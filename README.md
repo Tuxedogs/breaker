@@ -1,2 +1,3 @@
 # breaker
-final1
+
+React + Vite + TypeScript docs site project.
