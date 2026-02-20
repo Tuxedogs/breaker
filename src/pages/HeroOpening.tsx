@@ -18,7 +18,7 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
     if (isNavigatingRef.current) return;
 
     isNavigatingRef.current = true;
-    localStorage.setItem(ENTRY_STORAGE_KEY, "true");
+    sessionStorage.setItem(ENTRY_STORAGE_KEY, "true");
     setIsExiting(true);
 
     window.setTimeout(() => {
