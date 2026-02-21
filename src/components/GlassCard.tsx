@@ -8,6 +8,10 @@ type GlassCardProps = {
   subtitle: string;
   ctaLabel: string;
   ctaTo: string;
+  centerBloom?: boolean;
+  centeredHeader?: boolean;
+  showHeaderMarker?: boolean;
+  shipsStyle?: boolean;
   children: ReactNode;
 };
 
@@ -18,6 +22,10 @@ export default function GlassCard({
   subtitle,
   ctaLabel,
   ctaTo,
+  centerBloom = false,
+  centeredHeader = false,
+  showHeaderMarker = false,
+  shipsStyle = false,
   children,
 }: GlassCardProps) {
   const accentStyle = {
@@ -26,17 +34,196 @@ export default function GlassCard({
   } as CSSProperties;
 
   return (
-    <article style={accentStyle} className="glass-accent-card flex h-full flex-col rounded-3xl p-6">
-      <header className="pb-5">
-        <h2 className="title-font text-3xl tracking-[0.2em] text-white">{title}</h2>
-        <p className="mt-2 text-sm uppercase tracking-[0.18em] text-slate-300">{subtitle}</p>
+    <article
+      style={accentStyle}
+      className={[
+        "glass-accent-card group/card relative flex h-full flex-col overflow-hidden rounded-3xl p-6",
+        // richer base: darker glass so glow has contrast
+        "bg-black/40 backdrop-blur-2xl",
+        // motion
+        "transition-all duration-300 ease-out will-change-transform",
+        "hover:-translate-y-1 hover:scale-[1.005]",
+      ].join(" ")}
+    >
+      {shipsStyle ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-50"
+          style={{
+            background:
+              "radial-gradient(2px 2px at 14% 22%, rgba(255,255,255,0.10), transparent 70%), " +
+              "radial-gradient(1px 1px at 70% 38%, rgba(255,220,140,0.16), transparent 70%), " +
+              "radial-gradient(1px 1px at 28% 64%, rgba(255,255,255,0.10), transparent 70%), " +
+              "radial-gradient(1px 1px at 84% 78%, rgba(255,210,120,0.14), transparent 70%)",
+            backgroundSize: "220px 220px, 280px 280px, 260px 260px, 300px 300px",
+          }}
+        />
+      ) : null}
+
+      {/* Accent wash across panel (adds "rich color" inside the glass) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 ease-out group-hover/card:opacity-[0.14]"
+        style={{
+          background:
+            `radial-gradient(105% 82% at ${centerBloom ? "50% 14%" : "20% 12%"}, var(--accent-soft) 0%, rgba(0,0,0,0) 48%),` +
+            "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.65) 100%)",
+        }}
+      />
+
+      {/* Big ambient bloom (soft, wide) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-12 opacity-0 transition-all duration-300 ease-out group-hover/card:opacity-[0.12] group-hover/card:scale-[1.02]"
+        style={{
+          background:
+            `radial-gradient(46% 36% at ${centerBloom ? "50% 14%" : "16% 12%"}, var(--accent-soft) 0%, rgba(0,0,0,0) 62%),` +
+            "radial-gradient(45% 40% at 88% 22%, rgba(255,255,255,0.10) 0%, rgba(0,0,0,0) 60%)",
+          filter: "blur(14px)",
+        }}
+      />
+
+      {/* Top accent rail (crisp + bright like the reference) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-10 top-[10px] h-[3px] rounded-full opacity-0 transition-opacity duration-300 ease-out group-hover/card:opacity-30"
+        style={{
+          background: "linear-gradient(90deg, rgba(0,0,0,0), var(--accent), rgba(0,0,0,0))",
+          boxShadow: "0 0 6px 1px var(--accent-soft), 0 0 14px 2px var(--accent-soft)",
+        }}
+      />
+
+      {/* Rim + edge glow (tighter, brighter, less fog) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-70 transition-opacity duration-300 ease-out group-hover/card:opacity-100"
+        style={{
+          boxShadow:
+            // inner rim
+            "0 0 0 1px rgba(255,255,255,0.12) inset, " +
+            // neutral rim at rest (no accent glow)
+            "0 0 0 1px rgba(255,255,255,0.08) inset, " +
+            // depth shadow for lift
+            "0 30px 90px -25px rgba(0,0,0,0.90)",
+        }}
+      />
+      {shipsStyle ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl opacity-70"
+          style={{
+            boxShadow:
+              "0 0 0 1px color-mix(in srgb, var(--accent-soft) 58%, rgba(255,255,255,0.22) 42%) inset, " +
+              "0 0 20px 2px rgba(255, 181, 70, 0.12)",
+          }}
+        />
+      ) : null}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 ease-out group-hover/card:opacity-45"
+        style={{
+          boxShadow:
+            "0 0 0 1px color-mix(in srgb, var(--accent-soft) 60%, rgba(255,255,255,0.25) 40%) inset, " +
+            "0 0 18px 2px var(--accent-soft), " +
+            // depth shadow for lift
+            "0 30px 90px -25px rgba(0,0,0,0.90)",
+        }}
+      />
+      {shipsStyle ? (
+        <>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-0 h-16 w-16 rounded-tl-3xl opacity-80"
+            style={{
+              boxShadow: "inset 2px 2px 0 0 color-mix(in srgb, var(--accent) 70%, white 30%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-0 h-16 w-16 rounded-tr-3xl opacity-80"
+            style={{
+              boxShadow: "inset -2px 2px 0 0 color-mix(in srgb, var(--accent) 70%, white 30%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 left-0 h-16 w-16 rounded-bl-3xl opacity-80"
+            style={{
+              boxShadow: "inset 2px -2px 0 0 color-mix(in srgb, var(--accent) 70%, white 30%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 right-0 h-16 w-16 rounded-br-3xl opacity-80"
+            style={{
+              boxShadow: "inset -2px -2px 0 0 color-mix(in srgb, var(--accent) 70%, white 30%)",
+            }}
+          />
+        </>
+      ) : null}
+
+      {/* Top sheen to sell "glass" */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 opacity-65"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0) 100%)",
+        }}
+      />
+
+      {/* Content */}
+      <header className={`relative z-10 pb-5 ${centeredHeader ? "text-center" : ""}`}>
+        {showHeaderMarker ? (
+          <div
+            className="mx-auto mb-3 h-[10px] w-[10px] bg-white"
+            style={
+              shipsStyle
+                ? {
+                    boxShadow:
+                      "0 0 0 2px rgba(0,0,0,0.55), 0 0 10px color-mix(in srgb, var(--accent-soft) 70%, white 30%)",
+                  }
+                : undefined
+            }
+          />
+        ) : null}
+        <h2
+          className="title-font text-3xl tracking-[0.2em] text-white"
+          style={{ textShadow: "0 0 18px rgba(0,0,0,0.55)" }}
+        >
+          {title}
+        </h2>
+        <p className="mt-2 text-sm uppercase tracking-[0.18em] text-slate-300">
+          {subtitle}
+        </p>
       </header>
 
-      <div>{children}</div>
+      {/* Ensure CTA pins cleanly and lists can grow */}
+      <div className="relative z-10 flex-1">{children}</div>
 
-      <div className="mt-auto pt-6">
-        <Link to={ctaTo} className="accent-cta block w-full rounded-xl px-4 py-3 text-center text-sm font-medium uppercase tracking-[0.2em]">
-          {ctaLabel}
+      <div className="relative z-10 mt-auto pt-6">
+        <Link
+          to={ctaTo}
+          className={`accent-cta relative block w-full px-4 py-3 text-center text-sm font-medium uppercase tracking-[0.2em] transition-transform duration-300 group-hover/card:translate-y-[1px] ${shipsStyle ? "rounded-md" : "rounded-xl"}`}
+          style={{
+            boxShadow: shipsStyle
+              ? "0 0 0 1px color-mix(in srgb, var(--accent) 65%, rgba(255,255,255,0.2) 35%) inset, 0 0 0 1px rgba(0,0,0,0.42)"
+              : "0 0 0 1px rgba(255,255,255,0.06) inset",
+            background: shipsStyle
+              ? "linear-gradient(180deg, rgba(25,17,7,0.9) 0%, rgba(12,9,4,0.92) 100%)"
+              : undefined,
+          }}
+        >
+          {/* CTA glow wash */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover/card:opacity-35"
+            style={{
+              background:
+                "radial-gradient(70% 120% at 50% 0%, var(--accent-soft) 0%, rgba(0,0,0,0) 60%)",
+            }}
+          />
+          <span className="relative z-10">{ctaLabel}</span>
         </Link>
       </div>
     </article>

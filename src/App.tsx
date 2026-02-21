@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "./components/AppShell";
-import DocsShell from "./components/DocsShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import HeroOpening from "./pages/HeroOpening";
 import WipPage from "./pages/WipPage";
@@ -22,7 +21,6 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<EntryGate />} />
         <Route path="framework" element={<DoctrineFirstFramework />} />
-        <Route path="docs/*" element={<DocsShell />} />
 
         <Route path="ships/perseus" element={<WipPage section="Ships" title="Perseus" />} />
         <Route path="ships/polaris" element={<WipPage section="Ships" title="Polaris" />} />
