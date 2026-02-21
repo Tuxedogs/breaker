@@ -1,5 +1,6 @@
 import GlassCard from "../components/GlassCard";
 import IndexList, { type IndexListItem } from "../components/IndexList";
+import { useState } from "react";
 
 function PlaceholderIcon({ glyph }: { glyph: string }) {
   return (
@@ -50,6 +51,8 @@ const systemItems: IndexListItem[] = [
 ];
 
 export default function DoctrineFirstFramework() {
+  const [hoveredCard, setHoveredCard] = useState<"ships" | "systems" | null>(null);
+
   return (
     <section className="route-fade py-3">
       <div className="mb-16 text-center">
@@ -70,35 +73,41 @@ export default function DoctrineFirstFramework() {
       </div>
 
       <div className="grid items-stretch gap-8 lg:gap-12 lg:grid-cols-2">
-        <GlassCard
-          accentColor="rgba(255, 181, 70, 0.98)"
-          accentSoft="rgba(255, 181, 70, 0.26)"
-          title="SHIPS"
-          subtitle="Combat Platforms"
-          ctaLabel="ENTER SHIPS ->"
-          ctaTo="/ships/perseus"
-          centerBloom
-          centeredHeader
-          showHeaderMarker
-          shipsStyle
-        >
-          <IndexList items={shipItems} shipsStyle compactOnShortViewport />
-        </GlassCard>
+        <div onMouseEnter={() => setHoveredCard("ships")} onMouseLeave={() => setHoveredCard(null)}>
+          <GlassCard
+            accentColor="rgba(255, 181, 70, 0.98)"
+            accentSoft="rgba(255, 181, 70, 0.26)"
+            title="SHIPS"
+            subtitle="Combat Platforms"
+            ctaLabel="ENTER SHIPS ->"
+            ctaTo="/ships/perseus"
+            centerBloom
+            centeredHeader
+            showHeaderMarker
+            shipsStyle
+            dimmed={hoveredCard === "systems"}
+          >
+            <IndexList items={shipItems} shipsStyle compactOnShortViewport />
+          </GlassCard>
+        </div>
 
-        <GlassCard
-          accentColor="rgba(78, 214, 255, 0.98)"
-          accentSoft="rgba(78, 214, 255, 0.25)"
-          title="SYSTEMS"
-          subtitle="Procedures & Operations"
-          ctaLabel="ENTER SYSTEMS ->"
-          ctaTo="/systems/sub-targeting"
-          centerBloom
-          centeredHeader
-          showHeaderMarker
-          shipsStyle
-        >
-          <IndexList items={systemItems} shipsStyle compactOnShortViewport />
-        </GlassCard>
+        <div onMouseEnter={() => setHoveredCard("systems")} onMouseLeave={() => setHoveredCard(null)}>
+          <GlassCard
+            accentColor="rgba(78, 214, 255, 0.98)"
+            accentSoft="rgba(78, 214, 255, 0.25)"
+            title="SYSTEMS"
+            subtitle="Procedures & Operations"
+            ctaLabel="ENTER SYSTEMS ->"
+            ctaTo="/systems/sub-targeting"
+            centerBloom
+            centeredHeader
+            showHeaderMarker
+            shipsStyle
+            dimmed={hoveredCard === "ships"}
+          >
+            <IndexList items={systemItems} shipsStyle compactOnShortViewport />
+          </GlassCard>
+        </div>
       </div>
     </section>
   );

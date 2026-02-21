@@ -66,11 +66,11 @@ function IndexRow({
         {/* Accent wash on hover */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-70"
           style={{
             background: nested
               ? "radial-gradient(120% 120% at 15% 50%, rgba(255,255,255,0.06) 0%, rgba(0,0,0,0) 55%)"
-              : "radial-gradient(120% 120% at 15% 50%, var(--accent-soft) 0%, rgba(0,0,0,0) 55%)",
+              : "radial-gradient(105% 105% at 15% 50%, color-mix(in srgb, var(--accent-soft) 65%, transparent) 0%, rgba(0,0,0,0) 48%)",
           }}
         />
 
