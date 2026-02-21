@@ -1,9 +1,11 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 export type IndexListItem = {
   label: string;
   to: string;
   description?: string;
+  icon?: ReactNode;
   children?: IndexListItem[];
 };
 
@@ -16,9 +18,9 @@ function Chevron() {
   return (
     <span
       aria-hidden
-      className="ml-3 inline-flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-base leading-none text-white/80 transition group-hover:border-white/20 group-hover:text-white"
+      className="ml-3 inline-flex items-center justify-center text-lg leading-none"
       style={{
-        boxShadow: "0 0 0 1px rgba(255,255,255,0.04) inset",
+        color: "color-mix(in srgb, var(--accent) 84%, white 16%)",
       }}
     >
       &#8250;
@@ -46,8 +48,8 @@ function IndexRow({
           "transition-all duration-250 ease-out will-change-transform",
           "hover:-translate-y-[1px]",
           // Make rows feel like real UI surfaces
-          "border border-white/10 bg-black/25 backdrop-blur-xl",
-          "hover:border-white/18",
+          "border border-black/50 bg-black/25 backdrop-blur-xl",
+          "hover:border-black/35",
           shipsStyle ? "rounded-md" : "",
         ].join(" ")}
         style={{
@@ -55,7 +57,7 @@ function IndexRow({
           boxShadow: nested
             ? "0 0 0 1px rgba(255,255,255,0.03) inset"
             : shipsStyle
-              ? "0 0 0 1px color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,0.16) 45%) inset, 0 0 0 1px rgba(0,0,0,0.4)"
+              ? "0 0 0 1px color-mix(in srgb, var(--accent) 20%, rgba(0,0,0,0.82) 80%) inset, 0 0 0 1px rgba(0,0,0,0.52)"
               : "0 0 0 1px rgba(255,255,255,0.04) inset",
           background: shipsStyle ? "rgba(8, 8, 10, 0.78)" : undefined,
         }}
@@ -82,12 +84,27 @@ function IndexRow({
         />
 
         <span className="relative z-10 flex min-w-0 items-center gap-3">
-          <span className="min-w-0">
-            <span className="block truncate text-white/90 group-hover:text-white">
+          <span
+            aria-hidden
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/20 bg-white/[0.06]"
+            style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.04) inset" }}
+          >
+            {item.icon ?? <span className="h-4 w-4 rounded-sm bg-white/80" />}
+          </span>
+            <span className="min-w-0">
+            <span
+              className="block truncate font-semibold"
+              style={{ color: "color-mix(in srgb, var(--accent) 88%, white 12%)" }}
+            >
               {nested ? `-- ${item.label}` : item.label}
             </span>
             {item.description ? (
-              <span className="mt-0.5 block truncate text-sm text-slate-400">{item.description}</span>
+              <span
+                className="mt-0.5 block truncate text-sm"
+                style={{ color: "color-mix(in srgb, var(--accent) 66%, white 34%)" }}
+              >
+                {item.description}
+              </span>
             ) : null}
           </span>
         </span>
@@ -98,8 +115,8 @@ function IndexRow({
       </Link>
 
       {item.children ? (
-        <div className="mt-2 space-y-2">
-            {item.children.map((child) => (
+        <div className="mt-1 space-y-1">
+          {item.children.map((child) => (
             <IndexRow key={child.to} item={child} nested shipsStyle={shipsStyle} />
           ))}
         </div>
@@ -110,7 +127,7 @@ function IndexRow({
 
 export default function IndexList({ items, shipsStyle = false }: IndexListProps) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-1">
       {items.map((item) => (
         <IndexRow key={item.to} item={item} shipsStyle={shipsStyle} />
       ))}
