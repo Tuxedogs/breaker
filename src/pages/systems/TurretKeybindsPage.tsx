@@ -246,7 +246,7 @@ export default function TurretKeybindsPage() {
             The Addl. Keybindings section covers common keybinds in more detail, as well as game settings recommendations.
           </p>
           <Link
-            to="/systems/turret-keybinds/additional"
+            to="/systems/additional-settings-binds"
             className="mt-4 inline-block text-lg font-semibold text-cyan-300 transition hover:text-cyan-200"
           >
             Addl. Keybindings
