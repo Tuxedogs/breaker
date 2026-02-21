@@ -213,7 +213,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
             <div className="space-y-7">
               <section>
                 <h2 className={`title-font text-3xl tracking-[0.04em] ${s.title}`}>Overview</h2>
-                <p className="mt-4 text-2xl leading-relaxed text-slate-200">{data.overview}</p>
+                <p className="mt-4 text-2xl leading-normal text-slate-200">{data.overview}</p>
               </section>
 
               <section>
@@ -234,15 +234,15 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
 
             <section className="lg:border-l lg:border-white/15 lg:pl-7">
               <h2 className={`title-font text-3xl tracking-[0.04em] ${s.title}`}>Piloting</h2>
-              <p className="mt-4 text-2xl leading-relaxed text-slate-200">{data.pilotingSummary}</p>
-              <ol className="mt-5 list-decimal space-y-3 pl-5 text-xl leading-relaxed text-slate-200">
+              <p className="mt-4 text-2xl leading-normal text-slate-200">{data.pilotingSummary}</p>
+              <ol className="mt-5 list-decimal space-y-3 pl-5 text-xl leading-normal text-slate-200">
                 {data.relativeTracking.map((step) => (
                   <li key={step}>{step}</li>
                 ))}
               </ol>
 
               <h2 className={`title-font mt-10 text-3xl tracking-[0.04em] ${s.title}`}>Positioning & Range</h2>
-              <ul className="mt-4 space-y-3 text-xl leading-relaxed text-slate-200">
+              <ul className="mt-4 space-y-3 text-xl leading-normal text-slate-200">
                 {data.positioning.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -259,7 +259,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                   {data.loadoutLinkLabel ?? "spviewer"}
                 </a>
               </h2>
-              <ul className="mt-4 grid gap-x-8 gap-y-3 text-xl leading-relaxed text-slate-200 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-x-8 gap-y-3 text-xl leading-normal text-slate-200 sm:grid-cols-2">
                 {data.loadout.map((item) => (
                   <li key={item} className="list-disc ml-5">
                     {item}

@@ -3,6 +3,8 @@ import AppShell from "./components/AppShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import HeroOpening from "./pages/HeroOpening";
 import PerseusPage from "./pages/ships/PerseusPage";
+import SubTargetingPage from "./pages/systems/SubTargetingPage";
+import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
 import WipPage from "./pages/WipPage";
 
 const ENTRY_STORAGE_KEY = "ares:entered-framework";
@@ -27,8 +29,8 @@ export default function App() {
         <Route path="ships/polaris" element={<WipPage section="Ships" title="Polaris" />} />
         <Route path="ships/idris" element={<WipPage section="Ships" title="Idris" />} />
 
-        <Route path="systems/sub-targeting" element={<WipPage section="Systems" title="Sub Targeting" />} />
-        <Route path="systems/turret-keybinds" element={<WipPage section="Systems" title="Turret Keybinds" />} />
+        <Route path="systems/sub-targeting" element={<SubTargetingPage />} />
+        <Route path="systems/turret-keybinds" element={<TurretKeybindsPage />} />
         <Route
           path="systems/turret-keybinds/additional"
           element={<WipPage section="Systems" title="Additional Settings & Binds" />}

@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useLayoutEffect, useRef, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import AppBackground from "./AppBackground";
 
 const shipItems = [
@@ -37,7 +37,9 @@ function HomeIcon() {
 }
 
 export default function AppShell() {
+  const { pathname } = useLocation();
   const [openMenu, setOpenMenu] = useState<"ships" | "systems" | null>(null);
+  const [isRouteLoading, setIsRouteLoading] = useState(true);
   const closeTimerRef = useRef<number | null>(null);
 
   function clearCloseTimer() {
@@ -64,6 +66,12 @@ export default function AppShell() {
     clearCloseTimer();
     setOpenMenu(null);
   }
+
+  useLayoutEffect(() => {
+    setIsRouteLoading(true);
+    const timer = window.setTimeout(() => setIsRouteLoading(false), 580);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
@@ -194,6 +202,19 @@ export default function AppShell() {
 
       <main className="relative z-20 mx-auto w-full max-w-7xl px-4 pb-8 pt-20 sm:px-6 lg:px-8">
         <Outlet />
+        <div
+          className={[
+            "pointer-events-none absolute inset-0 transition-opacity duration-350 ease-out",
+            isRouteLoading ? "opacity-100" : "opacity-0",
+          ].join(" ")}
+          aria-hidden
+        >
+          <div className="absolute inset-0 rounded-2xl bg-black/45 backdrop-blur-sm" />
+          <div className="absolute left-1/2 top-[32%] h-10 w-10 -translate-x-1/2">
+            <span className="absolute inset-0 rounded-full border border-white/30" />
+            <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-cyan-300 border-r-cyan-300" />
+          </div>
+        </div>
       </main>
     </div>
   );
