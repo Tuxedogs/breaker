@@ -13,19 +13,19 @@ function PlaceholderIcon({ glyph }: { glyph: string }) {
 const shipItems: IndexListItem[] = [
   {
     label: "Perseus",
-    description: "Light Attack - Hit & Run",
+    description: "Heavy Gunship - Size 8 Mains",
     to: "/ships/perseus",
     icon: <PlaceholderIcon glyph="PS" />,
   },
   {
     label: "Polaris",
-    description: "Heavy Gunship - Broadside",
+    description: "Torpedo Deployment - Nuclear Submarine",
     to: "/ships/polaris",
     icon: <PlaceholderIcon glyph="PL" />,
   },
   {
     label: "Idris",
-    description: "Carrier - Capital Engagement",
+    description: "Super Carrier - Size 10 Wallet",
     to: "/ships/idris",
     icon: <PlaceholderIcon glyph="ID" />,
   },
@@ -37,14 +37,8 @@ const systemItems: IndexListItem[] = [
     label: "Turret Keybinds",
     to: "/systems/turret-keybinds",
     icon: <PlaceholderIcon glyph="KB" />,
-    children: [
-      {
-        label: "Additional Settings & Binds",
-        to: "/systems/additional-settings-binds",
-        icon: <PlaceholderIcon glyph="AD" />,
-      },
-    ],
   },
+  { label: "Additional Settings & Binds", to: "/systems/additional-settings-binds", icon: <PlaceholderIcon glyph="AD" /> },
   { label: "Gunnery with Luna", to: "/systems/gunnery-with-luna", icon: <PlaceholderIcon glyph="GN" /> },
   { label: "Communications", to: "/systems/communications", icon: <PlaceholderIcon glyph="CM" /> },
   { label: "Additional Resources", to: "/systems/additional-resources", icon: <PlaceholderIcon glyph="RS" /> },

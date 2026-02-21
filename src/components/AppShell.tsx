@@ -10,6 +10,7 @@ const shipItems = [
 const systemItems = [
   { to: "/systems/sub-targeting", label: "Sub-Targeting" },
   { to: "/systems/turret-keybinds", label: "Turret Keybinds" },
+  { to: "/systems/additional-settings-binds", label: "Additional Settings & Binds" },
   { to: "/systems/gunnery-with-luna", label: "Gunnery with Luna" },
   { to: "/systems/communications", label: "Communications" },
 ];

@@ -135,8 +135,8 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
           <section className="px-1 py-1">
             <p className="title-font text-xs uppercase tracking-[0.18em] text-slate-300">Ship Manual</p>
             <h1 className={`title-font mt-2 text-4xl tracking-[0.08em] sm:text-5xl ${s.title}`}>{data.name}</h1>
-            <p className={`mt-1 text-3xl ${s.soft}`}>{data.tagLine}</p>
-            <p className="mt-4 max-w-5xl text-xl leading-relaxed text-slate-200">{data.summary}</p>
+            <p className={`mt-1 text-2xl ${s.soft}`}>{data.tagLine}</p>
+            <p className="mt-4 max-w-5xl text-lg leading-relaxed text-slate-200">{data.summary}</p>
           </section>
 
           <div className="mt-5 grid gap-5 lg:grid-cols-3">
@@ -149,7 +149,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                 >
                   <h2 className={`title-font text-sm uppercase tracking-[0.14em] ${stateStyles.titleClass}`}>{note.title}</h2>
                   <div
-                  className={`relative mt-3 overflow-hidden rounded-md border px-3 py-2 text-xl font-semibold uppercase tracking-[0.1em] ${stateStyles.panelClass}`}
+                  className={`relative mt-3 overflow-hidden rounded-md border px-3 py-2 text-base font-semibold uppercase tracking-[0.1em] ${stateStyles.panelClass}`}
                     style={{ boxShadow: `0 0 0 1px ${stateStyles.edgeColor} inset, 0 0 12px ${stateStyles.glowColor}` }}
                   >
                     <span
@@ -161,7 +161,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                     />
                     <span className="relative z-10 font-bold">{note.status}</span>
                   </div>
-                  <ul className={`mt-3 space-y-1 text-lg leading-relaxed ${stateStyles.lowerTextClass}`}>
+                  <ul className={`mt-3 space-y-1 text-base leading-relaxed ${stateStyles.lowerTextClass}`}>
                     {note.points.map((point) => (
                       <li key={point}>{point}</li>
                     ))}
@@ -189,7 +189,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
               onPause={() => setIsPlaying(false)}
             />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
-            <p className="pointer-events-none absolute inset-x-5 top-4 text-center text-xl text-white/90 sm:text-2xl">{videoCaption}</p>
+            <p className="pointer-events-none absolute inset-x-5 top-4 text-center text-lg text-white/90 sm:text-xl">{videoCaption}</p>
             <button
               type="button"
               onClick={togglePlayback}
@@ -213,7 +213,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
             <div className="space-y-7">
               <section>
                 <h2 className={`title-font text-3xl tracking-[0.04em] ${s.title}`}>Overview</h2>
-                <p className="mt-4 text-2xl leading-normal text-slate-200">{data.overview}</p>
+                <p className="mt-4 text-lg leading-normal text-slate-200">{data.overview}</p>
               </section>
 
               <section>
@@ -225,7 +225,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                       className={`rounded-xl border border-white/15 p-5 ${subPanelSurfaceClass} ${index < data.crewRoles.length - 1 ? "border-b-white/20" : ""}`}
                     >
                       <h3 className={`title-font text-sm uppercase tracking-[0.16em] ${s.soft}`}>{role.title}</h3>
-                      <p className="mt-2 text-xl leading-relaxed text-slate-200">{role.body}</p>
+                      <p className="mt-2 text-lg leading-relaxed text-slate-200">{role.body}</p>
                     </div>
                   ))}
                 </div>
@@ -234,15 +234,15 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
 
             <section className="lg:border-l lg:border-white/15 lg:pl-7">
               <h2 className={`title-font text-3xl tracking-[0.04em] ${s.title}`}>Piloting</h2>
-              <p className="mt-4 text-2xl leading-normal text-slate-200">{data.pilotingSummary}</p>
-              <ol className="mt-5 list-decimal space-y-3 pl-5 text-xl leading-normal text-slate-200">
+              <p className="mt-4 text-lg leading-normal text-slate-200">{data.pilotingSummary}</p>
+              <ol className="mt-5 list-decimal space-y-3 pl-5 text-lg leading-normal text-slate-200">
                 {data.relativeTracking.map((step) => (
                   <li key={step}>{step}</li>
                 ))}
               </ol>
 
               <h2 className={`title-font mt-10 text-3xl tracking-[0.04em] ${s.title}`}>Positioning & Range</h2>
-              <ul className="mt-4 space-y-3 text-xl leading-normal text-slate-200">
+              <ul className="mt-4 space-y-3 text-lg leading-normal text-slate-200">
                 {data.positioning.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -259,7 +259,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                   {data.loadoutLinkLabel ?? "spviewer"}
                 </a>
               </h2>
-              <ul className="mt-4 grid gap-x-8 gap-y-3 text-xl leading-normal text-slate-200 sm:grid-cols-2">
+              <ul className="mt-4 grid gap-x-8 gap-y-3 text-lg leading-normal text-slate-200 sm:grid-cols-2">
                 {data.loadout.map((item) => (
                   <li key={item} className="list-disc ml-5">
                     {item}
@@ -272,7 +272,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
 
         <article className={`rounded-2xl border p-6 sm:p-7 ${panelSurfaceClass} ${s.border}`}>
           <h2 className={`title-font text-3xl tracking-[0.04em] ${s.title}`}>General Rules</h2>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-xl leading-relaxed text-slate-200">
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-lg leading-relaxed text-slate-200">
             {data.generalRules.map((rule) => (
               <li key={rule}>{rule}</li>
             ))}

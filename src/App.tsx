@@ -3,6 +3,7 @@ import AppShell from "./components/AppShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import HeroOpening from "./pages/HeroOpening";
 import PerseusPage from "./pages/ships/PerseusPage";
+import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import SubTargetingPage from "./pages/systems/SubTargetingPage";
 import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
 import WipPage from "./pages/WipPage";
@@ -31,9 +32,10 @@ export default function App() {
 
         <Route path="systems/sub-targeting" element={<SubTargetingPage />} />
         <Route path="systems/turret-keybinds" element={<TurretKeybindsPage />} />
+        <Route path="systems/additional-settings-binds" element={<AdditionalSettingsPage />} />
         <Route
           path="systems/turret-keybinds/additional"
-          element={<WipPage section="Systems" title="Additional Settings & Binds" />}
+          element={<Navigate to="/systems/additional-settings-binds" replace />}
         />
         <Route path="systems/gunnery-with-luna" element={<WipPage section="Systems" title="Gunnery with Luna" />} />
         <Route path="systems/communications" element={<WipPage section="Systems" title="Communications" />} />
