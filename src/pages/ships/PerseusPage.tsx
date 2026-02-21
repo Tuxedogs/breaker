@@ -4,11 +4,13 @@ const perseusData: ShipPageData = {
   name: "RSI Perseus",
   tagLine: '"Firing"',
   summary:
-    "While not intended to engage capital ships, we use it against them anyway. A unique combination of speed, firepower, and durability allows it to excel in roles beyond its original design.",
+    "While not intended to engage capital ships, we use it against them anyway.",
+  videoSrc: "/images/video/percy-position.mp4",
+  videoCaption: "Piloting: Relative Tracking Engagement",
   overview:
-    "The RSI Perseus heavy gunship is a sub-capital brawler optimized for harassment and close-range pressure on other large ships. To engage corvettes and frigates, leverage superior maneuverability to exploit blind spots and avoid fair trades. This is achieved mostly through relative tracking.",
+    "The RSI Perseus heavy gunship is a sub-capital brawler optimized for harassment and close-range pressure on other large ships. To engage corvettes and frigates, leverage superior maneuverability to exploit blind spots and avoid fair trades.",
   pilotingSummary:
-    "Relative tracking is the core piloting pattern. Maintain aft-oriented pressure while preserving position control and turret uptime.",
+    "Relative tracking is the core piloting pattern against capital threats. Maintain aft-oriented pressure while preserving position control and turret uptime.",
   relativeTracking: [
     "Establish alignment beneath the target while oriented aft.",
     "Focus pressure on vulnerable components toward the rear.",
@@ -29,34 +31,36 @@ const perseusData: ShipPageData = {
     {
       title: "Capital Railguns",
       status: "Caution",
-      points: ["Deploy Polaris support.", "Use long-range sniping operations when needed."],
+      points: ["Deploy Polaris support.", "Use long-range sniping operations."],
     },
   ],
   crewRoles: [
     {
-      title: "Gunner",
-      body: "Maintain turret discipline and stance control. Against smaller hulls, strip shields and finish components. Against larger hulls, deny clear lines and force tracking errors.",
+      title: "Gunners",
+      body: "Maintain trigger discipline and spatial awareness. Against smaller hulls, hold fire until optimal ranges and delta. Against larger hulls, sub target vulnerable components.",
     },
     {
-      title: "Torpedo Control",
-      body: "Lock torpedoes only when viable. Preserve bridge heat and avoid wasteful launches. Value volume and timing over isolated damage spikes.",
+      title: "Engineering",
+      body: "Gun 2's operator will flex into support roles as needed. Exponentially increasing overall ship survivability, and allowing for EVA/FPS operations.",
     },
     {
       title: "Coordination",
-      body: "Keep callouts concise. Pilot and gunners should continuously share target state, drift corrections, and pressure windows.",
+      body: "Keep callouts concise. Pilot and gunners should continuously share target state, platform stability, and pressure windows.",
     },
   ],
-  positioning: ["20,000m - Mid Zone", "2,500m - Risk Zone", "2,500m - X1IPS / X2IPS pressure window"],
-  loadout: ["EX-CS Torpedoes", "S7 Ballistic (x2)", "S3 Laser Repeaters (x4)"],
-  generalRules: ["Restock torpedo racks before recommit.", "Avoid off-bore torpedo launches."],
+  positioning: ["5,600m - Max Range", "1,500m - Max Effective Range", "1,000m - Optimal Range"],
+  loadout: ["Stalker V", "S3 GT-220 Mantis", "MRX Torrent PDC","2x JS-500", "2x Fullblock", "TS-2", "2x Blizzard",],
+  loadoutLinkUrl: "https://www.spviewer.eu/",
+  loadoutLinkLabel: "spviewer",
+  generalRules: ["Fully stock torpedo racks before recommit.", "Fire off bore torpedoes when able, do not sacrifice uptime.", "Use main guns to finish off crippled targets."],
 };
 
 export default function PerseusPage() {
   const surfacePreset: ShipSurfacePreset = {
-    panelBgClass: "bg-[rgba(0,0,0,0.40px,)]",
-    panelBlurClass: "backdrop-blur-[12px]",
-    subPanelBgClass: "bg-[rgba(0,0,0,0.40px,)]",
-    subPanelBlurClass: "backdrop-blur-[12px]",
+    panelBgClass: "bg-[rgba(0,0,0,0.30)]",
+    panelBlurClass: "backdrop-blur-[8px]",
+    subPanelBgClass: "bg-[rgba(0,0,0,0.30)]",
+    subPanelBlurClass: "backdrop-blur-[8px]",
   };
 
   return <ShipPage accent="amber" data={perseusData} surfacePreset={surfacePreset} />;

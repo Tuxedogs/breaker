@@ -12,6 +12,7 @@ type GlassCardProps = {
   centeredHeader?: boolean;
   showHeaderMarker?: boolean;
   shipsStyle?: boolean;
+  dimmed?: boolean;
   children: ReactNode;
 };
 
@@ -26,6 +27,7 @@ export default function GlassCard({
   centeredHeader = false,
   showHeaderMarker = false,
   shipsStyle = false,
+  dimmed = false,
   children,
 }: GlassCardProps) {
   const accentStyle = {
@@ -46,8 +48,8 @@ export default function GlassCard({
         // secondary outer frame with dark moat
         "outline outline-2 outline-offset-[9px]",
         // motion
-        "transition-all duration-300 ease-out will-change-transform",
-        "hover:-translate-y-1 hover:scale-[1.005]",
+        "transition-[filter] duration-250 ease-out",
+        dimmed ? "brightness-[0.6]" : "brightness-100",
       ].join(" ")}
     >
       {shipsStyle ? (

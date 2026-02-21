@@ -1,9 +1,17 @@
+import { useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import AppBackground from "./AppBackground";
 
-const navItems = [
-  { to: "/ships/perseus", label: "Ships" },
-  { to: "/systems/sub-targeting", label: "Systems" },
+const shipItems = [
+  { to: "/ships/perseus", label: "Perseus" },
+  { to: "/ships/polaris", label: "Polaris" },
+  { to: "/ships/idris", label: "Idris" },
+];
+const systemItems = [
+  { to: "/systems/sub-targeting", label: "Sub-Targeting" },
+  { to: "/systems/turret-keybinds", label: "Turret Keybinds" },
+  { to: "/systems/gunnery-with-luna", label: "Gunnery with Luna" },
+  { to: "/systems/communications", label: "Communications" },
 ];
 
 function SearchIcon() {
@@ -17,7 +25,46 @@ function SearchIcon() {
   );
 }
 
+function HomeIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" className="h-4 w-4">
+      <path
+        d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export default function AppShell() {
+  const [openMenu, setOpenMenu] = useState<"ships" | "systems" | null>(null);
+  const closeTimerRef = useRef<number | null>(null);
+
+  function clearCloseTimer() {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }
+
+  function open(menu: "ships" | "systems") {
+    clearCloseTimer();
+    setOpenMenu(menu);
+  }
+
+  function closeSoon() {
+    clearCloseTimer();
+    closeTimerRef.current = window.setTimeout(() => {
+      setOpenMenu(null);
+      closeTimerRef.current = null;
+    }, 120);
+  }
+
+  function closeNow() {
+    clearCloseTimer();
+    setOpenMenu(null);
+  }
+
   return (
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
       <AppBackground />
@@ -32,20 +79,106 @@ export default function AppShell() {
           </NavLink>
 
           <div className="flex items-center gap-4">
-            {navItems.map((item) => (
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                [
+                  "inline-flex items-center justify-center text-slate-200 transition hover:text-white",
+                  isActive ? "text-white" : "",
+                ].join(" ")
+              }
+              aria-label="Home"
+            >
+              <HomeIcon />
+            </NavLink>
+
+            <div className="relative" onMouseEnter={() => open("ships")} onMouseLeave={closeSoon}>
               <NavLink
-                key={item.to}
-                to={item.to}
+                to="/ships/perseus"
                 className={({ isActive }) =>
                   [
                     "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
-                    isActive ? "text-white" : "text-slate-200 hover:text-white",
+                    isActive ? "text-amber-300" : "text-slate-200 hover:text-amber-300",
                   ].join(" ")
                 }
               >
-                {item.label}
+                Ships
               </NavLink>
-            ))}
+
+              <div
+                className={[
+                  "pointer-events-none absolute left-1/2 top-full z-40 w-52 -translate-x-1/2 pt-2 opacity-0 transition duration-150 ease-out",
+                  openMenu === "ships" ? "pointer-events-auto opacity-100" : "",
+                ].join(" ")}
+              >
+                <div
+                  className={[
+                    "translate-y-2 rounded-md border border-amber-300/25 bg-black/70 p-2 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition duration-150 ease-out",
+                    openMenu === "ships" ? "translate-y-0" : "",
+                  ].join(" ")}
+                >
+                  {shipItems.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={closeNow}
+                      className={({ isActive }) =>
+                        [
+                          "block rounded px-2 py-1.5 text-xs uppercase tracking-[0.14em] transition sm:text-sm",
+                          isActive ? "text-amber-300" : "text-slate-200 hover:bg-amber-300/10 hover:text-amber-300",
+                        ].join(" ")
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="relative" onMouseEnter={() => open("systems")} onMouseLeave={closeSoon}>
+              <NavLink
+                to="/systems/sub-targeting"
+                className={({ isActive }) =>
+                  [
+                    "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
+                    isActive ? "text-cyan-300" : "text-slate-200 hover:text-cyan-300",
+                  ].join(" ")
+                }
+              >
+                Systems
+              </NavLink>
+
+              <div
+                className={[
+                  "pointer-events-none absolute left-1/2 top-full z-40 w-56 -translate-x-1/2 pt-2 opacity-0 transition duration-150 ease-out",
+                  openMenu === "systems" ? "pointer-events-auto opacity-100" : "",
+                ].join(" ")}
+              >
+                <div
+                  className={[
+                    "translate-y-2 rounded-md border border-cyan-300/25 bg-black/70 p-2 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition duration-150 ease-out",
+                    openMenu === "systems" ? "translate-y-0" : "",
+                  ].join(" ")}
+                >
+                  {systemItems.map((item) => (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      onClick={closeNow}
+                      className={({ isActive }) =>
+                        [
+                          "block rounded px-2 py-1.5 text-xs uppercase tracking-[0.14em] transition sm:text-sm",
+                          isActive ? "text-cyan-300" : "text-slate-200 hover:bg-cyan-300/10 hover:text-cyan-300",
+                        ].join(" ")
+                      }
+                    >
+                      {item.label}
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             <button
               type="button"
