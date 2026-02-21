@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "./components/AppShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import HeroOpening from "./pages/HeroOpening";
+import PerseusPage from "./pages/ships/PerseusPage";
 import WipPage from "./pages/WipPage";
 
 const ENTRY_STORAGE_KEY = "ares:entered-framework";
@@ -22,7 +23,7 @@ export default function App() {
         <Route index element={<EntryGate />} />
         <Route path="framework" element={<DoctrineFirstFramework />} />
 
-        <Route path="ships/perseus" element={<WipPage section="Ships" title="Perseus" />} />
+        <Route path="ships/perseus" element={<PerseusPage />} />
         <Route path="ships/polaris" element={<WipPage section="Ships" title="Polaris" />} />
         <Route path="ships/idris" element={<WipPage section="Ships" title="Idris" />} />
 

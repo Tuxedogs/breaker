@@ -12,6 +12,7 @@ export type IndexListItem = {
 type IndexListProps = {
   items: IndexListItem[];
   shipsStyle?: boolean;
+  compactOnShortViewport?: boolean;
 };
 
 function Chevron() {
@@ -125,9 +126,13 @@ function IndexRow({
   );
 }
 
-export default function IndexList({ items, shipsStyle = false }: IndexListProps) {
+export default function IndexList({
+  items,
+  shipsStyle = false,
+  compactOnShortViewport = false,
+}: IndexListProps) {
   return (
-    <div className="space-y-1">
+    <div className={compactOnShortViewport ? "index-list compact-two-col" : "index-list space-y-1"}>
       {items.map((item) => (
         <IndexRow key={item.to} item={item} shipsStyle={shipsStyle} />
       ))}

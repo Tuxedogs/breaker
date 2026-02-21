@@ -218,17 +218,17 @@ export default function GlassCard({
 
       {/* Ensure CTA pins cleanly and lists can grow */}
       <div className="relative z-10 flex-1 min-h-0">
-        <div className="flex max-h-[82%] flex-col justify-start overflow-y-auto">
+        <div className="flex flex-col justify-start">
           {children}
         </div>
       </div>
 
       <div aria-hidden className="h-5 opacity-0" />
 
-      <div className="relative z-10 mt-auto pt-3">
+      <div className="relative z-10 mt-auto px-3 pt-3">
         <Link
           to={ctaTo}
-          className={`accent-cta group/cta relative block w-full px-[80px] py-2.5 text-center text-base font-bold uppercase tracking-[0.2em] transition-transform duration-300 hover:translate-y-[1px] ${shipsStyle ? "rounded-md" : "rounded-xl"}`}
+          className={`accent-cta group/cta relative block w-full px-[80px] py-3 text-center text-lg font-bold uppercase tracking-[0.2em] transition-transform duration-300 hover:translate-y-[1px] ${shipsStyle ? "rounded-md" : "rounded-xl"}`}
           style={{
             boxShadow: shipsStyle
               ? "0 0 0 1px color-mix(in srgb, var(--accent) 65%, rgba(255,255,255,0.2) 35%) inset, 0 0 0 1px rgba(0,0,0,0.42)"
