@@ -22,8 +22,8 @@ export default function AppShell() {
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
       <AppBackground />
 
-      <header className="relative z-20 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border border-white/20 bg-black/30 px-4 py-3 backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center gap-3 text-white">
             <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/45 bg-white/10">
               <span className="h-2 w-2 rounded-full bg-white" />
@@ -31,17 +31,15 @@ export default function AppShell() {
             <span className="title-font text-sm tracking-[0.2em] sm:text-base">ARES</span>
           </NavLink>
 
-          <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex items-center gap-4">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
                   [
-                    "rounded-lg border px-3 py-1.5 text-xs uppercase tracking-[0.17em] transition sm:text-sm",
-                    isActive
-                      ? "border-white/45 bg-white/16 text-white"
-                      : "border-white/20 bg-black/25 text-slate-200 hover:border-white/40 hover:text-white",
+                    "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
+                    isActive ? "text-white" : "text-slate-200 hover:text-white",
                   ].join(" ")
                 }
               >
@@ -51,17 +49,17 @@ export default function AppShell() {
 
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/25 bg-black/25 px-3 py-1.5 text-xs uppercase tracking-[0.17em] text-slate-200 transition hover:border-white/40 hover:text-white sm:text-sm"
+              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.17em] text-slate-200 transition hover:text-white sm:text-sm"
               aria-label="Search"
             >
               <SearchIcon />
-              <span className="hidden sm:inline">Search</span>
+              <span>Search</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="relative z-20 mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <main className="relative z-20 mx-auto w-full max-w-7xl px-4 pb-8 pt-20 sm:px-6 lg:px-8">
         <Outlet />
       </main>
     </div>

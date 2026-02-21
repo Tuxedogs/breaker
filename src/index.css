@@ -17,6 +17,10 @@ body {
   background: #02040d;
 }
 
+.bg-black\/40 {
+  background-color: rgba(0, 0, 0, 0.89);
+}
+
 #root {
   min-height: 100vh;
 }
@@ -128,6 +132,19 @@ body {
   box-shadow:
     0 0 0 1px var(--accent-soft),
     0 0 22px var(--accent-soft);
+}
+
+.index-list.compact-two-col {
+  display: block;
+}
+
+@media (max-height: 860px) and (min-width: 1024px) {
+  .index-list.compact-two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.35rem;
+    align-content: start;
+  }
 }
 
 .accent-cta {
