@@ -2,9 +2,9 @@ import GlassCard from "../components/GlassCard";
 import IndexList, { type IndexListItem } from "../components/IndexList";
 
 const shipItems: IndexListItem[] = [
-  { label: "Perseus", to: "/ships/perseus" },
-  { label: "Polaris", to: "/ships/polaris" },
-  { label: "Idris", to: "/ships/idris" },
+  { label: "Perseus", description: "Light Attack - Hit & Run", to: "/ships/perseus" },
+  { label: "Polaris", description: "Heavy Gunship - Broadside", to: "/ships/polaris" },
+  { label: "Idris", description: "Carrier - Capital Engagement", to: "/ships/idris" },
 ];
 
 const systemItems: IndexListItem[] = [
@@ -36,8 +36,12 @@ export default function DoctrineFirstFramework() {
             subtitle="Combat Platforms"
             ctaLabel="ENTER SHIPS ->"
             ctaTo="/ships/perseus"
+            centerBloom
+            centeredHeader
+            showHeaderMarker
+            shipsStyle
           >
-            <IndexList items={shipItems} />
+            <IndexList items={shipItems} shipsStyle />
           </GlassCard>
         </div>
 
@@ -49,8 +53,12 @@ export default function DoctrineFirstFramework() {
             subtitle="Procedures & Operations"
             ctaLabel="ENTER SYSTEMS ->"
             ctaTo="/systems/sub-targeting"
+            centerBloom
+            centeredHeader
+            showHeaderMarker
+            shipsStyle
           >
-            <IndexList items={systemItems} />
+            <IndexList items={systemItems} shipsStyle />
           </GlassCard>
         </div>
       </div>
