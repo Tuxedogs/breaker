@@ -21,7 +21,6 @@ type SequencePhase =
 export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 1200 }: HeroOpeningProps) {
   const navigate = useNavigate();
   const isNavigatingRef = useRef(false);
-  const [isExiting, setIsExiting] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [phase, setPhase] = useState<SequencePhase>("hidden");
   const [imageIndex, setImageIndex] = useState(0);
@@ -37,11 +36,7 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
 
     isNavigatingRef.current = true;
     sessionStorage.setItem(ENTRY_STORAGE_KEY, "true");
-    setIsExiting(true);
-
-    window.setTimeout(() => {
-      navigate("/framework");
-    }, 260);
+    navigate("/framework");
   }, [navigate]);
 
   useEffect(() => {
@@ -109,9 +104,7 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
   const pageX = phase === "swap-in" || phase === "page-hold" ? 280 : 620;
 
   return (
-    <section
-      className={`hero-transition flex min-h-[calc(100vh-7.5rem)] items-center justify-center ${isExiting ? "hero-transition-exit" : ""}`}
-    >
+    <section className="hero-transition flex min-h-[calc(100vh-7.5rem)] items-center justify-center">
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-4 py-10">
         <div className="relative h-[430px] w-[430px]">
           <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-[40%_56%_46%_58%/54%_42%_58%_46%] bg-black blur-xl" />

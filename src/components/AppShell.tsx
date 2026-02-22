@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { useRef, useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import AppBackground from "./AppBackground";
 
 const shipItems = [
@@ -38,9 +38,7 @@ function HomeIcon() {
 }
 
 export default function AppShell() {
-  const { pathname } = useLocation();
   const [openMenu, setOpenMenu] = useState<"ships" | "systems" | null>(null);
-  const [isRouteLoading, setIsRouteLoading] = useState(true);
   const closeTimerRef = useRef<number | null>(null);
 
   function clearCloseTimer() {
@@ -71,20 +69,6 @@ export default function AppShell() {
   function goToHero() {
     sessionStorage.removeItem("ares:entered-framework");
   }
-
-  useLayoutEffect(() => {
-    if (pathname === "/") {
-      setIsRouteLoading(false);
-      return;
-    }
-
-    setIsRouteLoading(true);
-    const timer = window.setTimeout(() => setIsRouteLoading(false), 580);
-    return () => window.clearTimeout(timer);
-  }, [pathname]);
-
-  const showRouteVeil = isRouteLoading && pathname !== "/";
-  const stripWidths = ["14%", "10%", "7%"];
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
@@ -215,38 +199,6 @@ export default function AppShell() {
 
       <main className="relative z-20 mx-auto w-full max-w-7xl px-4 pb-8 pt-20 sm:px-6 lg:px-8">
         <Outlet />
-        <div
-          className={[
-            "pointer-events-none absolute inset-0 transition-opacity duration-250 ease-out",
-            showRouteVeil ? "opacity-100" : "opacity-0",
-          ].join(" ")}
-          aria-hidden
-        >
-          <div className="absolute inset-0 rounded-2xl bg-black/48 backdrop-blur-[1px]" />
-          <div className="absolute inset-0 overflow-hidden rounded-2xl">
-            {stripWidths.map((width, idx) => (
-              <div
-                key={`left-${width}`}
-                className={[
-                  "absolute inset-y-[-2%] right-1/2 rounded-l-xl bg-gradient-to-r from-cyan-950/0 via-cyan-300/18 to-cyan-100/24 shadow-[0_0_14px_rgba(78,214,255,0.18)] transition-transform ease-out",
-                  showRouteVeil ? "translate-x-0" : "-translate-x-[155%]",
-                ].join(" ")}
-                style={{ width, transitionDuration: `${420 + idx * 80}ms` }}
-              />
-            ))}
-            {stripWidths.map((width, idx) => (
-              <div
-                key={`right-${width}`}
-                className={[
-                  "absolute inset-y-[-2%] left-1/2 rounded-r-xl bg-gradient-to-l from-cyan-950/0 via-cyan-300/18 to-cyan-100/24 shadow-[0_0_14px_rgba(78,214,255,0.18)] transition-transform ease-out",
-                  showRouteVeil ? "translate-x-0" : "translate-x-[155%]",
-                ].join(" ")}
-                style={{ width, transitionDuration: `${420 + idx * 80}ms` }}
-              />
-            ))}
-            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-cyan-200/45 shadow-[0_0_14px_rgba(78,214,255,0.45)]" />
-          </div>
-        </div>
       </main>
     </div>
   );
