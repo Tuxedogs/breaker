@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "./components/AppShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
+import DoctrineLanding from "./pages/DoctrineLanding";
 import HeroOpening from "./pages/HeroOpening";
 import PerseusPage from "./pages/ships/PerseusPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
@@ -22,6 +23,7 @@ function EntryGate() {
 export default function App() {
   return (
     <Routes>
+      <Route path="doctrine-landing" element={<DoctrineLanding />} />
       <Route element={<AppShell />}>
         <Route index element={<EntryGate />} />
         <Route path="framework" element={<DoctrineFirstFramework />} />

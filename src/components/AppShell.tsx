@@ -68,11 +68,23 @@ export default function AppShell() {
     setOpenMenu(null);
   }
 
+  function goToHero() {
+    sessionStorage.removeItem("ares:entered-framework");
+  }
+
   useLayoutEffect(() => {
+    if (pathname === "/") {
+      setIsRouteLoading(false);
+      return;
+    }
+
     setIsRouteLoading(true);
     const timer = window.setTimeout(() => setIsRouteLoading(false), 580);
     return () => window.clearTimeout(timer);
   }, [pathname]);
+
+  const showRouteVeil = isRouteLoading && pathname !== "/";
+  const stripWidths = ["14%", "10%", "7%"];
 
   return (
     <div className="relative min-h-screen overflow-x-hidden text-slate-100">
@@ -80,7 +92,7 @@ export default function AppShell() {
 
       <header className="fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <NavLink to="/" className="flex items-center gap-3 text-white">
+          <NavLink to="/" onClick={goToHero} className="flex items-center gap-3 text-white">
             <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/45 bg-white/10">
               <span className="h-2 w-2 rounded-full bg-white" />
             </span>
@@ -205,15 +217,34 @@ export default function AppShell() {
         <Outlet />
         <div
           className={[
-            "pointer-events-none absolute inset-0 transition-opacity duration-350 ease-out",
-            isRouteLoading ? "opacity-100" : "opacity-0",
+            "pointer-events-none absolute inset-0 transition-opacity duration-250 ease-out",
+            showRouteVeil ? "opacity-100" : "opacity-0",
           ].join(" ")}
           aria-hidden
         >
-          <div className="absolute inset-0 rounded-2xl bg-black/45 backdrop-blur-sm" />
-          <div className="absolute left-1/2 top-[32%] h-10 w-10 -translate-x-1/2">
-            <span className="absolute inset-0 rounded-full border border-white/30" />
-            <span className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-cyan-300 border-r-cyan-300" />
+          <div className="absolute inset-0 rounded-2xl bg-black/48 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 overflow-hidden rounded-2xl">
+            {stripWidths.map((width, idx) => (
+              <div
+                key={`left-${width}`}
+                className={[
+                  "absolute inset-y-[-2%] right-1/2 rounded-l-xl bg-gradient-to-r from-cyan-950/0 via-cyan-300/18 to-cyan-100/24 shadow-[0_0_14px_rgba(78,214,255,0.18)] transition-transform ease-out",
+                  showRouteVeil ? "translate-x-0" : "-translate-x-[155%]",
+                ].join(" ")}
+                style={{ width, transitionDuration: `${420 + idx * 80}ms` }}
+              />
+            ))}
+            {stripWidths.map((width, idx) => (
+              <div
+                key={`right-${width}`}
+                className={[
+                  "absolute inset-y-[-2%] left-1/2 rounded-r-xl bg-gradient-to-l from-cyan-950/0 via-cyan-300/18 to-cyan-100/24 shadow-[0_0_14px_rgba(78,214,255,0.18)] transition-transform ease-out",
+                  showRouteVeil ? "translate-x-0" : "translate-x-[155%]",
+                ].join(" ")}
+                style={{ width, transitionDuration: `${420 + idx * 80}ms` }}
+              />
+            ))}
+            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-cyan-200/45 shadow-[0_0_14px_rgba(78,214,255,0.45)]" />
           </div>
         </div>
       </main>
