@@ -1,0 +1,411 @@
+.doctrine-root {
+  min-height: 100vh;
+  background: #020203;
+  color: #a1a1aa;
+  overflow: hidden;
+  position: relative;
+}
+
+.doctrine-grid-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)) bottom / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent 17%, rgba(255, 255, 255, 0.05) 17.2%, transparent 17.4%),
+    linear-gradient(270deg, transparent 17%, rgba(255, 255, 255, 0.05) 17.2%, transparent 17.4%);
+}
+
+.doctrine-arc-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.doctrine-arc-overlay::before,
+.doctrine-arc-overlay::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(132vw, 1900px);
+  height: min(132vw, 1900px);
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+}
+
+.doctrine-arc-overlay::after {
+  width: min(108vw, 1560px);
+  height: min(108vw, 1560px);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.doctrine-top-left,
+.doctrine-top-center,
+.doctrine-top-right,
+.doctrine-bottom-left,
+.doctrine-bottom-right {
+  position: fixed;
+  z-index: 15;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: rgba(244, 244, 245, 0.62);
+}
+
+.doctrine-top-left {
+  left: clamp(20px, 3.2vw, 54px);
+  top: clamp(20px, 2.8vw, 44px);
+  display: flex;
+  gap: 16px;
+}
+
+.doctrine-top-center {
+  top: clamp(22px, 3vw, 44px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(244, 244, 245, 0.76);
+}
+
+.doctrine-top-right {
+  top: clamp(22px, 3vw, 44px);
+  right: clamp(20px, 3.2vw, 54px);
+  max-width: 420px;
+  text-align: right;
+  color: rgba(244, 244, 245, 0.42);
+}
+
+.doctrine-bottom-left {
+  left: clamp(20px, 3.2vw, 54px);
+  bottom: clamp(16px, 2.4vw, 30px);
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.doctrine-bottom-left .year {
+  font-size: clamp(32px, 2.6vw, 44px);
+  line-height: 0.92;
+  color: rgba(250, 250, 250, 0.95);
+  font-weight: 700;
+}
+
+.doctrine-bottom-left .date {
+  font-size: 14px;
+  color: rgba(250, 250, 250, 0.85);
+  font-weight: 700;
+}
+
+.doctrine-bottom-left .project {
+  font-size: 24px;
+  color: rgba(244, 244, 245, 0.92);
+}
+
+.doctrine-bottom-right {
+  right: clamp(20px, 3.2vw, 54px);
+  bottom: clamp(20px, 2.8vw, 34px);
+  color: rgba(250, 250, 250, 0.74);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+}
+
+.doctrine-stage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(20px, 3vw, 42px);
+}
+
+.doctrine-frame {
+  position: relative;
+  width: min(92vw, 1380px);
+  height: min(82vh, 860px);
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.doctrine-blob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(38vw, 560px);
+  height: min(38vw, 560px);
+  transform: translate(-50%, -50%);
+  border-radius: 44% 56% 47% 53% / 58% 42% 52% 48%;
+  filter: blur(30px);
+  background:
+    radial-gradient(44% 44% at 18% 64%, rgba(174, 125, 255, 0.34), transparent 86%),
+    radial-gradient(40% 40% at 82% 24%, rgba(50, 218, 255, 0.38), transparent 84%),
+    radial-gradient(48% 48% at 62% 84%, rgba(255, 31, 182, 0.4), transparent 84%),
+    radial-gradient(45% 45% at 45% 42%, rgba(255, 146, 33, 0.34), transparent 82%);
+  animation: doctrineBlob 10s linear infinite;
+}
+
+@keyframes doctrineBlob {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1.05);
+  }
+}
+
+.doctrine-tile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(290px, 23vw, 390px);
+  height: clamp(290px, 23vw, 390px);
+  transform: translate(-50%, -50%);
+  border-radius: 84px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.65);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.66);
+  isolation: isolate;
+}
+
+.doctrine-tile-media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.doctrine-tile-lens {
+  position: absolute;
+  inset: 14%;
+  border-radius: 9999px;
+  background: rgba(8, 8, 11, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.doctrine-tile-copy {
+  position: absolute;
+  left: 20%;
+  top: 56%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.doctrine-tile-copy p:first-child {
+  font-size: 13px;
+  color: rgba(250, 250, 250, 0.92);
+  font-weight: 600;
+}
+
+.doctrine-tile-copy p:last-child {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(244, 244, 245, 0.86);
+}
+
+.doctrine-cross {
+  position: absolute;
+  right: 18%;
+  top: 52%;
+  font-size: 36px;
+  line-height: 1;
+  color: rgba(250, 250, 250, 0.62);
+  z-index: 2;
+}
+
+.doctrine-tile-shadow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(130% 130% at 50% 72%, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.55));
+}
+
+.doctrine-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+
+.doctrine-expanded {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(90vw, 1320px);
+  height: min(78vh, 780px);
+  transform: translate(-50%, -50%);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+.doctrine-expanded-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.doctrine-close {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  z-index: 30;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  line-height: 1;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.doctrine-left-media {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 72px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.doctrine-left-lens {
+  position: absolute;
+  inset: 9% 12%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(5, 5, 8, 0.3);
+}
+
+.doctrine-intro-title {
+  position: absolute;
+  left: 12%;
+  bottom: 20%;
+  font-size: clamp(44px, 5.3vw, 88px);
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 0.95;
+  font-weight: 600;
+}
+
+.doctrine-editorial {
+  position: absolute;
+  left: 52%;
+  top: 13%;
+  width: 38%;
+  height: 74%;
+  color: rgba(244, 244, 245, 0.66);
+  font-size: 12px;
+  line-height: 1.56;
+}
+
+.doctrine-editorial-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 10px;
+  color: rgba(244, 244, 245, 0.62);
+}
+
+.doctrine-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.doctrine-columns p {
+  margin: 0 0 12px;
+}
+
+.doctrine-quote {
+  font-size: clamp(32px, 2.8vw, 54px);
+  line-height: 0.94;
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.doctrine-quote-author {
+  text-align: right;
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: rgba(244, 244, 245, 0.64);
+}
+
+.doctrine-right-media {
+  position: absolute;
+  right: 0;
+  top: 21%;
+  width: 33%;
+  height: 58%;
+  border-top-left-radius: 34px;
+  border-bottom-left-radius: 34px;
+  overflow: hidden;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.doctrine-right-media-top,
+.doctrine-right-media-bottom {
+  width: 100%;
+  height: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.doctrine-right-media-top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.doctrine-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(244, 244, 245, 0.4);
+}
+
+@media (max-width: 1100px) {
+  .doctrine-expanded {
+    height: min(86vh, 900px);
+  }
+
+  .doctrine-left-media {
+    left: 6% !important;
+    top: 8% !important;
+    width: 88% !important;
+    height: 36% !important;
+    x: 0;
+    y: 0;
+  }
+
+  .doctrine-intro-title {
+    left: 8%;
+    bottom: 14%;
+    font-size: clamp(34px, 8vw, 56px);
+  }
+
+  .doctrine-editorial {
+    left: 8%;
+    top: 48%;
+    width: 84%;
+    height: 44%;
+    overflow-y: auto;
+  }
+
+  .doctrine-right-media {
+    display: none;
+  }
+
+  .doctrine-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .doctrine-caption {
+    font-size: 12px;
+    bottom: 10%;
+    width: 86%;
+  }
+
+  .doctrine-bottom-right {
+    display: none;
+  }
+}
