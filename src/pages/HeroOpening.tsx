@@ -8,28 +8,11 @@ type HeroOpeningProps = {
   autoAdvanceDelayMs?: number;
 };
 
-type SequencePhase =
-  | "hidden"
-  | "stack"
-  | "swap-in"
-  | "page-hold"
-  | "swap-back"
-  | "spin-out"
-  | "spin-return"
-  | "done";
-
 export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 1200 }: HeroOpeningProps) {
   const navigate = useNavigate();
   const isNavigatingRef = useRef(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [phase, setPhase] = useState<SequencePhase>("hidden");
-  const [imageIndex, setImageIndex] = useState(0);
-  const [isSequenceComplete, setIsSequenceComplete] = useState(false);
-
-  const deckImages = ["/images/bg-states/micropreview.png", "/images/bg-states/micropreview.png"];
-  const deckPreviewA = "/images/bg-states/shrug.png";
-  const deckPreviewB = "/images/bg-states/idrishero.png";
-  const briefingPreview = "/images/bg-states/shrug.png";
+  const [isReady, setIsReady] = useState(false);
 
   const moveToFramework = useCallback(() => {
     if (isNavigatingRef.current) return;
@@ -40,19 +23,8 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
   }, [navigate]);
 
   useEffect(() => {
-    const timers: number[] = [];
-
-    timers.push(window.setTimeout(() => setPhase("stack"), 120));
-    timers.push(window.setTimeout(() => setPhase("spin-out"), 620));
-    timers.push(window.setTimeout(() => setPhase("swap-in"), 1180));
-    timers.push(window.setTimeout(() => setPhase("page-hold"), 1760));
-    timers.push(window.setTimeout(() => setPhase("swap-back"), 3760));
-    timers.push(window.setTimeout(() => setPhase("spin-return"), 4220));
-    timers.push(window.setTimeout(() => setImageIndex(1), 4460));
-    timers.push(window.setTimeout(() => setPhase("done"), 4780));
-    timers.push(window.setTimeout(() => setIsSequenceComplete(true), 4840));
-
-    return () => timers.forEach((id) => window.clearTimeout(id));
+    const timerId = window.setTimeout(() => setIsReady(true), 1450);
+    return () => window.clearTimeout(timerId);
   }, []);
 
   useEffect(() => {
@@ -71,158 +43,83 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
   }, [autoAdvance]);
 
   useEffect(() => {
-    if (!autoAdvance || hasInteracted || !isSequenceComplete) return;
+    if (!autoAdvance || hasInteracted || !isReady) return;
 
     const timerId = window.setTimeout(() => {
       moveToFramework();
     }, autoAdvanceDelayMs);
 
     return () => window.clearTimeout(timerId);
-  }, [autoAdvance, autoAdvanceDelayMs, hasInteracted, isSequenceComplete, moveToFramework]);
-
-  const imageX =
-    phase === "spin-out" || phase === "swap-in" || phase === "page-hold"
-      ? -320
-      : phase === "spin-return" || phase === "done"
-        ? 14
-      : 0;
-  const imageY = 0;
-  const imageScale = 1;
-  const imageRotation =
-    phase === "spin-out" || phase === "swap-in" || phase === "page-hold" || phase === "swap-back"
-      ? -360
-      : phase === "spin-return" || phase === "done"
-        ? 540
-        : 0;
-  const imageZ =
-    phase === "stack" || phase === "spin-out"
-      ? 6
-      : phase === "swap-in" || phase === "page-hold" || phase === "swap-back" || phase === "spin-return" || phase === "done"
-        ? 1
-        : 6;
-
-  const pageX = phase === "swap-in" || phase === "page-hold" ? 280 : 620;
+  }, [autoAdvance, autoAdvanceDelayMs, hasInteracted, isReady, moveToFramework]);
 
   return (
-    <section className="hero-transition flex min-h-[calc(100vh-7.5rem)] items-center justify-center">
-      <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-4 py-10">
-        <div className="relative h-[430px] w-[430px]">
-          <div className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 rounded-[40%_56%_46%_58%/54%_42%_58%_46%] bg-black blur-xl" />
+    <section className="hero-transition relative flex min-h-[calc(100vh-7.5rem)] items-center justify-center overflow-hidden py-8">
+      <div className="hero-trend-mesh absolute inset-0" />
+      <div className="hero-trend-lines absolute inset-0" />
+      <div className="hero-trend-halo hero-trend-halo-left absolute -left-20 top-10 h-64 w-64 rounded-full blur-3xl" />
+      <div className="hero-trend-halo hero-trend-halo-right absolute -right-20 bottom-8 h-72 w-72 rounded-full blur-3xl" />
 
-          <div
-            className="absolute left-1/2 top-1/2 h-[250px] w-[250px] border border-slate-200/30 bg-black"
-            style={{
-              opacity: phase === "hidden" ? 0 : 1,
-              transform: "translate(-50%, -50%) translate(-10px, 8px) rotate(-40deg)",
-              borderRadius: "64px",
-              overflow: "hidden",
-              zIndex: 2,
-              transition: "opacity 320ms ease",
-            }}
-          >
-            <img src={deckPreviewA} alt="Ship preview" className="absolute inset-0 h-full w-full object-cover" />
-          </div>
-          <div
-            className="absolute left-1/2 top-1/2 h-[250px] w-[250px] border border-slate-200/35 bg-black"
-            style={{
-              opacity: phase === "hidden" ? 0 : 1,
-              transform: "translate(-50%, -50%) translate(-6px, 4px) rotate(-20deg)",
-              borderRadius: "64px",
-              overflow: "hidden",
-              zIndex: 3,
-              transition: "opacity 320ms ease",
-            }}
-          >
-            <img src={deckPreviewB} alt="Systems preview" className="absolute inset-0 h-full w-full object-cover" />
-          </div>
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+        <div
+          className={[
+            "transition-all duration-700 ease-out",
+            isReady ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+          ].join(" ")}
+        >
+          <p className="title-font text-xs uppercase tracking-[0.34em] text-cyan-100/75">Field Manual v2.0</p>
+          <h1 className="title-font mt-4 text-4xl leading-[0.95] text-white sm:text-5xl lg:text-7xl">
+            DOCTRINE-DRIVEN
+            <br />
+            <span className="hero-trend-gradient-text">MULTI-CREW FLOW</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-base text-slate-200/85 sm:text-lg">
+            Fast onboarding for ship roles, targeting discipline, and comms habits in one living playbook.
+          </p>
 
-          <div
-            className="absolute left-1/2 top-1/2 h-[250px] w-[250px] overflow-hidden border border-cyan-200/40 bg-black shadow-[0_16px_36px_rgba(0,0,0,0.35)]"
-            style={{
-              opacity: phase === "hidden" ? 0 : 1,
-              transform: `translate(-50%, -50%) translateX(${imageX}px) translateY(${imageY}px) scale(${imageScale}) rotate(${imageRotation}deg)`,
-              borderRadius: "64px",
-              zIndex: imageZ,
-              transition:
-                phase === "spin-out" || phase === "spin-return"
-                  ? "transform 560ms cubic-bezier(0.16,0.84,0.32,1), opacity 300ms ease"
-                  : "transform 420ms cubic-bezier(0.16,0.84,0.32,1), opacity 300ms ease",
-            }}
-          >
-            <img
-              src={deckImages[imageIndex]}
-              alt="Hero preview"
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{ transform: "scale(3)", transformOrigin: "center center" }}
-            />
-            <div className="absolute inset-[11%] rounded-full border border-white/18 bg-black/20" />
-          </div>
-
-          <div
-            className="absolute left-1/2 top-1/2 h-[750px] w-[750px] border border-transparent bg-transparent p-5 text-transparent"
-            style={{
-              opacity: phase === "swap-in" || phase === "page-hold" || phase === "swap-back" ? 1 : 0,
-              transform:
-                phase === "swap-in"
-                  ? `translate(-50%, -50%) translateX(${pageX}px) perspective(900px) rotateY(-18deg) scaleX(0.88)`
-                  : phase === "swap-back"
-                    ? `translate(-50%, -50%) translateX(${pageX}px) perspective(900px) rotateY(16deg) scaleX(0.9)`
-                    : `translate(-50%, -50%) translateX(${pageX}px) perspective(900px) rotateY(0deg) scaleX(1)`,
-              clipPath:
-                phase === "swap-in"
-                  ? "inset(0 22% 0 0 round 64px)"
-                  : phase === "swap-back"
-                    ? "inset(0 0 0 22% round 64px)"
-                    : "inset(0 0 0 0 round 64px)",
-              borderRadius: "64px",
-              transformOrigin: "right center",
-              zIndex: 5,
-              transition:
-                "transform 440ms cubic-bezier(0.16,0.84,0.32,1), opacity 280ms ease, clip-path 440ms cubic-bezier(0.16,0.84,0.32,1)",
-            }}
-          >
-            <div className="h-full w-full overflow-hidden rounded-[34px] border border-transparent bg-transparent">
-              <div
-                className="origin-top-left"
-                style={{
-                  transform: "scale(0.3)",
-                  width: "333.333%",
-                  height: "333.333%",
-                }}
-              >
-                <div className="relative h-full w-full overflow-hidden rounded-[24px] border border-transparent bg-transparent">
-                  <img src={briefingPreview} alt="Next page preview" className="absolute inset-0 h-full w-full object-cover" />
-                  <div className="absolute left-10 top-10">
-                    <p className="title-font text-xl uppercase tracking-[0.26em] text-transparent">Systems Preview</p>
-                    <p className="mt-3 max-w-[520px] text-base text-transparent">
-                      Sub-Targeting, Keybinds, and Additional Settings.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={moveToFramework}
+              className="rounded-xl border border-cyan-200/55 bg-cyan-200/10 px-7 py-3 text-sm uppercase tracking-[0.22em] text-cyan-50 transition hover:-translate-y-0.5 hover:bg-cyan-200/20"
+            >
+              Enter Framework
+            </button>
+            <span className="rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.18em] text-slate-200/75 backdrop-blur-md">
+              Systems + Ships
+            </span>
           </div>
         </div>
 
-        <div
-          className="mt-10 text-center transition-opacity duration-500 ease-out"
-          style={{ opacity: isSequenceComplete ? 1 : 0 }}
-        >
-          <p className="title-font text-xs uppercase tracking-[0.3em] text-slate-300">Field Manual v1.0</p>
-          <h1 className="title-font mt-4 text-4xl leading-tight text-white sm:text-5xl lg:text-6xl">
-            A DOCTRINE-FIRST FRAMEWORK
-          </h1>
-          <p className="title-font mt-4 text-xl uppercase tracking-[0.18em] text-slate-300 sm:text-2xl">
-            FOR MULTI-CREW COMBAT
-          </p>
+        <div className="relative mx-auto w-full max-w-[460px]">
+          <div className="hero-trend-ring absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-100/25" />
+          <div className="hero-trend-ring hero-trend-ring-reverse absolute left-1/2 top-1/2 h-[290px] w-[290px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-100/20" />
 
-          <button
-            type="button"
-            onClick={moveToFramework}
-            className="mt-10 rounded-xl border border-amber-400/90 bg-amber-300/12 px-7 py-3 text-sm uppercase tracking-[0.22em] text-amber-100 transition hover:-translate-y-0.5 hover:bg-amber-300/20"
+          <div
+            className={[
+              "hero-trend-card relative overflow-hidden rounded-[2.2rem] border border-white/20 bg-black/35 p-3 shadow-[0_30px_80px_rgba(2,8,26,0.55)] backdrop-blur-xl transition-all duration-700",
+              isReady ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
+            ].join(" ")}
           >
-            Enter
-          </button>
+            <div className="relative overflow-hidden rounded-[1.7rem] border border-white/20">
+              <img
+                src="/images/bg-states/idrishero.png"
+                alt="Hero ship preview"
+                className="hero-trend-image h-[360px] w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/10 to-slate-950/70" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/20 bg-slate-900/35 px-4 py-3 backdrop-blur-md">
+                <p className="title-font text-[0.63rem] uppercase tracking-[0.26em] text-cyan-100/85">Live Playbook</p>
+                <p className="mt-1 text-sm text-slate-100/90">Sub-targeting, keybinds, and ship doctrine synced.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="hero-trend-chip absolute -left-6 top-10 rounded-full border border-cyan-100/25 bg-cyan-100/10 px-3 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-cyan-50/90 backdrop-blur-xl">
+            Targeting
+          </div>
+          <div className="hero-trend-chip hero-trend-chip-delay absolute -right-5 bottom-14 rounded-full border border-amber-100/30 bg-amber-200/10 px-3 py-1 text-[0.62rem] uppercase tracking-[0.18em] text-amber-50/95 backdrop-blur-xl">
+            Gunnery
+          </div>
         </div>
       </div>
     </section>

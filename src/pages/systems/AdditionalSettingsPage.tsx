@@ -89,17 +89,23 @@ const flightReadyBindings: SettingsRow[] = [
 function SettingsTable({ columns, rows }: { columns: [string, string, string]; rows: SettingsRow[] }) {
   function renderKeybind(value: string) {
     const trimmed = value.trim();
-    if (!trimmed) return <span className="text-slate-500"> </span>;
+    if (!trimmed) {
+      return <span className="turret-keybind-empty">Unbound</span>;
+    }
 
     const parts = trimmed.split("+").map((part) => part.trim()).filter(Boolean);
-    if (parts.length === 0) return <span className="text-slate-500"> </span>;
+    if (parts.length === 0) {
+      return <span className="turret-keybind-empty">Unbound</span>;
+    }
 
     return (
-      <span className="inline-flex flex-wrap items-center gap-1">
+      <span className="turret-keybind-chip-wrap inline-flex flex-wrap items-center gap-1">
         {parts.map((part, idx) => (
           <span key={`${part}-${idx}`} className="inline-flex items-center gap-1">
             {idx > 0 ? <span className="text-slate-400">+</span> : null}
-            <span className="rounded border border-cyan-200/35 bg-cyan-950/30 px-1.5 py-0.5 text-slate-100">{part}</span>
+            <span className="turret-keybind-chip rounded border border-cyan-200/35 bg-cyan-950/30 px-1.5 py-0.5 text-slate-100">
+              {part}
+            </span>
           </span>
         ))}
       </span>
@@ -107,21 +113,24 @@ function SettingsTable({ columns, rows }: { columns: [string, string, string]; r
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-cyan-300/25 bg-black/35">
-      <div className="grid grid-cols-[1.4fr_0.8fr_1.8fr] border-b border-cyan-300/20 bg-cyan-950/25 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-cyan-200">
+    <div className="turret-table additional-table overflow-hidden rounded-xl border border-cyan-300/25">
+      <div className="turret-table-head">
         <span>{columns[0]}</span>
         <span>{columns[1]}</span>
         <span>{columns[2]}</span>
       </div>
       <div className="divide-y divide-white/10">
         {rows.map((row, idx) => (
-          <div
-            key={`${row.action}-${idx}`}
-            className="grid grid-cols-[1.4fr_0.8fr_1.8fr] gap-3 px-4 py-3 text-lg leading-normal text-slate-200 transition-colors duration-150 hover:bg-cyan-300/20"
-          >
-            <span>{row.action}</span>
-            <span className="text-slate-300">{renderKeybind(row.keybind)}</span>
-            <span>{row.description || " "}</span>
+          <div key={`${row.action}-${idx}`} className="turret-table-row additional-table-row">
+            <span className="turret-cell-action" data-label={columns[0]}>
+              {row.action}
+            </span>
+            <span className="turret-cell-keybind text-slate-300" data-label={columns[1]}>
+              {renderKeybind(row.keybind)}
+            </span>
+            <span className="turret-cell-description" data-label={columns[2]}>
+              {row.description || "No note"}
+            </span>
           </div>
         ))}
       </div>
@@ -131,11 +140,13 @@ function SettingsTable({ columns, rows }: { columns: [string, string, string]; r
 
 function SettingsSection({ title, subtitle, columns, rows }: SettingsTableSection) {
   return (
-    <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-      <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">{title}</h2>
-      {subtitle ? <p className="mt-3 text-base uppercase tracking-[0.14em] text-cyan-200/80">{subtitle}</p> : null}
-      <div className="mt-5">
-        <SettingsTable columns={columns} rows={rows} />
+    <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+      <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">{title}</h2>
+        {subtitle ? <p className="mt-2 text-sm uppercase tracking-[0.14em] text-cyan-200/80">{subtitle}</p> : null}
+        <div className="mt-4">
+          <SettingsTable columns={columns} rows={rows} />
+        </div>
       </div>
     </article>
   );
@@ -143,80 +154,89 @@ function SettingsSection({ title, subtitle, columns, rows }: SettingsTableSectio
 
 export default function AdditionalSettingsPage() {
   return (
-    <section className="route-fade pb-8 pt-2">
-      <div className="mx-auto max-w-[1180px] space-y-6">
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <p className="title-font text-xs uppercase tracking-[0.18em] text-slate-300">Systems Manual</p>
-          <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Additional Keybinds and Game Settings</h1>
-          <p className="mt-3 text-2xl text-cyan-100/85">Optimized configuration for turret operations and multi-crew combat</p>
-          <div className="mt-6 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-lg leading-normal text-cyan-100">
-            <span className="font-semibold">Engine Configuration:</span> Use the <strong>user.cfg</strong> file provided by Min for optimized engine configuration.
-          </div>
-        </article>
-
-        <SettingsSection
-          title="Critical Keybinds"
-          columns={["Action", "Keybind", "Description"]}
-          rows={criticalKeybinds}
-        />
-
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">General Settings</h2>
-          <div className="mt-4">
-            <h3 className="title-font text-xl tracking-[0.08em] text-cyan-300">Turn Off:</h3>
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-lg leading-normal text-slate-200">
-              <li>Camera movement</li>
-              <li>Vibration</li>
-              <li>Camera Spring Movement</li>
-            </ul>
-          </div>
-
-          <div className="mt-6 space-y-6">
-            <SettingsTable columns={["Setting", "Value", "Notes"]} rows={defaultsFlight} />
-            <div className="rounded-xl border border-amber-300/35 bg-amber-900/20 p-4 text-lg leading-normal text-amber-200">
-              <span className="font-semibold">Power Settings:</span> Draw missing power from other... - <strong>No</strong>
+    <section className="turret-modern additional-modern route-fade pb-8 pt-2">
+      <div className="mx-auto max-w-[1180px] space-y-4">
+        <article className="framework-modern-card framework-modern-card-systems additional-hero rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <p className="framework-modern-kicker">Systems Manual</p>
+            <h1 className="title-font mt-2 text-3xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Additional Keybinds and Game Settings</h1>
+            <p className="mt-2 text-base uppercase tracking-[0.1em] text-cyan-100/85 sm:text-lg">
+              Optimized configuration for turret operations and multi-crew combat
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="additional-chip">Turret Baseline</span>
+              <span className="additional-chip">ESP + Mouse</span>
+              <span className="additional-chip">Flight Ready Reset</span>
             </div>
-            <SettingsTable columns={["Setting", "Value", "Notes"]} rows={defaultsHud} />
+            <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-sm leading-relaxed text-cyan-100 sm:text-base">
+              <span className="font-semibold">Engine Configuration:</span> Use the <strong>user.cfg</strong> file provided by Min for optimized engine configuration.
+            </div>
           </div>
         </article>
 
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">Mouse and ESP Settings</h2>
-          <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-lg leading-normal text-cyan-100">
-            <span className="font-semibold">ESP Changes:</span> ESP is different now. Curve and Zone size are now combined. Mouse aim generally prefers <strong>high strength, low curvature 0.05-0.2</strong>.
+        <SettingsSection title="Critical Keybinds" columns={["Action", "Keybind", "Description"]} rows={criticalKeybinds} />
+
+        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">General Settings</h2>
+            <div className="mt-3">
+              <h3 className="title-font text-lg tracking-[0.08em] text-cyan-300">Turn Off:</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-base leading-relaxed text-slate-200">
+                <li>Camera movement</li>
+                <li>Vibration</li>
+                <li>Camera Spring Movement</li>
+              </ul>
+            </div>
+            <div className="mt-4 space-y-4">
+              <SettingsTable columns={["Setting", "Value", "Notes"]} rows={defaultsFlight} />
+              <div className="rounded-xl border border-amber-300/35 bg-amber-900/20 px-4 py-5 text-base leading-loose text-amber-200">
+                <span className="font-semibold">Power Settings:</span> Draw missing power from other... - <strong>No</strong>
+              </div>
+              <SettingsTable columns={["Setting", "Value", "Notes"]} rows={defaultsHud} />
+            </div>
           </div>
-          <div className="mt-6">
-            <SettingsTable columns={["Setting", "Value", "Notes"]} rows={vjoySettings} />
+        </article>
+
+        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Mouse and ESP Settings</h2>
+            <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-base leading-relaxed text-cyan-100">
+              <span className="font-semibold">ESP Changes:</span> ESP is different now. Curve and Zone size are now combined. Mouse aim generally prefers <strong>high strength, low curvature 0.05-0.2</strong>.
+            </div>
+            <div className="mt-4">
+              <SettingsTable columns={["Setting", "Value", "Notes"]} rows={vjoySettings} />
+            </div>
           </div>
         </article>
 
         <SettingsSection title="Weapon Settings" columns={["Setting", "Value", "Notes"]} rows={weaponDefaults} />
-
         <SettingsSection title="Targeting Settings" columns={["Setting", "Value", "Notes"]} rows={targetingSettings} />
 
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">Camera and Visual Settings</h2>
-          <div className="mt-6 space-y-6">
-            <SettingsTable columns={["Setting", "Value", "Notes"]} rows={gForceAndCamera} />
-            <div>
-              <h3 className="title-font text-xl tracking-[0.08em] text-cyan-300">Audio Settings</h3>
-              <p className="mt-2 text-base uppercase tracking-[0.14em] text-cyan-200/80">
-                Found in Audio tab at top of screen
-              </p>
-              <div className="mt-4">
-                <SettingsTable columns={["Setting", "Value", "Notes"]} rows={audioSettings} />
+        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Camera and Visual Settings</h2>
+            <div className="mt-4 space-y-4">
+              <SettingsTable columns={["Setting", "Value", "Notes"]} rows={gForceAndCamera} />
+              <div>
+                <h3 className="title-font text-lg tracking-[0.08em] text-cyan-300">Audio Settings</h3>
+                <p className="mt-2 text-xs uppercase tracking-[0.14em] text-cyan-200/80">Found in Audio tab at top of screen</p>
+                <div className="mt-3">
+                  <SettingsTable columns={["Setting", "Value", "Notes"]} rows={audioSettings} />
+                </div>
               </div>
             </div>
           </div>
         </article>
 
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">Flight Ready Settings</h2>
-          <div className="mt-4 rounded-xl border border-red-300/35 bg-red-900/20 p-4 text-lg leading-normal text-red-200">
-            <span className="font-semibold">Flight Ready Bindings:</span> You can optionally, although I <strong>highly recommend</strong> binding all of these to "Flight Ready" or your own reset key in case of abnormal behavior.
-          </div>
-          <div className="mt-6">
-            <SettingsTable columns={["Action", "Keybind", "Category"]} rows={flightReadyBindings} />
+        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Flight Ready Settings</h2>
+            <div className="mt-4 rounded-xl border border-red-300/35 bg-red-900/20 p-4 text-base leading-relaxed text-red-200">
+              <span className="font-semibold">Flight Ready Bindings:</span> You can optionally, although I <strong>highly recommend</strong> binding all of these to "Flight Ready" or your own reset key in case of abnormal behavior.
+            </div>
+            <div className="mt-4">
+              <SettingsTable columns={["Action", "Keybind", "Category"]} rows={flightReadyBindings} />
+            </div>
           </div>
         </article>
       </div>

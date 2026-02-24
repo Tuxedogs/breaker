@@ -42,14 +42,14 @@ export default function GlassCard({
     <article
       style={accentStyle}
       className={[
-        "glass-accent-card relative flex h-full flex-col overflow-hidden rounded-3xl p-6",
+        "glass-accent-card group relative flex h-full flex-col overflow-hidden rounded-[2rem] p-6 sm:p-7",
         // richer base: darker glass so glow has contrast
-        "bg-black/40 backdrop-blur-2xl",
+        "bg-slate-950/42 backdrop-blur-2xl",
         // secondary outer frame with dark moat
-        "outline outline-2 outline-offset-[9px]",
+        "outline outline-2 outline-offset-[8px]",
         // motion
-        "transition-[filter] duration-250 ease-out",
-        dimmed ? "brightness-[0.6]" : "brightness-100",
+        "transition-all duration-300 ease-out hover:-translate-y-1",
+        dimmed ? "brightness-[0.58] saturate-75" : "brightness-100",
       ].join(" ")}
     >
       {shipsStyle ? (
@@ -70,14 +70,14 @@ export default function GlassCard({
       {/* Base interior tint: controls how much accent color mixes with background through the glass */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.045]"
+        className="pointer-events-none absolute inset-0 opacity-[0.2]"
         style={{ backgroundColor: "var(--accent)" }}
       />
 
       {/* Accent wash across panel (adds "rich color" inside the glass) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-0"
+        className="pointer-events-none absolute inset-0 opacity-[0.24]"
         style={{
           background:
             `radial-gradient(105% 82% at ${centerBloom ? "50% 14%" : "20% 12%"}, var(--accent-soft) 0%, rgba(0,0,0,0) 48%),` +
@@ -88,7 +88,7 @@ export default function GlassCard({
       {/* Big ambient bloom (soft, wide) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -inset-12 opacity-0"
+        className="pointer-events-none absolute -inset-12 opacity-[0.35]"
         style={{
           background:
             `radial-gradient(46% 36% at ${centerBloom ? "50% 14%" : "16% 12%"}, var(--accent-soft) 0%, rgba(0,0,0,0) 62%),` +
@@ -100,7 +100,7 @@ export default function GlassCard({
       {/* Top accent rail (crisp + bright like the reference) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-10 top-[10px] h-[3px] rounded-full opacity-0"
+        className="pointer-events-none absolute inset-x-8 top-[11px] h-[3px] rounded-full opacity-85"
         style={{
           background: "linear-gradient(90deg, rgba(0,0,0,0), var(--accent), rgba(0,0,0,0))",
           boxShadow: "0 0 6px 1px var(--accent-soft), 0 0 14px 2px var(--accent-soft)",
@@ -110,37 +110,37 @@ export default function GlassCard({
       {/* Rim + edge glow (tighter, brighter, less fog) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-3xl opacity-90"
+        className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-90"
         style={{
           boxShadow:
             // inner rim
             "0 0 0 1px rgba(255,255,255,0.14) inset, " +
-            // neutral rim at rest (no accent glow)
-            "0 0 0 1px rgba(255,255,255,0.1) inset, " +
+            // neutral rim at rest
+            "0 0 0 1px rgba(255,255,255,0.18) inset, " +
             // depth shadow for lift
-            "0 30px 90px -25px rgba(0,0,0,0.90)",
+            "0 28px 90px -20px rgba(0,0,0,0.9)",
         }}
       />
       {shipsStyle ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-3xl opacity-70"
+          className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-90"
           style={{
             boxShadow:
               "0 0 0 1px color-mix(in srgb, var(--accent-soft) 58%, rgba(255,255,255,0.22) 42%) inset, " +
-              "0 0 20px 2px rgba(255, 181, 70, 0.12)",
+              "0 0 22px 2px rgba(255, 181, 70, 0.22)",
           }}
         />
       ) : null}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-3xl opacity-0"
+        className="pointer-events-none absolute inset-0 rounded-[2rem] opacity-100"
         style={{
           boxShadow:
             "0 0 0 1px color-mix(in srgb, var(--accent-soft) 60%, rgba(255,255,255,0.25) 40%) inset, " +
-            "0 0 18px 2px var(--accent-soft), " +
+            "0 0 22px 2px var(--accent-soft), " +
             // depth shadow for lift
-            "0 30px 90px -25px rgba(0,0,0,0.90)",
+            "0 30px 90px -25px rgba(0,0,0,0.9)",
         }}
       />
       {shipsStyle ? (
@@ -190,7 +190,7 @@ export default function GlassCard({
       <header className={`relative z-10 pb-5 ${centeredHeader ? "text-center" : ""}`}>
         {showHeaderMarker ? (
           <div
-            className="mx-auto mb-3 h-8 w-8 bg-white"
+            className="mx-auto mb-3 h-8 w-8 rounded-sm bg-white"
             style={
               shipsStyle
                 ? {
@@ -202,10 +202,10 @@ export default function GlassCard({
           />
         ) : null}
         <h2
-          className="title-font text-3xl tracking-[0.2em]"
+          className="title-font text-3xl tracking-[0.2em] sm:text-4xl"
           style={{
             color: "color-mix(in srgb, var(--accent) 86%, white 14%)",
-            textShadow: "0 0 18px rgba(0,0,0,0.55)",
+            textShadow: "0 0 20px rgba(0,0,0,0.55)",
           }}
         >
           {title}
@@ -227,29 +227,36 @@ export default function GlassCard({
 
       <div aria-hidden className="h-5 opacity-0" />
 
-      <div className="relative z-10 mt-auto px-3 pt-3">
+      <div className="relative z-10 mt-auto px-1 pt-4">
         <Link
           to={ctaTo}
-          className={`accent-cta group/cta relative block w-full px-[80px] py-3 text-center text-lg font-bold uppercase tracking-[0.2em] transition-transform duration-300 hover:translate-y-[1px] ${shipsStyle ? "rounded-md" : "rounded-xl"}`}
+          className={`accent-cta group/cta relative block w-full overflow-hidden px-8 py-3 text-center text-sm font-bold uppercase tracking-[0.2em] sm:text-base ${shipsStyle ? "rounded-lg" : "rounded-xl"}`}
           style={{
             boxShadow: shipsStyle
-              ? "0 0 0 1px color-mix(in srgb, var(--accent) 65%, rgba(255,255,255,0.2) 35%) inset, 0 0 0 1px rgba(0,0,0,0.42)"
-              : "0 0 0 1px rgba(255,255,255,0.06) inset",
+              ? "0 0 0 1px color-mix(in srgb, var(--accent) 65%, rgba(255,255,255,0.28) 35%) inset, 0 0 0 1px rgba(0,0,0,0.42)"
+              : "0 0 0 1px rgba(255,255,255,0.2) inset",
             background: shipsStyle
-              ? "linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, rgba(6,8,14,0.94) 78%) 0%, color-mix(in srgb, var(--accent) 14%, rgba(3,4,8,0.96) 86%) 100%)"
-              : undefined,
+              ? "linear-gradient(180deg, color-mix(in srgb, var(--accent) 28%, rgba(8,11,20,0.94) 72%) 0%, color-mix(in srgb, var(--accent) 16%, rgba(3,4,8,0.96) 84%) 100%)"
+              : "linear-gradient(180deg, color-mix(in srgb, var(--accent) 24%, rgba(8,12,24,0.92) 76%) 0%, rgba(2,5,11,0.95) 100%)",
           }}
         >
           {/* CTA glow wash */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 group-hover/cta:opacity-35"
+            className="pointer-events-none absolute inset-0 rounded-xl opacity-35 transition-opacity duration-300 group-hover/cta:opacity-60"
             style={{
               background:
                 "radial-gradient(70% 120% at 50% 0%, var(--accent-soft) 0%, rgba(0,0,0,0) 60%)",
             }}
           />
-          <span className="relative z-10">{ctaLabel}</span>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -left-1/3 top-0 h-full w-1/3 -skew-x-12 bg-white/25 opacity-0 blur-md transition-all duration-500 group-hover/cta:left-[110%] group-hover/cta:opacity-70"
+          />
+          <span className="relative z-10 inline-flex items-center gap-2">
+            {ctaLabel}
+            <span className="transition-transform duration-300 group-hover/cta:translate-x-1">{">"}</span>
+          </span>
         </Link>
       </div>
     </article>

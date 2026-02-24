@@ -146,17 +146,21 @@ const sections: KeybindSection[] = [
 function KeybindTable({ columns, rows }: { columns: [string, string, string]; rows: KeybindRow[] }) {
   function renderKeybind(value: string) {
     const trimmed = value.trim();
-    if (!trimmed) return <span className="text-slate-500"> </span>;
+    if (!trimmed) {
+      return <span className="turret-keybind-empty">Unbound</span>;
+    }
 
     const parts = trimmed.split("+").map((part) => part.trim()).filter(Boolean);
-    if (parts.length === 0) return <span className="text-slate-500"> </span>;
+    if (parts.length === 0) {
+      return <span className="turret-keybind-empty">Unbound</span>;
+    }
 
     return (
-      <span className="inline-flex flex-wrap items-center gap-1">
+      <span className="turret-keybind-chip-wrap inline-flex flex-wrap items-center gap-1">
         {parts.map((part, idx) => (
           <span key={`${part}-${idx}`} className="inline-flex items-center gap-1">
             {idx > 0 ? <span className="text-slate-400">+</span> : null}
-            <span className="rounded border border-cyan-200/35 bg-cyan-950/30 px-1.5 py-0.5 text-slate-100">
+            <span className="turret-keybind-chip rounded border border-cyan-200/35 bg-cyan-950/30 px-1.5 py-0.5 text-slate-100">
               {part}
             </span>
           </span>
@@ -166,24 +170,24 @@ function KeybindTable({ columns, rows }: { columns: [string, string, string]; ro
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-cyan-300/25 bg-black/35">
-      <div className="grid grid-cols-[1.4fr_0.8fr_1.8fr] border-b border-cyan-300/20 bg-cyan-950/25 px-4 py-3 text-sm font-semibold uppercase tracking-[0.12em] text-cyan-200">
+    <div className="turret-table additional-table overflow-hidden rounded-xl border border-cyan-300/25">
+      <div className="turret-table-head">
         <span>{columns[0]}</span>
         <span>{columns[1]}</span>
         <span>{columns[2]}</span>
       </div>
       <div className="divide-y divide-white/10">
         {rows.map((row, idx) => (
-          <div
-            key={`${row.action}-${idx}`}
-            className={[
-              "grid grid-cols-[1.4fr_0.8fr_1.8fr] gap-3 px-4 py-3 text-lg leading-normal text-slate-200 transition-colors duration-150",
-              "hover:bg-cyan-300/20",
-            ].join(" ")}
-          >
-            <span>{row.action}</span>
-            <span className="text-slate-300">{renderKeybind(row.keybind)}</span>
-            <span>{row.description || " "}</span>
+          <div key={`${row.action}-${idx}`} className="turret-table-row additional-table-row">
+            <span className="turret-cell-action" data-label={columns[0]}>
+              {row.action}
+            </span>
+            <span className="turret-cell-keybind text-slate-300" data-label={columns[1]}>
+              {renderKeybind(row.keybind)}
+            </span>
+            <span className="turret-cell-description" data-label={columns[2]}>
+              {row.description || "No note"}
+            </span>
           </div>
         ))}
       </div>
@@ -193,64 +197,80 @@ function KeybindTable({ columns, rows }: { columns: [string, string, string]; ro
 
 export default function TurretKeybindsPage() {
   return (
-    <section className="route-fade pb-8 pt-2">
-      <div className="mx-auto max-w-[1180px] space-y-6">
-        <article className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6">
-          <p className="title-font text-xs uppercase tracking-[0.18em] text-slate-300">Systems Manual</p>
-          <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Turret Keybindings</h1>
-          <p className="mt-3 text-2xl text-cyan-100/85">Aim faster, kill quicker</p>
-          <p className="mt-5 text-xl leading-normal text-slate-200">
+    <section className="turret-modern additional-modern route-fade pb-8 pt-2">
+      <div className="mx-auto max-w-[1180px] space-y-4">
+        <article className="framework-modern-card framework-modern-card-systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-[1.2rem] border border-white/18 p-4 sm:p-5">
+            <p className="framework-modern-kicker">Systems Manual</p>
+            <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Turret Keybindings</h1>
+            <p className="mt-2 text-lg uppercase tracking-[0.1em] text-cyan-100/85 sm:text-xl">Aim faster, kill quicker</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <span className="additional-chip">Seat Flow</span>
+              <span className="additional-chip">Target Cycling</span>
+              <span className="additional-chip">Turret Control</span>
+            </div>
+            <p className="mt-4 text-base leading-relaxed text-slate-200 sm:text-lg">
             This section covers the essential keybindings for operating your turret. Some are strictly for turret operations, while others are general best practices. Sections here are accurate in the order of which they appear in the keybinding menu.
-          </p>
-          <div className="mt-6 rounded-xl border border-amber-300/35 bg-amber-900/20 p-4 text-lg leading-normal text-amber-200">
-            <span className="font-semibold">Binding Preferences:</span> Hard swapping keybinds with modifiers (ALT+, RALT+, SHIFT+) is generally preferred over toggles. This isn't exclusively a turret best-practice.
+            </p>
+          </div>
+          <div className="mt-4 rounded-xl border border-amber-300/35 bg-amber-900/20 p-4 text-base leading-relaxed text-amber-200 sm:text-lg">
+            <span className="font-semibold">Binding Preferences:</span> Hard swapping keybinds with modifiers (ALT+, RALT+, SHIFT+) is generally preferred over toggles. This is not exclusively a turret best-practice.
           </div>
         </article>
 
-        {sections.map((section) => (
-          <article
-            key={section.title}
-            className="rounded-2xl border border-cyan-300/35 bg-[rgba(0,0,0,0.3)] p-5 backdrop-blur-[8px] sm:p-6"
-          >
-            <h2 className="title-font text-3xl tracking-[0.04em] text-cyan-200">{section.title}</h2>
-            {section.title === "Multi Function Displays (MFDs)" ? (
-              <>
-                <p className="mt-3 text-xl leading-normal text-slate-200">Configure these to match your fighter bindings</p>
-                <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-lg leading-normal text-cyan-100">
-                  These bindings should mirror the binds you use in a fighter. Power/Diagnostics on one side, comms for targeting and calling on the other. The ability to cycle pages is extremely useful when you cannot cycle manually.
+        <div className="grid gap-5 xl:grid-cols-2">
+          {sections.map((section) => {
+            const isWide = section.rows.length > 4 || section.title === "Multi Function Displays (MFDs)";
+            return (
+              <article
+                key={section.title}
+                className={[
+                  "framework-modern-card framework-modern-card-systems rounded-2xl border border-cyan-300/35 p-5 backdrop-blur-[8px] sm:p-6",
+                  isWide ? "xl:col-span-2" : "",
+                ].join(" ")}
+              >
+                <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+                  <h2 className="title-font text-2xl tracking-[0.05em] text-cyan-200 sm:text-3xl">{section.title}</h2>
+                  {section.title === "Multi Function Displays (MFDs)" ? (
+                    <>
+                      <p className="mt-3 text-base leading-relaxed text-slate-200 sm:text-lg">Configure these to match your fighter bindings</p>
+                      <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-base leading-relaxed text-cyan-100 sm:text-lg">
+                        These bindings should mirror the binds you use in a fighter. Power/Diagnostics on one side, comms for targeting and calling on the other. The ability to cycle pages is extremely useful when you cannot cycle manually.
+                      </div>
+                    </>
+                  ) : null}
+                  {section.title === "Target Cycling" ? (
+                    <div className="mt-4 rounded-xl border border-red-300/35 bg-red-900/20 p-4 text-base leading-relaxed text-red-200 sm:text-lg">
+                      <span className="font-semibold">Critical for Component Targeting:</span> Sub-targeting is essential for effective damage application.
+                    </div>
+                  ) : null}
+                  {section.subtitle ? (
+                    <p className="mt-3 text-base uppercase tracking-[0.14em] text-cyan-200/80">{section.subtitle}</p>
+                  ) : null}
+                  <div className="mt-5">
+                    <KeybindTable columns={section.columns} rows={section.rows} />
+                  </div>
+                  {section.title === "Target Cycling" ? (
+                    <p className="mt-4 text-sm leading-relaxed text-slate-400">
+                      Additional sub-targeting guidance is available in the <strong>Sub Targeting</strong> section.
+                    </p>
+                  ) : null}
                 </div>
-              </>
-            ) : null}
-            {section.title === "Target Cycling" ? (
-              <div className="mt-4 rounded-xl border border-red-300/35 bg-red-900/20 p-4 text-lg leading-normal text-red-200">
-                <span className="font-semibold">Critical for Component Targeting:</span> Sub-targeting is essential for effective damage application.
-              </div>
-            ) : null}
-            {section.subtitle ? (
-              <p className="mt-3 text-base uppercase tracking-[0.14em] text-cyan-200/80">{section.subtitle}</p>
-            ) : null}
-            <div className="mt-5">
-              <KeybindTable columns={section.columns} rows={section.rows} />
-            </div>
-            {section.title === "Target Cycling" ? (
-              <p className="mt-4 text-base leading-normal text-slate-400">
-                Additional sub-targeting guidance is available in the <strong>Sub Targeting</strong> section.
-              </p>
-            ) : null}
-          </article>
-        ))}
+              </article>
+            );
+          })}
+        </div>
 
-        <article className="rounded-2xl border border-cyan-300/35 bg-cyan-950/20 p-5 backdrop-blur-[8px] sm:p-6">
-          <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200">Further Reading</h2>
-          <p className="mt-3 text-lg leading-normal text-cyan-100">
-            The Addl. Keybindings section covers common keybinds in more detail, as well as game settings recommendations.
-          </p>
-          <Link
-            to="/systems/additional-settings-binds"
-            className="mt-4 inline-block text-lg font-semibold text-cyan-300 transition hover:text-cyan-200"
-          >
-            Addl. Keybindings
-          </Link>
+        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200">Further Reading</h2>
+            <p className="mt-3 text-base leading-relaxed text-cyan-100 sm:text-lg">
+              The Addl. Keybindings section covers common keybinds in more detail, as well as game settings recommendations.
+            </p>
+            <Link to="/systems/additional-settings-binds" className="framework-modern-cta mt-4 w-full sm:w-auto">
+              Addl. Keybindings
+            </Link>
+          </div>
         </article>
       </div>
     </section>
