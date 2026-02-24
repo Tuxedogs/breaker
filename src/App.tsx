@@ -3,6 +3,7 @@ import AppShell from "./components/AppShell";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLanding from "./pages/DoctrineLanding";
 import HeroOpening from "./pages/HeroOpening";
+import MapsPage from "./pages/MapsPage";
 import PerseusPage from "./pages/ships/PerseusPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
@@ -28,6 +29,7 @@ export default function App() {
       <Route element={<AppShell />}>
         <Route index element={<EntryGate />} />
         <Route path="framework" element={<DoctrineFirstFramework />} />
+        <Route path="maps" element={<MapsPage />} />
 
         <Route path="ships/perseus" element={<PerseusPage />} />
         <Route path="ships/polaris" element={<WipPage section="Ships" title="Polaris" />} />

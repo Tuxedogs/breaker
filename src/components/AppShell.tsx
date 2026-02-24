@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import AppBackground from "./AppBackground";
 
 const shipItems = [
@@ -38,8 +38,35 @@ function HomeIcon() {
 }
 
 export default function AppShell() {
+  const location = useLocation();
   const [openMenu, setOpenMenu] = useState<"ships" | "systems" | null>(null);
   const closeTimerRef = useRef<number | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [searchValue, setSearchValue] = useState("");
+  const isMapsRoute = location.pathname.startsWith("/maps");
+
+  useEffect(() => {
+    function onTypeToSearch(event: KeyboardEvent) {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.key.length !== 1) return;
+
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+      const tag = target.tagName.toLowerCase();
+      const isTypingContext =
+        tag === "input" ||
+        tag === "textarea" ||
+        target.isContentEditable;
+
+      if (isTypingContext) return;
+
+      setSearchValue((prev) => prev + event.key);
+      searchInputRef.current?.focus();
+    }
+
+    window.addEventListener("keydown", onTypeToSearch);
+    return () => window.removeEventListener("keydown", onTypeToSearch);
+  }, []);
 
   function clearCloseTimer() {
     if (closeTimerRef.current !== null) {
@@ -185,19 +212,40 @@ export default function AppShell() {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.17em] text-slate-200 transition hover:text-white sm:text-sm"
-              aria-label="Search"
+            <NavLink
+              to="/maps"
+              className={({ isActive }) =>
+                [
+                  "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
+                  isActive ? "text-blue-300" : "text-slate-200 hover:text-blue-300",
+                ].join(" ")
+              }
             >
+              Maps
+            </NavLink>
+
+            <label className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-black/25 px-2 py-1 text-xs uppercase tracking-[0.17em] text-slate-200 sm:text-sm">
               <SearchIcon />
-              <span>Search</span>
-            </button>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
+                placeholder="Search"
+                className="w-28 bg-transparent text-xs uppercase tracking-[0.17em] text-slate-100 outline-none placeholder:text-slate-300/75 sm:w-36 sm:text-sm"
+                aria-label="Search"
+              />
+            </label>
           </div>
         </div>
       </header>
 
-      <main className="relative z-20 mx-auto w-full max-w-7xl px-4 pb-8 pt-20 sm:px-6 lg:px-8">
+      <main
+        className={[
+          "relative z-20 mx-auto w-full px-4 pb-8 pt-20 sm:px-6 lg:px-8",
+          isMapsRoute ? "max-w-[96vw]" : "max-w-7xl",
+        ].join(" ")}
+      >
         <Outlet />
       </main>
     </div>
