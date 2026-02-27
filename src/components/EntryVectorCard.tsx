@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 export type EntryVectorCardIcon = "pilot" | "crew" | "threat" | "recovery";
+export type EntryVectorCtaVariant = "pilot" | "crew" | "threat" | "soon";
 
 type EntryVectorCardProps = {
   title: string;
@@ -8,9 +9,9 @@ type EntryVectorCardProps = {
   actionLabel: string;
   to: string;
   icon: EntryVectorCardIcon;
+  ctaVariant: EntryVectorCtaVariant;
   disabled?: boolean;
   isActive?: boolean;
-  hasFocusedPeer?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onFocusCapture?: () => void;
@@ -69,9 +70,9 @@ export default function EntryVectorCard({
   actionLabel,
   to,
   icon,
+  ctaVariant,
   disabled,
   isActive,
-  hasFocusedPeer,
   onMouseEnter,
   onMouseLeave,
   onFocusCapture,
@@ -79,20 +80,20 @@ export default function EntryVectorCard({
 }: EntryVectorCardProps) {
   return (
     <article
+      data-variant={ctaVariant}
       onMouseEnter={disabled ? undefined : onMouseEnter}
       onMouseLeave={disabled ? undefined : onMouseLeave}
       onFocusCapture={disabled ? undefined : onFocusCapture}
       onBlurCapture={disabled ? undefined : onBlurCapture}
       className={[
-        "relative overflow-hidden framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.35rem] px-4 py-6 sm:px-5 sm:py-8 transition duration-200",
+        "entry-card group relative overflow-visible framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.35rem] px-4 py-6 sm:px-5 sm:py-8 transition duration-200",
         isActive
           ? "border-cyan-200/45 shadow-[0_0_0_1px_rgba(125,211,252,0.35),0_0_34px_rgba(56,189,248,0.28)]"
-          : hasFocusedPeer
-            ? "opacity-55 saturate-75"
-            : "opacity-100",
+          : "opacity-100",
         disabled ? "opacity-85 saturate-50" : "",
       ].join(" ")}
     >
+      <div className="entry-card-glow pointer-events-none absolute inset-0 rounded-[1.35rem] opacity-0 transition-opacity duration-200" aria-hidden="true" />
       <div className="flex min-h-[340px] flex-1 flex-col items-center text-center">
         <div className="mt-2 inline-flex h-14 w-14 items-center justify-center rounded-full border border-cyan-100/28 text-slate-100/85 shadow-[0_0_18px_rgba(56,189,248,0.18)] md:mt-4 md:h-16 md:w-16 lg:mt-6 lg:h-20 lg:w-20">
           <EntryVectorIcon kind={icon} />
@@ -108,12 +109,13 @@ export default function EntryVectorCard({
           {disabled ? (
             <span
               aria-disabled="true"
-              className="framework-modern-cta mx-auto w-full max-w-[180px] cursor-not-allowed border-white/15 bg-white/5 text-slate-400"
+              data-variant={ctaVariant}
+              className="entry-cta framework-modern-cta mx-auto w-full max-w-[180px] cursor-not-allowed border-white/15 bg-white/5 text-slate-400"
             >
               {actionLabel}
             </span>
           ) : (
-            <Link to={to} className="framework-modern-cta mx-auto w-full max-w-[180px]">
+            <Link to={to} data-variant={ctaVariant} className="entry-cta framework-modern-cta mx-auto w-full max-w-[180px]">
               {actionLabel}
             </Link>
           )}

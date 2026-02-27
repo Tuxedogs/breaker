@@ -14,6 +14,7 @@ type EntryVector = {
   actionLabel: string;
   preset: Partial<ModuleFilters>;
   icon: Parameters<typeof EntryVectorCard>[0]["icon"];
+  ctaVariant: Parameters<typeof EntryVectorCard>[0]["ctaVariant"];
   disabled?: boolean;
 };
 
@@ -24,6 +25,7 @@ const entryVectors: EntryVector[] = [
     actionLabel: "Route as Pilot",
     preset: { role: "pilot", type: "flying" },
     icon: "pilot",
+    ctaVariant: "pilot",
   },
   {
     title: "I'm Manning",
@@ -31,6 +33,7 @@ const entryVectors: EntryVector[] = [
     actionLabel: "Route as Crew",
     preset: { role: "gunner", type: "manning" },
     icon: "crew",
+    ctaVariant: "crew",
   },
   {
     title: "I'm Facing",
@@ -38,6 +41,7 @@ const entryVectors: EntryVector[] = [
     actionLabel: "Classify Threat",
     preset: { enemy: "capital", type: "facing" },
     icon: "threat",
+    ctaVariant: "threat",
   },
   {
     title: "Something Went Wrong",
@@ -45,6 +49,7 @@ const entryVectors: EntryVector[] = [
     actionLabel: "Enter Recovery",
     preset: { type: "recovery" },
     icon: "recovery",
+    ctaVariant: "soon",
     disabled: true,
   },
 ];
@@ -67,8 +72,7 @@ export default function DoctrineIndexPage() {
   const loaderError = moduleLoadError ?? refLoadError ?? shipLoadError;
 
   return (
-    <section className="framework-static route-fade relative overflow-hidden py-3">
-      <div className="framework-trend-bg pointer-events-none absolute inset-0" />
+    <section className="framework-static route-fade relative overflow-visible py-3">
       <div className="relative z-10 space-y-6">
         {loaderError ? (
           <article className="rounded-2xl border border-red-300/35 bg-red-950/40 p-4">
@@ -84,11 +88,8 @@ export default function DoctrineIndexPage() {
           </p>
         </header>
 
-        <section className="framework-modern-card-head rounded-xl border border-white/12 bg-slate-950/35 p-4 sm:p-5">
-          <h2 className="title-font text-lg text-cyan-100">Entry Vectors</h2>
-          <p className="mt-2 text-sm text-slate-300">Choose one routing path and move immediately.</p>
-
-          <div className="mt-3 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section>
+          <div className="px-1 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {entryVectors.map((entry) => (
             <EntryVectorCard
               key={entry.title}
@@ -97,9 +98,9 @@ export default function DoctrineIndexPage() {
               actionLabel={entry.actionLabel}
               to={buildEntryTarget(entry.preset)}
               icon={entry.icon}
+              ctaVariant={entry.ctaVariant}
               disabled={entry.disabled}
               isActive={activeEntry === entry.title && !entry.disabled}
-              hasFocusedPeer={Boolean(activeEntry) && activeEntry !== entry.title}
               onMouseEnter={entry.disabled ? undefined : () => setActiveEntry(entry.title)}
               onMouseLeave={entry.disabled ? undefined : () => setActiveEntry(null)}
               onFocusCapture={entry.disabled ? undefined : () => setActiveEntry(entry.title)}
@@ -109,9 +110,11 @@ export default function DoctrineIndexPage() {
           </div>
         </section>
 
-        <SetupRail />
+        <div className="mt-[30px]">
+          <SetupRail />
+        </div>
 
-        <div className="opacity-75">
+        <div className="mt-[40px] opacity-85">
           <DoctrineFilterBar
             title="Refine Results"
             description="Optional: narrow routing outcomes by ship, role, threat, map, status, or type."
