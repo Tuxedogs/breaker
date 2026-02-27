@@ -50,9 +50,10 @@ const nonLockableComponents = [
   "Self-Worth",
 ];
 
-const placeholderVideo = {
+const subtargetVideo = {
   title: "Subtargeting Cinematic Walkthrough",
-  caption: "Placeholder video area. Drop final clip here when ready.",
+  caption: "1shotidrisv2",
+  src: "/images/video/1shotidrisv2.mp4",
 };
 
 export default function SubTargetingPage() {
@@ -130,13 +131,19 @@ export default function SubTargetingPage() {
           <div className="framework-modern-card-head additional-panel-head subtarget-video-shell rounded-xl border border-white/15 p-4 sm:p-5">
             <div className="subtarget-cinematic">
               <div className="subtarget-cinematic-top">
-                <span>{placeholderVideo.title}</span>
-                <span>Placeholder</span>
+                <span>{subtargetVideo.title}</span>
+                <span>Live Clip</span>
               </div>
               <div className="subtarget-cinematic-frame">
+                <video
+                  className="h-full w-full object-cover"
+                  src={subtargetVideo.src}
+                  preload="metadata"
+                  controls
+                  playsInline
+                />
                 <div className="subtarget-cinematic-glow" />
-                <div className="subtarget-cinematic-play" aria-hidden />
-                <p className="subtarget-cinematic-caption">{placeholderVideo.caption}</p>
+                <p className="subtarget-cinematic-caption">{subtargetVideo.caption}</p>
               </div>
             </div>
           </div>

@@ -1,0 +1,24 @@
+---
+id: "perseus-relative-tracking"
+title: "Perseus Relative Tracking"
+type: "module"
+status: "validated"
+moduleType: "flying"
+owner: "Doctrine Team"
+intent: "Significant main battery uptime at extremely close ranges."
+summary: "Pilot pattern for stable aft pressure on capital targets."
+lastValidated: "2026-02-26"
+tags: ["perseus", "pilot", "anti-cap"]
+ships: ["perseus"]
+roles: ["pilot"]
+enemies: ["capital"]
+maps: ["stanton-orbit-lanes"]
+useWhen: ["Engaging Polaris and Idris threats."]
+steps: ["Establish alignment with desired component on the target ship, remain oriented aft of the enemy.", "Focus pressure on vulnerable components.", "Coordinate pitch and controlled thrust to maintain stable tracking.", "Use lateral thrust only as needed; avoid destabilizing turret firing windows.", "Use mains in event of possible collision, or when the target attempts to break off the maneuver. Short bursts of boost."]
+failureModes: ["Closing at extreme delta increases exposure from extending beyond the intended slot.", "Oversteering greatly reduces accuracy.", "Improper posture, causing loss of position."]
+validation: ["Maintain stable firing geometry for two consecutive attack windows.", "No uncontrolled range collapse during commit."]
+prerequisites: ["map/stanton-orbit-lanes"]
+relatedModuleIds: ["perseus-component-sniping", "anti-cap-target-triage"]
+---
+
+This module is for geometry control, not target selection.

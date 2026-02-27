@@ -49,6 +49,10 @@ const systemItems: FrameworkItem[] = [
   { label: "Additional Resources", to: "/systems/additional-resources", glyph: "RS" },
 ];
 
+const antiCapItems: FrameworkItem[] = [
+  { label: "Component Sniping", to: "/anti-cap/component-sniping", glyph: "CS" },
+];
+
 function FrameworkCard({
   title,
   subtitle,
@@ -144,6 +148,14 @@ export default function DoctrineFirstFramework() {
           ctaTo="/ships/perseus"
           items={shipItems}
           accentClass="ships"
+        />
+        <FrameworkCard
+          title="STRATEGY"
+          subtitle="Application."
+          ctaLabel="Enter Anti-Cap"
+          ctaTo="/anti-cap/component-sniping"
+          items={antiCapItems}
+          accentClass="systems"
         />
         <article className="framework-modern-card framework-modern-card-maps framework-modern-card-maps-compact lg:col-span-2">
           <div aria-hidden className="framework-modern-card-maps-bg" />

@@ -1,10 +1,14 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "./components/AppShell";
+import DoctrineIndexPage from "./pages/DoctrineIndexPage";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLanding from "./pages/DoctrineLanding";
+import DoctrineModulePage from "./pages/DoctrineModulePage";
+import DoctrineReferencePage from "./pages/DoctrineReferencePage";
 import HeroOpening from "./pages/HeroOpening";
 import MapsPage from "./pages/MapsPage";
-import PerseusPage from "./pages/ships/PerseusPage";
+import ModuleIndexPage from "./pages/ModuleIndexPage";
+import ShipHubPage from "./pages/ShipHubPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
 import SubTargetingPage from "./pages/systems/SubTargetingPage";
@@ -28,12 +32,15 @@ export default function App() {
       <Route path="doctrine-landing" element={<DoctrineLanding />} />
       <Route element={<AppShell />}>
         <Route index element={<EntryGate />} />
-        <Route path="framework" element={<DoctrineFirstFramework />} />
+        <Route path="index" element={<DoctrineIndexPage />} />
+        <Route path="framework" element={<DoctrineIndexPage />} />
+        <Route path="framework-legacy" element={<DoctrineFirstFramework />} />
+        <Route path="modules" element={<ModuleIndexPage />} />
+        <Route path="module/:id" element={<DoctrineModulePage />} />
+        <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
         <Route path="maps" element={<MapsPage />} />
 
-        <Route path="ships/perseus" element={<PerseusPage />} />
-        <Route path="ships/polaris" element={<WipPage section="Ships" title="Polaris" />} />
-        <Route path="ships/idris" element={<WipPage section="Ships" title="Idris" />} />
+        <Route path="ships/:slug" element={<ShipHubPage />} />
 
         <Route path="systems/sub-targeting" element={<SubTargetingPage />} />
         <Route path="systems/turret-keybinds" element={<TurretKeybindsPage />} />
@@ -47,6 +54,10 @@ export default function App() {
         <Route
           path="systems/additional-resources"
           element={<WipPage section="Systems" title="Additional Resources" />}
+        />
+        <Route
+          path="anti-cap/component-sniping"
+          element={<WipPage section="Anti-Cap" title="Component Sniping" />}
         />
 
         <Route path="*" element={<Navigate to="/" replace />} />
