@@ -25,16 +25,18 @@ const setupItems = [
 
 export default function SetupRail() {
   return (
-    <section className="framework-modern-card-head rounded-xl border border-white/10 bg-slate-950/25 p-4 sm:p-5">
-      <h2 className="title-font text-lg text-cyan-100/90">Setup &amp; Configuration</h2>
-      <p className="mt-2 text-sm text-slate-300/80">Pre-flight settings, bindings, and client configuration</p>
+    <section>
+      <div className="framework-modern-card-head rounded-xl p-4">
+        <h2 className="title-font text-lg text-cyan-100/90">Setup &amp; Configuration</h2>
+        <p className="mt-2 text-sm text-slate-300/80">Pre-flight settings, bindings, and client configuration</p>
+      </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {setupItems.map((item) => (
           <Link
             key={item.title}
             to={item.to}
-            className="framework-modern-row rounded-lg border border-white/12 bg-slate-950/25 p-3 transition hover:border-cyan-200/25 hover:bg-slate-900/40"
+            className="setup-config-item framework-modern-row rounded-lg p-3 transition"
           >
             <h3 className="title-font text-base text-slate-100">{item.title}</h3>
             <p className="mt-2 text-xs text-slate-300/70">{item.subtitle}</p>

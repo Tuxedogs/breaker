@@ -44,6 +44,11 @@ export default function AppShell() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchValue, setSearchValue] = useState("");
   const isMapsRoute = location.pathname.startsWith("/maps");
+  const isFrameworkNavActive =
+    location.pathname === "/framework" ||
+    location.pathname === "/index" ||
+    location.pathname === "/modules" ||
+    location.pathname.startsWith("/module/");
 
   useEffect(() => {
     function onTypeToSearch(event: KeyboardEvent) {
@@ -229,7 +234,7 @@ export default function AppShell() {
               className={({ isActive }) =>
                 [
                   "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
-                  isActive ? "text-emerald-300" : "text-slate-200 hover:text-emerald-300",
+                  isActive || isFrameworkNavActive ? "text-emerald-300" : "text-slate-200 hover:text-emerald-300",
                 ].join(" ")
               }
             >
