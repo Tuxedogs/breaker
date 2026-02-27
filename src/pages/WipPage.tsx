@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 
 type WipPageProps = {
-  section: "Ships" | "Systems";
+  section: "Ships" | "Systems" | "Anti-Cap";
   title?: string;
 };
 

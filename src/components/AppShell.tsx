@@ -224,6 +224,18 @@ export default function AppShell() {
               Maps
             </NavLink>
 
+            <NavLink
+              to="/framework"
+              className={({ isActive }) =>
+                [
+                  "text-xs uppercase tracking-[0.17em] transition sm:text-sm",
+                  isActive ? "text-emerald-300" : "text-slate-200 hover:text-emerald-300",
+                ].join(" ")
+              }
+            >
+              Framework
+            </NavLink>
+
             <label className="inline-flex items-center gap-2 rounded-md border border-white/20 bg-black/25 px-2 py-1 text-xs uppercase tracking-[0.17em] text-slate-200 sm:text-sm">
               <SearchIcon />
               <input

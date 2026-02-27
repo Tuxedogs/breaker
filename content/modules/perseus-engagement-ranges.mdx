@@ -1,0 +1,25 @@
+---
+id: "perseus-engagement-ranges"
+title: "Perseus Engagement Ranges"
+type: "module"
+status: "validated"
+moduleType: "flying"
+owner: "Tux"
+intent: "Maintain range discipline, ensuring main battery uptime."
+summary: "Power Projection profile for Main Battery and Stalker V torpedoes."
+lastValidated: "2026-02-26"
+tags: ["perseus", "pilot", "range"]
+ships: ["perseus"]
+roles: ["pilot"]
+enemies: ["capital"]
+maps: ["stanton-orbit-lanes"]
+powerProjection: ["Main Battery: Optimal 0.5-1.2 km", "Main Battery: Degraded 1.2-2.0 km", "Main Battery: Maximum 2.0-5.6 km", "Torpedo: Stalker V 2-30 km"]
+useWhen: ["Preparing first commit.", "Re-entering after repair cycle.", "Managing power projection against anti-cap targets."]
+steps: ["Stage at long approach distance before full commit.", "Attempt to utilize Drop strategy with fleetmates or scout.", "If unable to drop, perform standard nav merge.", "Use torpedoes liberally from ranges beyond 2 km.", "Gunners hold fire until clear solutions are acquired via ranging and delta.", "Use main thrusters extensively for changes in vector and velocity as required.", "Maintain awareness of incoming damage, then extend or hold position accordingly."]
+failureModes: ["Starving boost regen, causing loss of position, critical in Relative Tracking maneuvers.", "Holding ineffective range, guns overheating when entering optimal.", "No pilot callouts when crossing critical range bands."]
+validation: ["Crew can state current range band on demand.", "Damage throughput remains stable during mid-range pressure.", "Crew can state current range band or request respositioning on demand.", "Effective fire on target."]
+prerequisites: ["map/perseus-deck-map"]
+relatedModuleIds: ["perseus-relative-tracking", "perseus-recovery-cycle"]
+---
+
+Power Projection values are modeled as structured data in frontmatter.
