@@ -1,6 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import EngagementEnvelope from "../components/EngagementEnvelope";
-import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { moduleById } from "../data/modules";
 import { refByKey } from "../data/refs";
 import { shipHubBySlug, shipLoadError, type ShipRoleLens } from "../data/ships";
@@ -61,25 +59,10 @@ export default function ShipHubPage() {
             <header className="framework-modern-card-head rounded-[1.2rem] p-5">
               <p className="framework-modern-kicker">Ship Hub</p>
               <h1 className="title-font mt-2 text-4xl text-amber-100">{ship.name}</h1>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {ship.primaryRoles.map((role) => (
-                  <ModuleFilterChipLink
-                    key={role}
-                    tag={role}
-                    className="inline-flex h-8 items-center rounded-full border border-amber-300/35 bg-amber-300/10 px-3 text-xs uppercase tracking-[0.16em] text-amber-100"
-                  />
-                ))}
-              </div>
               {ship.loadoutAssumption ? <p className="mt-4 text-sm text-slate-300">{ship.loadoutAssumption}</p> : null}
             </header>
           </div>
         </article>
-
-        {ship.slug === "perseus" && moduleById.get("perseus-engagement-ranges")?.powerProjection.length ? (
-          <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.9rem] border border-cyan-300/35 p-4 sm:p-6">
-            <EngagementEnvelope items={moduleById.get("perseus-engagement-ranges")?.powerProjection ?? []} />
-          </article>
-        ) : null}
 
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
           <div className="framework-modern-card-head rounded-[1.2rem] p-5">
@@ -163,6 +146,17 @@ export default function ShipHubPage() {
                 </article>
               );
             })}
+            {ship.operationalLinks?.map((item) => (
+              <article key={item.id} className="framework-modern-row rounded-xl p-4">
+                <div>
+                  <h3 className="title-font text-lg text-slate-100">{item.title}</h3>
+                  <p className="mt-1 text-sm text-slate-300">{item.summary}</p>
+                </div>
+                <Link to={item.to} className="ml-auto inline-flex h-11 items-center rounded-lg border border-amber-300/35 px-4 text-xs uppercase tracking-[0.16em] text-amber-100">
+                  Open Page
+                </Link>
+              </article>
+            ))}
           </div>
         </article>
       </div>

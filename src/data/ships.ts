@@ -13,6 +13,12 @@ export type ShipHub = {
   commonFailureModes: string[];
   recommendedModuleIds: string[];
   referenceIds: string[];
+  operationalLinks?: Array<{
+    id: string;
+    title: string;
+    summary: string;
+    to: string;
+  }>;
 };
 
 const shipHubData: ShipHub[] = [
@@ -23,15 +29,15 @@ const shipHubData: ShipHub[] = [
     primaryRoles: ["pilot", "gunner", "engineer"],
     loadoutAssumption: "Baseline anti-cap fit with stocked torpedoes and full engineering support.",
     primaryRoleFlow: [
-      "Pilot stabilizes aft pressure window at effective weapon range.",
-      "Gunners prioritize power plant and propulsion components.",
-      "Engineer rotates repairs and cooldown management to preserve uptime.",
-      "Crew recommits only when arcs, range, and support are confirmed.",
+      "Pilot maintains aft pressure window at effective weapon range.",
+      "Gunners prioritize power plant and QT drive components.",
+      "Engineer rotates repairs and any combat station, increasing total output and increasing survivability significantly.",
+      "Crews recommit only when range, and support are confirmed.",
     ],
     commonFailureModes: [
       "Pilot over-corrects and drops turret firing windows.",
       "Gunners split fire across low-value surfaces.",
-      "Engineering delay causes cascading component failure.",
+      "Pilot over uses boost, causing a gradual sliding loss of position, endangering the crew.",
       "Crew commits before target state is verified.",
     ],
     recommendedModuleIds: [
@@ -44,12 +50,22 @@ const shipHubData: ShipHub[] = [
       "perseus-recovery-cycle",
     ],
     referenceIds: [
-      "keybind/perseus-gunner-preset",
-      "keybind/turret-bind-baseline",
-      "map/stanton-orbit-lanes",
-      "map/perseus-deck-map",
       "diagram/perseus-component-priority",
       "diagram/subtarget-reference-frames",
+    ],
+    operationalLinks: [
+      {
+        id: "perseus-turret-keybinds",
+        title: "Turret Keybinds",
+        summary: "Current keybind baseline for all gunners until reference pages are refactored.",
+        to: "/systems/turret-keybinds",
+      },
+      {
+        id: "perseus-maps",
+        title: "Perseus Deck Map",
+        summary: "Use the current maps page until the dedicated deck-map reference is refactored.",
+        to: "/maps",
+      },
     ],
   },
   {

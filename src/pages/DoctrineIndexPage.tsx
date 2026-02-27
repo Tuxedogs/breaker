@@ -12,6 +12,7 @@ type EntryVector = {
   actionLabel: string;
   preset: Partial<ModuleFilters>;
   icon: "pilot" | "crew" | "threat" | "recovery";
+  disabled?: boolean;
 };
 
 const entryVectors: EntryVector[] = [
@@ -42,6 +43,7 @@ const entryVectors: EntryVector[] = [
     actionLabel: "Enter Recovery",
     preset: { type: "recovery" },
     icon: "recovery",
+    disabled: true,
   },
 ];
 
@@ -134,19 +136,28 @@ export default function DoctrineIndexPage() {
           {entryVectors.map((entry) => (
             <article
               key={entry.title}
-              onMouseEnter={() => setActiveEntry(entry.title)}
-              onMouseLeave={() => setActiveEntry(null)}
-              onFocusCapture={() => setActiveEntry(entry.title)}
-              onBlurCapture={() => setActiveEntry(null)}
+              onMouseEnter={entry.disabled ? undefined : () => setActiveEntry(entry.title)}
+              onMouseLeave={entry.disabled ? undefined : () => setActiveEntry(null)}
+              onFocusCapture={entry.disabled ? undefined : () => setActiveEntry(entry.title)}
+              onBlurCapture={entry.disabled ? undefined : () => setActiveEntry(null)}
               className={[
-                "framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.35rem] p-4 sm:p-5 transition duration-200",
-                activeEntry === entry.title
+                "relative overflow-hidden framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.35rem] p-4 sm:p-5 transition duration-200",
+                activeEntry === entry.title && !entry.disabled
                   ? "border-cyan-200/45 shadow-[0_0_0_1px_rgba(125,211,252,0.35),0_0_34px_rgba(56,189,248,0.28)]"
                   : activeEntry
                     ? "opacity-55 saturate-75"
                     : "opacity-100",
+                entry.disabled ? "opacity-90 saturate-75" : "",
               ].join(" ")}
             >
+              {entry.disabled ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/2 z-20 w-[165%] -translate-x-1/2 -translate-y-1/2 -rotate-[21deg] border-y border-amber-300/60 bg-amber-950/75 py-1 text-center text-xs font-semibold uppercase tracking-[0.32em] text-amber-100/95"
+                >
+                  SOONTM
+                </span>
+              ) : null}
               <div className="flex min-h-[260px] flex-1 flex-col items-center text-center">
                 <div className="mt-2 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-white/22 bg-slate-900/38 text-slate-100/85 shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_0_20px_rgba(56,189,248,0.14)] md:mt-3 md:h-16 md:w-16 xl:mt-4 xl:h-20 xl:w-20">
                   <EntryVectorIcon kind={entry.icon} />
@@ -154,9 +165,18 @@ export default function DoctrineIndexPage() {
                 <h2 className="title-font mt-6 text-2xl text-cyan-100">{entry.title}</h2>
                 <p className="mt-3 text-base text-slate-200">{entry.subtitle}</p>
                 <div className="mt-auto w-full pt-8">
-                  <Link to={buildEntryTarget(entry.preset)} className="framework-modern-cta w-full">
-                    {entry.actionLabel}
-                  </Link>
+                  {entry.disabled ? (
+                    <span
+                      aria-disabled="true"
+                      className="framework-modern-cta w-full cursor-not-allowed border-amber-300/30 bg-amber-950/35 text-amber-100/80"
+                    >
+                      {entry.actionLabel}
+                    </span>
+                  ) : (
+                    <Link to={buildEntryTarget(entry.preset)} className="framework-modern-cta w-full">
+                      {entry.actionLabel}
+                    </Link>
+                  )}
                 </div>
               </div>
             </article>

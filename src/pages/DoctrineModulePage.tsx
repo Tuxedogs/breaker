@@ -43,6 +43,39 @@ function SectionList({
   );
 }
 
+function VisualReferencePanel({ src, label }: { src: string; label?: string }) {
+  return (
+    <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+      <div className="hidden sm:block">
+        <section className="framework-modern-card-head rounded-xl border border-white/15 bg-slate-950/35 p-4">
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="title-font text-xl text-cyan-100">Visual Reference</h2>
+            <span className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</span>
+          </div>
+          <div className="mt-3 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
+            <video className="aspect-video w-full object-cover" src={src} preload="metadata" controls playsInline muted />
+          </div>
+          {label ? <p className="mt-2 text-xs text-slate-400">{label}</p> : null}
+        </section>
+      </div>
+
+      <details className="sm:hidden">
+        <summary className="framework-modern-row cursor-pointer select-none rounded-lg p-3">
+          <span className="title-font text-base text-cyan-100">Visual Reference</span>
+          <span className="text-[11px] uppercase tracking-[0.12em] text-slate-400">Tap to Expand</span>
+        </summary>
+        <section className="framework-modern-card-head mt-3 rounded-xl border border-white/15 bg-slate-950/35 p-3">
+          <p className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</p>
+          <div className="mt-2 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
+            <video className="aspect-video w-full object-cover" src={src} preload="metadata" controls playsInline muted />
+          </div>
+          {label ? <p className="mt-2 text-xs text-slate-400">{label}</p> : null}
+        </section>
+      </details>
+    </article>
+  );
+}
+
 export default function DoctrineModulePage() {
   const loaderError = moduleLoadError ?? refLoadError;
   const { id = "" } = useParams();
@@ -103,6 +136,8 @@ export default function DoctrineModulePage() {
             </div>
           </header>
         </article>
+
+        {module.videoSrc ? <VisualReferencePanel src={module.videoSrc} label={module.videoLabel} /> : null}
 
         {module.powerProjection.length > 0 ? (
           <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">

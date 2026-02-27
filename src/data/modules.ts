@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import {
+  optionalString,
   optionalStringArray,
   parseMdxFile,
   requireString,
@@ -18,6 +19,8 @@ export type DoctrineModule = {
   owner: string;
   intent: string;
   summary?: string;
+  videoSrc?: string;
+  videoLabel?: string;
   lastValidated: string;
   tags: string[];
   ships: string[];
@@ -121,6 +124,8 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
       owner: requireString(frontmatter, "owner", path),
       intent: requireString(frontmatter, "intent", path),
       summary: typeof frontmatter.summary === "string" ? frontmatter.summary : undefined,
+      videoSrc: optionalString(frontmatter, "videoSrc"),
+      videoLabel: optionalString(frontmatter, "videoLabel"),
       lastValidated: requireString(frontmatter, "lastValidated", path),
       tags: requireStringArray(frontmatter, "tags", path),
       ships: optionalStringArray(frontmatter, "ships"),
