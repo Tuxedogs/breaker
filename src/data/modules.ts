@@ -224,7 +224,6 @@ export const moduleFilterOptions = {
   ships: [...new Set(modules.flatMap((module) => module.ships))].sort(),
   roles: [...new Set(modules.flatMap((module) => module.roles))].sort(),
   enemies: [...new Set(modules.flatMap((module) => module.enemies))].sort(),
-  maps: [...new Set(modules.flatMap((module) => module.maps))].sort(),
   statuses: [...new Set(modules.map((module) => module.status))].sort(),
   types: [...new Set(modules.map((module) => module.moduleType))].sort(),
 };

@@ -91,7 +91,7 @@ const shipHubData: ShipHub[] = [
       "Engineer callouts are delayed under pressure.",
     ],
     recommendedModuleIds: ["anti-cap-target-triage"],
-    referenceIds: ["map/stanton-orbit-lanes"],
+    referenceIds: [],
   },
   {
     slug: "idris",

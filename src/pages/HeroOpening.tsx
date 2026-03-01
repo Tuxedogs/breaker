@@ -54,8 +54,6 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
 
   return (
     <section className="hero-transition relative flex min-h-[calc(100vh-7.5rem)] items-center justify-center overflow-hidden py-8">
-      <div className="hero-trend-mesh absolute inset-0" />
-
       <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
         <div
           className={[
