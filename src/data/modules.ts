@@ -25,6 +25,8 @@ export type DoctrineModule = {
   tags: string[];
   ships: string[];
   roles: string[];
+  excludeShips: string[];
+  excludeRoles: string[];
   enemies: string[];
   maps: string[];
   powerProjection: string[];
@@ -130,6 +132,8 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
       tags: requireStringArray(frontmatter, "tags", path),
       ships: optionalStringArray(frontmatter, "ships"),
       roles: optionalStringArray(frontmatter, "roles"),
+      excludeShips: optionalStringArray(frontmatter, "excludeShips"),
+      excludeRoles: optionalStringArray(frontmatter, "excludeRoles"),
       enemies: optionalStringArray(frontmatter, "enemies"),
       maps: optionalStringArray(frontmatter, "maps"),
       powerProjection: optionalStringArray(frontmatter, "powerProjection"),
@@ -149,6 +153,22 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
       throw new Error(`[content] duplicate module id "${module.id}"`);
     }
     seen.add(module.id);
+
+    for (const ship of module.excludeShips) {
+      if (module.ships.includes(ship)) {
+        throw new Error(
+          `[content] module "${module.id}" cannot include and exclude ship "${ship}"`
+        );
+      }
+    }
+
+    for (const role of module.excludeRoles) {
+      if (module.roles.includes(role)) {
+        throw new Error(
+          `[content] module "${module.id}" cannot include and exclude role "${role}"`
+        );
+      }
+    }
   }
 
   for (const module of modules) {
@@ -179,6 +199,26 @@ export const modules: DoctrineModule[] = await (async () => {
   }
 })();
 export const moduleById = new Map(modules.map((module) => [module.id, module]));
+
+export function moduleMatchesShipRole(
+  module: DoctrineModule,
+  context: { ship?: string; role?: string }
+): boolean {
+  const ship = context.ship?.trim();
+  const role = context.role?.trim();
+
+  if (ship) {
+    if (module.ships.length > 0 && !module.ships.includes(ship)) return false;
+    if (module.excludeShips.includes(ship)) return false;
+  }
+
+  if (role) {
+    if (module.roles.length > 0 && !module.roles.includes(role)) return false;
+    if (module.excludeRoles.includes(role)) return false;
+  }
+
+  return true;
+}
 
 export const moduleFilterOptions = {
   ships: [...new Set(modules.flatMap((module) => module.ships))].sort(),
