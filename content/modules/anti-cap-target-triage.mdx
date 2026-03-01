@@ -1,20 +1,20 @@
 ---
 id: "anti-cap-target-triage"
-title: "Anti-Cap Target Triage"
+title: "Anti-Cap Targets"
 type: "module"
 status: "review"
 moduleType: "facing"
-owner: "Doctrine Team"
+owner: "Tux"
 intent: "Rapidly classify hostile capital threats and assign engagement order."
-summary: "Threat assessment model for anti-cap fights."
+summary: "Threat assessment for anti-cap roles."
 lastValidated: "2026-02-24"
 tags: ["anti-cap", "targeting", "command"]
-ships: ["perseus"]
+ships: ["perseus", "polaris","idris","eclipse"]
 roles: ["pilot", "gunner", "engineer"]
 enemies: ["capital", "gunship"]
-maps: ["stanton-orbit-lanes"]
+maps: [""]
 useWhen: ["Multiple hostile heavy hulls are present.", "FC requires immediate kill priority order."]
-steps: ["Score hostiles by damage output and repair potential.", "Assign first kill target and secondary pressure target.", "Re-evaluate order after each disable event."]
+steps: ["Score hostiles by damage output and repair potential.", "Assign first kill target and secondary pressure target.", "Re-evaluate order after each disable or kill event."]
 failureModes: ["Target swaps with no comms handoff.", "Undervaluing enemy engineering presence.", "Ignoring proximity risk from escorts."]
 validation: ["Priority order is set within first engagement minute.", "All crew can repeat current target order on request."]
 prerequisites: ["diagram/perseus-component-priority"]
