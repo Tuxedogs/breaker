@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { moduleById } from "../data/modules";
+import { moduleById, moduleMatchesShipRole } from "../data/modules";
 import { refByKey } from "../data/refs";
 import { shipHubBySlug, shipLoadError, type ShipRoleLens } from "../data/ships";
 import { useMemo, useState } from "react";
@@ -16,7 +16,7 @@ export default function ShipHubPage() {
     return ship.recommendedModuleIds
       .map((id) => moduleById.get(id))
       .filter((item): item is NonNullable<typeof item> => Boolean(item))
-      .filter((module) => module.roles.length === 0 || module.roles.includes(activeLens));
+      .filter((module) => moduleMatchesShipRole(module, { ship: ship.slug, role: activeLens }));
   }, [ship, activeLens]);
 
   if (shipLoadError) {
@@ -59,6 +59,9 @@ export default function ShipHubPage() {
             <header className="framework-modern-card-head rounded-[1.2rem] p-5">
               <p className="framework-modern-kicker">Ship Hub</p>
               <h1 className="title-font mt-2 text-4xl text-amber-100">{ship.name}</h1>
+              <p className="mt-3 text-xs uppercase tracking-[0.16em] text-amber-200/90">
+                Career: {ship.career} | Role: {ship.role}
+              </p>
               {ship.loadoutAssumption ? <p className="mt-4 text-sm text-slate-300">{ship.loadoutAssumption}</p> : null}
             </header>
           </div>

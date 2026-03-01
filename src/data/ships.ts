@@ -6,6 +6,8 @@ export type ShipRoleLens = "pilot" | "gunner" | "engineer";
 export type ShipHub = {
   slug: string;
   name: string;
+  career: "Combat" | "Industry" | "Logistics";
+  role: string;
   imageSrc: string;
   primaryRoles: ShipRoleLens[];
   loadoutAssumption?: string;
@@ -25,6 +27,8 @@ const shipHubData: ShipHub[] = [
   {
     slug: "perseus",
     name: "RSI Perseus",
+    career: "Combat",
+    role: "Heavy Gunship",
     imageSrc: "/images/bg-states/percy-final.png",
     primaryRoles: ["pilot", "gunner", "engineer"],
     loadoutAssumption: "Baseline anti-cap fit with stocked torpedoes and full engineering support.",
@@ -71,6 +75,8 @@ const shipHubData: ShipHub[] = [
   {
     slug: "polaris",
     name: "RSI Polaris",
+    career: "Combat",
+    role: "Corvette",
     imageSrc: "/images/bg-states/Idristop.png",
     primaryRoles: ["pilot", "gunner", "engineer"],
     loadoutAssumption: "Placeholder hub while Polaris-specific modules are being validated.",
@@ -90,6 +96,8 @@ const shipHubData: ShipHub[] = [
   {
     slug: "idris",
     name: "Aegis Idris",
+    career: "Combat",
+    role: "Frigate",
     imageSrc: "/images/bg-states/idrishero.png",
     primaryRoles: ["pilot", "gunner", "engineer"],
     loadoutAssumption: "Placeholder hub while Idris doctrine modules are drafted.",

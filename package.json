@@ -5,9 +5,13 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -b && vite build",
-        "lint": "eslint .",
-        "preview": "vite preview"
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "content:check": "node scripts/validate-content.mjs",
+    "preview": "vite preview",
+        "prepare": "husky",
+        "changelog": "git-cliff -c cliff.toml -o CHANGELOG.md",
+        "release:tag": "node scripts/release-tag.js"
     },
     "dependencies": {
         "@mdx-js/react": "^3.1.1",
@@ -20,6 +24,8 @@
         "three": "^0.183.1"
     },
     "devDependencies": {
+        "@commitlint/cli": "^20.4.2",
+        "@commitlint/config-conventional": "^20.4.2",
         "@eslint/js": "^9.39.1",
         "@mdx-js/rollup": "^3.1.1",
         "@types/mdx": "^2.0.13",
@@ -32,6 +38,7 @@
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.4.24",
         "globals": "^16.5.0",
+        "husky": "^9.1.7",
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.17",
         "typescript": "~5.9.3",

@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import DoctrineFilterBar from "../components/DoctrineFilterBar";
 import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
-import { moduleFilterOptions, moduleLoadError, modules } from "../data/modules";
+import { moduleFilterOptions, moduleLoadError, moduleMatchesShipRole, modules } from "../data/modules";
 import { emptyModuleFilters, readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
 const statusClassName = {
@@ -24,8 +24,7 @@ export default function ModuleIndexPage() {
   }
 
   const filteredModules = modules.filter((module) => {
-    if (!matchesFilter(module.ships, filters.ship)) return false;
-    if (!matchesFilter(module.roles, filters.role)) return false;
+    if (!moduleMatchesShipRole(module, { ship: filters.ship, role: filters.role })) return false;
     if (!matchesFilter(module.enemies, filters.enemy)) return false;
     if (!matchesFilter(module.maps, filters.map)) return false;
     if (filters.status && module.status !== filters.status) return false;
