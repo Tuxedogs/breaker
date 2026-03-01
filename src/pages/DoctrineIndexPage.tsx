@@ -117,7 +117,7 @@ export default function DoctrineIndexPage() {
         <div className="mt-[40px] opacity-85">
           <DoctrineFilterBar
             title="Refine Results"
-            description="Optional: narrow routing outcomes by ship, role, threat, map, status, or type."
+            description="Optional: narrow routing outcomes by ship, role, threat, status, or type."
             filters={filters}
             options={moduleFilterOptions}
             onChange={updateFilter}

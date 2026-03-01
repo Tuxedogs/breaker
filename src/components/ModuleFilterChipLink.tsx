@@ -15,8 +15,6 @@ function toModulesFilterHref(tag: string) {
     params.set("role", normalized);
   } else if (moduleFilterOptions.enemies.includes(normalized)) {
     params.set("enemy", normalized);
-  } else if (moduleFilterOptions.maps.includes(normalized)) {
-    params.set("map", normalized);
   } else if (moduleFilterOptions.statuses.includes(normalized as (typeof moduleFilterOptions.statuses)[number])) {
     params.set("status", normalized);
   } else if (moduleFilterOptions.types.includes(normalized as (typeof moduleFilterOptions.types)[number])) {
@@ -40,4 +38,3 @@ export default function ModuleFilterChipLink({ tag, className = "" }: ModuleFilt
     </Link>
   );
 }
-

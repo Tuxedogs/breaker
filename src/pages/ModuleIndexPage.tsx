@@ -26,7 +26,6 @@ export default function ModuleIndexPage() {
   const filteredModules = modules.filter((module) => {
     if (!moduleMatchesShipRole(module, { ship: filters.ship, role: filters.role })) return false;
     if (!matchesFilter(module.enemies, filters.enemy)) return false;
-    if (!matchesFilter(module.maps, filters.map)) return false;
     if (filters.status && module.status !== filters.status) return false;
     if (filters.type && module.moduleType !== filters.type) return false;
     if (filters.domain && !module.tags.includes(filters.domain)) return false;
