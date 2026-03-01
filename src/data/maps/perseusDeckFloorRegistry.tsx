@@ -23,6 +23,7 @@ export type DeckFloorDefinition = {
   svgUrl: string;
   overlayAdjustments?: {
     rotationDeg?: number;
+    offsetY?: number;
     offsetX?: number;
     offsetZ?: number;
     scaleMultiplier?: number;
@@ -34,7 +35,7 @@ export const perseusDeckFloors: DeckFloorDefinition[] = [
   {
     id: "cargo",
     label: "Cargo Deck",
-    deckMin: -0.2,
+    deckMin: -0.19,
     enabled: true,
     nativeViewBox: [1506, 956],
     svgUrl: cargoDeckUrl,
@@ -66,13 +67,14 @@ export const perseusDeckFloors: DeckFloorDefinition[] = [
     label: "Top Deck",
     deckMin: 0.213,
     enabled: false,
-    nativeViewBox: [4096, 4096],
+    nativeViewBox: [980, 289],
     svgUrl: topDeckUrl,
     overlayAdjustments: {
       rotationDeg: 90,
       offsetX: 0,
-      offsetZ: 0,
-      scaleMultiplier: 1,
+      offsetZ: 0.80,
+      offsetY: 0.10,
+      scaleMultiplier: 0.45,
     },
     Component: decks.top,
   },
