@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useTexture } from "@react-three/drei";
 import {
   Box3,
   BufferAttribute,
   BufferGeometry,
+  DoubleSide,
   MeshStandardMaterial,
   Plane,
   PerspectiveCamera,
@@ -36,6 +37,37 @@ export type ShipMapViewState = {
   target: [number, number, number];
 };
 
+type ShipMapDeckOverlay = {
+  title: string;
+  id: string;
+  deckMin: number;
+  deckMax: number;
+  svgPath: string;
+  viewBox: [number, number];
+  rotationDeg?: number;
+  offsetX?: number;
+  offsetZ?: number;
+  scaleMultiplier?: number;
+};
+
+type ShipMapDeckOverlayConfig = {
+  decks: ShipMapDeckOverlay[];
+};
+
+type DeckOverlayRegion = {
+  key: string;
+  label: string;
+  centerX: number;
+  centerY: number;
+  bounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  highlightMarkup: string;
+};
+
 type ShipMapTemplateProps = {
   title: string;
   subtitle: string;
@@ -43,6 +75,7 @@ type ShipMapTemplateProps = {
   viewStorageKey: string;
   fallbackView: ShipMapViewState;
   showHeader?: boolean;
+  deckOverlayConfig?: ShipMapDeckOverlayConfig;
   modelTransform?: {
     scale?: number;
     offset?: [number, number, number];
@@ -51,6 +84,103 @@ type ShipMapTemplateProps = {
 
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
+}
+
+function labelizeRegion(value: string): string {
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function parseDeckOverlayRegions(svgText: string): {
+  regions: DeckOverlayRegion[];
+  sourceViewBox: string | null;
+} {
+  const parser = new DOMParser();
+  const parsed = parser.parseFromString(svgText, "image/svg+xml");
+  const svgRoot = parsed.querySelector("svg");
+  if (!svgRoot) {
+    return { regions: [], sourceViewBox: null };
+  }
+
+  const sourceViewBox = svgRoot.getAttribute("viewBox")?.trim() ?? null;
+  const graphics = Array.from(svgRoot.querySelectorAll("path, polygon, rect, circle, ellipse"));
+  if (graphics.length === 0) {
+    return { regions: [], sourceViewBox };
+  }
+
+  const measureSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  if (sourceViewBox) {
+    measureSvg.setAttribute("viewBox", sourceViewBox);
+  }
+  measureSvg.setAttribute("width", "1");
+  measureSvg.setAttribute("height", "1");
+  measureSvg.style.position = "absolute";
+  measureSvg.style.left = "-99999px";
+  measureSvg.style.top = "-99999px";
+  measureSvg.style.pointerEvents = "none";
+  measureSvg.style.opacity = "0";
+  document.body.appendChild(measureSvg);
+
+  const serializer = new XMLSerializer();
+  const regions: DeckOverlayRegion[] = [];
+
+  for (let index = 0; index < graphics.length; index += 1) {
+    const sourceElement = graphics[index];
+    const measureElement = sourceElement.cloneNode(true) as SVGGraphicsElement;
+    measureSvg.appendChild(measureElement);
+
+    let bbox: DOMRect;
+    try {
+      bbox = measureElement.getBBox();
+    } catch {
+      measureSvg.removeChild(measureElement);
+      continue;
+    }
+    measureSvg.removeChild(measureElement);
+
+    const idCandidate = sourceElement.getAttribute("id")?.trim();
+    const nameCandidate =
+      sourceElement.getAttribute("data-name")?.trim() ??
+      sourceElement.getAttribute("aria-label")?.trim() ??
+      sourceElement.getAttribute("inkscape:label")?.trim();
+    const rawLabel = nameCandidate || idCandidate || `section_${index + 1}`;
+    const label = labelizeRegion(rawLabel) || `Section ${index + 1}`;
+    const stableKey = `${idCandidate || "section"}-${index}`;
+
+    const highlightElement = sourceElement.cloneNode(true) as Element;
+    highlightElement.removeAttribute("style");
+    highlightElement.setAttribute("fill", "#67e8f9");
+    highlightElement.setAttribute("fill-opacity", "0.48");
+    highlightElement.setAttribute("stroke", "#a5f3fc");
+    highlightElement.setAttribute("stroke-width", "4");
+    highlightElement.setAttribute("stroke-linejoin", "round");
+    highlightElement.setAttribute("stroke-linecap", "round");
+
+    regions.push({
+      key: stableKey,
+      label,
+      centerX: round3(bbox.x + bbox.width / 2),
+      centerY: round3(bbox.y + bbox.height / 2),
+      bounds: {
+        x: round3(bbox.x),
+        y: round3(bbox.y),
+        width: round3(bbox.width),
+        height: round3(bbox.height),
+      },
+      highlightMarkup: serializer.serializeToString(highlightElement),
+    });
+  }
+
+  document.body.removeChild(measureSvg);
+  return { regions, sourceViewBox };
+}
+
+function buildHighlightTextureDataUri(viewBox: string, highlightMarkup: string): string {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${highlightMarkup}</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
 function readSavedView(storageKey: string, fallbackView: ShipMapViewState): ShipMapViewState {
@@ -140,10 +270,11 @@ function FitCtmMesh({
   const material = useMemo(
     () =>
       new MeshStandardMaterial({
-        color: "#7693a1",
-        emissive: "#17333d",
-        metalness: 0.03,
-        roughness: 0.9,
+        color: "#3f464d",
+        emissive: "#080c10",
+        emissiveIntensity: 0.15,
+        metalness: 0.01,
+        roughness: 0.95,
         vertexColors: geometry.getAttribute("color") !== undefined,
         clippingPlanes: sliceEnabled ? clippingPlanes : [],
         clipIntersection: false,
@@ -160,6 +291,61 @@ function FitCtmMesh({
   return <mesh geometry={geometry} material={material} />;
 }
 
+function DeckOverlayPlane({
+  deck,
+  modelSize,
+  texturePath,
+  opacity,
+  renderOrder,
+  yOffset = 0.002,
+}: {
+  deck: ShipMapDeckOverlay;
+  modelSize: { x: number; z: number };
+  texturePath: string;
+  opacity: number;
+  renderOrder: number;
+  yOffset?: number;
+}) {
+  const texture = useTexture(texturePath);
+
+  const [planeWidth, planeDepth] = useMemo(() => {
+    const maxWidth = modelSize.x * 1.12;
+    const maxDepth = modelSize.z * 1.12;
+    const aspect = deck.viewBox[0] / Math.max(deck.viewBox[1], 1);
+
+    let width = maxWidth;
+    let depth = width / Math.max(aspect, 0.0001);
+    if (depth > maxDepth) {
+      depth = maxDepth;
+      width = depth * aspect;
+    }
+    const scaleMultiplier = deck.scaleMultiplier ?? 1;
+    return [width * scaleMultiplier, depth * scaleMultiplier];
+  }, [deck.viewBox, modelSize.x, modelSize.z, deck.scaleMultiplier]);
+
+  const y = deck.deckMin + yOffset;
+  const rotationInPlane = -(((deck.rotationDeg ?? 0) * Math.PI) / 180);
+  const offsetX = deck.offsetX ?? 0;
+  const offsetZ = deck.offsetZ ?? 0;
+
+  return (
+    <group position={[offsetX, y, offsetZ]} rotation={[-Math.PI / 2, 0, rotationInPlane]}>
+      <mesh renderOrder={renderOrder}>
+        <planeGeometry args={[planeWidth, planeDepth]} />
+        <meshBasicMaterial
+          map={texture}
+          side={DoubleSide}
+          transparent
+          opacity={opacity}
+          depthTest={false}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 export default function ShipMapTemplate({
   title,
   subtitle,
@@ -167,8 +353,10 @@ export default function ShipMapTemplate({
   viewStorageKey,
   fallbackView,
   showHeader = true,
+  deckOverlayConfig,
   modelTransform,
 }: ShipMapTemplateProps) {
+  const hasDeckOverlay = Boolean(deckOverlayConfig?.decks.length);
   const initialView = useMemo(() => readSavedView(viewStorageKey, fallbackView), [viewStorageKey, fallbackView]);
   const [geometry, setGeometry] = useState<BufferGeometry<NormalBufferAttributes> | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -180,6 +368,17 @@ export default function ShipMapTemplate({
   const [deckBounds, setDeckBounds] = useState<{ min: number; max: number }>({ min: -1, max: 1 });
   const [deckMin, setDeckMin] = useState(-1);
   const [deckMax, setDeckMax] = useState(1);
+  const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(hasDeckOverlay);
+  const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(
+    deckOverlayConfig?.decks[0]?.id ?? ""
+  );
+  const [modelFootprint, setModelFootprint] = useState<{ x: number; z: number }>({ x: 1, z: 1 });
+  const [deckOverlayRegions, setDeckOverlayRegions] = useState<DeckOverlayRegion[]>([]);
+  const [deckOverlayViewBox, setDeckOverlayViewBox] = useState<string | null>(null);
+  const [deckOverlayRegionsLoading, setDeckOverlayRegionsLoading] = useState(false);
+  const [deckOverlayRegionsError, setDeckOverlayRegionsError] = useState<string | null>(null);
+  const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
+  const [hoveredRegionKey, setHoveredRegionKey] = useState<string | null>(null);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -193,6 +392,25 @@ export default function ShipMapTemplate({
     const span = Math.max(deckBounds.max - deckBounds.min, 1);
     return deckBounds.max + span * 1.2;
   }, [deckBounds]);
+
+  const activeDeckOverlay = useMemo(
+    () => deckOverlayConfig?.decks.find((deck) => deck.id === activeDeckOverlayId) ?? null,
+    [deckOverlayConfig, activeDeckOverlayId],
+  );
+  const activeRegionKey = hoveredRegionKey ?? selectedRegionKey;
+  const activeDeckRegion = useMemo(
+    () => deckOverlayRegions.find((region) => region.key === activeRegionKey) ?? null,
+    [deckOverlayRegions, activeRegionKey],
+  );
+  const activeDeckRegionHighlightUri = useMemo(() => {
+    if (!activeDeckRegion) return null;
+    const fallbackViewBox = activeDeckOverlay
+      ? `0 0 ${activeDeckOverlay.viewBox[0]} ${activeDeckOverlay.viewBox[1]}`
+      : null;
+    const viewBox = deckOverlayViewBox ?? fallbackViewBox;
+    if (!viewBox) return null;
+    return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
+  }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
 
   function handleControlsChange() {
     const controls = controlsRef.current;
@@ -293,9 +511,12 @@ export default function ShipMapTemplate({
         const bounds = parsedGeometry.boundingBox ?? new Box3();
         const minY = bounds.min.y;
         const maxY = bounds.max.y;
+        const size = new Vector3();
+        bounds.getSize(size);
         setDeckBounds({ min: minY, max: maxY });
         setDeckMin(minY);
         setDeckMax(maxY);
+        setModelFootprint({ x: Math.max(size.x, 0.1), z: Math.max(size.z, 0.1) });
         setGeometry(parsedGeometry);
         setLoadError(null);
       } catch (error) {
@@ -317,6 +538,68 @@ export default function ShipMapTemplate({
       geometry?.dispose();
     };
   }, [geometry]);
+
+  useEffect(() => {
+    if (!hasDeckOverlay || !activeDeckOverlay) return;
+
+    if (!deckOverlayEnabled) {
+      setSliceEnabled(false);
+      setDeckMin(deckBounds.min);
+      setDeckMax(deckBounds.max);
+      return;
+    }
+
+    const clearance = 0.02;
+    const targetMin = deckBounds.min;
+    const rawMax = Math.min(deckBounds.max, activeDeckOverlay.deckMin + clearance);
+    const targetMax = Math.max(rawMax, targetMin + 0.005);
+
+    setSliceEnabled(true);
+    setDeckMin(targetMin);
+    setDeckMax(targetMax);
+  }, [hasDeckOverlay, activeDeckOverlay, deckOverlayEnabled, deckBounds.min, deckBounds.max]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setDeckOverlayRegions([]);
+    setDeckOverlayViewBox(null);
+    setDeckOverlayRegionsError(null);
+    setSelectedRegionKey(null);
+    setHoveredRegionKey(null);
+
+    if (!activeDeckOverlay) return;
+    const overlay = activeDeckOverlay;
+
+    async function loadDeckRegions() {
+      try {
+        setDeckOverlayRegionsLoading(true);
+        const response = await fetch(overlay.svgPath);
+        if (!response.ok) {
+          throw new Error(`SVG request failed: ${response.status}`);
+        }
+        const svgText = await response.text();
+        if (cancelled) return;
+        const parsed = parseDeckOverlayRegions(svgText);
+        setDeckOverlayRegions(parsed.regions);
+        setDeckOverlayViewBox(parsed.sourceViewBox);
+      } catch (error) {
+        if (cancelled) return;
+        const message = error instanceof Error ? error.message : "Region parsing failed";
+        setDeckOverlayRegionsError(message);
+      } finally {
+        if (!cancelled) {
+          setDeckOverlayRegionsLoading(false);
+        }
+      }
+    }
+
+    void loadDeckRegions();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeDeckOverlay]);
 
   return (
     <section className="route-fade pb-8 pt-2">
@@ -342,12 +625,31 @@ export default function ShipMapTemplate({
                 cameraRef.current = camera as PerspectiveCamera;
               }}
             >
-              <ambientLight intensity={0.67} />
-              <directionalLight position={[6, 6, 5]} intensity={1.3} />
-              <directionalLight position={[-5, -3, -4]} intensity={0.31} />
+              <ambientLight intensity={0.44} />
+              <directionalLight position={[6, 6, 5]} intensity={0.85} />
+              <directionalLight position={[-5, -3, -4]} intensity={0.2} />
               <gridHelper args={[20, 20, "#2f6b80", "#143243"]} position={[0, -3.4, 0]} />
               {geometry ? (
                 <FitCtmMesh geometry={geometry} clippingPlanes={clippingPlanes} sliceEnabled={sliceEnabled} />
+              ) : null}
+              {deckOverlayEnabled && activeDeckOverlay && geometry ? (
+                <DeckOverlayPlane
+                  deck={activeDeckOverlay}
+                  modelSize={modelFootprint}
+                  texturePath={activeDeckOverlay.svgPath}
+                  opacity={0.95}
+                  renderOrder={41}
+                />
+              ) : null}
+              {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && geometry ? (
+                <DeckOverlayPlane
+                  deck={activeDeckOverlay}
+                  modelSize={modelFootprint}
+                  texturePath={activeDeckRegionHighlightUri}
+                  opacity={0.98}
+                  renderOrder={42}
+                  yOffset={0.0035}
+                />
               ) : null}
               <OrbitControls
                 ref={controlsRef}
@@ -361,13 +663,37 @@ export default function ShipMapTemplate({
             </Canvas>
 
             <div className="absolute right-4 top-4 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => setSliceEnabled((enabled) => !enabled)}
-                className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-              >
-                {sliceEnabled ? "Disable Slice" : "Enable Slice"}
-              </button>
+              {hasDeckOverlay ? (
+                <button
+                  type="button"
+                  onClick={() => setDeckOverlayEnabled((enabled) => !enabled)}
+                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                >
+                  {deckOverlayEnabled ? "Disable Floors" : "Enable Floors"}
+                </button>
+              ) : null}
+              {hasDeckOverlay && deckOverlayConfig ? (
+                <div className="flex flex-wrap justify-end gap-2 rounded-md border border-white/20 bg-black/55 p-2">
+                  {deckOverlayConfig.decks.map((deck) => {
+                    const isActive = deck.id === activeDeckOverlayId;
+                    return (
+                      <button
+                        key={deck.id}
+                        type="button"
+                        onClick={() => setActiveDeckOverlayId(deck.id)}
+                        className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
+                          isActive
+                            ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                            : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
+                        }`}
+                        aria-pressed={isActive}
+                      >
+                        {deck.title}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
               <button
                 type="button"
                 onClick={moveCameraTopDown}
@@ -413,7 +739,7 @@ export default function ShipMapTemplate({
               </button>
             </div>
 
-            {sliceEnabled ? (
+            {sliceEnabled && !hasDeckOverlay ? (
               <div className="absolute left-4 top-4 w-[min(320px,calc(100%-2rem))] rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
                 <label className="block text-[11px] uppercase tracking-[0.14em] text-cyan-100">
                   deckMin: {round3(deckMin)}
@@ -448,14 +774,63 @@ export default function ShipMapTemplate({
               </div>
             ) : null}
 
-            <div className="absolute bottom-4 left-4 rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
-              <p>slice: {sliceEnabled ? "enabled" : "disabled"}</p>
-              <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
-              <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
-              <p>cam: [{currentView.position.join(", ")}]</p>
-              <p>target: [{currentView.target.join(", ")}]</p>
-              {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
-              {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
+            <div className="absolute bottom-4 left-4 flex w-[min(360px,calc(100%-2rem))] flex-col gap-2">
+              <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
+                <p>slice: {sliceEnabled ? "enabled" : "disabled"}</p>
+                <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
+                {activeDeckOverlay ? <p>active floor: {activeDeckOverlay.title}</p> : null}
+                <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
+                <p>cam: [{currentView.position.join(", ")}]</p>
+                <p>target: [{currentView.target.join(", ")}]</p>
+                {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
+                {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
+              </div>
+
+              {hasDeckOverlay ? (
+                <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-100">Floor Section Legend</p>
+                  {deckOverlayRegionsLoading ? <p className="mt-1">Loading sections...</p> : null}
+                  {deckOverlayRegionsError ? <p className="mt-1 text-red-200">section parse failed: {deckOverlayRegionsError}</p> : null}
+                  {!deckOverlayRegionsLoading && !deckOverlayRegionsError ? (
+                    <>
+                      <div className="mt-2 max-h-40 space-y-1 overflow-y-auto pr-1">
+                        {deckOverlayRegions.map((region) => {
+                          const isActive = region.key === activeRegionKey;
+                          return (
+                            <button
+                              key={region.key}
+                              type="button"
+                              onClick={() => setSelectedRegionKey(region.key)}
+                              onMouseEnter={() => setHoveredRegionKey(region.key)}
+                              onMouseLeave={() => setHoveredRegionKey(null)}
+                              onFocus={() => setHoveredRegionKey(region.key)}
+                              onBlur={() => setHoveredRegionKey(null)}
+                              className={`min-h-11 w-full rounded-md border px-2 py-1 text-left text-[11px] transition ${
+                                isActive
+                                  ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                                  : "border-white/25 bg-black/35 text-slate-100 hover:bg-black/55"
+                              }`}
+                              aria-pressed={region.key === selectedRegionKey}
+                            >
+                              {region.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className="mt-2 border-t border-white/10 pt-2">
+                        coords:{" "}
+                        {activeDeckRegion ? `[${activeDeckRegion.centerX}, ${activeDeckRegion.centerY}]` : "none"}
+                      </p>
+                      {activeDeckRegion ? (
+                        <p>
+                          bounds: [{activeDeckRegion.bounds.x}, {activeDeckRegion.bounds.y}, {activeDeckRegion.bounds.width},{" "}
+                          {activeDeckRegion.bounds.height}]
+                        </p>
+                      ) : null}
+                    </>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
 
             {!geometry && !loadError ? (
