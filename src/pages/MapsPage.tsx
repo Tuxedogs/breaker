@@ -2,7 +2,7 @@ import ShipMapTemplate, { type ShipMapViewState } from "../components/maps/ShipM
 import { perseusDeckFloors } from "../data/maps/perseusDeckFloorRegistry";
 
 const defaultPerseusView: ShipMapViewState = {
-  position: [4.486, 3.601, 0.483],
+  position: [-3.165, 1.389, 0.111],
   target: [0, 0, 0],
 };
 
@@ -23,6 +23,7 @@ export default function MapsPage() {
         svgPath: deck.svgUrl,
         viewBox: deck.nativeViewBox,
         rotationDeg: deck.overlayAdjustments?.rotationDeg ?? 0,
+        offsetY: deck.overlayAdjustments?.offsetY ?? 0,
         offsetX: deck.overlayAdjustments?.offsetX ?? 0,
         offsetZ: deck.overlayAdjustments?.offsetZ ?? 0.5,
         scaleMultiplier: deck.overlayAdjustments?.scaleMultiplier ?? 1,

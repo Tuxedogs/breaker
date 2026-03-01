@@ -5,10 +5,12 @@ import {
   Box3,
   BufferAttribute,
   BufferGeometry,
+  CanvasTexture,
   DoubleSide,
   MeshStandardMaterial,
-  Plane,
   PerspectiveCamera,
+  RepeatWrapping,
+  SRGBColorSpace,
   Vector3,
   type NormalBufferAttributes,
 } from "three";
@@ -45,6 +47,7 @@ type ShipMapDeckOverlay = {
   svgPath: string;
   viewBox: [number, number];
   rotationDeg?: number;
+  offsetY?: number;
   offsetX?: number;
   offsetZ?: number;
   scaleMultiplier?: number;
@@ -68,6 +71,13 @@ type DeckOverlayRegion = {
   highlightMarkup: string;
 };
 
+const SHIP_SILVER_COLOR = "#aeb6bf";
+const HULL_OPACITY = 0.12;
+const CREW_ELEVATOR_LABEL_DECK_ID = "__disabled__";
+const TOP_DECK_ID = "top";
+const TOP_DECK_ELEVATED_SECTION_COUNT = 8;
+const TOP_DECK_ELEVATION_OFFSET = 0.06;
+
 type ShipMapTemplateProps = {
   title: string;
   subtitle: string;
@@ -84,6 +94,97 @@ type ShipMapTemplateProps = {
 
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
+}
+
+function resolveDeckPlaneSize(
+  deck: Pick<ShipMapDeckOverlay, "viewBox" | "scaleMultiplier">,
+  modelSize: { x: number; z: number },
+): [number, number] {
+  const maxWidth = modelSize.x * 1.12;
+  const maxDepth = modelSize.z * 1.12;
+  const aspect = deck.viewBox[0] / Math.max(deck.viewBox[1], 1);
+
+  let width = maxWidth;
+  let depth = width / Math.max(aspect, 0.0001);
+  if (depth > maxDepth) {
+    depth = maxDepth;
+    width = depth * aspect;
+  }
+  const scaleMultiplier = deck.scaleMultiplier ?? 1;
+  return [width * scaleMultiplier, depth * scaleMultiplier];
+}
+
+function createSeededRandom(seed: number): () => number {
+  let state = seed >>> 0;
+  return () => {
+    state = (1664525 * state + 1013904223) >>> 0;
+    return state / 0x100000000;
+  };
+}
+
+function createHullPanelTexture(): CanvasTexture {
+  const size = 1024;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    const fallback = new CanvasTexture(canvas);
+    fallback.wrapS = RepeatWrapping;
+    fallback.wrapT = RepeatWrapping;
+    fallback.repeat.set(6, 6);
+    fallback.colorSpace = SRGBColorSpace;
+    return fallback;
+  }
+
+  const random = createSeededRandom(1337);
+  ctx.fillStyle = "#9ca6b2";
+  ctx.fillRect(0, 0, size, size);
+
+  for (let i = 0; i < 220; i += 1) {
+    const x = Math.floor(random() * size);
+    const y = Math.floor(random() * size);
+    const w = 48 + Math.floor(random() * 192);
+    const h = 24 + Math.floor(random() * 120);
+    const tone = 130 + Math.floor(random() * 38);
+    ctx.fillStyle = `rgb(${tone}, ${tone + 6}, ${tone + 14})`;
+    ctx.fillRect(x, y, w, h);
+
+    ctx.strokeStyle = "rgba(40, 47, 56, 0.55)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x + 1, y + 1, Math.max(w - 2, 2), Math.max(h - 2, 2));
+  }
+
+  for (let i = 0; i < 360; i += 1) {
+    const x1 = Math.floor(random() * size);
+    const y1 = Math.floor(random() * size);
+    const x2 = x1 + (random() > 0.5 ? 1 : -1) * (12 + Math.floor(random() * 96));
+    const y2 = y1 + (random() > 0.5 ? 1 : -1) * (12 + Math.floor(random() * 96));
+    ctx.strokeStyle = "rgba(55, 62, 72, 0.45)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  const image = ctx.getImageData(0, 0, size, size);
+  const data = image.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = Math.floor((random() - 0.5) * 22);
+    data[i] = Math.max(0, Math.min(255, data[i] + noise));
+    data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+    data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+  }
+  ctx.putImageData(image, 0, 0);
+
+  const texture = new CanvasTexture(canvas);
+  texture.wrapS = RepeatWrapping;
+  texture.wrapT = RepeatWrapping;
+  texture.repeat.set(6, 6);
+  texture.colorSpace = SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
 }
 
 function labelizeRegion(value: string): string {
@@ -178,8 +279,66 @@ function parseDeckOverlayRegions(svgText: string): {
   return { regions, sourceViewBox };
 }
 
+function buildSplitDeckTextureUris(
+  svgText: string,
+  elevatedSectionCount: number,
+): { baseUri: string; elevatedUri: string } | null {
+  const parser = new DOMParser();
+  const serializer = new XMLSerializer();
+  const selectors = "path, polygon, rect, circle, ellipse";
+
+  const parsed = parser.parseFromString(svgText, "image/svg+xml");
+  const root = parsed.querySelector("svg");
+  if (!root) return null;
+
+  const graphics = Array.from(root.querySelectorAll(selectors));
+  if (graphics.length === 0) return null;
+
+  function buildLayerUri(keepPredicate: (index: number) => boolean): string | null {
+    const layerDoc = parser.parseFromString(svgText, "image/svg+xml");
+    const layerRoot = layerDoc.querySelector("svg");
+    if (!layerRoot) return null;
+    const layerGraphics = Array.from(layerRoot.querySelectorAll(selectors));
+    layerGraphics.forEach((element, index) => {
+      if (!keepPredicate(index)) {
+        element.remove();
+      }
+    });
+    const markup = serializer.serializeToString(layerRoot);
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+  }
+
+  const elevatedUri = buildLayerUri((index) => index < elevatedSectionCount);
+  const baseUri = buildLayerUri((index) => index >= elevatedSectionCount);
+  if (!elevatedUri || !baseUri) return null;
+
+  return { baseUri, elevatedUri };
+}
+
 function buildHighlightTextureDataUri(viewBox: string, highlightMarkup: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${highlightMarkup}</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function buildDeckPinnedLabelTextureDataUri(
+  viewBox: string,
+  centerX: number,
+  centerY: number,
+  line1: string,
+  line2: string,
+): string {
+  const viewBoxParts = viewBox.split(/\s+/).map((value) => Number(value));
+  const textureWidth = Number.isFinite(viewBoxParts[2]) && viewBoxParts[2] > 0 ? viewBoxParts[2] : 2048;
+  const textureHeight = Number.isFinite(viewBoxParts[3]) && viewBoxParts[3] > 0 ? viewBoxParts[3] : 2048;
+  const labelWidth = 120;
+  const labelHeight = 96;
+  const x = centerX - labelWidth / 2;
+  const y = centerY - labelHeight / 2;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${textureWidth}" height="${textureHeight}" viewBox="${viewBox}">
+    <rect x="${x}" y="${y}" width="${labelWidth}" height="${labelHeight}" rx="14" fill="rgba(8,10,14,0.9)" stroke="rgba(25,35,45,0.98)" stroke-width="4" />
+    <text x="${centerX}" y="${centerY - 8}" text-anchor="middle" font-size="18" font-weight="700" fill="#e7edf6">${line1}</text>
+    <text x="${centerX}" y="${centerY + 26}" text-anchor="middle" font-size="16" font-weight="700" fill="#e7edf6">${line2}</text>
+  </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
@@ -260,33 +419,40 @@ function createGeometryFromCtm(
 
 function FitCtmMesh({
   geometry,
-  clippingPlanes,
-  sliceEnabled,
+  opacity,
 }: {
   geometry: BufferGeometry<NormalBufferAttributes>;
-  clippingPlanes: Plane[];
-  sliceEnabled: boolean;
+  opacity: number;
 }) {
+  const hasUv = geometry.getAttribute("uv") !== undefined;
+  const hasVertexColor = geometry.getAttribute("color") !== undefined;
+  const panelTexture = useMemo(() => (hasUv ? createHullPanelTexture() : null), [hasUv]);
+
   const material = useMemo(
     () =>
       new MeshStandardMaterial({
-        color: "#3f464d",
-        emissive: "#080c10",
-        emissiveIntensity: 0.15,
+        color: SHIP_SILVER_COLOR,
+        emissive: "#1a2028",
+        emissiveIntensity: 0.08,
         metalness: 0.01,
-        roughness: 0.95,
-        vertexColors: geometry.getAttribute("color") !== undefined,
-        clippingPlanes: sliceEnabled ? clippingPlanes : [],
-        clipIntersection: false,
+        roughness: 0.96,
+        map: panelTexture ?? undefined,
+        bumpMap: panelTexture ?? undefined,
+        bumpScale: panelTexture ? 0.018 : 0,
+        vertexColors: !panelTexture && hasVertexColor,
+        transparent: true,
+        opacity,
+        depthWrite: false,
       }),
-    [geometry, clippingPlanes, sliceEnabled],
+    [panelTexture, hasVertexColor, opacity],
   );
 
   useEffect(() => {
     return () => {
       material.dispose();
+      panelTexture?.dispose();
     };
-  }, [material]);
+  }, [material, panelTexture]);
 
   return <mesh geometry={geometry} material={material} />;
 }
@@ -308,22 +474,12 @@ function DeckOverlayPlane({
 }) {
   const texture = useTexture(texturePath);
 
-  const [planeWidth, planeDepth] = useMemo(() => {
-    const maxWidth = modelSize.x * 1.12;
-    const maxDepth = modelSize.z * 1.12;
-    const aspect = deck.viewBox[0] / Math.max(deck.viewBox[1], 1);
+  const [planeWidth, planeDepth] = useMemo(
+    () => resolveDeckPlaneSize(deck, modelSize),
+    [deck, modelSize],
+  );
 
-    let width = maxWidth;
-    let depth = width / Math.max(aspect, 0.0001);
-    if (depth > maxDepth) {
-      depth = maxDepth;
-      width = depth * aspect;
-    }
-    const scaleMultiplier = deck.scaleMultiplier ?? 1;
-    return [width * scaleMultiplier, depth * scaleMultiplier];
-  }, [deck.viewBox, modelSize.x, modelSize.z, deck.scaleMultiplier]);
-
-  const y = deck.deckMin + yOffset;
+  const y = deck.deckMin + (deck.offsetY ?? 0) + yOffset;
   const rotationInPlane = -(((deck.rotationDeg ?? 0) * Math.PI) / 180);
   const offsetX = deck.offsetX ?? 0;
   const offsetZ = deck.offsetZ ?? 0;
@@ -337,7 +493,7 @@ function DeckOverlayPlane({
           side={DoubleSide}
           transparent
           opacity={opacity}
-          depthTest={false}
+          depthTest
           depthWrite={false}
           toneMapped={false}
         />
@@ -375,6 +531,7 @@ export default function ShipMapTemplate({
   const [modelFootprint, setModelFootprint] = useState<{ x: number; z: number }>({ x: 1, z: 1 });
   const [deckOverlayRegions, setDeckOverlayRegions] = useState<DeckOverlayRegion[]>([]);
   const [deckOverlayViewBox, setDeckOverlayViewBox] = useState<string | null>(null);
+  const [activeDeckSvgSource, setActiveDeckSvgSource] = useState<string | null>(null);
   const [deckOverlayRegionsLoading, setDeckOverlayRegionsLoading] = useState(false);
   const [deckOverlayRegionsError, setDeckOverlayRegionsError] = useState<string | null>(null);
   const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
@@ -382,11 +539,6 @@ export default function ShipMapTemplate({
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const clippingPlanes = useMemo(
-    () => [new Plane(new Vector3(0, 1, 0), -deckMin), new Plane(new Vector3(0, -1, 0), deckMax)],
-    [deckMin, deckMax],
-  );
 
   const topDownHeight = useMemo(() => {
     const span = Math.max(deckBounds.max - deckBounds.min, 1);
@@ -397,11 +549,27 @@ export default function ShipMapTemplate({
     () => deckOverlayConfig?.decks.find((deck) => deck.id === activeDeckOverlayId) ?? null,
     [deckOverlayConfig, activeDeckOverlayId],
   );
+  const hullOpacity = HULL_OPACITY;
   const activeRegionKey = hoveredRegionKey ?? selectedRegionKey;
   const activeDeckRegion = useMemo(
     () => deckOverlayRegions.find((region) => region.key === activeRegionKey) ?? null,
     [deckOverlayRegions, activeRegionKey],
   );
+  const activeDeckRegionIndex = useMemo(() => {
+    if (!activeDeckRegion) return null;
+    const rawIndex = activeDeckRegion.key.split("-").pop();
+    const parsed = Number(rawIndex);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [activeDeckRegion]);
+  const topDeckSplitTextures = useMemo(() => {
+    if (!activeDeckOverlay || activeDeckOverlay.id !== TOP_DECK_ID || !activeDeckSvgSource) return null;
+    return buildSplitDeckTextureUris(activeDeckSvgSource, TOP_DECK_ELEVATED_SECTION_COUNT);
+  }, [activeDeckOverlay, activeDeckSvgSource]);
+  const activeRegionElevationOffset = useMemo(() => {
+    if (activeDeckOverlay?.id !== TOP_DECK_ID) return 0;
+    if (activeDeckRegionIndex === null) return 0;
+    return activeDeckRegionIndex < TOP_DECK_ELEVATED_SECTION_COUNT ? TOP_DECK_ELEVATION_OFFSET : 0;
+  }, [activeDeckOverlay, activeDeckRegionIndex]);
   const activeDeckRegionHighlightUri = useMemo(() => {
     if (!activeDeckRegion) return null;
     const fallbackViewBox = activeDeckOverlay
@@ -411,6 +579,29 @@ export default function ShipMapTemplate({
     if (!viewBox) return null;
     return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
+  const section6Region = useMemo(
+    () =>
+      deckOverlayRegions.find((region) => region.label.toLowerCase() === "section 6") ??
+      deckOverlayRegions[5] ??
+      null,
+    [deckOverlayRegions],
+  );
+  const section6PinnedLabelUri = useMemo(() => {
+    if (activeDeckOverlay?.id !== CREW_ELEVATOR_LABEL_DECK_ID) return null;
+    if (!section6Region) return null;
+    const fallbackViewBox = activeDeckOverlay
+      ? `0 0 ${activeDeckOverlay.viewBox[0]} ${activeDeckOverlay.viewBox[1]}`
+      : null;
+    const viewBox = deckOverlayViewBox ?? fallbackViewBox;
+    if (!viewBox) return null;
+    return buildDeckPinnedLabelTextureDataUri(
+      viewBox,
+      section6Region.centerX,
+      section6Region.centerY,
+      "Crew",
+      "Elevator",
+    );
+  }, [section6Region, deckOverlayViewBox, activeDeckOverlay]);
 
   function handleControlsChange() {
     const controls = controlsRef.current;
@@ -564,6 +755,7 @@ export default function ShipMapTemplate({
 
     setDeckOverlayRegions([]);
     setDeckOverlayViewBox(null);
+    setActiveDeckSvgSource(null);
     setDeckOverlayRegionsError(null);
     setSelectedRegionKey(null);
     setHoveredRegionKey(null);
@@ -580,6 +772,7 @@ export default function ShipMapTemplate({
         }
         const svgText = await response.text();
         if (cancelled) return;
+        setActiveDeckSvgSource(svgText);
         const parsed = parseDeckOverlayRegions(svgText);
         setDeckOverlayRegions(parsed.regions);
         setDeckOverlayViewBox(parsed.sourceViewBox);
@@ -630,15 +823,25 @@ export default function ShipMapTemplate({
               <directionalLight position={[-5, -3, -4]} intensity={0.2} />
               <gridHelper args={[20, 20, "#2f6b80", "#143243"]} position={[0, -3.4, 0]} />
               {geometry ? (
-                <FitCtmMesh geometry={geometry} clippingPlanes={clippingPlanes} sliceEnabled={sliceEnabled} />
+                <FitCtmMesh geometry={geometry} opacity={hullOpacity} />
               ) : null}
               {deckOverlayEnabled && activeDeckOverlay && geometry ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
-                  texturePath={activeDeckOverlay.svgPath}
+                  texturePath={topDeckSplitTextures?.baseUri ?? activeDeckOverlay.svgPath}
                   opacity={0.95}
                   renderOrder={41}
+                />
+              ) : null}
+              {deckOverlayEnabled && activeDeckOverlay?.id === TOP_DECK_ID && topDeckSplitTextures && geometry ? (
+                <DeckOverlayPlane
+                  deck={activeDeckOverlay}
+                  modelSize={modelFootprint}
+                  texturePath={topDeckSplitTextures.elevatedUri}
+                  opacity={0.95}
+                  renderOrder={42}
+                  yOffset={0.002 + TOP_DECK_ELEVATION_OFFSET}
                 />
               ) : null}
               {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && geometry ? (
@@ -647,15 +850,25 @@ export default function ShipMapTemplate({
                   modelSize={modelFootprint}
                   texturePath={activeDeckRegionHighlightUri}
                   opacity={0.98}
-                  renderOrder={42}
-                  yOffset={0.0035}
+                  renderOrder={43}
+                  yOffset={0.0035 + activeRegionElevationOffset}
+                />
+              ) : null}
+              {deckOverlayEnabled && activeDeckOverlay && section6PinnedLabelUri && geometry ? (
+                <DeckOverlayPlane
+                  deck={activeDeckOverlay}
+                  modelSize={modelFootprint}
+                  texturePath={section6PinnedLabelUri}
+                  opacity={1}
+                  renderOrder={44}
+                  yOffset={0.0045}
                 />
               ) : null}
               <OrbitControls
                 ref={controlsRef}
                 enableDamping
                 dampingFactor={0.08}
-                minDistance={2.6}
+                minDistance={0.1}
                 maxDistance={20}
                 target={initialView.target}
                 onChange={handleControlsChange}
