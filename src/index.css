@@ -1426,3 +1426,32 @@ body {
   border-color: rgba(186, 230, 253, 0.72);
   box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.36);
 }
+
+.deck-floor-viewport svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.deck-floor-viewport svg path,
+.deck-floor-viewport svg polygon,
+.deck-floor-viewport svg rect,
+.deck-floor-viewport svg circle,
+.deck-floor-viewport svg ellipse {
+  cursor: pointer;
+  transition:
+    opacity 150ms ease,
+    filter 150ms ease;
+}
+
+.deck-floor-viewport svg path:hover,
+.deck-floor-viewport svg polygon:hover,
+.deck-floor-viewport svg rect:hover,
+.deck-floor-viewport svg circle:hover,
+.deck-floor-viewport svg ellipse:hover {
+  opacity: 0.82;
+}
+
+.deck-floor-viewport [data-region-selected="true"] {
+  filter: brightness(1.2);
+}
