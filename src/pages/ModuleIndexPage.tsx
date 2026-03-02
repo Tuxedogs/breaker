@@ -10,6 +10,8 @@ const statusClassName = {
   validated: "border-emerald-300/40 bg-emerald-300/10 text-emerald-100",
 } as const;
 
+const manningPinnedModuleIds = ["turret-keybind-baseline"] as const;
+
 function matchesFilter(list: string[], selected: string) {
   return !selected || list.includes(selected);
 }
@@ -31,6 +33,17 @@ export default function ModuleIndexPage() {
     if (filters.domain && !module.tags.includes(filters.domain)) return false;
     return true;
   });
+  const isManningIndex = filters.type === "manning" && (!filters.role || filters.role === "gunner");
+  const orderedModules = isManningIndex
+    ? [...filteredModules].sort((a, b) => {
+      const aPinnedIdx = manningPinnedModuleIds.indexOf(a.id as (typeof manningPinnedModuleIds)[number]);
+      const bPinnedIdx = manningPinnedModuleIds.indexOf(b.id as (typeof manningPinnedModuleIds)[number]);
+      if (aPinnedIdx === -1 && bPinnedIdx === -1) return 0;
+      if (aPinnedIdx === -1) return 1;
+      if (bPinnedIdx === -1) return -1;
+      return aPinnedIdx - bPinnedIdx;
+    })
+    : filteredModules;
 
   return (
     <section className="framework-static route-fade py-3">
@@ -58,12 +71,17 @@ export default function ModuleIndexPage() {
         />
 
         <div className="space-y-4">
-          {filteredModules.map((module) => (
+          {orderedModules.map((module) => (
             <article key={module.id} className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
               <div className="framework-modern-card-head rounded-xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
                     <h2 className="title-font text-2xl text-cyan-100">{module.title}</h2>
+                    {isManningIndex && manningPinnedModuleIds.includes(module.id as (typeof manningPinnedModuleIds)[number]) ? (
+                      <p className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-300/40 bg-amber-300/10 px-2 py-1 text-xs uppercase tracking-[0.12em] text-amber-100">
+                        <span>Pinned Manning Baseline</span>
+                      </p>
+                    ) : null}
                     <p className="mt-2 text-sm text-slate-300">{module.intent}</p>
                   </div>
                   <span
@@ -95,7 +113,7 @@ export default function ModuleIndexPage() {
             </article>
           ))}
 
-          {filteredModules.length === 0 ? (
+          {orderedModules.length === 0 ? (
             <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
               <div className="framework-modern-card-head rounded-xl p-4">
                 <h2 className="title-font text-xl text-cyan-100">No modules match current filters.</h2>

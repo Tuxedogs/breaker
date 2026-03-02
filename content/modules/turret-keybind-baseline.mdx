@@ -7,19 +7,19 @@ moduleType: "manning"
 owner: "Doctrine Team"
 intent: "Establish a reliable turret input baseline for faster target handling and fewer operator errors."
 summary: "Condensed setup flow from the existing Turret Keybindings page."
-lastValidated: "2026-02-25"
+lastValidated: "2026-03-01"
 tags: ["turret", "keybind", "gunner"]
 ships: ["perseus", "polaris", "idris"]
 roles: ["gunner"]
 enemies: ["capital", "fighter"]
 maps: []
-useWhen: ["Before operation start.", "After profile resets or patch changes."]
-steps: ["Confirm turret seat entry/exit binds.", "Set MFD cycle and MFD select binds to your fighter baseline.", "Bind sub-target forward and validate in test target pass.", "Verify gyro/recenter/turret swap controls under load."]
+useWhen: ["Before operation start.", "After profile resets or patch changes.", "Initial bindings setup."]
+steps: ["Backup user folder to preserve settings changes.", "Confirm remote turret entry/exit binds.", "Set MFD cycle and MFD select binds to your fighter baseline.", "Check sub-target forward/backwards and validate in test target pass.", "Verify gyro/recenter/turret swap controls operate."]
 failureModes: ["Unbound sub-target controls in live combat.", "Inconsistent MFD binds between fighter and turret roles.", "Operator toggles unintended movement mode mid-fight."]
 validation: ["Operator can switch target workflow without menu interaction.", "Turret handoff and exit/re-entry cycle is completed cleanly."]
 prerequisites: ["keybind/turret-bind-baseline"]
 relatedModuleIds: ["sub-targeting-component-cycle", "perseus-component-sniping"]
 ---
 
-This module reuses the current content at `/systems/turret-keybinds` as source material.
+Primary systems page: [Turret Keybindings](/systems/turret-keybinds).
 

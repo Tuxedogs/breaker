@@ -3,15 +3,18 @@ import EngagementEnvelope from "../components/EngagementEnvelope";
 import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { moduleById, moduleLoadError } from "../data/modules";
 import { refByKey, refLoadError } from "../data/refs";
+import type { ReactNode } from "react";
 
 function SectionList({
   title,
   items,
   variant = "default",
+  footer,
 }: {
   title: string;
   items: string[];
   variant?: "default" | "steps" | "failure" | "validation";
+  footer?: ReactNode;
 }) {
   const cardClass =
     variant === "failure"
@@ -39,6 +42,7 @@ function SectionList({
           <li key={item}>{item}</li>
         ))}
       </ul>
+      {footer ? <div className="mt-3">{footer}</div> : null}
     </section>
   );
 }
@@ -147,7 +151,17 @@ export default function DoctrineModulePage() {
 
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
           <div className="grid gap-4 lg:grid-cols-2">
-            <SectionList title="Use When" items={module.useWhen} />
+            <SectionList
+              title="Use When"
+              items={module.useWhen}
+              footer={
+                module.id === "turret-keybind-baseline" ? (
+                  <Link to="/systems/turret-keybinds" className="framework-modern-row rounded-lg p-3">
+                    Common Keybindings Here
+                  </Link>
+                ) : undefined
+              }
+            />
             <SectionList title="Steps" items={module.steps} variant="steps" />
             <SectionList title="Failure Modes" items={module.failureModes} variant="failure" />
             <SectionList title="Validation" items={module.validation} variant="validation" />
