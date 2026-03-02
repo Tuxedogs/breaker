@@ -47,7 +47,6 @@ type ShipMapDeckOverlay = {
   svgPath: string;
   viewBox: [number, number];
   rotationDeg?: number;
-  offsetY?: number;
   offsetX?: number;
   offsetZ?: number;
   scaleMultiplier?: number;
@@ -71,12 +70,9 @@ type DeckOverlayRegion = {
   highlightMarkup: string;
 };
 
-const SHIP_SILVER_COLOR = "#aeb6bf";
-const HULL_OPACITY = 0.12;
-const CREW_ELEVATOR_LABEL_DECK_ID = "__disabled__";
-const TOP_DECK_ID = "top";
-const TOP_DECK_ELEVATED_SECTION_COUNT = 8;
-const TOP_DECK_ELEVATION_OFFSET = 0.06;
+const SHIP_SILVER_COLOR = "#f8f8f8";
+const HULL_OPACITY_WITH_FLOORS = 0.12;
+const HULL_OPACITY_WITHOUT_FLOORS = 1;
 
 type ShipMapTemplateProps = {
   title: string;
@@ -138,7 +134,7 @@ function createHullPanelTexture(): CanvasTexture {
   }
 
   const random = createSeededRandom(1337);
-  ctx.fillStyle = "#9ca6b2";
+  ctx.fillStyle = "#b4b4b4";
   ctx.fillRect(0, 0, size, size);
 
   for (let i = 0; i < 220; i += 1) {
@@ -150,7 +146,7 @@ function createHullPanelTexture(): CanvasTexture {
     ctx.fillStyle = `rgb(${tone}, ${tone + 6}, ${tone + 14})`;
     ctx.fillRect(x, y, w, h);
 
-    ctx.strokeStyle = "rgba(40, 47, 56, 0.55)";
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.55)";
     ctx.lineWidth = 2;
     ctx.strokeRect(x + 1, y + 1, Math.max(w - 2, 2), Math.max(h - 2, 2));
   }
@@ -279,66 +275,8 @@ function parseDeckOverlayRegions(svgText: string): {
   return { regions, sourceViewBox };
 }
 
-function buildSplitDeckTextureUris(
-  svgText: string,
-  elevatedSectionCount: number,
-): { baseUri: string; elevatedUri: string } | null {
-  const parser = new DOMParser();
-  const serializer = new XMLSerializer();
-  const selectors = "path, polygon, rect, circle, ellipse";
-
-  const parsed = parser.parseFromString(svgText, "image/svg+xml");
-  const root = parsed.querySelector("svg");
-  if (!root) return null;
-
-  const graphics = Array.from(root.querySelectorAll(selectors));
-  if (graphics.length === 0) return null;
-
-  function buildLayerUri(keepPredicate: (index: number) => boolean): string | null {
-    const layerDoc = parser.parseFromString(svgText, "image/svg+xml");
-    const layerRoot = layerDoc.querySelector("svg");
-    if (!layerRoot) return null;
-    const layerGraphics = Array.from(layerRoot.querySelectorAll(selectors));
-    layerGraphics.forEach((element, index) => {
-      if (!keepPredicate(index)) {
-        element.remove();
-      }
-    });
-    const markup = serializer.serializeToString(layerRoot);
-    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
-  }
-
-  const elevatedUri = buildLayerUri((index) => index < elevatedSectionCount);
-  const baseUri = buildLayerUri((index) => index >= elevatedSectionCount);
-  if (!elevatedUri || !baseUri) return null;
-
-  return { baseUri, elevatedUri };
-}
-
 function buildHighlightTextureDataUri(viewBox: string, highlightMarkup: string): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">${highlightMarkup}</svg>`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
-
-function buildDeckPinnedLabelTextureDataUri(
-  viewBox: string,
-  centerX: number,
-  centerY: number,
-  line1: string,
-  line2: string,
-): string {
-  const viewBoxParts = viewBox.split(/\s+/).map((value) => Number(value));
-  const textureWidth = Number.isFinite(viewBoxParts[2]) && viewBoxParts[2] > 0 ? viewBoxParts[2] : 2048;
-  const textureHeight = Number.isFinite(viewBoxParts[3]) && viewBoxParts[3] > 0 ? viewBoxParts[3] : 2048;
-  const labelWidth = 120;
-  const labelHeight = 96;
-  const x = centerX - labelWidth / 2;
-  const y = centerY - labelHeight / 2;
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${textureWidth}" height="${textureHeight}" viewBox="${viewBox}">
-    <rect x="${x}" y="${y}" width="${labelWidth}" height="${labelHeight}" rx="14" fill="rgba(8,10,14,0.9)" stroke="rgba(25,35,45,0.98)" stroke-width="4" />
-    <text x="${centerX}" y="${centerY - 8}" text-anchor="middle" font-size="18" font-weight="700" fill="#e7edf6">${line1}</text>
-    <text x="${centerX}" y="${centerY + 26}" text-anchor="middle" font-size="16" font-weight="700" fill="#e7edf6">${line2}</text>
-  </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
@@ -433,16 +371,16 @@ function FitCtmMesh({
       new MeshStandardMaterial({
         color: SHIP_SILVER_COLOR,
         emissive: "#1a2028",
-        emissiveIntensity: 0.08,
-        metalness: 0.01,
-        roughness: 0.96,
+        emissiveIntensity: 0.1,
+        metalness: 0,
+        roughness: 1,
         map: panelTexture ?? undefined,
         bumpMap: panelTexture ?? undefined,
         bumpScale: panelTexture ? 0.018 : 0,
         vertexColors: !panelTexture && hasVertexColor,
-        transparent: true,
+        transparent: opacity < 1,
         opacity,
-        depthWrite: false,
+        depthWrite: opacity >= 1,
       }),
     [panelTexture, hasVertexColor, opacity],
   );
@@ -479,7 +417,7 @@ function DeckOverlayPlane({
     [deck, modelSize],
   );
 
-  const y = deck.deckMin + (deck.offsetY ?? 0) + yOffset;
+  const y = deck.deckMin + yOffset;
   const rotationInPlane = -(((deck.rotationDeg ?? 0) * Math.PI) / 180);
   const offsetX = deck.offsetX ?? 0;
   const offsetZ = deck.offsetZ ?? 0;
@@ -524,14 +462,13 @@ export default function ShipMapTemplate({
   const [deckBounds, setDeckBounds] = useState<{ min: number; max: number }>({ min: -1, max: 1 });
   const [deckMin, setDeckMin] = useState(-1);
   const [deckMax, setDeckMax] = useState(1);
-  const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(hasDeckOverlay);
+  const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(false);
   const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(
     deckOverlayConfig?.decks[0]?.id ?? ""
   );
   const [modelFootprint, setModelFootprint] = useState<{ x: number; z: number }>({ x: 1, z: 1 });
   const [deckOverlayRegions, setDeckOverlayRegions] = useState<DeckOverlayRegion[]>([]);
   const [deckOverlayViewBox, setDeckOverlayViewBox] = useState<string | null>(null);
-  const [activeDeckSvgSource, setActiveDeckSvgSource] = useState<string | null>(null);
   const [deckOverlayRegionsLoading, setDeckOverlayRegionsLoading] = useState(false);
   const [deckOverlayRegionsError, setDeckOverlayRegionsError] = useState<string | null>(null);
   const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
@@ -549,27 +486,12 @@ export default function ShipMapTemplate({
     () => deckOverlayConfig?.decks.find((deck) => deck.id === activeDeckOverlayId) ?? null,
     [deckOverlayConfig, activeDeckOverlayId],
   );
-  const hullOpacity = HULL_OPACITY;
+  const hullOpacity = deckOverlayEnabled ? HULL_OPACITY_WITH_FLOORS : HULL_OPACITY_WITHOUT_FLOORS;
   const activeRegionKey = hoveredRegionKey ?? selectedRegionKey;
   const activeDeckRegion = useMemo(
     () => deckOverlayRegions.find((region) => region.key === activeRegionKey) ?? null,
     [deckOverlayRegions, activeRegionKey],
   );
-  const activeDeckRegionIndex = useMemo(() => {
-    if (!activeDeckRegion) return null;
-    const rawIndex = activeDeckRegion.key.split("-").pop();
-    const parsed = Number(rawIndex);
-    return Number.isFinite(parsed) ? parsed : null;
-  }, [activeDeckRegion]);
-  const topDeckSplitTextures = useMemo(() => {
-    if (!activeDeckOverlay || activeDeckOverlay.id !== TOP_DECK_ID || !activeDeckSvgSource) return null;
-    return buildSplitDeckTextureUris(activeDeckSvgSource, TOP_DECK_ELEVATED_SECTION_COUNT);
-  }, [activeDeckOverlay, activeDeckSvgSource]);
-  const activeRegionElevationOffset = useMemo(() => {
-    if (activeDeckOverlay?.id !== TOP_DECK_ID) return 0;
-    if (activeDeckRegionIndex === null) return 0;
-    return activeDeckRegionIndex < TOP_DECK_ELEVATED_SECTION_COUNT ? TOP_DECK_ELEVATION_OFFSET : 0;
-  }, [activeDeckOverlay, activeDeckRegionIndex]);
   const activeDeckRegionHighlightUri = useMemo(() => {
     if (!activeDeckRegion) return null;
     const fallbackViewBox = activeDeckOverlay
@@ -579,29 +501,6 @@ export default function ShipMapTemplate({
     if (!viewBox) return null;
     return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
-  const section6Region = useMemo(
-    () =>
-      deckOverlayRegions.find((region) => region.label.toLowerCase() === "section 6") ??
-      deckOverlayRegions[5] ??
-      null,
-    [deckOverlayRegions],
-  );
-  const section6PinnedLabelUri = useMemo(() => {
-    if (activeDeckOverlay?.id !== CREW_ELEVATOR_LABEL_DECK_ID) return null;
-    if (!section6Region) return null;
-    const fallbackViewBox = activeDeckOverlay
-      ? `0 0 ${activeDeckOverlay.viewBox[0]} ${activeDeckOverlay.viewBox[1]}`
-      : null;
-    const viewBox = deckOverlayViewBox ?? fallbackViewBox;
-    if (!viewBox) return null;
-    return buildDeckPinnedLabelTextureDataUri(
-      viewBox,
-      section6Region.centerX,
-      section6Region.centerY,
-      "Crew",
-      "Elevator",
-    );
-  }, [section6Region, deckOverlayViewBox, activeDeckOverlay]);
 
   function handleControlsChange() {
     const controls = controlsRef.current;
@@ -755,7 +654,6 @@ export default function ShipMapTemplate({
 
     setDeckOverlayRegions([]);
     setDeckOverlayViewBox(null);
-    setActiveDeckSvgSource(null);
     setDeckOverlayRegionsError(null);
     setSelectedRegionKey(null);
     setHoveredRegionKey(null);
@@ -772,7 +670,6 @@ export default function ShipMapTemplate({
         }
         const svgText = await response.text();
         if (cancelled) return;
-        setActiveDeckSvgSource(svgText);
         const parsed = parseDeckOverlayRegions(svgText);
         setDeckOverlayRegions(parsed.regions);
         setDeckOverlayViewBox(parsed.sourceViewBox);
@@ -821,7 +718,7 @@ export default function ShipMapTemplate({
               <ambientLight intensity={0.44} />
               <directionalLight position={[6, 6, 5]} intensity={0.85} />
               <directionalLight position={[-5, -3, -4]} intensity={0.2} />
-              <gridHelper args={[20, 20, "#2f6b80", "#143243"]} position={[0, -3.4, 0]} />
+              <gridHelper args={[20, 20, "#a7acad", "#143243"]} position={[0, -3.4, 0]} />
               {geometry ? (
                 <FitCtmMesh geometry={geometry} opacity={hullOpacity} />
               ) : null}
@@ -829,19 +726,9 @@ export default function ShipMapTemplate({
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
-                  texturePath={topDeckSplitTextures?.baseUri ?? activeDeckOverlay.svgPath}
+                  texturePath={activeDeckOverlay.svgPath}
                   opacity={0.95}
                   renderOrder={41}
-                />
-              ) : null}
-              {deckOverlayEnabled && activeDeckOverlay?.id === TOP_DECK_ID && topDeckSplitTextures && geometry ? (
-                <DeckOverlayPlane
-                  deck={activeDeckOverlay}
-                  modelSize={modelFootprint}
-                  texturePath={topDeckSplitTextures.elevatedUri}
-                  opacity={0.95}
-                  renderOrder={42}
-                  yOffset={0.002 + TOP_DECK_ELEVATION_OFFSET}
                 />
               ) : null}
               {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && geometry ? (
@@ -850,25 +737,15 @@ export default function ShipMapTemplate({
                   modelSize={modelFootprint}
                   texturePath={activeDeckRegionHighlightUri}
                   opacity={0.98}
-                  renderOrder={43}
-                  yOffset={0.0035 + activeRegionElevationOffset}
-                />
-              ) : null}
-              {deckOverlayEnabled && activeDeckOverlay && section6PinnedLabelUri && geometry ? (
-                <DeckOverlayPlane
-                  deck={activeDeckOverlay}
-                  modelSize={modelFootprint}
-                  texturePath={section6PinnedLabelUri}
-                  opacity={1}
-                  renderOrder={44}
-                  yOffset={0.0045}
+                  renderOrder={42}
+                  yOffset={0.0035}
                 />
               ) : null}
               <OrbitControls
                 ref={controlsRef}
                 enableDamping
                 dampingFactor={0.08}
-                minDistance={0.1}
+                minDistance={0}
                 maxDistance={20}
                 target={initialView.target}
                 onChange={handleControlsChange}
@@ -882,7 +759,7 @@ export default function ShipMapTemplate({
                   onClick={() => setDeckOverlayEnabled((enabled) => !enabled)}
                   className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
                 >
-                  {deckOverlayEnabled ? "Disable Floors" : "Enable Floors"}
+                  {deckOverlayEnabled ? "Exterior" : "Interior"}
                 </button>
               ) : null}
               {hasDeckOverlay && deckOverlayConfig ? (
@@ -893,7 +770,10 @@ export default function ShipMapTemplate({
                       <button
                         key={deck.id}
                         type="button"
-                        onClick={() => setActiveDeckOverlayId(deck.id)}
+                        onClick={() => {
+                          setActiveDeckOverlayId(deck.id);
+                          setDeckOverlayEnabled(true);
+                        }}
                         className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
                           isActive
                             ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
@@ -907,49 +787,6 @@ export default function ShipMapTemplate({
                   })}
                 </div>
               ) : null}
-              <button
-                type="button"
-                onClick={moveCameraTopDown}
-                className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-              >
-                Top Down
-              </button>
-              <button
-                type="button"
-                onClick={exportPng}
-                className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-              >
-                Export PNG
-              </button>
-              <button
-                type="button"
-                onClick={copyViewJson}
-                className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-              >
-                Copy View JSON
-              </button>
-              <button
-                type="button"
-                onClick={copySuggestedScale}
-                className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-60"
-                disabled={suggestedScale === null}
-              >
-                Copy Suggested Scale
-              </button>
-              <button
-                type="button"
-                onClick={saveCurrentViewAsDefault}
-                className="rounded-md border border-amber-300/45 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-amber-100 transition hover:bg-black/65"
-              >
-                Save Current View
-              </button>
-              <button
-                type="button"
-                onClick={resetDefaultView}
-                className="rounded-md border border-slate-300/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-slate-100 transition hover:bg-black/65"
-              >
-                Reset Default
-              </button>
             </div>
 
             {sliceEnabled && !hasDeckOverlay ? (
@@ -988,6 +825,9 @@ export default function ShipMapTemplate({
             ) : null}
 
             <div className="absolute bottom-4 left-4 flex w-[min(360px,calc(100%-2rem))] flex-col gap-2">
+              <p className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-cyan-100">
+                Dev purpose only controls
+              </p>
               <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
                 <p>slice: {sliceEnabled ? "enabled" : "disabled"}</p>
                 <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
@@ -997,6 +837,51 @@ export default function ShipMapTemplate({
                 <p>target: [{currentView.target.join(", ")}]</p>
                 {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
                 {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
+              </div>
+              <div className="flex flex-wrap justify-end gap-2 rounded-md border border-white/20 bg-black/55 p-2">
+                <button
+                  type="button"
+                  onClick={moveCameraTopDown}
+                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                >
+                  Top Down
+                </button>
+                <button
+                  type="button"
+                  onClick={exportPng}
+                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                >
+                  Export PNG
+                </button>
+                <button
+                  type="button"
+                  onClick={copyViewJson}
+                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                >
+                  Copy View JSON
+                </button>
+                <button
+                  type="button"
+                  onClick={copySuggestedScale}
+                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={suggestedScale === null}
+                >
+                  Copy Suggested Scale
+                </button>
+                <button
+                  type="button"
+                  onClick={saveCurrentViewAsDefault}
+                  className="rounded-md border border-amber-300/45 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-amber-100 transition hover:bg-black/65"
+                >
+                  Save Current View
+                </button>
+                <button
+                  type="button"
+                  onClick={resetDefaultView}
+                  className="rounded-md border border-slate-300/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-slate-100 transition hover:bg-black/65"
+                >
+                  Reset Default
+                </button>
               </div>
 
               {hasDeckOverlay ? (
