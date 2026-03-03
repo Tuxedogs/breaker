@@ -40,7 +40,7 @@ export default function MapsPage() {
     <ShipMapTemplate
       title="RSI Perseus Holo Viewer"
       subtitle="Template ship map viewer. Drag to rotate, right-drag to pan, and scroll to zoom."
-      modelPath="/models/perseus-holo.ctm"
+      modelPath="/models/percy.glb"
       viewStorageKey="ship-map:perseus:default-view"
       fallbackView={defaultPerseusView}
       showHeader={false}

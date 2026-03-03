@@ -5,16 +5,21 @@ import {
   Box3,
   BufferAttribute,
   BufferGeometry,
-  CanvasTexture,
-  DoubleSide,
+  Euler,
+  FrontSide,
+  Group,
+  Material,
+  Matrix4,
+  Mesh,
   MeshStandardMaterial,
+  Object3D,
   PerspectiveCamera,
-  RepeatWrapping,
-  SRGBColorSpace,
   Vector3,
-  type NormalBufferAttributes,
 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import CTM from "../../lib/openctm/ctm.js";
 
 type CtmBody = {
@@ -70,10 +75,6 @@ type DeckOverlayRegion = {
   highlightMarkup: string;
 };
 
-const SHIP_SILVER_COLOR = "#f8f8f8";
-const HULL_OPACITY_WITH_FLOORS = 0.12;
-const HULL_OPACITY_WITHOUT_FLOORS = 1;
-
 type ShipMapTemplateProps = {
   title: string;
   subtitle: string;
@@ -82,11 +83,38 @@ type ShipMapTemplateProps = {
   fallbackView: ShipMapViewState;
   showHeader?: boolean;
   deckOverlayConfig?: ShipMapDeckOverlayConfig;
+  mergeMeshesForPerformance?: boolean;
   modelTransform?: {
     scale?: number;
     offset?: [number, number, number];
+    rotation?: [number, number, number];
   };
 };
+
+type ModelSource = "gltf" | "obj" | "ctm";
+
+type ResolvedModelTransform = {
+  scale: number;
+  offset: [number, number, number];
+  rotation: [number, number, number];
+};
+
+type LoadedModelAsset = {
+  source: ModelSource;
+  scene: Object3D;
+  baseBounds: Box3;
+  suggestedScale: number;
+};
+
+type CachedModelAssetEntry = {
+  refs: number;
+  promise: Promise<LoadedModelAsset>;
+  asset: LoadedModelAsset | null;
+};
+
+const MODEL_ASSET_CACHE = new Map<string, CachedModelAssetEntry>();
+const gltfLoader = new GLTFLoader();
+const objLoader = new OBJLoader();
 
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -108,79 +136,6 @@ function resolveDeckPlaneSize(
   }
   const scaleMultiplier = deck.scaleMultiplier ?? 1;
   return [width * scaleMultiplier, depth * scaleMultiplier];
-}
-
-function createSeededRandom(seed: number): () => number {
-  let state = seed >>> 0;
-  return () => {
-    state = (1664525 * state + 1013904223) >>> 0;
-    return state / 0x100000000;
-  };
-}
-
-function createHullPanelTexture(): CanvasTexture {
-  const size = 1024;
-  const canvas = document.createElement("canvas");
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    const fallback = new CanvasTexture(canvas);
-    fallback.wrapS = RepeatWrapping;
-    fallback.wrapT = RepeatWrapping;
-    fallback.repeat.set(6, 6);
-    fallback.colorSpace = SRGBColorSpace;
-    return fallback;
-  }
-
-  const random = createSeededRandom(1337);
-  ctx.fillStyle = "#b4b4b4";
-  ctx.fillRect(0, 0, size, size);
-
-  for (let i = 0; i < 220; i += 1) {
-    const x = Math.floor(random() * size);
-    const y = Math.floor(random() * size);
-    const w = 48 + Math.floor(random() * 192);
-    const h = 24 + Math.floor(random() * 120);
-    const tone = 130 + Math.floor(random() * 38);
-    ctx.fillStyle = `rgb(${tone}, ${tone + 6}, ${tone + 14})`;
-    ctx.fillRect(x, y, w, h);
-
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.55)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x + 1, y + 1, Math.max(w - 2, 2), Math.max(h - 2, 2));
-  }
-
-  for (let i = 0; i < 360; i += 1) {
-    const x1 = Math.floor(random() * size);
-    const y1 = Math.floor(random() * size);
-    const x2 = x1 + (random() > 0.5 ? 1 : -1) * (12 + Math.floor(random() * 96));
-    const y2 = y1 + (random() > 0.5 ? 1 : -1) * (12 + Math.floor(random() * 96));
-    ctx.strokeStyle = "rgba(55, 62, 72, 0.45)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-  }
-
-  const image = ctx.getImageData(0, 0, size, size);
-  const data = image.data;
-  for (let i = 0; i < data.length; i += 4) {
-    const noise = Math.floor((random() - 0.5) * 22);
-    data[i] = Math.max(0, Math.min(255, data[i] + noise));
-    data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
-    data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
-  }
-  ctx.putImageData(image, 0, 0);
-
-  const texture = new CanvasTexture(canvas);
-  texture.wrapS = RepeatWrapping;
-  texture.wrapT = RepeatWrapping;
-  texture.repeat.set(6, 6);
-  texture.colorSpace = SRGBColorSpace;
-  texture.needsUpdate = true;
-  return texture;
 }
 
 function labelizeRegion(value: string): string {
@@ -306,10 +261,77 @@ function readSavedView(storageKey: string, fallbackView: ShipMapViewState): Ship
   }
 }
 
-function createGeometryFromCtm(
-  body: CtmBody,
-  transform?: { scale?: number; offset?: [number, number, number] },
-): { geometry: BufferGeometry<NormalBufferAttributes>; suggestedScale: number } {
+function resolveModelSource(modelPath: string): ModelSource {
+  const normalizedPath = modelPath.split("?")[0].trim().toLowerCase();
+  if (normalizedPath.endsWith(".obj")) return "obj";
+  if (normalizedPath.endsWith(".ctm")) return "ctm";
+  return "gltf";
+}
+
+function computeSuggestedScale(bounds: Box3): number {
+  const size = new Vector3();
+  bounds.getSize(size);
+  const maxAxis = Math.max(size.x, size.y, size.z) || 1;
+  return 5.4 / maxAxis;
+}
+
+function ensureFiniteBounds(bounds: Box3): Box3 {
+  if (
+    bounds.isEmpty() ||
+    !Number.isFinite(bounds.min.x) ||
+    !Number.isFinite(bounds.min.y) ||
+    !Number.isFinite(bounds.min.z) ||
+    !Number.isFinite(bounds.max.x) ||
+    !Number.isFinite(bounds.max.y) ||
+    !Number.isFinite(bounds.max.z)
+  ) {
+    return new Box3(new Vector3(-0.5, -0.5, -0.5), new Vector3(0.5, 0.5, 0.5));
+  }
+  return bounds;
+}
+
+function getSceneBounds(scene: Object3D): Box3 {
+  scene.updateWorldMatrix(true, true);
+  const measuredBounds = new Box3().setFromObject(scene);
+  return ensureFiniteBounds(measuredBounds);
+}
+
+function disposeMaterial(material: Material) {
+  for (const value of Object.values(material)) {
+    if (value && typeof value === "object" && "isTexture" in value && value.isTexture) {
+      value.dispose();
+    }
+  }
+  material.dispose();
+}
+
+function disposeObject3dResources(root: Object3D) {
+  const geometries = new Set<BufferGeometry>();
+  const materials = new Set<Material>();
+
+  root.traverse((node) => {
+    if (!(node instanceof Mesh)) return;
+    if (node.geometry) {
+      geometries.add(node.geometry);
+    }
+    if (Array.isArray(node.material)) {
+      for (const material of node.material) {
+        if (material) {
+          materials.add(material);
+        }
+      }
+      return;
+    }
+    if (node.material) {
+      materials.add(node.material);
+    }
+  });
+
+  geometries.forEach((geometry) => geometry.dispose());
+  materials.forEach((material) => disposeMaterial(material));
+}
+
+function createGeometryFromCtm(body: CtmBody): BufferGeometry {
   const geometry = new BufferGeometry();
   geometry.setIndex(new BufferAttribute(body.indices, 1));
   geometry.setAttribute("position", new BufferAttribute(body.vertices, 3));
@@ -338,61 +360,218 @@ function createGeometryFromCtm(
 
   geometry.computeBoundingBox();
   const bounds = geometry.boundingBox ?? new Box3();
-  const size = new Vector3();
   const center = new Vector3();
-  bounds.getSize(size);
   bounds.getCenter(center);
   geometry.translate(-center.x, -center.y, -center.z);
-
-  const offset = transform?.offset ?? [0, 0, 0];
-  const maxAxis = Math.max(size.x, size.y, size.z) || 1;
-  const suggestedScale = 5.4 / maxAxis;
-  const scale = transform?.scale ?? suggestedScale;
-  geometry.translate(offset[0], offset[1], offset[2]);
-  geometry.scale(scale, scale, scale);
   geometry.computeBoundingBox();
-
-  return { geometry, suggestedScale };
+  return geometry;
 }
 
-function FitCtmMesh({
-  geometry,
-  opacity,
-}: {
-  geometry: BufferGeometry<NormalBufferAttributes>;
-  opacity: number;
-}) {
-  const hasUv = geometry.getAttribute("uv") !== undefined;
-  const hasVertexColor = geometry.getAttribute("color") !== undefined;
-  const panelTexture = useMemo(() => (hasUv ? createHullPanelTexture() : null), [hasUv]);
+async function loadCtmModelAsset(modelPath: string): Promise<LoadedModelAsset> {
+  const response = await fetch(modelPath);
+  if (!response.ok) {
+    throw new Error(`Model request failed: ${response.status}`);
+  }
 
-  const material = useMemo(
-    () =>
-      new MeshStandardMaterial({
-        color: SHIP_SILVER_COLOR,
-        emissive: "#1a2028",
-        emissiveIntensity: 0.1,
-        metalness: 0,
-        roughness: 1,
-        map: panelTexture ?? undefined,
-        bumpMap: panelTexture ?? undefined,
-        bumpScale: panelTexture ? 0.018 : 0,
-        vertexColors: !panelTexture && hasVertexColor,
-        transparent: opacity < 1,
-        opacity,
-        depthWrite: opacity >= 1,
-      }),
-    [panelTexture, hasVertexColor, opacity],
-  );
+  const buffer = await response.arrayBuffer();
+  const data = new Uint8Array(buffer);
+  const ctm = CTM as unknown as CtmModule;
+  const stream = new ctm.Stream(data);
+  const file = new ctm.File(stream);
+  const geometry = createGeometryFromCtm(file.body);
+  const mesh = new Mesh(geometry, new MeshStandardMaterial());
+  const scene = new Group();
+  scene.add(mesh);
+  const baseBounds = getSceneBounds(scene);
+  return {
+    source: "ctm",
+    scene,
+    baseBounds,
+    suggestedScale: computeSuggestedScale(baseBounds),
+  };
+}
 
-  useEffect(() => {
-    return () => {
-      material.dispose();
-      panelTexture?.dispose();
+function getGltfRoot(gltf: GLTF): Object3D {
+  if (gltf.scene) {
+    return gltf.scene;
+  }
+  if (gltf.scenes[0]) {
+    return gltf.scenes[0];
+  }
+  throw new Error("GLTF did not include a scene root.");
+}
+
+async function loadModelAsset(modelPath: string): Promise<LoadedModelAsset> {
+  const source = resolveModelSource(modelPath);
+
+  if (source === "gltf") {
+    const gltf = await gltfLoader.loadAsync(modelPath);
+    const scene = getGltfRoot(gltf);
+    const baseBounds = getSceneBounds(scene);
+    return {
+      source,
+      scene,
+      baseBounds,
+      suggestedScale: computeSuggestedScale(baseBounds),
     };
-  }, [material, panelTexture]);
+  }
 
-  return <mesh geometry={geometry} material={material} />;
+  if (source === "obj") {
+    const scene = await objLoader.loadAsync(modelPath);
+    const baseBounds = getSceneBounds(scene);
+    return {
+      source,
+      scene,
+      baseBounds,
+      suggestedScale: computeSuggestedScale(baseBounds),
+    };
+  }
+
+  return loadCtmModelAsset(modelPath);
+}
+
+async function acquireModelAsset(modelPath: string): Promise<LoadedModelAsset> {
+  let cacheEntry = MODEL_ASSET_CACHE.get(modelPath);
+
+  if (!cacheEntry) {
+    // Cache loaded source assets and release GPU resources when last consumer unmounts.
+    const newEntry: CachedModelAssetEntry = {
+      refs: 0,
+      asset: null,
+      promise: null as unknown as Promise<LoadedModelAsset>,
+    };
+    newEntry.promise = loadModelAsset(modelPath).then((asset) => {
+      newEntry.asset = asset;
+      if (newEntry.refs <= 0) {
+        disposeObject3dResources(asset.scene);
+        MODEL_ASSET_CACHE.delete(modelPath);
+      }
+      return asset;
+    }).catch((error) => {
+      MODEL_ASSET_CACHE.delete(modelPath);
+      throw error;
+    });
+    MODEL_ASSET_CACHE.set(modelPath, newEntry);
+    cacheEntry = newEntry;
+  }
+
+  cacheEntry.refs += 1;
+  return cacheEntry.promise;
+}
+
+function releaseModelAsset(modelPath: string) {
+  const cacheEntry = MODEL_ASSET_CACHE.get(modelPath);
+  if (!cacheEntry) return;
+
+  cacheEntry.refs -= 1;
+  if (cacheEntry.refs > 0) return;
+  if (!cacheEntry.asset) return;
+
+  disposeObject3dResources(cacheEntry.asset.scene);
+  MODEL_ASSET_CACHE.delete(modelPath);
+}
+
+function createMergedMeshScene(modelScene: Object3D): Object3D {
+  const clonedGeometries: BufferGeometry[] = [];
+  const worldMatrix = new Matrix4();
+
+  modelScene.updateWorldMatrix(true, true);
+  modelScene.traverse((node) => {
+    if (!(node instanceof Mesh)) return;
+    if (!node.geometry) return;
+    const clonedGeometry = node.geometry.clone();
+    worldMatrix.copy(node.matrixWorld);
+    clonedGeometry.applyMatrix4(worldMatrix);
+    clonedGeometries.push(clonedGeometry);
+  });
+
+  if (clonedGeometries.length === 0) {
+    return modelScene;
+  }
+
+  const mergedGeometry = mergeGeometries(clonedGeometries, false);
+  clonedGeometries.forEach((geometry) => geometry.dispose());
+
+  if (!mergedGeometry) {
+    return modelScene;
+  }
+
+  const mergedMesh = new Mesh(mergedGeometry, new MeshStandardMaterial());
+  const mergedScene = new Group();
+  mergedScene.add(mergedMesh);
+  mergedScene.userData.__ownedGeometries = [mergedGeometry];
+  return mergedScene;
+}
+
+function cloneSceneMeshGeometries(modelScene: Object3D): BufferGeometry[] {
+  const ownedGeometries: BufferGeometry[] = [];
+  modelScene.traverse((node) => {
+    if (!(node instanceof Mesh)) return;
+    if (!node.geometry) return;
+    const ownedGeometry = node.geometry.clone();
+    node.geometry = ownedGeometry;
+    ownedGeometries.push(ownedGeometry);
+  });
+  return ownedGeometries;
+}
+
+function createModelSceneInstance(asset: LoadedModelAsset, mergeMeshesForPerformance: boolean): Object3D {
+  const clonedScene = asset.scene.clone(true);
+  if (!mergeMeshesForPerformance) {
+    clonedScene.userData.__ownedGeometries = cloneSceneMeshGeometries(clonedScene);
+    return clonedScene;
+  }
+  return createMergedMeshScene(clonedScene);
+}
+
+function disposeModelSceneInstance(modelScene: Object3D) {
+  const ownedGeometries = modelScene.userData.__ownedGeometries as BufferGeometry[] | undefined;
+  if (!ownedGeometries?.length) return;
+  for (const geometry of ownedGeometries) {
+    geometry.dispose();
+  }
+  modelScene.userData.__ownedGeometries = [];
+}
+
+function resolveModelTransform(transform: ShipMapTemplateProps["modelTransform"], fallbackScale: number): ResolvedModelTransform {
+  return {
+    scale: transform?.scale ?? fallbackScale,
+    offset: transform?.offset ?? [0, 0, 0],
+    rotation: transform?.rotation ?? [0, 0, 0],
+  };
+}
+
+function createTransformMatrix(transform: ResolvedModelTransform): Matrix4 {
+  const matrix = new Matrix4();
+  const scale = new Vector3(transform.scale, transform.scale, transform.scale);
+  matrix.makeRotationFromEuler(new Euler(transform.rotation[0], transform.rotation[1], transform.rotation[2]));
+  matrix.scale(scale);
+  matrix.setPosition(transform.offset[0], transform.offset[1], transform.offset[2]);
+  return matrix;
+}
+
+function computeBoundsWithTransform(baseBounds: Box3, transform: ResolvedModelTransform): Box3 {
+  const transformedBounds = baseBounds.clone();
+  transformedBounds.applyMatrix4(createTransformMatrix(transform));
+  return ensureFiniteBounds(transformedBounds);
+}
+
+function FitModelMesh({
+  modelScene,
+  transform,
+}: {
+  modelScene: Object3D;
+  transform: ResolvedModelTransform;
+}) {
+  return (
+    <group
+      position={transform.offset}
+      rotation={transform.rotation}
+      scale={[transform.scale, transform.scale, transform.scale]}
+    >
+      <primitive object={modelScene} />
+    </group>
+  );
 }
 
 function DeckOverlayPlane({
@@ -428,11 +607,11 @@ function DeckOverlayPlane({
         <planeGeometry args={[planeWidth, planeDepth]} />
         <meshBasicMaterial
           map={texture}
-          side={DoubleSide}
+          side={FrontSide}
           transparent
           opacity={opacity}
           depthTest
-          depthWrite={false}
+          depthWrite
           toneMapped={false}
         />
       </mesh>
@@ -448,11 +627,14 @@ export default function ShipMapTemplate({
   fallbackView,
   showHeader = true,
   deckOverlayConfig,
+  mergeMeshesForPerformance = false,
   modelTransform,
 }: ShipMapTemplateProps) {
   const hasDeckOverlay = Boolean(deckOverlayConfig?.decks.length);
   const initialView = useMemo(() => readSavedView(viewStorageKey, fallbackView), [viewStorageKey, fallbackView]);
-  const [geometry, setGeometry] = useState<BufferGeometry<NormalBufferAttributes> | null>(null);
+  const [modelScene, setModelScene] = useState<Object3D | null>(null);
+  const [modelBounds, setModelBounds] = useState<Box3 | null>(null);
+  const [modelSource, setModelSource] = useState<ModelSource | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<ShipMapViewState>(initialView);
   const [viewSaveStatus, setViewSaveStatus] = useState<string | null>(null);
@@ -486,7 +668,10 @@ export default function ShipMapTemplate({
     () => deckOverlayConfig?.decks.find((deck) => deck.id === activeDeckOverlayId) ?? null,
     [deckOverlayConfig, activeDeckOverlayId],
   );
-  const hullOpacity = deckOverlayEnabled ? HULL_OPACITY_WITH_FLOORS : HULL_OPACITY_WITHOUT_FLOORS;
+  const effectiveModelTransform = useMemo(
+    () => resolveModelTransform(modelTransform, suggestedScale ?? 1),
+    [modelTransform, suggestedScale],
+  );
   const activeRegionKey = hoveredRegionKey ?? selectedRegionKey;
   const activeDeckRegion = useMemo(
     () => deckOverlayRegions.find((region) => region.key === activeRegionKey) ?? null,
@@ -576,42 +761,32 @@ export default function ShipMapTemplate({
   }, [copyStatus]);
 
   useEffect(() => {
-    let isCancelled = false;
+    let cancelled = false;
+    let acquiredAsset = false;
+
+    setLoadError(null);
+    setModelScene(null);
+    setModelBounds(null);
+    setModelSource(resolveModelSource(modelPath));
+    setSuggestedScale(null);
 
     async function loadModel() {
       try {
-        const response = await fetch(modelPath);
-        if (!response.ok) {
-          throw new Error(`Model request failed: ${response.status}`);
-        }
-
-        const buffer = await response.arrayBuffer();
-        const data = new Uint8Array(buffer);
-        const ctm = CTM as unknown as CtmModule;
-        const stream = new ctm.Stream(data);
-        const file = new ctm.File(stream);
-        const parsed = createGeometryFromCtm(file.body, modelTransform);
-        const parsedGeometry = parsed.geometry;
-        if (isCancelled) {
-          parsedGeometry.dispose();
+        const asset = await acquireModelAsset(modelPath);
+        acquiredAsset = true;
+        if (cancelled) {
+          releaseModelAsset(modelPath);
           return;
         }
 
-        setSuggestedScale(parsed.suggestedScale);
-        const bounds = parsedGeometry.boundingBox ?? new Box3();
-        const minY = bounds.min.y;
-        const maxY = bounds.max.y;
-        const size = new Vector3();
-        bounds.getSize(size);
-        setDeckBounds({ min: minY, max: maxY });
-        setDeckMin(minY);
-        setDeckMax(maxY);
-        setModelFootprint({ x: Math.max(size.x, 0.1), z: Math.max(size.z, 0.1) });
-        setGeometry(parsedGeometry);
-        setLoadError(null);
+        const sceneInstance = createModelSceneInstance(asset, mergeMeshesForPerformance);
+        setModelScene(sceneInstance);
+        setModelBounds(asset.baseBounds.clone());
+        setModelSource(asset.source);
+        setSuggestedScale(asset.suggestedScale);
       } catch (error) {
-        if (isCancelled) return;
-        const message = error instanceof Error ? error.message : "Unknown CTM parsing error";
+        if (cancelled) return;
+        const message = error instanceof Error ? error.message : "Unknown model parsing error";
         setLoadError(message);
       }
     }
@@ -619,15 +794,32 @@ export default function ShipMapTemplate({
     void loadModel();
 
     return () => {
-      isCancelled = true;
+      cancelled = true;
+      if (acquiredAsset) {
+        releaseModelAsset(modelPath);
+      }
     };
-  }, [modelPath, modelTransform]);
+  }, [modelPath, mergeMeshesForPerformance]);
+
+  useEffect(() => {
+    if (!modelScene || !modelBounds) return;
+
+    const transformedBounds = computeBoundsWithTransform(modelBounds, effectiveModelTransform);
+    const size = new Vector3();
+    transformedBounds.getSize(size);
+
+    setDeckBounds({ min: transformedBounds.min.y, max: transformedBounds.max.y });
+    setDeckMin(transformedBounds.min.y);
+    setDeckMax(transformedBounds.max.y);
+    setModelFootprint({ x: Math.max(size.x, 0.1), z: Math.max(size.z, 0.1) });
+  }, [modelScene, modelBounds, effectiveModelTransform]);
 
   useEffect(() => {
     return () => {
-      geometry?.dispose();
+      if (!modelScene) return;
+      disposeModelSceneInstance(modelScene);
     };
-  }, [geometry]);
+  }, [modelScene]);
 
   useEffect(() => {
     if (!hasDeckOverlay || !activeDeckOverlay) return;
@@ -707,6 +899,7 @@ export default function ShipMapTemplate({
         <article className="framework-modern-card framework-modern-card-ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
           <div className="relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15 bg-[radial-gradient(circle_at_50%_25%,rgba(24,67,86,0.65),rgba(5,10,18,0.95)_62%)]">
             <Canvas
+              dpr={[1, 2]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
               camera={{ position: initialView.position, fov: 42 }}
               onCreated={({ gl, camera }) => {
@@ -715,14 +908,14 @@ export default function ShipMapTemplate({
                 cameraRef.current = camera as PerspectiveCamera;
               }}
             >
-              <ambientLight intensity={0.44} />
-              <directionalLight position={[6, 6, 5]} intensity={0.85} />
-              <directionalLight position={[-5, -3, -4]} intensity={0.2} />
-              <gridHelper args={[20, 20, "#a7acad", "#143243"]} position={[0, -3.4, 0]} />
-              {geometry ? (
-                <FitCtmMesh geometry={geometry} opacity={hullOpacity} />
+              <directionalLight position={[10, 14, 8]} intensity={7} />
+              {modelScene ? (
+                <FitModelMesh
+                  modelScene={modelScene}
+                  transform={effectiveModelTransform}
+                />
               ) : null}
-              {deckOverlayEnabled && activeDeckOverlay && geometry ? (
+              {deckOverlayEnabled && activeDeckOverlay && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
@@ -731,7 +924,7 @@ export default function ShipMapTemplate({
                   renderOrder={41}
                 />
               ) : null}
-              {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && geometry ? (
+              {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
@@ -931,9 +1124,9 @@ export default function ShipMapTemplate({
               ) : null}
             </div>
 
-            {!geometry && !loadError ? (
+            {!modelScene && !loadError ? (
               <p className="absolute inset-x-0 top-4 text-center text-xs uppercase tracking-[0.15em] text-cyan-200/85">
-                Loading CTM model...
+                Loading {modelSource === null ? "model" : `${modelSource.toUpperCase()} model`}...
               </p>
             ) : null}
 
