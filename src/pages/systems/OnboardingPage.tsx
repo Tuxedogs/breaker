@@ -22,20 +22,20 @@ const sections = [
 ] as const;
 
 const checklistItems: ChecklistItem[] = [
-  { id: "c1", label: "Join the Discord and introduce yourself", group: "setup" },
-  { id: "c2", label: "Accept org invite in RSI profile", group: "setup" },
-  { id: "c3", label: "Read the Framework Routing page", group: "setup" },
-  { id: "c4", label: "Set your keybinds from the Keybind Presets doc", group: "setup" },
+  { id: "c1", label: "Joined the Discord and received roles", group: "setup" },
+  { id: "c2", label: "Set your keybinds from the Keybind Presets ref.", group: "setup" },
+  { id: "c3", label: "Adjust game settings from the Settings ref.", group: "setup" },
+  { id: "c4", label: "Informed of Mins Optimization doc.", group: "setup" },
   { id: "c5", label: "Stage at Grim Hex, Seraphim, or CRU-L1", group: "ingame" },
-  { id: "c6", label: "Set spawn point at your staging base", group: "ingame" },
-  { id: "c7", label: "Complete a solo QT jump using StarMap", group: "ingame" },
-  { id: "c8", label: "File an insurance claim after a ship loss", group: "ingame" },
-  { id: "c9", label: "Party up with an org member in-game (F11)", group: "crew" },
-  { id: "c10", label: "Crew a multi-crew ship (gunner or co-pilot seat)", group: "crew" },
-  { id: "c11", label: "Attend your first organized op", group: "crew" },
-  { id: "c12", label: "Know your role: Flying, Manning, or Facing", group: "doc" },
-  { id: "c13", label: "Practice standard callout format on comms", group: "doc" },
-  { id: "c14", label: "Complete a group QT jump with the FC", group: "doc" },
+  { id: "c6", label: "Familiarity with StarMap QT interactions", group: "ingame" },
+  { id: "c7", label: "Join a roaming/standing fleet", group: "crew" },
+  { id: "c8", label: "Identify Orgmates that can help you, it's rewarding to collaborate", group: "ingame" },
+  { id: "c10", label: "How to Attended a HWLR led introductory session", group: "crew" },
+  { id: "c11", label: "Resource gathering/Crafting/Materials Sourcing activity", group: "crew" },
+  
+  { id: "c12", label: "Crewed or Piloted a multi-crew combat ship", group: "doc" },
+  { id: "c13", label: "Understanding how to use Framework Routing page if needed", group: "doc" },
+  { id: "c14", label: "Practice standard callout format on comms", group: "doc" },
 ];
 
 const groups: Array<{ key: GroupKey; title: string; accentClass: string }> = [
@@ -48,61 +48,61 @@ const groups: Array<{ key: GroupKey; title: string; accentClass: string }> = [
 const basicsCards = [
   {
     title: "Respawn & Medical",
-    body: "When you die, you respawn at your last set spawn point. Make sure this is your staging base, not a random outpost. Use mobiGlas (F1) medical tabs to track incapacitation vs full death.",
+    body: "When you die, you respawn at your last set spawn point. If that is not available, you are sent to your starting home location. We strongly advise against setting your spawn on any vehicles.",
     tip: "Set spawn before ops",
   },
   {
-    title: "mobiGlas (F1)",
-    body: "Your wrist computer for contracts, map routing, inventory, and notifications. Use StarMap for QT routing and check notices for op updates.",
-    tip: "F1 -> StarMap -> QT",
+    title: "StarMap (F2)",
+    body: "Patch to patch reliability is inconsistent. Common issues setting/canceling routes. Reach out to orgmates for current patch issues and workarounds.",
+    tip: "Party Member List, top right Google Maps pin.",
   },
   {
     title: "Quantum Travel",
-    body: "Hold B to spool, then jump on the FC countdown. Never jump early during group ops or you split the formation.",
-    tip: "Wait for group call",
+    body: "Spool and Align, hold. Never jump early during group ops. It severely impacts performance and can be a major contributor to losses.",
+    tip: "Wait for FC to call the jump",
   },
   {
     title: "Gear & Insurance",
-    body: "You will lose gear on death. Keep critical kits in station or ship storage and plan for claim cycles after hull loss.",
-    tip: "Store gear in ship",
+    body: "(4.6) You will not lose equipped gear on death. Exceptions are Railgun Magazines. Have minimum kit equipped.",
+    tip: "Use backpacks as kit boxes",
   },
   {
     title: "Crime Stat & Bounties",
-    body: "CS3+ puts you in active threat status in Stanton. Clear when required and respect op rules on engagement authorization.",
-    tip: "Clear CS at Grim Hex",
+    body: "(4.6) Bounty hunters get markers on CS3+ players in Stanton and Pyro. Do not muster with fleet.",
+    tip: "Clean CS at Grim Hex / SPK",
   },
   {
     title: "Party & Group Play",
-    body: "Use F11 before launch, join your assigned crew slot, and confirm access before departure. Group tools drive cohesion and survivability.",
-    tip: "F11 -> Party first",
+    body: "Request invite during free comms, in game and not interacting with anything or waiting at Menu.",
+    tip: "Do not miss the party invite window",
   },
 ];
 
 const opsSteps = [
   {
-    title: "Op Posted in Discord",
-    body: "FC posts op type, staging point, ship comp, and start window. React if attending and verify your assigned role.",
-    tags: ["Discord", "Op Channel"],
+    title: "Event Posted in Discord",
+    body: "FC posts op type, staging point, intent, and start window. React if attending and verify your assigned role.",
+    tags: ["Discord", "React to attend"],
   },
   {
     title: "Stage Up & Party",
-    body: "Get to the designated staging point, set respawn, and join party/voice. Confirm seat assignment before launch.",
-    tags: ["Grim Hex", "Seraphim", "CRU-L1"],
+    body: "Get to the designated staging point well before the event, set respawn, and join party/voice. FC's are not expected to delay their ops for late arrivals.",
+    tags: ["System", "Station", "Claim Ships", "FPS Kit"],
   },
   {
     title: "Transit & Group QT",
-    body: "Spool but hold for countdown. If you miss jump, call it immediately so FC can route recovery.",
-    tags: ["Hold for call", "Don't lone wolf"],
+    body: "Spool and Align, hold for countdown. If you jump early, notify the FC immediately. Attempt full disengage. Listen for follow-up instructions.",
+    tags: ["Hold for call", "Don't Mav in"],
   },
   {
     title: "On Station / Engagement",
-    body: "Follow FC targeting calls, maintain assigned arcs, and report critical status changes immediately.",
-    tags: ["Follow FC", "Call everything"],
+    body: " Fighters maintain tight ball at all times. Follow FC kill targets, peel allies, and communicate critical status changes immediately.",
+    tags: ["Follow FC", "Call relevant information" , "Don't die in silence"],
   },
   {
     title: "Exfil & Debrief",
-    body: "RTB, complete quick debrief, claim losses, and reset for next cycle.",
-    tags: ["RTB", "Claim ships"],
+    body: "RTB, complete quick debrief, assessment, and reset if required.",
+    tags: ["Standing Down", "Scatter", "Reship"],
   },
 ];
 
@@ -134,8 +134,8 @@ export default function OnboardingPage() {
       <div className="onboarding-layout">
         <aside className="onboarding-sidebar framework-modern-card-head rounded-xl p-3 sm:p-4">
           <p className="title-font text-[11px] uppercase tracking-[0.24em] text-cyan-100/75">Onboarding</p>
-          <nav className="mt-3">
-            <ul className="space-y-1">
+          <nav className="mt-2">
+            <ul className="space-y-0.5">
               {sections.map((section, idx) => (
                 <li key={section.id}>
                   <a href={`#${section.id}`} className="onboarding-side-link">
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
             </ul>
           </nav>
 
-          <div className="mt-5 border-t border-white/10 pt-4">
+          <div className="mt-3 border-t border-white/10 pt-3">
             <div className="flex items-center justify-between text-[11px] tracking-[0.16em] text-slate-300/75">
               <span>CHECKLIST</span>
               <span className="text-cyan-100/80">
@@ -157,7 +157,7 @@ export default function OnboardingPage() {
             <div className="mt-2 h-1.5 overflow-hidden rounded bg-white/10">
               <div className="h-full bg-cyan-300/85 transition-all duration-300" style={{ width: `${progress}%` }} />
             </div>
-            <div className="mt-3 space-y-1">
+            <div className="mt-2.5 space-y-0.5">
               {checklistItems.map((item) => (
                 <button
                   key={item.id}
@@ -168,7 +168,7 @@ export default function OnboardingPage() {
                   <span className="onboarding-mini-check" aria-hidden="true">
                     {checked[item.id] ? "\u2713" : ""}
                   </span>
-                  <span>{item.label}</span>
+                  <span className="text-pretty leading-tight">{item.label}</span>
                 </button>
               ))}
             </div>
@@ -180,19 +180,19 @@ export default function OnboardingPage() {
             <p className="onboarding-eyebrow">01 - Welcome</p>
             <h1 className="title-font mt-2 text-3xl text-cyan-100 sm:text-4xl">New Member Briefing</h1>
             <p className="mt-3 text-slate-300/85">
-              You&apos;ve just joined one of the most operationally coordinated multi-crew orgs in Stanton. This document
-              is your first order of business.
+              You&apos;ve just joined one of the most operationally coordinated and capable orgs in the game. This document
+              will aid in getting you started before your first roam or event.
             </p>
-            <div className="onboarding-welcome mt-4">
+            <div className="onboarding-welcome mt-4 lg:grid-cols-[1fr_auto] lg:items-start">
               <div>
                 <p className="title-font text-xs uppercase tracking-[0.16em] text-cyan-100/70">Sons of Ares - Active Roster</p>
                 <p className="mt-2 text-sm text-slate-200/85">
-                  Sons of Ares is a tactical multi-crew org rooted in disciplined coordination and doctrine-first
-                  gameplay. We operate primarily out of Stanton with frequent roaming operations into Pyro, Nyx, and
-                  surrounding systems as the verse expands.
-                </p>
+                  The Sons of Ares operate in a grey area and have <span className="text-red-500 font-bold">very few in game restrictions.</span> 
+              </p>
+                <p className="mt-2 text-sm text-slate-200/85">The most common activity you will find us doing is maintaining a flexible roaming fleet, allowing for freedom between activities. Scouting around active areas is a primary source of content for the Org.</p>
+              
                 <p className="mt-2 text-sm text-slate-200/85">
-                  We&apos;re not a pickup group. We&apos;re a crew that trains together, stages together, and fights together.
+                  [LEGN] ranking and above are individuals that train together, stage together, and fight together. Centurions 
                   Read this briefing, run the checklist, and get yourself staged. We&apos;ll handle the rest.
                 </p>
               </div>
@@ -219,86 +219,163 @@ export default function OnboardingPage() {
                   <tr>
                     <td>
                       <div className="onboarding-rank-cell">
-                        <span>Recruit</span>
-                        <span className="onboarding-rank-pips">
-                          <i className="filled" />
-                          <i />
-                          <i />
-                          <i />
+                        <span>Prospect</span>
+                        <span className="onboarding-rank-pips new">
+                     
                         </span>
                       </div>
                     </td>
                     <td>
-                      <span className="onboarding-badge new">NEW</span>
+                      <span className="onboarding-badge new">YOU</span>
                     </td>
-                    <td>Full org access, ops participation, comms channels open</td>
-                    <td>Complete onboarding and stage correctly</td>
+                    <td>Public Channels & Events</td>
+                    <td>Probably a video of Min's</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="onboarding-rank-cell">
-                        <span>Operative</span>
-                        <span className="onboarding-rank-pips">
+                        <span className="font-bold">[ARES]</span>
+                        <span className="onboarding-rank-pips crew-blue">
                           <i className="filled" />
-                          <i className="filled" />
+                          <i className="" />
                           <i />
                           <i />
+                          <i/>
                         </span>
                       </div>
                     </td>
                     <td>
-                      <span className="onboarding-badge active">ACTIVE</span>
+                      <span className="onboarding-badge crew-blue">ACTIVE</span>
                     </td>
-                    <td>Can lead wing positions and access advanced doctrine</td>
-                    <td>Attend 3+ ops and show role competency</td>
+                    <td>Membership, Access to base Org Events & Trainings</td>
+                    <td>Meet base competency requirements and activity levels</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="onboarding-rank-cell">
-                        <span>Vanguard</span>
-                        <span className="onboarding-rank-pips">
+                        <span className="font-bold">[LEGN]</span>
+                        <span className="onboarding-rank-pips veteran">
+                          <i className="filled" />
+                          <i className="filled" />
+                          <i className="" />
+                          <i />
+                          <i/>
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="onboarding-badge veteran">Core</span>
+                    </td>
+                    <td>Foundation Locked Resources and Comms</td>
+                    <td>Consistent dependable presence</td>
+                  </tr>
+                   <tr>
+                    <td>
+                      <div className="onboarding-rank-cell">
+                        <span className="font-bold">[HWLR]</span>
+                        <span className="onboarding-rank-pips expert">
                           <i className="filled" />
                           <i className="filled" />
                           <i className="filled" />
                           <i />
+                          <i/>
                         </span>
                       </div>
                     </td>
                     <td>
-                      <span className="onboarding-badge veteran">VETERAN</span>
+                      <span className="onboarding-badge expert">Expert</span>
                     </td>
-                    <td>Trusted crew lead and trainer for recruits</td>
-                    <td>Consistent presence and multi-role reliability</td>
+                    <td>Highly skilled, extremely capable, specialized.</td>
+                    <td>Howlers requirements in Org Structure page</td>
                   </tr>
                   <tr>
                     <td>
                       <div className="onboarding-rank-cell">
-                        <span>Commander</span>
-                        <span className="onboarding-rank-pips">
+                        <span className="font-bold">[OPTIO/PRAE]</span>
+                        <span className="onboarding-rank-pips orange">
                           <i className="filled" />
                           <i className="filled" />
                           <i className="filled" />
-                          <i className="filled" />
+                          <i className="filled"/>
+                          <i/>
                         </span>
                       </div>
                     </td>
                     <td>
-                      <span className="onboarding-badge command">COMMAND</span>
+                      <span className="onboarding-badge orange">Fleet Leads</span>
                     </td>
-                    <td>Op planning, org direction, engagement authority</td>
+                    <td>Op planning, Training & Doctrine Implementation</td>
                     <td>Appointed by leadership</td>
+                  </tr>
+                    
+                  <tr>
+                    <td>
+                      <div className="onboarding-rank-cell">
+                        <span className="font-bold">Commander</span>
+                        <span className="onboarding-rank-pips leaders-red">
+                          <i className="filled" />
+                          <i className="filled" />
+                          <i className="filled" />
+                          <i className="filled" />                          
+                          <i className="filled" />
+
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="onboarding-badge leaders-red">COMMAND</span>
+                    </td>
+                    <td>Org direction, engagement authority</td>
+                    <td>Appointed by leadership</td>
+                  </tr>
+                  {/* Future Ranks - maybe specialty badges instead? */}
+                  <tr> 
+                    <td>
+                      <div className="onboarding-rank-cell mt-3">
+                        <span></span>
+                        <span>
+                          <i/>
+                          <i/>
+                          <i/>
+                          <i/>
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span></span>
+                    </td>
+                    <td className="font-bold text-slate-300/95">Non Leadership Ranks</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div className="onboarding-rank-cell">
+                        <span className="font-bold">[TBD] Centurion</span>
+                        <span className="onboarding-rank-pips expert">
+                          <i className="filled" />
+                          <i className="filled" />
+                          <i className="" />
+                          <i />
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="onboarding-badge expert">Expert</span>
+                    </td>
+                    <td>Specialized Resource in chosen domains</td>
+                    <td>Appointed by leadership & Peers</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div className="onboarding-note mt-4">Rank is earned through reliability, not time served.</div>
+            <div className="onboarding-note mt-4">Ref Structure/ColorGrading/Tag consistency</div>
           </section>
 
           <section id="basics" className="onboarding-section framework-modern-card-head rounded-xl p-5">
             <p className="onboarding-eyebrow">03 - Star Citizen Basics</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">Before Your First Op</h2>
+            <h2 className="title-font mt-2 text-2xl text-cyan-100">Getting where we're going</h2>
             <p className="mt-2 text-sm text-slate-300/85">
-              Star Citizen is rough on new players who don&apos;t know the systems. These are the things that trip people up
+              Star Citizen is rough on new players who don&apos;t know the systems and workarounds. These are the things that trip people up
               most.
             </p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -316,46 +393,46 @@ export default function OnboardingPage() {
             <p className="onboarding-eyebrow">04 - Staging Locations</p>
             <h2 className="title-font mt-2 text-2xl text-cyan-100">Where to Base Out Of</h2>
             <p className="mt-2 text-sm text-slate-300/85">
-              Sons of Ares operates across Stanton and rotates into Pyro regularly. These three points provide the most
-              reliable response and logistics flow.
+              Sons of Ares operates across all systems, based on potential target densities. These three points provide the most
+              reliable response for unscheduled daily operations.
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               <article className="onboarding-stage-card recommended">
                 <h3 className="title-font text-lg text-cyan-100">Grim Hex</h3>
                 <p className="text-xs text-slate-400">Crusader / Yela Belt</p>
                 <ul className="onboarding-list mt-2">
-                  <li>No crime stat required to dock</li>
-                  <li>CS clearance access and rapid deployment</li>
-                  <li>Central Stanton response timing</li>
+                  <li>No comms array, criminal states accepted</li>
+                  <li>Station Defenses and Hangar security logic should be understood entirely</li>
+                  <li>Do not be surprised by the above.</li>
                 </ul>
               </article>
               <article className="onboarding-stage-card recommended">
                 <h3 className="title-font text-lg text-cyan-100">Seraphim Station</h3>
                 <p className="text-xs text-slate-400">Crusader L2</p>
                 <ul className="onboarding-list mt-2">
-                  <li>Best pre-Pyro staging lane</li>
-                  <li>Large-pad access for multi-crew ships</li>
-                  <li>Strong logistics and med support</li>
+                  <li>Significantly faster response times for capitals</li>
+                  <li>External pads for multi-crew ships and Rapid Rearming</li>
+                  <li>Subject to extremely long hangar/collar queue times </li>
                 </ul>
               </article>
               <article className="onboarding-stage-card">
                 <h3 className="title-font text-lg text-cyan-100">CRU-L1</h3>
                 <p className="text-xs text-slate-400">Crusader L1</p>
                 <ul className="onboarding-list mt-2">
-                  <li>Safer fallback for newer members</li>
-                  <li>Lower conflict pressure than active hubs</li>
-                  <li>Good refuel/restock reset location</li>
+                  <li>Lighter Traffic Zero G staging</li>
+                  <li>Refinery services drives industrial traffic</li>
+                  <li>Short commute to major hubs and other key locations</li>
                 </ul>
               </article>
             </div>
-            <div className="onboarding-note mt-4">Roaming operations into Pyro and Nyx stage from Seraphim by default.</div>
+            <div className="onboarding-note mt-4">Roaming operations into Pyro and Nyx typically stage out of Crusader.</div>
           </section>
 
           <section id="opsflow" className="onboarding-section framework-modern-card-head rounded-xl p-5">
             <p className="onboarding-eyebrow">05 - Daily Ops Flow</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">How a Standard Op Runs</h2>
+            <h2 className="title-font mt-2 text-2xl text-cyan-100">How a Standard Event Runs</h2>
             <p className="mt-2 text-sm text-slate-300/85">
-              Every op follows roughly the same flow. Knowing it means you never hold the group up.
+              Most ops follow roughly the same flow. Knowing it means you never hold the group up.
             </p>
             <ol className="mt-4 space-y-2">
               {opsSteps.map((step, index) => (
@@ -381,15 +458,15 @@ export default function OnboardingPage() {
             <p className="onboarding-eyebrow">06 - Comms Discipline</p>
             <h2 className="title-font mt-2 text-2xl text-cyan-100">How We Talk on Ops</h2>
             <p className="mt-2 text-sm text-slate-300/85">
-              Bad comms kill ops faster than bad flying. Keep it clear and short.
+              When entering a VC, wait a moment to listen and be aware that orgmates may be engaged in active combat.
             </p>
             <div className="mt-4 grid gap-3">
               {[
-                "Push to talk, not open mic, during active operations.",
+                "Push to talk or dialed in suppression for open mic during active operations.",
                 "Short calls with clear targets and location references.",
                 "FC has comms priority; acknowledge instructions quickly.",
-                "Call status immediately: going down, respawning, returning.",
-                "No rage and no backseat command during active engagements.",
+                "Call status immediately: range, merge, effective, tails, self status and on/off grid.",
+                "Use best judgement, if the FC gives an instruction, follow it. While appreciated, real time updates on every missile fired is unnecessary.",
               ].map((item, idx) => (
                 <article key={item} className="onboarding-comms-row">
                   <span className="onboarding-comms-num">{String(idx + 1).padStart(2, "0")}</span>
@@ -398,13 +475,15 @@ export default function OnboardingPage() {
               ))}
             </div>
             <div className="onboarding-callout mt-4">
-              <p className="title-font text-xs uppercase tracking-[0.16em] text-cyan-100/80">Standard Callout Format</p>
+              <p className="title-font text-xs uppercase tracking-[0.18em] text-cyan-100/80">Hathor Callout Format Example</p>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                <div className="onboarding-callout-line"><strong>Who:</strong> Callsign or role (Gunner 2 / Zephyr).</div>
-                <div className="onboarding-callout-line"><strong>What:</strong> Ship type and count.</div>
-                <div className="onboarding-callout-line"><strong>Where:</strong> Clock position or relative bearing.</div>
-                <div className="onboarding-callout-line"><strong>Intent:</strong> Engaging, tracking, or requesting action.</div>
+                <div className="onboarding-callout-line"><strong>Who: </strong> Use your name, Hi I'm Tux.</div>
+                <div className="onboarding-callout-line"><strong>What:</strong> Enemy ships. An Arrow and Hornet</div>
+                <div className="onboarding-callout-line"><strong>Where:</strong> Bearing/Landmark, Altitude, Range</div>
+                <div className="onboarding-callout-line"><strong>Percieved Intent:</strong> Engaging, Burning out, relative delta.</div>
+                
               </div>
+              <div className="title-font text-sm text-slate-300/100 mt-4"><strong></strong> <span className="font-bold text-cyan-500">Tux</span> has two incoming, <span className="font-bold text-red-700">Mish</span> and <span className="font-bold text-red-700">Omen</span>. <span className="text-orange-500">Hornet, Arrow</span>, towards <span className="font-bold text-slate-500">Crusader</span>, <span className="font-bold text-blue-700">High</span> at <span className="font-bold text-slate-500">14km</span>. <span className="text-red-700">Positive Delta.</span></div>
             </div>
           </section>
 
@@ -452,7 +531,7 @@ export default function OnboardingPage() {
                 <div className="rounded-xl border border-emerald-300/35 bg-emerald-400/10 p-4">
                   <p className="title-font text-sm text-emerald-100">Onboarding Complete - Welcome to the Crew.</p>
                   <p className="mt-1 text-sm text-emerald-50/85">
-                    You&apos;re cleared for full ops participation. Check the Framework for role-specific modules.
+                    While optional, congrats and thanks for completing the onboarding checklist. You're all set to jump in and find content with the org. Welcome aboard.
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <Link
@@ -461,16 +540,10 @@ export default function OnboardingPage() {
                     >
                       Enter Framework
                     </Link>
-                    <Link
-                      to="/modules"
-                      className="rounded-md border border-white/25 bg-white/8 px-4 py-2 text-xs uppercase tracking-[0.15em] text-slate-100"
-                    >
-                      View Roles
-                    </Link>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-slate-300/75">Complete all checklist items to unlock full ops access.</p>
+                <p className="text-sm text-slate-300/75">Checklist is for those who want to track progress and is not mandatory.</p>
               )}
             </div>
           </section>
