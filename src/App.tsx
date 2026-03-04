@@ -11,6 +11,7 @@ import ModuleIndexPage from "./pages/ModuleIndexPage";
 import ShipHubPage from "./pages/ShipHubPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
+import OnboardingPage from "./pages/systems/OnboardingPage";
 import SubTargetingPage from "./pages/systems/SubTargetingPage";
 import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
 import WipPage from "./pages/WipPage";
@@ -56,7 +57,7 @@ export default function App() {
             path="systems/additional-resources"
             element={<WipPage section="Systems" title="Additional Resources" />}
           />
-          <Route path="wip/onboarding" element={<WipPage section="Systems" title="Onboarding" />} />
+          <Route path="wip/onboarding" element={<OnboardingPage />} />
           <Route path="wip/training" element={<WipPage section="Systems" title="Training" />} />
           <Route path="wip/organization" element={<WipPage section="Systems" title="Organization" />} />
           <Route path="wip/camera-tracking" element={<WipPage section="Systems" title="Camera and Tracking" />} />
