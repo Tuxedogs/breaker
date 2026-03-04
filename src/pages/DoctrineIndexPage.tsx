@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import DoctrineFilterBar from "../components/DoctrineFilterBar";
-import EntryVectorCard from "../components/EntryVectorCard";
+import OnboardingActionRail from "../components/OnboardingActionRail";
+import RoutingCard, { type RoutingCardCtaVariant, type RoutingCardIcon } from "../components/RoutingCard";
 import SetupRail from "../components/SetupRail";
-import { moduleFilterOptions, moduleLoadError } from "../data/modules";
+import { moduleLoadError } from "../data/modules";
 import { refLoadError } from "../data/refs";
 import { shipLoadError } from "../data/ships";
-import { emptyModuleFilters, readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
+import { readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
 type EntryVector = {
   title: string;
   subtitle: string;
   actionLabel: string;
   preset: Partial<ModuleFilters>;
-  icon: Parameters<typeof EntryVectorCard>[0]["icon"];
-  ctaVariant: Parameters<typeof EntryVectorCard>[0]["ctaVariant"];
+  icon: RoutingCardIcon;
+  ctaVariant: RoutingCardCtaVariant;
   disabled?: boolean;
 };
 
@@ -22,7 +22,7 @@ const entryVectors: EntryVector[] = [
   {
     title: "I'm Flying",
     subtitle: "Pilot-focused modules",
-    actionLabel: "Route as Pilot",
+    actionLabel: "Pilot",
     preset: { role: "pilot", type: "flying" },
     icon: "pilot",
     ctaVariant: "pilot",
@@ -30,7 +30,7 @@ const entryVectors: EntryVector[] = [
   {
     title: "I'm Manning",
     subtitle: "Crew station and gunner modules",
-    actionLabel: "Route as Crew",
+    actionLabel: "Crew",
     preset: { role: "gunner", type: "manning" },
     icon: "crew",
     ctaVariant: "crew",
@@ -38,15 +38,15 @@ const entryVectors: EntryVector[] = [
   {
     title: "I'm Facing",
     subtitle: "Threat classification modules",
-    actionLabel: "Classify Threat",
+    actionLabel: "Threat",
     preset: { enemy: "capital", type: "facing" },
     icon: "threat",
     ctaVariant: "threat",
   },
   {
-    title: "Something Went Wrong",
-    subtitle: "Recovery and failure handling modules",
-    actionLabel: "Enter Recovery",
+    title: "I'm Fixing",
+    subtitle: "Engineering and repair modules",
+    actionLabel: "10mm",
     preset: { type: "recovery" },
     icon: "recovery",
     ctaVariant: "soon",
@@ -56,13 +56,8 @@ const entryVectors: EntryVector[] = [
 
 export default function DoctrineIndexPage() {
   const [activeEntry, setActiveEntry] = useState<string | null>(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const filters = readModuleFilters(searchParams);
-
-  function updateFilter(key: keyof ModuleFilters, value: string) {
-    const nextFilters = { ...filters, [key]: value };
-    setSearchParams(writeModuleFilters(nextFilters), { replace: true });
-  }
 
   function buildEntryTarget(preset: Partial<ModuleFilters>) {
     const merged: ModuleFilters = { ...filters, ...preset };
@@ -91,7 +86,7 @@ export default function DoctrineIndexPage() {
         <section>
           <div className="px-1 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {entryVectors.map((entry) => (
-            <EntryVectorCard
+            <RoutingCard
               key={entry.title}
               title={entry.title}
               subtitle={entry.subtitle}
@@ -110,19 +105,12 @@ export default function DoctrineIndexPage() {
           </div>
         </section>
 
-        <div className="mt-[30px]">
-          <SetupRail />
+        <div className="mt-8">
+          <OnboardingActionRail />
         </div>
 
-        <div className="mt-[40px] opacity-85">
-          <DoctrineFilterBar
-            title="Refine Results"
-            description="Optional: narrow routing outcomes by ship, role, threat, status, or type."
-            filters={filters}
-            options={moduleFilterOptions}
-            onChange={updateFilter}
-            onClear={() => setSearchParams(writeModuleFilters(emptyModuleFilters), { replace: true })}
-          />
+        <div className="mt-8">
+          <SetupRail />
         </div>
       </div>
     </section>
