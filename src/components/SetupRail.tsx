@@ -14,12 +14,12 @@ const setupItems = [
   {
     title: "Camera & Tracking",
     subtitle: "Tune view and tracking persistence.",
-    to: "/systems/additional-settings-binds",
+    to: "/wip/camera-tracking",
   },
   {
     title: "Performance",
     subtitle: "Client settings and performance profile.",
-    to: "/systems/additional-settings-binds",
+    to: "/wip/performance",
   },
 ];
 

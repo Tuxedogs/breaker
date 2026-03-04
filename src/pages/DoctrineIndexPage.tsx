@@ -79,7 +79,7 @@ export default function DoctrineIndexPage() {
           <p className="title-font text-[11px] uppercase tracking-[0.34em] text-cyan-100/75">Doctrine Index</p>
           <h1 className="title-font mt-3 text-4xl font-medium leading-[0.95] text-white sm:text-5xl">Framework Routing</h1>
           <p className="mt-4 max-w-2xl text-sm text-slate-200/80 sm:text-base">
-            Start with your situation. Refine only if necessary.
+            Filter by context and open the module that matches your intent.
           </p>
         </header>
 

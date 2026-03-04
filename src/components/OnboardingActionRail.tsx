@@ -15,9 +15,9 @@ const onboardingActions: OnboardingAction[] = [
   {
     label: "Onboarding",
     subtitle: "New member pipeline & progression",
-    href: "/systems/additional-settings-binds",
+    href: "/wip/onboarding",
     accentColor: "#60f2ff",
-    activePathPrefix: "/systems/additional-settings-binds",
+    activePathPrefix: "/wip/onboarding",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
         <path d="M5.5 8.5L12 5l6.5 3.5v5.5c0 2.9-2 5.7-6.5 7-4.5-1.3-6.5-4.1-6.5-7V8.5z" />
@@ -28,9 +28,9 @@ const onboardingActions: OnboardingAction[] = [
   {
     label: "Training",
     subtitle: "Exercises, drills, and certifications",
-    href: "/systems/gunnery-with-luna",
+    href: "/wip/training",
     accentColor: "#a78bfa",
-    activePathPrefix: "/systems/gunnery-with-luna",
+    activePathPrefix: "/wip/training",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
         <circle cx="12" cy="12" r="6" />
@@ -42,9 +42,9 @@ const onboardingActions: OnboardingAction[] = [
   {
     label: "Organization",
     subtitle: "Command structure and roles",
-    href: "/modules",
+    href: "/wip/organization",
     accentColor: "#f59e0b",
-    activePathPrefix: "/modules",
+    activePathPrefix: "/wip/organization",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
         <circle cx="5" cy="6" r="2.2" />
