@@ -20,11 +20,11 @@ type RoutingCardProps = {
 };
 
 function EntryVectorIcon({ kind }: { kind: RoutingCardIcon }) {
-  const baseClass = "h-8 w-8 md:h-9 md:w-9 lg:h-11 lg:w-11";
+  const baseClass = "h-12 w-12 md:h-14 md:w-14 lg:h-16 lg:w-16";
   const strokeProps = {
     fill: "none",
     stroke: "currentColor",
-    strokeWidth: 1.7,
+    strokeWidth: 2.5,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
   };
@@ -32,8 +32,10 @@ function EntryVectorIcon({ kind }: { kind: RoutingCardIcon }) {
   if (kind === "pilot") {
     return (
       <svg viewBox="0 0 24 24" className={baseClass} aria-hidden>
-        <path {...strokeProps} d="M3.5 12h17M12 3.5v17M5.5 6.5l13 11M18.5 6.5l-13 11" />
-        <circle cx="12" cy="12" r="2.7" {...strokeProps} />
+        <path {...strokeProps} d="M12 2.8v5.4M12 15.8v5.4M4.2 12h5.4M14.4 12h5.4" />
+        <path {...strokeProps} d="M12 6.2l6.9 5.8L12 17.8 5.1 12 12 6.2z" />
+        <path {...strokeProps} d="M12 9.4l3.1 2.6-3.1 2.6-3.1-2.6L12 9.4z" />
+        <path {...strokeProps} d="M7.2 7.9l-1.6-2.4M16.8 7.9l1.6-2.4" />
       </svg>
     );
   }
@@ -41,9 +43,10 @@ function EntryVectorIcon({ kind }: { kind: RoutingCardIcon }) {
   if (kind === "crew") {
     return (
       <svg viewBox="0 0 24 24" className={baseClass} aria-hidden>
-        <rect x="4.5" y="4.5" width="15" height="10.5" rx="1.8" {...strokeProps} />
-        <path {...strokeProps} d="M12 8.2v5.6M9.2 11h5.6" />
-        <path {...strokeProps} d="M8 19.2h8M9.2 15v4.2M14.8 15v4.2" />
+        <circle cx="12" cy="12" r="7.6" {...strokeProps} />
+        <circle cx="12" cy="12" r="3.1" {...strokeProps} />
+        <path {...strokeProps} d="M12 2.8v3.1M12 18.1v3.1M2.8 12h3.1M18.1 12h3.1" />
+        <path {...strokeProps} d="M5.3 5.3l2.2 2.2M16.5 16.5l2.2 2.2M18.7 5.3l-2.2 2.2M7.5 16.5l-2.2 2.2" />
       </svg>
     );
   }
@@ -51,16 +54,22 @@ function EntryVectorIcon({ kind }: { kind: RoutingCardIcon }) {
   if (kind === "threat") {
     return (
       <svg viewBox="0 0 24 24" className={baseClass} aria-hidden>
-        <path {...strokeProps} d="M4.5 12h15M12 4.5v15M6.2 6.2l11.6 11.6M17.8 6.2 6.2 17.8" />
-        <circle cx="12" cy="12" r="7.5" {...strokeProps} />
+        <path {...strokeProps} d="M12 3.2a8.8 8.8 0 0 1 8.8 8.8" />
+        <path {...strokeProps} d="M12 6.4a5.6 5.6 0 0 1 5.6 5.6" />
+        <path {...strokeProps} d="M12 9.6a2.4 2.4 0 0 1 2.4 2.4" />
+        <path {...strokeProps} d="M4.2 18.6h5.2M4.2 21h9.3" />
+        <circle cx="12" cy="12" r="1.6" {...strokeProps} />
       </svg>
     );
   }
 
   return (
     <svg viewBox="0 0 24 24" className={baseClass} aria-hidden>
-      <path {...strokeProps} d="M12 4v8.2M12 16.6v.1M6 6l12 12M18 6 6 18" />
-      <circle cx="12" cy="12" r="8" {...strokeProps} />
+      <circle cx="8.3" cy="8.4" r="2.8" {...strokeProps} />
+      <path {...strokeProps} d="M10.4 10.5l2.2 2.2M7.1 17.5l-2.6 2.6" />
+      <path {...strokeProps} d="M13 7.2l1.4-1.4 2.8 2.8-1.4 1.4" />
+      <path {...strokeProps} d="M11.1 9.1l4.7 4.7-3.9 3.9-4.7-4.7z" />
+      <path {...strokeProps} d="M15.9 16.9l2.2 2.2M13.8 19l2.6 2.6" />
     </svg>
   );
 }

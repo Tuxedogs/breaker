@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import AppShell from "./components/AppShell";
 import DoctrineIndexPage from "./pages/DoctrineIndexPage";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
@@ -57,6 +56,11 @@ export default function App() {
             path="systems/additional-resources"
             element={<WipPage section="Systems" title="Additional Resources" />}
           />
+          <Route path="wip/onboarding" element={<WipPage section="Systems" title="Onboarding" />} />
+          <Route path="wip/training" element={<WipPage section="Systems" title="Training" />} />
+          <Route path="wip/organization" element={<WipPage section="Systems" title="Organization" />} />
+          <Route path="wip/camera-tracking" element={<WipPage section="Systems" title="Camera and Tracking" />} />
+          <Route path="wip/performance" element={<WipPage section="Systems" title="Performance" />} />
           <Route
             path="anti-cap/component-sniping"
             element={<WipPage section="Anti-Cap" title="Component Sniping" />}
@@ -65,7 +69,6 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
-      <SpeedInsights />
     </>
   );
 }
