@@ -70,6 +70,8 @@ export default function AppShell() {
   const [mobileSectionOpen, setMobileSectionOpen] = useState<MenuKey | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const isMapsRoute = location.pathname.startsWith("/maps");
+  const isShipsRoute = location.pathname.startsWith("/ships");
+  const isSystemsRoute = location.pathname.startsWith("/systems");
   const isFrameworkNavActive =
     location.pathname === "/framework" ||
     location.pathname === "/index" ||
@@ -120,17 +122,17 @@ export default function AppShell() {
   }
 
   const navItemClass =
-    "inline-flex h-11 items-center rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
+    "inline-flex h-11 items-center rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
 
   const menuButtonClass =
-    "inline-flex h-11 items-center gap-1 rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
+    "inline-flex h-11 items-center gap-1 rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden text-slate-100">
+    <div className="relative min-h-screen text-slate-100">
       <AppBackground />
 
       <header className="fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
-        <div className="rounded-xl border border-white/15 bg-black/45 px-3 py-2 backdrop-blur-md">
+        <div className="px-3 py-2">
           <div className="flex items-center justify-between">
             <NavLink
               to="/"
@@ -161,7 +163,12 @@ export default function AppShell() {
               <div className="relative" onMouseEnter={() => openDesktopMenu("ships")} onMouseLeave={closeDesktopMenuSoon}>
                 <button
                   type="button"
-                  className={menuButtonClass}
+                  className={[
+                    menuButtonClass,
+                    desktopMenu === "ships" || isShipsRoute
+                      ? "text-amber-300"
+                      : "hover:text-amber-300",
+                  ].join(" ")}
                   aria-expanded={desktopMenu === "ships"}
                   aria-controls="desktop-ships-menu"
                   onClick={() => toggleDesktopMenu("ships")}
@@ -198,7 +205,12 @@ export default function AppShell() {
               <div className="relative" onMouseEnter={() => openDesktopMenu("systems")} onMouseLeave={closeDesktopMenuSoon}>
                 <button
                   type="button"
-                  className={menuButtonClass}
+                  className={[
+                    menuButtonClass,
+                    desktopMenu === "systems" || isSystemsRoute
+                      ? "text-cyan-300"
+                      : "hover:text-cyan-300",
+                  ].join(" ")}
                   aria-expanded={desktopMenu === "systems"}
                   aria-controls="desktop-systems-menu"
                   onClick={() => toggleDesktopMenu("systems")}
@@ -236,7 +248,12 @@ export default function AppShell() {
                 to="/maps"
                 onClick={closeAllMenus}
                 className={({ isActive }) =>
-                  [navItemClass, isActive ? "text-blue-300" : "hover:text-blue-300"].join(" ")
+                  [
+                    navItemClass,
+                    isActive
+                      ? "text-blue-300"
+                      : "hover:text-blue-300",
+                  ].join(" ")
                 }
               >
                 Maps
@@ -248,7 +265,9 @@ export default function AppShell() {
                 className={({ isActive }) =>
                   [
                     navItemClass,
-                    isActive || isFrameworkNavActive ? "text-emerald-300" : "hover:text-emerald-300",
+                    isActive || isFrameworkNavActive
+                      ? "text-emerald-300"
+                      : "hover:text-emerald-300",
                   ].join(" ")
                 }
               >
