@@ -5,18 +5,18 @@ type: "module"
 status: "review"
 moduleType: "flying"
 owner: "Doctrine Team"
-intent: "Extend survivability by preserving shielded faces and minimizing repeated exposure on weakened arcs."
+intent: "Extend survivability by preserving shielded faces and minimizing repeated exposure on recovering faces."
 summary: "Pilot and crew posture rules for sustained shield pressure."
 lastValidated: "2026-03-05"
 tags: ["shield", "survivability", "pilot", "engineering"]
-ships: []
+ships: ["Perseus","idris", "polaris"]
 roles: ["pilot", "engineer"]
 enemies: []
 maps: []
 powerProjection: []
-useWhen: ["Under sustained shield pressure.", "Before committing into repeated firing lanes.", "During withdrawal and re-entry windows."]
-steps: ["Identify the currently weakest shield face and call it early.", "Adjust orientation to rotate stronger faces toward incoming pressure.", "Coordinate short movement corrections rather than over-rotating and exposing multiple weak arcs.", "Engineer and pilot coordinate power posture to support shield recovery windows.", "Delay recommit until shield state is stable enough for the planned attack profile."]
-failureModes: ["Pilot holds a collapsing face too long under concentrated fire.", "Over-rotation exposes multiple arcs and accelerates collapse.", "Crew recommits with unresolved shield weakness and takes avoidable hull damage."]
+useWhen: ["Under sustained shield pressure.", "Before committing to high risk kill lanes."]
+steps: ["Identify the currently weakest shield face convey intent to crew.", "Adjust orientation to rotate stronger faces toward incoming pressure.", "Coordinate short movement corrections rather than over-rotating and exposing multiple weak arcs."]
+failureModes: ["Pilot holds a collapsing face too long under concentrated fire.", "Over-rotation exposes multiple arcs and accelerates collapse."]
 validation: ["Crew consistently rotates away from collapsing faces before break.", "Shield survival time improves in repeated pressure drills.", "Recommit timing aligns with confirmed shield recovery state."]
 prerequisites: []
 relatedModuleIds: ["signature-management-em-ir-cs-awareness", "damage-control-priority-ladder"]
