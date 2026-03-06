@@ -1,0 +1,24 @@
+---
+id: "signature-management-em-ir-cs-awareness"
+title: "Signature Management (EM/IR/CS Awareness)"
+type: "module"
+status: "review"
+moduleType: "facing"
+owner: "Doctrine Team"
+intent: "Control detectability and lock timelines by actively managing EM, IR, and CS signatures through power and behavior."
+summary: "Pilot and engineer workflow for approach, ambush, and withdrawal signature control."
+lastValidated: "2026-03-05"
+tags: ["signature", "em", "ir", "cs", "pilot", "engineer"]
+ships: []
+roles: ["pilot", "engineer"]
+enemies: []
+maps: []
+useWhen: ["Approach phase before contact.", "Ambush setups and holding patterns.", "Withdrawal and disengage after contact."]
+steps: ["Establish current signature baseline before commit and call out EM/IR trends.", "Coordinate pilot/engineer power posture to reduce unnecessary emissions before lock exposure windows.", "In 4.6, account for major EM reductions as pips are shifted across power systems; call each major change on comms.", "Avoid unnecessary high-output systems during stealthier approach windows.", "During withdrawal, prioritize signature reduction and movement discipline over cosmetic damage checks."]
+failureModes: ["Crew ignores power-pip effects and accidentally spikes detectability.", "Pilot and engineer make unsynchronized changes that create lock windows.", "Over-focusing on speed while allowing EM to remain unnecessarily high."]
+validation: ["Crew can verbally report signature state changes tied to pip allocation.", "Approach profile reaches intended position with reduced early lock pressure.", "Withdrawal timeline improves due to lower detection and cleaner lock break timing."]
+prerequisites: []
+relatedModuleIds: ["decoy-noise-timing-missile-defense", "shield-face-management"]
+---
+
+4.6 note: EM values can drop dramatically based on pip allocation. Treat power state as an active tactical control, not a static setup.

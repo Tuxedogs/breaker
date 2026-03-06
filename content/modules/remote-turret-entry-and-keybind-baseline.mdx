@@ -1,0 +1,24 @@
+---
+id: "remote-turret-entry-and-keybind-baseline"
+title: "Remote Turret Entry and Keybind Baseline"
+type: "module"
+status: "review"
+moduleType: "manning"
+owner: "Doctrine Team"
+intent: "Ensure all personnel can enter remote turrets quickly and confirm the keybind location before combat."
+summary: "Universal baseline for entering remote turret stations and validating keybind reference access."
+lastValidated: "2026-03-05"
+tags: ["turret", "remote", "keybind", "crew"]
+ships: []
+roles: ["pilot", "gunner", "engineer"]
+enemies: []
+maps: []
+useWhen: ["Pre-op checks for any combat ship.", "Crew role swaps during live operations.", "After keybind resets or profile changes."]
+steps: ["Move to the assigned remote turret station and confirm seat prompt interaction is working.", "Enter the turret, verify weapon control and camera movement response.", "Open the keybind menu and verify remote turret entry/exit binds are present and readable.", "Cross-check the org keybind reference page and align local binds to the published baseline.", "Exit and re-enter once to validate clean handoff timing under comms direction."]
+failureModes: ["Crew cannot enter assigned turret due to missing or conflicting keybind.", "Operator enters turret but cannot quickly exit for emergency handoff.", "Different keybind baselines across crew create avoidable delays."]
+validation: ["All crew complete a clean enter/exit cycle within expected callout timing.", "Each operator confirms keybind reference location and match to org baseline.", "No control conflicts are observed during a short live-fire check."]
+prerequisites: ["keybind/turret-bind-baseline"]
+relatedModuleIds: ["turret-keybind-baseline"]
+---
+
+Use this as the minimum readiness gate before assigning live turret responsibilities.
