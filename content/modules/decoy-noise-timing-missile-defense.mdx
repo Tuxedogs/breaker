@@ -2,9 +2,9 @@
 id: "decoy-noise-timing-missile-defense"
 title: "Decoy/Noise Timing for Missile Defense"
 type: "module"
-status: "review"
+status: "validated"
 moduleType: "facing"
-owner: "Doctrine Team"
+owner: "Tux"
 intent: "Prevent panic countermeasure usage and improve missile survival with disciplined decoy/noise timing."
 summary: "Pilot timing model for measured countermeasure release under missile pressure."
 lastValidated: "2026-03-05"
@@ -17,11 +17,11 @@ enemies: ["fighter", "capital"]
 maps: []
 powerProjection: []
 useWhen: ["Missile pressure scenarios.", "Sustained pursuit with repeated locks.", "Covering disengage windows under hostile missile threat."]
-steps: ["Identify lock type and incoming cadence before releasing countermeasures.", "Avoid panic dumping; release in measured bursts tied to threat timing.", "Pair decoy/noise timing with maneuver and speed changes instead of using countermeasures alone.", "Communicate remaining countermeasure state early so crew can adjust commit/disengage decisions.", "Reset spacing discipline between releases to preserve inventory for repeat waves."]
-failureModes: ["Panic dumping early leaves no protection for follow-up volleys.", "Countermeasure release is not synchronized with maneuver timing.", "Crew overcommits while low on decoy/noise inventory."]
+steps: ["Identify lock type and incoming cadence before releasing countermeasures.", "Avoid panic dumping; release in measured bursts tied to threat timing.", "Do not pair decoy/noise timing. noise will hide you from being targeted, it will not stop incoming.", "Communicate remaining countermeasure state early so crew can adjust commit/disengage decisions.", "Leverage on field capitals high countermeasure capacities to screen friendlies."]
+failureModes: ["Panic dumping early leaves no protection for follow-up volleys.", "CM deployes in an insufficient burst to overcome incoming ordnance tracking", "Crew overcommits while low on decoy/noise inventory."]
 validation: ["Crew maintains controlled countermeasure inventory through multi-wave pressure.", "Missile survival rate improves without full panic dumps.", "Pilot callouts clearly report release timing and remaining capacity."]
 prerequisites: []
 relatedModuleIds: ["signature-management-em-ir-cs-awareness", "interdiction-snare-and-dampener-baseline"]
 ---
 
-Scope: pilots of combat ships. Industry ship-specific doctrine can be authored separately.
+Scope: pilots of combat ships.

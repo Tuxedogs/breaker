@@ -5,18 +5,18 @@ type: "module"
 status: "validated"
 moduleType: "manning"
 owner: "Doctrine Team"
-intent: "Acquire and maintain component-level locks so gunfire lands on high-value internals."
+intent: "Acquire and maintain component-level locks so weapons fire lands on high-value internals."
 summary: "Operational flow adapted from the existing Sub-Targeting guide."
 lastValidated: "2026-02-26"
 tags: ["sub-targeting", "gunner", "components"]
-ships: ["perseus"]
+ships: ["combat"]
 roles: ["gunner"]
 enemies: ["capital", "gunship"]
 maps: []
-useWhen: ["You have a stable target lock.", "Pilot call indicates steady firing geometry."]
-steps: ["Acquire a fresh target lock.", "Aim near the intended component zone.", "Cycle sub-target forward once and verify highlight.", "If sub-target fails, clear lock and repeat."]
+useWhen: ["You have a stable target lock.", "Pilot call indicates commencement of fire."]
+steps: ["Acquire a fresh target lock.", "Aim near the intended component hilighted location.", "Cycle sub-target forward once and verify highlight.", "If sub-target fails, clear lock and repeat."]
 failureModes: ["Crew fires center mass without component lock.", "Target cycling back is bound in unstable client build.", "No verbal confirmation of selected component."]
-validation: ["Selected component is visible on target status MFD.", "Damage is observed on intended subsystem over two volleys."]
+validation: ["Selected component is visible on target status MFD.", "Damage is observed."]
 prerequisites: ["keybind/perseus-gunner-preset", "diagram/subtarget-reference-frames"]
 relatedModuleIds: ["perseus-component-sniping", "turret-keybind-baseline"]
 ---

@@ -32,6 +32,8 @@ Rules:
 - Buttons/inputs/cards must use existing shared components and variants.
 - If you must add a new variant, update the shared component and document it.
 
+
+
 ## Performance Rules
 - Optimize images: correct dimensions, lazy-load below fold, prefer modern formats.
 - Avoid shipping heavy dependencies for small UI wins.
@@ -39,7 +41,6 @@ Rules:
 - Avoid layout shift (CLS): reserve space for images/video, stable header heights.
 
 ## Accessibility Rules
-- All interactive elements must be keyboard reachable.
 - Focus states must be visible.
 - Use semantic HTML first; ARIA only when needed.
 - Forms must have labels, errors must be announced/readable.
@@ -70,10 +71,31 @@ Goal: keyboard navigation, focus visibility, semantics, form correctness.
 Goal: naming, patterns, folder structure, no duplicated utilities.
 
 ### QA / Regression Scout
-Goal: smoke test routes, responsive sanity, avoid breaking adjacent pages.
+
 
 ## Output Expectations
 When making changes, include:
 - What changed (1–3 bullets)
 - Why (1–2 bullets)
-- How you verified (commands run + breakpoints checked)
+
+
+# Styling + Semantics (Doctrine Modules)
+
+Goal: make HTML semantic + maintainable without changing layout/visuals.
+
+Rules:
+- Do NOT change layout, spacing, colors, or structure. Only refactor repeated class blobs into semantic classes using @apply.
+- Replace repeated article wrapper classes with: module-card
+- Replace repeated header wrapper classes with: module-head
+- Second doctrine article inner wrapper uses: doctrine-column (grid gap-4 lg:grid-cols-2)
+- Doctrine blocks use: doctrine-block and variants:
+  - doctrine-block
+  - doctrine-block-steps
+  - doctrine-block-failure
+  - doctrine-block-validation
+- Avoid repeating framework-modern-* utility stacks in markup once semantic classes exist.
+- Keep existing DOM tags (article/header/section/h2/ul) unless a tag is outright wrong.
+Definition of done:
+- Doctrine page renders identical.
+- Repeated framework-modern-* strings removed from doctrine page markup.
+- New classes live in Tailwind @layer components.
