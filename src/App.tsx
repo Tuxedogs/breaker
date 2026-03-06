@@ -14,6 +14,7 @@ import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
 import OnboardingPage from "./pages/systems/OnboardingPage";
 import SubTargetingPage from "./pages/systems/SubTargetingPage";
 import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
+import TraditionalModulePage from "./pages/TraditionalModulePage";
 import WipPage from "./pages/WipPage";
 
 const ENTRY_STORAGE_KEY = "ares:entered-framework";
@@ -52,7 +53,7 @@ export default function App() {
             element={<Navigate to="/systems/additional-settings-binds" replace />}
           />
           <Route path="systems/gunnery-with-luna" element={<GunneryWithLunaPage />} />
-          <Route path="systems/communications" element={<WipPage section="Systems" title="Communications" />} />
+          <Route path="systems/communications" element={<TraditionalModulePage />} />
           <Route
             path="systems/additional-resources"
             element={<WipPage section="Systems" title="Additional Resources" />}
