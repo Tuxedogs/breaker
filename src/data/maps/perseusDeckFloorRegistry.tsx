@@ -66,7 +66,7 @@ export const perseusDeckFloors: DeckFloorDefinition[] = [
     id: "top",
     label: "Top Deck",
     deckMin: 0.213,
-    enabled: false,
+    enabled: true,
     nativeViewBox: [980, 289],
     svgUrl: topDeckUrl,
     overlayAdjustments: {

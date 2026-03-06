@@ -9,7 +9,7 @@ export const perseusDeckMapConfig: ShipDeckMapConfig = {
       name: "Perseus Cargo Deck",
       deckMin: -0.236,
       deckMax: -0.086,
-      svgPath: "/images/maps/deckmaps/percycargo.svg",
+      svgPath: "/images/maps/deckmaps/percy-cargo.png",
       viewBox: [1506, 956],
       icons: [
         { id: "exit_a", kind: "exit", label: "Exit A", x: 228, y: 812 },
@@ -41,7 +41,7 @@ export const perseusDeckMapConfig: ShipDeckMapConfig = {
       name: "Percy Mid Deck",
       deckMin: -0.086,
       deckMax: 0.139,
-      svgPath: "/images/maps/deckmaps/percymiddeck.svg",
+      svgPath: "/images/maps/deckmaps/percy-midDeck.png",
       viewBox: [2063, 694],
       icons: [
         { id: "mid_exit", kind: "exit", label: "Exit", x: 403, y: 572 },
@@ -66,6 +66,24 @@ export const perseusDeckMapConfig: ShipDeckMapConfig = {
         { from: "m_2", to: "m_eng" },
         { from: "m_core", to: "m_bridge" },
       ],
+    },
+    {
+      id: "percy_top",
+      name: "Percy Top Deck",
+      deckMin: 0.139,
+      deckMax: 0.36,
+      svgPath: "/images/maps/deckmaps/percy-topDeck.png",
+      viewBox: [980, 289],
+      icons: [
+        { id: "top_bridge", kind: "bridge", label: "Bridge", x: 490, y: 144 },
+      ],
+      labels: [
+        { id: "top_text", text: "Percy Top Deck", x: 490, y: 76 },
+      ],
+      nodes: [
+        { id: "t_bridge", x: 490, y: 144, role: "bridge" },
+      ],
+      edges: [],
     },
   ],
 };
