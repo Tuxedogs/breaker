@@ -2,10 +2,10 @@
 id: "signature-management-em-ir-cs-awareness"
 title: "Signature Management (EM/IR/CS Awareness)"
 type: "module"
-status: "review"
+status: "validated"
 moduleType: "facing"
-owner: "Doctrine Team"
-intent: "Control detectability and lock timelines by actively managing EM, IR, and CS signatures through power and behavior."
+owner: "Tux"
+intent: "Control detectability by actively managing EM, IR, and CS signatures through power and behavior."
 summary: "Pilot and engineer workflow for approach, ambush, and withdrawal signature control."
 lastValidated: "2026-03-05"
 tags: ["signature", "em", "ir", "cs", "pilot", "engineer"]
@@ -13,10 +13,10 @@ ships: []
 roles: ["pilot", "engineer"]
 enemies: []
 maps: []
-useWhen: ["Approach phase before contact.", "Ambush setups and holding patterns.", "Withdrawal and disengage after contact."]
-steps: ["Establish current signature baseline before commit and call out EM/IR trends.", "Coordinate pilot/engineer power posture to reduce unnecessary emissions before lock exposure windows.", "In 4.6, account for major EM reductions as pips are shifted across power systems; call each major change on comms.", "Avoid unnecessary high-output systems during stealthier approach windows.", "During withdrawal, prioritize signature reduction and movement discipline over cosmetic damage checks."]
+useWhen: ["Approach phase before contact.", "Ambush setups and holding patterns.", "Recon, Withdrawal and disengages."]
+steps: ["Coordinate pilot/engineer power posture to reduce unnecessary spiking of emissions.", "In 4.7, account for major EM reductions as pips are shifted across power systems; call each major change on comms.", "Avoid unnecessary high-output systems during stealthier approach windows.", "Reduce emissions to require enemy missile boats to drift closer to engage."]
 failureModes: ["Crew ignores power-pip effects and accidentally spikes detectability.", "Pilot and engineer make unsynchronized changes that create lock windows.", "Over-focusing on speed while allowing EM to remain unnecessarily high."]
-validation: ["Crew can verbally report signature state changes tied to pip allocation.", "Approach profile reaches intended position with reduced early lock pressure.", "Withdrawal timeline improves due to lower detection and cleaner lock break timing."]
+validation: ["Crew can verbally report signature state changes tied to pip allocation.", "Crew actively avoids detection"]
 prerequisites: []
 relatedModuleIds: ["decoy-noise-timing-missile-defense", "shield-face-management"]
 ---

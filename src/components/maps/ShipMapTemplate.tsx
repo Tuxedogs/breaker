@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useTexture } from "@react-three/drei";
 import {
   Box3,
   BufferAttribute,
   BufferGeometry,
+  Color,
   Euler,
   FrontSide,
   Group,
   Material,
   Matrix4,
   Mesh,
+  MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
+  Plane,
   PerspectiveCamera,
   Vector3,
 } from "three";
@@ -500,37 +503,71 @@ function createMergedMeshScene(modelScene: Object3D): Object3D {
   const mergedScene = new Group();
   mergedScene.add(mergedMesh);
   mergedScene.userData.__ownedGeometries = [mergedGeometry];
+  mergedScene.userData.__ownedMaterials = [mergedMesh.material];
   return mergedScene;
 }
 
-function cloneSceneMeshGeometries(modelScene: Object3D): BufferGeometry[] {
+function cloneSceneMeshResources(modelScene: Object3D): {
+  ownedGeometries: BufferGeometry[];
+  ownedMaterials: Material[];
+} {
   const ownedGeometries: BufferGeometry[] = [];
+  const ownedMaterials: Material[] = [];
   modelScene.traverse((node) => {
     if (!(node instanceof Mesh)) return;
     if (!node.geometry) return;
     const ownedGeometry = node.geometry.clone();
     node.geometry = ownedGeometry;
     ownedGeometries.push(ownedGeometry);
+    if (Array.isArray(node.material)) {
+      node.material = node.material.map((material) => {
+        const ownedMaterial = material.clone();
+        ownedMaterials.push(ownedMaterial);
+        return ownedMaterial;
+      });
+      return;
+    }
+    const ownedMaterial = node.material.clone();
+    node.material = ownedMaterial;
+    ownedMaterials.push(ownedMaterial);
   });
-  return ownedGeometries;
+  return { ownedGeometries, ownedMaterials };
 }
 
 function createModelSceneInstance(asset: LoadedModelAsset, mergeMeshesForPerformance: boolean): Object3D {
   const clonedScene = asset.scene.clone(true);
   if (!mergeMeshesForPerformance) {
-    clonedScene.userData.__ownedGeometries = cloneSceneMeshGeometries(clonedScene);
+    const { ownedGeometries, ownedMaterials } = cloneSceneMeshResources(clonedScene);
+    clonedScene.userData.__ownedGeometries = ownedGeometries;
+    clonedScene.userData.__ownedMaterials = ownedMaterials;
     return clonedScene;
   }
   return createMergedMeshScene(clonedScene);
 }
 
+function cloneModelSceneForPass(modelScene: Object3D): Object3D {
+  const clonedScene = modelScene.clone(true);
+  const { ownedGeometries, ownedMaterials } = cloneSceneMeshResources(clonedScene);
+  clonedScene.userData.__ownedGeometries = ownedGeometries;
+  clonedScene.userData.__ownedMaterials = ownedMaterials;
+  return clonedScene;
+}
+
 function disposeModelSceneInstance(modelScene: Object3D) {
   const ownedGeometries = modelScene.userData.__ownedGeometries as BufferGeometry[] | undefined;
-  if (!ownedGeometries?.length) return;
-  for (const geometry of ownedGeometries) {
-    geometry.dispose();
+  if (ownedGeometries?.length) {
+    for (const geometry of ownedGeometries) {
+      geometry.dispose();
+    }
   }
   modelScene.userData.__ownedGeometries = [];
+  const ownedMaterials = modelScene.userData.__ownedMaterials as Material[] | undefined;
+  if (ownedMaterials?.length) {
+    for (const material of ownedMaterials) {
+      disposeMaterial(material);
+    }
+  }
+  modelScene.userData.__ownedMaterials = [];
 }
 
 function resolveModelTransform(transform: ShipMapTemplateProps["modelTransform"], fallbackScale: number): ResolvedModelTransform {
@@ -559,10 +596,50 @@ function computeBoundsWithTransform(baseBounds: Box3, transform: ResolvedModelTr
 function FitModelMesh({
   modelScene,
   transform,
+  clippingPlanes,
+  opacity = 1,
+  ghosted = false,
+  renderOrder = 0,
 }: {
   modelScene: Object3D;
   transform: ResolvedModelTransform;
+  clippingPlanes?: Plane[];
+  opacity?: number;
+  ghosted?: boolean;
+  renderOrder?: number;
 }) {
+  useEffect(() => {
+    const assignedMaterials: Material[] = [];
+    modelScene.traverse((node) => {
+      if (!(node instanceof Mesh)) return;
+      node.renderOrder = renderOrder;
+      const materials = Array.isArray(node.material) ? node.material : [node.material];
+      for (const material of materials) {
+        assignedMaterials.push(material);
+        material.clippingPlanes = clippingPlanes ?? [];
+        material.clipShadows = Boolean(clippingPlanes?.length);
+        material.transparent = ghosted || opacity < 1;
+        material.opacity = opacity;
+        material.depthWrite = !(ghosted || opacity < 0.999);
+        if ("color" in material && material.color instanceof Color) {
+          material.color = ghosted ? material.color.clone().multiplyScalar(0.72) : material.color;
+        }
+        material.needsUpdate = true;
+      }
+    });
+
+    return () => {
+      for (const material of assignedMaterials) {
+        material.clippingPlanes = [];
+        material.clipShadows = false;
+        material.transparent = false;
+        material.opacity = 1;
+        material.depthWrite = true;
+        material.needsUpdate = true;
+      }
+    };
+  }, [modelScene, clippingPlanes, ghosted, opacity, renderOrder]);
+
   return (
     <group
       position={transform.offset}
@@ -590,6 +667,9 @@ function DeckOverlayPlane({
   yOffset?: number;
 }) {
   const texture = useTexture(texturePath);
+  const materialRef = useRef<MeshBasicMaterial | null>(null);
+  const animatedOpacityRef = useRef(0);
+  const animationStartRef = useRef<number | null>(null);
 
   const [planeWidth, planeDepth] = useMemo(
     () => resolveDeckPlaneSize(deck, modelSize),
@@ -601,15 +681,40 @@ function DeckOverlayPlane({
   const offsetX = deck.offsetX ?? 0;
   const offsetZ = deck.offsetZ ?? 0;
 
+  useEffect(() => {
+    animatedOpacityRef.current = 0;
+    animationStartRef.current = null;
+    if (materialRef.current) {
+      materialRef.current.opacity = 0;
+    }
+  }, [deck.id, texturePath]);
+
+  useFrame(({ clock }) => {
+    const material = materialRef.current;
+    if (!material) return;
+    const now = clock.getElapsedTime();
+    const startedAt = animationStartRef.current ?? now;
+    if (animationStartRef.current === null) {
+      animationStartRef.current = startedAt;
+    }
+    const progress = Math.min((now - startedAt) / 0.18, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const nextOpacity = opacity * eased;
+    if (Math.abs(animatedOpacityRef.current - nextOpacity) < 0.002 && progress < 1) return;
+    animatedOpacityRef.current = nextOpacity;
+    material.opacity = nextOpacity;
+  });
+
   return (
     <group position={[offsetX, y, offsetZ]} rotation={[-Math.PI / 2, 0, rotationInPlane]}>
       <mesh renderOrder={renderOrder}>
         <planeGeometry args={[planeWidth, planeDepth]} />
         <meshBasicMaterial
+          ref={materialRef}
           map={texture}
           side={FrontSide}
           transparent
-          opacity={opacity}
+          opacity={0}
           depthTest
           depthWrite
           toneMapped={false}
@@ -645,6 +750,7 @@ export default function ShipMapTemplate({
   const [deckMin, setDeckMin] = useState(-1);
   const [deckMax, setDeckMax] = useState(1);
   const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(false);
+  const [deckOverlayVisualProgress, setDeckOverlayVisualProgress] = useState(0);
   const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(
     deckOverlayConfig?.decks[0]?.id ?? ""
   );
@@ -655,9 +761,12 @@ export default function ShipMapTemplate({
   const [deckOverlayRegionsError, setDeckOverlayRegionsError] = useState<string | null>(null);
   const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
   const [hoveredRegionKey, setHoveredRegionKey] = useState<string | null>(null);
+  const [controlsOpen, setControlsOpen] = useState(true);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const deckOverlayVisualProgressRef = useRef(0);
+  const lastControlsSampleRef = useRef(0);
 
   const topDownHeight = useMemo(() => {
     const span = Math.max(deckBounds.max - deckBounds.min, 1);
@@ -686,8 +795,25 @@ export default function ShipMapTemplate({
     if (!viewBox) return null;
     return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
+  const deckOverlayVisualActive = deckOverlayVisualProgress > 0.001;
+  const activeDeckCutY = useMemo(() => {
+    if ((!sliceEnabled && !deckOverlayVisualActive) || !activeDeckOverlay) return null;
+    return Math.min(deckBounds.max, activeDeckOverlay.deckMin + 0.02);
+  }, [sliceEnabled, deckOverlayVisualActive, activeDeckOverlay, deckBounds.max]);
+  const lowerHullClippingPlanes = useMemo(() => {
+    if (activeDeckCutY === null) return [];
+    return [new Plane(new Vector3(0, -1, 0), activeDeckCutY)];
+  }, [activeDeckCutY]);
+  const lowerHullGhostScene = useMemo(() => {
+    if (!modelScene) return null;
+    return cloneModelSceneForPass(modelScene);
+  }, [modelScene]);
 
   function handleControlsChange() {
+    const now = performance.now();
+    if (now - lastControlsSampleRef.current < 80) return;
+    lastControlsSampleRef.current = now;
+
     const controls = controlsRef.current;
     if (!controls) return;
     const camera = controls.object;
@@ -822,6 +948,13 @@ export default function ShipMapTemplate({
   }, [modelScene]);
 
   useEffect(() => {
+    return () => {
+      if (!lowerHullGhostScene) return;
+      disposeModelSceneInstance(lowerHullGhostScene);
+    };
+  }, [lowerHullGhostScene]);
+
+  useEffect(() => {
     if (!hasDeckOverlay || !activeDeckOverlay) return;
 
     if (!deckOverlayEnabled) {
@@ -840,6 +973,38 @@ export default function ShipMapTemplate({
     setDeckMin(targetMin);
     setDeckMax(targetMax);
   }, [hasDeckOverlay, activeDeckOverlay, deckOverlayEnabled, deckBounds.min, deckBounds.max]);
+
+  useEffect(() => {
+    deckOverlayVisualProgressRef.current = deckOverlayVisualProgress;
+  }, [deckOverlayVisualProgress]);
+
+  useEffect(() => {
+    if (!hasDeckOverlay) {
+      setDeckOverlayVisualProgress(0);
+      return;
+    }
+
+    let frameId = 0;
+    let startTime = 0;
+    const startValue = deckOverlayVisualProgressRef.current;
+    const targetValue = deckOverlayEnabled ? 1 : 0;
+    if (Math.abs(targetValue - startValue) < 0.001) return;
+
+    const durationMs = 280;
+    const tick = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / durationMs, 1);
+      const eased = 0.5 - Math.cos(progress * Math.PI) * 0.5;
+      const nextValue = startValue + (targetValue - startValue) * eased;
+      setDeckOverlayVisualProgress(nextValue);
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [hasDeckOverlay, deckOverlayEnabled]);
 
   useEffect(() => {
     let cancelled = false;
@@ -899,7 +1064,7 @@ export default function ShipMapTemplate({
         <article className="framework-modern-card framework-modern-card-ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
           <div className="relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15 bg-[radial-gradient(circle_at_50%_25%,rgba(24,67,86,0.65),rgba(5,10,18,0.95)_62%)]">
             <Canvas
-              dpr={[1, 2]}
+              dpr={[1, 1.5]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
               camera={{ position: initialView.position, fov: 42 }}
               onCreated={({ gl, camera }) => {
@@ -908,28 +1073,43 @@ export default function ShipMapTemplate({
                 cameraRef.current = camera as PerspectiveCamera;
               }}
             >
-              <directionalLight position={[10, 14, 8]} intensity={7} />
+              <ambientLight intensity={1.15} color="#d7ecff" />
+              <directionalLight position={[18, 24, 10]} intensity={16} color="#fff4d6" />
+              <directionalLight position={[-10, 8, -14]} intensity={2.4} color="#8fc7ff" />
               {modelScene ? (
-                <FitModelMesh
-                  modelScene={modelScene}
-                  transform={effectiveModelTransform}
-                />
+                <>
+                  <FitModelMesh
+                    modelScene={modelScene}
+                    transform={effectiveModelTransform}
+                    opacity={Math.max(0, 1 - deckOverlayVisualProgress)}
+                  />
+                  {deckOverlayVisualActive && activeDeckCutY !== null && lowerHullGhostScene ? (
+                    <FitModelMesh
+                      modelScene={lowerHullGhostScene}
+                      transform={effectiveModelTransform}
+                      clippingPlanes={lowerHullClippingPlanes}
+                      opacity={0.34 * deckOverlayVisualProgress}
+                      ghosted
+                      renderOrder={4}
+                    />
+                  ) : null}
+                </>
               ) : null}
-              {deckOverlayEnabled && activeDeckOverlay && modelScene ? (
+              {deckOverlayVisualActive && activeDeckOverlay && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
                   texturePath={activeDeckOverlay.svgPath}
-                  opacity={0.95}
+                  opacity={0.95 * deckOverlayVisualProgress}
                   renderOrder={41}
                 />
               ) : null}
-              {deckOverlayEnabled && activeDeckOverlay && activeDeckRegionHighlightUri && modelScene ? (
+              {deckOverlayVisualActive && activeDeckOverlay && activeDeckRegionHighlightUri && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
                   texturePath={activeDeckRegionHighlightUri}
-                  opacity={0.98}
+                  opacity={0.98 * deckOverlayVisualProgress}
                   renderOrder={42}
                   yOffset={0.0035}
                 />
@@ -945,184 +1125,240 @@ export default function ShipMapTemplate({
               />
             </Canvas>
 
-            <div className="absolute right-4 top-4 flex flex-col gap-2">
+            <div className="absolute left-4 top-4 z-10 flex w-[min(220px,calc(100%-2rem))] flex-col gap-2">
               {hasDeckOverlay ? (
                 <button
                   type="button"
                   onClick={() => setDeckOverlayEnabled((enabled) => !enabled)}
-                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                  className={`rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 ${
+                    deckOverlayEnabled ? "map-selection-active" : ""
+                  }`}
                 >
-                  {deckOverlayEnabled ? "Exterior" : "Interior"}
+                  {deckOverlayEnabled ? "Interior" : "Exterior"}
                 </button>
               ) : null}
+
               {hasDeckOverlay && deckOverlayConfig ? (
-                <div className="flex flex-wrap justify-end gap-2 rounded-md border border-white/20 bg-black/55 p-2">
-                  {deckOverlayConfig.decks.map((deck) => {
-                    const isActive = deck.id === activeDeckOverlayId;
-                    return (
-                      <button
-                        key={deck.id}
-                        type="button"
-                        onClick={() => {
-                          setActiveDeckOverlayId(deck.id);
-                          setDeckOverlayEnabled(true);
-                        }}
-                        className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
-                          isActive
-                            ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
-                            : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
-                        }`}
-                        aria-pressed={isActive}
-                      >
-                        {deck.title}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : null}
-            </div>
-
-            {sliceEnabled && !hasDeckOverlay ? (
-              <div className="absolute left-4 top-4 w-[min(320px,calc(100%-2rem))] rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
-                <label className="block text-[11px] uppercase tracking-[0.14em] text-cyan-100">
-                  deckMin: {round3(deckMin)}
-                </label>
-                <input
-                  type="range"
-                  min={deckBounds.min}
-                  max={deckBounds.max}
-                  step={0.001}
-                  value={deckMin}
-                  onChange={(event) => {
-                    const nextMin = Number(event.target.value);
-                    setDeckMin(Math.min(nextMin, deckMax));
-                  }}
-                  className="mt-1 h-5 w-full"
-                />
-                <label className="mt-2 block text-[11px] uppercase tracking-[0.14em] text-cyan-100">
-                  deckMax: {round3(deckMax)}
-                </label>
-                <input
-                  type="range"
-                  min={deckBounds.min}
-                  max={deckBounds.max}
-                  step={0.001}
-                  value={deckMax}
-                  onChange={(event) => {
-                    const nextMax = Number(event.target.value);
-                    setDeckMax(Math.max(nextMax, deckMin));
-                  }}
-                  className="mt-1 h-5 w-full"
-                />
-              </div>
-            ) : null}
-
-            <div className="absolute bottom-4 left-4 flex w-[min(360px,calc(100%-2rem))] flex-col gap-2">
-              <p className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-cyan-100">
-                Dev purpose only controls
-              </p>
-              <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
-                <p>slice: {sliceEnabled ? "enabled" : "disabled"}</p>
-                <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
-                {activeDeckOverlay ? <p>active floor: {activeDeckOverlay.title}</p> : null}
-                <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
-                <p>cam: [{currentView.position.join(", ")}]</p>
-                <p>target: [{currentView.target.join(", ")}]</p>
-                {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
-                {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
-              </div>
-              <div className="flex flex-wrap justify-end gap-2 rounded-md border border-white/20 bg-black/55 p-2">
-                <button
-                  type="button"
-                  onClick={moveCameraTopDown}
-                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-                >
-                  Top Down
-                </button>
-                <button
-                  type="button"
-                  onClick={exportPng}
-                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-                >
-                  Export PNG
-                </button>
-                <button
-                  type="button"
-                  onClick={copyViewJson}
-                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
-                >
-                  Copy View JSON
-                </button>
-                <button
-                  type="button"
-                  onClick={copySuggestedScale}
-                  className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-60"
-                  disabled={suggestedScale === null}
-                >
-                  Copy Suggested Scale
-                </button>
-                <button
-                  type="button"
-                  onClick={saveCurrentViewAsDefault}
-                  className="rounded-md border border-amber-300/45 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-amber-100 transition hover:bg-black/65"
-                >
-                  Save Current View
-                </button>
-                <button
-                  type="button"
-                  onClick={resetDefaultView}
-                  className="rounded-md border border-slate-300/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-slate-100 transition hover:bg-black/65"
-                >
-                  Reset Default
-                </button>
-              </div>
-
-              {hasDeckOverlay ? (
-                <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
-                  <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-100">Floor Section Legend</p>
-                  {deckOverlayRegionsLoading ? <p className="mt-1">Loading sections...</p> : null}
-                  {deckOverlayRegionsError ? <p className="mt-1 text-red-200">section parse failed: {deckOverlayRegionsError}</p> : null}
-                  {!deckOverlayRegionsLoading && !deckOverlayRegionsError ? (
-                    <>
-                      <div className="mt-2 max-h-40 space-y-1 overflow-y-auto pr-1">
-                        {deckOverlayRegions.map((region) => {
-                          const isActive = region.key === activeRegionKey;
-                          return (
-                            <button
-                              key={region.key}
-                              type="button"
-                              onClick={() => setSelectedRegionKey(region.key)}
-                              onMouseEnter={() => setHoveredRegionKey(region.key)}
-                              onMouseLeave={() => setHoveredRegionKey(null)}
-                              onFocus={() => setHoveredRegionKey(region.key)}
-                              onBlur={() => setHoveredRegionKey(null)}
-                              className={`min-h-11 w-full rounded-md border px-2 py-1 text-left text-[11px] transition ${
-                                isActive
-                                  ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
-                                  : "border-white/25 bg-black/35 text-slate-100 hover:bg-black/55"
-                              }`}
-                              aria-pressed={region.key === selectedRegionKey}
-                            >
-                              {region.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <p className="mt-2 border-t border-white/10 pt-2">
-                        coords:{" "}
-                        {activeDeckRegion ? `[${activeDeckRegion.centerX}, ${activeDeckRegion.centerY}]` : "none"}
-                      </p>
-                      {activeDeckRegion ? (
-                        <p>
-                          bounds: [{activeDeckRegion.bounds.x}, {activeDeckRegion.bounds.y}, {activeDeckRegion.bounds.width},{" "}
-                          {activeDeckRegion.bounds.height}]
-                        </p>
-                      ) : null}
-                    </>
+                <>
+                  {deckOverlayConfig.decks.at(-1) ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const topDeck = deckOverlayConfig.decks.at(-1);
+                        if (!topDeck) return;
+                        setActiveDeckOverlayId(topDeck.id);
+                        setDeckOverlayEnabled(true);
+                      }}
+                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
+                        deckOverlayConfig.decks.at(-1)?.id === activeDeckOverlayId
+                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
+                      }`}
+                    >
+                      Top Deck
+                    </button>
                   ) : null}
-                </div>
+                  {deckOverlayConfig.decks.length > 2 ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const midDeck = deckOverlayConfig.decks[1];
+                        setActiveDeckOverlayId(midDeck.id);
+                        setDeckOverlayEnabled(true);
+                      }}
+                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
+                        deckOverlayConfig.decks[1]?.id === activeDeckOverlayId
+                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
+                      }`}
+                    >
+                      Mid Deck
+                    </button>
+                  ) : null}
+                  {deckOverlayConfig.decks[0] ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const bottomDeck = deckOverlayConfig.decks[0];
+                        setActiveDeckOverlayId(bottomDeck.id);
+                        setDeckOverlayEnabled(true);
+                      }}
+                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
+                        deckOverlayConfig.decks[0].id === activeDeckOverlayId
+                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
+                      }`}
+                    >
+                      Bottom Deck
+                    </button>
+                  ) : null}
+                </>
               ) : null}
             </div>
+
+            <aside
+              className={`map-controls-panel absolute bottom-4 right-4 z-10 flex max-h-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl border border-white/20 bg-black/60 backdrop-blur-md transition ${
+                controlsOpen ? "w-[min(340px,calc(100%-2rem))]" : "w-auto"
+              }`}
+            >
+              <div className="flex items-center justify-between gap-3 border-b border-white/10 px-3 py-2">
+                <div className={`${controlsOpen ? "opacity-100" : "pointer-events-none w-0 overflow-hidden opacity-0"} transition`}>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100">Map Controls</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setControlsOpen((open) => !open)}
+                  className="min-h-11 rounded-md border border-white/30 bg-black/45 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                  aria-expanded={controlsOpen}
+                  aria-controls="map-controls-panel-body"
+                >
+                  {controlsOpen ? "Hide" : "Controls"}
+                </button>
+              </div>
+
+              <div
+                id="map-controls-panel-body"
+                className={`map-controls-panel-body flex flex-col gap-2 overflow-y-auto p-3 ${controlsOpen ? "" : "hidden"}`}
+              >
+                {sliceEnabled && !hasDeckOverlay ? (
+                  <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
+                    <label className="block text-[11px] uppercase tracking-[0.14em] text-cyan-100">
+                      deckMin: {round3(deckMin)}
+                    </label>
+                    <input
+                      type="range"
+                      min={deckBounds.min}
+                      max={deckBounds.max}
+                      step={0.001}
+                      value={deckMin}
+                      onChange={(event) => {
+                        const nextMin = Number(event.target.value);
+                        setDeckMin(Math.min(nextMin, deckMax));
+                      }}
+                      className="mt-1 h-5 w-full"
+                    />
+                    <label className="mt-2 block text-[11px] uppercase tracking-[0.14em] text-cyan-100">
+                      deckMax: {round3(deckMax)}
+                    </label>
+                    <input
+                      type="range"
+                      min={deckBounds.min}
+                      max={deckBounds.max}
+                      step={0.001}
+                      value={deckMax}
+                      onChange={(event) => {
+                        const nextMax = Number(event.target.value);
+                        setDeckMax(Math.max(nextMax, deckMin));
+                      }}
+                      className="mt-1 h-5 w-full"
+                    />
+                  </div>
+                ) : null}
+
+                <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-100">Dev purpose only controls</p>
+                  <p className="mt-2">slice: {sliceEnabled ? "enabled" : "disabled"}</p>
+                  <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
+                  {activeDeckOverlay ? <p>active floor: {activeDeckOverlay.title}</p> : null}
+                  <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
+                  <p>cam: [{currentView.position.join(", ")}]</p>
+                  <p>target: [{currentView.target.join(", ")}]</p>
+                  {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
+                  {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
+                </div>
+
+                <div className="flex flex-wrap gap-2 rounded-md border border-white/20 bg-black/55 p-2">
+                  <button
+                    type="button"
+                    onClick={moveCameraTopDown}
+                    className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                  >
+                    Top Down
+                  </button>
+                  <button
+                    type="button"
+                    onClick={exportPng}
+                    className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                  >
+                    Export PNG
+                  </button>
+                  <button
+                    type="button"
+                    onClick={copyViewJson}
+                    className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65"
+                  >
+                    Copy View JSON
+                  </button>
+                  <button
+                    type="button"
+                    onClick={copySuggestedScale}
+                    className="rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled={suggestedScale === null}
+                  >
+                    Copy Suggested Scale
+                  </button>
+                  <button
+                    type="button"
+                    onClick={saveCurrentViewAsDefault}
+                    className="rounded-md border border-amber-300/45 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-amber-100 transition hover:bg-black/65"
+                  >
+                    Save Current View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetDefaultView}
+                    className="rounded-md border border-slate-300/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-slate-100 transition hover:bg-black/65"
+                  >
+                    Reset Default
+                  </button>
+                </div>
+
+                {hasDeckOverlay ? (
+                  <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
+                    <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-100">Floor Section Legend</p>
+                    {deckOverlayRegionsLoading ? <p className="mt-1">Loading sections...</p> : null}
+                    {deckOverlayRegionsError ? <p className="mt-1 text-red-200">section parse failed: {deckOverlayRegionsError}</p> : null}
+                    {!deckOverlayRegionsLoading && !deckOverlayRegionsError ? (
+                      <>
+                        <div className="mt-2 max-h-40 space-y-1 overflow-y-auto pr-1">
+                          {deckOverlayRegions.map((region) => {
+                            const isActive = region.key === activeRegionKey;
+                            return (
+                              <button
+                                key={region.key}
+                                type="button"
+                                onClick={() => setSelectedRegionKey(region.key)}
+                                onMouseEnter={() => setHoveredRegionKey(region.key)}
+                                onMouseLeave={() => setHoveredRegionKey(null)}
+                                onFocus={() => setHoveredRegionKey(region.key)}
+                                onBlur={() => setHoveredRegionKey(null)}
+                                className={`min-h-11 w-full rounded-md border px-2 py-1 text-left text-[11px] transition ${
+                                  isActive
+                                    ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                                    : "border-white/25 bg-black/35 text-slate-100 hover:bg-black/55"
+                                }`}
+                                aria-pressed={region.key === selectedRegionKey}
+                              >
+                                {region.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <p className="mt-2 border-t border-white/10 pt-2">
+                          coords: {activeDeckRegion ? `[${activeDeckRegion.centerX}, ${activeDeckRegion.centerY}]` : "none"}
+                        </p>
+                        {activeDeckRegion ? (
+                          <p>
+                            bounds: [{activeDeckRegion.bounds.x}, {activeDeckRegion.bounds.y}, {activeDeckRegion.bounds.width},{" "}
+                            {activeDeckRegion.bounds.height}]
+                          </p>
+                        ) : null}
+                      </>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            </aside>
 
             {!modelScene && !loadError ? (
               <p className="absolute inset-x-0 top-4 text-center text-xs uppercase tracking-[0.15em] text-cyan-200/85">

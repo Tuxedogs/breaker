@@ -2,9 +2,9 @@
 id: "damage-control-priority-ladder"
 title: "Damage Control Priority Ladder"
 type: "module"
-status: "review"
+status: "validated"
 moduleType: "recovery"
-owner: "Doctrine Team"
+owner: "Tux"
 intent: "Restore combat viability by fixing the highest-impact systems first under pressure."
 summary: "Fire suppression first, then component restoration in strict priority order."
 lastValidated: "2026-03-05"
@@ -14,9 +14,9 @@ roles: ["pilot", "gunner", "engineer"]
 enemies: []
 maps: []
 powerProjection: []
-useWhen: ["Component damage from incoming fire and ordnance.", "Any degraded combat state with multiple simultaneous failures.", "Post-volley stabilization before recommit."]
-steps: ["Put out fires above all else before non-fire repairs.", "Repair in strict order: Power Plant > Radar > Shields > Everything Else.", "Pilot announces maneuver intent so engineers can safely complete priority repairs.", "Gunners call subsystem loss immediately so engineering triage stays current.", "Only recommit once fire risk is clear and priority chain reaches shield restoration."]
-failureModes: ["Crew repairs low-impact systems while critical systems remain offline.", "Fires are ignored and cascade into additional component loss.", "Pilot recommits before power and shield survivability are restored."]
+useWhen: ["Component damage from incoming weapons fire and ordnance.", "Any degraded state with multiple simultaneous failures.", "Post-volley stabilization."]
+steps: ["Put out fires above all else.", "Repair in strict order: Power Plant | Radar | Shields | Everything Else.", "Pilot announce intent so engineers can complete priority repairs.", "Gunners call state changes, losses should be relayed immediately so engineering can triage.", "Only recommit once fire risk is clear and components are patched."]
+failureModes: ["Crew repairs low-impact systems while critical systems remain offline.", "Fires are ignored and cascade into ship loss.", "Pilot recommits before power and shield survivability are restored."]
 validation: ["Crew executes priority ladder correctly during timed damage-control drills.", "Fire suppression occurs first without reminder in live scenarios.", "Ship returns to stable combat posture faster than prior baseline."]
 prerequisites: []
 relatedModuleIds: ["shield-face-management", "comms-callout-standard"]
