@@ -29,12 +29,26 @@ export type DeckMapEdge = {
   to: string;
 };
 
+export type DeckMapPieceOverlay = {
+  id: string;
+  texturePath: string;
+  z: number;
+  yOffset?: number;
+  rotationDeg?: number;
+  offsetX?: number;
+  offsetZ?: number;
+  scaleMultiplier?: number;
+  widthMultiplier?: number;
+  heightMultiplier?: number;
+};
+
 export type DeckMapDeck = {
   id: string;
   name: string;
   deckMin: number;
   deckMax: number;
-  svgPath: string;
+  svgPath?: string;
+  pieceOverlays?: DeckMapPieceOverlay[];
   viewBox: [number, number];
   icons: DeckMapIcon[];
   labels: DeckMapLabel[];
@@ -186,7 +200,9 @@ export default function DeckMapRenderer({ config }: DeckMapRendererProps) {
               role="img"
               aria-label={`${activeDeck.name} deck map`}
             >
-              <image href={activeDeck.svgPath} x="0" y="0" width={activeDeck.viewBox[0]} height={activeDeck.viewBox[1]} />
+              {activeDeck.svgPath ? (
+                <image href={activeDeck.svgPath} x="0" y="0" width={activeDeck.viewBox[0]} height={activeDeck.viewBox[1]} />
+              ) : null}
 
               {activeRoute.length >= 2 ? (
                 <polyline

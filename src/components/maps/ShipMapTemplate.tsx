@@ -52,16 +52,14 @@ type ShipMapDeckOverlay = {
   id: string;
   deckMin: number;
   deckMax: number;
-  svgPath: string;
+  svgPath?: string;
   viewBox: [number, number];
   rotationDeg?: number;
   offsetX?: number;
   offsetZ?: number;
   scaleMultiplier?: number;
-};
-
-type ShipMapDeckOverlayConfig = {
-  decks: ShipMapDeckOverlay[];
+  widthMultiplier?: number;
+  heightMultiplier?: number;
 };
 
 type DeckOverlayRegion = {
@@ -124,7 +122,10 @@ function round3(value: number): number {
 }
 
 function resolveDeckPlaneSize(
-  deck: Pick<ShipMapDeckOverlay, "viewBox" | "scaleMultiplier">,
+  deck: Pick<ShipMapDeckOverlay, "viewBox" | "scaleMultiplier"> & {
+    widthMultiplier?: number;
+    heightMultiplier?: number;
+  },
   modelSize: { x: number; z: number },
 ): [number, number] {
   const maxWidth = modelSize.x * 1.12;
@@ -138,8 +139,14 @@ function resolveDeckPlaneSize(
     width = depth * aspect;
   }
   const scaleMultiplier = deck.scaleMultiplier ?? 1;
-  return [width * scaleMultiplier, depth * scaleMultiplier];
+  const widthMultiplier = deck.widthMultiplier ?? 1;
+  const heightMultiplier = deck.heightMultiplier ?? 1;
+  return [width * scaleMultiplier * widthMultiplier, depth * scaleMultiplier * heightMultiplier];
 }
+
+type ShipMapDeckOverlayConfig = {
+  decks: ShipMapDeckOverlay[];
+};
 
 function labelizeRegion(value: string): string {
   return value
@@ -1015,13 +1022,14 @@ export default function ShipMapTemplate({
     setSelectedRegionKey(null);
     setHoveredRegionKey(null);
 
-    if (!activeDeckOverlay) return;
+    if (!activeDeckOverlay || !activeDeckOverlay.svgPath) return;
     const overlay = activeDeckOverlay;
+    const overlayPath = overlay.svgPath!;
 
     async function loadDeckRegions() {
       try {
         setDeckOverlayRegionsLoading(true);
-        const response = await fetch(overlay.svgPath);
+        const response = await fetch(overlayPath);
         if (!response.ok) {
           throw new Error(`SVG request failed: ${response.status}`);
         }
@@ -1063,7 +1071,8 @@ export default function ShipMapTemplate({
 
         <article className="framework-modern-card framework-modern-card-ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
           <div className="relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15 bg-[radial-gradient(circle_at_50%_25%,rgba(24,67,86,0.65),rgba(5,10,18,0.95)_62%)]">
-            <Canvas
+            <div className="map-deck-viewport relative h-full w-full overflow-hidden rounded-[1.2rem]">
+              <Canvas
               dpr={[1, 1.5]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
               camera={{ position: initialView.position, fov: 42 }}
@@ -1074,8 +1083,8 @@ export default function ShipMapTemplate({
               }}
             >
               <ambientLight intensity={1.15} color="#d7ecff" />
-              <directionalLight position={[18, 24, 10]} intensity={16} color="#fff4d6" />
-              <directionalLight position={[-10, 8, -14]} intensity={2.4} color="#8fc7ff" />
+              <directionalLight position={[18, 24, 10]} intensity={16} color="#5f5622b6" />
+              <directionalLight position={[-10, 8, -14]} intensity={2.4} color="#ebc82ec2" />
               {modelScene ? (
                 <>
                   <FitModelMesh
@@ -1095,7 +1104,7 @@ export default function ShipMapTemplate({
                   ) : null}
                 </>
               ) : null}
-              {deckOverlayVisualActive && activeDeckOverlay && modelScene ? (
+              {deckOverlayVisualActive && activeDeckOverlay?.svgPath && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
@@ -1123,7 +1132,8 @@ export default function ShipMapTemplate({
                 target={initialView.target}
                 onChange={handleControlsChange}
               />
-            </Canvas>
+              </Canvas>
+            </div>
 
             <div className="absolute left-4 top-4 z-10 flex w-[min(220px,calc(100%-2rem))] flex-col gap-2">
               {hasDeckOverlay ? (
