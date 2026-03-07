@@ -245,6 +245,22 @@ function buildHighlightTextureDataUri(viewBox: string, highlightMarkup: string):
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
 
+function buildDeckShadowTextureDataUri(): string {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <defs>
+        <radialGradient id="deck-shadow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(0,0,0,0.55)" />
+          <stop offset="62%" stop-color="rgba(0,0,0,0.24)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0)" />
+        </radialGradient>
+      </defs>
+      <rect x="0" y="0" width="100" height="100" fill="url(#deck-shadow)" />
+    </svg>
+  `;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
 function readSavedView(storageKey: string, fallbackView: ShipMapViewState): ShipMapViewState {
   try {
     const raw = localStorage.getItem(storageKey);
@@ -802,6 +818,7 @@ export default function ShipMapTemplate({
     if (!viewBox) return null;
     return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
+  const activeDeckShadowTextureUri = useMemo(() => buildDeckShadowTextureDataUri(), []);
   const deckOverlayVisualActive = deckOverlayVisualProgress > 0.001;
   const activeDeckCutY = useMemo(() => {
     if ((!sliceEnabled && !deckOverlayVisualActive) || !activeDeckOverlay) return null;
@@ -1081,10 +1098,10 @@ export default function ShipMapTemplate({
                 canvasRef.current = gl.domElement;
                 cameraRef.current = camera as PerspectiveCamera;
               }}
-            >
+            > {/* Color of sun below */}
               <ambientLight intensity={1.15} color="#d7ecff" />
-              <directionalLight position={[18, 24, 10]} intensity={16} color="#5f5622b6" />
-              <directionalLight position={[-10, 8, -14]} intensity={2.4} color="#ebc82ec2" />
+              <directionalLight position={[18, 24, 20]} intensity={6} color="#586781b6" />
+              <directionalLight position={[-30, 9, -20]} intensity={6.4} color="#8997a7" />
               {modelScene ? (
                 <>
                   <FitModelMesh
@@ -1097,12 +1114,25 @@ export default function ShipMapTemplate({
                       modelScene={lowerHullGhostScene}
                       transform={effectiveModelTransform}
                       clippingPlanes={lowerHullClippingPlanes}
-                      opacity={0.34 * deckOverlayVisualProgress}
+                      opacity={0.14 * deckOverlayVisualProgress}
                       ghosted
                       renderOrder={4}
                     />
                   ) : null}
                 </>
+              ) : null}
+              {deckOverlayVisualActive && activeDeckOverlay && modelScene ? (
+                <DeckOverlayPlane
+                  deck={{
+                    ...activeDeckOverlay,
+                    scaleMultiplier: (activeDeckOverlay.scaleMultiplier ?? 1) * 1.08,
+                  }}
+                  modelSize={modelFootprint}
+                  texturePath={activeDeckShadowTextureUri}
+                  opacity={0.3 * deckOverlayVisualProgress}
+                  renderOrder={40}
+                  yOffset={-0.01}
+                />
               ) : null}
               {deckOverlayVisualActive && activeDeckOverlay?.svgPath && modelScene ? (
                 <DeckOverlayPlane
