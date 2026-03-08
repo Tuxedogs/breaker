@@ -94,6 +94,18 @@ export function EngineerStationIcon({ className = "size-6" }: DeckMarkerIconProp
   );
 }
 
+export function EngineeringTerminalIcon({ className = "size-6" }: DeckMarkerIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="6" width="16" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="6" y="8" width="5" height="3" rx="0.5" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+      <rect x="6" y="12" width="5" height="3" rx="0.5" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+      <path d="M13 9h5M13 11h4M13 13h5M13 15h3" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.6" />
+      <circle cx="17" cy="9" r="0.8" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function TurretStationIcon({ className = "size-6" }: DeckMarkerIconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -112,6 +124,30 @@ export function ElevatorIcon({ className = "size-6" }: DeckMarkerIconProps) {
       <path d="M9 9l3-3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M15 15l-3 3-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <rect x="8" y="17" width="8" height="1" fill="currentColor" opacity="0.4" />
+    </svg>
+  );
+}
+
+export function LadderIcon({ className = "size-6" }: DeckMarkerIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 3v18M16 3v18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M8 6h8M8 10h8M8 14h8M8 18h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ArmoryIcon({ className = "size-6" }: DeckMarkerIconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="4" width="16" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7 8h3M7 12h3M7 16h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="10.5" cy="8" r="0.8" fill="currentColor" />
+      <circle cx="10.5" cy="12" r="0.8" fill="currentColor" />
+      <circle cx="10.5" cy="16" r="0.8" fill="currentColor" />
+      <path d="M14 10h3M14 14h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="17.5" cy="10" r="0.6" fill="currentColor" />
+      <circle cx="17.5" cy="14" r="0.6" fill="currentColor" />
     </svg>
   );
 }
