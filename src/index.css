@@ -752,6 +752,22 @@ body {
   overflow: visible;
 }
 
+.entry-threat-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5.4rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.entry-threat-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
 .entry-icon-shell::after {
   content: "";
   position: absolute;
@@ -2500,6 +2516,14 @@ body {
     0 8px 24px rgba(0, 0, 0, 0.34),
     0 0 0 1px color-mix(in srgb, var(--marker-accent) 16%, transparent);
   overflow: hidden;
+  cursor: pointer;
+}
+
+.deck-marker-icon-badge-active {
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.34),
+    0 0 0 1px color-mix(in srgb, var(--marker-accent) 30%, transparent),
+    0 0 14px color-mix(in srgb, var(--marker-accent) 55%, transparent);
 }
 /*adjusting the size of the svg icon to fit within the badge*/
 .deck-marker-icon-svg {
