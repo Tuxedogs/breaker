@@ -839,7 +839,7 @@ function DeckAnnotations({
 
         return (
           <group key={annotation.id} position={[worldX, y, worldZ]}>
-            <Html center distanceFactor={12} sprite>
+            <Html center distanceFactor={12}>
               <div
                 className={`deck-annotation deck-annotation-${annotation.annotationType}`}
                 style={
