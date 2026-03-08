@@ -1,4 +1,44 @@
-import type { ShipDeckMapConfig } from "../../components/maps/DeckMapRenderer";
+import type { DeckMapPieceOverlay, ShipDeckMapConfig } from "../../components/maps/DeckMapRenderer";
+
+export const perseusMidDeckPieceOverlays: DeckMapPieceOverlay[] = [
+  {
+    id: "frontz0",
+    texturePath: "/images/maps/deckmaps/Frontz0.png",
+    z: 0,
+    offsetX: -0.04,
+    offsetZ: -0.15,
+    yOffset: 0.005,
+    scaleMultiplier: 0.8,
+  },
+  {
+    id: "midcargo",
+    texturePath: "/images/maps/deckmaps/mid-cargo.png",
+    z: 20,
+    offsetX: 0.01,
+    offsetZ: 0.27,
+    scaleMultiplier: 0.85, 
+    widthMultiplier: 1.0,
+    heightMultiplier: 0.75,
+  },
+  {
+    id: "stairsz2",
+    texturePath: "/images/maps/deckmaps/z2 stairs.png",
+    z: 2,
+   offsetX: 0.01,
+    offsetZ: 0.92,
+    scaleMultiplier: 0.15,
+  },
+  {
+    id: "rearz3",
+    texturePath: "/images/maps/deckmaps/rearz3.png",
+    z: 3,
+    offsetX: 0.03,
+    offsetZ: 0.98,
+    scaleMultiplier: 0.2, 
+    widthMultiplier: 1.0,
+    heightMultiplier: 8.0,
+  },
+];
 
 export const perseusDeckMapConfig: ShipDeckMapConfig = {
   shipId: "perseus",
@@ -41,7 +81,7 @@ export const perseusDeckMapConfig: ShipDeckMapConfig = {
       name: "Percy Mid Deck",
       deckMin: -0.086,
       deckMax: 0.139,
-      svgPath: "/images/maps/deckmaps/percy-midDeck.png",
+      pieceOverlays: perseusMidDeckPieceOverlays,
       viewBox: [2063, 694],
       icons: [
         { id: "mid_exit", kind: "exit", label: "Exit", x: 403, y: 572 },
