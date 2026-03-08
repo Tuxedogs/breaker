@@ -27,10 +27,12 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import CTM from "../../lib/openctm/ctm.js";
 import {
+  ArmoryIcon,
   CoolerIcon,
   CrewQuartersIcon,
   ElevatorIcon,
-  EngineerStationIcon,
+  EngineeringTerminalIcon,
+  LadderIcon,
   LifeSupportIcon,
   PowerPlantIcon,
   QuantumDriveIcon,
@@ -810,10 +812,12 @@ function DeckOverlayPlane({
 
 function resolveDeckMarkerIcon(annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation): DeckMarkerIconComponent | null {
   if (annotation.id === "crew-quarters-section") return CrewQuartersIcon;
+  if (annotation.id === "armory-section") return ArmoryIcon;
   if (annotation.id === "elevator") return ElevatorIcon;
   if (annotation.id === "torpedo-operator-terminal") return TorpedoStationIcon;
+  if (annotation.kind === "Ladder") return LadderIcon;
   if (annotation.kind === "Main Turret") return TurretStationIcon;
-  if (annotation.kind === "Terminal") return EngineerStationIcon;
+  if (annotation.kind === "Terminal") return EngineeringTerminalIcon;
   if (annotation.kind === "Power") return PowerPlantIcon;
   if (annotation.kind === "Shield") return ShieldGeneratorIcon;
   if (annotation.kind === "Cooler") return CoolerIcon;
