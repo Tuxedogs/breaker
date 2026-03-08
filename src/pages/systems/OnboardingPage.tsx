@@ -49,32 +49,26 @@ const basicsCards = [
   {
     title: "Respawn & Medical",
     body: "When you die, you respawn at your last set spawn point. If that is not available, you are sent to your starting home location. We strongly advise against setting your spawn on any vehicles.",
-    tip: "Set spawn before ops",
   },
   {
     title: "StarMap (F2)",
     body: "Patch to patch reliability is inconsistent. Common issues setting/canceling routes. Reach out to orgmates for current patch issues and workarounds.",
-    tip: "Party Member List, top right Google Maps pin.",
   },
   {
     title: "Quantum Travel",
     body: "Spool and Align, hold. Never jump early during group ops. It severely impacts performance and can be a major contributor to losses.",
-    tip: "Wait for FC to call the jump",
   },
   {
     title: "Gear & Insurance",
     body: "(4.6) You will not lose equipped gear on death. Exceptions are Railgun Magazines. Have minimum kit equipped.",
-    tip: "Use backpacks as kit boxes",
   },
   {
     title: "Crime Stat & Bounties",
     body: "(4.6) Bounty hunters get markers on CS3+ players in Stanton and Pyro. Do not muster with fleet.",
-    tip: "Clean CS at Grim Hex / SPK",
   },
   {
     title: "Party & Group Play",
     body: "Request invite during free comms, in game and not interacting with anything or waiting at Menu.",
-    tip: "Do not miss the party invite window",
   },
 ];
 
@@ -383,7 +377,6 @@ export default function OnboardingPage() {
                 <article key={item.title} className="onboarding-tile">
                   <h3 className="title-font text-sm text-cyan-100">{item.title}</h3>
                   <p className="mt-2">{item.body}</p>
-                  <span className="onboarding-tip mt-3">{item.tip}</span>
                 </article>
               ))}
             </div>
@@ -408,7 +401,7 @@ export default function OnboardingPage() {
               </article>
               <article className="onboarding-stage-card recommended">
                 <h3 className="title-font text-lg text-cyan-100">Seraphim Station</h3>
-                <p className="text-xs text-slate-400">Crusader L2</p>
+                <p className="text-xs text-slate-400">Crusader Orbit</p>
                 <ul className="onboarding-list mt-2">
                   <li>Significantly faster response times for capitals</li>
                   <li>External pads for multi-crew ships and Rapid Rearming</li>
@@ -435,9 +428,8 @@ export default function OnboardingPage() {
               Most ops follow roughly the same flow. Knowing it means you never hold the group up.
             </p>
             <ol className="mt-4 space-y-2">
-              {opsSteps.map((step, index) => (
+              {opsSteps.map((step) => (
                 <li key={step.title} className="onboarding-step">
-                  <span className="onboarding-step-num">{String(index + 1).padStart(2, "0")}</span>
                   <div>
                     <p className="title-font text-xs uppercase tracking-[0.12em] text-cyan-100/85">{step.title}</p>
                     <p className="mt-1 text-sm text-slate-200/85">{step.body}</p>
