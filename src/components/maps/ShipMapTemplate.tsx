@@ -125,6 +125,36 @@ type ShipMapDeckAnnotationConfig = {
 
 type DeckMarkerIconComponent = (props: { className?: string }) => React.JSX.Element;
 
+const DECK_MARKER_LEGEND = [
+  {
+    title: "Ship Components",
+    items: [
+      { label: "Power Plants", color: "#f59e0b", Icon: PowerPlantIcon },
+      { label: "Radar", color: "#1ed10e", Icon: RadarIcon },
+      { label: "Shield Generator", color: "#06a7bd", Icon: ShieldGeneratorIcon },
+      { label: "Coolers", color: "#93c5fd", Icon: CoolerIcon },
+      { label: "Quantum Drive", color: "#911696", Icon: QuantumDriveIcon },
+      { label: "Life Support", color: "#4ade80", Icon: LifeSupportIcon },
+    ],
+  },
+  {
+    title: "Crew Stations",
+    items: [
+      { label: "Main Turret", color: "#f50b0b", Icon: TurretStationIcon },
+      { label: "Torpedo Terminal", color: "#f50b0b", Icon: TorpedoStationIcon },
+      { label: "Engineer Terminal", color: "#67a1f9", Icon: EngineeringTerminalIcon },
+    ],
+  },
+  {
+    title: "Navigation",
+    items: [
+      { label: "Elevators", color: "#01ffd5", Icon: ElevatorIcon },
+      { label: "Ladders", color: "#01ffd5", Icon: LadderIcon },
+      { label: "Armory", color: "#fca5a5", Icon: ArmoryIcon },
+    ],
+  },
+] as const;
+
 type DeckOverlayRegion = {
   key: string;
   label: string;
@@ -1357,7 +1387,7 @@ export default function ShipMapTemplate({
               </Canvas>
             </div>
 
-            <div className="absolute left-4 top-4 z-10 flex w-[min(220px,calc(100%-2rem))] flex-col gap-2">
+            <div className="absolute left-4 top-4 z-10 flex w-[min(260px,calc(100%-2rem))] flex-col gap-2">
               {hasDeckOverlay ? (
                 <button
                   type="button"
@@ -1421,10 +1451,30 @@ export default function ShipMapTemplate({
                           : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
                       }`}
                     >
-                      Bottom Deck
+                      Lower Deck
                     </button>
                   ) : null}
                 </>
+              ) : null}
+
+              {hasDeckOverlay ? (
+                <section className="map-legend-panel rounded-xl border border-white/20 bg-black/55 p-3 backdrop-blur-md">
+                  {DECK_MARKER_LEGEND.map((section) => (
+                    <div key={section.title} className="map-legend-section">
+                      <p className="map-legend-heading">{section.title}</p>
+                      <div className="map-legend-items">
+                        {section.items.map(({ label, color, Icon }) => (
+                          <div key={label} className="map-legend-item" style={{ "--legend-accent": color } as React.CSSProperties}>
+                            <span className="map-legend-icon" aria-hidden>
+                              <Icon className="map-legend-icon-svg" />
+                            </span>
+                            <span className="map-legend-label">{label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </section>
               ) : null}
             </div>
 

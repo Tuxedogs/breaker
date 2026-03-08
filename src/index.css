@@ -2257,6 +2257,56 @@ body {
   scrollbar-width: thin;
 }
 
+.map-legend-panel {
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+}
+
+.map-legend-section + .map-legend-section {
+  margin-top: 0.85rem;
+}
+
+.map-legend-heading {
+  margin: 0 0 0.45rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(224, 242, 254, 0.92);
+}
+
+.map-legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--legend-accent);
+}
+
+.map-legend-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.map-legend-icon-svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.map-legend-label {
+  font-size: 0.73rem;
+  line-height: 1.15;
+  color: inherit;
+}
+
 .ship-viewer-shell {
   overflow: hidden;
   background: #02040a;
