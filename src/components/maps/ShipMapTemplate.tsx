@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Billboard, OrbitControls, Text, useTexture } from "@react-three/drei";
+import { Billboard, Html, OrbitControls, Text, useTexture } from "@react-three/drei";
 import {
   Box3,
   BufferAttribute,
@@ -26,6 +26,19 @@ import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import CTM from "../../lib/openctm/ctm.js";
+import {
+  CoolerIcon,
+  CrewQuartersIcon,
+  ElevatorIcon,
+  EngineerStationIcon,
+  LifeSupportIcon,
+  PowerPlantIcon,
+  QuantumDriveIcon,
+  RadarIcon,
+  ShieldGeneratorIcon,
+  TorpedoStationIcon,
+  TurretStationIcon,
+} from "../icons/DeckMarkerIcons";
 
 type CtmBody = {
   indices: Uint32Array;
@@ -107,6 +120,8 @@ type ShipMapDeckAnnotationConfig = {
   components: ShipMapDeckComponentAnnotation[];
   labels: ShipMapDeckLabelAnnotation[];
 };
+
+type DeckMarkerIconComponent = (props: { className?: string }) => React.JSX.Element;
 
 type DeckOverlayRegion = {
   key: string;
@@ -793,6 +808,21 @@ function DeckOverlayPlane({
   );
 }
 
+function resolveDeckMarkerIcon(annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation): DeckMarkerIconComponent | null {
+  if (annotation.id === "crew-quarters-section") return CrewQuartersIcon;
+  if (annotation.id === "elevator") return ElevatorIcon;
+  if (annotation.id === "torpedo-operator-terminal") return TorpedoStationIcon;
+  if (annotation.kind === "Main Turret") return TurretStationIcon;
+  if (annotation.kind === "Terminal") return EngineerStationIcon;
+  if (annotation.kind === "Power") return PowerPlantIcon;
+  if (annotation.kind === "Shield") return ShieldGeneratorIcon;
+  if (annotation.kind === "Cooler") return CoolerIcon;
+  if (annotation.kind === "Radar") return RadarIcon;
+  if (annotation.kind === "Quantum") return QuantumDriveIcon;
+  if (annotation.kind === "Life-Support") return LifeSupportIcon;
+  return null;
+}
+
 function DeckAnnotations({
   deck,
 }: {
@@ -810,6 +840,7 @@ function DeckAnnotations({
     <>
       {items.map((annotation) => {
         const [worldX, , worldZ] = annotation.worldPosition;
+        const MarkerIcon = resolveDeckMarkerIcon(annotation);
 
         return (
           <group key={annotation.id} position={[worldX, baseY, worldZ]}>
@@ -822,17 +853,28 @@ function DeckAnnotations({
               <meshBasicMaterial color={annotation.colorHint ?? "#93c5fd"} transparent opacity={0.96} />
             </mesh>
             <Billboard position={[0, stemHeight + chipHeight + 0.012, 0]} follow lockX={false} lockY={false} lockZ={false}>
-              <Text
-                fontSize={chipRadius * 0.95}
-                maxWidth={chipRadius * 4}
-                anchorX="center"
-                anchorY="middle"
-                color="#f8fafc"
-                outlineWidth={0.003}
-                outlineColor="#02040a"
-              >
-                {annotation.token ?? annotation.label}
-              </Text>
+              {MarkerIcon ? (
+                <Html center>
+                  <div
+                    className="deck-marker-icon-badge"
+                    style={{ "--marker-accent": annotation.colorHint ?? "#93c5fd" } as React.CSSProperties}
+                  >
+                    <MarkerIcon className="deck-marker-icon-svg" />
+                  </div>
+                </Html>
+              ) : (
+                <Text
+                  fontSize={chipRadius * 0.95}
+                  maxWidth={chipRadius * 4}
+                  anchorX="center"
+                  anchorY="middle"
+                  color="#f8fafc"
+                  outlineWidth={0.003}
+                  outlineColor="#02040a"
+                >
+                  {annotation.token ?? annotation.label}
+                </Text>
+              )}
             </Billboard>
           </group>
         );
