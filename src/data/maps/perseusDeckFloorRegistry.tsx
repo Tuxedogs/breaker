@@ -1,15 +1,26 @@
-import type { ComponentType, SVGProps } from "react";
-import CargoDeck from "../../assets/maps/decks/perseus/perseus_cargo.svg?react";
-import MidDeck from "../../assets/maps/decks/perseus/perseus_mid.svg?react";
-import TopDeck from "../../assets/maps/decks/perseus/perseus_top.svg?react";
-import cargoDeckUrl from "../../assets/maps/decks/perseus/perseus_cargo.svg";
-import midDeckUrl from "../../assets/maps/decks/perseus/perseus_mid.svg";
-import topDeckUrl from "../../assets/maps/decks/perseus/perseus_top.svg";
+import type { ComponentType, ReactElement, SVGProps } from "react";
+
+const cargoDeckUrl = "/images/maps/deckmaps/percy-cargo.png";
+const midDeckUrl = "/images/maps/deckmaps/percy-midDeck.png";
+const topDeckUrl = "/images/maps/deckmaps/percy-topDeck.png";
+
+function createDeckImageComponent(
+  href: string,
+  viewBox: [number, number],
+): ComponentType<SVGProps<SVGSVGElement>> {
+  return function DeckImageComponent(props): ReactElement {
+    return (
+      <svg viewBox={`0 0 ${viewBox[0]} ${viewBox[1]}`} xmlns="http://www.w3.org/2000/svg" {...props}>
+        <image href={href} x="0" y="0" width={viewBox[0]} height={viewBox[1]} preserveAspectRatio="xMidYMid meet" />
+      </svg>
+    );
+  };
+}
 
 export const decks = {
-  cargo: CargoDeck,
-  mid: MidDeck,
-  top: TopDeck,
+  cargo: createDeckImageComponent(cargoDeckUrl, [1506, 956]),
+  mid: createDeckImageComponent(midDeckUrl, [2063, 694]),
+  top: createDeckImageComponent(topDeckUrl, [980, 289]),
 } as const;
 
 export type DeckId = keyof typeof decks;

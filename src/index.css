@@ -711,12 +711,45 @@ body {
 
 .entry-icon-shell {
   position: relative;
+  overflow: visible;
   color: color-mix(in srgb, var(--route-accent) 58%, rgba(230, 244, 255, 0.9));
   border: 1px solid color-mix(in srgb, var(--route-accent) 36%, white 10%);
   background: color-mix(in srgb, var(--route-accent) 12%, rgba(255, 255, 255, 0.03));
   box-shadow:
     0 0 12px color-mix(in srgb, var(--route-accent) 20%, transparent),
     inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.entry-pilot-icon {
+  position: absolute;
+  left: 50%;
+  top: -0.75rem;
+  width: 5.75rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.entry-pilot-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.entry-crew-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5.25rem;
+  transform: translate(-50%, -52%);
+  pointer-events: none;
+}
+
+.entry-crew-icon svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
 }
 
 .entry-icon-shell::after {
@@ -2222,6 +2255,91 @@ body {
 
 .map-controls-panel-body {
   scrollbar-width: thin;
+}
+
+.ship-viewer-shell {
+  overflow: hidden;
+  background: #02040a;
+  isolation: isolate;
+}
+
+.ship-viewer-shell > .ship-viewer-bg,
+.ship-viewer-shell > .ship-viewer-grid,
+.ship-viewer-shell > .ship-backlight,
+.ship-viewer-shell > .ship-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ship-viewer-bg {
+  background:
+    radial-gradient(
+      circle at 55% 45%,
+      rgba(40, 90, 140, 0.35) 0%,
+      rgba(10, 20, 40, 0.55) 30%,
+      rgba(2, 4, 10, 0.95) 70%
+    ),
+    radial-gradient(circle at 20% 80%, rgba(0, 160, 255, 0.08), transparent 40%),
+    #02040a;
+}
+
+.ship-viewer-grid {
+  opacity: 0.25;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(120, 200, 255, 0.05) 0px,
+      rgba(120, 200, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 90px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(120, 200, 255, 0.05) 0px,
+      rgba(120, 200, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 90px
+    );
+}
+
+.ship-backlight {
+  background:
+    radial-gradient(
+      ellipse at var(--ship-x, 50%) var(--ship-y, 50%),
+      rgba(120, 200, 255, 0.25),
+      rgba(40, 100, 160, 0.18) 25%,
+      rgba(0, 0, 0, 0) 60%
+    );
+}
+
+.ship-backlight-large {
+  background:
+    radial-gradient(
+      ellipse at var(--ship-x, 50%) var(--ship-y, 50%),
+      rgba(120, 200, 255, 0.28),
+      rgba(50, 110, 170, 0.2) 35%,
+      rgba(0, 0, 0, 0) 70%
+    );
+}
+
+.ship-stars {
+  opacity: 0.35;
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.72) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 72% 34%, rgba(180, 220, 255, 0.62) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 35% 68%, rgba(255, 255, 255, 0.58) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 84% 76%, rgba(180, 220, 255, 0.54) 0 1px, transparent 1.4px),
+    radial-gradient(circle at 48% 12%, rgba(255, 255, 255, 0.48) 0 0.8px, transparent 1.2px),
+    radial-gradient(circle at 8% 58%, rgba(180, 220, 255, 0.4) 0 0.8px, transparent 1.2px);
+  background-size: 240px 240px, 320px 320px, 280px 280px, 360px 360px, 220px 220px, 300px 300px;
+  background-position: 0 0, 40px 20px, 20px 60px, 80px 40px, 10px 10px, 60px 30px;
+}
+
+.ship-viewer-shell .map-deck-viewport,
+.ship-viewer-shell .map-deck-viewport canvas {
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 640px) {

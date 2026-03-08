@@ -17,7 +17,9 @@ import {
   Object3D,
   Plane,
   PerspectiveCamera,
+  Raycaster,
   Vector3,
+  Vector2,
 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -785,11 +787,14 @@ export default function ShipMapTemplate({
   const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
   const [hoveredRegionKey, setHoveredRegionKey] = useState<string | null>(null);
   const [controlsOpen, setControlsOpen] = useState(true);
+  const [pickedTarget, setPickedTarget] = useState<[number, number, number] | null>(null);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const deckOverlayVisualProgressRef = useRef(0);
   const lastControlsSampleRef = useRef(0);
+  const pickRayRef = useRef(new Raycaster());
+  const pickPointerRef = useRef(new Vector2());
 
   const topDownHeight = useMemo(() => {
     const span = Math.max(deckBounds.max - deckBounds.min, 1);
@@ -820,6 +825,14 @@ export default function ShipMapTemplate({
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
   const activeDeckShadowTextureUri = useMemo(() => buildDeckShadowTextureDataUri(), []);
   const deckOverlayVisualActive = deckOverlayVisualProgress > 0.001;
+  const viewerBackdropStyle = useMemo(
+    () =>
+      ({
+        "--ship-x": "50%",
+        "--ship-y": "48%",
+      }) as React.CSSProperties,
+    [],
+  );
   const activeDeckCutY = useMemo(() => {
     if ((!sliceEnabled && !deckOverlayVisualActive) || !activeDeckOverlay) return null;
     return Math.min(deckBounds.max, activeDeckOverlay.deckMin + 0.02);
@@ -874,6 +887,36 @@ export default function ShipMapTemplate({
     } catch {
       setCopyStatus("Copy failed.");
     }
+  }
+
+  async function copyTargetJson() {
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(pickedTarget ?? currentView.target));
+      setCopyStatus("Target copied.");
+    } catch {
+      setCopyStatus("Copy failed.");
+    }
+  }
+
+  function handleViewportPick(event: React.MouseEvent<HTMLDivElement>) {
+    const canvas = canvasRef.current;
+    const camera = cameraRef.current;
+    if (!canvas || !camera) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    pickPointerRef.current.set(x, y);
+    pickRayRef.current.setFromCamera(pickPointerRef.current, camera);
+
+    const planeY = activeDeckOverlay?.deckMin ?? controlsRef.current?.target.y ?? 0;
+    const pickingPlane = new Plane(new Vector3(0, 1, 0), -planeY);
+    const hitPoint = new Vector3();
+
+    if (!pickRayRef.current.ray.intersectPlane(pickingPlane, hitPoint)) return;
+
+    setPickedTarget([round3(hitPoint.x), round3(hitPoint.y), round3(hitPoint.z)]);
   }
 
   function moveCameraTopDown() {
@@ -1087,8 +1130,18 @@ export default function ShipMapTemplate({
         ) : null}
 
         <article className="framework-modern-card framework-modern-card-ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
-          <div className="relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15 bg-[radial-gradient(circle_at_50%_25%,rgba(24,67,86,0.65),rgba(5,10,18,0.95)_62%)]">
-            <div className="map-deck-viewport relative h-full w-full overflow-hidden rounded-[1.2rem]">
+          <div
+            className="ship-viewer-shell relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15"
+            style={viewerBackdropStyle}
+          >
+            <div className="ship-viewer-bg rounded-[1.2rem]" />
+            <div className="ship-stars rounded-[1.2rem]" />
+            <div className="ship-viewer-grid rounded-[1.2rem]" />
+            <div className="ship-backlight ship-backlight-large rounded-[1.2rem]" />
+            <div
+              className="map-deck-viewport relative h-full w-full overflow-hidden rounded-[1.2rem]"
+              onClick={handleViewportPick}
+            >
               <Canvas
               dpr={[1, 1.5]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
@@ -1302,7 +1355,14 @@ export default function ShipMapTemplate({
                   {activeDeckOverlay ? <p>active floor: {activeDeckOverlay.title}</p> : null}
                   <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
                   <p>cam: [{currentView.position.join(", ")}]</p>
-                  <p>target: [{currentView.target.join(", ")}]</p>
+                  <button
+                    type="button"
+                    onClick={copyTargetJson}
+                    className="text-left text-slate-200 transition hover:text-cyan-100"
+                    title="Copy target coordinates"
+                  >
+                    target: [{(pickedTarget ?? currentView.target).join(", ")}]
+                  </button>
                   {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
                   {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
                 </div>
