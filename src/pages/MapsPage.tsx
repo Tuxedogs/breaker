@@ -26,6 +26,7 @@ export default function MapsPage() {
           deckMin: deck.deckMin,
           deckMax: mappedDeck?.deckMax ?? deckMax,
           svgPath: mappedDeck?.svgPath ?? deck.svgUrl,
+          annotations: mappedDeck?.annotations,
           viewBox: mappedDeck?.viewBox ?? deck.nativeViewBox,
           rotationDeg: deck.overlayAdjustments?.rotationDeg ?? 0,
           offsetY: deck.overlayAdjustments?.offsetY ?? 0,

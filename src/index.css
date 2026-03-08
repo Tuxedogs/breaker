@@ -2342,6 +2342,54 @@ body {
   z-index: 1;
 }
 
+.deck-annotation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.04rem;
+  max-width: 24px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--annotation-accent) 45%, rgba(255, 255, 255, 0.18));
+  background: rgba(3, 7, 18, 0.88);
+  padding: 0.01rem 0.04rem;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.34),
+    0 0 0 1px color-mix(in srgb, var(--annotation-accent) 14%, transparent);
+  white-space: nowrap;
+}
+
+.deck-annotation-component {
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--annotation-accent) 9%, rgba(255, 255, 255, 0.02)), rgba(2, 6, 16, 0.92)),
+    rgba(3, 7, 18, 0.88);
+}
+
+.deck-annotation-label {
+  background: rgba(3, 7, 18, 0.78);
+}
+
+.deck-annotation-icon {
+  display: inline-flex;
+  min-width: 0.32rem;
+  justify-content: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--annotation-accent) 18%, rgba(255, 255, 255, 0.04));
+  color: color-mix(in srgb, var(--annotation-accent) 72%, white 28%);
+  padding: 0.005rem 0.02rem;
+  font-size: 0.12rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.deck-annotation-meta {
+  display: none;
+  margin-left: 0;
+  font-size: 0.12rem;
+  letter-spacing: 0.01em;
+  color: rgba(191, 219, 254, 0.92);
+  text-transform: uppercase;
+}
+
 @media (max-width: 640px) {
   .map-controls-panel {
     top: auto;
