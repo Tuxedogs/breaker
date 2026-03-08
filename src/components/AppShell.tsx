@@ -70,6 +70,7 @@ export default function AppShell() {
   const [mobileSectionOpen, setMobileSectionOpen] = useState<MenuKey | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const isMapsRoute = location.pathname.startsWith("/maps");
+  const isHeroRoute = location.pathname === "/";
   const isShipsRoute = location.pathname.startsWith("/ships");
   const isSystemsRoute = location.pathname.startsWith("/systems");
   const isFrameworkNavActive =
@@ -77,10 +78,7 @@ export default function AppShell() {
     location.pathname === "/index" ||
     location.pathname === "/modules" ||
     location.pathname.startsWith("/module/");
-
-  function goToHero() {
-    sessionStorage.removeItem("ares:entered-framework");
-  }
+  const showHeader = !isHeroRoute;
 
   function closeAllMenus() {
     if (closeTimerRef.current !== null) {
@@ -131,13 +129,17 @@ export default function AppShell() {
     <div className="relative min-h-screen text-slate-100">
       <AppBackground />
 
-      <header className="fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 sm:px-6 lg:px-8">
+      <header
+        className={[
+          "fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 transition-opacity duration-500 sm:px-6 lg:px-8",
+          showHeader ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
+        ].join(" ")}
+      >
         <div className="px-3 py-2">
           <div className="flex items-center justify-between">
             <NavLink
-              to="/"
+              to="/framework"
               onClick={() => {
-                goToHero();
                 closeAllMenus();
               }}
               className="inline-flex h-11 items-center gap-3 rounded-md px-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70"
@@ -150,7 +152,7 @@ export default function AppShell() {
 
             <div className="hidden items-center gap-1 lg:flex">
               <NavLink
-                to="/"
+                to="/framework"
                 onClick={closeAllMenus}
                 className={({ isActive }) =>
                   [navItemClass, isActive ? "text-white" : ""].join(" ")
@@ -289,7 +291,7 @@ export default function AppShell() {
 
             <div className="flex items-center gap-2 lg:hidden">
               <NavLink
-                to="/"
+                to="/framework"
                 onClick={closeAllMenus}
                 className={({ isActive }) =>
                   [

@@ -29,7 +29,7 @@ export default function AppBackground() {
   const { pathname, search } = useLocation();
   const shipSlug = resolveShipSlug(pathname, search);
   const shipBackground = shipSlug ? shipBackgroundBySlug[shipSlug] : undefined;
-  const backgroundImage = shipBackground ? `url("${shipBackground}")` : 'url("/images/bg-states/starting.png")';
+  const backgroundImage = shipBackground ? `url("${shipBackground}")` : 'url("/images/bg-states/bloom.png")';
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
