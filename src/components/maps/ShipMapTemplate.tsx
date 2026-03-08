@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, OrbitControls, useTexture } from "@react-three/drei";
+import { Billboard, OrbitControls, Text, useTexture } from "@react-three/drei";
 import {
   Box3,
   BufferAttribute,
@@ -793,33 +793,6 @@ function DeckOverlayPlane({
   );
 }
 
-function annotationKindToken(kind: ShipMapDeckAnnotationKind): string {
-  switch (kind) {
-    case "Main Turret":
-      return "MT";
-    case "Terminal":
-      return "TRM";
-    case "Power":
-      return "PWR";
-    case "Shield":
-      return "SHD";
-    case "Cooler":
-      return "CLR";
-    case "Radar":
-      return "RDR";
-    case "Quantum":
-      return "QT";
-    case "Life-Support":
-      return "LIFE";
-    case "Ladder":
-      return "LDR";
-    case "Elevator":
-      return "ELV";
-    case "Cargo":
-      return "SEC";
-  }
-}
-
 function DeckAnnotations({
   deck,
 }: {
@@ -827,34 +800,40 @@ function DeckAnnotations({
 }) {
   if (!deck.annotations) return null;
 
-  const y = deck.deckMin + deck.annotations.fixedHeightAboveDeckMin;
+  const baseY = deck.deckMin;
+  const stemHeight = Math.max(deck.annotations.fixedHeightAboveDeckMin, 0.02);
+  const chipHeight = 0.012;
+  const chipRadius = Math.max(Math.min((deck.deckMax - deck.deckMin) * 0.06, 0.026), 0.014);
   const items = [...deck.annotations.components, ...deck.annotations.labels];
 
   return (
     <>
       {items.map((annotation) => {
         const [worldX, , worldZ] = annotation.worldPosition;
-        const [offsetX, offsetY] = annotation.screenOffset ?? [0, 0];
-        const pathingNote = annotation.pathing?.toLabels?.join(" • ");
 
         return (
-          <group key={annotation.id} position={[worldX, y, worldZ]}>
-            <Html center distanceFactor={12}>
-              <div
-                className={`deck-annotation deck-annotation-${annotation.annotationType}`}
-                style={
-                  {
-                    "--annotation-accent": annotation.colorHint ?? "#93c5fd",
-                    transform: `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`,
-                  } as React.CSSProperties
-                }
+          <group key={annotation.id} position={[worldX, baseY, worldZ]}>
+            <mesh position={[0, stemHeight * 0.5, 0]}>
+              <cylinderGeometry args={[0.0018, 0.0018, stemHeight, 10]} />
+              <meshBasicMaterial color={annotation.colorHint ?? "#93c5fd"} transparent opacity={0.82} />
+            </mesh>
+            <mesh position={[0, stemHeight + chipHeight * 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[chipRadius, 18]} />
+              <meshBasicMaterial color={annotation.colorHint ?? "#93c5fd"} transparent opacity={0.96} />
+            </mesh>
+            <Billboard position={[0, stemHeight + chipHeight + 0.012, 0]} follow lockX={false} lockY={false} lockZ={false}>
+              <Text
+                fontSize={chipRadius * 0.95}
+                maxWidth={chipRadius * 4}
+                anchorX="center"
+                anchorY="middle"
+                color="#f8fafc"
+                outlineWidth={0.003}
+                outlineColor="#02040a"
               >
-                <span className="deck-annotation-icon" aria-hidden>
-                  {annotation.token ?? annotationKindToken(annotation.kind)}
-                </span>
-                {pathingNote ? <span className="deck-annotation-meta">{pathingNote}</span> : null}
-              </div>
-            </Html>
+                {annotation.token ?? annotation.label}
+              </Text>
+            </Billboard>
           </group>
         );
       })}
