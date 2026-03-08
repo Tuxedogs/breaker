@@ -2384,10 +2384,34 @@ body {
 .deck-annotation-meta {
   display: none;
   margin-left: 0;
-  font-size: 0.12rem;
+  font-size: 2rem;
   letter-spacing: 0.01em;
   color: rgba(191, 219, 254, 0.92);
   text-transform: uppercase;
+}
+
+.deck-marker-icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.90rem;
+  height: 1.90rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--marker-accent) 50%, rgba(255, 255, 255, 0.16));
+  background:
+    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--marker-accent) 18%, rgba(255, 255, 255, 0.08)), rgba(2, 6, 16, 0.92)),
+    rgba(3, 7, 18, 0.88);
+  color: color-mix(in srgb, var(--marker-accent) 76%, white 24%);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.34),
+    0 0 0 1px color-mix(in srgb, var(--marker-accent) 16%, transparent);
+  overflow: hidden;
+}
+
+.deck-marker-icon-svg {
+  width: 1.85rem;
+  height: 1.85rem;
+  shape-rendering: geometricPrecision;
 }
 
 @media (max-width: 640px) {
