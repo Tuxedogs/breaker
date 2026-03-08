@@ -2258,6 +2258,8 @@ body {
 }
 
 .map-legend-panel {
+  width: fit-content;
+  max-width: 100%;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
 }
 
@@ -2267,7 +2269,7 @@ body {
 
 .map-legend-heading {
   margin: 0 0 0.45rem;
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2285,6 +2287,21 @@ body {
   align-items: center;
   gap: 0.45rem;
   color: var(--legend-accent);
+  cursor: pointer;
+  transition:
+    filter 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.map-legend-item:hover,
+.map-legend-item-active {
+  filter: brightness(1.08);
+  opacity: 1;
+}
+
+.map-legend-item-active {
+  transform: translateX(0.08rem);
 }
 
 .map-legend-icon {
@@ -2302,9 +2319,55 @@ body {
 }
 
 .map-legend-label {
-  font-size: 0.73rem;
+  font-size: 0.9rem;
   line-height: 1.15;
   color: inherit;
+}
+
+.map-legend-path-overlay {
+  pointer-events: none;
+}
+
+.map-legend-path-line {
+  fill: none;
+  stroke: var(--legend-path-accent, rgba(165, 243, 252, 0.92));
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 7 6;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--legend-path-accent, rgba(165, 243, 252, 0.92)) 55%, transparent));
+}
+
+.map-legend-path-hit-core {
+  fill: var(--legend-path-accent, rgba(165, 243, 252, 0.92));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--legend-path-accent, rgba(165, 243, 252, 0.92)) 70%, transparent));
+}
+
+.map-legend-path-hit-ring {
+  fill: none;
+  stroke: var(--legend-path-accent, rgba(165, 243, 252, 0.92));
+  stroke-width: 1.5;
+  opacity: 0.85;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: map-legend-hit-pulse 1.35s ease-out infinite;
+}
+
+@keyframes map-legend-hit-pulse {
+  0% {
+    opacity: 0.82;
+    transform: scale(0.72);
+  }
+
+  70% {
+    opacity: 0.22;
+    transform: scale(1.55);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
 }
 
 .ship-viewer-shell {
