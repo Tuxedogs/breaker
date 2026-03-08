@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import type { CSSProperties } from "react";
+import { FacingRadarIcon } from "./FacingRadarIcon";
 import { HelmetIcon } from "./HelmetIcon";
 import { SpaceshipIcon } from "./SpaceshipIcon";
 
@@ -49,13 +50,9 @@ function EntryVectorIcon({ kind }: { kind: RoutingCardIcon }) {
 
   if (kind === "threat") {
     return (
-      <svg viewBox="0 0 24 24" className={baseClass} aria-hidden>
-        <path {...strokeProps} d="M12 3.2a8.8 8.8 0 0 1 8.8 8.8" />
-        <path {...strokeProps} d="M12 6.4a5.6 5.6 0 0 1 5.6 5.6" />
-        <path {...strokeProps} d="M12 9.6a2.4 2.4 0 0 1 2.4 2.4" />
-        <path {...strokeProps} d="M4.2 18.6h5.2M4.2 21h9.3" />
-        <circle cx="12" cy="12" r="1.6" {...strokeProps} />
-      </svg>
+      <div className="entry-threat-icon" aria-hidden>
+        <FacingRadarIcon size={88} accentColor="#a78bfa" />
+      </div>
     );
   }
 
