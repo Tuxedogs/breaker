@@ -4,6 +4,7 @@ import {
   ThrusterFlame,
   MotionTrail,
 } from "./icons/IconStyleKit";
+import shipAssetUrl from "../assets/ARROWPNG.svg";
 
 interface SpaceshipIconProps {
   size?: number;
@@ -15,9 +16,6 @@ export function SpaceshipIcon({
   accentColor = "#164caf",
 }: SpaceshipIconProps) {
   const d = ids("ship");
-
-  // SVG path for the spaceship
-  const shipSVGPath = "/src/assets/ARROWPNG.svg";
 
   return (
     <svg
@@ -63,7 +61,7 @@ export function SpaceshipIcon({
       {/* ── Ship Hull SVG ── */}
       <g filter={`url(#${d.shipGlow})`}>
         <image
-          href={shipSVGPath}
+          href={shipAssetUrl}
           x="25" 
           y="10"
           width="150"
@@ -74,7 +72,7 @@ export function SpaceshipIcon({
 
       {/* ── Accent glow overlay on ship edges ── */}
       <image
-        href={shipSVGPath}
+        href={shipAssetUrl}
         x="25"
         y="10"
         width="150"
