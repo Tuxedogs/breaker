@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useTexture } from "@react-three/drei";
+import { Html, OrbitControls, useTexture } from "@react-three/drei";
 import {
   Box3,
   BufferAttribute,
@@ -55,6 +55,7 @@ type ShipMapDeckOverlay = {
   deckMin: number;
   deckMax: number;
   svgPath?: string;
+  annotations?: ShipMapDeckAnnotationConfig;
   viewBox: [number, number];
   rotationDeg?: number;
   offsetX?: number;
@@ -62,6 +63,49 @@ type ShipMapDeckOverlay = {
   scaleMultiplier?: number;
   widthMultiplier?: number;
   heightMultiplier?: number;
+};
+
+type ShipMapDeckAnnotationKind =
+  | "Main Turret"
+  | "Terminal"
+  | "Power"
+  | "Shield"
+  | "Cooler"
+  | "Radar"
+  | "Quantum"
+  | "Life-Support"
+  | "Ladder"
+  | "Elevator"
+  | "Cargo";
+
+type ShipMapDeckAnnotationPathing = {
+  connectsDeckIds: Array<"bottom" | "mid" | "top">;
+  toLabels?: string[];
+};
+
+type ShipMapDeckAnnotationBase = {
+  id: string;
+  label: string;
+  token?: string;
+  kind: ShipMapDeckAnnotationKind;
+  worldPosition: [number, number, number];
+  screenOffset?: [number, number];
+  colorHint?: string;
+  pathing?: ShipMapDeckAnnotationPathing;
+};
+
+type ShipMapDeckComponentAnnotation = ShipMapDeckAnnotationBase & {
+  annotationType: "component";
+};
+
+type ShipMapDeckLabelAnnotation = ShipMapDeckAnnotationBase & {
+  annotationType: "label";
+};
+
+type ShipMapDeckAnnotationConfig = {
+  fixedHeightAboveDeckMin: number;
+  components: ShipMapDeckComponentAnnotation[];
+  labels: ShipMapDeckLabelAnnotation[];
 };
 
 type DeckOverlayRegion = {
@@ -749,6 +793,75 @@ function DeckOverlayPlane({
   );
 }
 
+function annotationKindToken(kind: ShipMapDeckAnnotationKind): string {
+  switch (kind) {
+    case "Main Turret":
+      return "MT";
+    case "Terminal":
+      return "TRM";
+    case "Power":
+      return "PWR";
+    case "Shield":
+      return "SHD";
+    case "Cooler":
+      return "CLR";
+    case "Radar":
+      return "RDR";
+    case "Quantum":
+      return "QT";
+    case "Life-Support":
+      return "LIFE";
+    case "Ladder":
+      return "LDR";
+    case "Elevator":
+      return "ELV";
+    case "Cargo":
+      return "SEC";
+  }
+}
+
+function DeckAnnotations({
+  deck,
+}: {
+  deck: ShipMapDeckOverlay;
+}) {
+  if (!deck.annotations) return null;
+
+  const y = deck.deckMin + deck.annotations.fixedHeightAboveDeckMin;
+  const items = [...deck.annotations.components, ...deck.annotations.labels];
+
+  return (
+    <>
+      {items.map((annotation) => {
+        const [worldX, , worldZ] = annotation.worldPosition;
+        const [offsetX, offsetY] = annotation.screenOffset ?? [0, 0];
+        const pathingNote = annotation.pathing?.toLabels?.join(" • ");
+
+        return (
+          <group key={annotation.id} position={[worldX, y, worldZ]}>
+            <Html center distanceFactor={12} sprite>
+              <div
+                className={`deck-annotation deck-annotation-${annotation.annotationType}`}
+                style={
+                  {
+                    "--annotation-accent": annotation.colorHint ?? "#93c5fd",
+                    transform: `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`,
+                  } as React.CSSProperties
+                }
+              >
+                <span className="deck-annotation-icon" aria-hidden>
+                  {annotation.token ?? annotationKindToken(annotation.kind)}
+                </span>
+                {pathingNote ? <span className="deck-annotation-meta">{pathingNote}</span> : null}
+              </div>
+            </Html>
+          </group>
+        );
+      })}
+    </>
+  );
+}
+
 export default function ShipMapTemplate({
   title,
   subtitle,
@@ -1196,6 +1309,7 @@ export default function ShipMapTemplate({
                   renderOrder={41}
                 />
               ) : null}
+              {deckOverlayVisualActive && activeDeckOverlay && modelScene ? <DeckAnnotations deck={activeDeckOverlay} /> : null}
               {deckOverlayVisualActive && activeDeckOverlay && activeDeckRegionHighlightUri && modelScene ? (
                 <DeckOverlayPlane
                   deck={activeDeckOverlay}

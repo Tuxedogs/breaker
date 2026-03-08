@@ -42,6 +42,49 @@ export type DeckMapPieceOverlay = {
   heightMultiplier?: number;
 };
 
+export type DeckMapAnnotationKind =
+  | "Main Turret"
+  | "Terminal"
+  | "Power"
+  | "Shield"
+  | "Cooler"
+  | "Radar"
+  | "Quantum"
+  | "Life-Support"
+  | "Ladder"
+  | "Elevator"
+  | "Cargo";
+
+export type DeckMapAnnotationPathing = {
+  connectsDeckIds: Array<"bottom" | "mid" | "top">;
+  toLabels?: string[];
+};
+
+export type DeckMapAnnotationBase = {
+  id: string;
+  label: string;
+  token?: string;
+  kind: DeckMapAnnotationKind;
+  worldPosition: [number, number, number];
+  screenOffset?: [number, number];
+  colorHint?: string;
+  pathing?: DeckMapAnnotationPathing;
+};
+
+export type DeckMapComponentAnnotation = DeckMapAnnotationBase & {
+  annotationType: "component";
+};
+
+export type DeckMapLabelAnnotation = DeckMapAnnotationBase & {
+  annotationType: "label";
+};
+
+export type DeckMapAnnotationConfig = {
+  fixedHeightAboveDeckMin: number;
+  components: DeckMapComponentAnnotation[];
+  labels: DeckMapLabelAnnotation[];
+};
+
 export type DeckMapDeck = {
   id: string;
   name: string;
@@ -49,6 +92,7 @@ export type DeckMapDeck = {
   deckMax: number;
   svgPath?: string;
   pieceOverlays?: DeckMapPieceOverlay[];
+  annotations?: DeckMapAnnotationConfig;
   viewBox: [number, number];
   icons: DeckMapIcon[];
   labels: DeckMapLabel[];
