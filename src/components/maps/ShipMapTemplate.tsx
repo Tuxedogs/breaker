@@ -949,9 +949,7 @@ function isExteriorMarkerVisible(annotation: ShipMapDeckComponentAnnotation | Sh
 function getTraceStateForAnnotation(
   annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation,
 ): DeckMarkerTraceState | null {
-  const matchingLegendItem = DECK_MARKER_LEGEND.flatMap((section) => section.items).find((item) =>
-    item.annotationIds.includes(annotation.id),
-  );
+  const matchingLegendItem = DECK_MARKER_LEGEND.flatMap((section) => section.items).find((item) => item.annotationIds.includes(annotation.id));
   if (!matchingLegendItem) return null;
 
   return {
@@ -960,6 +958,12 @@ function getTraceStateForAnnotation(
     color: matchingLegendItem.color,
     startAnnotationId: annotation.id,
   };
+}
+
+function getLegendItemForAnnotation(
+  annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation,
+): DeckMarkerLegendItem | null {
+  return DECK_MARKER_LEGEND.flatMap((section) => section.items).find((item) => item.annotationIds.includes(annotation.id)) ?? null;
 }
 
 function getAnnotationWorldPosition(
@@ -1034,6 +1038,7 @@ function DeckAnnotations({
         const isTraceActive = activeTraceAnnotationIds?.includes(annotation.id) ?? false;
         const markerColor = isTraceActive ? "#f8fafc" : annotation.colorHint ?? "#93c5fd";
         const markerOpacity = isTraceActive ? 1 : 0.96;
+        const handleAnnotationSelect = () => onAnnotationClick?.(annotation);
 
         return (
           <group
@@ -1043,7 +1048,7 @@ function DeckAnnotations({
             onPointerLeave={() => onAnnotationLeave?.()}
             onClick={(event) => {
               event.stopPropagation();
-              onAnnotationClick?.(annotation);
+              handleAnnotationSelect();
             }}
           >
             <mesh position={[0, stemHeight * 0.5, 0]} renderOrder={70}>
@@ -1060,6 +1065,10 @@ function DeckAnnotations({
                   <div
                     className={`deck-marker-icon-badge ${isTraceActive ? "deck-marker-icon-badge-active" : ""}`}
                     style={{ "--marker-accent": markerColor } as React.CSSProperties}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleAnnotationSelect();
+                    }}
                   >
                     <MarkerIcon className="deck-marker-icon-svg" />
                   </div>
@@ -1711,11 +1720,30 @@ export default function ShipMapTemplate({
                     setHoveredMarkerTrace(null);
                   }}
                   onAnnotationClick={(annotation) => {
+                    const matchingLegendItem = getLegendItemForAnnotation(annotation);
+                    setHoveredLegendKey(null);
+                    setHoveredMarkerTrace(null);
+                    if (matchingLegendItem) {
+                      setSelectedAnnotationTraces([]);
+                      setSelectedLegendTraces((current) =>
+                        current.some((trace) => trace.key === matchingLegendItem.key)
+                          ? current.filter((trace) => trace.key !== matchingLegendItem.key)
+                          : [
+                              ...current,
+                              {
+                                key: matchingLegendItem.key,
+                                label: matchingLegendItem.label,
+                                color: matchingLegendItem.color,
+                                annotationIds: matchingLegendItem.annotationIds,
+                              },
+                            ],
+                      );
+                      return;
+                    }
+
                     const nextTrace = getTraceStateForAnnotation(annotation);
                     const nextColor = nextTrace?.color ?? annotation.colorHint ?? "#93c5fd";
                     setSelectedLegendTraces([]);
-                    setHoveredLegendKey(null);
-                    setHoveredMarkerTrace(null);
                     setSelectedAnnotationTraces((current) =>
                       current.some((entry) => entry.id === annotation.id)
                         ? current.filter((entry) => entry.id !== annotation.id)
