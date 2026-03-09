@@ -67,7 +67,7 @@ export const perseusDeckFloors: DeckFloorDefinition[] = [
     svgUrl: midDeckUrl,
     overlayAdjustments: {
       rotationDeg: 90,
-      offsetX: 0.069,
+      offsetX: 0.030,
       offsetZ: 0.2,
       scaleMultiplier: 1,
     },
