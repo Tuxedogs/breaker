@@ -138,7 +138,7 @@ export default function AppShell() {
         <div className="px-3 py-2">
           <div className="flex items-center justify-between">
             <NavLink
-              to="/framework"
+              to="/"
               onClick={() => {
                 closeAllMenus();
               }}
