@@ -1895,6 +1895,8 @@ export default function ShipMapTemplate({
                             }}
                             className={`map-legend-item ${activeLegendKey === key ? "map-legend-item-active" : ""}`}
                             style={{ "--legend-accent": color } as React.CSSProperties}
+                            title={label}
+                            aria-label={label}
                             onMouseEnter={() => {
                               if (selectedLegendTraces.length === 0 && selectedAnnotationIds.length === 0) setHoveredLegendKey(key);
                             }}
@@ -1936,7 +1938,7 @@ export default function ShipMapTemplate({
                     </div>
                   ))}
                   {selectedAnnotationTraces.length > 0 ? (
-                    <div className="map-legend-section">
+                    <div className="map-legend-section map-legend-section-selected">
                       <p className="map-legend-heading">Selected</p>
                       <div className="map-legend-items">
                         {selectedAnnotationTraces.map((trace) => (
@@ -1964,7 +1966,7 @@ export default function ShipMapTemplate({
             </div>
 
             <aside
-              className={`map-controls-panel absolute bottom-4 right-4 z-10 flex max-h-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl border border-white/20 bg-black/60 backdrop-blur-md transition ${
+              className={`map-controls-panel absolute bottom-4 right-4 z-10 hidden max-h-[calc(100%-2rem)] flex-col overflow-hidden rounded-xl border border-white/20 bg-black/60 backdrop-blur-md transition sm:flex ${
                 controlsOpen ? "w-[min(340px,calc(100%-2rem))]" : "w-auto"
               }`}
             >
