@@ -1835,7 +1835,12 @@ export default function ShipMapTemplate({
                     <div key={section.title} className="map-legend-section">
                       <p className="map-legend-heading">{section.title}</p>
                       <div className="map-legend-items">
-                        {section.items.map(({ key, label, color, Icon }) => (
+                        {section.items.map(({ key, label, color, Icon, annotationIds }) => {
+                          const isSelected =
+                            pinnedLegendKey === key ||
+                            annotationIds.some((annotationId) => selectedAnnotationIds.includes(annotationId));
+
+                          return (
                           <div
                             key={label}
                             ref={(node) => {
@@ -1860,9 +1865,24 @@ export default function ShipMapTemplate({
                               <Icon className="map-legend-icon-svg" />
                             </span>
                             <span className="map-legend-label">{label}</span>
+                            <span className={`map-legend-select-box ${isSelected ? "map-legend-select-box-filled" : ""}`} aria-hidden />
                           </div>
-                        ))}
+                        )})}
                       </div>
+                      {section.title === "Navigation" ? (
+                        <button
+                          type="button"
+                          className="map-legend-reset"
+                          onClick={() => {
+                            setPinnedLegendKey(null);
+                            setHoveredLegendKey(null);
+                            setHoveredMarkerTrace(null);
+                            setSelectedAnnotationTraces([]);
+                          }}
+                        >
+                          Reset Selection
+                        </button>
+                      ) : null}
                     </div>
                   ))}
                   {selectedAnnotationTraces.length > 0 ? (
