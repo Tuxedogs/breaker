@@ -119,6 +119,7 @@ type ShipMapDeckLabelAnnotation = ShipMapDeckAnnotationBase & {
 
 type ShipMapDeckAnnotationConfig = {
   fixedHeightAboveDeckMin: number;
+  worldOffset?: [number, number, number];
   components: ShipMapDeckComponentAnnotation[];
   labels: ShipMapDeckLabelAnnotation[];
 };
@@ -128,8 +129,17 @@ type LegendItemKey =
   | "power"
   | "radar"
   | "shield"
-  | "quantum";
+  | "quantum"
+  | "cooler"
+  | "crew-quarters"
+  | "main-turret"
+  | "torpedo-terminal"
+  | "engineer-terminal"
+  | "elevators"
+  | "ladders"
+  | "armory";
 type ScreenPoint = { x: number; y: number };
+type ScreenPath = { points: ScreenPoint[]; color: string };
 type DeckMarkerTraceState = {
   key: string;
   annotationIds: readonly string[];
@@ -161,6 +171,24 @@ const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
       { key: "shield", label: "Shield Generators", color: "#06a7bd", Icon: ShieldGeneratorIcon, annotationIds: ["shield-generator-1", "shield-generator-2"] },
       { key: "quantum", label: "Quantum Drive", color: "#911696", Icon: QuantumDriveIcon, annotationIds: ["qt-drive"] },
       { key: "radar", label: "Radar", color: "#1ed10e", Icon: RadarIcon, annotationIds: ["radar"] },
+      { key: "cooler", label: "Coolers", color: "#93c5fd", Icon: CoolerIcon, annotationIds: ["cooler-1", "cooler-2"] },
+      { key: "crew-quarters", label: "Crew Quarters", color: "#e2e8f0", Icon: CrewQuartersIcon, annotationIds: ["crew-quarters-section"] },
+    ],
+  },
+  {
+    title: "Crew Stations",
+    items: [
+      { key: "main-turret", label: "Main Turret", color: "#f50b0b", Icon: TurretStationIcon, annotationIds: ["gun-01"] },
+      { key: "torpedo-terminal", label: "Torpedo Terminal", color: "#f50b0b", Icon: TorpedoStationIcon, annotationIds: ["torpedo-operator-terminal"] },
+      { key: "engineer-terminal", label: "Engineer Terminals", color: "#67a1f9", Icon: EngineeringTerminalIcon, annotationIds: ["engineer-terminal-1", "engineer-terminal-2"] },
+    ],
+  },
+  {
+    title: "Navigation",
+    items: [
+      { key: "elevators", label: "Elevator", color: "#01ffd5", Icon: ElevatorIcon, annotationIds: ["elevator"] },
+      { key: "ladders", label: "Ladders", color: "#01ffd5", Icon: LadderIcon, annotationIds: ["main-ladder", "secondary-ladder-port", "secondary-ladder-starboard"] },
+      { key: "armory", label: "Armory", color: "#fca5a5", Icon: ArmoryIcon, annotationIds: ["armory-section"] },
     ],
   },
 ];
@@ -928,6 +956,40 @@ function getTraceStateForAnnotation(
   };
 }
 
+function getAnnotationWorldPosition(
+  annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation,
+  annotations?: ShipMapDeckAnnotationConfig,
+): [number, number, number] {
+  const offset = annotations?.worldOffset ?? [0, 0, 0];
+  return [
+    annotation.worldPosition[0] + offset[0],
+    annotation.worldPosition[1] + offset[1],
+    annotation.worldPosition[2] + offset[2],
+  ];
+}
+
+function getVisibleLegendSections(
+  deck: ShipMapDeckOverlay | null,
+  showInterior: boolean,
+): DeckMarkerLegendSection[] {
+  const exteriorKeys = new Set<LegendItemKey>(["power", "shield", "quantum"]);
+  if (!showInterior) {
+    return DECK_MARKER_LEGEND.map((section) => ({
+      ...section,
+      items: section.items.filter((item) => exteriorKeys.has(item.key)),
+    })).filter((section) => section.items.length > 0);
+  }
+
+  const annotationIds = new Set<string>();
+  deck?.annotations?.components.forEach((annotation) => annotationIds.add(annotation.id));
+  deck?.annotations?.labels.forEach((annotation) => annotationIds.add(annotation.id));
+
+  return DECK_MARKER_LEGEND.map((section) => ({
+    ...section,
+    items: section.items.filter((item) => item.annotationIds.some((id) => annotationIds.has(id))),
+  })).filter((section) => section.items.length > 0);
+}
+
 function getDefaultDeckOverlayId(deckOverlayConfig?: ShipMapDeckOverlayConfig): string {
   if (!deckOverlayConfig?.decks.length) return "";
   return deckOverlayConfig.decks.find((deck) => deck.id.toLowerCase().includes("mid"))?.id ?? deckOverlayConfig.decks[0].id;
@@ -950,12 +1012,10 @@ function DeckAnnotations({
 }) {
   if (!deck.annotations) return null;
 
-  const baseY = showExteriorSubsetOnly ? deck.deckMax + 0.12 : deck.deckMin;
-  const stemHeight = showExteriorSubsetOnly ? 0.11 : Math.max(deck.annotations.fixedHeightAboveDeckMin, 0.02);
-  const chipHeight = showExteriorSubsetOnly ? 0.02 : 0.012;
-  const chipRadius = showExteriorSubsetOnly
-    ? 0.022
-    : Math.max(Math.min((deck.deckMax - deck.deckMin) * 0.06, 0.026), 0.014);
+  const baseY = deck.deckMin;
+  const stemHeight = Math.max(deck.annotations.fixedHeightAboveDeckMin, 0.02);
+  const chipHeight = 0.012;
+  const chipRadius = Math.max(Math.min((deck.deckMax - deck.deckMin) * 0.06, 0.026), 0.014);
   const items = [...deck.annotations.components, ...deck.annotations.labels].filter((annotation) =>
     showExteriorSubsetOnly ? isExteriorMarkerVisible(annotation) : true,
   );
@@ -963,7 +1023,7 @@ function DeckAnnotations({
   return (
     <>
       {items.map((annotation) => {
-        const [worldX, , worldZ] = annotation.worldPosition;
+        const [worldX, , worldZ] = getAnnotationWorldPosition(annotation, deck.annotations);
         const MarkerIcon = resolveDeckMarkerIcon(annotation);
         const isTraceActive = activeTraceAnnotationIds?.includes(annotation.id) ?? false;
         const markerColor = isTraceActive ? "#f8fafc" : annotation.colorHint ?? "#93c5fd";
@@ -1043,8 +1103,7 @@ export default function ShipMapTemplate({
   const [pinnedLegendKey, setPinnedLegendKey] = useState<LegendItemKey | null>(null);
   const [hoveredMarkerTrace, setHoveredMarkerTrace] = useState<DeckMarkerTraceState | null>(null);
   const [selectedAnnotationTraces, setSelectedAnnotationTraces] = useState<SelectedAnnotationTrace[]>([]);
-  const [legendPathPoints, setLegendPathPoints] = useState<ScreenPoint[]>([]);
-  const [legendPathColor, setLegendPathColor] = useState<string | null>(null);
+  const [legendPaths, setLegendPaths] = useState<ScreenPath[]>([]);
   const [suggestedScale, setSuggestedScale] = useState<number | null>(null);
   const [sliceEnabled, setSliceEnabled] = useState(false);
   const [deckBounds, setDeckBounds] = useState<{ min: number; max: number }>({ min: -1, max: 1 });
@@ -1067,6 +1126,7 @@ export default function ShipMapTemplate({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const viewerShellRef = useRef<HTMLDivElement | null>(null);
   const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const selectedItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const deckOverlayVisualProgressRef = useRef(0);
   const lastControlsSampleRef = useRef(0);
   const pickRayRef = useRef(new Raycaster());
@@ -1081,6 +1141,28 @@ export default function ShipMapTemplate({
     () => deckOverlayConfig?.decks.find((deck) => deck.id === activeDeckOverlayId) ?? null,
     [deckOverlayConfig, activeDeckOverlayId],
   );
+  const exteriorDeckOverlay = useMemo<ShipMapDeckOverlay | null>(() => {
+    if (!deckOverlayConfig?.decks.length) return null;
+    const sourceDecks = deckOverlayConfig.decks.filter((deck) => deck.annotations);
+    if (sourceDecks.length === 0) return null;
+
+    const components = sourceDecks.flatMap((deck) => deck.annotations?.components ?? []).filter(isExteriorMarkerVisible);
+    const labels = sourceDecks.flatMap((deck) => deck.annotations?.labels ?? []).filter(isExteriorMarkerVisible);
+    const baseDeck =
+      deckOverlayConfig.decks.find((deck) => deck.id.toLowerCase().includes("mid") && deck.annotations) ??
+      activeDeckOverlay ??
+      sourceDecks[0];
+    return {
+      ...baseDeck,
+      annotations: {
+        fixedHeightAboveDeckMin: sourceDecks[0].annotations?.fixedHeightAboveDeckMin ?? 0.02,
+        worldOffset: sourceDecks[0].annotations?.worldOffset,
+        components,
+        labels,
+      },
+    };
+  }, [activeDeckOverlay, deckOverlayConfig]);
+  const interactiveDeckOverlay = deckOverlayEnabled ? activeDeckOverlay : exteriorDeckOverlay;
   const activeLegendKey = pinnedLegendKey ?? hoveredLegendKey;
   const activeLegendItem = useMemo(
     () => DECK_MARKER_LEGEND.flatMap((section) => section.items).find((item) => item.key === activeLegendKey) ?? null,
@@ -1142,6 +1224,10 @@ export default function ShipMapTemplate({
     activeTrace?.annotationIds.forEach((id) => ids.add(id));
     return [...ids];
   }, [activeTrace, selectedAnnotationIds]);
+  const visibleLegendSections = useMemo(
+    () => getVisibleLegendSections(interactiveDeckOverlay, deckOverlayEnabled),
+    [interactiveDeckOverlay, deckOverlayEnabled],
+  );
   const lowerHullClippingPlanes = useMemo(() => {
     if (activeDeckCutY === null) return [];
     return [new Plane(new Vector3(0, -1, 0), activeDeckCutY)];
@@ -1158,41 +1244,46 @@ export default function ShipMapTemplate({
   }, [activeDeckOverlayId, deckOverlayConfig]);
 
   useEffect(() => {
-    if (!activeDeckOverlay?.annotations) {
-      setLegendPathPoints([]);
-      setLegendPathColor(null);
+    if (!interactiveDeckOverlay?.annotations) {
+      setLegendPaths([]);
       return;
     }
 
     const viewerShell = viewerShellRef.current;
     const camera = cameraRef.current;
     if (!viewerShell || !camera) {
-      setLegendPathPoints([]);
-      setLegendPathColor(null);
+      setLegendPaths([]);
       return;
     }
 
     const overlayBounds = viewerShell.getBoundingClientRect();
-    const y = activeDeckOverlay.deckMin + Math.max(activeDeckOverlay.annotations.fixedHeightAboveDeckMin, 0.02) + 0.012;
-    const allAnnotations = [...activeDeckOverlay.annotations.components, ...activeDeckOverlay.annotations.labels];
+    const y = interactiveDeckOverlay.deckMin + Math.max(interactiveDeckOverlay.annotations.fixedHeightAboveDeckMin, 0.02) + 0.012;
+    const allAnnotations = [...interactiveDeckOverlay.annotations.components, ...interactiveDeckOverlay.annotations.labels];
 
     if (selectedAnnotationIds.length > 0) {
-      const selectedPoints = selectedAnnotationIds
-        .map((annotationId) => allAnnotations.find((annotation) => annotation.id === annotationId) ?? null)
-        .filter((annotation): annotation is ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation => annotation !== null)
-        .map((annotation) =>
-          projectWorldPointToOverlay(new Vector3(annotation.worldPosition[0], y, annotation.worldPosition[2]), camera, overlayBounds),
-        )
-        .filter((point): point is ScreenPoint => point !== null);
+      const selectedScreenPaths = selectedAnnotationTraces
+        .map((trace) => {
+          const annotation = allAnnotations.find((item) => item.id === trace.id);
+          if (!annotation) return null;
+          const [worldX, , worldZ] = getAnnotationWorldPosition(annotation, interactiveDeckOverlay.annotations);
+          const targetPoint = projectWorldPointToOverlay(new Vector3(worldX, y, worldZ), camera, overlayBounds);
+          const sourceElement = selectedItemRefs.current[trace.id];
+          if (!targetPoint || !sourceElement) return null;
+          const sourceBounds = sourceElement.getBoundingClientRect();
+          const sourcePoint = {
+            x: sourceBounds.right - overlayBounds.left,
+            y: sourceBounds.top - overlayBounds.top + sourceBounds.height * 0.5,
+          };
+          return { points: [sourcePoint, targetPoint], color: trace.color };
+        })
+        .filter((path): path is ScreenPath => path !== null);
 
-      setLegendPathPoints(selectedPoints);
-      setLegendPathColor(selectedAnnotationTraces.at(-1)?.color ?? null);
+      setLegendPaths(selectedScreenPaths);
       return;
     }
 
     if (!activeTrace) {
-      setLegendPathPoints([]);
-      setLegendPathColor(null);
+      setLegendPaths([]);
       return;
     }
 
@@ -1200,8 +1291,9 @@ export default function ShipMapTemplate({
 
     const projectedById = new Map<string, ScreenPoint>();
     for (const annotation of matchingAnnotations) {
+      const [worldX, , worldZ] = getAnnotationWorldPosition(annotation, interactiveDeckOverlay.annotations);
       const projected = projectWorldPointToOverlay(
-        new Vector3(annotation.worldPosition[0], y, annotation.worldPosition[2]),
+        new Vector3(worldX, y, worldZ),
         camera,
         overlayBounds,
       );
@@ -1211,8 +1303,7 @@ export default function ShipMapTemplate({
     }
 
     if (projectedById.size === 0) {
-      setLegendPathPoints([]);
-      setLegendPathColor(null);
+      setLegendPaths([]);
       return;
     }
 
@@ -1232,8 +1323,7 @@ export default function ShipMapTemplate({
     }
 
     if (!startPoint) {
-      setLegendPathPoints([]);
-      setLegendPathColor(null);
+      setLegendPaths([]);
       return;
     }
 
@@ -1242,9 +1332,8 @@ export default function ShipMapTemplate({
       .map((annotation) => projectedById.get(annotation.id) ?? null)
       .filter((point): point is ScreenPoint => point !== null);
 
-    setLegendPathPoints([startPoint, ...chainLegendPath(startPoint, chainedPoints)]);
-    setLegendPathColor(activeTrace.color);
-  }, [activeDeckOverlay, activeLegendKey, activeTrace, currentView, selectedAnnotationIds, selectedAnnotationTraces]);
+    setLegendPaths([{ points: [startPoint, ...chainLegendPath(startPoint, chainedPoints)], color: activeTrace.color }]);
+  }, [interactiveDeckOverlay, activeLegendKey, activeTrace, currentView, selectedAnnotationIds, selectedAnnotationTraces]);
 
   function handleControlsChange() {
     const now = performance.now();
@@ -1597,9 +1686,9 @@ export default function ShipMapTemplate({
                   renderOrder={41}
                 />
               ) : null}
-              {activeDeckOverlay && modelScene ? (
+              {interactiveDeckOverlay && modelScene ? (
                 <DeckAnnotations
-                  deck={activeDeckOverlay}
+                  deck={interactiveDeckOverlay}
                   showExteriorSubsetOnly={!deckOverlayVisualActive}
                   activeTraceAnnotationIds={activeAnnotationIds}
                   onAnnotationHover={(annotation) => {
@@ -1646,22 +1735,25 @@ export default function ShipMapTemplate({
               </Canvas>
             </div>
 
-            {legendPathPoints.length > 1 ? (
+            {legendPaths.some((path) => path.points.length > 1) ? (
               <svg
                 className="map-legend-path-overlay absolute inset-0 z-10"
                 viewBox={`0 0 ${Math.max(viewerShellRef.current?.clientWidth ?? 0, 1)} ${Math.max(viewerShellRef.current?.clientHeight ?? 0, 1)}`}
                 preserveAspectRatio="none"
                 aria-hidden
               >
-                <polyline
-                  points={legendPathPoints.map((point) => `${point.x},${point.y}`).join(" ")}
-                  className="map-legend-path-line"
-                  style={{ "--legend-path-accent": legendPathColor ?? "#a5f3fc" } as React.CSSProperties}
-                />
-                {legendPathPoints.slice(1).map((point, index) => (
-                  <g key={`${point.x}-${point.y}-${index}`} style={{ "--legend-path-accent": legendPathColor ?? "#a5f3fc" } as React.CSSProperties}>
-                    <circle cx={point.x} cy={point.y} r="9.5" className="map-legend-path-hit-core" />
-                    <circle cx={point.x} cy={point.y} r="12.5" className="map-legend-path-hit-ring" />
+                {legendPaths.map((path, pathIndex) => (
+                  <g key={`${path.color}-${pathIndex}`} style={{ "--legend-path-accent": path.color } as React.CSSProperties}>
+                    <polyline
+                      points={path.points.map((point) => `${point.x},${point.y}`).join(" ")}
+                      className="map-legend-path-line"
+                    />
+                    {path.points.slice(1).map((point, index) => (
+                      <g key={`${point.x}-${point.y}-${index}`}>
+                        <circle cx={point.x} cy={point.y} r="9.5" className="map-legend-path-hit-core" />
+                        <circle cx={point.x} cy={point.y} r="12.5" className="map-legend-path-hit-ring" />
+                      </g>
+                    ))}
                   </g>
                 ))}
               </svg>
@@ -1739,7 +1831,7 @@ export default function ShipMapTemplate({
 
               {hasDeckOverlay ? (
                 <section className="map-legend-panel rounded-xl border border-white/20 bg-black/55 p-3 backdrop-blur-md">
-                  {DECK_MARKER_LEGEND.map((section) => (
+                  {visibleLegendSections.map((section) => (
                     <div key={section.title} className="map-legend-section">
                       <p className="map-legend-heading">{section.title}</p>
                       <div className="map-legend-items">
@@ -1781,6 +1873,9 @@ export default function ShipMapTemplate({
                           <button
                             key={trace.id}
                             type="button"
+                            ref={(node) => {
+                              selectedItemRefs.current[trace.id] = node;
+                            }}
                             className="map-legend-item map-legend-item-active w-full border-0 bg-transparent p-0 text-left"
                             style={{ "--legend-accent": trace.color } as React.CSSProperties}
                             onClick={() => {
