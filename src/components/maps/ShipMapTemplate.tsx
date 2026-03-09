@@ -1143,7 +1143,7 @@ export default function ShipMapTemplate({
   const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const selectedItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const deckOverlayVisualProgressRef = useRef(0);
-  const lastControlsSampleRef = useRef(0);
+  const controlsFrameRef = useRef<number | null>(null);
   const pickRayRef = useRef(new Raycaster());
   const pickPointerRef = useRef(new Vector2());
 
@@ -1356,16 +1356,16 @@ export default function ShipMapTemplate({
   }, [interactiveDeckOverlay, activeLegendKey, activeTrace, currentView, selectedAnnotationIds, selectedAnnotationTraces]);
 
   function handleControlsChange() {
-    const now = performance.now();
-    if (now - lastControlsSampleRef.current < 80) return;
-    lastControlsSampleRef.current = now;
-
-    const controls = controlsRef.current;
-    if (!controls) return;
-    const camera = controls.object;
-    setCurrentView({
-      position: [round3(camera.position.x), round3(camera.position.y), round3(camera.position.z)],
-      target: [round3(controls.target.x), round3(controls.target.y), round3(controls.target.z)],
+    if (controlsFrameRef.current !== null) return;
+    controlsFrameRef.current = window.requestAnimationFrame(() => {
+      controlsFrameRef.current = null;
+      const controls = controlsRef.current;
+      if (!controls) return;
+      const camera = controls.object;
+      setCurrentView({
+        position: [round3(camera.position.x), round3(camera.position.y), round3(camera.position.z)],
+        target: [round3(controls.target.x), round3(controls.target.y), round3(controls.target.z)],
+      });
     });
   }
 
@@ -1529,6 +1529,14 @@ export default function ShipMapTemplate({
       disposeModelSceneInstance(lowerHullGhostScene);
     };
   }, [lowerHullGhostScene]);
+
+  useEffect(() => {
+    return () => {
+      if (controlsFrameRef.current !== null) {
+        window.cancelAnimationFrame(controlsFrameRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!hasDeckOverlay || !activeDeckOverlay) return;
