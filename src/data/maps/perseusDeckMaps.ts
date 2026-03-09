@@ -39,6 +39,7 @@ export type PerseusDeckLabelAnnotation = PerseusDeckAnnotationBase & {
 
 export type PerseusDeckAnnotationConfig = {
   fixedHeightAboveDeckMin: number;
+  worldOffset?: [number, number, number];
   components: PerseusDeckComponentAnnotation[];
   labels: PerseusDeckLabelAnnotation[];
 };
@@ -85,6 +86,7 @@ export const perseusMidDeckPieceOverlays: DeckMapPieceOverlay[] = [
 
 export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
   fixedHeightAboveDeckMin: 0.02,
+  worldOffset: [0, 0, 0],
   components: [
     {
       id: "gun-01",
@@ -92,7 +94,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Gun 01",
       token: "Gun 01",
       kind: "Main Turret",
-      worldPosition: [0.043,-0.052,-1.42],
+      worldPosition: [0.013,-0.052,-1.42],
       colorHint: "#f50b0b",
     },
     {
@@ -101,7 +103,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Engineer Terminal 1",
       token: "ENG TRM",
       kind: "Terminal",
-      worldPosition: [-0.134, -0.052, -0.794],
+      worldPosition: [-0.154, -0.052, -0.794],
       colorHint: "#67a1f9",
     },
     {
@@ -110,7 +112,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Torpedo Operator Terminal",
       token: "TORP TRM",
       kind: "Terminal",
-      worldPosition: [0.212,-0.052,-0.785],
+      worldPosition: [0.170,-0.052,-0.785],
       colorHint: "#f50b0b",
     },
     {
@@ -119,7 +121,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Power Plant 1",
       token: "PWR",
       kind: "Power",
-      worldPosition: [0.358,-0.052,-0.43],
+      worldPosition: [0.318,-0.052,-0.43],
       colorHint: "#f59e0b",
     },
     {
@@ -128,7 +130,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Cooler 1",
       token: "CLR",
       kind: "Cooler",
-      worldPosition: [-0.265, -0.052, -0.42],
+      worldPosition: [-0.295, -0.052, -0.42],
       colorHint: "#93c5fd",
     },
     {
@@ -137,7 +139,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Shield Generator 1",
       token: "SHD",
       kind: "Shield",
-      worldPosition: [0.138, -0.052, -1.078],
+      worldPosition: [0.108, -0.052, -1.0999],
       colorHint: "#06a7bd",
     },
     {
@@ -146,7 +148,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Power Plant 2",
       token: "PWR",
       kind: "Power",
-      worldPosition: [0.307, -0.052, 1.526],
+      worldPosition: [0.267, -0.052, 1.526],
       colorHint: "#f59e0b",
     },
     {
@@ -155,7 +157,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Shield Generator 2",
       token: "Shield",
       kind: "Shield",
-      worldPosition: [0.32,-0.052,1.70],
+      worldPosition: [0.280,-0.052,1.70],
       colorHint: "#06a7bd",
     },
     {
@@ -164,7 +166,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Radar",
       token: "RADAR",
       kind: "Radar",
-      worldPosition: [0.26,-0.052,1.645],
+      worldPosition: [0.23,-0.052,1.645],
       colorHint: "#1ed10e",
     },
     {
@@ -173,7 +175,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "QT Drive",
       token: "QT",
       kind: "Quantum",
-      worldPosition: [0.06,-0.052,1.86],
+      worldPosition: [0.02,-0.052,1.86],
       colorHint: "#911696",
     },
     {
@@ -182,7 +184,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Life Support",
       token: "LIFE",
       kind: "Life-Support",
-      worldPosition: [-0.179,-0.052,1.695],
+      worldPosition: [-0.216,-0.052,1.695],
       colorHint: "#4ade80",
     },
     {
@@ -191,7 +193,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Cooler 2",
       token: "CLR",
       kind: "Cooler",
-      worldPosition: [-0.176,-0.052,1.52],
+      worldPosition: [-0.216,-0.052,1.52],
       colorHint: "#93c5fd",
     },
     {
@@ -200,7 +202,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Engineer Terminal 2",
       token: "ENG",
       kind: "Terminal",
-      worldPosition: [0.053, -0.052, 1.663],
+      worldPosition: [0.01, -0.052, 1.663],
       colorHint: "#67e8f9",
     },
   ],
@@ -229,7 +231,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Main Ladder",
       token: "LDR",
       kind: "Ladder",
-      worldPosition: [0.25,-0.052,0.62],
+      worldPosition: [0.17,-0.052,0.62],
       colorHint: "#01ffd5",
       pathing: {
         connectsDeckIds: ["bottom", "mid", "top"],
@@ -242,7 +244,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       label: "Elevator",
       token: "ELV",
       kind: "Elevator",
-      worldPosition: [0.244,-0.052,0.77],
+      worldPosition: [0.17,-0.052,0.77],
       colorHint: "#01ffd5",
       pathing: {
         connectsDeckIds: ["bottom", "mid", "top"],
