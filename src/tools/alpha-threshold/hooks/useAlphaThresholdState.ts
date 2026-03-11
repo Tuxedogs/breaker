@@ -141,10 +141,6 @@ export function useAlphaThresholdState() {
     'alpha-threshold.slots',
     buildDefaultSlots()
   )
-  const [activeSlotCount, setActiveSlotCount] = useLocalStorageState<number>(
-    'alpha-threshold.slot-count',
-    4
-  )
   const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<string[]>(
     'alpha-threshold.selected-ships',
     getDefaultSelectedShips()
@@ -282,13 +278,8 @@ export function useAlphaThresholdState() {
     return effectiveShips.filter((ship) => selectedShipNameSet.has(ship.name))
   }, [effectiveShips, selectedShipNameSet])
 
-  const visibleSlots = useMemo(() => {
-    const clampedCount = Math.min(4, Math.max(1, activeSlotCount))
-    return slots.slice(0, clampedCount)
-  }, [activeSlotCount, slots])
-
   const selectedWeapons = useMemo<SelectedWeaponComparison[]>(() => {
-    return visibleSlots
+    return slots
       .map((slot, index) => {
         const baseWeapon = allWeapons.find(
           (weapon) => getWeaponKey(weapon) === slot.weaponKey
@@ -310,7 +301,7 @@ export function useAlphaThresholdState() {
         }
       })
       .filter(Boolean) as SelectedWeaponComparison[]
-  }, [allWeapons, visibleSlots, weaponOverrides])
+  }, [allWeapons, slots, weaponOverrides])
 
   const axisMaxByType = useMemo<Record<WeaponType, number>>(() => {
     return {
@@ -360,10 +351,6 @@ export function useAlphaThresholdState() {
     }))
   }
 
-  function setSlotCount(nextCount: number) {
-    setActiveSlotCount(Math.min(4, Math.max(1, nextCount)))
-  }
-
   function toggleShowSelectedOnly() {
     setShowSelectedOnly((prev) => !prev)
   }
@@ -372,9 +359,6 @@ export function useAlphaThresholdState() {
     sortKey: normalizedSortKey,
     setSortKey,
     slots,
-    visibleSlots,
-    activeSlotCount,
-    setSlotCount,
     setSlotWeapon,
     allWeapons,
     selectedWeapons,

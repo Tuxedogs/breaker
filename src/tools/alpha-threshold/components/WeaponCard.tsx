@@ -1,15 +1,11 @@
-import { useState } from 'react'
 import { formatMetric } from '../lib/calculations'
-import { WeaponOverrideEditor } from './WeaponOverrideEditor'
-import type { SlotTone, Weapon, WeaponOverride } from '../types'
+import type { SlotTone, Weapon } from '../types'
 
 type Props = {
   label: string
   tone: SlotTone
   weapon: Weapon
-  override?: WeaponOverride
-  onSaveOverride: (patch: WeaponOverride) => void
-  onResetOverride: () => void
+  onClear?: () => void
 }
 
 const toneClassName: Record<SlotTone, string> = {
@@ -30,14 +26,10 @@ export function WeaponCard({
   label,
   tone,
   weapon,
-  override,
-  onSaveOverride,
-  onResetOverride,
+  onClear,
 }: Props) {
-  const [editing, setEditing] = useState(false)
-
   return (
-    <article className="alpha-weapon-card">
+    <article className="alpha-summary-card">
       <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
         <div className="space-y-2">
           <div
@@ -65,13 +57,17 @@ export function WeaponCard({
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setEditing((prev) => !prev)}
-          className="alpha-action-button"
-        >
-          {editing ? 'Close' : 'Edit'}
-        </button>
+        <div className="flex flex-wrap justify-end gap-2">
+          {onClear ? (
+            <button
+              type="button"
+              onClick={onClear}
+              className="alpha-action-button"
+            >
+              Clear
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <dl className="mt-3 grid grid-cols-2 gap-2">
@@ -93,20 +89,6 @@ export function WeaponCard({
         </div>
       </dl>
 
-      {editing ? (
-        <WeaponOverrideEditor
-          weapon={weapon}
-          override={override}
-          onSave={(patch) => {
-            onSaveOverride(patch)
-            setEditing(false)
-          }}
-          onReset={() => {
-            onResetOverride()
-            setEditing(false)
-          }}
-        />
-      ) : null}
     </article>
   )
 }
