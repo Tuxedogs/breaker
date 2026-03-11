@@ -6,60 +6,34 @@ import {
   useState,
 } from 'react'
 import { formatMetric, getWeaponKey } from '../lib/calculations'
-import type { Weapon } from '../types'
+import {
+  filterWeaponRecords,
+  groupWeaponRecords,
+} from '../lib/weapons/grouping'
+import {
+  formatWeaponClassLabel,
+  formatWeaponSizeLabel,
+} from '../lib/weapons/normalize'
+import type { SlotTone, WeaponRecord } from '../types'
 
 type Props = {
   label: string
+  tone?: SlotTone
   value: string | null
-  weapons: Weapon[]
+  weapons: WeaponRecord[]
   onChange: (weaponKey: string | null) => void
 }
 
-const WEAPON_SIZE_ORDER = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8']
-
-function getWeaponSubtypeLabel(weapon: Weapon) {
-  const normalizedName = weapon.name.toLowerCase()
-
-  if (normalizedName.includes('mass driver')) {
-    return `${weapon.type === 'ballistic' ? 'Ballistic' : 'Energy'} Mass Driver`
-  }
-
-  if (normalizedName.includes('gatling')) {
-    return `${weapon.type === 'ballistic' ? 'Ballistic' : 'Energy'} Gatling`
-  }
-
-  if (normalizedName.includes('cannon')) {
-    return `${weapon.type === 'ballistic' ? 'Ballistic' : 'Laser'} Cannon`
-  }
-
-  if (normalizedName.includes('repeater')) {
-    return `${weapon.type === 'ballistic' ? 'Ballistic' : 'Energy'} Repeater`
-  }
-
-  return weapon.type === 'ballistic' ? 'Ballistic Weapon' : 'Energy Weapon'
-}
-
-function getWeaponLabel(weapon: Weapon) {
-  return `${weapon.name} (${weapon.size})`
-}
-
-function weaponMatchesQuery(weapon: Weapon, query: string) {
-  const haystack = [
-    weapon.name,
-    weapon.size,
-    weapon.type,
-    String(weapon.alpha),
-    String(weapon.burstDps),
-    String(weapon.speed),
-  ]
-    .join(' ')
-    .toLowerCase()
-
-  return haystack.includes(query)
+const selectedToneClassName: Record<SlotTone, string> = {
+  cyan: 'alpha-weapon-select-card-selected-cyan',
+  violet: 'alpha-weapon-select-card-selected-violet',
+  amber: 'alpha-weapon-select-card-selected-amber',
+  emerald: 'alpha-weapon-select-card-selected-emerald',
 }
 
 export function WeaponSelector({
   label,
+  tone = 'cyan',
   value,
   weapons,
   onChange,
@@ -71,71 +45,30 @@ export function WeaponSelector({
     () => weapons.find((weapon) => getWeaponKey(weapon) === value) ?? null,
     [value, weapons]
   )
-  const [query, setQuery] = useState(
-    selectedWeapon ? getWeaponLabel(selectedWeapon) : ''
-  )
+  const [query, setQuery] = useState(selectedWeapon ? selectedWeapon.name : '')
   const [open, setOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const deferredQuery = useDeferredValue(query)
 
-  const groupedWeapons = useMemo(() => {
-    const normalizedQuery = deferredQuery.trim().toLowerCase()
-    const baseWeapons = normalizedQuery
-      ? weapons.filter((weapon) => weaponMatchesQuery(weapon, normalizedQuery))
-      : weapons
-
-    const sortedWeapons = [...baseWeapons].sort((left, right) => {
-      const sizeDelta =
-        WEAPON_SIZE_ORDER.indexOf(left.size) - WEAPON_SIZE_ORDER.indexOf(right.size)
-
-      if (sizeDelta !== 0) return sizeDelta
-
-      const typeDelta = left.type.localeCompare(right.type)
-
-      if (typeDelta !== 0) return typeDelta
-
-      const subtypeDelta = getWeaponSubtypeLabel(left).localeCompare(getWeaponSubtypeLabel(right))
-
-      if (subtypeDelta !== 0) return subtypeDelta
-
-      return left.name.localeCompare(right.name)
-    })
-
-    const groups = WEAPON_SIZE_ORDER.map((size) => ({
-      size,
-      types: {
-        ballistic: [] as Weapon[],
-        energy: [] as Weapon[],
-      },
-    }))
-
-    sortedWeapons.forEach((weapon) => {
-      const sizeGroup = groups.find((group) => group.size === weapon.size)
-
-      if (!sizeGroup) return
-
-      sizeGroup.types[weapon.type].push(weapon)
-    })
-
-    return groups.filter(
-      (group) =>
-        group.types.ballistic.length > 0 || group.types.energy.length > 0
-    )
-  }, [deferredQuery, weapons])
+  const groupedWeapons = useMemo(
+    () => groupWeaponRecords(filterWeaponRecords(weapons, deferredQuery)),
+    [deferredQuery, weapons]
+  )
 
   const flatWeapons = useMemo(
     () =>
-      groupedWeapons.flatMap((group) => [
-        ...group.types.ballistic,
-        ...group.types.energy,
-      ]),
+      groupedWeapons.flatMap((sizeGroup) =>
+        sizeGroup.damageTypes.flatMap((damageTypeGroup) =>
+          damageTypeGroup.classes.flatMap((weaponClassGroup) => weaponClassGroup.weapons)
+        )
+      ),
     [groupedWeapons]
   )
 
-  function selectWeapon(weapon: Weapon | null) {
+  function selectWeapon(weapon: WeaponRecord | null) {
     onChange(weapon ? getWeaponKey(weapon) : null)
     setOpen(false)
-    setQuery(weapon ? getWeaponLabel(weapon) : '')
+    setQuery(weapon ? weapon.name : '')
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -172,12 +105,13 @@ export function WeaponSelector({
     if (event.key === 'Escape') {
       event.preventDefault()
       setOpen(false)
-      setQuery(selectedWeapon ? getWeaponLabel(selectedWeapon) : '')
+      setQuery(selectedWeapon ? selectedWeapon.name : '')
     }
   }
 
   function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
     const nextFocusTarget = event.relatedTarget
+
     if (
       nextFocusTarget instanceof Node &&
       containerRef.current?.contains(nextFocusTarget)
@@ -186,7 +120,7 @@ export function WeaponSelector({
     }
 
     setOpen(false)
-    setQuery(selectedWeapon ? getWeaponLabel(selectedWeapon) : '')
+    setQuery(selectedWeapon ? selectedWeapon.name : '')
   }
 
   return (
@@ -203,7 +137,7 @@ export function WeaponSelector({
             aria-hidden
             className={[
               'pointer-events-none absolute left-3 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full',
-              selectedWeapon.type === 'ballistic'
+              selectedWeapon.damageType === 'ballistic'
                 ? 'bg-cyan-300 ring-1 ring-cyan-300/35'
                 : 'bg-amber-300 ring-1 ring-amber-300/35',
             ].join(' ')}
@@ -259,78 +193,96 @@ export function WeaponSelector({
             className="max-h-[32rem] overflow-y-auto p-3"
           >
             {flatWeapons.length > 0 ? (
-              groupedWeapons.map((group) => (
-                <li key={group.size} className="alpha-weapon-size-group">
+              groupedWeapons.map((sizeGroup) => (
+                <li key={sizeGroup.size} className="alpha-weapon-size-group">
                   <div className="alpha-weapon-size-head">
-                    <span>{group.size}</span>
+                    <span>Size {sizeGroup.size}</span>
                   </div>
 
                   <div className="alpha-weapon-type-groups">
-                    {(['ballistic', 'energy'] as const).map((type) =>
-                      group.types[type].length > 0 ? (
-                        <section key={`${group.size}-${type}`} className="alpha-weapon-type-group">
-                          <div className="alpha-weapon-type-head">
-                            {type === 'ballistic' ? 'Ballistic' : 'Energy'}
-                          </div>
+                    {sizeGroup.damageTypes.map((damageTypeGroup) => (
+                      <section
+                        key={`${sizeGroup.size}-${damageTypeGroup.damageType}`}
+                        className="alpha-weapon-type-group"
+                      >
+                        <div
+                          className={[
+                            'alpha-weapon-type-head',
+                            damageTypeGroup.damageType === 'ballistic'
+                              ? 'alpha-weapon-type-head-ballistic'
+                              : 'alpha-weapon-type-head-energy',
+                          ].join(' ')}
+                        >
+                          {damageTypeGroup.damageType}
+                        </div>
 
-                          <div className="alpha-weapon-card-grid">
-                            {group.types[type].map((weapon) => {
-                              const weaponKey = getWeaponKey(weapon)
-                              const index = flatWeapons.findIndex(
-                                (candidate) => getWeaponKey(candidate) === weaponKey
-                              )
-                              const isActive = index === activeIndex
-                              const isSelected = weaponKey === value
+                        {damageTypeGroup.classes.map((weaponClassGroup) => (
+                          <section
+                            key={`${sizeGroup.size}-${damageTypeGroup.damageType}-${weaponClassGroup.weaponClass}`}
+                            className="alpha-weapon-class-group"
+                          >
+                            <div className="alpha-weapon-class-head">
+                              {formatWeaponClassLabel(weaponClassGroup.weaponClass)}
+                            </div>
 
-                              return (
-                                <button
-                                  key={weaponKey}
-                                  id={`${listboxId}-${weaponKey}`}
-                                  type="button"
-                                  role="option"
-                                  aria-selected={isSelected}
-                                  onMouseDown={(event) => event.preventDefault()}
-                                  onMouseEnter={() => setActiveIndex(index)}
-                                  onClick={() => selectWeapon(weapon)}
-                                  className={[
-                                    'alpha-weapon-select-card',
-                                    isActive ? 'alpha-weapon-select-card-active' : '',
-                                    isSelected
-                                      ? type === 'ballistic'
-                                        ? 'alpha-weapon-select-card-selected-ballistic'
-                                        : 'alpha-weapon-select-card-selected-energy'
-                                      : '',
-                                  ]
-                                    .filter(Boolean)
-                                    .join(' ')}
-                                >
-                                  <span className="alpha-weapon-select-name">
-                                    {weapon.name}
-                                  </span>
-                                  <span className="alpha-weapon-select-meta">
-                                    {getWeaponSubtypeLabel(weapon)}
-                                  </span>
-                                  <dl className="alpha-weapon-select-stats">
-                                    <div>
-                                      <dt>Alpha</dt>
-                                      <dd>{formatMetric(weapon.alpha)}</dd>
-                                    </div>
-                                    <div>
-                                      <dt>Burst</dt>
-                                      <dd>{formatMetric(weapon.burstDps)}</dd>
-                                    </div>
-                                    <div>
-                                      <dt>Speed</dt>
-                                      <dd>{formatMetric(weapon.speed)}</dd>
-                                    </div>
-                                  </dl>
-                                </button>
-                              )
-                            })}
-                          </div>
-                        </section>
-                      ) : null
-                    )}
+                            <div className="alpha-weapon-card-grid">
+                              {weaponClassGroup.weapons.map((weapon) => {
+                                const weaponKey = getWeaponKey(weapon)
+                                const index = flatWeapons.findIndex(
+                                  (candidate) => getWeaponKey(candidate) === weaponKey
+                                )
+                                const isActive = index === activeIndex
+                                const isSelected = weaponKey === value
+
+                                return (
+                                  <button
+                                    key={weaponKey}
+                                    id={`${listboxId}-${weaponKey}`}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={isSelected}
+                                    onMouseDown={(event) => event.preventDefault()}
+                                    onMouseEnter={() => setActiveIndex(index)}
+                                    onClick={() => selectWeapon(weapon)}
+                                    className={[
+                                      'alpha-weapon-select-card',
+                                      isActive ? 'alpha-weapon-select-card-active' : '',
+                                      isSelected ? selectedToneClassName[tone] : '',
+                                    ]
+                                      .filter(Boolean)
+                                      .join(' ')}
+                                  >
+                                    <span className="alpha-weapon-select-name">
+                                      {weapon.name}
+                                    </span>
+                                    <span className="alpha-weapon-select-meta">
+                                      {formatWeaponClassLabel(weapon.weaponClass)}
+                                    </span>
+                                    <span className="alpha-weapon-select-submeta">
+                                      {formatWeaponSizeLabel(weapon.size)}
+                                    </span>
+                                    <dl className="alpha-weapon-select-stats">
+                                      <div>
+                                        <dt>Alpha</dt>
+                                        <dd>{formatMetric(weapon.alpha ?? 0)}</dd>
+                                      </div>
+                                      <div>
+                                        <dt>Burst</dt>
+                                        <dd>{formatMetric(weapon.burstDps ?? 0)}</dd>
+                                      </div>
+                                      <div>
+                                        <dt>Speed</dt>
+                                        <dd>{formatMetric(weapon.projectileSpeed ?? 0)}</dd>
+                                      </div>
+                                    </dl>
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </section>
+                        ))}
+                      </section>
+                    ))}
                   </div>
                 </li>
               ))

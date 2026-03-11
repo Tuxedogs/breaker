@@ -34,7 +34,7 @@ export function Legend({ selectedWeapons }: Props) {
             toneClassName[selectedWeapon.tone],
           ].join(' ')}
         >
-          {selectedWeapon.slotLabel} {selectedWeapon.weapon.type}
+          {selectedWeapon.slotLabel} {selectedWeapon.weapon.damageType}
         </span>
       ))}
     </section>

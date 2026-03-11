@@ -5,8 +5,8 @@ import type {
   ShipComparisonResult,
   ShipSizeGroup,
   ShipSizeGroupOption,
-  Weapon,
-  WeaponType,
+  WeaponRecord,
+  WeaponThresholdType,
 } from '../types'
 
 const wholeFormatter = new Intl.NumberFormat('en-US')
@@ -24,7 +24,7 @@ export const SHIP_SIZE_GROUPS: ShipSizeGroupOption[] = [
 
 export function getThresholdForWeaponType(
   ship: Ship,
-  thresholdType: WeaponType
+  thresholdType: WeaponThresholdType
 ): number {
   return thresholdType === 'ballistic'
     ? ship.ballisticThreshold
@@ -45,8 +45,8 @@ export function formatEntityLabel(value: string): string {
   return value.replaceAll('_', ' ')
 }
 
-export function getWeaponKey(weapon: Weapon): string {
-  return `${weapon.type}:${weapon.size}:${weapon.name}`
+export function getWeaponKey(weapon: WeaponRecord): string {
+  return weapon.id
 }
 
 export function getShipGroupLabel(sizeGroup: ShipSizeGroup): string {
@@ -71,7 +71,7 @@ export function getDefaultSelectedShips(): string[] {
 export function getLaneAxisMax(
   ships: Ship[],
   weapons: SelectedWeaponComparison[],
-  thresholdType: WeaponType
+  thresholdType: WeaponThresholdType
 ): number {
   const thresholdValues = ships.map((ship) =>
     getThresholdForWeaponType(ship, thresholdType)
@@ -79,8 +79,8 @@ export function getLaneAxisMax(
   const highestThreshold = Math.max(...thresholdValues, 1)
   const highestWeaponAlpha = Math.max(
     ...weapons
-      .filter((weapon) => weapon.weapon.type === thresholdType)
-      .map((weapon) => weapon.weapon.alpha),
+      .filter((weapon) => weapon.weapon.damageType === thresholdType)
+      .map((weapon) => weapon.weapon.alpha ?? 0),
     0
   )
   const visibleWeaponMax = Math.min(highestWeaponAlpha, highestThreshold * 2.25)
@@ -97,26 +97,28 @@ export function getAxisPercent(value: number, axisMax: number): number {
 export function buildShipComparisonResult(
   ship: Ship,
   selectedWeapon: SelectedWeaponComparison,
-  axisMaxByType: Record<WeaponType, number>
+  axisMaxByType: Record<WeaponThresholdType, number>
 ): ShipComparisonResult {
-  const threshold = getThresholdForWeaponType(ship, selectedWeapon.weapon.type)
+  const thresholdType = selectedWeapon.weapon.damageType as WeaponThresholdType
+  const weaponAlpha = selectedWeapon.weapon.alpha ?? 0
+  const threshold = getThresholdForWeaponType(ship, thresholdType)
 
   return {
     slotId: selectedWeapon.slotId,
     slotLabel: selectedWeapon.slotLabel,
     tone: selectedWeapon.tone,
     weapon: selectedWeapon.weapon,
-    thresholdType: selectedWeapon.weapon.type,
+    thresholdType,
     threshold,
-    passes: canDamageHull(selectedWeapon.weapon.alpha, threshold),
-    overflow: selectedWeapon.weapon.alpha > axisMaxByType[selectedWeapon.weapon.type],
+    passes: canDamageHull(weaponAlpha, threshold),
+    overflow: weaponAlpha > axisMaxByType[thresholdType],
   }
 }
 
 export function buildSelectedShipResult(
   ship: Ship,
   selectedWeapons: SelectedWeaponComparison[],
-  axisMaxByType: Record<WeaponType, number>
+  axisMaxByType: Record<WeaponThresholdType, number>
 ): SelectedShipResult {
   const results = selectedWeapons.map((selectedWeapon) =>
     buildShipComparisonResult(ship, selectedWeapon, axisMaxByType)

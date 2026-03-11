@@ -19,8 +19,8 @@ import type {
   ShipSortKey,
   ShipSizeGroup,
   SlotTone,
-  Weapon,
-  WeaponType,
+  WeaponRecord,
+  WeaponThresholdType,
 } from '../types'
 import { useLocalStorageState } from './useLocalStorageState'
 import { useOverrides } from './useOverrides'
@@ -226,7 +226,7 @@ export function useAlphaThresholdState() {
     resetAllOverrides,
   } = useOverrides()
 
-  const allWeapons = useMemo<Weapon[]>(
+  const allWeapons = useMemo<WeaponRecord[]>(
     () => [...ballisticWeapons, ...energyWeapons],
     []
   )
@@ -303,7 +303,7 @@ export function useAlphaThresholdState() {
       .filter(Boolean) as SelectedWeaponComparison[]
   }, [allWeapons, slots, weaponOverrides])
 
-  const axisMaxByType = useMemo<Record<WeaponType, number>>(() => {
+  const axisMaxByType = useMemo<Record<WeaponThresholdType, number>>(() => {
     return {
       ballistic: getLaneAxisMax(selectedShips, selectedWeapons, 'ballistic'),
       energy: getLaneAxisMax(selectedShips, selectedWeapons, 'energy'),

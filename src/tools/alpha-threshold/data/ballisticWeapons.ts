@@ -1,6 +1,7 @@
-import type { Weapon } from '../types'
+import { normalizeManualWeaponRecord } from '../lib/weapons/adapters/manual'
+import type { WeaponRecord } from '../types'
 
-export const ballisticWeapons: Weapon[] = [
+const rawBallisticWeapons = [
   { name: 'Sledge III Mass Driver Cannon', size: 'S3', type: 'ballistic', burstDps: 249.4, alpha: 1125, speed: 3000 },
   { name: 'Deadbolt IV Cannon', size: 'S4', type: 'ballistic', burstDps: 1138.5, alpha: 683.1, speed: 900 },
   { name: 'Strife Mass Driver Cannon', size: 'S2', type: 'ballistic', burstDps: 149.6, alpha: 525, speed: 5000 },
@@ -15,4 +16,8 @@ export const ballisticWeapons: Weapon[] = [
   { name: 'Breakneck Gatling', size: 'S4', type: 'ballistic', burstDps: 953.3, alpha: 52, speed: 1400 },
   { name: 'Mantis GT-220 Gatling', size: 'S3', type: 'ballistic', burstDps: 506.7, alpha: 19, speed: 1600 },
   { name: 'Scorpion GT-215 Gatling', size: 'S2', type: 'ballistic', burstDps: 338.7, alpha: 12.7, speed: 1600 },
-]
+] as const
+
+export const ballisticWeapons: WeaponRecord[] = rawBallisticWeapons.map((weapon) =>
+  normalizeManualWeaponRecord(weapon, 'merged')
+)
