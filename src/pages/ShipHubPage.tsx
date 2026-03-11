@@ -23,7 +23,7 @@ export default function ShipHubPage() {
     return (
       <section className="route-fade py-8">
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.5rem] p-4">
-          <div className="framework-modern-card-head rounded-xl p-5">
+          <div className="card-head-md">
             <h1 className="title-font text-3xl text-amber-100">Ship Hub Content Error</h1>
             <p className="mt-3 text-slate-300">{shipLoadError.message}</p>
           </div>
@@ -39,7 +39,7 @@ export default function ShipHubPage() {
     return (
       <section className="route-fade py-8">
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.5rem] p-4">
-          <div className="framework-modern-card-head rounded-xl p-5">
+          <div className="card-head-md">
             <h1 className="title-font text-3xl text-amber-100">Ship Hub Not Found</h1>
             <p className="mt-3 text-slate-300">No ship hub is published for slug "{slug}".</p>
           </div>
@@ -56,7 +56,7 @@ export default function ShipHubPage() {
       <div className="mx-auto max-w-[1180px] space-y-6">
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
           <div className="grid gap-6">
-            <header className="framework-modern-card-head rounded-[1.2rem] p-5">
+            <header className="card-head-ship">
               <p className="framework-modern-kicker">Ship Hub</p>
               <h1 className="title-font mt-2 text-4xl text-amber-100">{ship.name}</h1>
               <p className="mt-3 text-xs uppercase tracking-[0.16em] text-amber-200/90">
@@ -68,7 +68,7 @@ export default function ShipHubPage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="framework-modern-card-head rounded-[1.2rem] p-5">
+          <div className="card-head-ship">
             <h2 className="title-font text-2xl text-amber-100">Overview</h2>
             <div className="mt-5 grid gap-6 lg:grid-cols-2">
               <section>
@@ -92,7 +92,7 @@ export default function ShipHubPage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="framework-modern-card-head rounded-[1.2rem] p-5">
+          <div className="card-head-ship">
             <h2 className="title-font text-2xl text-amber-100">Role Lenses</h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {roleLensOrder.map((lens) => (
@@ -129,7 +129,7 @@ export default function ShipHubPage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-ships framework-modern-card-compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="framework-modern-card-head rounded-[1.2rem] p-5">
+          <div className="card-head-ship">
             <h2 className="title-font text-2xl text-amber-100">References</h2>
             <p className="mt-2 text-sm text-slate-300">Reference pages only, no procedural doctrine.</p>
           </div>

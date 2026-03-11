@@ -25,9 +25,9 @@ export default function TraditionalModulePage() {
     <section className="route-fade py-3">
       <div className="space-y-5">
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
-          <header className="framework-modern-card-head rounded-xl p-5">
+          <header className="card-head-md">
             <p className="framework-modern-kicker">Communications Module</p>
-            <h1 className="title-font mt-2 text-3xl text-cyan-100 sm:text-4xl">Discord &amp; Teamspeak</h1>
+            <h1 className="detail-page-title-cyan">Discord &amp; Teamspeak</h1>
             <p className="mt-3 rounded-lg border border-cyan-200/35 bg-cyan-950/45 px-3 py-2 text-base text-cyan-50">
               Where and when
             </p>
@@ -35,8 +35,8 @@ export default function TraditionalModulePage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
-          <section className="framework-modern-card-head rounded-xl p-4 sm:p-5">
-            <h2 className="title-font text-xl text-cyan-100">Entry Points</h2>
+          <section className="card-head-lg">
+            <h2 className="surface-title">Entry Points</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <a
                 href="https://discord.gg/join-ares"
@@ -71,8 +71,8 @@ export default function TraditionalModulePage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
-          <section className="framework-modern-card-head rounded-xl p-5">
-            <h2 className="title-font text-xl text-cyan-100">Why Both Platforms</h2>
+          <section className="card-head-md">
+            <h2 className="surface-title">Why Both Platforms</h2>
             <p className="mt-3 text-base leading-relaxed text-slate-200">
               Discord is a decent tool but lacks many features. When voice comms need to be split, Teamspeak provides
               whisper lists that can be set on a client-by-client basis, allowing for extremely high levels of
@@ -87,8 +87,8 @@ export default function TraditionalModulePage() {
         </article>
 
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
-          <section className="framework-modern-card-head rounded-xl p-5">
-            <h2 className="title-font text-xl text-cyan-100">Communication Structure Example</h2>
+          <section className="card-head-md">
+            <h2 className="surface-title">Communication Structure Example</h2>
             <div className="mt-4 grid gap-4 lg:grid-cols-2">
               <div className="rounded-xl border border-cyan-300/25 bg-cyan-950/25 p-4">
                 <p className="title-font text-base uppercase tracking-[0.14em] text-cyan-100">Main Discord</p>
