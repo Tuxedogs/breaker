@@ -65,7 +65,7 @@ export function getDefaultCollapsedGroups(): Record<ShipSizeGroup, boolean> {
 }
 
 export function getDefaultSelectedShips(): string[] {
-  return ['Idris']
+  return []
 }
 
 export function getLaneAxisMax(
