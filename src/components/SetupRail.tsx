@@ -56,18 +56,6 @@ export default function SetupRail() {
         <h2 className="title-font text-lg text-cyan-100/90">Tools</h2>
         <p className="mt-2 text-sm text-slate-300/80">Interactive comparison and analysis utilities</p>
       </div>
-
-      <div className="mt-4">
-        <Link to="/tools/alpha-threshold" className="setup-alpha-card section-hub-card">
-          <span className="section-hub-copy">
-            <span className="title-font section-hub-title">ALPHA VS THRESHOLD</span>
-            <span className="section-hub-subtitle">
-              Compare weapon alpha against ship ballistic and energy thresholds.
-            </span>
-          </span>
-          <span className="section-hub-indicator" aria-hidden="true" />
-        </Link>
-      </div>
     </section>
   );
 }
