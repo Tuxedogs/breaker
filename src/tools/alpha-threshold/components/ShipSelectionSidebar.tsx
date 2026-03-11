@@ -6,8 +6,6 @@ type Props = {
   selectedShipNames: string[]
   searchValue: string
   showSelectedOnly: boolean
-  selectedShipCount: number
-  visibleShipCount: number
   mobileOpen: boolean
   onSearchChange: (value: string) => void
   onToggleShowSelectedOnly: () => void
@@ -22,8 +20,6 @@ export function ShipSelectionSidebar({
   selectedShipNames,
   searchValue,
   showSelectedOnly,
-  selectedShipCount,
-  visibleShipCount,
   mobileOpen,
   onSearchChange,
   onToggleShowSelectedOnly,
@@ -47,15 +43,6 @@ export function ShipSelectionSidebar({
           <div>
             <p className="page-kicker">Ship Selection</p>
             <h2 className="surface-title mt-3">Results Scope</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <span className="alpha-chip alpha-chip-muted">
-              Selected {selectedShipCount}
-            </span>
-            <span className="alpha-chip alpha-chip-muted">
-              Visible {visibleShipCount}
-            </span>
           </div>
 
           <label className="space-y-2">

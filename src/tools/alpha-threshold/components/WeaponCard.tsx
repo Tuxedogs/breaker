@@ -38,7 +38,7 @@ export function WeaponCard({
 
   return (
     <article className="alpha-weapon-card">
-      <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4">
+      <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
         <div className="space-y-2">
           <div
             className={[
@@ -56,10 +56,10 @@ export function WeaponCard({
             {label}
           </div>
           <div>
-            <h3 className="title-font text-xl leading-tight text-slate-50">
+            <h3 className="title-font text-lg leading-tight text-slate-50">
               {weapon.name}
             </h3>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-xs uppercase tracking-[0.12em] text-slate-400">
               {weapon.size} / {weapon.type}
             </p>
           </div>
@@ -74,7 +74,7 @@ export function WeaponCard({
         </button>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <dl className="mt-3 grid grid-cols-2 gap-2">
         <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Alpha</dt>
           <dd className="alpha-stat-value">{formatMetric(weapon.alpha)}</dd>

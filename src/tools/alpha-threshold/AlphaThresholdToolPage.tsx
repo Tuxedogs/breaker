@@ -3,7 +3,9 @@ import PageLayout from '../../components/PageLayout'
 import SidebarWorkspace from '../../components/SidebarWorkspace'
 import { AlphaThresholdPage } from './components/AlphaThresholdPage'
 import { ShipSelectionSidebar } from './components/ShipSelectionSidebar'
+import { WeaponCard } from './components/WeaponCard'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
+import { getWeaponKey } from './lib/calculations'
 
 export default function AlphaThresholdToolPage() {
   const {
@@ -19,7 +21,6 @@ export default function AlphaThresholdToolPage() {
     sidebarGroups,
     selectedShipNames,
     selectedShipCount,
-    visibleShipCount,
     toggleShipSelected,
     clearAllShips,
     selectVisibleShips,
@@ -44,22 +45,62 @@ export default function AlphaThresholdToolPage() {
     <section className="alpha-tool-route">
       <SidebarWorkspace
         className="alpha-sidebar-workspace"
-        sidebar={
-        <ShipSelectionSidebar
-          groups={sidebarGroups}
-          selectedShipNames={selectedShipNames}
-          searchValue={shipSearch}
-          showSelectedOnly={showSelectedOnly}
-          selectedShipCount={selectedShipCount}
-          visibleShipCount={visibleShipCount}
-          mobileOpen={mobileSidebarOpen}
-          onSearchChange={setShipSearch}
-          onToggleShowSelectedOnly={toggleShowSelectedOnly}
-          onToggleShipSelected={toggleShipSelected}
-          onToggleGroup={toggleGroupCollapsed}
-          onSelectVisible={selectVisibleShips}
-          onClearAll={clearAllShips}
-        />
+        leftSidebar={
+          <ShipSelectionSidebar
+            groups={sidebarGroups}
+            selectedShipNames={selectedShipNames}
+            searchValue={shipSearch}
+            showSelectedOnly={showSelectedOnly}
+            mobileOpen={mobileSidebarOpen}
+            onSearchChange={setShipSearch}
+            onToggleShowSelectedOnly={toggleShowSelectedOnly}
+            onToggleShipSelected={toggleShipSelected}
+            onToggleGroup={toggleGroupCollapsed}
+            onSelectVisible={selectVisibleShips}
+            onClearAll={clearAllShips}
+          />
+        }
+        rightSidebar={
+          <section className="alpha-summary-rail">
+            <div className="alpha-summary-rail-head">
+              <p className="page-kicker">Weapon Summary</p>
+              <h2 className="surface-title mt-3">Comparison Loadout</h2>
+              <p className="mt-2 text-sm text-slate-400">
+                Selected weapons stay visible here while the threshold matrix remains the dominant workspace.
+              </p>
+            </div>
+
+            {selectedWeapons.length > 0 ? (
+              <div className="alpha-summary-rail-cards">
+                {selectedWeapons.map((selectedWeapon) => {
+                  const weaponKey = getWeaponKey(selectedWeapon.weapon)
+
+                  return (
+                    <WeaponCard
+                      key={selectedWeapon.slotId}
+                      label={selectedWeapon.slotLabel}
+                      tone={selectedWeapon.tone}
+                      weapon={selectedWeapon.weapon}
+                      override={weaponOverrides[weaponKey]}
+                      onSaveOverride={(patch) =>
+                        setWeaponOverride(weaponKey, patch)
+                      }
+                      onResetOverride={() => resetWeaponOverride(weaponKey)}
+                    />
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="alpha-summary-empty">
+                <p className="title-font text-sm text-slate-100">
+                  No weapons selected
+                </p>
+                <p className="mt-2 text-sm text-slate-400">
+                  Add a weapon in the comparison controls to populate this rail.
+                </p>
+              </div>
+            )}
+          </section>
         }
       >
         <PageLayout
@@ -85,15 +126,11 @@ export default function AlphaThresholdToolPage() {
             />
 
             <AlphaThresholdPage
-              selectedWeapons={selectedWeapons}
               selectedShipResults={selectedShipResults}
               axisMaxByType={axisMaxByType}
               shipOverrides={shipOverrides}
-              weaponOverrides={weaponOverrides}
               onSaveShipOverride={setShipOverride}
               onResetShipOverride={resetShipOverride}
-              onSaveWeaponOverride={setWeaponOverride}
-              onResetWeaponOverride={resetWeaponOverride}
             />
           </div>
         </PageLayout>
