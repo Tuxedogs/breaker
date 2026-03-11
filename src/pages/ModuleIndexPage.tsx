@@ -4,10 +4,10 @@ import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { moduleFilterOptions, moduleLoadError, moduleMatchesShipRole, modules } from "../data/modules";
 import { emptyModuleFilters, readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
-const statusClassName = {
-  draft: "border-amber-300/40 bg-amber-300/10 text-amber-100",
-  review: "border-cyan-300/40 bg-cyan-300/10 text-cyan-100",
-  validated: "border-emerald-300/40 bg-emerald-300/10 text-emerald-100",
+const validationStatusClassName = {
+  draft: "module-card-validation-status-draft",
+  review: "module-card-validation-status-review",
+  validated: "module-card-validation-status-validated",
 } as const;
 
 const manningPinnedModuleIds = ["turret-keybind-baseline"] as const;
@@ -48,9 +48,9 @@ export default function ModuleIndexPage() {
   return (
     <section className="framework-static route-fade py-3">
       <div className="space-y-6">
-        <header className="rounded-3xl border border-white/15 bg-slate-950/35 px-6 py-8 backdrop-blur-xl sm:px-10 sm:py-10">
-          <p className="title-font text-[11px] uppercase tracking-[0.34em] text-cyan-100/75">Doctrine Modules</p>
-          <h1 className="title-font mt-3 text-4xl font-medium leading-[0.95] text-white sm:text-5xl">Module Index</h1>
+        <header className="page-hero-shell">
+          <p className="page-kicker">Doctrine Modules</p>
+          <h1 className="page-title">Module Index</h1>
           <p className="mt-4 max-w-2xl text-sm text-slate-200/80 sm:text-base">
             Filter by context and open the module that matches your current fight state.
           </p>
@@ -70,54 +70,55 @@ export default function ModuleIndexPage() {
           onClear={() => setSearchParams(writeModuleFilters(emptyModuleFilters), { replace: true })}
         />
 
-        <div className="space-y-4">
+        <div className="deck-doctrine">
           {orderedModules.map((module) => (
-            <article key={module.id} className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
-              <div className="framework-modern-card-head rounded-xl p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
+            <article key={module.id} className="module-card-doctrine">
+              <div className="module-card-content">
+                <div className="module-card-hero">
                   <div className="min-w-0">
-                    <h2 className="title-font text-2xl text-cyan-100">{module.title}</h2>
+                    <h2 className="module-card-title">{module.title}</h2>
+                    <p className="module-card-subtitle">{module.intent}</p>
                     {isManningIndex && manningPinnedModuleIds.includes(module.id as (typeof manningPinnedModuleIds)[number]) ? (
-                      <p className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-300/40 bg-amber-300/10 px-2 py-1 text-xs uppercase tracking-[0.12em] text-amber-100">
+                      <p className="module-card-chip module-card-chip-pinned mt-2">
                         <span>Pinned Manning Baseline</span>
                       </p>
                     ) : null}
-                    <p className="mt-2 text-sm text-slate-300">{module.intent}</p>
                   </div>
                   <span
-                    className={[
-                      "inline-flex h-8 items-center rounded-full border px-3 text-xs uppercase tracking-[0.16em]",
-                      statusClassName[module.status],
-                    ].join(" ")}
+                    className={`module-card-validation-status ${validationStatusClassName[module.status]}`}
                   >
                     {module.status}
                   </span>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="module-card-chip-row">
                   {module.tags.map((tag) => (
                     <ModuleFilterChipLink
                       key={tag}
                       tag={tag}
-                      className="inline-flex h-8 items-center rounded-full border border-white/25 bg-white/5 px-3 text-xs uppercase tracking-[0.14em] text-slate-200"
+                      className="module-card-chip"
                     />
                   ))}
                 </div>
-                <p className="mt-4 text-xs uppercase tracking-[0.16em] text-slate-400">
+                <p className="module-card-validation-date">
                   Last Validated: {module.lastValidated}
                 </p>
               </div>
-              <Link to={`/module/${module.id}`} className="framework-modern-cta mt-2">
+              <Link to={`/module/${module.id}`} className="module-card-cta">
                 View Module
               </Link>
             </article>
           ))}
 
           {orderedModules.length === 0 ? (
-            <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
-              <div className="framework-modern-card-head rounded-xl p-4">
-                <h2 className="title-font text-xl text-cyan-100">No modules match current filters.</h2>
-                <p className="mt-2 text-sm text-slate-300">Clear one or more filters and try again.</p>
+            <article className="module-card-doctrine">
+              <div className="module-card-content">
+                <div className="module-card-hero">
+                  <div className="min-w-0">
+                    <h2 className="module-card-title">No modules match current filters.</h2>
+                    <p className="module-card-subtitle">Clear one or more filters and try again.</p>
+                  </div>
+                </div>
               </div>
             </article>
           ) : null}

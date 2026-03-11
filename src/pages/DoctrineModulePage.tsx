@@ -35,8 +35,8 @@ function SectionList({
         : "list-disc space-y-1.5 pl-5";
 
   return (
-    <section className={`framework-modern-card-head rounded-xl p-4 ${cardClass}`}>
-      <h2 className="title-font text-xl text-cyan-100">{title}</h2>
+    <section className={`card-head-sm ${cardClass}`}>
+      <h2 className="surface-title">{title}</h2>
       <ul className={`mt-3 text-slate-200 ${listClass}`}>
         {items.map((item) => (
           <li key={item}>{item}</li>
@@ -51,9 +51,9 @@ function VisualReferencePanel({ src, label }: { src: string; label?: string }) {
   return (
     <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
       <div className="hidden sm:block">
-        <section className="framework-modern-card-head rounded-xl border border-white/15 bg-slate-950/35 p-4">
+        <section className="card-head-panel">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="title-font text-xl text-cyan-100">Visual Reference</h2>
+            <h2 className="surface-title">Visual Reference</h2>
             <span className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</span>
           </div>
           <div className="mt-3 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
@@ -89,8 +89,8 @@ export default function DoctrineModulePage() {
     return (
       <section className="route-fade py-8">
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
-          <div className="framework-modern-card-head rounded-xl p-5">
-            <h1 className="title-font text-3xl text-cyan-100">Module Content Error</h1>
+          <div className="card-head-md">
+            <h1 className="detail-title-cyan">Module Content Error</h1>
             <p className="mt-3 text-slate-300">{loaderError.message}</p>
           </div>
           <Link to="/modules" className="framework-modern-cta mt-2">
@@ -105,8 +105,8 @@ export default function DoctrineModulePage() {
     return (
       <section className="route-fade py-8">
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
-          <div className="framework-modern-card-head rounded-xl p-5">
-            <h1 className="title-font text-3xl text-cyan-100">Module Not Found</h1>
+          <div className="card-head-md">
+            <h1 className="detail-title-cyan">Module Not Found</h1>
           </div>
           <Link to="/modules" className="framework-modern-cta mt-2">
             Back to Module Index
@@ -120,9 +120,9 @@ export default function DoctrineModulePage() {
     <section className="route-fade py-3">
       <div className="space-y-5">
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
-          <header className="framework-modern-card-head rounded-xl p-5">
+          <header className="card-head-md">
             <p className="framework-modern-kicker">Doctrine Module</p>
-            <h1 className="title-font mt-2 text-3xl text-cyan-100 sm:text-4xl">{module.title}</h1>
+            <h1 className="detail-page-title-cyan">{module.title}</h1>
             <p className="mt-3 rounded-lg border border-cyan-200/35 bg-cyan-950/45 px-3 py-2 text-base text-cyan-50">
               {module.intent}
             </p>
@@ -170,8 +170,8 @@ export default function DoctrineModulePage() {
 
         <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
           <div className="grid gap-4 lg:grid-cols-2">
-            <section className="framework-modern-card-head rounded-xl p-4">
-              <h2 className="title-font text-xl text-cyan-100">Prerequisites</h2>
+            <section className="card-head-sm">
+              <h2 className="surface-title">Prerequisites</h2>
               <div className="mt-3 space-y-2">
                 {module.prerequisites.length === 0 ? <p className="text-slate-300">None</p> : null}
                 {module.prerequisites.map((refId) => {
@@ -192,8 +192,8 @@ export default function DoctrineModulePage() {
               </div>
             </section>
 
-            <section className="framework-modern-card-head rounded-xl p-4">
-              <h2 className="title-font text-xl text-cyan-100">Related Modules</h2>
+            <section className="card-head-sm">
+              <h2 className="surface-title">Related Modules</h2>
               <div className="mt-3 space-y-2">
                 {module.relatedModuleIds.length === 0 ? <p className="text-slate-300">None</p> : null}
                 {module.relatedModuleIds.map((relatedId) => {

@@ -64,7 +64,7 @@ export default function DoctrineFilterBar({
 }: DoctrineFilterBarProps) {
   return (
     <section className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-5">
-      <div className="framework-modern-card-head rounded-xl p-4">
+      <div className="card-head-sm">
         <h2 className="title-font text-lg text-cyan-200">{title}</h2>
         <p className="mt-2 text-sm text-slate-300">{description}</p>
       </div>

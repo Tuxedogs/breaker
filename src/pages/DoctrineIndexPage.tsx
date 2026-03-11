@@ -75,9 +75,9 @@ export default function DoctrineIndexPage() {
             <p className="mt-2 text-sm text-red-100/90">{loaderError.message}</p>
           </article>
         ) : null}
-        <header className="rounded-3xl border border-white/15 bg-slate-950/35 px-6 py-8 backdrop-blur-xl sm:px-10 sm:py-10">
-          <p className="title-font text-[11px] uppercase tracking-[0.34em] text-cyan-100/75">Doctrine Index</p>
-          <h1 className="title-font mt-3 text-4xl font-medium leading-[0.95] text-white sm:text-5xl">Framework Routing</h1>
+        <header className="page-hero-shell">
+          <p className="page-kicker">Doctrine Index</p>
+          <h1 className="page-title">Framework Routing</h1>
           <p className="mt-4 max-w-2xl text-sm text-slate-200/80 sm:text-base">
             Filter by context and open the module that matches your intent.
           </p>

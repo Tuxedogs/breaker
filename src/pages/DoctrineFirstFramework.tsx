@@ -104,9 +104,9 @@ export default function DoctrineFirstFramework() {
       <div className="pointer-events-none absolute -left-16 top-6 h-56 w-56 rounded-full bg-cyan-300/15 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 top-36 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl" />
 
-      <div className="relative z-10 mb-12 rounded-3xl border border-white/15 bg-slate-950/35 px-6 py-8 backdrop-blur-xl sm:px-10 sm:py-10">
-        <p className="title-font text-[11px] uppercase tracking-[0.34em] text-cyan-100/75">Field Manual v2.0</p>
-        <h1 className="title-font mt-3 text-4xl font-medium leading-[0.95] text-white sm:text-5xl lg:text-6xl">
+      <div className="page-hero-shell relative z-10 mb-12">
+        <p className="page-kicker">Field Manual v2.0</p>
+        <h1 className="page-title-wide">
           DOCTRINE-FIRST
           <span className="framework-trend-text block">TACTICAL INDEX</span>
         </h1>

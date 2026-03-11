@@ -49,8 +49,8 @@ export default function EngagementEnvelope({ items }: { items: string[] }) {
   );
 
   return (
-    <section className="framework-modern-card-head doctrine-envelope rounded-xl p-4">
-      <h2 className="title-font text-xl text-cyan-100">Engagement Envelope</h2>
+    <section className="card-head-sm doctrine-envelope">
+      <h2 className="surface-title">Engagement Envelope</h2>
       <div className="mt-4 doctrine-envelope-instrument">
         <div className="doctrine-envelope-track">
           {bands.map((band) => {
@@ -126,4 +126,3 @@ export default function EngagementEnvelope({ items }: { items: string[] }) {
     </section>
   );
 }
-

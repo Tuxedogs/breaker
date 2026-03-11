@@ -34,7 +34,7 @@ export default function SetupRail() {
         <span className="section-hub-indicator" aria-hidden="true" />
       </Link>
 
-      <div className="mt-6 framework-modern-card-head rounded-xl p-4">
+      <div className="mt-6 card-head-sm">
         <h2 className="title-font text-lg text-cyan-100/90">Setup &amp; Configuration</h2>
         <p className="mt-2 text-sm text-slate-300/80">Pre-flight settings, bindings, and client configuration</p>
       </div>

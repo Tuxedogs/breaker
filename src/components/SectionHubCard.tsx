@@ -8,6 +8,7 @@ type SectionHubCardProps = {
   href: string;
   accentColor: string;
   isActive?: boolean;
+  variant?: "default" | "maps";
 };
 
 export default function SectionHubCard({
@@ -17,11 +18,12 @@ export default function SectionHubCard({
   href,
   accentColor,
   isActive = false,
+  variant = "default",
 }: SectionHubCardProps) {
   return (
     <Link
       to={href}
-      className={`section-hub-card ${isActive ? "is-active" : ""}`}
+      className={`section-hub-card ${variant === "maps" ? "section-hub-card-maps" : ""} ${isActive ? "is-active" : ""}`}
       style={{ "--hub-accent": accentColor } as CSSProperties}
       aria-current={isActive ? "page" : undefined}
     >

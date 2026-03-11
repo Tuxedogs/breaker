@@ -52,8 +52,8 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
     <section className="hero-transition relative left-[calc(50%-50vw)] flex min-h-[calc(100vh-7.5rem)] w-screen items-center justify-start overflow-hidden px-0 py-4 sm:py-6">
       <div className="relative z-10 w-full px-3 sm:px-5 lg:px-8 xl:px-10 translate-x-[6vw]">
         <div className="max-w-[72rem]">
-          <p className="title-font text-xs uppercase tracking-[0.34em] text-cyan-100/75">Field Manual v2.0</p>
-          <h1 className="title-font mt-4 text-4xl leading-[0.95] text-white sm:text-5xl lg:text-7xl">
+          <p className="page-kicker">Field Manual v2.0</p>
+          <h1 className="page-title-hero">
             Not that button,
             <br />
             <span className="hero-trend-gradient-text">that button.</span>
@@ -101,6 +101,7 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
                   href="/maps"
                   accentColor="#f59e0b"
                   isActive={pathname.startsWith("/maps")}
+                  variant="maps"
                   icon={(
                     <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
                       <path d="M4.5 6.5l5-2 5 2 5-2v13l-5 2-5-2-5 2v-13z" />

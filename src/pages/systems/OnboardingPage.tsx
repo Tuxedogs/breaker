@@ -126,7 +126,7 @@ export default function OnboardingPage() {
   return (
     <section className="route-fade onboarding-shell py-4 sm:py-6">
       <div className="onboarding-layout">
-        <aside className="onboarding-sidebar framework-modern-card-head rounded-xl p-3 sm:p-4">
+        <aside className="onboarding-sidebar-panel">
           <p className="title-font text-[11px] uppercase tracking-[0.24em] text-cyan-100/75">Onboarding</p>
           <nav className="mt-2">
             <ul className="space-y-0.5">
@@ -170,9 +170,9 @@ export default function OnboardingPage() {
         </aside>
 
         <main className="min-w-0 space-y-5">
-          <section id="welcome" className="onboarding-section framework-modern-card-head rounded-xl p-5 sm:p-6">
+          <section id="welcome" className="onboarding-panel-lg">
             <p className="onboarding-eyebrow">01 - Welcome</p>
-            <h1 className="title-font mt-2 text-3xl text-cyan-100 sm:text-4xl">New Member Briefing</h1>
+            <h1 className="detail-page-title-cyan">New Member Briefing</h1>
             <p className="mt-3 text-slate-300/85">
               You&apos;ve just joined one of the most operationally coordinated and capable orgs in the game. This document
               will aid in getting you started before your first roam or event.
@@ -196,9 +196,9 @@ export default function OnboardingPage() {
             </div>
           </section>
 
-          <section id="org" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="org" className="onboarding-panel">
             <p className="onboarding-eyebrow">02 - Organization</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">Sons of Ares Rank Flow</h2>
+            <h2 className="surface-title-lg mt-2">Sons of Ares Rank Flow</h2>
             <div className="mt-4 overflow-x-auto">
               <table className="onboarding-table w-full">
                 <thead>
@@ -365,9 +365,9 @@ export default function OnboardingPage() {
             <div className="onboarding-note mt-4">Ref Structure/ColorGrading/Tag consistency</div>
           </section>
 
-          <section id="basics" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="basics" className="onboarding-panel">
             <p className="onboarding-eyebrow">03 - Star Citizen Basics</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">Getting where we're going</h2>
+            <h2 className="surface-title-lg mt-2">Getting where we're going</h2>
             <p className="mt-2 text-sm text-slate-300/85">
               Star Citizen is rough on new players who don&apos;t know the systems and workarounds. These are the things that trip people up
               most.
@@ -382,9 +382,9 @@ export default function OnboardingPage() {
             </div>
           </section>
 
-          <section id="staging" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="staging" className="onboarding-panel">
             <p className="onboarding-eyebrow">04 - Staging Locations</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">Where to Base Out Of</h2>
+            <h2 className="surface-title-lg mt-2">Where to Base Out Of</h2>
             <p className="mt-2 text-sm text-slate-300/85">
               Sons of Ares operates across all systems, based on potential target densities. These three points provide the most
               reliable response for unscheduled daily operations.
@@ -421,9 +421,9 @@ export default function OnboardingPage() {
             <div className="onboarding-note mt-4">Roaming operations into Pyro and Nyx typically stage out of Crusader.</div>
           </section>
 
-          <section id="opsflow" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="opsflow" className="onboarding-panel">
             <p className="onboarding-eyebrow">05 - Daily Ops Flow</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">How a Standard Event Runs</h2>
+            <h2 className="surface-title-lg mt-2">How a Standard Event Runs</h2>
             <p className="mt-2 text-sm text-slate-300/85">
               Most ops follow roughly the same flow. Knowing it means you never hold the group up.
             </p>
@@ -446,9 +446,9 @@ export default function OnboardingPage() {
             </ol>
           </section>
 
-          <section id="comms" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="comms" className="onboarding-panel">
             <p className="onboarding-eyebrow">06 - Comms Discipline</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">How We Talk on Ops</h2>
+            <h2 className="surface-title-lg mt-2">How We Talk on Ops</h2>
             <p className="mt-2 text-sm text-slate-300/85">
               When entering a VC, wait a moment to listen and be aware that orgmates may be engaged in active combat.
             </p>
@@ -479,9 +479,9 @@ export default function OnboardingPage() {
             </div>
           </section>
 
-          <section id="checklist" className="onboarding-section framework-modern-card-head rounded-xl p-5">
+          <section id="checklist" className="onboarding-panel">
             <p className="onboarding-eyebrow">07 - Checklist</p>
-            <h2 className="title-font mt-2 text-2xl text-cyan-100">Milestone Tracker</h2>
+            <h2 className="surface-title-lg mt-2">Milestone Tracker</h2>
             <p className="mt-2 text-sm text-slate-300/80">
               Work through these before your first real op. Tick them off as you go - progress saves in your browser.
             </p>
