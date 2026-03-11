@@ -1,8 +1,13 @@
-export type ThresholdMode = 'ballistic' | 'energy'
+export type ShipSizeGroup =
+  | 'capital'
+  | 'large'
+  | 'medium'
+  | 'small'
 
 export type Ship = {
   manufacturer: string
   name: string
+  sizeGroup: ShipSizeGroup
   health: number
   ballisticThreshold: number
   energyThreshold: number
@@ -35,25 +40,54 @@ export type ShipOverridesMap = Record<string, ShipOverride>
 export type WeaponOverridesMap = Record<string, WeaponOverride>
 
 export type ShipSortKey =
-  | 'threshold-desc'
   | 'health-desc'
+  | 'ballistic-desc'
+  | 'energy-desc'
   | 'manufacturer-asc'
 
 export type ComparisonSlot = {
   id: string
-  weaponName: string | null
+  weaponKey: string | null
 }
 
-export type ComparisonResult = {
-  threshold: number
-  passes: boolean
-}
-
-export type SlotTone = 'cyan' | 'violet' | 'amber'
+export type SlotTone = 'cyan' | 'violet' | 'amber' | 'emerald'
 
 export type SelectedWeaponComparison = {
   slotId: string
   slotLabel: string
   tone: SlotTone
   weapon: Weapon
+}
+
+export type ShipComparisonResult = {
+  slotId: string
+  slotLabel: string
+  tone: SlotTone
+  weapon: Weapon
+  thresholdType: WeaponType
+  threshold: number
+  passes: boolean
+  overflow: boolean
+}
+
+export type SelectedShipResult = {
+  ship: Ship
+  results: ShipComparisonResult[]
+  passingCount: number
+  blockedCount: number
+  hasSelections: boolean
+}
+
+export type ShipSizeGroupOption = {
+  id: ShipSizeGroup
+  label: string
+}
+
+export type ShipSidebarGroup = {
+  id: ShipSizeGroup
+  label: string
+  ships: Ship[]
+  visibleCount: number
+  selectedCount: number
+  collapsed: boolean
 }

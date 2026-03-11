@@ -1,60 +1,90 @@
-import { ThresholdModeToggle } from './ThresholdModeToggle'
 import { WeaponComparisonSlots } from './WeaponComparisonSlots'
 import type {
   ComparisonSlot,
   ShipSortKey,
-  SlotTone,
-  ThresholdMode,
   Weapon,
 } from '../types'
 
 type Props = {
-  mode: ThresholdMode
   sortKey: ShipSortKey
   slots: ComparisonSlot[]
-  tones: SlotTone[]
+  activeSlotCount: number
   weapons: Weapon[]
-  onModeChange: (mode: ThresholdMode) => void
+  selectedShipCount: number
+  mobileSidebarOpen: boolean
   onSortChange: (sortKey: ShipSortKey) => void
-  onSlotChange: (slotId: string, weaponName: string | null) => void
+  onSlotCountChange: (count: number) => void
+  onSlotChange: (slotId: string, weaponKey: string | null) => void
   onResetAllOverrides: () => void
+  onToggleMobileSidebar: () => void
 }
 
+const slotCountOptions = [1, 2, 3, 4]
+
 export function ControlsPanel({
-  mode,
   sortKey,
   slots,
-  tones,
+  activeSlotCount,
   weapons,
-  onModeChange,
+  selectedShipCount,
+  mobileSidebarOpen,
   onSortChange,
+  onSlotCountChange,
   onSlotChange,
   onResetAllOverrides,
+  onToggleMobileSidebar,
 }: Props) {
   return (
-    <section className="alpha-tool-panel alpha-tool-panel-sticky" aria-label="Alpha threshold controls">
+    <section className="alpha-tool-panel" aria-label="Alpha threshold controls">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
-            <p className="page-kicker">Comparison Controls</p>
-            <ThresholdModeToggle mode={mode} onChange={onModeChange} />
+        <div className="flex flex-col gap-4 border-b border-white/10 pb-4 xl:flex-row xl:items-end xl:justify-between">
+          <div className="space-y-3">
+            <div>
+              <p className="page-kicker">Comparison Controls</p>
+              <p className="mt-3 max-w-3xl text-sm text-slate-300/80">
+                Mix ballistic and energy weapons across up to four slots and compare them only against the ships you care about.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {slotCountOptions.map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  onClick={() => onSlotCountChange(count)}
+                  className={[
+                    'alpha-segment-button',
+                    activeSlotCount === count ? 'alpha-segment-button-active' : '',
+                  ].join(' ')}
+                >
+                  {count} slot{count > 1 ? 's' : ''}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-[minmax(0,220px)_auto] sm:items-end">
+          <div className="grid gap-3 sm:grid-cols-[minmax(0,220px)_minmax(0,220px)_auto] sm:items-end">
             <label className="space-y-2">
-              <span className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
-                Sort ships
-              </span>
+              <span className="alpha-control-label">Sort selected ships</span>
               <select
                 value={sortKey}
                 onChange={(event) => onSortChange(event.target.value as ShipSortKey)}
                 className="alpha-input"
               >
-                <option value="threshold-desc">Threshold descending</option>
                 <option value="health-desc">Health descending</option>
+                <option value="ballistic-desc">Ballistic threshold</option>
+                <option value="energy-desc">Energy threshold</option>
                 <option value="manufacturer-asc">Manufacturer</option>
               </select>
             </label>
+
+            <button
+              type="button"
+              onClick={onToggleMobileSidebar}
+              className="alpha-action-button min-h-11 lg:hidden"
+            >
+              {mobileSidebarOpen ? 'Hide ships' : `Select ships (${selectedShipCount})`}
+            </button>
 
             <button
               type="button"
@@ -68,7 +98,6 @@ export function ControlsPanel({
 
         <WeaponComparisonSlots
           slots={slots}
-          tones={tones}
           weapons={weapons}
           onChange={onSlotChange}
         />

@@ -43,7 +43,7 @@ export function ShipOverrideEditor({
   }
 
   return (
-    <div className="mt-4 space-y-3 rounded-xl border border-white/10 bg-black/30 p-3">
+    <div className="alpha-inline-editor space-y-3">
       <div className="grid gap-2 md:grid-cols-3">
         <input
           value={health}

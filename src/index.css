@@ -423,96 +423,158 @@
     @apply surface-title;
   }
 
+  /* Alpha Threshold: top-level spacing between the controls, legend, cards, and table. */
   .alpha-tool-layout {
-    @apply space-y-6;
+    @apply space-y-5 lg:space-y-6;
   }
 
+  /* Alpha Threshold: route-level shell matching the onboarding sidebar pattern. */
+  .alpha-tool-route {
+    @apply py-4 sm:py-6;
+  }
+
+  .alpha-tool-workspace {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .alpha-results-column {
+    @apply min-w-0 space-y-5 lg:space-y-6;
+  }
+
+  /* Alpha Threshold: primary control surface that sits above the data-heavy content. */
   .alpha-tool-panel {
-    @apply rounded-[1.5rem] border border-white/15 p-4 sm:p-5;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 38%),
-      linear-gradient(165deg, rgba(10, 18, 32, 0.78), rgba(3, 4, 7, 0.96));
+    @apply rounded-[1.5rem] border border-white/10 p-4 sm:p-5;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 24%), rgba(4, 8, 18, 0.92);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.17),
-      0 8px 24px rgba(0, 0, 0, 0.46);
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(0, 0, 0, 0.32);
   }
 
   .alpha-tool-panel-sticky {
     @apply lg:sticky lg:top-24 lg:z-20;
   }
 
-  .alpha-table-shell {
-    @apply overflow-hidden rounded-[1.5rem] border border-white/15;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 28%),
-      linear-gradient(165deg, rgba(8, 14, 26, 0.82), rgba(2, 4, 10, 0.98));
+  /* Alpha Threshold: sticky ship selection rail that scopes the result set. */
+  .alpha-sidebar {
+    @apply lg:self-start;
+  }
+
+  .alpha-sidebar-inner {
+    @apply rounded-[1.5rem] border border-white/10 p-4 sm:p-5;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%), rgba(4, 8, 18, 0.94);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      0 20px 44px rgba(0, 0, 0, 0.32);
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(0, 0, 0, 0.32);
+  }
+
+  .alpha-sidebar-groups {
+    @apply mt-4 space-y-3;
+    max-height: min(70vh, 56rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .alpha-sidebar-group {
+    @apply rounded-xl border border-white/10 p-3;
+    background: rgba(2, 6, 14, 0.72);
+  }
+
+  .alpha-sidebar-group-toggle {
+    @apply flex min-h-11 w-full items-center justify-between rounded-lg px-2 text-left text-sm uppercase tracking-[0.16em] text-slate-100 transition hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
+  }
+
+  /* Alpha Threshold: main results shell that holds the ship survivability matrix. */
+  .alpha-table-shell {
+    @apply overflow-hidden rounded-[1.5rem] border border-white/10;
+    background: rgba(3, 7, 16, 0.94);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 18px 38px rgba(0, 0, 0, 0.28);
   }
 
   .alpha-table-scroll {
     max-height: min(68vh, 58rem);
     overflow-y: auto;
     scrollbar-width: thin;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 8%), rgba(2, 4, 10, 0.55);
   }
 
+  /* Alpha Threshold: selected weapon summary cards. */
   .alpha-weapon-card {
     @apply rounded-[1.35rem] border border-white/10 p-4 sm:p-5;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 38%),
-      linear-gradient(155deg, rgba(10, 18, 32, 0.76), rgba(3, 4, 7, 0.92));
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%), rgba(5, 9, 20, 0.92);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.14),
-      0 16px 34px rgba(0, 0, 0, 0.26);
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(0, 0, 0, 0.24);
   }
 
   .alpha-ship-row {
-    @apply rounded-[1.2rem] border border-white/10 bg-slate-950/55 p-4 transition sm:p-5;
+    @apply rounded-[1.2rem] border border-white/10 p-4 transition sm:p-5;
+    background: rgba(7, 11, 21, 0.92);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 16px 30px rgba(0, 0, 0, 0.18);
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 12px 24px rgba(0, 0, 0, 0.2);
   }
 
   .alpha-ship-row:hover {
     @apply border-white/20;
-    background: rgba(9, 14, 28, 0.78);
+    background: rgba(9, 14, 26, 0.96);
   }
 
   .alpha-ship-row-pass {
-    border-color: rgba(103, 232, 249, 0.22);
+    border-color: rgba(103, 232, 249, 0.26);
     background:
-      linear-gradient(90deg, rgba(34, 211, 238, 0.08), transparent 24%),
-      rgba(9, 14, 28, 0.78);
+      linear-gradient(90deg, rgba(34, 211, 238, 0.06), transparent 26%),
+      rgba(8, 14, 26, 0.96);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 0 0 1px rgba(103, 232, 249, 0.08),
-      0 18px 36px rgba(3, 105, 161, 0.1);
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 12px 24px rgba(0, 0, 0, 0.22);
   }
 
   .alpha-ship-row-blocked {
-    opacity: 0.7;
-    border-color: rgba(148, 163, 184, 0.16);
+    border-color: rgba(71, 85, 105, 0.34);
+    background: rgba(4, 7, 14, 0.96);
   }
 
+  .alpha-empty-state {
+    @apply rounded-[1.2rem] border border-dashed border-white/15 p-6 text-center;
+    background: rgba(3, 7, 16, 0.62);
+  }
+
+  /* Alpha Threshold: shared form controls for search, sort, and numeric overrides. */
   .alpha-input {
-    @apply min-h-11 w-full rounded-xl border border-white/15 bg-slate-950/70 px-3 text-sm text-slate-100 outline-none placeholder:text-slate-400;
+    @apply min-h-11 w-full rounded-xl border border-white/15 px-3 text-sm text-slate-50 outline-none placeholder:text-slate-500;
+    background: rgba(2, 6, 23, 0.85);
+  }
+
+  .alpha-input:hover {
+    border-color: rgba(148, 163, 184, 0.32);
   }
 
   .alpha-input:focus-visible {
     outline: 2px solid rgba(125, 211, 252, 0.88);
     outline-offset: 2px;
-    border-color: rgba(125, 211, 252, 0.44);
+    border-color: rgba(125, 211, 252, 0.52);
   }
 
   .alpha-select-panel {
-    @apply overflow-hidden rounded-xl border border-white/10 bg-slate-950 shadow-2xl backdrop-blur-xl;
+    @apply overflow-hidden rounded-xl border border-white/10 shadow-2xl backdrop-blur-xl;
+    background: rgba(2, 6, 14, 0.98);
+    box-shadow:
+      0 18px 32px rgba(0, 0, 0, 0.48),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  /* Alpha Threshold: compact labels, state chips, and numeric readouts. */
+  .alpha-control-label {
+    @apply text-[10px] uppercase tracking-[0.2em] text-slate-300/75;
   }
 
   .alpha-chip {
-    @apply inline-flex min-h-8 items-center rounded-full border px-3 text-[11px] uppercase tracking-[0.18em];
+    @apply inline-flex min-h-8 items-center rounded-full border border-white/10 bg-white/5 px-3 text-[11px] uppercase tracking-[0.18em] text-slate-200;
   }
 
   .alpha-chip-pass {
@@ -528,19 +590,113 @@
   }
 
   .alpha-stat-label {
-    @apply text-[11px] uppercase tracking-[0.18em] text-slate-500;
+    @apply text-[10px] uppercase tracking-[0.2em] text-slate-400;
   }
 
   .alpha-stat-value {
-    @apply mt-2 text-sm font-semibold text-slate-100;
+    @apply mt-2 text-base font-semibold text-slate-50;
   }
 
+  /* Alpha Threshold: button treatment for reset, edit, and override actions. */
   .alpha-action-button {
-    @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 bg-white/5 px-3 text-xs uppercase tracking-[0.16em] text-slate-200 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
+    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-white/10 bg-slate-900/70 px-3 text-xs uppercase tracking-[0.16em] text-slate-100 transition hover:border-white/20 hover:bg-slate-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
   }
 
   .alpha-action-button-primary {
-    @apply border-cyan-300/20 bg-cyan-400/10 text-cyan-100;
+    @apply border-cyan-300/25 bg-cyan-400/10 text-cyan-100;
+  }
+
+  .alpha-segment-button {
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 px-3 text-xs uppercase tracking-[0.16em] text-slate-300 transition hover:border-white/20 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
+    background: rgba(2, 6, 23, 0.72);
+  }
+
+  .alpha-segment-button:hover {
+    background: rgba(15, 23, 42, 0.88);
+  }
+
+  .alpha-segment-button-active {
+    @apply border-cyan-300/25 bg-cyan-400/10 text-cyan-100;
+  }
+
+  .alpha-legend-panel {
+    @apply rounded-[1.1rem] border border-white/10 px-4 py-3;
+    background: rgba(4, 8, 18, 0.78);
+  }
+
+  .alpha-slot-panel {
+    @apply rounded-xl border border-white/10 p-3;
+    background: rgba(3, 7, 16, 0.72);
+  }
+
+  /* Alpha Threshold: inline editors that appear inside cards and ship rows. */
+  .alpha-inline-editor {
+    @apply mt-4 rounded-xl border border-white/10 p-3;
+    background: rgba(2, 6, 14, 0.86);
+  }
+
+  /* Alpha Threshold: small boxed metrics used to group key values without changing layout. */
+  .alpha-metric-card {
+    @apply rounded-xl border border-white/10 px-3 py-3;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Alpha Threshold: table intro bar that separates metadata from the row list. */
+  .alpha-table-header {
+    @apply border-b border-white/10 px-4 py-4 sm:px-5;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 82%);
+  }
+
+  /* Alpha Threshold: ship option rows in the left selector rail. */
+  .alpha-ship-option-button {
+    @apply flex min-h-12 w-full items-center gap-3 rounded-xl border border-white/10 px-3 py-3 text-left transition hover:border-white/20 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .alpha-ship-option-button[data-selected='true'] {
+    border-color: rgba(103, 232, 249, 0.28);
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.08), transparent 28%),
+      rgba(255, 255, 255, 0.04);
+  }
+
+  .alpha-ship-option-check {
+    @apply h-4 w-4 flex-none rounded border border-white/20 bg-slate-950/80;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .alpha-ship-option-check-selected {
+    @apply border-cyan-300/35 bg-cyan-300/20;
+    box-shadow:
+      inset 0 0 0 3px rgba(103, 232, 249, 0.88),
+      0 0 0 1px rgba(103, 232, 249, 0.18);
+  }
+
+  .alpha-ship-option-main {
+    @apply min-w-0 flex-1;
+  }
+
+  .alpha-ship-option-name {
+    @apply block truncate text-sm font-semibold text-slate-50;
+  }
+
+  .alpha-ship-option-meta {
+    @apply mt-1 block text-[11px] uppercase tracking-[0.16em] text-slate-400;
+  }
+
+  .alpha-ship-option-stats {
+    @apply hidden text-[11px] uppercase tracking-[0.16em] text-slate-400 sm:flex sm:flex-col sm:items-end;
+  }
+
+  /* Alpha Threshold: dual-lane chart surface for ballistic and energy comparisons. */
+  .alpha-threshold-lane {
+    @apply space-y-2;
+  }
+
+  /* Alpha Threshold: subtle hover-only row note for exact values and current threshold context. */
+  .alpha-hover-note {
+    @apply pointer-events-none rounded-xl border border-white/10 px-3 py-2 text-[11px] uppercase tracking-[0.16em] text-slate-300;
+    background: rgba(2, 6, 14, 0.92);
   }
 }
 
@@ -1999,6 +2155,18 @@ body {
 }
 
 @media (min-width: 1024px) {
+  .alpha-tool-workspace {
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .alpha-sidebar {
+    position: sticky;
+    top: 6rem;
+    max-height: calc(100vh - 6.5rem);
+    overflow-y: auto;
+  }
+
   .onboarding-layout {
     grid-template-columns: 240px minmax(0, 1fr);
     align-items: start;
