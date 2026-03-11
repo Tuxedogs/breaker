@@ -5,7 +5,6 @@ type FilterOptionSet = {
   roles: string[];
   enemies: string[];
   statuses: string[];
-  types: string[];
 };
 
 type DoctrineFilterBarProps = {
@@ -60,11 +59,11 @@ export default function DoctrineFilterBar({
   onChange,
   onClear,
   title = "Global Module Filters",
-  description = "Ship, role, enemy, status, and module type.",
+  description = "Ship, role, enemy, and status.",
 }: DoctrineFilterBarProps) {
   return (
-    <section className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-5">
-      <div className="card-head-sm">
+    <section className="filter-doctrine">
+      <div className="filter-head">
         <h2 className="title-font text-lg text-cyan-200">{title}</h2>
         <p className="mt-2 text-sm text-slate-300">{description}</p>
       </div>
@@ -74,7 +73,6 @@ export default function DoctrineFilterBar({
         <SelectField label="Role" value={filters.role} values={options.roles} onChange={(value) => onChange("role", value)} />
         <SelectField label="Enemy" value={filters.enemy} values={options.enemies} onChange={(value) => onChange("enemy", value)} />
         <SelectField label="Status" value={filters.status} values={options.statuses} onChange={(value) => onChange("status", value)} />
-        <SelectField label="Type" value={filters.type} values={options.types} onChange={(value) => onChange("type", value)} />
       </div>
 
       {onClear ? (

@@ -23,6 +23,14 @@ const setupItems = [
   },
 ];
 
+const toolItems = [
+  {
+    title: "Alpha vs Threshold",
+    subtitle: "Compare weapon alpha against ship hull damage thresholds.",
+    to: "/tools/alpha-threshold",
+  },
+];
+
 export default function SetupRail() {
   return (
     <section>
@@ -41,6 +49,24 @@ export default function SetupRail() {
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {setupItems.map((item) => (
+          <Link
+            key={item.title}
+            to={item.to}
+            className="setup-config-item framework-modern-row rounded-lg p-3 transition"
+          >
+            <h3 className="title-font text-base text-slate-100">{item.title}</h3>
+            <p className="mt-2 text-xs text-slate-300/70">{item.subtitle}</p>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-6 card-head-sm">
+        <h2 className="title-font text-lg text-cyan-100/90">Tools</h2>
+        <p className="mt-2 text-sm text-slate-300/80">Interactive comparison and analysis utilities</p>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {toolItems.map((item) => (
           <Link
             key={item.title}
             to={item.to}

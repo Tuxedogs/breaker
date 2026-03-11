@@ -17,8 +17,6 @@ function toModulesFilterHref(tag: string) {
     params.set("enemy", normalized);
   } else if (moduleFilterOptions.statuses.includes(normalized as (typeof moduleFilterOptions.statuses)[number])) {
     params.set("status", normalized);
-  } else if (moduleFilterOptions.types.includes(normalized as (typeof moduleFilterOptions.types)[number])) {
-    params.set("type", normalized);
   } else {
     params.set("domain", normalized);
   }
