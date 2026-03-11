@@ -83,6 +83,7 @@ export default function AlphaThresholdToolPage() {
         <PageLayout
           title="Alpha vs Threshold"
           summary="Compare weapon alpha against ship ballistic or energy thresholds to see which ships can take hull damage."
+          panelClassName="border-0 bg-transparent p-0 shadow-none sm:p-0 lg:p-0"
           contentClassName="max-w-none"
         >
           <AlphaThresholdPage
