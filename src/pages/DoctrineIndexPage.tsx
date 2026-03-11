@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import OnboardingActionRail from "../components/OnboardingActionRail";
 import RoutingCard, { type RoutingCardCtaVariant, type RoutingCardIcon } from "../components/RoutingCard";
 import SetupRail from "../components/SetupRail";
@@ -104,6 +104,16 @@ export default function DoctrineIndexPage() {
           ))}
           </div>
         </section>
+
+        <Link to="/tools/alpha-threshold" className="setup-alpha-card section-hub-card">
+          <span className="section-hub-copy">
+            <span className="title-font section-hub-title">ALPHA VS THRESHOLD</span>
+            <span className="section-hub-subtitle">
+              Compare weapon alpha against ship ballistic and energy thresholds.
+            </span>
+          </span>
+          <span className="section-hub-indicator" aria-hidden="true" />
+        </Link>
 
         <div className="mt-8">
           <OnboardingActionRail />
