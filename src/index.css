@@ -456,7 +456,7 @@
   }
 
   .alpha-tool-panel-sticky {
-    @apply lg:sticky lg:top-24 lg:z-20;
+    @apply lg:sticky lg:top-15 lg:z-20;
   }
 
   /* Alpha Threshold: sticky ship selection rail that scopes the result set. */
@@ -717,6 +717,13 @@
   }
 
   /* Alpha Threshold: ship option rows in the left selector rail. */
+  .alpha-ship-option-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
   .alpha-ship-option-button {
     display: flex;
     min-height: 3rem;
@@ -730,6 +737,9 @@
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
     text-align: left;
+    flex: 0 0 auto;
+    width: fit-content;
+    max-width: 100%;
     transition:
       border-color 160ms ease,
       background-color 160ms ease,
@@ -2277,7 +2287,7 @@ body {
 
   .sidebar-workspace-rail {
   position: sticky;
-  top: 18rem;
+  top: 10rem;
   align-self: start;
   width: 280px;
 }

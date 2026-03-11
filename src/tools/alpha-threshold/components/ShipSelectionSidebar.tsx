@@ -114,7 +114,7 @@ export function ShipSelectionSidebar({
               </button>
 
               {!group.collapsed ? (
-                <div className="mt-2 space-y-2">
+                <div className="alpha-ship-option-list">
                   {group.ships.length > 0 ? (
                     group.ships.map((ship) => {
                       const isSelected = selectedShipSet.has(ship.name)
