@@ -16,6 +16,7 @@ import SubTargetingPage from "./pages/systems/SubTargetingPage";
 import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
 import TraditionalModulePage from "./pages/TraditionalModulePage";
 import WipPage from "./pages/WipPage";
+import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
 
 const ENTRY_STORAGE_KEY = "ares:entered-framework";
 
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="module/:id" element={<DoctrineModulePage />} />
           <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
           <Route path="maps" element={<MapsPage />} />
+          <Route path="tools/alpha-threshold" element={<AlphaThresholdToolPage />} />
 
           <Route path="ships/:slug" element={<ShipHubPage />} />
 

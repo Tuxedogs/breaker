@@ -3,7 +3,6 @@ export type ModuleFilters = {
   role: string;
   enemy: string;
   status: string;
-  type: string;
   domain: string;
 };
 
@@ -12,7 +11,6 @@ export const emptyModuleFilters: ModuleFilters = {
   role: "",
   enemy: "",
   status: "",
-  type: "",
   domain: "",
 };
 
@@ -22,7 +20,6 @@ export function readModuleFilters(searchParams: URLSearchParams): ModuleFilters 
     role: searchParams.get("role") ?? "",
     enemy: searchParams.get("enemy") ?? "",
     status: searchParams.get("status") ?? "",
-    type: searchParams.get("type") ?? "",
     domain: searchParams.get("domain") ?? "",
   };
 }

@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import DoctrineFilterBar from "../components/DoctrineFilterBar";
 import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
-import { moduleFilterOptions, moduleLoadError, moduleMatchesShipRole, modules } from "../data/modules";
+import { moduleFilterOptions, moduleLoadError, moduleMatchesShipRole, modules, type DoctrineModule } from "../data/modules";
 import { emptyModuleFilters, readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
 const validationStatusClassName = {
@@ -16,6 +16,16 @@ function matchesFilter(list: string[], selected: string) {
   return !selected || list.includes(selected);
 }
 
+function matchesRoleSelection(module: DoctrineModule, role: string) {
+  if (!role) return true;
+  if (role !== "crew") {
+    return moduleMatchesShipRole(module, { role });
+  }
+
+  const crewRoles = ["gunner", "engineer"];
+  return module.roles.some((moduleRole) => crewRoles.includes(moduleRole));
+}
+
 export default function ModuleIndexPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = readModuleFilters(searchParams);
@@ -26,14 +36,14 @@ export default function ModuleIndexPage() {
   }
 
   const filteredModules = modules.filter((module) => {
-    if (!moduleMatchesShipRole(module, { ship: filters.ship, role: filters.role })) return false;
+    if (!moduleMatchesShipRole(module, { ship: filters.ship })) return false;
+    if (!matchesRoleSelection(module, filters.role)) return false;
     if (!matchesFilter(module.enemies, filters.enemy)) return false;
     if (filters.status && module.status !== filters.status) return false;
-    if (filters.type && module.moduleType !== filters.type) return false;
     if (filters.domain && !module.tags.includes(filters.domain)) return false;
     return true;
   });
-  const isManningIndex = filters.type === "manning" && (!filters.role || filters.role === "gunner");
+  const isManningIndex = !filters.ship && (filters.role === "gunner" || filters.role === "crew");
   const orderedModules = isManningIndex
     ? [...filteredModules].sort((a, b) => {
       const aPinnedIdx = manningPinnedModuleIds.indexOf(a.id as (typeof manningPinnedModuleIds)[number]);
