@@ -70,6 +70,7 @@ export default function AppShell() {
   const [mobileSectionOpen, setMobileSectionOpen] = useState<MenuKey | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const isMapsRoute = location.pathname.startsWith("/maps");
+  const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
   const isHeroRoute = location.pathname === "/";
   const isShipsRoute = location.pathname.startsWith("/ships");
   const isSystemsRoute = location.pathname.startsWith("/systems");
@@ -442,7 +443,7 @@ export default function AppShell() {
       <main
         className={[
           "relative z-20 mx-auto w-full px-4 pb-8 pt-24 sm:px-6 lg:px-8",
-          isMapsRoute ? "max-w-[96vw]" : "max-w-7xl",
+          isMapsRoute || isAlphaThresholdRoute ? "max-w-[96vw]" : "max-w-7xl",
         ].join(" ")}
       >
         <Outlet />
