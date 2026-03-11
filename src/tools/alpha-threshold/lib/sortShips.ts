@@ -1,16 +1,16 @@
-import { getActiveThreshold } from './calculations'
-import type { Ship, ShipSortKey, ThresholdMode } from '../types'
+import type { Ship, ShipSortKey } from '../types'
 
-export function sortShips(
-  ships: Ship[],
-  sortKey: ShipSortKey,
-  mode: ThresholdMode
-): Ship[] {
+export function sortShips(ships: Ship[], sortKey: ShipSortKey): Ship[] {
   const next = [...ships]
 
   switch (sortKey) {
-    case 'health-desc':
-      return next.sort((a, b) => b.health - a.health)
+    case 'ballistic-desc':
+      return next.sort(
+        (a, b) => b.ballisticThreshold - a.ballisticThreshold
+      )
+
+    case 'energy-desc':
+      return next.sort((a, b) => b.energyThreshold - a.energyThreshold)
 
     case 'manufacturer-asc':
       return next.sort((a, b) => {
@@ -20,10 +20,8 @@ export function sortShips(
         return a.name.localeCompare(b.name)
       })
 
-    case 'threshold-desc':
+    case 'health-desc':
     default:
-      return next.sort(
-        (a, b) => getActiveThreshold(b, mode) - getActiveThreshold(a, mode)
-      )
+      return next.sort((a, b) => b.health - a.health)
   }
 }

@@ -16,12 +16,14 @@ const toneClassName: Record<SlotTone, string> = {
   cyan: 'border-cyan-300/25 bg-cyan-400/5 text-cyan-100',
   violet: 'border-violet-300/25 bg-violet-400/5 text-violet-100',
   amber: 'border-amber-300/25 bg-amber-400/5 text-amber-100',
+  emerald: 'border-emerald-300/25 bg-emerald-400/5 text-emerald-100',
 }
 
 const toneDotClassName: Record<SlotTone, string> = {
   cyan: 'bg-cyan-300',
   violet: 'bg-violet-300',
   amber: 'bg-amber-300',
+  emerald: 'bg-emerald-300',
 }
 
 export function WeaponCard({
@@ -36,11 +38,11 @@ export function WeaponCard({
 
   return (
     <article className="alpha-weapon-card">
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-4">
         <div className="space-y-2">
           <div
             className={[
-              'inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em]',
+              'alpha-chip items-center gap-2 py-1',
               toneClassName[tone],
             ].join(' ')}
           >
@@ -54,9 +56,11 @@ export function WeaponCard({
             {label}
           </div>
           <div>
-            <h3 className="surface-title text-lg">{weapon.name}</h3>
-            <p className="mt-1 text-sm text-slate-300/80">
-              {weapon.size} · {weapon.type}
+            <h3 className="title-font text-xl leading-tight text-slate-50">
+              {weapon.name}
+            </h3>
+            <p className="mt-1 text-sm text-slate-400">
+              {weapon.size} / {weapon.type}
             </p>
           </div>
         </div>
@@ -71,19 +75,19 @@ export function WeaponCard({
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div>
+        <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Alpha</dt>
           <dd className="alpha-stat-value">{formatMetric(weapon.alpha)}</dd>
         </div>
-        <div>
+        <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Burst DPS</dt>
           <dd className="alpha-stat-value">{formatMetric(weapon.burstDps)}</dd>
         </div>
-        <div>
+        <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Speed</dt>
           <dd className="alpha-stat-value">{formatMetric(weapon.speed)} m/s</dd>
         </div>
-        <div>
+        <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Color</dt>
           <dd className="alpha-stat-value">{label}</dd>
         </div>

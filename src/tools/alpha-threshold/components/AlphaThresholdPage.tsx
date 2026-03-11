@@ -1,67 +1,47 @@
-import { useMemo } from 'react'
-import { ControlsPanel } from './ControlsPanel'
 import { Legend } from './Legend'
 import { ShipTable } from './ShipTable'
 import { WeaponCard } from './WeaponCard'
 import { getWeaponKey } from '../lib/calculations'
-import { useAlphaThresholdState } from '../hooks/useAlphaThresholdState'
-import type { SelectedWeaponComparison, SlotTone } from '../types'
+import type {
+  SelectedShipResult,
+  SelectedWeaponComparison,
+  ShipOverride,
+  WeaponOverride,
+} from '../types'
 
-const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber']
+type Props = {
+  selectedWeapons: SelectedWeaponComparison[]
+  selectedShipResults: SelectedShipResult[]
+  axisMaxByType: {
+    ballistic: number
+    energy: number
+  }
+  shipOverrides: Record<string, ShipOverride>
+  weaponOverrides: Record<string, WeaponOverride>
+  onSaveShipOverride: (shipName: string, patch: ShipOverride) => void
+  onResetShipOverride: (shipName: string) => void
+  onSaveWeaponOverride: (weaponKey: string, patch: WeaponOverride) => void
+  onResetWeaponOverride: (weaponKey: string) => void
+}
 
-export function AlphaThresholdPage() {
-  const {
-    mode,
-    setMode,
-    sortKey,
-    setSortKey,
-    slots,
-    setSlotWeapon,
-    availableWeapons,
-    effectiveShips,
-    selectedWeapons,
-    shipOverrides,
-    weaponOverrides,
-    setShipOverride,
-    resetShipOverride,
-    setWeaponOverride,
-    resetWeaponOverride,
-    resetAllOverrides,
-  } = useAlphaThresholdState()
-
-  const comparisonWeapons = useMemo<SelectedWeaponComparison[]>(() => {
-    return selectedWeapons.map(({ slotId, weapon }) => {
-      const slotIndex = slots.findIndex((slot) => slot.id === slotId)
-      const slotNumber = slotIndex >= 0 ? slotIndex + 1 : 1
-
-      return {
-        slotId,
-        slotLabel: `Weapon ${slotNumber}`,
-        tone: SLOT_TONES[Math.max(0, slotNumber - 1)] ?? 'cyan',
-        weapon,
-      }
-    })
-  }, [selectedWeapons, slots])
-
+export function AlphaThresholdPage({
+  selectedWeapons,
+  selectedShipResults,
+  axisMaxByType,
+  shipOverrides,
+  weaponOverrides,
+  onSaveShipOverride,
+  onResetShipOverride,
+  onSaveWeaponOverride,
+  onResetWeaponOverride,
+}: Props) {
   return (
-    <div className="alpha-tool-layout">
-      <ControlsPanel
-        mode={mode}
-        sortKey={sortKey}
-        slots={slots}
-        tones={SLOT_TONES}
-        weapons={availableWeapons}
-        onModeChange={setMode}
-        onSortChange={setSortKey}
-        onSlotChange={setSlotWeapon}
-        onResetAllOverrides={resetAllOverrides}
-      />
+    <div className="alpha-results-column">
+      <Legend selectedWeapons={selectedWeapons} />
 
-      <Legend mode={mode} selectedWeapons={comparisonWeapons} />
-
-      {comparisonWeapons.length > 0 ? (
-        <section className="grid gap-4 lg:grid-cols-3">
-          {comparisonWeapons.map((selectedWeapon) => {
+      {selectedWeapons.length > 0 ? (
+        <section className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4">
+          {selectedWeapons.map((selectedWeapon) => {
             const weaponKey = getWeaponKey(selectedWeapon.weapon)
 
             return (
@@ -71,8 +51,10 @@ export function AlphaThresholdPage() {
                 tone={selectedWeapon.tone}
                 weapon={selectedWeapon.weapon}
                 override={weaponOverrides[weaponKey]}
-                onSaveOverride={(patch) => setWeaponOverride(weaponKey, patch)}
-                onResetOverride={() => resetWeaponOverride(weaponKey)}
+                onSaveOverride={(patch) =>
+                  onSaveWeaponOverride(weaponKey, patch)
+                }
+                onResetOverride={() => onResetWeaponOverride(weaponKey)}
               />
             )
           })}
@@ -80,12 +62,11 @@ export function AlphaThresholdPage() {
       ) : null}
 
       <ShipTable
-        ships={effectiveShips}
-        mode={mode}
-        selectedWeapons={comparisonWeapons}
+        shipResults={selectedShipResults}
+        axisMaxByType={axisMaxByType}
         shipOverrides={shipOverrides}
-        onSaveOverride={setShipOverride}
-        onResetOverride={resetShipOverride}
+        onSaveOverride={onSaveShipOverride}
+        onResetOverride={onResetShipOverride}
       />
     </div>
   )
