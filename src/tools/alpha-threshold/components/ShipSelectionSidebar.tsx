@@ -127,23 +127,15 @@ export function ShipSelectionSidebar({
                           className="alpha-ship-option-button"
                           data-selected={isSelected}
                         >
-                          <span
-                            aria-hidden
-                            className={[
-                              'alpha-ship-option-check',
-                              isSelected ? 'alpha-ship-option-check-selected' : '',
-                            ].join(' ')}
-                          />
                           <span className="alpha-ship-option-main">
-                            <span className="alpha-ship-option-name">
-                              {formatEntityLabel(ship.name)}
-                            </span>
                             <span className="alpha-ship-option-meta">
                               {ship.manufacturer}
                             </span>
+                            <span className="alpha-ship-option-name">
+                              {formatEntityLabel(ship.name)}
+                            </span>
                           </span>
                           <span className="alpha-ship-option-stats">
-                            <span>Hull {formatMetric(ship.health)}</span>
                             <span>B {formatMetric(ship.ballisticThreshold)}</span>
                             <span>E {formatMetric(ship.energyThreshold)}</span>
                           </span>

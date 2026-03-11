@@ -1,5 +1,6 @@
 import { ControlsPanel } from './components/ControlsPanel'
 import PageLayout from '../../components/PageLayout'
+import SidebarWorkspace from '../../components/SidebarWorkspace'
 import { AlphaThresholdPage } from './components/AlphaThresholdPage'
 import { ShipSelectionSidebar } from './components/ShipSelectionSidebar'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
@@ -41,7 +42,9 @@ export default function AlphaThresholdToolPage() {
 
   return (
     <section className="alpha-tool-route">
-      <div className="alpha-tool-workspace">
+      <SidebarWorkspace
+        className="alpha-sidebar-workspace"
+        sidebar={
         <ShipSelectionSidebar
           groups={sidebarGroups}
           selectedShipNames={selectedShipNames}
@@ -57,7 +60,8 @@ export default function AlphaThresholdToolPage() {
           onSelectVisible={selectVisibleShips}
           onClearAll={clearAllShips}
         />
-
+        }
+      >
         <PageLayout
           title="Alpha vs Threshold"
           summary="Compare weapon alpha against ship ballistic or energy thresholds to see which ships can take hull damage."
@@ -93,7 +97,7 @@ export default function AlphaThresholdToolPage() {
             />
           </div>
         </PageLayout>
-      </div>
+      </SidebarWorkspace>
     </section>
   )
 }

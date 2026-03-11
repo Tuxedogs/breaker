@@ -71,11 +71,8 @@ export function ShipTable({
         ) : (
           <article className="alpha-empty-state">
             <h3 className="title-font text-xl text-slate-50">
-              No ships selected
+              Select a Ship and Weapon
             </h3>
-            <p className="mt-2 text-sm text-slate-400">
-              Open the ship selector and choose one or more ships to render results.
-            </p>
           </article>
         )}
       </div>
