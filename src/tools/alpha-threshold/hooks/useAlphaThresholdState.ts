@@ -1,18 +1,19 @@
 import { useEffect, useMemo } from 'react'
-import { ballisticWeapons } from '../data/ballisticWeapons'
-import { energyWeapons } from '../data/energyWeapons'
 import { shipThresholds } from '../data/shipThresholds'
+import { weapons } from '../data/weapons/weapons'
 import {
+  buildAxisMaxByType,
   buildSelectedShipResult,
   getDefaultCollapsedGroups,
   getDefaultSelectedShips,
-  getLaneAxisMax,
   getWeaponKey,
+  resolveAxisMaxByType,
   SHIP_SIZE_GROUPS,
 } from '../lib/calculations'
 import { mergeShipOverride, mergeWeaponOverride } from '../lib/mergeOverrides'
 import { sortShips } from '../lib/sortShips'
 import type {
+  AxisScaleMode,
   ComparisonSlot,
   SelectedWeaponComparison,
   ShipSidebarGroup,
@@ -32,6 +33,7 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
   'energy-desc',
   'manufacturer-asc',
 ]
+const VALID_AXIS_SCALE_MODES: AxisScaleMode[] = ['global', 'by-size', 'per-row']
 
 function buildDefaultSlots(): ComparisonSlot[] {
   return [
@@ -91,6 +93,10 @@ function normalizeSlots(value: ComparisonSlot[]): ComparisonSlot[] {
 
 function normalizeSortKey(value: ShipSortKey): ShipSortKey {
   return VALID_SORT_KEYS.includes(value) ? value : 'health-desc'
+}
+
+function normalizeAxisScaleMode(value: AxisScaleMode): AxisScaleMode {
+  return VALID_AXIS_SCALE_MODES.includes(value) ? value : 'by-size'
 }
 
 function normalizeSelectedShipNames(value: string[]): string[] {
@@ -160,6 +166,10 @@ export function useAlphaThresholdState() {
   const [collapsedGroups, setCollapsedGroups] = useLocalStorageState<
     Record<ShipSizeGroup, boolean>
   >('alpha-threshold.collapsed-groups', getDefaultCollapsedGroups())
+  const [axisScaleMode, setAxisScaleMode] = useLocalStorageState<AxisScaleMode>(
+    'alpha-threshold.axis-scale-mode',
+    'by-size'
+  )
 
   const slots = useMemo(
     () => normalizeSlots(storedSlots),
@@ -176,6 +186,10 @@ export function useAlphaThresholdState() {
   const normalizedCollapsedGroups = useMemo(
     () => normalizeCollapsedGroups(collapsedGroups),
     [collapsedGroups]
+  )
+  const normalizedAxisScaleMode = useMemo(
+    () => normalizeAxisScaleMode(axisScaleMode),
+    [axisScaleMode]
   )
 
   useEffect(() => {
@@ -216,6 +230,12 @@ export function useAlphaThresholdState() {
     setCollapsedGroups,
   ])
 
+  useEffect(() => {
+    if (axisScaleMode !== normalizedAxisScaleMode) {
+      setAxisScaleMode(normalizedAxisScaleMode)
+    }
+  }, [axisScaleMode, normalizedAxisScaleMode, setAxisScaleMode])
+
   const {
     shipOverrides,
     weaponOverrides,
@@ -226,10 +246,7 @@ export function useAlphaThresholdState() {
     resetAllOverrides,
   } = useOverrides()
 
-  const allWeapons = useMemo<WeaponRecord[]>(
-    () => [...ballisticWeapons, ...energyWeapons],
-    []
-  )
+  const allWeapons = useMemo<WeaponRecord[]>(() => weapons, [])
 
   const effectiveShips = useMemo(() => {
     const merged = shipThresholds.map((ship) =>
@@ -303,18 +320,25 @@ export function useAlphaThresholdState() {
       .filter(Boolean) as SelectedWeaponComparison[]
   }, [allWeapons, slots, weaponOverrides])
 
-  const axisMaxByType = useMemo<Record<WeaponThresholdType, number>>(() => {
-    return {
-      ballistic: getLaneAxisMax(selectedShips, selectedWeapons, 'ballistic'),
-      energy: getLaneAxisMax(selectedShips, selectedWeapons, 'energy'),
-    }
-  }, [selectedShips, selectedWeapons])
+  const globalAxisMaxByType = useMemo<Record<WeaponThresholdType, number>>(
+    () => buildAxisMaxByType(selectedShips, selectedWeapons),
+    [selectedShips, selectedWeapons]
+  )
 
   const selectedShipResults = useMemo(() => {
     return selectedShips.map((ship) =>
-      buildSelectedShipResult(ship, selectedWeapons, axisMaxByType)
+      buildSelectedShipResult(
+        ship,
+        selectedWeapons,
+        resolveAxisMaxByType(
+          ship,
+          selectedShips,
+          selectedWeapons,
+          normalizedAxisScaleMode
+        )
+      )
     )
-  }, [axisMaxByType, selectedShips, selectedWeapons])
+  }, [normalizedAxisScaleMode, selectedShips, selectedWeapons])
 
   function setSlotWeapon(slotId: string, weaponKey: string | null) {
     setSlots((prev) =>
@@ -362,7 +386,9 @@ export function useAlphaThresholdState() {
     setSlotWeapon,
     allWeapons,
     selectedWeapons,
-    axisMaxByType,
+    axisScaleMode: normalizedAxisScaleMode,
+    setAxisScaleMode,
+    globalAxisMaxByType,
     sidebarGroups,
     selectedShipNames: normalizedSelectedShipNames,
     selectedShipCount: normalizedSelectedShipNames.length,

@@ -15,7 +15,12 @@ export type Ship = {
 
 export type WeaponDamageType = 'ballistic' | 'energy' | 'distortion'
 export type WeaponThresholdType = Extract<WeaponDamageType, 'ballistic' | 'energy'>
-export type WeaponSource = 'erkul' | 'spviewer' | 'scunpacked' | 'merged'
+export type WeaponSource =
+  | 'manual'
+  | 'erkul'
+  | 'spviewer'
+  | 'scunpacked'
+  | 'merged'
 
 export type WeaponRecord = {
   id: string
@@ -58,6 +63,7 @@ export type ComparisonSlot = {
 }
 
 export type SlotTone = 'cyan' | 'violet' | 'amber' | 'emerald'
+export type AxisScaleMode = 'global' | 'by-size' | 'per-row'
 
 export type SelectedWeaponComparison = {
   slotId: string
@@ -83,6 +89,7 @@ export type SelectedShipResult = {
   passingCount: number
   blockedCount: number
   hasSelections: boolean
+  axisMaxByType: Record<WeaponThresholdType, number>
 }
 
 export type ShipSizeGroupOption = {

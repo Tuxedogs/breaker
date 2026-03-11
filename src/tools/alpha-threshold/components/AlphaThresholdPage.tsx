@@ -1,35 +1,36 @@
 import { ShipTable } from './ShipTable'
 import type {
+  AxisScaleMode,
   SelectedShipResult,
   ShipOverride,
 } from '../types'
 
 type Props = {
   selectedShipResults: SelectedShipResult[]
-  axisMaxByType: {
+  axisScaleMode: AxisScaleMode
+  globalAxisMaxByType: {
     ballistic: number
     energy: number
   }
+  onAxisScaleModeChange: (value: AxisScaleMode) => void
   shipOverrides: Record<string, ShipOverride>
-  onSaveShipOverride: (shipName: string, patch: ShipOverride) => void
-  onResetShipOverride: (shipName: string) => void
 }
 
 export function AlphaThresholdPage({
   selectedShipResults,
-  axisMaxByType,
+  axisScaleMode,
+  globalAxisMaxByType,
+  onAxisScaleModeChange,
   shipOverrides,
-  onSaveShipOverride,
-  onResetShipOverride,
 }: Props) {
   return (
     <div className="alpha-results-column">
       <ShipTable
         shipResults={selectedShipResults}
-        axisMaxByType={axisMaxByType}
+        axisScaleMode={axisScaleMode}
+        globalAxisMaxByType={globalAxisMaxByType}
+        onAxisScaleModeChange={onAxisScaleModeChange}
         shipOverrides={shipOverrides}
-        onSaveOverride={onSaveShipOverride}
-        onResetOverride={onResetShipOverride}
       />
     </div>
   )

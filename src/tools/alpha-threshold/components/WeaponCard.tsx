@@ -10,6 +10,7 @@ type Props = {
   tone: SlotTone
   weapon: WeaponRecord
   onClear?: () => void
+  onSelect?: () => void
 }
 
 const toneClassName: Record<SlotTone, string> = {
@@ -31,11 +32,18 @@ export function WeaponCard({
   tone,
   weapon,
   onClear,
+  onSelect,
 }: Props) {
   return (
-    <article className="alpha-summary-card">
+    <article
+      className={['alpha-summary-card', onSelect ? 'alpha-summary-card-selectable' : ''].filter(Boolean).join(' ')}
+    >
       <div className="flex items-start justify-between gap-3 border-b border-white/10 pb-3">
-        <div className="space-y-2">
+        <button
+          type="button"
+          onClick={onSelect}
+          className="min-w-0 flex-1 space-y-2 text-left"
+        >
           <div
             className={[
               'alpha-chip items-center gap-2 py-1',
@@ -59,7 +67,7 @@ export function WeaponCard({
               {formatWeaponSizeLabel(weapon.size)} / {formatWeaponClassLabel(weapon.weaponClass)}
             </p>
           </div>
-        </div>
+        </button>
 
         <div className="flex flex-wrap justify-end gap-2">
           {onClear ? (
