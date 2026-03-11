@@ -1,10 +1,14 @@
 import { formatMetric } from '../lib/calculations'
-import type { SlotTone, Weapon } from '../types'
+import {
+  formatWeaponClassLabel,
+  formatWeaponSizeLabel,
+} from '../lib/weapons/normalize'
+import type { SlotTone, WeaponRecord } from '../types'
 
 type Props = {
   label: string
   tone: SlotTone
-  weapon: Weapon
+  weapon: WeaponRecord
   onClear?: () => void
 }
 
@@ -52,7 +56,7 @@ export function WeaponCard({
               {weapon.name}
             </h3>
             <p className="mt-1 text-xs uppercase tracking-[0.12em] text-slate-400">
-              {weapon.size} / {weapon.type}
+              {formatWeaponSizeLabel(weapon.size)} / {formatWeaponClassLabel(weapon.weaponClass)}
             </p>
           </div>
         </div>
@@ -73,15 +77,17 @@ export function WeaponCard({
       <dl className="mt-3 grid grid-cols-2 gap-2">
         <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Alpha</dt>
-          <dd className="alpha-stat-value">{formatMetric(weapon.alpha)}</dd>
+          <dd className="alpha-stat-value">{formatMetric(weapon.alpha ?? 0)}</dd>
         </div>
         <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Burst DPS</dt>
-          <dd className="alpha-stat-value">{formatMetric(weapon.burstDps)}</dd>
+          <dd className="alpha-stat-value">{formatMetric(weapon.burstDps ?? 0)}</dd>
         </div>
         <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Speed</dt>
-          <dd className="alpha-stat-value">{formatMetric(weapon.speed)} m/s</dd>
+          <dd className="alpha-stat-value">
+            {formatMetric(weapon.projectileSpeed ?? 0)} m/s
+          </dd>
         </div>
         <div className="alpha-metric-card">
           <dt className="alpha-stat-label">Color</dt>

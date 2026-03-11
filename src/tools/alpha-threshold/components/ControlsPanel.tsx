@@ -1,12 +1,12 @@
 import { WeaponComparisonSlots } from './WeaponComparisonSlots'
 import type {
   ComparisonSlot,
-  Weapon,
+  WeaponRecord,
 } from '../types'
 
 type Props = {
   slots: ComparisonSlot[]
-  weapons: Weapon[]
+  weapons: WeaponRecord[]
   onSlotChange: (slotId: string, weaponKey: string | null) => void
 }
 

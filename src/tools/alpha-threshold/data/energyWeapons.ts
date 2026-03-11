@@ -1,6 +1,7 @@
-import type { Weapon } from '../types'
+import { normalizeManualWeaponRecord } from '../lib/weapons/adapters/manual'
+import type { WeaponRecord } from '../types'
 
-export const energyWeapons: Weapon[] = [
+const rawEnergyWeapons = [
   { name: 'M5A Laser Cannon', size: 'S3', type: 'energy', burstDps: 683.6, alpha: 410.2, speed: 1000 },
   { name: 'M5A Defense Division', size: 'S3', type: 'energy', burstDps: 683.6, alpha: 410.2, speed: 1000 },
   { name: 'M4A Laser Cannon', size: 'S2', type: 'energy', burstDps: 455.6, alpha: 273.4, speed: 1000 },
@@ -20,4 +21,8 @@ export const energyWeapons: Weapon[] = [
   { name: 'NDB-28 Neutron Repeater*', size: 'S2', type: 'energy', burstDps: 474.8, alpha: 57, speed: 1400 },
   { name: 'CF-337 Panther', size: 'S3', type: 'energy', burstDps: 545.6, alpha: 43.7, speed: 1800 },
   { name: 'CF-227 Badger', size: 'S2', type: 'energy', burstDps: 328, alpha: 26.2, speed: 1800 },
-]
+] as const
+
+export const energyWeapons: WeaponRecord[] = rawEnergyWeapons.map((weapon) =>
+  normalizeManualWeaponRecord(weapon, 'merged')
+)

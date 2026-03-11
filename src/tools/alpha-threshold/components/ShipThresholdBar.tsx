@@ -88,7 +88,7 @@ function ThresholdLane({
 
         {markers.map((result) => {
           const leftPercent = getClampedMarkerPercent(
-            result.weapon.alpha,
+            result.weapon.alpha ?? 0,
             axisMax
           )
 
@@ -113,7 +113,7 @@ function ThresholdLane({
                 ].join(' ')}
               />
               <span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-slate-950/95 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-slate-100 group-hover/marker:block">
-                {result.slotLabel}: {formatMetric(result.weapon.alpha)}
+                {result.slotLabel}: {formatMetric(result.weapon.alpha ?? 0)}
                 {result.overflow ? '+' : ''}
               </span>
             </div>

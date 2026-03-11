@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import type { Weapon, WeaponOverride } from '../types'
+import type { WeaponOverride, WeaponRecord } from '../types'
 
 type Props = {
-  weapon: Weapon
+  weapon: WeaponRecord
   override?: WeaponOverride
   onSave: (patch: WeaponOverride) => void
   onReset: () => void
@@ -18,7 +18,9 @@ export function WeaponOverrideEditor({
   const [burstDps, setBurstDps] = useState(
     String(override?.burstDps ?? weapon.burstDps)
   )
-  const [speed, setSpeed] = useState(String(override?.speed ?? weapon.speed))
+  const [speed, setSpeed] = useState(
+    String(override?.speed ?? weapon.projectileSpeed)
+  )
 
   function handleSave() {
     const nextAlpha = Number(alpha)

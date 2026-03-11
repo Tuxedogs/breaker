@@ -13,15 +13,22 @@ export type Ship = {
   energyThreshold: number
 }
 
-export type WeaponType = 'ballistic' | 'energy'
+export type WeaponDamageType = 'ballistic' | 'energy' | 'distortion'
+export type WeaponThresholdType = Extract<WeaponDamageType, 'ballistic' | 'energy'>
+export type WeaponSource = 'erkul' | 'spviewer' | 'scunpacked' | 'merged'
 
-export type Weapon = {
+export type WeaponRecord = {
+  id: string
   name: string
-  size: string
-  type: WeaponType
-  burstDps: number
-  alpha: number
-  speed: number
+  size: number
+  damageType: WeaponDamageType
+  weaponClass: string
+  alpha: number | null
+  burstDps: number | null
+  projectileSpeed: number | null
+  source?: WeaponSource
+  sourceId?: string
+  patch?: string
 }
 
 export type ShipOverride = {
@@ -56,15 +63,15 @@ export type SelectedWeaponComparison = {
   slotId: string
   slotLabel: string
   tone: SlotTone
-  weapon: Weapon
+  weapon: WeaponRecord
 }
 
 export type ShipComparisonResult = {
   slotId: string
   slotLabel: string
   tone: SlotTone
-  weapon: Weapon
-  thresholdType: WeaponType
+  weapon: WeaponRecord
+  thresholdType: WeaponThresholdType
   threshold: number
   passes: boolean
   overflow: boolean
@@ -90,4 +97,19 @@ export type ShipSidebarGroup = {
   visibleCount: number
   selectedCount: number
   collapsed: boolean
+}
+
+export type GroupedWeaponClass = {
+  weaponClass: string
+  weapons: WeaponRecord[]
+}
+
+export type GroupedWeaponDamageType = {
+  damageType: WeaponThresholdType
+  classes: GroupedWeaponClass[]
+}
+
+export type GroupedWeaponSize = {
+  size: number
+  damageTypes: GroupedWeaponDamageType[]
 }

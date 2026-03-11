@@ -1,7 +1,7 @@
 import type {
   Ship,
   ShipOverride,
-  Weapon,
+  WeaponRecord,
   WeaponOverride,
 } from '../types'
 
@@ -19,15 +19,15 @@ export function mergeShipOverride(ship: Ship, override?: ShipOverride): Ship {
 }
 
 export function mergeWeaponOverride(
-  weapon: Weapon,
+  weapon: WeaponRecord,
   override?: WeaponOverride
-): Weapon {
+): WeaponRecord {
   if (!override) return weapon
 
   return {
     ...weapon,
     alpha: override.alpha ?? weapon.alpha,
     burstDps: override.burstDps ?? weapon.burstDps,
-    speed: override.speed ?? weapon.speed,
+    projectileSpeed: override.speed ?? weapon.projectileSpeed,
   }
 }

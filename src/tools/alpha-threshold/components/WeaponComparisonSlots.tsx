@@ -4,12 +4,12 @@ import { WeaponSelector } from './WeaponSelector'
 import type {
   ComparisonSlot,
   SlotTone,
-  Weapon,
+  WeaponRecord,
 } from '../types'
 
 type Props = {
   slots: ComparisonSlot[]
-  weapons: Weapon[]
+  weapons: WeaponRecord[]
   onChange: (slotId: string, weaponKey: string | null) => void
 }
 
@@ -45,6 +45,7 @@ export function WeaponComparisonSlots({
           <section key={slot.id} className="alpha-slot-panel">
             <WeaponSelector
               label={slotLabel}
+              tone={tone}
               value={slot.weaponKey}
               weapons={weapons}
               onChange={(weaponKey) => onChange(slot.id, weaponKey)}
