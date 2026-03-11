@@ -447,6 +447,17 @@
     @apply py-4 sm:py-6;
   }
 
+  .alpha-sidebar-workspace {
+    align-items: start;
+  }
+
+  .alpha-sidebar-workspace > .sidebar-workspace-rail,
+  .alpha-sidebar-workspace > .sidebar-workspace-main {
+    align-self: start;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
   .alpha-results-column {
     @apply min-w-0 space-y-5 lg:space-y-6;
   }
@@ -632,6 +643,11 @@
     border-color: rgba(125, 211, 252, 0.52);
   }
 
+  .alpha-input-weapon-modal {
+    padding-left: 0.75rem;
+    padding-right: 4.75rem;
+  }
+
   .alpha-select-panel {
     @apply overflow-hidden rounded-xl border border-white/10 shadow-2xl backdrop-blur-xl;
     background: rgba(2, 6, 14, 0.98);
@@ -640,74 +656,402 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.06);
   }
 
+  .alpha-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: rgba(2, 6, 14, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .alpha-modal-shell {
+    display: flex;
+    width: min(62rem, calc(100vw - 1.5rem));
+    max-height: min(74vh, 52rem);
+    flex-direction: column;
+  }
+
+  .alpha-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1rem 1rem 0.85rem;
+  }
+
+  .alpha-modal-search {
+    padding: 1rem 1rem 0;
+  }
+
+  .alpha-modal-feedback {
+    min-height: 1.15rem;
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    line-height: 1.1rem;
+    color: rgb(251 191 36 / 0.92);
+  }
+
+  .alpha-modal-slot-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+    padding: 0.9rem 1rem 0;
+  }
+
+  .alpha-modal-slot-tab {
+    display: flex;
+    min-height: 5.6rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 0.85rem;
+    text-align: left;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      box-shadow 150ms ease,
+      transform 150ms ease;
+  }
+
+  .alpha-modal-slot-tab-filled {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
+      rgba(255, 255, 255, 0.04);
+  }
+
+  .alpha-modal-slot-tab-empty {
+    background: rgba(255, 255, 255, 0.02);
+    border-style: dashed;
+  }
+
+  .alpha-modal-slot-tab-active-cyan {
+    border-color: rgba(103, 232, 249, 0.58);
+    background:
+      linear-gradient(180deg, rgba(34, 211, 238, 0.14), transparent 34%),
+      rgba(34, 211, 238, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(103, 232, 249, 0.22),
+      0 0 18px rgba(34, 211, 238, 0.16);
+  }
+
+  .alpha-modal-slot-tab-active-violet {
+    border-color: rgba(196, 181, 253, 0.54);
+    background:
+      linear-gradient(180deg, rgba(139, 92, 246, 0.14), transparent 34%),
+      rgba(139, 92, 246, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(196, 181, 253, 0.2),
+      0 0 18px rgba(139, 92, 246, 0.16);
+  }
+
+  .alpha-modal-slot-tab-active-amber {
+    border-color: rgba(252, 211, 77, 0.56);
+    background:
+      linear-gradient(180deg, rgba(245, 158, 11, 0.14), transparent 34%),
+      rgba(245, 158, 11, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(252, 211, 77, 0.2),
+      0 0 18px rgba(245, 158, 11, 0.16);
+  }
+
+  .alpha-modal-slot-tab-active-emerald {
+    border-color: rgba(110, 231, 183, 0.54);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.14), transparent 34%),
+      rgba(16, 185, 129, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(110, 231, 183, 0.2),
+      0 0 18px rgba(16, 185, 129, 0.16);
+  }
+
+  .alpha-modal-slot-tab[aria-selected="true"] {
+    transform: translateY(-1px);
+  }
+
+  .alpha-modal-slot-top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .alpha-modal-slot-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(226 232 240 / 0.94);
+  }
+
+  .alpha-modal-slot-badge {
+    display: inline-flex;
+    min-height: 1.15rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0 0.38rem;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(248 250 252 / 0.96);
+  }
+
+  .alpha-modal-slot-content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .alpha-modal-slot-weapon {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    line-height: 1.15rem;
+    font-weight: 600;
+    color: rgb(248 250 252 / 0.98);
+  }
+
+  .alpha-modal-slot-state {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+    line-height: 1.15rem;
+    color: rgb(148 163 184 / 0.96);
+  }
+
+  .alpha-modal-slot-clear {
+    display: inline-flex;
+    min-height: 1.4rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    border-radius: 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.56);
+    padding: 0 0.45rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(226 232 240 / 0.94);
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .alpha-modal-slot-clear:hover {
+    border-color: rgba(248, 250, 252, 0.24);
+    background: rgba(30, 41, 59, 0.82);
+    color: rgb(248 250 252);
+  }
+
+  .alpha-modal-body {
+    min-height: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .alpha-modal-list {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.75rem 1rem 1rem;
+  }
+
   .alpha-summary-rail .alpha-select-panel {
     left: auto;
     right: 0;
     width: min(42rem, calc(100vw - 3rem));
   }
 
+  .alpha-weapon-bookmark-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.75rem 0.75rem 0;
+    background:
+      linear-gradient(180deg, rgba(2, 6, 14, 0.98), rgba(2, 6, 14, 0.88) 72%, transparent);
+  }
+
+  .alpha-weapon-bookmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.25rem 0.7rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(248 250 252 / 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .alpha-weapon-bookmark-ballistic {
+    border-color: rgba(103, 232, 249, 0.24);
+    background: rgba(34, 211, 238, 0.12);
+    color: rgb(165 243 252 / 0.98);
+  }
+
+  .alpha-weapon-bookmark-energy {
+    border-color: rgba(252, 211, 77, 0.22);
+    background: rgba(245, 158, 11, 0.12);
+    color: rgb(253 230 138 / 0.98);
+  }
+
   .alpha-weapon-size-group + .alpha-weapon-size-group {
-    margin-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 1rem;
+    margin-top: 1.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.35rem;
   }
 
   .alpha-weapon-size-head {
-    margin-bottom: 0.75rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
+    margin-bottom: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.38rem 0.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgb(241 245 249 / 0.9);
+    color: rgb(248 250 252 / 0.96);
   }
 
   .alpha-weapon-type-groups {
     display: grid;
-    gap: 0.9rem;
+    gap: 1.15rem;
   }
 
   .alpha-weapon-type-group {
     display: grid;
-    gap: 0.55rem;
+    gap: 0.7rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.85rem;
+    background: rgba(255, 255, 255, 0.02);
   }
 
   .alpha-weapon-type-head {
-    font-size: 0.64rem;
-    letter-spacing: 0.16em;
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.28rem 0.65rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: rgb(148 163 184 / 0.95);
   }
 
   .alpha-weapon-type-head-ballistic {
+    border-color: rgba(103, 232, 249, 0.22);
+    background: rgba(34, 211, 238, 0.08);
     color: rgb(165 243 252 / 0.95);
   }
 
   .alpha-weapon-type-head-energy {
+    border-color: rgba(252, 211, 77, 0.2);
+    background: rgba(245, 158, 11, 0.08);
     color: rgb(253 230 138 / 0.95);
   }
 
   .alpha-weapon-class-group {
     display: grid;
-    gap: 0.45rem;
+    gap: 0.6rem;
+  }
+
+  .alpha-weapon-class-group + .alpha-weapon-class-group {
+    margin-top: 0.35rem;
   }
 
   .alpha-weapon-class-head {
-    font-size: 0.58rem;
+    display: block;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.64rem;
+    font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgb(100 116 139 / 0.96);
+    color: rgb(203 213 225 / 0.88);
   }
 
   .alpha-weapon-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-    gap: 0.65rem;
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  @media (min-width: 900px) {
+    .alpha-weapon-card-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .alpha-modal-shell {
+      width: min(100%, calc(100vw - 0.75rem));
+      max-height: 78vh;
+    }
+
+    .alpha-modal-head {
+      padding: 0.9rem 0.9rem 0.8rem;
+    }
+
+    .alpha-modal-search {
+      padding: 0.9rem 0.9rem 0;
+    }
+
+    .alpha-modal-slot-strip {
+      padding: 0.8rem 0.9rem 0;
+    }
+
+    .alpha-modal-list {
+      padding: 0.75rem 0.9rem 0.9rem;
+    }
   }
 
   .alpha-weapon-select-card {
     display: grid;
     gap: 0.55rem;
     min-height: 8.4rem;
+    height: 100%;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.9rem;
     padding: 0.8rem;
@@ -774,11 +1118,32 @@
     color: rgb(248 250 252);
   }
 
-  .alpha-weapon-select-meta {
-    font-size: 0.63rem;
-    letter-spacing: 0.13em;
+  .alpha-weapon-select-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .alpha-weapon-select-badge {
+    display: inline-flex;
+    min-height: 1.2rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0 0.45rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgb(148 163 184);
+    color: rgb(241 245 249 / 0.96);
+  }
+
+  .alpha-weapon-select-meta {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(148 163 184 / 0.86);
   }
 
   .alpha-weapon-select-stats {
@@ -812,11 +1177,43 @@
   }
 
   .alpha-chip-pass {
-    @apply border-emerald-300/25 bg-emerald-500/10 text-emerald-100;
+    border-color: rgba(52, 211, 153, 0.5);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.22), rgba(5, 46, 22, 0.4)),
+      rgba(6, 78, 59, 0.28);
+    color: rgb(209 250 229);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(16, 185, 129, 0.14),
+      0 0 12px rgba(16, 185, 129, 0.16);
   }
 
   .alpha-chip-block {
-    @apply border-rose-300/25 bg-rose-500/10 text-rose-100;
+    border-color: rgba(251, 113, 133, 0.5);
+    background:
+      linear-gradient(180deg, rgba(244, 63, 94, 0.22), rgba(76, 5, 25, 0.42)),
+      rgba(127, 29, 29, 0.28);
+    color: rgb(255 228 230);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(244, 63, 94, 0.14),
+      0 0 12px rgba(244, 63, 94, 0.16);
+  }
+
+  .alpha-chip-tone-cyan {
+    color: rgb(207 250 254);
+  }
+
+  .alpha-chip-tone-violet {
+    color: rgb(237 233 254);
+  }
+
+  .alpha-chip-tone-amber {
+    color: rgb(254 243 199);
+  }
+
+  .alpha-chip-tone-emerald {
+    color: rgb(209 250 229);
   }
 
   .alpha-chip-muted {
@@ -889,6 +1286,52 @@
   .alpha-slot-panel {
     @apply rounded-xl border border-white/10 p-3;
     background: rgba(3, 7, 16, 0.72);
+  }
+
+  .alpha-slot-launch {
+    display: flex;
+    min-height: 5.75rem;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.45rem;
+    border-radius: 0.8rem;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.9rem;
+    text-align: left;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .alpha-slot-launch:hover {
+    border-color: rgba(103, 232, 249, 0.28);
+    background: rgba(15, 23, 42, 0.48);
+  }
+
+  .alpha-slot-launch:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.7);
+  }
+
+  .alpha-slot-launch-title {
+    font-size: 0.96rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    color: rgb(248 250 252);
+  }
+
+  .alpha-slot-launch-copy {
+    font-size: 0.75rem;
+    line-height: 1.15rem;
+    color: rgb(148 163 184 / 0.92);
+  }
+
+  .alpha-summary-card-selectable {
+    cursor: pointer;
   }
 
   /* Alpha Threshold: inline editors that appear inside cards and ship rows. */
@@ -1003,7 +1446,250 @@
 
   /* Alpha Threshold: dual-lane chart surface for ballistic and energy comparisons. */
   .alpha-threshold-lane {
-    @apply space-y-2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .alpha-threshold-lane-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+  }
+
+  .alpha-threshold-track {
+    position: relative;
+    height: 3.8rem;
+    overflow: hidden;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 22%),
+      rgba(2, 6, 23, 0.94);
+  }
+
+  .alpha-threshold-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.22;
+  }
+
+  .alpha-threshold-axis {
+    position: absolute;
+    inset-inline: 0.75rem;
+    top: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(100 116 139);
+  }
+
+  .alpha-threshold-lane-bar {
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: 0.65rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.88);
+  }
+
+  .alpha-threshold-threshold-fill {
+    height: 100%;
+    border-radius: 999px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 12px rgba(255, 255, 255, 0.08);
+  }
+
+  .alpha-threshold-compare-band {
+    position: absolute;
+    bottom: 0.2rem;
+    height: 0.46rem;
+    border-radius: 999px;
+    opacity: 0.99;
+  }
+
+  .alpha-threshold-marker-layer {
+    position: absolute;
+    inset-inline: 0.75rem;
+    inset-block: 0.5rem;
+  }
+
+  .alpha-threshold-marker {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .alpha-threshold-compare-band-pass {
+    color: rgb(52 211 153);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.5));
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.18);
+  }
+
+  .alpha-threshold-compare-band-block {
+    color: rgb(255, 0, 37);
+    background: linear-gradient(90deg, rgb(255, 0, 44), rgb(255, 0, 44));
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.03);
+  }
+
+  .alpha-threshold-compare-band-overflow::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.85;
+  }
+
+  .alpha-threshold-marker-cyan {
+    background: rgb(103 232 249);
+  }
+
+  .alpha-threshold-marker-violet {
+    background: rgb(196 181 253);
+  }
+
+  .alpha-threshold-marker-amber {
+    background: rgb(252 211 77);
+  }
+
+  .alpha-threshold-marker-emerald {
+    background: rgb(110 231 183);
+  }
+
+  .alpha-threshold-marker-line-pass {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.28);
+  }
+
+  .alpha-threshold-marker-line-block {
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.22);
+  }
+
+  .alpha-threshold-marker-line {
+    position: absolute;
+    top: -0.1rem;
+    height: 1.95rem;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+  }
+
+  .alpha-threshold-marker-dot {
+    position: absolute;
+    top: -0.18rem;
+    left: 50%;
+    height: 0.75rem;
+    width: 0.75rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    border: 2px solid rgba(2, 6, 23, 0.9);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .alpha-threshold-marker-label {
+    pointer-events: none;
+    position: absolute;
+    top: -1.95rem;
+    left: 50%;
+    z-index: 3;
+    display: none;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    border-radius: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(2, 6, 23, 0.97);
+    padding: 0.25rem 0.45rem;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(248 250 252);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
+  }
+
+  .alpha-threshold-slot-badge {
+    position: absolute;
+    top: -1.55rem;
+    left: 50%;
+    z-index: 3;
+    display: inline-flex;
+    min-height: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 0 0.38rem;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(248 250 252);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 6px 14px rgba(0, 0, 0, 0.24);
+  }
+
+  .alpha-threshold-slot-badge-capped {
+    transform: translateX(calc(-100% + 0.2rem));
+  }
+
+  .alpha-threshold-marker-overflow {
+    position: absolute;
+    left: calc(1%);
+    top: 50%;
+    height: 0;
+    width: 0;
+    transform: translateY(75%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .alpha-threshold-marker-overflow-pass {
+    border-left: 7px solid rgb(110 231 183);
+  }
+
+  .alpha-threshold-marker-overflow-block {
+    border-left: 7px solid rgb(253 164 175);
+  }
+
+  .alpha-threshold-slot-badge-cyan {
+    border-color: rgba(103, 232, 249, 0.32);
+    background: rgba(34, 211, 238, 0.18);
+    color: rgb(207 250 254);
+  }
+
+  .alpha-threshold-slot-badge-violet {
+    border-color: rgba(196, 181, 253, 0.32);
+    background: rgba(139, 92, 246, 0.18);
+    color: rgb(237 233 254);
+  }
+
+  .alpha-threshold-slot-badge-amber {
+    border-color: rgba(252, 211, 77, 0.32);
+    background: rgba(245, 158, 11, 0.2);
+    color: rgb(254 243 199);
+  }
+
+  .alpha-threshold-slot-badge-emerald {
+    border-color: rgba(110, 231, 183, 0.32);
+    background: rgba(16, 185, 129, 0.18);
+    color: rgb(209 250 229);
   }
 
   /* Alpha Threshold: subtle hover-only row note for exact values and current threshold context. */
@@ -2477,7 +3163,7 @@ body {
 
   .sidebar-workspace-rail {
     position: sticky;
-    top: 6rem;
+    top: 0;
     align-self: start;
   }
 
@@ -2487,7 +3173,7 @@ body {
   }
 
   .alpha-sidebar {
-    max-height: calc(100vh - 6.5rem);
+    max-height: calc(100vh - 1rem);
     overflow-y: auto;
   }
   .onboarding-layout {
@@ -2515,7 +3201,7 @@ body {
 
   .sidebar-workspace-rail-right {
     position: sticky;
-    top: 6rem;
+    top: 0;
     align-self: start;
   }
 }

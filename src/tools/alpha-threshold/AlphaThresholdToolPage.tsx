@@ -11,7 +11,9 @@ export default function AlphaThresholdToolPage() {
     setSlotWeapon,
     allWeapons,
     selectedWeapons,
-    axisMaxByType,
+    axisScaleMode,
+    setAxisScaleMode,
+    globalAxisMaxByType,
     sidebarGroups,
     selectedShipNames,
     toggleShipSelected,
@@ -25,8 +27,6 @@ export default function AlphaThresholdToolPage() {
     toggleGroupCollapsed,
     selectedShipResults,
     shipOverrides,
-    setShipOverride,
-    resetShipOverride,
   } = useAlphaThresholdState()
   const hasSelectedWeapons = selectedWeapons.length > 0
 
@@ -88,10 +88,10 @@ export default function AlphaThresholdToolPage() {
         >
           <AlphaThresholdPage
             selectedShipResults={selectedShipResults}
-            axisMaxByType={axisMaxByType}
+            axisScaleMode={axisScaleMode}
+            globalAxisMaxByType={globalAxisMaxByType}
+            onAxisScaleModeChange={setAxisScaleMode}
             shipOverrides={shipOverrides}
-            onSaveShipOverride={setShipOverride}
-            onResetShipOverride={resetShipOverride}
           />
         </PageLayout>
       </SidebarWorkspace>

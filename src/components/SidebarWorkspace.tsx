@@ -15,16 +15,16 @@ export default function SidebarWorkspace({
 }: SidebarWorkspaceProps) {
   return (
     <section className={['sidebar-workspace', className].join(' ').trim()}>
-      <aside className="sidebar-workspace-rail sidebar-workspace-rail-left">
+      <aside className="sidebar-workspace-rail sidebar-workspace-rail-left self-start">
         {leftSidebar}
       </aside>
 
-      <main className="sidebar-workspace-main">
+      <main className="sidebar-workspace-main self-start">
         {children}
       </main>
 
       {rightSidebar ? (
-        <aside className="sidebar-workspace-rail sidebar-workspace-rail-right">
+        <aside className="sidebar-workspace-rail sidebar-workspace-rail-right self-start">
           {rightSidebar}
         </aside>
       ) : null}

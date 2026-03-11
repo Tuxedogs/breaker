@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { formatEntityLabel, formatMetric } from '../lib/calculations'
-import { ShipOverrideEditor } from './ShipOverrideEditor'
 import { ShipThresholdBar } from './ShipThresholdBar'
 import type {
   SelectedShipResult,
@@ -9,31 +7,21 @@ import type {
 
 type Props = {
   shipResult: SelectedShipResult
-  axisMaxByType: {
-    ballistic: number
-    energy: number
-  }
   override?: ShipOverride
-  onSaveOverride: (patch: ShipOverride) => void
-  onResetOverride: () => void
 }
 
 const toneIndicatorClassName = {
-  cyan: 'border-cyan-300/25 text-cyan-100',
-  violet: 'border-violet-300/25 text-violet-100',
-  amber: 'border-amber-300/25 text-amber-100',
-  emerald: 'border-emerald-300/25 text-emerald-100',
+  cyan: 'alpha-chip-tone-cyan',
+  violet: 'alpha-chip-tone-violet',
+  amber: 'alpha-chip-tone-amber',
+  emerald: 'alpha-chip-tone-emerald',
 } as const
 
 export function ShipRow({
   shipResult,
-  axisMaxByType,
   override,
-  onSaveOverride,
-  onResetOverride,
 }: Props) {
-  const [editing, setEditing] = useState(false)
-  const { ship, results, passingCount, hasSelections } = shipResult
+  const { ship, results, passingCount, hasSelections, axisMaxByType } = shipResult
 
   return (
     <article
@@ -87,9 +75,7 @@ export function ShipRow({
                   className={[
                     'alpha-chip',
                     toneIndicatorClassName[result.tone],
-                    result.passes
-                      ? 'bg-emerald-500/10'
-                      : 'border-rose-300/25 bg-rose-500/10 text-rose-100',
+                    result.passes ? 'alpha-chip-pass' : 'alpha-chip-block',
                   ].join(' ')}
                 >
                   {result.slotLabel} {result.passes ? 'Pass' : 'Block'}
@@ -99,13 +85,6 @@ export function ShipRow({
               <span className="alpha-chip alpha-chip-muted">No weapon selected</span>
             )}
 
-            <button
-              type="button"
-              onClick={() => setEditing((prev) => !prev)}
-              className="alpha-action-button"
-            >
-              {editing ? 'Close' : 'Override'}
-            </button>
           </div>
         </div>
 
@@ -116,20 +95,6 @@ export function ShipRow({
         />
       </div>
 
-      {editing ? (
-        <ShipOverrideEditor
-          ship={ship}
-          override={override}
-          onSave={(patch) => {
-            onSaveOverride(patch)
-            setEditing(false)
-          }}
-          onReset={() => {
-            onResetOverride()
-            setEditing(false)
-          }}
-        />
-      ) : null}
     </article>
   )
 }

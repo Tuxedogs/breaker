@@ -1,12 +1,5 @@
-import {
-  formatMetric,
-  getAxisPercent,
-  getWeaponKey,
-} from '../lib/calculations'
-import type {
-  Ship,
-  ShipComparisonResult,
-} from '../types'
+import { formatMetric, getWeaponKey } from '../lib/calculations'
+import type { Ship, ShipComparisonResult } from '../types'
 
 type Props = {
   ship: Ship
@@ -18,14 +11,29 @@ type Props = {
 }
 
 const markerClassName = {
-  cyan: 'bg-cyan-300',
-  violet: 'bg-violet-300',
-  amber: 'bg-amber-300',
-  emerald: 'bg-emerald-300',
+  cyan: 'alpha-threshold-marker-cyan',
+  violet: 'alpha-threshold-marker-violet',
+  amber: 'alpha-threshold-marker-amber',
+  emerald: 'alpha-threshold-marker-emerald',
 } as const
 
-function getClampedMarkerPercent(value: number, axisMax: number) {
-  return Math.min(99.2, Math.max(0.8, getAxisPercent(value, axisMax)))
+const markerBadgeClassName = {
+  cyan: 'alpha-threshold-slot-badge-cyan',
+  violet: 'alpha-threshold-slot-badge-violet',
+  amber: 'alpha-threshold-slot-badge-amber',
+  emerald: 'alpha-threshold-slot-badge-emerald',
+} as const
+
+function getNormalizedPosition(value: number, axisMax: number) {
+  if (axisMax <= 0) return 0
+  return Math.min(value / axisMax, 1)
+}
+
+function getDeltaLabel(alpha: number, threshold: number) {
+  const delta = alpha - threshold
+  const rounded = formatMetric(Math.abs(delta))
+
+  return delta >= 0 ? `+${rounded} over` : `-${rounded} below`
 }
 
 function ThresholdLane({
@@ -44,18 +52,19 @@ function ThresholdLane({
   const ticks = Array.from({ length: 5 }, (_, index) =>
     formatMetric((axisMax / 4) * index)
   )
+  const thresholdPosition = getNormalizedPosition(thresholdValue, axisMax)
 
   return (
     <div className="alpha-threshold-lane">
-      <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-slate-400">
+      <div className="alpha-threshold-lane-meta">
         <span>{label} lane</span>
         <span>Axis max {formatMetric(axisMax)}</span>
       </div>
 
-      <div className="relative h-14 overflow-hidden rounded-xl border border-white/10 bg-slate-950/95">
+      <div className="alpha-threshold-track">
         <div
           aria-hidden
-          className="absolute inset-0 opacity-15"
+          className="alpha-threshold-grid"
           style={{
             backgroundImage:
               'linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px)',
@@ -63,59 +72,105 @@ function ThresholdLane({
           }}
         />
 
-        <div className="absolute inset-x-3 top-2 flex justify-between text-[10px] uppercase tracking-[0.16em] text-slate-500">
+        <div className="alpha-threshold-axis">
           {ticks.map((tick) => (
             <span key={tick}>{tick}</span>
           ))}
         </div>
 
-        <div className="absolute inset-x-3 bottom-3 h-3 rounded-lg border border-white/10 bg-slate-900/90">
+        <div className="alpha-threshold-lane-bar">
           <div
-            className={`h-full rounded-lg ${accentClassName}`}
-            style={{ width: `${Math.max(1.5, getAxisPercent(thresholdValue, axisMax))}%` }}
+            className={`alpha-threshold-threshold-fill ${accentClassName}`}
+            style={{
+              width: `${Math.max(1.5, thresholdPosition * 100)}%`,
+            }}
             title={`Threshold ${formatMetric(thresholdValue)}`}
           />
         </div>
 
-        <div
-          className="absolute bottom-8 -translate-x-1/2 rounded-full border border-white/10 bg-slate-950/95 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-100"
-          style={{
-            left: `calc(${getClampedMarkerPercent(thresholdValue, axisMax)}% + 0.75rem)`,
-          }}
-        >
-          T {formatMetric(thresholdValue)}
-        </div>
-
         {markers.map((result) => {
-          const leftPercent = getClampedMarkerPercent(
-            result.weapon.alpha ?? 0,
-            axisMax
-          )
+          const alphaValue = result.weapon.alpha ?? 0
+          const markerPosition = getNormalizedPosition(alphaValue, axisMax)
+          const markerPercent = markerPosition * 100
+          const thresholdPercent = thresholdPosition * 100
+          const compareLeft = result.passes
+            ? thresholdPercent
+            : markerPercent
+          const compareWidth = result.passes
+            ? Math.max(0, markerPercent - thresholdPercent)
+            : Math.max(0, thresholdPercent - markerPercent)
 
           return (
             <div
               key={`${result.slotId}-${getWeaponKey(result.weapon)}`}
-              className="group/marker absolute inset-y-2"
-              style={{ left: `calc(${leftPercent}% + 0.75rem)` }}
+              className="group/marker alpha-threshold-marker-layer"
             >
               <span
                 aria-hidden
                 className={[
-                  'absolute bottom-0 left-1/2 top-4 w-[2px] -translate-x-1/2',
-                  markerClassName[result.tone],
+                  'alpha-threshold-compare-band',
+                  result.passes
+                    ? 'alpha-threshold-compare-band-pass'
+                    : 'alpha-threshold-compare-band-block',
+                  result.passes || result.overflow
+                    ? 'alpha-threshold-compare-band-overflow'
+                    : '',
                 ].join(' ')}
+                style={{
+                  left: `${compareLeft}%`,
+                  width: `${Math.max(0, compareWidth)}%`,
+                }}
               />
-              <span
-                aria-hidden
-                className={[
-                  'absolute left-1/2 top-3 h-2.5 w-2.5 -translate-x-1/2 rounded-full border border-slate-950/90',
-                  markerClassName[result.tone],
-                ].join(' ')}
-              />
-              <span className="pointer-events-none absolute -top-7 left-1/2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg border border-white/10 bg-slate-950/95 px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-slate-100 group-hover/marker:block">
-                {result.slotLabel}: {formatMetric(result.weapon.alpha ?? 0)}
-                {result.overflow ? '+' : ''}
-              </span>
+
+              <div
+                className="alpha-threshold-marker"
+                style={{ left: `${markerPercent}%` }}
+              >
+                <span
+                  aria-hidden
+                  className={[
+                    'alpha-threshold-marker-line',
+                    markerClassName[result.tone],
+                    result.passes
+                      ? 'alpha-threshold-marker-line-pass'
+                      : 'alpha-threshold-marker-line-block',
+                  ].join(' ')}
+                />
+                <span
+                  aria-hidden
+                  className={[
+                    'alpha-threshold-marker-dot',
+                    markerClassName[result.tone],
+                  ].join(' ')}
+                />
+                <span
+                  aria-hidden
+                  className={[
+                    'alpha-threshold-slot-badge',
+                    markerBadgeClassName[result.tone],
+                    result.passes ? 'alpha-threshold-slot-badge-capped' : '',
+                  ].join(' ')}
+                >
+                  {result.slotLabel}
+                </span>
+                {result.overflow ? (
+                  <span
+                    aria-hidden
+                    className={[
+                      'alpha-threshold-marker-overflow',
+                      result.passes
+                        ? 'alpha-threshold-marker-overflow-pass'
+                        : 'alpha-threshold-marker-overflow-block',
+                    ].join(' ')}
+                  />
+                ) : null}
+                <span className="alpha-threshold-marker-label group-hover/marker:block">
+                  {result.slotLabel}: {formatMetric(alphaValue)}
+                  {result.overflow ? '+' : ''}
+                  {' • '}
+                  {getDeltaLabel(alphaValue, thresholdValue)}
+                </span>
+              </div>
             </div>
           )
         })}

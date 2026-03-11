@@ -1,4 +1,5 @@
 import type {
+  AxisScaleMode,
   SelectedShipResult,
   SelectedWeaponComparison,
   Ship,
@@ -85,7 +86,22 @@ export function getLaneAxisMax(
   )
   const visibleWeaponMax = Math.min(highestWeaponAlpha, highestThreshold * 2.25)
 
-  return Math.max(highestThreshold * 1.1, visibleWeaponMax, 1)
+  return getNiceAxisMax(Math.max(highestThreshold * 1.1, visibleWeaponMax, 1))
+}
+
+export function getNiceAxisMax(value: number): number {
+  if (value <= 0) return 1
+
+  const magnitude = 10 ** Math.floor(Math.log10(value))
+  const normalized = value / magnitude
+
+  if (normalized <= 1) return magnitude
+  if (normalized <= 1.5) return 1.5 * magnitude
+  if (normalized <= 2) return 2 * magnitude
+  if (normalized <= 2.5) return 2.5 * magnitude
+  if (normalized <= 5) return 5 * magnitude
+
+  return 10 * magnitude
 }
 
 export function getAxisPercent(value: number, axisMax: number): number {
@@ -131,5 +147,36 @@ export function buildSelectedShipResult(
     passingCount,
     blockedCount: results.length - passingCount,
     hasSelections: results.length > 0,
+    axisMaxByType,
   }
+}
+
+export function buildAxisMaxByType(
+  ships: Ship[],
+  selectedWeapons: SelectedWeaponComparison[]
+): Record<WeaponThresholdType, number> {
+  return {
+    ballistic: getLaneAxisMax(ships, selectedWeapons, 'ballistic'),
+    energy: getLaneAxisMax(ships, selectedWeapons, 'energy'),
+  }
+}
+
+export function resolveAxisMaxByType(
+  ship: Ship,
+  selectedShips: Ship[],
+  selectedWeapons: SelectedWeaponComparison[],
+  axisScaleMode: AxisScaleMode
+): Record<WeaponThresholdType, number> {
+  if (axisScaleMode === 'per-row') {
+    return buildAxisMaxByType([ship], selectedWeapons)
+  }
+
+  if (axisScaleMode === 'by-size') {
+    return buildAxisMaxByType(
+      selectedShips.filter((candidate) => candidate.sizeGroup === ship.sizeGroup),
+      selectedWeapons
+    )
+  }
+
+  return buildAxisMaxByType(selectedShips, selectedWeapons)
 }

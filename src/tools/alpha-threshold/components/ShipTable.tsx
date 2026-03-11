@@ -1,27 +1,28 @@
 import { formatMetric } from '../lib/calculations'
 import { ShipRow } from './ShipRow'
 import type {
+  AxisScaleMode,
   SelectedShipResult,
   ShipOverride,
 } from '../types'
 
 type Props = {
   shipResults: SelectedShipResult[]
-  axisMaxByType: {
+  axisScaleMode: AxisScaleMode
+  globalAxisMaxByType: {
     ballistic: number
     energy: number
   }
+  onAxisScaleModeChange: (value: AxisScaleMode) => void
   shipOverrides: Record<string, ShipOverride>
-  onSaveOverride: (shipName: string, patch: ShipOverride) => void
-  onResetOverride: (shipName: string) => void
 }
 
 export function ShipTable({
   shipResults,
-  axisMaxByType,
+  axisScaleMode,
+  globalAxisMaxByType,
+  onAxisScaleModeChange,
   shipOverrides,
-  onSaveOverride,
-  onResetOverride,
 }: Props) {
   return (
     <section aria-labelledby="alpha-threshold-ship-table" className="alpha-table-shell">
@@ -35,6 +36,28 @@ export function ShipTable({
             <p className="mt-2 max-w-2xl text-sm text-slate-400">
               Ballistic weapons compare only to ballistic thresholds. Energy weapons compare only to energy thresholds.
             </p>
+            <div className="mt-5 space-y-1">
+              <p className="alpha-control-label">Axis Scale Mode</p>
+              <div className="inline-flex rounded-xl border border-white/10 bg-white/5 p-1">
+                {([
+                  ['by-size', 'By Size'],
+                  ['global', 'Global'],
+                  ['per-row', 'Per Row'],
+                ] as const).map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => onAxisScaleModeChange(value)}
+                    className={[
+                      'alpha-segment-button min-h-8 px-2.5 text-[11px]',
+                      axisScaleMode === value ? 'alpha-segment-button-active' : '',
+                    ].join(' ')}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -42,10 +65,10 @@ export function ShipTable({
               Ships {shipResults.length}
             </span>
             <span className="alpha-chip alpha-chip-muted">
-              Ballistic axis {formatMetric(axisMaxByType.ballistic)}
+              B {formatMetric(globalAxisMaxByType.ballistic)}
             </span>
             <span className="alpha-chip alpha-chip-muted">
-              Energy axis {formatMetric(axisMaxByType.energy)}
+              E {formatMetric(globalAxisMaxByType.energy)}
             </span>
           </div>
         </div>
@@ -58,12 +81,7 @@ export function ShipTable({
               <li key={shipResult.ship.name}>
                 <ShipRow
                   shipResult={shipResult}
-                  axisMaxByType={axisMaxByType}
                   override={shipOverrides[shipResult.ship.name]}
-                  onSaveOverride={(patch) =>
-                    onSaveOverride(shipResult.ship.name, patch)
-                  }
-                  onResetOverride={() => onResetOverride(shipResult.ship.name)}
                 />
               </li>
             ))}

@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { getWeaponKey } from '../lib/calculations'
 import { WeaponCard } from './WeaponCard'
 import { WeaponSelector } from './WeaponSelector'
@@ -20,39 +21,86 @@ export function WeaponComparisonSlots({
   weapons,
   onChange,
 }: Props) {
-  return (
-    <div className="grid gap-3">
-      {slots.map((slot, index) => {
+  const [activeSlotId, setActiveSlotId] = useState<string | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const slotEntries = useMemo(
+    () =>
+      slots.map((slot, index) => {
         const selectedWeapon =
           weapons.find((weapon) => getWeaponKey(weapon) === slot.weaponKey) ??
           null
-        const slotLabel = `W${index + 1}`
-        const tone = SLOT_TONES[index] ?? 'cyan'
 
-        if (selectedWeapon) {
-          return (
-            <WeaponCard
-              key={slot.id}
-              label={slotLabel}
-              tone={tone}
-              weapon={selectedWeapon}
-              onClear={() => onChange(slot.id, null)}
-            />
-          )
+        return {
+          slot,
+          index,
+          slotLabel: `W${index + 1}`,
+          tone: SLOT_TONES[index] ?? 'cyan',
+          selectedWeapon,
         }
+      }),
+    [slots, weapons]
+  )
 
-        return (
-          <section key={slot.id} className="alpha-slot-panel">
-            <WeaponSelector
-              label={slotLabel}
-              tone={tone}
-              value={slot.weaponKey}
-              weapons={weapons}
-              onChange={(weaponKey) => onChange(slot.id, weaponKey)}
-            />
-          </section>
-        )
-      })}
-    </div>
+  function openModal(slotId: string) {
+    setActiveSlotId(slotId)
+    setModalOpen(true)
+  }
+
+  return (
+    <>
+      <div className="grid gap-3">
+        {slotEntries.map(({ slot, slotLabel, tone, selectedWeapon }) => {
+          if (selectedWeapon) {
+            return (
+              <WeaponCard
+                key={slot.id}
+                label={slotLabel}
+                tone={tone}
+                weapon={selectedWeapon}
+                onSelect={() => openModal(slot.id)}
+                onClear={() => onChange(slot.id, null)}
+              />
+            )
+          }
+
+          return (
+            <section key={slot.id} className="alpha-slot-panel">
+              <button
+                type="button"
+                onClick={() => openModal(slot.id)}
+                className="alpha-slot-launch"
+              >
+                <span className="alpha-control-label">{slotLabel}</span>
+                <span className="alpha-slot-launch-title">Select weapon</span>
+                <span className="alpha-slot-launch-copy">
+                  Open the selector to assign a weapon to {slotLabel}.
+                </span>
+              </button>
+            </section>
+          )
+        })}
+      </div>
+
+      {modalOpen && slotEntries.length > 0 ? (
+        <WeaponSelector
+          open={modalOpen}
+          slots={slotEntries.map(({ slot, slotLabel, tone, selectedWeapon }) => ({
+            id: slot.id,
+            label: slotLabel,
+            tone,
+            weaponKey: slot.weaponKey,
+            weaponName: selectedWeapon?.name ?? null,
+            weaponClass: selectedWeapon?.weaponClass ?? null,
+          }))}
+          activeSlotId={activeSlotId}
+          weapons={weapons}
+          onActiveSlotChange={setActiveSlotId}
+          onAssignWeapon={(slotId, weaponKey) => onChange(slotId, weaponKey)}
+          onClearSlot={(slotId) => onChange(slotId, null)}
+          onClose={() => setModalOpen(false)}
+        />
+      ) : null}
+    </>
   )
 }
