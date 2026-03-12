@@ -7,15 +7,12 @@ const shipItems = [
   { to: "/ships/polaris", label: "Polaris" },
   { to: "/ships/idris", label: "Idris" },
 ];
-const systemItems = [
-  { to: "/systems/sub-targeting", label: "Sub-Targeting" },
-  { to: "/systems/turret-keybinds", label: "Turret Keybinds" },
-  { to: "/systems/additional-settings-binds", label: "Additional Settings & Binds" },
-  { to: "/systems/gunnery-with-luna", label: "Gunnery with Luna" },
-  { to: "/systems/communications", label: "Communications" },
+const toolItems = [
+  { to: "/maps", label: "Maps" },
+  { to: "/tools/alpha-threshold", label: "Alpha vs Threshold" },
 ];
 
-type MenuKey = "ships" | "systems";
+type MenuKey = "ships" | "systems" | "tools";
 
 function SearchIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -73,7 +70,7 @@ export default function AppShell() {
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
   const isHeroRoute = location.pathname === "/";
   const isShipsRoute = location.pathname.startsWith("/ships");
-  const isSystemsRoute = location.pathname.startsWith("/systems");
+  const isToolsRoute = isMapsRoute || isAlphaThresholdRoute;
   const isFrameworkNavActive =
     location.pathname === "/framework" ||
     location.pathname === "/index" ||
@@ -205,39 +202,39 @@ export default function AppShell() {
                 </div>
               </div>
 
-              <div className="relative" onMouseEnter={() => openDesktopMenu("systems")} onMouseLeave={closeDesktopMenuSoon}>
+              <div className="relative" onMouseEnter={() => openDesktopMenu("tools")} onMouseLeave={closeDesktopMenuSoon}>
                 <button
                   type="button"
                   className={[
                     menuButtonClass,
-                    desktopMenu === "systems" || isSystemsRoute
-                      ? "text-cyan-300"
-                      : "hover:text-cyan-300",
+                    desktopMenu === "tools" || isToolsRoute
+                      ? "text-blue-300"
+                      : "hover:text-blue-300",
                   ].join(" ")}
-                  aria-expanded={desktopMenu === "systems"}
-                  aria-controls="desktop-systems-menu"
-                  onClick={() => toggleDesktopMenu("systems")}
+                  aria-expanded={desktopMenu === "tools"}
+                  aria-controls="desktop-tools-menu"
+                  onClick={() => toggleDesktopMenu("tools")}
                 >
-                  Systems
-                  <ChevronIcon expanded={desktopMenu === "systems"} />
+                  Tools
+                  <ChevronIcon expanded={desktopMenu === "tools"} />
                 </button>
 
                 <div
-                  id="desktop-systems-menu"
+                  id="desktop-tools-menu"
                   className={[
-                    "pointer-events-none absolute left-1/2 top-full z-40 mt-1 w-64 -translate-x-1/2 rounded-md border border-cyan-300/25 bg-black/80 p-2 opacity-0 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition",
-                    desktopMenu === "systems" ? "pointer-events-auto opacity-100" : "",
+                    "pointer-events-none absolute left-1/2 top-full z-40 mt-1 w-64 -translate-x-1/2 rounded-md border border-blue-300/25 bg-black/80 p-2 opacity-0 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition",
+                    desktopMenu === "tools" ? "pointer-events-auto opacity-100" : "",
                   ].join(" ")}
                 >
-                  {systemItems.map((item) => (
+                  {toolItems.map((item) => (
                     <NavLink
                       key={item.to}
                       to={item.to}
                       onClick={closeAllMenus}
                       className={({ isActive }) =>
                         [
-                          "flex min-h-11 items-center rounded px-2 py-2 text-xs uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 sm:text-sm",
-                          isActive ? "text-cyan-300" : "text-slate-200 hover:bg-cyan-300/10 hover:text-cyan-300",
+                          "flex min-h-11 items-center rounded px-2 py-2 text-xs uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/60 sm:text-sm",
+                          isActive ? "text-blue-300" : "text-slate-200 hover:bg-blue-300/10 hover:text-blue-300",
                         ].join(" ")
                       }
                     >
@@ -246,21 +243,6 @@ export default function AppShell() {
                   ))}
                 </div>
               </div>
-
-              <NavLink
-                to="/maps"
-                onClick={closeAllMenus}
-                className={({ isActive }) =>
-                  [
-                    navItemClass,
-                    isActive
-                      ? "text-blue-300"
-                      : "hover:text-blue-300",
-                  ].join(" ")
-                }
-              >
-                Maps
-              </NavLink>
 
               <NavLink
                 to="/framework"
@@ -327,19 +309,6 @@ export default function AppShell() {
           >
             <div className="space-y-1 rounded-lg border border-white/15 bg-black/40 p-2">
               <NavLink
-                to="/maps"
-                onClick={closeAllMenus}
-                className={({ isActive }) =>
-                  [
-                    "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                    isActive ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
-                  ].join(" ")
-                }
-              >
-                Maps
-              </NavLink>
-
-              <NavLink
                 to="/framework"
                 onClick={closeAllMenus}
                 className={({ isActive }) =>
@@ -391,22 +360,22 @@ export default function AppShell() {
               <div className="rounded-md border border-white/10">
                 <button
                   type="button"
-                  className="flex h-11 w-full items-center justify-between px-3 text-left text-sm uppercase tracking-[0.1em] text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60"
-                  aria-expanded={mobileSectionOpen === "systems"}
-                  aria-controls="mobile-systems-menu"
-                  onClick={() => toggleMobileSection("systems")}
+                  className="flex h-11 w-full items-center justify-between px-3 text-left text-sm uppercase tracking-[0.1em] text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/60"
+                  aria-expanded={mobileSectionOpen === "tools"}
+                  aria-controls="mobile-tools-menu"
+                  onClick={() => toggleMobileSection("tools")}
                 >
-                  Systems
-                  <ChevronIcon expanded={mobileSectionOpen === "systems"} />
+                  Tools
+                  <ChevronIcon expanded={mobileSectionOpen === "tools"} />
                 </button>
                 <div
-                  id="mobile-systems-menu"
+                  id="mobile-tools-menu"
                   className={[
                     "overflow-hidden transition-[max-height] duration-200",
-                    mobileSectionOpen === "systems" ? "max-h-96" : "max-h-0",
+                    mobileSectionOpen === "tools" ? "max-h-64" : "max-h-0",
                   ].join(" ")}
                 >
-                  {systemItems.map((item) => (
+                  {toolItems.map((item) => (
                     <NavLink
                       key={item.to}
                       to={item.to}
@@ -414,7 +383,7 @@ export default function AppShell() {
                       className={({ isActive }) =>
                         [
                           "flex min-h-11 items-center border-t border-white/10 px-4 text-sm transition",
-                          isActive ? "text-cyan-300" : "text-slate-300 hover:bg-cyan-300/10 hover:text-cyan-200",
+                          isActive ? "text-blue-300" : "text-slate-300 hover:bg-blue-300/10 hover:text-blue-200",
                         ].join(" ")
                       }
                     >

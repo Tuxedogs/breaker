@@ -43,4 +43,9 @@ export const manualShipSeeds: ManualShipSeed[] = [
   { manufacturer: 'AEGS', name: 'Eclipse', sizeGroup: 'small', health: 2200, ballisticThreshold: 11, energyThreshold: 7, patch: '4.7 PTU' },
   { manufacturer: 'KRIG', name: 'I21_AlphaWolf', sizeGroup: 'small', health: 2000, ballisticThreshold: 10, energyThreshold: 6, patch: '4.7 PTU' },
   { manufacturer: 'RSI', name: 'Shiv', sizeGroup: 'small', health: 2000, ballisticThreshold: 9, energyThreshold: 6, patch: '4.7 PTU' },
+
+
 ]
+
+
+

@@ -93,23 +93,35 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
                 )}
               />
             </div>
-            <div className="mt-5 flex justify-center md:w-1/2 md:translate-x-1/2">
-              <div className="w-full max-w-[22rem]">
-                <SectionHubCard
-                  title="Maps"
-                  subtitle="Deck views, overlays, and ship reference layouts"
-                  href="/maps"
-                  accentColor="#f59e0b"
-                  isActive={pathname.startsWith("/maps")}
-                  variant="maps"
-                  icon={(
-                    <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
-                      <path d="M4.5 6.5l5-2 5 2 5-2v13l-5 2-5-2-5 2v-13z" />
-                      <path d="M9.5 4.5v13M14.5 6.5v13" />
-                    </svg>
-                  )}
-                />
-              </div>
+            <div className="mt-5 grid gap-5 md:grid-cols-2">
+              <SectionHubCard
+                title="Maps"
+                subtitle="Deck views, overlays, and ship reference layouts"
+                href="/maps"
+                accentColor="#f59e0b"
+                isActive={pathname.startsWith("/maps")}
+                variant="maps"
+                icon={(
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
+                    <path d="M4.5 6.5l5-2 5 2 5-2v13l-5 2-5-2-5 2v-13z" />
+                    <path d="M9.5 4.5v13M14.5 6.5v13" />
+                  </svg>
+                )}
+              />
+              <SectionHubCard
+                title="Alpha vs Threshold"
+                subtitle="Compare weapon alpha against ship hull damage thresholds"
+                href="/tools/alpha-threshold"
+                accentColor="#38bdf8"
+                isActive={pathname.startsWith("/tools/alpha-threshold")}
+                icon={(
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="section-hub-icon">
+                    <path d="M5 18.5h14" />
+                    <path d="M7.5 18.5v-5.5M12 18.5V8.5M16.5 18.5v-9" />
+                    <path d="M6 9.5l4-3 3 2 5-4" />
+                  </svg>
+                )}
+              />
             </div>
           </div>
         </div>
