@@ -98,6 +98,10 @@ export function WeaponComparisonSlots({
           onActiveSlotChange={setActiveSlotId}
           onAssignWeapon={(slotId, weaponKey) => onChange(slotId, weaponKey)}
           onClearSlot={(slotId) => onChange(slotId, null)}
+          onClearAllSlots={() => {
+            slotEntries.forEach(({ slot }) => onChange(slot.id, null))
+            setActiveSlotId(slotEntries[0]?.slot.id ?? null)
+          }}
           onClose={() => setModalOpen(false)}
         />
       ) : null}

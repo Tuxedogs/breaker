@@ -671,8 +671,8 @@
 
   .alpha-modal-shell {
     display: flex;
-    width: min(62rem, calc(100vw - 1.5rem));
-    max-height: min(74vh, 52rem);
+    width: min(82rem, calc(100vw - 1.5rem));
+    max-height: min(84vh, 64rem);
     flex-direction: column;
   }
 
@@ -682,11 +682,21 @@
     justify-content: space-between;
     gap: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 1rem 1rem 0.85rem;
+    padding: 0.9rem 1rem 0.75rem;
   }
 
   .alpha-modal-search {
-    padding: 1rem 1rem 0;
+    padding: 0.75rem 1rem 0;
+  }
+
+  .alpha-modal-search-head {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.55rem;
+  }
+
+  .alpha-modal-clear-all {
+    min-width: 6.5rem;
   }
 
   .alpha-modal-feedback {
@@ -700,20 +710,20 @@
   .alpha-modal-slot-strip {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.65rem;
-    padding: 0.9rem 1rem 0;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem 0;
   }
 
   .alpha-modal-slot-tab {
     display: flex;
-    min-height: 5.6rem;
+    min-height: 4.35rem;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 0.35rem;
-    border-radius: 0.9rem;
+    gap: 0.25rem;
+    border-radius: 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.75rem 0.85rem;
+    padding: 0.55rem 0.65rem;
     text-align: left;
     transition:
       border-color 150ms ease,
@@ -744,6 +754,18 @@
       0 0 18px rgba(34, 211, 238, 0.16);
   }
 
+  .alpha-modal-slot-tab-next-cyan {
+    border-color: rgba(103, 232, 249, 0.82);
+    background:
+      linear-gradient(180deg, rgba(34, 211, 238, 0.2), transparent 34%),
+      rgba(34, 211, 238, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(103, 232, 249, 0.32),
+      0 0 24px rgba(34, 211, 238, 0.34),
+      0 0 42px rgba(34, 211, 238, 0.14);
+  }
+
   .alpha-modal-slot-tab-active-violet {
     border-color: rgba(196, 181, 253, 0.54);
     background:
@@ -753,6 +775,18 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 0 0 1px rgba(196, 181, 253, 0.2),
       0 0 18px rgba(139, 92, 246, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-violet {
+    border-color: rgba(196, 181, 253, 0.8);
+    background:
+      linear-gradient(180deg, rgba(139, 92, 246, 0.2), transparent 34%),
+      rgba(139, 92, 246, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(196, 181, 253, 0.3),
+      0 0 24px rgba(139, 92, 246, 0.34),
+      0 0 42px rgba(139, 92, 246, 0.14);
   }
 
   .alpha-modal-slot-tab-active-amber {
@@ -766,6 +800,18 @@
       0 0 18px rgba(245, 158, 11, 0.16);
   }
 
+  .alpha-modal-slot-tab-next-amber {
+    border-color: rgba(252, 211, 77, 0.82);
+    background:
+      linear-gradient(180deg, rgba(245, 158, 11, 0.2), transparent 34%),
+      rgba(245, 158, 11, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(252, 211, 77, 0.3),
+      0 0 24px rgba(245, 158, 11, 0.34),
+      0 0 42px rgba(245, 158, 11, 0.14);
+  }
+
   .alpha-modal-slot-tab-active-emerald {
     border-color: rgba(110, 231, 183, 0.54);
     background:
@@ -775,6 +821,18 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 0 0 1px rgba(110, 231, 183, 0.2),
       0 0 18px rgba(16, 185, 129, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-emerald {
+    border-color: rgba(110, 231, 183, 0.8);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.2), transparent 34%),
+      rgba(16, 185, 129, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(110, 231, 183, 0.3),
+      0 0 24px rgba(16, 185, 129, 0.34),
+      0 0 42px rgba(16, 185, 129, 0.14);
   }
 
   .alpha-modal-slot-tab[aria-selected="true"] {
@@ -790,7 +848,7 @@
   }
 
   .alpha-modal-slot-label {
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -799,17 +857,53 @@
 
   .alpha-modal-slot-badge {
     display: inline-flex;
-    min-height: 1.15rem;
+    min-height: 1rem;
     align-items: center;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(255, 255, 255, 0.08);
-    padding: 0 0.38rem;
-    font-size: 0.52rem;
+    padding: 0 0.32rem;
+    font-size: 0.48rem;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: rgb(248 250 252 / 0.96);
+  }
+
+  .alpha-modal-slot-badge-next-cyan {
+    border-color: rgba(103, 232, 249, 0.52);
+    background: rgba(34, 211, 238, 0.24);
+    color: rgb(207 250 254 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(34, 211, 238, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-violet {
+    border-color: rgba(196, 181, 253, 0.5);
+    background: rgba(139, 92, 246, 0.24);
+    color: rgb(237 233 254 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(139, 92, 246, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-amber {
+    border-color: rgba(252, 211, 77, 0.52);
+    background: rgba(245, 158, 11, 0.24);
+    color: rgb(254 243 199 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(245, 158, 11, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-emerald {
+    border-color: rgba(110, 231, 183, 0.5);
+    background: rgba(16, 185, 129, 0.24);
+    color: rgb(209 250 229 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(16, 185, 129, 0.34);
   }
 
   .alpha-modal-slot-content {
@@ -820,14 +914,31 @@
     gap: 0.15rem;
   }
 
+  .alpha-modal-slot-row {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .alpha-modal-slot-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
   .alpha-modal-slot-weapon {
     display: block;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.8rem;
-    line-height: 1.15rem;
+    font-size: 0.72rem;
+    line-height: 1rem;
     font-weight: 600;
     color: rgb(248 250 252 / 0.98);
   }
@@ -838,22 +949,22 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 0.78rem;
-    line-height: 1.15rem;
+    font-size: 0.68rem;
+    line-height: 1rem;
     color: rgb(148 163 184 / 0.96);
   }
 
   .alpha-modal-slot-clear {
     display: inline-flex;
-    min-height: 1.4rem;
+    min-height: 2.3rem;
+    min-width: 4.2rem;
     align-items: center;
     justify-content: center;
-    margin-top: auto;
     border-radius: 0.45rem;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(15, 23, 42, 0.56);
-    padding: 0 0.45rem;
-    font-size: 0.58rem;
+    padding: 0 0.7rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -882,13 +993,19 @@
     min-height: 0;
     flex: 1 1 auto;
     overflow-y: auto;
-    padding: 0.75rem 1rem 1rem;
+    padding: 0.5rem 1rem 1rem;
   }
 
   .alpha-summary-rail .alpha-select-panel {
     left: auto;
     right: 0;
     width: min(42rem, calc(100vw - 3rem));
+  }
+
+  @media (min-width: 900px) {
+    .alpha-modal-slot-strip {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
 
   .alpha-weapon-bookmark-wrap {
