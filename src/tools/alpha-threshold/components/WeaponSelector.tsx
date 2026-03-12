@@ -31,6 +31,7 @@ type Props = {
   onActiveSlotChange: (slotId: string | null) => void
   onAssignWeapon: (slotId: string, weaponKey: string) => void
   onClearSlot: (slotId: string) => void
+  onClearAllSlots: () => void
 }
 
 const selectedToneClassName: Record<SlotTone, string> = {
@@ -75,6 +76,7 @@ export function WeaponSelector({
   onActiveSlotChange,
   onAssignWeapon,
   onClearSlot,
+  onClearAllSlots,
 }: Props) {
   const listboxId = useId()
   const dialogTitleId = useId()
@@ -318,6 +320,9 @@ export function WeaponSelector({
                 className={[
                   'alpha-modal-slot-tab',
                   isActive ? `alpha-modal-slot-tab-active-${slot.tone}` : '',
+                  isActive && !isFilled
+                    ? `alpha-modal-slot-tab-next-${slot.tone}`
+                    : '',
                   isFilled
                     ? 'alpha-modal-slot-tab-filled'
                     : 'alpha-modal-slot-tab-empty',
@@ -328,47 +333,73 @@ export function WeaponSelector({
                 <span className="alpha-modal-slot-top">
                   <span className="alpha-modal-slot-label">{slot.label}</span>
                   {isActive ? (
-                    <span className="alpha-modal-slot-badge">
+                    <span
+                      className={[
+                        'alpha-modal-slot-badge',
+                        !slot.weaponKey
+                          ? `alpha-modal-slot-badge-next-${slot.tone}`
+                          : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
                       {slot.weaponKey ? 'Active' : 'Next'}
                     </span>
                   ) : null}
                 </span>
 
                 {slot.weaponName ? (
-                  <span className="alpha-modal-slot-content">
-                    <span className="alpha-modal-slot-weapon">
-                      {slot.weaponName}
-                    </span>
-                    {slot.weaponClass ? (
-                      <span className="alpha-modal-slot-state">
-                        {formatWeaponClassLabel(slot.weaponClass)}
+                  <span className="alpha-modal-slot-row">
+                    <span className="alpha-modal-slot-content">
+                      <span className="alpha-modal-slot-weapon">
+                        {slot.weaponName}
                       </span>
-                    ) : null}
+                      {slot.weaponClass ? (
+                        <span className="alpha-modal-slot-state">
+                          {formatWeaponClassLabel(slot.weaponClass)}
+                        </span>
+                      ) : null}
+                    </span>
+
+                    <span className="alpha-modal-slot-actions">
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setAssignmentError('')
+                          onClearSlot(slot.id)
+                          onActiveSlotChange(
+                            getFirstOpenSlotId(slots) ?? slot.id
+                          )
+                        }}
+                        className="alpha-modal-slot-clear"
+                      >
+                        Clear
+                      </button>
+                    </span>
                   </span>
                 ) : (
                   <span className="alpha-modal-slot-state">Empty slot</span>
                 )}
-
-                {slot.weaponKey ? (
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      setAssignmentError('')
-                      onClearSlot(slot.id)
-                      onActiveSlotChange(getFirstOpenSlotId(slots) ?? slot.id)
-                    }}
-                    className="alpha-modal-slot-clear"
-                  >
-                    Clear
-                  </button>
-                ) : null}
               </button>
             )
           })}
         </div>
 
         <div className="alpha-modal-search">
+          <div className="alpha-modal-search-head">
+            <button
+              type="button"
+              onClick={() => {
+                setAssignmentError('')
+                onClearAllSlots()
+              }}
+              className="alpha-action-button alpha-modal-clear-all"
+            >
+              Clear All
+            </button>
+          </div>
+
           <div className="relative">
             <input
               ref={inputRef}
@@ -389,7 +420,7 @@ export function WeaponSelector({
                 setActiveIndex(0)
               }}
               onKeyDown={handleKeyDown}
-              placeholder="Search any weapon"
+              placeholder="Search S5, Repeater, Gatling..."
               className="alpha-input alpha-input-weapon-modal"
             />
 
@@ -443,16 +474,19 @@ export function WeaponSelector({
                           }
                         }}
                       >
-                        <div
-                          className={[
-                            'alpha-weapon-type-head',
-                            damageTypeGroup.damageType === 'ballistic'
-                              ? 'alpha-weapon-type-head-ballistic'
-                              : 'alpha-weapon-type-head-energy',
-                          ].join(' ')}
-                        >
-                          {damageTypeGroup.damageType}
-                        </div>
+                        {!(sizeGroup.size === 1 &&
+                        damageTypeGroup.damageType === 'ballistic') ? (
+                          <div
+                            className={[
+                              'alpha-weapon-type-head',
+                              damageTypeGroup.damageType === 'ballistic'
+                                ? 'alpha-weapon-type-head-ballistic'
+                                : 'alpha-weapon-type-head-energy',
+                            ].join(' ')}
+                          >
+                            {damageTypeGroup.damageType}
+                          </div>
+                        ) : null}
 
                         {damageTypeGroup.classes.map((weaponClassGroup) => (
                           <section

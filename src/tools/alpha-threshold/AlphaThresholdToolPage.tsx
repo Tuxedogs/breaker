@@ -30,6 +30,10 @@ export default function AlphaThresholdToolPage() {
   } = useAlphaThresholdState()
   const hasSelectedWeapons = selectedWeapons.length > 0
 
+  function clearAllWeaponSlots() {
+    slots.forEach((slot) => setSlotWeapon(slot.id, null))
+  }
+
   return (
     <section className="alpha-tool-route">
       <SidebarWorkspace
@@ -58,6 +62,17 @@ export default function AlphaThresholdToolPage() {
                 Selected weapons stay visible here while the threshold matrix
                 remains the dominant workspace.
               </p>
+              {hasSelectedWeapons ? (
+                <div className="mt-4 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={clearAllWeaponSlots}
+                    className="alpha-action-button"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              ) : null}
             </div>
 
             {!hasSelectedWeapons ? (
