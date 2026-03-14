@@ -99,3 +99,25 @@ Definition of done:
 - Doctrine page renders identical.
 - Repeated framework-modern-* strings removed from doctrine page markup.
 - New classes live in Tailwind @layer components.
+
+## Cursor Cloud specific instructions
+
+This is a single-service client-side SPA (React + Vite + TypeScript). No backend, database, or external services are required.
+
+### Key commands
+
+| Task | Command |
+|---|---|
+| Install deps | `npm install` |
+| Dev server | `npm run dev` (serves on `http://localhost:5173`) |
+| Lint | `npm run lint` |
+| Build (typecheck + bundle) | `npm run build` |
+| Content validation | `npm run content:check` |
+
+### Notes
+
+- The Vite dev server starts on port 5173 by default. There is no `.env` file needed.
+- `npm run build` runs `tsc -b` (TypeScript check) followed by `vite build`, so it serves as both typecheck and production build.
+- Husky is set up for commit-msg hooks (commitlint with conventional commits). The `prepare` script installs hooks automatically during `npm install`.
+- Content lives in `content/modules/*.mdx` and `content/refs/*.mdx`. Run `npm run content:check` to validate frontmatter and references after editing content files.
+- The build produces a warning about chunk size (>500 kB) for the main bundle — this is expected and not a build failure.
