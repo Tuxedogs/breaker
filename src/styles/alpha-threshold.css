@@ -1,0 +1,1386 @@
+/* ──────────────────────────────────────────────
+   Alpha Threshold Tool
+   Ship survivability calculator: sidebar,
+   weapon selector modal, threshold charts,
+   comparison slots, and result matrix.
+   ────────────────────────────────────────────── */
+
+@layer components {
+  /* Alpha Threshold: top-level spacing between the controls, legend, cards, and table. */
+  .alpha-tool-layout {
+    @apply space-y-5 lg:space-y-6;
+  }
+
+  /* Alpha Threshold: route-level shell matching the onboarding sidebar pattern. */
+  .alpha-tool-route {
+    @apply py-4 sm:py-6;
+  }
+
+  .alpha-sidebar-workspace {
+    align-items: start;
+  }
+
+  .alpha-sidebar-workspace > .sidebar-workspace-rail,
+  .alpha-sidebar-workspace > .sidebar-workspace-main {
+    align-self: start;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .alpha-results-column {
+    @apply min-w-0 space-y-5 lg:space-y-6;
+  }
+
+  .alpha-summary-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .alpha-sidebar-section + .alpha-sidebar-section {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1rem;
+  }
+
+  .alpha-summary-rail-head {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%),
+      rgba(4, 8, 18, 0.92);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(0, 0, 0, 0.28);
+  }
+
+  .alpha-summary-rail-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .alpha-summary-empty {
+    border-radius: 1.25rem;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    padding: 1rem;
+    background: rgba(3, 7, 16, 0.58);
+  }
+
+  .alpha-tool-panel-sticky {
+    @apply lg:sticky lg:top-15 lg:z-20;
+  }
+
+  /* Alpha Threshold: sticky ship selection rail that scopes the result set. */
+  .alpha-sidebar {
+    align-self: start;
+  }
+
+  .alpha-sidebar-inner {
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%), rgba(4, 8, 18, 0.94);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 14px 28px rgba(0, 0, 0, 0.32);
+  }
+
+  .alpha-sidebar-groups {
+    margin-top: 1rem;
+    max-height: min(70vh, 56rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .alpha-sidebar-groups > * + * {
+    margin-top: 0.75rem;
+  }
+
+  .alpha-sidebar-group {
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem;
+    background: rgba(2, 6, 14, 0.72);
+  }
+
+  .alpha-sidebar-group-toggle {
+    display: flex;
+    min-height: 2.75rem;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+    padding-inline: 0.5rem;
+    text-align: left;
+    font-size: 0.875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(241 245 249);
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .alpha-sidebar-group-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .alpha-sidebar-group-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.7);
+  }
+
+  @media (min-width: 640px) {
+    .alpha-sidebar-inner {
+      padding: 1.25rem;
+    }
+  }
+
+  /* Alpha Threshold: main results shell that holds the ship survivability matrix. */
+  .alpha-table-shell {
+    @apply overflow-hidden rounded-[1.5rem] border border-white/10;
+    background: rgba(3, 7, 16, 0.94);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 22px 42px rgba(0, 0, 0, 0.3);
+  }
+
+  .alpha-table-scroll {
+    overflow: visible;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 8%), rgba(2, 4, 10, 0.55);
+  }
+
+  /* Alpha Threshold: selected weapon summary cards. */
+  .alpha-summary-card {
+    @apply rounded-[1.2rem] border border-white/10 p-3 sm:p-4;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%), rgba(5, 9, 20, 0.92);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 12px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .alpha-ship-row {
+    @apply rounded-[1.2rem] border border-white/10 p-4 transition sm:p-5;
+    background: rgba(7, 11, 21, 0.92);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .alpha-ship-row:hover {
+    @apply border-white/20;
+    background: rgba(9, 14, 26, 0.96);
+  }
+
+  .alpha-ship-row-pass {
+    border-color: rgba(103, 232, 249, 0.26);
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.06), transparent 26%),
+      rgba(8, 14, 26, 0.96);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 12px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .alpha-ship-row-blocked {
+    border-color: rgba(71, 85, 105, 0.34);
+    background: rgba(4, 7, 14, 0.96);
+  }
+
+  .alpha-empty-state {
+    @apply rounded-[1.2rem] border border-dashed border-white/15 p-6 text-center;
+    background: rgba(3, 7, 16, 0.62);
+  }
+
+  /* Alpha Threshold: shared form controls for search, sort, and numeric overrides. */
+  .alpha-input {
+    @apply min-h-11 w-full rounded-xl border border-white/15 px-3 text-sm text-slate-50 outline-none placeholder:text-slate-500;
+    background: rgba(2, 6, 23, 0.85);
+  }
+
+  .alpha-input:hover {
+    border-color: rgba(148, 163, 184, 0.32);
+  }
+
+  .alpha-input:focus-visible {
+    outline: 2px solid rgba(125, 211, 252, 0.88);
+    outline-offset: 2px;
+    border-color: rgba(125, 211, 252, 0.52);
+  }
+
+  .alpha-input-weapon-modal {
+    padding-left: 0.75rem;
+    padding-right: 4.75rem;
+  }
+
+  .alpha-select-panel {
+    @apply overflow-hidden rounded-xl border border-white/10 shadow-2xl backdrop-blur-xl;
+    background: rgba(2, 6, 14, 0.98);
+    box-shadow:
+      0 18px 32px rgba(0, 0, 0, 0.48),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .alpha-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: rgba(2, 6, 14, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .alpha-modal-shell {
+    display: flex;
+    width: min(82rem, calc(100vw - 1.5rem));
+    max-height: min(84vh, 64rem);
+    flex-direction: column;
+  }
+
+  .alpha-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.9rem 1rem 0.75rem;
+  }
+
+  .alpha-modal-search {
+    padding: 0.75rem 1rem 0;
+  }
+
+  .alpha-modal-search-head {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.55rem;
+  }
+
+  .alpha-modal-clear-all {
+    min-width: 6.5rem;
+  }
+
+  .alpha-modal-feedback {
+    min-height: 1.15rem;
+    margin-top: 0.45rem;
+    font-size: 0.72rem;
+    line-height: 1.1rem;
+    color: rgb(251 191 36 / 0.92);
+  }
+
+  .alpha-modal-slot-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    padding: 0.65rem 1rem 0;
+  }
+
+  .alpha-modal-slot-tab {
+    display: flex;
+    min-height: 4.35rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0.25rem;
+    border-radius: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.55rem 0.65rem;
+    text-align: left;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      box-shadow 150ms ease,
+      transform 150ms ease;
+  }
+
+  .alpha-modal-slot-tab-filled {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%),
+      rgba(255, 255, 255, 0.04);
+  }
+
+  .alpha-modal-slot-tab-empty {
+    background: rgba(255, 255, 255, 0.02);
+    border-style: dashed;
+  }
+
+  .alpha-modal-slot-tab-active-cyan {
+    border-color: rgba(103, 232, 249, 0.58);
+    background:
+      linear-gradient(180deg, rgba(34, 211, 238, 0.14), transparent 34%),
+      rgba(34, 211, 238, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(103, 232, 249, 0.22),
+      0 0 18px rgba(34, 211, 238, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-cyan {
+    border-color: rgba(103, 232, 249, 0.82);
+    background:
+      linear-gradient(180deg, rgba(34, 211, 238, 0.2), transparent 34%),
+      rgba(34, 211, 238, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(103, 232, 249, 0.32),
+      0 0 24px rgba(34, 211, 238, 0.34),
+      0 0 42px rgba(34, 211, 238, 0.14);
+  }
+
+  .alpha-modal-slot-tab-active-violet {
+    border-color: rgba(196, 181, 253, 0.54);
+    background:
+      linear-gradient(180deg, rgba(139, 92, 246, 0.14), transparent 34%),
+      rgba(139, 92, 246, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(196, 181, 253, 0.2),
+      0 0 18px rgba(139, 92, 246, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-violet {
+    border-color: rgba(196, 181, 253, 0.8);
+    background:
+      linear-gradient(180deg, rgba(139, 92, 246, 0.2), transparent 34%),
+      rgba(139, 92, 246, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(196, 181, 253, 0.3),
+      0 0 24px rgba(139, 92, 246, 0.34),
+      0 0 42px rgba(139, 92, 246, 0.14);
+  }
+
+  .alpha-modal-slot-tab-active-amber {
+    border-color: rgba(252, 211, 77, 0.56);
+    background:
+      linear-gradient(180deg, rgba(245, 158, 11, 0.14), transparent 34%),
+      rgba(245, 158, 11, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(252, 211, 77, 0.2),
+      0 0 18px rgba(245, 158, 11, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-amber {
+    border-color: rgba(252, 211, 77, 0.82);
+    background:
+      linear-gradient(180deg, rgba(245, 158, 11, 0.2), transparent 34%),
+      rgba(245, 158, 11, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(252, 211, 77, 0.3),
+      0 0 24px rgba(245, 158, 11, 0.34),
+      0 0 42px rgba(245, 158, 11, 0.14);
+  }
+
+  .alpha-modal-slot-tab-active-emerald {
+    border-color: rgba(110, 231, 183, 0.54);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.14), transparent 34%),
+      rgba(16, 185, 129, 0.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(110, 231, 183, 0.2),
+      0 0 18px rgba(16, 185, 129, 0.16);
+  }
+
+  .alpha-modal-slot-tab-next-emerald {
+    border-color: rgba(110, 231, 183, 0.8);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.2), transparent 34%),
+      rgba(16, 185, 129, 0.1);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 0 1px rgba(110, 231, 183, 0.3),
+      0 0 24px rgba(16, 185, 129, 0.34),
+      0 0 42px rgba(16, 185, 129, 0.14);
+  }
+
+  .alpha-modal-slot-tab[aria-selected="true"] {
+    transform: translateY(-1px);
+  }
+
+  .alpha-modal-slot-top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .alpha-modal-slot-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(226 232 240 / 0.94);
+  }
+
+  .alpha-modal-slot-badge {
+    display: inline-flex;
+    min-height: 1rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    padding: 0 0.32rem;
+    font-size: 0.48rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(248 250 252 / 0.96);
+  }
+
+  .alpha-modal-slot-badge-next-cyan {
+    border-color: rgba(103, 232, 249, 0.52);
+    background: rgba(34, 211, 238, 0.24);
+    color: rgb(207 250 254 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(34, 211, 238, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-violet {
+    border-color: rgba(196, 181, 253, 0.5);
+    background: rgba(139, 92, 246, 0.24);
+    color: rgb(237 233 254 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(139, 92, 246, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-amber {
+    border-color: rgba(252, 211, 77, 0.52);
+    background: rgba(245, 158, 11, 0.24);
+    color: rgb(254 243 199 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(245, 158, 11, 0.34);
+  }
+
+  .alpha-modal-slot-badge-next-emerald {
+    border-color: rgba(110, 231, 183, 0.5);
+    background: rgba(16, 185, 129, 0.24);
+    color: rgb(209 250 229 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 14px rgba(16, 185, 129, 0.34);
+  }
+
+  .alpha-modal-slot-content {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .alpha-modal-slot-row {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .alpha-modal-slot-actions {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+
+  .alpha-modal-slot-weapon {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    line-height: 1rem;
+    font-weight: 600;
+    color: rgb(248 250 252 / 0.98);
+  }
+
+  .alpha-modal-slot-state {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.68rem;
+    line-height: 1rem;
+    color: rgb(148 163 184 / 0.96);
+  }
+
+  .alpha-modal-slot-clear {
+    display: inline-flex;
+    min-height: 2.3rem;
+    min-width: 4.2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.45rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(15, 23, 42, 0.56);
+    padding: 0 0.7rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(226 232 240 / 0.94);
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .alpha-modal-slot-clear:hover {
+    border-color: rgba(248, 250, 252, 0.24);
+    background: rgba(30, 41, 59, 0.82);
+    color: rgb(248 250 252);
+  }
+
+  .alpha-modal-body {
+    min-height: 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .alpha-modal-list {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0.5rem 1rem 1rem;
+  }
+
+  .alpha-summary-rail .alpha-select-panel {
+    left: auto;
+    right: 0;
+    width: min(42rem, calc(100vw - 3rem));
+  }
+
+  @media (min-width: 900px) {
+    .alpha-modal-slot-strip {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .alpha-weapon-bookmark-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0.75rem 0.75rem 0;
+    background:
+      linear-gradient(180deg, rgba(2, 6, 14, 0.98), rgba(2, 6, 14, 0.88) 72%, transparent);
+  }
+
+  .alpha-weapon-bookmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.25rem 0.7rem;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(248 250 252 / 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .alpha-weapon-bookmark-ballistic {
+    border-color: rgba(103, 232, 249, 0.24);
+    background: rgba(34, 211, 238, 0.12);
+    color: rgb(165 243 252 / 0.98);
+  }
+
+  .alpha-weapon-bookmark-energy {
+    border-color: rgba(252, 211, 77, 0.22);
+    background: rgba(245, 158, 11, 0.12);
+    color: rgb(253 230 138 / 0.98);
+  }
+
+  .alpha-weapon-size-group + .alpha-weapon-size-group {
+    margin-top: 1.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.35rem;
+  }
+
+  .alpha-weapon-size-head {
+    margin-bottom: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.38rem 0.75rem;
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgb(248 250 252 / 0.96);
+  }
+
+  .alpha-weapon-type-groups {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .alpha-weapon-type-group {
+    display: grid;
+    gap: 0.7rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.85rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .alpha-weapon-type-head {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.28rem 0.65rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(148 163 184 / 0.95);
+  }
+
+  .alpha-weapon-type-head-ballistic {
+    border-color: rgba(103, 232, 249, 0.22);
+    background: rgba(34, 211, 238, 0.08);
+    color: rgb(165 243 252 / 0.95);
+  }
+
+  .alpha-weapon-type-head-energy {
+    border-color: rgba(252, 211, 77, 0.2);
+    background: rgba(245, 158, 11, 0.08);
+    color: rgb(253 230 138 / 0.95);
+  }
+
+  .alpha-weapon-class-group {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .alpha-weapon-class-group + .alpha-weapon-class-group {
+    margin-top: 0.35rem;
+  }
+
+  .alpha-weapon-class-head {
+    display: block;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(203 213 225 / 0.88);
+  }
+
+  .alpha-weapon-card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  @media (min-width: 900px) {
+    .alpha-weapon-card-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .alpha-modal-shell {
+      width: min(100%, calc(100vw - 0.75rem));
+      max-height: 78vh;
+    }
+
+    .alpha-modal-head {
+      padding: 0.9rem 0.9rem 0.8rem;
+    }
+
+    .alpha-modal-search {
+      padding: 0.9rem 0.9rem 0;
+    }
+
+    .alpha-modal-slot-strip {
+      padding: 0.8rem 0.9rem 0;
+    }
+
+    .alpha-modal-list {
+      padding: 0.75rem 0.9rem 0.9rem;
+    }
+  }
+
+  .alpha-weapon-select-card {
+    display: grid;
+    gap: 0.55rem;
+    min-height: 8.4rem;
+    height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.9rem;
+    padding: 0.8rem;
+    text-align: left;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 24%),
+      rgba(7, 12, 22, 0.94);
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      box-shadow 160ms ease,
+      transform 160ms ease;
+  }
+
+  .alpha-weapon-select-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 24%),
+      rgba(9, 14, 26, 0.98);
+  }
+
+  .alpha-weapon-select-card:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.72);
+  }
+
+  .alpha-weapon-select-card-active {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .alpha-weapon-select-card-selected-cyan {
+    border-color: rgba(103, 232, 249, 0.45);
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.08), transparent 35%),
+      rgba(8, 14, 26, 0.98);
+  }
+
+  .alpha-weapon-select-card-selected-violet {
+    border-color: rgba(196, 181, 253, 0.42);
+    background:
+      linear-gradient(90deg, rgba(139, 92, 246, 0.08), transparent 35%),
+      rgba(8, 14, 26, 0.98);
+  }
+
+  .alpha-weapon-select-card-selected-amber {
+    border-color: rgba(252, 211, 77, 0.4);
+    background:
+      linear-gradient(90deg, rgba(245, 158, 11, 0.08), transparent 35%),
+      rgba(8, 14, 26, 0.98);
+  }
+
+  .alpha-weapon-select-card-selected-emerald {
+    border-color: rgba(110, 231, 183, 0.4);
+    background:
+      linear-gradient(90deg, rgba(16, 185, 129, 0.08), transparent 35%),
+      rgba(8, 14, 26, 0.98);
+  }
+
+  .alpha-weapon-select-name {
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    font-weight: 600;
+    color: rgb(248 250 252);
+  }
+
+  .alpha-weapon-select-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .alpha-weapon-select-badge {
+    display: inline-flex;
+    min-height: 1.2rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0 0.45rem;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(241 245 249 / 0.96);
+  }
+
+  .alpha-weapon-select-meta {
+    font-size: 0.6rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(148 163 184 / 0.86);
+  }
+
+  .alpha-weapon-select-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.45rem;
+    margin-top: auto;
+  }
+
+  .alpha-weapon-select-stats dt {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+  }
+
+  .alpha-weapon-select-stats dd {
+    margin-top: 0.15rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgb(248 250 252);
+  }
+
+  /* Alpha Threshold: compact labels, state chips, and numeric readouts. */
+  .alpha-control-label {
+    @apply text-[10px] uppercase tracking-[0.2em] text-slate-300/75;
+  }
+
+  .alpha-chip {
+    @apply inline-flex min-h-8 items-center rounded-full border border-white/10 bg-white/5 px-3 text-[11px] uppercase tracking-[0.18em] text-slate-200;
+  }
+
+  .alpha-chip-pass {
+    border-color: rgba(52, 211, 153, 0.5);
+    background:
+      linear-gradient(180deg, rgba(16, 185, 129, 0.22), rgba(5, 46, 22, 0.4)),
+      rgba(6, 78, 59, 0.28);
+    color: rgb(209 250 229);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(16, 185, 129, 0.14),
+      0 0 12px rgba(16, 185, 129, 0.16);
+  }
+
+  .alpha-chip-block {
+    border-color: rgba(251, 113, 133, 0.5);
+    background:
+      linear-gradient(180deg, rgba(244, 63, 94, 0.22), rgba(76, 5, 25, 0.42)),
+      rgba(127, 29, 29, 0.28);
+    color: rgb(255 228 230);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 0 0 1px rgba(244, 63, 94, 0.14),
+      0 0 12px rgba(244, 63, 94, 0.16);
+  }
+
+  .alpha-chip-tone-cyan {
+    color: rgb(207 250 254);
+  }
+
+  .alpha-chip-tone-violet {
+    color: rgb(237 233 254);
+  }
+
+  .alpha-chip-tone-amber {
+    color: rgb(254 243 199);
+  }
+
+  .alpha-chip-tone-emerald {
+    color: rgb(209 250 229);
+  }
+
+  .alpha-chip-muted {
+    @apply border-white/10 bg-white/5 text-slate-300;
+  }
+
+  .alpha-stat-label {
+    @apply text-[10px] uppercase tracking-[0.2em] text-slate-400;
+  }
+
+  .alpha-stat-value {
+    @apply mt-2 text-base font-semibold text-slate-50;
+  }
+
+  /* Alpha Threshold: button treatment for reset, edit, and override actions. */
+  .alpha-action-button {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    border-width: 1px;
+    border-color: rgb(255 255 255 / 0.1);
+    background-color: rgb(15 23 42 / 0.7);
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.69rem;
+    line-height: 1.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    --tw-text-opacity: 1;
+    color: rgb(241 245 249 / var(--tw-text-opacity, 1));
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  .alpha-action-button:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(30, 41, 59, 0.8);
+  }
+
+  .alpha-action-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.7);
+  }
+
+  .alpha-action-button-primary {
+    @apply border-cyan-300/25 bg-cyan-400/10 text-cyan-100;
+  }
+
+  .alpha-segment-button {
+    @apply inline-flex min-h-10 items-center justify-center rounded-lg border border-white/10 px-3 text-xs uppercase tracking-[0.16em] text-slate-300 transition hover:border-white/20 hover:text-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/70;
+    background: rgba(2, 6, 23, 0.72);
+  }
+
+  .alpha-segment-button:hover {
+    background: rgba(15, 23, 42, 0.88);
+  }
+
+  .alpha-segment-button-active {
+    @apply border-cyan-300/25 bg-cyan-400/10 text-cyan-100;
+  }
+
+  .alpha-legend-panel {
+    @apply rounded-[1.1rem] border border-white/10 px-4 py-3;
+    background: rgba(4, 8, 18, 0.78);
+  }
+
+  .alpha-slot-panel {
+    @apply rounded-xl border border-white/10 p-3;
+    background: rgba(3, 7, 16, 0.72);
+  }
+
+  .alpha-slot-launch {
+    display: flex;
+    min-height: 5.75rem;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.45rem;
+    border-radius: 0.8rem;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+    padding: 0.9rem;
+    text-align: left;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .alpha-slot-launch:hover {
+    border-color: rgba(103, 232, 249, 0.28);
+    background: rgba(15, 23, 42, 0.48);
+  }
+
+  .alpha-slot-launch:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.7);
+  }
+
+  .alpha-slot-launch-title {
+    font-size: 0.96rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    color: rgb(248 250 252);
+  }
+
+  .alpha-slot-launch-copy {
+    font-size: 0.75rem;
+    line-height: 1.15rem;
+    color: rgb(148 163 184 / 0.92);
+  }
+
+  .alpha-summary-card-selectable {
+    cursor: pointer;
+  }
+
+  /* Alpha Threshold: inline editors that appear inside cards and ship rows. */
+  .alpha-inline-editor {
+    @apply mt-4 rounded-xl border border-white/10 p-3;
+    background: rgba(2, 6, 14, 0.86);
+  }
+
+  /* Alpha Threshold: small boxed metrics used to group key values without changing layout. */
+  .alpha-metric-card {
+    @apply rounded-xl border border-white/10 px-3 py-3;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  /* Alpha Threshold: table intro bar that separates metadata from the row list. */
+  .alpha-table-header {
+    @apply border-b border-white/10 px-4 py-4 sm:px-5;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 82%);
+  }
+
+  /* Alpha Threshold: ship option rows in the left selector rail. */
+  .alpha-ship-option-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .alpha-ship-option-button {
+    display: flex;
+    min-height: 3rem;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 0.75rem;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.1);
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    text-align: left;
+    flex: 0 0 auto;
+    width: fit-content;
+    max-width: 100%;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .alpha-ship-option-button:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .alpha-ship-option-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(103, 232, 249, 0.7);
+  }
+
+  .alpha-ship-option-button[data-selected='true'] {
+    border-color: rgba(103, 232, 249, 0.28);
+    background:
+      linear-gradient(90deg, rgba(34, 211, 238, 0.08), transparent 28%),
+      rgba(255, 255, 255, 0.04);
+  }
+
+  .alpha-ship-option-main {
+    @apply min-w-0 flex-1;
+  }
+
+  .alpha-ship-option-name {
+    display: block;
+    overflow: hidden;
+    font-size: 0.99rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    --tw-text-opacity: 1;
+    color: rgb(248 250 252 / var(--tw-text-opacity, 1));
+    text-transform: uppercase;
+  }
+
+  .alpha-ship-option-meta {
+    margin-top: 0.25rem;
+    display: block;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    --tw-text-opacity: 1;
+    color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+  }
+
+  .alpha-ship-option-stats {
+    display: none;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    --tw-text-opacity: 1;
+    color: rgb(148 163 184 / var(--tw-text-opacity, 1));
+  }
+
+  @media (min-width: 640px) {
+    .alpha-ship-option-stats {
+      display: flex;
+      flex-direction: column;
+      
+    }
+  }
+
+  /* Alpha Threshold: dual-lane chart surface for ballistic and energy comparisons. */
+  .alpha-threshold-lane {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .alpha-threshold-lane-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+  }
+
+  .alpha-threshold-track {
+    position: relative;
+    height: 3.8rem;
+    overflow: hidden;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 22%),
+      rgba(2, 6, 23, 0.94);
+  }
+
+  .alpha-threshold-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.22;
+  }
+
+  .alpha-threshold-axis {
+    position: absolute;
+    inset-inline: 0.75rem;
+    top: 0.4rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgb(100 116 139);
+  }
+
+  .alpha-threshold-lane-bar {
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: 0.65rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(15, 23, 42, 0.88);
+  }
+
+  .alpha-threshold-threshold-fill {
+    height: 100%;
+    border-radius: 999px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 0 12px rgba(255, 255, 255, 0.08);
+  }
+
+  .alpha-threshold-compare-band {
+    position: absolute;
+    bottom: 0.2rem;
+    height: 0.46rem;
+    border-radius: 999px;
+    opacity: 0.99;
+  }
+
+  .alpha-threshold-marker-layer {
+    position: absolute;
+    inset-inline: 0.75rem;
+    inset-block: 0.5rem;
+  }
+
+  .alpha-threshold-marker {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    overflow: visible;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .alpha-threshold-compare-band-pass {
+    color: rgb(52 211 153);
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.18), rgba(16, 185, 129, 0.5));
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.18);
+  }
+
+  .alpha-threshold-compare-band-block {
+    color: rgb(255, 0, 37);
+    background: linear-gradient(90deg, rgb(255, 0, 44), rgb(255, 0, 44));
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.03);
+  }
+
+  .alpha-threshold-compare-band-overflow::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.85;
+  }
+
+  .alpha-threshold-marker-cyan {
+    background: rgb(103 232 249);
+  }
+
+  .alpha-threshold-marker-violet {
+    background: rgb(196 181 253);
+  }
+
+  .alpha-threshold-marker-amber {
+    background: rgb(252 211 77);
+  }
+
+  .alpha-threshold-marker-emerald {
+    background: rgb(110 231 183);
+  }
+
+  .alpha-threshold-marker-line-pass {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.28);
+  }
+
+  .alpha-threshold-marker-line-block {
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.22);
+  }
+
+  .alpha-threshold-marker-line {
+    position: absolute;
+    top: -0.1rem;
+    height: 1.95rem;
+    left: 50%;
+    width: 3px;
+    transform: translateX(-50%);
+  }
+
+  .alpha-threshold-marker-dot {
+    position: absolute;
+    top: -0.18rem;
+    left: 50%;
+    height: 0.75rem;
+    width: 0.75rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    border: 2px solid rgba(2, 6, 23, 0.9);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .alpha-threshold-marker-label {
+    pointer-events: none;
+    position: absolute;
+    top: -1.95rem;
+    left: 50%;
+    z-index: 3;
+    display: none;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    border-radius: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(2, 6, 23, 0.97);
+    padding: 0.25rem 0.45rem;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(248 250 252);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.28);
+  }
+
+  .alpha-threshold-slot-badge {
+    position: absolute;
+    top: -1.55rem;
+    left: 50%;
+    z-index: 3;
+    display: inline-flex;
+    min-height: 1.2rem;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 0 0.38rem;
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(248 250 252);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 6px 14px rgba(0, 0, 0, 0.24);
+  }
+
+  .alpha-threshold-slot-badge-capped {
+    transform: translateX(calc(-100% + 0.2rem));
+  }
+
+  .alpha-threshold-marker-overflow {
+    position: absolute;
+    left: calc(1%);
+    top: 50%;
+    height: 0;
+    width: 0;
+    transform: translateY(75%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+
+  .alpha-threshold-marker-overflow-pass {
+    border-left: 7px solid rgb(110 231 183);
+  }
+
+  .alpha-threshold-marker-overflow-block {
+    border-left: 7px solid rgb(253 164 175);
+  }
+
+  .alpha-threshold-slot-badge-cyan {
+    border-color: rgba(103, 232, 249, 0.32);
+    background: rgba(34, 211, 238, 0.18);
+    color: rgb(207 250 254);
+  }
+
+  .alpha-threshold-slot-badge-violet {
+    border-color: rgba(196, 181, 253, 0.32);
+    background: rgba(139, 92, 246, 0.18);
+    color: rgb(237 233 254);
+  }
+
+  .alpha-threshold-slot-badge-amber {
+    border-color: rgba(252, 211, 77, 0.32);
+    background: rgba(245, 158, 11, 0.2);
+    color: rgb(254 243 199);
+  }
+
+  .alpha-threshold-slot-badge-emerald {
+    border-color: rgba(110, 231, 183, 0.32);
+    background: rgba(16, 185, 129, 0.18);
+    color: rgb(209 250 229);
+  }
+
+  /* Alpha Threshold: subtle hover-only row note for exact values and current threshold context. */
+  .alpha-hover-note {
+    @apply pointer-events-none rounded-xl border border-white/10 px-3 py-2 text-[11px] uppercase tracking-[0.16em] text-slate-300;
+    background: rgba(2, 6, 14, 0.92);
+  }
+}
