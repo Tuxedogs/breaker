@@ -1,12 +1,16 @@
+import { CompareShipStrip } from './CompareShipStrip'
+import { ShipBalanceChangelogPanel } from './ShipBalanceChangelogPanel'
 import { ShipTable } from './ShipTable'
 import type {
   AxisScaleMode,
   SelectedShipResult,
+  ShipBalanceChangeEntry,
   ShipOverride,
 } from '../types'
 
 type Props = {
   selectedShipResults: SelectedShipResult[]
+  shipBalanceChanges: ShipBalanceChangeEntry[]
   axisScaleMode: AxisScaleMode
   globalAxisMaxByType: {
     ballistic: number
@@ -18,13 +22,16 @@ type Props = {
 
 export function AlphaThresholdPage({
   selectedShipResults,
+  shipBalanceChanges,
   axisScaleMode,
   globalAxisMaxByType,
   onAxisScaleModeChange,
   shipOverrides,
 }: Props) {
   return (
-    <div className="alpha-results-column">
+    <section className="alpha-results-column" aria-label="Threshold matrix results">
+      <ShipBalanceChangelogPanel entries={shipBalanceChanges} />
+      <CompareShipStrip shipResults={selectedShipResults} />
       <ShipTable
         shipResults={selectedShipResults}
         axisScaleMode={axisScaleMode}
@@ -32,6 +39,6 @@ export function AlphaThresholdPage({
         onAxisScaleModeChange={onAxisScaleModeChange}
         shipOverrides={shipOverrides}
       />
-    </div>
+    </section>
   )
 }

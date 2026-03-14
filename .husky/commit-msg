@@ -1,1 +1,10 @@
 npx --no -- commitlint --edit "$1"
+status=$?
+
+if [ $status -ne 0 ]; then
+  echo ""
+  echo "Commit message check failed."
+  echo "Try: ui: <message>, framework: <message>, refs: <message>, review: <message>, feat: <message>, fix: <message>"
+fi
+
+exit $status
