@@ -11,6 +11,57 @@ export type Ship = {
   health: number
   ballisticThreshold: number
   energyThreshold: number
+  armor: number
+  armorHp: number
+  vitalHp: number
+  patch?: string
+  history: ShipBalanceSnapshot[]
+  hardpointGroups?: ShipHardpointGroup[]
+}
+
+export type ShipBalanceSnapshot = {
+  patch: string
+  armor: number
+  ballisticThreshold: number
+  energyThreshold: number
+  armorHp: number
+  vitalHp: number
+}
+
+export type ShipBalanceChangeEntry = {
+  ship: Ship
+  current: ShipBalanceSnapshot
+  previous: ShipBalanceSnapshot
+  fields: ShipBalanceFieldChange[]
+  changeMagnitude: number
+}
+
+export type ShipBalanceFieldKey =
+  | 'ballisticThreshold'
+  | 'energyThreshold'
+  | 'armor'
+  | 'armorHp'
+  | 'vitalHp'
+
+export type ShipBalanceFieldDirection = 'up' | 'down'
+
+export type ShipBalanceFieldChange = {
+  key: ShipBalanceFieldKey
+  label: string
+  before: number
+  after: number
+  delta: number
+  direction: ShipBalanceFieldDirection
+}
+
+export type HardpointRole = 'pilot' | 'turret'
+
+export type ShipHardpointGroup = {
+  id: string
+  role: HardpointRole
+  label: string
+  size: number
+  count: number
 }
 
 export type WeaponDamageType = 'ballistic' | 'energy' | 'distortion'
@@ -60,6 +111,10 @@ export type ShipSortKey =
 export type ComparisonSlot = {
   id: string
   weaponKey: string | null
+  label?: string
+  role?: HardpointRole
+  size?: number
+  count?: number
 }
 
 export type SlotTone = 'cyan' | 'violet' | 'amber' | 'emerald'
@@ -104,6 +159,12 @@ export type ShipSidebarGroup = {
   visibleCount: number
   selectedCount: number
   collapsed: boolean
+}
+
+export type ShipManufacturerOption = {
+  value: string
+  label: string
+  count: number
 }
 
 export type GroupedWeaponClass = {

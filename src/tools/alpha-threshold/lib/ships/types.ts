@@ -21,7 +21,12 @@ export type ManualShipSeed = {
   name: string
   sizeGroup: ShipSizeGroup
   health: number
+  armor?: number
+  armorHp?: number
+  vitalHp?: number
   ballisticThreshold: number
   energyThreshold: number
+  history?: Ship['history']
+  hardpointGroups?: Ship['hardpointGroups']
   patch?: string
 }

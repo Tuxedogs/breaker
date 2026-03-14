@@ -1,35 +1,28 @@
 import { formatEntityLabel, formatMetric } from '../lib/calculations'
-import type { ShipSidebarGroup, ShipSizeGroup } from '../types'
+import { ShipCascadeDropdown } from './ShipCascadeDropdown'
+import type {
+  Ship,
+  ShipHardpointGroup,
+} from '../types'
+import type { ReactNode } from 'react'
 
 type Props = {
-  groups: ShipSidebarGroup[]
-  selectedShipNames: string[]
-  searchValue: string
-  showSelectedOnly: boolean
+  attackerShip: Ship | null
+  attackerOptions: Ship[]
+  attackerHardpointGroups: ShipHardpointGroup[]
   mobileOpen: boolean
-  onSearchChange: (value: string) => void
-  onToggleShowSelectedOnly: () => void
-  onToggleShipSelected: (shipName: string) => void
-  onToggleGroup: (groupId: ShipSizeGroup) => void
-  onSelectVisible: () => void
-  onClearAll: () => void
+  onAttackerShipChange: (shipName: string | null) => void
+  children?: ReactNode
 }
 
 export function ShipSelectionSidebar({
-  groups,
-  selectedShipNames,
-  searchValue,
-  showSelectedOnly,
+  attackerShip,
+  attackerOptions,
+  attackerHardpointGroups,
   mobileOpen,
-  onSearchChange,
-  onToggleShowSelectedOnly,
-  onToggleShipSelected,
-  onToggleGroup,
-  onSelectVisible,
-  onClearAll,
+  onAttackerShipChange,
+  children,
 }: Props) {
-  const selectedShipSet = new Set(selectedShipNames)
-
   return (
     <aside
       className={[
@@ -39,106 +32,58 @@ export function ShipSelectionSidebar({
       ].join(' ')}
     >
       <div className="alpha-sidebar-inner">
-        <div className="space-y-3 border-b border-white/10 pb-4">
-          <div>
-            <p className="page-kicker">Ship Selection</p>
-            <h2 className="surface-title mt-3">Results Scope</h2>
-          </div>
+        <section className="alpha-sidebar-attacker-section">
+          <header>
+            <p className="page-kicker">Attacker</p>
+            <h2 className="surface-title mt-3">Attacking Ship</h2>
+          </header>
+
+          <article className="alpha-attacker-panel">
+            <figure className="alpha-attacker-image" aria-hidden="true">
+              {attackerShip ? formatEntityLabel(attackerShip.name).slice(0, 2) : '??'}
+            </figure>
+            <div className="alpha-attacker-copy">
+              <p className="alpha-ship-option-meta">
+                {attackerShip ? formatEntityLabel(attackerShip.manufacturer) : 'No ship selected'}
+              </p>
+              <h3 className="alpha-compare-ship-name">
+                {attackerShip ? formatEntityLabel(attackerShip.name) : 'Awaiting attacker'}
+              </h3>
+              <ul className="alpha-attacker-stats" aria-label="Attacker thresholds and hull">
+                <li>HP {formatMetric(attackerShip?.health ?? 0)}</li>
+                <li>B {formatMetric(attackerShip?.ballisticThreshold ?? 0)}</li>
+                <li>E {formatMetric(attackerShip?.energyThreshold ?? 0)}</li>
+              </ul>
+            </div>
+          </article>
 
           <label className="space-y-2">
-            <span className="alpha-control-label">Search ships</span>
-            <input
-              value={searchValue}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder="Idris, RSI, fighter..."
-              className="alpha-input"
+            <span className="alpha-control-label">Select attacker</span>
+            <ShipCascadeDropdown
+              ships={attackerOptions}
+              selectedShipName={attackerShip?.name ?? null}
+              onChange={onAttackerShipChange}
+              placeholder="Select Ship"
             />
           </label>
 
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={onSelectVisible}
-              className="alpha-action-button"
-            >
-              Select visible
-            </button>
-            <button
-              type="button"
-              onClick={onClearAll}
-              className="alpha-action-button"
-            >
-              Clear all
-            </button>
-            <button
-              type="button"
-              onClick={onToggleShowSelectedOnly}
-              className={[
-                'alpha-action-button',
-                showSelectedOnly ? 'alpha-action-button-primary' : '',
-              ].join(' ')}
-            >
-              {showSelectedOnly ? 'Showing selected' : 'Show selected only'}
-            </button>
-          </div>
-        </div>
-
-        <div className="alpha-sidebar-groups">
-          {groups.map((group) => (
-            <section key={group.id} className="alpha-sidebar-group">
-              <button
-                type="button"
-                onClick={() => onToggleGroup(group.id)}
-                className="alpha-sidebar-group-toggle"
-              >
-                <span>
+          <section>
+            <p className="alpha-control-label">Hardpoint groups</p>
+            <ul className="alpha-attacker-hardpoints" aria-label="Attacker hardpoint groups">
+              {attackerHardpointGroups.map((group) => (
+                <li key={group.id} className="alpha-chip alpha-chip-muted">
                   {group.label}
-                  <span className="ml-2 text-slate-500">
-                    {group.selectedCount}/{group.visibleCount}
-                  </span>
-                </span>
-                <span aria-hidden>{group.collapsed ? '+' : '-'}</span>
-              </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </section>
 
-              {!group.collapsed ? (
-                <div className="alpha-ship-option-list">
-                  {group.ships.length > 0 ? (
-                    group.ships.map((ship) => {
-                      const isSelected = selectedShipSet.has(ship.name)
-
-                      return (
-                        <button
-                          key={ship.name}
-                          type="button"
-                          onClick={() => onToggleShipSelected(ship.name)}
-                          className="alpha-ship-option-button"
-                          data-selected={isSelected}
-                        >
-                          <span className="alpha-ship-option-main">
-                            <span className="alpha-ship-option-meta">
-                              {ship.manufacturer}
-                            </span>
-                            <span className="alpha-ship-option-name">
-                              {formatEntityLabel(ship.name)}
-                            </span>
-                          </span>
-                          <span className="alpha-ship-option-stats">
-                            <span>B {formatMetric(ship.ballisticThreshold)}</span>
-                            <span>E {formatMetric(ship.energyThreshold)}</span>
-                          </span>
-                        </button>
-                      )
-                    })
-                  ) : (
-                    <p className="px-1 text-sm text-slate-500">
-                      No ships visible in this group.
-                    </p>
-                  )}
-                </div>
-              ) : null}
-            </section>
-          ))}
-        </div>
+        {children ? (
+          <section className="alpha-sidebar-merged-section">
+            {children}
+          </section>
+        ) : null}
       </div>
     </aside>
   )
