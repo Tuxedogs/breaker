@@ -1,8 +1,12 @@
 import { formatEntityLabel, formatMetric } from '../lib/calculations'
-import type { ShipSidebarGroup, ShipSizeGroup } from '../types'
+import type { Ship, ShipHardpointGroup, ShipSidebarGroup, ShipSizeGroup } from '../types'
+import type { ReactNode } from 'react'
 
 type Props = {
   groups: ShipSidebarGroup[]
+  attackerShip: Ship | null
+  attackerOptions: Ship[]
+  attackerHardpointGroups: ShipHardpointGroup[]
   selectedShipNames: string[]
   searchValue: string
   showSelectedOnly: boolean
@@ -11,12 +15,17 @@ type Props = {
   onToggleShowSelectedOnly: () => void
   onToggleShipSelected: (shipName: string) => void
   onToggleGroup: (groupId: ShipSizeGroup) => void
+  onAttackerShipChange: (shipName: string) => void
   onSelectVisible: () => void
   onClearAll: () => void
+  children?: ReactNode
 }
 
 export function ShipSelectionSidebar({
   groups,
+  attackerShip,
+  attackerOptions,
+  attackerHardpointGroups,
   selectedShipNames,
   searchValue,
   showSelectedOnly,
@@ -25,8 +34,10 @@ export function ShipSelectionSidebar({
   onToggleShowSelectedOnly,
   onToggleShipSelected,
   onToggleGroup,
+  onAttackerShipChange,
   onSelectVisible,
   onClearAll,
+  children,
 }: Props) {
   const selectedShipSet = new Set(selectedShipNames)
 
@@ -41,8 +52,60 @@ export function ShipSelectionSidebar({
       <div className="alpha-sidebar-inner">
         <div className="space-y-3 border-b border-white/10 pb-4">
           <div>
-            <p className="page-kicker">Ship Selection</p>
-            <h2 className="surface-title mt-3">Results Scope</h2>
+            <p className="page-kicker">Attacker</p>
+            <h2 className="surface-title mt-3">Attacking Ship</h2>
+          </div>
+
+          <label className="space-y-2">
+            <span className="alpha-control-label">Select attacker</span>
+            <select
+              value={attackerShip?.name ?? ''}
+              onChange={(event) => onAttackerShipChange(event.target.value)}
+              className="alpha-input"
+            >
+              {attackerOptions.map((ship) => (
+                <option key={ship.name} value={ship.name}>
+                  {formatEntityLabel(ship.manufacturer)} {formatEntityLabel(ship.name)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <article className="alpha-attacker-panel">
+            <div className="alpha-attacker-image" aria-hidden="true">
+              {attackerShip ? formatEntityLabel(attackerShip.name).slice(0, 2) : '??'}
+            </div>
+            <div className="alpha-attacker-copy">
+              <p className="alpha-ship-option-meta">
+                {attackerShip ? formatEntityLabel(attackerShip.manufacturer) : 'No ship selected'}
+              </p>
+              <h3 className="alpha-compare-ship-name">
+                {attackerShip ? formatEntityLabel(attackerShip.name) : 'Awaiting attacker'}
+              </h3>
+              <div className="alpha-attacker-stats">
+                <span>HP {formatMetric(attackerShip?.health ?? 0)}</span>
+                <span>B {formatMetric(attackerShip?.ballisticThreshold ?? 0)}</span>
+                <span>E {formatMetric(attackerShip?.energyThreshold ?? 0)}</span>
+              </div>
+            </div>
+          </article>
+
+          <section>
+            <p className="alpha-control-label">Hardpoint groups</p>
+            <div className="alpha-attacker-hardpoints">
+              {attackerHardpointGroups.map((group) => (
+                <div key={group.id} className="alpha-chip alpha-chip-muted">
+                  {group.label}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <div className="space-y-3 border-b border-white/10 py-4">
+          <div>
+            <p className="page-kicker">Victims</p>
+            <h2 className="surface-title mt-3">Victim Ships</h2>
           </div>
 
           <label className="space-y-2">
@@ -139,6 +202,12 @@ export function ShipSelectionSidebar({
             </section>
           ))}
         </div>
+
+        {children ? (
+          <section className="alpha-sidebar-merged-section">
+            {children}
+          </section>
+        ) : null}
       </div>
     </aside>
   )

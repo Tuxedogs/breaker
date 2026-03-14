@@ -83,14 +83,24 @@ export function normalizeManualShipRecord(
   const manufacturer = normalizeShipManufacturer(seed.manufacturer)
   const name = normalizeShipName(seed.name)
 
+  const fallbackArmor = Math.max(
+    1,
+    Math.round((seed.ballisticThreshold + seed.energyThreshold) / 2)
+  )
+
   return {
     id: createShipId({ manufacturer, name }),
     manufacturer,
     name,
     sizeGroup: normalizeShipSizeGroup(seed.sizeGroup),
     health: seed.health,
+    armor: seed.armor ?? fallbackArmor,
+    armorHp: seed.armorHp ?? seed.health,
+    vitalHp: seed.vitalHp ?? seed.health,
     ballisticThreshold: seed.ballisticThreshold,
     energyThreshold: seed.energyThreshold,
+    history: seed.history ?? [],
+    hardpointGroups: seed.hardpointGroups ?? [],
     source,
     sourceId: `${manufacturer}:${name}`,
     patch: seed.patch,

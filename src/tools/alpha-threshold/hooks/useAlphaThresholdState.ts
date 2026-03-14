@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { shipThresholds } from '../data/shipThresholds'
+import { resolveShipHardpointGroups } from '../data/ships/hardpointProfiles'
 import { weapons } from '../data/weapons/weapons'
 import {
   buildAxisMaxByType,
@@ -15,6 +16,10 @@ import { sortShips } from '../lib/sortShips'
 import type {
   AxisScaleMode,
   ComparisonSlot,
+  Ship,
+  ShipBalanceChangeEntry,
+  ShipBalanceSnapshot,
+  ShipHardpointGroup,
   SelectedWeaponComparison,
   ShipSidebarGroup,
   ShipSortKey,
@@ -37,11 +42,23 @@ const VALID_AXIS_SCALE_MODES: AxisScaleMode[] = ['global', 'by-size', 'per-row']
 
 function buildDefaultSlots(): ComparisonSlot[] {
   return [
-    { id: 'slot-1', weaponKey: null },
-    { id: 'slot-2', weaponKey: null },
-    { id: 'slot-3', weaponKey: null },
-    { id: 'slot-4', weaponKey: null },
+    { id: 'slot-1', weaponKey: null, label: 'Pilot Group 1', size: 3, count: 1 },
   ]
+}
+
+function buildSlotsFromHardpointGroups(
+  hardpointGroups: ShipHardpointGroup[]
+): ComparisonSlot[] {
+  if (hardpointGroups.length === 0) return buildDefaultSlots()
+
+  return hardpointGroups.map((group) => ({
+    id: group.id,
+    weaponKey: null,
+    label: group.label,
+    role: group.role,
+    size: group.size,
+    count: group.count,
+  }))
 }
 
 function isComparisonSlot(value: unknown): value is ComparisonSlot {
@@ -51,22 +68,29 @@ function isComparisonSlot(value: unknown): value is ComparisonSlot {
 
   return (
     typeof slot.id === 'string' &&
-    (typeof slot.weaponKey === 'string' || slot.weaponKey === null)
+    (typeof slot.weaponKey === 'string' || slot.weaponKey === null) &&
+    (slot.label === undefined || typeof slot.label === 'string') &&
+    (slot.role === undefined || slot.role === 'pilot' || slot.role === 'turret') &&
+    (slot.size === undefined || typeof slot.size === 'number') &&
+    (slot.count === undefined || typeof slot.count === 'number')
   )
 }
 
-function normalizeSlots(value: ComparisonSlot[]): ComparisonSlot[] {
-  if (Array.isArray(value) && value.every(isComparisonSlot)) {
-    return buildDefaultSlots().map((fallbackSlot, index) => {
-      const slot = value[index]
+function normalizeSlots(
+  value: ComparisonSlot[],
+  hardpointGroups: ShipHardpointGroup[]
+): ComparisonSlot[] {
+  const defaults = buildSlotsFromHardpointGroups(hardpointGroups)
 
-      return slot
-        ? {
-            id: slot.id || fallbackSlot.id,
-            weaponKey: slot.weaponKey,
-          }
-        : fallbackSlot
-    })
+  if (Array.isArray(value) && value.every(isComparisonSlot)) {
+    const previousById = new Map(
+      value.map((slot) => [slot.id, slot] as const)
+    )
+
+    return defaults.map((fallbackSlot) => ({
+      ...fallbackSlot,
+      weaponKey: previousById.get(fallbackSlot.id)?.weaponKey ?? null,
+    }))
   }
 
   if (value && typeof value === 'object') {
@@ -82,13 +106,17 @@ function normalizeSlots(value: ComparisonSlot[]): ComparisonSlot[] {
       .filter((slot) => typeof slot?.weaponName === 'string' && slot.weaponName)
       .slice(0, 4)
 
-    return buildDefaultSlots().map((fallbackSlot, index) => ({
+    return defaults.map((fallbackSlot, index) => ({
       id: legacySlots[index]?.id || fallbackSlot.id,
       weaponKey: null,
+      label: fallbackSlot.label,
+      role: fallbackSlot.role,
+      size: fallbackSlot.size,
+      count: fallbackSlot.count,
     }))
   }
 
-  return buildDefaultSlots()
+  return defaults
 }
 
 function normalizeSortKey(value: ShipSortKey): ShipSortKey {
@@ -138,6 +166,17 @@ function matchesShipSearch(ship: { manufacturer: string; name: string }, query: 
   return haystack.includes(query.trim().toLowerCase())
 }
 
+function buildCurrentBalanceSnapshot(ship: Ship): ShipBalanceSnapshot {
+  return {
+    patch: ship.patch ?? 'Current',
+    armor: ship.armor,
+    ballisticThreshold: ship.ballisticThreshold,
+    energyThreshold: ship.energyThreshold,
+    armorHp: ship.armorHp,
+    vitalHp: ship.vitalHp,
+  }
+}
+
 export function useAlphaThresholdState() {
   const [sortKey, setSortKey] = useLocalStorageState<ShipSortKey>(
     'alpha-threshold.sort',
@@ -146,6 +185,10 @@ export function useAlphaThresholdState() {
   const [storedSlots, setSlots] = useLocalStorageState<ComparisonSlot[]>(
     'alpha-threshold.slots',
     buildDefaultSlots()
+  )
+  const [attackerShipName, setAttackerShipName] = useLocalStorageState<string | null>(
+    'alpha-threshold.attacker-ship',
+    null
   )
   const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<string[]>(
     'alpha-threshold.selected-ships',
@@ -171,9 +214,22 @@ export function useAlphaThresholdState() {
     'by-size'
   )
 
+  const attackerShip = useMemo<Ship | null>(() => {
+    if (typeof attackerShipName === 'string' && attackerShipName.length > 0) {
+      return shipThresholds.find((ship) => ship.name === attackerShipName) ?? null
+    }
+
+    return shipThresholds.find((ship) => ship.name === 'Scorpius') ?? shipThresholds[0] ?? null
+  }, [attackerShipName])
+
+  const attackerHardpointGroups = useMemo(
+    () => resolveShipHardpointGroups(attackerShip),
+    [attackerShip]
+  )
+
   const slots = useMemo(
-    () => normalizeSlots(storedSlots),
-    [storedSlots]
+    () => normalizeSlots(storedSlots, attackerHardpointGroups),
+    [attackerHardpointGroups, storedSlots]
   )
   const normalizedSortKey = useMemo(
     () => normalizeSortKey(sortKey),
@@ -268,6 +324,10 @@ export function useAlphaThresholdState() {
     })
   }, [effectiveShips, selectedShipNameSet, shipSearch, showSelectedOnly])
 
+  const attackerOptions = useMemo(() => {
+    return [...effectiveShips].sort((left, right) => left.name.localeCompare(right.name))
+  }, [effectiveShips])
+
   const sidebarGroups = useMemo<ShipSidebarGroup[]>(() => {
     return SHIP_SIZE_GROUPS.map((group) => {
       const ships = visibleSidebarShips.filter(
@@ -309,12 +369,24 @@ export function useAlphaThresholdState() {
           baseWeapon,
           weaponOverrides[weaponKey]
         )
+        const mountCount = Math.max(1, slot.count ?? 1)
+        const groupedWeapon: WeaponRecord = {
+          ...effectiveWeapon,
+          alpha:
+            effectiveWeapon.alpha == null
+              ? null
+              : effectiveWeapon.alpha * mountCount,
+          burstDps:
+            effectiveWeapon.burstDps == null
+              ? null
+              : effectiveWeapon.burstDps * mountCount,
+        }
 
         return {
           slotId: slot.id,
-          slotLabel: `W${index + 1}`,
+          slotLabel: slot.label ?? `W${index + 1}`,
           tone: SLOT_TONES[index] ?? 'cyan',
-          weapon: effectiveWeapon,
+          weapon: groupedWeapon,
         }
       })
       .filter(Boolean) as SelectedWeaponComparison[]
@@ -339,6 +411,30 @@ export function useAlphaThresholdState() {
       )
     )
   }, [normalizedAxisScaleMode, selectedShips, selectedWeapons])
+
+  const shipBalanceChanges = useMemo<ShipBalanceChangeEntry[]>(() => {
+    return shipThresholds
+      .filter((ship) => ship.history.length > 0)
+      .map((ship) => {
+        const current = buildCurrentBalanceSnapshot(ship)
+        const previous = ship.history[0]
+
+        return {
+          ship,
+          current,
+          previous,
+          delta: {
+            armor: current.armor - previous.armor,
+            ballisticThreshold:
+              current.ballisticThreshold - previous.ballisticThreshold,
+            energyThreshold: current.energyThreshold - previous.energyThreshold,
+            armorHp: current.armorHp - previous.armorHp,
+            vitalHp: current.vitalHp - previous.vitalHp,
+          },
+        }
+      })
+      .sort((left, right) => left.ship.name.localeCompare(right.ship.name))
+  }, [])
 
   function setSlotWeapon(slotId: string, weaponKey: string | null) {
     setSlots((prev) =>
@@ -382,6 +478,10 @@ export function useAlphaThresholdState() {
   return {
     sortKey: normalizedSortKey,
     setSortKey,
+    attackerShip,
+    attackerOptions,
+    setAttackerShipName,
+    attackerHardpointGroups,
     slots,
     setSlotWeapon,
     allWeapons,
@@ -404,6 +504,7 @@ export function useAlphaThresholdState() {
     setMobileSidebarOpen,
     toggleGroupCollapsed,
     selectedShipResults,
+    shipBalanceChanges,
     shipOverrides,
     weaponOverrides,
     setShipOverride,
