@@ -7,9 +7,13 @@ import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
 export default function AlphaThresholdToolPage() {
   const {
+    attackerShipName,
+    setAttackerShipName,
+    attackerProfile,
     slots,
     setSlotWeapon,
     allWeapons,
+    allShips,
     selectedWeapons,
     axisScaleMode,
     setAxisScaleMode,
@@ -88,8 +92,12 @@ export default function AlphaThresholdToolPage() {
             ) : null}
 
             <ControlsPanel
+              attackerShipName={attackerShipName}
+              attackerProfile={attackerProfile}
+              ships={allShips}
               slots={slots}
               weapons={allWeapons}
+              onAttackerShipChange={setAttackerShipName}
               onSlotChange={setSlotWeapon}
             />
           </section>

@@ -1,0 +1,26 @@
+export const spviewerShipSeeds = [
+  {
+    id: 'spv-hornet-f7cs',
+    manufacturer: 'ANVL',
+    name: 'Hornet_F7CS',
+    sizeGroup: 'small',
+    health: 8250,
+    ballisticThreshold: 24,
+    energyThreshold: 13,
+    pilotHardpointSize: 3,
+    turretHardpointSize: 2,
+    patch: '4.7 PTU (SPViewer)',
+  },
+  {
+    id: 'spv-scorpius',
+    manufacturer: 'RSI',
+    name: 'Scorpius',
+    sizeGroup: 'medium',
+    health: 6600,
+    ballisticThreshold: 11,
+    energyThreshold: 9,
+    pilotHardpointSize: 3,
+    turretHardpointSize: 3,
+    patch: '4.7 PTU (SPViewer)',
+  },
+] as const

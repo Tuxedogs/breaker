@@ -28,13 +28,16 @@ export function WeaponComparisonSlots({
     () =>
       slots.map((slot, index) => {
         const selectedWeapon =
-          weapons.find((weapon) => getWeaponKey(weapon) === slot.weaponKey) ??
-          null
+          weapons.find(
+            (weapon) =>
+              getWeaponKey(weapon) === slot.weaponKey &&
+              weapon.size === slot.hardpointSize
+          ) ?? null
 
         return {
           slot,
           index,
-          slotLabel: `W${index + 1}`,
+          slotLabel: `${slot.operator === 'pilot' ? 'Pilot' : 'Turret'} S${slot.hardpointSize}`,
           tone: SLOT_TONES[index] ?? 'cyan',
           selectedWeapon,
         }
@@ -45,6 +48,14 @@ export function WeaponComparisonSlots({
   function openModal(slotId: string) {
     setActiveSlotId(slotId)
     setModalOpen(true)
+  }
+
+  if (slotEntries.length === 0) {
+    return (
+      <section className="alpha-slot-panel p-4 text-sm text-slate-300">
+        No pilot or turret hardpoints detected for this attacker profile.
+      </section>
+    )
   }
 
   return (
@@ -92,6 +103,7 @@ export function WeaponComparisonSlots({
             weaponKey: slot.weaponKey,
             weaponName: selectedWeapon?.name ?? null,
             weaponClass: selectedWeapon?.weaponClass ?? null,
+            hardpointSize: slot.hardpointSize,
           }))}
           activeSlotId={activeSlotId}
           weapons={weapons}
