@@ -32,13 +32,26 @@ export type ShipBalanceChangeEntry = {
   ship: Ship
   current: ShipBalanceSnapshot
   previous: ShipBalanceSnapshot
-  delta: {
-    armor: number
-    ballisticThreshold: number
-    energyThreshold: number
-    armorHp: number
-    vitalHp: number
-  }
+  fields: ShipBalanceFieldChange[]
+  changeMagnitude: number
+}
+
+export type ShipBalanceFieldKey =
+  | 'ballisticThreshold'
+  | 'energyThreshold'
+  | 'armor'
+  | 'armorHp'
+  | 'vitalHp'
+
+export type ShipBalanceFieldDirection = 'up' | 'down'
+
+export type ShipBalanceFieldChange = {
+  key: ShipBalanceFieldKey
+  label: string
+  before: number
+  after: number
+  delta: number
+  direction: ShipBalanceFieldDirection
 }
 
 export type HardpointRole = 'pilot' | 'turret'
@@ -146,6 +159,12 @@ export type ShipSidebarGroup = {
   visibleCount: number
   selectedCount: number
   collapsed: boolean
+}
+
+export type ShipManufacturerOption = {
+  value: string
+  label: string
+  count: number
 }
 
 export type GroupedWeaponClass = {

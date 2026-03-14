@@ -1,0 +1,102 @@
+/*
+  Alpha Threshold layout and shared surfaces.
+*/
+
+.alpha-tool-route {
+  isolation: isolate;
+}
+
+.alpha-tool-route .alpha-sidebar-workspace {
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .alpha-tool-route .alpha-sidebar-workspace > .sidebar-workspace-rail-left {
+    height: 100vh;
+  }
+
+  .alpha-tool-route .alpha-sidebar {
+    height: 100%;
+    max-height: 100vh;
+    overflow: visible;
+  }
+}
+
+.alpha-tool-route .alpha-page-layout-panel {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.alpha-tool-route .alpha-results-column {
+  gap: 0;
+}
+
+.alpha-tool-route .alpha-changelog-rail {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.alpha-tool-route :is(
+  .alpha-sidebar,
+  .alpha-summary-rail,
+  .alpha-table-shell,
+  .alpha-compare-strip,
+  .alpha-heatmap-panel
+) {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 28%),
+    linear-gradient(180deg, rgb(9 13 22 / 0.96), rgb(5 7 12 / 0.98));
+  box-shadow: 0 18px 44px rgb(0 0 0 / 0.28);
+}
+
+.alpha-tool-route .alpha-sidebar-inner,
+.alpha-tool-route .alpha-summary-rail,
+.alpha-tool-route .alpha-table-header,
+.alpha-tool-route .alpha-table-scroll {
+  padding: 1.25rem;
+}
+
+.alpha-tool-route .alpha-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: visible;
+}
+
+.alpha-tool-route .alpha-sidebar-attacker-section {
+  display: grid;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  padding-bottom: 1rem;
+}
+
+.alpha-tool-route .alpha-summary-rail-head,
+.alpha-tool-route .alpha-table-header {
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-table-intro,
+.alpha-tool-route .alpha-table-summary {
+  margin: 0;
+}
+
+.alpha-tool-route .alpha-summary-empty,
+.alpha-tool-route .alpha-empty-state {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+}
+
+.alpha-tool-route .alpha-summary-rail-clear {
+  margin: 1rem 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+.alpha-tool-route .alpha-sidebar-merged-section {
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  padding-top: 1rem;
+}

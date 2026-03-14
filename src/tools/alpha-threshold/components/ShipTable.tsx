@@ -25,10 +25,13 @@ export function ShipTable({
   shipOverrides,
 }: Props) {
   return (
-    <section aria-labelledby="alpha-threshold-ship-table" className="alpha-table-shell">
-      <div className="alpha-table-header">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
+    <section
+      aria-labelledby="alpha-threshold-ship-table"
+      className="alpha-table-shell"
+    >
+      <header className="alpha-table-header">
+        <div className="flex flex-col gap-6">
+          <div className="alpha-table-intro">
             <p className="page-kicker">Selected Ship Results</p>
             <h2 id="alpha-threshold-ship-table" className="surface-title mt-3">
               Threshold Matrix
@@ -60,23 +63,21 @@ export function ShipTable({
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <span className="alpha-chip alpha-chip-muted">
-              Ships {shipResults.length}
-            </span>
-            <span className="alpha-chip alpha-chip-muted">
+          <ul className="alpha-table-summary" aria-label="Matrix summary">
+            <li className="alpha-chip alpha-chip-muted">Ships {shipResults.length}</li>
+            <li className="alpha-chip alpha-chip-muted">
               B {formatMetric(globalAxisMaxByType.ballistic)}
-            </span>
-            <span className="alpha-chip alpha-chip-muted">
+            </li>
+            <li className="alpha-chip alpha-chip-muted">
               E {formatMetric(globalAxisMaxByType.energy)}
-            </span>
-          </div>
+            </li>
+          </ul>
         </div>
-      </div>
+      </header>
 
-      <div className="alpha-table-scroll p-3 sm:p-4">
+      <div className="alpha-table-scroll">
         {shipResults.length > 0 ? (
-          <ol className="space-y-3">
+          <ol className="alpha-table-list space-y-3">
             {shipResults.map((shipResult) => (
               <li key={shipResult.ship.name}>
                 <ShipRow
@@ -87,11 +88,11 @@ export function ShipTable({
             ))}
           </ol>
         ) : (
-          <article className="alpha-empty-state">
+          <section className="alpha-empty-state" aria-live="polite">
             <h3 className="title-font text-xl text-slate-50">
               Select a Ship and Weapon
             </h3>
-          </article>
+          </section>
         )}
       </div>
     </section>
