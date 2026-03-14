@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { shipThresholds } from '../data/shipThresholds'
+import { getAttackerHardpointProfile } from '../data/ships/ships'
 import { weapons } from '../data/weapons/weapons'
 import {
   buildAxisMaxByType,
@@ -13,6 +14,7 @@ import {
 import { mergeShipOverride, mergeWeaponOverride } from '../lib/mergeOverrides'
 import { sortShips } from '../lib/sortShips'
 import type {
+  AttackerHardpointProfile,
   AxisScaleMode,
   ComparisonSlot,
   SelectedWeaponComparison,
@@ -35,13 +37,28 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
 ]
 const VALID_AXIS_SCALE_MODES: AxisScaleMode[] = ['global', 'by-size', 'per-row']
 
-function buildDefaultSlots(): ComparisonSlot[] {
-  return [
-    { id: 'slot-1', weaponKey: null },
-    { id: 'slot-2', weaponKey: null },
-    { id: 'slot-3', weaponKey: null },
-    { id: 'slot-4', weaponKey: null },
-  ]
+function buildSlotsFromProfile(profile: AttackerHardpointProfile): ComparisonSlot[] {
+  const next: ComparisonSlot[] = []
+
+  if (profile.pilotHardpointSize) {
+    next.push({
+      id: 'slot-pilot',
+      operator: 'pilot',
+      hardpointSize: profile.pilotHardpointSize,
+      weaponKey: null,
+    })
+  }
+
+  if (profile.turretHardpointSize) {
+    next.push({
+      id: 'slot-turret',
+      operator: 'turret',
+      hardpointSize: profile.turretHardpointSize,
+      weaponKey: null,
+    })
+  }
+
+  return next
 }
 
 function isComparisonSlot(value: unknown): value is ComparisonSlot {
@@ -51,44 +68,28 @@ function isComparisonSlot(value: unknown): value is ComparisonSlot {
 
   return (
     typeof slot.id === 'string' &&
+    (slot.operator === 'pilot' || slot.operator === 'turret') &&
+    typeof slot.hardpointSize === 'number' &&
     (typeof slot.weaponKey === 'string' || slot.weaponKey === null)
   )
 }
 
-function normalizeSlots(value: ComparisonSlot[]): ComparisonSlot[] {
-  if (Array.isArray(value) && value.every(isComparisonSlot)) {
-    return buildDefaultSlots().map((fallbackSlot, index) => {
-      const slot = value[index]
+function normalizeSlots(value: ComparisonSlot[], profile: AttackerHardpointProfile): ComparisonSlot[] {
+  const baseSlots = buildSlotsFromProfile(profile)
 
-      return slot
-        ? {
-            id: slot.id || fallbackSlot.id,
-            weaponKey: slot.weaponKey,
-          }
-        : fallbackSlot
-    })
-  }
+  if (baseSlots.length === 0) return []
+  if (!Array.isArray(value) || !value.every(isComparisonSlot)) return baseSlots
 
-  if (value && typeof value === 'object') {
-    const legacyValue = value as {
-      ballistic?: Array<{ id?: string; weaponName?: string | null }>
-      energy?: Array<{ id?: string; weaponName?: string | null }>
+  return baseSlots.map((baseSlot) => {
+    const existingSlot = value.find((slot) => slot.id === baseSlot.id)
+
+    if (!existingSlot) return baseSlot
+
+    return {
+      ...baseSlot,
+      weaponKey: existingSlot.weaponKey,
     }
-
-    const legacySlots = [
-      ...(legacyValue.ballistic ?? []),
-      ...(legacyValue.energy ?? []),
-    ]
-      .filter((slot) => typeof slot?.weaponName === 'string' && slot.weaponName)
-      .slice(0, 4)
-
-    return buildDefaultSlots().map((fallbackSlot, index) => ({
-      id: legacySlots[index]?.id || fallbackSlot.id,
-      weaponKey: null,
-    }))
-  }
-
-  return buildDefaultSlots()
+  })
 }
 
 function normalizeSortKey(value: ShipSortKey): ShipSortKey {
@@ -143,9 +144,13 @@ export function useAlphaThresholdState() {
     'alpha-threshold.sort',
     'health-desc'
   )
+  const [attackerShipName, setAttackerShipName] = useLocalStorageState<string>(
+    'alpha-threshold.attacker-ship',
+    'Hornet_F7CS'
+  )
   const [storedSlots, setSlots] = useLocalStorageState<ComparisonSlot[]>(
     'alpha-threshold.slots',
-    buildDefaultSlots()
+    []
   )
   const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<string[]>(
     'alpha-threshold.selected-ships',
@@ -171,9 +176,14 @@ export function useAlphaThresholdState() {
     'by-size'
   )
 
+  const attackerProfile = useMemo(
+    () => getAttackerHardpointProfile(attackerShipName),
+    [attackerShipName]
+  )
+
   const slots = useMemo(
-    () => normalizeSlots(storedSlots),
-    [storedSlots]
+    () => normalizeSlots(storedSlots, attackerProfile),
+    [attackerProfile, storedSlots]
   )
   const normalizedSortKey = useMemo(
     () => normalizeSortKey(sortKey),
@@ -197,6 +207,12 @@ export function useAlphaThresholdState() {
       setSlots(slots)
     }
   }, [setSlots, slots, storedSlots])
+
+  useEffect(() => {
+    if (shipThresholds.some((ship) => ship.name === attackerShipName)) return
+
+    setAttackerShipName(shipThresholds[0]?.name ?? '')
+  }, [attackerShipName, setAttackerShipName])
 
   useEffect(() => {
     if (sortKey !== normalizedSortKey) {
@@ -302,7 +318,7 @@ export function useAlphaThresholdState() {
           (weapon) => getWeaponKey(weapon) === slot.weaponKey
         )
 
-        if (!baseWeapon) return null
+        if (!baseWeapon || baseWeapon.size !== slot.hardpointSize) return null
 
         const weaponKey = getWeaponKey(baseWeapon)
         const effectiveWeapon = mergeWeaponOverride(
@@ -312,7 +328,7 @@ export function useAlphaThresholdState() {
 
         return {
           slotId: slot.id,
-          slotLabel: `W${index + 1}`,
+          slotLabel: `${slot.operator === 'pilot' ? 'Pilot' : 'Turret'} S${slot.hardpointSize}`,
           tone: SLOT_TONES[index] ?? 'cyan',
           weapon: effectiveWeapon,
         }
@@ -382,9 +398,13 @@ export function useAlphaThresholdState() {
   return {
     sortKey: normalizedSortKey,
     setSortKey,
+    attackerShipName,
+    setAttackerShipName,
+    attackerProfile,
     slots,
     setSlotWeapon,
     allWeapons,
+    allShips: effectiveShips,
     selectedWeapons,
     axisScaleMode: normalizedAxisScaleMode,
     setAxisScaleMode,

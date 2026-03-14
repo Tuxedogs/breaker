@@ -19,6 +19,7 @@ type WeaponSelectorSlot = {
   weaponKey: string | null
   weaponName: string | null
   weaponClass: string | null
+  hardpointSize: number
 }
 
 type Props = {
@@ -103,8 +104,16 @@ export function WeaponSelector({
   const activeTone = activeSlot?.tone ?? tone
 
   const groupedWeapons = useMemo(
-    () => groupWeaponRecords(filterWeaponRecords(weapons, deferredQuery)),
-    [deferredQuery, weapons]
+    () =>
+      groupWeaponRecords(
+        filterWeaponRecords(
+          weapons.filter((weapon) =>
+            activeSlot ? weapon.size === activeSlot.hardpointSize : true
+          ),
+          deferredQuery
+        )
+      ),
+    [activeSlot, deferredQuery, weapons]
   )
 
   const flatWeapons = useMemo(
@@ -289,7 +298,7 @@ export function WeaponSelector({
           <div>
             <p className="page-kicker">Weapon Selector</p>
             <h2 id={dialogTitleId} className="surface-title mt-2">
-              {activeSlot ? `Select Weapon for ${activeSlot.label}` : 'Assign Weapons'}
+              {activeSlot ? `Select ${activeSlot.label} Weapon` : 'Assign Weapons'}
             </h2>
           </div>
 
@@ -420,7 +429,7 @@ export function WeaponSelector({
                 setActiveIndex(0)
               }}
               onKeyDown={handleKeyDown}
-              placeholder="Search S5, Repeater, Gatling..."
+              placeholder={activeSlot ? `Search S${activeSlot.hardpointSize} weapons...` : 'Search weapons...'}
               className="alpha-input alpha-input-weapon-modal"
             />
 
