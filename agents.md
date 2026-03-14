@@ -121,3 +121,4 @@ This is a single-service client-side SPA (React + Vite + TypeScript). No backend
 - Husky is set up for commit-msg hooks (commitlint with conventional commits). The `prepare` script installs hooks automatically during `npm install`.
 - Content lives in `content/modules/*.mdx` and `content/refs/*.mdx`. Run `npm run content:check` to validate frontmatter and references after editing content files.
 - The build produces a warning about chunk size (>500 kB) for the main bundle — this is expected and not a build failure.
+- Commitlint enforces a custom type-enum: `doctrine`, `framework`, `refs`, `fix`, `ui`, `chore`, `docs`, `test`. Standard types like `feat` or `refactor` are rejected.
