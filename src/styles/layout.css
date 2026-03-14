@@ -1,0 +1,58 @@
+/* ──────────────────────────────────────────────
+   Responsive Layout Breakpoints
+   Sidebar workspace, onboarding layout,
+   and alpha-sidebar responsive grid rules.
+   ────────────────────────────────────────────── */
+
+@media (min-width: 1024px) {
+  .sidebar-workspace {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .sidebar-workspace-rail {
+    position: sticky;
+    top: 0;
+    align-self: start;
+  }
+
+  .sidebar-workspace-main {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .alpha-sidebar {
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+  .onboarding-layout {
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .onboarding-sidebar {
+    position: sticky;
+    top: 6rem;
+    max-height: calc(100vh - 6.5rem);
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sidebar-workspace {
+    grid-template-columns: 340px minmax(0, 1fr) 280px;
+    gap: 1.75rem;
+  }
+
+  .sidebar-workspace-main {
+    max-width: none;
+  }
+
+  .sidebar-workspace-rail-right {
+    position: sticky;
+    top: 0;
+    align-self: start;
+  }
+}
