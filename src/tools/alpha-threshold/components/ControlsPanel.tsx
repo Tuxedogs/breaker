@@ -16,12 +16,12 @@ export function ControlsPanel({
   onSlotChange,
 }: Props) {
   return (
-    <div aria-label="Alpha threshold controls">
+    <section aria-label="Alpha threshold controls">
       <WeaponComparisonSlots
         slots={slots}
         weapons={weapons}
         onChange={onSlotChange}
       />
-    </div>
+    </section>
   )
 }

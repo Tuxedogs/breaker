@@ -34,13 +34,24 @@ export function WeaponComparisonSlots({
         return {
           slot,
           index,
-          slotLabel: `W${index + 1}`,
+          slotLabel: slot.label ?? `W${index + 1}`,
           tone: SLOT_TONES[index] ?? 'cyan',
           selectedWeapon,
         }
       }),
     [slots, weapons]
   )
+
+  const activeSlot = useMemo(
+    () => slotEntries.find(({ slot }) => slot.id === activeSlotId) ?? null,
+    [activeSlotId, slotEntries]
+  )
+
+  const compatibleWeapons = useMemo(() => {
+    const maxSize = activeSlot?.slot.size
+    if (!maxSize || maxSize <= 0) return weapons
+    return weapons.filter((weapon) => weapon.size <= maxSize)
+  }, [activeSlot?.slot.size, weapons])
 
   function openModal(slotId: string) {
     setActiveSlotId(slotId)
@@ -94,7 +105,7 @@ export function WeaponComparisonSlots({
             weaponClass: selectedWeapon?.weaponClass ?? null,
           }))}
           activeSlotId={activeSlotId}
-          weapons={weapons}
+          weapons={compatibleWeapons}
           onActiveSlotChange={setActiveSlotId}
           onAssignWeapon={(slotId, weaponKey) => onChange(slotId, weaponKey)}
           onClearSlot={(slotId) => onChange(slotId, null)}
