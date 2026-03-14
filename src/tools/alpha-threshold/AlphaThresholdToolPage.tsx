@@ -3,6 +3,7 @@ import { ControlsPanel } from './components/ControlsPanel'
 import PageLayout from '../../components/PageLayout'
 import SidebarWorkspace from '../../components/SidebarWorkspace'
 import { AlphaThresholdPage } from './components/AlphaThresholdPage'
+import { ShipBalanceChangelogPanel } from './components/ShipBalanceChangelogPanel'
 import { ShipSelectionSidebar } from './components/ShipSelectionSidebar'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
@@ -17,21 +18,14 @@ export default function AlphaThresholdToolPage() {
     globalAxisMaxByType,
     attackerShip,
     attackerOptions,
+    allShips,
     setAttackerShipName,
     attackerHardpointGroups,
-    sidebarGroups,
-    selectedShipNames,
-    toggleShipSelected,
-    clearAllShips,
-    selectVisibleShips,
-    shipSearch,
-    setShipSearch,
-    showSelectedOnly,
-    toggleShowSelectedOnly,
+    victimSlotShipNames,
     mobileSidebarOpen,
-    toggleGroupCollapsed,
     selectedShipResults,
     shipBalanceChanges,
+    setVictimShipAt,
     shipOverrides,
   } = useAlphaThresholdState()
   const hasSelectedWeapons = selectedWeapons.length > 0
@@ -41,26 +35,16 @@ export default function AlphaThresholdToolPage() {
   }
 
   return (
-    <section className="alpha-tool-route">
+    <main className="alpha-tool-route" aria-label="Alpha threshold tool">
       <SidebarWorkspace
         className="alpha-sidebar-workspace"
         leftSidebar={
           <ShipSelectionSidebar
-            groups={sidebarGroups}
             attackerShip={attackerShip}
             attackerOptions={attackerOptions}
             attackerHardpointGroups={attackerHardpointGroups}
-            selectedShipNames={selectedShipNames}
-            searchValue={shipSearch}
-            showSelectedOnly={showSelectedOnly}
             mobileOpen={mobileSidebarOpen}
-            onSearchChange={setShipSearch}
-            onToggleShowSelectedOnly={toggleShowSelectedOnly}
-            onToggleShipSelected={toggleShipSelected}
-            onToggleGroup={toggleGroupCollapsed}
             onAttackerShipChange={setAttackerShipName}
-            onSelectVisible={selectVisibleShips}
-            onClearAll={clearAllShips}
           >
             <section
               className="alpha-summary-rail"
@@ -79,7 +63,7 @@ export default function AlphaThresholdToolPage() {
                   focused on the selected ships.
                 </p>
                 {hasSelectedWeapons ? (
-                  <div className="mt-4 flex justify-center">
+                  <p className="alpha-summary-rail-clear">
                     <button
                       type="button"
                       onClick={clearAllWeaponSlots}
@@ -87,7 +71,7 @@ export default function AlphaThresholdToolPage() {
                     >
                       Clear All
                     </button>
-                  </div>
+                  </p>
                 ) : null}
               </header>
 
@@ -113,25 +97,32 @@ export default function AlphaThresholdToolPage() {
             </section>
           </ShipSelectionSidebar>
         }
+        rightSidebar={
+          <section className="alpha-changelog-rail" aria-label="Stat changelog">
+            <ShipBalanceChangelogPanel entries={shipBalanceChanges} />
+          </section>
+        }
       >
         <section aria-label="Threshold analysis workspace">
           <PageLayout
             title="Alpha vs Threshold"
             summary="Compare weapon alpha against ship ballistic or energy thresholds to see which ships can take hull damage."
-            panelClassName="border-0 bg-transparent p-0 shadow-none sm:p-0 lg:p-0"
+            panelClassName="alpha-page-layout-panel"
             contentClassName="max-w-none"
           >
             <AlphaThresholdPage
               selectedShipResults={selectedShipResults}
-              shipBalanceChanges={shipBalanceChanges}
+              allShips={allShips}
+              victimSlotShipNames={victimSlotShipNames}
               axisScaleMode={axisScaleMode}
               globalAxisMaxByType={globalAxisMaxByType}
               onAxisScaleModeChange={setAxisScaleMode}
+              onVictimShipChange={setVictimShipAt}
               shipOverrides={shipOverrides}
             />
           </PageLayout>
         </section>
       </SidebarWorkspace>
-    </section>
+    </main>
   )
 }

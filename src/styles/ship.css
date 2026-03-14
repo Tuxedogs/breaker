@@ -1,0 +1,80 @@
+/* ──────────────────────────────────────────────
+   Ship Pages
+   Ship modern panel surfaces, media cards,
+   and ship-scoped framework card overrides.
+   ────────────────────────────────────────────── */
+
+.ship-modern-shell {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 28px 60px rgba(0, 0, 0, 0.42);
+}
+
+.ship-modern-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 8% 0%, rgba(255, 255, 255, 0.08), transparent 42%),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.06), transparent 28%);
+}
+
+.ship-modern-panel {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01) 42%, rgba(0, 0, 0, 0.28)),
+    rgba(6, 10, 22, 0.56);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.ship-modern-subpanel {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01) 48%, rgba(0, 0, 0, 0.22)),
+    rgba(4, 8, 18, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.ship-modern-note {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01) 55%, rgba(0, 0, 0, 0.3)),
+    rgba(6, 10, 20, 0.62);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 24px rgba(0, 0, 0, 0.3);
+}
+
+.ship-modern-media {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01) 48%, rgba(0, 0, 0, 0.28)),
+    rgba(4, 8, 18, 0.5);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 22px 44px rgba(0, 0, 0, 0.38);
+}
+
+.ship-framework .framework-modern-card {
+  min-height: 0;
+  background:
+    linear-gradient(150deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02) 42%, rgba(0, 0, 0, 0.25)),
+    rgba(6, 10, 22, 0.52);
+}
+
+.ship-framework .ship-framework-block {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 28px 62px rgba(0, 0, 0, 0.44);
+}
+
+.ship-framework .framework-modern-card-head {
+  background: rgba(5, 9, 20, 0.54);
+}
+
+.ship-framework .framework-modern-row {
+  background: rgba(7, 12, 24, 0.62);
+}
+
+.ship-framework .ship-framework-note {
+  display: block;
+}

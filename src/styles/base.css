@@ -1,0 +1,36 @@
+/* ──────────────────────────────────────────────
+   App Shell & Visual Effects
+   Vignette, grain overlay, placeholders,
+   and route-level transitions.
+   ────────────────────────────────────────────── */
+
+.app-vignette {
+  background:
+    radial-gradient(circle at 70% 44%, rgba(38, 80, 168, 0.18), transparent 48%),
+    radial-gradient(circle at 85% 16%, rgba(255, 181, 70, 0.08), transparent 32%),
+    radial-gradient(circle at center, transparent 58%, rgba(2, 3, 8, 0.82) 100%);
+}
+
+.app-placeholder-box {
+  background: rgba(255, 255, 255, 0.085);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.app-grain {
+  opacity: 0.2;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 23% 18%, rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 4px 4px, 5px 5px;
+}
+
+.route-fade {
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+

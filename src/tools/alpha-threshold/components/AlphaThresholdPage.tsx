@@ -1,37 +1,46 @@
+import { ArmorDegradationHeatmap } from './ArmorDegradationHeatmap'
 import { CompareShipStrip } from './CompareShipStrip'
-import { ShipBalanceChangelogPanel } from './ShipBalanceChangelogPanel'
 import { ShipTable } from './ShipTable'
 import type {
   AxisScaleMode,
   SelectedShipResult,
-  ShipBalanceChangeEntry,
   ShipOverride,
+  Ship,
 } from '../types'
 
 type Props = {
   selectedShipResults: SelectedShipResult[]
-  shipBalanceChanges: ShipBalanceChangeEntry[]
+  allShips: Ship[]
+  victimSlotShipNames: Array<string | null>
   axisScaleMode: AxisScaleMode
   globalAxisMaxByType: {
     ballistic: number
     energy: number
   }
   onAxisScaleModeChange: (value: AxisScaleMode) => void
+  onVictimShipChange: (slotIndex: number, shipName: string | null) => void
   shipOverrides: Record<string, ShipOverride>
 }
 
 export function AlphaThresholdPage({
   selectedShipResults,
-  shipBalanceChanges,
+  allShips,
+  victimSlotShipNames,
   axisScaleMode,
   globalAxisMaxByType,
   onAxisScaleModeChange,
+  onVictimShipChange,
   shipOverrides,
 }: Props) {
   return (
     <section className="alpha-results-column" aria-label="Threshold matrix results">
-      <ShipBalanceChangelogPanel entries={shipBalanceChanges} />
-      <CompareShipStrip shipResults={selectedShipResults} />
+      <CompareShipStrip
+        shipResults={selectedShipResults}
+        allShips={allShips}
+        victimSlotShipNames={victimSlotShipNames}
+        onVictimShipChange={onVictimShipChange}
+      />
+      <ArmorDegradationHeatmap shipResults={selectedShipResults} />
       <ShipTable
         shipResults={selectedShipResults}
         axisScaleMode={axisScaleMode}
