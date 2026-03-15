@@ -9,9 +9,13 @@ import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
 export default function AlphaThresholdToolPage() {
   const {
+    attackerShipName,
+    setAttackerShipName,
+    attackerProfile,
     slots,
     setSlotWeapon,
     allWeapons,
+    allShips,
     selectedWeapons,
     axisScaleMode,
     setAxisScaleMode,
@@ -75,6 +79,7 @@ export default function AlphaThresholdToolPage() {
                 ) : null}
               </header>
 
+<<<<<<< ours
               {!hasSelectedWeapons ? (
                 <section className="alpha-summary-empty" aria-live="polite">
                   <p className="title-font text-sm text-slate-100">
@@ -100,6 +105,17 @@ export default function AlphaThresholdToolPage() {
         rightSidebar={
           <section className="alpha-changelog-rail" aria-label="Stat changelog">
             <ShipBalanceChangelogPanel entries={shipBalanceChanges} />
+=======
+            <ControlsPanel
+              attackerShipName={attackerShipName}
+              attackerProfile={attackerProfile}
+              ships={allShips}
+              slots={slots}
+              weapons={allWeapons}
+              onAttackerShipChange={setAttackerShipName}
+              onSlotChange={setSlotWeapon}
+            />
+>>>>>>> theirs
           </section>
         }
       >

@@ -14,6 +14,8 @@ export type ShipRecord = Ship & {
   source?: ShipSource
   sourceId?: string
   patch?: string
+  pilotHardpointSize?: number | null
+  turretHardpointSize?: number | null
 }
 
 export type ManualShipSeed = {

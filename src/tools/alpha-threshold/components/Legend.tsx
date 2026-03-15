@@ -18,10 +18,10 @@ export function Legend({ selectedWeapons }: Props) {
       className="alpha-legend-panel flex flex-wrap gap-2 text-xs text-white/70"
     >
       <span className="alpha-chip alpha-chip-pass">
-        Pass = alpha meets the matching threshold
+        Green = victim takes hull damage (alpha meets threshold once)
       </span>
       <span className="alpha-chip alpha-chip-block">
-        Block = alpha is below the matching threshold
+        Red = victim deflects the hit (alpha below threshold)
       </span>
       <span className="alpha-chip alpha-chip-muted">
         Ballistic and energy lanes are scaled independently
