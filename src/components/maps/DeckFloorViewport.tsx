@@ -75,9 +75,9 @@ export default function DeckFloorViewport({ title, subtitle, deckDefinitions }: 
 
   return (
     <section className="route-fade pb-8 pt-2">
-      <article className="framework-modern-card framework-modern-card-ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
-        <header className="framework-modern-card-head rounded-[1.2rem] border border-white/15 p-5">
-          <p className="framework-modern-kicker">Floor Maps</p>
+      <article className="base-card base-card--ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
+        <header className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
+          <p className="base-card-kicker">Floor Maps</p>
           <h2 className="title-font mt-2 text-3xl tracking-[0.07em] text-amber-200 sm:text-4xl">{title}</h2>
           <p className="mt-3 text-sm leading-relaxed text-slate-200 sm:text-base">{subtitle}</p>
         </header>

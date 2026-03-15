@@ -28,9 +28,9 @@ export default function GunneryWithLunaPage() {
   return (
     <section className="turret-modern additional-modern route-fade pb-8 pt-2">
       <div className="mx-auto max-w-[1180px] space-y-4">
-        <article className="framework-modern-card framework-modern-card-systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
-            <p className="framework-modern-kicker">Systems Manual</p>
+        <article className="base-card base-card--systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <p className="base-card-kicker">Systems Manual</p>
             <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Gunnery with Luna</h1>
           <p className="mt-3 text-2xl text-cyan-100/85">
             Understanding delta, weapon velocities, and effective engagement ranges
@@ -49,8 +49,8 @@ export default function GunneryWithLunaPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
           <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Delta</h2>
           <p className="mt-4 text-xl leading-normal text-slate-200">
             Delta is the relative speed difference between you and your target. Positive delta means the target is
@@ -77,8 +77,8 @@ export default function GunneryWithLunaPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
           <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Ship Weapons</h2>
           <p className="mt-4 text-xl leading-normal text-slate-200">
             This is essential for both turret gunners and pilots.
@@ -139,8 +139,8 @@ export default function GunneryWithLunaPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
           <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Weapon Spread</h2>
           <p className="mt-4 text-xl leading-normal text-slate-200">
             Spread is cone offset from your crosshair center. At short range it is minor; at long range, misses can be
@@ -164,8 +164,8 @@ export default function GunneryWithLunaPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Ship Weapons - Penetration</h2>
             <p className="mt-4 text-xl italic leading-normal text-slate-400">Penetration guidance is TBD.</p>
           </div>

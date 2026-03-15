@@ -1637,16 +1637,16 @@ export default function ShipMapTemplate({
     <section className="route-fade pb-8 pt-2">
       <div className="mx-auto w-full max-w-none space-y-6">
         {showHeader ? (
-          <article className="framework-modern-card framework-modern-card-ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
-            <header className="framework-modern-card-head rounded-[1.2rem] border border-white/15 p-5">
-              <p className="framework-modern-kicker">Ship Maps</p>
+          <article className="base-card base-card--ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
+            <header className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
+              <p className="base-card-kicker">Ship Maps</p>
               <h1 className="title-font mt-2 text-4xl tracking-[0.07em] text-amber-200 sm:text-5xl">{title}</h1>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">{subtitle}</p>
             </header>
           </article>
         ) : null}
 
-        <article className="framework-modern-card framework-modern-card-ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
+        <article className="base-card base-card--ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
           <div
             ref={viewerShellRef}
             className="ship-viewer-shell relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15"

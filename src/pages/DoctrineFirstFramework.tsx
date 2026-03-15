@@ -69,28 +69,28 @@ function FrameworkCard({
   accentClass: "ships" | "systems";
 }) {
   return (
-    <article className={`framework-modern-card framework-modern-card-${accentClass}`}>
-      <div className="framework-modern-card-head">
-        <p className="framework-modern-kicker">{subtitle}</p>
-        <h2 className="title-font framework-modern-title">{title}</h2>
+    <article className={`base-card base-card--${accentClass}`}>
+      <div className="base-card-head">
+        <p className="base-card-kicker">{subtitle}</p>
+        <h2 className="title-font base-card-title">{title}</h2>
       </div>
 
-      <div className="framework-modern-list">
+      <div className="base-card-list">
         {items.map((item) => (
-          <Link key={item.to} to={item.to} className="framework-modern-row">
-            <span className="framework-modern-icon">
+          <Link key={item.to} to={item.to} className="base-card-row">
+            <span className="base-card-icon">
               <PlaceholderIcon glyph={item.glyph} />
             </span>
             <span className="min-w-0">
-              <span className="framework-modern-row-title">{item.label}</span>
-              {item.description ? <span className="framework-modern-row-subtitle">{item.description}</span> : null}
+              <span className="base-card-row-title">{item.label}</span>
+              {item.description ? <span className="base-card-row-subtitle">{item.description}</span> : null}
             </span>
-            <span className="framework-modern-arrow">+</span>
+            <span className="base-card-arrow">+</span>
           </Link>
         ))}
       </div>
 
-      <Link to={ctaTo} className="framework-modern-cta">
+      <Link to={ctaTo} className="base-card-cta">
         {ctaLabel}
       </Link>
     </article>
@@ -99,8 +99,8 @@ function FrameworkCard({
 
 export default function DoctrineFirstFramework() {
   return (
-    <section className="framework-static route-fade relative overflow-hidden py-3">
-      <div className="framework-trend-bg pointer-events-none absolute inset-0" />
+    <section className="base-static route-fade relative overflow-hidden py-3">
+      <div className="base-trend-bg pointer-events-none absolute inset-0" />
       <div className="pointer-events-none absolute -left-16 top-6 h-56 w-56 rounded-full bg-cyan-300/15 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 top-36 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl" />
 
@@ -108,7 +108,7 @@ export default function DoctrineFirstFramework() {
         <p className="page-kicker">Field Manual v2.0</p>
         <h1 className="page-title-wide">
           DOCTRINE-FIRST
-          <span className="framework-trend-text block">TACTICAL INDEX</span>
+          <span className="base-trend-text block">TACTICAL INDEX</span>
         </h1>
         <p className="mt-4 max-w-2xl text-sm text-slate-200/80 sm:text-base">
           Pick a ship platform or systems workflow and drop directly into playbook-grade guidance.
@@ -157,14 +157,14 @@ export default function DoctrineFirstFramework() {
           items={antiCapItems}
           accentClass="systems"
         />
-        <article className="framework-modern-card framework-modern-card-maps framework-modern-card-maps-compact lg:col-span-2">
-          <div aria-hidden className="framework-modern-card-maps-bg" />
-          <div className="framework-modern-card-head w-full text-center">
-            <p className="framework-modern-kicker">Class is that way</p>
-            <h2 className="title-font framework-modern-title">MAPS</h2>
+        <article className="base-card base-card--maps base-card--maps-compact lg:col-span-2">
+          <div aria-hidden className="base-card--maps-bg" />
+          <div className="base-card-head w-full text-center">
+            <p className="base-card-kicker">Class is that way</p>
+            <h2 className="title-font base-card-title">MAPS</h2>
           </div>
           <div className="flex-1" />
-          <Link to="/maps" className="framework-modern-cta w-full">
+          <Link to="/maps" className="base-card-cta w-full">
             Enter Maps
           </Link>
         </article>

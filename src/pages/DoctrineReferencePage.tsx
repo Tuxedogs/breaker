@@ -8,12 +8,12 @@ export default function DoctrineReferencePage() {
   if (refLoadError) {
     return (
       <section className="route-fade py-8">
-        <article className="framework-modern-card framework-modern-card-maps framework-modern-card-compact rounded-[1.5rem] p-4">
+        <article className="base-card base-card--maps base-card--compact rounded-[1.5rem] p-4">
           <div className="card-head-md">
             <h1 className="detail-title-blue">Reference Content Error</h1>
             <p className="mt-3 text-slate-300">{refLoadError.message}</p>
           </div>
-          <Link to="/modules" className="framework-modern-cta mt-2">
+          <Link to="/modules" className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -25,11 +25,11 @@ export default function DoctrineReferencePage() {
   if (!reference) {
     return (
       <section className="route-fade py-8">
-        <article className="framework-modern-card framework-modern-card-maps framework-modern-card-compact rounded-[1.5rem] p-4">
+        <article className="base-card base-card--maps base-card--compact rounded-[1.5rem] p-4">
           <div className="card-head-md">
             <h1 className="detail-title-blue">Reference Not Found</h1>
           </div>
-          <Link to="/modules" className="framework-modern-cta mt-2">
+          <Link to="/modules" className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -41,9 +41,9 @@ export default function DoctrineReferencePage() {
 
   return (
     <section className="route-fade py-3">
-      <article className="framework-modern-card framework-modern-card-maps framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+      <article className="base-card base-card--maps base-card--compact rounded-[1.5rem] p-4 sm:p-6">
         <header className="card-head-md">
-          <p className="framework-modern-kicker">Reference</p>
+          <p className="base-card-kicker">Reference</p>
           <h1 className="detail-page-title-blue">{reference.title}</h1>
           <p className="mt-3 text-sm text-slate-200">{reference.summary ?? "Non-procedural reference content."}</p>
           <p className="mt-4 text-xs uppercase tracking-[0.16em] text-slate-400">
@@ -59,7 +59,7 @@ export default function DoctrineReferencePage() {
             ))}
           </div>
         </header>
-        <div className="framework-modern-card-head prose prose-invert mt-1 max-w-none rounded-xl p-5 text-slate-200">
+        <div className="base-card-head prose prose-invert mt-1 max-w-none rounded-xl p-5 text-slate-200">
           <RefContent />
         </div>
       </article>

@@ -131,10 +131,10 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
   return (
     <section className="ship-framework route-fade pb-8 pt-2">
       <div className="mx-auto max-w-[1180px] space-y-6">
-        <article className={`framework-modern-card framework-modern-card-${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-4 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
+        <article className={`base-card base-card--${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-4 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
           <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <section className="framework-modern-card-head rounded-[1.4rem] border border-white/18 p-5 sm:p-6">
-              <p className="framework-modern-kicker">Ship Manual</p>
+            <section className="base-card-head rounded-[1.4rem] border border-white/18 p-5 sm:p-6">
+              <p className="base-card-kicker">Ship Manual</p>
               <h1 className={`title-font mt-2 text-4xl tracking-[0.07em] sm:text-5xl ${s.title}`}>{data.name}</h1>
               <p className={`mt-2 text-xl ${s.soft}`}>{data.tagLine}</p>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">{data.summary}</p>
@@ -145,7 +145,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
                   return (
                     <article
                       key={note.title}
-                      className={`framework-modern-row ship-framework-note rounded-xl border p-3 ${subPanelSurfaceClass} ${stateStyles.cardBorderClass}`}
+                      className={`base-card-row ship-framework-note rounded-xl border p-3 ${subPanelSurfaceClass} ${stateStyles.cardBorderClass}`}
                       style={{ boxShadow: `inset 0 0 0 1px ${stateStyles.edgeColor}` }}
                     >
                       <h2 className={`title-font text-[0.65rem] uppercase tracking-[0.16em] ${stateStyles.titleClass}`}>
@@ -165,7 +165,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
               </div>
             </section>
 
-            <section className="framework-modern-card-head relative overflow-hidden rounded-[1.4rem] border border-white/18">
+            <section className="base-card-head relative overflow-hidden rounded-[1.4rem] border border-white/18">
               <video
                 ref={videoRef}
                 className="h-full w-full aspect-[4/3] object-cover lg:aspect-auto"
@@ -203,16 +203,16 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
           </div>
         </article>
 
-        <article className={`framework-modern-card framework-modern-card-${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-4 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
+        <article className={`base-card base-card--${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-4 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
           <div className="grid gap-6 lg:grid-cols-2">
-            <section className="framework-modern-card-head rounded-[1.2rem] border border-white/15 p-5">
+            <section className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
               <h2 className={`title-font text-2xl tracking-[0.06em] ${s.title}`}>Overview</h2>
               <p className="mt-4 text-base leading-relaxed text-slate-200">{data.overview}</p>
 
               <h2 className={`title-font mt-8 text-2xl tracking-[0.06em] ${s.title}`}>Crew Roles</h2>
               <div className="mt-4 space-y-3">
                 {data.crewRoles.map((role) => (
-                  <div key={role.title} className={`framework-modern-row rounded-lg border border-white/15 p-4 ${subPanelSurfaceClass}`}>
+                  <div key={role.title} className={`base-card-row rounded-lg border border-white/15 p-4 ${subPanelSurfaceClass}`}>
                     <h3 className={`title-font text-xs uppercase tracking-[0.16em] ${s.soft}`}>{role.title}</h3>
                     <p className="mt-2 text-base leading-relaxed text-slate-200">{role.body}</p>
                   </div>
@@ -220,7 +220,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
               </div>
             </section>
 
-            <section className="framework-modern-card-head rounded-[1.2rem] border border-white/15 p-5">
+            <section className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
               <h2 className={`title-font text-2xl tracking-[0.06em] ${s.title}`}>Piloting</h2>
               <p className="mt-4 text-base leading-relaxed text-slate-200">{data.pilotingSummary}</p>
               <ol className="mt-4 list-decimal space-y-2 pl-5 text-base leading-relaxed text-slate-200">
@@ -253,7 +253,7 @@ export default function ShipPage({ accent, data, surfacePreset = defaultSurfaceP
           </div>
         </article>
 
-        <article className={`framework-modern-card framework-modern-card-${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-5 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
+        <article className={`base-card base-card--${accent === "amber" ? "ships" : "systems"} ship-framework-block rounded-[1.9rem] border p-5 sm:p-6 ${panelSurfaceClass} ${s.border}`}>
           <h2 className={`title-font text-2xl tracking-[0.06em] ${s.title}`}>General Rules</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-base leading-relaxed text-slate-200">
             {data.generalRules.map((rule) => (

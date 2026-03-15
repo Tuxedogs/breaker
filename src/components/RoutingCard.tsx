@@ -97,7 +97,7 @@ export default function RoutingCard({
       onBlurCapture={disabled ? undefined : onBlurCapture}
       style={{ "--route-accent": cardAccent[ctaVariant] } as CSSProperties}
       className={[
-        "entry-card group relative overflow-visible framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.35rem] px-4 py-6 sm:px-5 sm:py-8 transition duration-200",
+        "entry-card base-card base-card--systems base-card--compact",
         isActive ? "is-active" : "",
         disabled ? "opacity-85 saturate-50" : "",
       ].join(" ")}
@@ -119,12 +119,12 @@ export default function RoutingCard({
             <span
               aria-disabled="true"
               data-variant={ctaVariant}
-              className="entry-cta framework-modern-cta mx-auto w-full max-w-[180px] cursor-not-allowed border-white/15 bg-white/5 text-slate-400"
+              className="entry-cta base-card-cta mx-auto w-full max-w-[180px] cursor-not-allowed border-white/15 bg-white/5 text-slate-400"
             >
               {actionLabel}
             </span>
           ) : (
-            <Link to={to} data-variant={ctaVariant} className="entry-cta framework-modern-cta mx-auto w-full max-w-[180px]">
+            <Link to={to} data-variant={ctaVariant} className="entry-cta base-card-cta mx-auto w-full max-w-[180px]">
               {actionLabel}
             </Link>
           )}

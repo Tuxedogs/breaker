@@ -85,9 +85,9 @@ export default function SubTargetingPage() {
   return (
     <section className="subtarget-modern turret-modern additional-modern route-fade pb-8 pt-2">
       <div className="mx-auto max-w-[1180px] space-y-4">
-        <article className="framework-modern-card framework-modern-card-systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-[1.2rem] border border-white/18 p-4 sm:p-5">
-            <p className="framework-modern-kicker">Systems Manual</p>
+        <article className="base-card base-card--systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-[1.2rem] border border-white/18 p-4 sm:p-5">
+            <p className="base-card-kicker">Systems Manual</p>
             <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Sub-Targeting Guide</h1>
             <p className="mt-2 text-lg uppercase tracking-[0.1em] text-cyan-100/85 sm:text-xl">
               Targeting specific components for tactical advantage
@@ -127,8 +127,8 @@ export default function SubTargetingPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head subtarget-video-shell rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head subtarget-video-shell rounded-xl border border-white/15 p-4 sm:p-5">
             <div className="subtarget-cinematic">
               <div className="subtarget-cinematic-top">
                 <span>{subtargetVideo.title}</span>
@@ -149,9 +149,9 @@ export default function SubTargetingPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
           <section className="subtarget-practice-layout space-y-4">
-            <article className="framework-modern-card-head additional-panel-head subtarget-practice-card rounded-xl border border-white/15 p-4 sm:p-5">
+            <article className="base-card-head additional-panel-head subtarget-practice-card rounded-xl border border-white/15 p-4 sm:p-5">
               <h2 className="title-font text-2xl tracking-[0.05em] text-cyan-200 sm:text-3xl">In Practice</h2>
 
               <div className="subtarget-practice-block mt-5">
@@ -190,7 +190,7 @@ export default function SubTargetingPage() {
               </div>
             </article>
 
-            <aside className="framework-modern-card-head additional-panel-head subtarget-reference-card rounded-xl border border-white/15 p-4 sm:p-5">
+            <aside className="base-card-head additional-panel-head subtarget-reference-card rounded-xl border border-white/15 p-4 sm:p-5">
               <h3 className="title-font text-lg tracking-[0.08em] text-cyan-300">Reference Frames</h3>
               <div className="mt-4 grid grid-cols-3 gap-2">
                 {practiceImages.map((image) => (
@@ -209,9 +209,9 @@ export default function SubTargetingPage() {
           </section>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
           <div className="grid gap-4 md:grid-cols-2">
-            <section className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <section className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
               <h3 className="title-font text-xl tracking-[0.06em] text-cyan-300 sm:text-2xl">Components You Can Target</h3>
               <ul className="mt-4 space-y-2 text-base leading-relaxed text-slate-200 sm:text-lg">
                 {targetableComponents.map((item) => (
@@ -219,7 +219,7 @@ export default function SubTargetingPage() {
                 ))}
               </ul>
             </section>
-            <section className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <section className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
               <h3 className="title-font text-xl tracking-[0.06em] text-cyan-300 sm:text-2xl">Cannot Lock, Can Destroy</h3>
               <ul className="mt-4 space-y-2 text-base leading-relaxed text-slate-200 sm:text-lg">
                 {nonLockableComponents.map((item) => (
