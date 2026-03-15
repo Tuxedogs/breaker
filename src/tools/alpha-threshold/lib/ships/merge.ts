@@ -15,6 +15,8 @@ export function mergeShipRecords(records: ShipRecord[]): ShipRecord[] {
       ...existing,
       ...record,
       source: existing.source === record.source ? record.source : 'merged',
+      pilotHardpointSize: record.pilotHardpointSize ?? existing.pilotHardpointSize,
+      turretHardpointSize: record.turretHardpointSize ?? existing.turretHardpointSize,
     })
   }
 

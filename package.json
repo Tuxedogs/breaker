@@ -11,7 +11,8 @@
         "preview": "vite preview",
         "prepare": "husky",
         "changelog": "git-cliff -c cliff.toml -o CHANGELOG.md",
-        "release:tag": "node scripts/release-tag.js"
+        "release:tag": "node scripts/release-tag.js",
+        "alpha:import": "node --import tsx scripts/alpha-threshold/import-sources.mts"
     },
     "dependencies": {
         "@mdx-js/react": "^3.1.1",

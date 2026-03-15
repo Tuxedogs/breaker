@@ -78,7 +78,7 @@ export function ShipRow({
                     result.passes ? 'alpha-chip-pass' : 'alpha-chip-block',
                   ].join(' ')}
                 >
-                  {result.slotLabel} {result.passes ? 'Pass' : 'Block'}
+                  {result.slotLabel} {result.passes ? 'Damage' : 'Deflect'}
                 </span>
               ))
             ) : (

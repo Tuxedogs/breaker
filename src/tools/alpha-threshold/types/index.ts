@@ -64,6 +64,24 @@ export type ShipHardpointGroup = {
   count: number
 }
 
+export type AttackerHardpointProfile = {
+  shipName: string
+  pilotHardpointSize: number | null
+  turretHardpointSize: number | null
+}
+
+export type AttackerHardpointProfile = {
+  shipName: string
+  pilotHardpointSize: number | null
+  turretHardpointSize: number | null
+}
+
+export type AttackerHardpointProfile = {
+  shipName: string
+  pilotHardpointSize: number | null
+  turretHardpointSize: number | null
+}
+
 export type WeaponDamageType = 'ballistic' | 'energy' | 'distortion'
 export type WeaponThresholdType = Extract<WeaponDamageType, 'ballistic' | 'energy'>
 export type WeaponSource =
@@ -110,6 +128,8 @@ export type ShipSortKey =
 
 export type ComparisonSlot = {
   id: string
+  hardpointSize: number
+  operator: 'pilot' | 'turret'
   weaponKey: string | null
   label?: string
   role?: HardpointRole

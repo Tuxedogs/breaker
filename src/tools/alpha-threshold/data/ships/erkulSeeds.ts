@@ -1,0 +1,26 @@
+export const erkulShipSeeds = [
+  {
+    id: 'erkul-vanguard',
+    manufacturer: 'AEGS',
+    name: 'Vanguard',
+    sizeGroup: 'medium',
+    health: 12375,
+    ballisticThreshold: 77,
+    energyThreshold: 62,
+    pilotHardpointSize: 5,
+    turretHardpointSize: 2,
+    patch: '4.7 PTU (Erkul)',
+  },
+  {
+    id: 'erkul-perseus',
+    manufacturer: 'RSI',
+    name: 'Perseus',
+    sizeGroup: 'large',
+    health: 60840,
+    ballisticThreshold: 132,
+    energyThreshold: 106,
+    pilotHardpointSize: 7,
+    turretHardpointSize: 7,
+    patch: '4.7 PTU (Erkul)',
+  },
+] as const
