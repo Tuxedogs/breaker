@@ -56,7 +56,7 @@ export default function ModuleIndexPage() {
     : filteredModules;
 
   return (
-    <section className="framework-static route-fade py-3">
+    <section className="base-static route-fade py-3">
       <div className="space-y-6">
         <header className="page-hero-shell">
           <p className="page-kicker">Doctrine Modules</p>

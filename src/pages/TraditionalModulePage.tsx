@@ -24,9 +24,9 @@ export default function TraditionalModulePage() {
   return (
     <section className="route-fade py-3">
       <div className="space-y-5">
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <header className="card-head-md">
-            <p className="framework-modern-kicker">Communications Module</p>
+            <p className="base-card-kicker">Communications Module</p>
             <h1 className="detail-page-title-cyan">Discord &amp; Teamspeak</h1>
             <p className="mt-3 rounded-lg border border-cyan-200/35 bg-cyan-950/45 px-3 py-2 text-base text-cyan-50">
               Where and when
@@ -34,7 +34,7 @@ export default function TraditionalModulePage() {
           </header>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <section className="card-head-lg">
             <h2 className="surface-title">Entry Points</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -42,7 +42,7 @@ export default function TraditionalModulePage() {
                 href="https://discord.gg/join-ares"
                 target="_blank"
                 rel="noreferrer"
-                className="framework-modern-row min-h-11 rounded-xl p-4 transition hover:border-cyan-300/55 hover:bg-cyan-300/10"
+                className="base-card-row min-h-11 rounded-xl p-4 transition hover:border-cyan-300/55 hover:bg-cyan-300/10"
               >
                 <div className="flex items-center gap-3">
                   <DiscordIcon />
@@ -56,7 +56,7 @@ export default function TraditionalModulePage() {
                 href="https://www.teamspeak.com/en/downloads/"
                 target="_blank"
                 rel="noreferrer"
-                className="framework-modern-row min-h-11 rounded-xl p-4 transition hover:border-blue-300/55 hover:bg-blue-300/10"
+                className="base-card-row min-h-11 rounded-xl p-4 transition hover:border-blue-300/55 hover:bg-blue-300/10"
               >
                 <div className="flex items-center gap-3">
                   <TeamspeakIcon />
@@ -70,7 +70,7 @@ export default function TraditionalModulePage() {
           </section>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <section className="card-head-md">
             <h2 className="surface-title">Why Both Platforms</h2>
             <p className="mt-3 text-base leading-relaxed text-slate-200">
@@ -86,7 +86,7 @@ export default function TraditionalModulePage() {
           </section>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <section className="card-head-md">
             <h2 className="surface-title">Communication Structure Example</h2>
             <div className="mt-4 grid gap-4 lg:grid-cols-2">

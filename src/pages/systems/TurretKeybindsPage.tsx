@@ -199,9 +199,9 @@ export default function TurretKeybindsPage() {
   return (
     <section className="turret-modern additional-modern route-fade pb-8 pt-2">
       <div className="mx-auto max-w-[1180px] space-y-4">
-        <article className="framework-modern-card framework-modern-card-systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-[1.2rem] border border-white/18 p-4 sm:p-5">
-            <p className="framework-modern-kicker">Systems Manual</p>
+        <article className="base-card base-card--systems additional-hero additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-[1.2rem] border border-white/18 p-4 sm:p-5">
+            <p className="base-card-kicker">Systems Manual</p>
             <h1 className="title-font mt-2 text-4xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Turret Keybindings</h1>
             <p className="mt-2 text-lg uppercase tracking-[0.1em] text-cyan-100/85 sm:text-xl">Aim faster, kill quicker</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -225,11 +225,11 @@ export default function TurretKeybindsPage() {
               <article
                 key={section.title}
                 className={[
-                  "framework-modern-card framework-modern-card-systems rounded-2xl border border-cyan-300/35 p-5 backdrop-blur-[8px] sm:p-6",
+                  "base-card base-card--systems rounded-2xl border border-cyan-300/35 p-5 backdrop-blur-[8px] sm:p-6",
                   isWide ? "xl:col-span-2" : "",
                 ].join(" ")}
               >
-                <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+                <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
                   <h2 className="title-font text-2xl tracking-[0.05em] text-cyan-200 sm:text-3xl">{section.title}</h2>
                   {section.title === "Multi Function Displays (MFDs)" ? (
                     <>
@@ -261,13 +261,13 @@ export default function TurretKeybindsPage() {
           })}
         </div>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200">Further Reading</h2>
             <p className="mt-3 text-base leading-relaxed text-cyan-100 sm:text-lg">
               The Addl. Keybindings section covers common keybinds in more detail, as well as game settings recommendations.
             </p>
-            <Link to="/systems/additional-settings-binds" className="framework-modern-cta mt-4 w-full sm:w-auto">
+            <Link to="/systems/additional-settings-binds" className="base-card-cta mt-4 w-full sm:w-auto">
               Addl. Keybindings
             </Link>
           </div>

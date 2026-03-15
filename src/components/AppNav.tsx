@@ -7,23 +7,7 @@ const shipItems = [
   { to: "/ships/idris", label: "Idris" },
 ];
 
-const toolItems = [
-  { to: "/maps", label: "Maps" },
-  { to: "/tools/alpha-threshold", label: "Alpha vs Threshold" },
-];
-
-type MenuKey = "ships" | "systems" | "tools";
-
-function SearchIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" className={className}>
-      <path
-        d="M11 4a7 7 0 1 0 4.45 12.4l3.57 3.57a1 1 0 0 0 1.42-1.42l-3.57-3.57A7 7 0 0 0 11 4Zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+type MenuKey = "ships";
 
 function HomeIcon() {
   return (
@@ -68,21 +52,14 @@ export default function AppNav() {
   const closeTimerRef = useRef<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSectionOpen, setMobileSectionOpen] = useState<MenuKey | null>(null);
-  const [searchValue, setSearchValue] = useState("");
   const isMapsRoute = location.pathname.startsWith("/maps");
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
-  const isHeroRoute = location.pathname === "/";
   const isShipsRoute = location.pathname.startsWith("/ships");
-  const isToolsRoute = isMapsRoute || isAlphaThresholdRoute;
   const isFrameworkNavActive =
     location.pathname === "/framework" ||
     location.pathname === "/index" ||
     location.pathname === "/modules" ||
     location.pathname.startsWith("/module/");
-
-  if (isHeroRoute) {
-    return null;
-  }
 
   function closeAllMenus() {
     if (closeTimerRef.current !== null) {
@@ -131,7 +108,7 @@ export default function AppNav() {
 
   return (
     <header className="pointer-events-auto fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 opacity-100 transition-opacity">
-      <div className="px-3 py-2">
+      <nav className="px-3 py-2" aria-label="Primary">
         <div className="flex items-center justify-between">
           <NavLink to="/" onClick={closeAllMenus} className="inline-flex h-11 items-center gap-3 rounded-md px-2 text-white">
             <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/45 bg-white/10">
@@ -142,12 +119,36 @@ export default function AppNav() {
 
           <div className="hidden items-center gap-1 lg:flex">
             <NavLink
-              to="/framework"
+              to="/"
               onClick={closeAllMenus}
               className={({ isActive }) => [navItemClass, isActive ? "text-white" : ""].join(" ")}
               aria-label="Home"
             >
               <HomeIcon />
+            </NavLink>
+
+            <NavLink
+              to="/framework"
+              onClick={closeAllMenus}
+              className={({ isActive }) => [navItemClass, isActive || isFrameworkNavActive ? "text-emerald-300" : "hover:text-emerald-300"].join(" ")}
+            >
+              Framework
+            </NavLink>
+
+            <NavLink
+              to="/maps"
+              onClick={closeAllMenus}
+              className={({ isActive }) => [navItemClass, isActive || isMapsRoute ? "text-amber-300" : "hover:text-amber-300"].join(" ")}
+            >
+              Maps
+            </NavLink>
+
+            <NavLink
+              to="/tools/alpha-threshold"
+              onClick={closeAllMenus}
+              className={({ isActive }) => [navItemClass, isActive || isAlphaThresholdRoute ? "text-blue-300" : "hover:text-blue-300"].join(" ")}
+            >
+              Alpha Deflection Matrix
             </NavLink>
 
             <div className="relative" onMouseEnter={() => openDesktopMenu("ships")} onMouseLeave={closeDesktopMenuSoon}>
@@ -186,68 +187,11 @@ export default function AppNav() {
                 ))}
               </div>
             </div>
-
-            <div className="relative" onMouseEnter={() => openDesktopMenu("tools")} onMouseLeave={closeDesktopMenuSoon}>
-              <button
-                type="button"
-                className={[menuButtonClass, desktopMenu === "tools" || isToolsRoute ? "text-blue-300" : "hover:text-blue-300"].join(" ")}
-                aria-expanded={desktopMenu === "tools"}
-                aria-controls="desktop-tools-menu"
-                onClick={() => toggleDesktopMenu("tools")}
-              >
-                Tools
-                <ChevronIcon expanded={desktopMenu === "tools"} />
-              </button>
-
-              <div
-                id="desktop-tools-menu"
-                className={[
-                  "pointer-events-none absolute left-1/2 top-full z-40 mt-1 w-64 -translate-x-1/2 rounded-md border border-blue-300/25 bg-black/80 p-2 opacity-0 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition",
-                  desktopMenu === "tools" ? "pointer-events-auto opacity-100" : "",
-                ].join(" ")}
-              >
-                {toolItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    onClick={closeAllMenus}
-                    className={({ isActive }) =>
-                      [
-                        "flex min-h-11 items-center rounded px-2 py-2 text-xs uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/60 sm:text-sm",
-                        isActive ? "text-blue-300" : "text-slate-200 hover:bg-blue-300/10 hover:text-blue-300",
-                      ].join(" ")
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
-            </div>
-
-            <NavLink
-              to="/framework"
-              onClick={closeAllMenus}
-              className={({ isActive }) => [navItemClass, isActive || isFrameworkNavActive ? "text-emerald-300" : "hover:text-emerald-300"].join(" ")}
-            >
-              Framework
-            </NavLink>
-
-            <label className="inline-flex h-11 items-center gap-2 rounded-md border border-white/20 bg-black/25 px-2 text-xs uppercase tracking-[0.14em] text-slate-200 sm:text-sm">
-              <SearchIcon />
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search"
-                className="w-32 bg-transparent text-xs uppercase tracking-[0.14em] text-slate-100 outline-none placeholder:text-slate-300/75 sm:w-36 sm:text-sm"
-                aria-label="Search"
-              />
-            </label>
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
             <NavLink
-              to="/framework"
+              to="/"
               onClick={closeAllMenus}
               className={({ isActive }) =>
                 [
@@ -294,6 +238,32 @@ export default function AppNav() {
               Framework
             </NavLink>
 
+            <NavLink
+              to="/maps"
+              onClick={closeAllMenus}
+              className={({ isActive }) =>
+                [
+                  "flex min-h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
+                  isActive || isMapsRoute ? "bg-amber-300/10 text-amber-300" : "text-slate-100 hover:bg-white/5",
+                ].join(" ")
+              }
+            >
+              Maps
+            </NavLink>
+
+            <NavLink
+              to="/tools/alpha-threshold"
+              onClick={closeAllMenus}
+              className={({ isActive }) =>
+                [
+                  "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
+                  isActive || isAlphaThresholdRoute ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
+                ].join(" ")
+              }
+            >
+              Alpha Deflection Matrix
+            </NavLink>
+
             <div className="rounded-md border border-white/10">
               <button
                 type="button"
@@ -329,57 +299,9 @@ export default function AppNav() {
                 ))}
               </div>
             </div>
-
-            <div className="rounded-md border border-white/10">
-              <button
-                type="button"
-                className="flex h-11 w-full items-center justify-between px-3 text-left text-sm uppercase tracking-[0.1em] text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300/60"
-                aria-expanded={mobileSectionOpen === "tools"}
-                aria-controls="mobile-tools-menu"
-                onClick={() => toggleMobileSection("tools")}
-              >
-                Tools
-                <ChevronIcon expanded={mobileSectionOpen === "tools"} />
-              </button>
-              <div
-                id="mobile-tools-menu"
-                className={[
-                  "overflow-hidden transition-[max-height] duration-200",
-                  mobileSectionOpen === "tools" ? "max-h-64" : "max-h-0",
-                ].join(" ")}
-              >
-                {toolItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    onClick={closeAllMenus}
-                    className={({ isActive }) =>
-                      [
-                        "flex min-h-11 items-center border-t border-white/10 px-4 text-sm transition",
-                        isActive ? "text-blue-300" : "text-slate-300 hover:bg-blue-300/10 hover:text-blue-200",
-                      ].join(" ")
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
-            </div>
-
-            <label className="mt-1 flex h-11 items-center gap-2 rounded-md border border-white/20 bg-black/35 px-3 text-sm text-slate-200">
-              <SearchIcon className="h-4 w-4" />
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(event) => setSearchValue(event.target.value)}
-                placeholder="Search"
-                className="w-full bg-transparent text-sm text-slate-100 outline-none placeholder:text-slate-300/70"
-                aria-label="Search"
-              />
-            </label>
           </div>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

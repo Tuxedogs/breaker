@@ -67,7 +67,7 @@ export default function DoctrineIndexPage() {
   const loaderError = moduleLoadError ?? refLoadError ?? shipLoadError;
 
   return (
-    <section className="framework-static route-fade relative overflow-visible py-3">
+    <section className="base-static route-fade relative overflow-visible py-3">
       <div className="relative z-10 space-y-6">
         {loaderError ? (
           <article className="rounded-2xl border border-red-300/35 bg-red-950/40 p-4">

@@ -44,7 +44,7 @@ export default function SetupRail() {
           <Link
             key={item.title}
             to={item.to}
-            className="setup-config-item framework-modern-row rounded-lg p-3 transition"
+            className="setup-config-item base-card-row rounded-lg p-3 transition"
           >
             <h3 className="title-font text-base text-slate-100">{item.title}</h3>
             <p className="mt-2 text-xs text-slate-300/70">{item.subtitle}</p>

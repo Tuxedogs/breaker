@@ -140,8 +140,8 @@ function SettingsTable({ columns, rows }: { columns: [string, string, string]; r
 
 function SettingsSection({ title, subtitle, columns, rows }: SettingsTableSection) {
   return (
-    <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-      <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+    <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+      <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
         <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">{title}</h2>
         {subtitle ? <p className="mt-2 text-sm uppercase tracking-[0.14em] text-cyan-200/80">{subtitle}</p> : null}
         <div className="mt-4">
@@ -156,9 +156,9 @@ export default function AdditionalSettingsPage() {
   return (
     <section className="turret-modern additional-modern route-fade pb-8 pt-2">
       <div className="mx-auto max-w-[1180px] space-y-4">
-        <article className="framework-modern-card framework-modern-card-systems additional-hero rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
-            <p className="framework-modern-kicker">Systems Manual</p>
+        <article className="base-card base-card--systems additional-hero rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+            <p className="base-card-kicker">Systems Manual</p>
             <h1 className="title-font mt-2 text-3xl tracking-[0.08em] text-cyan-200 sm:text-5xl">Additional Keybinds and Game Settings</h1>
             <p className="mt-2 text-base uppercase tracking-[0.1em] text-cyan-100/85 sm:text-lg">
               Optimized configuration for turret operations and multi-crew combat
@@ -176,8 +176,8 @@ export default function AdditionalSettingsPage() {
 
         <SettingsSection title="Critical Keybinds" columns={["Action", "Keybind", "Description"]} rows={criticalKeybinds} />
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">General Settings</h2>
             <div className="mt-3">
               <h3 className="title-font text-lg tracking-[0.08em] text-cyan-300">Turn Off:</h3>
@@ -197,8 +197,8 @@ export default function AdditionalSettingsPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Mouse and ESP Settings</h2>
             <div className="mt-4 rounded-xl border border-cyan-300/30 bg-cyan-950/20 p-4 text-base leading-relaxed text-cyan-100">
               <span className="font-semibold">ESP Changes:</span> ESP is different now. Curve and Zone size are now combined. Mouse aim generally prefers <strong>high strength, low curvature 0.05-0.2</strong>.
@@ -212,8 +212,8 @@ export default function AdditionalSettingsPage() {
         <SettingsSection title="Weapon Settings" columns={["Setting", "Value", "Notes"]} rows={weaponDefaults} />
         <SettingsSection title="Targeting Settings" columns={["Setting", "Value", "Notes"]} rows={targetingSettings} />
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Camera and Visual Settings</h2>
             <div className="mt-4 space-y-4">
               <SettingsTable columns={["Setting", "Value", "Notes"]} rows={gForceAndCamera} />
@@ -228,8 +228,8 @@ export default function AdditionalSettingsPage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
-          <div className="framework-modern-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
+        <article className="base-card base-card--systems additional-panel rounded-2xl border border-cyan-300/35 p-4 backdrop-blur-[8px] sm:p-5">
+          <div className="base-card-head additional-panel-head rounded-xl border border-white/15 p-4 sm:p-5">
             <h2 className="title-font text-2xl tracking-[0.04em] text-cyan-200 sm:text-3xl">Flight Ready Settings</h2>
             <div className="mt-4 rounded-xl border border-red-300/35 bg-red-900/20 p-4 text-base leading-relaxed text-red-200">
               <span className="font-semibold">Flight Ready Bindings:</span> You can optionally, although I <strong>highly recommend</strong> binding all of these to "Flight Ready" or your own reset key in case of abnormal behavior.

@@ -49,7 +49,7 @@ function SectionList({
 
 function VisualReferencePanel({ src, label }: { src: string; label?: string }) {
   return (
-    <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+    <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
       <div className="hidden sm:block">
         <section className="card-head-panel">
           <div className="flex items-center justify-between gap-2">
@@ -64,11 +64,11 @@ function VisualReferencePanel({ src, label }: { src: string; label?: string }) {
       </div>
 
       <details className="sm:hidden">
-        <summary className="framework-modern-row cursor-pointer select-none rounded-lg p-3">
+        <summary className="base-card-row cursor-pointer select-none rounded-lg p-3">
           <span className="title-font text-base text-cyan-100">Visual Reference</span>
           <span className="text-[11px] uppercase tracking-[0.12em] text-slate-400">Tap to Expand</span>
         </summary>
-        <section className="framework-modern-card-head mt-3 rounded-xl border border-white/15 bg-slate-950/35 p-3">
+        <section className="base-card-head mt-3 rounded-xl border border-white/15 bg-slate-950/35 p-3">
           <p className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</p>
           <div className="mt-2 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
             <video className="aspect-video w-full object-cover" src={src} preload="metadata" controls playsInline muted />
@@ -88,12 +88,12 @@ export default function DoctrineModulePage() {
   if (loaderError) {
     return (
       <section className="route-fade py-8">
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4">
           <div className="card-head-md">
             <h1 className="detail-title-cyan">Module Content Error</h1>
             <p className="mt-3 text-slate-300">{loaderError.message}</p>
           </div>
-          <Link to="/modules" className="framework-modern-cta mt-2">
+          <Link to="/modules" className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -104,11 +104,11 @@ export default function DoctrineModulePage() {
   if (!module) {
     return (
       <section className="route-fade py-8">
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4">
           <div className="card-head-md">
             <h1 className="detail-title-cyan">Module Not Found</h1>
           </div>
-          <Link to="/modules" className="framework-modern-cta mt-2">
+          <Link to="/modules" className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -119,9 +119,9 @@ export default function DoctrineModulePage() {
   return (
     <section className="route-fade py-3">
       <div className="space-y-5">
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <header className="card-head-md">
-            <p className="framework-modern-kicker">Doctrine Module</p>
+            <p className="base-card-kicker">Doctrine Module</p>
             <h1 className="detail-page-title-cyan">{module.title}</h1>
             <p className="mt-3 rounded-lg border border-cyan-200/35 bg-cyan-950/45 px-3 py-2 text-base text-cyan-50">
               {module.intent}
@@ -144,19 +144,19 @@ export default function DoctrineModulePage() {
         {module.videoSrc ? <VisualReferencePanel src={module.videoSrc} label={module.videoLabel} /> : null}
 
         {module.powerProjection.length > 0 ? (
-          <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+          <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
             <EngagementEnvelope items={module.powerProjection} />
           </article>
         ) : null}
 
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <div className="grid gap-4 lg:grid-cols-2">
             <SectionList
               title="Use When"
               items={module.useWhen}
               footer={
                 module.id === "turret-keybind-baseline" ? (
-                  <Link to="/systems/turret-keybinds" className="framework-modern-row rounded-lg p-3">
+                  <Link to="/systems/turret-keybinds" className="base-card-row rounded-lg p-3">
                     Common Keybindings Here
                   </Link>
                 ) : undefined
@@ -168,7 +168,7 @@ export default function DoctrineModulePage() {
           </div>
         </article>
 
-        <article className="framework-modern-card framework-modern-card-systems framework-modern-card-compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
           <div className="grid gap-4 lg:grid-cols-2">
             <section className="card-head-sm">
               <h2 className="surface-title">Prerequisites</h2>
@@ -184,7 +184,7 @@ export default function DoctrineModulePage() {
                     );
                   }
                   return (
-                    <Link key={refId} to={`/refs/${ref.refType}/${ref.id}`} className="framework-modern-row rounded-lg p-3">
+                    <Link key={refId} to={`/refs/${ref.refType}/${ref.id}`} className="base-card-row rounded-lg p-3">
                       {ref.title}
                     </Link>
                   );
@@ -200,7 +200,7 @@ export default function DoctrineModulePage() {
                   const related = moduleById.get(relatedId);
                   if (!related) return null;
                   return (
-                    <Link key={relatedId} to={`/module/${relatedId}`} className="framework-modern-row rounded-lg p-3">
+                    <Link key={relatedId} to={`/module/${relatedId}`} className="base-card-row rounded-lg p-3">
                       {related.title}
                     </Link>
                   );
