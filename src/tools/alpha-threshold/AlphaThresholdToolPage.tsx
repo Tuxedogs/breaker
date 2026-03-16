@@ -5,13 +5,14 @@ import SidebarWorkspace from '../../components/SidebarWorkspace'
 import { AlphaThresholdPage } from './components/AlphaThresholdPage'
 import { ShipBalanceChangelogPanel } from './components/ShipBalanceChangelogPanel'
 import { ShipSelectionSidebar } from './components/ShipSelectionSidebar'
+import { DataSourceSelector } from './components/DataSourceSelector'
+import { thresholdDataSourceOptions } from './data/sourceOptions'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
 export default function AlphaThresholdToolPage() {
   const {
-    attackerShipName,
-    setAttackerShipName,
-    attackerProfile,
+    activeSource,
+    setActiveSource,
     slots,
     setSlotWeapon,
     allWeapons,
@@ -20,16 +21,12 @@ export default function AlphaThresholdToolPage() {
     axisScaleMode,
     setAxisScaleMode,
     globalAxisMaxByType,
-    attackerShip,
-    attackerOptions,
-    allShips,
-    setAttackerShipName,
-    attackerHardpointGroups,
-    victimSlotShipNames,
     mobileSidebarOpen,
     selectedShipResults,
     shipBalanceChanges,
+    victimSlotShipNames,
     setVictimShipAt,
+    clearAllShips,
     shipOverrides,
   } = useAlphaThresholdState()
   const hasSelectedWeapons = selectedWeapons.length > 0
@@ -44,16 +41,18 @@ export default function AlphaThresholdToolPage() {
         className="alpha-sidebar-workspace"
         leftSidebar={
           <ShipSelectionSidebar
-            attackerShip={attackerShip}
-            attackerOptions={attackerOptions}
-            attackerHardpointGroups={attackerHardpointGroups}
             mobileOpen={mobileSidebarOpen}
-            onAttackerShipChange={setAttackerShipName}
           >
             <section
               className="alpha-summary-rail"
               aria-labelledby="alpha-active-weapons-title"
             >
+              <DataSourceSelector
+                activeSource={activeSource}
+                sourceOptions={thresholdDataSourceOptions}
+                onSourceChange={setActiveSource}
+              />
+
               <header className="alpha-summary-rail-head">
                 <p className="page-kicker">Weapon Summary</p>
                 <h2
@@ -79,7 +78,6 @@ export default function AlphaThresholdToolPage() {
                 ) : null}
               </header>
 
-<<<<<<< ours
               {!hasSelectedWeapons ? (
                 <section className="alpha-summary-empty" aria-live="polite">
                   <p className="title-font text-sm text-slate-100">
@@ -105,17 +103,6 @@ export default function AlphaThresholdToolPage() {
         rightSidebar={
           <section className="alpha-changelog-rail" aria-label="Stat changelog">
             <ShipBalanceChangelogPanel entries={shipBalanceChanges} />
-=======
-            <ControlsPanel
-              attackerShipName={attackerShipName}
-              attackerProfile={attackerProfile}
-              ships={allShips}
-              slots={slots}
-              weapons={allWeapons}
-              onAttackerShipChange={setAttackerShipName}
-              onSlotChange={setSlotWeapon}
-            />
->>>>>>> theirs
           </section>
         }
       >
@@ -128,12 +115,14 @@ export default function AlphaThresholdToolPage() {
           >
             <AlphaThresholdPage
               selectedShipResults={selectedShipResults}
+              selectedWeapons={selectedWeapons}
               allShips={allShips}
               victimSlotShipNames={victimSlotShipNames}
               axisScaleMode={axisScaleMode}
               globalAxisMaxByType={globalAxisMaxByType}
               onAxisScaleModeChange={setAxisScaleMode}
               onVictimShipChange={setVictimShipAt}
+              onClearAllShips={clearAllShips}
               shipOverrides={shipOverrides}
             />
           </PageLayout>

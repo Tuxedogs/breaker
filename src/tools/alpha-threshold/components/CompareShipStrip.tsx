@@ -1,18 +1,29 @@
+import type { CSSProperties } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import { ShipCascadeDropdown } from './ShipCascadeDropdown'
-import type { SelectedShipResult, Ship } from '../types'
+import type { Ship } from '../types'
 
 type Props = {
-  shipResults: SelectedShipResult[]
   allShips: Ship[]
   victimSlotShipNames: Array<string | null>
   onVictimShipChange: (slotIndex: number, shipName: string | null) => void
+  onClearAllShips: () => void
 }
 
 type CompareCard = {
   key: string
   manufacturer: string | null
   name: string | null
+  imageSrc?: string
+  imageAlt?: string
+  armorHp?: number | null
+  ballisticThreshold?: number | null
+  energyThreshold?: number | null
+  vitalHp?: number | null
+  noiseCount?: number | null
+  decoyCount?: number | null
+  scmSpeed?: number | null
+  navSpeed?: number | null
 }
 
 function ShipPlaceholderIcon() {
@@ -38,22 +49,31 @@ function ShipPlaceholderIcon() {
 }
 
 export function CompareShipStrip({
-  shipResults,
   allShips,
   victimSlotShipNames,
   onVictimShipChange,
+  onClearAllShips,
 }: Props) {
   const cards: CompareCard[] = Array.from({ length: 3 }, (_, index) => {
-    const selectedName = victimSlotShipNames[index]
-    const ship =
-      (selectedName
-        ? allShips.find((candidate) => candidate.name === selectedName)
-        : null) ?? shipResults[index]?.ship
+    const selectedShipKey = victimSlotShipNames[index]
+    const ship = selectedShipKey
+      ? allShips.find((candidate) => `${candidate.manufacturer}::${candidate.name}` === selectedShipKey) ?? null
+      : null
 
     return {
-      key: ship?.name ?? `placeholder-${index + 1}`,
+      key: `slot-${index + 1}`,
       manufacturer: ship?.manufacturer ?? null,
       name: ship?.name ?? null,
+      imageSrc: ship?.imageSrc,
+      imageAlt: ship?.imageAlt,
+      armorHp: ship?.armorHp ?? null,
+      ballisticThreshold: ship?.ballisticThreshold ?? null,
+      energyThreshold: ship?.energyThreshold ?? null,
+      vitalHp: ship?.vitalHp ?? null,
+      noiseCount: ship?.noiseCount ?? null,
+      decoyCount: ship?.decoyCount ?? null,
+      scmSpeed: ship?.scmSpeed ?? null,
+      navSpeed: ship?.navSpeed ?? null,
     }
   })
 
@@ -62,12 +82,22 @@ export function CompareShipStrip({
       <header className="alpha-compare-strip-head">
         <p className="page-kicker">Selected Ships</p>
         <h2 className="surface-title mt-3">Victim Ship</h2>
+        <p className="mt-3">
+          <button
+            type="button"
+            onClick={onClearAllShips}
+            className="alpha-action-button"
+          >
+            Clear All
+          </button>
+        </p>
       </header>
 
       <ul className="alpha-compare-strip-grid" aria-label="Victim ship slots">
         {cards.map((card, index) => {
           const slotLabel = `${index + 1}`
           const hasShip = Boolean(card.name)
+          const selectedShipKey = victimSlotShipNames[index]
 
           return (
             <li key={card.key}>
@@ -75,27 +105,86 @@ export function CompareShipStrip({
                 className={[
                   'alpha-compare-ship-card',
                   hasShip ? 'alpha-compare-ship-card-active' : '',
+                  card.imageSrc ? 'alpha-compare-ship-card-has-image' : '',
                 ]
                   .filter(Boolean)
                   .join(' ')}
+                style={
+                  card.imageSrc
+                    ? ({
+                        '--alpha-compare-ship-bg': `url("${card.imageSrc}")`,
+                      } as CSSProperties)
+                    : undefined
+                }
               >
                 <p className="alpha-compare-ship-slot">{slotLabel}</p>
-                <ShipPlaceholderIcon />
+                <ShipArt imageSrc={card.imageSrc} imageAlt={card.imageAlt} />
                 <div className="alpha-compare-ship-copy">
-                  <p className="alpha-compare-ship-make">
-                    {card.manufacturer ?? 'Awaiting selection'}
-                  </p>
-                  <h3 className="alpha-compare-ship-name">
-                    {card.name ? formatEntityLabel(card.name) : 'Select ship'}
-                  </h3>
+                  {card.name ? (
+                    <>
+                      <p className="alpha-compare-ship-make">
+                        {card.manufacturer ?? 'Awaiting selection'}
+                      </p>
+                      <h3 className="alpha-compare-ship-name">
+                        {formatEntityLabel(card.name)}
+                      </h3>
+                      <dl className="alpha-compare-ship-stats">
+                        <div className="alpha-compare-ship-stat">
+                          <dt>Armor HP</dt>
+                          <dd>{formatValue(card.armorHp)}</dd>
+                        </div>
+                        <div className="alpha-compare-ship-stat">
+                          <dt>Deflection</dt>
+                          <dd>
+                            <span className="alpha-compare-ship-stat-energy">E {formatValue(card.energyThreshold)}</span>{' '}
+                            <span className="alpha-compare-ship-stat-ballistic">B {formatValue(card.ballisticThreshold)}</span>
+                          </dd>
+                        </div>
+                        <div className="alpha-compare-ship-stat">
+                          <dt>Vital HP</dt>
+                          <dd>{formatValue(card.vitalHp)}</dd>
+                        </div>
+                        <div className="alpha-compare-ship-stat">
+                          <dt>Noise/Decoy</dt>
+                          <dd>{formatRatio(card.noiseCount, card.decoyCount)}</dd>
+                        </div>
+                        <div className="alpha-compare-ship-stat">
+                          <dt>SCM Speed</dt>
+                          <dd>{formatValue(card.scmSpeed)}</dd>
+                        </div>
+                        <div className="alpha-compare-ship-stat">
+                          <dt>Nav Speed</dt>
+                          <dd>{formatValue(card.navSpeed)}</dd>
+                        </div>
+                      </dl>
+                    </>
+                  ) : (
+                    <>
+                      <p className="alpha-compare-ship-make">
+                        {card.manufacturer ?? 'Awaiting selection'}
+                      </p>
+                      <h3 className="alpha-compare-ship-name">Select ship</h3>
+                    </>
+                  )}
                   <section className="alpha-compare-ship-picker" aria-label={`Victim slot ${slotLabel}`}>
                     <ShipCascadeDropdown
                       ships={allShips}
-                      selectedShipName={card.name}
-                      onChange={(shipName) => onVictimShipChange(index, shipName)}
+                      selectedShipName={selectedShipKey}
+                      onChange={(shipKey) => onVictimShipChange(index, shipKey)}
                       placeholder="Select Ship"
                     />
                   </section>
+                  {card.name ? (
+                    <p className="mt-3">
+                      <button
+                        type="button"
+                        onClick={() => onVictimShipChange(index, null)}
+                        className="alpha-action-button"
+                      >
+                        Clear
+                      </button>
+                    </p>
+                  ) : null}
                 </div>
               </article>
             </li>
@@ -104,4 +193,24 @@ export function CompareShipStrip({
       </ul>
     </section>
   )
+}
+
+function ShipArt({ imageSrc, imageAlt }: { imageSrc?: string; imageAlt?: string }) {
+  if (!imageSrc) {
+    return <ShipPlaceholderIcon />
+  }
+
+  return <span className="sr-only">{imageAlt ?? ''}</span>
+}
+
+function formatValue(value: number | null | undefined): string {
+  return typeof value === 'number' ? `${Math.round(value)}` : '--'
+}
+
+function formatRatio(left: number | null | undefined, right: number | null | undefined): string {
+  if (typeof left !== 'number' || typeof right !== 'number') {
+    return '--/--'
+  }
+
+  return `${left}/${right}`
 }

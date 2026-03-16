@@ -12,7 +12,9 @@
         "prepare": "husky",
         "changelog": "git-cliff -c cliff.toml -o CHANGELOG.md",
         "release:tag": "node scripts/release-tag.js",
-        "alpha:import": "node --import tsx scripts/alpha-threshold/import-sources.mts"
+        "alpha:import": "node --import tsx scripts/alpha-threshold/import-sources.mts",
+        "alpha:images": "node --import tsx scripts/alpha-threshold/import-wiki-images.mts",
+        "alpha:card-stats": "node --import tsx scripts/alpha-threshold/import-ship-card-stats.mts"
     },
     "dependencies": {
         "@mdx-js/react": "^3.1.1",

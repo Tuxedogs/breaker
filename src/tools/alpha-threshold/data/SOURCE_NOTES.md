@@ -6,9 +6,11 @@ Use the importer to ingest full source exports (JSON files or reachable API URLs
 
 ```bash
 npm run alpha:import -- \
-  --ships-erkul ./tmp/erkul-ships.json \
+  --ships-erkul-live ./tmp/erkul-live-ships.json \
+  --ships-erkul-ptu ./tmp/erkul-ptu-ships.json \
   --ships-spviewer ./tmp/spviewer-ships.json \
-  --weapons-erkul ./tmp/erkul-weapons.json \
+  --weapons-erkul-live ./tmp/erkul-live-weapons.json \
+  --weapons-erkul-ptu ./tmp/erkul-ptu-weapons.json \
   --weapons-spviewer ./tmp/spviewer-weapons.json \
   --patch "4.7" \
   --report ./tmp/alpha-threshold-import-report.json
@@ -16,9 +18,11 @@ npm run alpha:import -- \
 
 Importer outputs:
 
-- `src/tools/alpha-threshold/data/ships/erkulSeeds.ts`
+- `src/tools/alpha-threshold/data/ships/erkulLiveSeeds.ts`
+- `src/tools/alpha-threshold/data/ships/erkulPtuSeeds.ts`
 - `src/tools/alpha-threshold/data/ships/spviewerSeeds.ts`
-- `src/tools/alpha-threshold/data/weapons/erkulSeeds.ts`
+- `src/tools/alpha-threshold/data/weapons/erkulLiveSeeds.ts`
+- `src/tools/alpha-threshold/data/weapons/erkulPtuSeeds.ts`
 - `src/tools/alpha-threshold/data/weapons/spviewerSeeds.ts`
 
 It also prints and can save a cross-check report with Erkul/SPViewer threshold deltas for overlapping ships.

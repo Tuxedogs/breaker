@@ -12,11 +12,16 @@ import type { WeaponRecord } from '../../src/tools/alpha-threshold/types'
 
 type SourceKind = 'erkul' | 'spviewer'
 type ResourceKind = 'ships' | 'weapons'
+type ErkulChannel = 'live' | 'ptu'
 
 type ImportArgs = {
   shipsErkul?: string
+  shipsErkulLive?: string
+  shipsErkulPtu?: string
   shipsSpviewer?: string
   weaponsErkul?: string
+  weaponsErkulLive?: string
+  weaponsErkulPtu?: string
   weaponsSpviewer?: string
   patch?: string
   outDir: string
@@ -44,11 +49,23 @@ function parseArgs(argv: string[]): ImportArgs {
       case '--ships-erkul':
         values.shipsErkul = next
         break
+      case '--ships-erkul-live':
+        values.shipsErkulLive = next
+        break
+      case '--ships-erkul-ptu':
+        values.shipsErkulPtu = next
+        break
       case '--ships-spviewer':
         values.shipsSpviewer = next
         break
       case '--weapons-erkul':
         values.weaponsErkul = next
+        break
+      case '--weapons-erkul-live':
+        values.weaponsErkulLive = next
+        break
+      case '--weapons-erkul-ptu':
+        values.weaponsErkulPtu = next
         break
       case '--weapons-spviewer':
         values.weaponsSpviewer = next
@@ -76,8 +93,10 @@ async function readJsonInput(location: string): Promise<unknown> {
   if (location.startsWith('http://') || location.startsWith('https://')) {
     const response = await fetch(location, {
       headers: {
-        'user-agent': 'moonbreaker-alpha-threshold-importer/1.0',
         accept: 'application/json,text/plain,*/*',
+        origin: 'https://www.erkul.games',
+        referer: 'https://www.erkul.games/',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
       },
     })
 
@@ -103,15 +122,7 @@ function collectRecords(payload: unknown): JsonRecord[] {
     return []
   }
 
-  const candidateRoots = [
-    'data',
-    'items',
-    'ships',
-    'vehicles',
-    'weapons',
-    'results',
-    'rows',
-  ]
+  const candidateRoots = ['data', 'items', 'ships', 'vehicles', 'weapons', 'results', 'rows']
 
   for (const key of candidateRoots) {
     const value = (payload as JsonRecord)[key]
@@ -136,11 +147,7 @@ function normalizeShips(records: JsonRecord[], source: SourceKind, patch?: strin
     .filter((record) => record.name && record.health > 0)
 }
 
-function normalizeWeapons(
-  records: JsonRecord[],
-  source: SourceKind,
-  patch?: string
-): WeaponRecord[] {
+function normalizeWeapons(records: JsonRecord[], source: SourceKind, patch?: string): WeaponRecord[] {
   return records
     .map((record) => {
       const enriched = patch ? { ...record, patch } : record
@@ -163,6 +170,9 @@ function toShipSeed(record: ShipRecord) {
     name: record.name,
     sizeGroup: record.sizeGroup,
     health: record.health,
+    armor: record.armor,
+    armorHp: record.armorHp,
+    vitalHp: record.vitalHp,
     ballisticThreshold: record.ballisticThreshold,
     energyThreshold: record.energyThreshold,
     pilotHardpointSize: record.pilotHardpointSize ?? null,
@@ -175,7 +185,7 @@ function toWeaponSeed(record: WeaponRecord) {
   return {
     id: record.sourceId || record.id,
     name: record.name,
-    size: record.size,
+    size: `S${record.size}`,
     type: record.damageType,
     alpha: record.alpha,
     burstDps: record.burstDps,
@@ -189,30 +199,33 @@ async function writeDataFile(filePath: string, content: string) {
   await fs.writeFile(filePath, content, 'utf8')
 }
 
-function buildThresholdCrossCheck(erkul: ShipRecord[], spviewer: ShipRecord[]) {
-  const byName = new Map(spviewer.map((ship) => [ship.name, ship]))
+function buildThresholdCrossCheck(primary: ShipRecord[], secondary: ShipRecord[]) {
+  const byName = new Map(secondary.map((ship) => [ship.name, ship]))
 
-  return erkul
+  return primary
     .map((ship) => {
       const counterpart = byName.get(ship.name)
       if (!counterpart) return null
 
       return {
         ship: ship.name,
-        erkul: {
+        primary: {
           ballisticThreshold: ship.ballisticThreshold,
           energyThreshold: ship.energyThreshold,
-          health: ship.health,
+          armorHp: ship.armorHp,
+          vitalHp: ship.vitalHp,
         },
-        spviewer: {
+        secondary: {
           ballisticThreshold: counterpart.ballisticThreshold,
           energyThreshold: counterpart.energyThreshold,
-          health: counterpart.health,
+          armorHp: counterpart.armorHp,
+          vitalHp: counterpart.vitalHp,
         },
         delta: {
           ballisticThreshold: ship.ballisticThreshold - counterpart.ballisticThreshold,
           energyThreshold: ship.energyThreshold - counterpart.energyThreshold,
-          health: ship.health - counterpart.health,
+          armorHp: ship.armorHp - counterpart.armorHp,
+          vitalHp: ship.vitalHp - counterpart.vitalHp,
         },
       }
     })
@@ -237,54 +250,75 @@ async function importResource(
   return normalizeWeapons(rows, source, patch)
 }
 
+async function writeShipSeeds(outDir: string, fileName: string, exportName: string, records: ShipRecord[]) {
+  await writeDataFile(
+    path.join(outDir, 'ships', fileName),
+    serializeConstArray(exportName, records.map(toShipSeed))
+  )
+}
+
+async function writeWeaponSeeds(outDir: string, fileName: string, exportName: string, records: WeaponRecord[]) {
+  await writeDataFile(
+    path.join(outDir, 'weapons', fileName),
+    serializeConstArray(exportName, records.map(toWeaponSeed))
+  )
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2))
 
-  const [erkulShips, spviewerShips, erkulWeapons, spviewerWeapons] = await Promise.all([
-    importResource('ships', 'erkul', args.shipsErkul, args.patch),
+  const erkulLiveShipLocation = args.shipsErkulLive ?? args.shipsErkul
+  const erkulPtuShipLocation = args.shipsErkulPtu
+  const erkulLiveWeaponLocation = args.weaponsErkulLive ?? args.weaponsErkul
+  const erkulPtuWeaponLocation = args.weaponsErkulPtu
+
+  const [
+    erkulLiveShips,
+    erkulPtuShips,
+    spviewerShips,
+    erkulLiveWeapons,
+    erkulPtuWeapons,
+    spviewerWeapons,
+  ] = await Promise.all([
+    importResource('ships', 'erkul', erkulLiveShipLocation, args.patch),
+    importResource('ships', 'erkul', erkulPtuShipLocation, args.patch),
     importResource('ships', 'spviewer', args.shipsSpviewer, args.patch),
-    importResource('weapons', 'erkul', args.weaponsErkul, args.patch),
+    importResource('weapons', 'erkul', erkulLiveWeaponLocation, args.patch),
+    importResource('weapons', 'erkul', erkulPtuWeaponLocation, args.patch),
     importResource('weapons', 'spviewer', args.weaponsSpviewer, args.patch),
   ])
 
   const mergedShips = mergeShipRecords([
     ...(spviewerShips as ShipRecord[]),
-    ...(erkulShips as ShipRecord[]),
+    ...(erkulLiveShips as ShipRecord[]),
+    ...(erkulPtuShips as ShipRecord[]),
   ])
   const mergedWeapons = mergeWeaponRecords([
     ...(spviewerWeapons as WeaponRecord[]),
-    ...(erkulWeapons as WeaponRecord[]),
+    ...(erkulLiveWeapons as WeaponRecord[]),
+    ...(erkulPtuWeapons as WeaponRecord[]),
   ])
 
-  const shipsDir = path.join(args.outDir, 'ships')
-  const weaponsDir = path.join(args.outDir, 'weapons')
-
   await Promise.all([
-    writeDataFile(
-      path.join(shipsDir, 'erkulSeeds.ts'),
-      serializeConstArray('erkulShipSeeds', (erkulShips as ShipRecord[]).map(toShipSeed))
-    ),
-    writeDataFile(
-      path.join(shipsDir, 'spviewerSeeds.ts'),
-      serializeConstArray('spviewerShipSeeds', (spviewerShips as ShipRecord[]).map(toShipSeed))
-    ),
-    writeDataFile(
-      path.join(weaponsDir, 'erkulSeeds.ts'),
-      serializeConstArray('erkulWeaponSeeds', (erkulWeapons as WeaponRecord[]).map(toWeaponSeed))
-    ),
-    writeDataFile(
-      path.join(weaponsDir, 'spviewerSeeds.ts'),
-      serializeConstArray('spviewerWeaponSeeds', (spviewerWeapons as WeaponRecord[]).map(toWeaponSeed))
-    ),
+    writeShipSeeds(args.outDir, 'erkulLiveSeeds.ts', 'erkulLiveShipSeeds', erkulLiveShips as ShipRecord[]),
+    writeShipSeeds(args.outDir, 'erkulPtuSeeds.ts', 'erkulPtuShipSeeds', erkulPtuShips as ShipRecord[]),
+    writeShipSeeds(args.outDir, 'spviewerSeeds.ts', 'spviewerShipSeeds', spviewerShips as ShipRecord[]),
+    writeWeaponSeeds(args.outDir, 'erkulLiveSeeds.ts', 'erkulLiveWeaponSeeds', erkulLiveWeapons as WeaponRecord[]),
+    writeWeaponSeeds(args.outDir, 'erkulPtuSeeds.ts', 'erkulPtuWeaponSeeds', erkulPtuWeapons as WeaponRecord[]),
+    writeWeaponSeeds(args.outDir, 'spviewerSeeds.ts', 'spviewerWeaponSeeds', spviewerWeapons as WeaponRecord[]),
   ])
 
   const report = {
     importedAt: new Date().toISOString(),
     patch: args.patch ?? null,
     sources: {
-      erkul: {
-        ships: (erkulShips as ShipRecord[]).length,
-        weapons: (erkulWeapons as WeaponRecord[]).length,
+      'erkul-live': {
+        ships: (erkulLiveShips as ShipRecord[]).length,
+        weapons: (erkulLiveWeapons as WeaponRecord[]).length,
+      },
+      'erkul-ptu': {
+        ships: (erkulPtuShips as ShipRecord[]).length,
+        weapons: (erkulPtuWeapons as WeaponRecord[]).length,
       },
       spviewer: {
         ships: (spviewerShips as ShipRecord[]).length,
@@ -295,10 +329,16 @@ async function main() {
       ships: mergedShips.length,
       weapons: mergedWeapons.length,
     },
-    thresholdCrossCheck: buildThresholdCrossCheck(
-      erkulShips as ShipRecord[],
-      spviewerShips as ShipRecord[]
-    ),
+    crossCheck: {
+      erkulLiveVsSpviewer: buildThresholdCrossCheck(
+        erkulLiveShips as ShipRecord[],
+        spviewerShips as ShipRecord[]
+      ),
+      erkulPtuVsSpviewer: buildThresholdCrossCheck(
+        erkulPtuShips as ShipRecord[],
+        spviewerShips as ShipRecord[]
+      ),
+    },
   }
 
   if (args.reportPath) {

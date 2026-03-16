@@ -16,6 +16,12 @@ type Props = {
 
 const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
+function getSlotLabel(slot: ComparisonSlot, index: number): string {
+  if (slot.label) return slot.label
+  if (slot.hardpointSize > 0) return `Weapon ${index + 1} · S${slot.hardpointSize}`
+  return `Weapon ${index + 1}`
+}
+
 export function WeaponComparisonSlots({
   slots,
   weapons,
@@ -31,25 +37,13 @@ export function WeaponComparisonSlots({
           weapons.find(
             (weapon) =>
               getWeaponKey(weapon) === slot.weaponKey &&
-              weapon.size === slot.hardpointSize
+              (slot.hardpointSize <= 0 || weapon.size <= slot.hardpointSize)
           ) ?? null
 
         return {
           slot,
           index,
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-          slotLabel: slot.label ?? `W${index + 1}`,
-=======
-          slotLabel: `${slot.operator === 'pilot' ? 'Pilot' : 'Turret'} S${slot.hardpointSize}`,
->>>>>>> theirs
-=======
-          slotLabel: `${slot.operator === 'pilot' ? 'Pilot' : 'Turret'} S${slot.hardpointSize}`,
->>>>>>> theirs
-=======
-          slotLabel: `${slot.operator === 'pilot' ? 'Pilot' : 'Turret'} S${slot.hardpointSize}`,
->>>>>>> theirs
+          slotLabel: getSlotLabel(slot, index),
           tone: SLOT_TONES[index] ?? 'cyan',
           selectedWeapon,
         }
@@ -63,10 +57,10 @@ export function WeaponComparisonSlots({
   )
 
   const compatibleWeapons = useMemo(() => {
-    const maxSize = activeSlot?.slot.size
+    const maxSize = activeSlot?.slot.hardpointSize
     if (!maxSize || maxSize <= 0) return weapons
     return weapons.filter((weapon) => weapon.size <= maxSize)
-  }, [activeSlot?.slot.size, weapons])
+  }, [activeSlot?.slot.hardpointSize, weapons])
 
   function openModal(slotId: string) {
     setActiveSlotId(slotId)
@@ -76,7 +70,7 @@ export function WeaponComparisonSlots({
   if (slotEntries.length === 0) {
     return (
       <section className="alpha-slot-panel p-4 text-sm text-slate-300">
-        No pilot or turret hardpoints detected for this attacker profile.
+        No weapon slots configured.
       </section>
     )
   }

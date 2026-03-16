@@ -3,7 +3,7 @@ import { nav } from '../nav'
 
 function Sidebar() {
   return (
-    <aside className="glass-panel rounded-2xl p-4 lg:sticky lg:top-5 lg:h-[calc(100vh-3.5rem)] lg:p-5">
+    <aside className="glass-panel rounded-2xl p-4 lg:sticky lg:top-[var(--app-sticky-top)] lg:h-[calc(100vh-var(--app-sticky-top)-1rem)] lg:p-5">
       <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
         <p className="text-xs uppercase tracking-[0.18em] text-white/70">Doctrine Index</p>
         <span className="text-xs text-slate-400">v0.1</span>
