@@ -1,4 +1,3 @@
-import { useEffect, useId, useRef, useState } from 'react'
 import type { ThresholdDataSourceOption } from '../data/sourceOptions'
 import type { ThresholdDataSourceKey } from '../types'
 
@@ -8,85 +7,56 @@ type Props = {
   onSourceChange: (source: ThresholdDataSourceKey) => void
 }
 
+const LIVE_SOURCE: ThresholdDataSourceKey = 'erkul-live'
+const PTU_SOURCE: ThresholdDataSourceKey = 'erkul-ptu'
+
 export function DataSourceSelector({
   activeSource,
   sourceOptions,
   onSourceChange,
 }: Props) {
-  const activeOption = sourceOptions.find((option) => option.value === activeSource)
-  const [open, setOpen] = useState(false)
-  const rootRef = useRef<HTMLElement | null>(null)
-  const listId = useId()
+  const hasLive = sourceOptions.some((option) => option.value === LIVE_SOURCE)
+  const hasPtu = sourceOptions.some((option) => option.value === PTU_SOURCE)
+  const normalizedSource =
+    activeSource === PTU_SOURCE && hasPtu ? PTU_SOURCE : LIVE_SOURCE
 
-  useEffect(() => {
-    if (!open) return
-
-    function handlePointerDown(event: MouseEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false)
-      }
+  function handleToggle() {
+    if (normalizedSource === LIVE_SOURCE && hasPtu) {
+      onSourceChange(PTU_SOURCE)
+      return
     }
 
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        setOpen(false)
-      }
+    if (normalizedSource === PTU_SOURCE && hasLive) {
+      onSourceChange(LIVE_SOURCE)
     }
-
-    document.addEventListener('mousedown', handlePointerDown)
-    document.addEventListener('keydown', handleEscape)
-
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown)
-      document.removeEventListener('keydown', handleEscape)
-    }
-  }, [open])
+  }
 
   return (
-    <section
-      ref={rootRef}
-      className="data-source-card relative z-20 ml-auto w-fit overflow-visible"
-    >
+    <section className="data-source-card relative z-20 ml-auto w-fit overflow-visible">
       <button
         type="button"
-        aria-expanded={open}
-        aria-controls={listId}
-        onClick={() => setOpen((current) => !current)}
-        className="alpha-chip alpha-chip-pass cursor-pointer"
+        onClick={handleToggle}
+        className="alpha-chip alpha-chip-pass inline-flex cursor-pointer items-center gap-2"
+        aria-label={`Toggle data source. Current source: ${
+          normalizedSource === PTU_SOURCE ? 'PTU' : 'LIVE'
+        }`}
       >
-        {activeOption?.label ?? activeSource}
-      </button>
-
-      {open ? (
-        <div
-          id={listId}
-          className="absolute right-0 top-full mt-3 flex min-w-44 flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/95 p-3 shadow-2xl backdrop-blur-xl"
-          role="group"
-          aria-label="Data source options"
+        <span
+          className={
+            normalizedSource === PTU_SOURCE ? 'text-current' : 'text-slate-400'
+          }
         >
-          {sourceOptions.map((option) => {
-            const isActive = option.value === activeSource
-
-            return (
-              <button
-                key={option.value}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => {
-                  onSourceChange(option.value as ThresholdDataSourceKey)
-                  setOpen(false)
-                }}
-                className={[
-                  'alpha-chip text-left',
-                  isActive ? 'alpha-chip-pass' : 'alpha-chip-muted',
-                ].join(' ')}
-              >
-                {option.label}
-              </button>
-            )
-          })}
-        </div>
-      ) : null}
+          PTU
+        </span>
+        <span className="text-slate-500">/</span>
+        <span
+          className={
+            normalizedSource === LIVE_SOURCE ? 'text-current' : 'text-slate-400'
+          }
+        >
+          LIVE
+        </span>
+      </button>
     </section>
   )
 }

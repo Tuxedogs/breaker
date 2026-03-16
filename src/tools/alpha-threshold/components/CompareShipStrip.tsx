@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import { ShipCascadeDropdown } from './ShipCascadeDropdown'
 import type { Ship } from '../types'
@@ -54,6 +54,8 @@ export function CompareShipStrip({
   onVictimShipChange,
   onClearAllShips,
 }: Props) {
+  const [openPicker, setOpenPicker] = useState<{ index: number; x: number; y: number } | null>(null)
+
   const cards: CompareCard[] = Array.from({ length: 3 }, (_, index) => {
     const selectedShipKey = victimSlotShipNames[index]
     const ship = selectedShipKey
@@ -97,7 +99,6 @@ export function CompareShipStrip({
         {cards.map((card, index) => {
           const slotLabel = `${index + 1}`
           const hasShip = Boolean(card.name)
-          const selectedShipKey = victimSlotShipNames[index]
 
           return (
             <li key={card.key}>
@@ -117,6 +118,16 @@ export function CompareShipStrip({
                     : undefined
                 }
               >
+                <ShipCascadeDropdown
+                  ships={allShips}
+                  onChange={(shipKey) => onVictimShipChange(index, shipKey)}
+                  open={openPicker?.index === index}
+                  menuPosition={openPicker?.index === index ? { x: openPicker.x, y: openPicker.y } : null}
+                  onOpenChange={(nextOpen) => {
+                    setOpenPicker(nextOpen ? openPicker : null)
+                  }}
+                  ariaLabel={`Victim slot ${slotLabel} ship selector`}
+                />
                 <p className="alpha-compare-ship-slot">{slotLabel}</p>
                 <ShipArt imageSrc={card.imageSrc} imageAlt={card.imageAlt} />
                 <div className="alpha-compare-ship-copy">
@@ -163,23 +174,38 @@ export function CompareShipStrip({
                       <p className="alpha-compare-ship-make">
                         {card.manufacturer ?? 'Awaiting selection'}
                       </p>
-                      <h3 className="alpha-compare-ship-name">Select ship</h3>
+                      <p className="mt-3">
+                        <button
+                          type="button"
+                          className="alpha-action-button"
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            const articleElement = event.currentTarget.closest('.alpha-compare-ship-card')
+                            const articleRect = articleElement?.getBoundingClientRect()
+                            const triggerRect = event.currentTarget.getBoundingClientRect()
+
+                            if (!articleRect) return
+
+                            setOpenPicker({
+                              index,
+                              x: triggerRect.left - articleRect.left,
+                              y: triggerRect.bottom - articleRect.top + 6,
+                            })
+                          }}
+                          data-ship-picker-ignore="true"
+                        >
+                          Select ship
+                        </button>
+                      </p>
                     </>
                   )}
-                  <section className="alpha-compare-ship-picker" aria-label={`Victim slot ${slotLabel}`}>
-                    <ShipCascadeDropdown
-                      ships={allShips}
-                      selectedShipName={selectedShipKey}
-                      onChange={(shipKey) => onVictimShipChange(index, shipKey)}
-                      placeholder="Select Ship"
-                    />
-                  </section>
                   {card.name ? (
                     <p className="mt-3">
                       <button
                         type="button"
                         onClick={() => onVictimShipChange(index, null)}
                         className="alpha-action-button"
+                        data-ship-picker-ignore="true"
                       >
                         Clear
                       </button>

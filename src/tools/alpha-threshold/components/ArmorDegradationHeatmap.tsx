@@ -1,4 +1,5 @@
 import { formatEntityLabel, formatMetric } from '../lib/calculations'
+import { formatWeaponTypeLabel } from '../lib/weapons/normalize'
 import type { SelectedShipResult, SelectedWeaponComparison } from '../types'
 
 type Props = {
@@ -10,13 +11,20 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
 }
 
-function getCellState(shipResult: SelectedShipResult, weapon: SelectedWeaponComparison) {
+function getCellState(
+  shipResult: SelectedShipResult,
+  weapon: SelectedWeaponComparison
+) {
   const result = shipResult.results.find((entry) => entry.slotId === weapon.slotId)
   if (!result) return null
 
   const alpha = result.weapon.alpha ?? 0
   const delta = alpha - result.threshold
-  const normalized = clamp(Math.abs(delta) / Math.max(result.threshold, 1), 0, 1.25)
+  const normalized = clamp(
+    Math.abs(delta) / Math.max(result.threshold, 1),
+    0,
+    1.25
+  )
 
   return {
     result,
@@ -42,14 +50,18 @@ export function ArmorDegradationHeatmap({
   selectedWeapons,
 }: Props) {
   return (
-    <section className="alpha-heatmap-panel" aria-labelledby="armor-degradation-title">
+    <section
+      className="alpha-heatmap-panel"
+      aria-labelledby="armor-degradation-title"
+    >
       <header className="alpha-heatmap-head">
         <p className="page-kicker">Ship vs Weapon Matrix</p>
         <h2 id="armor-degradation-title" className="surface-title mt-3">
           Threshold Heatmap
         </h2>
         <p className="mt-2 text-sm text-slate-400">
-          Rows are selected ships. Columns are selected weapons. Each cell shows threshold margin.
+          Rows are selected ships. Columns are selected weapons. Each cell shows
+          threshold margin.
         </p>
       </header>
 
@@ -59,7 +71,9 @@ export function ArmorDegradationHeatmap({
             className="alpha-heatmap-matrix"
             role="table"
             aria-label="Ship versus weapon threshold matrix"
-            style={{ ['--alpha-heatmap-columns' as string]: selectedWeapons.length }}
+            style={{
+              ['--alpha-heatmap-columns' as string]: selectedWeapons.length,
+            }}
           >
             <div className="alpha-heatmap-matrix-corner" aria-hidden="true" />
 
@@ -76,20 +90,18 @@ export function ArmorDegradationHeatmap({
                   {selectedWeapon.weapon.name}
                 </strong>
                 <span className="alpha-heatmap-matrix-weapon-meta">
-                  {selectedWeapon.weapon.damageType} · {formatMetric(selectedWeapon.weapon.alpha ?? 0)}
+                  {formatWeaponTypeLabel({
+                    damageType: selectedWeapon.weapon.damageType,
+                    weaponClass: selectedWeapon.weapon.weaponClass,
+                  })}{' '}
+                  · {formatMetric(selectedWeapon.weapon.alpha ?? 0)}
                 </span>
               </div>
             ))}
 
             {shipResults.map((shipResult) => (
-              <div
-                key={shipResult.ship.name}
-                className="contents"
-              >
-                <div
-                  role="rowheader"
-                  className="alpha-heatmap-matrix-ship"
-                >
+              <div key={shipResult.ship.name} className="contents">
+                <div role="rowheader" className="alpha-heatmap-matrix-ship">
                   <span className="alpha-ship-option-meta">
                     {formatEntityLabel(shipResult.ship.manufacturer)}
                   </span>
@@ -97,7 +109,8 @@ export function ArmorDegradationHeatmap({
                     {formatEntityLabel(shipResult.ship.name)}
                   </strong>
                   <span className="text-xs text-slate-400">
-                    B {formatMetric(shipResult.ship.ballisticThreshold)} / E {formatMetric(shipResult.ship.energyThreshold)}
+                    B {formatMetric(shipResult.ship.ballisticThreshold)} / E{' '}
+                    {formatMetric(shipResult.ship.energyThreshold)}
                   </span>
                 </div>
 
@@ -124,14 +137,19 @@ export function ArmorDegradationHeatmap({
                         'alpha-heatmap-matrix-cell',
                         getCellClassName(state.delta, state.intensity),
                       ].join(' ')}
-                      title={`${selectedWeapon.weapon.name}: ${state.delta >= 0 ? '+' : '-'}${formatMetric(Math.abs(state.delta))} vs ${formatMetric(state.result.threshold)}`}
+                      title={`${selectedWeapon.weapon.name}: ${
+                        state.delta >= 0 ? '+' : '-'
+                      }${formatMetric(Math.abs(state.delta))} vs ${formatMetric(
+                        state.result.threshold
+                      )}`}
                     >
                       <span className="alpha-heatmap-matrix-cell-value">
                         {state.delta >= 0 ? '+' : '-'}
                         {formatMetric(Math.abs(state.delta))}
                       </span>
                       <span className="alpha-heatmap-matrix-cell-meta">
-                        {state.result.thresholdType === 'ballistic' ? 'B' : 'E'} {formatMetric(state.result.threshold)}
+                        {state.result.thresholdType === 'ballistic' ? 'B' : 'E'}{' '}
+                        {formatMetric(state.result.threshold)}
                       </span>
                     </div>
                   )

@@ -4,9 +4,11 @@ import type { Ship } from '../types'
 
 type Props = {
   ships: Ship[]
-  selectedShipName: string | null
   onChange: (shipName: string | null) => void
-  placeholder?: string
+  open: boolean
+  menuPosition: { x: number; y: number } | null
+  onOpenChange: (open: boolean) => void
+  ariaLabel: string
 }
 
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
@@ -36,33 +38,23 @@ function dedupeShips(ships: Ship[]): Ship[] {
 
 export function ShipCascadeDropdown({
   ships,
-  selectedShipName,
   onChange,
-  placeholder = 'Search ship',
+  open,
+  menuPosition,
+  onOpenChange,
+  ariaLabel,
 }: Props) {
-  const [open, setOpen] = useState(false)
-  const [query, setQuery] = useState('')
   const [activeManufacturer, setActiveManufacturer] = useState<string | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
   const [flyoutStyle, setFlyoutStyle] = useState<{ top?: number; bottom?: number; maxHeight?: number }>({})
   const rootRef = useRef<HTMLDivElement | null>(null)
   const panelsRef = useRef<HTMLDivElement | null>(null)
   const shipsFlyoutRef = useRef<HTMLUListElement | null>(null)
   const manufacturerButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
-  const selectedShip = useMemo(
-    () =>
-      selectedShipName
-        ? ships.find((ship) => getShipSelectionKey(ship) === selectedShipName) ?? null
-        : null,
-    [selectedShipName, ships]
-  )
-
   const uniqueShips = useMemo(() => dedupeShips(ships), [ships])
 
-  const filteredShips = useMemo(
-    () => uniqueShips.filter((ship) => matchesQuery(ship, query)),
-    [query, uniqueShips]
-  )
+  const filteredShips = useMemo(() => uniqueShips.filter((ship) => matchesQuery(ship, '')), [uniqueShips])
 
   const manufacturerGroups = useMemo(() => {
     const byManufacturer = new Map<string, Ship[]>()
@@ -103,20 +95,30 @@ export function ShipCascadeDropdown({
   )
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const updateViewportMode = () => setIsMobile(mediaQuery.matches)
+
+    updateViewportMode()
+    mediaQuery.addEventListener('change', updateViewportMode)
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateViewportMode)
+    }
+  }, [])
+
+  useEffect(() => {
     if (!open) return
 
     const onWindowMouseDown = (event: MouseEvent) => {
       if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false)
-        setQuery('')
+        onOpenChange(false)
       }
     }
 
     const onWindowKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
-        setOpen(false)
-        setQuery('')
+        onOpenChange(false)
       }
     }
 
@@ -127,10 +129,10 @@ export function ShipCascadeDropdown({
       window.removeEventListener('mousedown', onWindowMouseDown)
       window.removeEventListener('keydown', onWindowKeyDown)
     }
-  }, [open])
+  }, [onOpenChange, open])
 
   useLayoutEffect(() => {
-    if (!open || !panelsRef.current || !shipsFlyoutRef.current || !resolvedActiveManufacturer) return
+    if (isMobile || !open || !panelsRef.current || !shipsFlyoutRef.current || !resolvedActiveManufacturer) return
 
     const activeButton = manufacturerButtonRefs.current[resolvedActiveManufacturer]
     if (!activeButton) return
@@ -170,55 +172,32 @@ export function ShipCascadeDropdown({
       bottom: undefined,
       maxHeight: preferredMaxHeight,
     })
-  }, [manufacturerGroups, open, resolvedActiveManufacturer])
+  }, [isMobile, manufacturerGroups, open, resolvedActiveManufacturer])
 
   useLayoutEffect(() => {
-    if (!open || !shipsFlyoutRef.current || !panelsRef.current || !resolvedActiveManufacturer) return
+    if (!open || !shipsFlyoutRef.current) return
 
     const flyout = shipsFlyoutRef.current
-    const activeButton = manufacturerButtonRefs.current[resolvedActiveManufacturer]
-
-    if (!activeButton) return
-
-    if (flyout.scrollHeight <= flyout.clientHeight) {
-      flyout.scrollTop = 0
-      return
-    }
-
-    const panelsRect = panelsRef.current.getBoundingClientRect()
-    const buttonRect = activeButton.getBoundingClientRect()
-    const buttonCenter = buttonRect.top + buttonRect.height / 2
-    const panelsHeight = Math.max(panelsRect.height, 1)
-    const relativePosition = Math.min(
-      Math.max((buttonCenter - panelsRect.top) / panelsHeight, 0),
-      1
-    )
-    const maxScroll = flyout.scrollHeight - flyout.clientHeight
-
-    flyout.scrollTop = maxScroll * relativePosition
-  }, [activeManufacturerGroup, flyoutStyle, open, resolvedActiveManufacturer])
+    flyout.scrollTop = 0
+    flyout.scrollLeft = 0
+  }, [activeManufacturerGroup, flyoutStyle, open])
 
   return (
-    <div ref={rootRef} className="alpha-ship-cascade">
-      <label className="alpha-ship-cascade-search">
-        <span className="alpha-control-label">Search</span>
-        <input
-          className="alpha-input alpha-ship-cascade-trigger"
-          value={query}
-          onFocus={() => setOpen(true)}
-          onClick={() => setOpen(true)}
-          onChange={(event) => {
-            setQuery(event.target.value)
-            if (!open) {
-              setOpen(true)
-            }
-          }}
-          placeholder={selectedShip ? formatEntityLabel(selectedShip.name) : placeholder}
-        />
-      </label>
-
+    <div ref={rootRef} className="alpha-ship-cascade alpha-ship-cascade-card-root">
       {open ? (
-        <section className="alpha-ship-cascade-menu" role="listbox" aria-label="Ship selector">
+        <section
+          className="alpha-ship-cascade-menu"
+          role="listbox"
+          aria-label={ariaLabel}
+          style={
+            !isMobile && menuPosition
+              ? {
+                  left: menuPosition.x,
+                  top: menuPosition.y,
+                }
+              : undefined
+          }
+        >
           {hasMatches ? (
             <div ref={panelsRef} className="alpha-ship-cascade-panels">
               <ul className="alpha-ship-cascade-groups">
@@ -259,19 +238,19 @@ export function ShipCascadeDropdown({
               </ul>
 
               <ul
+                key={resolvedActiveManufacturer ?? 'ships-flyout'}
                 ref={shipsFlyoutRef}
                 className="alpha-ship-cascade-ships alpha-ship-cascade-ships-flyout"
-                style={flyoutStyle}
+                style={isMobile ? undefined : flyoutStyle}
               >
                 {activeManufacturerGroup?.ships.map((ship) => (
                   <li key={`${ship.manufacturer}:${ship.name}`}>
                     <button
                       type="button"
                       className="alpha-ship-cascade-ship"
-                        onClick={() => {
+                      onClick={() => {
                         onChange(getShipSelectionKey(ship))
-                        setOpen(false)
-                        setQuery('')
+                        onOpenChange(false)
                       }}
                     >
                       {formatEntityLabel(ship.name)}

@@ -2,6 +2,7 @@ import {
   useDeferredValue,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -9,8 +10,11 @@ import {
 import { createPortal } from 'react-dom'
 import { formatMetric, getWeaponKey } from '../lib/calculations'
 import { filterWeaponRecords, groupWeaponRecords } from '../lib/weapons/grouping'
-import { formatWeaponClassLabel } from '../lib/weapons/normalize'
-import type { SlotTone, WeaponRecord } from '../types'
+import {
+  formatWeaponClassLabel,
+  formatWeaponTypeLabel,
+} from '../lib/weapons/normalize'
+import type { SlotTone, WeaponDamageType, WeaponRecord } from '../types'
 
 type WeaponSelectorSlot = {
   id: string
@@ -19,12 +23,14 @@ type WeaponSelectorSlot = {
   weaponKey: string | null
   weaponName: string | null
   weaponClass: string | null
+  damageType: WeaponDamageType | null
   hardpointSize: number
 }
 
 type Props = {
   open: boolean
   activeSlotId: string | null
+  getSourceSlotElement: (slotId: string) => HTMLElement | null
   slots: WeaponSelectorSlot[]
   tone?: SlotTone
   weapons: WeaponRecord[]
@@ -54,6 +60,7 @@ function getFirstOpenSlotId(slots: WeaponSelectorSlot[]): string | null {
 export function WeaponSelector({
   open,
   activeSlotId,
+  getSourceSlotElement,
   slots,
   tone = 'cyan',
   weapons,
@@ -66,6 +73,7 @@ export function WeaponSelector({
   const listboxId = useId()
   const dialogTitleId = useId()
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const dialogRef = useRef<HTMLDivElement | null>(null)
   const scrollPanelRef = useRef<HTMLUListElement | null>(null)
   const sectionRefMap = useRef(new Map<string, HTMLElement>())
   const [query, setQuery] = useState('')
@@ -75,6 +83,22 @@ export function WeaponSelector({
     damageType: 'ballistic' | 'energy'
   } | null>(null)
   const [assignmentError, setAssignmentError] = useState('')
+  const [overlaySlots, setOverlaySlots] = useState<
+    Array<{
+      id: string
+      left: number
+      top: number
+      width: number
+      height: number
+    }>
+  >([])
+  const [connectorLine, setConnectorLine] = useState<{
+    x1: number
+    y1: number
+    x2: number
+    y2: number
+    color: string
+  } | null>(null)
   const deferredQuery = useDeferredValue(query)
 
   const activeSlot = useMemo(
@@ -138,6 +162,17 @@ export function WeaponSelector({
   useEffect(() => {
     if (!open) return
 
+    const handlePointerDown = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null
+
+      if (!target) return
+      if (dialogRef.current?.contains(target)) return
+      if (target.closest('[data-alpha-weapon-slot="true"]')) return
+      if (target.closest('[data-alpha-modal-slot-overlay="true"]')) return
+
+      onClose()
+    }
+
     const handleWindowKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault()
@@ -145,9 +180,11 @@ export function WeaponSelector({
       }
     }
 
+    window.addEventListener('mousedown', handlePointerDown)
     window.addEventListener('keydown', handleWindowKeyDown)
 
     return () => {
+      window.removeEventListener('mousedown', handlePointerDown)
       window.removeEventListener('keydown', handleWindowKeyDown)
     }
   }, [onClose, open])
@@ -225,6 +262,77 @@ export function WeaponSelector({
     }
   }, [groupedWeapons, open])
 
+  useLayoutEffect(() => {
+    if (!open) return
+
+    const toneColorMap: Record<SlotTone, string> = {
+      cyan: 'rgb(103 232 249)',
+      violet: 'rgb(196 181 253)',
+      amber: 'rgb(252 211 77)',
+      emerald: 'rgb(110 231 183)',
+    }
+
+    const measureOverlay = () => {
+      const nextOverlaySlots = slots
+        .map((slot) => {
+          const sourceElement = getSourceSlotElement(slot.id)
+          if (!sourceElement) return null
+
+          const rect = sourceElement.getBoundingClientRect()
+          return {
+            id: slot.id,
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+          }
+        })
+        .filter(Boolean) as Array<{
+        id: string
+        left: number
+        top: number
+        width: number
+        height: number
+      }>
+
+      setOverlaySlots(nextOverlaySlots)
+
+      if (!activeSlotId) {
+        setConnectorLine(null)
+        return
+      }
+
+      const sourceSlotElement = getSourceSlotElement(activeSlotId)
+      const dialogElement = dialogRef.current
+
+      if (!sourceSlotElement || !dialogElement) {
+        setConnectorLine(null)
+        return
+      }
+
+      const sourceRect = sourceSlotElement.getBoundingClientRect()
+      const dialogRect = dialogElement.getBoundingClientRect()
+
+      setConnectorLine({
+        x1: sourceRect.right,
+        y1: sourceRect.top + sourceRect.height / 2,
+        x2: dialogRect.left,
+        y2: sourceRect.top + sourceRect.height / 2,
+        color: toneColorMap[activeTone],
+      })
+    }
+
+    const frame = window.requestAnimationFrame(measureOverlay)
+    window.addEventListener('resize', measureOverlay)
+    window.addEventListener('scroll', measureOverlay, true)
+
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('resize', measureOverlay)
+      window.removeEventListener('scroll', measureOverlay, true)
+    }
+  }, [activeSlotId, activeTone, getSourceSlotElement, open, slots])
+
   function handleAssignWeapon(weapon: WeaponRecord) {
     if (!activeSlot) {
       setAssignmentError(
@@ -273,8 +381,104 @@ export function WeaponSelector({
   if (!open) return null
 
   return createPortal(
-    <div className="alpha-modal-backdrop" onMouseDown={onClose}>
+    <div className="alpha-modal-backdrop">
+      {overlaySlots.map((slot) => {
+        const slotData = slots.find((entry) => entry.id === slot.id)
+        if (!slotData) return null
+
+        const isActive = slot.id === activeSlotId
+        const isFilled = Boolean(slotData.weaponKey)
+
+        return (
+          <button
+            key={`overlay-${slot.id}`}
+            type="button"
+            onClick={() => {
+              setAssignmentError('')
+              onActiveSlotChange(slot.id)
+            }}
+            className={[
+              'alpha-modal-slot-tab',
+              'alpha-modal-slot-tab-overlay',
+              isActive ? `alpha-modal-slot-tab-active-${slotData.tone}` : '',
+              isActive && !isFilled
+                ? `alpha-modal-slot-tab-next-${slotData.tone}`
+                : '',
+              isFilled
+                ? 'alpha-modal-slot-tab-filled'
+                : 'alpha-modal-slot-tab-empty',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            style={{
+              left: slot.left,
+              top: slot.top,
+              width: slot.width,
+              minHeight: slot.height,
+            }}
+            data-alpha-modal-slot-overlay="true"
+          >
+            <span className="alpha-modal-slot-top">
+              <span className="alpha-modal-slot-label">{slotData.label}</span>
+              {isActive ? (
+                <span
+                  className={[
+                    'alpha-modal-slot-badge',
+                    !slotData.weaponKey
+                      ? `alpha-modal-slot-badge-next-${slotData.tone}`
+                      : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                >
+                  {slotData.weaponKey ? 'Active' : 'Next'}
+                </span>
+              ) : null}
+            </span>
+
+            {slotData.weaponName ? (
+              <span className="alpha-modal-slot-row">
+                <span className="alpha-modal-slot-content">
+                  <span className="alpha-modal-slot-weapon">
+                    {slotData.weaponName}
+                  </span>
+                  {slotData.weaponClass && slotData.damageType ? (
+                    <span className="alpha-modal-slot-state">
+                      {formatWeaponTypeLabel({
+                        damageType: slotData.damageType,
+                        weaponClass: slotData.weaponClass,
+                      })}
+                    </span>
+                  ) : null}
+                </span>
+              </span>
+            ) : (
+              <span className="alpha-modal-slot-state">Empty slot</span>
+            )}
+          </button>
+        )
+      })}
+      {connectorLine ? (
+        <svg
+          className="alpha-modal-connector"
+          aria-hidden="true"
+          viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
+          preserveAspectRatio="none"
+        >
+          <line
+            x1={connectorLine.x1}
+            y1={connectorLine.y1}
+            x2={connectorLine.x2}
+            y2={connectorLine.y2}
+            stroke={connectorLine.color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            opacity="0.95"
+          />
+        </svg>
+      ) : null}
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={dialogTitleId}
@@ -298,7 +502,7 @@ export function WeaponSelector({
           </button>
         </div>
 
-        <div className="alpha-modal-slot-strip" role="tablist" aria-label="Weapon slots">
+        <div className="alpha-modal-slot-strip alpha-modal-slot-strip-hidden">
           {slots.map((slot) => {
             const isActive = slot.id === activeSlot?.id
             const isFilled = Boolean(slot.weaponKey)
@@ -307,8 +511,6 @@ export function WeaponSelector({
               <button
                 key={slot.id}
                 type="button"
-                role="tab"
-                aria-selected={isActive}
                 onClick={() => {
                   setAssignmentError('')
                   onActiveSlotChange(slot.id)
@@ -350,9 +552,12 @@ export function WeaponSelector({
                       <span className="alpha-modal-slot-weapon">
                         {slot.weaponName}
                       </span>
-                      {slot.weaponClass ? (
+                      {slot.weaponClass && slot.damageType ? (
                         <span className="alpha-modal-slot-state">
-                          {formatWeaponClassLabel(slot.weaponClass)}
+                          {formatWeaponTypeLabel({
+                            damageType: slot.damageType,
+                            weaponClass: slot.weaponClass,
+                          })}
                         </span>
                       ) : null}
                     </span>
@@ -546,7 +751,10 @@ export function WeaponSelector({
                                       {weapon.name}
                                     </span>
                                     <span className="alpha-weapon-select-meta">
-                                      {formatWeaponClassLabel(weapon.weaponClass)}
+                                      {formatWeaponTypeLabel({
+                                        damageType: weapon.damageType,
+                                        weaponClass: weapon.weaponClass,
+                                      })}
                                     </span>
                                     <dl className="alpha-weapon-select-stats">
                                       <div>

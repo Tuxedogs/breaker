@@ -1,7 +1,7 @@
 import { formatMetric } from '../lib/calculations'
 import {
-  formatWeaponClassLabel,
   formatWeaponSizeLabel,
+  formatWeaponTypeLabel,
 } from '../lib/weapons/normalize'
 import type { SlotTone, WeaponRecord } from '../types'
 
@@ -64,7 +64,11 @@ export function WeaponCard({
               {weapon.name}
             </h3>
             <p className="mt-1 text-xs uppercase tracking-[0.12em] text-slate-400">
-              {formatWeaponSizeLabel(weapon.size)} / {formatWeaponClassLabel(weapon.weaponClass)}
+              {formatWeaponSizeLabel(weapon.size)} /{' '}
+              {formatWeaponTypeLabel({
+                damageType: weapon.damageType,
+                weaponClass: weapon.weaponClass,
+              })}
             </p>
           </div>
         </button>
