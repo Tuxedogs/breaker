@@ -47,22 +47,6 @@ const bookmarkToneClassName = {
   energy: 'alpha-weapon-bookmark-energy',
 } as const
 
-function getNextOpenSlotId(
-  slots: WeaponSelectorSlot[],
-  currentSlotId: string
-): string | null {
-  const currentIndex = slots.findIndex((slot) => slot.id === currentSlotId)
-
-  if (currentIndex === -1) return null
-
-  const nextOpenSlot =
-    [...slots.slice(currentIndex + 1), ...slots.slice(0, currentIndex)].find(
-      (slot) => slot.weaponKey === null
-    ) ?? null
-
-  return nextOpenSlot?.id ?? null
-}
-
 function getFirstOpenSlotId(slots: WeaponSelectorSlot[]): string | null {
   return slots.find((slot) => slot.weaponKey === null)?.id ?? null
 }
@@ -108,7 +92,9 @@ export function WeaponSelector({
       groupWeaponRecords(
         filterWeaponRecords(
           weapons.filter((weapon) =>
-            activeSlot ? weapon.size === activeSlot.hardpointSize : true
+            activeSlot && activeSlot.hardpointSize > 0
+              ? weapon.size <= activeSlot.hardpointSize
+              : true
           ),
           deferredQuery
         )
@@ -249,7 +235,8 @@ export function WeaponSelector({
 
     onAssignWeapon(activeSlot.id, getWeaponKey(weapon))
     setAssignmentError('')
-    onActiveSlotChange(getNextOpenSlotId(slots, activeSlot.id))
+    onActiveSlotChange(activeSlot.id)
+    onClose()
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -429,7 +416,11 @@ export function WeaponSelector({
                 setActiveIndex(0)
               }}
               onKeyDown={handleKeyDown}
-              placeholder={activeSlot ? `Search S${activeSlot.hardpointSize} weapons...` : 'Search weapons...'}
+              placeholder={
+                activeSlot && activeSlot.hardpointSize > 0
+                  ? `Search up to S${activeSlot.hardpointSize} weapons...`
+                  : 'Search weapons...'
+              }
               className="alpha-input alpha-input-weapon-modal"
             />
 

@@ -7,6 +7,12 @@ export type ShipSizeGroup =
 export type Ship = {
   manufacturer: string
   name: string
+  imageSrc?: string
+  imageAlt?: string
+  scmSpeed?: number | null
+  navSpeed?: number | null
+  noiseCount?: number | null
+  decoyCount?: number | null
   sizeGroup: ShipSizeGroup
   health: number
   ballisticThreshold: number
@@ -54,7 +60,7 @@ export type ShipBalanceFieldChange = {
   direction: ShipBalanceFieldDirection
 }
 
-export type HardpointRole = 'pilot' | 'turret'
+export type HardpointRole = 'pilot' | 'turret' | 'weapon'
 
 export type ShipHardpointGroup = {
   id: string
@@ -70,20 +76,14 @@ export type AttackerHardpointProfile = {
   turretHardpointSize: number | null
 }
 
-export type AttackerHardpointProfile = {
-  shipName: string
-  pilotHardpointSize: number | null
-  turretHardpointSize: number | null
-}
-
-export type AttackerHardpointProfile = {
-  shipName: string
-  pilotHardpointSize: number | null
-  turretHardpointSize: number | null
-}
-
 export type WeaponDamageType = 'ballistic' | 'energy' | 'distortion'
 export type WeaponThresholdType = Extract<WeaponDamageType, 'ballistic' | 'energy'>
+export type ThresholdDataSourceKey =
+  | 'merged'
+  | 'manual'
+  | 'erkul-live'
+  | 'erkul-ptu'
+  | 'spviewer'
 export type WeaponSource =
   | 'manual'
   | 'erkul'
@@ -129,7 +129,7 @@ export type ShipSortKey =
 export type ComparisonSlot = {
   id: string
   hardpointSize: number
-  operator: 'pilot' | 'turret'
+  operator: HardpointRole
   weaponKey: string | null
   label?: string
   role?: HardpointRole

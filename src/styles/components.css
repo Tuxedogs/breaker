@@ -5,6 +5,10 @@
    ------------------------------------------------------------------ */
 
 @layer components {
+  :root {
+    --app-sticky-top: 4.75rem;
+  }
+
   .page-hero-shell {
     border: 1px solid rgb(255 255 255 / 0.15);
     border-radius: 1.5rem;
@@ -101,6 +105,54 @@
       inset 0 1px 0 rgb(255 255 255 / 0.12),
       0 8px 24px rgb(0 0 0 / 0.35);
     padding: 0.75rem;
+  }
+
+  .app-nav-band {
+    border-bottom: 1px solid rgb(150 206 255 / 0.18);
+    background:
+      linear-gradient(180deg, rgba(18, 26, 38, 0.65) 0%, rgba(8, 14, 26, 0.96) 100%),
+      rgb(6, 10, 22);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 8px 24px rgb(0 0 0 / 0.35);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .app-nav-shell {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .app-nav-link {
+    color: rgb(226 232 240);
+  }
+
+  .app-nav-link:hover {
+    color: rgb(248 250 252);
+  }
+
+  .app-nav-link--home-active {
+    color: rgb(255 255 255);
+  }
+
+  .app-nav-link--alpha:hover,
+  .app-nav-link--alpha-active {
+    color: rgb(147 197 253);
+  }
+
+  .app-nav-link--framework:hover,
+  .app-nav-link--framework-active {
+    color: rgb(110 231 183);
+  }
+
+  .app-nav-link--maps:hover,
+  .app-nav-link--maps-active {
+    color: rgb(252 211 77);
+  }
+
+  .app-nav-link--ships:hover,
+  .app-nav-link--ships-active {
+    color: rgb(252 211 77);
   }
 
   .page-kicker {

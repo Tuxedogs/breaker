@@ -55,6 +55,7 @@ export default function AppNav() {
   const isMapsRoute = location.pathname.startsWith("/maps");
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
   const isShipsRoute = location.pathname.startsWith("/ships");
+  const isHomeRoute = location.pathname === "/";
   const isFrameworkNavActive =
     location.pathname === "/framework" ||
     location.pathname === "/index" ||
@@ -101,36 +102,52 @@ export default function AppNav() {
   }
 
   const navItemClass =
-    "inline-flex h-11 items-center rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
+    "app-nav-link inline-flex h-9 items-center rounded-md px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70";
 
   const menuButtonClass =
-    "inline-flex h-11 items-center gap-1 rounded-md px-2 text-xs uppercase tracking-[0.14em] text-slate-200 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70 sm:text-sm";
+    "app-nav-link inline-flex h-9 items-center gap-1 rounded-md px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70";
 
   return (
-    <header className="pointer-events-auto fixed inset-x-0 top-0 z-30 px-4 pb-3 pt-5 opacity-100 transition-opacity">
-      <nav className="px-3 py-2" aria-label="Primary">
+    <header className="app-nav-band pointer-events-auto fixed inset-x-0 top-0 z-30 px-4 pb-2 pt-3 opacity-100 transition-opacity">
+      <nav className="app-nav-shell" aria-label="Primary">
         <div className="flex items-center justify-between">
-          <NavLink to="/" onClick={closeAllMenus} className="inline-flex h-11 items-center gap-3 rounded-md px-2 text-white">
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/45 bg-white/10">
+          <NavLink to="/" onClick={closeAllMenus} className="inline-flex h-9 items-center gap-2 rounded-md px-2 text-white">
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/45 bg-white/10">
               <span className="h-2 w-2 rounded-full bg-white" />
             </span>
-            <span className="title-font text-sm tracking-[0.2em] sm:text-base">ARES</span>
+            <span className="title-font text-xs tracking-[0.18em] sm:text-sm">ARES</span>
           </NavLink>
 
           <div className="hidden items-center gap-1 lg:flex">
             <NavLink
               to="/"
               onClick={closeAllMenus}
-              className={({ isActive }) => [navItemClass, isActive ? "text-white" : ""].join(" ")}
+              className={[navItemClass, isHomeRoute ? "app-nav-link--home-active" : ""].join(" ")}
               aria-label="Home"
             >
               <HomeIcon />
             </NavLink>
 
             <NavLink
+              to="/tools/alpha-threshold"
+              onClick={closeAllMenus}
+              className={[
+                navItemClass,
+                "app-nav-link--alpha",
+                isAlphaThresholdRoute ? "app-nav-link--alpha-active" : "",
+              ].join(" ")}
+            >
+              Alha Matrix
+            </NavLink>
+
+            <NavLink
               to="/framework"
               onClick={closeAllMenus}
-              className={({ isActive }) => [navItemClass, isActive || isFrameworkNavActive ? "text-emerald-300" : "hover:text-emerald-300"].join(" ")}
+              className={[
+                navItemClass,
+                "app-nav-link--framework",
+                isFrameworkNavActive ? "app-nav-link--framework-active" : "",
+              ].join(" ")}
             >
               Framework
             </NavLink>
@@ -138,23 +155,23 @@ export default function AppNav() {
             <NavLink
               to="/maps"
               onClick={closeAllMenus}
-              className={({ isActive }) => [navItemClass, isActive || isMapsRoute ? "text-amber-300" : "hover:text-amber-300"].join(" ")}
+              className={[
+                navItemClass,
+                "app-nav-link--maps",
+                isMapsRoute ? "app-nav-link--maps-active" : "",
+              ].join(" ")}
             >
               Maps
-            </NavLink>
-
-            <NavLink
-              to="/tools/alpha-threshold"
-              onClick={closeAllMenus}
-              className={({ isActive }) => [navItemClass, isActive || isAlphaThresholdRoute ? "text-blue-300" : "hover:text-blue-300"].join(" ")}
-            >
-              Alpha Deflection Matrix
             </NavLink>
 
             <div className="relative" onMouseEnter={() => openDesktopMenu("ships")} onMouseLeave={closeDesktopMenuSoon}>
               <button
                 type="button"
-                className={[menuButtonClass, desktopMenu === "ships" || isShipsRoute ? "text-amber-300" : "hover:text-amber-300"].join(" ")}
+                className={[
+                  menuButtonClass,
+                  "app-nav-link--ships",
+                  desktopMenu === "ships" || isShipsRoute ? "app-nav-link--ships-active" : "",
+                ].join(" ")}
                 aria-expanded={desktopMenu === "ships"}
                 aria-controls="desktop-ships-menu"
                 onClick={() => toggleDesktopMenu("ships")}
@@ -177,7 +194,7 @@ export default function AppNav() {
                     onClick={closeAllMenus}
                     className={({ isActive }) =>
                       [
-                        "flex h-11 items-center rounded px-2 text-xs uppercase tracking-[0.14em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/60 sm:text-sm",
+                        "flex h-9 items-center rounded px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/60",
                         isActive ? "text-amber-300" : "text-slate-200 hover:bg-amber-300/10 hover:text-amber-300",
                       ].join(" ")
                     }
@@ -193,12 +210,10 @@ export default function AppNav() {
             <NavLink
               to="/"
               onClick={closeAllMenus}
-              className={({ isActive }) =>
-                [
-                  "inline-flex h-11 w-11 items-center justify-center rounded-md text-slate-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70",
-                  isActive ? "text-white" : "",
-                ].join(" ")
-              }
+              className={[
+                "inline-flex h-11 w-11 items-center justify-center rounded-md text-slate-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70",
+                isHomeRoute ? "text-white" : "",
+              ].join(" ")}
               aria-label="Home"
             >
               <HomeIcon />
@@ -226,14 +241,23 @@ export default function AppNav() {
         >
           <div className="space-y-1 rounded-lg border border-white/15 bg-black/40 p-2">
             <NavLink
+              to="/tools/alpha-threshold"
+              onClick={closeAllMenus}
+              className={[
+                "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
+                isAlphaThresholdRoute ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
+              ].join(" ")}
+            >
+              Alha Matrix
+            </NavLink>
+
+            <NavLink
               to="/framework"
               onClick={closeAllMenus}
-              className={({ isActive }) =>
-                [
-                  "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                  isActive || isFrameworkNavActive ? "bg-emerald-300/10 text-emerald-300" : "text-slate-100 hover:bg-white/5",
-                ].join(" ")
-              }
+              className={[
+                "flex min-h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
+                isFrameworkNavActive ? "bg-emerald-300/10 text-emerald-300" : "text-slate-100 hover:bg-white/5",
+              ].join(" ")}
             >
               Framework
             </NavLink>
@@ -241,27 +265,12 @@ export default function AppNav() {
             <NavLink
               to="/maps"
               onClick={closeAllMenus}
-              className={({ isActive }) =>
-                [
-                  "flex min-h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                  isActive || isMapsRoute ? "bg-amber-300/10 text-amber-300" : "text-slate-100 hover:bg-white/5",
-                ].join(" ")
-              }
+              className={[
+                "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
+                isMapsRoute ? "bg-amber-300/10 text-amber-300" : "text-slate-100 hover:bg-white/5",
+              ].join(" ")}
             >
               Maps
-            </NavLink>
-
-            <NavLink
-              to="/tools/alpha-threshold"
-              onClick={closeAllMenus}
-              className={({ isActive }) =>
-                [
-                  "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                  isActive || isAlphaThresholdRoute ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
-                ].join(" ")
-              }
-            >
-              Alpha Deflection Matrix
             </NavLink>
 
             <div className="rounded-md border border-white/10">

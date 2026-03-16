@@ -69,7 +69,7 @@
   }
 
   .alpha-tool-panel-sticky {
-    @apply lg:sticky lg:top-15 lg:z-20;
+    position: static;
   }
 
   /* Alpha Threshold: sticky ship selection rail that scopes the result set. */
@@ -137,6 +137,14 @@
   @media (min-width: 640px) {
     .alpha-sidebar-inner {
       padding: 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .alpha-tool-panel-sticky {
+      position: sticky;
+      top: var(--app-sticky-top);
+      z-index: 20;
     }
   }
 
