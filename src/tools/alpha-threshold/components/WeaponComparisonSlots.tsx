@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { getWeaponKey } from '../lib/calculations'
 import { WeaponCard } from './WeaponCard'
 import { WeaponSelector } from './WeaponSelector'
@@ -29,6 +29,7 @@ export function WeaponComparisonSlots({
 }: Props) {
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const slotElementRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   const slotEntries = useMemo(
     () =>
@@ -67,6 +68,15 @@ export function WeaponComparisonSlots({
     setModalOpen(true)
   }
 
+  function handleSlotSelect(slotId: string) {
+    if (modalOpen) {
+      setActiveSlotId(slotId)
+      return
+    }
+
+    openModal(slotId)
+  }
+
   if (slotEntries.length === 0) {
     return (
       <section className="alpha-slot-panel p-4 text-sm text-slate-300">
@@ -79,33 +89,59 @@ export function WeaponComparisonSlots({
     <>
       <div className="grid gap-3">
         {slotEntries.map(({ slot, slotLabel, tone, selectedWeapon }) => {
+          const isActive = modalOpen && slot.id === activeSlotId
+          const wrapperClassName = [
+            'alpha-weapon-slot-bridge',
+            isActive ? 'alpha-weapon-slot-bridge-active' : '',
+            isActive ? `alpha-weapon-slot-bridge-active-${tone}` : '',
+          ]
+            .filter(Boolean)
+            .join(' ')
+
           if (selectedWeapon) {
             return (
-              <WeaponCard
+              <div
                 key={slot.id}
-                label={slotLabel}
-                tone={tone}
-                weapon={selectedWeapon}
-                onSelect={() => openModal(slot.id)}
-                onClear={() => onChange(slot.id, null)}
-              />
+                ref={(element) => {
+                  slotElementRefs.current[slot.id] = element
+                }}
+                className={wrapperClassName}
+                data-alpha-weapon-slot="true"
+              >
+                <WeaponCard
+                  label={slotLabel}
+                  tone={tone}
+                  weapon={selectedWeapon}
+                  onSelect={() => handleSlotSelect(slot.id)}
+                  onClear={() => onChange(slot.id, null)}
+                />
+              </div>
             )
           }
 
           return (
-            <section key={slot.id} className="alpha-slot-panel">
-              <button
-                type="button"
-                onClick={() => openModal(slot.id)}
-                className="alpha-slot-launch"
-              >
-                <span className="alpha-control-label">{slotLabel}</span>
-                <span className="alpha-slot-launch-title">Select weapon</span>
-                <span className="alpha-slot-launch-copy">
-                  Open the selector to assign a weapon to {slotLabel}.
-                </span>
-              </button>
-            </section>
+            <div
+              key={slot.id}
+              ref={(element) => {
+                slotElementRefs.current[slot.id] = element
+              }}
+              className={wrapperClassName}
+              data-alpha-weapon-slot="true"
+            >
+              <section className="alpha-slot-panel">
+                <button
+                  type="button"
+                  onClick={() => handleSlotSelect(slot.id)}
+                  className="alpha-slot-launch"
+                >
+                  <span className="alpha-control-label">{slotLabel}</span>
+                  <span className="alpha-slot-launch-title">Select weapon</span>
+                  <span className="alpha-slot-launch-copy">
+                    Open the selector to assign a weapon to {slotLabel}.
+                  </span>
+                </button>
+              </section>
+            </div>
           )
         })}
       </div>
@@ -120,9 +156,13 @@ export function WeaponComparisonSlots({
             weaponKey: slot.weaponKey,
             weaponName: selectedWeapon?.name ?? null,
             weaponClass: selectedWeapon?.weaponClass ?? null,
+            damageType: selectedWeapon?.damageType ?? null,
             hardpointSize: slot.hardpointSize,
           }))}
           activeSlotId={activeSlotId}
+          getSourceSlotElement={(slotId) =>
+            slotElementRefs.current[slotId] ?? null
+          }
           weapons={compatibleWeapons}
           onActiveSlotChange={setActiveSlotId}
           onAssignWeapon={(slotId, weaponKey) => onChange(slotId, weaponKey)}

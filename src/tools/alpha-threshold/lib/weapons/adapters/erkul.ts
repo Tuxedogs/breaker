@@ -11,6 +11,7 @@ type ErkulWeaponSeed = {
   name?: string
   size?: string | number
   type?: WeaponRecord['damageType']
+  weaponClass?: string
   alpha?: number | null
   burstDps?: number | null
   projectileSpeed?: number | null
@@ -72,7 +73,12 @@ export function normalizeErkulWeapon(seed: ErkulWeaponSeed): WeaponRecord {
   const burstDps = seed.burstDps ?? (fireRate > 0 ? alpha * (fireRate / 60) : null)
   const projectileSpeedValue = seed.projectileSpeed ?? asNumber(asRecord(asRecord(rawData?.ammo)?.data)?.speed, 0)
   const projectileSpeed = projectileSpeedValue > 0 ? projectileSpeedValue : null
-  const group = typeof rawData?.group === 'string' ? rawData.group : ''
+  const group =
+    typeof seed.weaponClass === 'string' && seed.weaponClass.trim()
+      ? seed.weaponClass
+      : typeof rawData?.group === 'string'
+        ? rawData.group
+        : ''
   const weaponClass = group ? normalizeWeaponClass(group) : inferWeaponClass(name)
 
   return {

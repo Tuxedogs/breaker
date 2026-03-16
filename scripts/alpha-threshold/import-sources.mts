@@ -187,6 +187,7 @@ function toWeaponSeed(record: WeaponRecord) {
     name: record.name,
     size: `S${record.size}`,
     type: record.damageType,
+    weaponClass: record.weaponClass,
     alpha: record.alpha,
     burstDps: record.burstDps,
     projectileSpeed: record.projectileSpeed,
