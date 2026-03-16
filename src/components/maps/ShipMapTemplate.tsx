@@ -1670,9 +1670,9 @@ export default function ShipMapTemplate({
                 cameraRef.current = camera as PerspectiveCamera;
               }}
             > {/* Color of sun below */}
-              <ambientLight intensity={1.15} color="#d7ecff" />
-              <directionalLight position={[18, 24, 20]} intensity={6} color="#586781b6" />
-              <directionalLight position={[-30, 9, -20]} intensity={6.4} color="#8997a7" />
+              <ambientLight intensity={8} color="#b6b6b6" />
+              <directionalLight position={[18, 24, 20]} intensity={4} color="#b6b6b6" />
+              <directionalLight position={[-30, 9, -20]} intensity={8} color="#b6b6b6" />
               {modelScene ? (
                 <>
                   <FitModelMesh
