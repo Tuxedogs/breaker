@@ -1,8 +1,12 @@
 import type {
+  ArmorStatePercent,
   AxisScaleMode,
+  HeatmapTraceModel,
+  HeatmapTraceStatus,
   SelectedShipResult,
   SelectedWeaponComparison,
   Ship,
+  ShipHeatmapModel,
   ShipComparisonResult,
   ShipSizeGroup,
   ShipSizeGroupOption,
@@ -32,8 +36,179 @@ export function getThresholdForWeaponType(
     : ship.energyThreshold
 }
 
-export function canDamageHull(weaponAlpha: number, threshold: number): boolean {
-  return weaponAlpha >= threshold
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value))
+}
+
+export function getMatchedThresholdForWeapon(
+  ship: Ship,
+  selectedWeapon: SelectedWeaponComparison
+) {
+  const matchedDamageType = selectedWeapon.weapon.damageType as WeaponThresholdType
+  const baseThreshold = getThresholdForWeaponType(ship, matchedDamageType)
+
+  return {
+    matchedDamageType,
+    baseThreshold,
+  }
+}
+
+export function getPenetrationStartRatio(
+  ship: Ship,
+  selectedWeapon: SelectedWeaponComparison
+) {
+  const { baseThreshold } = getMatchedThresholdForWeapon(ship, selectedWeapon)
+  const weaponAlpha = selectedWeapon.weapon.alpha ?? 0
+
+  if (baseThreshold <= 0) return 1
+  if (weaponAlpha <= 0) return 0
+
+  return clamp(weaponAlpha / baseThreshold, 0, 1)
+}
+
+export function getEffectiveThresholdAtArmorRatio(
+  ship: Ship,
+  selectedWeapon: SelectedWeaponComparison,
+  armorRatio: number
+) {
+  const { baseThreshold } = getMatchedThresholdForWeapon(ship, selectedWeapon)
+  return baseThreshold * clamp(armorRatio, 0, 1)
+}
+
+function getHeatmapTraceStatus(
+  penetrationStartArmorRatio: number,
+  alwaysDeflects: boolean,
+  alwaysPenetrates: boolean
+): HeatmapTraceStatus {
+  if (alwaysDeflects) return 'always-deflects'
+  if (alwaysPenetrates) return 'always-penetrates'
+  if (penetrationStartArmorRatio >= 0.7) return 'penetrates-early'
+  return 'crosses-late'
+}
+
+export function buildHeatmapTraceModel(
+  ship: Ship,
+  selectedWeapon: SelectedWeaponComparison
+): HeatmapTraceModel {
+  const { matchedDamageType, baseThreshold } = getMatchedThresholdForWeapon(
+    ship,
+    selectedWeapon
+  )
+  const weaponAlpha = selectedWeapon.weapon.alpha ?? 0
+  const penetrationStartArmorRatio = getPenetrationStartRatio(ship, selectedWeapon)
+  const penetrationStartArmorPercent = penetrationStartArmorRatio * 100
+  const penetrationStartX = 1 - penetrationStartArmorRatio
+  const effectiveThresholdAtCrossover = getEffectiveThresholdAtArmorRatio(
+    ship,
+    selectedWeapon,
+    penetrationStartArmorRatio
+  )
+  const overUnderDeltaAtFullArmor = weaponAlpha - baseThreshold
+  const alwaysDeflects = weaponAlpha <= 0
+  const alwaysPenetrates = baseThreshold <= 0 || weaponAlpha >= baseThreshold
+  const transitionWidth = 0.04
+  const nearCrossoverBandStart = clamp(
+    penetrationStartX - transitionWidth,
+    0,
+    1
+  )
+  const nearCrossoverBandEnd = clamp(
+    penetrationStartX + transitionWidth,
+    0,
+    1
+  )
+
+  return {
+    weapon: selectedWeapon,
+    matchedDamageType,
+    baseThreshold,
+    weaponAlpha,
+    penetrationStartArmorRatio,
+    penetrationStartArmorPercent,
+    penetrationStartX,
+    effectiveThresholdAtCrossover,
+    overUnderDeltaAtFullArmor,
+    alwaysDeflects,
+    alwaysPenetrates,
+    nearCrossoverBandStart,
+    nearCrossoverBandEnd,
+    status: getHeatmapTraceStatus(
+      penetrationStartArmorRatio,
+      alwaysDeflects,
+      alwaysPenetrates
+    ),
+  }
+}
+
+export function buildShipHeatmapModel(
+  ship: Ship,
+  selectedWeapons: SelectedWeaponComparison[]
+): ShipHeatmapModel {
+  const traces = selectedWeapons.map((selectedWeapon) =>
+    buildHeatmapTraceModel(ship, selectedWeapon)
+  )
+
+  return {
+    ship,
+    lanes: {
+      ballistic: {
+        lane: 'ballistic',
+        label: 'Ballistic Lane',
+        traces: traces.filter((trace) => trace.matchedDamageType === 'ballistic'),
+        threshold: ship.ballisticThreshold,
+      },
+      energy: {
+        lane: 'energy',
+        label: 'Energy Lane',
+        traces: traces.filter((trace) => trace.matchedDamageType === 'energy'),
+        threshold: ship.energyThreshold,
+      },
+    },
+  }
+}
+
+export function calculateThresholdMargin(
+  weaponAlpha: number,
+  baseThreshold: number,
+  armorPercent: number = 100
+) {
+  const armorRatio = armorPercent / 100
+  const effectiveThreshold = baseThreshold * armorRatio
+  const margin = weaponAlpha - effectiveThreshold
+
+  return {
+    margin,
+    penetrates: margin >= 0,
+    effectiveThreshold,
+  }
+}
+
+export function evaluateThresholdCell(
+  weaponAlpha: number,
+  baseThreshold: number,
+  armorPercent: number
+) {
+  const { margin, penetrates, effectiveThreshold } = calculateThresholdMargin(
+    weaponAlpha,
+    baseThreshold,
+    armorPercent
+  )
+
+  return {
+    margin,
+    penetrates,
+    effectiveThreshold,
+    ratio:
+      effectiveThreshold > 0
+        ? weaponAlpha / effectiveThreshold
+        : weaponAlpha > 0
+          ? Number.POSITIVE_INFINITY
+          : 0,
+  }
+}
+
+export function buildArmorSteps() {
+  return Array.from({ length: 101 }, (_, index) => 100 - index)
 }
 
 export function formatMetric(value: number): string {
@@ -113,11 +288,17 @@ export function getAxisPercent(value: number, axisMax: number): number {
 export function buildShipComparisonResult(
   ship: Ship,
   selectedWeapon: SelectedWeaponComparison,
-  axisMaxByType: Record<WeaponThresholdType, number>
+  axisMaxByType: Record<WeaponThresholdType, number>,
+  armorPercent: number = 100
 ): ShipComparisonResult {
   const thresholdType = selectedWeapon.weapon.damageType as WeaponThresholdType
   const weaponAlpha = selectedWeapon.weapon.alpha ?? 0
   const threshold = getThresholdForWeaponType(ship, thresholdType)
+  const { margin, penetrates, effectiveThreshold } = calculateThresholdMargin(
+    weaponAlpha,
+    threshold,
+    armorPercent
+  )
 
   return {
     slotId: selectedWeapon.slotId,
@@ -126,7 +307,9 @@ export function buildShipComparisonResult(
     weapon: selectedWeapon.weapon,
     thresholdType,
     threshold,
-    passes: canDamageHull(weaponAlpha, threshold),
+    effectiveThreshold,
+    margin,
+    passes: penetrates,
     overflow: weaponAlpha > axisMaxByType[thresholdType],
   }
 }
@@ -134,10 +317,11 @@ export function buildShipComparisonResult(
 export function buildSelectedShipResult(
   ship: Ship,
   selectedWeapons: SelectedWeaponComparison[],
-  axisMaxByType: Record<WeaponThresholdType, number>
+  axisMaxByType: Record<WeaponThresholdType, number>,
+  armorPercent: ArmorStatePercent = 100
 ): SelectedShipResult {
   const results = selectedWeapons.map((selectedWeapon) =>
-    buildShipComparisonResult(ship, selectedWeapon, axisMaxByType)
+    buildShipComparisonResult(ship, selectedWeapon, axisMaxByType, armorPercent)
   )
   const passingCount = results.filter((result) => result.passes).length
 
@@ -148,7 +332,35 @@ export function buildSelectedShipResult(
     blockedCount: results.length - passingCount,
     hasSelections: results.length > 0,
     axisMaxByType,
+    armorPercent,
   }
+}
+
+export function buildShipWeaponMatrix(
+  ships: Ship[],
+  weapons: SelectedWeaponComparison[],
+  armorPercent: ArmorStatePercent = 100
+) {
+  return ships.map((ship) => ({
+    ship,
+    weapons: weapons.map((weapon) => {
+      const thresholdType = weapon.weapon.damageType as WeaponThresholdType
+      const threshold = getThresholdForWeaponType(ship, thresholdType)
+      const { margin, penetrates, effectiveThreshold } = calculateThresholdMargin(
+        weapon.weapon.alpha ?? 0,
+        threshold,
+        armorPercent
+      )
+
+      return {
+        weapon,
+        threshold,
+        effectiveThreshold,
+        margin,
+        penetrates,
+      }
+    }),
+  }))
 }
 
 export function buildAxisMaxByType(
