@@ -139,6 +139,7 @@ export type ComparisonSlot = {
 
 export type SlotTone = 'cyan' | 'violet' | 'amber' | 'emerald'
 export type AxisScaleMode = 'global' | 'by-size' | 'per-row'
+export type ArmorStatePercent = 25 | 50 | 75 | 100
 
 export type SelectedWeaponComparison = {
   slotId: string
@@ -154,6 +155,8 @@ export type ShipComparisonResult = {
   weapon: WeaponRecord
   thresholdType: WeaponThresholdType
   threshold: number
+  effectiveThreshold: number
+  margin: number
   passes: boolean
   overflow: boolean
 }
@@ -165,6 +168,42 @@ export type SelectedShipResult = {
   blockedCount: number
   hasSelections: boolean
   axisMaxByType: Record<WeaponThresholdType, number>
+  armorPercent: ArmorStatePercent
+}
+
+export type HeatmapTraceStatus =
+  | 'always-deflects'
+  | 'crosses-late'
+  | 'penetrates-early'
+  | 'always-penetrates'
+
+export type HeatmapTraceModel = {
+  weapon: SelectedWeaponComparison
+  matchedDamageType: WeaponThresholdType
+  baseThreshold: number
+  weaponAlpha: number
+  penetrationStartArmorRatio: number
+  penetrationStartArmorPercent: number
+  penetrationStartX: number
+  effectiveThresholdAtCrossover: number
+  overUnderDeltaAtFullArmor: number
+  alwaysDeflects: boolean
+  alwaysPenetrates: boolean
+  nearCrossoverBandStart: number
+  nearCrossoverBandEnd: number
+  status: HeatmapTraceStatus
+}
+
+export type ShipHeatmapLaneModel = {
+  lane: WeaponThresholdType
+  label: string
+  traces: HeatmapTraceModel[]
+  threshold: number
+}
+
+export type ShipHeatmapModel = {
+  ship: Ship
+  lanes: Record<WeaponThresholdType, ShipHeatmapLaneModel>
 }
 
 export type ShipSizeGroupOption = {

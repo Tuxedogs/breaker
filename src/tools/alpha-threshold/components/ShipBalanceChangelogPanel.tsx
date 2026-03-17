@@ -5,9 +5,10 @@ import type { ShipBalanceChangeEntry } from '../types'
 
 type Props = {
   entries: ShipBalanceChangeEntry[]
+  compact?: boolean
 }
 
-export function ShipBalanceChangelogPanel({ entries }: Props) {
+export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
@@ -47,7 +48,10 @@ export function ShipBalanceChangelogPanel({ entries }: Props) {
     <>
       <button
         type="button"
-        className="alpha-balance-trigger"
+        className={[
+          'alpha-balance-trigger',
+          compact ? 'alpha-balance-trigger-compact' : '',
+        ].filter(Boolean).join(' ')}
         onClick={() => setOpen(true)}
         aria-label="Open ship balance changelog"
         title="Ship Balance Changelog"
@@ -59,7 +63,9 @@ export function ShipBalanceChangelogPanel({ entries }: Props) {
             fill="currentColor"
           />
         </svg>
-        <span className="alpha-balance-trigger-label">Stat Changelog</span>
+        <span className="alpha-balance-trigger-label">
+          {compact ? 'Changelog' : 'Stat Changelog'}
+        </span>
       </button>
 
       {open
