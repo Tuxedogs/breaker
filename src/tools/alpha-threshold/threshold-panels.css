@@ -210,48 +210,609 @@
   color: rgb(254 205 211);
 }
 
+.alpha-tool-route .alpha-threshold-rail,
+.alpha-tool-route .alpha-threshold-board {
+  border-radius: 1.5rem;
+}
+
+.alpha-tool-route .alpha-threshold-rail {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding: 1rem;
+}
+
+.alpha-tool-route .alpha-threshold-rail-head,
+.alpha-tool-route .alpha-threshold-board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.alpha-tool-route .alpha-threshold-rail-head-action {
+  margin-left: auto;
+}
+
+.alpha-tool-route .alpha-threshold-rail-section {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  padding: 0.9rem;
+}
+
+.alpha-tool-route .alpha-threshold-rail-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.alpha-tool-route .alpha-threshold-rail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-card {
+  position: relative;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-button {
+  display: grid;
+  gap: 0.2rem;
+  text-align: left;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  padding: 0.75rem;
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-name {
+  font-size: 1rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-meta {
+  font-size: 0.75rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-clear {
+  justify-self: start;
+  font-size: 0.75rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-threshold-board {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.alpha-tool-route .alpha-threshold-board-empty {
+  place-items: center;
+}
+
+.alpha-tool-route .alpha-threshold-board-scroll {
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.alpha-tool-route .alpha-threshold-board-columns {
+  display: grid;
+  gap: 1rem;
+  min-width: min(100%, 72rem);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-column {
+  display: grid;
+  gap: 1rem;
+  min-width: 18rem;
+  border-radius: 1.35rem;
+  padding: 1rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-head {
+  display: grid;
+  gap: 0.85rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding-bottom: 0.9rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-pills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding-bottom: 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgb(226 232 240);
+  text-shadow: 0 1px 0 rgb(2 6 23 / 0.75);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis > span:nth-child(2),
+.alpha-tool-route .alpha-heatmap-ship-axis > span:nth-child(3),
+.alpha-tool-route .alpha-heatmap-ship-axis > span:nth-child(4) {
+  text-align: center;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis > span:last-child {
+  text-align: right;
+}
+
+.alpha-tool-route .alpha-ship-header-pill {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  padding: 0.45rem 0.55rem;
+  font-size: 0.72rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-ship-header-pill > strong {
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-lanes {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent 100%),
+    rgb(5 9 18 / 0.85);
+  background-size: 12.5% 100%, 100% 100%, auto;
+  padding: 0.85rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-kicker {
+  margin: 0;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-threshold {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-traces {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-empty {
+  border: 1px dashed rgb(255 255 255 / 0.08);
+  padding: 0.8rem;
+  font-size: 0.82rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-trace {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-slot {
+  margin: 0;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-name {
+  margin: 0.22rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-meta {
+  margin: 0;
+  font-size: 0.76rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell {
+  position: relative;
+  min-height: 2.35rem;
+  overflow: visible;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(8 12 20 / 0.9);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect,
+.alpha-tool-route .alpha-heatmap-trace-transition,
+.alpha-tool-route .alpha-heatmap-trace-damage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect {
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(56 189 248 / 0.06), rgb(15 23 42 / 0.78));
+}
+
+.alpha-tool-route .alpha-heatmap-trace-transition {
+  background: linear-gradient(90deg, rgb(245 158 11 / 0.4), rgb(251 191 36 / 0.72));
+}
+
+.alpha-tool-route .alpha-heatmap-trace-damage {
+  background:
+    linear-gradient(90deg, rgb(251 146 60 / 0.78), rgb(239 68 68 / 0.88));
+}
+
+.alpha-tool-route .alpha-penetration-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 0;
+  transform: translateX(-50%);
+}
+
+.alpha-tool-route .alpha-penetration-marker-stick {
+  position: absolute;
+  top: -0.45rem;
+  bottom: -0.35rem;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-penetration-marker-dot {
+  position: absolute;
+  top: -0.6rem;
+  left: 50%;
+  width: 0.65rem;
+  height: 0.65rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(248 250 252);
+  box-shadow: 0 0 0 2px rgb(8 12 20 / 0.88);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-anchor {
+  position: relative;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.85rem);
+  z-index: 10;
+  width: min(18rem, calc(100vw - 2rem));
+  transform: translateX(-50%) translateY(0.25rem);
+  opacity: 0;
+  pointer-events: none;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 24%),
+    linear-gradient(180deg, rgb(8 12 20 / 0.98), rgb(4 7 14 / 0.99));
+  padding: 0.8rem;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-anchor:hover .alpha-heatmap-tooltip,
+.alpha-tool-route .alpha-heatmap-tooltip-anchor:focus-within .alpha-heatmap-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-title {
+  margin: 0 0 0.55rem;
+  font-size: 0.9rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-list {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  font-size: 0.76rem;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-row > dt {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-row > dd {
+  margin: 0;
+  color: rgb(248 250 252);
+  text-align: right;
+}
+
+.alpha-tool-route .alpha-heatmap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  font-size: 0.74rem;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch {
+  height: 0.7rem;
+  width: 1.2rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-deflect {
+  background: linear-gradient(90deg, rgb(56 189 248 / 0.06), rgb(15 23 42 / 0.78));
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-transition {
+  background: linear-gradient(90deg, rgb(245 158 11 / 0.4), rgb(251 191 36 / 0.72));
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-damage {
+  background: linear-gradient(90deg, rgb(251 146 60 / 0.78), rgb(239 68 68 / 0.88));
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker {
+  position: relative;
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgb(248 250 252);
+}
+
+@media (min-width: 768px) {
+  .alpha-tool-route .alpha-threshold-board-columns {
+    grid-template-columns: repeat(var(--alpha-threshold-columns, 1), minmax(0, 1fr));
+  }
+}
+
 .alpha-tool-route .alpha-heatmap-head {
   border-bottom: 1px solid rgb(255 255 255 / 0.08);
   padding: 1.25rem;
 }
 
 .alpha-tool-route .alpha-heatmap-grid-wrap {
-  overflow-x: auto;
   padding: 1.25rem;
 }
 
-.alpha-tool-route .alpha-heatmap-matrix {
+.alpha-tool-route .alpha-ship-heatmap-stack {
   display: grid;
-  min-width: max-content;
-  gap: 0.55rem;
-  grid-template-columns: minmax(14rem, 18rem) repeat(var(--alpha-heatmap-columns, 1), minmax(10rem, 1fr));
-  align-items: stretch;
+  gap: 1rem;
 }
 
-.alpha-tool-route .alpha-heatmap-matrix-corner,
-.alpha-tool-route .alpha-heatmap-matrix-weapon,
-.alpha-tool-route .alpha-heatmap-matrix-ship,
-.alpha-tool-route .alpha-heatmap-matrix-cell {
+.alpha-tool-route .alpha-ship-heatmap-panel {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.02);
+  padding: 1rem;
+}
+
+.alpha-tool-route .alpha-ship-heatmap-card,
+.alpha-tool-route .alpha-armor-curve-weapon-card,
+.alpha-tool-route .alpha-armor-curve-grid {
   border: 1px solid rgb(255 255 255 / 0.08);
   background: rgb(255 255 255 / 0.025);
   border-radius: 1rem;
 }
 
-.alpha-tool-route .alpha-heatmap-matrix-corner {
-  background: transparent;
-  border-color: transparent;
+.alpha-tool-route .alpha-ship-heatmap-card {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1rem;
 }
 
-.alpha-tool-route .alpha-heatmap-matrix-weapon,
-.alpha-tool-route .alpha-heatmap-matrix-ship {
+.alpha-tool-route .alpha-ship-heatmap-stats {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.alpha-tool-route .alpha-ship-heatmap-stat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.alpha-tool-route .alpha-ship-heatmap-stat > dt {
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-ship-heatmap-stat > dd {
+  margin: 0;
+  font-weight: 600;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-armor-curve-grid {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.alpha-tool-route .alpha-armor-curve-head {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.alpha-tool-route .alpha-armor-curve-axis {
+  position: relative;
+  height: 1.5rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-armor-curve-axis-marker {
+  position: absolute;
+  top: 0.15rem;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgb(226 232 240);
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgb(2 6 23 / 0.8);
+}
+
+.alpha-tool-route .alpha-armor-curve-axis-marker::before {
+  content: '';
+  position: absolute;
+  top: -0.2rem;
+  left: 50%;
+  width: 1px;
+  height: 0.5rem;
+  transform: translateX(-50%);
+  background: rgb(148 163 184 / 0.55);
+}
+
+.alpha-tool-route .alpha-armor-curve-axis-marker:first-child {
+  transform: translateX(0);
+}
+
+.alpha-tool-route .alpha-armor-curve-axis-marker:last-child {
+  transform: translateX(-100%);
+}
+
+.alpha-tool-route .alpha-armor-curve-rows {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.alpha-tool-route .alpha-armor-curve-row {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.alpha-tool-route .alpha-armor-curve-weapon-card {
+  display: flex;
+  min-height: 5.5rem;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 0.85rem 0.95rem;
 }
 
-.alpha-tool-route .alpha-heatmap-matrix-weapon {
-  display: flex;
-  min-height: 6.75rem;
-  flex-direction: column;
-  justify-content: space-between;
+.alpha-tool-route .alpha-armor-curve-track-wrap {
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-armor-curve-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--alpha-armor-columns, 101), minmax(0, 1fr));
+  gap: 1px;
+  min-width: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.08);
+  padding: 1px;
+}
+
+.alpha-tool-route .alpha-armor-curve-cell {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  background: rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-curve-boundary {
+  position: absolute;
+  top: -0.4rem;
+  bottom: 0;
+  z-index: 2;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgb(248 250 252 / 0.95);
+  box-shadow: 0 0 0 1px rgb(15 23 42 / 0.55);
+  cursor: help;
+}
+
+.alpha-tool-route .alpha-armor-curve-boundary::before {
+  content: '';
+  position: absolute;
+  top: -0.22rem;
+  left: 50%;
+  width: 0.45rem;
+  height: 0.45rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(248 250 252);
+  box-shadow: 0 0 0 2px rgb(15 23 42 / 0.7);
+}
+
+.alpha-tool-route .alpha-armor-curve-cell-pass-strong {
+  background: rgb(22 163 74 / 0.9);
+}
+
+.alpha-tool-route .alpha-armor-curve-cell-pass {
+  background: rgb(34 197 94 / 0.82);
+}
+
+.alpha-tool-route .alpha-armor-curve-cell-near {
+  background: rgb(245 158 11 / 0.82);
+}
+
+.alpha-tool-route .alpha-armor-curve-cell-block {
+  background: rgb(225 29 72 / 0.8);
 }
 
 .alpha-tool-route .alpha-heatmap-matrix-weapon-slot {
@@ -275,71 +836,37 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-matrix-ship {
-  display: flex;
-  min-height: 6.75rem;
-  flex-direction: column;
-  justify-content: center;
-}
+@media (min-width: 1024px) {
+  .alpha-tool-route .alpha-ship-heatmap-panel {
+    grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+    align-items: start;
+  }
 
-.alpha-tool-route .alpha-heatmap-matrix-cell {
-  display: flex;
-  min-height: 6.75rem;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.9rem;
-  text-align: center;
-}
+  .alpha-tool-route .alpha-armor-curve-head {
+    grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr);
+    align-items: end;
+  }
 
-.alpha-tool-route .alpha-heatmap-matrix-cell-value {
-  font-size: 1.2rem;
-  line-height: 1;
-  font-weight: 700;
-  color: rgb(248 250 252);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-meta {
-  font-size: 0.74rem;
-  color: rgb(226 232 240 / 0.82);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-empty {
-  color: rgb(148 163 184);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-pass-soft {
-  border-color: rgb(74 222 128 / 0.22);
-  background: rgb(34 197 94 / 0.12);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-pass {
-  border-color: rgb(74 222 128 / 0.32);
-  background: rgb(34 197 94 / 0.2);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-pass-strong {
-  border-color: rgb(134 239 172 / 0.42);
-  background: rgb(22 163 74 / 0.34);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-block-soft {
-  border-color: rgb(251 113 133 / 0.2);
-  background: rgb(244 63 94 / 0.1);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-block {
-  border-color: rgb(251 113 133 / 0.3);
-  background: rgb(225 29 72 / 0.18);
-}
-
-.alpha-tool-route .alpha-heatmap-matrix-cell-block-strong {
-  border-color: rgb(253 164 175 / 0.4);
-  background: rgb(190 24 93 / 0.3);
+  .alpha-tool-route .alpha-armor-curve-row {
+    grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr);
+    align-items: center;
+  }
 }
 
 .alpha-tool-route .alpha-compare-strip-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 1.25rem 1.25rem 0;
+}
+
+.alpha-tool-route .alpha-compare-strip-head-action {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .alpha-tool-route .alpha-compare-strip-grid {
@@ -511,7 +1038,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 45;
+  z-index: 90;
   width: fit-content;
   max-width: calc(100vw - 2.5rem);
   background:
@@ -567,6 +1094,7 @@
 .alpha-tool-route .alpha-ship-cascade-ships-flyout {
   position: absolute;
   left: calc(100% + 0.6rem);
+  z-index: 91;
   min-width: max-content;
   max-width: min(22rem, calc(100vw - 2.5rem));
   width: max-content;
@@ -747,5 +1275,979 @@
 
   .alpha-tool-route .alpha-heatmap-grid-wrap {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/*
+  Alpha Threshold command-stage refinements.
+*/
+
+.alpha-tool-route .alpha-top-control-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-radius: 1.2rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.alpha-tool-route .alpha-top-control-strip-primary,
+.alpha-tool-route .alpha-top-control-strip-actions,
+.alpha-tool-route .alpha-top-control-strip-source,
+.alpha-tool-route .alpha-top-control-strip-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.alpha-tool-route .alpha-top-control-strip-primary,
+.alpha-tool-route .alpha-top-control-strip-actions {
+  gap: 0.6rem;
+}
+
+.alpha-tool-route .alpha-top-control-strip-source,
+.alpha-tool-route .alpha-top-control-strip-status {
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-top-control-strip-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-top-strip-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.035);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.78rem;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-top-strip-button {
+  display: inline-flex;
+  min-height: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  background: rgb(255 255 255 / 0.03);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-top-strip-button:hover {
+  border-color: rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.06);
+}
+
+.alpha-tool-route .alpha-top-strip-button-primary,
+.alpha-tool-route .alpha-top-strip-button-active {
+  border-color: rgb(125 211 252 / 0.22);
+  background: rgb(14 34 52 / 0.96);
+  color: rgb(224 242 254);
+}
+
+.alpha-tool-route .alpha-top-control-strip-changelog {
+  margin-left: 0.15rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger-compact {
+  min-height: 2.4rem;
+  min-width: auto;
+  flex-direction: row;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem 0.45rem 0.8rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger-compact .alpha-balance-trigger-icon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger-compact .alpha-balance-trigger-badge {
+  top: 0.18rem;
+  right: 0.2rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger-compact .alpha-balance-trigger-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.09em;
+}
+
+.alpha-tool-route.alpha-loadout-portal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  min-height: 0;
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.alpha-tool-route .alpha-loadout-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgb(2 6 12 / 0.5);
+  backdrop-filter: blur(10px);
+  pointer-events: auto;
+}
+
+.alpha-tool-route .alpha-loadout-drawer {
+  position: fixed;
+  top: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 1001;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(30rem, calc(100vw - 1.5rem));
+  border-radius: 1.4rem;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+.alpha-tool-route .alpha-loadout-drawer-head {
+  display: grid;
+  gap: 0.85rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding: 1rem 1rem 0.95rem;
+}
+
+.alpha-tool-route .alpha-loadout-drawer-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-loadout-drawer-tab {
+  display: inline-flex;
+  min-height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-loadout-drawer-tab-active {
+  border-color: rgb(125 211 252 / 0.24);
+  background: rgb(17 33 48 / 0.94);
+  color: rgb(240 249 255);
+}
+
+.alpha-tool-route .alpha-loadout-drawer-body {
+  min-height: 0;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.alpha-tool-route .alpha-selection-panel {
+  display: grid;
+  gap: 0.95rem;
+  overflow: visible;
+}
+
+.alpha-tool-route .alpha-selection-panel-head {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-selection-panel-copy {
+  margin: 0;
+  font-size: 0.84rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-selection-ship-grid {
+  display: grid;
+  gap: 0.75rem;
+  overflow: visible;
+}
+
+.alpha-tool-route .alpha-drawer-workflow {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 0.9rem;
+  height: 100%;
+  min-height: 0;
+}
+
+.alpha-tool-route .alpha-drawer-selection-summary,
+.alpha-tool-route .alpha-drawer-filter-bar {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+}
+
+.alpha-tool-route .alpha-drawer-selection-summary {
+  display: grid;
+  gap: 0.85rem;
+  border-radius: 1rem;
+  padding: 0.9rem;
+}
+
+.alpha-tool-route .alpha-drawer-filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  gap: 0.8rem;
+  border-radius: 1rem;
+  padding: 0.85rem;
+}
+
+.alpha-tool-route .alpha-drawer-filter-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-drawer-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-drawer-segmented-button {
+  display: inline-flex;
+  min-height: 2.15rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-drawer-segmented-button-active {
+  border-color: rgb(125 211 252 / 0.26);
+  background: rgb(15 35 56 / 0.96);
+  color: rgb(224 242 254);
+}
+
+.alpha-tool-route .alpha-drawer-results {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.alpha-tool-route .alpha-drawer-group {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-drawer-group + .alpha-drawer-group {
+  margin-top: 0.8rem;
+}
+
+.alpha-tool-route .alpha-drawer-group-toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  padding: 0.8rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-drawer-group-toggle-static {
+  cursor: default;
+}
+
+.alpha-tool-route .alpha-drawer-group-toggle-static:focus {
+  outline: none;
+}
+
+.alpha-tool-route .alpha-drawer-group-body {
+  display: grid;
+  gap: 0.95rem;
+  padding: 0.9rem;
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-card {
+  display: grid;
+  gap: 0.6rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  border-radius: 1rem;
+  padding: 0.8rem;
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-card-active {
+  border-color: rgb(125 211 252 / 0.22);
+  background: rgb(14 28 44 / 0.92);
+  box-shadow: inset 0 0 0 1px rgb(125 211 252 / 0.12);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-top,
+.alpha-tool-route .alpha-weapon-drawer-slot-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-badge,
+.alpha-tool-route .alpha-drawer-weapon-chip {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgb(45 212 191 / 0.24);
+  background: rgb(17 94 89 / 0.18);
+  padding: 0.18rem 0.45rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(153 246 228);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-activate {
+  display: grid;
+  width: 100%;
+  justify-items: start;
+  gap: 0.22rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-name {
+  font-size: 0.92rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-name-empty,
+.alpha-tool-route .alpha-drawer-empty-copy {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-meta,
+.alpha-tool-route .alpha-drawer-weapon-meta {
+  margin: 0;
+  font-size: 0.76rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-size {
+  font-size: 0.72rem;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-weapon-drawer-slot-clear {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-class,
+.alpha-tool-route .alpha-drawer-ship-manufacturer {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.alpha-tool-route .alpha-drawer-weapon-class-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-list,
+.alpha-tool-route .alpha-drawer-ship-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-drawer-weapon-row,
+.alpha-tool-route .alpha-drawer-ship-row,
+.alpha-tool-route .alpha-drawer-ship-pill {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  border-radius: 0.9rem;
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+}
+
+.alpha-tool-route .alpha-drawer-weapon-row:hover,
+.alpha-tool-route .alpha-drawer-ship-row:hover,
+.alpha-tool-route .alpha-drawer-ship-pill:hover {
+  border-color: rgb(255 255 255 / 0.16);
+  background: rgb(255 255 255 / 0.04);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-row-assigned,
+.alpha-tool-route .alpha-drawer-ship-row-selected,
+.alpha-tool-route .alpha-drawer-ship-pill {
+  border-color: rgb(125 211 252 / 0.18);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-row-active-assignment {
+  box-shadow: inset 0 0 0 1px rgb(125 211 252 / 0.14);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-name {
+  display: block;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-drawer-weapon-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-drawer-ship-pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-drawer-ship-pill {
+  padding: 0.45rem 0.65rem;
+}
+
+.alpha-tool-route .alpha-drawer-ship-pill-remove {
+  font-size: 0.72rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-drawer-ship-row:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.alpha-tool-route .alpha-threshold-ship-slot-button {
+  min-height: 5rem;
+  border-radius: 1rem;
+}
+
+.alpha-tool-route .alpha-threshold-board {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 0.75rem;
+  min-height: calc(100vh - 10.25rem);
+  border-radius: 1.75rem;
+  padding: 0.85rem 0.9rem 0.95rem;
+  overflow: hidden;
+  box-shadow:
+    0 24px 60px rgb(0 0 0 / 0.28),
+    inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+
+.alpha-tool-route .alpha-threshold-board::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at top left, rgb(56 189 248 / 0.08), transparent 28%),
+    radial-gradient(circle at top right, rgb(251 146 60 / 0.08), transparent 22%);
+}
+
+.alpha-tool-route .alpha-threshold-board-head {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.alpha-tool-route .alpha-threshold-board-title-block {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.alpha-tool-route .alpha-threshold-board-copy {
+  margin: 0;
+  max-width: 42rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-threshold-board-axis-copy {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-threshold-board-axis-copy > span:nth-child(2) {
+  text-align: center;
+}
+
+.alpha-tool-route .alpha-threshold-board-axis-copy > span:last-child {
+  text-align: right;
+}
+
+.alpha-tool-route .alpha-heatmap-legend {
+  position: relative;
+  z-index: 1;
+  gap: 0.8rem;
+  padding-bottom: 0.15rem;
+  font-size: 0.72rem;
+}
+
+.alpha-tool-route .alpha-threshold-board-scroll {
+  position: relative;
+  z-index: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.2rem;
+}
+
+.alpha-tool-route .alpha-threshold-board-columns {
+  display: grid;
+  gap: 0.9rem;
+  align-items: stretch;
+  min-width: max(100%, calc(var(--alpha-threshold-columns, 1) * 19rem));
+}
+
+.alpha-tool-route .alpha-heatmap-ship-column {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 0.95rem;
+  min-width: 18.75rem;
+  border-radius: 1.45rem;
+  padding: 1rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 20%),
+    linear-gradient(180deg, rgb(6 11 20 / 0.98), rgb(4 7 14 / 0.98));
+}
+
+.alpha-tool-route .alpha-heatmap-ship-head {
+  gap: 0.75rem;
+  padding-bottom: 0.85rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-title-block {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-name {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-make {
+  margin: 0;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.alpha-tool-route .alpha-ship-header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  border-radius: 999px;
+  padding: 0.34rem 0.58rem;
+  font-size: 0.72rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis {
+  position: relative;
+  padding-bottom: 0.3rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-lanes {
+  gap: 1rem;
+  min-height: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-lane {
+  gap: 0.9rem;
+  border-radius: 1.15rem;
+  padding: 0.95rem 0.9rem 1rem;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc(25% - 1px),
+      rgb(255 255 255 / 0.065) calc(25% - 1px),
+      rgb(255 255 255 / 0.065) 25%
+    ),
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    rgb(5 9 18 / 0.9);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-energy {
+  box-shadow: inset 0 1px 0 rgb(56 189 248 / 0.12);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-ballistic {
+  box-shadow: inset 0 1px 0 rgb(251 191 36 / 0.12);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-head {
+  align-items: center;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-kicker {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-energy .alpha-heatmap-lane-kicker {
+  color: rgb(125 211 252);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-ballistic .alpha-heatmap-lane-kicker {
+  color: rgb(252 211 77);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-threshold {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  background: rgb(255 255 255 / 0.04);
+  padding: 0.34rem 0.58rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-traces {
+  gap: 0.8rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-empty {
+  border-radius: 0.95rem;
+  padding: 0.95rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace {
+  gap: 0.6rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-head {
+  align-items: flex-start;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy {
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-name {
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-meta {
+  margin-top: 0.24rem;
+  font-size: 0.74rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-slot,
+.alpha-tool-route .alpha-heatmap-trace-status {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.035);
+  padding: 0.22rem 0.42rem;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-slot {
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status {
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-deflect {
+  border-color: rgb(248 113 113 / 0.22);
+  background: rgb(127 29 29 / 0.18);
+  color: rgb(254 202 202);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-late {
+  border-color: rgb(251 191 36 / 0.22);
+  background: rgb(146 64 14 / 0.16);
+  color: rgb(253 230 138);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-early,
+.alpha-tool-route .alpha-heatmap-trace-status-penetrate {
+  border-color: rgb(45 212 191 / 0.22);
+  background: rgb(17 94 89 / 0.18);
+  color: rgb(153 246 228);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell {
+  min-height: 2.8rem;
+  border-radius: 0.95rem;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(7 11 18 / 0.96);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.02),
+    inset 0 -10px 20px rgb(0 0 0 / 0.2);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell:focus-visible {
+  outline: 2px solid rgb(125 211 252 / 0.7);
+  outline-offset: 2px;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect {
+  background:
+    linear-gradient(90deg, rgb(15 23 42 / 0.96), rgb(12 20 35 / 0.94)),
+    linear-gradient(90deg, rgb(56 189 248 / 0.1), transparent 75%);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-transition {
+  background: linear-gradient(90deg, rgb(245 158 11 / 0.62), rgb(251 191 36 / 0.86));
+}
+
+.alpha-tool-route .alpha-heatmap-trace-damage {
+  background: linear-gradient(90deg, rgb(251 146 60 / 0.92), rgb(239 68 68 / 0.96));
+}
+
+.alpha-tool-route .alpha-penetration-marker {
+  top: -0.05rem;
+  bottom: -0.05rem;
+  z-index: 4;
+}
+
+.alpha-tool-route .alpha-penetration-marker-halo {
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 0.95rem;
+  height: 0.95rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.08);
+  filter: blur(6px);
+}
+
+.alpha-tool-route .alpha-penetration-marker-stick {
+  top: -0.25rem;
+  bottom: -0.2rem;
+  width: 2px;
+  box-shadow: 0 0 0 1px rgb(8 12 20 / 0.45);
+}
+
+.alpha-tool-route .alpha-penetration-marker-dot {
+  top: -0.45rem;
+  width: 0.52rem;
+  height: 0.52rem;
+  box-shadow:
+    0 0 0 2px rgb(8 12 20 / 0.92),
+    0 0 18px rgb(255 255 255 / 0.22);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip {
+  left: auto;
+  right: 0;
+  bottom: calc(100% + 0.95rem);
+  width: min(19rem, calc(100vw - 2rem));
+  transform: translateY(0.25rem);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 1rem;
+  padding: 0.9rem;
+  box-shadow: 0 18px 42px rgb(0 0 0 / 0.35);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-anchor:hover .alpha-heatmap-tooltip,
+.alpha-tool-route .alpha-heatmap-tooltip-anchor:focus-within .alpha-heatmap-tooltip {
+  transform: translateY(0);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-eyebrow {
+  margin: 0 0 0.3rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(125 211 252);
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-title {
+  margin-bottom: 0.65rem;
+  line-height: 1.3;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-list {
+  gap: 0.42rem;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-row {
+  gap: 0.85rem;
+  font-size: 0.75rem;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1102;
+  min-height: 0;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1102;
+  width: min(19rem, calc(100vw - 2rem));
+  transform: none;
+  opacity: 1;
+  pointer-events: none;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 24%),
+    linear-gradient(180deg, rgb(8 12 20 / 0.985), rgb(4 7 14 / 0.995));
+  padding: 0.9rem;
+  box-shadow:
+    0 22px 48px rgb(0 0 0 / 0.42),
+    0 0 0 1px rgb(255 255 255 / 0.02);
+  backdrop-filter: blur(12px);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-title {
+  margin: 0 0 0.65rem;
+  line-height: 1.3;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-list {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.85rem;
+  font-size: 0.75rem;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row > dt {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row > dd {
+  margin: 0;
+  color: rgb(248 250 252);
+  text-align: right;
+}
+
+@media (min-width: 768px) {
+  .alpha-tool-route .alpha-threshold-board-columns {
+    grid-template-columns: repeat(var(--alpha-threshold-columns, 1), minmax(18.75rem, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .alpha-tool-route .alpha-threshold-board {
+    min-height: calc(100vh - 9.6rem);
+    border-radius: 1.35rem;
+    padding: 0.75rem;
+  }
+
+  .alpha-tool-route .alpha-loadout-drawer {
+    top: 0.4rem;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    width: calc(100vw - 0.8rem);
+    border-radius: 1.15rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip {
+    padding: 0.6rem 0.7rem;
   }
 }

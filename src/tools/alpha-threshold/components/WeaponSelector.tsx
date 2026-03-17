@@ -381,126 +381,127 @@ export function WeaponSelector({
   if (!open) return null
 
   return createPortal(
-    <div className="alpha-modal-backdrop">
-      {overlaySlots.map((slot) => {
-        const slotData = slots.find((entry) => entry.id === slot.id)
-        if (!slotData) return null
+    <div className="alpha-tool-route">
+      <div className="alpha-modal-backdrop">
+        {overlaySlots.map((slot) => {
+          const slotData = slots.find((entry) => entry.id === slot.id)
+          if (!slotData) return null
 
-        const isActive = slot.id === activeSlotId
-        const isFilled = Boolean(slotData.weaponKey)
+          const isActive = slot.id === activeSlotId
+          const isFilled = Boolean(slotData.weaponKey)
 
-        return (
-          <button
-            key={`overlay-${slot.id}`}
-            type="button"
-            onClick={() => {
-              setAssignmentError('')
-              onActiveSlotChange(slot.id)
-            }}
-            className={[
-              'alpha-modal-slot-tab',
-              'alpha-modal-slot-tab-overlay',
-              isActive ? `alpha-modal-slot-tab-active-${slotData.tone}` : '',
-              isActive && !isFilled
-                ? `alpha-modal-slot-tab-next-${slotData.tone}`
-                : '',
-              isFilled
-                ? 'alpha-modal-slot-tab-filled'
-                : 'alpha-modal-slot-tab-empty',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            style={{
-              left: slot.left,
-              top: slot.top,
-              width: slot.width,
-              minHeight: slot.height,
-            }}
-            data-alpha-modal-slot-overlay="true"
-          >
-            <span className="alpha-modal-slot-top">
-              <span className="alpha-modal-slot-label">{slotData.label}</span>
-              {isActive ? (
-                <span
-                  className={[
-                    'alpha-modal-slot-badge',
-                    !slotData.weaponKey
-                      ? `alpha-modal-slot-badge-next-${slotData.tone}`
-                      : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                >
-                  {slotData.weaponKey ? 'Active' : 'Next'}
-                </span>
-              ) : null}
-            </span>
-
-            {slotData.weaponName ? (
-              <span className="alpha-modal-slot-row">
-                <span className="alpha-modal-slot-content">
-                  <span className="alpha-modal-slot-weapon">
-                    {slotData.weaponName}
+          return (
+            <button
+              key={`overlay-${slot.id}`}
+              type="button"
+              onClick={() => {
+                setAssignmentError('')
+                onActiveSlotChange(slot.id)
+              }}
+              className={[
+                'alpha-modal-slot-tab',
+                'alpha-modal-slot-tab-overlay',
+                isActive ? `alpha-modal-slot-tab-active-${slotData.tone}` : '',
+                isActive && !isFilled
+                  ? `alpha-modal-slot-tab-next-${slotData.tone}`
+                  : '',
+                isFilled
+                  ? 'alpha-modal-slot-tab-filled'
+                  : 'alpha-modal-slot-tab-empty',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              style={{
+                left: slot.left,
+                top: slot.top,
+                width: slot.width,
+                minHeight: slot.height,
+              }}
+              data-alpha-modal-slot-overlay="true"
+            >
+              <span className="alpha-modal-slot-top">
+                <span className="alpha-modal-slot-label">{slotData.label}</span>
+                {isActive ? (
+                  <span
+                    className={[
+                      'alpha-modal-slot-badge',
+                      !slotData.weaponKey
+                        ? `alpha-modal-slot-badge-next-${slotData.tone}`
+                        : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    {slotData.weaponKey ? 'Active' : 'Next'}
                   </span>
-                  {slotData.weaponClass && slotData.damageType ? (
-                    <span className="alpha-modal-slot-state">
-                      {formatWeaponTypeLabel({
-                        damageType: slotData.damageType,
-                        weaponClass: slotData.weaponClass,
-                      })}
-                    </span>
-                  ) : null}
-                </span>
+                ) : null}
               </span>
-            ) : (
-              <span className="alpha-modal-slot-state">Empty slot</span>
-            )}
-          </button>
-        )
-      })}
-      {connectorLine ? (
-        <svg
-          className="alpha-modal-connector"
-          aria-hidden="true"
-          viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
-          preserveAspectRatio="none"
-        >
-          <line
-            x1={connectorLine.x1}
-            y1={connectorLine.y1}
-            x2={connectorLine.x2}
-            y2={connectorLine.y2}
-            stroke={connectorLine.color}
-            strokeWidth="2"
-            strokeLinecap="round"
-            opacity="0.95"
-          />
-        </svg>
-      ) : null}
-      <div
-        ref={dialogRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={dialogTitleId}
-        className="alpha-modal-shell alpha-select-panel"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <div className="alpha-modal-head">
-          <div>
-            <p className="page-kicker">Weapon Selector</p>
-            <h2 id={dialogTitleId} className="surface-title mt-2">
-              {activeSlot ? `Select ${activeSlot.label} Weapon` : 'Assign Weapons'}
-            </h2>
-          </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="alpha-action-button"
+              {slotData.weaponName ? (
+                <span className="alpha-modal-slot-row">
+                  <span className="alpha-modal-slot-content">
+                    <span className="alpha-modal-slot-weapon">
+                      {slotData.weaponName}
+                    </span>
+                    {slotData.weaponClass && slotData.damageType ? (
+                      <span className="alpha-modal-slot-state">
+                        {formatWeaponTypeLabel({
+                          damageType: slotData.damageType,
+                          weaponClass: slotData.weaponClass,
+                        })}
+                      </span>
+                    ) : null}
+                  </span>
+                </span>
+              ) : (
+                <span className="alpha-modal-slot-state">Empty slot</span>
+              )}
+            </button>
+          )
+        })}
+        {connectorLine ? (
+          <svg
+            className="alpha-modal-connector"
+            aria-hidden="true"
+            viewBox={`0 0 ${window.innerWidth} ${window.innerHeight}`}
+            preserveAspectRatio="none"
           >
-            Close
-          </button>
-        </div>
+            <line
+              x1={connectorLine.x1}
+              y1={connectorLine.y1}
+              x2={connectorLine.x2}
+              y2={connectorLine.y2}
+              stroke={connectorLine.color}
+              strokeWidth="2"
+              strokeLinecap="round"
+              opacity="0.95"
+            />
+          </svg>
+        ) : null}
+        <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={dialogTitleId}
+          className="alpha-modal-shell alpha-select-panel"
+          onMouseDown={(event) => event.stopPropagation()}
+        >
+          <div className="alpha-modal-head">
+            <div>
+              <p className="page-kicker">Weapon Selector</p>
+              <h2 id={dialogTitleId} className="surface-title mt-2">
+                {activeSlot ? `Select ${activeSlot.label} Weapon` : 'Assign Weapons'}
+              </h2>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="alpha-action-button"
+            >
+              Close
+            </button>
+          </div>
 
         <div className="alpha-modal-slot-strip alpha-modal-slot-strip-hidden">
           {slots.map((slot) => {
@@ -793,7 +794,8 @@ export function WeaponSelector({
           </ul>
         </div>
       </div>
-    </div>,
+    </div>
+  </div>,
     document.body
   )
 }
