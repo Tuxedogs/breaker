@@ -4,39 +4,43 @@
 
 .alpha-tool-route {
   isolation: isolate;
+  min-height: calc(100vh - 5rem);
 }
 
-.alpha-tool-route .alpha-sidebar-workspace {
-  gap: 1.5rem;
+.alpha-tool-route .alpha-command-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  min-height: calc(100vh - 5rem);
+  padding: 0.5rem;
+}
+
+.alpha-tool-route .alpha-main-heatmap-stage,
+.alpha-tool-route .alpha-main-heatmap-board {
+  min-height: 0;
+}
+
+.alpha-tool-route .alpha-main-heatmap-stage {
+  position: relative;
+  display: grid;
+}
+
+.alpha-tool-route .alpha-threshold-board,
+.alpha-tool-route .alpha-top-control-strip,
+.alpha-tool-route .alpha-loadout-drawer,
+.alpha-tool-route .alpha-heatmap-ship-column {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 28%),
+    linear-gradient(180deg, rgb(9 13 22 / 0.96), rgb(5 7 12 / 0.98));
+  box-shadow: 0 18px 44px rgb(0 0 0 / 0.28);
 }
 
 @media (min-width: 1024px) {
-  .alpha-tool-route .alpha-sidebar-workspace > .sidebar-workspace-rail-left {
-    height: 100vh;
+  .alpha-tool-route .alpha-command-shell {
+    gap: 0.9rem;
+    padding: 0.6rem 0.75rem 0.75rem;
   }
-
-  .alpha-tool-route .alpha-sidebar {
-    height: 100%;
-    max-height: 100vh;
-    overflow: visible;
-  }
-}
-
-.alpha-tool-route .alpha-page-layout-panel {
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-}
-
-.alpha-tool-route .alpha-results-column {
-  gap: 0;
-}
-
-.alpha-tool-route .alpha-changelog-rail {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
 }
 
 .alpha-tool-route :is(

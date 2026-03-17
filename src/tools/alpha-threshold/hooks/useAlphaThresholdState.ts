@@ -2,18 +2,14 @@ import { useEffect, useMemo } from 'react'
 import { getShipThresholdsForSource } from '../data/ships/ships'
 import { getWeaponsForSource } from '../data/weapons/weapons'
 import {
-  buildAxisMaxByType,
-  buildSelectedShipResult,
   getDefaultCollapsedGroups,
   getDefaultSelectedShips,
   getWeaponKey,
-  resolveAxisMaxByType,
   SHIP_SIZE_GROUPS,
 } from '../lib/calculations'
 import { mergeShipOverride, mergeWeaponOverride } from '../lib/mergeOverrides'
 import { sortShips } from '../lib/sortShips'
 import type {
-  AxisScaleMode,
   ComparisonSlot,
   Ship,
   ShipBalanceChangeEntry,
@@ -28,7 +24,6 @@ import type {
   SlotTone,
   ThresholdDataSourceKey,
   WeaponRecord,
-  WeaponThresholdType,
 } from '../types'
 import { useLocalStorageState } from './useLocalStorageState'
 import { useOverrides } from './useOverrides'
@@ -40,9 +35,8 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
   'energy-desc',
   'manufacturer-asc',
 ]
-const VALID_AXIS_SCALE_MODES: AxisScaleMode[] = ['global', 'by-size', 'per-row']
 const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['merged', 'manual', 'erkul-live', 'erkul-ptu', 'spviewer']
-const MAX_VICTIM_SHIPS = 3
+const MAX_VICTIM_SHIPS = 4
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   { id: 'slot-1', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 1' },
   { id: 'slot-2', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 2' },
@@ -89,10 +83,6 @@ function normalizeSlots(value: ComparisonSlot[]): ComparisonSlot[] {
 
 function normalizeSortKey(value: ShipSortKey): ShipSortKey {
   return VALID_SORT_KEYS.includes(value) ? value : 'health-desc'
-}
-
-function normalizeAxisScaleMode(value: AxisScaleMode): AxisScaleMode {
-  return VALID_AXIS_SCALE_MODES.includes(value) ? value : 'by-size'
 }
 
 function normalizeDataSource(value: ThresholdDataSourceKey): ThresholdDataSourceKey {
@@ -258,10 +248,6 @@ export function useAlphaThresholdState() {
   const [collapsedGroups, setCollapsedGroups] = useLocalStorageState<
     Record<ShipSizeGroup, boolean>
   >('alpha-threshold.collapsed-groups', getDefaultCollapsedGroups())
-  const [axisScaleMode, setAxisScaleMode] = useLocalStorageState<AxisScaleMode>(
-    'alpha-threshold.axis-scale-mode',
-    'by-size'
-  )
   const [activeSource, setActiveSource] = useLocalStorageState<ThresholdDataSourceKey>(
     'alpha-threshold.data-source',
     'merged'
@@ -317,11 +303,6 @@ export function useAlphaThresholdState() {
     () => normalizeCollapsedGroups(collapsedGroups),
     [collapsedGroups]
   )
-  const normalizedAxisScaleMode = useMemo(
-    () => normalizeAxisScaleMode(axisScaleMode),
-    [axisScaleMode]
-  )
-
   useEffect(() => {
     if (activeSource !== resolvedActiveSource) {
       setActiveSource(resolvedActiveSource)
@@ -351,12 +332,6 @@ export function useAlphaThresholdState() {
       setCollapsedGroups(normalizedCollapsedGroups)
     }
   }, [collapsedGroups, normalizedCollapsedGroups, setCollapsedGroups])
-
-  useEffect(() => {
-    if (axisScaleMode !== normalizedAxisScaleMode) {
-      setAxisScaleMode(normalizedAxisScaleMode)
-    }
-  }, [axisScaleMode, normalizedAxisScaleMode, setAxisScaleMode])
 
   const {
     shipOverrides,
@@ -495,26 +470,6 @@ export function useAlphaThresholdState() {
       .filter(Boolean) as SelectedWeaponComparison[]
   }, [allWeapons, slots, weaponOverrides])
 
-  const globalAxisMaxByType = useMemo<Record<WeaponThresholdType, number>>(
-    () => buildAxisMaxByType(selectedShips, selectedWeapons),
-    [selectedShips, selectedWeapons]
-  )
-
-  const selectedShipResults = useMemo(() => {
-    return selectedShips.map((ship) =>
-      buildSelectedShipResult(
-        ship,
-        selectedWeapons,
-        resolveAxisMaxByType(
-          ship,
-          selectedShips,
-          selectedWeapons,
-          normalizedAxisScaleMode
-        )
-      )
-    )
-  }, [normalizedAxisScaleMode, selectedShips, selectedWeapons])
-
   const shipBalanceChanges = useMemo<ShipBalanceChangeEntry[]>(() => {
     return activeShips
       .filter((ship) => ship.history.length > 0)
@@ -624,10 +579,8 @@ export function useAlphaThresholdState() {
     setSlotWeapon,
     allWeapons,
     allShips,
+    selectedShips,
     selectedWeapons,
-    axisScaleMode: normalizedAxisScaleMode,
-    setAxisScaleMode,
-    globalAxisMaxByType,
     victimManufacturer: normalizedVictimManufacturer,
     setVictimManufacturer,
     victimManufacturerOptions,
@@ -649,7 +602,6 @@ export function useAlphaThresholdState() {
     mobileSidebarOpen,
     setMobileSidebarOpen,
     toggleGroupCollapsed,
-    selectedShipResults,
     shipBalanceChanges,
     shipOverrides,
     weaponOverrides,

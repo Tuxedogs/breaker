@@ -32,7 +32,7 @@ export function DataSourceSelector({
   }
 
   return (
-    <section className="data-source-card relative z-20 ml-auto w-fit overflow-visible">
+    <section className="data-source-card relative z-20 w-fit overflow-visible">
       <button
         type="button"
         onClick={handleToggle}
