@@ -8,8 +8,6 @@ type Props = {
   onSourceChange: (source: ThresholdDataSourceKey) => void
   selectedWeaponCount: number
   selectedShipCount: number
-  showLegend: boolean
-  onToggleLegend: () => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onClearAllWeapons: () => void
@@ -22,8 +20,6 @@ export function TopControlStrip({
   onSourceChange,
   selectedWeaponCount,
   selectedShipCount,
-  showLegend,
-  onToggleLegend,
   onOpenWeapons,
   onOpenShips,
   onClearAllWeapons,
@@ -64,17 +60,6 @@ export function TopControlStrip({
         </button>
         <button type="button" className="alpha-top-strip-button" onClick={onClearAllShips}>
           Clear Ships
-        </button>
-        <button
-          type="button"
-          className={[
-            'alpha-top-strip-button',
-            showLegend ? 'alpha-top-strip-button-active' : '',
-          ].filter(Boolean).join(' ')}
-          onClick={onToggleLegend}
-          aria-pressed={showLegend}
-        >
-          Legend
         </button>
         {changelogControl ? (
           <div className="alpha-top-control-strip-changelog">{changelogControl}</div>

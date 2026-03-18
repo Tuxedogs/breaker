@@ -165,6 +165,10 @@ function compareByManufacturerThenName(
   return left.name.localeCompare(right.name)
 }
 
+function getShipDatasetKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
+  return `${ship.manufacturer}::${ship.name}`.toLowerCase()
+}
+
 function buildCurrentBalanceSnapshot(ship: Ship): ShipBalanceSnapshot {
   return {
     patch: ship.patch ?? 'Current',
@@ -471,11 +475,23 @@ export function useAlphaThresholdState() {
   }, [allWeapons, slots, weaponOverrides])
 
   const shipBalanceChanges = useMemo<ShipBalanceChangeEntry[]>(() => {
-    return activeShips
-      .filter((ship) => ship.history.length > 0)
+    const liveShips = getShipThresholdsForSource('erkul-live')
+    const ptuShips = getShipThresholdsForSource('erkul-ptu')
+    const liveShipMap = new Map(liveShips.map((ship) => [getShipDatasetKey(ship), ship]))
+
+    return ptuShips
       .map((ship) => {
-        const current = buildCurrentBalanceSnapshot(ship)
-        const previous = ship.history[0]
+        const liveShip = liveShipMap.get(getShipDatasetKey(ship))
+        if (!liveShip) return null
+
+        const current = buildCurrentBalanceSnapshot({
+          ...ship,
+          patch: ship.patch ?? 'Erkul PTU',
+        })
+        const previous = buildCurrentBalanceSnapshot({
+          ...liveShip,
+          patch: liveShip.patch ?? 'Erkul Live',
+        })
         const fields = buildBalanceFieldChanges(current, previous)
         const changeMagnitude = fields.reduce(
           (total, field) => total + Math.abs(field.delta),
@@ -490,14 +506,14 @@ export function useAlphaThresholdState() {
           changeMagnitude,
         }
       })
-      .filter((entry) => entry.fields.length > 0)
+      .filter((entry): entry is ShipBalanceChangeEntry => Boolean(entry && entry.fields.length > 0))
       .sort((left, right) => {
         if (right.changeMagnitude !== left.changeMagnitude) {
           return right.changeMagnitude - left.changeMagnitude
         }
         return left.ship.name.localeCompare(right.ship.name)
       })
-  }, [activeShips])
+  }, [])
 
   function setSlotWeapon(slotId: string, weaponKey: string | null) {
     setSlots((prev) =>

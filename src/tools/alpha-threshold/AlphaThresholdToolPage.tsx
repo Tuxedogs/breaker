@@ -11,7 +11,6 @@ import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
 export default function AlphaThresholdToolPage() {
   const [drawerMode, setDrawerMode] = useState<'ships' | 'weapons' | null>(null)
-  const [showLegend, setShowLegend] = useState(true)
   const {
     activeSource,
     setActiveSource,
@@ -40,8 +39,6 @@ export default function AlphaThresholdToolPage() {
           onSourceChange={setActiveSource}
           selectedWeaponCount={selectedWeapons.length}
           selectedShipCount={selectedShips.length}
-          showLegend={showLegend}
-          onToggleLegend={() => setShowLegend((current) => !current)}
           onOpenWeapons={() => setDrawerMode('weapons')}
           onOpenShips={() => setDrawerMode('ships')}
           onClearAllWeapons={clearAllWeaponSlots}
@@ -56,7 +53,6 @@ export default function AlphaThresholdToolPage() {
             <ThresholdHeatmapBoard
               ships={selectedShips}
               selectedWeapons={selectedWeapons}
-              showLegend={showLegend}
             />
           }
           drawer={

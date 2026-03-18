@@ -7,13 +7,11 @@ import type { SelectedWeaponComparison, Ship } from '../types'
 type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
-  showLegend?: boolean
 }
 
 export function ThresholdHeatmapBoard({
   ships,
   selectedWeapons,
-  showLegend = true,
 }: Props) {
   const shipModels = useMemo(
     () => ships.map((ship) => buildShipHeatmapModel(ship, selectedWeapons)),
@@ -47,7 +45,7 @@ export function ThresholdHeatmapBoard({
         </div>
       </header>
 
-      {showLegend ? <HeatmapLegend /> : null}
+      <HeatmapLegend />
 
       <div className="alpha-threshold-board-scroll">
         <div
