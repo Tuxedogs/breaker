@@ -22,7 +22,7 @@ export function ThresholdHeatmapBoard({
     return (
       <section className="alpha-threshold-board alpha-threshold-board-empty" aria-live="polite">
         <div className="alpha-empty-state">
-          <h2 className="surface-title">Threshold Heatmap</h2>
+          <h2 className="surface-title">Armor Thresholds</h2>
           <p className="mt-3 text-sm text-slate-400">
             Select at least one ship and one weapon to build the analysis board.
           </p>
@@ -32,12 +32,12 @@ export function ThresholdHeatmapBoard({
   }
 
   return (
-    <section className="alpha-threshold-board" aria-label="Threshold heatmap board">
+    <section className="alpha-threshold-board" aria-label="Armor Thresholds board">
       <header className="alpha-threshold-board-head">
         <div className="alpha-threshold-board-title-block">
           <div>
             <p className="page-kicker">Armor Degradation Curve</p>
-            <h2 className="surface-title mt-3">Threshold Heatmap</h2>
+            <h2 className="surface-title mt-3">Armor Thresholds</h2>
           </div>
           <p className="alpha-threshold-board-copy">
             Compare crossover timing directly on the board. Intact armor stays left, broken armor collapses to the right.

@@ -109,8 +109,8 @@ export default function HeroOpening({ autoAdvance = false, autoAdvanceDelayMs = 
                 )}
               />
               <SectionHubCard
-                title="Alpha vs Threshold"
-                subtitle="Compare weapon alpha against ship hull damage thresholds"
+                title="Armor Threshold Mapping"
+                subtitle="Compare weapon alpha against armor damage thresholds"
                 href="/tools/alpha-threshold"
                 accentColor="#38bdf8"
                 isActive={pathname.startsWith("/tools/alpha-threshold")}

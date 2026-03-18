@@ -107,7 +107,7 @@ export default function DoctrineIndexPage() {
 
         <Link to="/tools/alpha-threshold" className="setup-alpha-card section-hub-card">
           <span className="section-hub-copy">
-            <span className="title-font section-hub-title">ALPHA VS THRESHOLD</span>
+            <span className="title-font section-hub-title">ARMOR THRESHOLD MAPPING</span>
             <span className="section-hub-subtitle">
               Compare weapon alpha against ship ballistic and energy thresholds.
             </span>
