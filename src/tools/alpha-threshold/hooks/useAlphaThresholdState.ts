@@ -169,6 +169,17 @@ function getShipDatasetKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
   return `${ship.manufacturer}::${ship.name}`.toLowerCase()
 }
 
+function shouldExcludeWeapon(weapon: WeaponRecord): boolean {
+  const normalizedName = weapon.name.trim().toLowerCase()
+  const normalizedClass = weapon.weaponClass.trim().toLowerCase()
+
+  return (
+    normalizedName.includes('suregrip') ||
+    normalizedName.includes('viselock') ||
+    normalizedClass === 'rocket pod'
+  )
+}
+
 function buildCurrentBalanceSnapshot(ship: Ship): ShipBalanceSnapshot {
   return {
     patch: ship.patch ?? 'Current',
@@ -347,7 +358,10 @@ export function useAlphaThresholdState() {
     resetAllOverrides,
   } = useOverrides()
 
-  const allWeapons = useMemo<WeaponRecord[]>(() => activeWeapons, [activeWeapons])
+  const allWeapons = useMemo<WeaponRecord[]>(
+    () => activeWeapons.filter((weapon) => !shouldExcludeWeapon(weapon)),
+    [activeWeapons]
+  )
 
   const effectiveShips = useMemo(() => {
     const merged = activeShips.map((ship) =>
