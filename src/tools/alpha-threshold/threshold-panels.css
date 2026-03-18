@@ -597,11 +597,11 @@
 }
 
 .alpha-tool-route .alpha-heatmap-legend-swatch-transition {
-  background: linear-gradient(90deg, rgb(245 158 11 / 0.4), rgb(251 191 36 / 0.72));
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.62), rgb(250 204 21 / 0.88));
 }
 
 .alpha-tool-route .alpha-heatmap-legend-swatch-damage {
-  background: linear-gradient(90deg, rgb(251 146 60 / 0.78), rgb(239 68 68 / 0.88));
+  background: linear-gradient(90deg, rgb(59 130 246 / 0.86), rgb(124 58 237 / 0.92));
 }
 
 .alpha-tool-route .alpha-heatmap-legend-marker {
@@ -619,7 +619,20 @@
   bottom: 0;
   width: 2px;
   transform: translateX(-50%);
-  background: rgb(248 250 252);
+  background: rgb(255 255 255);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -0.02rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255);
+  box-shadow: 0 0 0 2px rgb(8 12 20 / 0.92);
 }
 
 @media (min-width: 768px) {
@@ -1287,9 +1300,9 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: 0.6rem;
   border-radius: 1.2rem;
-  padding: 0.65rem 0.85rem;
+  padding: 0.55rem 0.75rem;
 }
 
 .alpha-tool-route .alpha-top-control-strip-primary,
@@ -1303,12 +1316,12 @@
 
 .alpha-tool-route .alpha-top-control-strip-primary,
 .alpha-tool-route .alpha-top-control-strip-actions {
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .alpha-tool-route .alpha-top-control-strip-source,
 .alpha-tool-route .alpha-top-control-strip-status {
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .alpha-tool-route .alpha-top-control-strip-label {
@@ -1773,11 +1786,10 @@
 .alpha-tool-route .alpha-threshold-board {
   position: relative;
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 0.75rem;
-  min-height: calc(100vh - 10.25rem);
+  grid-template-rows: auto auto auto;
+  gap: 0.6rem;
   border-radius: 1.75rem;
-  padding: 0.85rem 0.9rem 0.95rem;
+  padding: 0.7rem 0.8rem 0.8rem;
   overflow: hidden;
   box-shadow:
     0 24px 60px rgb(0 0 0 / 0.28),
@@ -1790,21 +1802,21 @@
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at top left, rgb(56 189 248 / 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgb(251 146 60 / 0.08), transparent 22%);
+    radial-gradient(circle at top left, rgb(96 165 250 / 0.09), transparent 30%),
+    radial-gradient(circle at top right, rgb(129 140 248 / 0.07), transparent 24%);
 }
 
 .alpha-tool-route .alpha-threshold-board-head {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 0.8rem;
+  gap: 0.6rem;
   align-items: start;
 }
 
 .alpha-tool-route .alpha-threshold-board-title-block {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .alpha-tool-route .alpha-threshold-board-copy {
@@ -1815,30 +1827,11 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-threshold-board-axis-copy {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgb(203 213 225);
-}
-
-.alpha-tool-route .alpha-threshold-board-axis-copy > span:nth-child(2) {
-  text-align: center;
-}
-
-.alpha-tool-route .alpha-threshold-board-axis-copy > span:last-child {
-  text-align: right;
-}
-
 .alpha-tool-route .alpha-heatmap-legend {
   position: relative;
   z-index: 1;
-  gap: 0.8rem;
-  padding-bottom: 0.15rem;
+  gap: 0.65rem;
+  padding-bottom: 0.05rem;
   font-size: 0.72rem;
 }
 
@@ -1853,26 +1846,26 @@
 
 .alpha-tool-route .alpha-threshold-board-columns {
   display: grid;
-  gap: 0.9rem;
-  align-items: stretch;
+  gap: 0.75rem;
+  align-items: start;
   min-width: max(100%, calc(var(--alpha-threshold-columns, 1) * 19rem));
 }
 
 .alpha-tool-route .alpha-heatmap-ship-column {
   display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 0.95rem;
+  grid-template-rows: auto auto auto;
+  gap: 0.8rem;
   min-width: 18.75rem;
   border-radius: 1.45rem;
-  padding: 1rem;
+  padding: 0.85rem;
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 20%),
     linear-gradient(180deg, rgb(6 11 20 / 0.98), rgb(4 7 14 / 0.98));
 }
 
 .alpha-tool-route .alpha-heatmap-ship-head {
-  gap: 0.75rem;
-  padding-bottom: 0.85rem;
+  gap: 0.65rem;
+  padding-bottom: 0.7rem;
 }
 
 .alpha-tool-route .alpha-heatmap-ship-title-block {
@@ -1912,7 +1905,10 @@
 
 .alpha-tool-route .alpha-heatmap-ship-axis {
   position: relative;
+  display: block;
+  min-height: 1.9rem;
   padding-bottom: 0.3rem;
+  color: rgb(203 213 225);
 }
 
 .alpha-tool-route .alpha-heatmap-ship-axis::after {
@@ -1923,25 +1919,87 @@
   background: rgb(255 255 255 / 0.08);
 }
 
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint {
+  position: absolute;
+  top: 0;
+  display: grid;
+  gap: 0.14rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint:first-child {
+  left: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint-right {
+  right: 0;
+  justify-items: end;
+  text-align: right;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > strong {
+  font-size: 0.76rem;
+  line-height: 1;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > em {
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker {
+  position: absolute;
+  top: 0.08rem;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(2) {
+  left: 25%;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(3) {
+  left: 50%;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(4) {
+  left: 75%;
+}
+
 .alpha-tool-route .alpha-heatmap-ship-lanes {
-  gap: 1rem;
+  gap: 0.8rem;
   min-height: 0;
 }
 
 .alpha-tool-route .alpha-heatmap-lane {
-  gap: 0.9rem;
+  gap: 0.75rem;
   border-radius: 1.15rem;
-  padding: 0.95rem 0.9rem 1rem;
+  padding: 0.8rem 0.8rem 0.85rem;
   background:
+    linear-gradient(
+      90deg,
+      rgb(15 23 42 / 0.24) 0%,
+      rgb(15 23 42 / 0.24) 25%,
+      rgb(30 41 59 / 0.22) 25%,
+      rgb(30 41 59 / 0.22) 75%,
+      rgb(51 65 85 / 0.24) 75%,
+      rgb(51 65 85 / 0.26) 100%
+    ),
     repeating-linear-gradient(
       90deg,
       transparent 0,
       transparent calc(25% - 1px),
-      rgb(255 255 255 / 0.065) calc(25% - 1px),
-      rgb(255 255 255 / 0.065) 25%
+      rgb(255 255 255 / 0.09) calc(25% - 1px),
+      rgb(255 255 255 / 0.09) 25%
     ),
     linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
-    rgb(5 9 18 / 0.9);
+    rgb(5 9 18 / 0.92);
 }
 
 .alpha-tool-route .alpha-heatmap-lane-energy {
@@ -1949,7 +2007,7 @@
 }
 
 .alpha-tool-route .alpha-heatmap-lane-ballistic {
-  box-shadow: inset 0 1px 0 rgb(251 191 36 / 0.12);
+  box-shadow: inset 0 1px 0 rgb(196 181 253 / 0.16);
 }
 
 .alpha-tool-route .alpha-heatmap-lane-head {
@@ -1967,7 +2025,7 @@
 }
 
 .alpha-tool-route .alpha-heatmap-lane-ballistic .alpha-heatmap-lane-kicker {
-  color: rgb(252 211 77);
+  color: rgb(196 181 253);
 }
 
 .alpha-tool-route .alpha-heatmap-lane-threshold {
@@ -1984,7 +2042,7 @@
 }
 
 .alpha-tool-route .alpha-heatmap-lane-traces {
-  gap: 0.8rem;
+  gap: 0.65rem;
 }
 
 .alpha-tool-route .alpha-heatmap-lane-empty {
@@ -1993,7 +2051,9 @@
 }
 
 .alpha-tool-route .alpha-heatmap-trace {
-  gap: 0.6rem;
+  position: relative;
+  isolation: isolate;
+  gap: 0.5rem;
 }
 
 .alpha-tool-route .alpha-heatmap-trace-head {
@@ -2002,6 +2062,26 @@
 
 .alpha-tool-route .alpha-heatmap-trace-copy {
   min-width: 0;
+  display: grid;
+  gap: 0.24rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.95rem;
+  padding: 0.65rem 0.75rem;
+  background: rgb(255 255 255 / 0.025);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy-energy {
+  border-color: rgb(96 165 250 / 0.22);
+  background:
+    linear-gradient(180deg, rgb(96 165 250 / 0.08), transparent 100%),
+    rgb(8 16 30 / 0.88);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+  border-color: rgb(167 139 250 / 0.24);
+  background:
+    linear-gradient(180deg, rgb(124 58 237 / 0.08), transparent 100%),
+    rgb(14 12 30 / 0.88);
 }
 
 .alpha-tool-route .alpha-heatmap-trace-name {
@@ -2022,7 +2102,6 @@
   gap: 0.35rem;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-slot,
 .alpha-tool-route .alpha-heatmap-trace-status {
   display: inline-flex;
   align-items: center;
@@ -2033,10 +2112,6 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.alpha-tool-route .alpha-heatmap-trace-slot {
-  color: rgb(203 213 225);
 }
 
 .alpha-tool-route .alpha-heatmap-trace-status {
@@ -2063,11 +2138,22 @@
 }
 
 .alpha-tool-route .alpha-heatmap-trace-bar-shell {
+  position: relative;
+  z-index: 2;
   min-height: 2.8rem;
   border-radius: 0.95rem;
-  overflow: hidden;
+  overflow: visible;
   border-color: rgb(255 255 255 / 0.1);
-  background: rgb(7 11 18 / 0.96);
+  background:
+    linear-gradient(
+      90deg,
+      rgb(12 20 35 / 0.92) 0%,
+      rgb(12 20 35 / 0.92) 25%,
+      rgb(15 23 42 / 0.94) 25%,
+      rgb(15 23 42 / 0.94) 75%,
+      rgb(30 41 59 / 0.94) 75%,
+      rgb(30 41 59 / 0.96) 100%
+    );
   box-shadow:
     inset 0 0 0 1px rgb(255 255 255 / 0.02),
     inset 0 -10px 20px rgb(0 0 0 / 0.2);
@@ -2080,22 +2166,30 @@
 
 .alpha-tool-route .alpha-heatmap-trace-deflect {
   background:
-    linear-gradient(90deg, rgb(15 23 42 / 0.96), rgb(12 20 35 / 0.94)),
-    linear-gradient(90deg, rgb(56 189 248 / 0.1), transparent 75%);
+    linear-gradient(90deg, rgb(10 17 30 / 0.98), rgb(22 34 56 / 0.95)),
+    linear-gradient(90deg, rgb(96 165 250 / 0.08), transparent 72%);
 }
 
 .alpha-tool-route .alpha-heatmap-trace-transition {
-  background: linear-gradient(90deg, rgb(245 158 11 / 0.62), rgb(251 191 36 / 0.86));
+  z-index: 2;
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.65), rgb(250 204 21 / 0.92));
+  box-shadow:
+    0 0 18px rgb(250 204 21 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.22);
 }
 
 .alpha-tool-route .alpha-heatmap-trace-damage {
-  background: linear-gradient(90deg, rgb(251 146 60 / 0.92), rgb(239 68 68 / 0.96));
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgb(59 130 246 / 0.88), rgb(124 58 237 / 0.92)),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 100%);
 }
 
 .alpha-tool-route .alpha-penetration-marker {
   top: -0.05rem;
   bottom: -0.05rem;
-  z-index: 4;
+  z-index: 12;
+  pointer-events: none;
 }
 
 .alpha-tool-route .alpha-penetration-marker-halo {
@@ -2106,24 +2200,28 @@
   height: 0.95rem;
   transform: translateX(-50%);
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.08);
-  filter: blur(6px);
+  background: rgb(255 255 255 / 0.12);
+  filter: blur(5px);
 }
 
 .alpha-tool-route .alpha-penetration-marker-stick {
   top: -0.25rem;
   bottom: -0.2rem;
-  width: 2px;
-  box-shadow: 0 0 0 1px rgb(8 12 20 / 0.45);
+  width: 3px;
+  background: rgb(255 255 255);
+  box-shadow:
+    0 0 0 1px rgb(8 12 20 / 0.6),
+    0 0 12px rgb(255 255 255 / 0.16);
 }
 
 .alpha-tool-route .alpha-penetration-marker-dot {
-  top: -0.45rem;
-  width: 0.52rem;
-  height: 0.52rem;
+  top: -0.55rem;
+  width: 0.62rem;
+  height: 0.62rem;
+  background: rgb(255 255 255);
   box-shadow:
-    0 0 0 2px rgb(8 12 20 / 0.92),
-    0 0 18px rgb(255 255 255 / 0.22);
+    0 0 0 2px rgb(8 12 20 / 0.95),
+    0 0 16px rgb(255 255 255 / 0.2);
 }
 
 .alpha-tool-route .alpha-heatmap-tooltip {
@@ -2185,34 +2283,56 @@
   transform: none;
   opacity: 1;
   pointer-events: none;
-  border: 1px solid rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(125 211 252 / 0.16);
   border-radius: 1rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 24%),
-    linear-gradient(180deg, rgb(8 12 20 / 0.985), rgb(4 7 14 / 0.995));
-  padding: 0.9rem;
+    linear-gradient(180deg, rgb(18 28 44) 0%, rgb(10 16 27) 100%);
+  padding: 0.7rem 1rem 1rem;
   box-shadow:
-    0 22px 48px rgb(0 0 0 / 0.42),
+    0 24px 60px rgb(0 0 0 / 0.46),
     0 0 0 1px rgb(255 255 255 / 0.02);
-  backdrop-filter: blur(12px);
 }
 
-.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-title {
-  margin: 0 0 0.65rem;
-  line-height: 1.3;
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-body {
+  border: 1px solid rgb(255 255 255 / 0.05);
+  border-radius: 0.8rem;
+  background:
+    linear-gradient(180deg, rgb(20 30 46) 0%, rgb(9 15 25) 100%);
+  padding: 0.78rem 0.82rem;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-ship-title {
+  margin: 0 0 0.55rem;
+  padding: 0 0 0.45rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.05;
   color: rgb(248 250 252);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-section-title {
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.45rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: rgb(226 232 240);
 }
 
 .alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-list {
   display: grid;
-  gap: 0.42rem;
+  gap: 0.48rem;
   margin: 0;
 }
 
 .alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.85rem;
+  gap: 0.9rem;
+  align-items: start;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  padding-top: 0.48rem;
   font-size: 0.75rem;
 }
 
@@ -2224,6 +2344,11 @@
   margin: 0;
   color: rgb(248 250 252);
   text-align: right;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row:first-child > dt,
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row:first-child > dd {
+  color: rgb(248 113 113);
 }
 
 @media (min-width: 768px) {

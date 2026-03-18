@@ -7,8 +7,6 @@ type Props = {
   model: ShipHeatmapModel
 }
 
-const AXIS_MARKERS = ['100%', '75%', '50%', '25%', '0%']
-
 export function HeatmapShipColumn({ model }: Props) {
   const shipName = formatEntityLabel(model.ship.name)
   const manufacturer = formatEntityLabel(model.ship.manufacturer)
@@ -22,16 +20,24 @@ export function HeatmapShipColumn({ model }: Props) {
         </div>
         <div className="alpha-heatmap-ship-pills">
           <ShipHeaderPill label="Armor" value={formatMetric(model.ship.armorHp)} />
-          <ShipHeaderPill label="Hull" value={formatMetric(model.ship.health)} />
+          <ShipHeaderPill label="Hull" value={formatMetric(model.ship.vitalHp)} />
           <ShipHeaderPill label="B" value={formatMetric(model.ship.ballisticThreshold)} />
           <ShipHeaderPill label="E" value={formatMetric(model.ship.energyThreshold)} />
         </div>
       </header>
 
       <div className="alpha-heatmap-ship-axis" aria-hidden="true">
-        {AXIS_MARKERS.map((marker) => (
-          <span key={`${shipName}-${marker}`}>{marker}</span>
-        ))}
+        <span className="alpha-heatmap-ship-axis-endpoint">
+          <strong>100%</strong>
+          <em>INTACT</em>
+        </span>
+        <span className="alpha-heatmap-ship-axis-marker">75%</span>
+        <span className="alpha-heatmap-ship-axis-marker">50%</span>
+        <span className="alpha-heatmap-ship-axis-marker">25%</span>
+        <span className="alpha-heatmap-ship-axis-endpoint alpha-heatmap-ship-axis-endpoint-right">
+          <strong>0%</strong>
+          <em>BROKEN</em>
+        </span>
       </div>
 
       <div className="alpha-heatmap-ship-lanes">

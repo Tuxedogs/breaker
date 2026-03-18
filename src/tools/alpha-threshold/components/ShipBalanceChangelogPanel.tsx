@@ -59,7 +59,7 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
         <span className="alpha-balance-trigger-badge">{entries.length}</span>
         <svg aria-hidden viewBox="0 0 20 20" className="alpha-balance-trigger-icon">
           <path
-            d="M4 3h9l3 3v11H4V3zm8 1.5V7h2.5L12 4.5zM7 9h6v1.5H7V9zm0 3h6v1.5H7V12z"
+            d="M10 3a7 7 0 0 1 6.52 4.45V4.75H18v5h-5V8.25h2.45A5.5 5.5 0 1 0 15.5 10h1.5A7 7 0 1 1 10 3Z"
             fill="currentColor"
           />
         </svg>
