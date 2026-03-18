@@ -34,9 +34,12 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
   })
   const frameRef = useRef<number | null>(null)
   const nextPointRef = useRef({ x: 0, y: 0 })
-  const damageStart = trace.alwaysPenetrates ? 0 : trace.nearCrossoverBandEnd * 100
-  const transitionStart = trace.nearCrossoverBandStart * 100
-  const transitionWidth = (trace.nearCrossoverBandEnd - trace.nearCrossoverBandStart) * 100
+  const crossoverStart = trace.penetrationStartX * 100
+  const transitionStart = trace.alwaysPenetrates ? 0 : crossoverStart
+  const transitionWidth = trace.alwaysPenetrates
+    ? 2
+    : Math.min(3, Math.max(1.35, (trace.nearCrossoverBandEnd - trace.nearCrossoverBandStart) * 50))
+  const damageStart = trace.alwaysPenetrates ? 0 : crossoverStart
   const statusLabel = getStatusLabel(trace)
 
   useEffect(() => {
@@ -91,8 +94,7 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
       className={`alpha-heatmap-trace alpha-heatmap-trace-${trace.matchedDamageType}`}
     >
       <header className="alpha-heatmap-trace-head">
-        <div className="alpha-heatmap-trace-copy">
-          <p className="alpha-heatmap-trace-slot">{trace.weapon.slotLabel}</p>
+        <div className={`alpha-heatmap-trace-copy alpha-heatmap-trace-copy-${trace.matchedDamageType}`}>
           <h4 className="alpha-heatmap-trace-name">{trace.weapon.weapon.name}</h4>
           <p className="alpha-heatmap-trace-meta">
             {trace.matchedDamageType} · {formatMetric(trace.weaponAlpha)} alpha
@@ -149,14 +151,16 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
           open={tooltipState.open}
           x={tooltipState.x}
           y={tooltipState.y}
-          title={`${trace.weapon.weapon.name} vs ${shipName}`}
+          title={shipName}
+          sectionTitle={trace.weapon.weapon.name}
           lines={[
-            { label: 'Weapon Type', value: trace.matchedDamageType },
-            { label: 'Alpha', value: formatMetric(trace.weaponAlpha) },
             {
               label: 'Penetration Start',
               value: `${Math.round(trace.penetrationStartArmorPercent)}% armor`,
             },
+            { label: 'Weapon Type', value: trace.matchedDamageType },
+            { label: 'Alpha', value: formatMetric(trace.weaponAlpha) },
+            { label: 'Threshold Used', value: formatMetric(trace.baseThreshold) },
             {
               label: 'Crossover Threshold',
               value: formatMetric(trace.effectiveThresholdAtCrossover),

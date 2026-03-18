@@ -10,8 +10,58 @@ type Props = {
   onToggleShip: (shipName: string) => void
 }
 
+const COMMON_PICK_SHIP_NAMES = [
+  'Idris',
+  'Perseus',
+  'Guardian',
+  'Vanguard',
+  'Gladius',
+  'Arrow',
+] as const
+
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
   return `${ship.manufacturer}::${ship.name}`
+}
+
+function ShipRow({
+  ship,
+  isSelected,
+  isLocked,
+  onToggleShip,
+}: {
+  ship: Ship
+  isSelected: boolean
+  isLocked: boolean
+  onToggleShip: (shipName: string) => void
+}) {
+  const shipKey = getShipSelectionKey(ship)
+
+  return (
+    <button
+      type="button"
+      className={[
+        'alpha-drawer-ship-row',
+        isSelected ? 'alpha-drawer-ship-row-selected' : '',
+      ].join(' ')}
+      onClick={() => onToggleShip(shipKey)}
+      disabled={isLocked}
+    >
+      <div>
+        <strong className="alpha-drawer-weapon-name">
+          {formatEntityLabel(ship.name)}
+        </strong>
+        <p className="alpha-drawer-weapon-meta">
+          {formatEntityLabel(ship.manufacturer)} · B {ship.ballisticThreshold} · E {ship.energyThreshold}
+        </p>
+      </div>
+      <div className="alpha-drawer-weapon-stats">
+        <span>{ship.sizeGroup}</span>
+        {isSelected ? (
+          <span className="alpha-drawer-weapon-chip">Selected</span>
+        ) : null}
+      </div>
+    </button>
+  )
 }
 
 export function ShipSelectorPanel({
@@ -22,6 +72,13 @@ export function ShipSelectorPanel({
   onToggleShip,
 }: Props) {
   const [query, setQuery] = useState('')
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
+    'common-picks': false,
+    capital: true,
+    large: true,
+    medium: true,
+    small: true,
+  })
 
   const selectedKeySet = useMemo(
     () => new Set(selectedShipNames.filter((shipKey): shipKey is string => Boolean(shipKey))),
@@ -37,6 +94,14 @@ export function ShipSelectorPanel({
       }),
     [allShips, query]
   )
+
+  const commonPickShips = useMemo(() => {
+    const commonPickSet = new Set(COMMON_PICK_SHIP_NAMES)
+
+    return filteredShips.filter((ship) =>
+      commonPickSet.has(ship.name as (typeof COMMON_PICK_SHIP_NAMES)[number])
+    )
+  }, [filteredShips])
 
   const groupedShips = useMemo(
     () =>
@@ -63,6 +128,13 @@ export function ShipSelectorPanel({
       }).filter((group) => group.manufacturers.length > 0),
     [filteredShips]
   )
+
+  function toggleGroup(groupId: string) {
+    setCollapsedGroups((current) => ({
+      ...current,
+      [groupId]: !(current[groupId] ?? true),
+    }))
+  }
 
   return (
     <section className="alpha-drawer-workflow" aria-labelledby="alpha-drawer-ship-slots">
@@ -117,68 +189,91 @@ export function ShipSelectorPanel({
       </div>
 
       <div className="alpha-drawer-results">
-        {groupedShips.length > 0 ? (
-          groupedShips.map((group) => (
-            <section key={group.id} className="alpha-drawer-group">
-              <div className="alpha-drawer-group-toggle alpha-drawer-group-toggle-static">
-                <span>{group.label}</span>
-                <span>
-                  {group.manufacturers.reduce((total, manufacturerGroup) => total + manufacturerGroup.ships.length, 0)}
-                </span>
-              </div>
+        {commonPickShips.length > 0 || groupedShips.length > 0 ? (
+          <>
+            {commonPickShips.length > 0 ? (
+              <section className="alpha-drawer-group">
+                <button
+                  type="button"
+                  className="alpha-drawer-group-toggle"
+                  onClick={() => toggleGroup('common-picks')}
+                  aria-expanded={!(collapsedGroups['common-picks'] ?? false)}
+                >
+                  <span>Common Picks</span>
+                  <span>{(collapsedGroups['common-picks'] ?? false) ? '+' : '-'}</span>
+                </button>
 
-              <div className="alpha-drawer-group-body">
-                {group.manufacturers.map((manufacturerGroup) => (
-                  <section
-                    key={`${group.id}-${manufacturerGroup.manufacturer}`}
-                    className="alpha-drawer-ship-manufacturer"
-                  >
-                    <h4 className="alpha-drawer-weapon-class-title">
-                      {formatEntityLabel(manufacturerGroup.manufacturer)}
-                    </h4>
-
+                {!(collapsedGroups['common-picks'] ?? false) ? (
+                  <div className="alpha-drawer-group-body">
                     <div className="alpha-drawer-ship-list">
-                      {manufacturerGroup.ships.map((ship) => {
+                      {commonPickShips.map((ship) => {
                         const shipKey = getShipSelectionKey(ship)
                         const isSelected = selectedKeySet.has(shipKey)
-                        const isLocked =
-                          !isSelected &&
-                          selectedKeySet.size >= maxVictimShips
+                        const isLocked = !isSelected && selectedKeySet.size >= maxVictimShips
 
                         return (
-                          <button
-                            key={shipKey}
-                            type="button"
-                            className={[
-                              'alpha-drawer-ship-row',
-                              isSelected ? 'alpha-drawer-ship-row-selected' : '',
-                            ].join(' ')}
-                            onClick={() => onToggleShip(shipKey)}
-                            disabled={isLocked}
-                          >
-                            <div>
-                              <strong className="alpha-drawer-weapon-name">
-                                {formatEntityLabel(ship.name)}
-                              </strong>
-                              <p className="alpha-drawer-weapon-meta">
-                                {formatEntityLabel(ship.manufacturer)} · B {ship.ballisticThreshold} · E {ship.energyThreshold}
-                              </p>
-                            </div>
-                            <div className="alpha-drawer-weapon-stats">
-                              <span>{ship.sizeGroup}</span>
-                              {isSelected ? (
-                                <span className="alpha-drawer-weapon-chip">Selected</span>
-                              ) : null}
-                            </div>
-                          </button>
+                          <ShipRow
+                            key={`common-${shipKey}`}
+                            ship={ship}
+                            isSelected={isSelected}
+                            isLocked={isLocked}
+                            onToggleShip={onToggleShip}
+                          />
                         )
                       })}
                     </div>
-                  </section>
-                ))}
-              </div>
-            </section>
-          ))
+                  </div>
+                ) : null}
+              </section>
+            ) : null}
+
+            {groupedShips.map((group) => (
+              <section key={group.id} className="alpha-drawer-group">
+                <button
+                  type="button"
+                  className="alpha-drawer-group-toggle"
+                  onClick={() => toggleGroup(group.id)}
+                  aria-expanded={!(collapsedGroups[group.id] ?? true)}
+                >
+                  <span>{group.label}</span>
+                  <span>{(collapsedGroups[group.id] ?? true) ? '+' : '-'}</span>
+                </button>
+
+                {!(collapsedGroups[group.id] ?? true) ? (
+                  <div className="alpha-drawer-group-body">
+                    {group.manufacturers.map((manufacturerGroup) => (
+                      <section
+                        key={`${group.id}-${manufacturerGroup.manufacturer}`}
+                        className="alpha-drawer-ship-manufacturer"
+                      >
+                        <h4 className="alpha-drawer-weapon-class-title">
+                          {formatEntityLabel(manufacturerGroup.manufacturer)}
+                        </h4>
+
+                        <div className="alpha-drawer-ship-list">
+                          {manufacturerGroup.ships.map((ship) => {
+                            const shipKey = getShipSelectionKey(ship)
+                            const isSelected = selectedKeySet.has(shipKey)
+                            const isLocked = !isSelected && selectedKeySet.size >= maxVictimShips
+
+                            return (
+                              <ShipRow
+                                key={shipKey}
+                                ship={ship}
+                                isSelected={isSelected}
+                                isLocked={isLocked}
+                                onToggleShip={onToggleShip}
+                              />
+                            )
+                          })}
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
+            ))}
+          </>
         ) : (
           <section className="alpha-empty-state">
             <h3 className="title-font text-base text-slate-50">No ships match the current search.</h3>

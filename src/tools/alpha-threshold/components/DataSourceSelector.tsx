@@ -17,46 +17,41 @@ export function DataSourceSelector({
 }: Props) {
   const hasLive = sourceOptions.some((option) => option.value === LIVE_SOURCE)
   const hasPtu = sourceOptions.some((option) => option.value === PTU_SOURCE)
-  const normalizedSource =
-    activeSource === PTU_SOURCE && hasPtu ? PTU_SOURCE : LIVE_SOURCE
-
-  function handleToggle() {
-    if (normalizedSource === LIVE_SOURCE && hasPtu) {
-      onSourceChange(PTU_SOURCE)
-      return
-    }
-
-    if (normalizedSource === PTU_SOURCE && hasLive) {
-      onSourceChange(LIVE_SOURCE)
-    }
-  }
 
   return (
     <section className="data-source-card relative z-20 w-fit overflow-visible">
-      <button
-        type="button"
-        onClick={handleToggle}
-        className="alpha-chip alpha-chip-pass inline-flex cursor-pointer items-center gap-2"
-        aria-label={`Toggle data source. Current source: ${
-          normalizedSource === PTU_SOURCE ? 'PTU' : 'LIVE'
-        }`}
+      <div
+        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 p-1"
+        role="group"
+        aria-label="Erkul data source"
       >
-        <span
-          className={
-            normalizedSource === PTU_SOURCE ? 'text-current' : 'text-slate-400'
-          }
-        >
-          PTU
-        </span>
-        <span className="text-slate-500">/</span>
-        <span
-          className={
-            normalizedSource === LIVE_SOURCE ? 'text-current' : 'text-slate-400'
-          }
-        >
-          LIVE
-        </span>
-      </button>
+        {hasLive ? (
+          <button
+            type="button"
+            onClick={() => onSourceChange(LIVE_SOURCE)}
+            className={[
+              'alpha-chip inline-flex cursor-pointer items-center gap-2',
+              activeSource === LIVE_SOURCE ? 'alpha-chip-pass' : '',
+            ].join(' ')}
+            aria-pressed={activeSource === LIVE_SOURCE}
+          >
+            Live
+          </button>
+        ) : null}
+        {hasPtu ? (
+          <button
+            type="button"
+            onClick={() => onSourceChange(PTU_SOURCE)}
+            className={[
+              'alpha-chip inline-flex cursor-pointer items-center gap-2',
+              activeSource === PTU_SOURCE ? 'alpha-chip-pass' : '',
+            ].join(' ')}
+            aria-pressed={activeSource === PTU_SOURCE}
+          >
+            PTU
+          </button>
+        ) : null}
+      </div>
     </section>
   )
 }

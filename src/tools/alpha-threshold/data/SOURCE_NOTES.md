@@ -2,6 +2,37 @@
 
 ## Current importer workflow
 
+To gather and freeze all Erkul raw dumps in `./tmp`, create a local config file from:
+
+- `./tmp/erkul-sources.example.json`
+
+Save it as:
+
+- `./tmp/erkul-sources.json`
+
+Then run:
+
+```bash
+npm run alpha:fetch-erkul
+```
+
+This writes:
+
+- `./tmp/erkul-live-ships.json`
+- `./tmp/erkul-ptu-ships.json`
+- `./tmp/erkul-live-weapons.json`
+- `./tmp/erkul-ptu-weapons.json`
+
+To save the raw PTU ship payload locally for inspection before normalization:
+
+```bash
+npm run alpha:fetch-ptu-ships -- \
+  --url "https://<erkul-ptu-endpoint>" \
+  --out ./tmp/erkul-ptu-ships.json
+```
+
+Then regenerate the normalized seed files from that frozen dump:
+
 Use the importer to ingest full source exports (JSON files or reachable API URLs) and regenerate source seed files used by the UI:
 
 ```bash

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { formatMetric, getWeaponKey } from '../lib/calculations'
 import { filterWeaponRecords, groupWeaponRecords } from '../lib/weapons/grouping'
 import { formatWeaponTypeLabel } from '../lib/weapons/normalize'
@@ -12,13 +12,66 @@ type Props = {
 
 const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 const DAMAGE_FILTERS = ['all', 'ballistic', 'energy'] as const
+const COMMON_PICK_WEAPON_MATCHERS = [
+  'CF-337 Panther',
+  'NDB-30',
+  'Revenant',
+  'Mantis GT-220',
+  'Shredder',
+] as const
+
 type DamageFilter = (typeof DAMAGE_FILTERS)[number]
+
+function WeaponRow({
+  weapon,
+  isAssigned,
+  isActiveAssignment,
+  onAssign,
+}: {
+  weapon: WeaponRecord
+  isAssigned: boolean
+  isActiveAssignment: boolean
+  onAssign: (weapon: WeaponRecord) => void
+}) {
+  return (
+    <button
+      type="button"
+      className={[
+        'alpha-drawer-weapon-row',
+        isAssigned ? 'alpha-drawer-weapon-row-assigned' : '',
+        isActiveAssignment ? 'alpha-drawer-weapon-row-active-assignment' : '',
+      ].join(' ')}
+      onClick={() => onAssign(weapon)}
+    >
+      <div>
+        <strong className="alpha-drawer-weapon-name">
+          {weapon.name}
+        </strong>
+        <p className="alpha-drawer-weapon-meta">
+          {formatWeaponTypeLabel({
+            damageType: weapon.damageType,
+            weaponClass: weapon.weaponClass,
+          })}{' '}
+          · S{weapon.size}
+        </p>
+      </div>
+      <div className="alpha-drawer-weapon-stats">
+        <span>{formatMetric(weapon.alpha ?? 0)} alpha</span>
+        {isAssigned ? (
+          <span className="alpha-drawer-weapon-chip">Assigned</span>
+        ) : null}
+      </div>
+    </button>
+  )
+}
 
 export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [damageFilter, setDamageFilter] = useState<DamageFilter>('all')
-  const [collapsedSizes, setCollapsedSizes] = useState<Record<number, boolean>>({})
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
+    'common-picks': false,
+  })
 
   const slotCards = useMemo(
     () =>
@@ -40,24 +93,21 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
     [slots, weapons]
   )
 
-  useEffect(() => {
-    if (
-      activeSlotId &&
-      slotCards.some((entry) => entry.slot.id === activeSlotId)
-    ) {
-      return
+  const resolvedActiveSlotId = useMemo(() => {
+    if (activeSlotId && slotCards.some((entry) => entry.slot.id === activeSlotId)) {
+      return activeSlotId
     }
 
-    setActiveSlotId(
+    return (
       slotCards.find((entry) => entry.slot.weaponKey === null)?.slot.id ??
-        slotCards[0]?.slot.id ??
-        null
+      slotCards[0]?.slot.id ??
+      null
     )
   }, [activeSlotId, slotCards])
 
   const activeSlot = useMemo(
-    () => slotCards.find((entry) => entry.slot.id === activeSlotId) ?? slotCards[0] ?? null,
-    [activeSlotId, slotCards]
+    () => slotCards.find((entry) => entry.slot.id === resolvedActiveSlotId) ?? slotCards[0] ?? null,
+    [resolvedActiveSlotId, slotCards]
   )
 
   const filteredWeapons = useMemo(() => {
@@ -76,6 +126,14 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
 
   const groupedWeapons = useMemo(
     () => groupWeaponRecords(filteredWeapons),
+    [filteredWeapons]
+  )
+
+  const commonPickWeapons = useMemo(
+    () =>
+      filteredWeapons.filter((weapon) =>
+        COMMON_PICK_WEAPON_MATCHERS.some((token) => weapon.name.includes(token))
+      ),
     [filteredWeapons]
   )
 
@@ -106,10 +164,10 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
     moveToNextOpenSlot(activeSlot.slot.id)
   }
 
-  function toggleSizeGroup(size: number) {
-    setCollapsedSizes((current) => ({
+  function toggleGroup(groupId: string) {
+    setCollapsedGroups((current) => ({
       ...current,
-      [size]: !current[size],
+      [groupId]: !(current[groupId] ?? true),
     }))
   }
 
@@ -232,85 +290,101 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
       </div>
 
       <div className="alpha-drawer-results">
-        {groupedWeapons.length > 0 ? (
-          groupedWeapons.map((sizeGroup) => {
-            const isCollapsed = collapsedSizes[sizeGroup.size] ?? false
-
-            return (
-              <section key={sizeGroup.size} className="alpha-drawer-group">
+        {commonPickWeapons.length > 0 || groupedWeapons.length > 0 ? (
+          <>
+            {commonPickWeapons.length > 0 ? (
+              <section className="alpha-drawer-group">
                 <button
                   type="button"
                   className="alpha-drawer-group-toggle"
-                  onClick={() => toggleSizeGroup(sizeGroup.size)}
-                  aria-expanded={!isCollapsed}
+                  onClick={() => toggleGroup('common-picks')}
+                  aria-expanded={!(collapsedGroups['common-picks'] ?? false)}
                 >
-                  <span>Size {sizeGroup.size}</span>
-                  <span>{isCollapsed ? '+' : '-'}</span>
+                  <span>Common Picks</span>
+                  <span>{(collapsedGroups['common-picks'] ?? false) ? '+' : '-'}</span>
                 </button>
 
-                {!isCollapsed ? (
+                {!(collapsedGroups['common-picks'] ?? false) ? (
                   <div className="alpha-drawer-group-body">
-                    {sizeGroup.damageTypes.map((damageTypeGroup) => (
-                      damageTypeGroup.classes.map((weaponClassGroup) => (
-                        <section
-                          key={`${sizeGroup.size}-${damageTypeGroup.damageType}-${weaponClassGroup.weaponClass}`}
-                          className="alpha-drawer-weapon-class"
-                        >
-                          <h4 className="alpha-drawer-weapon-class-title">
-                            {formatWeaponTypeLabel({
-                              damageType: damageTypeGroup.damageType,
-                              weaponClass: weaponClassGroup.weaponClass,
-                            })}
-                          </h4>
+                    <div className="alpha-drawer-weapon-list">
+                      {commonPickWeapons.map((weapon) => {
+                        const weaponKey = getWeaponKey(weapon)
+                        const isAssigned = assignedWeaponKeys.has(weaponKey)
+                        const isActiveAssignment = activeSlot?.slot.weaponKey === weaponKey
 
-                          <div className="alpha-drawer-weapon-list">
-                            {weaponClassGroup.weapons.map((weapon) => {
-                              const weaponKey = getWeaponKey(weapon)
-                              const isAssigned = assignedWeaponKeys.has(weaponKey)
-                              const isActiveAssignment =
-                                activeSlot?.slot.weaponKey === weaponKey
-
-                              return (
-                                <button
-                                  key={weaponKey}
-                                  type="button"
-                                  className={[
-                                    'alpha-drawer-weapon-row',
-                                    isAssigned ? 'alpha-drawer-weapon-row-assigned' : '',
-                                    isActiveAssignment ? 'alpha-drawer-weapon-row-active-assignment' : '',
-                                  ].join(' ')}
-                                  onClick={() => handleAssignWeapon(weapon)}
-                                >
-                                  <div>
-                                    <strong className="alpha-drawer-weapon-name">
-                                      {weapon.name}
-                                    </strong>
-                                    <p className="alpha-drawer-weapon-meta">
-                                      {formatWeaponTypeLabel({
-                                        damageType: weapon.damageType,
-                                        weaponClass: weapon.weaponClass,
-                                      })}{' '}
-                                      · S{weapon.size}
-                                    </p>
-                                  </div>
-                                  <div className="alpha-drawer-weapon-stats">
-                                    <span>{formatMetric(weapon.alpha ?? 0)} alpha</span>
-                                    {isAssigned ? (
-                                      <span className="alpha-drawer-weapon-chip">Assigned</span>
-                                    ) : null}
-                                  </div>
-                                </button>
-                              )
-                            })}
-                          </div>
-                        </section>
-                      ))
-                    ))}
+                        return (
+                          <WeaponRow
+                            key={`common-${weaponKey}`}
+                            weapon={weapon}
+                            isAssigned={isAssigned}
+                            isActiveAssignment={isActiveAssignment}
+                            onAssign={handleAssignWeapon}
+                          />
+                        )
+                      })}
+                    </div>
                   </div>
                 ) : null}
               </section>
-            )
-          })
+            ) : null}
+
+            {groupedWeapons.map((sizeGroup) => {
+              const groupKey = String(sizeGroup.size)
+              const isCollapsed = collapsedGroups[groupKey] ?? true
+
+              return (
+                <section key={sizeGroup.size} className="alpha-drawer-group">
+                  <button
+                    type="button"
+                    className="alpha-drawer-group-toggle"
+                    onClick={() => toggleGroup(groupKey)}
+                    aria-expanded={!isCollapsed}
+                  >
+                    <span>Size {sizeGroup.size}</span>
+                    <span>{isCollapsed ? '+' : '-'}</span>
+                  </button>
+
+                  {!isCollapsed ? (
+                    <div className="alpha-drawer-group-body">
+                      {sizeGroup.damageTypes.map((damageTypeGroup) => (
+                        damageTypeGroup.classes.map((weaponClassGroup) => (
+                          <section
+                            key={`${sizeGroup.size}-${damageTypeGroup.damageType}-${weaponClassGroup.weaponClass}`}
+                            className="alpha-drawer-weapon-class"
+                          >
+                            <h4 className="alpha-drawer-weapon-class-title">
+                              {formatWeaponTypeLabel({
+                                damageType: damageTypeGroup.damageType,
+                                weaponClass: weaponClassGroup.weaponClass,
+                              })}
+                            </h4>
+
+                            <div className="alpha-drawer-weapon-list">
+                              {weaponClassGroup.weapons.map((weapon) => {
+                                const weaponKey = getWeaponKey(weapon)
+                                const isAssigned = assignedWeaponKeys.has(weaponKey)
+                                const isActiveAssignment = activeSlot?.slot.weaponKey === weaponKey
+
+                                return (
+                                  <WeaponRow
+                                    key={weaponKey}
+                                    weapon={weapon}
+                                    isAssigned={isAssigned}
+                                    isActiveAssignment={isActiveAssignment}
+                                    onAssign={handleAssignWeapon}
+                                  />
+                                )
+                              })}
+                            </div>
+                          </section>
+                        ))
+                      ))}
+                    </div>
+                  ) : null}
+                </section>
+              )
+            })}
+          </>
         ) : (
           <section className="alpha-empty-state">
             <h3 className="title-font text-base text-slate-50">No weapons match the current filters.</h3>

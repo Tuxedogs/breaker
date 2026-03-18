@@ -5,10 +5,11 @@ type Props = {
   x: number
   y: number
   title: string
+  sectionTitle?: string
   lines: Array<{ label: string; value: string }>
 }
 
-export function HeatmapTooltip({ open, x, y, title, lines }: Props) {
+export function HeatmapTooltip({ open, x, y, title, sectionTitle, lines }: Props) {
   if (!open) return null
 
   return createPortal(
@@ -21,15 +22,18 @@ export function HeatmapTooltip({ open, x, y, title, lines }: Props) {
           top: `${y}px`,
         }}
       >
-        <p className="alpha-heatmap-tooltip-title">{title}</p>
-        <dl className="alpha-heatmap-tooltip-list">
-          {lines.map((line) => (
-            <div key={line.label} className="alpha-heatmap-tooltip-row">
-              <dt>{line.label}</dt>
-              <dd>{line.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <div className="alpha-heatmap-tooltip-body">
+          <p className="alpha-heatmap-tooltip-ship-title">{title}</p>
+          {sectionTitle ? <p className="alpha-heatmap-tooltip-section-title">{sectionTitle}</p> : null}
+          <dl className="alpha-heatmap-tooltip-list">
+            {lines.map((line) => (
+              <div key={line.label} className="alpha-heatmap-tooltip-row">
+                <dt>{line.label}</dt>
+                <dd>{line.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
       </div>
     </div>,
     document.body

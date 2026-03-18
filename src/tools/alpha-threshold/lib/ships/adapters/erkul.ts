@@ -33,8 +33,8 @@ function inferSizeGroup(input: JsonRecord, rawData: JsonRecord | null): ShipSize
   }
 
   const size = asNumber(rawData?.size, -1)
-  if (size >= 5) return 'capital'
-  if (size >= 4) return 'large'
+  if (size >= 6) return 'capital'
+  if (size >= 5) return 'large'
   if (size >= 3) return 'medium'
   return 'small'
 }
@@ -158,7 +158,8 @@ export function normalizeErkulShip(
   const rawArmorDeflection = asRecord(rawArmorStats?.armorDeflection)
   const manufacturer = normalizeShipManufacturer(inferManufacturer(input, rawData))
   const name = normalizeShipName(String(input.name ?? rawData?.shortName ?? rawData?.name ?? ''))
-  const health = asNumber(input.health ?? asRecord(rawData?.hull)?.totalHp ?? asRecord(rawData?.health)?.hp, 0)
+  const rawHullTotalHp = asRecord(rawData?.hull)?.totalHp
+  const health = asNumber(input.health ?? rawHullTotalHp ?? asRecord(rawData?.health)?.hp, 0)
   const ballisticThreshold = Math.round(
     asNumber(input.ballisticThreshold ?? rawArmorDeflection?.damagePhysical)
   )

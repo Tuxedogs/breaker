@@ -45,11 +45,6 @@ export function ThresholdHeatmapBoard({
             Compare crossover timing directly on the board. Intact armor stays left, broken armor collapses to the right.
           </p>
         </div>
-        <div className="alpha-threshold-board-axis-copy" aria-hidden="true">
-          <span>Intact</span>
-          <span>Failing</span>
-          <span>Broken</span>
-        </div>
       </header>
 
       {showLegend ? <HeatmapLegend /> : null}

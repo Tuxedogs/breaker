@@ -14,7 +14,7 @@ export default function AppShell() {
 
       <main
         className={[
-          "relative z-20 mx-auto w-full px-4 pb-8 pt-24 sm:px-6 lg:px-8",
+          "relative z-20 mx-auto w-full px-4 pb-8 pt-12 sm:px-6 lg:px-8",
           isMapsRoute || isAlphaThresholdRoute ? "max-w-[96vw]" : "max-w-7xl",
         ].join(" ")}
       >
