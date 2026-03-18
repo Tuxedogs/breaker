@@ -11,6 +11,12 @@ type Props = {
 export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
+  const patchSummary = entries[0]
+    ? {
+        previous: entries[0].previous.patch,
+        current: entries[0].current.patch,
+      }
+    : null
 
   const visibleEntries = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -67,8 +73,11 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
 
       {open
         ? createPortal(
-            <div className="alpha-tool-route">
-              <div className="alpha-modal-backdrop" onMouseDown={() => setOpen(false)}>
+            <div
+              className="alpha-tool-route alpha-balance-modal-root"
+              onMouseDown={() => setOpen(false)}
+            >
+              <div className="alpha-modal-backdrop">
                 <section
                   className="alpha-modal-shell alpha-balance-modal"
                   role="dialog"
@@ -78,24 +87,24 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
                 >
                   <header className="alpha-balance-changelog-head">
                     <div>
-                      <p className="page-kicker">Erkul Source Delta</p>
+                      <p className="page-kicker">Changelog</p>
                       <h2 id="ship-balance-changelog" className="surface-title mt-3">
                         Live vs PTU Ship Changes
                       </h2>
                       <p className="mt-2 text-sm text-slate-400">
-                        Compare armor, thresholds, armor HP, and hull HP changes between the current Erkul Live and Erkul PTU ship datasets.
+                        Compare armor, thresholds, armor HP, and hull HP changes between the current Live and PTU ship datasets.
                       </p>
                       <p className="mt-1 text-xs uppercase tracking-[0.12em] text-slate-500">
-                        Source: Erkul Live {'>'} Erkul PTU
+                        Source: Live {'>'} PTU
                       </p>
                     </div>
                     <div className="alpha-balance-changelog-actions">
                       <label className="alpha-balance-search-wrap">
-                        <span className="alpha-control-label">Search ship or patch</span>
+                        <span className="alpha-control-label">Search ship</span>
                         <input
                           value={query}
                           onChange={(event) => setQuery(event.target.value)}
-                          placeholder="Perseus, RSI, PTU..."
+                          placeholder="Perseus, RSI..."
                           className="alpha-input"
                         />
                       </label>
@@ -110,6 +119,18 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
                   </header>
 
                   <div className="alpha-balance-changelog-list" aria-live="polite">
+                    {patchSummary ? (
+                      <article className="alpha-balance-change-card alpha-balance-change-card-summary">
+                        <header className="alpha-balance-change-head">
+                          <div>
+                            <p className="alpha-ship-option-meta">Patch Comparison</p>
+                            <h3 className="alpha-compare-ship-name">
+                              {patchSummary.previous} {'>'} {patchSummary.current}
+                            </h3>
+                          </div>
+                        </header>
+                      </article>
+                    ) : null}
                     {visibleEntries.length > 0 ? (
                       visibleEntries.map((entry) => (
                         <article key={entry.ship.name} className="alpha-balance-change-card">
@@ -121,11 +142,6 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
                               <h3 className="alpha-compare-ship-name">
                                 {formatEntityLabel(entry.ship.name)}
                               </h3>
-                            </div>
-                            <div className="alpha-balance-change-patches">
-                              <span className="alpha-chip alpha-chip-muted">
-                                {entry.previous.patch} {'>'} {entry.current.patch}
-                              </span>
                             </div>
                           </header>
 
