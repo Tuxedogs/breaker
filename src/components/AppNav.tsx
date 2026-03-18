@@ -137,7 +137,7 @@ export default function AppNav() {
                 isAlphaThresholdRoute ? "app-nav-link--alpha-active" : "",
               ].join(" ")}
             >
-              Alha Matrix
+              Armor Thresholds
             </NavLink>
 
             <NavLink
@@ -248,7 +248,7 @@ export default function AppNav() {
                 isAlphaThresholdRoute ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
               ].join(" ")}
             >
-              Alha Matrix
+              Armor Thresholds
             </NavLink>
 
             <NavLink
