@@ -12,59 +12,11 @@
     linear-gradient(160deg, rgba(5, 10, 24, 0.25), rgba(3, 8, 20, 0.05) 56%, rgba(2, 5, 15, 0.24));
 }
 
-.base-trend-halo {
-  animation: baseHaloFloat 9.5s ease-in-out infinite;
-}
-
-.base-trend-halo-left {
-  background: rgba(82, 215, 255, 0.26);
-}
-
-.base-trend-halo-right {
-  background: rgba(255, 190, 96, 0.2);
-  animation-delay: -4.4s;
-}
-
 .base-trend-text {
   background: linear-gradient(92deg, rgba(163, 241, 255, 1), rgba(255, 212, 152, 1) 56%, rgba(211, 233, 255, 1));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-.base-card-float {
-  animation: baseCardFloat 9s ease-in-out infinite;
-}
-
-.base-card-float-delay {
-  animation-delay: -4.5s;
-}
-
-@keyframes baseCardFloat {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-@keyframes baseHaloFloat {
-  0%,
-  100% {
-    transform: translateY(0px) scale(1);
-  }
-  50% {
-    transform: translateY(-14px) scale(1.04);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .base-trend-halo,
-  .base-card-float {
-    animation: none !important;
-  }
 }
 
 .base-static .base-trend-bg {
