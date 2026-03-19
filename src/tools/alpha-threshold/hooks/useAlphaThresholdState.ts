@@ -37,6 +37,7 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
 ]
 const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['merged', 'manual', 'erkul-live', 'erkul-ptu', 'spviewer']
 const MAX_VICTIM_SHIPS = 4
+const MOBILE_MAX_VICTIM_SHIPS = 2
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   { id: 'slot-1', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 1' },
   { id: 'slot-2', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 2' },
@@ -232,6 +233,10 @@ function buildBalanceFieldChanges(
 }
 
 export function useAlphaThresholdState() {
+  const [isMobileViewport, setIsMobileViewport] = useLocalStorageState<boolean>(
+    'alpha-threshold.mobile-viewport',
+    false
+  )
   const [sortKey, setSortKey] = useLocalStorageState<ShipSortKey>(
     'alpha-threshold.sort',
     'health-desc'
@@ -318,6 +323,18 @@ export function useAlphaThresholdState() {
     () => normalizeCollapsedGroups(collapsedGroups),
     [collapsedGroups]
   )
+  const maxVictimShips = isMobileViewport ? MOBILE_MAX_VICTIM_SHIPS : MAX_VICTIM_SHIPS
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const updateViewport = () => setIsMobileViewport(mediaQuery.matches)
+
+    updateViewport()
+    mediaQuery.addEventListener('change', updateViewport)
+
+    return () => mediaQuery.removeEventListener('change', updateViewport)
+  }, [setIsMobileViewport])
+
   useEffect(() => {
     if (activeSource !== resolvedActiveSource) {
       setActiveSource(resolvedActiveSource)
@@ -341,6 +358,16 @@ export function useAlphaThresholdState() {
       setSelectedShipNames(normalizedSelectedShipNames)
     }
   }, [normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])
+
+  useEffect(() => {
+    const limitedSelection = normalizedSelectedShipNames.map((shipName, index) =>
+      index < maxVictimShips ? shipName : null
+    )
+
+    if (JSON.stringify(selectedShipNames) !== JSON.stringify(limitedSelection)) {
+      setSelectedShipNames(limitedSelection)
+    }
+  }, [maxVictimShips, normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])
 
   useEffect(() => {
     if (JSON.stringify(collapsedGroups) !== JSON.stringify(normalizedCollapsedGroups)) {
@@ -372,8 +399,13 @@ export function useAlphaThresholdState() {
   }, [activeShips, normalizedSortKey, shipOverrides])
 
   const selectedShipNameSet = useMemo(
-    () => new Set(normalizedSelectedShipNames.filter((shipName): shipName is string => Boolean(shipName))),
-    [normalizedSelectedShipNames]
+    () =>
+      new Set(
+        normalizedSelectedShipNames
+          .slice(0, maxVictimShips)
+          .filter((shipName): shipName is string => Boolean(shipName))
+      ),
+    [maxVictimShips, normalizedSelectedShipNames]
   )
 
   const victimManufacturerOptions = useMemo<ShipManufacturerOption[]>(() => {
@@ -544,7 +576,7 @@ export function useAlphaThresholdState() {
       }
 
       const emptyIndex = prev.findIndex((name) => name === null)
-      if (emptyIndex === -1) return prev
+      if (emptyIndex === -1 || emptyIndex >= maxVictimShips) return prev
 
       const next = [...prev]
       next[emptyIndex] = shipName
@@ -562,7 +594,7 @@ export function useAlphaThresholdState() {
       visibleShipNames.forEach((shipName) => {
         if (next.includes(shipName)) return
         const emptyIndex = next.findIndex((name) => name === null)
-        if (emptyIndex !== -1) {
+        if (emptyIndex !== -1 && emptyIndex < maxVictimShips) {
           next[emptyIndex] = shipName
         }
       })
@@ -582,6 +614,10 @@ export function useAlphaThresholdState() {
       const existingIndex = next.findIndex((name) => name === shipName)
       if (existingIndex !== -1) {
         next[existingIndex] = null
+      }
+
+      if (slotIndex >= maxVictimShips) {
+        return next
       }
 
       next[slotIndex] = shipName
@@ -616,10 +652,10 @@ export function useAlphaThresholdState() {
     victimManufacturerOptions,
     visibleVictimShips,
     sidebarGroups,
-    selectedShipNames: normalizedSelectedShipNames,
-    victimSlotShipNames: normalizedSelectedShipNames,
-    selectedShipCount: normalizedSelectedShipNames.filter(Boolean).length,
-    maxVictimShips: MAX_VICTIM_SHIPS,
+    selectedShipNames: normalizedSelectedShipNames.slice(0, maxVictimShips),
+    victimSlotShipNames: normalizedSelectedShipNames.slice(0, maxVictimShips),
+    selectedShipCount: normalizedSelectedShipNames.slice(0, maxVictimShips).filter(Boolean).length,
+    maxVictimShips,
     visibleShipCount: visibleShipNames.length,
     toggleShipSelected,
     clearAllShips,

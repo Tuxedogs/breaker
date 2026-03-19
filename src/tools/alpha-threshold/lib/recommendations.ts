@@ -13,6 +13,7 @@ export type WeaponRecommendation = {
   viabilityScore: number
   viabilityPercent: number
   viabilityBand: RecommendationBand
+  threshold: number
   firstPenetrationArmorPercent: number | null
   firstPenetrationStepLabel: string
   firstPenetrationX: number
@@ -90,11 +91,38 @@ export function isThresholdRecommendationWeapon(weapon: WeaponRecord): weapon is
 
 function shouldExcludeRecommendationWeapon(weapon: WeaponRecord) {
   const normalizedName = weapon.name.trim().toLowerCase()
+  const excludedNames = [
+    "'warlord'",
+    "war'",
+    'reign-3',
+    'quarreler',
+    'dominance-3',
+    'predator',
+    "'wrath'",
+    'conqueror-7',
+    'attrition',
+    'attrition-6',
+    'omnisky',
+    'sf7e',
+    'destroyer mass driver',
+    'rsi medusa',
+    'maris',
+    'strife mass driver',
+    'leonids',
+    'slayer',
+    'c-788',
+    'mvsa',
+    'ad6b',
+    'cvsa',
+    'nv57',
+    'draugar',
+  ]
 
   return (
     normalizedName.includes('sledge') ||
     normalizedName.includes('singe') ||
     normalizedName.includes('deadbolt') ||
+    excludedNames.some((name) => normalizedName.includes(name)) ||
     /\bm\d+a\b/.test(normalizedName)
   )
 }
@@ -123,6 +151,7 @@ export function evaluateWeaponRecommendation(
   if (shouldExcludeRecommendationWeapon(weapon)) return null
 
   const thresholdType = weapon.damageType
+  const threshold = getThresholdForWeaponType(ship, thresholdType)
   const penetratedArmorSteps = getPenetratedArmorSteps(ship, weapon, thresholdType)
   const firstPenetrationArmorPercent =
     getFirstPenetrationArmorPercent(ship, weapon, thresholdType)
@@ -151,6 +180,7 @@ export function evaluateWeaponRecommendation(
     viabilityScore,
     viabilityPercent,
     viabilityBand: getRecommendationBand(viabilityPercent),
+    threshold,
     firstPenetrationArmorPercent,
     firstPenetrationStepLabel:
       firstPenetrationArmorPercent == null

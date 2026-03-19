@@ -3,10 +3,9 @@ import { buildShipHeatmapModel } from '../lib/calculations'
 import { HeatmapLegend } from './HeatmapLegend'
 import { HeatmapShipColumn } from './HeatmapShipColumn'
 import { RecommendationsBoard } from './RecommendationsBoard'
-import { ThresholdSummaryBoard } from './ThresholdSummaryBoard'
 import type { SelectedWeaponComparison, Ship, WeaponRecord } from '../types'
 
-type BoardTab = 'heatmap' | 'thresholds' | 'recommendations'
+type BoardTab = 'heatmap' | 'recommendations'
 
 type Props = {
   ships: Ship[]
@@ -40,7 +39,7 @@ export function ThresholdHeatmapBoard({
           </p>
         </div>
         <div className="alpha-threshold-board-tabs" role="tablist" aria-label="Threshold analysis views">
-          {(['heatmap', 'thresholds', 'recommendations'] as const).map((tab) => (
+          {(['heatmap', 'recommendations'] as const).map((tab) => (
             <button
               key={tab}
               type="button"
@@ -49,11 +48,7 @@ export function ThresholdHeatmapBoard({
               className="alpha-threshold-board-tab"
               onClick={() => setActiveTab(tab)}
             >
-              {tab === 'heatmap'
-                ? 'Heatmap'
-                : tab === 'thresholds'
-                  ? 'Thresholds'
-                  : 'Recommendations'}
+              {tab === 'heatmap' ? 'Analysis' : 'Weapons Loadout'}
             </button>
           ))}
         </div>
@@ -90,10 +85,6 @@ export function ThresholdHeatmapBoard({
             </>
           )}
         </>
-      ) : null}
-
-      {activeTab === 'thresholds' ? (
-        <ThresholdSummaryBoard ships={ships} selectedWeapons={selectedWeapons} />
       ) : null}
 
       {activeTab === 'recommendations' ? (

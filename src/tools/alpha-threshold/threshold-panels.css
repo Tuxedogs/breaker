@@ -1268,16 +1268,16 @@
   position: relative;
   z-index: 1;
   min-height: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 0.2rem;
+  overflow: visible;
+  padding-bottom: 0;
 }
 
 .alpha-tool-route .alpha-threshold-board-columns {
   display: grid;
   gap: 0.75rem;
   align-items: start;
-  min-width: max(100%, calc(var(--alpha-threshold-columns, 1) * 19rem));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
+  min-width: 0;
 }
 
 .alpha-tool-route .alpha-heatmap-ship-column {
@@ -1505,101 +1505,44 @@
   display: grid;
   position: relative;
   isolation: isolate;
-  gap: 0.5rem;
-}
-
-.alpha-tool-route .alpha-heatmap-trace-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.65rem;
-  align-items: flex-start;
+  gap: 0.35rem;
 }
 
 .alpha-tool-route .alpha-heatmap-trace-copy {
-  min-width: 0;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   display: grid;
-  gap: 0.24rem;
-  border: 1px solid rgb(255 255 255 / 0.08);
-  border-radius: 0.95rem;
-  padding: 0.65rem 0.75rem;
-  background: rgb(255 255 255 / 0.025);
+  align-content: center;
+  gap: 0.14rem;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  pointer-events: none;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-copy-energy {
-  /* Energy weapon card accent */
-  border-color: rgb(253 224 71 / 0.22);
-  background:
-    linear-gradient(180deg, rgb(253 224 71 / 0.08), transparent 100%),
-    rgb(16 16 12 / 0.88);
-}
-
+.alpha-tool-route .alpha-heatmap-trace-copy-energy,
 .alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
-  border-color: rgb(167 139 250 / 0.24);
-  background:
-    linear-gradient(180deg, rgb(124 58 237 / 0.08), transparent 100%),
-    rgb(14 12 30 / 0.88);
+  border: 0;
+  background: transparent;
 }
 
 .alpha-tool-route .alpha-heatmap-trace-name {
   margin: 0;
-  font-size: 0.96rem;
-  line-height: 1.2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.92rem;
+  line-height: 1.15;
+  color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-meta {
-  display: grid;
-  gap: 0.12rem;
-  margin-top: 0.24rem;
-  font-size: 0.74rem;
-}
-
-.alpha-tool-route .alpha-heatmap-trace-speed {
-  color: rgb(148 163 184);
-}
-
-.alpha-tool-route .alpha-heatmap-trace-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.35rem;
-  margin-top: 0.22rem;
-}
-
-.alpha-tool-route .alpha-heatmap-trace-status {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid rgb(255 255 255 / 0.08);
-  background: rgb(255 255 255 / 0.035);
-  padding: 0.22rem 0.42rem;
-  font-size: 0.67rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.alpha-tool-route .alpha-heatmap-trace-status {
-  color: rgb(226 232 240);
-}
-
-.alpha-tool-route .alpha-heatmap-trace-status-deflect {
-  /* Blocked state badge */
-  border-color: rgb(248 113 113 / 0.22);
-  background: rgb(127 29 29 / 0.18);
-  color: rgb(254 202 202);
-}
-
-.alpha-tool-route .alpha-heatmap-trace-status-late {
-  border-color: rgb(56 189 248 / 0.4);
-  background: rgb(8 47 73 / 0.78);
-  color: rgb(186 230 253);
-}
-
-.alpha-tool-route .alpha-heatmap-trace-status-early,
-.alpha-tool-route .alpha-heatmap-trace-status-penetrate {
-  border-color: rgb(16 185 129 / 0.44);
-  background: rgb(6 78 59 / 0.78);
-  color: rgb(167 243 208);
+.alpha-tool-route .alpha-heatmap-trace-hint {
+  min-width: 0;
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.1;
+  color: rgb(203 213 225);
 }
 
 .alpha-tool-route .alpha-heatmap-trace-bar-shell {
@@ -1862,17 +1805,15 @@
   color: rgb(248 113 113);
 }
 
-@media (min-width: 768px) {
-  .alpha-tool-route .alpha-threshold-board-columns {
-    grid-template-columns: repeat(var(--alpha-threshold-columns, 1), minmax(18.75rem, 1fr));
-  }
-}
-
 @media (max-width: 767px) {
   .alpha-tool-route .alpha-threshold-board {
     min-height: calc(100vh - 9.6rem);
     border-radius: 1.35rem;
     padding: 0.75rem;
+  }
+
+  .alpha-tool-route .alpha-penetration-marker {
+    display: none;
   }
 
   .alpha-tool-route .alpha-loadout-drawer {
@@ -1883,7 +1824,23 @@
     border-radius: 1.15rem;
   }
 
+  .alpha-tool-route .alpha-top-control-strip-status,
+  .alpha-tool-route .alpha-top-control-strip-changelog {
+    display: none;
+  }
+
   .alpha-tool-route .alpha-top-control-strip {
     padding: 0.6rem 0.7rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip-actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip-actions .alpha-top-strip-button {
+    width: 100%;
   }
 }
