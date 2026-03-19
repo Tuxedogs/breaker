@@ -53,6 +53,8 @@ export default function AlphaThresholdToolPage() {
             <ThresholdHeatmapBoard
               ships={selectedShips}
               selectedWeapons={selectedWeapons}
+              allShips={allShips}
+              allWeapons={allWeapons}
             />
           }
           drawer={
