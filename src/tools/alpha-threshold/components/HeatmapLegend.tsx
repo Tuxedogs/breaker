@@ -14,6 +14,13 @@ export function HeatmapLegend() {
         Active penetration
       </span>
       <span className="alpha-heatmap-legend-item">
+        <span
+          className="alpha-heatmap-legend-swatch alpha-heatmap-legend-swatch-damage alpha-heatmap-legend-swatch-immediate"
+          aria-hidden="true"
+        />
+        Always Penetrates
+      </span>
+      <span className="alpha-heatmap-legend-item">
         <span className="alpha-heatmap-legend-marker" aria-hidden="true" />
         Penetration threshold
       </span>
