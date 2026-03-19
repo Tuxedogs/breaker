@@ -85,14 +85,6 @@
   }
 }
 
-.map-controls-panel {
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
-}
-
-.map-controls-panel-body {
-  scrollbar-width: thin;
-}
-
 .map-mobile-overlay-actions {
   display: flex;
   flex-wrap: wrap;
@@ -105,6 +97,7 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .map-deck-picker-trigger,
@@ -146,7 +139,7 @@
 .map-deck-picker-menu {
   position: absolute;
   top: 0;
-  left: calc(100% + 0.5rem);
+  left: calc(100% + 1.5rem);
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -485,10 +478,6 @@
 
   .map-deck-picker-menu {
     max-width: calc(100vw - 7rem);
-  }
-
-  .map-controls-panel {
-    display: none;
   }
 
   .map-legend-panel {
