@@ -6,7 +6,7 @@ import { ShipBalanceChangelogPanel } from './components/ShipBalanceChangelogPane
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { TopControlStrip } from './components/TopControlStrip'
 import { ShipSelectorPanel } from './components/ShipSelectorPanel'
-import { WeaponSelectorPanel } from './components/WeaponSelectorPanel'
+import WeaponSelectorPanel from './components/WeaponSelectorPanel'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
 
 export default function AlphaThresholdToolPage() {
@@ -84,3 +84,4 @@ export default function AlphaThresholdToolPage() {
     </main>
   )
 }
+

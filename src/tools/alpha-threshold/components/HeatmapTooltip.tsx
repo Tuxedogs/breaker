@@ -6,7 +6,7 @@ type Props = {
   y: number
   title: string
   sectionTitle?: string
-  lines: Array<{ label: string; value: string }>
+  lines: Array<{ label: string; value: string; tone?: 'immediate' }>
 }
 
 export function HeatmapTooltip({ open, x, y, title, sectionTitle, lines }: Props) {
@@ -29,7 +29,9 @@ export function HeatmapTooltip({ open, x, y, title, sectionTitle, lines }: Props
             {lines.map((line) => (
               <div key={line.label} className="alpha-heatmap-tooltip-row">
                 <dt>{line.label}</dt>
-                <dd>{line.value}</dd>
+                <dd className={line.tone ? `alpha-heatmap-tooltip-value-${line.tone}` : undefined}>
+                  {line.value}
+                </dd>
               </div>
             ))}
           </dl>

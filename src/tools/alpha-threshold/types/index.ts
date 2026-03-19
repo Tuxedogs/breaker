@@ -177,6 +177,8 @@ export type HeatmapTraceStatus =
   | 'penetrates-early'
   | 'always-penetrates'
 
+export type PenetrationState = 'blocked' | 'threshold' | 'immediate'
+
 export type HeatmapTraceModel = {
   weapon: SelectedWeaponComparison
   matchedDamageType: WeaponThresholdType
@@ -192,6 +194,7 @@ export type HeatmapTraceModel = {
   nearCrossoverBandStart: number
   nearCrossoverBandEnd: number
   status: HeatmapTraceStatus
+  penetrationState: PenetrationState
 }
 
 export type ShipHeatmapLaneModel = {

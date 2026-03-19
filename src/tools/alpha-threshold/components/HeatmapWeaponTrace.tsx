@@ -10,6 +10,39 @@ type Props = {
 }
 
 function getStatusLabel(trace: HeatmapTraceModel) {
+  switch (trace.penetrationState) {
+    case 'blocked':
+      return 'Blocked'
+    case 'immediate':
+      return 'Immediate penetration'
+    case 'threshold':
+      return 'Armor Damage Required.'
+  }
+}
+
+function getStatusTone(trace: HeatmapTraceModel) {
+  switch (trace.penetrationState) {
+    case 'blocked':
+      return 'deflect'
+    case 'immediate':
+      return 'penetrate'
+    case 'threshold':
+      return 'late'
+  }
+}
+
+function getPenetrationStartLabel(trace: HeatmapTraceModel) {
+  switch (trace.penetrationState) {
+    case 'blocked':
+      return 'No penetration point'
+    case 'immediate':
+      return '100% intact armor'
+    case 'threshold':
+      return `${Math.round(trace.penetrationStartArmorPercent)}% armor remaining`
+  }
+}
+
+function getLegacyStatusLabel(trace: HeatmapTraceModel) {
   switch (trace.status) {
     case 'always-deflects':
       return 'Always Deflects'
@@ -34,13 +67,9 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
   })
   const frameRef = useRef<number | null>(null)
   const nextPointRef = useRef({ x: 0, y: 0 })
-  const crossoverStart = trace.penetrationStartX * 100
-  const transitionStart = trace.alwaysPenetrates ? 0 : crossoverStart
-  const transitionWidth = trace.alwaysPenetrates
-    ? 2
-    : Math.min(3, Math.max(1.35, (trace.nearCrossoverBandEnd - trace.nearCrossoverBandStart) * 50))
-  const damageStart = trace.alwaysPenetrates ? 0 : crossoverStart
   const statusLabel = getStatusLabel(trace)
+  const destroyedArmorWidth = trace.penetrationStartX * 100
+  const activeWidth = 100 - destroyedArmorWidth
 
   useEffect(() => {
     return () => {
@@ -94,23 +123,34 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
       className={`alpha-heatmap-trace alpha-heatmap-trace-${trace.matchedDamageType}`}
     >
       <header className="alpha-heatmap-trace-head">
-        <div className={`alpha-heatmap-trace-copy alpha-heatmap-trace-copy-${trace.matchedDamageType}`}>
+        <div
+          className={`alpha-heatmap-trace-copy alpha-heatmap-trace-copy-${trace.matchedDamageType}`}
+        >
           <h4 className="alpha-heatmap-trace-name">{trace.weapon.weapon.name}</h4>
-          <p className="alpha-heatmap-trace-meta">
-            {trace.matchedDamageType} · {formatMetric(trace.weaponAlpha)} alpha
-          </p>
+          <div className="alpha-heatmap-trace-meta">
+            <span>{formatMetric(trace.weaponAlpha)} alpha</span>
+            <span className="alpha-heatmap-trace-speed">
+              {formatMetric(trace.weapon.weapon.projectileSpeed ?? 0)} m/s
+            </span>
+          </div>
         </div>
+        {trace.penetrationState === 'blocked' ? (
+          <div className="alpha-heatmap-trace-badges">
+            <span
+              className={`alpha-heatmap-trace-status alpha-heatmap-trace-status-${getStatusTone(trace)}`}
+            >
+              {statusLabel}
+            </span>
+          </div>
+        ) : null}
       </header>
 
       <div
-        className="alpha-heatmap-trace-bar-shell"
+        className={`alpha-heatmap-trace-bar-shell alpha-heatmap-trace-bar-shell-${trace.penetrationState}`}
+        aria-label={statusLabel}
         tabIndex={0}
-        onPointerEnter={(event) =>
-          queueTooltipPosition(event.clientX, event.clientY)
-        }
-        onPointerMove={(event) =>
-          queueTooltipPosition(event.clientX, event.clientY)
-        }
+        onPointerEnter={(event) => queueTooltipPosition(event.clientX, event.clientY)}
+        onPointerMove={(event) => queueTooltipPosition(event.clientX, event.clientY)}
         onPointerLeave={closeTooltip}
         onFocus={(event) => {
           const rect = event.currentTarget.getBoundingClientRect()
@@ -125,26 +165,35 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
         }}
         onBlur={closeTooltip}
       >
-        <div className="alpha-heatmap-trace-deflect" aria-hidden="true" />
-        {!trace.alwaysDeflects ? (
+        {trace.penetrationState === 'blocked' ? (
+          <div className="alpha-heatmap-trace-deflect" aria-hidden="true" />
+        ) : null}
+        {trace.penetrationState === 'threshold' ? (
           <>
             <div
-              className="alpha-heatmap-trace-transition"
+              className="alpha-heatmap-trace-deflect alpha-heatmap-trace-deflect-threshold"
               aria-hidden="true"
               style={{
-                left: `${transitionStart}%`,
-                width: `${transitionWidth}%`,
+                inset: '0 auto 0 0',
+                width: `${destroyedArmorWidth}%`,
               }}
             />
             <div
               className="alpha-heatmap-trace-damage"
               aria-hidden="true"
               style={{
-                left: `${damageStart}%`,
-                width: `${100 - damageStart}%`,
+                left: `${destroyedArmorWidth}%`,
+                width: `${activeWidth}%`,
               }}
             />
           </>
+        ) : null}
+        {trace.penetrationState === 'immediate' ? (
+          <div
+            className="alpha-heatmap-trace-damage alpha-heatmap-trace-damage-immediate"
+            aria-hidden="true"
+            style={{ inset: 0 }}
+          />
         ) : null}
         <PenetrationMarker trace={trace} />
         <HeatmapTooltip
@@ -156,7 +205,8 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
           lines={[
             {
               label: 'Penetration Start',
-              value: `${Math.round(trace.penetrationStartArmorPercent)}% armor`,
+              value: getPenetrationStartLabel(trace),
+              tone: trace.penetrationState === 'immediate' ? 'immediate' : undefined,
             },
             { label: 'Weapon Type', value: trace.matchedDamageType },
             { label: 'Alpha', value: formatMetric(trace.weaponAlpha) },
@@ -171,10 +221,11 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
                 Math.abs(trace.overUnderDeltaAtFullArmor)
               )}`,
             },
-            { label: 'Status', value: statusLabel },
+            { label: 'Legacy Status', value: getLegacyStatusLabel(trace) },
           ]}
         />
       </div>
     </section>
   )
 }
+

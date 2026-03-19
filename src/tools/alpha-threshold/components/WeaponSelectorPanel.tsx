@@ -57,6 +57,7 @@ function WeaponRow({
       </div>
       <div className="alpha-drawer-weapon-stats">
         <span>{formatMetric(weapon.alpha ?? 0)} alpha</span>
+        <span>{formatMetric(weapon.projectileSpeed ?? 0)} m/s</span>
         {isAssigned ? (
           <span className="alpha-drawer-weapon-chip">Assigned</span>
         ) : null}
@@ -65,7 +66,7 @@ function WeaponRow({
   )
 }
 
-export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
+export default function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
   const [activeSlotId, setActiveSlotId] = useState<string | null>(null)
   const [query, setQuery] = useState('')
   const [damageFilter, setDamageFilter] = useState<DamageFilter>('all')
@@ -220,7 +221,7 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
                           damageType: entry.assignedWeapon.damageType,
                           weaponClass: entry.assignedWeapon.weaponClass,
                         })}{' '}
-                        Â· {formatMetric(entry.assignedWeapon.alpha ?? 0)} alpha
+                        · {formatMetric(entry.assignedWeapon.alpha ?? 0)} alpha
                       </span>
                     </>
                   ) : (
@@ -394,3 +395,6 @@ export function WeaponSelectorPanel({ slots, weapons, onSlotChange }: Props) {
     </section>
   )
 }
+
+
+

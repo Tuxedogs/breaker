@@ -3,6 +3,7 @@ import type {
   AxisScaleMode,
   HeatmapTraceModel,
   HeatmapTraceStatus,
+  PenetrationState,
   SelectedShipResult,
   SelectedWeaponComparison,
   Ship,
@@ -86,6 +87,17 @@ function getHeatmapTraceStatus(
   return 'crosses-late'
 }
 
+function getPenetrationState(
+  baseThreshold: number,
+  weaponAlpha: number,
+  penetrationStartArmorRatio: number
+): PenetrationState {
+  if (!Number.isFinite(baseThreshold) || baseThreshold <= 0) return 'immediate'
+  if (!Number.isFinite(weaponAlpha) || weaponAlpha <= 0) return 'blocked'
+  if (penetrationStartArmorRatio >= 1) return 'immediate'
+  return 'threshold'
+}
+
 export function buildHeatmapTraceModel(
   ship: Ship,
   selectedWeapon: SelectedWeaponComparison
@@ -106,6 +118,11 @@ export function buildHeatmapTraceModel(
   const overUnderDeltaAtFullArmor = weaponAlpha - baseThreshold
   const alwaysDeflects = weaponAlpha <= 0
   const alwaysPenetrates = baseThreshold <= 0 || weaponAlpha >= baseThreshold
+  const penetrationState = getPenetrationState(
+    baseThreshold,
+    weaponAlpha,
+    penetrationStartArmorRatio
+  )
   const transitionWidth = 0.04
   const nearCrossoverBandStart = clamp(
     penetrationStartX - transitionWidth,
@@ -132,6 +149,7 @@ export function buildHeatmapTraceModel(
     alwaysPenetrates,
     nearCrossoverBandStart,
     nearCrossoverBandEnd,
+    penetrationState,
     status: getHeatmapTraceStatus(
       penetrationStartArmorRatio,
       alwaysDeflects,
