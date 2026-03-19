@@ -20,17 +20,6 @@ function getStatusLabel(trace: HeatmapTraceModel) {
   }
 }
 
-function getStatusTone(trace: HeatmapTraceModel) {
-  switch (trace.penetrationState) {
-    case 'blocked':
-      return 'deflect'
-    case 'immediate':
-      return 'penetrate'
-    case 'threshold':
-      return 'late'
-  }
-}
-
 function getPenetrationStartLabel(trace: HeatmapTraceModel) {
   switch (trace.penetrationState) {
     case 'blocked':
@@ -122,29 +111,6 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
     <section
       className={`alpha-heatmap-trace alpha-heatmap-trace-${trace.matchedDamageType}`}
     >
-      <header className="alpha-heatmap-trace-head">
-        <div
-          className={`alpha-heatmap-trace-copy alpha-heatmap-trace-copy-${trace.matchedDamageType}`}
-        >
-          <h4 className="alpha-heatmap-trace-name">{trace.weapon.weapon.name}</h4>
-          <div className="alpha-heatmap-trace-meta">
-            <span>{formatMetric(trace.weaponAlpha)} alpha</span>
-            <span className="alpha-heatmap-trace-speed">
-              {formatMetric(trace.weapon.weapon.projectileSpeed ?? 0)} m/s
-            </span>
-          </div>
-        </div>
-        {trace.penetrationState === 'blocked' ? (
-          <div className="alpha-heatmap-trace-badges">
-            <span
-              className={`alpha-heatmap-trace-status alpha-heatmap-trace-status-${getStatusTone(trace)}`}
-            >
-              {statusLabel}
-            </span>
-          </div>
-        ) : null}
-      </header>
-
       <div
         className={`alpha-heatmap-trace-bar-shell alpha-heatmap-trace-bar-shell-${trace.penetrationState}`}
         aria-label={statusLabel}
@@ -165,6 +131,12 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
         }}
         onBlur={closeTooltip}
       >
+        <div
+          className={`alpha-heatmap-trace-copy alpha-heatmap-trace-copy-${trace.matchedDamageType}`}
+        >
+          <h4 className="alpha-heatmap-trace-name">{trace.weapon.weapon.name}</h4>
+          <p className="alpha-heatmap-trace-hint">Tap for details</p>
+        </div>
         {trace.penetrationState === 'blocked' ? (
           <div className="alpha-heatmap-trace-deflect" aria-hidden="true" />
         ) : null}

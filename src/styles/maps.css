@@ -93,10 +93,89 @@
   scrollbar-width: thin;
 }
 
+.map-mobile-overlay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.map-deck-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.map-deck-picker-trigger,
+.map-deck-picker-option {
+  min-height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(241, 245, 249, 1);
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.map-deck-picker-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  padding: 0;
+}
+
+.map-deck-picker-trigger:hover,
+.map-deck-picker-option:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.map-deck-picker-icon {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.map-deck-picker-menu {
+  position: absolute;
+  top: 0;
+  left: calc(100% + 0.5rem);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  z-index: 1;
+}
+
+.map-deck-picker-option {
+  padding: 0.75rem 0.9rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .map-legend-panel {
   width: fit-content;
   max-width: 100%;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+}
+
+.map-legend-mobile-bar {
+  display: none;
+}
+
+.map-legend-mobile-preview {
+  display: none;
+}
+
+.map-legend-mobile-toggle {
+  display: none;
 }
 
 .map-legend-section + .map-legend-section {
@@ -385,12 +464,115 @@
 }
 
 @media (max-width: 640px) {
+  .map-mobile-overlay-cluster {
+    top: 1rem;
+    bottom: auto;
+    left: 1rem;
+    right: auto;
+    max-width: calc(100% - 2rem);
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .map-mobile-overlay-actions {
+    max-width: 100%;
+  }
+
+  .map-deck-picker {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .map-deck-picker-menu {
+    max-width: calc(100vw - 7rem);
+  }
+
   .map-controls-panel {
     display: none;
   }
 
   .map-legend-panel {
+    position: relative;
+    max-width: min(100%, 20rem);
     padding: 0.65rem;
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .map-legend-panel-mobile-closed {
+    transform: translateX(calc(100% - 3.5rem));
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .map-legend-panel-mobile-open {
+    transform: translateX(0);
+  }
+
+  .map-legend-panel-mobile-open .map-legend-mobile-preview {
+    display: none;
+  }
+
+  .map-legend-mobile-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .map-legend-mobile-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    min-width: 0;
+    align-self: flex-end;
+  }
+
+  .map-legend-mobile-preview-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid color-mix(in srgb, var(--legend-accent) 34%, rgba(255, 255, 255, 0.14));
+    border-radius: 0.6rem;
+    background: rgba(15, 23, 42, 0.6);
+    color: var(--legend-accent);
+  }
+
+  .map-legend-mobile-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    min-height: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 0.6rem;
+    background: rgba(15, 23, 42, 0.72);
+    color: rgba(224, 242, 254, 0.92);
+  }
+
+  .map-legend-mobile-toggle-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+  }
+
+  .map-legend-panel-mobile-closed .map-legend-section,
+  .map-legend-panel-mobile-closed .map-legend-section-selected {
+    display: none;
+  }
+
+  .map-legend-panel-mobile-open .map-legend-mobile-toggle-icon {
+    transform: rotate(180deg);
   }
 
   .map-legend-section + .map-legend-section {
@@ -408,7 +590,7 @@
   .map-legend-items {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: 0;
   }
 
   .map-legend-item {
@@ -420,6 +602,14 @@
     border: 1px solid color-mix(in srgb, var(--legend-accent) 34%, rgba(255, 255, 255, 0.14));
     border-radius: 0.7rem;
     background: rgba(15, 23, 42, 0.6);
+  }
+
+  .map-legend-item-row-two {
+    order: 2;
+  }
+
+  .map-legend-item-row-three {
+    order: 3;
   }
 
   .map-legend-item-active {

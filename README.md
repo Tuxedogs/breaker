@@ -51,3 +51,5 @@ ManualShipSeed[] -> normalizeManualShipRecord() -> ShipRecord[]
 ```
 
 Normalization and raw dump parsing live in [src/tools/alpha-threshold/lib/ships/adapters/manual.ts](./src/tools/alpha-threshold/lib/ships/adapters/manual.ts).
+
+

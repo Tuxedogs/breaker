@@ -30,7 +30,6 @@ export function TopControlStrip({
     <section className="alpha-top-control-strip" aria-label="Threshold controls">
       <div className="alpha-top-control-strip-primary">
         <div className="alpha-top-control-strip-source">
-          <span className="alpha-top-control-strip-label">Source</span>
           <DataSourceSelector
             activeSource={activeSource}
             sourceOptions={thresholdDataSourceOptions}
@@ -49,17 +48,17 @@ export function TopControlStrip({
       </div>
 
       <div className="alpha-top-control-strip-actions">
-        <button type="button" className="alpha-top-strip-button alpha-top-strip-button-primary" onClick={onOpenWeapons}>
-          Edit Weapons
-        </button>
         <button type="button" className="alpha-top-strip-button alpha-top-strip-button-primary" onClick={onOpenShips}>
           Edit Ships
         </button>
-        <button type="button" className="alpha-top-strip-button" onClick={onClearAllWeapons}>
-          Clear Weapons
+        <button type="button" className="alpha-top-strip-button alpha-top-strip-button-primary" onClick={onOpenWeapons}>
+          Edit Weapons
         </button>
         <button type="button" className="alpha-top-strip-button" onClick={onClearAllShips}>
           Clear Ships
+        </button>
+        <button type="button" className="alpha-top-strip-button" onClick={onClearAllWeapons}>
+          Clear Weapons
         </button>
         {changelogControl ? (
           <div className="alpha-top-control-strip-changelog">{changelogControl}</div>

@@ -3,7 +3,6 @@ import { formatEntityLabel, formatMetric } from '../lib/calculations'
 import {
   buildWeaponRecommendations,
   matchesRecommendationFilter,
-  type RecommendationBand,
   type RecommendationFilter,
   type WeaponRecommendation,
 } from '../lib/recommendations'
@@ -18,40 +17,12 @@ type Props = {
 
 const DEFAULT_RESULT_LIMIT = 8
 const SINGLE_TYPE_RESULT_LIMIT = 16
-const DEFAULT_RECOMMENDATION_FLOOR = 75
-
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>) {
   return `${ship.manufacturer}::${ship.name}`
 }
 
-function getBandLabel(band: RecommendationBand) {
-  switch (band) {
-    case 'guaranteed':
-      return 'Guaranteed'
-    case 'strong':
-      return 'Strong'
-    case 'viable':
-      return 'Viable'
-    case 'weak':
-      return 'Weak / Situational'
-  }
-}
-
-function getBandClassName(band: RecommendationBand) {
-  switch (band) {
-    case 'guaranteed':
-      return 'alpha-recommendation-band-guaranteed'
-    case 'strong':
-      return 'alpha-recommendation-band-strong'
-    case 'viable':
-      return 'alpha-recommendation-band-viable'
-    case 'weak':
-      return 'alpha-recommendation-band-weak'
-  }
-}
-
 function getTypeColumnLabel(type: WeaponThresholdType) {
-  return type === 'ballistic' ? 'Ballistic' : 'Energy'
+  return type === 'energy' ? 'Energy' : 'Ballistic'
 }
 
 function buildGroupFilterOptions(weapons: WeaponRecord[]) {
@@ -76,7 +47,7 @@ function buildGroupFilterOptions(weapons: WeaponRecord[]) {
 
 function getVisibleRecommendations(recommendations: WeaponRecommendation[], limit: number) {
   const viableRecommendations = recommendations.filter(
-    (recommendation) => recommendation.viabilityPercent >= DEFAULT_RECOMMENDATION_FLOOR
+    (recommendation) => recommendation.viableCoveragePercent >= 40
   )
 
   if (viableRecommendations.length > 0) {
@@ -86,111 +57,128 @@ function getVisibleRecommendations(recommendations: WeaponRecommendation[], limi
   return recommendations.slice(0, limit)
 }
 
+function getRecommendationState(recommendation: WeaponRecommendation) {
+  const firstPen = recommendation.firstPenetrationArmorPercent
+
+  if (firstPen === 100) {
+    return {
+      label: 'Passes',
+      rowClassName: 'alpha-threshold-summary-row-pass',
+    }
+  }
+
+  if (firstPen != null && firstPen >= 75) {
+    return {
+      label: 'Pen Early',
+      rowClassName: 'alpha-recommendation-row-early',
+    }
+  }
+
+  if (firstPen != null && firstPen >= 50) {
+    return {
+      label: 'Pen Late',
+      rowClassName: 'alpha-recommendation-row-late',
+    }
+  }
+
+  return {
+    label: 'Fails',
+    rowClassName: 'alpha-threshold-summary-row-blocked',
+  }
+}
+
 function RecommendationCard({ recommendation }: { recommendation: WeaponRecommendation }) {
-  const needsArmorDamage =
-    recommendation.firstPenetrationArmorPercent != null &&
-    recommendation.firstPenetrationArmorPercent < 100
-  const isGuaranteed = recommendation.viabilityPercent === 100
+  const state = getRecommendationState(recommendation)
 
   return (
-    <article className="alpha-recommendation-card">
-      <header className="alpha-recommendation-card-head">
-        <div>
-          {!isGuaranteed ? (
-            <div
-              className={[
-                'alpha-recommendation-band',
-                getBandClassName(recommendation.viabilityBand),
-              ].join(' ')}
-            >
-              {getBandLabel(recommendation.viabilityBand)}
-            </div>
-          ) : null}
-          <h3 className="alpha-recommendation-name">{recommendation.weapon.name}</h3>
-          <p className="alpha-recommendation-meta">
-            {formatWeaponSizeLabel(recommendation.weapon.size)} /{' '}
-            {formatWeaponTypeLabel({
-              damageType: recommendation.weapon.damageType,
-              weaponClass: recommendation.weapon.weaponClass,
-            })}
-          </p>
-        </div>
-        <div className="alpha-recommendation-score">
-          <strong
-            className={isGuaranteed ? 'alpha-recommendation-viability-guaranteed' : undefined}
-          >
-            {recommendation.viabilityPercent}%
-          </strong>
-          <span>Viability</span>
-        </div>
-      </header>
+    <article
+      className={[
+        'alpha-threshold-summary-row',
+        'alpha-recommendation-card',
+        state.rowClassName,
+      ].join(' ')}
+    >
+      <div className="alpha-threshold-summary-row-copy">
+        <h4 className="alpha-threshold-summary-weapon">{recommendation.weapon.name}</h4>
+        <p className="alpha-threshold-summary-meta alpha-recommendation-meta">
+          {formatWeaponSizeLabel(recommendation.weapon.size)} /{' '}
+          {formatWeaponTypeLabel({
+            damageType: recommendation.weapon.damageType,
+            weaponClass: recommendation.weapon.weaponClass,
+          })}
+        </p>
+      </div>
 
-      <dl className="alpha-recommendation-stats">
-        <div className="alpha-metric-card">
+      <dl className="alpha-threshold-summary-stats alpha-recommendation-stats">
+        <div>
+          <dt className="alpha-stat-label">Alpha</dt>
+          <dd className="alpha-stat-value">{formatMetric(recommendation.weapon.alpha ?? 0)}</dd>
+        </div>
+        <div>
+          <dt className="alpha-stat-label">State</dt>
+          <dd className="alpha-stat-value">{state.label}</dd>
+        </div>
+        <div>
           <dt className="alpha-stat-label">Speed</dt>
           <dd className="alpha-stat-value">
             {formatMetric(recommendation.weapon.projectileSpeed ?? 0)} m/s
           </dd>
         </div>
-        <div className="alpha-metric-card">
-          <dt className="alpha-stat-label">First Pen</dt>
-          <dd className="alpha-stat-value">
-            {recommendation.firstPenetrationArmorPercent == null
-              ? 'Never'
-              : `${recommendation.firstPenetrationArmorPercent}%`}
-          </dd>
-        </div>
-        <div className="alpha-metric-card">
-          <dt className="alpha-stat-label">Alpha</dt>
-          <dd className="alpha-stat-value">
-            {formatMetric(recommendation.weapon.alpha ?? 0)}
-          </dd>
-        </div>
-        <div className="alpha-metric-card">
+        <div>
           <dt className="alpha-stat-label">Coverage</dt>
-          <dd className="alpha-stat-value">{recommendation.viableCoveragePercent}%</dd>
+          <dd className="alpha-stat-value">
+            {state.label === 'Passes' ? '100%' : `${recommendation.viableCoveragePercent}%`}
+          </dd>
         </div>
       </dl>
 
-      {needsArmorDamage ? (
-        <div className="alpha-recommendation-bar-block" aria-hidden="true">
-          <div className="alpha-recommendation-bar-axis">
-            <span>100% armor</span>
-            <span>0% armor</span>
-          </div>
-          <div className="alpha-recommendation-bar">
-            <div
-              className="alpha-recommendation-bar-region"
-              style={{
-                left: `${recommendation.firstPenetrationX * 100}%`,
-                width: `${100 - recommendation.firstPenetrationX * 100}%`,
-              }}
-            />
-            <span
-              className="alpha-recommendation-bar-marker"
-              style={{ left: `${recommendation.firstPenetrationX * 100}%` }}
-            />
-          </div>
-        </div>
-      ) : null}
-
       {recommendation.firstPenetrationArmorPercent != null &&
       recommendation.firstPenetrationArmorPercent < 100 ? (
-        <p className="alpha-recommendation-copy">{recommendation.firstPenetrationStepLabel}</p>
-      ) : recommendation.firstPenetrationArmorPercent == null ? (
-        <p className="alpha-recommendation-copy">{recommendation.firstPenetrationStepLabel}</p>
+        <p className="alpha-recommendation-copy">
+          First Pen {recommendation.firstPenetrationArmorPercent}% / Coverage{' '}
+          {recommendation.viableCoveragePercent}%
+        </p>
       ) : null}
     </article>
+  )
+}
+
+function RecommendationSection({
+  title,
+  note,
+  recommendations,
+}: {
+  title: string
+  note: string
+  recommendations: WeaponRecommendation[]
+}) {
+  return (
+    <section className="alpha-recommendation-section" aria-label={`${title} recommendations`}>
+      <div className="alpha-recommendation-section-head">
+        <h3 className="surface-title alpha-recommendation-section-title">{title}</h3>
+        <p className="alpha-recommendation-section-note">{note}</p>
+      </div>
+      <div className="alpha-recommendation-grid">
+        {recommendations.map((recommendation) => (
+          <RecommendationCard
+            key={`${title}-${recommendation.weapon.id}`}
+            recommendation={recommendation}
+          />
+        ))}
+      </div>
+    </section>
   )
 }
 
 export function RecommendationsBoard({ ships, weapons, selectedShips }: Props) {
   const shipOptions = useMemo(
     () =>
-      ships.map((ship) => ({
-        value: getShipSelectionKey(ship),
-        label: `${formatEntityLabel(ship.name)} / ${formatEntityLabel(ship.manufacturer)}`,
-      })),
+      ships
+        .filter((ship) => ship.name.trim().toLowerCase() !== 'mule')
+        .map((ship) => ({
+          value: getShipSelectionKey(ship),
+          label: `${formatEntityLabel(ship.name)} / ${formatEntityLabel(ship.manufacturer)}`,
+        })),
     [ships]
   )
   const sizeOptions = useMemo(
@@ -203,21 +191,35 @@ export function RecommendationsBoard({ ships, weapons, selectedShips }: Props) {
   const groupFilterOptions = useMemo(() => buildGroupFilterOptions(weapons), [weapons])
 
   const [selectedShipKey, setSelectedShipKey] = useState<string>('')
-  const [selectedSize, setSelectedSize] = useState<string>('all')
+  const [selectedSize, setSelectedSize] = useState<string>(() =>
+    sizeOptions.includes(3) ? '3' : 'all'
+  )
   const [selectedGroupFilter, setSelectedGroupFilter] =
     useState<RecommendationFilter>('all')
 
   const resolvedShipKey = useMemo(() => {
-    if (selectedShipKey && ships.some((ship) => getShipSelectionKey(ship) === selectedShipKey)) {
+    const availableShips = ships.filter((ship) => ship.name.trim().toLowerCase() !== 'mule')
+
+    if (
+      selectedShipKey &&
+      availableShips.some((ship) => getShipSelectionKey(ship) === selectedShipKey)
+    ) {
       return selectedShipKey
     }
 
-    const preferredShip = selectedShips[0] ?? ships[0]
+    const preferredShip =
+      selectedShips.find((ship) => ship.name.trim().toLowerCase() !== 'mule') ??
+      availableShips[0]
     return preferredShip ? getShipSelectionKey(preferredShip) : ''
   }, [selectedShipKey, selectedShips, ships])
 
   const targetShip = useMemo(
-    () => ships.find((ship) => getShipSelectionKey(ship) === resolvedShipKey) ?? null,
+    () =>
+      ships.find(
+        (ship) =>
+          ship.name.trim().toLowerCase() !== 'mule' &&
+          getShipSelectionKey(ship) === resolvedShipKey
+      ) ?? null,
     [resolvedShipKey, ships]
   )
 
@@ -238,31 +240,32 @@ export function RecommendationsBoard({ ships, weapons, selectedShips }: Props) {
     return buildWeaponRecommendations(targetShip, filteredWeapons)
   }, [filteredWeapons, targetShip])
 
-  const recommendationColumns = useMemo(() => {
-    if (selectedGroupFilter === 'type:ballistic' || selectedGroupFilter === 'type:energy') {
-      const selectedType = selectedGroupFilter.slice(5) as WeaponThresholdType
-      return [
-        {
-          key: selectedType,
-          label: getTypeColumnLabel(selectedType),
-          recommendations: getVisibleRecommendations(recommendations, SINGLE_TYPE_RESULT_LIMIT),
-        },
-      ]
-    }
+  const energyRecommendations = useMemo(() => {
+    const source =
+      selectedGroupFilter === 'type:ballistic'
+        ? []
+        : recommendations.filter((recommendation) => recommendation.thresholdType === 'energy')
 
-    return (['ballistic', 'energy'] as const).map((type) => ({
-      key: type,
-      label: getTypeColumnLabel(type),
-      recommendations: getVisibleRecommendations(
-        recommendations.filter((recommendation) => recommendation.thresholdType === type),
-        DEFAULT_RESULT_LIMIT
-      ),
-    }))
+    return getVisibleRecommendations(
+      source,
+      selectedGroupFilter === 'type:energy' ? SINGLE_TYPE_RESULT_LIMIT : DEFAULT_RESULT_LIMIT
+    )
   }, [recommendations, selectedGroupFilter])
 
-  const hasAnyRecommendations = recommendationColumns.some(
-    (column) => column.recommendations.length > 0
-  )
+  const ballisticRecommendations = useMemo(() => {
+    const source =
+      selectedGroupFilter === 'type:energy'
+        ? []
+        : recommendations.filter((recommendation) => recommendation.thresholdType === 'ballistic')
+
+    return getVisibleRecommendations(
+      source,
+      selectedGroupFilter === 'type:ballistic' ? SINGLE_TYPE_RESULT_LIMIT : DEFAULT_RESULT_LIMIT
+    )
+  }, [recommendations, selectedGroupFilter])
+
+  const hasAnyRecommendations =
+    energyRecommendations.length > 0 || ballisticRecommendations.length > 0
 
   return (
     <section className="alpha-threshold-tab-panel" aria-label="Weapon recommendations">
@@ -336,25 +339,21 @@ export function RecommendationsBoard({ ships, weapons, selectedShips }: Props) {
         </section>
       ) : (
         <div className="alpha-recommendation-sections">
-          {recommendationColumns.map((column) => (
-            <section key={column.key} className="alpha-recommendation-section">
-              <header className="alpha-recommendation-section-head">
-                <div>
-                  <p className="page-kicker">Recommendations</p>
-                  <h3 className="surface-title mt-2">{column.label}</h3>
-                </div>
-              </header>
+          {selectedGroupFilter !== 'type:ballistic' ? (
+            <RecommendationSection
+              title={getTypeColumnLabel('energy')}
+              note="Omni, MXA, Attrition always penetrate all armors."
+              recommendations={energyRecommendations}
+            />
+          ) : null}
 
-              <div className="alpha-recommendation-grid">
-                {column.recommendations.map((recommendation) => (
-                  <RecommendationCard
-                    key={`${column.key}-${recommendation.weapon.id}`}
-                    recommendation={recommendation}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+          {selectedGroupFilter !== 'type:energy' ? (
+            <RecommendationSection
+              title={getTypeColumnLabel('ballistic')}
+              note="Deadbolt, Mass Drivers, Railguns ect always penetrate all armors."
+              recommendations={ballisticRecommendations}
+            />
+          ) : null}
         </div>
       )}
     </section>

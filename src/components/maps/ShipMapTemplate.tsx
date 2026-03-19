@@ -1135,7 +1135,8 @@ export default function ShipMapTemplate({
   const [selectedRegionKey, setSelectedRegionKey] = useState<string | null>(null);
   const [hoveredRegionKey, setHoveredRegionKey] = useState<string | null>(null);
   const [controlsOpen, setControlsOpen] = useState(true);
-  const [pickedTarget, setPickedTarget] = useState<[number, number, number] | null>(null);
+  const [deckMenuOpen, setDeckMenuOpen] = useState(false);
+  const [mobileLegendOpen, setMobileLegendOpen] = useState(false);
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -1216,6 +1217,20 @@ export default function ShipMapTemplate({
     () => deckOverlayRegions.find((region) => region.key === activeRegionKey) ?? null,
     [deckOverlayRegions, activeRegionKey],
   );
+  const deckOverlayOptions = useMemo(() => {
+    if (!deckOverlayConfig) return [];
+
+    const options: Array<{ id: string; label: string }> = [];
+    const topDeck = deckOverlayConfig.decks.at(-1);
+    const midDeck = deckOverlayConfig.decks.length > 2 ? deckOverlayConfig.decks[1] : null;
+    const lowerDeck = deckOverlayConfig.decks[0] ?? null;
+
+    if (topDeck) options.push({ id: topDeck.id, label: "Top Deck" });
+    if (midDeck) options.push({ id: midDeck.id, label: "Mid Deck" });
+    if (lowerDeck) options.push({ id: lowerDeck.id, label: "Lower Deck" });
+
+    return options;
+  }, [deckOverlayConfig]);
   const activeDeckRegionHighlightUri = useMemo(() => {
     if (!activeDeckRegion) return null;
     const fallbackViewBox = activeDeckOverlay
@@ -1248,6 +1263,17 @@ export default function ShipMapTemplate({
     () => getVisibleLegendSections(interactiveDeckOverlay, deckOverlayEnabled),
     [interactiveDeckOverlay, deckOverlayEnabled],
   );
+  const mobileLegendPreviewItems = useMemo(() => {
+    const items = visibleLegendSections.flatMap((section) => section.items);
+    const radarItem = items.find((item) => item.Icon === RadarIcon);
+    const nonRadarItems = items.filter((item) => item.key !== radarItem?.key);
+
+    if (radarItem) {
+      return [...nonRadarItems.slice(0, 2), radarItem];
+    }
+
+    return items.slice(0, 3);
+  }, [visibleLegendSections]);
   const lowerHullClippingPlanes = useMemo(() => {
     if (activeDeckCutY === null) return [];
     return [new Plane(new Vector3(0, -1, 0), activeDeckCutY)];
@@ -1262,6 +1288,13 @@ export default function ShipMapTemplate({
     if (deckOverlayConfig.decks.some((deck) => deck.id === activeDeckOverlayId)) return;
     setActiveDeckOverlayId(getDefaultDeckOverlayId(deckOverlayConfig));
   }, [activeDeckOverlayId, deckOverlayConfig]);
+
+  useEffect(() => {
+    if (!hasDeckOverlay) {
+      setDeckMenuOpen(false);
+      setMobileLegendOpen(false);
+    }
+  }, [hasDeckOverlay]);
 
   useEffect(() => {
     if (!interactiveDeckOverlay?.annotations) {
@@ -1398,15 +1431,6 @@ export default function ShipMapTemplate({
     }
   }
 
-  async function copyTargetJson() {
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(pickedTarget ?? currentView.target));
-      setCopyStatus("Target copied.");
-    } catch {
-      setCopyStatus("Copy failed.");
-    }
-  }
-
   function handleViewportPick(event: React.MouseEvent<HTMLDivElement>) {
     const canvas = canvasRef.current;
     const camera = cameraRef.current;
@@ -1425,7 +1449,6 @@ export default function ShipMapTemplate({
 
     if (!pickRayRef.current.ray.intersectPlane(pickingPlane, hitPoint)) return;
 
-    setPickedTarget([round3(hitPoint.x), round3(hitPoint.y), round3(hitPoint.z)]);
   }
 
   function moveCameraTopDown() {
@@ -1717,17 +1740,20 @@ export default function ShipMapTemplate({
               {interactiveDeckOverlay && modelScene ? (
                 <DeckAnnotations
                   deck={interactiveDeckOverlay}
-                  showExteriorSubsetOnly={!deckOverlayVisualActive}
+                  showExteriorSubsetOnly={!deckOverlayEnabled}
                   activeTraceAnnotationIds={activeAnnotationIds}
                   onAnnotationHover={(annotation) => {
+                    if (!deckOverlayEnabled) return;
                     if (selectedAnnotationIds.length > 0 || selectedLegendTraces.length > 0) return;
                     setHoveredMarkerTrace(getTraceStateForAnnotation(annotation));
                   }}
                   onAnnotationLeave={() => {
+                    if (!deckOverlayEnabled) return;
                     if (selectedAnnotationIds.length > 0 || selectedLegendTraces.length > 0) return;
                     setHoveredMarkerTrace(null);
                   }}
                   onAnnotationClick={(annotation) => {
+                    if (!deckOverlayEnabled) return;
                     const matchingLegendItem = getLegendItemForAnnotation(annotation);
                     setHoveredLegendKey(null);
                     setHoveredMarkerTrace(null);
@@ -1806,78 +1832,97 @@ export default function ShipMapTemplate({
               </svg>
             ) : null}
 
-            <div className="absolute left-4 top-4 z-10 flex max-w-[calc(100%-2rem)] flex-col gap-2">
+            <div className="map-mobile-overlay-cluster absolute left-4 top-4 z-10 flex max-w-[calc(100%-2rem)] flex-col gap-2">
               {hasDeckOverlay ? (
-                <button
-                  type="button"
-                  onClick={() => setDeckOverlayEnabled((enabled) => !enabled)}
-                  className={`rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 ${
-                    deckOverlayEnabled ? "map-selection-active" : ""
+                <div className="map-mobile-overlay-actions">
+                  <button
+                    type="button"
+                    onClick={() => setDeckOverlayEnabled((enabled) => !enabled)}
+                    className={`rounded-md border border-white/35 bg-black/50 px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-white transition hover:bg-black/65 ${
+                      deckOverlayEnabled ? "map-selection-active" : ""
+                    }`}
+                    aria-label="Toggle interior exterior view"
+                  >
+                    Int. / Ext.
+                  </button>
+
+                  {deckOverlayEnabled && deckOverlayOptions.length > 0 ? (
+                    <div className="map-deck-picker">
+                      <button
+                        type="button"
+                        onClick={() => setDeckMenuOpen((open) => !open)}
+                        className={`map-deck-picker-trigger ${deckMenuOpen ? "map-selection-active" : ""}`}
+                        aria-expanded={deckMenuOpen}
+                        aria-controls="map-deck-picker-menu"
+                        aria-label="Toggle deck layers"
+                      >
+                        <svg viewBox="0 0 24 24" className="map-deck-picker-icon" aria-hidden="true">
+                          <path d="M12 4 4 8l8 4 8-4-8-4Z" />
+                          <path d="m4 12 8 4 8-4" />
+                          <path d="m4 16 8 4 8-4" />
+                        </svg>
+                      </button>
+
+                      {deckMenuOpen ? (
+                        <div id="map-deck-picker-menu" className="map-deck-picker-menu">
+                          {deckOverlayOptions.map((deckOption) => (
+                            <button
+                              key={deckOption.id}
+                              type="button"
+                              onClick={() => {
+                                setActiveDeckOverlayId(deckOption.id);
+                                setDeckOverlayEnabled(true);
+                                setDeckMenuOpen(false);
+                              }}
+                              className={`map-deck-picker-option ${
+                                deckOption.id === activeDeckOverlayId
+                                  ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
+                                  : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
+                              }`}
+                            >
+                              {deckOption.label}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {hasDeckOverlay && deckOverlayEnabled ? (
+                <section
+                  className={`map-legend-panel rounded-xl border border-white/20 bg-black/55 p-3 backdrop-blur-md ${
+                    mobileLegendOpen ? "map-legend-panel-mobile-open" : "map-legend-panel-mobile-closed"
                   }`}
                 >
-                  {deckOverlayEnabled ? "Exterior" : "Interior"}
-                </button>
-              ) : null}
+                  <div className="map-legend-mobile-bar">
+                    <div className="map-legend-mobile-preview" aria-hidden>
+                      {mobileLegendPreviewItems.map(({ key, color, Icon }) => (
+                        <span
+                          key={key}
+                          className="map-legend-mobile-preview-item"
+                          style={{ "--legend-accent": color } as React.CSSProperties}
+                        >
+                          <Icon className="map-legend-icon-svg" />
+                        </span>
+                      ))}
+                    </div>
+                    <button
+                      type="button"
+                      className="map-legend-mobile-toggle"
+                      onClick={() => setMobileLegendOpen((open) => !open)}
+                      aria-expanded={mobileLegendOpen}
+                      aria-label={mobileLegendOpen ? "Hide legend" : "Show legend"}
+                    >
+                      <svg viewBox="0 0 24 24" className="map-legend-mobile-toggle-icon" aria-hidden="true">
+                        <path d="m7 15 5-5 5 5" />
+                        <path d="m7 19 5-5 5 5" />
+                        <path d="m7 11 5-5 5 5" />
+                      </svg>
+                    </button>
+                  </div>
 
-              {hasDeckOverlay && deckOverlayConfig ? (
-                <>
-                  {deckOverlayConfig.decks.at(-1) ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const topDeck = deckOverlayConfig.decks.at(-1);
-                        if (!topDeck) return;
-                        setActiveDeckOverlayId(topDeck.id);
-                        setDeckOverlayEnabled(true);
-                      }}
-                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
-                        deckOverlayConfig.decks.at(-1)?.id === activeDeckOverlayId
-                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
-                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
-                      }`}
-                    >
-                      Top Deck
-                    </button>
-                  ) : null}
-                  {deckOverlayConfig.decks.length > 2 ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const midDeck = deckOverlayConfig.decks[1];
-                        setActiveDeckOverlayId(midDeck.id);
-                        setDeckOverlayEnabled(true);
-                      }}
-                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
-                        deckOverlayConfig.decks[1]?.id === activeDeckOverlayId
-                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
-                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
-                      }`}
-                    >
-                      Mid Deck
-                    </button>
-                  ) : null}
-                  {deckOverlayConfig.decks[0] ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const bottomDeck = deckOverlayConfig.decks[0];
-                        setActiveDeckOverlayId(bottomDeck.id);
-                        setDeckOverlayEnabled(true);
-                      }}
-                      className={`rounded-md border px-3 py-1.5 text-xs uppercase tracking-[0.12em] transition ${
-                        deckOverlayConfig.decks[0].id === activeDeckOverlayId
-                          ? "map-selection-active border-cyan-300/60 bg-cyan-500/20 text-cyan-100"
-                          : "border-white/30 bg-black/45 text-slate-100 hover:bg-black/65"
-                      }`}
-                    >
-                      Lower Deck
-                    </button>
-                  ) : null}
-                </>
-              ) : null}
-
-              {hasDeckOverlay ? (
-                <section className="map-legend-panel rounded-xl border border-white/20 bg-black/55 p-3 backdrop-blur-md">
                   {visibleLegendSections.map((section) => (
                     <div key={section.title} className="map-legend-section">
                       <p className="map-legend-heading">{section.title}</p>
@@ -1886,6 +1931,12 @@ export default function ShipMapTemplate({
                           const isSelected =
                             selectedLegendTraces.some((trace) => trace.key === key) ||
                             annotationIds.some((annotationId) => selectedAnnotationIds.includes(annotationId));
+                          const forcedRowClass =
+                            Icon === RadarIcon
+                              ? "map-legend-item-row-two"
+                              : Icon === CoolerIcon
+                                ? "map-legend-item-row-three"
+                                : "";
 
                           return (
                           <div
@@ -1893,7 +1944,7 @@ export default function ShipMapTemplate({
                             ref={(node) => {
                               legendItemRefs.current[key] = node;
                             }}
-                            className={`map-legend-item ${activeLegendKey === key ? "map-legend-item-active" : ""}`}
+                            className={`map-legend-item ${activeLegendKey === key ? "map-legend-item-active" : ""} ${forcedRowClass}`}
                             style={{ "--legend-accent": color } as React.CSSProperties}
                             title={label}
                             aria-label={label}
@@ -2023,25 +2074,6 @@ export default function ShipMapTemplate({
                     />
                   </div>
                 ) : null}
-
-                <div className="rounded-md border border-white/20 bg-black/55 px-3 py-2 text-[11px] leading-relaxed text-slate-200">
-                  <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-100">Dev purpose only controls</p>
-                  <p className="mt-2">slice: {sliceEnabled ? "enabled" : "disabled"}</p>
-                  <p>deck: [{round3(deckMin)}, {round3(deckMax)}]</p>
-                  {activeDeckOverlay ? <p>active floor: {activeDeckOverlay.title}</p> : null}
-                  <p>suggestedScale: {suggestedScale === null ? "n/a" : round3(suggestedScale)}</p>
-                  <p>cam: [{currentView.position.join(", ")}]</p>
-                  <button
-                    type="button"
-                    onClick={copyTargetJson}
-                    className="text-left text-slate-200 transition hover:text-cyan-100"
-                    title="Copy target coordinates"
-                  >
-                    target: [{(pickedTarget ?? currentView.target).join(", ")}]
-                  </button>
-                  {viewSaveStatus ? <p className="mt-1 text-cyan-200">{viewSaveStatus}</p> : null}
-                  {copyStatus ? <p className="mt-1 text-cyan-200">{copyStatus}</p> : null}
-                </div>
 
                 <div className="flex flex-wrap gap-2 rounded-md border border-white/20 bg-black/55 p-2">
                   <button
