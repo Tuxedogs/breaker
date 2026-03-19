@@ -72,7 +72,13 @@ export function ThresholdHeatmapBoard({
               <div className="alpha-threshold-board-scroll">
                 <div
                   className="alpha-threshold-board-columns"
-                  style={{ ['--alpha-threshold-columns' as string]: shipModels.length }}
+                  style={{
+                    ['--alpha-threshold-columns' as string]: shipModels.length,
+                    ['--alpha-threshold-visible-columns' as string]: Math.max(
+                      shipModels.length,
+                      2
+                    ),
+                  }}
                 >
                   {shipModels.map((model) => (
                     <HeatmapShipColumn
