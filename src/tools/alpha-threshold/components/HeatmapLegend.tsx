@@ -3,19 +3,19 @@ export function HeatmapLegend() {
     <section className="alpha-heatmap-legend" aria-label="Heatmap legend">
       <span className="alpha-heatmap-legend-item">
         <span className="alpha-heatmap-legend-swatch alpha-heatmap-legend-swatch-deflect" aria-hidden="true" />
-        Deflection
+        Blocked
       </span>
       <span className="alpha-heatmap-legend-item">
         <span className="alpha-heatmap-legend-swatch alpha-heatmap-legend-swatch-transition" aria-hidden="true" />
-        Crossover band
+        Destroyed armor required
       </span>
       <span className="alpha-heatmap-legend-item">
         <span className="alpha-heatmap-legend-swatch alpha-heatmap-legend-swatch-damage" aria-hidden="true" />
-        Damage region
+        Active penetration
       </span>
       <span className="alpha-heatmap-legend-item">
         <span className="alpha-heatmap-legend-marker" aria-hidden="true" />
-        True penetration point
+        Penetration threshold
       </span>
     </section>
   )

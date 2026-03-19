@@ -5,7 +5,7 @@ type Props = {
 }
 
 export function PenetrationMarker({ trace }: Props) {
-  if (trace.alwaysDeflects) return null
+  if (trace.penetrationState !== 'threshold') return null
 
   return (
     <span
