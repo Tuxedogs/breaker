@@ -12,6 +12,12 @@ type Scenario = {
   selections: SelectedWeaponComparison[]
 }
 
+type MatchupBlock =
+  | { type: 'dual'; selection: SelectedWeaponComparison }
+  | { type: 'single-grid'; selections: SelectedWeaponComparison[] }
+
+type SingleStateRow = SelectedWeaponComparison[]
+
 const TESTBED_SHIP_NAMES = [
   'Perseus',
   'Avenger_Stalker',
@@ -113,6 +119,46 @@ function buildScenarios(ships: Ship[], weapons: WeaponRecord[]): Scenario[] {
     .filter((scenario): scenario is Scenario => scenario !== null)
 }
 
+function getLayoutMode(selection: SelectedWeaponComparison): 'dual-state' | 'single-state' {
+  return selection.weapon.damageType === 'ballistic' ? 'dual-state' : 'single-state'
+}
+
+function buildMatchupBlocks(selections: SelectedWeaponComparison[]): MatchupBlock[] {
+  const blocks: MatchupBlock[] = []
+  let currentSingles: SelectedWeaponComparison[] = []
+
+  function flushSingles() {
+    if (!currentSingles.length) return
+    blocks.push({ type: 'single-grid', selections: currentSingles })
+    currentSingles = []
+  }
+
+  for (const selection of selections) {
+    if (getLayoutMode(selection) === 'single-state') {
+      currentSingles.push(selection)
+      continue
+    }
+
+    flushSingles()
+    blocks.push({ type: 'dual', selection })
+  }
+
+  flushSingles()
+  return blocks
+}
+
+function buildSingleStateRows(
+  selections: SelectedWeaponComparison[]
+): SingleStateRow[] {
+  const rows: SingleStateRow[] = []
+
+  for (let index = 0; index < selections.length; index += 2) {
+    rows.push(selections.slice(index, index + 2))
+  }
+
+  return rows
+}
+
 export function ArmorInteractionTestbed({ ships, weapons }: Props) {
   const scenarios = buildScenarios(ships, weapons)
 
@@ -146,9 +192,10 @@ export function ArmorInteractionTestbed({ ships, weapons }: Props) {
 
       <div className="alpha-ui-testbed-grid">
         {scenarios.map((scenario) => (
-          <article
+          <section
             key={scenario.ship.id}
-            className="alpha-ui-testbed-card"
+            className="alpha-ui-testbed-ship-column"
+            aria-label={`${formatEntityLabel(scenario.ship.name)} armor interaction group`}
           >
             <header className="alpha-ui-testbed-card-head">
               <div>
@@ -160,16 +207,55 @@ export function ArmorInteractionTestbed({ ships, weapons }: Props) {
               </p>
             </header>
 
-            <div className="alpha-ui-testbed-panel-list">
-              {scenario.selections.map((selection) => (
-                <ArmorInteractionSummaryPanel
-                  key={selection.slotId}
-                  ship={scenario.ship}
-                  selectedWeapon={selection}
-                />
-              ))}
+            <div className="alpha-ui-testbed-matchup-stack">
+              {buildMatchupBlocks(scenario.selections).map((block, blockIndex) => {
+                if (block.type === 'dual') {
+                  return (
+                    <article
+                      key={`${scenario.ship.id}-${block.selection.slotId}`}
+                      className="alpha-ui-testbed-card alpha-ui-testbed-card-dual"
+                    >
+                      <ArmorInteractionSummaryPanel
+                        ship={scenario.ship}
+                        selectedWeapon={block.selection}
+                      />
+                    </article>
+                  )
+                }
+
+                return (
+                  <div
+                    key={`${scenario.ship.id}-single-grid-${blockIndex}`}
+                    className="alpha-ui-testbed-single-grid"
+                  >
+                    {buildSingleStateRows(block.selections).map((row, rowIndex) => (
+                      <div
+                        key={`${scenario.ship.id}-single-row-${blockIndex}-${rowIndex}`}
+                        className="alpha-ui-testbed-single-row"
+                      >
+                        {row.map((selection) => (
+                          <div
+                            key={`${scenario.ship.id}-${selection.slotId}`}
+                            className={`alpha-ui-testbed-single-cell ${row.length === 1 ? 'alpha-ui-testbed-single-cell-span' : ''}`}
+                          >
+                            <article
+                              className="alpha-ui-testbed-card alpha-ui-testbed-card-single"
+                            >
+                              <ArmorInteractionSummaryPanel
+                                ship={scenario.ship}
+                                selectedWeapon={selection}
+                                compact
+                              />
+                            </article>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )
+              })}
             </div>
-          </article>
+          </section>
         ))}
       </div>
     </section>
