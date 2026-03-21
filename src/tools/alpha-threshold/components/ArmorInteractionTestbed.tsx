@@ -1,8 +1,10 @@
+import type { ReactNode } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import type { SelectedWeaponComparison, Ship } from '../types'
 import { ArmorInteractionSummaryPanel } from './ArmorInteractionSummaryPanel'
 
 type Props = {
+  controlStrip?: ReactNode
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
 }
@@ -70,7 +72,11 @@ function buildSingleStateRows(
   return rows
 }
 
-export function ArmorInteractionTestbed({ ships, selectedWeapons }: Props) {
+export function ArmorInteractionTestbed({
+  controlStrip,
+  ships,
+  selectedWeapons,
+}: Props) {
   const groups = buildShipAnalysisGroups(ships, selectedWeapons)
 
   if (!groups.length) {
@@ -91,32 +97,37 @@ export function ArmorInteractionTestbed({ ships, selectedWeapons }: Props) {
 
   return (
     <section className="alpha-threshold-tab-panel" aria-label="Armor interaction UI testbed">
-      <header className="alpha-ui-testbed-head">
-        <div>
-          <p className="page-kicker">Armor Interaction Review</p>
-          <h2 className="surface-title mt-2">Shield-Aware Armor Validation</h2>
+      <div className="alpha-analysis-sticky-shell">
+        <div className="alpha-analysis-sticky-surface">
+          {controlStrip}
+          <div className="alpha-ui-testbed-grid alpha-ui-testbed-header-grid">
+            {groups.map((group) => (
+              <section
+                key={`${group.ship.id}-header`}
+                className="alpha-ui-testbed-ship-column"
+                aria-label={`${formatEntityLabel(group.ship.name)} armor interaction header`}
+              >
+                <header className="alpha-ui-testbed-card-head">
+                  <div>
+                    <p className="alpha-ui-testbed-label">
+                      {formatEntityLabel(group.ship.manufacturer)}
+                    </p>
+                    <h3 className="alpha-ui-testbed-title">{formatEntityLabel(group.ship.name)}</h3>
+                  </div>
+                </header>
+              </section>
+            ))}
+          </div>
         </div>
-        <p className="alpha-ui-testbed-copy">
-          Live ship and weapon matchups for reading shield state, armor onset, and confidence through the shield-aware model.
-        </p>
-      </header>
+      </div>
 
-      <div className="alpha-ui-testbed-grid">
+      <div className="alpha-ui-testbed-grid alpha-ui-testbed-body-grid">
         {groups.map((group) => (
           <section
             key={group.ship.id}
             className="alpha-ui-testbed-ship-column"
             aria-label={`${formatEntityLabel(group.ship.name)} armor interaction group`}
           >
-            <header className="alpha-ui-testbed-card-head">
-              <div>
-                <p className="alpha-ui-testbed-label">
-                  {formatEntityLabel(group.ship.manufacturer)}
-                </p>
-                <h3 className="alpha-ui-testbed-title">{formatEntityLabel(group.ship.name)}</h3>
-              </div>
-            </header>
-
             <div className="alpha-ui-testbed-matchup-stack">
               {buildMatchupBlocks(group.selections).map((block, blockIndex) => {
                 if (block.type === 'dual') {
