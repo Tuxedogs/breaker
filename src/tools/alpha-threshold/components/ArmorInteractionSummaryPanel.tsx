@@ -146,7 +146,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
   function openTooltip(
     event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>,
     title: string,
-    sectionTitle: string,
+    sectionTitle: string | undefined,
     lines: TooltipState['lines']
   ) {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -196,6 +196,15 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
         ? [
             ...noteLines,
             {
+              label: 'Shield State',
+              value: 'Offline',
+            },
+            {
+              label: 'Pass Through',
+              value: '100%',
+              tone: 'cyan',
+            },
+            {
               label: 'Armor Interaction',
               value: formatTooltipArmorInteraction(estimate),
               tone: estimate.damagesFreshArmor ? 'cyan' : 'amber',
@@ -203,23 +212,10 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             {
               label: 'Calculation',
               value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
-            },
-            {
-              label: 'Shield State',
-              value: 'Offline',
             },
           ]
         : [
             ...noteLines,
-            {
-              label: 'Armor Interaction',
-              value: formatTooltipArmorInteraction(estimate),
-              tone: estimate.damagesFreshArmor ? 'cyan' : 'amber',
-            },
-            {
-              label: 'Calculation',
-              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
-            },
             {
               label: 'Shield State',
               value: 'Online',
@@ -228,6 +224,15 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
               label: 'Pass Through',
               value: formatPassThroughLabel(activePassThrough ?? undefined),
               tone: 'cyan',
+            },
+            {
+              label: 'Armor Interaction',
+              value: formatTooltipArmorInteraction(estimate),
+              tone: estimate.damagesFreshArmor ? 'cyan' : 'amber',
+            },
+            {
+              label: 'Calculation',
+              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
             },
             ...(armorOnsetBand
               ? [{
@@ -246,7 +251,11 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
         <header className="alpha-armor-interaction-state-head">
           <div className="alpha-armor-interaction-state-badges">
             <span className="alpha-armor-badge alpha-armor-badge-state">
-              Shield State: {state === 'up' ? 'Up' : 'Down'}
+              <span
+                className={`alpha-armor-badge-state-value ${state === 'up' ? 'alpha-armor-badge-state-online' : 'alpha-armor-badge-state-offline'}`}
+              >
+                Shield State: {state === 'up' ? 'Online' : 'Offline'}
+              </span>
             </span>
             <span className="alpha-armor-badge alpha-armor-badge-source">
               {formatSourceBadgeLabel(estimate.armorDamageStartsAtPercentSource)}
@@ -266,7 +275,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
               openTooltip(
                 event,
                 `${selectedWeapon.weapon.name} vs ${ship.name.replaceAll('_', ' ')}`,
-                `Shield ${formatStateLabel(state)}`,
+                undefined,
                 tooltipLines
               )
             }
@@ -275,7 +284,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
               openTooltip(
                 event,
                 `${selectedWeapon.weapon.name} vs ${ship.name.replaceAll('_', ' ')}`,
-                `Shield ${formatStateLabel(state)}`,
+                undefined,
                 tooltipLines
               )
             }
