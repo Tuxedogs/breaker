@@ -437,6 +437,29 @@ export function estimateArmorInteraction(
     shieldState === 'up'
       ? defenseProfile.shields.passThrough[damageChannel].max
       : 1
+
+  if (shieldState === 'up' && shieldPassThrough <= 0) {
+    notes.push(
+      `Resolved shield profile fully blocks ${damageChannel} damage from reaching armor while shields are up.`
+    )
+
+    return {
+      damageChannel,
+      shieldState,
+      armorDamageMultiplier,
+      shieldPassThrough,
+      effectiveArmorAlpha: 0,
+      deflectionThreshold: armor.deflectionThreshold,
+      thresholdRatio: 0,
+      damagesFreshArmor: false,
+      armorDamageStartsAtPercent: null,
+      armorDamageStartsAtPercentSource: 'none',
+      estimatedArmorOnsetBand: null,
+      confidence: 'high',
+      notes,
+    }
+  }
+
   const effectiveArmorAlpha = (weapon.alpha ?? 0) * armorDamageMultiplier * shieldPassThrough
   const deflectionThreshold = armor.deflectionThreshold
   const thresholdRatio = getThresholdRatio(effectiveArmorAlpha, deflectionThreshold)
