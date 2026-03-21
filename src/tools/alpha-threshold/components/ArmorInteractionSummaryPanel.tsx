@@ -9,6 +9,8 @@ type Props = {
   ship: Ship
   selectedWeapon: SelectedWeaponComparison
   compact?: boolean
+  hideWeaponHeader?: boolean
+  highlighted?: boolean
 }
 
 type TooltipState = {
@@ -80,14 +82,14 @@ function getArmorEffectivenessRating(estimate: ArmorInteractionEstimate) {
 
 function formatResultSummary(estimate: ArmorInteractionEstimate) {
   if (estimate.damagesFreshArmor) {
-    return 'Damage on target effective immediately.'
+    return 'Immediate armor damage.'
   }
 
   if (estimate.armorDamageStartsAtPercent != null) {
-    return `Projectile defeated. Effective from ${Math.round(estimate.armorDamageStartsAtPercent)}%.`
+    return `Effective from ${Math.round(estimate.armorDamageStartsAtPercent)}%.`
   }
 
-  return 'Onset not yet calibrated.'
+  return 'Uncalibrated.'
 }
 
 function formatSourceBadgeLabel(source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']) {
@@ -120,7 +122,13 @@ function formatTooltipCalculation(estimate: ArmorInteractionEstimate, weaponAlph
   ].join('\n')
 }
 
-export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = false }: Props) {
+export function ArmorInteractionSummaryPanel({
+  ship,
+  selectedWeapon,
+  compact = false,
+  hideWeaponHeader = false,
+  highlighted = false,
+}: Props) {
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     open: false,
     x: 0,
@@ -142,6 +150,13 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
   const layoutClass = compact
     ? 'alpha-armor-interaction-panel-compact'
     : 'alpha-armor-interaction-panel-full'
+  const headerClass = hideWeaponHeader
+    ? 'alpha-armor-interaction-panel-headless'
+    : 'alpha-armor-interaction-panel-headed'
+  const velocityLabel =
+    selectedWeapon.weapon.projectileSpeed != null
+      ? `${formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s`
+      : null
 
   function openTooltip(
     event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>,
@@ -184,13 +199,13 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
           : activeShield?.passThrough.energy
         : null
     const armorOnsetBand = estimate.estimatedArmorOnsetBand
-    const noteLines: TooltipState['lines'] = estimate.notes?.length
-      ? [{
+      const noteLines: TooltipState['lines'] = estimate.notes?.length
+        ? [{
           label: 'Note',
-          value: estimate.notes[0] ?? '',
+          value: `\n${estimate.notes[0] ?? ''}`,
           tone: estimate.armorDamageStartsAtPercentSource === 'estimated' ? 'amber' : undefined,
         }]
-      : []
+        : []
     const tooltipLines: TooltipState['lines'] =
       state === 'down'
         ? [
@@ -246,7 +261,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
     return (
       <article
         key={state}
-        className={`alpha-armor-interaction-state ${toneClass} ${isPrimaryState ? 'alpha-armor-interaction-state-primary' : 'alpha-armor-interaction-state-secondary'}`}
+        className={`alpha-armor-interaction-state ${toneClass} ${isPrimaryState ? 'alpha-armor-interaction-state-primary' : 'alpha-armor-interaction-state-secondary'} ${highlighted ? 'alpha-armor-interaction-state-highlighted' : ''}`}
       >
         <header className="alpha-armor-interaction-state-head">
           <div className="alpha-armor-interaction-state-badges">
@@ -265,7 +280,22 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
                 {effectivenessRating}
               </span>
             ) : null}
-          </div>
+            {estimate.damagesFreshArmor ? (
+              <span className="alpha-armor-badge alpha-armor-badge-priority">
+                Intact Armor: Yes
+              </span>
+            ) : null}
+              {effectivenessRating === 'High' ? (
+                <span className="alpha-armor-badge alpha-armor-badge-priority">
+                  Effective Damage: High
+                </span>
+              ) : null}
+              {hideWeaponHeader && velocityLabel ? (
+                <span className="alpha-armor-badge alpha-armor-badge-meta">
+                  Velocity {velocityLabel}
+                </span>
+              ) : null}
+            </div>
 
           <button
             type="button"
@@ -294,69 +324,73 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
           </button>
         </header>
 
-        <section className="alpha-armor-interaction-result">
-          <div className="alpha-armor-interaction-result-head">
+        <div className="alpha-armor-interaction-body">
+          <section className="alpha-armor-interaction-result">
+            <div className="alpha-armor-interaction-result-head">
+              <div>
+                <p className="alpha-armor-interaction-result-label">Intact Armor</p>
+                <p className="alpha-armor-interaction-result-value">
+                  {estimate.damagesFreshArmor ? 'Yes' : 'No'}
+                </p>
+              </div>
+              <div className="alpha-armor-interaction-result-secondary">
+                <p className="alpha-armor-interaction-result-label">Effective Damage</p>
+                <p className="alpha-armor-interaction-result-value">
+                  {effectivenessRating}
+                </p>
+              </div>
+            </div>
+
+            <p className="alpha-armor-interaction-summary-copy">
+              {formatResultSummary(estimate)}
+            </p>
+          </section>
+
+          <dl className="alpha-armor-interaction-grid">
             <div>
-              <p className="alpha-armor-interaction-result-label">Intact Armor</p>
-              <p className="alpha-armor-interaction-result-value">
-                {estimate.damagesFreshArmor ? 'Yes' : 'No'}
-              </p>
+              <dt>Effective Alpha</dt>
+              <dd>{formatMetric(estimate.effectiveArmorAlpha)}</dd>
             </div>
-            <div className="alpha-armor-interaction-result-secondary">
-              <p className="alpha-armor-interaction-result-label">Effective Damage</p>
-              <p className="alpha-armor-interaction-result-value">
-                {effectivenessRating}
-              </p>
+            <div>
+              <dt>Deflection Threshold</dt>
+              <dd>{formatMetric(estimate.deflectionThreshold)}</dd>
             </div>
-          </div>
-
-          <p className="alpha-armor-interaction-summary-copy">
-            {formatResultSummary(estimate)}
-          </p>
-        </section>
-
-        <dl className="alpha-armor-interaction-grid">
-          <div>
-            <dt>Effective Alpha</dt>
-            <dd>{formatMetric(estimate.effectiveArmorAlpha)}</dd>
-          </div>
-          <div>
-            <dt>Deflection Threshold</dt>
-            <dd>{formatMetric(estimate.deflectionThreshold)}</dd>
-          </div>
-          <div>
-            <dt>Threshold Ratio</dt>
-            <dd>
-              {Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'}{' '}
-              <span className="alpha-armor-interaction-ratio-label">
-                <span className={getThresholdRatioToneClass(estimate.thresholdRatio)}>
-                  ({getThresholdRatioLabel(estimate.thresholdRatio)})
+            <div>
+              <dt>Threshold Ratio</dt>
+              <dd>
+                {Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'}{' '}
+                <span className="alpha-armor-interaction-ratio-label">
+                  <span className={getThresholdRatioToneClass(estimate.thresholdRatio)}>
+                    ({getThresholdRatioLabel(estimate.thresholdRatio)})
+                  </span>
                 </span>
-              </span>
-            </dd>
-          </div>
-          <div>
-            <dt>Confidence</dt>
-            <dd>{estimate.confidence[0].toUpperCase()}{estimate.confidence.slice(1)}</dd>
-          </div>
-        </dl>
+              </dd>
+            </div>
+            <div>
+              <dt>Confidence</dt>
+              <dd>{estimate.confidence[0].toUpperCase()}{estimate.confidence.slice(1)}</dd>
+            </div>
+          </dl>
+        </div>
 
       </article>
     )
   }
 
   return (
-    <section className={`alpha-armor-interaction-panel ${familyClass} ${layoutClass}`}>
-      <header className="alpha-armor-interaction-panel-head">
-        <div>
-          <p className="alpha-armor-interaction-eyebrow">{selectedWeapon.weapon.name}</p>
-          {selectedWeapon.weapon.projectileSpeed != null ? (
-            <p className="alpha-armor-interaction-kicker">
-              {formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s
-            </p>
-          ) : null}
-        </div>
-      </header>
+    <section className={`alpha-armor-interaction-panel ${familyClass} ${layoutClass} ${headerClass}`}>
+      {!hideWeaponHeader ? (
+        <header className="alpha-armor-interaction-panel-head">
+          <div>
+            <p className="alpha-armor-interaction-eyebrow">{selectedWeapon.weapon.name}</p>
+            {selectedWeapon.weapon.projectileSpeed != null ? (
+              <p className="alpha-armor-interaction-kicker">
+                {formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s
+              </p>
+            ) : null}
+          </div>
+        </header>
+      ) : null}
 
       <div className="alpha-armor-interaction-state-grid">
         {visibleStates.map((state) =>

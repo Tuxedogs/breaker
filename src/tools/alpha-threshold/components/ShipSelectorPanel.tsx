@@ -145,7 +145,7 @@ export function ShipSelectorPanel({
               Selected Ships
             </p>
             <p className="alpha-selection-panel-copy">
-              Choose up to {maxVictimShips} victim ships for the heatmap columns.
+              Choose up to {maxVictimShips} victim ships for the analysis columns.
             </p>
           </div>
         </header>

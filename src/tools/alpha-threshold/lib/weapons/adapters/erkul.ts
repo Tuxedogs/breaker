@@ -80,6 +80,7 @@ export function normalizeErkulWeapon(seed: ErkulWeaponSeed): WeaponRecord {
         ? rawData.group
         : ''
   const weaponClass = group ? normalizeWeaponClass(group) : inferWeaponClass(name)
+  const damageChannel = damageType === 'ballistic' ? 'physical' : 'energy'
 
   return {
     id: createWeaponId({ damageType, size, name }),
@@ -90,6 +91,15 @@ export function normalizeErkulWeapon(seed: ErkulWeaponSeed): WeaponRecord {
     alpha,
     burstDps,
     projectileSpeed,
+    calculatorProfile: {
+      damageChannel,
+      mountCount: 1,
+      baseAlpha: alpha,
+      effectiveAlpha: alpha,
+      baseBurstDps: burstDps,
+      effectiveBurstDps: burstDps,
+      projectileSpeed,
+    },
     source: 'erkul',
     sourceId: seed.id ?? (typeof rawData?.ref === 'string' ? rawData.ref : undefined),
     patch: seed.patch,

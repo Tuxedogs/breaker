@@ -64,18 +64,6 @@ export function LoadoutDrawer({
             <button
               type="button"
               role="tab"
-              aria-selected={mode === 'weapons'}
-              className={[
-                'alpha-loadout-drawer-tab',
-                mode === 'weapons' ? 'alpha-loadout-drawer-tab-active' : '',
-              ].filter(Boolean).join(' ')}
-              onClick={onOpenWeapons}
-            >
-              Weapons
-            </button>
-            <button
-              type="button"
-              role="tab"
               aria-selected={mode === 'ships'}
               className={[
                 'alpha-loadout-drawer-tab',
@@ -84,6 +72,18 @@ export function LoadoutDrawer({
               onClick={onOpenShips}
             >
               Ships
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'weapons'}
+              className={[
+                'alpha-loadout-drawer-tab',
+                mode === 'weapons' ? 'alpha-loadout-drawer-tab-active' : '',
+              ].filter(Boolean).join(' ')}
+              onClick={onOpenWeapons}
+            >
+              Weapons
             </button>
             <button
               type="button"

@@ -17,6 +17,7 @@ export function mergeWeaponRecords(records: WeaponRecord[]): WeaponRecord[] {
       alpha: record.alpha ?? existing.alpha,
       burstDps: record.burstDps ?? existing.burstDps,
       projectileSpeed: record.projectileSpeed ?? existing.projectileSpeed,
+      calculatorProfile: record.calculatorProfile ?? existing.calculatorProfile,
       source: existing.source === record.source ? existing.source : 'merged',
       sourceId: record.sourceId ?? existing.sourceId,
       patch: record.patch ?? existing.patch,
