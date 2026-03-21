@@ -153,6 +153,7 @@ export function normalizeManualWeaponRecord(
   const weaponClass = seed.weaponClass
     ? normalizeWeaponClass(seed.weaponClass)
     : inferWeaponClass(seed.name)
+  const damageChannel = seed.type === 'ballistic' ? 'physical' : 'energy'
 
   return {
     id: createWeaponId({
@@ -167,6 +168,15 @@ export function normalizeManualWeaponRecord(
     alpha: seed.alpha,
     burstDps: seed.burstDps,
     projectileSpeed: seed.speed,
+    calculatorProfile: {
+      damageChannel,
+      mountCount: 1,
+      baseAlpha: seed.alpha,
+      effectiveAlpha: seed.alpha,
+      baseBurstDps: seed.burstDps,
+      effectiveBurstDps: seed.burstDps,
+      projectileSpeed: seed.speed,
+    },
     source,
     sourceId: seed.name,
     patch: seed.patch,

@@ -312,6 +312,93 @@ type AnchorEstimate = {
   notes: string[]
 }
 
+function getObservedOnsetRatio(
+  state: NonNullable<ObservedBreakpointState> | undefined
+): number | null {
+  if (!state) return null
+  if (state.armorDamageStartsAtPercent != null) {
+    return clamp(state.armorDamageStartsAtPercent / 100, 0, 1)
+  }
+
+  return state.damagesFreshArmor === true ? 1 : null
+}
+
+function getObservedBallisticShieldCarryover(ship: Ship): number | null {
+  const observedBreakpoints = ship.defenseProfile?.observedBreakpoints
+  if (!observedBreakpoints) return null
+
+  const carryovers = Object.entries(observedBreakpoints)
+    .filter(([weaponId]) => weaponId.startsWith('ballistic:'))
+    .map(([, states]) => {
+      const downRatio = getObservedOnsetRatio(states.shieldsDown)
+      const upRatio = getObservedOnsetRatio(states.shieldsUp)
+      if (downRatio == null || upRatio == null || downRatio <= 0) return null
+
+      return clamp(upRatio / downRatio, 0, 1.25)
+    })
+    .filter((value): value is number => value != null)
+
+  if (!carryovers.length) return null
+
+  carryovers.sort((left, right) => left - right)
+  return carryovers[Math.floor(carryovers.length / 2)] ?? null
+}
+
+function estimateBallisticOnsetFromThreshold(
+  ship: Ship,
+  weapon: WeaponRecord,
+  shieldState: DefenseShieldState,
+  thresholdRatio: number,
+  damageChannel: DefenseDamageChannel
+): AnchorEstimate | null {
+  if (weapon.damageType !== 'ballistic' || damageChannel !== 'physical') return null
+
+  const baseRatio =
+    shieldState === 'down'
+      ? thresholdRatio
+      : (() => {
+          const carryover = getObservedBallisticShieldCarryover(ship)
+          if (carryover == null) return null
+
+          const shieldsDownRatio =
+            ship.defenseProfile?.armor.physical.deflectionThreshold
+              ? ((weapon.alpha ?? 0) * ship.defenseProfile.armor.physical.damageMultiplier) /
+                ship.defenseProfile.armor.physical.deflectionThreshold
+              : null
+          if (shieldsDownRatio == null) return null
+
+          return shieldsDownRatio * carryover
+        })()
+
+  if (baseRatio == null) return null
+
+  if (baseRatio >= 1) {
+    return {
+      onsetPercent: 100,
+      band: [100, 100],
+      notes:
+        shieldState === 'up'
+          ? ['Estimated from observed ship ballistic shield carryover and current alpha, yielding guaranteed fresh armor damage.']
+          : ['Estimated from ballistic armor threshold ratio, yielding guaranteed fresh armor damage.'],
+    }
+  }
+
+  const onsetPercent = Math.round(clamp(baseRatio * 100, 1, 99))
+  const band: [number, number] = [
+    Math.max(1, onsetPercent - 3),
+    Math.min(99, onsetPercent + 3),
+  ]
+
+  return {
+    onsetPercent,
+    band,
+    notes:
+      shieldState === 'up'
+        ? ['Estimated from observed ship ballistic shield carryover, weapon alpha, and armor threshold ratio.']
+        : ['Estimated directly from ballistic alpha versus armor threshold ratio.'],
+  }
+}
+
 const weaponLookup = new Map(
   ['merged', 'erkul-live', 'erkul-ptu', 'manual', 'spviewer']
     .flatMap((source) => getWeaponsForSource(source as WeaponThresholdType extends never ? never : 'merged' | 'erkul-live' | 'erkul-ptu' | 'manual' | 'spviewer'))
@@ -499,6 +586,16 @@ export function estimateArmorInteraction(
   const hasObservedDamageOverride = observedState?.damagesFreshArmor != null
   const explicitObservedOnset = observedState?.armorDamageStartsAtPercent ?? null
   const explicitObservedOnsetSource = observedState?.source ?? 'observed'
+  const ballisticCurveEstimate =
+    !observedState
+      ? estimateBallisticOnsetFromThreshold(
+          ship,
+          weapon,
+          shieldState,
+          thresholdRatio,
+          damageChannel
+        )
+      : null
   const anchorEstimate =
     explicitObservedOnset == null && observedState?.damagesFreshArmor === false
       ? estimateOnsetFromAnchors(
@@ -514,7 +611,7 @@ export function estimateArmorInteraction(
     notes.push('Ship has no resolved shields; shield-up calculation uses pass-through 1.0.')
   }
 
-  if (!observedState && thresholdRatio < 1) {
+  if (!observedState && !ballisticCurveEstimate && thresholdRatio < 1) {
     notes.push('Observed breakpoint missing; calibration curve not implemented yet.')
   }
 
@@ -526,12 +623,17 @@ export function estimateArmorInteraction(
     notes.push(...anchorEstimate.notes)
   }
 
+  if (ballisticCurveEstimate) {
+    notes.push(...ballisticCurveEstimate.notes)
+  }
+
   const damagesFreshArmor = hasObservedDamageOverride
     ? Boolean(observedState?.damagesFreshArmor)
     : thresholdRatio >= 1
 
   const armorDamageStartsAtPercent =
     explicitObservedOnset ??
+    ballisticCurveEstimate?.onsetPercent ??
     anchorEstimate?.onsetPercent ??
     (!hasObservedDamageOverride && thresholdRatio >= 1 ? 100 : null) ??
     (observedState?.damagesFreshArmor === true ? 100 : null)
@@ -539,6 +641,8 @@ export function estimateArmorInteraction(
   const armorDamageStartsAtPercentSource =
     explicitObservedOnset != null
       ? explicitObservedOnsetSource
+      : ballisticCurveEstimate
+        ? 'estimated'
       : anchorEstimate
         ? 'estimated'
         : !hasObservedDamageOverride && thresholdRatio >= 1
@@ -546,13 +650,17 @@ export function estimateArmorInteraction(
           : observedState?.damagesFreshArmor === true
             ? 'observed'
             : 'none'
-  const estimatedArmorOnsetBand =
+  const rawEstimatedArmorOnsetBand =
     explicitObservedOnsetSource === 'estimated'
       ? observedState?.estimatedArmorOnsetBand ?? null
-      : anchorEstimate?.band ?? null
+      : ballisticCurveEstimate?.band ?? anchorEstimate?.band ?? null
+  const estimatedArmorOnsetBand =
+    armorDamageStartsAtPercent === 100 ? null : rawEstimatedArmorOnsetBand
   const computedConfidence =
     explicitObservedOnset != null || hasObservedDamageOverride
       ? 'high'
+      : ballisticCurveEstimate
+        ? 'medium'
       : anchorEstimate
         ? 'medium'
         : !hasObservedDamageOverride && thresholdRatio >= 1

@@ -1,10 +1,9 @@
 import './threshold.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LoadoutDrawer } from './components/LoadoutDrawer'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
 import { ShipBalanceChangelogPanel } from './components/ShipBalanceChangelogPanel'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
-import { TopControlStrip } from './components/TopControlStrip'
 import { ShipSelectorPanel } from './components/ShipSelectorPanel'
 import WeaponSelectorPanel from './components/WeaponSelectorPanel'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
@@ -27,6 +26,14 @@ export default function AlphaThresholdToolPage() {
     clearAllShips,
   } = useAlphaThresholdState()
 
+  useEffect(() => {
+    document.body.classList.add('alpha-threshold-page')
+
+    return () => {
+      document.body.classList.remove('alpha-threshold-page')
+    }
+  }, [])
+
   function clearAllWeaponSlots() {
     slots.forEach((slot) => setSlotWeapon(slot.id, null))
   }
@@ -34,20 +41,6 @@ export default function AlphaThresholdToolPage() {
   return (
     <main className="alpha-tool-route" aria-label="Alpha threshold tool">
       <div className="alpha-command-shell">
-        <TopControlStrip
-          activeSource={activeSource}
-          onSourceChange={setActiveSource}
-          selectedWeaponCount={selectedWeapons.length}
-          selectedShipCount={selectedShips.length}
-          onOpenWeapons={() => setDrawerMode('weapons')}
-          onOpenShips={() => setDrawerMode('ships')}
-          onClearAllWeapons={clearAllWeaponSlots}
-          onClearAllShips={clearAllShips}
-          changelogControl={
-            <ShipBalanceChangelogPanel entries={shipBalanceChanges} compact />
-          }
-        />
-
         <MainHeatmapStage
           board={
             <ThresholdHeatmapBoard
@@ -55,6 +48,17 @@ export default function AlphaThresholdToolPage() {
               selectedWeapons={selectedWeapons}
               allShips={allShips}
               allWeapons={allWeapons}
+              activeSource={activeSource}
+              onSourceChange={setActiveSource}
+              selectedWeaponCount={selectedWeapons.length}
+              selectedShipCount={selectedShips.length}
+              onOpenWeapons={() => setDrawerMode('weapons')}
+              onOpenShips={() => setDrawerMode('ships')}
+              onClearAllWeapons={clearAllWeaponSlots}
+              onClearAllShips={clearAllShips}
+              changelogControl={
+                <ShipBalanceChangelogPanel entries={shipBalanceChanges} compact />
+              }
             />
           }
           drawer={

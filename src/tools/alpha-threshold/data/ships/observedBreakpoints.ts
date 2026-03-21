@@ -43,6 +43,32 @@ export const observedBreakpoints = {
         damagesFreshArmor: true,
       },
     },
+    'energy:4:Attrition-4': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 60,
+        estimatedArmorOnsetBand: [55, 65],
+        notes: ['Estimated from Perseus ballistic anchor spacing and Attrition-4 shield-down armor performance.'],
+      },
+    },
+    'energy:5:M7A': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: true,
+        armorDamageStartsAtPercent: 100,
+        notes: ['Estimated as immediate shield-down armor damage on Perseus based on M7A alpha class.'],
+      },
+    },
+    'energy:5:Omnisky XV': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 71,
+        estimatedArmorOnsetBand: [68, 74],
+        notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
+      },
+    },
   },
   rsi_perseus: {
     'ballistic:3:11-Series Broadsword': {
@@ -86,6 +112,32 @@ export const observedBreakpoints = {
       shieldsUp: {
         source: 'observed',
         damagesFreshArmor: true,
+      },
+    },
+    'energy:4:Attrition-4': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 60,
+        estimatedArmorOnsetBand: [55, 65],
+        notes: ['Estimated from Perseus ballistic anchor spacing and Attrition-4 shield-down armor performance.'],
+      },
+    },
+    'energy:5:M7A': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: true,
+        armorDamageStartsAtPercent: 100,
+        notes: ['Estimated as immediate shield-down armor damage on Perseus based on M7A alpha class.'],
+      },
+    },
+    'energy:5:Omnisky XV': {
+      shieldsDown: {
+        source: 'estimated',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 71,
+        estimatedArmorOnsetBand: [68, 74],
+        notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
       },
     },
   },

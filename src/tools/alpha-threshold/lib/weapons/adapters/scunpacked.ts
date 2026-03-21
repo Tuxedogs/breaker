@@ -24,6 +24,10 @@ export function normalizeScunpackedWeapon(
   const damageType = seed.damageType === 'energy' || seed.damageType === 'distortion'
     ? seed.damageType
     : 'ballistic'
+  const alpha = seed.alpha ?? null
+  const burstDps = seed.burstDps ?? null
+  const projectileSpeed = seed.projectileSpeed ?? null
+  const damageChannel = damageType === 'ballistic' ? 'physical' : 'energy'
 
   return {
     id: createWeaponId({ damageType, size, name }),
@@ -31,9 +35,18 @@ export function normalizeScunpackedWeapon(
     size,
     damageType,
     weaponClass: inferWeaponClass(name),
-    alpha: seed.alpha ?? null,
-    burstDps: seed.burstDps ?? null,
-    projectileSpeed: seed.projectileSpeed ?? null,
+    alpha,
+    burstDps,
+    projectileSpeed,
+    calculatorProfile: {
+      damageChannel,
+      mountCount: 1,
+      baseAlpha: alpha,
+      effectiveAlpha: alpha,
+      baseBurstDps: burstDps,
+      effectiveBurstDps: burstDps,
+      projectileSpeed,
+    },
     source: 'scunpacked',
     sourceId: seed.recordId,
     patch: seed.patch,

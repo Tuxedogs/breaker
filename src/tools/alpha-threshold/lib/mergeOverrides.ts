@@ -24,10 +24,24 @@ export function mergeWeaponOverride(
 ): WeaponRecord {
   if (!override) return weapon
 
+  const alpha = override.alpha ?? weapon.alpha
+  const burstDps = override.burstDps ?? weapon.burstDps
+  const projectileSpeed = override.speed ?? weapon.projectileSpeed
+
   return {
     ...weapon,
-    alpha: override.alpha ?? weapon.alpha,
-    burstDps: override.burstDps ?? weapon.burstDps,
-    projectileSpeed: override.speed ?? weapon.projectileSpeed,
+    alpha,
+    burstDps,
+    projectileSpeed,
+    calculatorProfile: weapon.calculatorProfile
+      ? {
+          ...weapon.calculatorProfile,
+          baseAlpha: alpha,
+          effectiveAlpha: alpha,
+          baseBurstDps: burstDps,
+          effectiveBurstDps: burstDps,
+          projectileSpeed,
+        }
+      : weapon.calculatorProfile,
   }
 }

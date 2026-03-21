@@ -504,10 +504,22 @@ export function useAlphaThresholdState() {
           weaponOverrides[weaponKey]
         )
         const mountCount = Math.max(1, slot.count ?? 1)
+        const effectiveAlpha = effectiveWeapon.alpha == null ? null : effectiveWeapon.alpha * mountCount
+        const effectiveBurstDps =
+          effectiveWeapon.burstDps == null ? null : effectiveWeapon.burstDps * mountCount
         const groupedWeapon: WeaponRecord = {
           ...effectiveWeapon,
-          alpha: effectiveWeapon.alpha == null ? null : effectiveWeapon.alpha * mountCount,
-          burstDps: effectiveWeapon.burstDps == null ? null : effectiveWeapon.burstDps * mountCount,
+          alpha: effectiveAlpha,
+          burstDps: effectiveBurstDps,
+          calculatorProfile: {
+            damageChannel: effectiveWeapon.damageType === 'ballistic' ? 'physical' : 'energy',
+            mountCount,
+            baseAlpha: effectiveWeapon.alpha,
+            effectiveAlpha,
+            baseBurstDps: effectiveWeapon.burstDps,
+            effectiveBurstDps,
+            projectileSpeed: effectiveWeapon.projectileSpeed,
+          },
         }
 
         return {

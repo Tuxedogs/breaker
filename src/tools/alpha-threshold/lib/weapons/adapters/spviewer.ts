@@ -22,6 +22,10 @@ export function normalizeSpviewerWeapon(seed: SpviewerWeaponSeed): WeaponRecord 
   const damageType = seed.damageType === 'energy' || seed.damageType === 'distortion'
     ? seed.damageType
     : 'ballistic'
+  const alpha = seed.alphaDamage ?? null
+  const burstDps = seed.burstDps ?? null
+  const projectileSpeed = seed.speed ?? null
+  const damageChannel = damageType === 'ballistic' ? 'physical' : 'energy'
 
   return {
     id: createWeaponId({ damageType, size, name }),
@@ -29,9 +33,18 @@ export function normalizeSpviewerWeapon(seed: SpviewerWeaponSeed): WeaponRecord 
     size,
     damageType,
     weaponClass: inferWeaponClass(name),
-    alpha: seed.alphaDamage ?? null,
-    burstDps: seed.burstDps ?? null,
-    projectileSpeed: seed.speed ?? null,
+    alpha,
+    burstDps,
+    projectileSpeed,
+    calculatorProfile: {
+      damageChannel,
+      mountCount: 1,
+      baseAlpha: alpha,
+      effectiveAlpha: alpha,
+      baseBurstDps: burstDps,
+      effectiveBurstDps: burstDps,
+      projectileSpeed,
+    },
     source: 'spviewer',
     sourceId: seed.uuid,
     patch: seed.patch,

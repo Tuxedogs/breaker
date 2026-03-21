@@ -194,9 +194,20 @@ export type WeaponRecord = {
   alpha: number | null
   burstDps: number | null
   projectileSpeed: number | null
+  calculatorProfile?: WeaponCalculatorProfile
   source?: WeaponSource
   sourceId?: string
   patch?: string
+}
+
+export type WeaponCalculatorProfile = {
+  damageChannel: DefenseDamageChannel
+  mountCount: number
+  baseAlpha: number | null
+  effectiveAlpha: number | null
+  baseBurstDps: number | null
+  effectiveBurstDps: number | null
+  projectileSpeed: number | null
 }
 
 export type ShipOverride = {

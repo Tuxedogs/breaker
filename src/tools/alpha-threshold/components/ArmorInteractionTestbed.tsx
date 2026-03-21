@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react'
+import { useState } from 'react'
+import type { FocusEvent, ReactNode } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import type { SelectedWeaponComparison, Ship } from '../types'
 import { ArmorInteractionSummaryPanel } from './ArmorInteractionSummaryPanel'
@@ -9,67 +10,8 @@ type Props = {
   selectedWeapons: SelectedWeaponComparison[]
 }
 
-type ShipAnalysisGroup = {
-  ship: Ship
-  selections: SelectedWeaponComparison[]
-}
-
-type MatchupBlock =
-  | { type: 'dual'; selection: SelectedWeaponComparison }
-  | { type: 'single-group'; rows: SingleStateRow[] }
-
-type SingleStateRow = SelectedWeaponComparison[]
-
-function buildShipAnalysisGroups(
-  ships: Ship[],
-  selectedWeapons: SelectedWeaponComparison[]
-): ShipAnalysisGroup[] {
-  if (!ships.length || !selectedWeapons.length) return []
-
-  return ships.slice(0, 4).map((ship) => ({
-    ship,
-    selections: selectedWeapons,
-  }))
-}
-
-function getLayoutMode(selection: SelectedWeaponComparison): 'dual-state' | 'single-state' {
-  return selection.weapon.damageType === 'ballistic' ? 'dual-state' : 'single-state'
-}
-
-function buildMatchupBlocks(selections: SelectedWeaponComparison[]): MatchupBlock[] {
-  const blocks: MatchupBlock[] = []
-  let currentSingles: SelectedWeaponComparison[] = []
-
-  function flushSingles() {
-    if (!currentSingles.length) return
-    blocks.push({ type: 'single-group', rows: buildSingleStateRows(currentSingles) })
-    currentSingles = []
-  }
-
-  for (const selection of selections) {
-    if (getLayoutMode(selection) === 'single-state') {
-      currentSingles.push(selection)
-      continue
-    }
-
-    flushSingles()
-    blocks.push({ type: 'dual', selection })
-  }
-
-  flushSingles()
-  return blocks
-}
-
-function buildSingleStateRows(
-  selections: SelectedWeaponComparison[]
-): SingleStateRow[] {
-  const rows: SingleStateRow[] = []
-
-  for (let index = 0; index < selections.length; index += 2) {
-    rows.push(selections.slice(index, index + 2))
-  }
-
-  return rows
+function buildVisibleShips(ships: Ship[]) {
+  return ships.slice(0, 4)
 }
 
 export function ArmorInteractionTestbed({
@@ -77,9 +19,10 @@ export function ArmorInteractionTestbed({
   ships,
   selectedWeapons,
 }: Props) {
-  const groups = buildShipAnalysisGroups(ships, selectedWeapons)
+  const [activeCell, setActiveCell] = useState<{ shipId: string; slotId: string } | null>(null)
+  const visibleShips = buildVisibleShips(ships)
 
-  if (!groups.length) {
+  if (!visibleShips.length || !selectedWeapons.length) {
     return (
       <section
         className="alpha-threshold-tab-panel alpha-threshold-board-empty"
@@ -95,24 +38,40 @@ export function ArmorInteractionTestbed({
     )
   }
 
+  function handleCellActivate(shipId: string, slotId: string) {
+    setActiveCell({ shipId, slotId })
+  }
+
+  function handleCellDeactivate(event: FocusEvent<HTMLDivElement>, shipId: string, slotId: string) {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return
+    setActiveCell((current) =>
+      current?.shipId === shipId && current.slotId === slotId ? null : current
+    )
+  }
+
   return (
-    <section className="alpha-threshold-tab-panel" aria-label="Armor interaction UI testbed">
+    <section
+      className="alpha-threshold-tab-panel alpha-analysis-board"
+      data-ship-count={visibleShips.length}
+      data-active-ship={activeCell?.shipId ?? ''}
+      aria-label="Armor interaction analysis"
+    >
       <div className="alpha-analysis-sticky-shell">
         <div className="alpha-analysis-sticky-surface">
           {controlStrip}
           <div className="alpha-ui-testbed-grid alpha-ui-testbed-header-grid">
-            {groups.map((group) => (
+            {visibleShips.map((ship) => (
               <section
-                key={`${group.ship.id}-header`}
+                key={`${ship.id}-header`}
                 className="alpha-ui-testbed-ship-column"
-                aria-label={`${formatEntityLabel(group.ship.name)} armor interaction header`}
+                aria-label={`${formatEntityLabel(ship.name)} armor interaction header`}
               >
                 <header className="alpha-ui-testbed-card-head">
                   <div>
                     <p className="alpha-ui-testbed-label">
-                      {formatEntityLabel(group.ship.manufacturer)}
+                      {formatEntityLabel(ship.manufacturer)}
                     </p>
-                    <h3 className="alpha-ui-testbed-title">{formatEntityLabel(group.ship.name)}</h3>
+                    <h3 className="alpha-ui-testbed-title">{formatEntityLabel(ship.name)}</h3>
                   </div>
                 </header>
               </section>
@@ -121,61 +80,60 @@ export function ArmorInteractionTestbed({
         </div>
       </div>
 
-      <div className="alpha-ui-testbed-grid alpha-ui-testbed-body-grid">
-        {groups.map((group) => (
-          <section
-            key={group.ship.id}
-            className="alpha-ui-testbed-ship-column"
-            aria-label={`${formatEntityLabel(group.ship.name)} armor interaction group`}
+      <div className="alpha-weapon-analysis-stack">
+        {selectedWeapons.map((selection) => (
+          <article
+            key={selection.slotId}
+            className={`alpha-weapon-analysis-row alpha-weapon-analysis-row-${selection.weapon.damageType}`}
           >
-            <div className="alpha-ui-testbed-matchup-stack">
-              {buildMatchupBlocks(group.selections).map((block, blockIndex) => {
-                if (block.type === 'dual') {
-                  return (
-                    <article
-                      key={`${group.ship.id}-${block.selection.slotId}`}
-                      className="alpha-ui-testbed-card alpha-ui-testbed-card-dual"
-                    >
-                      <ArmorInteractionSummaryPanel
-                        ship={group.ship}
-                        selectedWeapon={block.selection}
-                      />
-                    </article>
-                  )
-                }
+            <header className="alpha-weapon-analysis-row-head">
+              <div className="alpha-weapon-analysis-row-context-grid" aria-live="polite">
+                {visibleShips.map((ship) => {
+                  const isActive =
+                    activeCell?.slotId === selection.slotId && activeCell.shipId === ship.id
 
-                return (
-                  <div
-                    key={`${group.ship.id}-single-group-${blockIndex}`}
-                  >
-                    {block.rows.map((row, rowIndex) => (
-                      <div
-                        key={`${group.ship.id}-single-row-${blockIndex}-${rowIndex}`}
-                        className="alpha-ui-testbed-single-row"
-                      >
-                        {row.map((selection) => (
-                          <div
-                            key={`${group.ship.id}-${selection.slotId}`}
-                            className={`alpha-ui-testbed-single-cell ${row.length === 1 ? 'alpha-ui-testbed-single-cell-span' : ''}`}
-                          >
-                            <article
-                              className="alpha-ui-testbed-card alpha-ui-testbed-card-single"
-                            >
-                              <ArmorInteractionSummaryPanel
-                                ship={group.ship}
-                                selectedWeapon={selection}
-                                compact
-                              />
-                            </article>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )
-              })}
+                  return (
+                    <div
+                      key={`${selection.slotId}-${ship.id}-context`}
+                      className={`alpha-weapon-analysis-row-context-cell ${isActive ? 'alpha-weapon-analysis-row-context-cell-active' : ''}`}
+                    >
+                      <p className="alpha-weapon-analysis-row-eyebrow">
+                        {selection.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy'}
+                      </p>
+                      <p className="alpha-weapon-analysis-row-context">
+                        {selection.weapon.name} · {formatEntityLabel(ship.name)}
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            </header>
+
+            <div className="alpha-weapon-analysis-grid">
+              {visibleShips.map((ship) => (
+                <div
+                  key={`${selection.slotId}-${ship.id}`}
+                  className={`alpha-weapon-analysis-cell ${activeCell?.shipId === ship.id && activeCell.slotId === selection.slotId ? 'alpha-weapon-analysis-cell-active' : ''}`}
+                  onPointerEnter={() => handleCellActivate(ship.id, selection.slotId)}
+                  onPointerLeave={() =>
+                    setActiveCell((current) =>
+                      current?.shipId === ship.id && current.slotId === selection.slotId ? null : current
+                    )
+                  }
+                  onFocusCapture={() => handleCellActivate(ship.id, selection.slotId)}
+                  onBlurCapture={(event) => handleCellDeactivate(event, ship.id, selection.slotId)}
+                >
+                  <ArmorInteractionSummaryPanel
+                    ship={ship}
+                    selectedWeapon={selection}
+                    compact
+                    hideWeaponHeader
+                    highlighted={activeCell?.shipId === ship.id && activeCell.slotId === selection.slotId}
+                  />
+                </div>
+              ))}
             </div>
-          </section>
+          </article>
         ))}
       </div>
     </section>
