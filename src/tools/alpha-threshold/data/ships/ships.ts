@@ -1,25 +1,68 @@
 import { normalizeErkulShip } from '../../lib/ships/adapters/erkul'
 import { normalizeManualShipRecord } from '../../lib/ships/adapters/manual'
+import { normalizeShipName } from '../../lib/ships/normalize'
 import { normalizeSpviewerShip } from '../../lib/ships/adapters/spviewer'
 import { mergeShipRecords } from '../../lib/ships/merge'
 import type { ShipRecord } from '../../lib/ships/types'
-import type { AttackerHardpointProfile, Ship, ThresholdDataSourceKey } from '../../types'
+import type { AttackerHardpointProfile, Ship, ShipDefenseProfile, ThresholdDataSourceKey } from '../../types'
 import { erkulLiveShipSeeds } from './erkulLiveSeeds'
 import { erkulPtuShipSeeds } from './erkulPtuSeeds'
 import { manualShipSeeds } from './manualSeeds'
 import { spviewerShipSeeds } from './spviewerSeeds'
 import { shipCardStats } from './cardStats'
+import { erkulLiveShipDefenseProfiles } from '../shields/erkulLiveShipDefenseProfiles'
+import { erkulPtuShipDefenseProfiles } from '../shields/erkulPtuShipDefenseProfiles'
+import { observedBreakpoints } from './observedBreakpoints'
 import { shipWikiImages } from './wikiImages'
 
-function toShip(record: ShipRecord): Ship {
+function getDefenseProfileKey(name: string) {
+  return normalizeShipName(name).toLowerCase()
+}
+
+const liveDefenseProfileMap = new Map<string, ShipDefenseProfile>(
+  erkulLiveShipDefenseProfiles.map((profile) => [getDefenseProfileKey(profile.name), profile as ShipDefenseProfile])
+)
+const ptuDefenseProfileMap = new Map<string, ShipDefenseProfile>(
+  erkulPtuShipDefenseProfiles.map((profile) => [getDefenseProfileKey(profile.name), profile as ShipDefenseProfile])
+)
+
+function getDefenseProfile(record: ShipRecord, source: ThresholdDataSourceKey) {
+  const key = getDefenseProfileKey(record.name)
+
+  if (source === 'erkul-live') return liveDefenseProfileMap.get(key)
+  if (source === 'erkul-ptu') return ptuDefenseProfileMap.get(key)
+
+  if (source === 'merged') {
+    return liveDefenseProfileMap.get(key) ?? ptuDefenseProfileMap.get(key)
+  }
+
+  return undefined
+}
+
+function getObservedBreakpoints(record: ShipRecord, defenseProfile?: ShipDefenseProfile) {
+  const byRecordId = observedBreakpoints[record.id as keyof typeof observedBreakpoints]
+  if (byRecordId) return byRecordId
+
+  if (defenseProfile?.id) {
+    return observedBreakpoints[defenseProfile.id as keyof typeof observedBreakpoints]
+  }
+
+  return undefined
+}
+
+function toShip(record: ShipRecord, source: ThresholdDataSourceKey): Ship {
   const imageKey = `${record.manufacturer}::${record.name}`.toLowerCase() as keyof typeof shipWikiImages
   const wikiImage = shipWikiImages[imageKey]
   const cardStatsKey = `${record.manufacturer}::${record.name}`.toLowerCase() as keyof typeof shipCardStats
   const cardStats = shipCardStats[cardStatsKey]
+  const defenseProfile = getDefenseProfile(record, source)
+  const observed = getObservedBreakpoints(record, defenseProfile)
 
   return {
+    id: record.id,
     manufacturer: record.manufacturer,
     name: record.name,
+    source,
     imageSrc: wikiImage?.imageSrc,
     imageAlt: wikiImage?.imageAlt,
     scmSpeed: cardStats?.scmSpeed ?? null,
@@ -36,6 +79,12 @@ function toShip(record: ShipRecord): Ship {
     patch: record.patch,
     history: record.history ?? [],
     hardpointGroups: record.hardpointGroups,
+    defenseProfile: defenseProfile
+      ? {
+          ...defenseProfile,
+          ...(observed ? { observedBreakpoints: observed } : {}),
+        }
+      : undefined,
   }
 }
 
@@ -58,7 +107,10 @@ const shipRecordDatasets: Record<ThresholdDataSourceKey, ShipRecord[]> = {
 }
 
 const shipDatasets: Record<ThresholdDataSourceKey, Ship[]> = Object.fromEntries(
-  Object.entries(shipRecordDatasets).map(([key, records]) => [key, records.map(toShip)])
+  Object.entries(shipRecordDatasets).map(([key, records]) => [
+    key,
+    records.map((record) => toShip(record, key as ThresholdDataSourceKey)),
+  ])
 ) as Record<ThresholdDataSourceKey, Ship[]>
 
 const FALLBACK_PROFILE: Omit<AttackerHardpointProfile, 'shipName'> = {

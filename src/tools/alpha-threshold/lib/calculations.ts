@@ -1,6 +1,9 @@
 import type {
   ArmorStatePercent,
+  ArmorInteractionEstimate,
   AxisScaleMode,
+  DefenseDamageChannel,
+  DefenseShieldState,
   HeatmapTraceModel,
   HeatmapTraceStatus,
   PenetrationState,
@@ -14,6 +17,7 @@ import type {
   WeaponRecord,
   WeaponThresholdType,
 } from '../types'
+import { getWeaponsForSource } from '../data/weapons/weapons'
 
 const wholeFormatter = new Intl.NumberFormat('en-US')
 const decimalFormatter = new Intl.NumberFormat('en-US', {
@@ -255,6 +259,268 @@ export function getDefaultCollapsedGroups(): Record<ShipSizeGroup, boolean> {
     large: false,
     medium: false,
     small: false,
+  }
+}
+
+function getDamageChannel(damageType: WeaponRecord['damageType']): DefenseDamageChannel {
+  return damageType === 'ballistic' ? 'physical' : 'energy'
+}
+
+function getThresholdRatio(effectiveArmorAlpha: number, deflectionThreshold: number): number {
+  if (deflectionThreshold <= 0) {
+    return effectiveArmorAlpha > 0 ? Number.POSITIVE_INFINITY : 0
+  }
+
+  return effectiveArmorAlpha / deflectionThreshold
+}
+
+type ObservedBreakpointState = NonNullable<
+  NonNullable<Ship['defenseProfile']>['observedBreakpoints']
+>[string]['shieldsUp']
+
+type AnchorEstimate = {
+  onsetPercent: number
+  band: [number, number]
+  notes: string[]
+}
+
+const weaponLookup = new Map(
+  ['merged', 'erkul-live', 'erkul-ptu', 'manual', 'spviewer']
+    .flatMap((source) => getWeaponsForSource(source as WeaponThresholdType extends never ? never : 'merged' | 'erkul-live' | 'erkul-ptu' | 'manual' | 'spviewer'))
+    .map((weapon) => [weapon.id, weapon] as const)
+)
+
+function getAnchorEffectiveArmorAlpha(
+  ship: Ship,
+  weaponId: string,
+  shieldState: DefenseShieldState
+): number | null {
+  const defenseProfile = ship.defenseProfile
+  if (!defenseProfile) return null
+
+  const anchorWeapon = weaponLookup.get(weaponId)
+  if (!anchorWeapon || anchorWeapon.alpha == null) return null
+
+  const damageChannel = weaponId.startsWith('ballistic:') ? 'physical' : 'energy'
+  const armor = defenseProfile.armor[damageChannel]
+  const shieldPassThrough =
+    shieldState === 'up'
+      ? defenseProfile.shields.passThrough[damageChannel].max
+      : 1
+
+  return anchorWeapon.alpha * armor.damageMultiplier * shieldPassThrough
+}
+
+function estimateOnsetFromAnchors(
+  ship: Ship,
+  weapon: WeaponRecord,
+  shieldState: DefenseShieldState,
+  effectiveArmorAlpha: number,
+  damageChannel: DefenseDamageChannel
+): AnchorEstimate | null {
+  const observedBreakpoints = ship.defenseProfile?.observedBreakpoints
+  if (!observedBreakpoints) return null
+
+  const anchorEntries = Object.entries(observedBreakpoints)
+    .map(([weaponId, states]) => {
+      const state = shieldState === 'up' ? states.shieldsUp : states.shieldsDown
+      if (!state) return null
+
+      const sameChannel =
+        (weaponId.startsWith('ballistic:') && damageChannel === 'physical') ||
+        (!weaponId.startsWith('ballistic:') && damageChannel === 'energy')
+
+      if (!sameChannel) return null
+
+      return { weaponId, state }
+    })
+    .filter((entry): entry is { weaponId: string; state: NonNullable<ObservedBreakpointState> } => entry !== null)
+
+  if (!anchorEntries.length) return null
+
+  const anchors = anchorEntries
+    .map((entry) => ({
+      ...entry,
+      effectiveArmorAlpha: getAnchorEffectiveArmorAlpha(ship, entry.weaponId, shieldState),
+    }))
+    .filter((entry): entry is typeof entry & { effectiveArmorAlpha: number } => entry.effectiveArmorAlpha != null)
+    .sort((left, right) => left.effectiveArmorAlpha - right.effectiveArmorAlpha)
+
+  if (!anchors.length) return null
+
+  const lowerObserved = [...anchors]
+    .reverse()
+    .find((entry) =>
+      entry.effectiveArmorAlpha <= effectiveArmorAlpha &&
+      entry.state.armorDamageStartsAtPercent != null
+    )
+  const higherFresh = anchors.find((entry) =>
+    entry.effectiveArmorAlpha > effectiveArmorAlpha &&
+    entry.state.damagesFreshArmor === true
+  )
+
+  if (!lowerObserved) return null
+
+  const lowerOnset = lowerObserved.state.armorDamageStartsAtPercent ?? null
+  if (lowerOnset == null) return null
+
+  if (!higherFresh) {
+    const conservative = Math.round(clamp(lowerOnset + 4, lowerOnset, 95))
+    return {
+      onsetPercent: conservative,
+      band: [Math.max(lowerOnset, conservative - 4), Math.min(100, conservative + 2)],
+      notes: [`Estimated from ${weaponLookup.get(lowerObserved.weaponId)?.name ?? lowerObserved.weaponId} at ${lowerOnset}%.`],
+    }
+  }
+
+  const relativeLift =
+    lowerObserved.effectiveArmorAlpha > 0
+      ? (effectiveArmorAlpha - lowerObserved.effectiveArmorAlpha) / lowerObserved.effectiveArmorAlpha
+      : 0
+  const cappedLift = clamp(relativeLift, 0, 0.25)
+  const onsetPercent = Math.round(clamp(lowerOnset + cappedLift * 32, lowerOnset, 99))
+  const band: [number, number] = [
+    Math.max(lowerOnset, onsetPercent - 4),
+    Math.min(100, onsetPercent + 2),
+  ]
+
+  return {
+    onsetPercent,
+    band,
+    notes: [
+      `Estimated from ${weaponLookup.get(lowerObserved.weaponId)?.name ?? lowerObserved.weaponId} at ${lowerOnset}% and ${weapon.name}'s higher alpha.`,
+    ],
+  }
+}
+
+export function estimateArmorInteraction(
+  weapon: WeaponRecord,
+  ship: Ship,
+  shieldState: DefenseShieldState
+): ArmorInteractionEstimate {
+  const notes: string[] = []
+  const defenseProfile = ship.defenseProfile
+  const damageChannel = getDamageChannel(weapon.damageType)
+
+  if (weapon.damageType === 'distortion') {
+    notes.push('Distortion currently maps to the energy channel for this phase.')
+  }
+
+  if (!defenseProfile) {
+    notes.push('Defense profile missing on ship; using neutral fallback values.')
+
+    const effectiveArmorAlpha = weapon.alpha ?? 0
+    const deflectionThreshold =
+      damageChannel === 'physical' ? ship.ballisticThreshold : ship.energyThreshold
+    const thresholdRatio = getThresholdRatio(effectiveArmorAlpha, deflectionThreshold)
+
+    return {
+      damageChannel,
+      shieldState,
+      armorDamageMultiplier: 1,
+      shieldPassThrough: 1,
+      effectiveArmorAlpha,
+      deflectionThreshold,
+      thresholdRatio,
+      damagesFreshArmor: thresholdRatio >= 1,
+      armorDamageStartsAtPercent: thresholdRatio >= 1 ? 100 : null,
+      armorDamageStartsAtPercentSource: thresholdRatio >= 1 ? 'threshold' : 'none',
+      estimatedArmorOnsetBand: null,
+      confidence: 'low',
+      notes,
+    }
+  }
+
+  const armor = defenseProfile.armor[damageChannel]
+  const armorDamageMultiplier = armor.damageMultiplier
+  const shieldPassThrough =
+    shieldState === 'up'
+      ? defenseProfile.shields.passThrough[damageChannel].max
+      : 1
+  const effectiveArmorAlpha = (weapon.alpha ?? 0) * armorDamageMultiplier * shieldPassThrough
+  const deflectionThreshold = armor.deflectionThreshold
+  const thresholdRatio = getThresholdRatio(effectiveArmorAlpha, deflectionThreshold)
+  const observedBreakpoint = defenseProfile.observedBreakpoints?.[weapon.id]
+  const observedState =
+    shieldState === 'up'
+      ? observedBreakpoint?.shieldsUp
+      : observedBreakpoint?.shieldsDown
+  const hasObservedDamageOverride = observedState?.damagesFreshArmor != null
+  const explicitObservedOnset = observedState?.armorDamageStartsAtPercent ?? null
+  const explicitObservedOnsetSource = observedState?.source ?? 'observed'
+  const anchorEstimate =
+    explicitObservedOnset == null && observedState?.damagesFreshArmor === false
+      ? estimateOnsetFromAnchors(
+          ship,
+          weapon,
+          shieldState,
+          effectiveArmorAlpha,
+          damageChannel
+        )
+      : null
+
+  if (shieldState === 'up' && defenseProfile.shields.count === 0) {
+    notes.push('Ship has no resolved shields; shield-up calculation uses pass-through 1.0.')
+  }
+
+  if (!observedState && thresholdRatio < 1) {
+    notes.push('Observed breakpoint missing; calibration curve not implemented yet.')
+  }
+
+  if (observedState?.notes?.length) {
+    notes.push(...observedState.notes)
+  }
+
+  if (anchorEstimate) {
+    notes.push(...anchorEstimate.notes)
+  }
+
+  const damagesFreshArmor = hasObservedDamageOverride
+    ? Boolean(observedState?.damagesFreshArmor)
+    : thresholdRatio >= 1
+
+  const armorDamageStartsAtPercent =
+    explicitObservedOnset ??
+    anchorEstimate?.onsetPercent ??
+    (!hasObservedDamageOverride && thresholdRatio >= 1 ? 100 : null) ??
+    (observedState?.damagesFreshArmor === true ? 100 : null)
+
+  const armorDamageStartsAtPercentSource =
+    explicitObservedOnset != null
+      ? explicitObservedOnsetSource
+      : anchorEstimate
+        ? 'estimated'
+        : !hasObservedDamageOverride && thresholdRatio >= 1
+          ? 'threshold'
+          : observedState?.damagesFreshArmor === true
+            ? 'observed'
+            : 'none'
+  const estimatedArmorOnsetBand =
+    explicitObservedOnsetSource === 'estimated'
+      ? observedState?.estimatedArmorOnsetBand ?? null
+      : anchorEstimate?.band ?? null
+
+  return {
+    damageChannel,
+    shieldState,
+    armorDamageMultiplier,
+    shieldPassThrough,
+    effectiveArmorAlpha,
+    deflectionThreshold,
+    thresholdRatio,
+    damagesFreshArmor,
+    armorDamageStartsAtPercent,
+    armorDamageStartsAtPercentSource,
+    estimatedArmorOnsetBand,
+    confidence:
+      explicitObservedOnset != null || hasObservedDamageOverride
+        ? 'high'
+        : anchorEstimate
+          ? 'medium'
+          : !hasObservedDamageOverride && thresholdRatio >= 1
+            ? 'medium'
+            : 'low',
+    ...(notes.length ? { notes } : {}),
   }
 }
 

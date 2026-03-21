@@ -4,9 +4,102 @@ export type ShipSizeGroup =
   | 'medium'
   | 'small'
 
+export type DefenseDamageChannel = 'physical' | 'energy'
+export type DefenseShieldState = 'up' | 'down'
+
+export type DamageRange = {
+  min: number
+  max: number
+}
+
+export type ShipDefenseProfile = {
+  id: string
+  name: string
+  source: 'live' | 'ptu'
+  armor: {
+    hp: number
+    physical: {
+      damageMultiplier: number
+      deflectionThreshold: number
+    }
+    energy: {
+      damageMultiplier: number
+      deflectionThreshold: number
+    }
+  }
+  hull: {
+    hp: number
+    physical: { damageMultiplier: number }
+    energy: { damageMultiplier: number }
+  }
+  shields: {
+    count: number
+    size: number | number[]
+    installedShieldIds: readonly string[]
+    installedShieldNames: readonly string[]
+    installedShieldClass?: readonly string[]
+    hasBespokeShield: boolean
+    rawShieldRecords: readonly string[]
+    physical: {
+      resistance: DamageRange
+      absorption: DamageRange
+    }
+    energy: {
+      resistance: DamageRange
+      absorption: DamageRange
+    }
+    distortion?: {
+      resistance: DamageRange
+      absorption: DamageRange
+    }
+    passThrough: {
+      physical: DamageRange
+      energy: DamageRange
+    }
+  }
+  observedBreakpoints?: Record<string, {
+    shieldsDown?: {
+      source?: 'observed' | 'estimated'
+      damagesFreshArmor?: boolean
+      armorDamageStartsAtPercent?: number | null
+      estimatedArmorOnsetBand?: readonly [number, number] | null
+      notes?: readonly string[]
+    }
+    shieldsUp?: {
+      source?: 'observed' | 'estimated'
+      damagesFreshArmor?: boolean
+      armorDamageStartsAtPercent?: number | null
+      estimatedArmorOnsetBand?: readonly [number, number] | null
+      notes?: readonly string[]
+    }
+  }>
+}
+
+export type ArmorInteractionEstimate = {
+  damageChannel: DefenseDamageChannel
+  shieldState: DefenseShieldState
+  armorDamageMultiplier: number
+  shieldPassThrough: number
+  effectiveArmorAlpha: number
+  deflectionThreshold: number
+  thresholdRatio: number
+  damagesFreshArmor: boolean
+  armorDamageStartsAtPercent: number | null
+  armorDamageStartsAtPercentSource:
+    | 'observed'
+    | 'estimated'
+    | 'threshold'
+    | 'none'
+  estimatedArmorOnsetBand?: readonly [number, number] | null
+  confidence: 'low' | 'medium' | 'high'
+  notes?: string[]
+}
+
 export type Ship = {
+  id: string
   manufacturer: string
   name: string
+  source?: ThresholdDataSourceKey | 'erkul' | 'spviewer' | 'scunpacked' | 'manual' | 'merged' | 'live' | 'ptu'
   imageSrc?: string
   imageAlt?: string
   scmSpeed?: number | null
@@ -23,6 +116,7 @@ export type Ship = {
   patch?: string
   history: ShipBalanceSnapshot[]
   hardpointGroups?: ShipHardpointGroup[]
+  defenseProfile?: ShipDefenseProfile
 }
 
 export type ShipBalanceSnapshot = {
