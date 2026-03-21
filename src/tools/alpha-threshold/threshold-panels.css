@@ -1213,9 +1213,9 @@
   position: relative;
   display: grid;
   grid-template-rows: auto auto auto;
-  gap: 0.6rem;
+  gap: 0.5rem;
   border-radius: 1.75rem;
-  padding: 0.7rem 0.8rem 0.8rem;
+  padding: 0.52rem 0.55rem 0.62rem;
   overflow: hidden;
   box-shadow:
     0 24px 60px rgb(0 0 0 / 0.28),
@@ -1236,7 +1236,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.5rem;
   align-items: start;
 }
 
@@ -1247,7 +1247,7 @@
 
 .alpha-tool-route .alpha-threshold-board-copy {
   margin: 0;
-  max-width: 42rem;
+  max-width: 64rem;
   font-size: 0.9rem;
   line-height: 1.55;
   color: rgb(148 163 184);
@@ -1274,15 +1274,12 @@
 
 .alpha-tool-route .alpha-threshold-board-columns {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.7rem;
   align-items: start;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
   min-width: 0;
-  max-width: calc(
-    (18.75rem * var(--alpha-threshold-visible-columns, 2)) +
-      (0.75rem * (var(--alpha-threshold-visible-columns, 2) - 1))
-  );
-  margin-inline: auto;
+  max-width: none;
+  margin-inline: 0;
 }
 
 .alpha-tool-route .alpha-heatmap-ship-column {
@@ -1951,5 +1948,11 @@
 
   .alpha-tool-route .alpha-top-control-strip-actions .alpha-top-strip-button {
     width: 100%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 2600px) {
+  .alpha-tool-route .alpha-threshold-board {
+    padding: 0.48rem 0.5rem 0.6rem;
   }
 }

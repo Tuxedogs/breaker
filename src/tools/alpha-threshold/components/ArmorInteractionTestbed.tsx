@@ -14,7 +14,7 @@ type Scenario = {
 
 type MatchupBlock =
   | { type: 'dual'; selection: SelectedWeaponComparison }
-  | { type: 'single-grid'; selections: SelectedWeaponComparison[] }
+  | { type: 'single-group'; rows: SingleStateRow[] }
 
 type SingleStateRow = SelectedWeaponComparison[]
 
@@ -23,7 +23,6 @@ const TESTBED_SHIP_NAMES = [
   'Avenger_Stalker',
   'Gladius',
   'Hammerhead',
-  'Polaris',
 ] as const
 
 const TESTBED_WEAPON_NAMES = [
@@ -117,6 +116,7 @@ function buildScenarios(ships: Ship[], weapons: WeaponRecord[]): Scenario[] {
       }
     })
     .filter((scenario): scenario is Scenario => scenario !== null)
+    .slice(0, 4)
 }
 
 function getLayoutMode(selection: SelectedWeaponComparison): 'dual-state' | 'single-state' {
@@ -129,7 +129,7 @@ function buildMatchupBlocks(selections: SelectedWeaponComparison[]): MatchupBloc
 
   function flushSingles() {
     if (!currentSingles.length) return
-    blocks.push({ type: 'single-grid', selections: currentSingles })
+    blocks.push({ type: 'single-group', rows: buildSingleStateRows(currentSingles) })
     currentSingles = []
   }
 
@@ -199,12 +199,11 @@ export function ArmorInteractionTestbed({ ships, weapons }: Props) {
           >
             <header className="alpha-ui-testbed-card-head">
               <div>
-                <p className="alpha-ui-testbed-label">Ship</p>
+                <p className="alpha-ui-testbed-label">
+                  {formatEntityLabel(scenario.ship.manufacturer)}
+                </p>
                 <h3 className="alpha-ui-testbed-title">{formatEntityLabel(scenario.ship.name)}</h3>
               </div>
-              <p className="alpha-ui-testbed-meta">
-                {formatEntityLabel(scenario.ship.manufacturer)} / {scenario.ship.source}
-              </p>
             </header>
 
             <div className="alpha-ui-testbed-matchup-stack">
@@ -225,10 +224,9 @@ export function ArmorInteractionTestbed({ ships, weapons }: Props) {
 
                 return (
                   <div
-                    key={`${scenario.ship.id}-single-grid-${blockIndex}`}
-                    className="alpha-ui-testbed-single-grid"
+                    key={`${scenario.ship.id}-single-group-${blockIndex}`}
                   >
-                    {buildSingleStateRows(block.selections).map((row, rowIndex) => (
+                    {block.rows.map((row, rowIndex) => (
                       <div
                         key={`${scenario.ship.id}-single-row-${blockIndex}-${rowIndex}`}
                         className="alpha-ui-testbed-single-row"
