@@ -5,6 +5,12 @@
 .alpha-tool-route {
   isolation: isolate;
   min-height: 0;
+  scroll-behavior: smooth;
+  padding-top: calc(var(--app-sticky-top) + 0.35rem);
+  --alpha-shell-top-padding: 0.15rem;
+  --alpha-sticky-top: calc(var(--app-sticky-top) - 0.08rem);
+  --alpha-top-control-strip-height: 57px;
+  --alpha-sticky-ship-top: calc(var(--alpha-sticky-top) + var(--alpha-top-control-strip-height));
 }
 
 .alpha-tool-route .alpha-command-shell {
@@ -14,7 +20,7 @@
   min-height: 0;
   width: 100%;
   max-width: none;
-  padding: 0.15rem 0.25rem 0.35rem;
+  padding: var(--alpha-shell-top-padding) 0.25rem 0.35rem;
 }
 
 .alpha-tool-route .alpha-main-heatmap-stage,
@@ -46,7 +52,7 @@
 @media (min-width: 1024px) {
   .alpha-tool-route .alpha-command-shell {
     gap: 0.65rem;
-    padding: 0.15rem 0.35rem 0.45rem;
+    padding: var(--alpha-shell-top-padding) 0.35rem 0.45rem;
   }
 }
 
