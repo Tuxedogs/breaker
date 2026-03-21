@@ -21,7 +21,7 @@ export function ThresholdHeatmapBoard({
   allShips,
   allWeapons,
 }: Props) {
-  const [activeTab, setActiveTab] = useState<BoardTab>('heatmap')
+  const [activeTab, setActiveTab] = useState<BoardTab>('ui-testbed')
   const shipModels = useMemo(
     () => ships.map((ship) => buildShipHeatmapModel(ship, selectedWeapons)),
     [selectedWeapons, ships]
@@ -50,10 +50,10 @@ export function ThresholdHeatmapBoard({
               onClick={() => setActiveTab(tab)}
             >
               {tab === 'heatmap'
-                ? 'Analysis'
+                ? 'Threshold Heatmap'
                 : tab === 'recommendations'
                   ? 'Weapons Loadout'
-                  : 'UI Testbed'}
+                  : 'Analysis'}
             </button>
           ))}
         </div>
@@ -108,8 +108,8 @@ export function ThresholdHeatmapBoard({
 
       {activeTab === 'ui-testbed' ? (
         <ArmorInteractionTestbed
-          ships={allShips}
-          weapons={allWeapons}
+          ships={ships}
+          selectedWeapons={selectedWeapons}
         />
       ) : null}
     </section>
