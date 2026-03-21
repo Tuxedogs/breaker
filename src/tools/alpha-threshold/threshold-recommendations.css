@@ -116,6 +116,307 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.alpha-tool-route .alpha-armor-interaction-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgb(8 15 28 / 0.72), rgb(4 8 16 / 0.94)),
+    rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-armor-interaction-panel-head {
+  display: grid;
+  gap: 0.7rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-armor-interaction-eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(125 211 252);
+}
+
+.alpha-tool-route .alpha-armor-interaction-title {
+  margin: 0.18rem 0 0;
+  font-size: 0.98rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-armor-interaction-shield-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-armor-interaction-shield-summary > span,
+.alpha-tool-route .alpha-armor-badge {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.04);
+  padding: 0.34rem 0.58rem;
+  font-size: 0.72rem;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.alpha-tool-route .alpha-armor-interaction-state {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.8rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.95rem;
+  background: rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-primary {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-secondary {
+  opacity: 0.72;
+  background:
+    linear-gradient(180deg, rgb(15 23 42 / 0.18), transparent 100%),
+    rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-pass {
+  border-color: rgb(16 185 129 / 0.28);
+  background:
+    linear-gradient(180deg, rgb(6 78 59 / 0.22), transparent 100%),
+    rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-hold {
+  border-color: rgb(245 158 11 / 0.24);
+  background:
+    linear-gradient(180deg, rgb(120 53 15 / 0.22), transparent 100%),
+    rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-neutral {
+  border-color: rgb(56 189 248 / 0.24);
+  background:
+    linear-gradient(180deg, rgb(8 47 73 / 0.24), transparent 100%),
+    rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.alpha-tool-route .alpha-armor-interaction-state-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.alpha-tool-route .alpha-armor-badge-state {
+  color: rgb(224 242 254);
+}
+
+.alpha-tool-route .alpha-armor-badge-source {
+  color: rgb(253 224 71);
+}
+
+.alpha-tool-route .alpha-armor-badge-confidence {
+  color: rgb(196 181 253);
+  text-transform: capitalize;
+}
+
+.alpha-tool-route .alpha-armor-badge-rating {
+  color: rgb(134 239 172);
+}
+
+.alpha-tool-route .alpha-armor-tooltip-trigger {
+  min-height: 2.75rem;
+  border: 1px solid rgb(125 211 252 / 0.22);
+  border-radius: 999px;
+  background: rgb(8 47 73 / 0.72);
+  padding: 0.45rem 0.82rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(186 230 253);
+}
+
+.alpha-tool-route .alpha-armor-tooltip-trigger:hover {
+  border-color: rgb(125 211 252 / 0.42);
+  background: rgb(12 74 110 / 0.82);
+}
+
+.alpha-tool-route .alpha-armor-tooltip-trigger:focus-visible {
+  outline: 2px solid rgb(125 211 252 / 0.7);
+  outline-offset: 2px;
+}
+
+.alpha-tool-route .alpha-armor-interaction-grid {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.alpha-tool-route .alpha-armor-interaction-result {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.85rem;
+  background: rgb(255 255 255 / 0.04);
+}
+
+.alpha-tool-route .alpha-armor-interaction-result-head {
+  display: grid;
+  gap: 0.55rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.alpha-tool-route .alpha-armor-interaction-result-label {
+  margin: 0;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-armor-interaction-result-value {
+  margin: 0.14rem 0 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-armor-interaction-grid > div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.5rem 0.58rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-armor-interaction-grid dt {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-armor-interaction-grid dd {
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-armor-interaction-summary-copy,
+.alpha-tool-route .alpha-armor-interaction-start-copy,
+.alpha-tool-route .alpha-armor-interaction-note {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.alpha-tool-route .alpha-armor-interaction-summary-copy {
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-armor-interaction-start-copy {
+  color: rgb(125 211 252);
+}
+
+.alpha-tool-route .alpha-armor-interaction-note {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-armor-interaction-ratio-label {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-ui-testbed-head {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.alpha-tool-route .alpha-ui-testbed-copy {
+  margin: 0;
+  max-width: 52rem;
+  font-size: 0.86rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-ui-testbed-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
+}
+
+.alpha-tool-route .alpha-ui-testbed-card {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 20%),
+    rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-ui-testbed-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-ui-testbed-label {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(125 211 252);
+}
+
+.alpha-tool-route .alpha-ui-testbed-title {
+  margin: 0.22rem 0 0;
+  font-size: 1.08rem;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-ui-testbed-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-ui-testbed-panel-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
 .alpha-tool-route .alpha-recommendation-controls {
   display: grid;
   gap: 0.8rem;
@@ -206,6 +507,12 @@
   .alpha-tool-route .alpha-recommendation-controls,
   .alpha-tool-route .alpha-recommendation-sections,
   .alpha-tool-route .alpha-recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alpha-tool-route .alpha-armor-interaction-state-grid,
+  .alpha-tool-route .alpha-armor-interaction-grid,
+  .alpha-tool-route .alpha-armor-interaction-result-head {
     grid-template-columns: 1fr;
   }
 

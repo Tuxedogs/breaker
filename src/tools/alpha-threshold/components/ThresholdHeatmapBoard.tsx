@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
 import { buildShipHeatmapModel } from '../lib/calculations'
+import { ArmorInteractionTestbed } from './ArmorInteractionTestbed'
 import { HeatmapLegend } from './HeatmapLegend'
 import { HeatmapShipColumn } from './HeatmapShipColumn'
 import { RecommendationsBoard } from './RecommendationsBoard'
 import type { SelectedWeaponComparison, Ship, WeaponRecord } from '../types'
 
-type BoardTab = 'heatmap' | 'recommendations'
+type BoardTab = 'heatmap' | 'recommendations' | 'ui-testbed'
 
 type Props = {
   ships: Ship[]
@@ -39,7 +40,7 @@ export function ThresholdHeatmapBoard({
           </p>
         </div>
         <div className="alpha-threshold-board-tabs" role="tablist" aria-label="Threshold analysis views">
-          {(['heatmap', 'recommendations'] as const).map((tab) => (
+          {(['heatmap', 'recommendations', 'ui-testbed'] as const).map((tab) => (
             <button
               key={tab}
               type="button"
@@ -48,7 +49,11 @@ export function ThresholdHeatmapBoard({
               className="alpha-threshold-board-tab"
               onClick={() => setActiveTab(tab)}
             >
-              {tab === 'heatmap' ? 'Analysis' : 'Weapons Loadout'}
+              {tab === 'heatmap'
+                ? 'Analysis'
+                : tab === 'recommendations'
+                  ? 'Weapons Loadout'
+                  : 'UI Testbed'}
             </button>
           ))}
         </div>
@@ -98,6 +103,13 @@ export function ThresholdHeatmapBoard({
           ships={allShips}
           weapons={allWeapons}
           selectedShips={ships}
+        />
+      ) : null}
+
+      {activeTab === 'ui-testbed' ? (
+        <ArmorInteractionTestbed
+          ships={allShips}
+          weapons={allWeapons}
         />
       ) : null}
     </section>

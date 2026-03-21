@@ -6,7 +6,7 @@ type Props = {
   y: number
   title: string
   sectionTitle?: string
-  lines: Array<{ label: string; value: string; tone?: 'immediate' }>
+  lines: Array<{ label: string; value: string; tone?: 'immediate' | 'cyan' | 'danger' | 'amber' }>
 }
 
 export function HeatmapTooltip({ open, x, y, title, sectionTitle, lines }: Props) {
