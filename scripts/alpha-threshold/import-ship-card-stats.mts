@@ -136,9 +136,11 @@ function extractCountermeasureCounts(rawData: JsonRecord | null): Pick<CardStats
     const countermeasure = asRecord(entry)
     const data = asRecord(countermeasure?.data)
     const shortName = String(data?.shortName ?? '').toLowerCase()
+    const ammoContainer = asRecord(data?.ammoContainer)
+    const ammoCount = asNumber(ammoContainer?.initialAmmoCount) ?? asNumber(ammoContainer?.maxAmmoCount) ?? 0
 
-    if (shortName.includes('noise')) noiseCount += 1
-    if (shortName.includes('decoy')) decoyCount += 1
+    if (shortName.includes('noise')) noiseCount += ammoCount
+    if (shortName.includes('decoy')) decoyCount += ammoCount
   }
 
   return {
