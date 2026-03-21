@@ -362,8 +362,7 @@ function estimateBallisticOnsetFromThreshold(
 
           const shieldsDownRatio =
             ship.defenseProfile?.armor.physical.deflectionThreshold
-              ? ((weapon.alpha ?? 0) * ship.defenseProfile.armor.physical.damageMultiplier) /
-                ship.defenseProfile.armor.physical.deflectionThreshold
+              ? (weapon.alpha ?? 0) / ship.defenseProfile.armor.physical.deflectionThreshold
               : null
           if (shieldsDownRatio == null) return null
 
@@ -417,13 +416,12 @@ function getAnchorEffectiveArmorAlpha(
   if (!anchorWeapon || anchorWeapon.alpha == null) return null
 
   const damageChannel = weaponId.startsWith('ballistic:') ? 'physical' : 'energy'
-  const armor = defenseProfile.armor[damageChannel]
   const shieldPassThrough =
     shieldState === 'up'
       ? defenseProfile.shields.passThrough[damageChannel].max
       : 1
 
-  return anchorWeapon.alpha * armor.damageMultiplier * shieldPassThrough
+  return anchorWeapon.alpha * shieldPassThrough
 }
 
 function estimateOnsetFromAnchors(
@@ -575,7 +573,7 @@ export function estimateArmorInteraction(
     }
   }
 
-  const effectiveArmorAlpha = (weapon.alpha ?? 0) * armorDamageMultiplier * shieldPassThrough
+  const effectiveArmorAlpha = (weapon.alpha ?? 0) * shieldPassThrough
   const deflectionThreshold = armor.deflectionThreshold
   const thresholdRatio = getThresholdRatio(effectiveArmorAlpha, deflectionThreshold)
   const observedBreakpoint = defenseProfile.observedBreakpoints?.[weapon.id]

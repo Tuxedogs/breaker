@@ -2,8 +2,14 @@ import { useState } from 'react'
 import type { FocusEvent, PointerEvent } from 'react'
 
 import { estimateArmorInteraction, formatMetric } from '../lib/calculations'
+import { formatWeaponClassLabel } from '../lib/weapons/normalize'
 import type { ArmorInteractionEstimate, SelectedWeaponComparison, Ship } from '../types'
 import { HeatmapTooltip } from './HeatmapTooltip'
+
+export type ArmorInteractionFilterChip =
+  | { kind: 'damageType'; slotId: string; label: string; value: string }
+  | { kind: 'weaponClass'; slotId: string; label: string; value: string }
+  | { kind: 'velocity'; slotId: string; label: string; value: number | null }
 
 type Props = {
   ship: Ship
@@ -11,6 +17,7 @@ type Props = {
   compact?: boolean
   hideWeaponHeader?: boolean
   highlighted?: boolean
+  onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
 }
 
 type TooltipState = {
@@ -43,15 +50,15 @@ function getThresholdRatioLabel(ratio: number) {
   if (!Number.isFinite(ratio)) return 'Overkill'
   if (ratio >= 2) return 'Overkill'
   if (ratio >= 1.15) return 'Above'
-  if (ratio >= 0.9) return 'Near'
-  if (ratio >= 0.5) return 'Below'
-  return 'Far Below'
+  if (ratio >= 0.85) return 'Near'
+  if (ratio > 0.65) return 'Medium'
+  return 'Low'
 }
 
 function getThresholdRatioToneClass(ratio: number) {
-  return getThresholdRatioLabel(ratio) === 'Overkill'
-    ? 'alpha-armor-interaction-ratio-label-overkill'
-    : ''
+  const label = getThresholdRatioLabel(ratio)
+  if (label === 'Overkill') return 'alpha-armor-interaction-ratio-label-overkill'
+  return ''
 }
 
 function formatPassThroughLabel(value: { min: number; max: number } | undefined) {
@@ -69,14 +76,10 @@ function formatArmorOnsetValue(estimate: ArmorInteractionEstimate) {
 
 function getArmorEffectivenessRating(estimate: ArmorInteractionEstimate) {
   if (estimate.damagesFreshArmor) {
-    return estimate.thresholdRatio >= 2 ? 'High' : 'Medium'
+    return estimate.thresholdRatio >= 1.5 ? 'High' : 'Medium'
   }
 
-  if (estimate.armorDamageStartsAtPercent != null) {
-    return estimate.armorDamageStartsAtPercent >= 70 ? 'Low' : 'Medium'
-  }
-
-  if (estimate.thresholdRatio >= 0.9) return 'Medium'
+  if (estimate.thresholdRatio >= 0.85) return 'Medium'
   return 'Low'
 }
 
@@ -96,6 +99,36 @@ function formatSourceBadgeLabel(source: ArmorInteractionEstimate['armorDamageSta
   return formatSourceLabel(source)
 }
 
+function getIntactArmorValueClass(damagesFreshArmor: boolean, highlighted: boolean) {
+  if (!highlighted) return ''
+
+  return damagesFreshArmor
+    ? 'alpha-armor-interaction-result-value-yes'
+    : 'alpha-armor-interaction-result-value-no'
+}
+
+function getEffectivenessSemanticClass(rating: string) {
+  switch (rating) {
+    case 'High':
+      return 'alpha-armor-interaction-result-value-high'
+    case 'Medium':
+      return 'alpha-armor-interaction-result-value-medium'
+    default:
+      return 'alpha-armor-interaction-result-value-low'
+  }
+}
+
+function getEffectivenessValueClass(
+  rating: string,
+  highlighted: boolean,
+  thresholdRatio: number
+) {
+  if (!highlighted) return ''
+  if (thresholdRatio >= 1) return 'alpha-armor-interaction-result-value-high'
+
+  return getEffectivenessSemanticClass(rating)
+}
+
 function formatTooltipArmorInteraction(estimate: ArmorInteractionEstimate) {
   return [
     `Starts At: ${formatArmorOnsetValue(estimate)}`,
@@ -113,6 +146,15 @@ function formatTooltipCalculation(estimate: ArmorInteractionEstimate, weaponAlph
   const ratio = Number.isFinite(estimate.thresholdRatio)
     ? estimate.thresholdRatio.toFixed(2)
     : 'Immediate'
+  const effectiveAlphaEquation =
+    estimate.shieldState === 'up'
+      ? `Effective Alpha = ${alpha} × ${shieldPassThrough} = ${effectiveAlpha}`
+      : `Effective Alpha = ${alpha}`
+
+  return [
+    effectiveAlphaEquation,
+    `Threshold Ratio = ${effectiveAlpha} ÷ ${threshold} = ${ratio} (${getThresholdRatioLabel(estimate.thresholdRatio)})`,
+  ].join('\n')
 
   return [
     estimate.shieldState === 'up'
@@ -128,6 +170,7 @@ export function ArmorInteractionSummaryPanel({
   compact = false,
   hideWeaponHeader = false,
   highlighted = false,
+  onFilterChipClick,
 }: Props) {
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     open: false,
@@ -157,6 +200,12 @@ export function ArmorInteractionSummaryPanel({
     selectedWeapon.weapon.projectileSpeed != null
       ? `${formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s`
       : null
+  const baseAlphaLabel =
+    selectedWeapon.weapon.calculatorProfile?.baseAlpha != null
+      ? formatMetric(selectedWeapon.weapon.calculatorProfile.baseAlpha)
+      : selectedWeapon.weapon.alpha != null
+        ? formatMetric(selectedWeapon.weapon.alpha)
+        : null
 
   function openTooltip(
     event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>,
@@ -285,15 +334,63 @@ export function ArmorInteractionSummaryPanel({
                 Intact Armor: Yes
               </span>
             ) : null}
-              {effectivenessRating === 'High' ? (
+            {effectivenessRating === 'High' ? (
                 <span className="alpha-armor-badge alpha-armor-badge-priority">
                   Effective Damage: High
                 </span>
               ) : null}
-              {hideWeaponHeader && velocityLabel ? (
-                <span className="alpha-armor-badge alpha-armor-badge-meta">
-                  Velocity {velocityLabel}
-                </span>
+              {isPrimaryState ? (
+                <>
+                  <button
+                    type="button"
+                    className="alpha-armor-badge alpha-armor-badge-meta alpha-armor-badge-button"
+                    onClick={() =>
+                      onFilterChipClick?.({
+                        kind: 'damageType',
+                        slotId: selectedWeapon.slotId,
+                        label: selectedWeapon.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy',
+                        value: selectedWeapon.weapon.damageType,
+                      })
+                    }
+                  >
+                    {selectedWeapon.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy'}
+                  </button>
+                  <button
+                    type="button"
+                    className="alpha-armor-badge alpha-armor-badge-meta alpha-armor-badge-button"
+                    onClick={() =>
+                      onFilterChipClick?.({
+                        kind: 'weaponClass',
+                        slotId: selectedWeapon.slotId,
+                        label: formatWeaponClassLabel(selectedWeapon.weapon.weaponClass),
+                        value: selectedWeapon.weapon.weaponClass,
+                      })
+                    }
+                  >
+                    {formatWeaponClassLabel(selectedWeapon.weapon.weaponClass)}
+                  </button>
+                  {hideWeaponHeader && velocityLabel ? (
+                    <button
+                      type="button"
+                      className="alpha-armor-badge alpha-armor-badge-meta alpha-armor-badge-button"
+                      onClick={() =>
+                        onFilterChipClick?.({
+                          kind: 'velocity',
+                          slotId: selectedWeapon.slotId,
+                          label: velocityLabel,
+                          value: selectedWeapon.weapon.projectileSpeed,
+                        })
+                      }
+                    >
+                      Velocity {velocityLabel}
+                    </button>
+                  ) : null}
+                  {baseAlphaLabel ? (
+                    <span className="alpha-armor-badge alpha-armor-badge-meta alpha-armor-badge-meta-muted">
+                      Alpha {baseAlphaLabel}
+                    </span>
+                  ) : null}
+                </>
               ) : null}
             </div>
 
@@ -329,13 +426,13 @@ export function ArmorInteractionSummaryPanel({
             <div className="alpha-armor-interaction-result-head">
               <div>
                 <p className="alpha-armor-interaction-result-label">Intact Armor</p>
-                <p className="alpha-armor-interaction-result-value">
+                <p className={`alpha-armor-interaction-result-value ${getIntactArmorValueClass(estimate.damagesFreshArmor, highlighted)}`}>
                   {estimate.damagesFreshArmor ? 'Yes' : 'No'}
                 </p>
               </div>
               <div className="alpha-armor-interaction-result-secondary">
                 <p className="alpha-armor-interaction-result-label">Effective Damage</p>
-                <p className="alpha-armor-interaction-result-value">
+                <p className={`alpha-armor-interaction-result-value ${getEffectivenessValueClass(effectivenessRating, highlighted, estimate.thresholdRatio)}`}>
                   {effectivenessRating}
                 </p>
               </div>
@@ -358,7 +455,9 @@ export function ArmorInteractionSummaryPanel({
             <div>
               <dt>Threshold Ratio</dt>
               <dd>
-                {Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'}{' '}
+                <span className={getEffectivenessValueClass(effectivenessRating, highlighted, estimate.thresholdRatio) || undefined}>
+                  {Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'}
+                </span>{' '}
                 <span className="alpha-armor-interaction-ratio-label">
                   <span className={getThresholdRatioToneClass(estimate.thresholdRatio)}>
                     ({getThresholdRatioLabel(estimate.thresholdRatio)})

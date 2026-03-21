@@ -2,12 +2,16 @@ import { useState } from 'react'
 import type { FocusEvent, ReactNode } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import type { SelectedWeaponComparison, Ship } from '../types'
-import { ArmorInteractionSummaryPanel } from './ArmorInteractionSummaryPanel'
+import {
+  ArmorInteractionSummaryPanel,
+  type ArmorInteractionFilterChip,
+} from './ArmorInteractionSummaryPanel'
 
 type Props = {
   controlStrip?: ReactNode
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
+  onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
 }
 
 function buildVisibleShips(ships: Ship[]) {
@@ -18,6 +22,7 @@ export function ArmorInteractionTestbed({
   controlStrip,
   ships,
   selectedWeapons,
+  onFilterChipClick,
 }: Props) {
   const [activeCell, setActiveCell] = useState<{ shipId: string; slotId: string } | null>(null)
   const visibleShips = buildVisibleShips(ships)
@@ -129,6 +134,7 @@ export function ArmorInteractionTestbed({
                     compact
                     hideWeaponHeader
                     highlighted={activeCell?.shipId === ship.id && activeCell.slotId === selection.slotId}
+                    onFilterChipClick={onFilterChipClick}
                   />
                 </div>
               ))}

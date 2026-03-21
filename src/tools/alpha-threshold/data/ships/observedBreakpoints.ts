@@ -69,6 +69,14 @@ export const observedBreakpoints = {
         notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
       },
     },
+    'energy:3:NDB-30': {
+      shieldsDown: {
+        source: 'observed',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 80,
+        notes: ['Observed shield-down onset on Perseus. NDB-30 does not damage intact armor.'],
+      },
+    },
   },
   rsi_perseus: {
     'ballistic:3:11-Series Broadsword': {
@@ -138,6 +146,32 @@ export const observedBreakpoints = {
         armorDamageStartsAtPercent: 71,
         estimatedArmorOnsetBand: [68, 74],
         notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
+      },
+    },
+    'energy:3:NDB-30': {
+      shieldsDown: {
+        source: 'observed',
+        damagesFreshArmor: false,
+        armorDamageStartsAtPercent: 80,
+        notes: ['Observed shield-down onset on Perseus. NDB-30 does not damage intact armor.'],
+      },
+    },
+  },
+  'MRAI:Guardian': {
+    'energy:3:NDB-30': {
+      shieldsDown: {
+        source: 'observed',
+        damagesFreshArmor: true,
+        notes: ['Observed shield-down result on Guardian. NDB-30 damages intact armor.'],
+      },
+    },
+  },
+  mrai_guardian: {
+    'energy:3:NDB-30': {
+      shieldsDown: {
+        source: 'observed',
+        damagesFreshArmor: true,
+        notes: ['Observed shield-down result on Guardian. NDB-30 damages intact armor.'],
       },
     },
   },
