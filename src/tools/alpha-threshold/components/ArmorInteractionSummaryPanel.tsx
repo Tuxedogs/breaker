@@ -46,6 +46,12 @@ function getThresholdRatioLabel(ratio: number) {
   return 'Far Below'
 }
 
+function getThresholdRatioToneClass(ratio: number) {
+  return getThresholdRatioLabel(ratio) === 'Overkill'
+    ? 'alpha-armor-interaction-ratio-label-overkill'
+    : ''
+}
+
 function formatPassThroughLabel(value: { min: number; max: number } | undefined) {
   if (!value) return '100% / 100%'
   return `${Math.round(value.min * 100)}% / ${Math.round(value.max * 100)}%`
@@ -74,7 +80,7 @@ function getArmorEffectivenessRating(estimate: ArmorInteractionEstimate) {
 
 function formatResultSummary(estimate: ArmorInteractionEstimate) {
   if (estimate.damagesFreshArmor) {
-    return 'Armor damage effective immediately.'
+    return 'Damage on target effective immediately.'
   }
 
   if (estimate.armorDamageStartsAtPercent != null) {
@@ -96,11 +102,21 @@ function formatTooltipArmorInteraction(estimate: ArmorInteractionEstimate) {
   ].join('\n')
 }
 
-function formatTooltipCalculation(estimate: ArmorInteractionEstimate) {
+function formatTooltipCalculation(estimate: ArmorInteractionEstimate, weaponAlpha: number | null) {
+  const alpha = formatMetric(weaponAlpha ?? 0)
+  const armorMultiplier = formatMetric(estimate.armorDamageMultiplier)
+  const shieldPassThrough = formatMetric(estimate.shieldPassThrough)
+  const effectiveAlpha = formatMetric(estimate.effectiveArmorAlpha)
+  const threshold = formatMetric(estimate.deflectionThreshold)
+  const ratio = Number.isFinite(estimate.thresholdRatio)
+    ? estimate.thresholdRatio.toFixed(2)
+    : 'Immediate'
+
   return [
-    `Effective Armor Alpha: ${formatMetric(estimate.effectiveArmorAlpha)}`,
-    `Threshold: ${formatMetric(estimate.deflectionThreshold)}`,
-    `Ratio: ${Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'} (${getThresholdRatioLabel(estimate.thresholdRatio)})`,
+    estimate.shieldState === 'up'
+      ? `Effective Alpha = ${alpha} × ${armorMultiplier} × ${shieldPassThrough} = ${effectiveAlpha}`
+      : `Effective Alpha = ${alpha} × ${armorMultiplier} = ${effectiveAlpha}`,
+    `Threshold Ratio = ${effectiveAlpha} ÷ ${threshold} = ${ratio} (${getThresholdRatioLabel(estimate.thresholdRatio)})`,
   ].join('\n')
 }
 
@@ -168,9 +184,17 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
           : activeShield?.passThrough.energy
         : null
     const armorOnsetBand = estimate.estimatedArmorOnsetBand
+    const noteLines: TooltipState['lines'] = estimate.notes?.length
+      ? [{
+          label: 'Note',
+          value: estimate.notes[0] ?? '',
+          tone: estimate.armorDamageStartsAtPercentSource === 'estimated' ? 'amber' : undefined,
+        }]
+      : []
     const tooltipLines: TooltipState['lines'] =
       state === 'down'
         ? [
+            ...noteLines,
             {
               label: 'Armor Interaction',
               value: formatTooltipArmorInteraction(estimate),
@@ -178,7 +202,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             },
             {
               label: 'Calculation',
-              value: formatTooltipCalculation(estimate),
+              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
             },
             {
               label: 'Shield State',
@@ -186,6 +210,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             },
           ]
         : [
+            ...noteLines,
             {
               label: 'Armor Interaction',
               value: formatTooltipArmorInteraction(estimate),
@@ -193,7 +218,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             },
             {
               label: 'Calculation',
-              value: formatTooltipCalculation(estimate),
+              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
             },
             {
               label: 'Shield State',
@@ -226,7 +251,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             <span className="alpha-armor-badge alpha-armor-badge-source">
               {formatSourceBadgeLabel(estimate.armorDamageStartsAtPercentSource)}
             </span>
-            {selectedWeapon.weapon.damageType === 'ballistic' ? (
+            {selectedWeapon.weapon.damageType === 'ballistic' && effectivenessRating !== 'Medium' ? (
               <span className="alpha-armor-badge alpha-armor-badge-rating">
                 {effectivenessRating}
               </span>
@@ -256,20 +281,20 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             }
             onBlur={closeTooltip}
           >
-            Details
+            <span aria-hidden="true">i</span>
           </button>
         </header>
 
         <section className="alpha-armor-interaction-result">
           <div className="alpha-armor-interaction-result-head">
             <div>
-              <p className="alpha-armor-interaction-result-label">Fresh Armor</p>
+              <p className="alpha-armor-interaction-result-label">Intact Armor</p>
               <p className="alpha-armor-interaction-result-value">
                 {estimate.damagesFreshArmor ? 'Yes' : 'No'}
               </p>
             </div>
-            <div>
-              <p className="alpha-armor-interaction-result-label">Effectiveness</p>
+            <div className="alpha-armor-interaction-result-secondary">
+              <p className="alpha-armor-interaction-result-label">Effective Damage</p>
               <p className="alpha-armor-interaction-result-value">
                 {effectivenessRating}
               </p>
@@ -283,7 +308,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
 
         <dl className="alpha-armor-interaction-grid">
           <div>
-            <dt>Effective Armor Alpha</dt>
+            <dt>Effective Alpha</dt>
             <dd>{formatMetric(estimate.effectiveArmorAlpha)}</dd>
           </div>
           <div>
@@ -295,7 +320,9 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
             <dd>
               {Number.isFinite(estimate.thresholdRatio) ? estimate.thresholdRatio.toFixed(2) : 'Immediate'}{' '}
               <span className="alpha-armor-interaction-ratio-label">
-                ({getThresholdRatioLabel(estimate.thresholdRatio)})
+                <span className={getThresholdRatioToneClass(estimate.thresholdRatio)}>
+                  ({getThresholdRatioLabel(estimate.thresholdRatio)})
+                </span>
               </span>
             </dd>
           </div>
@@ -305,11 +332,6 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
           </div>
         </dl>
 
-        {estimate.notes?.length ? (
-          <p className="alpha-armor-interaction-note">
-            {estimate.notes[0]}
-          </p>
-        ) : null}
       </article>
     )
   }
@@ -319,6 +341,11 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = f
       <header className="alpha-armor-interaction-panel-head">
         <div>
           <p className="alpha-armor-interaction-eyebrow">{selectedWeapon.weapon.name}</p>
+          {selectedWeapon.weapon.projectileSpeed != null ? (
+            <p className="alpha-armor-interaction-kicker">
+              {formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s
+            </p>
+          ) : null}
         </div>
       </header>
 
