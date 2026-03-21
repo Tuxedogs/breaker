@@ -8,6 +8,7 @@ import { HeatmapTooltip } from './HeatmapTooltip'
 type Props = {
   ship: Ship
   selectedWeapon: SelectedWeaponComparison
+  compact?: boolean
 }
 
 type TooltipState = {
@@ -73,11 +74,11 @@ function getArmorEffectivenessRating(estimate: ArmorInteractionEstimate) {
 
 function formatResultSummary(estimate: ArmorInteractionEstimate) {
   if (estimate.damagesFreshArmor) {
-    return 'Damages fresh armor immediately.'
+    return 'Armor damage effective immediately.'
   }
 
   if (estimate.armorDamageStartsAtPercent != null) {
-    return `Fresh armor holds. Starts at ${Math.round(estimate.armorDamageStartsAtPercent)}%.`
+    return `Projectile defeated. Effective from ${Math.round(estimate.armorDamageStartsAtPercent)}%.`
   }
 
   return 'Onset not yet calibrated.'
@@ -103,7 +104,7 @@ function formatTooltipCalculation(estimate: ArmorInteractionEstimate) {
   ].join('\n')
 }
 
-export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
+export function ArmorInteractionSummaryPanel({ ship, selectedWeapon, compact = false }: Props) {
   const [tooltipState, setTooltipState] = useState<TooltipState>({
     open: false,
     x: 0,
@@ -118,6 +119,13 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
   const activeShield = ship.defenseProfile?.shields
   const visibleStates: Array<'up' | 'down'> =
     selectedWeapon.weapon.damageType === 'ballistic' ? ['up', 'down'] : ['down']
+  const familyClass =
+    selectedWeapon.weapon.damageType === 'ballistic'
+      ? 'alpha-armor-interaction-panel-ballistic'
+      : 'alpha-armor-interaction-panel-energy'
+  const layoutClass = compact
+    ? 'alpha-armor-interaction-panel-compact'
+    : 'alpha-armor-interaction-panel-full'
 
   function openTooltip(
     event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>,
@@ -218,12 +226,11 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
             <span className="alpha-armor-badge alpha-armor-badge-source">
               {formatSourceBadgeLabel(estimate.armorDamageStartsAtPercentSource)}
             </span>
-            <span className="alpha-armor-badge alpha-armor-badge-confidence">
-              {estimate.confidence}
-            </span>
-            <span className="alpha-armor-badge alpha-armor-badge-rating">
-              {effectivenessRating}
-            </span>
+            {selectedWeapon.weapon.damageType === 'ballistic' ? (
+              <span className="alpha-armor-badge alpha-armor-badge-rating">
+                {effectivenessRating}
+              </span>
+            ) : null}
           </div>
 
           <button
@@ -262,7 +269,7 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
               </p>
             </div>
             <div>
-              <p className="alpha-armor-interaction-result-label">Armor Effectiveness</p>
+              <p className="alpha-armor-interaction-result-label">Effectiveness</p>
               <p className="alpha-armor-interaction-result-value">
                 {effectivenessRating}
               </p>
@@ -292,6 +299,10 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
               </span>
             </dd>
           </div>
+          <div>
+            <dt>Confidence</dt>
+            <dd>{estimate.confidence[0].toUpperCase()}{estimate.confidence.slice(1)}</dd>
+          </div>
         </dl>
 
         {estimate.notes?.length ? (
@@ -304,21 +315,10 @@ export function ArmorInteractionSummaryPanel({ ship, selectedWeapon }: Props) {
   }
 
   return (
-    <section className="alpha-armor-interaction-panel">
+    <section className={`alpha-armor-interaction-panel ${familyClass} ${layoutClass}`}>
       <header className="alpha-armor-interaction-panel-head">
         <div>
-          <p className="alpha-armor-interaction-eyebrow">{selectedWeapon.weapon.name} VS</p>
-          <h5 className="alpha-armor-interaction-title">{ship.name.replaceAll('_', ' ')}</h5>
-        </div>
-        <div className="alpha-armor-interaction-shield-summary">
-          <span>{activeShield?.count ?? 0}x S{Array.isArray(activeShield?.size) ? activeShield?.size.join('/') : activeShield?.size ?? 0}</span>
-          <span>{activeShield?.installedShieldNames.join(', ') || 'No Shield Data'}</span>
-          <span>{activeShield?.hasBespokeShield ? 'Bespoke' : 'Standard'}</span>
-          <span>
-            PT {activeChannel === 'physical'
-              ? formatPassThroughLabel(activeShield?.passThrough.physical)
-              : formatPassThroughLabel(activeShield?.passThrough.energy)}
-          </span>
+          <p className="alpha-armor-interaction-eyebrow">{selectedWeapon.weapon.name}</p>
         </div>
       </header>
 

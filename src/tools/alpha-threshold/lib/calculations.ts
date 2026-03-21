@@ -274,6 +274,34 @@ function getThresholdRatio(effectiveArmorAlpha: number, deflectionThreshold: num
   return effectiveArmorAlpha / deflectionThreshold
 }
 
+function getWeaponConfidenceOverride(
+  weapon: WeaponRecord
+): ArmorInteractionEstimate['confidence'] | null {
+  const normalizedName = weapon.name.trim().toLowerCase()
+
+  if (normalizedName.startsWith('deadbolt') && weapon.size >= 4) {
+    return 'high'
+  }
+
+  if (/^m\d+a$/i.test(weapon.name.trim()) && weapon.size >= 3) {
+    return 'high'
+  }
+
+  if (normalizedName.startsWith('attrition-') && weapon.size >= 4) {
+    return 'high'
+  }
+
+  if (normalizedName.includes('medusa')) {
+    return 'high'
+  }
+
+  if (normalizedName.startsWith('omnisky')) {
+    return 'medium'
+  }
+
+  return null
+}
+
 type ObservedBreakpointState = NonNullable<
   NonNullable<Ship['defenseProfile']>['observedBreakpoints']
 >[string]['shieldsUp']
@@ -522,6 +550,15 @@ export function estimateArmorInteraction(
     explicitObservedOnsetSource === 'estimated'
       ? observedState?.estimatedArmorOnsetBand ?? null
       : anchorEstimate?.band ?? null
+  const computedConfidence =
+    explicitObservedOnset != null || hasObservedDamageOverride
+      ? 'high'
+      : anchorEstimate
+        ? 'medium'
+        : !hasObservedDamageOverride && thresholdRatio >= 1
+          ? 'medium'
+          : 'low'
+  const confidence = getWeaponConfidenceOverride(weapon) ?? computedConfidence
 
   return {
     damageChannel,
@@ -535,14 +572,7 @@ export function estimateArmorInteraction(
     armorDamageStartsAtPercent,
     armorDamageStartsAtPercentSource,
     estimatedArmorOnsetBand,
-    confidence:
-      explicitObservedOnset != null || hasObservedDamageOverride
-        ? 'high'
-        : anchorEstimate
-          ? 'medium'
-          : !hasObservedDamageOverride && thresholdRatio >= 1
-            ? 'medium'
-            : 'low',
+    confidence,
     ...(notes.length ? { notes } : {}),
   }
 }
