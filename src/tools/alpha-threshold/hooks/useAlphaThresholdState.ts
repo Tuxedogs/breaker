@@ -35,7 +35,7 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
   'energy-desc',
   'manufacturer-asc',
 ]
-const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['merged', 'manual', 'erkul-live', 'erkul-ptu', 'spviewer']
+const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-ptu']
 const MAX_VICTIM_SHIPS = 4
 const MOBILE_MAX_VICTIM_SHIPS = 2
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
@@ -87,7 +87,7 @@ function normalizeSortKey(value: ShipSortKey): ShipSortKey {
 }
 
 function normalizeDataSource(value: ThresholdDataSourceKey): ThresholdDataSourceKey {
-  return VALID_DATA_SOURCES.includes(value) ? value : 'merged'
+  return VALID_DATA_SOURCES.includes(value) ? value : 'erkul-ptu'
 }
 
 function resolveAvailableDataSource(
@@ -99,7 +99,7 @@ function resolveAvailableDataSource(
     return source
   }
 
-  return 'merged'
+  return 'erkul-ptu'
 }
 
 function normalizeSelectedShipNames(value: Array<string | null>, ships: Ship[]): Array<string | null> {
@@ -270,7 +270,7 @@ export function useAlphaThresholdState() {
   >('alpha-threshold.collapsed-groups', getDefaultCollapsedGroups())
   const [activeSource, setActiveSource] = useLocalStorageState<ThresholdDataSourceKey>(
     'alpha-threshold.data-source',
-    'merged'
+    'erkul-ptu'
   )
 
   const normalizedActiveSource = useMemo(
