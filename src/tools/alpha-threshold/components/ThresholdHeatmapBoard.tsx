@@ -152,18 +152,26 @@ export function ThresholdHeatmapBoard({
           </p>
         </div>
         <div className="alpha-threshold-board-tabs" role="tablist" aria-label="Threshold analysis views">
-          {(['analysis', 'recommendations'] as const).map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === tab}
-              className="alpha-threshold-board-tab"
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab === 'analysis' ? 'Analysis' : 'Weapons Loadout'}
-            </button>
-          ))}
+          {(['analysis', 'recommendations'] as const).map((tab) => {
+            const isDisabled = tab === 'recommendations'
+
+            return (
+              <button
+                key={tab}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab}
+                aria-disabled={isDisabled}
+                disabled={isDisabled}
+                className={`alpha-threshold-board-tab ${tab === 'recommendations' ? 'alpha-threshold-board-tab-wip' : ''}`}
+                onClick={() => {
+                  if (!isDisabled) setActiveTab(tab)
+                }}
+              >
+                {tab === 'analysis' ? 'Analysis' : 'Weapons Loadout WIP'}
+              </button>
+            )
+          })}
         </div>
       </header>
 
