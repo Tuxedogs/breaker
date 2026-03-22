@@ -1,6 +1,9 @@
 .alpha-tool-route .alpha-threshold-board-tabs {
   display: inline-flex;
+  justify-self: start;
   flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
   gap: 0.4rem;
   padding: 0.35rem;
   border: 1px solid rgb(255 255 255 / 0.08);
@@ -11,13 +14,15 @@
 .alpha-tool-route .alpha-threshold-board-tab {
   min-height: 2.75rem;
   padding: 0.45rem 0.9rem;
-  border: 1px solid transparent;
+  border: 1px solid rgb(255 255 255 / 0.05);
   border-radius: 999px;
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgb(148 163 184);
+  background: rgb(255 255 255 / 0.035);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.025);
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
@@ -34,6 +39,23 @@
   background: rgb(8 47 73 / 0.72);
   color: rgb(186 230 253);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+}
+
+.alpha-tool-route .alpha-threshold-board-tab-wip:not([aria-selected='true']) {
+  border-color: rgb(255 255 255 / 0.04);
+  background: rgb(255 255 255 / 0.02);
+  color: rgb(100 116 139);
+}
+
+.alpha-tool-route .alpha-threshold-board-tab-wip:not([aria-selected='true']):hover {
+  border-color: rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-threshold-board-tab:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .alpha-tool-route .alpha-threshold-tab-panel {
@@ -247,8 +269,8 @@
   border: 1px solid rgb(255 255 255 / 0.08);
   border-radius: 0.95rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.018), transparent 100%),
-    rgb(255 255 255 / 0.022);
+    linear-gradient(180deg, rgb(255 255 255 / 0.02), rgb(0 0 0) 100%),
+    rgb(255 255 255 / 0.02);
   transition:
     border-color 160ms ease,
     box-shadow 160ms ease,
@@ -476,7 +498,7 @@
   display: grid;
   flex: 1 1 auto;
   gap: 0.45rem;
-  grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   align-items: stretch;
   min-height: 0;
 }
@@ -495,11 +517,11 @@
   justify-content: space-between;
   gap: 0.35rem;
   min-height: 0;
-  padding: 0.7rem 0.75rem;
+  padding: 0.65rem 0.65rem;
   border: 1px solid rgb(255 255 255 / 0.08);
   border-radius: 0.85rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 0.45), transparent 100%),
     rgb(255 255 255 / 0.04);
 }
 
@@ -558,7 +580,7 @@
   border: 1px solid rgb(255 255 255 / 0.08);
   border-radius: 0.75rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    linear-gradient(180deg, rgb(0 0 0 / 0.55), transparent 100%),
     rgb(255 255 255 / 0.03);
 }
 
@@ -653,15 +675,21 @@
   z-index: auto;
 }
 
+.alpha-tool-route .alpha-analysis-control-shell {
+  display: grid;
+}
+
 .alpha-tool-route .alpha-analysis-sticky-surface {
   display: grid;
   gap: 0;
   border: 1px solid rgb(255 255 255 / 0.1);
   border-radius: 1.2rem;
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 28%),
-    linear-gradient(180deg, rgb(9 13 22 / 0.96), rgb(5 7 12 / 0.98));
-  box-shadow: 0 18px 44px rgb(0 0 0 / 0.28);
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0.01) 32%, rgb(255 255 255 / 0.01) 100%),
+    rgb(0 0 0);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 18px 44px rgb(0 0 0 / 0.28);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   overflow: hidden;
