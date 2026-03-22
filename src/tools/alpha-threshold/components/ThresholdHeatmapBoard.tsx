@@ -140,7 +140,7 @@ export function ThresholdHeatmapBoard({
   }
 
   return (
-    <section className="alpha-threshold-board" aria-label="Armor Thresholds board">
+    <section className="alpha-threshold-board" aria-label="Weapons Analysis board">
       <header className="alpha-threshold-board-head">
         <div className="alpha-threshold-board-title-block">
           <div>
@@ -148,7 +148,7 @@ export function ThresholdHeatmapBoard({
             <h2 className="surface-title mt-3">Shield-Aware Armor Validation</h2>
           </div>
           <p className="alpha-threshold-board-copy">
-            PTU ship and weapon matchups for validating armor thresholds, damage multipliers, shield stats, and observed breakpoint behavior through the shield-aware model.
+            PTU ship and weapon matchups for validating weapons analysis, damage multipliers, shield stats, and observed breakpoint behavior through the shield-aware model.
           </p>
         </div>
         <div className="alpha-threshold-board-tabs" role="tablist" aria-label="Threshold analysis views">

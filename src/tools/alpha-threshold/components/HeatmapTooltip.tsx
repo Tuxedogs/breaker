@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom'
+import { useLayoutEffect, useRef } from 'react'
 
 type Props = {
   open: boolean
@@ -10,11 +11,38 @@ type Props = {
 }
 
 export function HeatmapTooltip({ open, x, y, title, sectionTitle, lines }: Props) {
+  const tooltipRef = useRef<HTMLDivElement | null>(null)
+
+  useLayoutEffect(() => {
+    if (!open) return
+
+    const tooltip = tooltipRef.current
+    if (!tooltip) return
+
+    const viewportPadding = 12
+    const rect = tooltip.getBoundingClientRect()
+    const viewportWidth = window.innerWidth
+    const viewportHeight = window.innerHeight
+
+    const clampedLeft = Math.min(
+      Math.max(viewportPadding, x),
+      Math.max(viewportPadding, viewportWidth - rect.width - viewportPadding)
+    )
+    const clampedTop = Math.min(
+      Math.max(viewportPadding, y),
+      Math.max(viewportPadding, viewportHeight - rect.height - viewportPadding)
+    )
+
+    tooltip.style.left = `${clampedLeft}px`
+    tooltip.style.top = `${clampedTop}px`
+  }, [open, x, y, title, sectionTitle, lines])
+
   if (!open) return null
 
   return createPortal(
     <div className="alpha-tool-route alpha-heatmap-tooltip-portal-root">
       <div
+        ref={tooltipRef}
         className="alpha-heatmap-tooltip"
         role="tooltip"
         style={{
