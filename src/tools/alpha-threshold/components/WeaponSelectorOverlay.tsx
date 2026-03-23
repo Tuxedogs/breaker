@@ -9,7 +9,11 @@ type Props = {
   slots: ComparisonSlot[]
   weapons: WeaponRecord[]
   targetSlotIndex: number
+  activeSlotIndex: number
+  onSetActiveSlot: (slotIndex: number) => void
+  onHoverSlot: (slotIndex: number | null) => void
   onSelectWeapon: (weaponKey: string) => void
+  onClearWeapon: (slotIndex: number) => void
   onClose: () => void
 }
 
@@ -21,6 +25,7 @@ const COMMON_PICK_WEAPON_MATCHERS = [
   'Mantis GT-220',
   'Shredder',
 ] as const
+const SLOT_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 
 type DamageFilter = (typeof DAMAGE_FILTERS)[number]
 
@@ -29,7 +34,11 @@ export function WeaponSelectorOverlay({
   slots,
   weapons,
   targetSlotIndex,
+  activeSlotIndex,
+  onSetActiveSlot,
+  onHoverSlot,
   onSelectWeapon,
+  onClearWeapon,
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
@@ -78,6 +87,10 @@ export function WeaponSelectorOverlay({
       ),
     [slots]
   )
+  const weaponByKey = useMemo(
+    () => new Map(weapons.map((weapon) => [getWeaponKey(weapon), weapon] as const)),
+    [weapons]
+  )
 
   function toggleGroup(groupId: string) {
     setCollapsedGroups((current) => ({
@@ -101,6 +114,46 @@ export function WeaponSelectorOverlay({
                 Close
               </button>
             </header>
+            <div className="alpha-overlay-slot-grid" role="list" aria-label="Weapon slots">
+              {slots.slice(0, 4).map((slot, index) => {
+                const assignedWeapon = slot.weaponKey ? weaponByKey.get(slot.weaponKey) : null
+                const isActive = index === activeSlotIndex
+                return (
+                  <div
+                    key={slot.id}
+                    className={[
+                      'alpha-overlay-slot-card',
+                      `alpha-overlay-slot-tone-${SLOT_TONES[index % SLOT_TONES.length]}`,
+                      isActive ? 'alpha-overlay-slot-card-active' : '',
+                      assignedWeapon ? 'alpha-overlay-slot-card-filled' : '',
+                    ].join(' ')}
+                    role="listitem"
+                  >
+                    <button
+                      type="button"
+                      className="alpha-overlay-slot-button"
+                      onClick={() => onSetActiveSlot(index)}
+                      onPointerEnter={() => onHoverSlot(index)}
+                      onPointerLeave={() => onHoverSlot(null)}
+                    >
+                      <span className="alpha-overlay-slot-label">
+                        {assignedWeapon ? assignedWeapon.name : `Weapon ${index + 1}`}
+                      </span>
+                    </button>
+                    {assignedWeapon ? (
+                      <button
+                        type="button"
+                        className="alpha-overlay-slot-clear"
+                        onClick={() => onClearWeapon(index)}
+                        aria-label={`Clear weapon slot ${index + 1}`}
+                      >
+                        Clear
+                      </button>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="alpha-drawer-filter-bar">

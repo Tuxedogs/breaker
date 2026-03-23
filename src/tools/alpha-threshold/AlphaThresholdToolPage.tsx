@@ -14,6 +14,10 @@ const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
 export default function AlphaThresholdToolPage() {
   const [selectionMode, setSelectionMode] = useState<'ship' | 'weapon' | null>(null)
+  const [activeShipSlotIndex, setActiveShipSlotIndex] = useState(0)
+  const [activeWeaponSlotIndex, setActiveWeaponSlotIndex] = useState(0)
+  const [hoveredShipSlotIndex, setHoveredShipSlotIndex] = useState<number | null>(null)
+  const [hoveredWeaponSlotIndex, setHoveredWeaponSlotIndex] = useState<number | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const {
     slots,
@@ -35,6 +39,14 @@ export default function AlphaThresholdToolPage() {
     const openIndex = slots.findIndex((slot) => slot.weaponKey == null)
     return openIndex === -1 ? Math.max(0, slots.length - 1) : openIndex
   }, [slots])
+  const effectiveShipSlotIndex = Math.max(
+    0,
+    Math.min(maxVictimShips - 1, hoveredShipSlotIndex ?? activeShipSlotIndex)
+  )
+  const effectiveWeaponSlotIndex = Math.max(
+    0,
+    Math.min(slots.length - 1, hoveredWeaponSlotIndex ?? activeWeaponSlotIndex)
+  )
 
   const shipBySelectionKey = useMemo(() => {
     return new Map(allShips.map((ship) => [`${ship.manufacturer}::${ship.name}`, ship] as const))
@@ -120,12 +132,27 @@ export default function AlphaThresholdToolPage() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [selectionMode])
 
+  useEffect(() => {
+    if (selectionMode === 'ship') {
+      setActiveShipSlotIndex(nextShipSlotIndex)
+      setHoveredShipSlotIndex(null)
+      return
+    }
+    if (selectionMode === 'weapon') {
+      setActiveWeaponSlotIndex(nextWeaponSlotIndex)
+      setHoveredWeaponSlotIndex(null)
+      return
+    }
+    setHoveredShipSlotIndex(null)
+    setHoveredWeaponSlotIndex(null)
+  }, [nextShipSlotIndex, nextWeaponSlotIndex, selectionMode])
+
   function handleShipSelect(shipKey: string) {
-    setVictimShipAt(nextShipSlotIndex, shipKey)
+    setVictimShipAt(Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex)), shipKey)
   }
 
   function handleWeaponSelect(weaponKey: string) {
-    const slot = slots[nextWeaponSlotIndex]
+    const slot = slots[Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))]
     if (!slot) return
     setSlotWeapon(slot.id, weaponKey)
   }
@@ -142,8 +169,8 @@ export default function AlphaThresholdToolPage() {
               allWeapons={allWeapons}
               shieldMode={shieldMode}
               selectionMode={selectionMode}
-              nextShipSlotIndex={nextShipSlotIndex}
-              nextWeaponSlotIndex={nextWeaponSlotIndex}
+              nextShipSlotIndex={effectiveShipSlotIndex}
+              nextWeaponSlotIndex={effectiveWeaponSlotIndex}
               onShieldModeChange={handleShieldModeChange}
               onOpenWeapons={() => setSelectionMode('weapon')}
               onOpenShips={() => setSelectionMode('ship')}
@@ -157,8 +184,12 @@ export default function AlphaThresholdToolPage() {
                 allShips={allShips}
                 selectedShipNames={selectedShipNames}
                 maxVictimShips={maxVictimShips}
-                targetSlotIndex={nextShipSlotIndex}
+                targetSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
+                activeSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
+                onSetActiveSlot={setActiveShipSlotIndex}
+                onHoverSlot={setHoveredShipSlotIndex}
                 onSelectShip={handleShipSelect}
+                onClearShip={(slotIndex) => setVictimShipAt(slotIndex, null)}
                 onClose={() => setSelectionMode(null)}
               />
             ) : selectionMode === 'weapon' ? (
@@ -166,8 +197,16 @@ export default function AlphaThresholdToolPage() {
                 open
                 slots={slots}
                 weapons={allWeapons}
-                targetSlotIndex={nextWeaponSlotIndex}
+                targetSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
+                activeSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
+                onSetActiveSlot={setActiveWeaponSlotIndex}
+                onHoverSlot={setHoveredWeaponSlotIndex}
                 onSelectWeapon={handleWeaponSelect}
+                onClearWeapon={(slotIndex) => {
+                  const slot = slots[slotIndex]
+                  if (!slot) return
+                  setSlotWeapon(slot.id, null)
+                }}
                 onClose={() => setSelectionMode(null)}
               />
             ) : null
