@@ -8,7 +8,11 @@ type Props = {
   selectedShipNames: Array<string | null>
   maxVictimShips: number
   targetSlotIndex: number
+  activeSlotIndex: number
+  onSetActiveSlot: (slotIndex: number) => void
+  onHoverSlot: (slotIndex: number | null) => void
   onSelectShip: (shipName: string) => void
+  onClearShip: (slotIndex: number) => void
   onClose: () => void
 }
 
@@ -20,6 +24,7 @@ const COMMON_PICK_SHIP_NAMES = [
   'Gladius',
   'Arrow',
 ] as const
+const SLOT_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
   return `${ship.manufacturer}::${ship.name}`
@@ -31,7 +36,11 @@ export function ShipSelectorOverlay({
   selectedShipNames,
   maxVictimShips,
   targetSlotIndex,
+  activeSlotIndex,
+  onSetActiveSlot,
+  onHoverSlot,
   onSelectShip,
+  onClearShip,
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
@@ -96,6 +105,10 @@ export function ShipSelectorOverlay({
       }).filter((group) => group.manufacturers.length > 0),
     [filteredShips]
   )
+  const shipBySelectionKey = useMemo(
+    () => new Map(allShips.map((ship) => [getShipSelectionKey(ship), ship] as const)),
+    [allShips]
+  )
 
   function toggleGroup(groupId: string) {
     setCollapsedGroups((current) => ({
@@ -119,6 +132,47 @@ export function ShipSelectorOverlay({
                 Close
               </button>
             </header>
+            <div className="alpha-overlay-slot-grid" role="list" aria-label="Ship slots">
+              {Array.from({ length: maxVictimShips }, (_, index) => {
+                const shipKey = selectedShipNames[index]
+                const selectedShip = shipKey ? shipBySelectionKey.get(shipKey) : null
+                const isActive = index === activeSlotIndex
+                return (
+                  <div
+                    key={`ship-slot-${index + 1}`}
+                    className={[
+                      'alpha-overlay-slot-card',
+                      `alpha-overlay-slot-tone-${SLOT_TONES[index % SLOT_TONES.length]}`,
+                      isActive ? 'alpha-overlay-slot-card-active' : '',
+                      selectedShip ? 'alpha-overlay-slot-card-filled' : '',
+                    ].join(' ')}
+                    role="listitem"
+                  >
+                    <button
+                      type="button"
+                      className="alpha-overlay-slot-button"
+                      onClick={() => onSetActiveSlot(index)}
+                      onPointerEnter={() => onHoverSlot(index)}
+                      onPointerLeave={() => onHoverSlot(null)}
+                    >
+                      <span className="alpha-overlay-slot-label">
+                        {selectedShip ? formatEntityLabel(selectedShip.name) : `Ship ${index + 1}`}
+                      </span>
+                    </button>
+                    {selectedShip ? (
+                      <button
+                        type="button"
+                        className="alpha-overlay-slot-clear"
+                        onClick={() => onClearShip(index)}
+                        aria-label={`Clear ship slot ${index + 1}`}
+                      >
+                        Clear
+                      </button>
+                    ) : null}
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="alpha-drawer-filter-bar">
