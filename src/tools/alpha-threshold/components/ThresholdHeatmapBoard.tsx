@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ArmorInteractionTestbed } from './ArmorInteractionTestbed'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
@@ -16,6 +16,9 @@ type Props = {
   selectedWeapons: SelectedWeaponComparison[]
   allWeapons: WeaponRecord[]
   shieldMode: DefenseShieldState
+  selectionMode: 'ship' | 'weapon' | null
+  nextShipSlotIndex: number
+  nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
@@ -87,19 +90,36 @@ export function ThresholdHeatmapBoard({
   selectedWeapons,
   allWeapons,
   shieldMode,
+  selectionMode,
+  nextShipSlotIndex,
+  nextWeaponSlotIndex,
   onShieldModeChange,
   onOpenWeapons,
   onOpenShips,
   onAssignWeapon,
 }: Props) {
   const [analysisFilter, setAnalysisFilter] = useState<AnalysisFilterState | null>(null)
+  const filterSourceSelection =
+    analysisFilter == null
+      ? null
+      : selectedWeapons.find((selection) => selection.slotId === analysisFilter.chip.slotId)
+  const hasValidFilterSource =
+    analysisFilter != null &&
+    filterSourceSelection != null &&
+    getWeaponKey(filterSourceSelection.weapon) === getWeaponKey(analysisFilter.sourceWeapon)
 
-  const filteredWeapons = analysisFilter
+  useEffect(() => {
+    if (analysisFilter && !hasValidFilterSource) {
+      setAnalysisFilter(null)
+    }
+  }, [analysisFilter, hasValidFilterSource])
+
+  const filteredWeapons = hasValidFilterSource
     ? selectedWeapons.filter((selection) => matchesAnalysisFilter(selection, analysisFilter))
     : selectedWeapons
 
   const relatedWeapons =
-    analysisFilter == null
+    !hasValidFilterSource
       ? []
       : allWeapons
           .filter((weapon) =>
@@ -188,6 +208,9 @@ export function ThresholdHeatmapBoard({
         ships={ships}
         selectedWeapons={filteredWeapons}
         shieldMode={shieldMode}
+        selectionMode={selectionMode}
+        nextShipSlotIndex={nextShipSlotIndex}
+        nextWeaponSlotIndex={nextWeaponSlotIndex}
         onShieldModeChange={onShieldModeChange}
         onFilterChipClick={handleFilterChipClick}
         onOpenWeapons={onOpenWeapons}
