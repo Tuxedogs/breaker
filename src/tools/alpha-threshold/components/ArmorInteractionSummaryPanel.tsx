@@ -26,7 +26,12 @@ type TooltipState = {
   y: number
   title: string
   sectionTitle?: string
-  lines: Array<{ label: string; value: string; tone?: 'immediate' | 'cyan' | 'danger' | 'amber' }>
+  lines: Array<{
+    label: string
+    value: string
+    tone?: 'immediate' | 'cyan' | 'danger' | 'amber'
+    kind?: 'section'
+  }>
 }
 
 function formatSourceLabel(source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']) {
@@ -83,20 +88,14 @@ function getArmorEffectivenessRating(estimate: ArmorInteractionEstimate) {
   return 'Low'
 }
 
-function formatResultSummary(estimate: ArmorInteractionEstimate) {
-  if (estimate.damagesFreshArmor) {
-    return 'Immediate armor damage.'
-  }
-
-  if (estimate.armorDamageStartsAtPercent != null) {
-    return `Effective from ${Math.round(estimate.armorDamageStartsAtPercent)}%.`
-  }
-
-  return 'Uncalibrated.'
-}
-
 function formatSourceBadgeLabel(source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']) {
   return formatSourceLabel(source)
+}
+
+function formatSourceTypeLabel(source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']) {
+  if (source === 'estimated') return 'Estimated'
+  if (source === 'none') return 'Unknown'
+  return 'Threshold'
 }
 
 function getIntactArmorValueClass(damagesFreshArmor: boolean, highlighted: boolean) {
@@ -129,39 +128,24 @@ function getEffectivenessValueClass(
   return getEffectivenessSemanticClass(rating)
 }
 
-function formatTooltipArmorInteraction(estimate: ArmorInteractionEstimate) {
-  return [
-    `Starts At: ${formatArmorOnsetValue(estimate)}`,
-    `Source: ${formatSourceLabel(estimate.armorDamageStartsAtPercentSource)}`,
-    `Confidence: ${estimate.confidence[0].toUpperCase()}${estimate.confidence.slice(1)}`,
-  ].join('\n')
+function getConfidenceLabel(confidence: ArmorInteractionEstimate['confidence']) {
+  return `${confidence[0].toUpperCase()}${confidence.slice(1)}`
 }
 
-function formatTooltipCalculation(estimate: ArmorInteractionEstimate, weaponAlpha: number | null) {
-  const alpha = formatMetric(weaponAlpha ?? 0)
-  const armorMultiplier = formatMetric(estimate.armorDamageMultiplier)
-  const shieldPassThrough = formatMetric(estimate.shieldPassThrough)
-  const effectiveAlpha = formatMetric(estimate.effectiveArmorAlpha)
-  const threshold = formatMetric(estimate.deflectionThreshold)
-  const ratio = Number.isFinite(estimate.thresholdRatio)
-    ? estimate.thresholdRatio.toFixed(2)
-    : 'Immediate'
-  const effectiveAlphaEquation =
-    estimate.shieldState === 'up'
-      ? `Effective Alpha = ${alpha} × ${shieldPassThrough} = ${effectiveAlpha}`
-      : `Effective Alpha = ${alpha}`
+function getInterpretationSentence(estimate: ArmorInteractionEstimate, effectivenessRating: string) {
+  if (estimate.damagesFreshArmor && effectivenessRating === 'High') {
+    return 'Reliable immediate armor damage with high threshold pressure.'
+  }
 
-  return [
-    effectiveAlphaEquation,
-    `Threshold Ratio = ${effectiveAlpha} ÷ ${threshold} = ${ratio} (${getThresholdRatioLabel(estimate.thresholdRatio)})`,
-  ].join('\n')
+  if (estimate.damagesFreshArmor) {
+    return 'Immediate armor damage, but threshold pressure is moderate.'
+  }
 
-  return [
-    estimate.shieldState === 'up'
-      ? `Effective Alpha = ${alpha} × ${armorMultiplier} × ${shieldPassThrough} = ${effectiveAlpha}`
-      : `Effective Alpha = ${alpha} × ${armorMultiplier} = ${effectiveAlpha}`,
-    `Threshold Ratio = ${effectiveAlpha} ÷ ${threshold} = ${ratio} (${getThresholdRatioLabel(estimate.thresholdRatio)})`,
-  ].join('\n')
+  if (estimate.armorDamageStartsAtPercent != null) {
+    return `Armor damage starts around ${Math.round(estimate.armorDamageStartsAtPercent)}% integrity.`
+  }
+
+  return 'Not yet calibrated for a reliable armor onset point.'
 }
 
 export function ArmorInteractionSummaryPanel({
@@ -200,13 +184,6 @@ export function ArmorInteractionSummaryPanel({
     selectedWeapon.weapon.projectileSpeed != null
       ? `${formatMetric(selectedWeapon.weapon.projectileSpeed)} m/s`
       : null
-  const baseAlphaLabel =
-    selectedWeapon.weapon.calculatorProfile?.baseAlpha != null
-      ? formatMetric(selectedWeapon.weapon.calculatorProfile.baseAlpha)
-      : selectedWeapon.weapon.alpha != null
-        ? formatMetric(selectedWeapon.weapon.alpha)
-        : null
-
   function openTooltip(
     event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>,
     title: string,
@@ -248,64 +225,122 @@ export function ArmorInteractionSummaryPanel({
           : activeShield?.passThrough.energy
         : null
     const armorOnsetBand = estimate.estimatedArmorOnsetBand
-      const noteLines: TooltipState['lines'] = estimate.notes?.length
+    const confidenceLabel = getConfidenceLabel(estimate.confidence)
+    const thresholdRatioValue = Number.isFinite(estimate.thresholdRatio)
+      ? estimate.thresholdRatio.toFixed(2)
+      : 'Immediate'
+    const thresholdRatioLabel = getThresholdRatioLabel(estimate.thresholdRatio)
+    const interpretationSentence = getInterpretationSentence(estimate, effectivenessRating)
+    const sourceTypeLabel = formatSourceTypeLabel(estimate.armorDamageStartsAtPercentSource)
+    const tooltipLines: TooltipState['lines'] = [
+      {
+        label: 'Context',
+        value: '',
+        kind: 'section',
+      },
+      {
+        label: 'Ship',
+        value: ship.name.replaceAll('_', ' '),
+      },
+      {
+        label: 'Weapon',
+        value: selectedWeapon.weapon.name,
+      },
+      {
+        label: 'Weapon Group',
+        value: formatWeaponClassLabel(selectedWeapon.weapon.weaponClass),
+      },
+      {
+        label: 'Combat State',
+        value: '',
+        kind: 'section',
+      },
+      {
+        label: 'Alpha',
+        value: formatMetric(selectedWeapon.weapon.alpha ?? 0),
+      },
+      {
+        label: 'Velocity',
+        value: velocityLabel ?? 'Unknown',
+      },
+      {
+        label: 'Shield State',
+        value: formatStateLabel(state),
+      },
+      {
+        label: 'State/Source',
+        value: `${formatStateLabel(state)} / ${sourceTypeLabel}`,
+      },
+      {
+        label: 'Outcomes',
+        value: '',
+        kind: 'section',
+      },
+      {
+        label: 'Intact Armor',
+        value: estimate.damagesFreshArmor ? 'Yes' : 'No',
+        tone: estimate.damagesFreshArmor ? 'immediate' : 'amber',
+      },
+      {
+        label: 'Effective Damage',
+        value: effectivenessRating,
+        tone:
+          effectivenessRating === 'High'
+            ? 'immediate'
+            : effectivenessRating === 'Medium'
+              ? 'amber'
+              : 'danger',
+      },
+      {
+        label: 'Effective Alpha',
+        value: formatMetric(estimate.effectiveArmorAlpha),
+      },
+      {
+        label: 'Deflection Threshold',
+        value: formatMetric(estimate.deflectionThreshold),
+      },
+      {
+        label: 'Threshold Ratio',
+        value: `${thresholdRatioValue} (${thresholdRatioLabel})`,
+        tone: thresholdRatioLabel === 'Low' ? 'danger' : thresholdRatioLabel === 'Near' ? 'amber' : 'cyan',
+      },
+      {
+        label: 'Confidence',
+        value: confidenceLabel,
+      },
+      {
+        label: 'Model Details',
+        value: '',
+        kind: 'section',
+      },
+      {
+        label: 'Pass Through',
+        value: state === 'up' ? formatPassThroughLabel(activePassThrough ?? undefined) : '100%',
+        tone: 'cyan',
+      },
+      {
+        label: 'Armor Start',
+        value: formatArmorOnsetValue(estimate),
+      },
+      ...(armorOnsetBand
         ? [{
-          label: 'Note',
-          value: `\n${estimate.notes[0] ?? ''}`,
-          tone: estimate.armorDamageStartsAtPercentSource === 'estimated' ? 'amber' : undefined,
-        }]
-        : []
-    const tooltipLines: TooltipState['lines'] =
-      state === 'down'
-        ? [
-            ...noteLines,
-            {
-              label: 'Shield State',
-              value: 'Offline',
-            },
-            {
-              label: 'Pass Through',
-              value: '100%',
-              tone: 'cyan',
-            },
-            {
-              label: 'Armor Interaction',
-              value: formatTooltipArmorInteraction(estimate),
-              tone: estimate.damagesFreshArmor ? 'cyan' : 'amber',
-            },
-            {
-              label: 'Calculation',
-              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
-            },
-          ]
-        : [
-            ...noteLines,
-            {
-              label: 'Shield State',
-              value: 'Online',
-            },
-            {
-              label: 'Pass Through',
-              value: formatPassThroughLabel(activePassThrough ?? undefined),
-              tone: 'cyan',
-            },
-            {
-              label: 'Armor Interaction',
-              value: formatTooltipArmorInteraction(estimate),
-              tone: estimate.damagesFreshArmor ? 'cyan' : 'amber',
-            },
-            {
-              label: 'Calculation',
-              value: `\n${formatTooltipCalculation(estimate, selectedWeapon.weapon.alpha)}`,
-            },
-            ...(armorOnsetBand
-              ? [{
-                  label: 'Estimated Band',
-                  value: `${armorOnsetBand[0]}-${armorOnsetBand[1]}%`,
-                  tone: 'amber' as const,
-                }]
-              : []),
-          ]
+            label: 'Estimated Band',
+            value: `${armorOnsetBand[0]}-${armorOnsetBand[1]}%`,
+            tone: 'amber' as const,
+          }]
+        : []),
+      ...(estimate.notes?.[0]
+        ? [{
+            label: 'Note',
+            value: estimate.notes[0],
+            tone: estimate.armorDamageStartsAtPercentSource === 'estimated' ? 'amber' as const : undefined,
+          }]
+        : []),
+      {
+        label: 'Interpretation',
+        value: interpretationSentence,
+      },
+    ]
 
     return (
       <article
@@ -313,6 +348,9 @@ export function ArmorInteractionSummaryPanel({
         className={`alpha-armor-interaction-state ${toneClass} ${isPrimaryState ? 'alpha-armor-interaction-state-primary' : 'alpha-armor-interaction-state-secondary'} ${highlighted ? 'alpha-armor-interaction-state-highlighted' : ''}`}
       >
         <header className="alpha-armor-interaction-state-head">
+          <p className="alpha-armor-interaction-hover-title" aria-hidden="true">
+            {ship.name.replaceAll('_', ' ')} · {selectedWeapon.weapon.name} · {formatWeaponClassLabel(selectedWeapon.weapon.weaponClass)}
+          </p>
           <div className="alpha-armor-interaction-state-badges">
             <span className="alpha-armor-badge alpha-armor-badge-state">
               <span
@@ -324,7 +362,7 @@ export function ArmorInteractionSummaryPanel({
             <span className="alpha-armor-badge alpha-armor-badge-source">
               {formatSourceBadgeLabel(estimate.armorDamageStartsAtPercentSource)}
             </span>
-            {selectedWeapon.weapon.damageType === 'ballistic' && effectivenessRating !== 'Medium' ? (
+            {effectivenessRating === 'High' ? (
               <span className="alpha-armor-badge alpha-armor-badge-rating">
                 {effectivenessRating}
               </span>
@@ -385,11 +423,6 @@ export function ArmorInteractionSummaryPanel({
                       Velocity {velocityLabel}
                     </button>
                   ) : null}
-                  {baseAlphaLabel ? (
-                    <span className="alpha-armor-badge alpha-armor-badge-meta alpha-armor-badge-meta-muted">
-                      Alpha {baseAlphaLabel}
-                    </span>
-                  ) : null}
                 </>
               ) : null}
             </div>
@@ -401,8 +434,8 @@ export function ArmorInteractionSummaryPanel({
             onPointerEnter={(event) =>
               openTooltip(
                 event,
-                `${selectedWeapon.weapon.name} vs ${ship.name.replaceAll('_', ' ')}`,
-                undefined,
+                `${ship.name.replaceAll('_', ' ')} · ${selectedWeapon.weapon.name}`,
+                `${formatWeaponClassLabel(selectedWeapon.weapon.weaponClass)} · Shield ${formatStateLabel(state)}`,
                 tooltipLines
               )
             }
@@ -410,8 +443,8 @@ export function ArmorInteractionSummaryPanel({
             onFocus={(event) =>
               openTooltip(
                 event,
-                `${selectedWeapon.weapon.name} vs ${ship.name.replaceAll('_', ' ')}`,
-                undefined,
+                `${ship.name.replaceAll('_', ' ')} · ${selectedWeapon.weapon.name}`,
+                `${formatWeaponClassLabel(selectedWeapon.weapon.weaponClass)} · Shield ${formatStateLabel(state)}`,
                 tooltipLines
               )
             }
@@ -437,21 +470,9 @@ export function ArmorInteractionSummaryPanel({
                 </p>
               </div>
             </div>
-
-            <p className="alpha-armor-interaction-summary-copy">
-              {formatResultSummary(estimate)}
-            </p>
           </section>
 
           <dl className="alpha-armor-interaction-grid">
-            <div>
-              <dt>Effective Alpha</dt>
-              <dd>{formatMetric(estimate.effectiveArmorAlpha)}</dd>
-            </div>
-            <div>
-              <dt>Deflection Threshold</dt>
-              <dd>{formatMetric(estimate.deflectionThreshold)}</dd>
-            </div>
             <div>
               <dt>Threshold Ratio</dt>
               <dd>
@@ -467,7 +488,7 @@ export function ArmorInteractionSummaryPanel({
             </div>
             <div>
               <dt>Confidence</dt>
-              <dd>{estimate.confidence[0].toUpperCase()}{estimate.confidence.slice(1)}</dd>
+              <dd>{confidenceLabel}</dd>
             </div>
           </dl>
         </div>

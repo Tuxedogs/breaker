@@ -140,7 +140,7 @@ That is how mismatches between imported PTU data and tested facts are handled sa
 
 ## Flowchart
 
-```mermaid
+```
 flowchart TD
   A[Selected weapon + selected ship + shield state] --> B{Ship has defense profile?}
   B -- No --> C[Use neutral fallback thresholds]
@@ -184,7 +184,15 @@ The current analysis layout is organized as:
 2. Top control strip
 3. Ship header band
 4. Weapon rows
-5. One panel per weapon/ship matchup
+5. One panel per weapon/ship matchup online & offline shield states for ballistic weapon systems
+
+## UI Restructure
+1. Bring Drawers in line, less separated from the rest of the panel, unblur/highlight sections
+2. Evaluate Title Draw w/ Highlight
+2. Evaluate flow with minimal instruction
+4. Userbase should have general understanding of flow via 
+  Edit Ships / Weapons / Clear Ships & Weapons
+5. If unable to navigate tool, tutorial style highlighting to buttons and example drawer slelections post UI alignment.
 
 Rendering path:
 
@@ -266,6 +274,6 @@ Follow-up cleanup targets:
 
 - remove dead tooltip equation code in [ArmorInteractionSummaryPanel.tsx](Moonbreaker/src/tools/alpha-threshold/components/ArmorInteractionSummaryPanel.tsx)
 
-- clean remaining mojibake text in weapon-row labels
+- clean remaining text in weapon-row labels
 - expand observed breakpoint coverage beyond the current curated set
 - re-enable a true live environment after patch lands, live data is audited

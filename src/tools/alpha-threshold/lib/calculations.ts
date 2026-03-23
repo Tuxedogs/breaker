@@ -266,6 +266,10 @@ function getDamageChannel(damageType: WeaponRecord['damageType']): DefenseDamage
   return damageType === 'ballistic' ? 'physical' : 'energy'
 }
 
+function getFallbackArmorThreshold(ship: Ship, damageChannel: DefenseDamageChannel) {
+  return damageChannel === 'physical' ? ship.ballisticThreshold : ship.energyThreshold
+}
+
 function getThresholdRatio(effectiveArmorAlpha: number, deflectionThreshold: number): number {
   if (deflectionThreshold <= 0) {
     return effectiveArmorAlpha > 0 ? Number.POSITIVE_INFINITY : 0
@@ -546,6 +550,10 @@ export function estimateArmorInteraction(
 
   const armor = defenseProfile.armor[damageChannel]
   const armorDamageMultiplier = armor.damageMultiplier
+  const resolvedDeflectionThreshold =
+    armor.deflectionThreshold > 0
+      ? armor.deflectionThreshold
+      : getFallbackArmorThreshold(ship, damageChannel)
   const shieldPassThrough =
     shieldState === 'up'
       ? defenseProfile.shields.passThrough[damageChannel].max
@@ -562,7 +570,7 @@ export function estimateArmorInteraction(
       armorDamageMultiplier,
       shieldPassThrough,
       effectiveArmorAlpha: 0,
-      deflectionThreshold: armor.deflectionThreshold,
+      deflectionThreshold: resolvedDeflectionThreshold,
       thresholdRatio: 0,
       damagesFreshArmor: false,
       armorDamageStartsAtPercent: null,
@@ -574,7 +582,7 @@ export function estimateArmorInteraction(
   }
 
   const effectiveArmorAlpha = (weapon.alpha ?? 0) * shieldPassThrough
-  const deflectionThreshold = armor.deflectionThreshold
+  const deflectionThreshold = resolvedDeflectionThreshold
   const thresholdRatio = getThresholdRatio(effectiveArmorAlpha, deflectionThreshold)
   const observedBreakpoint = defenseProfile.observedBreakpoints?.[weapon.id]
   const observedState =
@@ -625,6 +633,11 @@ export function estimateArmorInteraction(
     notes.push(...ballisticCurveEstimate.notes)
   }
 
+  const thresholdOnsetPercent =
+    !hasObservedDamageOverride && thresholdRatio > 0 && thresholdRatio < 1
+      ? Math.round(clamp(thresholdRatio * 100, 1, 99))
+      : null
+
   const damagesFreshArmor = hasObservedDamageOverride
     ? Boolean(observedState?.damagesFreshArmor)
     : thresholdRatio >= 1
@@ -633,6 +646,7 @@ export function estimateArmorInteraction(
     explicitObservedOnset ??
     ballisticCurveEstimate?.onsetPercent ??
     anchorEstimate?.onsetPercent ??
+    thresholdOnsetPercent ??
     (!hasObservedDamageOverride && thresholdRatio >= 1 ? 100 : null) ??
     (observedState?.damagesFreshArmor === true ? 100 : null)
 
@@ -643,6 +657,8 @@ export function estimateArmorInteraction(
         ? 'estimated'
       : anchorEstimate
         ? 'estimated'
+        : thresholdOnsetPercent != null
+          ? 'threshold'
         : !hasObservedDamageOverride && thresholdRatio >= 1
           ? 'threshold'
           : observedState?.damagesFreshArmor === true
@@ -661,6 +677,8 @@ export function estimateArmorInteraction(
         ? 'medium'
       : anchorEstimate
         ? 'medium'
+        : thresholdOnsetPercent != null
+          ? 'medium'
         : !hasObservedDamageOverride && thresholdRatio >= 1
           ? 'medium'
           : 'low'
