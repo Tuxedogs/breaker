@@ -1,6 +1,5 @@
 import { normalizeErkulShip } from '../../lib/ships/adapters/erkul'
 import { normalizeManualShipRecord } from '../../lib/ships/adapters/manual'
-import { normalizeShipName } from '../../lib/ships/normalize'
 import { normalizeSpviewerShip } from '../../lib/ships/adapters/spviewer'
 import { mergeShipRecords } from '../../lib/ships/merge'
 import type { ShipRecord } from '../../lib/ships/types'
@@ -14,30 +13,24 @@ import { erkulLiveShipDefenseProfiles } from '../shields/erkulLiveShipDefensePro
 import { erkulPtuShipDefenseProfiles } from '../shields/erkulPtuShipDefenseProfiles'
 import { observedBreakpoints } from './observedBreakpoints'
 import { shipWikiImages } from './wikiImages'
-
-function getDefenseProfileKey(name: string) {
-  return normalizeShipName(name).toLowerCase()
-}
-
-/**
- * Erkul ship seeds often use long names (e.g. A2_Hercules_Starlifter) while defense
- * profiles use short display names (A2 Hercules → a2_hercules). Try stripping a trailing
- * _Starlifter segment so armor/shield math uses the same thresholds as the profile.
- */
-function getDefenseProfileLookupKeys(recordName: string): string[] {
-  const key = getDefenseProfileKey(recordName)
-  const keys = [key]
-  if (/_starlifter$/i.test(key)) {
-    keys.push(key.replace(/_starlifter$/i, ''))
-  }
-  return keys
-}
+import {
+  getDefenseProfileIdHint,
+  getDefenseProfileKey,
+  getDefenseProfileLookupKeys,
+} from './defenseProfileLookup'
 
 const liveDefenseProfileMap = new Map<string, ShipDefenseProfile>(
   erkulLiveShipDefenseProfiles.map((profile) => [getDefenseProfileKey(profile.name), profile as ShipDefenseProfile])
 )
 const ptuDefenseProfileMap = new Map<string, ShipDefenseProfile>(
   erkulPtuShipDefenseProfiles.map((profile) => [getDefenseProfileKey(profile.name), profile as ShipDefenseProfile])
+)
+
+const liveDefenseProfileById = new Map<string, ShipDefenseProfile>(
+  erkulLiveShipDefenseProfiles.map((profile) => [profile.id, profile as ShipDefenseProfile])
+)
+const ptuDefenseProfileById = new Map<string, ShipDefenseProfile>(
+  erkulPtuShipDefenseProfiles.map((profile) => [profile.id, profile as ShipDefenseProfile])
 )
 
 function getDefenseProfile(record: ShipRecord, source: ThresholdDataSourceKey) {
@@ -53,6 +46,21 @@ function getDefenseProfile(record: ShipRecord, source: ThresholdDataSourceKey) {
     } else if (source === 'merged') {
       const profile =
         liveDefenseProfileMap.get(key) ?? ptuDefenseProfileMap.get(key)
+      if (profile) return profile
+    }
+  }
+
+  const idHint = getDefenseProfileIdHint(record.name)
+  if (idHint) {
+    if (source === 'erkul-live') {
+      const profile = liveDefenseProfileById.get(idHint)
+      if (profile) return profile
+    } else if (source === 'erkul-ptu') {
+      const profile = ptuDefenseProfileById.get(idHint)
+      if (profile) return profile
+    } else if (source === 'merged') {
+      const profile =
+        liveDefenseProfileById.get(idHint) ?? ptuDefenseProfileById.get(idHint)
       if (profile) return profile
     }
   }
