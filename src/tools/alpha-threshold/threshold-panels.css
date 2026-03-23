@@ -2112,11 +2112,17 @@
 }
 
 .alpha-tool-route .alpha-selection-overlay {
-  --alpha-overlay-top-offset: calc(8.55rem + 16px);
-  --alpha-overlay-matrix-inset: calc(0.5rem + 1px + 0.75rem);
+  --alpha-matrix-header-height: 6.25rem;
+  --alpha-board-top-inset: 0.6rem;
+  --alpha-overlay-align-x: 1.425rem;
+  --alpha-overlay-align-y: 1.9rem;
+  --alpha-overlay-top-offset: calc(
+    var(--alpha-board-top-inset) + var(--alpha-matrix-header-height) + var(--alpha-matrix-gap, 0.45rem) +
+      var(--alpha-overlay-align-y)
+  );
   --alpha-overlay-left-offset: calc(
     var(--alpha-matrix-ship-width, 17.5rem) + var(--alpha-matrix-gap, 0.45rem) +
-      var(--alpha-overlay-matrix-inset)
+      var(--alpha-overlay-align-x)
   );
   --alpha-overlay-right-offset: 1.8rem;
   --alpha-overlay-max-width: 41rem;
@@ -2129,6 +2135,7 @@
   padding: 0;
   pointer-events: none;
 }
+
 
 .alpha-tool-route .alpha-selection-overlay::before {
   content: '';
@@ -2282,6 +2289,13 @@
   color: rgb(226 232 240);
 }
 
+.alpha-tool-route .alpha-overlay-panel .alpha-overlay-selection-notice {
+  margin: 0.2rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: rgb(252 165 165);
+}
+
 .alpha-tool-route .alpha-overlay-panel .alpha-selection-panel-head {
   display: flex;
   align-items: center;
@@ -2346,8 +2360,15 @@
 
 @media (max-width: 1023px) {
   .alpha-tool-route .alpha-selection-overlay {
-    --alpha-overlay-top-offset: calc(7.05rem + 16px);
-    --alpha-overlay-left-offset: 0.4rem;
+    --alpha-board-top-inset: 0.4rem;
+    --alpha-matrix-header-height: 6.25rem;
+    --alpha-overlay-align-x: 1.225rem;
+    --alpha-overlay-align-y: 1.85rem;
+    --alpha-overlay-top-offset: calc(
+      var(--alpha-board-top-inset) + var(--alpha-matrix-header-height) + var(--alpha-matrix-gap, 0.45rem) +
+        var(--alpha-overlay-align-y)
+    );
+    --alpha-overlay-left-offset: calc(0.4rem + var(--alpha-overlay-align-x));
     --alpha-overlay-right-offset: 0.4rem;
     --alpha-overlay-max-width: none;
   }

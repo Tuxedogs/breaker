@@ -10,6 +10,7 @@ type Props = {
   weapons: WeaponRecord[]
   targetSlotIndex: number
   activeSlotIndex: number
+  selectionNotice: string | null
   onSetActiveSlot: (slotIndex: number) => void
   onHoverSlot: (slotIndex: number | null) => void
   onSelectWeapon: (weaponKey: string) => void
@@ -35,6 +36,7 @@ export function WeaponSelectorOverlay({
   weapons,
   targetSlotIndex,
   activeSlotIndex,
+  selectionNotice,
   onSetActiveSlot,
   onHoverSlot,
   onSelectWeapon,
@@ -154,6 +156,11 @@ export function WeaponSelectorOverlay({
                 )
               })}
             </div>
+            {selectionNotice ? (
+              <p className="alpha-overlay-selection-notice" role="status" aria-live="polite">
+                {selectionNotice}
+              </p>
+            ) : null}
           </div>
 
           <div className="alpha-drawer-filter-bar">

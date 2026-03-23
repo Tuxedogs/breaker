@@ -133,8 +133,27 @@ export default function AlphaThresholdToolPage() {
       setSelectionMode(null)
     }
 
+    const onPointerDown = (event: PointerEvent) => {
+      if (!selectionMode) return
+      const target = event.target
+      if (!(target instanceof Element)) return
+
+      if (target.closest('.alpha-overlay-panel')) return
+      if (target.closest('.alpha-comparison-matrix-ship-card')) return
+      if (target.closest('.alpha-comparison-matrix-weapon-header')) return
+
+      setSelectionMode(null)
+      setSelectionNotice(null)
+      setHoveredShipSlotIndex(null)
+      setHoveredWeaponSlotIndex(null)
+    }
+
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    window.addEventListener('pointerdown', onPointerDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('pointerdown', onPointerDown)
+    }
   }, [selectionMode])
 
   function handleShipSelect(shipKey: string) {
@@ -230,7 +249,6 @@ export default function AlphaThresholdToolPage() {
               onOpenWeaponsAt={handleOpenWeaponsAt}
               onOpenShipsAt={handleOpenShipsAt}
               onAssignWeapon={setSlotWeapon}
-              selectionNotice={selectionNotice}
             />
           }
           overlay={
@@ -242,6 +260,7 @@ export default function AlphaThresholdToolPage() {
                 maxVictimShips={maxVictimShips}
                 targetSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
                 activeSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
+                selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
                 onSetActiveSlot={setActiveShipSlotIndex}
                 onHoverSlot={setHoveredShipSlotIndex}
                 onSelectShip={handleShipSelect}
@@ -255,6 +274,7 @@ export default function AlphaThresholdToolPage() {
                 weapons={allWeapons}
                 targetSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
                 activeSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
+                selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
                 onSetActiveSlot={setActiveWeaponSlotIndex}
                 onHoverSlot={setHoveredWeaponSlotIndex}
                 onSelectWeapon={handleWeaponSelect}
