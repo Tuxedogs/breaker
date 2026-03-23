@@ -27,6 +27,8 @@ type Props = {
   onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
+  onOpenWeaponsAt?: (slotIndex: number) => void
+  onOpenShipsAt?: (slotIndex: number) => void
 }
 
 type MatrixCellModel = ReturnType<typeof buildMatrixCellModel>
@@ -35,19 +37,6 @@ const DESTINATION_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 
 function buildVisibleShips(ships: Ship[]) {
   return ships.slice(0, 4)
-}
-
-function sortSelectedWeapons(selectedWeapons: SelectedWeaponComparison[]) {
-  return selectedWeapons
-    .map((selection, index) => ({ selection, index }))
-    .sort((left, right) => {
-      const leftPriority = left.selection.weapon.damageType === 'energy' ? 0 : 1
-      const rightPriority = right.selection.weapon.damageType === 'energy' ? 0 : 1
-
-      if (leftPriority !== rightPriority) return leftPriority - rightPriority
-      return left.index - right.index
-    })
-    .map(({ selection }) => selection)
 }
 
 function getShieldChipLabel(state: DefenseShieldState) {
@@ -185,11 +174,13 @@ export function ThresholdComparisonMatrix({
   onFilterChipClick,
   onOpenWeapons,
   onOpenShips,
+  onOpenWeaponsAt,
+  onOpenShipsAt,
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null)
   const visibleShips = buildVisibleShips(ships)
-  const orderedWeapons = useMemo(() => sortSelectedWeapons(selectedWeapons), [selectedWeapons])
+  const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
     (visibleShips.length > 0 &&
       visibleShips.every((ship) => ship.name === '' && ship.manufacturer === '')) ||
@@ -336,6 +327,13 @@ export function ThresholdComparisonMatrix({
                           current === selection.slotId ? null : current
                         )
                       }
+                      onClick={() => {
+                        if (onOpenWeaponsAt) {
+                          onOpenWeaponsAt(columnIndex)
+                          return
+                        }
+                        onOpenWeapons()
+                      }}
                     >
                       <p className="alpha-comparison-matrix-weapon-eyebrow">
                         {selection.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy'}
@@ -418,6 +416,13 @@ export function ThresholdComparisonMatrix({
                           'alpha-comparison-matrix-ship-card',
                           destinationToneClass,
                         ].filter(Boolean).join(' ')}
+                        onClick={() => {
+                          if (onOpenShipsAt) {
+                            onOpenShipsAt(rowIndex)
+                            return
+                          }
+                          onOpenShips()
+                        }}
                       >
                         <div className="alpha-comparison-matrix-ship-header">
                           <div className="alpha-comparison-matrix-ship-media">

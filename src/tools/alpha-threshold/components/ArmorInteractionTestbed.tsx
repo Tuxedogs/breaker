@@ -18,6 +18,8 @@ type Props = {
   onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
+  onOpenWeaponsAt?: (slotIndex: number) => void
+  onOpenShipsAt?: (slotIndex: number) => void
 }
 
 export function ArmorInteractionTestbed({
@@ -32,6 +34,8 @@ export function ArmorInteractionTestbed({
   onFilterChipClick,
   onOpenWeapons,
   onOpenShips,
+  onOpenWeaponsAt,
+  onOpenShipsAt,
 }: Props) {
   return (
     <ThresholdComparisonMatrix
@@ -46,6 +50,8 @@ export function ArmorInteractionTestbed({
       onFilterChipClick={onFilterChipClick}
       onOpenWeapons={onOpenWeapons}
       onOpenShips={onOpenShips}
+      onOpenWeaponsAt={onOpenWeaponsAt}
+      onOpenShipsAt={onOpenShipsAt}
     />
   )
 }
