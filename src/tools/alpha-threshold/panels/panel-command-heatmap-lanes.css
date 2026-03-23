@@ -1,0 +1,480 @@
+﻿
+.alpha-tool-route .alpha-heatmap-ship-column {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 0.8rem;
+  min-width: 18.75rem;
+  border-radius: 1.45rem;
+  padding: 0.85rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 20%),
+    linear-gradient(180deg, rgb(6 11 20 / 0.98), rgb(4 7 14 / 0.98));
+}
+
+.alpha-tool-route .alpha-heatmap-ship-head {
+  display: grid;
+  gap: 0.65rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding-bottom: 0.7rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-title-block {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-name {
+  margin: 0;
+  font-size: 1.2rem;
+  line-height: 1.1;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-make {
+  margin: 0;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.alpha-tool-route .alpha-ship-header-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.03);
+  border-radius: 999px;
+  padding: 0.34rem 0.58rem;
+  font-size: 0.72rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-ship-header-pill > strong {
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis {
+  position: relative;
+  display: block;
+  min-height: 1.9rem;
+  padding-bottom: 0.3rem;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint {
+  position: absolute;
+  top: 0;
+  display: grid;
+  gap: 0.14rem;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint:first-child {
+  left: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint-right {
+  right: 0;
+  justify-items: end;
+  text-align: right;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > strong {
+  font-size: 0.76rem;
+  line-height: 1;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > em {
+  font-size: 0.58rem;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker {
+  position: absolute;
+  top: 0.08rem;
+  transform: translateX(-50%);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(2) {
+  left: 25%;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(3) {
+  left: 50%;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(4) {
+  left: 75%;
+}
+
+.alpha-tool-route .alpha-heatmap-ship-lanes {
+  display: grid;
+  gap: 0.8rem;
+  min-height: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-lane {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 1.15rem;
+  padding: 0.8rem 0.8rem 0.85rem;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(15 23 42 / 0.24) 0%,
+      rgb(15 23 42 / 0.24) 25%,
+      rgb(30 41 59 / 0.22) 25%,
+      rgb(30 41 59 / 0.22) 75%,
+      rgb(51 65 85 / 0.24) 75%,
+      rgb(51 65 85 / 0.26) 100%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc(25% - 1px),
+      rgb(255 255 255 / 0.09) calc(25% - 1px),
+      rgb(255 255 255 / 0.09) 25%
+    ),
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    rgb(5 9 18 / 0.92);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-energy {
+  box-shadow: inset 0 1px 0 rgb(250 204 21 / 0.2);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-ballistic {
+  box-shadow: inset 0 1px 0 rgb(196 181 253 / 0.16);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-kicker {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-energy .alpha-heatmap-lane-kicker {
+  /* Energy lane accent text */
+  color: rgb(253 224 71);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-ballistic .alpha-heatmap-lane-kicker {
+  color: rgb(196 181 253);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-threshold {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  background: rgb(255 255 255 / 0.04);
+  padding: 0.34rem 0.58rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-lane-traces {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.alpha-tool-route .alpha-heatmap-lane-empty {
+  border: 1px dashed rgb(255 255 255 / 0.08);
+  border-radius: 0.95rem;
+  padding: 0.95rem;
+  font-size: 0.82rem;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-trace {
+  display: grid;
+  position: relative;
+  isolation: isolate;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-meta {
+  display: grid;
+  gap: 0.12rem;
+  margin-top: 0.24rem;
+  font-size: 0.74rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 0.22rem;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.035);
+  padding: 0.22rem 0.42rem;
+  font-size: 0.67rem;
+  text-transform: uppercase;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-speed {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status {
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-deflect {
+  border-color: rgb(248 113 113 / 0.22);
+  background: rgb(127 29 29 / 0.18);
+  color: rgb(254 202 202);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-late {
+  border-color: rgb(56 189 248 / 0.4);
+  background: rgb(8 47 73 / 0.78);
+  color: rgb(186 230 253);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-status-early,
+.alpha-tool-route .alpha-heatmap-trace-status-penetrate {
+  border-color: rgb(16 185 129 / 0.44);
+  background: rgb(6 78 59 / 0.78);
+  color: rgb(167 243 208);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy {
+  display: grid;
+  gap: 0.24rem;
+  min-width: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.95rem;
+  padding: 0.65rem 0.75rem;
+  background: rgb(255 255 255 / 0.025);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy-energy,
+.alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+  background: rgb(255 255 255 / 0.025);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy-energy {
+  border-color: rgb(253 224 71 / 0.22);
+  background:
+    linear-gradient(180deg, rgb(253 224 71 / 0.08), transparent 100%),
+    rgb(16 16 12 / 0.88);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+  border-color: rgb(167 139 250 / 0.24);
+  background:
+    linear-gradient(180deg, rgb(124 58 237 / 0.08), transparent 100%),
+    rgb(14 12 30 / 0.88);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-name {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.92rem;
+  line-height: 1.15;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-hint {
+  min-width: 0;
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.1;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell {
+  position: relative;
+  z-index: 2;
+  min-height: 2.8rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.95rem;
+  overflow: visible;
+  border-color: rgb(255 255 255 / 0.1);
+  background:
+    linear-gradient(
+      90deg,
+      rgb(12 20 35 / 0.92) 0%,
+      rgb(12 20 35 / 0.92) 25%,
+      rgb(15 23 42 / 0.94) 25%,
+      rgb(15 23 42 / 0.94) 75%,
+      rgb(30 41 59 / 0.94) 75%,
+      rgb(30 41 59 / 0.96) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.02),
+    inset 0 -10px 20px rgb(0 0 0 / 0.2);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell-blocked {
+  border-color: rgb(100 116 139 / 0.4);
+  background: rgb(15 23 42 / 0.9);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell-threshold {
+  border-color: rgb(56 189 248 / 0.28);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell-immediate {
+  border-color: rgb(16 185 129 / 0.36);
+  background: rgb(6 78 59 / 0.32);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  pointer-events: none;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-bar-shell:focus-visible {
+  outline: 2px solid rgb(125 211 252 / 0.7);
+  outline-offset: 2px;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect,
+.alpha-tool-route .alpha-heatmap-trace-damage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect {
+  /* Blocked state bar */
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(51, 65, 85);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-deflect-threshold {
+  /* Threshold state destroyed-armor segment */
+  border-radius: 0.95rem 0 0 0.95rem;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(27, 97, 194, 0.295) 0,
+      rgb(28, 34, 43) 6px,
+      rgb(15 23 42 / 0.92) 6px,
+      rgb(15 23 42 / 0.92) 12px
+    ),
+    linear-gradient(180deg, rgb(30 41 59 / 0.96), rgb(15 23 42 / 0.98));
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.507);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-damage {
+  /* Threshold state active penetration segment */
+  z-index: 1;
+  border-radius: 0 0.95rem 0.95rem 0;
+  background: rgb(14 165 233);
+  box-shadow: inset 0 0 0 1px rgb(186 230 253 / 0.2);
+}
+
+.alpha-tool-route .alpha-heatmap-trace-damage-immediate {
+  /* Immediate penetration full-bar color */
+  border-radius: inherit;
+  background: rgb(15, 231, 159);
+  box-shadow: inset 0 0 0 1px rgba(38, 219, 125, 0.822);
+}
+
+.alpha-tool-route .alpha-penetration-marker {
+  position: absolute;
+  top: -0.05rem;
+  bottom: -0.05rem;
+  z-index: 12;
+  width: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.alpha-tool-route .alpha-penetration-marker-halo {
+  position: absolute;
+  top: -0.45rem;
+  left: 50%;
+  width: 0.95rem;
+  height: 0.95rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.2);
+  filter: blur(4px);
+}
+
+.alpha-tool-route .alpha-penetration-marker-stick {
+  position: absolute;
+  top: -0.25rem;
+  bottom: -0.2rem;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background: rgb(255 255 255);
+  box-shadow:
+    0 0 0 2px rgb(2 6 23 / 0.92),
+    0 0 12px rgb(255 255 255 / 0.22);
+}
+
+.alpha-tool-route .alpha-penetration-marker-dot {
+  position: absolute;
+  top: -0.55rem;
+  left: 50%;
+  width: 0.62rem;
+  height: 0.62rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255);
+  box-shadow:
+    0 0 0 3px rgb(2 6 23 / 0.95),
+    0 0 16px rgb(255 255 255 / 0.28);
+}
+

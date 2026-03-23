@@ -1,0 +1,72 @@
+﻿
+@media (max-width: 767px) {
+  .alpha-tool-route .alpha-threshold-board {
+    min-height: 0;
+    border-radius: 1.35rem;
+    padding: 0.75rem;
+  }
+
+  .alpha-tool-route .alpha-penetration-marker {
+    display: none;
+  }
+
+  .alpha-tool-route .alpha-heatmap-trace-head {
+    display: none;
+  }
+
+  .alpha-tool-route .alpha-heatmap-trace-copy {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    align-content: center;
+    gap: 0.14rem;
+    padding: 0.45rem 0.7rem;
+    pointer-events: none;
+    border: 0;
+    background: transparent;
+  }
+
+  .alpha-tool-route .alpha-heatmap-trace-copy-energy,
+  .alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+    border: 0;
+    background: transparent;
+  }
+
+  .alpha-tool-route .alpha-loadout-drawer {
+    top: 0.4rem;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    width: calc(100vw - 0.8rem);
+    border-radius: 1.15rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip-status,
+  .alpha-tool-route .alpha-top-control-strip-changelog {
+    display: none;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip {
+    padding: 0.6rem 0.7rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip-actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .alpha-tool-route .alpha-top-control-strip-actions .alpha-top-strip-button {
+    width: 100%;
+  }
+
+  .alpha-tool-route .alpha-analysis-filter-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 2600px) {
+  .alpha-tool-route .alpha-threshold-board {
+    padding: 0.48rem 0.5rem 0.6rem;
+  }
+}

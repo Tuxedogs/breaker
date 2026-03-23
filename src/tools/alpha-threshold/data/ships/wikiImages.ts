@@ -239,10 +239,10 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/avenger-titan.jpg",
     "imageAlt": "Avenger Titan ship image"
   },
-  "aegs::avenger_titan_rngd.": {
+"aegs::avenger_titan_renegade": {
     "wikiUrl": "https://starcitizen.tools/Avenger_Titan_Renegade",
-    "imageSrc": "/ships/wiki/avenger-titan-renegade.jpg",
-    "imageAlt": "Avenger Titan Rngd. ship image"
+    "imageSrc": "https://media.starcitizen.tools/thumb/5/50/Avenger_Titan_Renegade_3.2_sale_Renegade_01_-_cropped_and_adjusted.jpg/400px-Avenger_Titan_Renegade_3.2_sale_Renegade_01_-_cropped_and_adjusted.jpg.webp",
+    "imageAlt": "Avenger Titan Renegade ship image"
   },
   "aegs::avenger_warlock": {
     "wikiUrl": "https://starcitizen.tools/Avenger_Warlock",
@@ -524,7 +524,7 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/a2-hercules-starlifter.jpg",
     "imageAlt": "A2 Hercules ship image"
   },
-  "crus::ares_inferno": {
+"crus::ares_star_fighter_inferno": {
     "wikiUrl": "https://starcitizen.tools/Ares_Star_Fighter_Inferno",
     "imageSrc": "/ships/wiki/ares-star-fighter-inferno.jpg",
     "imageAlt": "Ares Inferno ship image"
@@ -539,7 +539,7 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/c1-spirit.png",
     "imageAlt": "C1 Spirit ship image"
   },
-  "crus::c2_hercules": {
+  "crus::c2_hercules_starlifter": {
     "wikiUrl": "https://starcitizen.tools/C2_Hercules_Starlifter",
     "imageSrc": "/ships/wiki/c2-hercules-starlifter.jpg",
     "imageAlt": "C2 Hercules ship image"
@@ -549,15 +549,15 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/intrepid.jpg",
     "imageAlt": "Intrepid ship image"
   },
-  "crus::m2_hercules": {
+  "crus::m2_hercules_starlifter": {
     "wikiUrl": "https://starcitizen.tools/M2_Hercules_Starlifter",
     "imageSrc": "/ships/wiki/m2-hercules-starlifter.jpg",
     "imageAlt": "M2 Hercules ship image"
   },
-  "crus::mercury": {
-    "wikiUrl": "https://starcitizen.tools/Mercury",
-    "imageSrc": "/ships/wiki/mercury.svg",
-    "imageAlt": "Mercury ship image"
+  "crus::mercury_star_runner": {
+    "wikiUrl": "https://starcitizen.tools/Mercury_Star_Runner",
+    "imageSrc": "https://media.starcitizen.tools/thumb/e/e7/Mercury_-_flying_over_clouds.jpg/600px-Mercury_-_flying_over_clouds.jpg.webp",
+    "imageAlt": "Mercury Star Runner ship image"
   },
   "drak::buccaneer": {
     "wikiUrl": "https://starcitizen.tools/Buccaneer",
@@ -924,10 +924,10 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/constellation-andromeda.jpg",
     "imageAlt": "Constellation Andr. ship image"
   },
-  "rsi::constellation_aqlla.": {
+ "rsi::constellation_aquila": {
     "wikiUrl": "https://starcitizen.tools/Constellation_Aquila",
-    "imageSrc": "/ships/wiki/constellation-aquila.jpg",
-    "imageAlt": "Constellation Aqlla. ship image"
+    "imageSrc": "https://media.starcitizen.tools/thumb/7/7e/Aquila_-_QT_-_Rear_Port.jpg/400px-Aquila_-_QT_-_Rear_Port.jpg.webp",
+    "imageAlt": "Constellation Aquila ship image"
   },
   "rsi::constellation_phnx.": {
     "wikiUrl": "https://starcitizen.tools/Constellation_Phoenix",

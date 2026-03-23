@@ -96,6 +96,9 @@
   width: max(100%, var(--alpha-matrix-min-width));
   min-width: var(--alpha-matrix-min-width);
   min-height: 100%;
+  /* Chart cells only — never use on weapon headers / ship row cards */
+  --alpha-matrix-cell-muted-blur: blur(6px);
+  --alpha-matrix-cell-muted-opacity: 0.55;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-header-row,
@@ -258,14 +261,17 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.045);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-placeholder-preview
-  .alpha-comparison-matrix-weapon-header,
-.alpha-tool-route .alpha-comparison-matrix-placeholder-preview
-  .alpha-comparison-matrix-ship-card,
-.alpha-tool-route .alpha-comparison-matrix-placeholder-preview
-  .alpha-comparison-matrix-cell {
-  filter: blur(6px);
-  opacity: 0.55;
+/* Slot headers (weapon column + ship row cards): no filter/blur — style visibility separately.
+   Chart matrix cells: blurred/muted below. */
+
+.alpha-tool-route .alpha-comparison-matrix-placeholder-preview .alpha-comparison-matrix-ship-card,
+.alpha-tool-route .alpha-comparison-matrix-placeholder-preview .alpha-comparison-matrix-weapon-header {
+  user-select: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-placeholder-preview .alpha-comparison-matrix-cell {
+  filter: var(--alpha-matrix-cell-muted-blur);
+  opacity: var(--alpha-matrix-cell-muted-opacity);
   pointer-events: none;
   user-select: none;
 }
@@ -274,10 +280,9 @@
   border-color: rgb(148 163 184 / 0.08);
   background: rgb(15 23 42 / 0.22);
   box-shadow: none;
-  filter: blur(4.5px);
-  opacity: 0.5;
 }
 
+/* Placeholder chart cells only (not headers). */
 .alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder {
   filter: blur(6.2px);
   opacity: 0.33;
@@ -308,28 +313,6 @@
 }
 
 .alpha-tool-route
-  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-panel-placeholder
-  .alpha-comparison-matrix-ship-name {
-  color: rgb(203 213 225);
-}
-
-.alpha-tool-route
-  .alpha-comparison-matrix-placeholder-identity-blur
-  .alpha-comparison-matrix-ship-eyebrow,
-.alpha-tool-route
-  .alpha-comparison-matrix-placeholder-identity-blur
-  .alpha-comparison-matrix-ship-name {
-  filter: blur(3px);
-  opacity: 0.48;
-}
-
-.alpha-tool-route
-  .alpha-comparison-matrix-placeholder-identity-blur
-  .alpha-comparison-matrix-ship-name {
-  color: rgb(203 213 225) !important;
-}
-
-.alpha-tool-route
   .alpha-comparison-matrix-panel-placeholder
   .alpha-comparison-matrix-cell-state,
 .alpha-tool-route
@@ -351,25 +334,10 @@
   transition: none !important;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-panel-placeholder:hover,
-.alpha-tool-route .alpha-comparison-matrix-row:hover .alpha-comparison-matrix-panel-placeholder,
-.alpha-tool-route .alpha-comparison-matrix-row:focus-within .alpha-comparison-matrix-panel-placeholder {
-  border-color: rgb(148 163 184 / 0.08);
-  box-shadow: none;
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder:hover,
-.alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder:focus-visible {
-  border-color: rgb(148 163 184 / 0.08);
-  box-shadow: none;
-  outline: none;
-}
-
-.alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-weapon-header,
-.alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-ship-card,
+/* Overlay open: mute chart cells only — headers stay unfiltered. */
 .alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-cell {
-  filter: blur(4px);
-  opacity: 0.3;
+  filter: var(--alpha-matrix-cell-muted-blur);
+  opacity: var(--alpha-matrix-cell-muted-opacity);
   transition:
     filter 180ms ease,
     opacity 180ms ease,
@@ -377,12 +345,18 @@
     box-shadow 180ms ease;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-selection-ship .alpha-comparison-matrix-destination-row .alpha-comparison-matrix-ship-card,
 .alpha-tool-route .alpha-comparison-matrix-selection-ship .alpha-comparison-matrix-destination-row .alpha-comparison-matrix-cell,
-.alpha-tool-route .alpha-comparison-matrix-selection-weapon .alpha-comparison-matrix-destination-column,
 .alpha-tool-route .alpha-comparison-matrix-selection-weapon .alpha-comparison-matrix-destination-column-cell {
   filter: none;
   opacity: 1;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-destination-active .alpha-comparison-matrix-cell-detail-blur {
+  filter: blur(6px);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-cell.alpha-comparison-matrix-cell-destination-active {
+  filter: blur(6px);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-selection-ship .alpha-comparison-matrix-destination-row .alpha-comparison-matrix-ship-card,
@@ -464,6 +438,47 @@
     0 0 0 1px rgb(255 255 255 / 0.04);
 }
 
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.4rem;
+  min-height: 6.25rem;
+  border-style: dashed;
+  border-color: rgb(255 255 255 / 0.12);
+  background:
+    linear-gradient(180deg, rgb(9 13 22 / 0.72), rgb(9 13 22 / 0.9)),
+    rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.38rem;
+  width: 100%;
+  text-align: center;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-empty-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.18;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-empty-hint {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.18;
+  font-weight: 600;
+  color: rgb(100 116 139);
+}
+
 .alpha-tool-route .alpha-comparison-matrix-weapon-eyebrow,
 .alpha-tool-route .alpha-comparison-matrix-ship-eyebrow {
   margin: 0;
@@ -518,7 +533,9 @@
     color 140ms ease;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-chip:hover {
+.alpha-tool-route
+  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
+  .alpha-comparison-matrix-chip:hover {
   border-color: rgb(255 255 255 / 0.16);
   background: rgb(255 255 255 / 0.05);
   color: rgb(248 250 252);
@@ -573,8 +590,15 @@
   opacity: 0.85;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-row:hover .alpha-comparison-matrix-ship-card,
-.alpha-tool-route .alpha-comparison-matrix-row:focus-within .alpha-comparison-matrix-ship-card {
+/* Row hover lift: not when overlay open, not on empty ship slots */
+.alpha-tool-route
+  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
+  .alpha-comparison-matrix-row:hover
+  .alpha-comparison-matrix-ship-card:not(.alpha-comparison-matrix-panel-placeholder),
+.alpha-tool-route
+  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
+  .alpha-comparison-matrix-row:focus-within
+  .alpha-comparison-matrix-ship-card:not(.alpha-comparison-matrix-panel-placeholder) {
   border-color: rgb(226 232 240 / 0.18);
   box-shadow:
     inset -1px 0 0 rgb(255 255 255 / 0.08),
@@ -584,6 +608,75 @@
 
 .alpha-tool-route .alpha-comparison-matrix-row-active .alpha-comparison-matrix-ship-card::before {
   background: linear-gradient(180deg, rgb(125 211 252 / 0.25), rgb(125 211 252 / 0.92), rgb(125 211 252 / 0.22));
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty {
+  align-content: center;
+  border-style: dashed;
+  border-color: rgb(255 255 255 / 0.12);
+  background:
+    linear-gradient(180deg, rgb(7 10 16 / 0.72), rgb(7 10 16 / 0.88)),
+    rgb(255 255 255 / 0.02);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty::before {
+  opacity: 0.35;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 6rem;
+  text-align: center;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-empty-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.18;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-empty-hint {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.18;
+  font-weight: 600;
+  color: rgb(100 116 139);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty.alpha-comparison-matrix-panel-tone-cyan
+  .alpha-comparison-matrix-ship-empty-label,
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-empty.alpha-comparison-matrix-panel-tone-cyan
+  .alpha-comparison-matrix-weapon-empty-label {
+  color: rgb(103 232 249 / 0.95);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty.alpha-comparison-matrix-panel-tone-violet
+  .alpha-comparison-matrix-ship-empty-label,
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-empty.alpha-comparison-matrix-panel-tone-violet
+  .alpha-comparison-matrix-weapon-empty-label {
+  color: rgb(196 181 253 / 0.95);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty.alpha-comparison-matrix-panel-tone-amber
+  .alpha-comparison-matrix-ship-empty-label,
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-empty.alpha-comparison-matrix-panel-tone-amber
+  .alpha-comparison-matrix-weapon-empty-label {
+  color: rgb(252 211 77 / 0.95);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card-empty.alpha-comparison-matrix-panel-tone-emerald
+  .alpha-comparison-matrix-ship-empty-label,
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-empty.alpha-comparison-matrix-panel-tone-emerald
+  .alpha-comparison-matrix-weapon-empty-label {
+  color: rgb(110 231 183 / 0.95);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-header {
@@ -740,7 +833,8 @@
   min-width: var(--alpha-matrix-weapon-min-width);
   min-height: 6.85rem;
   align-content: stretch;
-  padding: 0.5rem 0.56rem 0.48rem;
+  /* Vertical padding trimmed to offset extra meta→title spacing (border box height neutral) */
+  padding: 0.25rem 0.54rem 0.23rem;
   transition:
     border-color 140ms ease,
     background-color 140ms ease,
@@ -750,7 +844,8 @@
 .alpha-tool-route .alpha-comparison-matrix-cell-content {
   display: grid;
   grid-template-rows: auto auto auto;
-  gap: 0.24rem;
+  /* Row gaps via margins so meta→title spacing can grow without bloating title→chart */
+  gap: 0;
   min-height: 100%;
   transition:
     filter 180ms ease,
@@ -818,25 +913,47 @@
   color: rgb(252 211 77);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-cell-head {
-  display: grid;
-  gap: 0.18rem;
-  grid-template-columns: auto auto 1fr;
-  align-items: start;
+.alpha-tool-route .alpha-comparison-matrix-cell-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-title-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  min-width: 0;
+  /* Space between meta chips and Armor Dmg line (padding above offsets net cell height) */
+  margin-top: 0.5rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-title-row .alpha-comparison-matrix-cell-summary {
+  width: 100%;
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-title-row .alpha-comparison-matrix-cell-inline-metrics {
+  align-self: flex-start;
+  justify-content: flex-start;
+  margin: 1rem 0 0;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-state {
   margin: 0;
   display: inline-flex;
-  min-height: 1.28rem;
+  min-height: 1.1rem;
   align-items: center;
   border: 1px solid rgb(255 255 255 / 0.07);
   border-radius: 999px;
   background: rgb(255 255 255 / 0.02);
-  padding: 0.06rem 0.4rem;
-  font-size: 0.58rem;
+  padding: 0.04rem 0.36rem;
+  font-size: 0.54rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgb(148 163 184);
 }
@@ -844,22 +961,21 @@
 .alpha-tool-route .alpha-comparison-matrix-cell-shield-chip {
   margin: 0;
   display: inline-flex;
-  min-height: 1.28rem;
+  min-height: 1.1rem;
   align-items: center;
   border: 1px solid rgb(255 255 255 / 0.07);
   border-radius: 999px;
   background: rgb(255 255 255 / 0.03);
-  padding: 0.06rem 0.42rem;
-  font-size: 0.58rem;
+  padding: 0.04rem 0.38rem;
+  font-size: 0.54rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgb(203 213 225);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-summary {
   margin: 0;
-  grid-column: 1 / -1;
   text-align: left;
   font-size: 1.2rem;
   font-weight: 800;
@@ -876,14 +992,14 @@
 
 .alpha-tool-route .alpha-comparison-matrix-cell-inline-metrics > span {
   display: inline-flex;
-  min-height: 1.4rem;
+  min-height: 1.3rem;
   align-items: center;
-  gap: 0.28rem;
+  gap: 0.24rem;
   border: 1px solid rgb(255 255 255 / 0.07);
   border-radius: 999px;
   background: rgb(255 255 255 / 0.02);
-  padding: 0.1rem 0.42rem;
-  font-size: 0.74rem;
+  padding: 0.08rem 0.38rem;
+  font-size: 0.72rem;
   font-weight: 700;
   color: rgb(203 213 225);
 }
@@ -898,8 +1014,9 @@
 .alpha-tool-route .alpha-comparison-matrix-cell-chart {
   display: grid;
   align-content: start;
-  gap: 0.18rem;
+  gap: 0.1rem;
   min-height: 0;
+  margin-top: 0.16rem;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track-scale {
@@ -907,16 +1024,16 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  font-size: 0.58rem;
+  font-size: 0.54rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgb(148 163 184);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track {
   position: relative;
-  height: 2.15rem;
+  height: 2.05rem;
   border: 1px solid rgb(255 255 255 / 0.1);
   border-radius: 0.76rem;
   background:
@@ -943,22 +1060,23 @@
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track-caption-row {
   position: relative;
-  height: 0.95rem;
+  height: 0.72rem;
+  line-height: 1;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track-caption {
   position: absolute;
   top: 0;
   display: inline-flex;
-  min-height: 0.95rem;
   align-items: center;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.54rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(203 213 225);
+  color: rgb(148 163 184);
   white-space: nowrap;
   transform: translateX(-50%);
+  line-height: 1.1;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track-caption-start {

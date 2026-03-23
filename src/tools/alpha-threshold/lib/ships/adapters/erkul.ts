@@ -14,6 +14,10 @@ function asNumber(value: unknown, fallback = 0): number {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim() : null
+}
+
 function inferManufacturer(input: JsonRecord, rawData: JsonRecord | null): string {
   if (typeof input.manufacturer === 'string' && input.manufacturer.trim()) {
     return input.manufacturer
@@ -156,8 +160,13 @@ export function normalizeErkulShip(
   const rawArmorHealth = asRecord(rawArmorData?.health)
   const rawArmorStats = asRecord(rawArmorData?.armor)
   const rawArmorDeflection = asRecord(rawArmorStats?.armorDeflection)
+  const inputName = asString(input.name)
+  const rawName = asString(rawData?.name)
+  const rawShortName = asString(rawData?.shortName)
+  // Keep stable name precedence for media key compatibility, while still allowing full names when provided.
+  const resolvedName = inputName ?? rawName ?? rawShortName ?? ''
   const manufacturer = normalizeShipManufacturer(inferManufacturer(input, rawData))
-  const name = normalizeShipName(String(input.name ?? rawData?.shortName ?? rawData?.name ?? ''))
+  const name = normalizeShipName(resolvedName)
   const rawHullTotalHp = asRecord(rawData?.hull)?.totalHp
   const health = asNumber(input.health ?? rawHullTotalHp ?? asRecord(rawData?.health)?.hp, 0)
   const ballisticThreshold = Math.round(
@@ -170,11 +179,18 @@ export function normalizeErkulShip(
   const vitalHp = asNumber(input.vitalHp, inferVitalHp(rawData, health))
   const { hardpointGroups, pilotHardpointSize, turretHardpointSize } = buildHardpointSummary(rawData)
   const armor = asNumber(input.armor, Math.max(0, Math.round((ballisticThreshold + energyThreshold) / 2)))
+  const rawVehicle = asRecord(rawData?.vehicle)
+  const role = asString(input.role) ?? asString(rawVehicle?.role) ?? asString(rawData?.role)
+  const career = asString(input.career) ?? asString(rawVehicle?.career) ?? asString(rawData?.career)
+  const isGroundVehicle = typeof rawVehicle?.dogfightEnabled === 'boolean' ? !rawVehicle.dogfightEnabled : false
 
   return {
     id: createShipId({ manufacturer, name }),
     manufacturer,
     name,
+    role,
+    career,
+    isGroundVehicle,
     sizeGroup: inferSizeGroup(input, rawData),
     health,
     armor,

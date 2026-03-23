@@ -99,6 +99,9 @@ export type Ship = {
   id: string
   manufacturer: string
   name: string
+  role?: string | null
+  career?: string | null
+  isGroundVehicle?: boolean
   source?: ThresholdDataSourceKey | 'erkul' | 'spviewer' | 'scunpacked' | 'manual' | 'merged' | 'live' | 'ptu'
   imageSrc?: string
   imageAlt?: string
