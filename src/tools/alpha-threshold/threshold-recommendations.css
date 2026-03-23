@@ -189,6 +189,42 @@
   align-items: center;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-corner-control-row-shield {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-shield-toggle {
+  width: auto;
+  min-width: 9rem;
+  border-radius: 999px;
+  padding-inline: 0.75rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-shield-toggle-up {
+  border-color: rgb(255 255 255 / 0.14);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-shield-toggle-down {
+  border-color: rgb(255 255 255 / 0.14);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-shield-toggle-state {
+  font-weight: 800;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-shield-toggle-up
+  .alpha-comparison-matrix-shield-toggle-state-active {
+  color: rgb(110 231 183);
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-shield-toggle-down
+  .alpha-comparison-matrix-shield-toggle-state-active {
+  color: rgb(252 211 77);
+}
+
 .alpha-tool-route .alpha-comparison-matrix-corner-pill {
   appearance: none;
   width: 100%;
@@ -234,6 +270,101 @@
   user-select: none;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-panel-placeholder {
+  border-color: rgb(148 163 184 / 0.08);
+  background: rgb(15 23 42 / 0.22);
+  box-shadow: none;
+  filter: blur(4.5px);
+  opacity: 0.5;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder {
+  filter: blur(6.2px);
+  opacity: 0.33;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-state,
+.alpha-tool-route
+  .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-summary,
+.alpha-tool-route
+  .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-inline-metrics,
+.alpha-tool-route
+  .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-track-scale,
+.alpha-tool-route
+  .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-track-caption {
+  color: rgb(148 163 184) !important;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-ship-durability-copy {
+  color: rgb(100 116 139);
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-ship-name {
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-placeholder-identity-blur
+  .alpha-comparison-matrix-ship-eyebrow,
+.alpha-tool-route
+  .alpha-comparison-matrix-placeholder-identity-blur
+  .alpha-comparison-matrix-ship-name {
+  filter: blur(3px);
+  opacity: 0.48;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-placeholder-identity-blur
+  .alpha-comparison-matrix-ship-name {
+  color: rgb(203 213 225) !important;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-state,
+.alpha-tool-route
+  .alpha-comparison-matrix-panel-placeholder
+  .alpha-comparison-matrix-cell-summary {
+  color: rgb(255 255 255) !important;
+  filter: blur(2.8px);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-placeholder {
+  user-select: none;
+  animation: none !important;
+  transition: none !important;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-placeholder * {
+  user-select: none;
+  animation: none !important;
+  transition: none !important;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-panel-placeholder:hover,
+.alpha-tool-route .alpha-comparison-matrix-row:hover .alpha-comparison-matrix-panel-placeholder,
+.alpha-tool-route .alpha-comparison-matrix-row:focus-within .alpha-comparison-matrix-panel-placeholder {
+  border-color: rgb(148 163 184 / 0.08);
+  box-shadow: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder:hover,
+.alpha-tool-route .alpha-comparison-matrix-cell.alpha-comparison-matrix-panel-placeholder:focus-visible {
+  border-color: rgb(148 163 184 / 0.08);
+  box-shadow: none;
+  outline: none;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-weapon-header,
 .alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-ship-card,
 .alpha-tool-route .alpha-comparison-matrix-selection-active .alpha-comparison-matrix-cell {
@@ -263,6 +394,7 @@
   animation: alphaDestinationPulse 1.8s ease-in-out infinite;
 }
 
+
 .alpha-tool-route .alpha-comparison-matrix-destination-cyan {
   border-color: rgb(103 232 249 / 0.8);
 }
@@ -277,6 +409,22 @@
 
 .alpha-tool-route .alpha-comparison-matrix-destination-emerald {
   border-color: rgb(110 231 183 / 0.8);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-tone-cyan {
+  border-color: rgb(103 232 249 / 0.4);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-tone-violet {
+  border-color: rgb(196 181 253 / 0.4);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-tone-amber {
+  border-color: rgb(252 211 77 / 0.42);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-tone-emerald {
+  border-color: rgb(110 231 183 / 0.4);
 }
 
 @keyframes alphaDestinationPulse {
@@ -624,6 +772,12 @@
   opacity: 0.28;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-cell-shield-blocked-muted {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-cell-overlay {
   position: absolute;
   inset: 0;
@@ -631,6 +785,10 @@
   place-items: center;
   padding: 0.8rem;
   pointer-events: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-overlay-interactive {
+  pointer-events: auto;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-overlay-copy {
@@ -643,6 +801,21 @@
   letter-spacing: 0.02em;
   color: rgb(226 232 240);
   text-shadow: 0 1px 10px rgb(2 6 23 / 0.42);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-overlay-copy > span {
+  color: rgb(252 211 77);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-overlay-action {
+  border: 1px solid rgb(251 191 36 / 0.55);
+  border-radius: 999px;
+  background: rgb(120 53 15 / 0.6);
+  padding: 0.1rem 0.42rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
+  color: rgb(252 211 77);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-head {

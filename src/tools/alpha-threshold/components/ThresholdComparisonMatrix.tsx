@@ -56,9 +56,9 @@ function getEstimatePenetrationLabel(estimate: ArmorInteractionEstimate) {
     return 'No Armor Dmg'
   }
   if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) {
-    return 'Armor Dmg @ Full'
+    return 'Armor Dmg at 100%'
   }
-  return `Armor Dmg @ ${Math.round(estimate.armorDamageStartsAtPercent ?? 0)}%`
+  return `Armor Dmg at ${Math.round(estimate.armorDamageStartsAtPercent ?? 0)}%`
 }
 
 function getEstimateStateLabel(estimate: ArmorInteractionEstimate) {
@@ -117,6 +117,14 @@ function getVelocityLabel(selection: SelectedWeaponComparison) {
   return selection.weapon.projectileSpeed != null
     ? `${formatMetric(selection.weapon.projectileSpeed)} m/s`
     : 'Velocity Unknown'
+}
+
+function isPlaceholderShip(ship: Ship) {
+  return ship.name === '' && ship.manufacturer === ''
+}
+
+function isPlaceholderWeapon(selection: SelectedWeaponComparison) {
+  return selection.weapon.name === '' && selection.weapon.weaponClass === ''
 }
 
 function getCompactMetricLabel(value: number | null | undefined) {
@@ -196,6 +204,9 @@ export function ThresholdComparisonMatrix({
   const activeShipTone = DESTINATION_TONES[activeShipDestinationIndex % DESTINATION_TONES.length]
   const activeWeaponTone =
     DESTINATION_TONES[activeWeaponDestinationIndex % DESTINATION_TONES.length]
+  const firstEnergyColumnIndex = orderedWeapons.findIndex(
+    (selection) => selection.weapon.damageType === 'energy'
+  )
   const gridStyle = getMatrixGridStyle(orderedWeapons.length)
 
   const cellModels = useMemo(() => {
@@ -258,11 +269,11 @@ export function ThresholdComparisonMatrix({
                         ].filter(Boolean).join(' ')}
                         onClick={onOpenWeapons}
                       >
-                        Edit Weapons
+                        Weapons
                       </button>
                     </div>
                     <div
-                      className="alpha-comparison-matrix-corner-control-row"
+                      className="alpha-comparison-matrix-corner-control-row alpha-comparison-matrix-corner-control-row-shield"
                       role="group"
                       aria-label="Shield mode"
                     >
@@ -271,24 +282,37 @@ export function ThresholdComparisonMatrix({
                         className={[
                           'alpha-comparison-matrix-corner-pill',
                           'alpha-tool-frame-banner-mode',
-                          shieldMode === 'up' ? 'alpha-tool-frame-banner-mode-active' : '',
+                          'alpha-comparison-matrix-shield-toggle',
+                          shieldMode === 'up'
+                            ? 'alpha-comparison-matrix-shield-toggle-up'
+                            : 'alpha-comparison-matrix-shield-toggle-down',
                         ].join(' ')}
                         aria-pressed={shieldMode === 'up'}
-                        onClick={() => onShieldModeChange('up')}
+                        onClick={() => onShieldModeChange(shieldMode === 'up' ? 'down' : 'up')}
                       >
-                        Shields On
-                      </button>
-                      <button
-                        type="button"
-                        className={[
-                          'alpha-comparison-matrix-corner-pill',
-                          'alpha-tool-frame-banner-mode',
-                          shieldMode === 'down' ? 'alpha-tool-frame-banner-mode-active' : '',
-                        ].join(' ')}
-                        aria-pressed={shieldMode === 'down'}
-                        onClick={() => onShieldModeChange('down')}
-                      >
-                        Shields Off
+                        Shield:
+                        <span
+                          className={[
+                            'alpha-comparison-matrix-shield-toggle-state',
+                            shieldMode === 'up'
+                              ? 'alpha-comparison-matrix-shield-toggle-state-active'
+                              : '',
+                          ].join(' ')}
+                        >
+                          {' '}
+                          On
+                        </span>
+                        {' / '}
+                        <span
+                          className={[
+                            'alpha-comparison-matrix-shield-toggle-state',
+                            shieldMode === 'down'
+                              ? 'alpha-comparison-matrix-shield-toggle-state-active'
+                              : '',
+                          ].join(' ')}
+                        >
+                          Off
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -299,8 +323,11 @@ export function ThresholdComparisonMatrix({
                   const columnIndex = orderedWeapons.findIndex(
                     (entry) => entry.slotId === selection.slotId
                   )
+                  const placeholderWeapon = isPlaceholderWeapon(selection)
                   const isDestinationColumn =
                     selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
+                  const panelToneClass =
+                    `alpha-comparison-matrix-panel-tone-${DESTINATION_TONES[columnIndex % DESTINATION_TONES.length]}`
                   const destinationToneClass = isDestinationColumn
                     ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
                     : ''
@@ -310,6 +337,8 @@ export function ThresholdComparisonMatrix({
                       key={selection.slotId}
                       className={[
                         'alpha-comparison-matrix-weapon-header',
+                        panelToneClass,
+                        placeholderWeapon ? 'alpha-comparison-matrix-panel-placeholder' : '',
                         isActive ? 'alpha-comparison-matrix-weapon-header-active' : '',
                         isDestinationColumn ? 'alpha-comparison-matrix-destination-column' : '',
                         destinationToneClass,
@@ -336,15 +365,23 @@ export function ThresholdComparisonMatrix({
                       }}
                     >
                       <p className="alpha-comparison-matrix-weapon-eyebrow">
-                        {selection.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy'}
+                        {placeholderWeapon
+                          ? 'Armor'
+                          : selection.weapon.damageType === 'ballistic'
+                            ? 'Ballistic'
+                            : 'Energy'}
                       </p>
                       <h3 className="alpha-comparison-matrix-weapon-name">
-                        {formatEntityLabel(selection.weapon.name)}
+                        {placeholderWeapon ? 'Armor' : formatEntityLabel(selection.weapon.name)}
                       </h3>
                       <p className="alpha-comparison-matrix-weapon-meta">
-                        {formatWeaponClassLabel(selection.weapon.weaponClass)} - {getVelocityLabel(selection)}
+                        {placeholderWeapon
+                          ? 'T0 A0'
+                          : `${formatWeaponClassLabel(selection.weapon.weaponClass)} - ${getVelocityLabel(selection)}`}
                       </p>
                       <div className="alpha-comparison-matrix-weapon-actions">
+                        {placeholderWeapon ? null : (
+                          <>
                         <button
                           type="button"
                           className="alpha-comparison-matrix-chip"
@@ -376,6 +413,8 @@ export function ThresholdComparisonMatrix({
                         >
                           {formatWeaponClassLabel(selection.weapon.weaponClass)}
                         </button>
+                          </>
+                        )}
                       </div>
                     </header>
                   )
@@ -386,11 +425,16 @@ export function ThresholdComparisonMatrix({
                 {visibleShips.map((ship) => {
                   const rowActive = activeRowId === ship.id
                   const rowIndex = visibleShips.findIndex((entry) => entry.id === ship.id)
+                  const placeholderShip = isPlaceholderShip(ship)
                   const isDestinationRow =
                     selectionMode === 'ship' && rowIndex === activeShipDestinationIndex
+                  const rowPanelToneClass =
+                    `alpha-comparison-matrix-panel-tone-${DESTINATION_TONES[rowIndex % DESTINATION_TONES.length]}`
                   const destinationToneClass = isDestinationRow
                     ? `alpha-comparison-matrix-destination-${activeShipTone}`
                     : ''
+                  const blurPlaceholderIdentity =
+                    selectionMode === 'ship' && isDestinationRow && placeholderShip
                   const durability = getShipDurabilityBreakdown(ship)
 
                   return (
@@ -414,6 +458,11 @@ export function ThresholdComparisonMatrix({
                       <article
                         className={[
                           'alpha-comparison-matrix-ship-card',
+                          rowPanelToneClass,
+                          placeholderShip ? 'alpha-comparison-matrix-panel-placeholder' : '',
+                          blurPlaceholderIdentity
+                            ? 'alpha-comparison-matrix-placeholder-identity-blur'
+                            : '',
                           destinationToneClass,
                         ].filter(Boolean).join(' ')}
                         onClick={() => {
@@ -445,14 +494,16 @@ export function ThresholdComparisonMatrix({
 
                           <div className="alpha-comparison-matrix-ship-copy">
                             <p className="alpha-comparison-matrix-ship-eyebrow">
-                              Manufacturer
+                              {placeholderShip ? 'Manu' : 'Manufacturer'}
                             </p>
                             <h3 className="alpha-comparison-matrix-ship-name">
-                              {formatEntityLabel(ship.name)}
+                              {placeholderShip ? 'Select' : formatEntityLabel(ship.name)}
                             </h3>
-                            <p className="alpha-comparison-matrix-ship-summary">
-                              {getShipSummaryLine(ship)}
-                            </p>
+                            {placeholderShip ? null : (
+                              <p className="alpha-comparison-matrix-ship-summary">
+                                {getShipSummaryLine(ship)}
+                              </p>
+                            )}
                           </div>
                         </div>
 
@@ -462,8 +513,9 @@ export function ThresholdComparisonMatrix({
                               Durability Mix
                             </p>
                             <p className="alpha-comparison-matrix-ship-durability-copy">
-                              Armor {Math.round(durability.armorPercent)}% • Hull{' '}
-                              {Math.round(durability.hullPercent)}%
+                              {placeholderShip
+                                ? '50 / 50'
+                                : `Armor ${Math.round(durability.armorPercent)}% • Hull ${Math.round(durability.hullPercent)}%`}
                             </p>
                           </div>
                           <div
@@ -487,11 +539,11 @@ export function ThresholdComparisonMatrix({
                             <dl className="alpha-comparison-matrix-ship-stat-list">
                               <div className="alpha-comparison-matrix-ship-stat-row">
                                 <dt>NAV</dt>
-                                <dd>{getCompactMetricLabel(ship.navSpeed)}</dd>
+                                <dd>{placeholderShip ? 'N/A' : getCompactMetricLabel(ship.navSpeed)}</dd>
                               </div>
                               <div className="alpha-comparison-matrix-ship-stat-row">
                                 <dt>SCM</dt>
-                                <dd>{getCompactMetricLabel(ship.scmSpeed)}</dd>
+                                <dd>{placeholderShip ? 'N/A' : getCompactMetricLabel(ship.scmSpeed)}</dd>
                               </div>
                             </dl>
                           </section>
@@ -504,11 +556,11 @@ export function ThresholdComparisonMatrix({
                             <dl className="alpha-comparison-matrix-ship-stat-list">
                               <div className="alpha-comparison-matrix-ship-stat-row">
                                 <dt>Armor HP</dt>
-                                <dd>{formatMetric(ship.armorHp)}</dd>
+                                <dd>{placeholderShip ? 'N/A' : formatMetric(ship.armorHp)}</dd>
                               </div>
                               <div className="alpha-comparison-matrix-ship-stat-row">
                                 <dt>Hull HP</dt>
-                                <dd>{formatMetric(ship.vitalHp)}</dd>
+                                <dd>{placeholderShip ? 'N/A' : formatMetric(ship.vitalHp)}</dd>
                               </div>
                             </dl>
                           </section>
@@ -532,6 +584,10 @@ export function ThresholdComparisonMatrix({
                         const columnActive = activeColumnId === selection.slotId
                         const shieldBlocked =
                           shieldMode === 'up' && selection.weapon.damageType === 'energy'
+                        const placeholderWeapon = isPlaceholderWeapon(selection)
+                        const placeholderCell = placeholderShip || placeholderWeapon
+                        const isPrimaryShieldBlockedPanel =
+                          shieldBlocked && firstEnergyColumnIndex !== -1 && columnIndex === firstEnergyColumnIndex && rowIndex === 0
 
                         return (
                           <article
@@ -539,8 +595,12 @@ export function ThresholdComparisonMatrix({
                             className={[
                               'alpha-comparison-matrix-cell',
                               `alpha-comparison-matrix-cell-${activeResult.tone}`,
+                              placeholderCell ? 'alpha-comparison-matrix-panel-placeholder' : '',
                               columnActive ? 'alpha-comparison-matrix-cell-column-active' : '',
                               shieldBlocked ? 'alpha-comparison-matrix-cell-shield-blocked' : '',
+                              shieldBlocked && !isPrimaryShieldBlockedPanel
+                                ? 'alpha-comparison-matrix-cell-shield-blocked-muted'
+                                : '',
                               isDestinationRow ? 'alpha-comparison-matrix-destination-row-cell' : '',
                               isDestinationColumn
                                 ? 'alpha-comparison-matrix-destination-column-cell'
@@ -562,62 +622,117 @@ export function ThresholdComparisonMatrix({
                             tabIndex={isPlaceholderPreview ? -1 : 0}
                           >
                             <div className="alpha-comparison-matrix-cell-content" aria-hidden={shieldBlocked}>
-                              <div className="alpha-comparison-matrix-cell-head">
-                                <p className="alpha-comparison-matrix-cell-state">
-                                  {activeResult.stateLabel}
-                                </p>
-                                <p className="alpha-comparison-matrix-cell-shield-chip">
-                                  {activeResult.shieldChipLabel}
-                                </p>
-                                <p className="alpha-comparison-matrix-cell-summary">
-                                  {activeResult.penetrationLabel}
-                                </p>
-                              </div>
+                              {placeholderCell ? (
+                                <>
+                                  <div className="alpha-comparison-matrix-cell-head">
+                                    <p className="alpha-comparison-matrix-cell-state">Armor</p>
+                                    <p className="alpha-comparison-matrix-cell-summary">Armor Dmg at 0%</p>
+                                  </div>
+                                  <div className="alpha-comparison-matrix-cell-inline-metrics">
+                                    <span>
+                                      <strong>T</strong>0
+                                    </span>
+                                    <span>
+                                      <strong>A</strong>0
+                                    </span>
+                                  </div>
+                                  <div className="alpha-comparison-matrix-cell-chart">
+                                    <div className="alpha-comparison-matrix-cell-track-scale">
+                                      <span>100% armor</span>
+                                      <span>0% armor</span>
+                                    </div>
+                                    <div
+                                      className="alpha-comparison-matrix-cell-track"
+                                      aria-label="Armor placeholder threshold marker"
+                                    >
+                                      <div className="alpha-comparison-matrix-cell-track-fill" />
+                                      <span
+                                        className="alpha-comparison-matrix-cell-marker"
+                                        style={{ left: '100%' }}
+                                      />
+                                    </div>
+                                    <div className="alpha-comparison-matrix-cell-track-caption-row">
+                                      <span
+                                        className="alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-end"
+                                        style={{ left: '100%' }}
+                                      >
+                                        Damage start
+                                      </span>
+                                    </div>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="alpha-comparison-matrix-cell-head">
+                                    <p className="alpha-comparison-matrix-cell-state">
+                                      {activeResult.stateLabel}
+                                    </p>
+                                    <p className="alpha-comparison-matrix-cell-shield-chip">
+                                      {activeResult.shieldChipLabel}
+                                    </p>
+                                    <p className="alpha-comparison-matrix-cell-summary">
+                                      {activeResult.penetrationLabel}
+                                    </p>
+                                  </div>
 
-                              <div className="alpha-comparison-matrix-cell-inline-metrics">
-                                <span>
-                                  <strong>T</strong>
-                                  {formatMetric(activeResult.estimate.deflectionThreshold)}
-                                </span>
-                                <span>
-                                  <strong>A</strong>
-                                  {formatMetric(activeResult.estimate.effectiveArmorAlpha)}
-                                </span>
-                              </div>
+                                  <div className="alpha-comparison-matrix-cell-inline-metrics">
+                                    <span>
+                                      <strong>T</strong>
+                                      {formatMetric(activeResult.estimate.deflectionThreshold)}
+                                    </span>
+                                    <span>
+                                      <strong>A</strong>
+                                      {formatMetric(activeResult.estimate.effectiveArmorAlpha)}
+                                    </span>
+                                  </div>
 
-                              <div className="alpha-comparison-matrix-cell-chart">
-                                <div className="alpha-comparison-matrix-cell-track-scale">
-                                  <span>100% armor</span>
-                                  <span>0% armor</span>
-                                </div>
-                                <div
-                                  className="alpha-comparison-matrix-cell-track"
-                                  aria-label={`${activeResult.penetrationLabel} threshold marker`}
-                                >
-                                  <div className="alpha-comparison-matrix-cell-track-fill" />
-                                  <span
-                                    className="alpha-comparison-matrix-cell-marker"
-                                    style={{ left: `${activeResult.markerPercent}%` }}
-                                  />
-                                </div>
-                                <div className="alpha-comparison-matrix-cell-track-caption-row">
-                                  <span
-                                    className={`alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-${activeResult.markerAlign}`}
-                                    style={{ left: `${activeResult.markerPercent}%` }}
-                                  >
-                                    {activeResult.markerLabel}
-                                  </span>
-                                </div>
-                              </div>
+                                  <div className="alpha-comparison-matrix-cell-chart">
+                                    <div className="alpha-comparison-matrix-cell-track-scale">
+                                      <span>100% armor</span>
+                                      <span>0% armor</span>
+                                    </div>
+                                    <div
+                                      className="alpha-comparison-matrix-cell-track"
+                                      aria-label={`${activeResult.penetrationLabel} threshold marker`}
+                                    >
+                                      <div className="alpha-comparison-matrix-cell-track-fill" />
+                                      <span
+                                        className="alpha-comparison-matrix-cell-marker"
+                                        style={{ left: `${activeResult.markerPercent}%` }}
+                                      />
+                                    </div>
+                                    <div className="alpha-comparison-matrix-cell-track-caption-row">
+                                      <span
+                                        className={`alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-${activeResult.markerAlign}`}
+                                        style={{ left: `${activeResult.markerPercent}%` }}
+                                      >
+                                        {activeResult.markerLabel}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
                             </div>
 
-                            {shieldBlocked ? (
+                            {isPrimaryShieldBlockedPanel ? (
                               <div
-                                className="alpha-comparison-matrix-cell-overlay"
-                                aria-label="Regular shield damage applies"
+                                className="alpha-comparison-matrix-cell-overlay alpha-comparison-matrix-cell-overlay-interactive"
+                                aria-label="Turn Shields Off for Armor vs Energy"
                               >
                                 <p className="alpha-comparison-matrix-cell-overlay-copy">
-                                  Regular shield damage applies
+                                  Turn Shields{' '}
+                                  <button
+                                    type="button"
+                                    className="alpha-comparison-matrix-cell-overlay-action"
+                                    onClick={(event) => {
+                                      event.preventDefault()
+                                      event.stopPropagation()
+                                      onShieldModeChange('down')
+                                    }}
+                                  >
+                                    Off
+                                  </button>{' '}
+                                  for Armor vs Energy
                                 </p>
                               </div>
                             ) : null}

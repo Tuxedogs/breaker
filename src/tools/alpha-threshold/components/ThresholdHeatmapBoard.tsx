@@ -25,7 +25,6 @@ type Props = {
   onOpenWeaponsAt?: (slotIndex: number) => void
   onOpenShipsAt?: (slotIndex: number) => void
   onAssignWeapon: (slotId: string, weaponKey: string | null) => void
-  selectionNotice: string | null
 }
 
 type AnalysisFilterState = {
@@ -102,7 +101,6 @@ export function ThresholdHeatmapBoard({
   onOpenWeaponsAt,
   onOpenShipsAt,
   onAssignWeapon,
-  selectionNotice,
 }: Props) {
   const [analysisFilter, setAnalysisFilter] = useState<AnalysisFilterState | null>(null)
   const filterSourceSelection =
@@ -177,13 +175,6 @@ export function ThresholdHeatmapBoard({
 
   return (
     <section className="alpha-threshold-board alpha-threshold-board-app" aria-label="Weapons Analysis board">
-      {selectionNotice ? (
-        <div className="alpha-analysis-filter-strip" role="status" aria-live="polite">
-          <div className="alpha-analysis-filter-copy">
-            <p className="alpha-analysis-filter-label">{selectionNotice}</p>
-          </div>
-        </div>
-      ) : null}
       <ArmorInteractionTestbed
         controlStrip={
           analysisFilter ? (
