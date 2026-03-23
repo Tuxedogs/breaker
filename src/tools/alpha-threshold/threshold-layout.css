@@ -14,9 +14,10 @@
   overflow: hidden;
   padding-top: 0;
   --alpha-shell-top-padding: 0.04rem;
-  --alpha-sticky-top: calc(var(--app-sticky-top) - 0.08rem);
-  --alpha-top-control-strip-height: 57px;
-  --alpha-sticky-ship-top: calc(var(--alpha-sticky-top) + var(--alpha-top-control-strip-height));
+  /* Full-viewport tool: no global nav bar; sticky offsets stay at 0 inside this route */
+  --app-sticky-top: 0px;
+  --alpha-sticky-top: 0rem;
+  --alpha-sticky-ship-top: 0rem;
 }
 
 .alpha-tool-route .alpha-command-shell {
@@ -46,6 +47,24 @@
 
 .alpha-tool-route .alpha-main-heatmap-stage {
   position: relative;
+  /* Overlay anchor fallbacks: first body cell (below header row). JS overrides on ≥1024px. */
+  --alpha-matrix-ship-width: 17.5rem;
+  --alpha-matrix-header-row-height: 7.35rem;
+  --alpha-board-top-inset: 0.35rem;
+  --alpha-threshold-board-pad-inline: 0.35rem;
+  --alpha-overlay-top-offset: calc(
+    var(--alpha-board-top-inset) + var(--alpha-matrix-header-row-height) + 0.45rem
+  );
+  --alpha-overlay-left-offset: calc(
+    var(--alpha-threshold-board-pad-inline) + var(--alpha-matrix-ship-width) + 0.45rem
+  );
+}
+
+@media (min-width: 1024px) and (max-width: 2600px) {
+  .alpha-tool-route .alpha-main-heatmap-stage {
+    --alpha-board-top-inset: 0.48rem;
+    --alpha-threshold-board-pad-inline: 0.5rem;
+  }
 }
 
 .alpha-tool-route .alpha-app-edge-rail {

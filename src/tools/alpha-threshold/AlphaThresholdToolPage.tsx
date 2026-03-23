@@ -6,6 +6,7 @@ import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { WeaponSelectorOverlay } from './components/WeaponSelectorOverlay'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
+import type { ArmorInteractionFilterChip } from './components/ArmorInteractionSummaryPanel'
 import type { Ship, SelectedWeaponComparison, SlotTone, WeaponRecord } from './types'
 import { parseShieldMode } from './lib/shieldMode'
 
@@ -21,6 +22,8 @@ export default function AlphaThresholdToolPage() {
   const [selectionNotice, setSelectionNotice] = useState<string | null>(null)
   const [hoveredShipSlotIndex, setHoveredShipSlotIndex] = useState<number | null>(null)
   const [hoveredWeaponSlotIndex, setHoveredWeaponSlotIndex] = useState<number | null>(null)
+  const [weaponOverlayFilterPreset, setWeaponOverlayFilterPreset] =
+    useState<ArmorInteractionFilterChip | null>(null)
   /** Clears in the overlay; at 2+ re-enable auto-advance (per ship / weapon flows). */
   const shipClearStreakRef = useRef(0)
   const weaponClearStreakRef = useRef(0)
@@ -48,31 +51,26 @@ export default function AlphaThresholdToolPage() {
     return openIndex === -1 ? Math.max(0, slots.length - 1) : openIndex
   }, [slots])
 
-  /** Row/column shown in overlay + matrix when auto-advance: prefer active slot if empty (e.g. after clear). */
-  const shipOverlayTargetIndex = useMemo(() => {
-    const clamped = Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))
-    if (!shipAutoAdvance) return clamped
-    return selectedShipNames[clamped] == null ? clamped : nextShipSlotIndex
-  }, [
-    shipAutoAdvance,
-    activeShipSlotIndex,
-    selectedShipNames,
-    nextShipSlotIndex,
-    maxVictimShips,
-  ])
-
+  /** Column shown in weapon overlay + matrix when auto-advance: prefer active slot if empty (e.g. after clear). */
   const weaponOverlayTargetIndex = useMemo(() => {
     const clamped = Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))
     if (!weaponAutoAdvance) return clamped
     return slots[clamped]?.weaponKey == null ? clamped : nextWeaponSlotIndex
   }, [weaponAutoAdvance, activeWeaponSlotIndex, slots, nextWeaponSlotIndex])
+  /** Matrix destination highlight: overlay hover must not move row/column — use active slot only while selector is open. */
   const effectiveShipSlotIndex = Math.max(
     0,
-    Math.min(maxVictimShips - 1, hoveredShipSlotIndex ?? activeShipSlotIndex)
+    Math.min(
+      maxVictimShips - 1,
+      selectionMode === 'ship' ? activeShipSlotIndex : hoveredShipSlotIndex ?? activeShipSlotIndex
+    )
   )
   const effectiveWeaponSlotIndex = Math.max(
     0,
-    Math.min(slots.length - 1, hoveredWeaponSlotIndex ?? activeWeaponSlotIndex)
+    Math.min(
+      slots.length - 1,
+      selectionMode === 'weapon' ? activeWeaponSlotIndex : hoveredWeaponSlotIndex ?? activeWeaponSlotIndex
+    )
   )
 
   const shipBySelectionKey = useMemo(() => {
@@ -255,12 +253,25 @@ export default function AlphaThresholdToolPage() {
   }
 
   function handleOpenWeaponsAt(slotIndex: number, autoAdvance = false) {
+    setWeaponOverlayFilterPreset(null)
     setActiveWeaponSlotIndex(Math.max(0, Math.min(slots.length - 1, slotIndex)))
     setHoveredWeaponSlotIndex(null)
     setWeaponAutoAdvance(autoAdvance)
     if (autoAdvance) {
       weaponClearStreakRef.current = 0
     }
+    setSelectionNotice(null)
+    setSelectionMode('weapon')
+  }
+
+  function handleWeaponHeaderChip(payload: {
+    columnIndex: number
+    chip: ArmorInteractionFilterChip
+  }) {
+    setWeaponOverlayFilterPreset(payload.chip)
+    setActiveWeaponSlotIndex(Math.max(0, Math.min(slots.length - 1, payload.columnIndex)))
+    setHoveredWeaponSlotIndex(null)
+    setWeaponAutoAdvance(false)
     setSelectionNotice(null)
     setSelectionMode('weapon')
   }
@@ -297,7 +308,6 @@ export default function AlphaThresholdToolPage() {
             <ThresholdHeatmapBoard
               ships={previewShips}
               selectedWeapons={previewWeapons}
-              allWeapons={allWeapons}
               shieldMode={shieldMode}
               selectionMode={selectionMode}
               nextShipSlotIndex={effectiveShipSlotIndex}
@@ -307,7 +317,7 @@ export default function AlphaThresholdToolPage() {
               onOpenShips={handleOpenShips}
               onOpenWeaponsAt={handleOpenWeaponsAt}
               onOpenShipsAt={handleOpenShipsAt}
-              onAssignWeapon={setSlotWeapon}
+              onWeaponHeaderChip={handleWeaponHeaderChip}
             />
           }
           overlay={
@@ -317,14 +327,9 @@ export default function AlphaThresholdToolPage() {
                 allShips={allShips}
                 selectedShipNames={selectedShipNames}
                 maxVictimShips={maxVictimShips}
-                targetSlotIndex={Math.max(
-                  0,
-                  Math.min(maxVictimShips - 1, shipOverlayTargetIndex)
-                )}
                 activeSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
                 selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
                 onSetActiveSlot={handleShipOverlaySlotActivate}
-                onHoverSlot={setHoveredShipSlotIndex}
                 onSelectShip={handleShipSelect}
                 onClearShip={(slotIndex) => {
                   setVictimShipAt(slotIndex, null)
@@ -350,8 +355,8 @@ export default function AlphaThresholdToolPage() {
                 )}
                 activeSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
                 selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
+                weaponFilterPreset={weaponOverlayFilterPreset}
                 onSetActiveSlot={handleWeaponOverlaySlotActivate}
-                onHoverSlot={setHoveredWeaponSlotIndex}
                 onSelectWeapon={handleWeaponSelect}
                 onClearWeapon={(slotIndex) => {
                   const slot = slots[slotIndex]
@@ -366,7 +371,10 @@ export default function AlphaThresholdToolPage() {
                     weaponClearStreakRef.current = 0
                   }
                 }}
-                onClose={() => setSelectionMode(null)}
+                onClose={() => {
+                  setWeaponOverlayFilterPreset(null)
+                  setSelectionMode(null)
+                }}
               />
             ) : null
           }

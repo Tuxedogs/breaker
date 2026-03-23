@@ -23,7 +23,7 @@ export function TopControlStrip({
         <div className="alpha-top-control-strip-primary">
           <div className="alpha-top-control-strip-source">
             <span className="alpha-top-strip-pill alpha-top-strip-pill-locked">
-              PTU Locked
+              PTU
             </span>
           </div>
 

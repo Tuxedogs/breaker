@@ -19,6 +19,20 @@ function getDefenseProfileKey(name: string) {
   return normalizeShipName(name).toLowerCase()
 }
 
+/**
+ * Erkul ship seeds often use long names (e.g. A2_Hercules_Starlifter) while defense
+ * profiles use short display names (A2 Hercules → a2_hercules). Try stripping a trailing
+ * _Starlifter segment so armor/shield math uses the same thresholds as the profile.
+ */
+function getDefenseProfileLookupKeys(recordName: string): string[] {
+  const key = getDefenseProfileKey(recordName)
+  const keys = [key]
+  if (/_starlifter$/i.test(key)) {
+    keys.push(key.replace(/_starlifter$/i, ''))
+  }
+  return keys
+}
+
 const liveDefenseProfileMap = new Map<string, ShipDefenseProfile>(
   erkulLiveShipDefenseProfiles.map((profile) => [getDefenseProfileKey(profile.name), profile as ShipDefenseProfile])
 )
@@ -27,13 +41,20 @@ const ptuDefenseProfileMap = new Map<string, ShipDefenseProfile>(
 )
 
 function getDefenseProfile(record: ShipRecord, source: ThresholdDataSourceKey) {
-  const key = getDefenseProfileKey(record.name)
+  const keys = getDefenseProfileLookupKeys(record.name)
 
-  if (source === 'erkul-live') return liveDefenseProfileMap.get(key)
-  if (source === 'erkul-ptu') return ptuDefenseProfileMap.get(key)
-
-  if (source === 'merged') {
-    return liveDefenseProfileMap.get(key) ?? ptuDefenseProfileMap.get(key)
+  for (const key of keys) {
+    if (source === 'erkul-live') {
+      const profile = liveDefenseProfileMap.get(key)
+      if (profile) return profile
+    } else if (source === 'erkul-ptu') {
+      const profile = ptuDefenseProfileMap.get(key)
+      if (profile) return profile
+    } else if (source === 'merged') {
+      const profile =
+        liveDefenseProfileMap.get(key) ?? ptuDefenseProfileMap.get(key)
+      if (profile) return profile
+    }
   }
 
   return undefined
