@@ -57,14 +57,54 @@ function getEstimateTimingTone(estimate: ArmorInteractionEstimate) {
   return 'late'
 }
 
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t
+}
+
+/** 0–100 effective armor damage start % (same basis as E label). */
+function getPenetrationEffectivePercent(estimate: ArmorInteractionEstimate): number {
+  if (!estimate.damagesFreshArmor && estimate.armorDamageStartsAtPercent == null) return 0
+  if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) return 100
+  return Math.round(estimate.armorDamageStartsAtPercent ?? 0)
+}
+
+/**
+ * E100 = green; E75–E99 = yellow; E50–E74 = yellow→orange; E1–E49 = orange→dark red; E0 = dark red.
+ * Only E100 uses green; any value below 100 is not green.
+ */
+function getEffectivePenetrationSummaryColor(pct: number): string {
+  const p = Math.max(0, Math.min(100, Math.round(pct)))
+
+  if (p >= 100) {
+    return 'rgb(74 222 128)'
+  }
+  if (p >= 75) {
+    const t = (p - 75) / 24
+    const h = lerp(43, 52, t)
+    const s = lerp(86, 92, t)
+    const l = lerp(46, 56, t)
+    return `hsl(${h} ${s}% ${l}%)`
+  }
+  if (p >= 50) {
+    const t = (p - 50) / 25
+    const h = lerp(26, 45, t)
+    const s = lerp(90, 86, t)
+    const l = lerp(48, 46, t)
+    return `hsl(${h} ${s}% ${l}%)`
+  }
+  if (p >= 1) {
+    const t = (p - 1) / 48
+    const h = lerp(0, 22, t)
+    const s = lerp(62, 88, t)
+    const l = lerp(28, 48, t)
+    return `hsl(${h} ${s}% ${l}%)`
+  }
+  return 'hsl(0 58% 28%)'
+}
+
+/** E = Effective (armor damage start %). E100 = 100%, E41 = 41%, etc. */
 function getEstimatePenetrationLabel(estimate: ArmorInteractionEstimate) {
-  if (!estimate.damagesFreshArmor && estimate.armorDamageStartsAtPercent == null) {
-    return 'No Armor Dmg'
-  }
-  if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) {
-    return 'Armor Dmg at 100%'
-  }
-  return `Armor Dmg at ${Math.round(estimate.armorDamageStartsAtPercent ?? 0)}%`
+  return `E${getPenetrationEffectivePercent(estimate)}`
 }
 
 function getEstimateStateLabel(estimate: ArmorInteractionEstimate) {
@@ -100,6 +140,7 @@ function buildEstimateViewModel(estimate: ArmorInteractionEstimate, shieldState:
     shieldChipLabel: getShieldChipLabel(shieldState),
     stateLabel: getEstimateStateLabel(estimate),
     penetrationLabel: getEstimatePenetrationLabel(estimate),
+    penetrationEffectivePercent: getPenetrationEffectivePercent(estimate),
     markerPercent,
     markerAlign: getMarkerAlign(markerPercent),
     markerLabel:
@@ -138,35 +179,10 @@ function getCompactMetricLabel(value: number | null | undefined) {
   return formatMetric(value)
 }
 
-function getShipSummaryLine(ship: Ship) {
-  const armorHp = ship.armorHp ?? 0
-  const hullHp = ship.vitalHp ?? 0
-  const totalDurability = armorHp + hullHp
-  const armorShare = totalDurability > 0 ? armorHp / totalDurability : 0
-
-  if (armorShare >= 0.58 || armorHp >= hullHp * 1.25) return 'Armor-weighted durability'
-  if (armorShare <= 0.4 || hullHp >= armorHp * 1.4) {
-    return 'Light durability profile'
-  }
-  return 'Balanced durability'
-}
-
-function getShipDurabilityBreakdown(ship: Ship) {
-  const armorHp = Math.max(0, ship.armorHp ?? 0)
-  const hullHp = Math.max(0, ship.vitalHp ?? 0)
-  const total = armorHp + hullHp
-
-  if (total <= 0) {
-    return {
-      armorPercent: 50,
-      hullPercent: 50,
-    }
-  }
-
-  return {
-    armorPercent: (armorHp / total) * 100,
-    hullPercent: (hullHp / total) * 100,
-  }
+function getShipRoleLabel(ship: Ship) {
+  const raw = ship.role?.trim()
+  if (!raw) return '—'
+  return formatEntityLabel(raw)
 }
 
 function getMatrixGridStyle(columnCount: number): CSSProperties {
@@ -176,7 +192,13 @@ function getMatrixGridStyle(columnCount: number): CSSProperties {
   }
 }
 
-function MatrixShipThumbnail({ ship }: { ship: Ship }) {
+function MatrixShipThumbnail({
+  ship,
+  layout = 'inline',
+}: {
+  ship: Ship
+  layout?: 'inline' | 'fill'
+}) {
   const candidates = useMemo(
     () => getShipThumbnailCandidates(ship),
     [ship.id, ship.imageAlt, ship.imageSrc, ship.manufacturer, ship.name]
@@ -190,19 +212,22 @@ function MatrixShipThumbnail({ ship }: { ship: Ship }) {
   const current = candidates[Math.min(candidateIndex, candidates.length - 1)]
   const canAdvance = candidateIndex < candidates.length - 1
 
+  const imageClass =
+    layout === 'fill'
+      ? 'alpha-comparison-matrix-ship-image alpha-comparison-matrix-ship-image--fill'
+      : 'alpha-comparison-matrix-ship-image'
+
   return (
-    <>
-      <img
-        className="alpha-comparison-matrix-ship-image"
-        src={current.src}
-        alt={current.alt}
-        loading="lazy"
-        onError={() => {
-          if (!canAdvance) return
-          setCandidateIndex((value) => Math.min(value + 1, candidates.length - 1))
-        }}
-      />
-    </>
+    <img
+      className={imageClass}
+      src={current.src}
+      alt={layout === 'fill' ? '' : current.alt}
+      loading="lazy"
+      onError={() => {
+        if (!canAdvance) return
+        setCandidateIndex((value) => Math.min(value + 1, candidates.length - 1))
+      }}
+    />
   )
 }
 
@@ -576,7 +601,6 @@ export function ThresholdComparisonMatrix({
                   const destinationToneClass = isDestinationRow
                     ? `alpha-comparison-matrix-destination-${activeShipTone}`
                     : ''
-                  const durability = getShipDurabilityBreakdown(ship)
                   const shipSlotLabel = `Ship ${rowIndex + 1}`
 
                   return (
@@ -609,6 +633,7 @@ export function ThresholdComparisonMatrix({
                         className={[
                           'alpha-comparison-matrix-ship-card',
                           placeholderShip ? 'alpha-comparison-matrix-ship-card-empty' : '',
+                          !placeholderShip ? 'alpha-comparison-matrix-ship-card--fill' : '',
                           rowPanelToneClass,
                           placeholderShip ? 'alpha-comparison-matrix-panel-placeholder' : '',
                           destinationToneClass,
@@ -633,54 +658,40 @@ export function ThresholdComparisonMatrix({
                           </div>
                         ) : (
                           <>
-                            <div className="alpha-comparison-matrix-ship-header">
-                              <div className="alpha-comparison-matrix-ship-media">
+                            <div className="alpha-comparison-matrix-ship-card-body">
+                              <div className="alpha-comparison-matrix-ship-fill" aria-hidden="true">
                                 {ship.name ? (
-                                  <MatrixShipThumbnail ship={ship} />
+                                  <MatrixShipThumbnail ship={ship} layout="fill" />
                                 ) : (
                                   <div
-                                    className="alpha-comparison-matrix-ship-image-fallback"
+                                    className="alpha-comparison-matrix-ship-image-fallback alpha-comparison-matrix-ship-image-fallback--fill"
                                     aria-hidden="true"
                                   >
                                     {formatEntityLabel(ship.manufacturer).slice(0, 2)}
                                   </div>
                                 )}
+                                <div className="alpha-comparison-matrix-ship-fill-scrim" />
                               </div>
 
-                              <div className="alpha-comparison-matrix-ship-copy">
-                                <p className="alpha-comparison-matrix-ship-eyebrow">Manufacturer</p>
-                                <h3 className="alpha-comparison-matrix-ship-name">
-                                  {formatEntityLabel(ship.name)}
-                                </h3>
-                                <p className="alpha-comparison-matrix-ship-summary">
-                                  {getShipSummaryLine(ship)}
-                                </p>
+                              <div className="alpha-comparison-matrix-ship-foreground">
+                              <div className="alpha-comparison-matrix-ship-header">
+                                <div className="alpha-comparison-matrix-ship-copy">
+                                  <p className="alpha-comparison-matrix-ship-eyebrow">
+                                    {formatEntityLabel(ship.manufacturer).trim() || '—'}
+                                  </p>
+                                  <h3 className="alpha-comparison-matrix-ship-name">
+                                    {formatEntityLabel(ship.name)}
+                                  </h3>
+                                  <p className="alpha-comparison-matrix-ship-summary">
+                                    {getShipRoleLabel(ship)}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
 
-                            <div className="alpha-comparison-matrix-ship-durability">
-                              <div className="alpha-comparison-matrix-ship-durability-head">
-                                <p className="alpha-comparison-matrix-ship-section-label">
-                                  Durability Mix
-                                </p>
-                                <p className="alpha-comparison-matrix-ship-durability-copy">
-                                  {`Armor ${Math.round(durability.armorPercent)}% • Hull ${Math.round(durability.hullPercent)}%`}
-                                </p>
-                              </div>
                               <div
-                                className="alpha-comparison-matrix-ship-durability-track"
-                                aria-label="Armor to hull durability ratio"
-                              >
-                                <span
-                                  className="alpha-comparison-matrix-ship-durability-fill alpha-comparison-matrix-ship-durability-fill-armor"
-                                  style={{ flexBasis: `${durability.armorPercent}%` }}
-                                />
-                                <span
-                                  className="alpha-comparison-matrix-ship-durability-fill alpha-comparison-matrix-ship-durability-fill-hull"
-                                  style={{ flexBasis: `${durability.hullPercent}%` }}
-                                />
-                              </div>
-                            </div>
+                                className="alpha-comparison-matrix-ship-durability-spacer"
+                                aria-hidden="true"
+                              />
 
                             <div className="alpha-comparison-matrix-ship-sections">
                               <section
@@ -718,6 +729,8 @@ export function ThresholdComparisonMatrix({
                                   </div>
                                 </dl>
                               </section>
+                            </div>
+                            </div>
                             </div>
                           </>
                         )}
@@ -813,8 +826,13 @@ export function ThresholdComparisonMatrix({
                                     <p className="alpha-comparison-matrix-cell-state alpha-comparison-matrix-cell-detail-blur">Armor</p>
                                   </div>
                                   <div className="alpha-comparison-matrix-cell-title-row">
-                                    <p className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur">
-                                      Armor Dmg at 0%
+                                    <p
+                                      className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur"
+                                      style={{
+                                        color: getEffectivePenetrationSummaryColor(0),
+                                      }}
+                                    >
+                                      E0
                                     </p>
                                     <div className="alpha-comparison-matrix-cell-inline-metrics alpha-comparison-matrix-cell-detail-blur">
                                       <span>
@@ -861,7 +879,14 @@ export function ThresholdComparisonMatrix({
                                     </p>
                                   </div>
                                   <div className="alpha-comparison-matrix-cell-title-row">
-                                    <p className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur">
+                                    <p
+                                      className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur"
+                                      style={{
+                                        color: getEffectivePenetrationSummaryColor(
+                                          activeResult.penetrationEffectivePercent
+                                        ),
+                                      }}
+                                    >
                                       {activeResult.penetrationLabel}
                                     </p>
                                     <div className="alpha-comparison-matrix-cell-inline-metrics alpha-comparison-matrix-cell-detail-blur">

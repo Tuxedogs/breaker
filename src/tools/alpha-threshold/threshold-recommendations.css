@@ -360,12 +360,6 @@
 
 .alpha-tool-route
   .alpha-comparison-matrix-panel-placeholder
-  .alpha-comparison-matrix-ship-durability-copy {
-  color: rgb(100 116 139);
-}
-
-.alpha-tool-route
-  .alpha-comparison-matrix-panel-placeholder
   .alpha-comparison-matrix-cell-state,
 .alpha-tool-route
   .alpha-comparison-matrix-panel-placeholder
@@ -449,6 +443,12 @@
     border-color 180ms ease,
     box-shadow 180ms ease,
     background 180ms ease;
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-selection-weapon
+  .alpha-comparison-matrix-ship-card--fill {
+  background: transparent !important;
 }
 
 
@@ -668,6 +668,10 @@
     rgb(255 255 255 / 0.03);
 }
 
+.alpha-tool-route .alpha-comparison-matrix-row-active .alpha-comparison-matrix-ship-card--fill {
+  background: transparent;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-ship-card {
   position: sticky;
   left: 0;
@@ -695,6 +699,93 @@
   align-content: start;
 }
 
+/* Full-bleed wiki art under stats (matrix ship column) */
+.alpha-tool-route .alpha-comparison-matrix-ship-card--fill:not(.alpha-comparison-matrix-ship-card-empty) {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  height: 100%;
+  min-height: var(--alpha-matrix-cell-min-height);
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  box-shadow:
+    inset -1px 0 0 rgb(255 255 255 / 0.06);
+}
+
+/* Stretch to matrix row height so absolute fill + cover image span the full cell */
+.alpha-tool-route .alpha-comparison-matrix-ship-card-body {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-fill-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgb(2 6 23 / 0.92) 0%,
+    rgb(2 6 23 / 0.25) 42%,
+    rgb(2 6 23 / 0.88) 100%
+  );
+  pointer-events: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-foreground {
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  display: grid;
+  gap: 0.36rem;
+  align-content: start;
+  flex: 1 1 auto;
+  min-height: 100%;
+  padding: 0.52rem 0.58rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-card--fill .alpha-comparison-matrix-ship-header {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-image--fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  border: none;
+  border-radius: 0;
+  object-fit: cover;
+  object-position: center;
+  background: rgb(15 23 42 / 0.9);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-ship-image-fallback--fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  font-size: clamp(1.75rem, 12vw, 2.75rem);
+}
+
 /* Row hover lift — match overlay ship slot inactive hover */
 .alpha-tool-route
   .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
@@ -713,6 +804,17 @@
   background:
     linear-gradient(180deg, rgb(12 16 24 / 0.96), rgb(9 13 22 / 0.92)),
     rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route
+  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
+  .alpha-comparison-matrix-row:hover
+  .alpha-comparison-matrix-ship-card--fill:not(.alpha-comparison-matrix-panel-placeholder),
+.alpha-tool-route
+  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
+  .alpha-comparison-matrix-row:focus-within
+  .alpha-comparison-matrix-ship-card--fill:not(.alpha-comparison-matrix-panel-placeholder) {
+  background: transparent;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-card-empty {
@@ -815,15 +917,16 @@
   align-self: center;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-ship-image,
-.alpha-tool-route .alpha-comparison-matrix-ship-image-fallback {
+.alpha-tool-route .alpha-comparison-matrix-ship-image:not(.alpha-comparison-matrix-ship-image--fill),
+.alpha-tool-route
+  .alpha-comparison-matrix-ship-image-fallback:not(.alpha-comparison-matrix-ship-image-fallback--fill) {
   width: 4.1rem;
   height: 4.1rem;
   border-radius: 0.85rem;
   border: 1px solid rgb(255 255 255 / 0.07);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-ship-image {
+.alpha-tool-route .alpha-comparison-matrix-ship-image:not(.alpha-comparison-matrix-ship-image--fill) {
   object-fit: contain;
   background: rgb(255 255 255 / 0.03);
 }
@@ -844,63 +947,28 @@
 
 .alpha-tool-route .alpha-comparison-matrix-ship-summary {
   margin: 0;
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-summary {
   font-size: 0.76rem;
   line-height: 1.18;
   color: rgb(226 232 240);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-ship-durability {
-  display: grid;
-  gap: 0.18rem;
-  padding: 0.04rem 0 0.02rem;
+/* Preserves height of former durability-mix row + bar padding (no visible content) */
+.alpha-tool-route .alpha-comparison-matrix-ship-durability-spacer {
+  flex-shrink: 0;
+  width: 100%;
+  min-height: calc(0.04rem + 0.85rem + 0.02rem + 0.18rem + 0.58rem);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-head,
 .alpha-tool-route .alpha-comparison-matrix-ship-section-label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-section-label {
   margin: 0;
   font-size: 0.54rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: rgb(148 163 184);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-copy {
-  margin: 0;
-  font-size: 0.64rem;
-  color: rgb(203 213 225);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-track {
-  display: flex;
-  align-items: stretch;
-  gap: 0.12rem;
-  height: 0.58rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgb(15 23 42 / 0.9);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-fill {
-  min-width: 0.7rem;
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-fill-armor {
-  background: linear-gradient(90deg, rgb(96 165 250 / 0.45), rgb(125 211 252 / 0.92));
-}
-
-.alpha-tool-route .alpha-comparison-matrix-ship-durability-fill-hull {
-  background: linear-gradient(90deg, rgb(71 85 105 / 0.72), rgb(148 163 184 / 0.82));
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-sections {

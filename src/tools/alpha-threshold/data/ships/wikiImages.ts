@@ -129,6 +129,12 @@ export const shipWikiImages = {
     "imageSrc": "/ships/wiki/scorpius.png",
     "imageAlt": "Scorpius ship image"
   },
+  "rsi::scorpius_antares": {
+    "wikiUrl": "https://starcitizen.tools/Scorpius_Antares",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/5/57/Scorpius_Antares_Concept_Roadmap.png/400px-Scorpius_Antares_Concept_Roadmap.png.webp",
+    "imageAlt": "Scorpius Antares ship image"
+  },
   "crus::starfighter_inferno": {
     "wikiUrl": "https://starcitizen.tools/Ares_Star_Fighter_Inferno",
     "imageSrc": "/ships/wiki/ares-star-fighter-inferno.jpg",
@@ -368,6 +374,30 @@ export const shipWikiImages = {
     "wikiUrl": "https://starcitizen.tools/Anvil_F7C-M_Mk_II_Ball_Turret",
     "imageSrc": "/ships/wiki/anvil-f7c-m-mk-ii-ball-turret.png",
     "imageAlt": "F7C-M Mk II ship image"
+  },
+  "anvl::f7c-m_hornet_heartseeker_mk_i": {
+    "wikiUrl": "https://starcitizen.tools/F7C-M_Hornet_Heartseeker_Mk_I",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/3/34/Heartseeker_Hornet_Isometric.jpg/400px-Heartseeker_Hornet_Isometric.jpg.webp",
+    "imageAlt": "F7C-M Hornet Heartseeker Mk I ship image"
+  },
+  "anvl::f7c-m_hornet_heartseeker_mk_ii": {
+    "wikiUrl": "https://starcitizen.tools/F7C-M_Hornet_Heartseeker_Mk_II",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/a/af/F7CM_MkII_Heartseeker_flying_above_the_cloud_firing_weapons_-_cropped.jpg/400px-F7CM_MkII_Heartseeker_flying_above_the_cloud_firing_weapons_-_cropped.jpg.webp",
+    "imageAlt": "F7C-M Hornet Heartseeker Mk II ship image"
+  },
+  "anvl::f7c-m_super_hornet_mk_ii": {
+    "wikiUrl": "https://starcitizen.tools/F7C-M_Super_Hornet_Mk_II",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/e/e7/F7C-M_MkII_flying_over_mountains_-_cropped.png/400px-F7C-M_MkII_flying_over_mountains_-_cropped.png.webp",
+    "imageAlt": "F7C-M Super Hornet Mk II ship image"
+  },
+  "anvl::f7c-s_hornet_ghost_mk_ii": {
+    "wikiUrl": "https://starcitizen.tools/F7C-S_Hornet_Ghost_Mk_II",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/5/50/F7C-S_Ghost_MkII_shadowing_pirate_ships_-_cropped.jpg/400px-F7C-S_Ghost_MkII_shadowing_pirate_ships_-_cropped.jpg.webp",
+    "imageAlt": "F7C-S Hornet Ghost Mk II ship image"
   },
   "anvl::f7c-r_mk_i": {
     "wikiUrl": "https://starcitizen.tools/F7C-R_Hornet_Tracker_Mk_I",
@@ -933,6 +963,18 @@ export const shipWikiImages = {
     "wikiUrl": "https://starcitizen.tools/Constellation_Phoenix",
     "imageSrc": "/ships/wiki/constellation-phoenix.jpg",
     "imageAlt": "Constellation Phnx. ship image"
+  },
+  "rsi::constellation_phoenix_emerald": {
+    "wikiUrl": "https://starcitizen.tools/Constellation_Phoenix_Emerald",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/9/90/Constellation_Phoenix_Emerald_-_3.14_Update_-_cropped_and_adjusted.png/400px-Constellation_Phoenix_Emerald_-_3.14_Update_-_cropped_and_adjusted.png.webp",
+    "imageAlt": "Constellation Phoenix Emerald ship image"
+  },
+  "rsi::constellation_taurus": {
+    "wikiUrl": "https://starcitizen.tools/Constellation_Taurus",
+    "imageSrc":
+      "https://media.starcitizen.tools/thumb/9/9d/Constellation_Taurus_-_Flying_through_clouds.jpg/400px-Constellation_Taurus_-_Flying_through_clouds.jpg.webp",
+    "imageAlt": "Constellation Taurus ship image"
   },
   "rsi::constellation_tau.": {
     "wikiUrl": "https://starcitizen.tools/Star_Citizen_resources_megalist",
