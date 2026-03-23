@@ -15,6 +15,8 @@ export function TopControlStrip({
   onClearAllWeapons,
   onClearAllShips,
 }: Props) {
+  const needsSelectionSeed = selectedWeaponCount === 0 && selectedShipCount === 0
+
   return (
     <section className="alpha-top-control-strip-shell" aria-label="Threshold controls">
       <div className="alpha-top-control-strip">
@@ -36,10 +38,18 @@ export function TopControlStrip({
         </div>
 
         <div className="alpha-top-control-strip-actions">
-          <button type="button" className="alpha-top-strip-button alpha-top-strip-button-primary" onClick={onOpenShips}>
+          <button
+            type="button"
+            className={`alpha-top-strip-button alpha-top-strip-button-primary ${needsSelectionSeed ? 'alpha-top-strip-button-seed' : ''}`}
+            onClick={onOpenShips}
+          >
             Edit Ships
           </button>
-          <button type="button" className="alpha-top-strip-button alpha-top-strip-button-primary" onClick={onOpenWeapons}>
+          <button
+            type="button"
+            className={`alpha-top-strip-button alpha-top-strip-button-primary ${needsSelectionSeed ? 'alpha-top-strip-button-seed' : ''}`}
+            onClick={onOpenWeapons}
+          >
             Edit Weapons
           </button>
           <button type="button" className="alpha-top-strip-button" onClick={onClearAllShips}>

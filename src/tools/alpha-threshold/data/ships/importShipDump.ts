@@ -106,29 +106,7 @@ export function buildManualShipSeedsFromDump(
  */
 // -------------------------
 // 
-// -------------------------
-
-const smallDump = `
-ANVL Hurricane 6600 7800 22 11
-AEGS Sabre 5400 6200 21 11
-ESP Talon 3000 2000 9 7
-KRUG L-22 Wolf 2700 1700 10 6
-`
-
-const mediumDump = `
-CRUS Spirit A1 2500 16500 11 6
-CRUS Starfighter Ion 6000 12000 22 13
-DRAK Cutlass Black 5400 9400 17 11
-ESP Prowler 9000 12500 41 30
-`
-
-
-
-
-const largeDump = `
-RSI Apollo Medivac 10800 33000 45 27
-`
-
+// -----------------------
 //const capitalDump = `
 //`
 
@@ -136,13 +114,3 @@ RSI Apollo Medivac 10800 33000 45 27
 // -------------------------
 // OUTPUTS
 // -------------------------
-
-const smallSeeds = buildManualShipSeedsFromDump(smallDump, 'small', '4.7 PTU')
-const mediumSeeds = buildManualShipSeedsFromDump(mediumDump, 'medium', '4.7 PTU')
-const largeSeeds = buildManualShipSeedsFromDump(largeDump, 'large', '4.7 PTU')
-
-console.log('smallSeeds', smallSeeds)
-console.log('mediumSeeds', mediumSeeds)
-console.log('largeSeeds', largeSeeds)
-
-

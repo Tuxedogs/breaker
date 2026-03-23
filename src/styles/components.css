@@ -120,14 +120,83 @@
   }
 
   body.alpha-threshold-page .app-nav-band {
-    position: absolute;
+    position: fixed;
     inset-inline: 0;
     top: 0;
     z-index: 1200;
   }
 
+  body.alpha-threshold-page {
+    overflow: hidden;
+  }
+
+  body.alpha-threshold-page .app-nav-band--alpha-tool {
+    border-bottom-color: rgb(255 255 255 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(8 12 20 / 0.86) 0%, rgb(8 12 20 / 0.4) 100%);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 6px 18px rgb(0 0 0 / 0.2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
   .app-nav-shell {
     padding: 0.25rem 0.5rem;
+  }
+
+  .app-nav-shell--alpha-tool {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    padding: 0;
+  }
+
+  .app-nav-link--alpha-home {
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
+    color: rgb(226 232 240);
+  }
+
+  .app-nav-link--alpha-home:hover {
+    color: rgb(255 255 255);
+    border-color: rgb(255 255 255 / 0.18);
+    background: rgb(255 255 255 / 0.05);
+  }
+
+  .alpha-tool-frame-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .alpha-tool-frame-banner-kicker,
+  .alpha-tool-frame-banner-mode {
+    display: inline-flex;
+    min-height: 1.65rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    padding: 0.16rem 0.52rem;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+    background: rgb(255 255 255 / 0.03);
+  }
+
+  .alpha-tool-frame-banner-kicker {
+    color: rgb(226 232 240);
+  }
+
+  .alpha-tool-frame-banner-mode-active {
+    color: rgb(255 255 255);
+    border-color: rgb(255 255 255 / 0.14);
+    background: rgb(255 255 255 / 0.05);
   }
 
   .app-nav-link {

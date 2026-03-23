@@ -1,14 +1,17 @@
 import './threshold.css'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { LoadoutDrawer } from './components/LoadoutDrawer'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { ShipSelectorPanel } from './components/ShipSelectorPanel'
 import WeaponSelectorPanel from './components/WeaponSelectorPanel'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
+import { parseShieldMode } from './lib/shieldMode'
 
 export default function AlphaThresholdToolPage() {
   const [drawerMode, setDrawerMode] = useState<'ships' | 'weapons' | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const {
     slots,
     setSlotWeapon,
@@ -19,8 +22,14 @@ export default function AlphaThresholdToolPage() {
     selectedShipNames,
     maxVictimShips,
     toggleShipSelected,
-    clearAllShips,
   } = useAlphaThresholdState()
+  const shieldMode = parseShieldMode(searchParams.get('shield'))
+
+  function handleShieldModeChange(mode: 'up' | 'down') {
+    const next = new URLSearchParams(searchParams)
+    next.set('shield', mode)
+    setSearchParams(next, { replace: true })
+  }
 
   useEffect(() => {
     document.body.classList.add('alpha-threshold-page')
@@ -30,26 +39,20 @@ export default function AlphaThresholdToolPage() {
     }
   }, [])
 
-  function clearAllWeaponSlots() {
-    slots.forEach((slot) => setSlotWeapon(slot.id, null))
-  }
-
   return (
-    <main className="alpha-tool-route" aria-label="Alpha threshold tool">
+    <section className="alpha-tool-route" aria-label="Alpha threshold tool">
+      <div className="alpha-app-edge-rail" aria-hidden="true" />
       <div className="alpha-command-shell">
         <MainHeatmapStage
           board={
             <ThresholdHeatmapBoard
               ships={selectedShips}
               selectedWeapons={selectedWeapons}
-              allShips={allShips}
               allWeapons={allWeapons}
-              selectedWeaponCount={selectedWeapons.length}
-              selectedShipCount={selectedShips.length}
+              shieldMode={shieldMode}
+              onShieldModeChange={handleShieldModeChange}
               onOpenWeapons={() => setDrawerMode('weapons')}
               onOpenShips={() => setDrawerMode('ships')}
-              onClearAllWeapons={clearAllWeaponSlots}
-              onClearAllShips={clearAllShips}
               onAssignWeapon={setSlotWeapon}
             />
           }
@@ -79,7 +82,7 @@ export default function AlphaThresholdToolPage() {
           }
         />
       </div>
-    </main>
+    </section>
   )
 }
 
