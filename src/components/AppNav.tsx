@@ -62,31 +62,7 @@ export default function AppNav() {
     location.pathname === "/modules" ||
     location.pathname.startsWith("/module/");
   if (isAlphaThresholdRoute) {
-    return (
-      <header className="app-nav-band app-nav-band--alpha-tool pointer-events-auto fixed inset-x-0 top-0 z-30 px-2.5 pb-1 pt-2 opacity-100 transition-opacity">
-        <div className="app-nav-shell app-nav-shell--alpha-tool">
-          <NavLink
-            to="/"
-            onClick={closeAllMenus}
-            className={[
-              "app-nav-link app-nav-link--alpha-home inline-flex h-10 w-10 items-center justify-center rounded-md transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70",
-              isHomeRoute ? "app-nav-link--home-active" : "",
-            ].join(" ")}
-            aria-label="Home"
-          >
-            <HomeIcon />
-          </NavLink>
-
-          <div className="alpha-tool-frame-banner" aria-label="Tool mode">
-            <span className="alpha-tool-frame-banner-kicker">PTU Locked</span>
-            <span className="alpha-tool-frame-banner-mode alpha-tool-frame-banner-mode-active">
-              Analysis
-            </span>
-            <span className="alpha-tool-frame-banner-mode">Weapons Loadout</span>
-          </div>
-        </div>
-      </header>
-    );
+    return null;
   }
 
   function closeAllMenus() {

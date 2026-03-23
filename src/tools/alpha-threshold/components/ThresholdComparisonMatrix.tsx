@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
+import { NavLink } from 'react-router-dom'
 
 import {
   estimateArmorInteraction,
@@ -25,7 +26,11 @@ type Props = {
   nextShipSlotIndex: number
   nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
-  onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
+  /** Matrix weapon header chips: open overlay with filter (not main-board analysis strip) */
+  onWeaponHeaderChipClick?: (payload: {
+    columnIndex: number
+    chip: ArmorInteractionFilterChip
+  }) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
@@ -210,7 +215,7 @@ export function ThresholdComparisonMatrix({
   nextShipSlotIndex,
   nextWeaponSlotIndex,
   onShieldModeChange,
-  onFilterChipClick,
+  onWeaponHeaderChipClick,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
@@ -218,6 +223,8 @@ export function ThresholdComparisonMatrix({
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null)
+  const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
+  const [matrixMode, setMatrixMode] = useState<'analysis' | 'frakk'>('analysis')
   const visibleShips = buildVisibleShips(ships)
   const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
@@ -280,78 +287,147 @@ export function ThresholdComparisonMatrix({
               data-weapon-count={orderedWeapons.length}
             >
               <div className="alpha-comparison-matrix-header-row">
-                <div className="alpha-comparison-matrix-corner">
-                  <p className="alpha-comparison-matrix-corner-label">Chart Controls</p>
-                  <p className="alpha-comparison-matrix-corner-copy">
-                    Start here: configure ships & weapons to populate the main chart.
-                  </p>
-                  <div className="alpha-comparison-matrix-corner-controls">
-                    <div className="alpha-comparison-matrix-corner-control-row">
-                      <button
-                        type="button"
-                        className={[
-                          'alpha-comparison-matrix-corner-pill',
-                          'alpha-tool-frame-banner-mode',
-                          selectionMode !== 'weapon' ? 'alpha-tool-frame-banner-mode-active' : '',
-                        ].filter(Boolean).join(' ')}
-                        onClick={onOpenShips}
+                <div
+                  className="alpha-comparison-matrix-corner"
+                  aria-label="Chart and shield controls"
+                >
+                  <div className="alpha-comparison-matrix-corner-body">
+                    <div className="alpha-comparison-matrix-corner-head">
+                      <NavLink
+                        to="/"
+                        end
+                        className={({ isActive }) =>
+                          [
+                            'alpha-comparison-matrix-corner-home',
+                            isActive ? 'alpha-comparison-matrix-corner-home-active' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')
+                        }
+                        aria-label="Home"
                       >
-                        Ships
-                      </button>
-                      <button
-                        type="button"
-                        className={[
-                          'alpha-comparison-matrix-corner-pill',
-                          'alpha-tool-frame-banner-mode',
-                          selectionMode === 'weapon' ? 'alpha-tool-frame-banner-mode-active' : '',
-                        ].filter(Boolean).join(' ')}
-                        onClick={onOpenWeapons}
+                        <svg aria-hidden viewBox="0 0 24 24" className="alpha-comparison-matrix-corner-home-icon">
+                          <path
+                            d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                      </NavLink>
+                      <div
+                        className="alpha-comparison-matrix-corner-segments alpha-comparison-matrix-corner-head-segments"
+                        role="radiogroup"
+                        aria-label="Source"
                       >
-                        Weapons
-                      </button>
+                        {(
+                          [
+                            ['ptu', 'PTU'],
+                            ['live', 'LIVE'],
+                          ] as const
+                        ).map(([id, label], i) => (
+                          <span key={id} className="alpha-comparison-matrix-corner-seg-wrap">
+                            {i > 0 ? (
+                              <span className="alpha-comparison-matrix-corner-seg-sep" aria-hidden>
+                                |
+                              </span>
+                            ) : null}
+                            <button
+                              type="button"
+                              className={[
+                                'alpha-comparison-matrix-corner-seg',
+                                sourceMode === id ? 'alpha-comparison-matrix-corner-seg--active' : '',
+                              ]
+                                .filter(Boolean)
+                                .join(' ')}
+                              role="radio"
+                              aria-checked={sourceMode === id}
+                              onClick={() => setSourceMode(id)}
+                            >
+                              {label}
+                            </button>
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <div
-                      className="alpha-comparison-matrix-corner-control-row alpha-comparison-matrix-corner-control-row-shield"
-                      role="group"
-                      aria-label="Shield mode"
-                    >
-                      <button
-                        type="button"
-                        className={[
-                          'alpha-comparison-matrix-corner-pill',
-                          'alpha-tool-frame-banner-mode',
-                          'alpha-comparison-matrix-shield-toggle',
-                          shieldMode === 'up'
-                            ? 'alpha-comparison-matrix-shield-toggle-up'
-                            : 'alpha-comparison-matrix-shield-toggle-down',
-                        ].join(' ')}
-                        aria-pressed={shieldMode === 'up'}
-                        onClick={() => onShieldModeChange(shieldMode === 'up' ? 'down' : 'up')}
+
+                    <div className="alpha-comparison-matrix-corner-row">
+                      <span className="alpha-comparison-matrix-corner-label" id="alpha-matrix-corner-mode-label">
+                        Mode
+                      </span>
+                      <div
+                        className="alpha-comparison-matrix-corner-segments"
+                        role="radiogroup"
+                        aria-labelledby="alpha-matrix-corner-mode-label"
                       >
-                        Shield:
-                        <span
+                        {(
+                          [
+                            ['analysis', 'Analysis'],
+                            ['frakk', 'Frakk'],
+                          ] as const
+                        ).map(([id, label], i) => (
+                          <span key={id} className="alpha-comparison-matrix-corner-seg-wrap">
+                            {i > 0 ? (
+                              <span className="alpha-comparison-matrix-corner-seg-sep" aria-hidden>
+                                |
+                              </span>
+                            ) : null}
+                            <button
+                              type="button"
+                              className={[
+                                'alpha-comparison-matrix-corner-seg',
+                                matrixMode === id ? 'alpha-comparison-matrix-corner-seg--active' : '',
+                              ]
+                                .filter(Boolean)
+                                .join(' ')}
+                              role="radio"
+                              aria-checked={matrixMode === id}
+                              onClick={() => setMatrixMode(id)}
+                            >
+                              {label}
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="alpha-comparison-matrix-corner-row">
+                      <span className="alpha-comparison-matrix-corner-label" id="alpha-matrix-corner-shield-label">
+                        Shields
+                      </span>
+                      <div
+                        className="alpha-comparison-matrix-corner-segments"
+                        role="group"
+                        aria-labelledby="alpha-matrix-corner-shield-label"
+                      >
+                        <button
+                          type="button"
                           className={[
-                            'alpha-comparison-matrix-shield-toggle-state',
-                            shieldMode === 'up'
-                              ? 'alpha-comparison-matrix-shield-toggle-state-active'
-                              : '',
-                          ].join(' ')}
+                            'alpha-comparison-matrix-corner-seg',
+                            shieldMode === 'up' ? 'alpha-comparison-matrix-corner-seg--active-shield-on' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                          aria-pressed={shieldMode === 'up'}
+                          onClick={() => onShieldModeChange('up')}
                         >
-                          {' '}
-                          On
+                          ON
+                        </button>
+                        <span className="alpha-comparison-matrix-corner-seg-sep" aria-hidden>
+                          /
                         </span>
-                        {' / '}
-                        <span
+                        <button
+                          type="button"
                           className={[
-                            'alpha-comparison-matrix-shield-toggle-state',
-                            shieldMode === 'down'
-                              ? 'alpha-comparison-matrix-shield-toggle-state-active'
-                              : '',
-                          ].join(' ')}
+                            'alpha-comparison-matrix-corner-seg',
+                            shieldMode === 'down' ? 'alpha-comparison-matrix-corner-seg--active-shield-off' : '',
+                          ]
+                            .filter(Boolean)
+                            .join(' ')}
+                          aria-pressed={shieldMode === 'down'}
+                          onClick={() => onShieldModeChange('down')}
                         >
-                          Off
-                        </span>
-                      </button>
+                          OFF
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -430,10 +506,7 @@ export function ThresholdComparisonMatrix({
                           <p className="alpha-comparison-matrix-weapon-empty-hint">Select weapon</p>
                         </div>
                       ) : (
-                        <>
-                          <p className="alpha-comparison-matrix-weapon-eyebrow">
-                            {selection.weapon.damageType === 'ballistic' ? 'Ballistic' : 'Energy'}
-                          </p>
+                        <div className="alpha-comparison-matrix-weapon-header-body">
                           <h3 className="alpha-comparison-matrix-weapon-name">
                             {formatEntityLabel(selection.weapon.name)}
                           </h3>
@@ -444,17 +517,21 @@ export function ThresholdComparisonMatrix({
                             <button
                               type="button"
                               className="alpha-comparison-matrix-chip"
-                              onClick={() =>
-                                onFilterChipClick?.({
-                                  kind: 'damageType',
-                                  slotId: selection.slotId,
-                                  label:
-                                    selection.weapon.damageType === 'ballistic'
-                                      ? 'Ballistic'
-                                      : 'Energy',
-                                  value: selection.weapon.damageType,
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                onWeaponHeaderChipClick?.({
+                                  columnIndex,
+                                  chip: {
+                                    kind: 'damageType',
+                                    slotId: selection.slotId,
+                                    label:
+                                      selection.weapon.damageType === 'ballistic'
+                                        ? 'Ballistic'
+                                        : 'Energy',
+                                    value: selection.weapon.damageType,
+                                  },
                                 })
-                              }
+                              }}
                             >
                               {selection.weapon.damageType === 'ballistic'
                                 ? 'Ballistic'
@@ -463,19 +540,23 @@ export function ThresholdComparisonMatrix({
                             <button
                               type="button"
                               className="alpha-comparison-matrix-chip"
-                              onClick={() =>
-                                onFilterChipClick?.({
-                                  kind: 'weaponClass',
-                                  slotId: selection.slotId,
-                                  label: formatWeaponClassLabel(selection.weapon.weaponClass),
-                                  value: selection.weapon.weaponClass,
+                              onClick={(event) => {
+                                event.stopPropagation()
+                                onWeaponHeaderChipClick?.({
+                                  columnIndex,
+                                  chip: {
+                                    kind: 'weaponClass',
+                                    slotId: selection.slotId,
+                                    label: formatWeaponClassLabel(selection.weapon.weaponClass),
+                                    value: selection.weapon.weaponClass,
+                                  },
                                 })
-                              }
+                              }}
                             >
                               {formatWeaponClassLabel(selection.weapon.weaponClass)}
                             </button>
                           </div>
-                        </>
+                        </div>
                       )}
                     </header>
                   )
@@ -504,7 +585,6 @@ export function ThresholdComparisonMatrix({
                       className={[
                         'alpha-comparison-matrix-row',
                         rowActive ? 'alpha-comparison-matrix-row-active' : '',
-                        isDestinationRow ? 'alpha-comparison-matrix-destination-row' : '',
                       ].filter(Boolean).join(' ')}
                       data-row-index={rowIndex}
                       onPointerEnter={() => {
@@ -647,18 +727,21 @@ export function ThresholdComparisonMatrix({
                         const columnIndex = orderedWeapons.findIndex(
                           (entry) => entry.slotId === selection.slotId
                         )
-                        const isDestinationColumn =
-                          selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
-                        const columnToneClass = isDestinationColumn
-                          ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
-                          : ''
+                        const placeholderWeapon = isPlaceholderWeapon(selection)
+                        const placeholderCell = placeholderShip || placeholderWeapon
+                        const isDestinationColumnForCells =
+                          selectionMode === 'weapon' &&
+                          columnIndex === activeWeaponDestinationIndex &&
+                          !placeholderWeapon
+                        const columnToneClass =
+                          isDestinationColumnForCells
+                            ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
+                            : ''
                         const model = cellModels.get(
                           `${ship.id}:${selection.slotId}`
                         ) as MatrixCellModel
                         const activeResult: MatrixEstimateView =
                           shieldMode === 'up' ? model.shieldsOn : model.shieldsOff
-                        const placeholderWeapon = isPlaceholderWeapon(selection)
-                        const placeholderCell = placeholderShip || placeholderWeapon
                         const columnActive =
                           activeColumnId === selection.slotId &&
                           !placeholderCell &&
@@ -673,21 +756,23 @@ export function ThresholdComparisonMatrix({
                             key={`${ship.id}:${selection.slotId}`}
                             className={[
                               'alpha-comparison-matrix-cell',
+                              rowIndex === 0 && columnIndex === 0 ? 'alpha-matrix-first-cell-anchor' : '',
                               `alpha-comparison-matrix-cell-${activeResult.tone}`,
                               placeholderCell ? 'alpha-comparison-matrix-panel-placeholder' : '',
                               columnActive ? 'alpha-comparison-matrix-cell-column-active' : '',
-                              selectionMode && (isDestinationRow || isDestinationColumn)
+                              selectionMode &&
+                              !placeholderCell &&
+                              isDestinationColumnForCells
                                 ? 'alpha-comparison-matrix-cell-destination-active'
                                 : '',
                               shieldBlocked ? 'alpha-comparison-matrix-cell-shield-blocked' : '',
                               shieldBlocked && !isPrimaryShieldBlockedPanel
                                 ? 'alpha-comparison-matrix-cell-shield-blocked-muted'
                                 : '',
-                              isDestinationRow ? 'alpha-comparison-matrix-destination-row-cell' : '',
-                              isDestinationColumn
+                              !placeholderCell && isDestinationColumnForCells
                                 ? 'alpha-comparison-matrix-destination-column-cell'
                                 : '',
-                              columnToneClass || destinationToneClass,
+                              columnToneClass,
                             ].filter(Boolean).join(' ')}
                             onPointerEnter={() => {
                               if (selectionMode || placeholderCell) {

@@ -1,5 +1,3 @@
-import type { ReactNode } from 'react'
-
 import type { DefenseShieldState, SelectedWeaponComparison, Ship } from '../types'
 import {
   type ArmorInteractionFilterChip,
@@ -7,7 +5,6 @@ import {
 import { ThresholdComparisonMatrix } from './ThresholdComparisonMatrix'
 
 type Props = {
-  controlStrip?: ReactNode
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
@@ -15,7 +12,10 @@ type Props = {
   nextShipSlotIndex: number
   nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
-  onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
+  onWeaponHeaderChipClick?: (payload: {
+    columnIndex: number
+    chip: ArmorInteractionFilterChip
+  }) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
@@ -23,7 +23,6 @@ type Props = {
 }
 
 export function ArmorInteractionTestbed({
-  controlStrip,
   ships,
   selectedWeapons,
   shieldMode,
@@ -31,7 +30,7 @@ export function ArmorInteractionTestbed({
   nextShipSlotIndex,
   nextWeaponSlotIndex,
   onShieldModeChange,
-  onFilterChipClick,
+  onWeaponHeaderChipClick,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
@@ -39,7 +38,6 @@ export function ArmorInteractionTestbed({
 }: Props) {
   return (
     <ThresholdComparisonMatrix
-      controlStrip={controlStrip}
       ships={ships}
       selectedWeapons={selectedWeapons}
       shieldMode={shieldMode}
@@ -47,7 +45,7 @@ export function ArmorInteractionTestbed({
       nextShipSlotIndex={nextShipSlotIndex}
       nextWeaponSlotIndex={nextWeaponSlotIndex}
       onShieldModeChange={onShieldModeChange}
-      onFilterChipClick={onFilterChipClick}
+      onWeaponHeaderChipClick={onWeaponHeaderChipClick}
       onOpenWeapons={onOpenWeapons}
       onOpenShips={onOpenShips}
       onOpenWeaponsAt={onOpenWeaponsAt}
