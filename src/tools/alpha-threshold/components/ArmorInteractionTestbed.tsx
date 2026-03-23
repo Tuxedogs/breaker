@@ -11,6 +11,9 @@ type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
+  selectionMode: 'ship' | 'weapon' | null
+  nextShipSlotIndex: number
+  nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
   onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
   onOpenWeapons: () => void
@@ -22,6 +25,9 @@ export function ArmorInteractionTestbed({
   ships,
   selectedWeapons,
   shieldMode,
+  selectionMode,
+  nextShipSlotIndex,
+  nextWeaponSlotIndex,
   onShieldModeChange,
   onFilterChipClick,
   onOpenWeapons,
@@ -33,6 +39,9 @@ export function ArmorInteractionTestbed({
       ships={ships}
       selectedWeapons={selectedWeapons}
       shieldMode={shieldMode}
+      selectionMode={selectionMode}
+      nextShipSlotIndex={nextShipSlotIndex}
+      nextWeaponSlotIndex={nextWeaponSlotIndex}
       onShieldModeChange={onShieldModeChange}
       onFilterChipClick={onFilterChipClick}
       onOpenWeapons={onOpenWeapons}

@@ -2,14 +2,14 @@ import type { ReactNode } from 'react'
 
 type Props = {
   board: ReactNode
-  drawer?: ReactNode
+  overlay?: ReactNode
 }
 
-export function MainHeatmapStage({ board, drawer }: Props) {
+export function MainHeatmapStage({ board, overlay }: Props) {
   return (
     <section className="alpha-main-heatmap-stage" aria-label="Armor interaction analysis stage">
       <div className="alpha-main-heatmap-board">{board}</div>
-      {drawer}
+      {overlay}
     </section>
   )
 }

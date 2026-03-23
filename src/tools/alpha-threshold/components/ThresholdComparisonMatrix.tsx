@@ -20,6 +20,9 @@ type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
+  selectionMode: 'ship' | 'weapon' | null
+  nextShipSlotIndex: number
+  nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
   onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
   onOpenWeapons: () => void
@@ -28,6 +31,7 @@ type Props = {
 
 type MatrixCellModel = ReturnType<typeof buildMatrixCellModel>
 type MatrixEstimateView = ReturnType<typeof buildEstimateViewModel>
+const DESTINATION_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 
 function buildVisibleShips(ships: Ship[]) {
   return ships.slice(0, 4)
@@ -174,6 +178,9 @@ export function ThresholdComparisonMatrix({
   ships,
   selectedWeapons,
   shieldMode,
+  selectionMode,
+  nextShipSlotIndex,
+  nextWeaponSlotIndex,
   onShieldModeChange,
   onFilterChipClick,
   onOpenWeapons,
@@ -183,7 +190,21 @@ export function ThresholdComparisonMatrix({
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null)
   const visibleShips = buildVisibleShips(ships)
   const orderedWeapons = useMemo(() => sortSelectedWeapons(selectedWeapons), [selectedWeapons])
-  const isEmpty = visibleShips.length === 0 || orderedWeapons.length === 0
+  const isPlaceholderPreview =
+    (visibleShips.length > 0 &&
+      visibleShips.every((ship) => ship.name === '' && ship.manufacturer === '')) ||
+    (orderedWeapons.length > 0 &&
+      orderedWeapons.every(
+        (selection) => selection.weapon.name === '' && selection.weapon.weaponClass === ''
+      ))
+  const activeShipDestinationIndex = Math.min(nextShipSlotIndex, Math.max(0, visibleShips.length - 1))
+  const activeWeaponDestinationIndex = Math.min(
+    nextWeaponSlotIndex,
+    Math.max(0, orderedWeapons.length - 1)
+  )
+  const activeShipTone = DESTINATION_TONES[activeShipDestinationIndex % DESTINATION_TONES.length]
+  const activeWeaponTone =
+    DESTINATION_TONES[activeWeaponDestinationIndex % DESTINATION_TONES.length]
   const gridStyle = getMatrixGridStyle(orderedWeapons.length)
 
   const cellModels = useMemo(() => {
@@ -199,20 +220,19 @@ export function ThresholdComparisonMatrix({
 
   return (
     <section
-      className={`alpha-threshold-tab-panel ${isEmpty ? 'alpha-threshold-board-empty' : 'alpha-comparison-matrix-panel'}`}
+      className={[
+        'alpha-threshold-tab-panel',
+        'alpha-comparison-matrix-panel',
+        isPlaceholderPreview ? 'alpha-comparison-matrix-placeholder-preview' : '',
+        selectionMode ? 'alpha-comparison-matrix-selection-active' : '',
+        selectionMode === 'ship' ? 'alpha-comparison-matrix-selection-ship' : '',
+        selectionMode === 'weapon' ? 'alpha-comparison-matrix-selection-weapon' : '',
+      ].filter(Boolean).join(' ')}
       aria-label="Threshold comparison matrix"
     >
       {controlStrip ? <div className="alpha-analysis-control-shell">{controlStrip}</div> : null}
 
-      {isEmpty ? (
-        <div className="alpha-empty-state" aria-live="polite">
-          <h2 className="surface-title">Shield-Aware Armor Validation</h2>
-          <p className="mt-3 text-sm text-slate-400">
-            Select at least one ship and one weapon to build the analysis matrix.
-          </p>
-        </div>
-      ) : (
-        <div className="alpha-comparison-matrix-shell">
+      <div className="alpha-comparison-matrix-shell">
           <div className="alpha-comparison-matrix-scroll">
             <div
               className="alpha-comparison-matrix-table"
@@ -221,22 +241,30 @@ export function ThresholdComparisonMatrix({
             >
               <div className="alpha-comparison-matrix-header-row">
                 <div className="alpha-comparison-matrix-corner">
-                  <p className="alpha-comparison-matrix-corner-label">Ships</p>
+                  <p className="alpha-comparison-matrix-corner-label">Chart Controls</p>
                   <p className="alpha-comparison-matrix-corner-copy">
-                    Configure matrix inputs.
+                    Start here: configure ships & weapons to populate the main chart.
                   </p>
                   <div className="alpha-comparison-matrix-corner-controls">
                     <div className="alpha-comparison-matrix-corner-control-row">
                       <button
                         type="button"
-                        className="alpha-comparison-matrix-corner-pill alpha-tool-frame-banner-mode alpha-tool-frame-banner-mode-active"
+                        className={[
+                          'alpha-comparison-matrix-corner-pill',
+                          'alpha-tool-frame-banner-mode',
+                          selectionMode !== 'weapon' ? 'alpha-tool-frame-banner-mode-active' : '',
+                        ].filter(Boolean).join(' ')}
                         onClick={onOpenShips}
                       >
                         Ships
                       </button>
                       <button
                         type="button"
-                        className="alpha-comparison-matrix-corner-pill alpha-tool-frame-banner-mode"
+                        className={[
+                          'alpha-comparison-matrix-corner-pill',
+                          'alpha-tool-frame-banner-mode',
+                          selectionMode === 'weapon' ? 'alpha-tool-frame-banner-mode-active' : '',
+                        ].filter(Boolean).join(' ')}
                         onClick={onOpenWeapons}
                       >
                         Edit Weapons
@@ -277,11 +305,25 @@ export function ThresholdComparisonMatrix({
 
                 {orderedWeapons.map((selection) => {
                   const isActive = activeColumnId === selection.slotId
+                  const columnIndex = orderedWeapons.findIndex(
+                    (entry) => entry.slotId === selection.slotId
+                  )
+                  const isDestinationColumn =
+                    selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
+                  const destinationToneClass = isDestinationColumn
+                    ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
+                    : ''
 
                   return (
                     <header
                       key={selection.slotId}
-                      className={`alpha-comparison-matrix-weapon-header ${isActive ? 'alpha-comparison-matrix-weapon-header-active' : ''}`}
+                      className={[
+                        'alpha-comparison-matrix-weapon-header',
+                        isActive ? 'alpha-comparison-matrix-weapon-header-active' : '',
+                        isDestinationColumn ? 'alpha-comparison-matrix-destination-column' : '',
+                        destinationToneClass,
+                      ].filter(Boolean).join(' ')}
+                      data-col-index={columnIndex}
                       onPointerEnter={() => setActiveColumnId(selection.slotId)}
                       onPointerLeave={() =>
                         setActiveColumnId((current) =>
@@ -345,12 +387,23 @@ export function ThresholdComparisonMatrix({
               <div className="alpha-comparison-matrix-body">
                 {visibleShips.map((ship) => {
                   const rowActive = activeRowId === ship.id
+                  const rowIndex = visibleShips.findIndex((entry) => entry.id === ship.id)
+                  const isDestinationRow =
+                    selectionMode === 'ship' && rowIndex === activeShipDestinationIndex
+                  const destinationToneClass = isDestinationRow
+                    ? `alpha-comparison-matrix-destination-${activeShipTone}`
+                    : ''
                   const durability = getShipDurabilityBreakdown(ship)
 
                   return (
                     <div
                       key={ship.id}
-                      className={`alpha-comparison-matrix-row ${rowActive ? 'alpha-comparison-matrix-row-active' : ''}`}
+                      className={[
+                        'alpha-comparison-matrix-row',
+                        rowActive ? 'alpha-comparison-matrix-row-active' : '',
+                        isDestinationRow ? 'alpha-comparison-matrix-destination-row' : '',
+                      ].filter(Boolean).join(' ')}
+                      data-row-index={rowIndex}
                       onPointerEnter={() => setActiveRowId(ship.id)}
                       onPointerLeave={() =>
                         setActiveRowId((current) => (current === ship.id ? null : current))
@@ -360,7 +413,12 @@ export function ThresholdComparisonMatrix({
                         setActiveRowId((current) => (current === ship.id ? null : current))
                       }
                     >
-                      <article className="alpha-comparison-matrix-ship-card">
+                      <article
+                        className={[
+                          'alpha-comparison-matrix-ship-card',
+                          destinationToneClass,
+                        ].filter(Boolean).join(' ')}
+                      >
                         <div className="alpha-comparison-matrix-ship-header">
                           <div className="alpha-comparison-matrix-ship-media">
                             {ship.imageSrc ? (
@@ -453,6 +511,14 @@ export function ThresholdComparisonMatrix({
                       </article>
 
                       {orderedWeapons.map((selection) => {
+                        const columnIndex = orderedWeapons.findIndex(
+                          (entry) => entry.slotId === selection.slotId
+                        )
+                        const isDestinationColumn =
+                          selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
+                        const columnToneClass = isDestinationColumn
+                          ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
+                          : ''
                         const model = cellModels.get(
                           `${ship.id}:${selection.slotId}`
                         ) as MatrixCellModel
@@ -465,7 +531,17 @@ export function ThresholdComparisonMatrix({
                         return (
                           <article
                             key={`${ship.id}:${selection.slotId}`}
-                            className={`alpha-comparison-matrix-cell alpha-comparison-matrix-cell-${activeResult.tone} ${columnActive ? 'alpha-comparison-matrix-cell-column-active' : ''} ${shieldBlocked ? 'alpha-comparison-matrix-cell-shield-blocked' : ''}`}
+                            className={[
+                              'alpha-comparison-matrix-cell',
+                              `alpha-comparison-matrix-cell-${activeResult.tone}`,
+                              columnActive ? 'alpha-comparison-matrix-cell-column-active' : '',
+                              shieldBlocked ? 'alpha-comparison-matrix-cell-shield-blocked' : '',
+                              isDestinationRow ? 'alpha-comparison-matrix-destination-row-cell' : '',
+                              isDestinationColumn
+                                ? 'alpha-comparison-matrix-destination-column-cell'
+                                : '',
+                              columnToneClass || destinationToneClass,
+                            ].filter(Boolean).join(' ')}
                             onPointerEnter={() => setActiveColumnId(selection.slotId)}
                             onPointerLeave={() =>
                               setActiveColumnId((current) =>
@@ -478,7 +554,7 @@ export function ThresholdComparisonMatrix({
                                 current === selection.slotId ? null : current
                               )
                             }
-                            tabIndex={0}
+                            tabIndex={isPlaceholderPreview ? -1 : 0}
                           >
                             <div className="alpha-comparison-matrix-cell-content" aria-hidden={shieldBlocked}>
                               <div className="alpha-comparison-matrix-cell-head">
@@ -550,7 +626,6 @@ export function ThresholdComparisonMatrix({
             </div>
           </div>
         </div>
-      )}
     </section>
   )
 }

@@ -38,6 +38,13 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
 const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-ptu']
 const MAX_VICTIM_SHIPS = 4
 const MOBILE_MAX_VICTIM_SHIPS = 2
+const STORAGE_MIGRATION_VERSION_KEY = 'alpha-threshold.storage-migration-version'
+const STORAGE_MIGRATION_VERSION = 1
+const LEGACY_STORAGE_KEYS_TO_CLEAR = [
+  'alpha-threshold.analysis-filter',
+  'alpha-threshold.weapon-analysis-filter',
+  'alpha-threshold.filter-chip',
+] as const
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   { id: 'slot-1', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 1' },
   { id: 'slot-2', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 2' },
@@ -277,6 +284,25 @@ export function useAlphaThresholdState() {
     () => normalizeDataSource(activeSource),
     [activeSource]
   )
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    try {
+      const storedVersionRaw = window.localStorage.getItem(STORAGE_MIGRATION_VERSION_KEY)
+      const storedVersion = storedVersionRaw == null ? 0 : Number(JSON.parse(storedVersionRaw))
+
+      if (!Number.isFinite(storedVersion) || storedVersion < STORAGE_MIGRATION_VERSION) {
+        LEGACY_STORAGE_KEYS_TO_CLEAR.forEach((key) => window.localStorage.removeItem(key))
+        window.localStorage.setItem(
+          STORAGE_MIGRATION_VERSION_KEY,
+          JSON.stringify(STORAGE_MIGRATION_VERSION)
+        )
+      }
+    } catch {
+      // Ignore storage migration failures.
+    }
+  }, [])
 
   const sourceShips = useMemo(
     () => getShipThresholdsForSource(normalizedActiveSource),
