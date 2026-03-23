@@ -177,6 +177,28 @@ function getShipDatasetKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
   return `${ship.manufacturer}::${ship.name}`.toLowerCase()
 }
 
+function getShipDisplayIdentityKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
+  const normalizedManufacturer = ship.manufacturer.trim().toLowerCase()
+  const normalizedDisplayName = ship.name
+    .replaceAll('_', ' ')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  return `${normalizedManufacturer}::${normalizedDisplayName}`
+}
+
+function dedupeShipsByDisplayIdentity(ships: Ship[]): Ship[] {
+  const byKey = new Map<string, Ship>()
+  ships.forEach((ship) => {
+    const key = getShipDisplayIdentityKey(ship)
+    if (!byKey.has(key)) {
+      byKey.set(key, ship)
+    }
+  })
+  return Array.from(byKey.values())
+}
+
 function shouldExcludeWeapon(weapon: WeaponRecord): boolean {
   const normalizedName = weapon.name.trim().toLowerCase()
   const normalizedClass = weapon.weaponClass.trim().toLowerCase()
@@ -420,8 +442,8 @@ export function useAlphaThresholdState() {
     const merged = activeShips.map((ship) =>
       mergeShipOverride(ship, shipOverrides[ship.name])
     )
-
-    return sortShips(merged, normalizedSortKey)
+    const deduped = dedupeShipsByDisplayIdentity(merged)
+    return sortShips(deduped, normalizedSortKey)
   }, [activeShips, normalizedSortKey, shipOverrides])
 
   const selectedShipNameSet = useMemo(

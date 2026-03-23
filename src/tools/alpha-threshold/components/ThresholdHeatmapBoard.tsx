@@ -22,8 +22,8 @@ type Props = {
   onShieldModeChange: (mode: DefenseShieldState) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
-  onOpenWeaponsAt?: (slotIndex: number) => void
-  onOpenShipsAt?: (slotIndex: number) => void
+  onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onAssignWeapon: (slotId: string, weaponKey: string | null) => void
 }
 

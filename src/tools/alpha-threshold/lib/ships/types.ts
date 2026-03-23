@@ -21,6 +21,9 @@ export type ShipRecord = Ship & {
 export type ManualShipSeed = {
   manufacturer: string
   name: string
+  role?: string | null
+  career?: string | null
+  isGroundVehicle?: boolean
   sizeGroup: ShipSizeGroup
   health: number
   armor?: number

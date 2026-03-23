@@ -3,6 +3,9 @@ export const erkulPtuShipSeeds = [
     "id": "97648869-5fa5-42da-b804-4d9314289539",
     "manufacturer": "AEGS",
     "name": "Avenger_Stalker",
+    "role": "Interceptor",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 11900,
     "armor": 10,
@@ -11,13 +14,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "0079c5d5-1678-4f8c-85ba-18ca8f642af6",
     "manufacturer": "AEGS",
     "name": "Avenger_Titan",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 11900,
     "armor": 10,
@@ -26,13 +31,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d9bc09ce-4c74-4f72-892e-a833c094f4e6",
     "manufacturer": "AEGS",
-    "name": "Avenger_Titan_Rngd.",
+    "name": "Avenger_Titan_Renegade",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 11900,
     "armor": 10,
@@ -41,13 +48,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "9474f571-8467-4d83-b1fe-f64103d363f4",
     "manufacturer": "AEGS",
     "name": "Avenger_Warlock",
+    "role": "Interdiction",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 11900,
     "armor": 10,
@@ -56,13 +65,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "c9b3ef78-9c47-4052-bf70-ecf32c55c001",
     "manufacturer": "AEGS",
     "name": "Eclipse",
+    "role": "Stealth Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 27044,
     "armor": 10,
@@ -71,13 +82,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b6b59889-7226-458e-a6b0-1c9392128a3c",
     "manufacturer": "AEGS",
     "name": "Gladius",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6110,
     "armor": 10,
@@ -86,13 +99,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b3d87a94-6858-4d3c-ba59-1ef29d727d1a",
     "manufacturer": "AEGS",
     "name": "Gladius_Pirate",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6110,
     "armor": 10,
@@ -101,13 +116,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d6cb3db3-b1e0-47a5-8c62-a64285dbb675",
     "manufacturer": "AEGS",
     "name": "Gladius_Valiant",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6110,
     "armor": 10,
@@ -116,13 +133,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d46f4de1-8dc1-473b-9739-88c9ba7e75a6",
     "manufacturer": "AEGS",
     "name": "Hammerhead",
+    "role": "Heavy Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 295600,
     "armor": 127,
@@ -131,13 +150,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 152,
     "energyThreshold": 101,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "f0caa993-4c6b-4402-8ef1-d91879060f3b",
     "manufacturer": "AEGS",
-    "name": "Idris-M",
+    "name": "Idris_M",
+    "role": "Frigate",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "capital",
     "health": 15515000,
     "armor": 156,
@@ -146,13 +167,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 173,
     "energyThreshold": 139,
     "pilotHardpointSize": 10,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "4b0585b0-b60b-4c52-a744-d812e5e9ad58",
     "manufacturer": "AEGS",
-    "name": "Idris-P",
+    "name": "Idris_P",
+    "role": "Frigate",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "capital",
     "health": 15515000,
     "armor": 156,
@@ -161,13 +184,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 173,
     "energyThreshold": 139,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "f05b74b2-06cf-44d0-8607-c09487359384",
     "manufacturer": "AEGS",
     "name": "Reclaimer",
+    "role": "Heavy Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "capital",
     "health": 123002,
     "armor": 119,
@@ -176,13 +201,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 132,
     "energyThreshold": 106,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "9a25d006-5706-4c70-9ac6-df795688fe09",
     "manufacturer": "AEGS",
     "name": "Redeemer",
+    "role": "Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 66700,
     "armor": 70,
@@ -191,13 +218,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "93e1a434-f4fa-43ee-a40c-71bcae5073bc",
     "manufacturer": "AEGS",
     "name": "Retaliator",
+    "role": "Modular",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 138981,
     "armor": 70,
@@ -206,13 +235,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "17276ad3-7636-40b8-969a-877a2b439b37",
     "manufacturer": "AEGS",
     "name": "Sabre",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 23013,
     "armor": 18,
@@ -221,13 +252,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "9e4b2b2b-1b5a-4d53-84a2-fe6ed1e43172",
     "manufacturer": "AEGS",
     "name": "Sabre_Comet",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 23013,
     "armor": 18,
@@ -236,13 +269,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b9bc6679-81ad-472b-8b98-866c72fe6a89",
     "manufacturer": "AEGS",
     "name": "Sabre_Firebird",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15510,
     "armor": 18,
@@ -251,13 +286,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "ac7ec306-b272-432e-8284-491da614419c",
     "manufacturer": "AEGS",
     "name": "Sabre_Peregrine",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 13550,
     "armor": 18,
@@ -266,13 +303,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 6,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "34615358-6b8e-4c27-b29e-f936e254e2a3",
     "manufacturer": "AEGS",
     "name": "Sabre_Raven",
+    "role": "Interdiction",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 12516,
     "armor": 18,
@@ -281,13 +320,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "34295443-da9b-4e6c-9335-69d5f3b29a88",
     "manufacturer": "AEGS",
     "name": "Vanguard_Harbinger",
+    "role": "Heavy Fighter / Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 42800,
     "armor": 70,
@@ -296,13 +337,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "f80d39f3-50fc-4fca-ada1-76de4c237e3f",
     "manufacturer": "AEGS",
     "name": "Vanguard_Hoplite",
+    "role": "Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 57800,
     "armor": 70,
@@ -311,13 +354,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "8aa6a16e-6c06-4db8-ac6d-165f97bf2565",
     "manufacturer": "AEGS",
     "name": "Vanguard_Sentinel",
+    "role": "Heavy Fighter / Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 48140,
     "armor": 70,
@@ -326,13 +371,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "a8208d11-32d4-4a4a-82c4-fd7f498b2ae6",
     "manufacturer": "AEGS",
     "name": "Vanguard_Warden",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 42800,
     "armor": 70,
@@ -341,13 +388,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "eaeb562d-d4ac-43bd-a843-e8a6d69fad82",
     "manufacturer": "ANVL",
     "name": "Arrow",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8580,
     "armor": 9,
@@ -356,13 +405,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 12,
     "energyThreshold": 6,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "8ffde65b-ee9b-4a50-b386-3111175736b2",
     "manufacturer": "ANVL",
     "name": "Asgard",
+    "role": "Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 77000,
     "armor": 71,
@@ -371,13 +422,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 92,
     "energyThreshold": 49,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 7,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 7
   },
   {
     "id": "20d5f617-147a-4530-a753-a7afd1875fd1",
     "manufacturer": "ANVL",
     "name": "C8_Pisces",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6250,
     "armor": 9,
@@ -386,13 +439,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 12,
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "1bed9058-e284-4c0f-b561-6ba57ab4f99d",
     "manufacturer": "ANVL",
     "name": "C8R_Pisces_Rescue",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6250,
     "armor": 9,
@@ -401,13 +456,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 12,
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "831fdcfc-337a-4350-967d-e693d19efeee",
     "manufacturer": "ANVL",
-    "name": "C8X_Pisces_Exp.",
+    "name": "C8X_Pisces_Expedition",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6250,
     "armor": 9,
@@ -416,13 +473,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 12,
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "f6d606c9-b324-4efa-814f-15a59047a6a5",
     "manufacturer": "ANVL",
     "name": "Carrack",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 88000,
     "armor": 92,
@@ -431,13 +490,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 120,
     "energyThreshold": 64,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "f1b224dd-273e-488f-9dee-fbf73f44f462",
     "manufacturer": "ANVL",
     "name": "Carrack_Expedition",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 88000,
     "armor": 92,
@@ -446,13 +507,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 120,
     "energyThreshold": 64,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "8b7e0d33-21c1-4057-8e5b-bf391b5091b2",
     "manufacturer": "ANVL",
-    "name": "F7A_Mk_I",
+    "name": "F7A_Hornet_Mk_I",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 16758,
     "armor": 19,
@@ -461,13 +524,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "6759360c-8b2f-4a89-b7c6-82e94b873c1b",
     "manufacturer": "ANVL",
-    "name": "F7A_Mk_II",
+    "name": "F7A_Hornet_Mk_II",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 13453,
     "armor": 19,
@@ -476,13 +541,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "933ca746-3c36-470f-8245-a247a3776455",
     "manufacturer": "ANVL",
-    "name": "F7C_Mk_I",
+    "name": "F7C_Hornet_Mk_I",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15550,
     "armor": 19,
@@ -491,13 +558,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "fb231ba1-dba1-4c9f-823a-746c772ae92f",
     "manufacturer": "ANVL",
-    "name": "F7C_Mk_II",
+    "name": "F7C_Hornet_Mk_II",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 13153,
     "armor": 19,
@@ -506,13 +575,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "0af2064a-c02d-4801-a434-09d802ba6573",
     "manufacturer": "ANVL",
-    "name": "F7C_Wildfire_Mk_I",
+    "name": "F7C_Hornet_Wildfire_Mk_I",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15550,
     "armor": 19,
@@ -521,13 +592,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b140e32f-a96b-462f-8c7b-e7243577b2f4",
     "manufacturer": "ANVL",
-    "name": "F7C-M_Hrtskr._Mk_I",
+    "name": "F7C-M_Hornet_Heartseeker_Mk_I",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15450,
     "armor": 19,
@@ -536,13 +609,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "6f8bfcc3-2ade-4976-a8e9-fd07de5c3601",
     "manufacturer": "ANVL",
-    "name": "F7C-M_Hrtskr._Mk_II",
+    "name": "F7C-M_Hornet_Heartseeker_Mk_II",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15250,
     "armor": 19,
@@ -551,13 +626,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "4f83f89d-480b-4d1b-867a-13772742d828",
     "manufacturer": "ANVL",
-    "name": "F7C-M_Mk_I",
+    "name": "F7C-M_Super_Hornet_Mk_I",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15450,
     "armor": 19,
@@ -566,13 +643,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "8c2eefb6-d880-47c9-8fd0-1f88865d5511",
     "manufacturer": "ANVL",
-    "name": "F7C-M_Mk_II",
+    "name": "F7C-M_Super_Hornet_Mk_II",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15250,
     "armor": 19,
@@ -581,13 +660,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "95b11c76-31ea-4bf3-9894-fb29caecb927",
     "manufacturer": "ANVL",
-    "name": "F7C-R_Mk_I",
+    "name": "F7C-R_Hornet_Tracker_Mk_I",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15550,
     "armor": 19,
@@ -596,13 +677,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3fbff8f5-90f0-4c97-93f2-62d180aa8736",
     "manufacturer": "ANVL",
-    "name": "F7C-R_Mk_II",
+    "name": "F7C-R_Hornet_Tracker_Mk_II",
+    "role": "Pathfinder",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 13153,
     "armor": 19,
@@ -611,13 +694,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "63b90c8d-459c-4a27-8cf6-db706ffc49ae",
     "manufacturer": "ANVL",
-    "name": "F7C-S_Mk_I",
+    "name": "F7C-S_Hornet_Ghost_Mk_I",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15350,
     "armor": 19,
@@ -626,13 +711,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "6fa37a02-3d65-448c-a989-02d42d9574dc",
     "manufacturer": "ANVL",
-    "name": "F7C-S_Mk_II",
+    "name": "F7C-S_Hornet_Ghost_Mk_II",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 12953,
     "armor": 19,
@@ -641,13 +728,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "1e837261-78d9-4d5b-b17c-90d312d6a3dd",
     "manufacturer": "ANVL",
     "name": "F8A_Lightning",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": true,
     "sizeGroup": "small",
     "health": 40200,
     "armor": 65,
@@ -656,13 +745,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "663b6047-5b06-489c-a906-bc91fb7d6e63",
     "manufacturer": "ANVL",
     "name": "F8C_Lightning",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 40200,
     "armor": 65,
@@ -671,13 +762,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 3,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 3
   },
   {
     "id": "f3f7b2e8-1e11-4649-82c6-3106ec966655",
     "manufacturer": "ANVL",
     "name": "Gladiator",
+    "role": "Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 34800,
     "armor": 19,
@@ -686,13 +779,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 24,
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "c0f1d217-388c-453a-b6c1-3cb5c2cfc4d8",
     "manufacturer": "ANVL",
     "name": "Hawk",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 16600,
     "armor": 9,
@@ -701,13 +796,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 12,
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3a586d52-4829-4504-8e3a-4ee300bb40cc",
     "manufacturer": "ANVL",
     "name": "Hurricane",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 18226,
     "armor": 65,
@@ -716,13 +813,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "b617902a-6cab-457b-9eb8-494274f659b8",
     "manufacturer": "ANVL",
     "name": "Paladin",
+    "role": "Gunship",
+    "career": "Gunship",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 149819,
     "armor": 71,
@@ -731,13 +830,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 92,
     "energyThreshold": 49,
     "pilotHardpointSize": null,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "0920e187-515d-466a-9c6a-a7dde9d2b1bc",
     "manufacturer": "ANVL",
     "name": "Terrapin",
+    "role": "Pathfinder",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 173201,
     "armor": 75,
@@ -746,13 +847,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 97,
     "energyThreshold": 52,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "35f6ad71-01c6-4762-a18b-99c7fdde9760",
     "manufacturer": "ANVL",
     "name": "Terrapin_Medic",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 173201,
     "armor": 75,
@@ -761,13 +864,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 97,
     "energyThreshold": 52,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "881e3879-a186-44da-8b47-1d8f0a846438",
     "manufacturer": "ANVL",
     "name": "Valkyrie",
+    "role": "Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 90053,
     "armor": 71,
@@ -776,13 +881,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 92,
     "energyThreshold": 49,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "8f61dc58-74ca-4dc6-aa95-c3105f10bba4",
     "manufacturer": "XIAN",
     "name": "Khartu-al",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 14100,
     "armor": 10,
@@ -791,13 +898,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "daddeefa-fef0-4146-b630-a33d6e8904d3",
     "manufacturer": "XIAN",
     "name": "Nox",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2231,
     "armor": 5,
@@ -806,13 +915,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "204a6ce4-1634-4f87-9955-04c70e44c8af",
     "manufacturer": "XIAN",
     "name": "Nox_Kue",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2231,
     "armor": 5,
@@ -821,13 +932,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "9634b4d6-9f5a-4ad2-8574-431c15e3bc5d",
     "manufacturer": "XNAA",
     "name": "San'tok.yāi",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 10975.880000000001,
     "armor": 18,
@@ -836,13 +949,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "ecdfd0df-6c5f-4183-a24b-9e1546e00a4e",
     "manufacturer": "ARGO",
     "name": "MOLE",
+    "role": "Medium Mining",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 130000,
     "armor": 66,
@@ -851,13 +966,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 70,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "aaa12a00-a1e7-4dfc-8626-3bebb005209f",
     "manufacturer": "ARGO",
     "name": "MOTH",
+    "role": "Medium Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 130000,
     "armor": 66,
@@ -866,13 +983,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 70,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "e19fc6c3-f5fa-4623-9a17-b00a29b71500",
     "manufacturer": "ARGO",
     "name": "MPUV_Cargo",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5920,
     "armor": 5,
@@ -881,13 +1000,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e17ccf62-f2d2-4c4e-a132-a3000d40fbde",
     "manufacturer": "ARGO",
     "name": "MPUV_Personnel",
+    "role": "Passenger",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5920,
     "armor": 5,
@@ -896,13 +1017,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "674e0a52-4469-4b55-ba0d-6aecc44d1728",
     "manufacturer": "ARGO",
     "name": "MPUV_Tractor",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6380,
     "armor": 5,
@@ -911,13 +1034,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "cf9aa91e-15bf-435c-a22d-f2cadc4485ce",
     "manufacturer": "ARGO",
     "name": "RAFT",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 115700,
     "armor": 66,
@@ -926,13 +1051,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 70,
     "energyThreshold": 62,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "1810d1a7-61e3-4d95-bafb-0f11758c7683",
     "manufacturer": "ARGO",
     "name": "SRV",
+    "role": "Recovery",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 34500,
     "armor": 10,
@@ -941,13 +1068,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "081236f5-9549-4a60-9123-6ae21f0cd261",
     "manufacturer": "BANU",
     "name": "Defender",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 13800,
     "armor": 18,
@@ -956,13 +1085,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 20,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "16ff4365-ac34-4b09-a132-d52d51f688d4",
     "manufacturer": "CNOU",
     "name": "HoverQuad",
+    "role": "Passenger",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 3300,
     "armor": 5,
@@ -971,13 +1102,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "a852bb00-e395-468f-9adc-78b3df9c82f6",
     "manufacturer": "CNOU",
     "name": "Mustang_Alpha",
+    "role": "Starter / Light Freight",
+    "career": "Multi-Role",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 10080,
     "armor": 10,
@@ -986,13 +1119,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "973bc147-4422-48a6-99c8-6ff0ead25bdf",
     "manufacturer": "CNOU",
     "name": "Mustang_Beta",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 10080,
     "armor": 10,
@@ -1001,13 +1136,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "f8c8fe5c-1aa3-41d7-86b0-6bb54b249541",
     "manufacturer": "CNOU",
     "name": "Mustang_Delta",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 10080,
     "armor": 10,
@@ -1016,13 +1153,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "968249b2-ca7c-4b41-8f58-730673fefc8c",
     "manufacturer": "CNOU",
     "name": "Mustang_Gamma",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8580,
     "armor": 10,
@@ -1031,13 +1170,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "1164be4d-623e-4ef7-bc3d-4cdb45c22ec5",
     "manufacturer": "CNOU",
     "name": "Mustang_Omega",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8580,
     "armor": 10,
@@ -1046,13 +1187,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "34506e83-b7b8-4804-a7bb-f31f11bb9214",
     "manufacturer": "CNOU",
     "name": "Nomad",
+    "role": "Starter / Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 9800,
     "armor": 10,
@@ -1061,13 +1204,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "c0b86c69-55ac-4af3-a722-d46282813e91",
     "manufacturer": "CRUS",
     "name": "A1_Spirit",
+    "role": "Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 67600,
     "armor": 67,
@@ -1076,13 +1221,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 56,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "3bee9f2d-4494-4560-b9f8-463bc90695cb",
     "manufacturer": "CRUS",
-    "name": "A2_Hercules",
+    "name": "A2_Hercules_Starlifter",
+    "role": "Heavy Bomber",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 112530,
     "armor": 95,
@@ -1091,13 +1238,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 110,
     "energyThreshold": 80,
     "pilotHardpointSize": 10,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "04571d49-0680-4b84-bdb1-dbebeb22c898",
     "manufacturer": "CRUS",
-    "name": "Ares_Inferno",
+    "name": "Ares_Star_Fighter_Inferno",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 38600,
     "armor": 67,
@@ -1106,13 +1255,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 56,
     "pilotHardpointSize": 7,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "30aab266-9131-4a07-808b-61c868cb404f",
     "manufacturer": "CRUS",
-    "name": "Ares_Ion",
+    "name": "Ares_Star_Fighter_Ion",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 38600,
     "armor": 67,
@@ -1121,13 +1272,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 56,
     "pilotHardpointSize": 7,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "9611b8ed-cc96-4b5c-aa1e-baefe7d5bb1c",
     "manufacturer": "CRUS",
     "name": "C1_Spirit",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 67600,
     "armor": 67,
@@ -1136,13 +1289,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 56,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "7533ff77-836c-4bd2-9171-487d9c63863c",
     "manufacturer": "CRUS",
-    "name": "C2_Hercules",
+    "name": "C2_Hercules_Starlifter",
+    "role": "Heavy Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 78400,
     "armor": 95,
@@ -1151,13 +1306,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 110,
     "energyThreshold": 80,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "16aa514f-12ac-43a4-b51d-44447252186e",
     "manufacturer": "CRUS",
     "name": "Intrepid",
+    "role": "Starter / Light Freight",
+    "career": "Starter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 15350,
     "armor": 10,
@@ -1166,13 +1323,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "5cf39b3b-41d8-45c1-8ef2-d4678c7a7b85",
     "manufacturer": "CRUS",
-    "name": "M2_Hercules",
+    "name": "M2_Hercules_Starlifter",
+    "role": "Heavy Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 101820,
     "armor": 95,
@@ -1181,13 +1340,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 110,
     "energyThreshold": 80,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "c8e10f09-38a0-4730-9dd3-eb0a510c9e43",
     "manufacturer": "CRUS",
-    "name": "Mercury",
+    "name": "Mercury_Star_Runner",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 41400,
     "armor": 74,
@@ -1196,13 +1357,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 85,
     "energyThreshold": 62,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "efec4d48-77ab-4cba-9add-a3d96c5be8d8",
     "manufacturer": "DRAK",
     "name": "Buccaneer",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 9480,
     "armor": 9,
@@ -1211,13 +1374,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "dc39ca6b-1d76-4db5-9346-356f49954978",
     "manufacturer": "DRAK",
     "name": "Caterpillar",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 92700,
     "armor": 85,
@@ -1226,13 +1391,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 80,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "565d8121-50a9-4920-af50-f176caef0431",
     "manufacturer": "DRAK",
     "name": "Caterpillar_Pirate",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 92700,
     "armor": 85,
@@ -1241,13 +1408,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 80,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "c03e7aef-6411-4e85-9c10-e89862884433",
     "manufacturer": "DRAK",
-    "name": "Drake_Clipper",
+    "name": "Clipper",
+    "role": "Generalist",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 26350,
     "armor": 9,
@@ -1256,13 +1425,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e1afb014-fe71-4da9-89ae-c30fcf9c0782",
     "manufacturer": "DRAK",
     "name": "Corsair",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 91000,
     "armor": 60,
@@ -1271,13 +1442,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 56,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "b58f7735-9454-4a0a-b724-2bc8d61961d7",
     "manufacturer": "DRAK",
     "name": "Cutlass_Black",
+    "role": "Light Freight / Medium Fighter",
+    "career": "Multi-Role",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 29760,
     "armor": 48,
@@ -1286,13 +1459,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "13c3f610-7bbd-4464-bd36-d716de49a125",
     "manufacturer": "DRAK",
     "name": "Cutlass_Blue",
+    "role": "Interdiction",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 35770,
     "armor": 48,
@@ -1301,13 +1476,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "7780e93d-1cc3-43b4-9b32-9923af19775a",
     "manufacturer": "DRAK",
     "name": "Cutlass_Red",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 34520,
     "armor": 48,
@@ -1316,13 +1493,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "384d7e27-daec-4554-a8e9-6920a10a86c1",
     "manufacturer": "DRAK",
     "name": "Cutlass_Steel",
+    "role": "Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 35560,
     "armor": 48,
@@ -1331,13 +1510,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 45,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "3ea9bcd8-1ddd-4714-a537-7b2675e8c2d2",
     "manufacturer": "DRAK",
     "name": "Cutter",
+    "role": "Starter / Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 17100,
     "armor": 9,
@@ -1346,13 +1527,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "93b13680-9aa6-4c21-b998-e4f8880f7c12",
     "manufacturer": "DRAK",
     "name": "Cutter_Rambler",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 17100,
     "armor": 9,
@@ -1361,13 +1544,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "887cd720-7337-44ae-9708-828ccf808649",
     "manufacturer": "DRAK",
     "name": "Cutter_Scout",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 17500,
     "armor": 9,
@@ -1376,13 +1561,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "37659ff0-a803-4a4f-97ff-ad59822061ed",
     "manufacturer": "DRAK",
     "name": "Dragonfly",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1570,
     "armor": 5,
@@ -1391,13 +1578,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d868dfb9-5bcd-4f7b-a40a-3aa5bbf7d705",
     "manufacturer": "DRAK",
-    "name": "Dragonfly_StarKitten",
+    "name": "Dragonfly_Star_Kitten",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1570,
     "armor": 5,
@@ -1406,13 +1595,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "533b9b62-33eb-4b34-95eb-d43fe3e020ff",
     "manufacturer": "DRAK",
-    "name": "Dragonfly_Yellowjckt",
+    "name": "Dragonfly_Yellowjacket",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1570,
     "armor": 5,
@@ -1421,13 +1612,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b616b3ad-123c-40f2-80bd-b8f4109633aa",
     "manufacturer": "DRAK",
     "name": "Golem",
+    "role": "Starter / Light Mining",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 17300,
     "armor": 17,
@@ -1436,13 +1629,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "ea2c22bc-c2f0-42dc-967d-3300f9232f91",
     "manufacturer": "DRAK",
-    "name": "Drake_Golem_OX",
+    "name": "Golem_OX",
+    "role": "Light Freight",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 20700,
     "armor": 17,
@@ -1451,13 +1646,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "36726a9f-7e14-4942-bc4f-1a398b5bef6a",
     "manufacturer": "DRAK",
     "name": "Herald",
+    "role": "Medium Data",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6420,
     "armor": 17,
@@ -1466,13 +1663,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "34077e67-5e2c-4903-a17c-2d0e163751c7",
     "manufacturer": "DRAK",
     "name": "Vulture",
+    "role": "Light Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 43700,
     "armor": 17,
@@ -1481,13 +1680,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "0d4c5000-ffdb-41f5-9de1-d64252dfef21",
     "manufacturer": "VNCL",
     "name": "Blade",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 7950,
     "armor": 9,
@@ -1496,13 +1697,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e379e38c-459a-4705-be7d-49a5f5d7a928",
     "manufacturer": "VNCL",
     "name": "Glaive",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 10962,
     "armor": 18,
@@ -1511,13 +1714,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 22,
     "energyThreshold": 14,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "087b2253-2fc7-4fae-9f9d-97f64b7c43db",
     "manufacturer": "ESPR",
     "name": "Prowler",
+    "role": "Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 76900,
     "armor": 55,
@@ -1526,13 +1731,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 60,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "528fdddc-c97f-4ae8-a00e-11a59fc3662d",
     "manufacturer": "ESPR",
     "name": "Prowler_Utility",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 69300,
     "armor": 55,
@@ -1541,13 +1748,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 50,
     "energyThreshold": 60,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "f7b8addd-9253-495c-a278-bdaa236e6cbc",
     "manufacturer": "VNCL",
     "name": "Stinger",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 47114,
     "armor": 64,
@@ -1556,13 +1765,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 50,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "41a84db8-062b-4359-ad16-611ad540fbdb",
     "manufacturer": "ESPR",
     "name": "Talon",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 24930,
     "armor": 9,
@@ -1571,13 +1782,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 8,
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "2000c8d9-f151-4148-babe-6d9e413e2114",
     "manufacturer": "ESPR",
     "name": "Talon_Shrike",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 24930,
     "armor": 9,
@@ -1586,13 +1799,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 8,
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "11ebc47d-4763-4faa-9020-171cf6c2651f",
     "manufacturer": "GAMA",
     "name": "Syulen",
+    "role": "Starter / Pathfinder",
+    "career": "Multi-Role",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 11740,
     "armor": 10,
@@ -1601,13 +1816,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3a7bfe4f-7a6c-4818-aba8-0f1019c3a647",
     "manufacturer": "GLSN",
     "name": "Shiv",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 34300,
     "armor": 41,
@@ -1616,13 +1833,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 45,
     "energyThreshold": 36,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "1b201ef2-b4dd-46c2-978e-47a13e0a7f81",
     "manufacturer": "KRIG",
-    "name": "Wolf",
+    "name": "L-21_Wolf",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8523,
     "armor": 9,
@@ -1631,13 +1850,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "df2166dd-70ba-4b10-90ee-bb2ae203b3e8",
     "manufacturer": "KRIG",
-    "name": "Kruger_L-22_Alpha_Wolf",
+    "name": "L-22_Alpha_Wolf",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 7722,
     "armor": 9,
@@ -1646,13 +1867,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "a5a8e4e5-939c-4f7b-ab48-5f7db556d5a4",
     "manufacturer": "KRIG",
-    "name": "P-52",
+    "name": "P-52_Merlin",
+    "role": "Snub Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2430,
     "armor": 5,
@@ -1661,13 +1884,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "70580bce-2347-4e96-9260-dee6394f483d",
     "manufacturer": "KRIG",
-    "name": "P-72",
+    "name": "P-72_Archimedes",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1680,
     "armor": 5,
@@ -1676,13 +1901,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "ebee8a7f-8e4a-4bed-9e5d-76822724c9f0",
     "manufacturer": "KRIG",
-    "name": "P-72_Emerald",
+    "name": "P-72_Archimedes_Emerald",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1680,
     "armor": 5,
@@ -1691,13 +1918,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "96b11061-68ce-4896-9424-fc8804a410ae",
     "manufacturer": "MISC",
     "name": "Fury",
+    "role": "Snub Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5830,
     "armor": 5,
@@ -1706,13 +1935,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "83a450d1-e6b1-437e-9aee-18316ed34c29",
     "manufacturer": "MISC",
     "name": "Fury_LX",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2160,
     "armor": 5,
@@ -1721,13 +1952,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": null,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "469d850e-b86b-47fc-9ee2-df81d775ccc8",
     "manufacturer": "MISC",
     "name": "Fury_MX",
+    "role": "Snub Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5830,
     "armor": 5,
@@ -1736,13 +1969,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "30e0f7ac-26fc-4d31-a231-af625511e37e",
     "manufacturer": "MRAI",
     "name": "Guardian",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 69200,
     "armor": 73,
@@ -1751,13 +1986,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "aaa0cdcd-907c-4533-b3fc-181ede06076d",
     "manufacturer": "MRAI",
     "name": "Guardian_MX",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 89300,
     "armor": 73,
@@ -1766,13 +2003,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e98521b6-ea2f-4c10-9050-abc29d89d0e8",
     "manufacturer": "MRAI",
     "name": "Guardian_QI",
+    "role": "Interdiction",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 69100,
     "armor": 73,
@@ -1781,13 +2020,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 84,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "48415834-ac12-4c28-ad01-7c210f30c2da",
     "manufacturer": "MRAI",
     "name": "Pulse",
+    "role": "Combat",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1150,
     "armor": 5,
@@ -1796,13 +2037,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d1f27f85-90db-4b5d-8ac2-09a9e9ee1315",
     "manufacturer": "MRAI",
     "name": "Pulse_LX",
+    "role": "Racing",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 1150,
     "armor": 5,
@@ -1811,13 +2054,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "cec2111b-4c71-4968-8035-634de6561cf3",
     "manufacturer": "MISC",
     "name": "Razor",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 7200,
     "armor": 5,
@@ -1826,13 +2071,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b17ef3ab-9518-40fd-803f-c2468175ccf6",
     "manufacturer": "MISC",
     "name": "Razor_EX",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 7100,
     "armor": 5,
@@ -1841,13 +2088,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "203cb135-4f12-4a23-bd53-30910134bac8",
     "manufacturer": "MISC",
     "name": "Razor_LX",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2100,
     "armor": 5,
@@ -1856,13 +2105,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3d371fd4-50e2-4b5e-859f-1086e905c946",
     "manufacturer": "MISC",
     "name": "Fortune",
+    "role": "Light Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 59500,
     "armor": 10,
@@ -1871,13 +2122,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b4791030-9d64-4f98-85cb-ca106f868c5e",
     "manufacturer": "MISC",
     "name": "Freelancer",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 34900,
     "armor": 65,
@@ -1886,13 +2139,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 67,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "34821163-e32e-42bf-99df-8f42ba66ef34",
     "manufacturer": "MISC",
     "name": "Freelancer_DUR",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 26200,
     "armor": 65,
@@ -1901,13 +2156,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 67,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "6c6e9731-3d70-4f1b-84c2-9dbf3c1f97c7",
     "manufacturer": "MISC",
     "name": "Freelancer_MAX",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 25000,
     "armor": 65,
@@ -1916,13 +2173,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 67,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "4b6700e5-38bd-4d8d-9281-ef82996b135f",
     "manufacturer": "MISC",
     "name": "Freelancer_MIS",
+    "role": "Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 25000,
     "armor": 65,
@@ -1931,13 +2190,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 67,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "6ec72f64-2002-481c-b7c9-b132476ba6aa",
     "manufacturer": "MISC",
     "name": "Hull_A",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 91400,
     "armor": 19,
@@ -1946,13 +2207,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 19,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "c4ceff45-d851-44b1-921b-bfef93a6cd6a",
     "manufacturer": "MISC",
     "name": "Hull_C",
+    "role": "Heavy Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 323500,
     "armor": 93,
@@ -1961,13 +2224,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 96,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "f68ee841-88d1-46f3-a1e2-5dc71d9d5d97",
     "manufacturer": "MISC",
     "name": "Prospector",
+    "role": "Light Mining",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 33400,
     "armor": 19,
@@ -1976,13 +2241,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 18,
     "energyThreshold": 19,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3c9af040-d919-4afc-b768-45821a5b913c",
     "manufacturer": "MISC",
     "name": "Reliant_Kore",
+    "role": "Starter / Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 15460,
     "armor": 10,
@@ -1991,13 +2258,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "c6cfa4d9-e794-4bb6-8da9-54cb779ea109",
     "manufacturer": "MISC",
     "name": "Reliant_Mako",
+    "role": "Reporting",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 15460,
     "armor": 10,
@@ -2006,13 +2275,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 10,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e32d125f-a3f8-4bc7-b0e6-cb7edf22b7ac",
     "manufacturer": "MISC",
     "name": "Reliant_Sen",
+    "role": "Light Science",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 15460,
     "armor": 10,
@@ -2021,13 +2292,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 10,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "c2956880-b82a-42d0-962b-eb736dac1536",
     "manufacturer": "MISC",
     "name": "Reliant_Tana",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 14860,
     "armor": 10,
@@ -2036,13 +2309,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 10,
     "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "13a02a6d-7d67-4d22-8530-d4d2c8443f66",
     "manufacturer": "MISC",
     "name": "Starfarer",
+    "role": "Heavy Refueling",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 75800,
     "armor": 93,
@@ -2051,13 +2326,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 96,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "c989caf2-84a5-4c01-b99e-5fc9f8d0ce8e",
     "manufacturer": "MISC",
     "name": "Starfarer_Gemini",
+    "role": "Heavy Refueling",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 78800,
     "armor": 98,
@@ -2066,13 +2343,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 95,
     "energyThreshold": 101,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "ff873dda-2b79-4fa3-b3ce-535b8adff5e2",
     "manufacturer": "MISC",
     "name": "Starlancer_MAX",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 84200,
     "armor": 93,
@@ -2081,13 +2360,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 96,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "14b8caeb-d5e1-4816-9537-86ef19afada8",
     "manufacturer": "MISC",
     "name": "Starlancer_TAC",
+    "role": "Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 116600,
     "armor": 103,
@@ -2096,13 +2377,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 99,
     "energyThreshold": 106,
     "pilotHardpointSize": 4,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "6135a874-4cb1-4f49-9f29-5781e5991f2b",
     "manufacturer": "ORIG",
     "name": "100i",
+    "role": "Starter / Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 4550,
     "armor": 8,
@@ -2111,13 +2394,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "e7eeba8d-b108-48a1-a332-d9edbab2b9c1",
     "manufacturer": "ORIG",
     "name": "125a",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 4550,
     "armor": 8,
@@ -2126,13 +2411,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "2f231daa-95e5-4cb2-a32e-4db8f29a30d6",
     "manufacturer": "ORIG",
     "name": "135c",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 4550,
     "armor": 8,
@@ -2141,13 +2428,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "ce937681-caa2-4cfa-ab80-f5bf2a5b9a6c",
     "manufacturer": "ORIG",
     "name": "300i",
+    "role": "Luxury Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8700,
     "armor": 8,
@@ -2156,13 +2445,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "dc537d66-2abb-43aa-9d37-4e963fc6e9e2",
     "manufacturer": "ORIG",
     "name": "315p",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 9100,
     "armor": 8,
@@ -2171,13 +2462,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "039a2768-1aff-4969-b2a4-ed8aeb21dae1",
     "manufacturer": "ORIG",
     "name": "325a",
+    "role": "Interceptor",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 9300,
     "armor": 8,
@@ -2186,13 +2479,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "316c6601-b405-4a3a-abac-394c655718f8",
     "manufacturer": "ORIG",
     "name": "350r",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2400,
     "armor": 8,
@@ -2201,13 +2496,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "718f4435-628b-4436-bb80-bf9cfef9a945",
     "manufacturer": "ORIG",
     "name": "400i",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 81500,
     "armor": 57,
@@ -2216,13 +2513,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 63,
     "energyThreshold": 50,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "f8ac4c26-8f4d-4cb3-9be2-7d867a95a877",
     "manufacturer": "ORIG",
     "name": "600i",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 197250,
     "armor": 81,
@@ -2231,13 +2530,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 72,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "38ae749f-d4fc-4dfd-907b-ed8db61f3d88",
     "manufacturer": "ORIG",
-    "name": "600i_Exec._Edition",
+    "name": "600i_Executive_Edition",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 197250,
     "armor": 81,
@@ -2246,13 +2547,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 72,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "11b660a2-c77c-490b-9e85-ee70400c5cf8",
     "manufacturer": "ORIG",
     "name": "600i_Touring",
+    "role": "Luxury Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 197250,
     "armor": 81,
@@ -2261,13 +2564,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 90,
     "energyThreshold": 72,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "9dc9c257-c413-416a-ab9b-06fbadf18d1e",
     "manufacturer": "ORIG",
     "name": "85X_Limited",
+    "role": "Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2100,
     "armor": 8,
@@ -2276,13 +2581,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "50ddaf5e-a8e3-42fe-a1d3-7267f39b39b0",
     "manufacturer": "ORIG",
     "name": "890_Jump",
+    "role": "Luxury Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "capital",
     "health": 153200,
     "armor": 97,
@@ -2291,13 +2598,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 108,
     "energyThreshold": 86,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "1b57cdac-693b-410b-8343-68fa194c94ae",
     "manufacturer": "ORIG",
     "name": "M50_Interceptor",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2281,
     "armor": 8,
@@ -2306,13 +2615,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "829d0525-e67e-4e57-9f52-b4e572a4f73d",
     "manufacturer": "ORIG",
     "name": "X1",
+    "role": "Passenger",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2820,
     "armor": 5,
@@ -2321,13 +2632,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": null,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "b416dbbf-53f2-489e-a9dc-456286aa6c70",
     "manufacturer": "ORIG",
     "name": "X1_Force",
+    "role": "Passenger",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2820,
     "armor": 5,
@@ -2336,13 +2649,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": null,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "58e25524-8bd3-450f-8442-7b58fdfc8a50",
     "manufacturer": "ORIG",
     "name": "X1_Velocity",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 2820,
     "armor": 5,
@@ -2351,13 +2666,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": null,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "4559fbe2-55ab-a5a8-4e77-75106cb96ab7",
     "manufacturer": "RSI",
     "name": "Apollo_Medivac",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 116700,
     "armor": 73,
@@ -2366,13 +2683,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 81,
     "energyThreshold": 65,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "478bfc10-9577-ac19-262a-d40a93c3fcb2",
     "manufacturer": "RSI",
     "name": "Apollo_Triage",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 113700,
     "armor": 70,
@@ -2381,13 +2700,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "6fa21dc8-c838-4134-a74a-0cd8313bcad8",
     "manufacturer": "RSI",
     "name": "Aurora_Mk_I_LX",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5950,
     "armor": 10,
@@ -2396,13 +2717,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "c984fac2-06c0-4776-8f93-07ebd2c26ad3",
     "manufacturer": "RSI",
     "name": "Aurora_Mk_I_CL",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5950,
     "armor": 10,
@@ -2411,13 +2734,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d8987dc2-340d-4312-8d4f-aee7e7fac823",
     "manufacturer": "RSI",
     "name": "Aurora_Mk_I_ES",
+    "role": "Starter / Pathfinder",
+    "career": "Multi-Role",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5950,
     "armor": 10,
@@ -2426,13 +2751,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d7828052-56fb-41a6-ae7d-bc29b0bdf68c",
     "manufacturer": "RSI",
     "name": "Aurora_Mk_I_LN",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5950,
     "armor": 10,
@@ -2441,13 +2768,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "a6e1bb18-8a11-4bbc-865e-45fd84e7b469",
     "manufacturer": "RSI",
-    "name": "Aurora_MR",
+    "name": "Aurora_Mk_I_MR",
+    "role": "Light Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5950,
     "armor": 10,
@@ -2456,13 +2785,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d95fb013-60d5-43ac-ab2d-daa082f45411",
     "manufacturer": "RSI",
-    "name": "Constellation_Andr.",
+    "name": "Constellation_Andromeda",
+    "role": "Medium Freight / Gun Ship",
+    "career": "Multi-Role",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 180644,
     "armor": 70,
@@ -2471,13 +2802,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "e7b40f5c-4099-4aa6-b226-b5b08bd68413",
     "manufacturer": "RSI",
-    "name": "Constellation_Aqlla.",
+    "name": "Constellation_Aquila",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 180644,
     "armor": 70,
@@ -2486,13 +2819,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "ecadf2b2-a404-4776-9289-04af91538d76",
     "manufacturer": "RSI",
-    "name": "Constellation_Phnx.",
+    "name": "Constellation_Phoenix",
+    "role": "Luxury Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 161145,
     "armor": 70,
@@ -2501,13 +2836,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "daf936a1-689f-4edb-980a-96947e2727c4",
     "manufacturer": "RSI",
-    "name": "Constelltn._PhnxEmr.",
+    "name": "Constellation_Phoenix_Emerald",
+    "role": "Luxury Touring",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 161145,
     "armor": 70,
@@ -2516,13 +2853,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "d1c3fa10-b2d9-421e-8301-97dbf4d0c115",
     "manufacturer": "RSI",
-    "name": "Constellation_Tau.",
+    "name": "Constellation_Taurus",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 140040,
     "armor": 70,
@@ -2531,13 +2870,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "4ed10b1c-df4f-4ab0-430e-b5b9f33b0f94",
     "manufacturer": "RSI",
     "name": "Hermes",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 118700,
     "armor": 70,
@@ -2546,13 +2887,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "43f4f9c3-70ad-4549-8a10-0045afbbda10",
     "manufacturer": "RSI",
     "name": "Mantis",
+    "role": "Interdiction",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 32500,
     "armor": 20,
@@ -2561,13 +2904,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 22,
     "energyThreshold": 18,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3155e6fd-e1c8-4c15-9bd1-f8e3c2c7174f",
     "manufacturer": "RSI",
     "name": "Meteor",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 30150,
     "armor": 20,
@@ -2576,13 +2921,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 22,
     "energyThreshold": 18,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "40a1f83b-3623-49e6-8168-ab8223998aa2",
     "manufacturer": "RSI",
     "name": "Perseus",
+    "role": "Heavy Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "large",
     "health": 389204,
     "armor": 119,
@@ -2591,13 +2938,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 132,
     "energyThreshold": 106,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "a5a5b055-c5d7-4384-9951-f15d47b88789",
     "manufacturer": "RSI",
     "name": "Polaris",
+    "role": "Corvette",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "capital",
     "health": 3947100,
     "armor": 119,
@@ -2606,13 +2955,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 132,
     "energyThreshold": 106,
     "pilotHardpointSize": null,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "83318d44-b6c1-42d8-bcd1-284318718b42",
     "manufacturer": "RSI",
     "name": "Salvation",
+    "role": "Starter / Light Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5503,
     "armor": 10,
@@ -2621,13 +2972,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 11,
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "edc1421b-59ee-4233-b292-abc2c3ea0a1a",
     "manufacturer": "RSI",
     "name": "Scorpius",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 43660,
     "armor": 70,
@@ -2636,13 +2989,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "2f88be37-7825-4fe1-afae-2ca9d2b01114",
     "manufacturer": "RSI",
-    "name": "Scorpius",
+    "name": "Scorpius_Antares",
+    "role": "Heavy Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 43660,
     "armor": 70,
@@ -2651,13 +3006,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 4
   },
   {
     "id": "02fe3279-3598-4ce6-96dc-0bc5cb90dfdc",
     "manufacturer": "RSI",
     "name": "Zeus_Mk_II_CL",
+    "role": "Medium Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 32000,
     "armor": 70,
@@ -2666,13 +3023,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "e4770804-b43a-4c2d-a4e4-fedd410e50fb",
     "manufacturer": "RSI",
     "name": "Zeus_Mk_II_ES",
+    "role": "Expedition",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 32000,
     "armor": 70,
@@ -2681,13 +3040,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 77,
     "energyThreshold": 62,
     "pilotHardpointSize": 2,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "28f22bb8-9f1c-4a46-9a39-20bcb1e5000e",
     "manufacturer": "VNCL",
     "name": "Scythe",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 11701,
     "armor": 18,
@@ -2696,13 +3057,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 22,
     "energyThreshold": 14,
     "pilotHardpointSize": 5,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "a04a1503-ac5c-4520-bc22-4b1a1a198eff",
     "manufacturer": "ANVL",
     "name": "Ballista",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 24200,
     "armor": 5,
@@ -2711,13 +3074,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "50f551e3-3435-4cbe-9ecf-8712855a8e27",
     "manufacturer": "ANVL",
     "name": "Ballista_Dunestalker",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 24200,
     "armor": 5,
@@ -2726,13 +3091,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "aaeb976b-7a79-4a9c-91ee-07ed05d4a399",
     "manufacturer": "ANVL",
     "name": "Ballista_Snowblind",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 24200,
     "armor": 5,
@@ -2741,13 +3108,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "27515ffd-04df-413f-8533-34612d906c7d",
     "manufacturer": "ANVL",
     "name": "Centurion",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 20000,
     "armor": 5,
@@ -2756,13 +3125,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "9c26b25a-9285-4074-94d1-163db2aa8cbb",
     "manufacturer": "ANVL",
     "name": "Spartan",
+    "role": "Passenger",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 24201,
     "armor": 5,
@@ -2771,13 +3142,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "e8efe30c-5a1e-4ca2-a956-424b352f80c2",
     "manufacturer": "ARGO",
     "name": "CSV-SM",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8100,
     "armor": 5,
@@ -2786,13 +3159,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "fb484074-f33f-4977-a052-2937e8508acc",
     "manufacturer": "",
     "name": "Mule",
+    "role": "Light Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 5800,
     "armor": 9,
@@ -2801,13 +3176,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 9,
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "3e911bb5-1a94-4501-bd63-560557f1b492",
     "manufacturer": "GRIN",
     "name": "MDC",
+    "role": "Anti-Air",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 16990,
     "armor": 5,
@@ -2816,13 +3193,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "91c9418e-6240-4fb1-a18a-1e22ebfb7747",
     "manufacturer": "GRIN",
     "name": "MTC",
+    "role": "Passenger",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 16990,
     "armor": 5,
@@ -2831,13 +3210,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "41ff82e7-ce4e-4dbc-ad7c-7ef52fbe569c",
     "manufacturer": "GRIN",
-    "name": "Greycat_PTV",
+    "name": "PTV",
+    "role": "Passenger",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 8510,
     "armor": 0,
@@ -2846,13 +3227,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 0,
     "energyThreshold": 0,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "62e33393-5d68-4191-aba5-3b81ce4f3bf9",
     "manufacturer": "GRIN",
-    "name": "Greycat_ROC",
+    "name": "ROC",
+    "role": "Light Mining",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 3400,
     "armor": 5,
@@ -2861,13 +3244,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "14d6ba03-86ad-47f8-b940-e8a82d2d52b6",
     "manufacturer": "GRIN",
-    "name": "Greycat_ROC-DS",
+    "name": "ROC-DS",
+    "role": "Light Mining",
+    "career": "Industrial",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 4900,
     "armor": 5,
@@ -2876,13 +3261,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "d4662193-10ab-4912-8ca4-d64ead0e6f3b",
     "manufacturer": "GRIN",
-    "name": "Greycat_STV",
+    "name": "STV",
+    "role": "Passenger",
+    "career": "Ground",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 4250,
     "armor": 5,
@@ -2891,13 +3278,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": null,
-    "turretHardpointSize": null,
-    "patch": "2026-03-17"
+    "turretHardpointSize": null
   },
   {
     "id": "4c034eef-329c-4336-850e-49bfb1f06a15",
     "manufacturer": "RSI",
     "name": "Lynx",
+    "role": "Luxury Touring",
+    "career": "Transporter",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 22700,
     "armor": 5,
@@ -2906,13 +3295,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "8c375d7e-0e44-42e8-b84b-c8d6b2e1256c",
     "manufacturer": "RSI",
     "name": "Ursa",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 25200,
     "armor": 5,
@@ -2921,13 +3312,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "953f8277-43a5-4f88-b139-ee997ee5c482",
     "manufacturer": "RSI",
     "name": "Ursa_Fortuna",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 25200,
     "armor": 5,
@@ -2936,13 +3329,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "ebf015be-7bf9-44e9-ad9c-b5c65f00c530",
     "manufacturer": "RSI",
     "name": "Ursa_Medivac",
+    "role": "Medical",
+    "career": "Support",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 26700,
     "armor": 5,
@@ -2951,13 +3346,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 6,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "8dbb42e4-e127-4153-9694-2845142c3e51",
     "manufacturer": "TMBL",
     "name": "Cyclone",
+    "role": "Passenger",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -2966,13 +3363,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "0194943d-1164-4b5f-a85e-79ebc0ebe621",
     "manufacturer": "TMBL",
     "name": "Cyclone_AA",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -2981,13 +3380,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 2,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 2
   },
   {
     "id": "bda93768-c01f-40b4-a92e-f31876cd33d0",
     "manufacturer": "TMBL",
     "name": "Cyclone_MT",
+    "role": "Anti-Air",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -2996,13 +3397,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "064951d7-3dd0-49c2-8b88-d2d7f809633e",
     "manufacturer": "TMBL",
     "name": "Cyclone_RC",
+    "role": "Racing",
+    "career": "Competition",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -3011,13 +3414,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "b389839d-fdf9-4c41-850a-4e7461250304",
     "manufacturer": "TMBL",
     "name": "Cyclone_RN",
+    "role": "Pathfinder",
+    "career": "Exploration",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -3026,13 +3431,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 6,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 6
   },
   {
     "id": "f80914cf-643e-4b7e-b715-eaf9aa572954",
     "manufacturer": "TMBL",
-    "name": "Cyclone",
+    "name": "Cyclone_TR",
+    "role": "Anti-Vehicle",
+    "career": "Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "small",
     "health": 6910,
     "armor": 5,
@@ -3041,13 +3448,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 5,
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   },
   {
     "id": "b8a352bb-74a8-415b-9e08-77f684ac91b8",
     "manufacturer": "TMBL",
     "name": "Nova",
+    "role": "Heavy Tank",
+    "career": "Ground Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 110000,
     "armor": 9,
@@ -3056,13 +3465,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 5,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 5
   },
   {
     "id": "515269d2-fea4-473f-b416-5f6677a54b55",
     "manufacturer": "TMBL",
     "name": "Storm",
+    "role": "Light Tank",
+    "career": "Ground Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 89000,
     "armor": 9,
@@ -3071,13 +3482,15 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 3,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 3
   },
   {
     "id": "8bbcd2cd-1e4b-4b0b-a65c-385bb2a02c32",
     "manufacturer": "TMBL",
     "name": "Storm_AA",
+    "role": "Light Tank",
+    "career": "Ground Combat",
+    "isGroundVehicle": false,
     "sizeGroup": "medium",
     "health": 89000,
     "armor": 9,
@@ -3086,7 +3499,6 @@ export const erkulPtuShipSeeds = [
     "ballisticThreshold": 10,
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
-    "turretHardpointSize": 1,
-    "patch": "2026-03-17"
+    "turretHardpointSize": 1
   }
 ] as const

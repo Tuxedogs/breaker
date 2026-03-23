@@ -1,0 +1,221 @@
+﻿/*
+  Alpha Threshold feature panels:
+  attacker, changelog, compare strip, heatmap, and ship cascade.
+*/
+
+.alpha-tool-route .alpha-attacker-panel {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  padding: 0.75rem;
+}
+
+.alpha-tool-route .alpha-attacker-image {
+  display: grid;
+  aspect-ratio: 1 / 1;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(15 23 42 / 0.8);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-attacker-copy {
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-attacker-stats {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.68rem;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-attacker-stats > li {
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(15 23 42 / 0.72);
+  padding: 0.15rem 0.4rem;
+}
+
+.alpha-tool-route .alpha-attacker-hardpoints {
+  margin-top: 0.45rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  list-style: none;
+}
+
+.alpha-tool-route .alpha-summary-rail {
+  margin: 0;
+}
+
+.alpha-tool-route .alpha-balance-trigger {
+  position: relative;
+  display: flex;
+  min-height: 4.75rem;
+  min-width: 5.75rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(15 23 42 / 0.76);
+  color: rgb(226 232 240);
+  padding: 0.5rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger:hover {
+  border-color: rgb(255 255 255 / 0.2);
+  background: rgb(24 39 61 / 0.95);
+}
+
+.alpha-tool-route .alpha-balance-trigger-icon {
+  height: 1.45rem;
+  width: 1.45rem;
+}
+
+.alpha-tool-route .alpha-balance-trigger-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route .alpha-balance-trigger-badge {
+  position: absolute;
+  top: 0.28rem;
+  right: 0.28rem;
+  border: 1px solid rgb(20 184 166 / 0.35);
+  background: rgb(13 148 136 / 0.24);
+  color: rgb(204 251 241);
+  font-size: 0.62rem;
+  line-height: 1;
+  padding: 0.18rem 0.32rem;
+}
+
+.alpha-tool-route .alpha-balance-modal {
+  display: flex;
+  width: min(62rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1.5rem;
+}
+
+.alpha-tool-route .alpha-balance-changelog-head {
+  display: grid;
+  gap: 0.85rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding: 1.25rem;
+}
+
+.alpha-tool-route .alpha-balance-search-wrap,
+.alpha-tool-route .alpha-balance-changelog-actions {
+  display: grid;
+}
+
+.alpha-tool-route .alpha-balance-search-wrap {
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-balance-changelog-actions {
+  gap: 0.6rem;
+}
+
+.alpha-tool-route .alpha-balance-changelog-list {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 0.75rem;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.25rem;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.alpha-tool-route .alpha-balance-change-card {
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.025);
+  padding: 0.85rem;
+}
+
+.alpha-tool-route .alpha-balance-change-card-summary {
+  background:
+    linear-gradient(180deg, rgb(96 165 250 / 0.08), transparent 100%),
+    rgb(255 255 255 / 0.03);
+}
+
+.alpha-tool-route .alpha-balance-change-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding-bottom: 0.65rem;
+}
+
+.alpha-tool-route .alpha-balance-change-patches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.alpha-tool-route .alpha-balance-diff-list {
+  margin-top: 0.65rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.alpha-tool-route .alpha-balance-diff-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.02);
+  padding: 0.45rem 0.6rem;
+}
+
+.alpha-tool-route .alpha-balance-diff-values {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.alpha-tool-route .alpha-balance-diff-arrow {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-balance-diff-old,
+.alpha-tool-route .alpha-balance-diff-new {
+  border: 1px solid transparent;
+  padding: 0.1rem 0.35rem;
+}
+
+.alpha-tool-route .alpha-balance-diff-old-up,
+.alpha-tool-route .alpha-balance-diff-new-up {
+  border-color: rgb(20 184 166 / 0.36);
+  background: rgb(13 148 136 / 0.16);
+  color: rgb(204 251 241);
+}
+
+.alpha-tool-route .alpha-balance-diff-old-down,
+.alpha-tool-route .alpha-balance-diff-new-down {
+  border-color: rgb(244 63 94 / 0.34);
+  background: rgb(190 24 93 / 0.17);
+  color: rgb(254 205 211);
+}

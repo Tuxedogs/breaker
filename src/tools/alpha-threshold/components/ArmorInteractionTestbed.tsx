@@ -18,8 +18,8 @@ type Props = {
   onFilterChipClick?: (chip: ArmorInteractionFilterChip) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
-  onOpenWeaponsAt?: (slotIndex: number) => void
-  onOpenShipsAt?: (slotIndex: number) => void
+  onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
 }
 
 export function ArmorInteractionTestbed({

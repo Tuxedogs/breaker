@@ -1,0 +1,145 @@
+﻿.alpha-tool-route .alpha-heatmap-tooltip-eyebrow {
+  margin: 0 0 0.3rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(125 211 252);
+}
+
+
+
+.alpha-tool-route .alpha-heatmap-tooltip-list {
+  gap: 0.42rem;
+}
+
+.alpha-tool-route .alpha-heatmap-tooltip-row {
+  gap: 0.85rem;
+  font-size: 0.75rem;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 1102;
+  min-height: 0;
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1102;
+  width: min(20rem, calc(100vw - 1.5rem));
+  max-width: calc(100vw - 1.5rem);
+  max-height: calc(100vh - 1.5rem);
+  transform: none;
+  opacity: 1;
+  pointer-events: none;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0.01) 32%, rgb(255 255 255 / 0.01) 100%),
+    rgb(0 0 0);
+  padding: 0.2rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 24px 60px rgb(0 0 0 / 0.46);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-body {
+  border: 1px solid rgb(255 255 255 / 0.05);
+  border-radius: 0.8rem;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.5), transparent 100%),
+    rgb(255 255 255 / 0.03);
+  padding: 0.78rem 0.82rem;
+  max-height: calc(100vh - 1.9rem);
+  overflow: auto;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-ship-title {
+  /* Tooltip ship title */
+  margin: 0 0 0.32rem;
+  padding: 0;
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: rgb(248 250 252);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-section-title {
+  margin: 0 0 0.6rem;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: rgb(203 213 225);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-list {
+  display: grid;
+  gap: 0.48rem;
+  margin: 0;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-section-row {
+  margin-top: 0.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  padding-top: 0.48rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-section-row:first-child {
+  margin-top: 0;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: start;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  padding-top: 0.48rem;
+  font-size: 0.75rem;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row > dt {
+  /* Tooltip row label */
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row > dd {
+  margin: 0;
+  color: rgb(248 250 252);
+  text-align: right;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-value-immediate {
+  /* Immediate penetration tooltip value */
+  color: rgb(167 243 208);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-value-cyan {
+  color: rgb(103 232 249);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-value-danger {
+  color: rgb(248 113 113);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-value-amber {
+  color: rgb(253 224 71);
+}
+
+.alpha-tool-route.alpha-heatmap-tooltip-portal-root .alpha-heatmap-tooltip-row:first-child > dt {
+  color: rgb(148 163 184);
+}

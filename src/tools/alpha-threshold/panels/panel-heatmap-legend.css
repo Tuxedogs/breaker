@@ -1,0 +1,73 @@
+﻿
+.alpha-tool-route .alpha-threshold-board-empty {
+  place-items: center;
+}
+.alpha-tool-route .alpha-heatmap-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch {
+  height: 0.7rem;
+  width: 1.2rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-deflect {
+  border-radius: 999px;
+  background: rgb(71 85 105 / 0.7);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-transition {
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgb(148 163 184 / 0.28) 0,
+      rgb(148 163 184 / 0.28) 6px,
+      rgb(15 23 42 / 0.92) 6px,
+      rgb(15 23 42 / 0.92) 12px
+    ),
+    rgb(30 41 59 / 0.94);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-damage {
+  border-radius: 999px;
+  background: rgb(14 165 233);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-swatch-immediate {
+  background: rgb(15, 231, 159);
+  box-shadow: inset 0 0 0 1px rgba(38, 219, 125, 0.822);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker {
+  position: relative;
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgb(255 255 255);
+}
+
+.alpha-tool-route .alpha-heatmap-legend-marker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -0.02rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgb(255 255 255);
+  box-shadow: 0 0 0 2px rgb(8 12 20 / 0.92);
+}
