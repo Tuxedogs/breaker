@@ -12,8 +12,8 @@ export default function AppShell() {
   const mainClassName = isAlphaThresholdRoute
     ? "relative z-20 flex min-h-0 flex-1 w-full items-start justify-start overflow-hidden pt-0"
     : [
-        "relative z-20 mx-auto w-full flex-1 px-4 pb-8 pt-12 sm:px-6 lg:px-8",
-        isMapsRoute ? "max-w-[96vw]" : "max-w-7xl",
+        "relative z-20 mx-auto w-full flex-1 px-4 pb-8 sm:px-6 lg:px-8",
+        isMapsRoute ? "max-w-[96vw] pt-6 sm:pt-8" : "max-w-7xl pt-12",
       ].join(" ");
 
   return (
