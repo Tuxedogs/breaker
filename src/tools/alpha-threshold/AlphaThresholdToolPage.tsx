@@ -5,6 +5,7 @@ import {
   AlphaThresholdOnboardingModal,
   type AlphaThresholdOnboardingHighlight,
 } from './components/AlphaThresholdOnboardingModal'
+import { AlphaThresholdMobileOnboardingTip } from './components/AlphaThresholdMobileOnboardingTip'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
 import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
@@ -16,6 +17,8 @@ import type { Ship, SelectedWeaponComparison, SlotTone, WeaponRecord } from './t
 import { parseShieldMode } from './lib/shieldMode'
 
 const PREVIEW_WEAPON_COUNT = 4
+const MOBILE_PREVIEW_WEAPON_COUNT = 4
+const MOBILE_PREVIEW_SHIP_COUNT = 4
 const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
 export default function AlphaThresholdToolPage() {
@@ -37,8 +40,13 @@ export default function AlphaThresholdToolPage() {
     'moonbreaker.alphaThreshold.onboarding.v1',
     false
   )
+  const [mobileOnboardingDismissed, setMobileOnboardingDismissed] = useLocalStorageState<boolean>(
+    'moonbreaker.alphaThreshold.mobileOnboarding.v1',
+    false
+  )
   const [onboardingHighlight, setOnboardingHighlight] =
     useState<AlphaThresholdOnboardingHighlight>(null)
+  const [isMobileViewport, setIsMobileViewport] = useState(false)
   const {
     slots,
     setSlotWeapon,
@@ -50,6 +58,12 @@ export default function AlphaThresholdToolPage() {
     maxVictimShips,
   } = useAlphaThresholdState()
   const shieldMode = parseShieldMode(searchParams.get('shield'))
+  const visibleShipCount = isMobileViewport
+    ? Math.min(maxVictimShips, MOBILE_PREVIEW_SHIP_COUNT)
+    : maxVictimShips
+  const visibleWeaponCount = isMobileViewport
+    ? Math.min(slots.length, MOBILE_PREVIEW_WEAPON_COUNT)
+    : Math.min(slots.length, PREVIEW_WEAPON_COUNT)
 
   const handleOnboardingHighlight = useCallback((highlight: AlphaThresholdOnboardingHighlight) => {
     setOnboardingHighlight(highlight)
@@ -64,17 +78,17 @@ export default function AlphaThresholdToolPage() {
     return `${ship.manufacturer}::${ship.name}`
   }
   const nextShipSlotIndex = useMemo(() => {
-    const openIndex = selectedShipNames.findIndex((shipName) => shipName === null)
-    return openIndex === -1 ? Math.max(0, maxVictimShips - 1) : openIndex
-  }, [maxVictimShips, selectedShipNames])
+    const openIndex = selectedShipNames.slice(0, visibleShipCount).findIndex((shipName) => shipName === null)
+    return openIndex === -1 ? Math.max(0, visibleShipCount - 1) : openIndex
+  }, [selectedShipNames, visibleShipCount])
   const nextWeaponSlotIndex = useMemo(() => {
-    const openIndex = slots.findIndex((slot) => slot.weaponKey == null)
-    return openIndex === -1 ? Math.max(0, slots.length - 1) : openIndex
-  }, [slots])
+    const openIndex = slots.slice(0, visibleWeaponCount).findIndex((slot) => slot.weaponKey == null)
+    return openIndex === -1 ? Math.max(0, visibleWeaponCount - 1) : openIndex
+  }, [slots, visibleWeaponCount])
 
   /** Column shown in weapon overlay + matrix when auto-advance: prefer active slot if empty (e.g. after clear). */
   const weaponOverlayTargetIndex = useMemo(() => {
-    const clamped = Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))
+    const clamped = Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))
     if (!weaponAutoAdvance) return clamped
     return slots[clamped]?.weaponKey == null ? clamped : nextWeaponSlotIndex
   }, [weaponAutoAdvance, activeWeaponSlotIndex, slots, nextWeaponSlotIndex])
@@ -82,14 +96,14 @@ export default function AlphaThresholdToolPage() {
   const effectiveShipSlotIndex = Math.max(
     0,
     Math.min(
-      maxVictimShips - 1,
+      visibleShipCount - 1,
       selectionMode === 'ship' ? activeShipSlotIndex : hoveredShipSlotIndex ?? activeShipSlotIndex
     )
   )
   const effectiveWeaponSlotIndex = Math.max(
     0,
     Math.min(
-      slots.length - 1,
+      visibleWeaponCount - 1,
       selectionMode === 'weapon' ? activeWeaponSlotIndex : hoveredWeaponSlotIndex ?? activeWeaponSlotIndex
     )
   )
@@ -100,7 +114,7 @@ export default function AlphaThresholdToolPage() {
 
   const previewShips = useMemo(() => {
     const placeholderHistory: Ship['history'] = []
-    return Array.from({ length: maxVictimShips }, (_, index): Ship => {
+    return Array.from({ length: visibleShipCount }, (_, index): Ship => {
       const shipKey = selectedShipNames[index]
       const selectedShip = shipKey ? shipBySelectionKey.get(shipKey) : null
       if (selectedShip) return selectedShip
@@ -119,7 +133,7 @@ export default function AlphaThresholdToolPage() {
         history: placeholderHistory,
       }
     })
-  }, [maxVictimShips, selectedShipNames, shipBySelectionKey])
+  }, [selectedShipNames, shipBySelectionKey, visibleShipCount])
 
   const previewWeapons = useMemo<SelectedWeaponComparison[]>(() => {
     const selectedWeaponBySlotId = new Map(
@@ -127,7 +141,7 @@ export default function AlphaThresholdToolPage() {
     )
 
     return slots
-      .slice(0, PREVIEW_WEAPON_COUNT)
+      .slice(0, visibleWeaponCount)
       .map((slot, index) => {
         const selectedWeapon = selectedWeaponBySlotId.get(slot.id)
         if (selectedWeapon) return selectedWeapon
@@ -150,7 +164,7 @@ export default function AlphaThresholdToolPage() {
           weapon: placeholderWeapon,
         }
       })
-  }, [selectedWeapons, slots])
+  }, [selectedWeapons, slots, visibleWeaponCount])
 
   function handleShieldModeChange(mode: 'up' | 'down') {
     const next = new URLSearchParams(searchParams)
@@ -164,6 +178,14 @@ export default function AlphaThresholdToolPage() {
     return () => {
       document.body.classList.remove('alpha-threshold-page')
     }
+  }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const sync = () => setIsMobileViewport(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
   }, [])
 
   useEffect(() => {
@@ -202,14 +224,14 @@ export default function AlphaThresholdToolPage() {
   }, [selectionMode])
 
   function handleShipSelect(shipKey: string) {
-    const allShipSlotsFull = selectedShipNames.every((name) => name != null)
+    const allShipSlotsFull = selectedShipNames.slice(0, visibleShipCount).every((name) => name != null)
 
     if (shipAutoAdvance && allShipSlotsFull) {
       setSelectionNotice('All ship slots are filled. Clear a slot or select one to replace.')
       return
     }
 
-    const currentIndex = Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))
+    const currentIndex = Math.max(0, Math.min(visibleShipCount - 1, activeShipSlotIndex))
     const currentSlotEmpty = selectedShipNames[currentIndex] == null
     const targetIndex = shipAutoAdvance
       ? selectedShipNames[currentIndex] == null
@@ -225,20 +247,20 @@ export default function AlphaThresholdToolPage() {
         (shipName, index) => index > targetIndex && shipName === null
       )
       setActiveShipSlotIndex(
-        nextIndex === -1 ? targetIndex : Math.max(0, Math.min(maxVictimShips - 1, nextIndex))
+        nextIndex === -1 ? targetIndex : Math.max(0, Math.min(visibleShipCount - 1, nextIndex))
       )
     }
   }
 
   function handleWeaponSelect(weaponKey: string) {
-    const allWeaponSlotsFull = slots.every((s) => s.weaponKey != null)
+    const allWeaponSlotsFull = slots.slice(0, visibleWeaponCount).every((s) => s.weaponKey != null)
 
     if (weaponAutoAdvance && allWeaponSlotsFull) {
       setSelectionNotice('All weapon slots are filled. Clear a slot or select one to replace.')
       return
     }
 
-    const currentIndex = Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))
+    const currentIndex = Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))
     const currentSlot = slots[currentIndex]
     const currentSlotEmpty = currentSlot?.weaponKey == null
     const targetIndex = weaponAutoAdvance
@@ -253,17 +275,17 @@ export default function AlphaThresholdToolPage() {
     setSlotWeapon(slot.id, weaponKey)
 
     if (weaponAutoAdvance && currentSlotEmpty) {
-      const nextIndex = slots.findIndex(
+      const nextIndex = slots.slice(0, visibleWeaponCount).findIndex(
         (entry, index) => index > targetIndex && entry.weaponKey === null
       )
       setActiveWeaponSlotIndex(
-        nextIndex === -1 ? targetIndex : Math.max(0, Math.min(slots.length - 1, nextIndex))
+        nextIndex === -1 ? targetIndex : Math.max(0, Math.min(visibleWeaponCount - 1, nextIndex))
       )
     }
   }
 
   function handleOpenShipsAt(slotIndex: number, autoAdvance = false) {
-    setActiveShipSlotIndex(Math.max(0, Math.min(maxVictimShips - 1, slotIndex)))
+    setActiveShipSlotIndex(Math.max(0, Math.min(visibleShipCount - 1, slotIndex)))
     setHoveredShipSlotIndex(null)
     setShipAutoAdvance(autoAdvance)
     if (autoAdvance) {
@@ -275,7 +297,7 @@ export default function AlphaThresholdToolPage() {
 
   function handleOpenWeaponsAt(slotIndex: number, autoAdvance = false) {
     setWeaponOverlayFilterPreset(null)
-    setActiveWeaponSlotIndex(Math.max(0, Math.min(slots.length - 1, slotIndex)))
+    setActiveWeaponSlotIndex(Math.max(0, Math.min(visibleWeaponCount - 1, slotIndex)))
     setHoveredWeaponSlotIndex(null)
     setWeaponAutoAdvance(autoAdvance)
     if (autoAdvance) {
@@ -290,7 +312,7 @@ export default function AlphaThresholdToolPage() {
     chip: ArmorInteractionFilterChip
   }) {
     setWeaponOverlayFilterPreset(payload.chip)
-    setActiveWeaponSlotIndex(Math.max(0, Math.min(slots.length - 1, payload.columnIndex)))
+    setActiveWeaponSlotIndex(Math.max(0, Math.min(visibleWeaponCount - 1, payload.columnIndex)))
     setHoveredWeaponSlotIndex(null)
     setWeaponAutoAdvance(false)
     setSelectionNotice(null)
@@ -299,14 +321,14 @@ export default function AlphaThresholdToolPage() {
 
   /** Overlay slot button: manual target — next pick goes to this slot. */
   function handleShipOverlaySlotActivate(index: number) {
-    setActiveShipSlotIndex(Math.max(0, Math.min(maxVictimShips - 1, index)))
+    setActiveShipSlotIndex(Math.max(0, Math.min(visibleShipCount - 1, index)))
     setShipAutoAdvance(false)
     setHoveredShipSlotIndex(null)
     setSelectionNotice(null)
   }
 
   function handleWeaponOverlaySlotActivate(index: number) {
-    setActiveWeaponSlotIndex(Math.max(0, Math.min(slots.length - 1, index)))
+    setActiveWeaponSlotIndex(Math.max(0, Math.min(visibleWeaponCount - 1, index)))
     setWeaponAutoAdvance(false)
     setHoveredWeaponSlotIndex(null)
     setSelectionNotice(null)
@@ -348,8 +370,8 @@ export default function AlphaThresholdToolPage() {
                 open
                 allShips={allShips}
                 selectedShipNames={selectedShipNames}
-                maxVictimShips={maxVictimShips}
-                activeSlotIndex={Math.max(0, Math.min(maxVictimShips - 1, activeShipSlotIndex))}
+                maxVictimShips={visibleShipCount}
+                activeSlotIndex={Math.max(0, Math.min(visibleShipCount - 1, activeShipSlotIndex))}
                 selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
                 onSetActiveSlot={handleShipOverlaySlotActivate}
                 onSelectShip={handleShipSelect}
@@ -369,13 +391,13 @@ export default function AlphaThresholdToolPage() {
             ) : selectionMode === 'weapon' ? (
               <WeaponSelectorOverlay
                 open
-                slots={slots}
+                slots={slots.slice(0, visibleWeaponCount)}
                 weapons={allWeapons}
                 targetSlotIndex={Math.max(
                   0,
-                  Math.min(slots.length - 1, weaponOverlayTargetIndex)
+                  Math.min(visibleWeaponCount - 1, weaponOverlayTargetIndex)
                 )}
-                activeSlotIndex={Math.max(0, Math.min(slots.length - 1, activeWeaponSlotIndex))}
+                activeSlotIndex={Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))}
                 selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
                 weaponFilterPreset={weaponOverlayFilterPreset}
                 onSetActiveSlot={handleWeaponOverlaySlotActivate}
@@ -402,11 +424,14 @@ export default function AlphaThresholdToolPage() {
           }
         />
       </div>
-      {!onboardingDismissed ? (
+      {!onboardingDismissed && !isMobileViewport ? (
         <AlphaThresholdOnboardingModal
           onHighlightChange={handleOnboardingHighlight}
           onComplete={handleOnboardingComplete}
         />
+      ) : null}
+      {!mobileOnboardingDismissed && isMobileViewport ? (
+        <AlphaThresholdMobileOnboardingTip onComplete={() => setMobileOnboardingDismissed(true)} />
       ) : null}
     </section>
   )
