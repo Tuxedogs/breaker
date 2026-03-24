@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Billboard, Html, OrbitControls, Text, useTexture } from "@react-three/drei";
 import {
   ACESFilmicToneMapping,
@@ -237,6 +237,63 @@ type ShipMapTemplateProps = {
 const SHIP_VIEWER_SCENE_BG = "#02040a";
 const SHIP_VIEWER_FOG_DENSITY = 0.048;
 const SHIP_VIEWER_TONE_EXPOSURE = 0.92;
+/** Interior ↔ exterior blend duration; ref-driven (no per-frame React state). */
+const INTERIOR_TRANSITION_MS = 520;
+
+function InteriorTransitionDriver({
+  progressRef,
+  interiorTarget,
+  onSettled,
+}: {
+  progressRef: React.MutableRefObject<number>;
+  interiorTarget: boolean;
+  onSettled?: () => void;
+}) {
+  const { invalidate } = useThree();
+  const rafRef = useRef<number | null>(null);
+  const onSettledRef = useRef(onSettled);
+  onSettledRef.current = onSettled;
+
+  useEffect(() => {
+    const target = interiorTarget ? 1 : 0;
+    const from = progressRef.current;
+    if (Math.abs(target - from) < 0.0005) {
+      progressRef.current = target;
+      invalidate();
+      onSettledRef.current?.();
+      return;
+    }
+
+    const startTime = performance.now();
+    let cancelled = false;
+
+    const step = (now: number) => {
+      if (cancelled) return;
+      const t = Math.min((now - startTime) / INTERIOR_TRANSITION_MS, 1);
+      const eased = 0.5 - Math.cos(t * Math.PI) * 0.5;
+      progressRef.current = from + (target - from) * eased;
+      invalidate();
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      } else {
+        progressRef.current = target;
+        invalidate();
+        onSettledRef.current?.();
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+    return () => {
+      cancelled = true;
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [interiorTarget, invalidate, progressRef]);
+
+  return null;
+}
 
 type ModelSource = "gltf" | "obj" | "ctm";
 
@@ -767,47 +824,85 @@ function FitModelMesh({
   transform,
   clippingPlanes,
   opacity = 1,
+  opacityRef,
+  opacityScale = 1,
+  invertProgress = false,
   ghosted = false,
   renderOrder = 0,
 }: {
   modelScene: Object3D;
   transform: ResolvedModelTransform;
   clippingPlanes?: Plane[];
+  /** Static opacity when not animating via ref */
   opacity?: number;
+  /** 0–1 interior blend; read each frame (avoids React re-renders during transition) */
+  opacityRef?: React.MutableRefObject<number>;
+  /** Multiply ref value (e.g. ghost hull 0.14) */
+  opacityScale?: number;
+  /** Main hull: 1 − progress */
+  invertProgress?: boolean;
   ghosted?: boolean;
   renderOrder?: number;
 }) {
-  useEffect(() => {
-    const assignedMaterials: Material[] = [];
+  const materialsRef = useRef<Material[]>([]);
+  const ghostColorBackupRef = useRef<Map<Material, Color>>(new Map());
+
+  useLayoutEffect(() => {
+    materialsRef.current = [];
     modelScene.traverse((node) => {
       if (!(node instanceof Mesh)) return;
       node.renderOrder = renderOrder;
       const materials = Array.isArray(node.material) ? node.material : [node.material];
       for (const material of materials) {
-        assignedMaterials.push(material);
+        materialsRef.current.push(material);
         material.clippingPlanes = clippingPlanes ?? [];
         material.clipShadows = Boolean(clippingPlanes?.length);
-        material.transparent = ghosted || opacity < 1;
-        material.opacity = opacity;
-        material.depthWrite = !(ghosted || opacity < 0.999);
-        if ("color" in material && material.color instanceof Color) {
-          material.color = ghosted ? material.color.clone().multiplyScalar(0.72) : material.color;
+        if (ghosted && "color" in material && material.color instanceof Color) {
+          const base = material.color.clone();
+          ghostColorBackupRef.current.set(material, base);
+          material.color.copy(base).multiplyScalar(0.72);
         }
         material.needsUpdate = true;
       }
     });
 
     return () => {
-      for (const material of assignedMaterials) {
+      for (const material of materialsRef.current) {
         material.clippingPlanes = [];
         material.clipShadows = false;
+        const base = ghostColorBackupRef.current.get(material);
+        if (base && "color" in material && material.color instanceof Color) {
+          material.color.copy(base);
+        }
+        ghostColorBackupRef.current.delete(material);
         material.transparent = false;
         material.opacity = 1;
         material.depthWrite = true;
         material.needsUpdate = true;
       }
+      materialsRef.current = [];
     };
-  }, [modelScene, clippingPlanes, ghosted, opacity, renderOrder]);
+  }, [modelScene, clippingPlanes, ghosted, renderOrder]);
+
+  useFrame(() => {
+    const materials = materialsRef.current;
+    if (materials.length === 0) return;
+
+    let op: number;
+    if (opacityRef) {
+      const p = opacityRef.current;
+      op = invertProgress ? 1 - p : p * opacityScale;
+    } else {
+      op = opacity;
+    }
+    op = Math.max(0, Math.min(1, op));
+    const transparent = ghosted || op < 0.999;
+    for (const material of materials) {
+      material.transparent = transparent;
+      material.opacity = op;
+      material.depthWrite = !(ghosted || op < 0.999);
+    }
+  });
 
   return (
     <group
@@ -824,21 +919,22 @@ function DeckOverlayPlane({
   deck,
   modelSize,
   texturePath,
-  opacity,
+  opacityScale,
+  progressRef,
   renderOrder,
   yOffset = 0.002,
 }: {
   deck: ShipMapDeckOverlay;
   modelSize: { x: number; z: number };
   texturePath: string;
-  opacity: number;
+  /** Final opacity = progressRef.current * opacityScale */
+  opacityScale: number;
+  progressRef: React.MutableRefObject<number>;
   renderOrder: number;
   yOffset?: number;
 }) {
   const texture = useTexture(texturePath);
   const materialRef = useRef<MeshBasicMaterial | null>(null);
-  const animatedOpacityRef = useRef(0);
-  const animationStartRef = useRef<number | null>(null);
 
   const [planeWidth, planeDepth] = useMemo(
     () => resolveDeckPlaneSize(deck, modelSize),
@@ -850,27 +946,10 @@ function DeckOverlayPlane({
   const offsetX = deck.offsetX ?? 0;
   const offsetZ = deck.offsetZ ?? 0;
 
-  useEffect(() => {
-    animatedOpacityRef.current = 0;
-    animationStartRef.current = null;
-    if (materialRef.current) {
-      materialRef.current.opacity = 0;
-    }
-  }, [deck.id, texturePath]);
-
-  useFrame(({ clock }) => {
+  useFrame(() => {
     const material = materialRef.current;
     if (!material) return;
-    const now = clock.getElapsedTime();
-    const startedAt = animationStartRef.current ?? now;
-    if (animationStartRef.current === null) {
-      animationStartRef.current = startedAt;
-    }
-    const progress = Math.min((now - startedAt) / 0.18, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const nextOpacity = opacity * eased;
-    if (Math.abs(animatedOpacityRef.current - nextOpacity) < 0.002 && progress < 1) return;
-    animatedOpacityRef.current = nextOpacity;
+    const nextOpacity = Math.max(0, Math.min(1, progressRef.current * opacityScale));
     material.opacity = nextOpacity;
   });
 
@@ -1131,7 +1210,8 @@ export default function ShipMapTemplate({
   const [sliceEnabled, setSliceEnabled] = useState(false);
   const [deckBounds, setDeckBounds] = useState<{ min: number; max: number }>({ min: -1, max: 1 });
   const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(false);
-  const [deckOverlayVisualProgress, setDeckOverlayVisualProgress] = useState(0);
+  /** True while interior↔exterior blend is running (keeps slice/ghost mounted without per-frame React state). */
+  const [interiorAnimating, setInteriorAnimating] = useState(false);
   const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(getDefaultDeckOverlayId(deckOverlayConfig));
   const [modelFootprint, setModelFootprint] = useState<{ x: number; z: number }>({ x: 1, z: 1 });
   const [deckOverlayRegions, setDeckOverlayRegions] = useState<DeckOverlayRegion[]>([]);
@@ -1147,6 +1227,7 @@ export default function ShipMapTemplate({
   const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const selectedItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const deckOverlayVisualProgressRef = useRef(0);
+  const prevDeckOverlayEnabledRef = useRef<boolean | undefined>(undefined);
   const controlsFrameRef = useRef<number | null>(null);
   const pickRayRef = useRef(new Raycaster());
   const pickPointerRef = useRef(new Vector2());
@@ -1239,7 +1320,7 @@ export default function ShipMapTemplate({
     return buildHighlightTextureDataUri(viewBox, activeDeckRegion.highlightMarkup);
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
   const activeDeckShadowTextureUri = useMemo(() => buildDeckShadowTextureDataUri(), []);
-  const deckOverlayVisualActive = deckOverlayVisualProgress > 0.001;
+  const deckOverlayVisualActive = deckOverlayEnabled || interiorAnimating;
   const viewerBackdropStyle = useMemo(
     () =>
       ({
@@ -1506,36 +1587,22 @@ export default function ShipMapTemplate({
   }, [hasDeckOverlay, activeDeckOverlay, deckOverlayEnabled, deckBounds.min, deckBounds.max]);
 
   useEffect(() => {
-    deckOverlayVisualProgressRef.current = deckOverlayVisualProgress;
-  }, [deckOverlayVisualProgress]);
+    if (!hasDeckOverlay) {
+      deckOverlayVisualProgressRef.current = 0;
+      setInteriorAnimating(false);
+    }
+  }, [hasDeckOverlay]);
 
   useEffect(() => {
-    if (!hasDeckOverlay) {
-      setDeckOverlayVisualProgress(0);
+    if (prevDeckOverlayEnabledRef.current === undefined) {
+      prevDeckOverlayEnabledRef.current = deckOverlayEnabled;
       return;
     }
-
-    let frameId = 0;
-    let startTime = 0;
-    const startValue = deckOverlayVisualProgressRef.current;
-    const targetValue = deckOverlayEnabled ? 1 : 0;
-    if (Math.abs(targetValue - startValue) < 0.001) return;
-
-    const durationMs = 280;
-    const tick = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / durationMs, 1);
-      const eased = 0.5 - Math.cos(progress * Math.PI) * 0.5;
-      const nextValue = startValue + (targetValue - startValue) * eased;
-      setDeckOverlayVisualProgress(nextValue);
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(tick);
-      }
-    };
-
-    frameId = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(frameId);
-  }, [hasDeckOverlay, deckOverlayEnabled]);
+    if (prevDeckOverlayEnabledRef.current !== deckOverlayEnabled) {
+      prevDeckOverlayEnabledRef.current = deckOverlayEnabled;
+      setInteriorAnimating(true);
+    }
+  }, [deckOverlayEnabled]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1616,16 +1683,15 @@ export default function ShipMapTemplate({
             style={viewerBackdropStyle}
           >
             <div className={`ship-viewer-bg ${roundShell}`} />
-            <div className={`ship-stars ${roundShell}`} />
             <div className={`ship-viewer-grid ${roundShell}`} />
-            <div className={`ship-backlight ship-backlight-large ${roundShell}`} />
+            <div className={`ship-backlight ${roundShell}`} />
             <div
               className={`map-deck-viewport relative h-full w-full min-h-0 flex-1 overflow-hidden ${roundShell}`}
               onClick={handleViewportPick}
             >
               <Canvas
               className={immersiveFocus ? "h-full min-h-0 w-full min-w-0" : undefined}
-              dpr={[1, 1.5]}
+              dpr={[1, 1.25]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
               camera={{ position: initialView.position, fov: 42 }}
               onCreated={({ gl, camera, scene }) => {
@@ -1639,6 +1705,11 @@ export default function ShipMapTemplate({
                 cameraRef.current = camera as PerspectiveCamera;
               }}
             >
+              <InteriorTransitionDriver
+                progressRef={deckOverlayVisualProgressRef}
+                interiorTarget={deckOverlayEnabled}
+                onSettled={() => setInteriorAnimating(false)}
+              />
               <hemisphereLight intensity={0.42} color="#9eb0c8" groundColor="#0a0c12" />
               <ambientLight intensity={0.2} color="#cbd5e1" />
               <directionalLight position={[14, 22, 16]} intensity={1.32} color="#f2ede4" />
@@ -1649,14 +1720,16 @@ export default function ShipMapTemplate({
                   <FitModelMesh
                     modelScene={modelScene}
                     transform={effectiveModelTransform}
-                    opacity={Math.max(0, 1 - deckOverlayVisualProgress)}
+                    opacityRef={deckOverlayVisualProgressRef}
+                    invertProgress
                   />
                   {deckOverlayVisualActive && activeDeckCutY !== null && lowerHullGhostScene ? (
                     <FitModelMesh
                       modelScene={lowerHullGhostScene}
                       transform={effectiveModelTransform}
                       clippingPlanes={lowerHullClippingPlanes}
-                      opacity={0.14 * deckOverlayVisualProgress}
+                      opacityRef={deckOverlayVisualProgressRef}
+                      opacityScale={0.14}
                       ghosted
                       renderOrder={4}
                     />
@@ -1671,7 +1744,8 @@ export default function ShipMapTemplate({
                   }}
                   modelSize={modelFootprint}
                   texturePath={activeDeckShadowTextureUri}
-                  opacity={0.3 * deckOverlayVisualProgress}
+                  progressRef={deckOverlayVisualProgressRef}
+                  opacityScale={0.3}
                   renderOrder={40}
                   yOffset={-0.01}
                 />
@@ -1681,7 +1755,8 @@ export default function ShipMapTemplate({
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
                   texturePath={activeDeckOverlay.svgPath}
-                  opacity={0.95 * deckOverlayVisualProgress}
+                  progressRef={deckOverlayVisualProgressRef}
+                  opacityScale={0.95}
                   renderOrder={41}
                 />
               ) : null}
@@ -1739,7 +1814,8 @@ export default function ShipMapTemplate({
                   deck={activeDeckOverlay}
                   modelSize={modelFootprint}
                   texturePath={activeDeckRegionHighlightUri}
-                  opacity={0.98 * deckOverlayVisualProgress}
+                  progressRef={deckOverlayVisualProgressRef}
+                  opacityScale={0.98}
                   renderOrder={42}
                   yOffset={0.0035}
                 />
