@@ -248,6 +248,9 @@ export function ThresholdComparisonMatrix({
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null)
+  /** Hover/focus anchor: row highlight runs only through this column; column highlight only through this row. */
+  const [hoverAnchorRowIndex, setHoverAnchorRowIndex] = useState<number | null>(null)
+  const [hoverAnchorColumnIndex, setHoverAnchorColumnIndex] = useState<number | null>(null)
   const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
   const [matrixMode, setMatrixMode] = useState<'analysis' | 'frakk'>('analysis')
   const visibleShips = buildVisibleShips(ships)
@@ -276,6 +279,8 @@ export function ThresholdComparisonMatrix({
     if (selectionMode) {
       setActiveRowId(null)
       setActiveColumnId(null)
+      setHoverAnchorRowIndex(null)
+      setHoverAnchorColumnIndex(null)
     }
   }, [selectionMode])
 
@@ -462,10 +467,6 @@ export function ThresholdComparisonMatrix({
                     (entry) => entry.slotId === selection.slotId
                   )
                   const placeholderWeapon = isPlaceholderWeapon(selection)
-                  const isActive =
-                    activeColumnId === selection.slotId &&
-                    !placeholderWeapon &&
-                    !selectionMode
                   const isDestinationColumn =
                     selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
                   const panelToneClass =
@@ -484,7 +485,6 @@ export function ThresholdComparisonMatrix({
                         placeholderWeapon ? 'alpha-comparison-matrix-weapon-header-empty' : '',
                         panelToneClass,
                         placeholderWeapon ? 'alpha-comparison-matrix-panel-placeholder' : '',
-                        isActive ? 'alpha-comparison-matrix-weapon-header-active' : '',
                         isDestinationColumn ? 'alpha-comparison-matrix-destination-column' : '',
                         destinationToneClass,
                       ].filter(Boolean).join(' ')}
@@ -592,8 +592,6 @@ export function ThresholdComparisonMatrix({
                 {visibleShips.map((ship) => {
                   const rowIndex = visibleShips.findIndex((entry) => entry.id === ship.id)
                   const placeholderShip = isPlaceholderShip(ship)
-                  const rowActive =
-                    activeRowId === ship.id && !placeholderShip && !selectionMode
                   const isDestinationRow =
                     selectionMode === 'ship' && rowIndex === activeShipDestinationIndex
                   const rowPanelToneClass =
@@ -606,10 +604,7 @@ export function ThresholdComparisonMatrix({
                   return (
                     <div
                       key={ship.id}
-                      className={[
-                        'alpha-comparison-matrix-row',
-                        rowActive ? 'alpha-comparison-matrix-row-active' : '',
-                      ].filter(Boolean).join(' ')}
+                      className="alpha-comparison-matrix-row"
                       data-row-index={rowIndex}
                       onPointerEnter={() => {
                         if (selectionMode || placeholderShip) {
@@ -618,16 +613,20 @@ export function ThresholdComparisonMatrix({
                         }
                         setActiveRowId(ship.id)
                       }}
-                      onPointerLeave={() =>
+                      onPointerLeave={() => {
                         setActiveRowId((current) => (current === ship.id ? null : current))
-                      }
+                        setHoverAnchorRowIndex(null)
+                        setHoverAnchorColumnIndex(null)
+                      }}
                       onFocusCapture={() => {
                         if (selectionMode || placeholderShip) return
                         setActiveRowId(ship.id)
                       }}
-                      onBlurCapture={() =>
+                      onBlurCapture={() => {
                         setActiveRowId((current) => (current === ship.id ? null : current))
-                      }
+                        setHoverAnchorRowIndex(null)
+                        setHoverAnchorColumnIndex(null)
+                      }}
                     >
                       <article
                         className={[
@@ -755,10 +754,19 @@ export function ThresholdComparisonMatrix({
                         ) as MatrixCellModel
                         const activeResult: MatrixEstimateView =
                           shieldMode === 'up' ? model.shieldsOn : model.shieldsOff
-                        const columnActive =
+                        const rowSegmentActive =
+                          activeRowId === ship.id &&
+                          !placeholderShip &&
+                          !selectionMode &&
+                          !placeholderCell &&
+                          (hoverAnchorColumnIndex === null ||
+                            columnIndex <= hoverAnchorColumnIndex)
+                        const columnSegmentActive =
                           activeColumnId === selection.slotId &&
                           !placeholderCell &&
-                          !selectionMode
+                          !selectionMode &&
+                          hoverAnchorRowIndex !== null &&
+                          rowIndex <= hoverAnchorRowIndex
                         const shieldBlocked =
                           shieldMode === 'up' && selection.weapon.damageType === 'energy'
                         const isPrimaryShieldBlockedPanel =
@@ -772,7 +780,8 @@ export function ThresholdComparisonMatrix({
                               rowIndex === 0 && columnIndex === 0 ? 'alpha-matrix-first-cell-anchor' : '',
                               `alpha-comparison-matrix-cell-${activeResult.tone}`,
                               placeholderCell ? 'alpha-comparison-matrix-panel-placeholder' : '',
-                              columnActive ? 'alpha-comparison-matrix-cell-column-active' : '',
+                              rowSegmentActive ? 'alpha-comparison-matrix-cell-row-active' : '',
+                              columnSegmentActive ? 'alpha-comparison-matrix-cell-column-active' : '',
                               selectionMode &&
                               !placeholderCell &&
                               isDestinationColumnForCells
@@ -790,24 +799,36 @@ export function ThresholdComparisonMatrix({
                             onPointerEnter={() => {
                               if (selectionMode || placeholderCell) {
                                 setActiveColumnId(null)
+                                setHoverAnchorRowIndex(null)
+                                setHoverAnchorColumnIndex(null)
                                 return
                               }
+                              setActiveRowId(ship.id)
                               setActiveColumnId(selection.slotId)
+                              setHoverAnchorRowIndex(rowIndex)
+                              setHoverAnchorColumnIndex(columnIndex)
                             }}
-                            onPointerLeave={() =>
+                            onPointerLeave={() => {
                               setActiveColumnId((current) =>
                                 current === selection.slotId ? null : current
                               )
-                            }
+                              setHoverAnchorRowIndex(null)
+                              setHoverAnchorColumnIndex(null)
+                            }}
                             onFocusCapture={() => {
                               if (selectionMode || placeholderCell) return
+                              setActiveRowId(ship.id)
                               setActiveColumnId(selection.slotId)
+                              setHoverAnchorRowIndex(rowIndex)
+                              setHoverAnchorColumnIndex(columnIndex)
                             }}
-                            onBlurCapture={() =>
+                            onBlurCapture={() => {
                               setActiveColumnId((current) =>
                                 current === selection.slotId ? null : current
                               )
-                            }
+                              setHoverAnchorRowIndex(null)
+                              setHoverAnchorColumnIndex(null)
+                            }}
                             tabIndex={isPlaceholderPreview ? -1 : 0}
                             onClick={() => {
                               if (selectionMode === 'ship' && onOpenShipsAt) {

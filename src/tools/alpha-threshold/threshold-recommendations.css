@@ -528,19 +528,6 @@
     rgb(255 255 255 / 0.03);
 }
 
-/* Matrix headers: hover when selection overlay closed (class may also apply via pointer) */
-.alpha-tool-route
-  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
-  .alpha-comparison-matrix-weapon-header:hover {
-  border-color: rgb(255 255 255 / 0.22);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.05),
-    0 0 0 1px rgb(255 255 255 / 0.08);
-  background:
-    linear-gradient(180deg, rgb(12 16 24 / 0.96), rgb(9 13 22 / 0.92)),
-    rgb(255 255 255 / 0.03);
-}
-
 .alpha-tool-route .alpha-comparison-matrix-weapon-header-empty {
   display: flex;
   flex-direction: column;
@@ -660,16 +647,13 @@
   align-items: stretch;
 }
 
-.alpha-tool-route .alpha-comparison-matrix-row-active .alpha-comparison-matrix-ship-card,
-.alpha-tool-route .alpha-comparison-matrix-row-active .alpha-comparison-matrix-cell {
-  border-color: rgb(255 255 255 / 0.14);
+/* Matrix body: row segment (left through hovered column) — set per cell in TSX */
+.alpha-tool-route .alpha-comparison-matrix-cell-row-active {
+  border-color: rgb(255 255 255 / 0.22);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
     rgb(255 255 255 / 0.03);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-row-active .alpha-comparison-matrix-ship-card--fill {
-  background: transparent;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-card {
@@ -784,37 +768,6 @@
   border: none;
   border-radius: 0;
   font-size: clamp(1.75rem, 12vw, 2.75rem);
-}
-
-/* Row hover lift — match overlay ship slot inactive hover */
-.alpha-tool-route
-  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
-  .alpha-comparison-matrix-row:hover
-  .alpha-comparison-matrix-ship-card:not(.alpha-comparison-matrix-panel-placeholder),
-.alpha-tool-route
-  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
-  .alpha-comparison-matrix-row:focus-within
-  .alpha-comparison-matrix-ship-card:not(.alpha-comparison-matrix-panel-placeholder) {
-  border-color: rgb(255 255 255 / 0.22);
-  box-shadow:
-    inset -1px 0 0 rgb(255 255 255 / 0.08),
-    inset 0 1px 0 rgb(255 255 255 / 0.05),
-    0 0 0 1px rgb(255 255 255 / 0.08),
-    0 10px 24px rgb(2 6 23 / 0.16);
-  background:
-    linear-gradient(180deg, rgb(12 16 24 / 0.96), rgb(9 13 22 / 0.92)),
-    rgb(255 255 255 / 0.03);
-}
-
-.alpha-tool-route
-  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
-  .alpha-comparison-matrix-row:hover
-  .alpha-comparison-matrix-ship-card--fill:not(.alpha-comparison-matrix-panel-placeholder),
-.alpha-tool-route
-  .alpha-comparison-matrix-panel:not(.alpha-comparison-matrix-selection-active)
-  .alpha-comparison-matrix-row:focus-within
-  .alpha-comparison-matrix-ship-card--fill:not(.alpha-comparison-matrix-panel-placeholder) {
-  background: transparent;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-card-empty {
@@ -1049,8 +1002,11 @@
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-column-active {
-  border-color: rgb(226 232 240 / 0.18);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+  border-color: rgb(255 255 255 / 0.22);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    rgb(255 255 255 / 0.03);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-shield-blocked .alpha-comparison-matrix-cell-content {
@@ -1291,58 +1247,9 @@
   transform: translateX(-50%);
 }
 
-.alpha-tool-route .alpha-comparison-matrix-cell-none {
-  border-color: rgb(100 116 139 / 0.28);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-none .alpha-comparison-matrix-cell-summary {
-  color: rgb(203 213 225);
-}
-
+/* Timing tone (early/mid/late) does not change matrix cell chrome — E label color is inline */
 .alpha-tool-route .alpha-comparison-matrix-cell-none .alpha-comparison-matrix-cell-track {
   background: rgb(15 23 42 / 0.9);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-late {
-  border-color: rgb(245 158 11 / 0.24);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-late .alpha-comparison-matrix-cell-summary {
-  color: rgb(253 230 138);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-mid {
-  border-color: rgb(226 232 240 / 0.14);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-mid .alpha-comparison-matrix-cell-summary {
-  color: rgb(226 232 240);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-early {
-  border-color: rgb(34 197 94 / 0.24);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-early .alpha-comparison-matrix-cell-summary {
-  color: rgb(187 247 208);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-none .alpha-comparison-matrix-cell-shield-chip {
-  border-color: rgb(100 116 139 / 0.26);
-  color: rgb(203 213 225);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-late .alpha-comparison-matrix-cell-shield-chip {
-  border-color: rgb(245 158 11 / 0.22);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-mid .alpha-comparison-matrix-cell-shield-chip {
-  border-color: rgb(226 232 240 / 0.14);
-}
-
-.alpha-tool-route .alpha-comparison-matrix-cell-early .alpha-comparison-matrix-cell-shield-chip {
-  border-color: rgb(34 197 94 / 0.22);
-  color: rgb(220 252 231);
 }
 
 .alpha-tool-route .alpha-threshold-summary-grid {
