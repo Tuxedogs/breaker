@@ -771,6 +771,7 @@ export function ThresholdComparisonMatrix({
                           shieldMode === 'up' && selection.weapon.damageType === 'energy'
                         const isPrimaryShieldBlockedPanel =
                           shieldBlocked && firstEnergyColumnIndex !== -1 && columnIndex === firstEnergyColumnIndex && rowIndex === 0
+                        const isHoverAnchorCell = rowSegmentActive && columnSegmentActive
 
                         return (
                           <article
@@ -782,6 +783,7 @@ export function ThresholdComparisonMatrix({
                               placeholderCell ? 'alpha-comparison-matrix-panel-placeholder' : '',
                               rowSegmentActive ? 'alpha-comparison-matrix-cell-row-active' : '',
                               columnSegmentActive ? 'alpha-comparison-matrix-cell-column-active' : '',
+                              isHoverAnchorCell ? 'alpha-comparison-matrix-cell-hover-anchor' : '',
                               selectionMode &&
                               !placeholderCell &&
                               isDestinationColumnForCells
@@ -796,6 +798,16 @@ export function ThresholdComparisonMatrix({
                                 : '',
                               columnToneClass,
                             ].filter(Boolean).join(' ')}
+                            style={
+                              isHoverAnchorCell
+                                ? ({
+                                    '--alpha-matrix-effectiveness-accent':
+                                      getEffectivePenetrationSummaryColor(
+                                        activeResult.penetrationEffectivePercent
+                                      ),
+                                  } as CSSProperties)
+                                : undefined
+                            }
                             onPointerEnter={() => {
                               if (selectionMode || placeholderCell) {
                                 setActiveColumnId(null)
