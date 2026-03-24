@@ -47,6 +47,8 @@ export default function MapsPage() {
       viewStorageKey="ship-map:perseus:default-view"
       fallbackView={defaultPerseusView}
       deckOverlayConfig={deckOverlayConfig}
+      showHeader={false}
+      immersiveFocus
     />
   );
 }
