@@ -1578,7 +1578,7 @@ export default function ShipMapTemplate({
         <article className="base-card base-card--ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
           <div
             ref={viewerShellRef}
-            className="ship-viewer-shell relative h-[72vh] min-h-[620px] w-full rounded-[1.2rem] border border-white/15"
+            className="ship-viewer-shell relative h-[min(72vh,85dvh)] min-h-[min(360px,52dvh)] w-full sm:min-h-[480px] lg:min-h-[620px] rounded-[1.2rem] border border-white/15"
             style={viewerBackdropStyle}
           >
             <div className="ship-viewer-bg rounded-[1.2rem]" />

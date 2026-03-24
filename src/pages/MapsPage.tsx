@@ -42,11 +42,10 @@ export default function MapsPage() {
   return (
     <ShipMapTemplate
       title="RSI Perseus Holo Viewer"
-      subtitle="Template ship map viewer. Drag to rotate, right-drag to pan, and scroll to zoom."
+      subtitle="Drag to orbit, right-drag to pan, scroll or pinch to zoom. Use Interior to pick a deck, then tap legend items to highlight systems and trace paths between components."
       modelPath="/models/perctex.glb"
       viewStorageKey="ship-map:perseus:default-view"
       fallbackView={defaultPerseusView}
-      showHeader={false}
       deckOverlayConfig={deckOverlayConfig}
     />
   );
