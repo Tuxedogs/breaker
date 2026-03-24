@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { CSSProperties, ReactNode } from 'react'
+import type { CSSProperties, FocusEvent, PointerEvent, ReactNode } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import {
@@ -16,6 +16,7 @@ import type {
   Ship,
 } from '../types'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
+import { HeatmapTooltip } from './HeatmapTooltip'
 
 type Props = {
   controlStrip?: ReactNode
@@ -166,6 +167,110 @@ function getVelocityLabel(selection: SelectedWeaponComparison) {
     : 'Velocity Unknown'
 }
 
+type MatrixTooltipLine = {
+  label: string
+  value: string
+  tone?: 'immediate' | 'cyan' | 'danger' | 'amber'
+  kind?: 'section'
+}
+
+function capitalizeConfidence(c: ArmorInteractionEstimate['confidence']): string {
+  return `${c.charAt(0).toUpperCase()}${c.slice(1)}`
+}
+
+function formatArmorOnsetSourceShort(
+  source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']
+): string {
+  switch (source) {
+    case 'observed':
+      return 'Observed'
+    case 'estimated':
+      return 'Estimated'
+    case 'threshold':
+      return 'From α/T'
+    case 'none':
+      return '—'
+    default:
+      return source
+  }
+}
+
+/** Tooltip body: E-rating math, model confidence, and estimate notes only. */
+function buildMatrixCellTooltipLines(
+  selection: SelectedWeaponComparison,
+  estimate: ArmorInteractionEstimate
+): MatrixTooltipLine[] {
+  const ePct = getPenetrationEffectivePercent(estimate)
+  const rawAlpha = selection.weapon.alpha ?? 0
+  const pass = estimate.shieldPassThrough
+  const effectiveAlpha = estimate.effectiveArmorAlpha
+  const T = estimate.deflectionThreshold
+  const ratio = estimate.thresholdRatio
+  const ratioDisplay = Number.isFinite(ratio) ? ratio.toFixed(2) : '∞'
+  const notes = estimate.notes ?? []
+  const shieldShort = estimate.shieldState === 'up' ? 'up' : 'down'
+
+  const lines: MatrixTooltipLine[] = [
+    {
+      label: 'What it is',
+      value: `E${ePct} is the effective damage start % (0–100).`,
+    },
+    {
+      label: 'Chain',
+      value: [
+        `α_weapon ${formatMetric(rawAlpha)}`,
+        `pass ${formatMetric(pass)} (${shieldShort})`,
+        `→ α_eff ${formatMetric(effectiveAlpha)}`,
+      ].join(' · '),
+    },
+    {
+      label: 'Threshold',
+      value: `T ${formatMetric(T)} · α/T ${ratioDisplay}${Number.isFinite(ratio) && ratio >= 1 ? ' (≥1)' : ''}`,
+    },
+  ]
+
+  const onsetParts: string[] = []
+  if (estimate.armorDamageStartsAtPercent != null) {
+    onsetParts.push(`${Math.round(estimate.armorDamageStartsAtPercent)}% onset`)
+  }
+  onsetParts.push(formatArmorOnsetSourceShort(estimate.armorDamageStartsAtPercentSource))
+  if (estimate.estimatedArmorOnsetBand) {
+    onsetParts.push(`band ${estimate.estimatedArmorOnsetBand[0]}–${estimate.estimatedArmorOnsetBand[1]}%`)
+  }
+  lines.push({
+    label: 'Onset',
+    value: onsetParts.join(' · '),
+  })
+
+  let eSummary: string
+  if (!estimate.damagesFreshArmor && estimate.armorDamageStartsAtPercent == null) {
+    eSummary = 'E = 0 — no onset on file.'
+  } else if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) {
+    eSummary = 'E = 100 — full-integrity damage or onset at 100%.'
+  } else {
+    eSummary = `E = round(onset %) → ${ePct}.`
+  }
+
+  lines.push({ label: 'Result', value: eSummary })
+
+  lines.push({
+    label: 'Confidence',
+    value: capitalizeConfidence(estimate.confidence),
+  })
+
+  if (notes.length > 0) {
+    lines.push({ label: 'Notes', value: '', kind: 'section' })
+    notes.forEach((note, index) => {
+      lines.push({ label: `${index + 1}`, value: note })
+    })
+  }
+
+  return lines
+}
+
+const MATRIX_TOOLTIP_WIDTH_PX = 304
+const MATRIX_TOOLTIP_VIEWPORT_GUTTER = 8
+
 function isPlaceholderShip(ship: Ship) {
   return ship.name === '' && ship.manufacturer === ''
 }
@@ -251,6 +356,20 @@ export function ThresholdComparisonMatrix({
   /** Hover/focus anchor: row highlight runs only through this column; column highlight only through this row. */
   const [hoverAnchorRowIndex, setHoverAnchorRowIndex] = useState<number | null>(null)
   const [hoverAnchorColumnIndex, setHoverAnchorColumnIndex] = useState<number | null>(null)
+  const [matrixTooltip, setMatrixTooltip] = useState<{
+    open: boolean
+    x: number
+    y: number
+    title: string
+    sectionTitle?: string
+    lines: MatrixTooltipLine[]
+  }>({
+    open: false,
+    x: 0,
+    y: 0,
+    title: '',
+    lines: [],
+  })
   const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
   const [matrixMode, setMatrixMode] = useState<'analysis' | 'frakk'>('analysis')
   const visibleShips = buildVisibleShips(ships)
@@ -772,6 +891,23 @@ export function ThresholdComparisonMatrix({
                         const isPrimaryShieldBlockedPanel =
                           shieldBlocked && firstEnergyColumnIndex !== -1 && columnIndex === firstEnergyColumnIndex && rowIndex === 0
                         const isHoverAnchorCell = rowSegmentActive && columnSegmentActive
+                        const isE100Penetration = activeResult.penetrationEffectivePercent >= 100
+
+                        function openMatrixCellTooltip(
+                          event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>
+                        ) {
+                          const cell = event.currentTarget.closest('.alpha-comparison-matrix-cell')
+                          if (!(cell instanceof HTMLElement)) return
+                          const rect = cell.getBoundingClientRect()
+                          setMatrixTooltip({
+                            open: true,
+                            x: rect.right - MATRIX_TOOLTIP_WIDTH_PX - MATRIX_TOOLTIP_VIEWPORT_GUTTER,
+                            y: rect.top + MATRIX_TOOLTIP_VIEWPORT_GUTTER,
+                            title: `${getEstimatePenetrationLabel(activeResult.estimate)} — ${formatEntityLabel(ship.name)} vs ${selection.weapon.name}`,
+                            sectionTitle: undefined,
+                            lines: buildMatrixCellTooltipLines(selection, activeResult.estimate),
+                          })
+                        }
 
                         return (
                           <article
@@ -885,7 +1021,10 @@ export function ThresholdComparisonMatrix({
                                       className="alpha-comparison-matrix-cell-track alpha-comparison-matrix-cell-detail-blur"
                                       aria-label="Armor placeholder threshold marker"
                                     >
-                                      <div className="alpha-comparison-matrix-cell-track-fill alpha-comparison-matrix-cell-detail-blur" />
+                                      <div
+                                        className="alpha-comparison-matrix-cell-track-fill alpha-comparison-matrix-cell-track-fill--full alpha-comparison-matrix-cell-detail-blur"
+                                        style={{ width: '100%' }}
+                                      />
                                       <span
                                         className="alpha-comparison-matrix-cell-marker"
                                         style={{ left: '100%' }}
@@ -940,21 +1079,54 @@ export function ThresholdComparisonMatrix({
                                       <span>0% armor</span>
                                     </div>
                                     <div
-                                      className="alpha-comparison-matrix-cell-track alpha-comparison-matrix-cell-detail-blur"
-                                      aria-label={`${activeResult.penetrationLabel} threshold marker`}
+                                      className={[
+                                        'alpha-comparison-matrix-cell-track',
+                                        'alpha-comparison-matrix-cell-detail-blur',
+                                        isE100Penetration ? 'alpha-comparison-matrix-cell-track--e100' : '',
+                                      ]
+                                        .filter(Boolean)
+                                        .join(' ')}
+                                      aria-label={
+                                        isE100Penetration
+                                          ? `${activeResult.penetrationLabel} full armor effectiveness`
+                                          : `${activeResult.penetrationLabel} threshold marker`
+                                      }
                                     >
-                                      <div className="alpha-comparison-matrix-cell-track-fill alpha-comparison-matrix-cell-detail-blur" />
-                                      <span
-                                        className="alpha-comparison-matrix-cell-marker"
-                                        style={{ left: `${activeResult.markerPercent}%` }}
-                                      />
+                                      {!isE100Penetration ? (
+                                        <div
+                                          className={[
+                                            'alpha-comparison-matrix-cell-track-fill',
+                                            'alpha-comparison-matrix-cell-detail-blur',
+                                            activeResult.markerPercent >= 100
+                                              ? 'alpha-comparison-matrix-cell-track-fill--full'
+                                              : '',
+                                          ]
+                                            .filter(Boolean)
+                                            .join(' ')}
+                                          style={{ width: `${activeResult.markerPercent}%` }}
+                                        />
+                                      ) : null}
+                                      {!isE100Penetration ? (
+                                        <span
+                                          className="alpha-comparison-matrix-cell-marker"
+                                          style={{ left: `${activeResult.markerPercent}%` }}
+                                        />
+                                      ) : null}
                                     </div>
                                     <div className="alpha-comparison-matrix-cell-track-caption-row">
                                       <span
-                                        className={`alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-${activeResult.markerAlign} alpha-comparison-matrix-cell-detail-blur`}
-                                        style={{ left: `${activeResult.markerPercent}%` }}
+                                        className={
+                                          isE100Penetration
+                                            ? 'alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-center alpha-comparison-matrix-cell-track-caption-e100 alpha-comparison-matrix-cell-detail-blur'
+                                            : `alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-${activeResult.markerAlign} alpha-comparison-matrix-cell-detail-blur`
+                                        }
+                                        style={{
+                                          left: isE100Penetration ? '50%' : `${activeResult.markerPercent}%`,
+                                        }}
                                       >
-                                        {activeResult.markerLabel}
+                                        {isE100Penetration
+                                          ? 'Effective at full armor'
+                                          : activeResult.markerLabel}
                                       </span>
                                     </div>
                                   </div>
@@ -984,6 +1156,25 @@ export function ThresholdComparisonMatrix({
                                 </p>
                               </div>
                             ) : null}
+                            {!placeholderCell ? (
+                              <button
+                                type="button"
+                                className="alpha-armor-tooltip-trigger alpha-comparison-matrix-cell-tooltip-trigger"
+                                aria-label={`Armor interaction details for ${formatEntityLabel(ship.name)} vs ${selection.weapon.name}`}
+                                onPointerEnter={openMatrixCellTooltip}
+                                onPointerLeave={() =>
+                                  setMatrixTooltip((current) => ({ ...current, open: false }))
+                                }
+                                onFocus={openMatrixCellTooltip}
+                                onBlur={() =>
+                                  setMatrixTooltip((current) => ({ ...current, open: false }))
+                                }
+                                onPointerDown={(event) => event.stopPropagation()}
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                <span aria-hidden="true">?</span>
+                              </button>
+                            ) : null}
                           </article>
                         )
                       })}
@@ -994,6 +1185,15 @@ export function ThresholdComparisonMatrix({
             </div>
           </div>
         </div>
+
+      <HeatmapTooltip
+        open={matrixTooltip.open}
+        x={matrixTooltip.x}
+        y={matrixTooltip.y}
+        title={matrixTooltip.title}
+        sectionTitle={matrixTooltip.sectionTitle}
+        lines={matrixTooltip.lines}
+      />
     </section>
   )
 }
