@@ -1,5 +1,6 @@
 import { ArmorInteractionTestbed } from './ArmorInteractionTestbed'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
+import type { AlphaThresholdOnboardingHighlight } from './AlphaThresholdOnboardingModal'
 import type { DefenseShieldState, SelectedWeaponComparison, Ship } from '../types'
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onWeaponHeaderChip?: (payload: { columnIndex: number; chip: ArmorInteractionFilterChip }) => void
+  onboardingHighlight?: AlphaThresholdOnboardingHighlight
 }
 
 export function ThresholdHeatmapBoard({
@@ -30,6 +32,7 @@ export function ThresholdHeatmapBoard({
   onOpenWeaponsAt,
   onOpenShipsAt,
   onWeaponHeaderChip,
+  onboardingHighlight = null,
 }: Props) {
   return (
     <section className="alpha-threshold-board alpha-threshold-board-app" aria-label="Weapons Analysis board">
@@ -46,6 +49,7 @@ export function ThresholdHeatmapBoard({
         onOpenShips={onOpenShips}
         onOpenWeaponsAt={onOpenWeaponsAt}
         onOpenShipsAt={onOpenShipsAt}
+        onboardingHighlight={onboardingHighlight}
       />
     </section>
   )

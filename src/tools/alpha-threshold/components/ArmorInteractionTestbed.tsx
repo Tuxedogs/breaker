@@ -2,6 +2,7 @@ import type { DefenseShieldState, SelectedWeaponComparison, Ship } from '../type
 import {
   type ArmorInteractionFilterChip,
 } from './ArmorInteractionSummaryPanel'
+import type { AlphaThresholdOnboardingHighlight } from './AlphaThresholdOnboardingModal'
 import { ThresholdComparisonMatrix } from './ThresholdComparisonMatrix'
 
 type Props = {
@@ -20,6 +21,7 @@ type Props = {
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onboardingHighlight?: AlphaThresholdOnboardingHighlight
 }
 
 export function ArmorInteractionTestbed({
@@ -35,6 +37,7 @@ export function ArmorInteractionTestbed({
   onOpenShips,
   onOpenWeaponsAt,
   onOpenShipsAt,
+  onboardingHighlight = null,
 }: Props) {
   return (
     <ThresholdComparisonMatrix
@@ -50,6 +53,7 @@ export function ArmorInteractionTestbed({
       onOpenShips={onOpenShips}
       onOpenWeaponsAt={onOpenWeaponsAt}
       onOpenShipsAt={onOpenShipsAt}
+      onboardingHighlight={onboardingHighlight}
     />
   )
 }

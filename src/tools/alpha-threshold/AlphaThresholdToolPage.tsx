@@ -1,11 +1,16 @@
 import './threshold.css'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import {
+  AlphaThresholdOnboardingModal,
+  type AlphaThresholdOnboardingHighlight,
+} from './components/AlphaThresholdOnboardingModal'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
 import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { WeaponSelectorOverlay } from './components/WeaponSelectorOverlay'
 import { useAlphaThresholdState } from './hooks/useAlphaThresholdState'
+import { useLocalStorageState } from './hooks/useLocalStorageState'
 import type { ArmorInteractionFilterChip } from './components/ArmorInteractionSummaryPanel'
 import type { Ship, SelectedWeaponComparison, SlotTone, WeaponRecord } from './types'
 import { parseShieldMode } from './lib/shieldMode'
@@ -28,6 +33,12 @@ export default function AlphaThresholdToolPage() {
   const shipClearStreakRef = useRef(0)
   const weaponClearStreakRef = useRef(0)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [onboardingDismissed, setOnboardingDismissed] = useLocalStorageState<boolean>(
+    'moonbreaker.alphaThreshold.onboarding.v1',
+    false
+  )
+  const [onboardingHighlight, setOnboardingHighlight] =
+    useState<AlphaThresholdOnboardingHighlight>(null)
   const {
     slots,
     setSlotWeapon,
@@ -39,6 +50,16 @@ export default function AlphaThresholdToolPage() {
     maxVictimShips,
   } = useAlphaThresholdState()
   const shieldMode = parseShieldMode(searchParams.get('shield'))
+
+  const handleOnboardingHighlight = useCallback((highlight: AlphaThresholdOnboardingHighlight) => {
+    setOnboardingHighlight(highlight)
+  }, [])
+
+  const handleOnboardingComplete = useCallback(() => {
+    setOnboardingDismissed(true)
+    setOnboardingHighlight(null)
+  }, [setOnboardingDismissed])
+
   function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
     return `${ship.manufacturer}::${ship.name}`
   }
@@ -318,6 +339,7 @@ export default function AlphaThresholdToolPage() {
               onOpenWeaponsAt={handleOpenWeaponsAt}
               onOpenShipsAt={handleOpenShipsAt}
               onWeaponHeaderChip={handleWeaponHeaderChip}
+              onboardingHighlight={onboardingHighlight}
             />
           }
           overlay={
@@ -380,6 +402,12 @@ export default function AlphaThresholdToolPage() {
           }
         />
       </div>
+      {!onboardingDismissed ? (
+        <AlphaThresholdOnboardingModal
+          onHighlightChange={handleOnboardingHighlight}
+          onComplete={handleOnboardingComplete}
+        />
+      ) : null}
     </section>
   )
 }
