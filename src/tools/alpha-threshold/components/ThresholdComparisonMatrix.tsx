@@ -36,6 +36,8 @@ type Props = {
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  /** First-visit tour: spotlight matrix controls */
+  onboardingHighlight?: 'ship-weapon' | 'shield' | null
 }
 
 type MatrixCellModel = ReturnType<typeof buildMatrixCellModel>
@@ -350,6 +352,7 @@ export function ThresholdComparisonMatrix({
   onOpenShips,
   onOpenWeaponsAt,
   onOpenShipsAt,
+  onboardingHighlight = null,
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null)
@@ -538,7 +541,14 @@ export function ThresholdComparisonMatrix({
                       </div>
                     </div>
 
-                    <div className="alpha-comparison-matrix-corner-row">
+                    <div
+                      className={[
+                        'alpha-comparison-matrix-corner-row',
+                        onboardingHighlight === 'shield' ? 'alpha-onboarding-target-highlight' : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                    >
                       <span className="alpha-comparison-matrix-corner-label" id="alpha-matrix-corner-shield-label">
                         Shields
                       </span>
@@ -606,6 +616,9 @@ export function ThresholdComparisonMatrix({
                         placeholderWeapon ? 'alpha-comparison-matrix-panel-placeholder' : '',
                         isDestinationColumn ? 'alpha-comparison-matrix-destination-column' : '',
                         destinationToneClass,
+                        onboardingHighlight === 'ship-weapon' && columnIndex === 0
+                          ? 'alpha-onboarding-target-highlight'
+                          : '',
                       ].filter(Boolean).join(' ')}
                       data-col-index={columnIndex}
                       aria-label={
@@ -755,6 +768,9 @@ export function ThresholdComparisonMatrix({
                           rowPanelToneClass,
                           placeholderShip ? 'alpha-comparison-matrix-panel-placeholder' : '',
                           destinationToneClass,
+                          onboardingHighlight === 'ship-weapon' && rowIndex === 0
+                            ? 'alpha-onboarding-target-highlight'
+                            : '',
                         ].filter(Boolean).join(' ')}
                         aria-label={
                           placeholderShip
