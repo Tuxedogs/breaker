@@ -6,15 +6,18 @@ export default function AppShell() {
   const location = useLocation();
   const isMapsRoute = location.pathname.startsWith("/maps");
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
-  const shellClassName = isAlphaThresholdRoute
-    ? "relative flex h-screen w-full flex-col overflow-hidden text-slate-100"
-    : "relative flex min-h-screen w-full flex-col text-slate-100";
+  const shellClassName =
+    isAlphaThresholdRoute || isMapsRoute
+      ? "relative flex h-screen w-full flex-col overflow-hidden text-slate-100"
+      : "relative flex min-h-screen w-full flex-col text-slate-100";
   const mainClassName = isAlphaThresholdRoute
     ? "relative z-20 flex min-h-0 flex-1 w-full items-start justify-start overflow-hidden pt-0"
-    : [
-        "relative z-20 mx-auto w-full flex-1 px-4 pb-8 sm:px-6 lg:px-8",
-        isMapsRoute ? "max-w-[96vw] pt-6 sm:pt-8" : "max-w-7xl pt-12",
-      ].join(" ");
+    : isMapsRoute
+      ? "relative z-20 flex min-h-0 flex-1 w-full flex-col overflow-hidden px-0 pb-0 pt-0"
+      : [
+          "relative z-20 mx-auto w-full flex-1 px-4 pb-8 sm:px-6 lg:px-8",
+          "max-w-7xl pt-12",
+        ].join(" ");
 
   return (
     <div className={shellClassName}>

@@ -344,6 +344,14 @@
   isolation: isolate;
 }
 
+/*
+ * Immersive maps: main is full-bleed under the fixed app nav (z-30). Overlay controls
+ * default to top: 1rem and sit in the band covered by the nav — offset below the bar.
+ */
+.ship-viewer-shell--immersive .map-mobile-overlay-cluster {
+  top: calc(4.5rem + env(safe-area-inset-top, 0px));
+}
+
 .ship-viewer-shell > .ship-viewer-bg,
 .ship-viewer-shell > .ship-viewer-grid,
 .ship-viewer-shell > .ship-backlight,
@@ -423,6 +431,11 @@
   z-index: 1;
 }
 
+/* Immersive maps route: flex chain must allow the WebGL canvas to shrink and fill. */
+.ship-viewer-shell .map-deck-viewport.min-h-0 {
+  min-height: 0;
+}
+
 /*Deck marker styles*/
 .deck-marker-icon-badge {
   display: flex;
@@ -465,6 +478,11 @@
     max-width: calc(100% - 2rem);
     align-items: flex-start;
     justify-content: flex-start;
+  }
+
+  .ship-viewer-shell--immersive .map-mobile-overlay-cluster {
+    top: calc(4.5rem + env(safe-area-inset-top, 0px));
+    left: 1rem;
   }
 
   .map-mobile-overlay-actions {

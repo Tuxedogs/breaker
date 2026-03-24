@@ -2,11 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Billboard, Html, OrbitControls, Text, useTexture } from "@react-three/drei";
 import {
+  ACESFilmicToneMapping,
   Box3,
   BufferAttribute,
   BufferGeometry,
   Color,
   Euler,
+  FogExp2,
   FrontSide,
   Group,
   Material,
@@ -18,6 +20,7 @@ import {
   Plane,
   PerspectiveCamera,
   Raycaster,
+  SRGBColorSpace,
   Vector3,
   Vector2,
 } from "three";
@@ -220,6 +223,8 @@ type ShipMapTemplateProps = {
   viewStorageKey: string;
   fallbackView: ShipMapViewState;
   showHeader?: boolean;
+  /** Edge-to-edge viewer: fills main under nav; pair with AppShell maps layout. */
+  immersiveFocus?: boolean;
   deckOverlayConfig?: ShipMapDeckOverlayConfig;
   mergeMeshesForPerformance?: boolean;
   modelTransform?: {
@@ -228,6 +233,10 @@ type ShipMapTemplateProps = {
     rotation?: [number, number, number];
   };
 };
+
+const SHIP_VIEWER_SCENE_BG = "#02040a";
+const SHIP_VIEWER_FOG_DENSITY = 0.048;
+const SHIP_VIEWER_TONE_EXPOSURE = 0.92;
 
 type ModelSource = "gltf" | "obj" | "ctm";
 
@@ -1101,6 +1110,7 @@ export default function ShipMapTemplate({
   viewStorageKey,
   fallbackView,
   showHeader = true,
+  immersiveFocus = false,
   deckOverlayConfig,
   mergeMeshesForPerformance = false,
   modelTransform,
@@ -1562,9 +1572,23 @@ export default function ShipMapTemplate({
     };
   }, [activeDeckOverlay]);
 
+  const roundShell = immersiveFocus ? "rounded-none" : "rounded-[1.2rem]";
+
   return (
-    <section className="route-fade pb-8 pt-2">
-      <div className="mx-auto w-full max-w-none space-y-6">
+    <section
+      className={
+        immersiveFocus
+          ? "route-fade flex h-full min-h-0 flex-1 flex-col pb-0 pt-0"
+          : "route-fade pb-8 pt-2"
+      }
+    >
+      <div
+        className={
+          immersiveFocus
+            ? "mx-auto flex w-full max-w-none flex-1 min-h-0 flex-col"
+            : "mx-auto w-full max-w-none space-y-6"
+        }
+      >
         {showHeader ? (
           <article className="base-card base-card--ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
             <header className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
@@ -1575,33 +1599,51 @@ export default function ShipMapTemplate({
           </article>
         ) : null}
 
-        <article className="base-card base-card--ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3">
+        <article
+          className={
+            immersiveFocus
+              ? "base-card base-card--ships flex min-h-0 flex-1 flex-col overflow-hidden border-0 bg-black/35 p-0 backdrop-blur sm:rounded-none"
+              : "base-card base-card--ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3"
+          }
+        >
           <div
             ref={viewerShellRef}
-            className="ship-viewer-shell relative h-[min(72vh,85dvh)] min-h-[min(360px,52dvh)] w-full sm:min-h-[480px] lg:min-h-[620px] rounded-[1.2rem] border border-white/15"
+            className={
+              immersiveFocus
+                ? "ship-viewer-shell ship-viewer-shell--immersive relative flex min-h-0 w-full flex-1 flex-col overflow-hidden border-0 sm:min-h-0"
+                : "ship-viewer-shell relative h-[min(72vh,85dvh)] min-h-[min(360px,52dvh)] w-full sm:min-h-[480px] lg:min-h-[620px] rounded-[1.2rem] border border-white/15"
+            }
             style={viewerBackdropStyle}
           >
-            <div className="ship-viewer-bg rounded-[1.2rem]" />
-            <div className="ship-stars rounded-[1.2rem]" />
-            <div className="ship-viewer-grid rounded-[1.2rem]" />
-            <div className="ship-backlight ship-backlight-large rounded-[1.2rem]" />
+            <div className={`ship-viewer-bg ${roundShell}`} />
+            <div className={`ship-stars ${roundShell}`} />
+            <div className={`ship-viewer-grid ${roundShell}`} />
+            <div className={`ship-backlight ship-backlight-large ${roundShell}`} />
             <div
-              className="map-deck-viewport relative h-full w-full overflow-hidden rounded-[1.2rem]"
+              className={`map-deck-viewport relative h-full w-full min-h-0 flex-1 overflow-hidden ${roundShell}`}
               onClick={handleViewportPick}
             >
               <Canvas
+              className={immersiveFocus ? "h-full min-h-0 w-full min-w-0" : undefined}
               dpr={[1, 1.5]}
               gl={{ localClippingEnabled: true, preserveDrawingBuffer: true }}
               camera={{ position: initialView.position, fov: 42 }}
-              onCreated={({ gl, camera }) => {
+              onCreated={({ gl, camera, scene }) => {
                 gl.localClippingEnabled = true;
+                gl.outputColorSpace = SRGBColorSpace;
+                gl.toneMapping = ACESFilmicToneMapping;
+                gl.toneMappingExposure = SHIP_VIEWER_TONE_EXPOSURE;
+                scene.background = new Color(SHIP_VIEWER_SCENE_BG);
+                scene.fog = new FogExp2(SHIP_VIEWER_SCENE_BG, SHIP_VIEWER_FOG_DENSITY);
                 canvasRef.current = gl.domElement;
                 cameraRef.current = camera as PerspectiveCamera;
               }}
-            > {/* Color of sun below */}
-              <ambientLight intensity={8} color="#b6b6b6" />
-              <directionalLight position={[18, 24, 20]} intensity={4} color="#b6b6b6" />
-              <directionalLight position={[-30, 9, -20]} intensity={8} color="#b6b6b6" />
+            >
+              <hemisphereLight intensity={0.42} color="#9eb0c8" groundColor="#0a0c12" />
+              <ambientLight intensity={0.2} color="#cbd5e1" />
+              <directionalLight position={[14, 22, 16]} intensity={1.32} color="#f2ede4" />
+              <directionalLight position={[-10, 6, -8]} intensity={0.4} color="#8fa3c4" />
+              <directionalLight position={[-18, 12, -24]} intensity={0.88} color="#7dd3fc" />
               {modelScene ? (
                 <>
                   <FitModelMesh
@@ -1738,7 +1780,13 @@ export default function ShipMapTemplate({
               </svg>
             ) : null}
 
-            <div className="map-mobile-overlay-cluster absolute left-4 top-4 z-10 flex max-w-[calc(100%-2rem)] flex-col gap-2">
+            <div
+              className={
+                immersiveFocus
+                  ? "map-mobile-overlay-cluster absolute left-4 z-10 flex max-w-[calc(100%-2rem)] flex-col gap-2"
+                  : "map-mobile-overlay-cluster absolute left-4 top-4 z-10 flex max-w-[calc(100%-2rem)] flex-col gap-2"
+              }
+            >
               {hasDeckOverlay ? (
                 <div className="map-mobile-overlay-actions">
                   <button
