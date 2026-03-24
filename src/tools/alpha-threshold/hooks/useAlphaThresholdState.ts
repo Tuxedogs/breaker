@@ -37,7 +37,7 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
 ]
 const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-ptu']
 const MAX_VICTIM_SHIPS = 4
-const MOBILE_MAX_VICTIM_SHIPS = 2
+const MOBILE_MAX_VICTIM_SHIPS = 3
 const STORAGE_MIGRATION_VERSION_KEY = 'alpha-threshold.storage-migration-version'
 const STORAGE_MIGRATION_VERSION = 1
 const LEGACY_STORAGE_KEYS_TO_CLEAR = [
@@ -374,7 +374,7 @@ export function useAlphaThresholdState() {
   const maxVictimShips = isMobileViewport ? MOBILE_MAX_VICTIM_SHIPS : MAX_VICTIM_SHIPS
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 767px)')
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
     const updateViewport = () => setIsMobileViewport(mediaQuery.matches)
 
     updateViewport()

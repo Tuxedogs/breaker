@@ -17,6 +17,7 @@ import type {
 } from '../types'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import { HeatmapTooltip } from './HeatmapTooltip'
+import { MobileThresholdComparisonLayout } from './MobileThresholdComparisonLayout'
 
 type Props = {
   controlStrip?: ReactNode
@@ -375,6 +376,7 @@ export function ThresholdComparisonMatrix({
   })
   const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
   const [matrixMode, setMatrixMode] = useState<'analysis' | 'frakk'>('analysis')
+  const [isMobileLayout, setIsMobileLayout] = useState(false)
   const visibleShips = buildVisibleShips(ships)
   const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
@@ -406,6 +408,14 @@ export function ThresholdComparisonMatrix({
     }
   }, [selectionMode])
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const sync = () => setIsMobileLayout(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
   const cellModels = useMemo(() => {
     return new Map(
       visibleShips.flatMap((ship) =>
@@ -416,6 +426,23 @@ export function ThresholdComparisonMatrix({
       )
     )
   }, [orderedWeapons, visibleShips])
+
+  if (isMobileLayout) {
+    return (
+      <MobileThresholdComparisonLayout
+        ships={visibleShips}
+        selectedWeapons={orderedWeapons}
+        shieldMode={shieldMode}
+        shipCount={visibleShips.filter((ship) => ship.name !== '' && ship.manufacturer !== '').length}
+        weaponCount={orderedWeapons.filter(
+          (selection) => selection.weapon.name !== '' && selection.weapon.weaponClass !== ''
+        ).length}
+        onShieldModeChange={onShieldModeChange}
+        onOpenShips={onOpenShips}
+        onOpenWeapons={onOpenWeapons}
+      />
+    )
+  }
 
   return (
     <section

@@ -167,3 +167,86 @@
   border-top: 1px solid rgb(255 255 255 / 0.08);
   padding-top: 1rem;
 }
+
+@media (max-width: 768px) {
+  .alpha-tool-route {
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: max(0.65rem, env(safe-area-inset-bottom));
+  }
+
+  .alpha-tool-route .alpha-command-shell,
+  .alpha-tool-route .alpha-main-heatmap-stage,
+  .alpha-tool-route .alpha-main-heatmap-board {
+    display: block;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .alpha-tool-route .alpha-main-heatmap-stage {
+    padding: 0 0.5rem;
+  }
+
+  .alpha-tool-route .alpha-app-edge-rail {
+    display: none;
+  }
+
+  .alpha-tool-route .alpha-threshold-board,
+  .alpha-tool-route .alpha-top-control-strip,
+  .alpha-tool-route .alpha-loadout-drawer,
+  .alpha-tool-route .alpha-heatmap-ship-column,
+  .alpha-tool-route :is(.alpha-sidebar, .alpha-summary-rail, .alpha-table-shell, .alpha-compare-strip, .alpha-heatmap-panel) {
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+  }
+
+  .alpha-mobile-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .alpha-mobile-control-strip {
+    position: sticky;
+    top: calc(env(safe-area-inset-top) + 0.35rem);
+    z-index: 12;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    padding: 0 0.5rem;
+  }
+
+  .alpha-mobile-control-strip-button {
+    min-height: 44px;
+    padding-inline: 0.65rem;
+    font-size: 0.72rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .alpha-mobile-results {
+    padding: 0 0.5rem;
+  }
+
+  .alpha-mobile-result-list {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .alpha-mobile-result-card {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .alpha-mobile-result-head {
+    margin-bottom: 0.45rem;
+  }
+
+  .alpha-mobile-result-body {
+    display: grid;
+    gap: 0.28rem;
+  }
+}
