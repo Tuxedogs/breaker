@@ -13,7 +13,6 @@
   scroll-behavior: smooth;
   overflow: hidden;
   padding-top: 0;
-  --alpha-shell-top-padding: 0.04rem;
   /* Full-viewport tool: no global nav bar; sticky offsets stay at 0 inside this route */
   --app-sticky-top: 0px;
   --alpha-sticky-top: 0rem;
@@ -30,7 +29,7 @@
   overflow: hidden;
   width: 100%;
   max-width: none;
-  padding: var(--alpha-shell-top-padding) 0.18rem 0.16rem;
+  padding: 0 0.18rem 0.16rem;
 }
 
 .alpha-tool-route .alpha-main-heatmap-stage,
@@ -97,7 +96,7 @@
 
 @media (min-width: 1024px) {
   .alpha-tool-route .alpha-command-shell {
-    padding: var(--alpha-shell-top-padding) 0.3rem 0.22rem;
+    padding: 0 0.3rem 0.22rem;
   }
 }
 
