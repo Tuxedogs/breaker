@@ -7,10 +7,12 @@ type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
+  matrixMode: 'analysis' | 'target'
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
   nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
+  onMatrixModeChange: (mode: 'analysis' | 'target') => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
@@ -23,10 +25,12 @@ export function ThresholdHeatmapBoard({
   ships,
   selectedWeapons,
   shieldMode,
+  matrixMode,
   selectionMode,
   nextShipSlotIndex,
   nextWeaponSlotIndex,
   onShieldModeChange,
+  onMatrixModeChange,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
@@ -40,10 +44,12 @@ export function ThresholdHeatmapBoard({
         ships={ships}
         selectedWeapons={selectedWeapons}
         shieldMode={shieldMode}
+        matrixMode={matrixMode}
         selectionMode={selectionMode}
         nextShipSlotIndex={nextShipSlotIndex}
         nextWeaponSlotIndex={nextWeaponSlotIndex}
         onShieldModeChange={onShieldModeChange}
+        onMatrixModeChange={onMatrixModeChange}
         onWeaponHeaderChipClick={onWeaponHeaderChip}
         onOpenWeapons={onOpenWeapons}
         onOpenShips={onOpenShips}

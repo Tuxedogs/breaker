@@ -296,6 +296,16 @@ function computePassThrough(
   resistance: ResolvedRange,
   absorption: ResolvedRange
 ): ResolvedRange {
+  // passThrough.max = (1 - resistance.max) * (1 - absorption.max)
+  //
+  // Data from shields:
+  // resistance.max = 0.25
+  // absorption.max = 0.45
+  //
+  // (1 - 0.25) * (1 - 0.45)
+  // 0.75 * 0.55
+  //
+  // passThrough.max = 0.4125
   return {
     min: (1 - resistance.min) * (1 - absorption.min),
     max: (1 - resistance.max) * (1 - absorption.max),
