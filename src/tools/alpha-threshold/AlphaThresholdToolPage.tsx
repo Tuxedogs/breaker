@@ -7,6 +7,7 @@ import {
 } from './components/AlphaThresholdOnboardingModal'
 import { AlphaThresholdMobileOnboardingTip } from './components/AlphaThresholdMobileOnboardingTip'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
+import { RecommendationsBoard } from './components/RecommendationsBoard'
 import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { WeaponSelectorOverlay } from './components/WeaponSelectorOverlay'
@@ -23,6 +24,7 @@ const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
 export default function AlphaThresholdToolPage() {
   const [selectionMode, setSelectionMode] = useState<'ship' | 'weapon' | null>(null)
+  const [matrixMode, setMatrixMode] = useState<'analysis' | 'target'>('analysis')
   const [activeShipSlotIndex, setActiveShipSlotIndex] = useState(0)
   const [activeWeaponSlotIndex, setActiveWeaponSlotIndex] = useState(0)
   const [shipAutoAdvance, setShipAutoAdvance] = useState(true)
@@ -348,21 +350,31 @@ export default function AlphaThresholdToolPage() {
       <div className="alpha-command-shell">
         <MainHeatmapStage
           board={
-            <ThresholdHeatmapBoard
-              ships={previewShips}
-              selectedWeapons={previewWeapons}
-              shieldMode={shieldMode}
-              selectionMode={selectionMode}
-              nextShipSlotIndex={effectiveShipSlotIndex}
-              nextWeaponSlotIndex={effectiveWeaponSlotIndex}
-              onShieldModeChange={handleShieldModeChange}
-              onOpenWeapons={handleOpenWeapons}
-              onOpenShips={handleOpenShips}
-              onOpenWeaponsAt={handleOpenWeaponsAt}
-              onOpenShipsAt={handleOpenShipsAt}
-              onWeaponHeaderChip={handleWeaponHeaderChip}
-              onboardingHighlight={onboardingHighlight}
-            />
+            matrixMode === 'analysis' ? (
+              <ThresholdHeatmapBoard
+                ships={previewShips}
+                selectedWeapons={previewWeapons}
+                shieldMode={shieldMode}
+                matrixMode={matrixMode}
+                selectionMode={selectionMode}
+                nextShipSlotIndex={effectiveShipSlotIndex}
+                nextWeaponSlotIndex={effectiveWeaponSlotIndex}
+                onShieldModeChange={handleShieldModeChange}
+                onMatrixModeChange={setMatrixMode}
+                onOpenWeapons={handleOpenWeapons}
+                onOpenShips={handleOpenShips}
+                onOpenWeaponsAt={handleOpenWeaponsAt}
+                onOpenShipsAt={handleOpenShipsAt}
+                onWeaponHeaderChip={handleWeaponHeaderChip}
+                onboardingHighlight={onboardingHighlight}
+              />
+            ) : (
+              <RecommendationsBoard
+                ships={previewShips}
+                weapons={allWeapons}
+                selectedShips={previewShips.filter((ship) => ship.name.trim() !== '')}
+              />
+            )
           }
           overlay={
             selectionMode === 'ship' ? (

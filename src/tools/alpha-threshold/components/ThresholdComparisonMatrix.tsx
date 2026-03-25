@@ -24,10 +24,12 @@ type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
+  matrixMode: 'analysis' | 'target'
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
   nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
+  onMatrixModeChange: (mode: 'analysis' | 'target') => void
   /** Matrix weapon header chips: open overlay with filter (not main-board analysis strip) */
   onWeaponHeaderChipClick?: (payload: {
     columnIndex: number
@@ -65,7 +67,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t
 }
 
-/** 0–100 effective armor damage start % (same basis as E label). */
+/** 0-100 effective armor damage start % (same basis as E label). */
 function getPenetrationEffectivePercent(estimate: ArmorInteractionEstimate): number {
   if (!estimate.damagesFreshArmor && estimate.armorDamageStartsAtPercent == null) return 0
   if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) return 100
@@ -73,7 +75,7 @@ function getPenetrationEffectivePercent(estimate: ArmorInteractionEstimate): num
 }
 
 /**
- * E100 = green; E75–E99 = yellow; E50–E74 = yellow→orange; E1–E49 = orange→dark red; E0 = dark red.
+ * E100 = green; E75-E99 = yellow; E50-E74 = yellow->orange; E1-E49 = orange->dark red; E0 = dark red.
  * Only E100 uses green; any value below 100 is not green.
  */
 function getEffectivePenetrationSummaryColor(pct: number): string {
@@ -175,100 +177,35 @@ type MatrixTooltipLine = {
   value: string
   tone?: 'immediate' | 'cyan' | 'danger' | 'amber'
   kind?: 'section'
+  pills?: string[]
 }
 
 function capitalizeConfidence(c: ArmorInteractionEstimate['confidence']): string {
   return `${c.charAt(0).toUpperCase()}${c.slice(1)}`
 }
 
-function formatArmorOnsetSourceShort(
-  source: ArmorInteractionEstimate['armorDamageStartsAtPercentSource']
-): string {
-  switch (source) {
-    case 'observed':
-      return 'Observed'
-    case 'estimated':
-      return 'Estimated'
-    case 'threshold':
-      return 'From α/T'
-    case 'none':
-      return '—'
-    default:
-      return source
-  }
-}
-
-/** Tooltip body: E-rating math, model confidence, and estimate notes only. */
-function buildMatrixCellTooltipLines(
-  selection: SelectedWeaponComparison,
-  estimate: ArmorInteractionEstimate
-): MatrixTooltipLine[] {
-  const ePct = getPenetrationEffectivePercent(estimate)
-  const rawAlpha = selection.weapon.alpha ?? 0
-  const pass = estimate.shieldPassThrough
-  const effectiveAlpha = estimate.effectiveArmorAlpha
-  const T = estimate.deflectionThreshold
-  const ratio = estimate.thresholdRatio
-  const ratioDisplay = Number.isFinite(ratio) ? ratio.toFixed(2) : '∞'
+function buildMatrixCellTooltipLines(estimate: ArmorInteractionEstimate): MatrixTooltipLine[] {
   const notes = estimate.notes ?? []
-  const shieldShort = estimate.shieldState === 'up' ? 'up' : 'down'
 
-  const lines: MatrixTooltipLine[] = [
+  return [
     {
-      label: 'What it is',
-      value: `E${ePct} is the effective damage start % (0–100).`,
+      label: 'Pills',
+      value: '',
+      pills: ['T', 'A'],
     },
     {
-      label: 'Chain',
-      value: [
-        `α_weapon ${formatMetric(rawAlpha)}`,
-        `pass ${formatMetric(pass)} (${shieldShort})`,
-        `→ α_eff ${formatMetric(effectiveAlpha)}`,
-      ].join(' · '),
+      label: 'Shields',
+      value: 'Ballistic threshold is affected\nby shields, lowering the E rating.',
     },
     {
-      label: 'Threshold',
-      value: `T ${formatMetric(T)} · α/T ${ratioDisplay}${Number.isFinite(ratio) && ratio >= 1 ? ' (≥1)' : ''}`,
+      label: 'Confidence',
+      value: capitalizeConfidence(estimate.confidence),
+    },
+    {
+      label: 'Notes',
+      value: notes.length > 0 ? `\n${notes.join('\n')}` : '—',
     },
   ]
-
-  const onsetParts: string[] = []
-  if (estimate.armorDamageStartsAtPercent != null) {
-    onsetParts.push(`${Math.round(estimate.armorDamageStartsAtPercent)}% onset`)
-  }
-  onsetParts.push(formatArmorOnsetSourceShort(estimate.armorDamageStartsAtPercentSource))
-  if (estimate.estimatedArmorOnsetBand) {
-    onsetParts.push(`band ${estimate.estimatedArmorOnsetBand[0]}–${estimate.estimatedArmorOnsetBand[1]}%`)
-  }
-  lines.push({
-    label: 'Onset',
-    value: onsetParts.join(' · '),
-  })
-
-  let eSummary: string
-  if (!estimate.damagesFreshArmor && estimate.armorDamageStartsAtPercent == null) {
-    eSummary = 'E = 0 — no onset on file.'
-  } else if (estimate.damagesFreshArmor || estimate.armorDamageStartsAtPercent === 100) {
-    eSummary = 'E = 100 — full-integrity damage or onset at 100%.'
-  } else {
-    eSummary = `E = round(onset %) → ${ePct}.`
-  }
-
-  lines.push({ label: 'Result', value: eSummary })
-
-  lines.push({
-    label: 'Confidence',
-    value: capitalizeConfidence(estimate.confidence),
-  })
-
-  if (notes.length > 0) {
-    lines.push({ label: 'Notes', value: '', kind: 'section' })
-    notes.forEach((note, index) => {
-      lines.push({ label: `${index + 1}`, value: note })
-    })
-  }
-
-  return lines
 }
 
 const MATRIX_TOOLTIP_WIDTH_PX = 304
@@ -289,7 +226,7 @@ function getCompactMetricLabel(value: number | null | undefined) {
 
 function getShipRoleLabel(ship: Ship) {
   const raw = ship.role?.trim()
-  if (!raw) return '—'
+  if (!raw) return '-'
   return formatEntityLabel(raw)
 }
 
@@ -344,10 +281,12 @@ export function ThresholdComparisonMatrix({
   ships,
   selectedWeapons,
   shieldMode,
+  matrixMode,
   selectionMode,
   nextShipSlotIndex,
   nextWeaponSlotIndex,
   onShieldModeChange,
+  onMatrixModeChange,
   onWeaponHeaderChipClick,
   onOpenWeapons,
   onOpenShips,
@@ -366,6 +305,13 @@ export function ThresholdComparisonMatrix({
     y: number
     title: string
     sectionTitle?: string
+    hero?: {
+      leftLabel: string
+      leftValue: string
+      rightLabel: string
+      rightValue: string
+      description: string
+    }
     lines: MatrixTooltipLine[]
   }>({
     open: false,
@@ -375,7 +321,6 @@ export function ThresholdComparisonMatrix({
     lines: [],
   })
   const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
-  const [matrixMode, setMatrixMode] = useState<'analysis' | 'frakk'>('analysis')
   const [isMobileLayout, setIsMobileLayout] = useState(false)
   const visibleShips = buildVisibleShips(ships)
   const orderedWeapons = selectedWeapons
@@ -540,7 +485,7 @@ export function ThresholdComparisonMatrix({
                         {(
                           [
                             ['analysis', 'Analysis'],
-                            ['frakk', 'Frakk'],
+                          ['target', 'Target'],
                           ] as const
                         ).map(([id, label], i) => (
                           <span key={id} className="alpha-comparison-matrix-corner-seg-wrap">
@@ -559,7 +504,7 @@ export function ThresholdComparisonMatrix({
                                 .join(' ')}
                               role="radio"
                               aria-checked={matrixMode === id}
-                              onClick={() => setMatrixMode(id)}
+                              onClick={() => onMatrixModeChange(id)}
                             >
                               {label}
                             </button>
@@ -838,7 +783,7 @@ export function ThresholdComparisonMatrix({
                               <div className="alpha-comparison-matrix-ship-header">
                                 <div className="alpha-comparison-matrix-ship-copy">
                                   <p className="alpha-comparison-matrix-ship-eyebrow">
-                                    {formatEntityLabel(ship.manufacturer).trim() || '—'}
+                                    {formatEntityLabel(ship.manufacturer).trim() || '-'}
                                   </p>
                                   <h3 className="alpha-comparison-matrix-ship-name">
                                     {formatEntityLabel(ship.name)}
@@ -946,9 +891,17 @@ export function ThresholdComparisonMatrix({
                             open: true,
                             x: rect.right - MATRIX_TOOLTIP_WIDTH_PX - MATRIX_TOOLTIP_VIEWPORT_GUTTER,
                             y: rect.top + MATRIX_TOOLTIP_VIEWPORT_GUTTER,
-                            title: `${getEstimatePenetrationLabel(activeResult.estimate)} — ${formatEntityLabel(ship.name)} vs ${selection.weapon.name}`,
-                            sectionTitle: undefined,
-                            lines: buildMatrixCellTooltipLines(selection, activeResult.estimate),
+                            title: `${getEstimatePenetrationLabel(activeResult.estimate)} - ${formatEntityLabel(ship.name)} vs ${selection.weapon.name}`,
+                            sectionTitle: selection.weapon.name,
+                            hero: {
+                              leftLabel: 'Rating',
+                              leftValue: `E${getPenetrationEffectivePercent(activeResult.estimate)}`,
+                              rightLabel: 'Effective',
+                              rightValue: `${getPenetrationEffectivePercent(activeResult.estimate)}%`,
+                              description:
+                                'You only apply damage when the enemy ship armor is below this number in %.',
+                            },
+                            lines: buildMatrixCellTooltipLines(activeResult.estimate),
                           })
                         }
 
@@ -1235,10 +1188,13 @@ export function ThresholdComparisonMatrix({
         y={matrixTooltip.y}
         title={matrixTooltip.title}
         sectionTitle={matrixTooltip.sectionTitle}
+        hero={matrixTooltip.hero}
         lines={matrixTooltip.lines}
       />
     </section>
   )
 }
+
+
 
 

@@ -9,10 +9,12 @@ type Props = {
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   shieldMode: DefenseShieldState
+  matrixMode: 'analysis' | 'target'
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
   nextWeaponSlotIndex: number
   onShieldModeChange: (mode: DefenseShieldState) => void
+  onMatrixModeChange: (mode: 'analysis' | 'target') => void
   onWeaponHeaderChipClick?: (payload: {
     columnIndex: number
     chip: ArmorInteractionFilterChip
@@ -28,10 +30,12 @@ export function ArmorInteractionTestbed({
   ships,
   selectedWeapons,
   shieldMode,
+  matrixMode,
   selectionMode,
   nextShipSlotIndex,
   nextWeaponSlotIndex,
   onShieldModeChange,
+  onMatrixModeChange,
   onWeaponHeaderChipClick,
   onOpenWeapons,
   onOpenShips,
@@ -44,10 +48,12 @@ export function ArmorInteractionTestbed({
       ships={ships}
       selectedWeapons={selectedWeapons}
       shieldMode={shieldMode}
+      matrixMode={matrixMode}
       selectionMode={selectionMode}
       nextShipSlotIndex={nextShipSlotIndex}
       nextWeaponSlotIndex={nextWeaponSlotIndex}
       onShieldModeChange={onShieldModeChange}
+      onMatrixModeChange={onMatrixModeChange}
       onWeaponHeaderChipClick={onWeaponHeaderChipClick}
       onOpenWeapons={onOpenWeapons}
       onOpenShips={onOpenShips}

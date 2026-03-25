@@ -31,30 +31,6 @@ function getStatusTone(trace: HeatmapTraceModel) {
   }
 }
 
-function getPenetrationStartLabel(trace: HeatmapTraceModel) {
-  switch (trace.penetrationState) {
-    case 'blocked':
-      return 'No penetration point'
-    case 'immediate':
-      return '100% intact armor'
-    case 'threshold':
-      return `${Math.round(trace.penetrationStartArmorPercent)}% armor remaining`
-  }
-}
-
-function getLegacyStatusLabel(trace: HeatmapTraceModel) {
-  switch (trace.status) {
-    case 'always-deflects':
-      return 'Always Deflects'
-    case 'always-penetrates':
-      return 'Always Penetrates'
-    case 'penetrates-early':
-      return 'Penetrates Early'
-    default:
-      return 'Crosses Late'
-  }
-}
-
 function clampTooltipCoordinate(value: number, max: number) {
   return Math.max(16, Math.min(value, max))
 }
@@ -210,7 +186,11 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
           lines={[
             {
               label: 'Penetration Start',
-              value: getPenetrationStartLabel(trace),
+              value: trace.penetrationState === 'blocked'
+                ? 'No penetration point'
+                : trace.penetrationState === 'immediate'
+                  ? '100% intact armor'
+                  : `${Math.round(trace.penetrationStartArmorPercent)}% armor remaining`,
               tone: trace.penetrationState === 'immediate' ? 'immediate' : undefined,
             },
             { label: 'Weapon Type', value: trace.matchedDamageType },
@@ -226,7 +206,7 @@ export function HeatmapWeaponTrace({ shipName, trace }: Props) {
                 Math.abs(trace.overUnderDeltaAtFullArmor)
               )}`,
             },
-            { label: 'Legacy Status', value: getLegacyStatusLabel(trace) },
+            { label: 'Legacy Status', value: trace.status },
           ]}
         />
       </div>
