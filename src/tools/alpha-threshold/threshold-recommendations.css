@@ -76,6 +76,10 @@
   height: 100%;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-panel-target {
+  --alpha-matrix-weapon-min-width: 12.5rem;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-shell {
   min-width: 0;
   min-height: 0;
@@ -243,6 +247,10 @@
   line-height: 1.2;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-corner-label--spacer {
+  visibility: hidden;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-corner-segments {
   display: flex;
   flex-wrap: wrap;
@@ -251,6 +259,26 @@
   gap: 0;
   min-width: 0;
   text-align: right;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-corner-filter-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.18rem;
+  justify-self: end;
+  width: 100%;
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-corner-row--filter .alpha-comparison-matrix-corner-segments {
+  justify-content: flex-end;
+  width: 100%;
+  align-self: flex-end;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-corner-row--filter {
+  grid-template-columns: minmax(3.25rem, auto) minmax(0, 1fr);
 }
 
 .alpha-tool-route .alpha-comparison-matrix-corner-seg-wrap {
@@ -509,12 +537,112 @@
   overflow-y: auto;
 }
 
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-selector {
+  justify-self: start;
+  width: fit-content;
+  min-width: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-right: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 1rem;
+  background: rgb(9 13 22 / 0.98);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    inset 0 -1px 0 rgb(0 0 0 / 0.35),
+    0 0 0 1px rgb(0 0 0 / 0.2),
+    0 12px 28px rgb(2 6 23 / 0.45);
+  overflow: visible !important;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-weapon-header-body {
   display: flex;
   flex-direction: column;
   gap: 0.24rem;
   width: 100%;
   min-width: 0;
+  overflow: visible;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector {
+  display: grid;
+  gap: 0.48rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-label {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(100 116 139);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.42rem;
+  min-width: 0;
+  overflow: visible;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-chip-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-chip-sep {
+  margin: 0 0.04rem;
+  font-size: 0.58rem;
+  font-weight: 600;
+  color: rgb(51 65 85);
+  user-select: none;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-group .alpha-comparison-matrix-chip {
+  appearance: none;
+  margin: 0;
+  padding: 0.08rem 0.12rem;
+  border: none;
+  border-radius: 0.2rem;
+  background: transparent;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(71 85 105);
+  min-height: 1.7rem;
+  padding-inline: 0.12rem;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    text-shadow 140ms ease;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-group .alpha-comparison-matrix-chip:hover {
+  color: rgb(148 163 184);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-group .alpha-comparison-matrix-chip:focus-visible {
+  outline: 2px solid rgb(125 211 252 / 0.45);
+  outline-offset: 2px;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-selector-group .alpha-comparison-matrix-chip--active {
+  font-size: 0.66rem;
+  color: rgb(186 230 253);
+  text-shadow: 0 0 14px rgb(56 189 248 / 0.4);
 }
 
 /* Hovered column — match overlay inactive slot hover */
@@ -542,6 +670,10 @@
     rgb(255 255 255 / 0.02);
 }
 
+.alpha-tool-route .alpha-comparison-matrix-weapon-header-target {
+  justify-content: center;
+}
+
 .alpha-tool-route .alpha-comparison-matrix-weapon-empty {
   display: flex;
   flex-direction: column;
@@ -550,6 +682,12 @@
   gap: 0.38rem;
   width: 100%;
   text-align: center;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-empty-target {
+  position: relative;
+  min-height: 100%;
+  justify-content: center;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-weapon-empty-label {
@@ -567,6 +705,19 @@
   line-height: 1.18;
   font-weight: 600;
   color: rgb(100 116 139);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-weapon-empty-note {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  font-size: 0.58rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: rgb(148 163 184);
+  text-align: right;
+  max-width: 11.5rem;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-ship-eyebrow {
@@ -1194,6 +1345,63 @@
   gap: 0.1rem;
   min-height: 0;
   margin-top: 0.16rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-target-rating {
+  font-size: 1.46rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-target-weapon-name {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.08;
+  color: rgb(226 232 240);
+}
+
+.alpha-tool-route .alpha-comparison-matrix-cell-title-row--target {
+  margin-top: 0.38rem;
+  gap: 0.22rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-target-stats {
+  align-self: flex-start;
+  justify-content: flex-start;
+  margin: 0.72rem 0 0;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-weapon-header {
+  min-width: var(--alpha-matrix-weapon-min-width);
+  padding: 0.54rem 0.56rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-cell {
+  min-width: var(--alpha-matrix-weapon-min-width);
+  padding: 0.24rem 0.46rem 0.22rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-target-rating {
+  font-size: 1.3rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-target-weapon-name {
+  font-size: 0.84rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-cell-inline-metrics {
+  gap: 0.18rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-cell-inline-metrics > span {
+  gap: 0.18rem;
+  padding: 0.08rem 0.3rem;
+  font-size: 0.66rem;
+}
+
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-cell-state,
+.alpha-tool-route .alpha-comparison-matrix-panel-target .alpha-comparison-matrix-cell-shield-chip {
+  font-size: 0.5rem;
+  padding-inline: 0.3rem;
 }
 
 .alpha-tool-route .alpha-comparison-matrix-cell-track-scale {
