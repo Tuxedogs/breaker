@@ -24,6 +24,10 @@ export type WeaponRecommendation = {
   thresholdType: WeaponThresholdType
 }
 
+type EvaluateWeaponRecommendationOptions = {
+  ignoreExclusions?: boolean
+}
+
 const ARMOR_STEPS = buildArmorSteps()
 
 function clamp(value: number, min: number, max: number) {
@@ -145,10 +149,11 @@ export function evaluateWeaponRecommendation(
   ship: Ship,
   weapon: WeaponRecord,
   maxAlpha: number,
-  maxSpeed: number
+  maxSpeed: number,
+  options: EvaluateWeaponRecommendationOptions = {}
 ): WeaponRecommendation | null {
   if (!isThresholdRecommendationWeapon(weapon)) return null
-  if (shouldExcludeRecommendationWeapon(weapon)) return null
+  if (!options.ignoreExclusions && shouldExcludeRecommendationWeapon(weapon)) return null
 
   const thresholdType = weapon.damageType
   const threshold = getThresholdForWeaponType(ship, thresholdType)
@@ -196,6 +201,25 @@ export function evaluateWeaponRecommendation(
   }
 }
 
+export function sortWeaponRecommendations(
+  left: WeaponRecommendation,
+  right: WeaponRecommendation
+) {
+  if (right.viabilityScore !== left.viabilityScore) {
+    return right.viabilityScore - left.viabilityScore
+  }
+  if (
+    (right.firstPenetrationArmorPercent ?? -1) !==
+    (left.firstPenetrationArmorPercent ?? -1)
+  ) {
+    return (right.firstPenetrationArmorPercent ?? -1) - (left.firstPenetrationArmorPercent ?? -1)
+  }
+  if ((right.weapon.alpha ?? 0) !== (left.weapon.alpha ?? 0)) {
+    return (right.weapon.alpha ?? 0) - (left.weapon.alpha ?? 0)
+  }
+  return (right.weapon.projectileSpeed ?? 0) - (left.weapon.projectileSpeed ?? 0)
+}
+
 export function buildWeaponRecommendations(
   ship: Ship,
   weapons: WeaponRecord[]
@@ -207,19 +231,5 @@ export function buildWeaponRecommendations(
     .map((weapon) => evaluateWeaponRecommendation(ship, weapon, maxAlpha, maxSpeed))
     .filter((recommendation): recommendation is WeaponRecommendation => Boolean(recommendation))
 
-  return evaluatedRecommendations.sort((left, right) => {
-      if (right.viabilityScore !== left.viabilityScore) {
-        return right.viabilityScore - left.viabilityScore
-      }
-      if (
-        (right.firstPenetrationArmorPercent ?? -1) !==
-        (left.firstPenetrationArmorPercent ?? -1)
-      ) {
-        return (right.firstPenetrationArmorPercent ?? -1) - (left.firstPenetrationArmorPercent ?? -1)
-      }
-      if ((right.weapon.alpha ?? 0) !== (left.weapon.alpha ?? 0)) {
-        return (right.weapon.alpha ?? 0) - (left.weapon.alpha ?? 0)
-      }
-      return (right.weapon.projectileSpeed ?? 0) - (left.weapon.projectileSpeed ?? 0)
-    })
+  return evaluatedRecommendations.sort(sortWeaponRecommendations)
 }

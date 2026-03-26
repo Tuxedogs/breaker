@@ -261,7 +261,7 @@ function buildBalanceFieldChanges(
     .filter(Boolean) as ShipBalanceFieldChange[]
 }
 
-export function useAlphaThresholdState() {
+export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
   const [isMobileViewport, setIsMobileViewport] = useLocalStorageState<boolean>(
     'alpha-threshold.mobile-viewport',
     false
@@ -271,11 +271,11 @@ export function useAlphaThresholdState() {
     'health-desc'
   )
   const [storedSlots, setSlots] = useLocalStorageState<ComparisonSlot[]>(
-    'alpha-threshold.slots',
+    `alpha-threshold.${matrixMode}.slots`,
     buildDefaultWeaponSlots()
   )
   const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<Array<string | null>>(
-    'alpha-threshold.selected-ships',
+    `alpha-threshold.${matrixMode}.selected-ships`,
     []
   )
   const [shipSearch, setShipSearch] = useLocalStorageState<string>(
@@ -629,6 +629,14 @@ export function useAlphaThresholdState() {
     )
   }
 
+  function setSlotHardpointSize(slotId: string, hardpointSize: number) {
+    setSlots((prev) =>
+      prev.map((slot) =>
+        slot.id === slotId ? { ...slot, hardpointSize } : slot
+      )
+    )
+  }
+
   function toggleShipSelected(shipName: string) {
     setSelectedShipNames((prev) => {
       if (prev.includes(shipName)) {
@@ -703,6 +711,7 @@ export function useAlphaThresholdState() {
     setSortKey,
     slots,
     setSlotWeapon,
+    setSlotHardpointSize,
     allWeapons,
     allShips,
     selectedShips,

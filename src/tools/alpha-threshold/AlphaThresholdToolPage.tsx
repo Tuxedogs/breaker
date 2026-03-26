@@ -7,7 +7,6 @@ import {
 } from './components/AlphaThresholdOnboardingModal'
 import { AlphaThresholdMobileOnboardingTip } from './components/AlphaThresholdMobileOnboardingTip'
 import { MainHeatmapStage } from './components/MainHeatmapStage'
-import { RecommendationsBoard } from './components/RecommendationsBoard'
 import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { WeaponSelectorOverlay } from './components/WeaponSelectorOverlay'
@@ -24,7 +23,6 @@ const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
 export default function AlphaThresholdToolPage() {
   const [selectionMode, setSelectionMode] = useState<'ship' | 'weapon' | null>(null)
-  const [matrixMode, setMatrixMode] = useState<'analysis' | 'target'>('analysis')
   const [activeShipSlotIndex, setActiveShipSlotIndex] = useState(0)
   const [activeWeaponSlotIndex, setActiveWeaponSlotIndex] = useState(0)
   const [shipAutoAdvance, setShipAutoAdvance] = useState(true)
@@ -34,6 +32,9 @@ export default function AlphaThresholdToolPage() {
   const [hoveredWeaponSlotIndex, setHoveredWeaponSlotIndex] = useState<number | null>(null)
   const [weaponOverlayFilterPreset, setWeaponOverlayFilterPreset] =
     useState<ArmorInteractionFilterChip | null>(null)
+  const [targetWeaponFilterPreset, setTargetWeaponFilterPreset] =
+    useState<ArmorInteractionFilterChip | null>(null)
+  const [targetWeaponSizeFilter, setTargetWeaponSizeFilter] = useState<number | null>(null)
   /** Clears in the overlay; at 2+ re-enable auto-advance (per ship / weapon flows). */
   const shipClearStreakRef = useRef(0)
   const weaponClearStreakRef = useRef(0)
@@ -49,6 +50,7 @@ export default function AlphaThresholdToolPage() {
   const [onboardingHighlight, setOnboardingHighlight] =
     useState<AlphaThresholdOnboardingHighlight>(null)
   const [isMobileViewport, setIsMobileViewport] = useState(false)
+  const [matrixMode, setMatrixMode] = useState<'analysis' | 'target'>('analysis')
   const {
     slots,
     setSlotWeapon,
@@ -58,7 +60,7 @@ export default function AlphaThresholdToolPage() {
     selectedShipNames,
     setVictimShipAt,
     maxVictimShips,
-  } = useAlphaThresholdState()
+  } = useAlphaThresholdState(matrixMode)
   const shieldMode = parseShieldMode(searchParams.get('shield'))
   const visibleShipCount = isMobileViewport
     ? Math.min(maxVictimShips, MOBILE_PREVIEW_SHIP_COUNT)
@@ -309,18 +311,6 @@ export default function AlphaThresholdToolPage() {
     setSelectionMode('weapon')
   }
 
-  function handleWeaponHeaderChip(payload: {
-    columnIndex: number
-    chip: ArmorInteractionFilterChip
-  }) {
-    setWeaponOverlayFilterPreset(payload.chip)
-    setActiveWeaponSlotIndex(Math.max(0, Math.min(visibleWeaponCount - 1, payload.columnIndex)))
-    setHoveredWeaponSlotIndex(null)
-    setWeaponAutoAdvance(false)
-    setSelectionNotice(null)
-    setSelectionMode('weapon')
-  }
-
   /** Overlay slot button: manual target — next pick goes to this slot. */
   function handleShipOverlaySlotActivate(index: number) {
     setActiveShipSlotIndex(Math.max(0, Math.min(visibleShipCount - 1, index)))
@@ -350,31 +340,28 @@ export default function AlphaThresholdToolPage() {
       <div className="alpha-command-shell">
         <MainHeatmapStage
           board={
-            matrixMode === 'analysis' ? (
-              <ThresholdHeatmapBoard
-                ships={previewShips}
-                selectedWeapons={previewWeapons}
-                shieldMode={shieldMode}
-                matrixMode={matrixMode}
-                selectionMode={selectionMode}
-                nextShipSlotIndex={effectiveShipSlotIndex}
-                nextWeaponSlotIndex={effectiveWeaponSlotIndex}
-                onShieldModeChange={handleShieldModeChange}
-                onMatrixModeChange={setMatrixMode}
-                onOpenWeapons={handleOpenWeapons}
-                onOpenShips={handleOpenShips}
-                onOpenWeaponsAt={handleOpenWeaponsAt}
-                onOpenShipsAt={handleOpenShipsAt}
-                onWeaponHeaderChip={handleWeaponHeaderChip}
-                onboardingHighlight={onboardingHighlight}
-              />
-            ) : (
-              <RecommendationsBoard
-                ships={previewShips}
-                weapons={allWeapons}
-                selectedShips={previewShips.filter((ship) => ship.name.trim() !== '')}
-              />
-            )
+            <ThresholdHeatmapBoard
+              ships={previewShips}
+              selectedWeapons={previewWeapons}
+              allWeapons={allWeapons}
+              shieldMode={shieldMode}
+              matrixMode={matrixMode}
+              targetWeaponFilterPreset={targetWeaponFilterPreset}
+              onTargetWeaponFilterPresetChange={setTargetWeaponFilterPreset}
+              targetWeaponSizeFilter={targetWeaponSizeFilter}
+              onTargetWeaponSizeFilterChange={setTargetWeaponSizeFilter}
+              hideHeaderRow={false}
+              selectionMode={selectionMode}
+              nextShipSlotIndex={effectiveShipSlotIndex}
+              nextWeaponSlotIndex={effectiveWeaponSlotIndex}
+              onShieldModeChange={handleShieldModeChange}
+              onMatrixModeChange={setMatrixMode}
+              onOpenWeapons={handleOpenWeapons}
+              onOpenShips={handleOpenShips}
+              onOpenWeaponsAt={handleOpenWeaponsAt}
+              onOpenShipsAt={handleOpenShipsAt}
+              onboardingHighlight={onboardingHighlight}
+            />
           }
           overlay={
             selectionMode === 'ship' ? (
