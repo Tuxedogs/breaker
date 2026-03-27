@@ -1,15 +1,5 @@
 export const erkulLiveWeaponSeeds = [
   {
-    "id": "85fd75f8-6c6c-4d3f-839f-988ae7660617",
-    "name": "9-Series Longsword",
-    "size": "S1",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 48.6,
-    "burstDps": 202.50000000000003,
-    "projectileSpeed": 1600
-  },
-  {
     "id": "00ab31a0-7de2-44f7-a567-7ff88fdbad49",
     "name": "'WEAK'",
     "size": "S1",
@@ -20,14 +10,14 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
-    "id": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
-    "name": "Attrition-1",
+    "id": "85fd75f8-6c6c-4d3f-839f-988ae7660617",
+    "name": "9-Series Longsword",
     "size": "S1",
-    "type": "energy",
-    "weaponClass": "laser repeater",
-    "alpha": 66.51,
-    "burstDps": 387.975,
-    "projectileSpeed": 1000
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 48.6,
+    "burstDps": 202.50000000000003,
+    "projectileSpeed": 1600
   },
   {
     "id": "ebf157d4-5b04-4f0c-95a4-ad22b34b0cce",
@@ -37,6 +27,16 @@ export const erkulLiveWeaponSeeds = [
     "weaponClass": "laser repeater",
     "alpha": 73.2,
     "burstDps": 427,
+    "projectileSpeed": 1000
+  },
+  {
+    "id": "ed951ee5-0873-45e8-92b2-586a277f4ba6",
+    "name": "Attrition-1",
+    "size": "S1",
+    "type": "energy",
+    "weaponClass": "laser repeater",
+    "alpha": 66.51,
+    "burstDps": 387.975,
     "projectileSpeed": 1000
   },
   {
@@ -70,16 +70,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
-    "id": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
-    "name": "FL-11",
-    "size": "S1",
-    "type": "energy",
-    "weaponClass": "laser cannon",
-    "alpha": 49.248,
-    "burstDps": 205.20000000000002,
-    "projectileSpeed": 1800
-  },
-  {
     "id": "34bc9924-3f20-4bc9-a6cf-81335a0608fe",
     "name": "DR Model-XJ1",
     "size": "S1",
@@ -88,6 +78,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 0.0001,
     "burstDps": 0.0006666666666666668,
     "projectileSpeed": 1300
+  },
+  {
+    "id": "3d562dad-88f9-43aa-8ed5-616bf6634ff9",
+    "name": "FL-11",
+    "size": "S1",
+    "type": "energy",
+    "weaponClass": "laser cannon",
+    "alpha": 49.248,
+    "burstDps": 205.20000000000002,
+    "projectileSpeed": 1800
   },
   {
     "id": "2ef5eb91-95ec-442c-a856-79a39f84d365",
@@ -120,16 +120,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 700
   },
   {
-    "id": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
-    "name": "M2C \"Swarm\"",
-    "size": "S1",
-    "type": "energy",
-    "weaponClass": "laser repeater",
-    "alpha": 10,
-    "burstDps": 166.66666666666669,
-    "projectileSpeed": 1800
-  },
-  {
     "id": "0cced6b1-acfd-4c55-96cc-d0503638b9ad",
     "name": "Lightstrike I",
     "size": "S1",
@@ -137,6 +127,16 @@ export const erkulLiveWeaponSeeds = [
     "weaponClass": "laser cannon",
     "alpha": 49.248,
     "burstDps": 205.20000000000002,
+    "projectileSpeed": 1800
+  },
+  {
+    "id": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+    "name": "M2C \"Swarm\"",
+    "size": "S1",
+    "type": "energy",
+    "weaponClass": "laser repeater",
+    "alpha": 10,
+    "burstDps": 166.66666666666669,
     "projectileSpeed": 1800
   },
   {
@@ -190,16 +190,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1400
   },
   {
-    "id": "43269af0-736e-4232-8cfe-271367b28ee1",
-    "name": "Sledge I Mass Driver",
-    "size": "S1",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 225,
-    "burstDps": null,
-    "projectileSpeed": 3000
-  },
-  {
     "id": "e0c51f49-8910-4c99-92e5-ba7eca915bbb",
     "name": "Singe-1",
     "size": "S1",
@@ -210,14 +200,14 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 3000
   },
   {
-    "id": "355b26c5-a3b7-4c34-ad8b-d281473715e8",
-    "name": "SureGrip HV-S1",
+    "id": "43269af0-736e-4232-8cfe-271367b28ee1",
+    "name": "Sledge I Mass Driver",
     "size": "S1",
     "type": "ballistic",
-    "weaponClass": "ballistic",
-    "alpha": 0,
+    "weaponClass": "ballistic cannon",
+    "alpha": 225,
     "burstDps": null,
-    "projectileSpeed": null
+    "projectileSpeed": 3000
   },
   {
     "id": "d195eb47-24b8-45c0-a4d0-1771d60dc1a8",
@@ -230,8 +220,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1300
   },
   {
-    "id": "a82e22e4-504d-4ade-a625-f421e6e9a220",
-    "name": "SureGrip PR-S1",
+    "id": "355b26c5-a3b7-4c34-ad8b-d281473715e8",
+    "name": "SureGrip HV-S1",
     "size": "S1",
     "type": "ballistic",
     "weaponClass": "ballistic",
@@ -240,8 +230,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": null
   },
   {
-    "id": "c778680f-3cdc-4032-a0cd-4bf1e62ea24f",
-    "name": "SureGrip TH1",
+    "id": "a82e22e4-504d-4ade-a625-f421e6e9a220",
+    "name": "SureGrip PR-S1",
     "size": "S1",
     "type": "ballistic",
     "weaponClass": "ballistic",
@@ -260,6 +250,16 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": null
   },
   {
+    "id": "c778680f-3cdc-4032-a0cd-4bf1e62ea24f",
+    "name": "SureGrip TH1",
+    "size": "S1",
+    "type": "ballistic",
+    "weaponClass": "ballistic",
+    "alpha": 0,
+    "burstDps": null,
+    "projectileSpeed": null
+  },
+  {
     "id": "631884a6-7e06-4612-986c-1b3e556aecac",
     "name": "SW16BR1 \"Buzzsaw\"",
     "size": "S1",
@@ -270,16 +270,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1200
   },
   {
-    "id": "f70cbd61-2d36-4862-b259-7cc94917b2e7",
-    "name": "ViseLock S1",
-    "size": "S1",
-    "type": "ballistic",
-    "weaponClass": "ballistic",
-    "alpha": 0,
-    "burstDps": null,
-    "projectileSpeed": null
-  },
-  {
     "id": "8bebf292-a9a3-4dc8-a86c-ddfa3b9b79be",
     "name": "Tarantula GT-870 Mk 1",
     "size": "S1",
@@ -288,6 +278,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 60.75,
     "burstDps": 202.5,
     "projectileSpeed": 1600
+  },
+  {
+    "id": "f70cbd61-2d36-4862-b259-7cc94917b2e7",
+    "name": "ViseLock S1",
+    "size": "S1",
+    "type": "ballistic",
+    "weaponClass": "ballistic",
+    "alpha": 0,
+    "burstDps": null,
+    "projectileSpeed": null
   },
   {
     "id": "4d3e0757-eec3-44ec-b603-5eaafa6c80ac",
@@ -310,16 +310,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1600
   },
   {
-    "id": "e350773c-9131-4974-b624-e6b9e7c7200d",
-    "name": "'WHIP'",
-    "size": "S2",
-    "type": "energy",
-    "weaponClass": "plasma cannon",
-    "alpha": 273.132,
-    "burstDps": 455.22,
-    "projectileSpeed": 1000
-  },
-  {
     "id": "80ab18bb-9bc2-4e4f-a407-06c28e69bea7",
     "name": "'WASP'",
     "size": "S2",
@@ -330,13 +320,13 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
-    "id": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
-    "name": "Ardor-2 Salvaged",
+    "id": "e350773c-9131-4974-b624-e6b9e7c7200d",
+    "name": "'WHIP'",
     "size": "S2",
     "type": "energy",
-    "weaponClass": "laser repeater",
-    "alpha": 109.7,
-    "burstDps": 639.9166666666666,
+    "weaponClass": "plasma cannon",
+    "alpha": 273.132,
+    "burstDps": 455.22,
     "projectileSpeed": 1000
   },
   {
@@ -348,6 +338,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 72.99,
     "burstDps": 304.125,
     "projectileSpeed": 1600
+  },
+  {
+    "id": "d6decc9e-ec4f-4bab-a0bc-5e1dc01d7af7",
+    "name": "Ardor-2 Salvaged",
+    "size": "S2",
+    "type": "energy",
+    "weaponClass": "laser repeater",
+    "alpha": 109.7,
+    "burstDps": 639.9166666666666,
+    "projectileSpeed": 1000
   },
   {
     "id": "ea6b4297-83a4-476f-aee0-9d4f87168cf7",
@@ -390,16 +390,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
-    "id": "92f60837-933a-42dc-a7b0-473a337ffc13",
-    "name": "Deadbolt II",
-    "size": "S2",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 303.3,
-    "burstDps": 505.50000000000006,
-    "projectileSpeed": 900
-  },
-  {
     "id": "8115a034-92bf-4766-b0ce-408398ddc7e7",
     "name": "CVSA",
     "size": "S2",
@@ -408,6 +398,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 162,
     "burstDps": 405,
     "projectileSpeed": 1320
+  },
+  {
+    "id": "92f60837-933a-42dc-a7b0-473a337ffc13",
+    "name": "Deadbolt II",
+    "size": "S2",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 303.3,
+    "burstDps": 505.50000000000006,
+    "projectileSpeed": 900
   },
   {
     "id": "ac55431a-d662-4d92-bda7-ea44f27ca597",
@@ -440,16 +440,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1300
   },
   {
-    "id": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
-    "name": "GVSR",
-    "size": "S2",
-    "type": "energy",
-    "weaponClass": "laser repeater",
-    "alpha": 99.72,
-    "burstDps": 581.6999999999999,
-    "projectileSpeed": 1000
-  },
-  {
     "id": "ee3e42f7-56ea-46b8-bac2-d27187005a70",
     "name": "FL-22",
     "size": "S2",
@@ -458,6 +448,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 74.034,
     "burstDps": 308.475,
     "projectileSpeed": 1800
+  },
+  {
+    "id": "2f68375a-3c66-4e02-9d1f-5d7f37c12725",
+    "name": "GVSR",
+    "size": "S2",
+    "type": "energy",
+    "weaponClass": "laser repeater",
+    "alpha": 99.72,
+    "burstDps": 581.6999999999999,
+    "projectileSpeed": 1000
   },
   {
     "id": "c7c36fea-dcf5-48b9-9939-bf2771f9f8f4",
@@ -470,8 +470,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
-    "id": "5ed1f1ec-6ebc-463b-9529-83382e20624d",
-    "name": "Liberator Prime",
+    "id": "06c3eecf-c6e5-4f63-91ab-158103f04e4a",
+    "name": "Jericho X",
     "size": "S2",
     "type": "ballistic",
     "weaponClass": "rocket pod",
@@ -480,8 +480,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 700
   },
   {
-    "id": "06c3eecf-c6e5-4f63-91ab-158103f04e4a",
-    "name": "Jericho X",
+    "id": "5ed1f1ec-6ebc-463b-9529-83382e20624d",
+    "name": "Liberator Prime",
     "size": "S2",
     "type": "ballistic",
     "weaponClass": "rocket pod",
@@ -550,16 +550,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1400
   },
   {
-    "id": "40b94722-48be-406a-9843-5c77772e4ab4",
-    "name": "Singe-2",
-    "size": "S2",
-    "type": "energy",
-    "weaponClass": "tachyon cannon",
-    "alpha": 472.5,
-    "burstDps": null,
-    "projectileSpeed": 3000
-  },
-  {
     "id": "7034e330-3d22-4e89-83cb-c01815dbb875",
     "name": "Scorpion GT-215",
     "size": "S2",
@@ -570,14 +560,14 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1600
   },
   {
-    "id": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
-    "name": "Strife Mass Driver",
+    "id": "40b94722-48be-406a-9843-5c77772e4ab4",
+    "name": "Singe-2",
     "size": "S2",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 525,
+    "type": "energy",
+    "weaponClass": "tachyon cannon",
+    "alpha": 472.5,
     "burstDps": null,
-    "projectileSpeed": 5000
+    "projectileSpeed": 3000
   },
   {
     "id": "c657c03c-6ac6-4da6-ab70-bfab52804444",
@@ -590,6 +580,16 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 3000
   },
   {
+    "id": "86630fcf-09c3-4def-a7b4-9385cbc05a42",
+    "name": "Strife Mass Driver",
+    "size": "S2",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 525,
+    "burstDps": null,
+    "projectileSpeed": 5000
+  },
+  {
     "id": "70a98c94-9252-4fd3-a673-5a584339e273",
     "name": "Suckerpunch-L",
     "size": "S2",
@@ -600,8 +600,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1300
   },
   {
-    "id": "93e4822f-6e58-4613-82e9-800dedc9419a",
-    "name": "SureGrip PR-S2",
+    "id": "39d9b779-561f-42c2-9e6d-a832ed37a303",
+    "name": "SureGrip HV-S2",
     "size": "S2",
     "type": "ballistic",
     "weaponClass": "ballistic",
@@ -610,8 +610,8 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": null
   },
   {
-    "id": "39d9b779-561f-42c2-9e6d-a832ed37a303",
-    "name": "SureGrip HV-S2",
+    "id": "93e4822f-6e58-4613-82e9-800dedc9419a",
+    "name": "SureGrip PR-S2",
     "size": "S2",
     "type": "ballistic",
     "weaponClass": "ballistic",
@@ -680,16 +680,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1200
   },
   {
-    "id": "2f525576-8894-4bc6-baf1-d08a8c21cabc",
-    "name": "Yebira II",
-    "size": "S2",
-    "type": "ballistic",
-    "weaponClass": "rocket pod",
-    "alpha": 0,
-    "burstDps": 0,
-    "projectileSpeed": 700
-  },
-  {
     "id": "df040b13-b043-42c2-b4e5-3fd8f9f3f23c",
     "name": "ViseLock S2",
     "size": "S2",
@@ -700,6 +690,16 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": null
   },
   {
+    "id": "2f525576-8894-4bc6-baf1-d08a8c21cabc",
+    "name": "Yebira II",
+    "size": "S2",
+    "type": "ballistic",
+    "weaponClass": "rocket pod",
+    "alpha": 0,
+    "burstDps": 0,
+    "projectileSpeed": 700
+  },
+  {
     "id": "2b261d0c-d208-4ab4-9217-ded64b8cb7cf",
     "name": "'WARLORD'",
     "size": "S3",
@@ -707,6 +707,16 @@ export const erkulLiveWeaponSeeds = [
     "weaponClass": "plasma cannon",
     "alpha": 526.5,
     "burstDps": 877.5,
+    "projectileSpeed": 1600
+  },
+  {
+    "id": "f03daac4-28e2-405c-b226-c258151cb9f1",
+    "name": "11-Series Broadsword",
+    "size": "S3",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 109.26,
+    "burstDps": 455.25000000000006,
     "projectileSpeed": 1600
   },
   {
@@ -720,16 +730,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
-    "id": "f03daac4-28e2-405c-b226-c258151cb9f1",
-    "name": "11-Series Broadsword",
-    "size": "S3",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 109.26,
-    "burstDps": 455.25000000000006,
-    "projectileSpeed": 1600
-  },
-  {
     "id": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
     "name": "Attrition-3",
     "size": "S3",
@@ -738,16 +738,6 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 134.784,
     "burstDps": 786.2399999999999,
     "projectileSpeed": 1000
-  },
-  {
-    "id": "370e4728-924a-4791-9297-a71b25ff08e9",
-    "name": "Deadbolt III",
-    "size": "S3",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 455.4,
-    "burstDps": 759,
-    "projectileSpeed": 900
   },
   {
     "id": "bd13235d-1261-4b71-b32f-aed1a8beb526",
@@ -760,6 +750,16 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
+    "id": "370e4728-924a-4791-9297-a71b25ff08e9",
+    "name": "Deadbolt III",
+    "size": "S3",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 455.4,
+    "burstDps": 759,
+    "projectileSpeed": 900
+  },
+  {
     "id": "5f31f7c2-1383-4d77-892b-24507515ab0b",
     "name": "Dominance-3",
     "size": "S3",
@@ -770,16 +770,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
-    "id": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
-    "name": "FL-33",
-    "size": "S3",
-    "type": "energy",
-    "weaponClass": "laser cannon",
-    "alpha": 110.808,
-    "burstDps": 461.70000000000005,
-    "projectileSpeed": 1800
-  },
-  {
     "id": "2a787ee5-d720-4490-8823-65a0f8578f4b",
     "name": "DR Model-XJ3",
     "size": "S3",
@@ -788,6 +778,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 0.0001,
     "burstDps": 0.0006666666666666668,
     "projectileSpeed": 1300
+  },
+  {
+    "id": "3a5bd643-3c3e-42fb-87ce-2a44b976555d",
+    "name": "FL-33",
+    "size": "S3",
+    "type": "energy",
+    "weaponClass": "laser cannon",
+    "alpha": 110.808,
+    "burstDps": 461.70000000000005,
+    "projectileSpeed": 1800
   },
   {
     "id": "4312c1a5-f575-4e06-9892-2c5270982e9e",
@@ -840,6 +840,16 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
+    "id": "b837397c-47b6-45e7-b409-db290a068b47",
+    "name": "Mantis GT-220",
+    "size": "S3",
+    "type": "ballistic",
+    "weaponClass": "ballistic gatling",
+    "alpha": 19,
+    "burstDps": null,
+    "projectileSpeed": 1600
+  },
+  {
     "id": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
     "name": "NDB-30",
     "size": "S3",
@@ -850,14 +860,14 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1400
   },
   {
-    "id": "b837397c-47b6-45e7-b409-db290a068b47",
-    "name": "Mantis GT-220",
+    "id": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+    "name": "NN-15",
     "size": "S3",
-    "type": "ballistic",
-    "weaponClass": "ballistic gatling",
-    "alpha": 19,
-    "burstDps": null,
-    "projectileSpeed": 1600
+    "type": "energy",
+    "weaponClass": "laser cannon",
+    "alpha": 220.7,
+    "burstDps": 551.75,
+    "projectileSpeed": 1400
   },
   {
     "id": "95c85f25-ccd9-402e-b02a-522f5a97a654",
@@ -870,16 +880,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1400
   },
   {
-    "id": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
-    "name": "PyroBurst",
-    "size": "S3",
-    "type": "energy",
-    "weaponClass": "laser scattergun",
-    "alpha": 49.5,
-    "burstDps": null,
-    "projectileSpeed": 1200
-  },
-  {
     "id": "fac5a97f-64bf-450e-a2f2-90e4da5ccf73",
     "name": "Predator",
     "size": "S3",
@@ -888,6 +888,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 105,
     "burstDps": null,
     "projectileSpeed": 1000
+  },
+  {
+    "id": "aa41e4d8-6b99-4f63-90d5-b0956e70c1d8",
+    "name": "PyroBurst",
+    "size": "S3",
+    "type": "energy",
+    "weaponClass": "laser scattergun",
+    "alpha": 49.5,
+    "burstDps": null,
+    "projectileSpeed": 1200
   },
   {
     "id": "cfacea3e-afbc-405c-b220-2d1d3b6e20b1",
@@ -910,22 +920,22 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1000
   },
   {
-    "id": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
-    "name": "Sledge III Mass Driver",
-    "size": "S3",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 1125,
-    "burstDps": null,
-    "projectileSpeed": 3000
-  },
-  {
     "id": "f15b742b-1457-4eb7-b7aa-078816297d29",
     "name": "Singe-3",
     "size": "S3",
     "type": "energy",
     "weaponClass": "tachyon cannon",
     "alpha": 1012.5,
+    "burstDps": null,
+    "projectileSpeed": 3000
+  },
+  {
+    "id": "ccd05b20-4042-4c49-a4c0-4a94f6d841ee",
+    "name": "Sledge III Mass Driver",
+    "size": "S3",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 1125,
     "burstDps": null,
     "projectileSpeed": 3000
   },
@@ -970,16 +980,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
-    "id": "e4afc8b4-da61-4efb-af7e-f003d9900d96",
-    "name": "AD4B",
-    "size": "S4",
-    "type": "ballistic",
-    "weaponClass": "ballistic gatling",
-    "alpha": 84.4,
-    "burstDps": null,
-    "projectileSpeed": 900
-  },
-  {
     "id": "a9780953-9488-4644-9b56-61464e9dd6b9",
     "name": "Yeng’tu",
     "size": "S3",
@@ -988,6 +988,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 36.45,
     "burstDps": 455.62500000000006,
     "projectileSpeed": 1800
+  },
+  {
+    "id": "e4afc8b4-da61-4efb-af7e-f003d9900d96",
+    "name": "AD4B",
+    "size": "S4",
+    "type": "ballistic",
+    "weaponClass": "ballistic gatling",
+    "alpha": 84.4,
+    "burstDps": null,
+    "projectileSpeed": 900
   },
   {
     "id": "8d868b78-eccd-4ba5-a4a5-57e2f20bdc35",
@@ -1100,16 +1110,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1200
   },
   {
-    "id": "55f8b029-dc4b-4397-baac-992de680aa24",
-    "name": "SureGrip TH4",
-    "size": "S4",
-    "type": "ballistic",
-    "weaponClass": "ballistic",
-    "alpha": 0,
-    "burstDps": null,
-    "projectileSpeed": null
-  },
-  {
     "id": "76706adf-4687-4a7a-aaf1-c44af0a5d2ca",
     "name": "Salvation",
     "size": "S4",
@@ -1118,6 +1118,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 0.0001,
     "burstDps": null,
     "projectileSpeed": 700
+  },
+  {
+    "id": "55f8b029-dc4b-4397-baac-992de680aa24",
+    "name": "SureGrip TH4",
+    "size": "S4",
+    "type": "ballistic",
+    "weaponClass": "ballistic",
+    "alpha": 0,
+    "burstDps": null,
+    "projectileSpeed": null
   },
   {
     "id": "cfbd1437-b6aa-480a-b3a2-5d3ad001c726",
@@ -1140,7 +1150,7 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1288
   },
   {
-    "id": "fde9335b-a9b7-4d7d-a4a4-69b1158de320",
+    "id": "2148a144-a9a2-457c-8bb5-e96f0492a0bc",
     "name": "'WRATH'",
     "size": "S5",
     "type": "energy",
@@ -1150,7 +1160,7 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1288
   },
   {
-    "id": "2148a144-a9a2-457c-8bb5-e96f0492a0bc",
+    "id": "fde9335b-a9b7-4d7d-a4a4-69b1158de320",
     "name": "'WRATH'",
     "size": "S5",
     "type": "energy",
@@ -1240,16 +1250,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 920
   },
   {
-    "id": "c778d7c0-116a-4597-a32e-2bbf7f6b7c17",
-    "name": "Omnisky XV",
-    "size": "S5",
-    "type": "energy",
-    "weaponClass": "laser cannon",
-    "alpha": 492.156,
-    "burstDps": 1230.39,
-    "projectileSpeed": 1288
-  },
-  {
     "id": "56c36bd9-9090-4166-a3dd-9dc8ad225f70",
     "name": "NV57",
     "size": "S5",
@@ -1258,6 +1258,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 162.5,
     "burstDps": null,
     "projectileSpeed": 1000
+  },
+  {
+    "id": "c778d7c0-116a-4597-a32e-2bbf7f6b7c17",
+    "name": "Omnisky XV",
+    "size": "S5",
+    "type": "energy",
+    "weaponClass": "laser cannon",
+    "alpha": 492.156,
+    "burstDps": 1230.39,
+    "projectileSpeed": 1288
   },
   {
     "id": "189b0ce2-d934-4208-9970-ac633dbd67d3",
@@ -1320,16 +1330,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 792
   },
   {
-    "id": "a336be9a-ea2f-4db2-97ec-593ad6134471",
-    "name": "Lightstrike VI",
-    "size": "S6",
-    "type": "energy",
-    "weaponClass": "laser cannon",
-    "alpha": 374.139,
-    "burstDps": 1558.9125000000001,
-    "projectileSpeed": 1584
-  },
-  {
     "id": "85726664-e16d-4a24-98f8-7cc8f0ba6f00",
     "name": "Draugar",
     "size": "S6",
@@ -1340,14 +1340,14 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 1200
   },
   {
-    "id": "61d5e767-fcee-4e70-ae9e-7671b6692404",
-    "name": "Maris",
+    "id": "a336be9a-ea2f-4db2-97ec-593ad6134471",
+    "name": "Lightstrike VI",
     "size": "S6",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 3400,
-    "burstDps": 2833.3333333333335,
-    "projectileSpeed": 890
+    "type": "energy",
+    "weaponClass": "laser cannon",
+    "alpha": 374.139,
+    "burstDps": 1558.9125000000001,
+    "projectileSpeed": 1584
   },
   {
     "id": "4e3897c1-a48f-4dce-b3cf-0f91fe3eb0f6",
@@ -1358,6 +1358,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 1383.48,
     "burstDps": 2305.8,
     "projectileSpeed": 880
+  },
+  {
+    "id": "61d5e767-fcee-4e70-ae9e-7671b6692404",
+    "name": "Maris",
+    "size": "S6",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 3400,
+    "burstDps": 2833.3333333333335,
+    "projectileSpeed": 890
   },
   {
     "id": "1901415b-cfbd-49fb-82f8-42eff2c11f01",
@@ -1430,16 +1440,6 @@ export const erkulLiveWeaponSeeds = [
     "projectileSpeed": 900
   },
   {
-    "id": "26298097-2f16-4f25-b652-9c72170b5529",
-    "name": "Destroyer Mass Driver",
-    "size": "S10",
-    "type": "ballistic",
-    "weaponClass": "ballistic cannon",
-    "alpha": 144160,
-    "burstDps": null,
-    "projectileSpeed": 5000
-  },
-  {
     "id": "bf958f42-4f50-46ce-af92-64b08e7f7c19",
     "name": "M11A",
     "size": "S9",
@@ -1448,6 +1448,16 @@ export const erkulLiveWeaponSeeds = [
     "alpha": 4670.46,
     "burstDps": 7784.1,
     "projectileSpeed": 760
+  },
+  {
+    "id": "26298097-2f16-4f25-b652-9c72170b5529",
+    "name": "Destroyer Mass Driver",
+    "size": "S10",
+    "type": "ballistic",
+    "weaponClass": "ballistic cannon",
+    "alpha": 144160,
+    "burstDps": null,
+    "projectileSpeed": 5000
   },
   {
     "id": "9fd3b3be-5653-413f-ba8f-0959a0adda89",
