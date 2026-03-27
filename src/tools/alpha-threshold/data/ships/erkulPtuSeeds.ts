@@ -187,23 +187,6 @@ export const erkulPtuShipSeeds = [
     "turretHardpointSize": 5
   },
   {
-    "id": "f05b74b2-06cf-44d0-8607-c09487359384",
-    "manufacturer": "AEGS",
-    "name": "Reclaimer",
-    "role": "Heavy Salvage",
-    "career": "Industrial",
-    "isGroundVehicle": false,
-    "sizeGroup": "capital",
-    "health": 123002,
-    "armor": 119,
-    "armorHp": 41140,
-    "vitalHp": 50000,
-    "ballisticThreshold": 132,
-    "energyThreshold": 106,
-    "pilotHardpointSize": 1,
-    "turretHardpointSize": 6
-  },
-  {
     "id": "9a25d006-5706-4c70-9ac6-df795688fe09",
     "manufacturer": "AEGS",
     "name": "Redeemer",
@@ -304,6 +287,23 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 6,
     "turretHardpointSize": null
+  },
+  {
+    "id": "f05b74b2-06cf-44d0-8607-c09487359384",
+    "manufacturer": "AEGS",
+    "name": "Reclaimer",
+    "role": "Heavy Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
+    "sizeGroup": "capital",
+    "health": 123002,
+    "armor": 119,
+    "armorHp": 41140,
+    "vitalHp": 50000,
+    "ballisticThreshold": 132,
+    "energyThreshold": 106,
+    "pilotHardpointSize": 1,
+    "turretHardpointSize": 6
   },
   {
     "id": "34615358-6b8e-4c27-b29e-f936e254e2a3",
@@ -3043,23 +3043,6 @@ export const erkulPtuShipSeeds = [
     "turretHardpointSize": 2
   },
   {
-    "id": "28f22bb8-9f1c-4a46-9a39-20bcb1e5000e",
-    "manufacturer": "VNCL",
-    "name": "Scythe",
-    "role": "Medium Fighter",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "medium",
-    "health": 11701,
-    "armor": 18,
-    "armorHp": 8250,
-    "vitalHp": 4000,
-    "ballisticThreshold": 22,
-    "energyThreshold": 14,
-    "pilotHardpointSize": 5,
-    "turretHardpointSize": null
-  },
-  {
     "id": "a04a1503-ac5c-4520-bc22-4b1a1a198eff",
     "manufacturer": "ANVL",
     "name": "Ballista",
@@ -3075,6 +3058,23 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5
+  },
+  {
+    "id": "28f22bb8-9f1c-4a46-9a39-20bcb1e5000e",
+    "manufacturer": "VNCL",
+    "name": "Scythe",
+    "role": "Medium Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "medium",
+    "health": 11701,
+    "armor": 18,
+    "armorHp": 8250,
+    "vitalHp": 4000,
+    "ballisticThreshold": 22,
+    "energyThreshold": 14,
+    "pilotHardpointSize": 5,
+    "turretHardpointSize": null
   },
   {
     "id": "50f551e3-3435-4cbe-9ecf-8712855a8e27",

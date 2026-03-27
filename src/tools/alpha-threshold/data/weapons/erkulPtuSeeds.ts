@@ -130,16 +130,6 @@ export const erkulPtuWeaponSeeds = [
     "projectileSpeed": 1800
   },
   {
-    "id": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
-    "name": "M2C \"Swarm\"",
-    "size": "S1",
-    "type": "energy",
-    "weaponClass": "laser repeater",
-    "alpha": 10,
-    "burstDps": 166.66666666666669,
-    "projectileSpeed": 1800
-  },
-  {
     "id": "42e2ddb1-7397-4299-88ee-2ddfaa0efc67",
     "name": "M3A",
     "size": "S1",
@@ -148,6 +138,16 @@ export const erkulPtuWeaponSeeds = [
     "alpha": 182.25,
     "burstDps": 303.75,
     "projectileSpeed": 1000
+  },
+  {
+    "id": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+    "name": "M2C \"Swarm\"",
+    "size": "S1",
+    "type": "energy",
+    "weaponClass": "laser repeater",
+    "alpha": 10,
+    "burstDps": 166.66666666666669,
+    "projectileSpeed": 1800
   },
   {
     "id": "647c70b5-1547-4c86-ba47-4aa452d3b506",

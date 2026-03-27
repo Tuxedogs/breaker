@@ -5369,298 +5369,6 @@
       "subType": "Gun",
       "size": 1,
       "grade": "A",
-      "requiredTags": "PDC",
-      "name": "M2C \"Swarm\"",
-      "description": "The latest generation of point-defense technology, the M2C \"Swarm\" utilizes advanced search, detection, and tracking software to unleash a swift barrage of laserfire, protecting ships from incoming missiles, torpedoes, and other high-speed threats.",
-      "physics": {
-        "mass": 36,
-        "temperature": {
-          "enable": false,
-          "initialTemperature": -1,
-          "coolingEqualizationMultiplier": false,
-          "internalTemperatureGeneration": false,
-          "signatureParams": {
-            "enable": false,
-            "minimumTemperatureForIR": 250,
-            "temperatureToIR": 6
-          },
-          "itemResourceParams": {
-            "minOperatingTemperature": 0,
-            "minCoolingTemperature": 300,
-            "enableOverheat": false,
-            "overheatTemperature": 450,
-            "overheatWarningTemperature": 370,
-            "overheatRecoveryTemperature": 350
-          }
-        }
-      },
-      "health": {
-        "hp": 800,
-        "damageResistanceMultiplier": {
-          "physical": 0.6,
-          "energy": 1,
-          "distortion": 1,
-          "thermal": 1,
-          "biochemical": 1,
-          "stun": 1
-        }
-      },
-      "ref": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
-      "distortion": {
-        "decayDelay": 0,
-        "decayRate": 500000,
-        "maximum": 500000,
-        "warningRatio": 0.75,
-        "recoveryRatio": 0,
-        "powerRatioAtMaxDistortion": false,
-        "powerChangeOnlyAtMaxDistortion": false
-      },
-      "resource": {
-        "isResourceNetworked": true,
-        "defaultPriority": 50,
-        "online": {
-          "consumption": {
-            "power": 0.352
-          },
-          "signatureParams": {
-            "em": {
-              "nominalSignature": 143,
-              "decayRate": 0.15
-            },
-            "ir": {
-              "nominalSignature": 0,
-              "decayRate": 0.15
-            }
-          },
-          "powerRanges": {
-            "low": {
-              "start": 0,
-              "modifier": 1,
-              "registerRange": 0
-            },
-            "medium": {
-              "start": 0,
-              "modifier": 1,
-              "registerRange": 0
-            },
-            "high": {
-              "start": 0,
-              "modifier": 1,
-              "registerRange": 0
-            }
-          },
-          "powerConsumptionMinimumFraction": 0,
-          "consumptionMinimumFraction": 0
-        },
-        "selfRepair": {
-          "maxRepairCount": 1,
-          "timeToRepair": 9.99,
-          "healthRatio": 0.2
-        }
-      },
-      "weapon": {
-        "supplementaryFireTime": 0,
-        "idealCombatRange": 0,
-        "connection": {
-          "powerActiveCooldown": 1,
-          "heatRateOnline": 0,
-          "maxGlow": 100,
-          "noPowerStats": {
-            "fireRate": 0,
-            "fireRateMultiplier": 0,
-            "damageMultiplier": 0,
-            "projectileSpeedMultiplier": 1,
-            "pellets": 0,
-            "burstShots": 0,
-            "ammoCost": 0,
-            "ammoCostMultiplier": 1,
-            "heatGenerationMultiplier": 1,
-            "spreadModifier": {
-              "minMultiplier": 1,
-              "maxMultiplier": 1,
-              "firstAttackMultiplier": 1,
-              "attackMultiplier": 1,
-              "decayMultiplier": 1,
-              "additiveModifier": 0
-            }
-          },
-          "underpowerStats": {
-            "fireRate": 0,
-            "fireRateMultiplier": 1,
-            "damageMultiplier": 1,
-            "projectileSpeedMultiplier": 1,
-            "pellets": 0,
-            "burstShots": 0,
-            "ammoCost": 0,
-            "ammoCostMultiplier": 1,
-            "heatGenerationMultiplier": 1,
-            "spreadModifier": {
-              "minMultiplier": 1,
-              "maxMultiplier": 1,
-              "firstAttackMultiplier": 1,
-              "attackMultiplier": 1,
-              "decayMultiplier": 1,
-              "additiveModifier": 0
-            }
-          },
-          "overpowerStats": {
-            "fireRate": 0,
-            "fireRateMultiplier": 1,
-            "damageMultiplier": 1,
-            "projectileSpeedMultiplier": 1,
-            "pellets": 0,
-            "burstShots": 0,
-            "ammoCost": 0,
-            "ammoCostMultiplier": 1,
-            "heatGenerationMultiplier": 1,
-            "spreadModifier": {
-              "minMultiplier": 1,
-              "maxMultiplier": 1,
-              "firstAttackMultiplier": 1,
-              "attackMultiplier": 1,
-              "decayMultiplier": 1,
-              "additiveModifier": 0
-            }
-          },
-          "overclockStats": {
-            "fireRate": 0,
-            "fireRateMultiplier": 1,
-            "damageMultiplier": 1,
-            "projectileSpeedMultiplier": 1,
-            "pellets": 0,
-            "burstShots": 0,
-            "ammoCost": 0,
-            "ammoCostMultiplier": 1,
-            "heatGenerationMultiplier": 1,
-            "spreadModifier": {
-              "minMultiplier": 1,
-              "maxMultiplier": 1,
-              "firstAttackMultiplier": 1,
-              "attackMultiplier": 1,
-              "decayMultiplier": 1,
-              "additiveModifier": 0
-            }
-          },
-          "heatStats": {
-            "fireRate": 0,
-            "fireRateMultiplier": 1,
-            "damageMultiplier": 1,
-            "projectileSpeedMultiplier": 1,
-            "pellets": 0,
-            "burstShots": 0,
-            "ammoCost": 0,
-            "ammoCostMultiplier": 1,
-            "heatGenerationMultiplier": 1,
-            "spreadModifier": {
-              "minMultiplier": 1,
-              "maxMultiplier": 1,
-              "firstAttackMultiplier": 1,
-              "attackMultiplier": 1,
-              "decayMultiplier": 1,
-              "additiveModifier": 0
-            }
-          }
-        },
-        "regen": {
-          "initialRegenPerSec": 0,
-          "requestedRegenPerSec": 2025,
-          "regenerationCooldown": 0.605,
-          "regenerationCostPerBullet": 32.4,
-          "requestedAmmoLoad": 12150,
-          "maxAmmoLoad": 75,
-          "maxRegenPerSec": 15
-        },
-        "mode": "Looping",
-        "fireActions": [
-          {
-            "delay": 1000,
-            "fireRate": 1000,
-            "heatPerShot": 0,
-            "ammoCost": 1,
-            "pelletCount": 1,
-            "damageMultiplier": 1,
-            "spread": {
-              "min": 0.1,
-              "max": 0.1,
-              "firstAttack": 0.022,
-              "attack": 0.022,
-              "decay": 2
-            }
-          }
-        ]
-      },
-      "ammoContainer": {
-        "initialAmmoCount": 0,
-        "maxAmmoCount": 0,
-        "maxRestockCount": 3,
-        "ammoRef": "2630eae8-0301-409b-8360-defaa6fdc140"
-      },
-      "ammo": {
-        "calculatorType": "ammo",
-        "data": {
-          "ref": "2630eae8-0301-409b-8360-defaa6fdc140",
-          "projectile": {
-            "impactRadius": 0,
-            "minImpactRadius": 0,
-            "hitType": "bullet"
-          },
-          "damage": {
-            "damagePhysical": 0,
-            "damageEnergy": 10,
-            "damageDistortion": 0,
-            "damageThermal": 0,
-            "damageBiochemical": 0,
-            "damageStun": 0
-          },
-          "penetration": {
-            "basePenetrationDistance": 0.3,
-            "nearRadius": 0.02,
-            "farRadius": 0.03
-          },
-          "pierceability": {
-            "damageFalloffLevel1": 0,
-            "damageFalloffLevel2": 0,
-            "damageFalloffLevel3": 0,
-            "maxPenetrationThickness": 0.5
-          },
-          "size": 1,
-          "ammoCategory": "None",
-          "hitPoints": 0,
-          "lifetime": 1.11,
-          "showtime": 0,
-          "inheritVelocity": true,
-          "speed": 1800
-        },
-        "localName": "behr_pdc_laserrepeater_s1_ammo"
-      },
-      "gimbalModeModifier": {
-        "calculatorType": "gimbal-mode-modifier",
-        "data": {
-          "ref": "2a3bcf4f-9fa9-4b1d-86b2-a974260f12e7"
-        },
-        "localName": "weapongimbalmodemodifier_null"
-      },
-      "group": "laser repeater",
-      "manufacturerData": {
-        "calculatorType": "manufacturer",
-        "data": {
-          "nameSmall": "BEHR",
-          "name": "Behring",
-          "description": "The Behring Research Consortium was founded in 2554 on Terra as the end result of several years of buyouts and consolidation of dozens of small research and development firms by Behring Equity Investments. By having so many different research units focusing on a wide variety of developments, the Behring group hoped to increase the likelihood of expensive research resulting in a marketable product. Their history speaks for itself as the famed laboratory is accredited for the standardization of laser weaponry and dozens of other innovations. Today, Behring is still going strong with their technological forward products featuring straight forward and simple designs, making everything from guns, missiles, sentry drones, to shields and armor.",
-          "ref": "65a5d887-3b21-4046-a718-6912c0c7c3be",
-          "calculatorName": "BEHR"
-        }
-      }
-    },
-    "localName": "behr_laserrepeater_pdc_s1"
-  },
-  {
-    "calculatorType": "weapon",
-    "data": {
-      "type": "WeaponGun",
-      "subType": "Gun",
-      "size": 1,
-      "grade": "A",
       "name": "M3A",
       "shortName": "M3A",
       "description": "The M3A is Behring's entry level laser autocannon. The autocannon configuration offers modest damage per projectile and a fairly low rate of fire. As the most basic offering in Behring's weapons lineup, it features low power consumption, but poor power efficiency. It makes up ground for its shortcomings by being cheap, a feature many pilots are looking for when outfitting their ships on a budget.",
@@ -6077,6 +5785,298 @@
       }
     },
     "localName": "behr_lasercannon_s1"
+  },
+  {
+    "calculatorType": "weapon",
+    "data": {
+      "type": "WeaponGun",
+      "subType": "Gun",
+      "size": 1,
+      "grade": "A",
+      "requiredTags": "PDC",
+      "name": "M2C \"Swarm\"",
+      "description": "The latest generation of point-defense technology, the M2C \"Swarm\" utilizes advanced search, detection, and tracking software to unleash a swift barrage of laserfire, protecting ships from incoming missiles, torpedoes, and other high-speed threats.",
+      "physics": {
+        "mass": 36,
+        "temperature": {
+          "enable": false,
+          "initialTemperature": -1,
+          "coolingEqualizationMultiplier": false,
+          "internalTemperatureGeneration": false,
+          "signatureParams": {
+            "enable": false,
+            "minimumTemperatureForIR": 250,
+            "temperatureToIR": 6
+          },
+          "itemResourceParams": {
+            "minOperatingTemperature": 0,
+            "minCoolingTemperature": 300,
+            "enableOverheat": false,
+            "overheatTemperature": 450,
+            "overheatWarningTemperature": 370,
+            "overheatRecoveryTemperature": 350
+          }
+        }
+      },
+      "health": {
+        "hp": 800,
+        "damageResistanceMultiplier": {
+          "physical": 0.6,
+          "energy": 1,
+          "distortion": 1,
+          "thermal": 1,
+          "biochemical": 1,
+          "stun": 1
+        }
+      },
+      "ref": "18b795c5-25f1-444a-86c0-b5edd7cf0118",
+      "distortion": {
+        "decayDelay": 0,
+        "decayRate": 500000,
+        "maximum": 500000,
+        "warningRatio": 0.75,
+        "recoveryRatio": 0,
+        "powerRatioAtMaxDistortion": false,
+        "powerChangeOnlyAtMaxDistortion": false
+      },
+      "resource": {
+        "isResourceNetworked": true,
+        "defaultPriority": 50,
+        "online": {
+          "consumption": {
+            "power": 0.352
+          },
+          "signatureParams": {
+            "em": {
+              "nominalSignature": 143,
+              "decayRate": 0.15
+            },
+            "ir": {
+              "nominalSignature": 0,
+              "decayRate": 0.15
+            }
+          },
+          "powerRanges": {
+            "low": {
+              "start": 0,
+              "modifier": 1,
+              "registerRange": 0
+            },
+            "medium": {
+              "start": 0,
+              "modifier": 1,
+              "registerRange": 0
+            },
+            "high": {
+              "start": 0,
+              "modifier": 1,
+              "registerRange": 0
+            }
+          },
+          "powerConsumptionMinimumFraction": 0,
+          "consumptionMinimumFraction": 0
+        },
+        "selfRepair": {
+          "maxRepairCount": 1,
+          "timeToRepair": 9.99,
+          "healthRatio": 0.2
+        }
+      },
+      "weapon": {
+        "supplementaryFireTime": 0,
+        "idealCombatRange": 0,
+        "connection": {
+          "powerActiveCooldown": 1,
+          "heatRateOnline": 0,
+          "maxGlow": 100,
+          "noPowerStats": {
+            "fireRate": 0,
+            "fireRateMultiplier": 0,
+            "damageMultiplier": 0,
+            "projectileSpeedMultiplier": 1,
+            "pellets": 0,
+            "burstShots": 0,
+            "ammoCost": 0,
+            "ammoCostMultiplier": 1,
+            "heatGenerationMultiplier": 1,
+            "spreadModifier": {
+              "minMultiplier": 1,
+              "maxMultiplier": 1,
+              "firstAttackMultiplier": 1,
+              "attackMultiplier": 1,
+              "decayMultiplier": 1,
+              "additiveModifier": 0
+            }
+          },
+          "underpowerStats": {
+            "fireRate": 0,
+            "fireRateMultiplier": 1,
+            "damageMultiplier": 1,
+            "projectileSpeedMultiplier": 1,
+            "pellets": 0,
+            "burstShots": 0,
+            "ammoCost": 0,
+            "ammoCostMultiplier": 1,
+            "heatGenerationMultiplier": 1,
+            "spreadModifier": {
+              "minMultiplier": 1,
+              "maxMultiplier": 1,
+              "firstAttackMultiplier": 1,
+              "attackMultiplier": 1,
+              "decayMultiplier": 1,
+              "additiveModifier": 0
+            }
+          },
+          "overpowerStats": {
+            "fireRate": 0,
+            "fireRateMultiplier": 1,
+            "damageMultiplier": 1,
+            "projectileSpeedMultiplier": 1,
+            "pellets": 0,
+            "burstShots": 0,
+            "ammoCost": 0,
+            "ammoCostMultiplier": 1,
+            "heatGenerationMultiplier": 1,
+            "spreadModifier": {
+              "minMultiplier": 1,
+              "maxMultiplier": 1,
+              "firstAttackMultiplier": 1,
+              "attackMultiplier": 1,
+              "decayMultiplier": 1,
+              "additiveModifier": 0
+            }
+          },
+          "overclockStats": {
+            "fireRate": 0,
+            "fireRateMultiplier": 1,
+            "damageMultiplier": 1,
+            "projectileSpeedMultiplier": 1,
+            "pellets": 0,
+            "burstShots": 0,
+            "ammoCost": 0,
+            "ammoCostMultiplier": 1,
+            "heatGenerationMultiplier": 1,
+            "spreadModifier": {
+              "minMultiplier": 1,
+              "maxMultiplier": 1,
+              "firstAttackMultiplier": 1,
+              "attackMultiplier": 1,
+              "decayMultiplier": 1,
+              "additiveModifier": 0
+            }
+          },
+          "heatStats": {
+            "fireRate": 0,
+            "fireRateMultiplier": 1,
+            "damageMultiplier": 1,
+            "projectileSpeedMultiplier": 1,
+            "pellets": 0,
+            "burstShots": 0,
+            "ammoCost": 0,
+            "ammoCostMultiplier": 1,
+            "heatGenerationMultiplier": 1,
+            "spreadModifier": {
+              "minMultiplier": 1,
+              "maxMultiplier": 1,
+              "firstAttackMultiplier": 1,
+              "attackMultiplier": 1,
+              "decayMultiplier": 1,
+              "additiveModifier": 0
+            }
+          }
+        },
+        "regen": {
+          "initialRegenPerSec": 0,
+          "requestedRegenPerSec": 2025,
+          "regenerationCooldown": 0.605,
+          "regenerationCostPerBullet": 32.4,
+          "requestedAmmoLoad": 12150,
+          "maxAmmoLoad": 75,
+          "maxRegenPerSec": 15
+        },
+        "mode": "Looping",
+        "fireActions": [
+          {
+            "delay": 1000,
+            "fireRate": 1000,
+            "heatPerShot": 0,
+            "ammoCost": 1,
+            "pelletCount": 1,
+            "damageMultiplier": 1,
+            "spread": {
+              "min": 0.1,
+              "max": 0.1,
+              "firstAttack": 0.022,
+              "attack": 0.022,
+              "decay": 2
+            }
+          }
+        ]
+      },
+      "ammoContainer": {
+        "initialAmmoCount": 0,
+        "maxAmmoCount": 0,
+        "maxRestockCount": 3,
+        "ammoRef": "2630eae8-0301-409b-8360-defaa6fdc140"
+      },
+      "ammo": {
+        "calculatorType": "ammo",
+        "data": {
+          "ref": "2630eae8-0301-409b-8360-defaa6fdc140",
+          "projectile": {
+            "impactRadius": 0,
+            "minImpactRadius": 0,
+            "hitType": "bullet"
+          },
+          "damage": {
+            "damagePhysical": 0,
+            "damageEnergy": 10,
+            "damageDistortion": 0,
+            "damageThermal": 0,
+            "damageBiochemical": 0,
+            "damageStun": 0
+          },
+          "penetration": {
+            "basePenetrationDistance": 0.3,
+            "nearRadius": 0.02,
+            "farRadius": 0.03
+          },
+          "pierceability": {
+            "damageFalloffLevel1": 0,
+            "damageFalloffLevel2": 0,
+            "damageFalloffLevel3": 0,
+            "maxPenetrationThickness": 0.5
+          },
+          "size": 1,
+          "ammoCategory": "None",
+          "hitPoints": 0,
+          "lifetime": 1.11,
+          "showtime": 0,
+          "inheritVelocity": true,
+          "speed": 1800
+        },
+        "localName": "behr_pdc_laserrepeater_s1_ammo"
+      },
+      "gimbalModeModifier": {
+        "calculatorType": "gimbal-mode-modifier",
+        "data": {
+          "ref": "2a3bcf4f-9fa9-4b1d-86b2-a974260f12e7"
+        },
+        "localName": "weapongimbalmodemodifier_null"
+      },
+      "group": "laser repeater",
+      "manufacturerData": {
+        "calculatorType": "manufacturer",
+        "data": {
+          "nameSmall": "BEHR",
+          "name": "Behring",
+          "description": "The Behring Research Consortium was founded in 2554 on Terra as the end result of several years of buyouts and consolidation of dozens of small research and development firms by Behring Equity Investments. By having so many different research units focusing on a wide variety of developments, the Behring group hoped to increase the likelihood of expensive research resulting in a marketable product. Their history speaks for itself as the famed laboratory is accredited for the standardization of laser weaponry and dozens of other innovations. Today, Behring is still going strong with their technological forward products featuring straight forward and simple designs, making everything from guns, missiles, sentry drones, to shields and armor.",
+          "ref": "65a5d887-3b21-4046-a718-6912c0c7c3be",
+          "calculatorName": "BEHR"
+        }
+      }
+    },
+    "localName": "behr_laserrepeater_pdc_s1"
   },
   {
     "calculatorType": "weapon",
