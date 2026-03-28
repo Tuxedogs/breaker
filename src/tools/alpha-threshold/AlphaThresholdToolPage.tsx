@@ -35,6 +35,8 @@ export default function AlphaThresholdToolPage() {
   const [targetWeaponFilterPreset, setTargetWeaponFilterPreset] =
     useState<ArmorInteractionFilterChip | null>(null)
   const [targetWeaponSizeFilter, setTargetWeaponSizeFilter] = useState<number | null>(null)
+  const [analysisColumnCount, setAnalysisColumnCount] = useState(4)
+  const [targetColumnCount, setTargetColumnCount] = useState(3)
   /** Clears in the overlay; at 2+ re-enable auto-advance (per ship / weapon flows). */
   const shipClearStreakRef = useRef(0)
   const weaponClearStreakRef = useRef(0)
@@ -95,7 +97,7 @@ export default function AlphaThresholdToolPage() {
     const clamped = Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))
     if (!weaponAutoAdvance) return clamped
     return slots[clamped]?.weaponKey == null ? clamped : nextWeaponSlotIndex
-  }, [weaponAutoAdvance, activeWeaponSlotIndex, slots, nextWeaponSlotIndex])
+  }, [weaponAutoAdvance, activeWeaponSlotIndex, slots, nextWeaponSlotIndex, visibleWeaponCount])
   /** Matrix destination highlight: overlay hover must not move row/column — use active slot only while selector is open. */
   const effectiveShipSlotIndex = Math.max(
     0,
@@ -350,6 +352,10 @@ export default function AlphaThresholdToolPage() {
               onTargetWeaponFilterPresetChange={setTargetWeaponFilterPreset}
               targetWeaponSizeFilter={targetWeaponSizeFilter}
               onTargetWeaponSizeFilterChange={setTargetWeaponSizeFilter}
+              analysisColumnCount={analysisColumnCount}
+              onAnalysisColumnCountChange={setAnalysisColumnCount}
+              targetColumnCount={targetColumnCount}
+              onTargetColumnCountChange={setTargetColumnCount}
               hideHeaderRow={false}
               selectionMode={selectionMode}
               nextShipSlotIndex={effectiveShipSlotIndex}

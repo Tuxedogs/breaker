@@ -64,7 +64,7 @@ export function AlphaThresholdOnboardingModal({ onHighlightChange, onComplete }:
 
   const title =
     step === 0
-      ? 'Choose Ship 1 and Weapon 1'
+      ? 'Choose Ships and Weapons'
       : step === 1
         ? 'Shields On / Off'
         : 'The E rating'
@@ -94,8 +94,7 @@ export function AlphaThresholdOnboardingModal({ onHighlightChange, onComplete }:
             {step === 0 ? (
               <div className="alpha-threshold-onboarding-copy">
                 <p>
-                  Tap <strong>Ship 1</strong> in the left column and <strong>Weapon 1</strong> in the first
-                  weapon column to open the selectors and fill the comparison matrix.
+                  Select up to <strong>4 ships</strong> and compare them against up to <strong>6 weapon choices</strong>.
                 </p>
               </div>
             ) : step === 1 ? (

@@ -95,6 +95,68 @@ export type ArmorInteractionEstimate = {
   notes?: string[]
 }
 
+export type ShipDimensions = {
+  length?: number | null
+  beam?: number | null
+  height?: number | null
+}
+
+export type ShipFlightDetails = {
+  scmSpeed?: number | null
+  navSpeed?: number | null
+  boostSpeed?: number | null
+  pitch?: number | null
+  yaw?: number | null
+  roll?: number | null
+  acceleration?: number | null
+  jerk?: number | null
+}
+
+export type ShipCountermeasureDetails = {
+  noiseCount?: number | null
+  decoyCount?: number | null
+}
+
+export type ShipSignatureDetails = {
+  electromagnetic?: number | null
+  infrared?: number | null
+  crossSection?: number | null
+}
+
+export type ShipWeaponMountDetails = {
+  type: 'pilot' | 'turret' | 'remote-turret' | 'missile-rack' | 'utility'
+  label: string
+  size?: number | null
+  count?: number | null
+  placement?: string | null
+  missileSize?: number | null
+  rackSize?: number | null
+}
+
+export type ShipSectionDurability = {
+  section: string
+  hp?: number | null
+  notes?: string | null
+}
+
+export type ShipSubsystemDetails = {
+  name: string
+  kind?: 'weapon' | 'turret' | 'engine' | 'thruster' | 'shield' | 'power' | 'cooler' | 'radar' | 'other'
+  hp?: number | null
+  placement?: string | null
+  notes?: string | null
+}
+
+export type ShipExtendedDetails = {
+  dimensions?: ShipDimensions
+  flight?: ShipFlightDetails
+  countermeasures?: ShipCountermeasureDetails
+  signatures?: ShipSignatureDetails
+  weaponMounts?: ShipWeaponMountDetails[]
+  sectionDurability?: ShipSectionDurability[]
+  subsystems?: ShipSubsystemDetails[]
+}
+
 export type Ship = {
   id: string
   manufacturer: string
@@ -120,6 +182,7 @@ export type Ship = {
   history: ShipBalanceSnapshot[]
   hardpointGroups?: ShipHardpointGroup[]
   defenseProfile?: ShipDefenseProfile
+  shipDetails?: ShipExtendedDetails
 }
 
 export type ShipBalanceSnapshot = {

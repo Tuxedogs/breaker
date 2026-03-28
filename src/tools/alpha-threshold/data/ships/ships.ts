@@ -9,6 +9,7 @@ import { erkulPtuShipSeeds } from './erkulPtuSeeds'
 import { manualShipSeeds } from './manualSeeds'
 import { spviewerShipSeeds } from './spviewerSeeds'
 import { shipCardStats } from './cardStats'
+import { getShipDetailsForSource } from './shipDetails'
 import { erkulLiveShipDefenseProfiles } from '../shields/erkulLiveShipDefenseProfiles'
 import { erkulPtuShipDefenseProfiles } from '../shields/erkulPtuShipDefenseProfiles'
 import { observedBreakpoints } from './observedBreakpoints'
@@ -84,6 +85,13 @@ function toShip(record: ShipRecord, source: ThresholdDataSourceKey): Ship {
   const wikiImage = shipWikiImages[imageKey]
   const cardStatsKey = `${record.manufacturer}::${record.name}`.toLowerCase() as keyof typeof shipCardStats
   const cardStats = shipCardStats[cardStatsKey]
+  const shipDetails = getShipDetailsForSource(
+    {
+      manufacturer: record.manufacturer,
+      name: record.name,
+    },
+    source
+  )
   const defenseProfile = getDefenseProfile(record, source)
   const observed = getObservedBreakpoints(record, defenseProfile)
 
@@ -111,6 +119,7 @@ function toShip(record: ShipRecord, source: ThresholdDataSourceKey): Ship {
     patch: record.patch,
     history: record.history ?? [],
     hardpointGroups: record.hardpointGroups,
+    shipDetails,
     defenseProfile: defenseProfile
       ? {
           ...defenseProfile,
