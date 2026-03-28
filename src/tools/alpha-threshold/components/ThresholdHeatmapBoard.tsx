@@ -13,6 +13,10 @@ type Props = {
   onTargetWeaponFilterPresetChange?: (chip: ArmorInteractionFilterChip | null) => void
   targetWeaponSizeFilter?: number | null
   onTargetWeaponSizeFilterChange?: (size: number | null) => void
+  analysisColumnCount?: number
+  onAnalysisColumnCountChange?: (count: number) => void
+  targetColumnCount?: number
+  onTargetColumnCountChange?: (count: number) => void
   hideHeaderRow?: boolean
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
@@ -36,6 +40,10 @@ export function ThresholdHeatmapBoard({
   onTargetWeaponFilterPresetChange,
   targetWeaponSizeFilter,
   onTargetWeaponSizeFilterChange,
+  analysisColumnCount,
+  onAnalysisColumnCountChange,
+  targetColumnCount,
+  onTargetColumnCountChange,
   hideHeaderRow = false,
   selectionMode,
   nextShipSlotIndex,
@@ -60,6 +68,10 @@ export function ThresholdHeatmapBoard({
         onTargetWeaponFilterPresetChange={onTargetWeaponFilterPresetChange}
         targetWeaponSizeFilter={targetWeaponSizeFilter}
         onTargetWeaponSizeFilterChange={onTargetWeaponSizeFilterChange}
+        analysisColumnCount={analysisColumnCount}
+        onAnalysisColumnCountChange={onAnalysisColumnCountChange}
+        targetColumnCount={targetColumnCount}
+        onTargetColumnCountChange={onTargetColumnCountChange}
         hideHeaderRow={hideHeaderRow}
         selectionMode={selectionMode}
         nextShipSlotIndex={nextShipSlotIndex}

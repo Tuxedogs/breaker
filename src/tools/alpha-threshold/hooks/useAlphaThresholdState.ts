@@ -45,11 +45,41 @@ const LEGACY_STORAGE_KEYS_TO_CLEAR = [
   'alpha-threshold.weapon-analysis-filter',
   'alpha-threshold.filter-chip',
 ] as const
+const DEFAULT_EXAMPLE_SHIP_KEYS = ['ANVL::Paladin', 'RSI::Scorpius', 'RSI::Mantis'] as const
+const DEFAULT_EXAMPLE_WEAPON_KEYS = [
+  'energy:3:NDB-30',
+  'energy:3:CF-337 Panther',
+  'energy:3:NN-15',
+] as const
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
-  { id: 'slot-1', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 1' },
-  { id: 'slot-2', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 2' },
-  { id: 'slot-3', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 3' },
-  { id: 'slot-4', operator: 'weapon', hardpointSize: 0, weaponKey: null, label: 'Weapon 4' },
+  {
+    id: 'slot-1',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[0],
+    label: 'Weapon 1',
+  },
+  {
+    id: 'slot-2',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[1],
+    label: 'Weapon 2',
+  },
+  {
+    id: 'slot-3',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[2],
+    label: 'Weapon 3',
+  },
+  {
+    id: 'slot-4',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: null,
+    label: 'Weapon 4',
+  },
 ]
 
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
@@ -111,9 +141,17 @@ function resolveAvailableDataSource(
 
 function normalizeSelectedShipNames(value: Array<string | null>, ships: Ship[]): Array<string | null> {
   const shipKeys = new Set(ships.map((ship) => getShipSelectionKey(ship)))
+  const seededDefaultShipKeys = Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => {
+    const candidate = DEFAULT_EXAMPLE_SHIP_KEYS[index]
+    return candidate && shipKeys.has(candidate) ? candidate : null
+  })
   const defaults = getDefaultSelectedShips()
 
   if (!Array.isArray(value)) {
+    if (seededDefaultShipKeys.some(Boolean)) {
+      return seededDefaultShipKeys
+    }
+
     return Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => {
       const defaultShip = ships.find((ship) => ship.name === defaults[index])
       return defaultShip ? getShipSelectionKey(defaultShip) : null
@@ -124,6 +162,18 @@ function normalizeSelectedShipNames(value: Array<string | null>, ships: Ship[]):
     if (!shipName) return null
     return shipKeys.has(shipName) ? shipName : null
   })
+
+  const legacyPaladinSeedKey = DEFAULT_EXAMPLE_SHIP_KEYS[0]
+  const legacyAllPaladinsSeed =
+    seededDefaultShipKeys.some(Boolean) &&
+    trimmed[0] === legacyPaladinSeedKey &&
+    trimmed[1] === legacyPaladinSeedKey &&
+    trimmed[2] === legacyPaladinSeedKey &&
+    (trimmed[3] === null || trimmed[3] === legacyPaladinSeedKey)
+
+  if (legacyAllPaladinsSeed) {
+    return seededDefaultShipKeys
+  }
 
   return Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => trimmed[index] ?? null)
 }
@@ -276,7 +326,7 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
   )
   const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<Array<string | null>>(
     `alpha-threshold.${matrixMode}.selected-ships`,
-    []
+    Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => DEFAULT_EXAMPLE_SHIP_KEYS[index] ?? null)
   )
   const [shipSearch, setShipSearch] = useLocalStorageState<string>(
     'alpha-threshold.ship-search',
