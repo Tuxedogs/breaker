@@ -74,7 +74,7 @@ export function ShipBalanceChangelogPanel({ entries, compact = false }: Props) {
       {open
         ? createPortal(
             <div
-              className="alpha-tool-route alpha-balance-modal-root"
+              className="alpha-threshold-tool alpha-balance-modal-root"
               onMouseDown={() => setOpen(false)}
             >
               <div className="alpha-modal-backdrop">

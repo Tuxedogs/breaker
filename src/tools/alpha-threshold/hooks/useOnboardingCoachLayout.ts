@@ -105,15 +105,15 @@ const COACH_STROKE_HALF = 1
  * 1) Leave modal at left edge, 50% height.
  * 2) Horizontal left until x = 50% across weapon header width.
  * 3) 90° toward weapon header bottom edge (same x).
- * 4) Vertical to y = 50% of the ship header row (`.alpha-comparison-matrix-ship-header`, or empty placeholder).
+ * 4) Vertical to y = 50% of the ship header row (`.acm-ship-header`, or empty placeholder).
  * 5) 90° left to the ship **card** right border (highlight edge), inset for stroke.
  */
 function buildStep0CombinedPath(modal: DOMRect, weaponEl: Element, shipEl: Element): string {
   const w = weaponEl.getBoundingClientRect()
   const ship = shipEl.getBoundingClientRect()
 
-  const shipHeaderEl = shipEl.querySelector<HTMLElement>('.alpha-comparison-matrix-ship-header')
-  const shipEmptyEl = shipEl.querySelector<HTMLElement>('.alpha-comparison-matrix-ship-empty')
+  const shipHeaderEl = shipEl.querySelector<HTMLElement>('.acm-ship-header')
+  const shipEmptyEl = shipEl.querySelector<HTMLElement>('.acm-ship-empty')
 
   let headerMidY: number
   if (shipHeaderEl) {
@@ -141,8 +141,8 @@ function buildPaths(modal: DOMRect, targets: Element[], step: number): string[] 
   if (targets.length === 0) return []
 
   if (step === 0 && targets.length >= 2) {
-    const weaponEl = targets.find((t) => t.classList.contains('alpha-comparison-matrix-weapon-header'))
-    const shipEl = targets.find((t) => t.classList.contains('alpha-comparison-matrix-ship-card'))
+    const weaponEl = targets.find((t) => t.classList.contains('acm-weapon-header'))
+    const shipEl = targets.find((t) => t.classList.contains('acm-ship-card'))
     if (weaponEl && shipEl) {
       return [buildStep0CombinedPath(modal, weaponEl, shipEl)]
     }
@@ -217,7 +217,7 @@ export function useOnboardingCoachLayout(
 
     measure()
 
-    const scrollEl = document.querySelector('.alpha-comparison-matrix-scroll')
+    const scrollEl = document.querySelector('.acm-scroll')
     window.addEventListener('resize', measure)
     window.addEventListener('scroll', measure, true)
     scrollEl?.addEventListener('scroll', measure, { passive: true })

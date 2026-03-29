@@ -70,7 +70,7 @@ export function AlphaThresholdOnboardingModal({ onHighlightChange, onComplete }:
         : 'The E rating'
 
   return createPortal(
-    <div className="alpha-tool-route alpha-threshold-onboarding-portal">
+    <div className="alpha-threshold-tool alpha-threshold-onboarding-portal">
       <AlphaThresholdOnboardingCoachDim
         step={step}
         layout={coachLayout}

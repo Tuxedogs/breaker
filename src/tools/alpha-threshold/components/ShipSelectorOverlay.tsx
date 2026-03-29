@@ -271,14 +271,14 @@ export function ShipSelectorOverlay({
                 const shipKey = selectedShipNames[index]
                 const selectedShip = shipKey ? shipBySelectionKey.get(shipKey) : null
                 const isActive = index === activeSlotIndex
-                const toneClass = `alpha-comparison-matrix-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
+                const toneClass = `acm-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
                 return (
                   <article
                     key={`ship-slot-${index + 1}`}
                     className={[
-                      'alpha-comparison-matrix-ship-card',
+                      'acm-ship-card',
                       'alpha-selector-bay-ship-slot',
-                      !selectedShip ? 'alpha-comparison-matrix-ship-card-empty' : '',
+                      !selectedShip ? 'acm-ship-card-empty' : '',
                       toneClass,
                       isActive ? 'alpha-selector-bay-ship-slot-active' : '',
                     ]
@@ -293,16 +293,16 @@ export function ShipSelectorOverlay({
                     >
                       {selectedShip ? (
                         <>
-                          <p className="alpha-comparison-matrix-ship-role">
+                          <p className="acm-ship-role">
                             {formatEntityLabel(selectedShip.manufacturer)}
                           </p>
-                          <h3 className="alpha-comparison-matrix-ship-name">
+                          <h3 className="acm-ship-name">
                             {formatShipCardName(selectedShip)}
                           </h3>
                         </>
                       ) : (
-                        <div className="alpha-comparison-matrix-ship-empty">
-                          <p className="alpha-comparison-matrix-ship-empty-label">Ship {index + 1}</p>
+                        <div className="acm-ship-empty">
+                          <p className="acm-ship-empty-label">Ship {index + 1}</p>
                         </div>
                       )}
                     </button>

@@ -1,5 +1,5 @@
-﻿
-.alpha-tool-route .alpha-heatmap-ship-column {
+
+.alpha-threshold-tool .alpha-heatmap-ship-column {
   display: grid;
   grid-template-rows: auto auto auto;
   gap: 0.8rem;
@@ -11,26 +11,26 @@
     linear-gradient(180deg, rgb(6 11 20 / 0.98), rgb(4 7 14 / 0.98));
 }
 
-.alpha-tool-route .alpha-heatmap-ship-head {
+.alpha-threshold-tool .alpha-heatmap-ship-head {
   display: grid;
   gap: 0.65rem;
   border-bottom: 1px solid rgb(255 255 255 / 0.08);
   padding-bottom: 0.7rem;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-title-block {
+.alpha-threshold-tool .alpha-heatmap-ship-title-block {
   display: grid;
   gap: 0.22rem;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-name {
+.alpha-threshold-tool .alpha-heatmap-ship-name {
   margin: 0;
   font-size: 1.2rem;
   line-height: 1.1;
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-make {
+.alpha-threshold-tool .alpha-heatmap-ship-make {
   margin: 0;
   font-size: 0.76rem;
   letter-spacing: 0.12em;
@@ -38,13 +38,13 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-pills {
+.alpha-threshold-tool .alpha-heatmap-ship-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
-.alpha-tool-route .alpha-ship-header-pill {
+.alpha-threshold-tool .alpha-ship-header-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.38rem;
@@ -56,11 +56,11 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-ship-header-pill > strong {
+.alpha-threshold-tool .alpha-ship-header-pill > strong {
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis {
+.alpha-threshold-tool .alpha-heatmap-ship-axis {
   position: relative;
   display: block;
   min-height: 1.9rem;
@@ -68,7 +68,7 @@
   color: rgb(203 213 225);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis::after {
+.alpha-threshold-tool .alpha-heatmap-ship-axis::after {
   content: '';
   position: absolute;
   inset: auto 0 0;
@@ -76,30 +76,30 @@
   background: rgb(255 255 255 / 0.08);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-endpoint {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-endpoint {
   position: absolute;
   top: 0;
   display: grid;
   gap: 0.14rem;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-endpoint:first-child {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-endpoint:first-child {
   left: 0;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-endpoint-right {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-endpoint-right {
   right: 0;
   justify-items: end;
   text-align: right;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > strong {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-endpoint > strong {
   font-size: 0.76rem;
   line-height: 1;
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-endpoint > em {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-endpoint > em {
   font-size: 0.58rem;
   font-style: normal;
   font-weight: 800;
@@ -108,7 +108,7 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-marker {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-marker {
   position: absolute;
   top: 0.08rem;
   transform: translateX(-50%);
@@ -117,25 +117,25 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(2) {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-marker:nth-child(2) {
   left: 25%;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(3) {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-marker:nth-child(3) {
   left: 50%;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-axis-marker:nth-child(4) {
+.alpha-threshold-tool .alpha-heatmap-ship-axis-marker:nth-child(4) {
   left: 75%;
 }
 
-.alpha-tool-route .alpha-heatmap-ship-lanes {
+.alpha-threshold-tool .alpha-heatmap-ship-lanes {
   display: grid;
   gap: 0.8rem;
   min-height: 0;
 }
 
-.alpha-tool-route .alpha-heatmap-lane {
+.alpha-threshold-tool .alpha-heatmap-lane {
   display: grid;
   gap: 0.75rem;
   border: 1px solid rgb(255 255 255 / 0.08);
@@ -162,22 +162,22 @@
     rgb(5 9 18 / 0.92);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-energy {
+.alpha-threshold-tool .alpha-heatmap-lane-energy {
   box-shadow: inset 0 1px 0 rgb(250 204 21 / 0.2);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-ballistic {
+.alpha-threshold-tool .alpha-heatmap-lane-ballistic {
   box-shadow: inset 0 1px 0 rgb(196 181 253 / 0.16);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-head {
+.alpha-threshold-tool .alpha-heatmap-lane-head {
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
   align-items: center;
 }
 
-.alpha-tool-route .alpha-heatmap-lane-kicker {
+.alpha-threshold-tool .alpha-heatmap-lane-kicker {
   margin: 0;
   font-size: 0.82rem;
   font-weight: 800;
@@ -185,16 +185,16 @@
   text-transform: uppercase;
 }
 
-.alpha-tool-route .alpha-heatmap-lane-energy .alpha-heatmap-lane-kicker {
+.alpha-threshold-tool .alpha-heatmap-lane-energy .alpha-heatmap-lane-kicker {
   /* Energy lane accent text */
   color: rgb(253 224 71);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-ballistic .alpha-heatmap-lane-kicker {
+.alpha-threshold-tool .alpha-heatmap-lane-ballistic .alpha-heatmap-lane-kicker {
   color: rgb(196 181 253);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-threshold {
+.alpha-threshold-tool .alpha-heatmap-lane-threshold {
   margin: 0;
   display: inline-flex;
   align-items: center;
@@ -207,12 +207,12 @@
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-lane-traces {
+.alpha-threshold-tool .alpha-heatmap-lane-traces {
   display: grid;
   gap: 0.65rem;
 }
 
-.alpha-tool-route .alpha-heatmap-lane-empty {
+.alpha-threshold-tool .alpha-heatmap-lane-empty {
   border: 1px dashed rgb(255 255 255 / 0.08);
   border-radius: 0.95rem;
   padding: 0.95rem;
@@ -220,28 +220,28 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-trace {
+.alpha-threshold-tool .alpha-heatmap-trace {
   display: grid;
   position: relative;
   isolation: isolate;
   gap: 0.35rem;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-head {
+.alpha-threshold-tool .alpha-heatmap-trace-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-meta {
+.alpha-threshold-tool .alpha-heatmap-trace-meta {
   display: grid;
   gap: 0.12rem;
   margin-top: 0.24rem;
   font-size: 0.74rem;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-badges {
+.alpha-threshold-tool .alpha-heatmap-trace-badges {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -249,7 +249,7 @@
   margin-top: 0.22rem;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-status {
+.alpha-threshold-tool .alpha-heatmap-trace-status {
   display: inline-flex;
   align-items: center;
   border: 1px solid rgb(255 255 255 / 0.1);
@@ -259,34 +259,34 @@
   text-transform: uppercase;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-speed {
+.alpha-threshold-tool .alpha-heatmap-trace-speed {
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-status {
+.alpha-threshold-tool .alpha-heatmap-trace-status {
   color: rgb(226 232 240);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-status-deflect {
+.alpha-threshold-tool .alpha-heatmap-trace-status-deflect {
   border-color: rgb(248 113 113 / 0.22);
   background: rgb(127 29 29 / 0.18);
   color: rgb(254 202 202);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-status-late {
+.alpha-threshold-tool .alpha-heatmap-trace-status-late {
   border-color: rgb(56 189 248 / 0.4);
   background: rgb(8 47 73 / 0.78);
   color: rgb(186 230 253);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-status-early,
-.alpha-tool-route .alpha-heatmap-trace-status-penetrate {
+.alpha-threshold-tool .alpha-heatmap-trace-status-early,
+.alpha-threshold-tool .alpha-heatmap-trace-status-penetrate {
   border-color: rgb(16 185 129 / 0.44);
   background: rgb(6 78 59 / 0.78);
   color: rgb(167 243 208);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-copy {
+.alpha-threshold-tool .alpha-heatmap-trace-copy {
   display: grid;
   gap: 0.24rem;
   min-width: 0;
@@ -296,26 +296,26 @@
   background: rgb(255 255 255 / 0.025);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-copy-energy,
-.alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+.alpha-threshold-tool .alpha-heatmap-trace-copy-energy,
+.alpha-threshold-tool .alpha-heatmap-trace-copy-ballistic {
   background: rgb(255 255 255 / 0.025);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-copy-energy {
+.alpha-threshold-tool .alpha-heatmap-trace-copy-energy {
   border-color: rgb(253 224 71 / 0.22);
   background:
     linear-gradient(180deg, rgb(253 224 71 / 0.08), transparent 100%),
     rgb(16 16 12 / 0.88);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-copy-ballistic {
+.alpha-threshold-tool .alpha-heatmap-trace-copy-ballistic {
   border-color: rgb(167 139 250 / 0.24);
   background:
     linear-gradient(180deg, rgb(124 58 237 / 0.08), transparent 100%),
     rgb(14 12 30 / 0.88);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-name {
+.alpha-threshold-tool .alpha-heatmap-trace-name {
   margin: 0;
   min-width: 0;
   overflow: hidden;
@@ -326,7 +326,7 @@
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-hint {
+.alpha-threshold-tool .alpha-heatmap-trace-hint {
   min-width: 0;
   margin: 0;
   font-size: 0.68rem;
@@ -334,7 +334,7 @@
   color: rgb(203 213 225);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell {
   position: relative;
   z-index: 2;
   min-height: 2.8rem;
@@ -357,21 +357,21 @@
     inset 0 -10px 20px rgb(0 0 0 / 0.2);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell-blocked {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell-blocked {
   border-color: rgb(100 116 139 / 0.4);
   background: rgb(15 23 42 / 0.9);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell-threshold {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell-threshold {
   border-color: rgb(56 189 248 / 0.28);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell-immediate {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell-immediate {
   border-color: rgb(16 185 129 / 0.36);
   background: rgb(6 78 59 / 0.32);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell::before {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -380,26 +380,26 @@
   pointer-events: none;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-bar-shell:focus-visible {
+.alpha-threshold-tool .alpha-heatmap-trace-bar-shell:focus-visible {
   outline: 2px solid rgb(125 211 252 / 0.7);
   outline-offset: 2px;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-deflect,
-.alpha-tool-route .alpha-heatmap-trace-damage {
+.alpha-threshold-tool .alpha-heatmap-trace-deflect,
+.alpha-threshold-tool .alpha-heatmap-trace-damage {
   position: absolute;
   top: 0;
   bottom: 0;
 }
 
-.alpha-tool-route .alpha-heatmap-trace-deflect {
+.alpha-threshold-tool .alpha-heatmap-trace-deflect {
   /* Blocked state bar */
   inset: 0;
   border-radius: inherit;
   background: rgb(51, 65, 85);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-deflect-threshold {
+.alpha-threshold-tool .alpha-heatmap-trace-deflect-threshold {
   /* Threshold state destroyed-armor segment */
   border-radius: 0.95rem 0 0 0.95rem;
   background:
@@ -414,7 +414,7 @@
   box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.507);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-damage {
+.alpha-threshold-tool .alpha-heatmap-trace-damage {
   /* Threshold state active penetration segment */
   z-index: 1;
   border-radius: 0 0.95rem 0.95rem 0;
@@ -422,14 +422,14 @@
   box-shadow: inset 0 0 0 1px rgb(186 230 253 / 0.2);
 }
 
-.alpha-tool-route .alpha-heatmap-trace-damage-immediate {
+.alpha-threshold-tool .alpha-heatmap-trace-damage-immediate {
   /* Immediate penetration full-bar color */
   border-radius: inherit;
   background: rgb(15, 231, 159);
   box-shadow: inset 0 0 0 1px rgba(38, 219, 125, 0.822);
 }
 
-.alpha-tool-route .alpha-penetration-marker {
+.alpha-threshold-tool .alpha-penetration-marker {
   position: absolute;
   top: -0.05rem;
   bottom: -0.05rem;
@@ -439,7 +439,7 @@
   pointer-events: none;
 }
 
-.alpha-tool-route .alpha-penetration-marker-halo {
+.alpha-threshold-tool .alpha-penetration-marker-halo {
   position: absolute;
   top: -0.45rem;
   left: 50%;
@@ -451,7 +451,7 @@
   filter: blur(4px);
 }
 
-.alpha-tool-route .alpha-penetration-marker-stick {
+.alpha-threshold-tool .alpha-penetration-marker-stick {
   position: absolute;
   top: -0.25rem;
   bottom: -0.2rem;
@@ -464,7 +464,7 @@
     0 0 12px rgb(255 255 255 / 0.22);
 }
 
-.alpha-tool-route .alpha-penetration-marker-dot {
+.alpha-threshold-tool .alpha-penetration-marker-dot {
   position: absolute;
   top: -0.55rem;
   left: 50%;

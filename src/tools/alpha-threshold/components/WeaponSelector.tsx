@@ -381,7 +381,7 @@ export function WeaponSelector({
   if (!open) return null
 
   return createPortal(
-    <div className="alpha-tool-route">
+    <div className="alpha-threshold-tool">
       <div className="alpha-modal-backdrop">
         {overlaySlots.map((slot) => {
           const slotData = slots.find((entry) => entry.id === slot.id)

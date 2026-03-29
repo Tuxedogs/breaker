@@ -2,91 +2,42 @@
   Alpha Threshold layout and shared surfaces.
 */
 
-.alpha-tool-route {
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 100%;
-  height: 100%;
-  min-width: 0;
-  scroll-behavior: smooth;
-  overflow: hidden;
-  padding-top: 0;
-  /* Full-viewport tool: no global nav bar; sticky offsets stay at 0 inside this route */
-  --app-sticky-top: 0px;
-  --alpha-sticky-top: 0rem;
-  --alpha-sticky-ship-top: 0rem;
-}
-
-.alpha-tool-route .alpha-command-shell {
+/*
+  Tool root: column layout, overlay CSS vars (panel-command-selection-overlay.css), sticky override.
+*/
+.alpha-threshold-tool {
   display: flex;
   flex: 1 1 auto;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: column;
   min-height: 0;
   min-width: 0;
   overflow: hidden;
   width: 100%;
   max-width: none;
-  padding: 0 0.18rem 0.16rem;
-}
-
-.alpha-tool-route .alpha-main-heatmap-stage,
-.alpha-tool-route .alpha-main-heatmap-board {
-  display: flex;
-  flex: 1 1 auto;
-  justify-content: flex-start;
-  align-items: flex-start;
-  min-height: 0;
-  min-width: 0;
-  overflow: hidden;
-  width: 100%;
-}
-
-.alpha-tool-route .alpha-main-heatmap-stage {
   position: relative;
-  /* Overlay anchor fallbacks: first body cell (below header row). JS overrides on ≥1024px. */
+  --app-sticky-top: 0px;
   --alpha-matrix-ship-width: 17.5rem;
   --alpha-matrix-header-row-height: 7.35rem;
   --alpha-board-top-inset: 0.35rem;
-  --alpha-threshold-board-pad-inline: 0.35rem;
+  --alpha-matrix-pad-inline: 0.35rem;
   --alpha-overlay-top-offset: calc(
     var(--alpha-board-top-inset) + var(--alpha-matrix-header-row-height) + 0.45rem
   );
   --alpha-overlay-left-offset: calc(
-    var(--alpha-threshold-board-pad-inline) + var(--alpha-matrix-ship-width) + 0.45rem
+    var(--alpha-matrix-pad-inline) + var(--alpha-matrix-ship-width) + 0.45rem
   );
 }
 
 @media (min-width: 1024px) and (max-width: 2600px) {
-  .alpha-tool-route .alpha-main-heatmap-stage {
+  .alpha-threshold-tool {
     --alpha-board-top-inset: 0.48rem;
-    --alpha-threshold-board-pad-inline: 0.5rem;
+    --alpha-matrix-pad-inline: 0.5rem;
   }
 }
 
-.alpha-tool-route .alpha-app-edge-rail {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 0.3rem;
-  z-index: 1201;
-  background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02) 22%, rgb(255 255 255 / 0.08) 100%);
-  box-shadow: inset 1px 0 0 rgb(255 255 255 / 0.08);
-  pointer-events: none;
-}
-
-.alpha-tool-route .alpha-main-heatmap-board {
-  align-self: stretch;
-}
-
-.alpha-tool-route .alpha-threshold-board,
-.alpha-tool-route .alpha-top-control-strip,
-.alpha-tool-route .alpha-loadout-drawer,
-.alpha-tool-route .alpha-heatmap-ship-column {
+.alpha-threshold-tool .alpha-top-control-strip,
+.alpha-threshold-tool .alpha-loadout-drawer,
+.alpha-threshold-tool .alpha-heatmap-ship-column {
   border: 1px solid rgb(255 255 255 / 0.1);
   background:
     linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 28%),
@@ -94,19 +45,7 @@
   box-shadow: 0 18px 44px rgb(0 0 0 / 0.28);
 }
 
-@media (min-width: 1024px) {
-  .alpha-tool-route .alpha-command-shell {
-    padding: 0 0.3rem 0.22rem;
-  }
-}
-
-@media (min-width: 1024px) and (max-width: 2600px) {
-  .alpha-tool-route .alpha-command-shell {
-    padding-inline: 0.25rem;
-  }
-}
-
-.alpha-tool-route :is(
+.alpha-threshold-tool :is(
   .alpha-sidebar,
   .alpha-summary-rail,
   .alpha-table-shell,
@@ -120,56 +59,56 @@
   box-shadow: 0 18px 44px rgb(0 0 0 / 0.28);
 }
 
-.alpha-tool-route .alpha-sidebar-inner,
-.alpha-tool-route .alpha-summary-rail,
-.alpha-tool-route .alpha-table-header,
-.alpha-tool-route .alpha-table-scroll {
+.alpha-threshold-tool .alpha-sidebar-inner,
+.alpha-threshold-tool .alpha-summary-rail,
+.alpha-threshold-tool .alpha-table-header,
+.alpha-threshold-tool .alpha-table-scroll {
   padding: 1.25rem;
 }
 
-.alpha-tool-route .alpha-sidebar-inner {
+.alpha-threshold-tool .alpha-sidebar-inner {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   overflow: visible;
 }
 
-.alpha-tool-route .alpha-sidebar-attacker-section {
+.alpha-threshold-tool .alpha-sidebar-attacker-section {
   display: grid;
   gap: 0.75rem;
   border-bottom: 1px solid rgb(255 255 255 / 0.1);
   padding-bottom: 1rem;
 }
 
-.alpha-tool-route .alpha-summary-rail-head,
-.alpha-tool-route .alpha-table-header {
+.alpha-threshold-tool .alpha-summary-rail-head,
+.alpha-threshold-tool .alpha-table-header {
   border-bottom: 1px solid rgb(255 255 255 / 0.08);
 }
 
-.alpha-tool-route .alpha-table-intro,
-.alpha-tool-route .alpha-table-summary {
+.alpha-threshold-tool .alpha-table-intro,
+.alpha-threshold-tool .alpha-table-summary {
   margin: 0;
 }
 
-.alpha-tool-route .alpha-summary-empty,
-.alpha-tool-route .alpha-empty-state {
+.alpha-threshold-tool .alpha-summary-empty,
+.alpha-threshold-tool .alpha-empty-state {
   border: 1px solid rgb(255 255 255 / 0.08);
   background: rgb(255 255 255 / 0.025);
 }
 
-.alpha-tool-route .alpha-summary-rail-clear {
+.alpha-threshold-tool .alpha-summary-rail-clear {
   margin: 1rem 0 0;
   display: flex;
   justify-content: center;
 }
 
-.alpha-tool-route .alpha-sidebar-merged-section {
+.alpha-threshold-tool .alpha-sidebar-merged-section {
   border-top: 1px solid rgb(255 255 255 / 0.08);
   padding-top: 1rem;
 }
 
 @media (max-width: 768px) {
-  .alpha-tool-route {
+  .alpha-threshold-tool {
     min-height: 100dvh;
     height: auto;
     overflow: visible;
@@ -177,29 +116,20 @@
     padding-bottom: max(0.65rem, env(safe-area-inset-bottom));
   }
 
-  .alpha-tool-route .alpha-command-shell,
-  .alpha-tool-route .alpha-main-heatmap-stage,
-  .alpha-tool-route .alpha-main-heatmap-board {
+  .alpha-threshold-tool .acm-panel,
+  .alpha-threshold-tool .alpha-mobile-layout {
     display: block;
     min-height: 0;
     height: auto;
     overflow: visible;
-    padding: 0;
   }
 
-  .alpha-tool-route .alpha-main-heatmap-stage {
-    padding: 0 0.5rem;
-  }
-
-  .alpha-tool-route .alpha-app-edge-rail {
-    display: none;
-  }
-
-  .alpha-tool-route .alpha-threshold-board,
-  .alpha-tool-route .alpha-top-control-strip,
-  .alpha-tool-route .alpha-loadout-drawer,
-  .alpha-tool-route .alpha-heatmap-ship-column,
-  .alpha-tool-route :is(.alpha-sidebar, .alpha-summary-rail, .alpha-table-shell, .alpha-compare-strip, .alpha-heatmap-panel) {
+  .alpha-threshold-tool .acm-panel,
+  .alpha-threshold-tool .alpha-mobile-layout,
+  .alpha-threshold-tool .alpha-top-control-strip,
+  .alpha-threshold-tool .alpha-loadout-drawer,
+  .alpha-threshold-tool .alpha-heatmap-ship-column,
+  .alpha-threshold-tool :is(.alpha-sidebar, .alpha-summary-rail, .alpha-table-shell, .alpha-compare-strip, .alpha-heatmap-panel) {
     box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
   }
 

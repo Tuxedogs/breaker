@@ -53,7 +53,7 @@ export function HeatmapTooltip({ open, x, y, title, sectionTitle, hero, lines }:
   if (!open) return null
 
   return createPortal(
-    <div className="alpha-tool-route alpha-heatmap-tooltip-portal-root">
+    <div className="alpha-threshold-tool alpha-heatmap-tooltip-portal-root">
       <div
         ref={tooltipRef}
         className="alpha-heatmap-tooltip"

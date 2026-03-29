@@ -40,7 +40,7 @@ export function LoadoutDrawer({
   if (!mode) return null
 
   return createPortal(
-    <div className="alpha-tool-route alpha-loadout-portal-root">
+    <div className="alpha-threshold-tool alpha-loadout-portal-root">
       <div
         className="alpha-loadout-drawer-backdrop"
         onMouseDown={onClose}

@@ -17,15 +17,15 @@ export function AlphaMobileControlStrip({
 }: Props) {
   return (
     <section className="alpha-mobile-control-strip" aria-label="Comparison controls">
-      <button type="button" className="alpha-comparison-matrix-corner-seg alpha-mobile-control-strip-button" onClick={onOpenShips}>
+      <button type="button" className="acm-corner-seg alpha-mobile-control-strip-button" onClick={onOpenShips}>
         Ships ({shipCount})
       </button>
-      <button type="button" className="alpha-comparison-matrix-corner-seg alpha-mobile-control-strip-button" onClick={onOpenWeapons}>
+      <button type="button" className="acm-corner-seg alpha-mobile-control-strip-button" onClick={onOpenWeapons}>
         Weapons ({weaponCount})
       </button>
       <button
         type="button"
-        className="alpha-comparison-matrix-corner-seg alpha-mobile-control-strip-button"
+        className="acm-corner-seg alpha-mobile-control-strip-button"
         aria-pressed={shieldMode === 'up'}
         onClick={() => onShieldModeChange(shieldMode === 'up' ? 'down' : 'up')}
       >
