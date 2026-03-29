@@ -1,13 +1,12 @@
-﻿.alpha-tool-route .alpha-threshold-board {
+/* Matrix + mobile list surface (former alpha-threshold-board shell). */
+.alpha-threshold-tool .acm-panel,
+.alpha-threshold-tool .alpha-mobile-layout {
   position: relative;
-  display: grid;
-  grid-template-rows: minmax(0, 1fr);
-  gap: 0.3rem;
+  flex: 1 1 auto;
   width: 100%;
-  height: 100%;
   min-width: 0;
   min-height: 0;
-  border-radius: 1.15rem;
+  border-radius: 0;
   padding: 0.35rem 0.35rem 0.25rem;
   border: 1px solid rgb(255 255 255 / 0.1);
   background:
@@ -19,42 +18,20 @@
     inset 0 1px 0 rgb(255 255 255 / 0.03);
 }
 
-.alpha-tool-route .alpha-threshold-board-app {
+.alpha-threshold-tool .acm-panel > .acm-shell {
   min-height: 0;
+  min-width: 0;
 }
 
-.alpha-tool-route .alpha-threshold-board > * {
-  min-height: 0;
-}
-
-.alpha-tool-route .alpha-threshold-board::before {
+.alpha-threshold-tool .acm-panel::before,
+.alpha-threshold-tool .alpha-mobile-layout::before {
   content: '';
+  position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
-.alpha-tool-route .alpha-threshold-board-head {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 0.35rem;
-  align-items: start;
-}
-
-.alpha-tool-route .alpha-threshold-board-title-block {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.alpha-tool-route .alpha-threshold-board-copy {
-  margin: 0;
-  max-width: 64rem;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgb(148 163 184);
-}
-
-.alpha-tool-route .alpha-heatmap-legend {
+.alpha-threshold-tool .alpha-heatmap-legend {
   position: relative;
   z-index: 1;
   display: flex;
@@ -63,22 +40,4 @@
   padding-bottom: 0.05rem;
   font-size: 0.72rem;
   color: rgb(203 213 225);
-}
-
-.alpha-tool-route .alpha-threshold-board-scroll {
-  position: relative;
-  z-index: 1;
-  min-height: 0;
-  overflow: visible;
-  padding-bottom: 0;
-}
-
-.alpha-tool-route .alpha-threshold-board-columns {
-  display: grid;
-  gap: 0.7rem;
-  align-items: start;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18.75rem), 1fr));
-  min-width: 0;
-  max-width: none;
-  margin-inline: 0;
 }

@@ -175,16 +175,16 @@ export function WeaponSelectorOverlay({
               {slots.slice(0, 4).map((slot, index) => {
                 const assignedWeapon = slot.weaponKey ? weaponByKey.get(slot.weaponKey) : null
                 const isActive = index === activeSlotIndex
-                const toneClass = `alpha-comparison-matrix-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
+                const toneClass = `acm-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
                 return (
                   <header
                     key={slot.id}
                     className={[
-                      'alpha-comparison-matrix-weapon-header',
+                      'acm-weapon-header',
                       'alpha-selector-bay-slot',
-                      !assignedWeapon ? 'alpha-comparison-matrix-weapon-header-empty' : '',
+                      !assignedWeapon ? 'acm-weapon-header-empty' : '',
                       toneClass,
-                      isActive ? 'alpha-comparison-matrix-weapon-header-active' : '',
+                      isActive ? 'acm-weapon-header-active' : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -196,12 +196,12 @@ export function WeaponSelectorOverlay({
                       onClick={() => onSetActiveSlot(index)}
                     >
                       {assignedWeapon ? (
-                        <h3 className="alpha-comparison-matrix-weapon-name">
+                        <h3 className="acm-weapon-name">
                           {formatEntityLabel(assignedWeapon.name)}
                         </h3>
                       ) : (
-                        <div className="alpha-comparison-matrix-weapon-empty">
-                          <p className="alpha-comparison-matrix-weapon-empty-label">
+                        <div className="acm-weapon-empty">
+                          <p className="acm-weapon-empty-label">
                             Weapon {index + 1}
                           </p>
                         </div>

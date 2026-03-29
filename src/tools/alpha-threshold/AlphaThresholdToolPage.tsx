@@ -6,7 +6,6 @@ import {
   type AlphaThresholdOnboardingHighlight,
 } from './components/AlphaThresholdOnboardingModal'
 import { AlphaThresholdMobileOnboardingTip } from './components/AlphaThresholdMobileOnboardingTip'
-import { MainHeatmapStage } from './components/MainHeatmapStage'
 import { ShipSelectorOverlay } from './components/ShipSelectorOverlay'
 import { ThresholdHeatmapBoard } from './components/ThresholdHeatmapBoard'
 import { WeaponSelectorOverlay } from './components/WeaponSelectorOverlay'
@@ -211,9 +210,9 @@ export default function AlphaThresholdToolPage() {
       // matrix slot control (ship column, weapon headers, chart corner). Clicks on
       // matrix cells / chart panels close the overlay.
       if (target.closest('.alpha-overlay-panel')) return
-      if (target.closest('.alpha-comparison-matrix-ship-card')) return
-      if (target.closest('.alpha-comparison-matrix-weapon-header')) return
-      if (target.closest('.alpha-comparison-matrix-corner')) return
+      if (target.closest('.acm-ship-card')) return
+      if (target.closest('.acm-weapon-header')) return
+      if (target.closest('.acm-corner')) return
 
       setSelectionMode(null)
       setSelectionNotice(null)
@@ -337,98 +336,86 @@ export default function AlphaThresholdToolPage() {
   }
 
   return (
-    <section className="alpha-tool-route" aria-label="Alpha threshold tool">
-      <div className="alpha-app-edge-rail" aria-hidden="true" />
-      <div className="alpha-command-shell">
-        <MainHeatmapStage
-          board={
-            <ThresholdHeatmapBoard
-              ships={previewShips}
-              selectedWeapons={previewWeapons}
-              allWeapons={allWeapons}
-              shieldMode={shieldMode}
-              matrixMode={matrixMode}
-              targetWeaponFilterPreset={targetWeaponFilterPreset}
-              onTargetWeaponFilterPresetChange={setTargetWeaponFilterPreset}
-              targetWeaponSizeFilter={targetWeaponSizeFilter}
-              onTargetWeaponSizeFilterChange={setTargetWeaponSizeFilter}
-              analysisColumnCount={analysisColumnCount}
-              onAnalysisColumnCountChange={setAnalysisColumnCount}
-              targetColumnCount={targetColumnCount}
-              onTargetColumnCountChange={setTargetColumnCount}
-              hideHeaderRow={false}
-              selectionMode={selectionMode}
-              nextShipSlotIndex={effectiveShipSlotIndex}
-              nextWeaponSlotIndex={effectiveWeaponSlotIndex}
-              onShieldModeChange={handleShieldModeChange}
-              onMatrixModeChange={setMatrixMode}
-              onOpenWeapons={handleOpenWeapons}
-              onOpenShips={handleOpenShips}
-              onOpenWeaponsAt={handleOpenWeaponsAt}
-              onOpenShipsAt={handleOpenShipsAt}
-              onboardingHighlight={onboardingHighlight}
-            />
-          }
-          overlay={
-            selectionMode === 'ship' ? (
-              <ShipSelectorOverlay
-                open
-                allShips={allShips}
-                selectedShipNames={selectedShipNames}
-                maxVictimShips={visibleShipCount}
-                activeSlotIndex={Math.max(0, Math.min(visibleShipCount - 1, activeShipSlotIndex))}
-                selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
-                onSetActiveSlot={handleShipOverlaySlotActivate}
-                onSelectShip={handleShipSelect}
-                onClearShip={(slotIndex) => {
-                  setVictimShipAt(slotIndex, null)
-                  setActiveShipSlotIndex(slotIndex)
-                  setHoveredShipSlotIndex(null)
-                  setSelectionNotice(null)
-                  shipClearStreakRef.current += 1
-                  if (shipClearStreakRef.current >= 2) {
-                    setShipAutoAdvance(true)
-                    shipClearStreakRef.current = 0
-                  }
-                }}
-                onClose={() => setSelectionMode(null)}
-              />
-            ) : selectionMode === 'weapon' ? (
-              <WeaponSelectorOverlay
-                open
-                slots={slots.slice(0, visibleWeaponCount)}
-                weapons={allWeapons}
-                targetSlotIndex={Math.max(
-                  0,
-                  Math.min(visibleWeaponCount - 1, weaponOverlayTargetIndex)
-                )}
-                activeSlotIndex={Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))}
-                selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
-                weaponFilterPreset={weaponOverlayFilterPreset}
-                onSetActiveSlot={handleWeaponOverlaySlotActivate}
-                onSelectWeapon={handleWeaponSelect}
-                onClearWeapon={(slotIndex) => {
-                  const slot = slots[slotIndex]
-                  if (!slot) return
-                  setSlotWeapon(slot.id, null)
-                  setActiveWeaponSlotIndex(slotIndex)
-                  setHoveredWeaponSlotIndex(null)
-                  setSelectionNotice(null)
-                  weaponClearStreakRef.current += 1
-                  if (weaponClearStreakRef.current >= 2) {
-                    setWeaponAutoAdvance(true)
-                    weaponClearStreakRef.current = 0
-                  }
-                }}
-                onClose={() => {
-                  setWeaponOverlayFilterPreset(null)
-                  setSelectionMode(null)
-                }}
-              />
-            ) : null
-          }
+    <section className="alpha-threshold-tool" aria-label="Alpha threshold tool">
+      <ThresholdHeatmapBoard
+        ships={previewShips}
+        selectedWeapons={previewWeapons}
+        allWeapons={allWeapons}
+        shieldMode={shieldMode}
+        matrixMode={matrixMode}
+        targetWeaponFilterPreset={targetWeaponFilterPreset}
+        onTargetWeaponFilterPresetChange={setTargetWeaponFilterPreset}
+        targetWeaponSizeFilter={targetWeaponSizeFilter}
+        onTargetWeaponSizeFilterChange={setTargetWeaponSizeFilter}
+        analysisColumnCount={analysisColumnCount}
+        onAnalysisColumnCountChange={setAnalysisColumnCount}
+        targetColumnCount={targetColumnCount}
+        onTargetColumnCountChange={setTargetColumnCount}
+        hideHeaderRow={false}
+        selectionMode={selectionMode}
+        nextShipSlotIndex={effectiveShipSlotIndex}
+        nextWeaponSlotIndex={effectiveWeaponSlotIndex}
+        onShieldModeChange={handleShieldModeChange}
+        onMatrixModeChange={setMatrixMode}
+        onOpenWeapons={handleOpenWeapons}
+        onOpenShips={handleOpenShips}
+        onOpenWeaponsAt={handleOpenWeaponsAt}
+        onOpenShipsAt={handleOpenShipsAt}
+        onboardingHighlight={onboardingHighlight}
+      />
+      {selectionMode === 'ship' ? (
+        <ShipSelectorOverlay
+          open
+          allShips={allShips}
+          selectedShipNames={selectedShipNames}
+          maxVictimShips={visibleShipCount}
+          activeSlotIndex={Math.max(0, Math.min(visibleShipCount - 1, activeShipSlotIndex))}
+          selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
+          onSetActiveSlot={handleShipOverlaySlotActivate}
+          onSelectShip={handleShipSelect}
+          onClearShip={(slotIndex) => {
+            setVictimShipAt(slotIndex, null)
+            setActiveShipSlotIndex(slotIndex)
+            setHoveredShipSlotIndex(null)
+            setSelectionNotice(null)
+            shipClearStreakRef.current += 1
+            if (shipClearStreakRef.current >= 2) {
+              setShipAutoAdvance(true)
+              shipClearStreakRef.current = 0
+            }
+          }}
+          onClose={() => setSelectionMode(null)}
         />
-      </div>
+      ) : selectionMode === 'weapon' ? (
+        <WeaponSelectorOverlay
+          open
+          slots={slots.slice(0, visibleWeaponCount)}
+          weapons={allWeapons}
+          targetSlotIndex={Math.max(0, Math.min(visibleWeaponCount - 1, weaponOverlayTargetIndex))}
+          activeSlotIndex={Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))}
+          selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
+          weaponFilterPreset={weaponOverlayFilterPreset}
+          onSetActiveSlot={handleWeaponOverlaySlotActivate}
+          onSelectWeapon={handleWeaponSelect}
+          onClearWeapon={(slotIndex) => {
+            const slot = slots[slotIndex]
+            if (!slot) return
+            setSlotWeapon(slot.id, null)
+            setActiveWeaponSlotIndex(slotIndex)
+            setHoveredWeaponSlotIndex(null)
+            setSelectionNotice(null)
+            weaponClearStreakRef.current += 1
+            if (weaponClearStreakRef.current >= 2) {
+              setWeaponAutoAdvance(true)
+              weaponClearStreakRef.current = 0
+            }
+          }}
+          onClose={() => {
+            setWeaponOverlayFilterPreset(null)
+            setSelectionMode(null)
+          }}
+        />
+      ) : null}
       {!onboardingDismissed && !isMobileViewport ? (
         <AlphaThresholdOnboardingModal
           onHighlightChange={handleOnboardingHighlight}

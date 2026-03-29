@@ -347,13 +347,7 @@ function getMatrixGridStyle(columnCount: number): CSSProperties {
   }
 }
 
-function MatrixShipThumbnail({
-  ship,
-  layout = 'inline',
-}: {
-  ship: Ship
-  layout?: 'inline' | 'fill'
-}) {
+function MatrixShipThumbnail({ ship }: { ship: Ship }) {
   const candidates = useMemo(
     () => getShipThumbnailCandidates(ship),
     [ship.id, ship.imageAlt, ship.imageSrc, ship.manufacturer, ship.name]
@@ -367,16 +361,11 @@ function MatrixShipThumbnail({
   const current = candidates[Math.min(candidateIndex, candidates.length - 1)]
   const canAdvance = candidateIndex < candidates.length - 1
 
-  const imageClass =
-    layout === 'fill'
-      ? 'alpha-comparison-matrix-ship-image alpha-comparison-matrix-ship-image--fill'
-      : 'alpha-comparison-matrix-ship-image'
-
   return (
     <img
-      className={imageClass}
+      className="acm-ship-image acm-ship-image--fill"
       src={current.src}
-      alt={layout === 'fill' ? '' : current.alt}
+      alt=""
       loading="lazy"
       onError={() => {
         if (!canAdvance) return
@@ -632,32 +621,32 @@ export function ThresholdComparisonMatrix({
     <section
       className={[
         'alpha-threshold-tab-panel',
-        'alpha-comparison-matrix-panel',
-        matrixMode === 'target' ? 'alpha-comparison-matrix-panel-target' : '',
-        isPlaceholderPreview ? 'alpha-comparison-matrix-placeholder-preview' : '',
-        selectionMode ? 'alpha-comparison-matrix-selection-active' : '',
-        selectionMode === 'ship' ? 'alpha-comparison-matrix-selection-ship' : '',
-        selectionMode === 'weapon' ? 'alpha-comparison-matrix-selection-weapon' : '',
+        'acm-panel',
+        matrixMode === 'target' ? 'acm-panel-target' : '',
+        isPlaceholderPreview ? 'acm-placeholder-preview' : '',
+        selectionMode ? 'acm-selection-active' : '',
+        selectionMode === 'ship' ? 'acm-selection-ship' : '',
+        selectionMode === 'weapon' ? 'acm-selection-weapon' : '',
       ].filter(Boolean).join(' ')}
-      aria-label="Threshold comparison matrix"
+      aria-label="Weapons Analysis board"
     >
       {controlStrip ? <div className="alpha-analysis-control-shell">{controlStrip}</div> : null}
-      <div className="alpha-comparison-matrix-toolbar" aria-label="Threshold controls">
-        <div className="alpha-comparison-matrix-toolbar-group alpha-comparison-matrix-toolbar-group--home">
+      <div className="acm-toolbar" aria-label="Threshold controls">
+        <div className="acm-toolbar-group acm-toolbar-group--home">
           <NavLink
             to="/"
             end
             className={({ isActive }) =>
               [
-                'alpha-comparison-matrix-toolbar-home',
-                isActive ? 'alpha-comparison-matrix-toolbar-home-active' : '',
+                'acm-toolbar-home',
+                isActive ? 'acm-toolbar-home-active' : '',
               ]
                 .filter(Boolean)
                 .join(' ')
             }
             aria-label="Home"
           >
-            <svg aria-hidden viewBox="0 0 24 24" className="alpha-comparison-matrix-toolbar-home-icon">
+            <svg aria-hidden viewBox="0 0 24 24" className="acm-toolbar-home-icon">
               <path
                 d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
                 fill="currentColor"
@@ -665,23 +654,23 @@ export function ThresholdComparisonMatrix({
             </svg>
           </NavLink>
         </div>
-        <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-        <div className="alpha-comparison-matrix-toolbar-group">
-          <span className="alpha-comparison-matrix-toolbar-label">Source</span>
-          <div className="alpha-comparison-matrix-toolbar-segments" role="radiogroup" aria-label="Source">
+        <span className="acm-toolbar-divider" aria-hidden="true" />
+        <div className="acm-toolbar-group">
+          <span className="acm-toolbar-label">Source</span>
+          <div className="acm-toolbar-segments" role="radiogroup" aria-label="Source">
             {(
               [
                 ['ptu', 'PTU'],
                 ['live', 'LIVE'],
               ] as const
             ).map(([id, label], index) => (
-              <span key={id} className="alpha-comparison-matrix-toolbar-seg-wrap">
-                {index > 0 ? <span className="alpha-comparison-matrix-toolbar-seg-sep" aria-hidden>|</span> : null}
+              <span key={id} className="acm-toolbar-seg-wrap">
+                {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
                 <button
                   type="button"
                   className={[
-                    'alpha-comparison-matrix-toolbar-seg',
-                    sourceMode === id ? 'alpha-comparison-matrix-toolbar-seg--active' : '',
+                    'acm-toolbar-seg',
+                    sourceMode === id ? 'acm-toolbar-seg--active' : '',
                   ].filter(Boolean).join(' ')}
                   role="radio"
                   aria-checked={sourceMode === id}
@@ -693,23 +682,23 @@ export function ThresholdComparisonMatrix({
             ))}
           </div>
         </div>
-        <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-        <div className="alpha-comparison-matrix-toolbar-group">
-          <span className="alpha-comparison-matrix-toolbar-label">Mode</span>
-          <div className="alpha-comparison-matrix-toolbar-segments" role="radiogroup" aria-label="Mode">
+        <span className="acm-toolbar-divider" aria-hidden="true" />
+        <div className="acm-toolbar-group">
+          <span className="acm-toolbar-label">Mode</span>
+          <div className="acm-toolbar-segments" role="radiogroup" aria-label="Mode">
             {(
               [
                 ['analysis', 'Analysis'],
                 ['target', 'Target'],
               ] as const
             ).map(([id, label], index) => (
-              <span key={id} className="alpha-comparison-matrix-toolbar-seg-wrap">
-                {index > 0 ? <span className="alpha-comparison-matrix-toolbar-seg-sep" aria-hidden>|</span> : null}
+              <span key={id} className="acm-toolbar-seg-wrap">
+                {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
                 <button
                   type="button"
                   className={[
-                    'alpha-comparison-matrix-toolbar-seg',
-                    matrixMode === id ? 'alpha-comparison-matrix-toolbar-seg--active' : '',
+                    'acm-toolbar-seg',
+                    matrixMode === id ? 'acm-toolbar-seg--active' : '',
                   ].filter(Boolean).join(' ')}
                   role="radio"
                   aria-checked={matrixMode === id}
@@ -721,27 +710,27 @@ export function ThresholdComparisonMatrix({
             ))}
           </div>
         </div>
-        <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-        <div className="alpha-comparison-matrix-toolbar-group">
-          <span className="alpha-comparison-matrix-toolbar-label">Shields</span>
-          <div className="alpha-comparison-matrix-toolbar-segments" role="group" aria-label="Shields">
+        <span className="acm-toolbar-divider" aria-hidden="true" />
+        <div className="acm-toolbar-group">
+          <span className="acm-toolbar-label">Shields</span>
+          <div className="acm-toolbar-segments" role="group" aria-label="Shields">
             <button
               type="button"
               className={[
-                'alpha-comparison-matrix-toolbar-seg',
-                shieldMode === 'up' ? 'alpha-comparison-matrix-toolbar-seg--active-shield-on' : '',
+                'acm-toolbar-seg',
+                shieldMode === 'up' ? 'acm-toolbar-seg--active-shield-on' : '',
               ].filter(Boolean).join(' ')}
               aria-pressed={shieldMode === 'up'}
               onClick={() => onShieldModeChange('up')}
             >
               ON
             </button>
-            <span className="alpha-comparison-matrix-toolbar-seg-sep" aria-hidden>/</span>
+            <span className="acm-toolbar-seg-sep" aria-hidden>/</span>
             <button
               type="button"
               className={[
-                'alpha-comparison-matrix-toolbar-seg',
-                shieldMode === 'down' ? 'alpha-comparison-matrix-toolbar-seg--active-shield-off' : '',
+                'acm-toolbar-seg',
+                shieldMode === 'down' ? 'acm-toolbar-seg--active-shield-off' : '',
               ].filter(Boolean).join(' ')}
               aria-pressed={shieldMode === 'down'}
               onClick={() => onShieldModeChange('down')}
@@ -750,13 +739,13 @@ export function ThresholdComparisonMatrix({
             </button>
           </div>
         </div>
-        <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-        <div className="alpha-comparison-matrix-toolbar-group">
-          <span className="alpha-comparison-matrix-toolbar-label">Columns</span>
-          <div className="alpha-comparison-matrix-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
+        <span className="acm-toolbar-divider" aria-hidden="true" />
+        <div className="acm-toolbar-group">
+          <span className="acm-toolbar-label">Columns</span>
+          <div className="acm-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
             <button
               type="button"
-              className="alpha-comparison-matrix-toolbar-stepper-button"
+              className="acm-toolbar-stepper-button"
               aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
               onClick={() =>
                 matrixMode === 'target'
@@ -770,12 +759,12 @@ export function ThresholdComparisonMatrix({
             >
               -
             </button>
-            <span className="alpha-comparison-matrix-toolbar-stepper-value" aria-live="polite">
+            <span className="acm-toolbar-stepper-value" aria-live="polite">
               {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
             </span>
             <button
               type="button"
-              className="alpha-comparison-matrix-toolbar-stepper-button"
+              className="acm-toolbar-stepper-button"
               aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
               onClick={() =>
                 matrixMode === 'target'
@@ -793,19 +782,19 @@ export function ThresholdComparisonMatrix({
         </div>
         {matrixMode === 'target' ? (
           <>
-            <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-            <div className="alpha-comparison-matrix-toolbar-group">
-              <span className="alpha-comparison-matrix-toolbar-label">Type</span>
-              <div className="alpha-comparison-matrix-toolbar-segments" role="radiogroup" aria-label="Weapon type filter">
+            <span className="acm-toolbar-divider" aria-hidden="true" />
+            <div className="acm-toolbar-group">
+              <span className="acm-toolbar-label">Type</span>
+              <div className="acm-toolbar-segments" role="radiogroup" aria-label="Weapon type filter">
                 {(['ballistic', 'energy'] as const).map((value, index) => (
-                  <span key={value} className="alpha-comparison-matrix-toolbar-seg-wrap">
-                    {index > 0 ? <span className="alpha-comparison-matrix-toolbar-seg-sep" aria-hidden>|</span> : null}
+                  <span key={value} className="acm-toolbar-seg-wrap">
+                    {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
                     <button
                       type="button"
                       className={[
-                        'alpha-comparison-matrix-toolbar-seg',
+                        'acm-toolbar-seg',
                         targetWeaponFilterPreset?.kind === 'damageType' && targetWeaponFilterPreset.value === value
-                          ? 'alpha-comparison-matrix-toolbar-seg--active'
+                          ? 'acm-toolbar-seg--active'
                           : '',
                       ].filter(Boolean).join(' ')}
                       role="radio"
@@ -829,15 +818,15 @@ export function ThresholdComparisonMatrix({
                 ))}
               </div>
             </div>
-            <span className="alpha-comparison-matrix-toolbar-divider" aria-hidden="true" />
-            <div className="alpha-comparison-matrix-toolbar-group alpha-comparison-matrix-toolbar-group--size">
-              <label className="alpha-comparison-matrix-toolbar-label" htmlFor="alpha-comparison-matrix-size-filter">
+            <span className="acm-toolbar-divider" aria-hidden="true" />
+            <div className="acm-toolbar-group acm-toolbar-group--size">
+              <label className="acm-toolbar-label" htmlFor="acm-size-filter">
                 Size
               </label>
-              <div className="alpha-comparison-matrix-toolbar-select-wrap">
+              <div className="acm-toolbar-select-wrap">
                 <select
-                  id="alpha-comparison-matrix-size-filter"
-                  className="alpha-comparison-matrix-toolbar-select"
+                  id="acm-size-filter"
+                  className="acm-toolbar-select"
                   aria-label="Weapon size filter"
                   value={targetWeaponSizeFilter == null ? 'all' : String(targetWeaponSizeFilter)}
                   onChange={(event) =>
@@ -853,7 +842,7 @@ export function ThresholdComparisonMatrix({
                     </option>
                   ))}
                 </select>
-                <span className="alpha-comparison-matrix-toolbar-select-caret" aria-hidden="true">
+                <span className="acm-toolbar-select-caret" aria-hidden="true">
                   v
                 </span>
               </div>
@@ -862,48 +851,48 @@ export function ThresholdComparisonMatrix({
         ) : null}
       </div>
 
-      <div className="alpha-comparison-matrix-shell">
-          <div className="alpha-comparison-matrix-scroll">
+      <div className="acm-shell">
+          <div className="acm-scroll">
             <div
-              className="alpha-comparison-matrix-table"
+              className="acm-table"
               style={gridStyle}
               data-weapon-count={matrixMode === 'target' ? normalizedTargetColumnCount : bodyWeapons.length}
             >
               {hideHeaderRow || matrixMode === 'target' ? null : (
-                <div className="alpha-comparison-matrix-header-row">
+                <div className="acm-header-row">
                   <div
                     className={[
-                      'alpha-comparison-matrix-corner',
-                      'alpha-comparison-matrix-corner-spacer',
+                      'acm-corner',
+                      'acm-corner-spacer',
                       onboardingHighlight === 'shield' ? 'alpha-onboarding-target-highlight' : '',
                     ].filter(Boolean).join(' ')}
                     aria-hidden="true"
                   >
-                    <div className="alpha-comparison-matrix-corner-spacer-bar" />
+                    <div className="acm-corner-spacer-bar" />
                   </div>
                   {headerColumns.map(({ columnIndex, key, slotLabel: weaponSlotLabel, selection, placeholderWeapon }) => {
                     const isDestinationColumn =
                       selectionMode === 'weapon' && columnIndex === activeWeaponDestinationIndex
                     const panelToneClass =
-                      `alpha-comparison-matrix-panel-tone-${DESTINATION_TONES[columnIndex % DESTINATION_TONES.length]}`
+                      `acm-panel-tone-${DESTINATION_TONES[columnIndex % DESTINATION_TONES.length]}`
                     const destinationToneClass = isDestinationColumn
-                      ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
+                      ? `acm-destination-${activeWeaponTone}`
                       : ''
 
                     return (
                       <header
                         key={key}
                         className={[
-                          'alpha-comparison-matrix-weapon-header',
-                          placeholderWeapon ? 'alpha-comparison-matrix-weapon-header-empty' : '',
+                          'acm-weapon-header',
+                          placeholderWeapon ? 'acm-weapon-header-empty' : '',
                           panelToneClass,
-                          placeholderWeapon ? 'alpha-comparison-matrix-panel-placeholder' : '',
-                          isDestinationColumn ? 'alpha-comparison-matrix-destination-column' : '',
+                          placeholderWeapon ? 'acm-panel-placeholder' : '',
+                          isDestinationColumn ? 'acm-destination-column' : '',
                           destinationToneClass,
                           !selectionMode &&
                           selection &&
                           activeColumnId === selection.slotId
-                            ? 'alpha-comparison-matrix-weapon-header-matrix-axis-active'
+                            ? 'acm-weapon-header-matrix-axis-active'
                             : '',
                           onboardingHighlight === 'ship-weapon' && columnIndex === 0
                             ? 'alpha-onboarding-target-highlight'
@@ -950,16 +939,16 @@ export function ThresholdComparisonMatrix({
                         }}
                       >
                         {placeholderWeapon ? (
-                          <div className="alpha-comparison-matrix-weapon-empty">
-                            <p className="alpha-comparison-matrix-weapon-empty-label">{weaponSlotLabel}</p>
-                            <p className="alpha-comparison-matrix-weapon-empty-hint">Select weapon</p>
+                          <div className="acm-weapon-empty">
+                            <p className="acm-weapon-empty-label">{weaponSlotLabel}</p>
+                            <p className="acm-weapon-empty-hint">Select weapon</p>
                           </div>
                         ) : selection ? (
-                          <div className="alpha-comparison-matrix-weapon-header-body">
-                            <h3 className="alpha-comparison-matrix-weapon-name">
+                          <div className="acm-weapon-header-body">
+                            <h3 className="acm-weapon-name">
                               {formatEntityLabel(selection.weapon.name)}
                             </h3>
-                            <p className="alpha-comparison-matrix-weapon-meta">
+                            <p className="acm-weapon-meta">
                               {`${formatWeaponClassLabel(selection.weapon.weaponClass)} - ${getVelocityLabel(selection)}`}
                             </p>
                           </div>
@@ -970,16 +959,16 @@ export function ThresholdComparisonMatrix({
                 </div>
               )}
 
-              <div className="alpha-comparison-matrix-body">
+              <div className="acm-body">
                 {visibleShips.map((ship) => {
                   const rowIndex = visibleShips.findIndex((entry) => entry.id === ship.id)
                   const placeholderShip = isPlaceholderShip(ship)
                   const isDestinationRow =
                     selectionMode === 'ship' && rowIndex === activeShipDestinationIndex
                   const rowPanelToneClass =
-                    `alpha-comparison-matrix-panel-tone-${DESTINATION_TONES[rowIndex % DESTINATION_TONES.length]}`
+                    `acm-panel-tone-${DESTINATION_TONES[rowIndex % DESTINATION_TONES.length]}`
                   const destinationToneClass = isDestinationRow
-                    ? `alpha-comparison-matrix-destination-${activeShipTone}`
+                    ? `acm-destination-${activeShipTone}`
                     : ''
                   const shipSlotLabel = `Ship ${rowIndex + 1}`
                   const isTargetMode = matrixMode === 'target'
@@ -999,7 +988,7 @@ export function ThresholdComparisonMatrix({
                   return (
                     <div
                       key={ship.id}
-                      className="alpha-comparison-matrix-row"
+                      className="acm-row"
                       data-row-index={rowIndex}
                       onPointerEnter={() => {
                         if (selectionMode || placeholderShip) {
@@ -1025,17 +1014,17 @@ export function ThresholdComparisonMatrix({
                     >
                       <article
                         className={[
-                          'alpha-comparison-matrix-ship-card',
-                          placeholderShip ? 'alpha-comparison-matrix-ship-card-empty' : '',
-                          !placeholderShip ? 'alpha-comparison-matrix-ship-card--fill' : '',
+                          'acm-ship-card',
+                          placeholderShip ? 'acm-ship-card-empty' : '',
+                          !placeholderShip ? 'acm-ship-card--fill' : '',
                           rowPanelToneClass,
-                          placeholderShip ? 'alpha-comparison-matrix-panel-placeholder' : '',
+                          placeholderShip ? 'acm-panel-placeholder' : '',
                           destinationToneClass,
                           selectionMode && isDestinationRow
-                            ? 'alpha-comparison-matrix-ship-card-destination-active'
+                            ? 'acm-ship-card-destination-active'
                             : '',
                           shipRowMatrixAxisActive
-                            ? 'alpha-comparison-matrix-ship-card-matrix-axis-active'
+                            ? 'acm-ship-card-matrix-axis-active'
                             : '',
                           onboardingHighlight === 'ship-weapon' && rowIndex === 0
                             ? 'alpha-onboarding-target-highlight'
@@ -1055,68 +1044,60 @@ export function ThresholdComparisonMatrix({
                         }}
                       >
                         {placeholderShip ? (
-                          <div className="alpha-comparison-matrix-ship-empty">
-                            <p className="alpha-comparison-matrix-ship-empty-label">{shipSlotLabel}</p>
-                            <p className="alpha-comparison-matrix-ship-empty-hint">Select ship</p>
+                          <div className="acm-ship-empty">
+                            <p className="acm-ship-empty-label">{shipSlotLabel}</p>
+                            <p className="acm-ship-empty-hint">Select ship</p>
                           </div>
                         ) : (
                           <>
-                            <div className="alpha-comparison-matrix-ship-card-body">
-                              <div className="alpha-comparison-matrix-ship-fill" aria-hidden="true">
-                                {ship.name ? (
-                                  <MatrixShipThumbnail ship={ship} layout="fill" />
-                                ) : (
-                                  <div
-                                    className="alpha-comparison-matrix-ship-image-fallback alpha-comparison-matrix-ship-image-fallback--fill"
-                                    aria-hidden="true"
-                                  >
-                                    {formatEntityLabel(ship.manufacturer).slice(0, 2)}
-                                  </div>
-                                )}
-                                <div className="alpha-comparison-matrix-ship-fill-scrim" />
-                              </div>
+                            <div className="acm-ship-card-body">
+                              {ship.name ? (
+                                <MatrixShipThumbnail ship={ship} />
+                              ) : (
+                                <div
+                                  className="acm-ship-image-fallback acm-ship-image-fallback--fill"
+                                  aria-hidden="true"
+                                >
+                                  {formatEntityLabel(ship.manufacturer).slice(0, 2)}
+                                </div>
+                              )}
+                              <div className="acm-ship-fill-scrim" aria-hidden="true" />
 
-                              <div className="alpha-comparison-matrix-ship-foreground">
-                                <div className="alpha-comparison-matrix-ship-header">
-                                  <div className="alpha-comparison-matrix-ship-media" aria-hidden="true">
-                                    {ship.name ? (
-                                      <MatrixShipThumbnail ship={ship} layout="inline" />
-                                    ) : (
-                                      <div className="alpha-comparison-matrix-ship-image-fallback">
-                                        {formatEntityLabel(ship.manufacturer).slice(0, 2)}
-                                      </div>
-                                    )}
-                                  </div>
-                                  <div className="alpha-comparison-matrix-ship-copy">
-                                    <h3 className="alpha-comparison-matrix-ship-name">
+                              <div className="acm-ship-foreground">
+                                <div className="acm-ship-header">
+                                  <div className="acm-ship-copy">
+                                    <p className="acm-ship-eyebrow">
+                                      {formatEntityLabel(ship.manufacturer)}
+                                    </p>
+                                    <h3 className="acm-ship-name">
                                       {formatEntityLabel(ship.name)}
-                                      <span className="alpha-comparison-matrix-ship-name-role">
-                                        {getShipRoleLabel(ship)}
-                                      </span>
                                     </h3>
+                                    <span className="acm-ship-name-role">
+                                      {getShipRoleLabel(ship)}
+                                    </span>
                                   </div>
                                 </div>
 
-                                <dl className="alpha-comparison-matrix-ship-inline-stats" aria-label="Ship stats">
-                                  <div className="alpha-comparison-matrix-ship-inline-stat">
-                                    <dt>Flight</dt>
-                                    <dd>{ship.sizeGroup.toUpperCase()}</dd>
+                                <dl className="acm-ship-inline-stats" aria-label="Ship stats">
+                                  <div className="acm-ship-stat-box">
+                                    <div className="acm-ship-inline-stat">
+                                      <dt>NAV</dt>
+                                      <dd>{getCompactMetricLabel(ship.navSpeed)}</dd>
+                                    </div>
+                                    <div className="acm-ship-inline-stat">
+                                      <dt>SCM</dt>
+                                      <dd>{getCompactMetricLabel(ship.scmSpeed)}</dd>
+                                    </div>
                                   </div>
-                                  <div className="alpha-comparison-matrix-ship-inline-stat">
-                                    <dt>NAV</dt>
-                                    <dd>{getCompactMetricLabel(ship.navSpeed)}</dd>
-                                  </div>
-                                  <div className="alpha-comparison-matrix-ship-inline-stat">
-                                    <dt>SCM</dt>
-                                    <dd>{getCompactMetricLabel(ship.scmSpeed)}</dd>
-                                  </div>
-                                  <div className="alpha-comparison-matrix-ship-inline-stat">
-                                    <dt>Armor HP</dt>
-                                    <dd>{formatMetric(ship.armorHp)}</dd>
-                                  </div>
-                                  <div className="alpha-comparison-matrix-ship-inline-stat">
-                                    <dt>Hull HP</dt>
-                                    <dd>{formatMetric(ship.vitalHp)}</dd>
+                                  <div className="acm-ship-stat-box">
+                                    <div className="acm-ship-inline-stat">
+                                      <dt>Armor HP</dt>
+                                      <dd>{formatMetric(ship.armorHp)}</dd>
+                                    </div>
+                                    <div className="acm-ship-inline-stat">
+                                      <dt>Hull HP</dt>
+                                      <dd>{formatMetric(ship.vitalHp)}</dd>
+                                    </div>
                                   </div>
                                 </dl>
                               </div>
@@ -1134,7 +1115,7 @@ export function ThresholdComparisonMatrix({
                           !placeholderWeapon
                         const columnToneClass =
                           isDestinationColumnForCells
-                            ? `alpha-comparison-matrix-destination-${activeWeaponTone}`
+                            ? `acm-destination-${activeWeaponTone}`
                             : ''
                         const model = selection
                           ? (cellModels.get(`${ship.id}:${selection.slotId}`) as
@@ -1181,7 +1162,7 @@ export function ThresholdComparisonMatrix({
                         function openMatrixCellTooltip(
                           event: PointerEvent<HTMLButtonElement> | FocusEvent<HTMLButtonElement>
                         ) {
-                          const cell = event.currentTarget.closest('.alpha-comparison-matrix-cell')
+                          const cell = event.currentTarget.closest('.acm-cell')
                           if (!(cell instanceof HTMLElement)) return
                           const rect = cell.getBoundingClientRect()
                           setMatrixTooltip({
@@ -1218,24 +1199,23 @@ export function ThresholdComparisonMatrix({
                           <article
                             key={`${ship.id}:${key}`}
                             className={[
-                              'alpha-comparison-matrix-cell',
-                              rowIndex === 0 && columnIndex === 0 ? 'alpha-matrix-first-cell-anchor' : '',
-                              activeResult ? `alpha-comparison-matrix-cell-${activeResult.tone}` : '',
-                              placeholderCell ? 'alpha-comparison-matrix-panel-placeholder' : '',
-                              rowSegmentActive ? 'alpha-comparison-matrix-cell-row-active' : '',
-                              columnSegmentActive ? 'alpha-comparison-matrix-cell-column-active' : '',
-                              isHoverAnchorCell ? 'alpha-comparison-matrix-cell-hover-anchor' : '',
+                              'acm-cell',
+                              activeResult ? `acm-cell-${activeResult.tone}` : '',
+                              placeholderCell ? 'acm-panel-placeholder' : '',
+                              rowSegmentActive ? 'acm-cell-row-active' : '',
+                              columnSegmentActive ? 'acm-cell-column-active' : '',
+                              isHoverAnchorCell ? 'acm-cell-hover-anchor' : '',
                               selectionMode &&
                               !placeholderCell &&
                               isDestinationColumnForCells
-                                ? 'alpha-comparison-matrix-cell-destination-active'
+                                ? 'acm-cell-destination-active'
                                 : '',
-                              shieldBlocked ? 'alpha-comparison-matrix-cell-shield-blocked' : '',
+                              shieldBlocked ? 'acm-cell-shield-blocked' : '',
                               shieldBlocked && !isPrimaryShieldBlockedPanel
-                                ? 'alpha-comparison-matrix-cell-shield-blocked-muted'
+                                ? 'acm-cell-shield-blocked-muted'
                                 : '',
                               !placeholderCell && isDestinationColumnForCells
-                                ? 'alpha-comparison-matrix-destination-column-cell'
+                                ? 'acm-destination-column-cell'
                                 : '',
                               columnToneClass,
                             ].filter(Boolean).join(' ')}
@@ -1295,26 +1275,26 @@ export function ThresholdComparisonMatrix({
                               }
                             }}
                           >
-                            <div className="alpha-comparison-matrix-cell-content" aria-hidden={shieldBlocked || undefined}>
+                            <div className="acm-cell-content" aria-hidden={shieldBlocked || undefined}>
                               {matrixMode === 'target' ? (
                                 targetRecommendation ? (
                                   <>
-                                    <div className="alpha-comparison-matrix-cell-meta-row">
-                                      <p className="alpha-comparison-matrix-cell-state">
+                                    <div className="acm-cell-meta-row">
+                                      <p className="acm-cell-state">
                                         {formatWeaponTypeLabel({
                                           damageType: targetRecommendation.weapon.damageType,
                                           weaponClass: targetRecommendation.weapon.weaponClass,
                                         })}
                                       </p>
-                                      <p className="alpha-comparison-matrix-cell-shield-chip">
+                                      <p className="acm-cell-shield-chip">
                                         {targetRecommendation.weapon.projectileSpeed != null
                                           ? `${formatMetric(targetRecommendation.weapon.projectileSpeed)} m/s`
                                           : 'Velocity Unknown'}
                                       </p>
                                     </div>
-                                    <div className="alpha-comparison-matrix-cell-title-row alpha-comparison-matrix-cell-title-row--target">
+                                    <div className="acm-cell-title-row acm-cell-title-row--target">
                                       <p
-                                        className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-target-rating"
+                                        className="acm-cell-summary acm-target-rating"
                                         style={{
                                           color: getEffectivePenetrationSummaryColor(
                                             targetRecommendation.firstPenetrationArmorPercent ?? 0
@@ -1323,11 +1303,11 @@ export function ThresholdComparisonMatrix({
                                       >
                                         {getTargetRecommendationRating(targetRecommendation)}
                                       </p>
-                                      <p className="alpha-comparison-matrix-target-weapon-name">
+                                      <p className="acm-target-weapon-name">
                                         {targetRecommendation.weapon.name}
                                       </p>
                                     </div>
-                                    <div className="alpha-comparison-matrix-target-stats alpha-comparison-matrix-cell-inline-metrics">
+                                    <div className="acm-target-stats acm-cell-inline-metrics">
                                       <span>
                                         <strong>Alpha</strong>
                                         {formatMetric(targetRecommendation.weapon.alpha ?? 0)}
@@ -1343,27 +1323,27 @@ export function ThresholdComparisonMatrix({
                                     </div>
                                   </>
                               ) : (
-                                  <div className="alpha-comparison-matrix-weapon-empty">
-                                    <p className="alpha-comparison-matrix-weapon-empty-label">
+                                  <div className="acm-weapon-empty">
+                                    <p className="acm-weapon-empty-label">
                                       No match
                                     </p>
                                   </div>
                                 )
                               ) : placeholderCell ? (
                                 <>
-                                  <div className="alpha-comparison-matrix-cell-meta-row">
-                                    <p className="alpha-comparison-matrix-cell-state alpha-comparison-matrix-cell-detail-blur">Armor</p>
+                                  <div className="acm-cell-meta-row">
+                                    <p className="acm-cell-state acm-cell-detail-blur">Armor</p>
                                   </div>
-                                  <div className="alpha-comparison-matrix-cell-title-row">
+                                  <div className="acm-cell-title-row">
                                     <p
-                                      className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur"
+                                      className="acm-cell-summary acm-cell-detail-blur"
                                       style={{
                                         color: getEffectivePenetrationSummaryColor(0),
                                       }}
                                     >
                                       E0
                                     </p>
-                                    <div className="alpha-comparison-matrix-cell-inline-metrics alpha-comparison-matrix-cell-detail-blur">
+                                    <div className="acm-cell-inline-metrics acm-cell-detail-blur">
                                       <span>
                                         <strong>T</strong>0
                                       </span>
@@ -1372,27 +1352,27 @@ export function ThresholdComparisonMatrix({
                                       </span>
                                     </div>
                                   </div>
-                                  <div className="alpha-comparison-matrix-cell-chart">
-                                    <div className="alpha-comparison-matrix-cell-track-scale alpha-comparison-matrix-cell-detail-blur">
+                                  <div className="acm-cell-chart">
+                                    <div className="acm-cell-track-scale acm-cell-detail-blur">
                                       <span>100% armor</span>
                                       <span>0% armor</span>
                                     </div>
                                     <div
-                                      className="alpha-comparison-matrix-cell-track alpha-comparison-matrix-cell-detail-blur"
+                                      className="acm-cell-track acm-cell-detail-blur"
                                       aria-label="Armor placeholder threshold marker"
                                     >
                                       <div
-                                        className="alpha-comparison-matrix-cell-track-fill alpha-comparison-matrix-cell-track-fill--full alpha-comparison-matrix-cell-detail-blur"
+                                        className="acm-cell-track-fill acm-cell-track-fill--full acm-cell-detail-blur"
                                         style={{ width: '100%' }}
                                       />
                                       <span
-                                        className="alpha-comparison-matrix-cell-marker"
+                                        className="acm-cell-marker"
                                         style={{ left: '100%' }}
                                       />
                                     </div>
-                                    <div className="alpha-comparison-matrix-cell-track-caption-row">
+                                    <div className="acm-cell-track-caption-row">
                                       <span
-                                        className="alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-end alpha-comparison-matrix-cell-detail-blur"
+                                        className="acm-cell-track-caption acm-cell-track-caption-end acm-cell-detail-blur"
                                         style={{ left: '100%' }}
                                       >
                                         Damage start
@@ -1402,17 +1382,17 @@ export function ThresholdComparisonMatrix({
                                 </>
                               ) : activeResult ? (
                                 <>
-                                  <div className="alpha-comparison-matrix-cell-meta-row">
-                                    <p className="alpha-comparison-matrix-cell-state alpha-comparison-matrix-cell-detail-blur">
+                                  <div className="acm-cell-meta-row">
+                                    <p className="acm-cell-state acm-cell-detail-blur">
                                       {activeResult.stateLabel}
                                     </p>
-                                    <p className="alpha-comparison-matrix-cell-shield-chip">
+                                    <p className="acm-cell-shield-chip">
                                       {activeResult.shieldChipLabel}
                                     </p>
                                   </div>
-                                  <div className="alpha-comparison-matrix-cell-title-row">
+                                  <div className="acm-cell-title-row">
                                     <p
-                                      className="alpha-comparison-matrix-cell-summary alpha-comparison-matrix-cell-detail-blur"
+                                      className="acm-cell-summary acm-cell-detail-blur"
                                       style={{
                                         color: getEffectivePenetrationSummaryColor(
                                           activeResult.penetrationEffectivePercent
@@ -1421,7 +1401,7 @@ export function ThresholdComparisonMatrix({
                                     >
                                       {activeResult.penetrationLabel}
                                     </p>
-                                    <div className="alpha-comparison-matrix-cell-inline-metrics alpha-comparison-matrix-cell-detail-blur">
+                                    <div className="acm-cell-inline-metrics acm-cell-detail-blur">
                                       <span>
                                         <strong>T</strong>
                                         {formatMetric(activeResult.estimate.deflectionThreshold)}
@@ -1433,16 +1413,16 @@ export function ThresholdComparisonMatrix({
                                     </div>
                                   </div>
 
-                                  <div className="alpha-comparison-matrix-cell-chart">
-                                    <div className="alpha-comparison-matrix-cell-track-scale alpha-comparison-matrix-cell-detail-blur">
+                                  <div className="acm-cell-chart">
+                                    <div className="acm-cell-track-scale acm-cell-detail-blur">
                                       <span>100% armor</span>
                                       <span>0% armor</span>
                                     </div>
                                     <div
                                       className={[
-                                        'alpha-comparison-matrix-cell-track',
-                                        'alpha-comparison-matrix-cell-detail-blur',
-                                        isE100Penetration ? 'alpha-comparison-matrix-cell-track--e100' : '',
+                                        'acm-cell-track',
+                                        'acm-cell-detail-blur',
+                                        isE100Penetration ? 'acm-cell-track--e100' : '',
                                       ]
                                         .filter(Boolean)
                                         .join(' ')}
@@ -1455,10 +1435,10 @@ export function ThresholdComparisonMatrix({
                                       {!isE100Penetration ? (
                                         <div
                                           className={[
-                                            'alpha-comparison-matrix-cell-track-fill',
-                                            'alpha-comparison-matrix-cell-detail-blur',
+                                            'acm-cell-track-fill',
+                                            'acm-cell-detail-blur',
                                             activeResult.markerPercent >= 100
-                                              ? 'alpha-comparison-matrix-cell-track-fill--full'
+                                              ? 'acm-cell-track-fill--full'
                                               : '',
                                           ]
                                             .filter(Boolean)
@@ -1468,17 +1448,17 @@ export function ThresholdComparisonMatrix({
                                       ) : null}
                                       {!isE100Penetration ? (
                                         <span
-                                          className="alpha-comparison-matrix-cell-marker"
+                                          className="acm-cell-marker"
                                           style={{ left: `${activeResult.markerPercent}%` }}
                                         />
                                       ) : null}
                                     </div>
-                                    <div className="alpha-comparison-matrix-cell-track-caption-row">
+                                    <div className="acm-cell-track-caption-row">
                                       <span
                                         className={
                                           isE100Penetration
-                                            ? 'alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-center alpha-comparison-matrix-cell-track-caption-e100 alpha-comparison-matrix-cell-detail-blur'
-                                            : `alpha-comparison-matrix-cell-track-caption alpha-comparison-matrix-cell-track-caption-${activeResult.markerAlign} alpha-comparison-matrix-cell-detail-blur`
+                                            ? 'acm-cell-track-caption acm-cell-track-caption-center acm-cell-track-caption-e100 acm-cell-detail-blur'
+                                            : `acm-cell-track-caption acm-cell-track-caption-${activeResult.markerAlign} acm-cell-detail-blur`
                                         }
                                         style={{
                                           left: isE100Penetration ? '50%' : `${activeResult.markerPercent}%`,
@@ -1496,14 +1476,14 @@ export function ThresholdComparisonMatrix({
 
                             {isPrimaryShieldBlockedPanel ? (
                               <div
-                                className="alpha-comparison-matrix-cell-overlay alpha-comparison-matrix-cell-overlay-interactive"
+                                className="acm-cell-overlay acm-cell-overlay-interactive"
                                 aria-label="Turn Shields Off for Armor vs Energy"
                               >
-                                <p className="alpha-comparison-matrix-cell-overlay-copy">
+                                <p className="acm-cell-overlay-copy">
                                   Turn Shields{' '}
                                   <button
                                     type="button"
-                                    className="alpha-comparison-matrix-cell-overlay-action"
+                                    className="acm-cell-overlay-action"
                                     onClick={(event) => {
                                       event.preventDefault()
                                       event.stopPropagation()
@@ -1519,7 +1499,7 @@ export function ThresholdComparisonMatrix({
                             {!placeholderCell ? (
                               <button
                                 type="button"
-                                className="alpha-armor-tooltip-trigger alpha-comparison-matrix-cell-tooltip-trigger"
+                                className="alpha-armor-tooltip-trigger acm-cell-tooltip-trigger"
                                   aria-label={`Armor interaction details for ${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`}
                                 onPointerEnter={openMatrixCellTooltip}
                                 onPointerLeave={() =>

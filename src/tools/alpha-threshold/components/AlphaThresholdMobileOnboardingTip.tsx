@@ -22,7 +22,7 @@ export function AlphaThresholdMobileOnboardingTip({ onComplete }: Props) {
   }, [])
 
   return (
-    <div className="alpha-tool-route alpha-mobile-onboarding-portal" role="presentation">
+    <div className="alpha-threshold-tool alpha-mobile-onboarding-portal" role="presentation">
       <div className="alpha-mobile-onboarding-dim" onClick={onComplete} />
       <section className="alpha-mobile-onboarding-sheet" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <p className="alpha-mobile-onboarding-kicker">Quick tip</p>

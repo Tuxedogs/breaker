@@ -1,6 +1,6 @@
 
-.alpha-tool-route .alpha-selection-overlay {
-  /* --alpha-overlay-top-offset / --alpha-overlay-left-offset: inherit from .alpha-main-heatmap-stage (first body cell) */
+.alpha-threshold-tool .alpha-selection-overlay {
+  /* --alpha-overlay-*: inherited from .alpha-threshold-tool */
   --alpha-overlay-right-offset: 1.8rem;
   --alpha-overlay-width: calc(
     ((100% - var(--alpha-overlay-left-offset) - var(--alpha-overlay-right-offset)) / 2) -
@@ -16,16 +16,16 @@
   pointer-events: none;
 }
 
-/* Match panel-command-responsive.css: .alpha-threshold-board padding at this range */
+/* Match panel-command-responsive.css: matrix panel padding at this range */
 @media (min-width: 1024px) and (max-width: 2600px) {
-  .alpha-tool-route .alpha-selection-overlay {
+  .alpha-threshold-tool .alpha-selection-overlay {
     --alpha-board-top-inset: 0.48rem;
-    --alpha-threshold-board-pad-inline: 0.5rem;
+    --alpha-matrix-pad-inline: 0.5rem;
   }
 }
 
 
-.alpha-tool-route .alpha-selection-overlay::before {
+.alpha-threshold-tool .alpha-selection-overlay::before {
   content: '';
   position: absolute;
   top: var(--alpha-overlay-top-offset);
@@ -39,7 +39,7 @@
   backdrop-filter: blur(3px);
 }
 
-.alpha-tool-route .alpha-overlay-panel {
+.alpha-threshold-tool .alpha-overlay-panel {
   position: absolute;
   top: var(--alpha-overlay-top-offset);
   right: auto;
@@ -62,7 +62,7 @@
 }
 
 /* Loadout bay: hard surface — shell uses thin neutral border (accent only on slots/controls, not the overlay frame) */
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay {
   --alpha-sel-accent: rgb(125 211 252);
   --alpha-sel-accent-soft: rgb(125 211 252 / 0.22);
   border: 1px solid rgb(226 232 240 / 0.12);
@@ -76,27 +76,27 @@
     border-color 160ms ease;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay--tone-cyan {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay--tone-cyan {
   --alpha-sel-accent: rgb(103 232 249);
   --alpha-sel-accent-soft: rgb(103 232 249 / 0.24);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay--tone-violet {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay--tone-violet {
   --alpha-sel-accent: rgb(103 232 249);
   --alpha-sel-accent-soft: rgb(103 232 249 / 0.24);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay--tone-amber {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay--tone-amber {
   --alpha-sel-accent: rgb(103 232 249);
   --alpha-sel-accent-soft: rgb(103 232 249 / 0.24);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay--tone-emerald {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay--tone-emerald {
   --alpha-sel-accent: rgb(103 232 249);
   --alpha-sel-accent-soft: rgb(103 232 249 / 0.24);
 }
 
-.alpha-tool-route .alpha-selector-bay-shell {
+.alpha-threshold-tool .alpha-selector-bay-shell {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
@@ -106,14 +106,14 @@
   padding: 0.55rem 0.6rem 0.5rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-head {
+.alpha-threshold-tool .alpha-selector-bay-head {
   display: flex;
   align-items: stretch;
   gap: 0.45rem;
   min-width: 0;
 }
 
-.alpha-tool-route .alpha-selector-bay-slot-row {
+.alpha-threshold-tool .alpha-selector-bay-slot-row {
   flex: 1 1 auto;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -121,11 +121,11 @@
   min-width: 0;
 }
 
-.alpha-tool-route .alpha-selector-bay-slot-row-ship {
+.alpha-threshold-tool .alpha-selector-bay-slot-row-ship {
   grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
 }
 
-.alpha-tool-route .alpha-selector-bay-close {
+.alpha-threshold-tool .alpha-selector-bay-close {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -148,19 +148,19 @@
     color 140ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-close:hover {
+.alpha-threshold-tool .alpha-selector-bay-close:hover {
   border-color: rgb(255 255 255 / 0.18);
   background: rgb(255 255 255 / 0.05);
   color: rgb(255 255 255);
 }
 
-.alpha-tool-route .alpha-selector-bay-close:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-close:focus-visible {
   outline: 2px solid rgb(125 211 252 / 0.55);
   outline-offset: 2px;
 }
 
 /* Weapon column headers — compact matrix weapon header */
-.alpha-tool-route .alpha-selector-bay .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot {
+.alpha-threshold-tool .alpha-selector-bay .acm-weapon-header.alpha-selector-bay-slot {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -174,15 +174,15 @@
 }
 
 /* Inactive slot: hover / focus-within lift */
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot:not(
-    .alpha-comparison-matrix-weapon-header-active
+  .acm-weapon-header.alpha-selector-bay-slot:not(
+    .acm-weapon-header-active
   ):hover,
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot:not(
-    .alpha-comparison-matrix-weapon-header-active
+  .acm-weapon-header.alpha-selector-bay-slot:not(
+    .acm-weapon-header-active
   ):focus-within {
   border-color: rgb(255 255 255 / 0.22);
   box-shadow:
@@ -194,12 +194,12 @@
 }
 
 /* Active slot: solid border + tone glow — selector bay + matrix destination column (same styling). */
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot.alpha-comparison-matrix-weapon-header-active.alpha-comparison-matrix-panel-tone-cyan,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-weapon
-  .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-destination-column.alpha-comparison-matrix-destination-cyan {
+  .acm-weapon-header.alpha-selector-bay-slot.acm-weapon-header-active.acm-panel-tone-cyan,
+.alpha-threshold-tool
+  .acm-selection-weapon
+  .acm-weapon-header.acm-destination-column.acm-destination-cyan {
   border-style: solid;
   border-color: rgb(103 232 249 / 0.72);
   box-shadow:
@@ -216,12 +216,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot.alpha-comparison-matrix-weapon-header-active.alpha-comparison-matrix-panel-tone-violet,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-weapon
-  .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-destination-column.alpha-comparison-matrix-destination-violet {
+  .acm-weapon-header.alpha-selector-bay-slot.acm-weapon-header-active.acm-panel-tone-violet,
+.alpha-threshold-tool
+  .acm-selection-weapon
+  .acm-weapon-header.acm-destination-column.acm-destination-violet {
   border-style: solid;
   border-color: rgb(103 232 249 / 0.72);
   box-shadow:
@@ -238,12 +238,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot.alpha-comparison-matrix-weapon-header-active.alpha-comparison-matrix-panel-tone-amber,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-weapon
-  .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-destination-column.alpha-comparison-matrix-destination-amber {
+  .acm-weapon-header.alpha-selector-bay-slot.acm-weapon-header-active.acm-panel-tone-amber,
+.alpha-threshold-tool
+  .acm-selection-weapon
+  .acm-weapon-header.acm-destination-column.acm-destination-amber {
   border-style: solid;
   border-color: rgb(103 232 249 / 0.72);
   box-shadow:
@@ -260,12 +260,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot.alpha-comparison-matrix-weapon-header-active.alpha-comparison-matrix-panel-tone-emerald,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-weapon
-  .alpha-comparison-matrix-weapon-header.alpha-comparison-matrix-destination-column.alpha-comparison-matrix-destination-emerald {
+  .acm-weapon-header.alpha-selector-bay-slot.acm-weapon-header-active.acm-panel-tone-emerald,
+.alpha-threshold-tool
+  .acm-selection-weapon
+  .acm-weapon-header.acm-destination-column.acm-destination-emerald {
   border-style: solid;
   border-color: rgb(103 232 249 / 0.72);
   box-shadow:
@@ -283,9 +283,9 @@
 }
 
 /* Full-cell hit target: main button fills header (padding on button, not header) */
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot
+  .acm-weapon-header.alpha-selector-bay-slot
   .alpha-selector-bay-slot-main {
   flex: 1 1 auto;
   align-self: stretch;
@@ -298,25 +298,25 @@
 }
 
 /* Assigned weapon: center title in the hit target (empty slots keep prior layout). */
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot
-  .alpha-selector-bay-slot-main:has(> .alpha-comparison-matrix-weapon-name) {
+  .acm-weapon-header.alpha-selector-bay-slot
+  .alpha-selector-bay-slot-main:has(> .acm-weapon-name) {
   justify-content: center;
   align-items: center;
   text-align: center;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-weapon-header.alpha-selector-bay-slot
+  .acm-weapon-header.alpha-selector-bay-slot
   .alpha-selector-bay-slot-main
-  .alpha-comparison-matrix-weapon-empty {
+  .acm-weapon-empty {
   flex: 1;
   min-height: 0;
 }
 
-.alpha-tool-route .alpha-selector-bay .alpha-selector-bay-slot .alpha-comparison-matrix-weapon-name {
+.alpha-threshold-tool .alpha-selector-bay .alpha-selector-bay-slot .acm-weapon-name {
   width: 100%;
   margin: 0;
   font-size: 0.78rem;
@@ -330,7 +330,7 @@
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-selector-bay-slot-main {
+.alpha-threshold-tool .alpha-selector-bay-slot-main {
   display: block;
   width: 100%;
   margin: 0;
@@ -344,12 +344,12 @@
   transition: opacity 140ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-slot-main:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-slot-main:focus-visible {
   outline: 2px solid var(--alpha-sel-accent);
   outline-offset: 2px;
 }
 
-.alpha-tool-route .alpha-selector-bay .alpha-selector-bay-slot-clear {
+.alpha-threshold-tool .alpha-selector-bay .alpha-selector-bay-slot-clear {
   position: absolute;
   bottom: 0.2rem;
   right: 0.2rem;
@@ -369,18 +369,18 @@
     color 140ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay .alpha-selector-bay-slot-clear:hover {
+.alpha-threshold-tool .alpha-selector-bay .alpha-selector-bay-slot-clear:hover {
   border-color: rgb(255 255 255 / 0.22);
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-selector-bay .alpha-selector-bay-slot-clear:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay .alpha-selector-bay-slot-clear:focus-visible {
   outline: 2px solid var(--alpha-sel-accent);
   outline-offset: 2px;
 }
 
 /* Ship slots — matrix ship card, compact strip (mirror weapon slot: block hit target + centered empty label) */
-.alpha-tool-route .alpha-selector-bay .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot {
+.alpha-threshold-tool .alpha-selector-bay .acm-ship-card.alpha-selector-bay-ship-slot {
   position: relative;
   left: auto;
   top: auto;
@@ -401,12 +401,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot:not(.alpha-selector-bay-ship-slot-active):hover,
-.alpha-tool-route
+  .acm-ship-card.alpha-selector-bay-ship-slot:not(.alpha-selector-bay-ship-slot-active):hover,
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot:not(.alpha-selector-bay-ship-slot-active):focus-within {
+  .acm-ship-card.alpha-selector-bay-ship-slot:not(.alpha-selector-bay-ship-slot-active):focus-within {
   border-color: rgb(255 255 255 / 0.22);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.05),
@@ -417,12 +417,12 @@
 }
 
 /* Active ship slot — selector bay + matrix destination row (same border/glow as overlay). */
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.alpha-comparison-matrix-panel-tone-cyan,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-ship
-  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-destination-row.alpha-comparison-matrix-destination-cyan {
+  .acm-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.acm-panel-tone-cyan,
+.alpha-threshold-tool
+  .acm-selection-ship
+  .acm-ship-card.acm-destination-row.acm-destination-cyan {
   border-style: solid;
   border-right: 0;
   border-color: rgb(103 232 249 / 0.72);
@@ -440,12 +440,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.alpha-comparison-matrix-panel-tone-violet,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-ship
-  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-destination-row.alpha-comparison-matrix-destination-violet {
+  .acm-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.acm-panel-tone-violet,
+.alpha-threshold-tool
+  .acm-selection-ship
+  .acm-ship-card.acm-destination-row.acm-destination-violet {
   border-style: solid;
   border-right: 0;
   border-color: rgb(196 181 253 / 0.72);
@@ -463,12 +463,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.alpha-comparison-matrix-panel-tone-amber,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-ship
-  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-destination-row.alpha-comparison-matrix-destination-amber {
+  .acm-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.acm-panel-tone-amber,
+.alpha-threshold-tool
+  .acm-selection-ship
+  .acm-ship-card.acm-destination-row.acm-destination-amber {
   border-style: solid;
   border-right: 0;
   border-color: rgb(252 211 77 / 0.72);
@@ -486,12 +486,12 @@
     background 160ms ease;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay
-  .alpha-comparison-matrix-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.alpha-comparison-matrix-panel-tone-emerald,
-.alpha-tool-route
-  .alpha-comparison-matrix-selection-ship
-  .alpha-comparison-matrix-ship-card.alpha-comparison-matrix-destination-row.alpha-comparison-matrix-destination-emerald {
+  .acm-ship-card.alpha-selector-bay-ship-slot.alpha-selector-bay-ship-slot-active.acm-panel-tone-emerald,
+.alpha-threshold-tool
+  .acm-selection-ship
+  .acm-ship-card.acm-destination-row.acm-destination-emerald {
   border-style: solid;
   border-right: 0;
   border-color: rgb(110 231 183 / 0.72);
@@ -509,7 +509,7 @@
     background 160ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-ship-slot-main {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot-main {
   flex: 1 1 auto;
   align-self: stretch;
   display: flex;
@@ -531,26 +531,26 @@
 }
 
 /* Assigned ship: manufacturer eyebrow + ship name, centered in the hit target. */
-.alpha-tool-route .alpha-selector-bay-ship-slot-main:has(> .alpha-comparison-matrix-ship-role) {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot-main:has(> .acm-ship-role) {
   justify-content: center;
   align-items: center;
   text-align: center;
   gap: 0.24rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-ship-slot-main:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot-main:focus-visible {
   outline: 2px solid var(--alpha-sel-accent);
   outline-offset: 2px;
 }
 
-.alpha-tool-route
+.alpha-threshold-tool
   .alpha-selector-bay-ship-slot-main
-  .alpha-comparison-matrix-ship-empty {
+  .acm-ship-empty {
   flex: 1;
   min-height: 0;
 }
 
-.alpha-tool-route .alpha-selector-bay-ship-slot .alpha-comparison-matrix-ship-role {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot .acm-ship-role {
   width: 100%;
   margin: 0;
   font-size: 0.6rem;
@@ -565,7 +565,7 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-selector-bay-ship-slot .alpha-comparison-matrix-ship-name {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot .acm-ship-name {
   width: 100%;
   margin: 0;
   font-size: 0.78rem;
@@ -579,8 +579,8 @@
   color: rgb(248 250 252);
 }
 
-/* Match .alpha-comparison-matrix-weapon-empty + .alpha-comparison-matrix-weapon-empty-label in weapon slots */
-.alpha-tool-route .alpha-selector-bay-ship-slot .alpha-comparison-matrix-ship-empty {
+/* Match .acm-weapon-empty + .acm-weapon-empty-label in weapon slots */
+.alpha-threshold-tool .alpha-selector-bay-ship-slot .acm-ship-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -591,7 +591,7 @@
   text-align: center;
 }
 
-.alpha-tool-route .alpha-selector-bay-ship-slot .alpha-comparison-matrix-ship-empty-label {
+.alpha-threshold-tool .alpha-selector-bay-ship-slot .acm-ship-empty-label {
   margin: 0;
   font-size: 0.72rem;
   font-weight: 800;
@@ -600,7 +600,7 @@
   line-height: 1.18;
 }
 
-.alpha-tool-route .alpha-overlay-panel .alpha-overlay-selection-notice {
+.alpha-threshold-tool .alpha-overlay-panel .alpha-overlay-selection-notice {
   margin: 0;
   padding: 0 0.1rem;
   font-size: 0.75rem;
@@ -609,7 +609,7 @@
 }
 
 /* Single surface: controls + full-width scroll (no side panels) */
-.alpha-tool-route .alpha-selector-bay-surface {
+.alpha-threshold-tool .alpha-selector-bay-surface {
   display: flex;
   flex-direction: column;
   gap: 0.32rem;
@@ -622,23 +622,23 @@
   padding: 0.4rem 0.45rem 0.38rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-surface-ship {
+.alpha-threshold-tool .alpha-selector-bay-surface-ship {
   padding-bottom: 0.45rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-controls {
+.alpha-threshold-tool .alpha-selector-bay-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem 0.45rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-search-wrap {
+.alpha-threshold-tool .alpha-selector-bay-search-wrap {
   flex: 1 1 10rem;
   min-width: 0;
 }
 
-.alpha-tool-route .alpha-selector-bay-search {
+.alpha-threshold-tool .alpha-selector-bay-search {
   box-sizing: border-box;
   width: 100%;
   min-height: 2.4rem;
@@ -656,28 +656,28 @@
     box-shadow 120ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-search::placeholder {
+.alpha-threshold-tool .alpha-selector-bay-search::placeholder {
   color: rgb(148 163 184);
   font-weight: 500;
 }
 
-.alpha-tool-route .alpha-selector-bay-search:hover {
+.alpha-threshold-tool .alpha-selector-bay-search:hover {
   border-color: rgb(255 255 255 / 0.14);
 }
 
 /* Static cyan (same as tone-cyan / group 1) — does not follow bay accent */
-.alpha-tool-route .alpha-selector-bay-search:focus {
+.alpha-threshold-tool .alpha-selector-bay-search:focus {
   outline: none;
   border-color: rgb(255 255 255 / 0.22);
   box-shadow: inset 0 0 0 1px rgb(103 232 249 / 0.24);
 }
 
-.alpha-tool-route .alpha-selector-bay-search:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-search:focus-visible {
   outline: 2px solid rgb(103 232 249 / 0.55);
   outline-offset: 2px;
 }
 
-.alpha-tool-route .alpha-selector-bay-segments {
+.alpha-threshold-tool .alpha-selector-bay-segments {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 0.2rem;
@@ -687,7 +687,7 @@
   background: rgb(0 0 0 / 0.2);
 }
 
-.alpha-tool-route .alpha-selector-bay-segment {
+.alpha-threshold-tool .alpha-selector-bay-segment {
   display: inline-flex;
   min-height: 1.85rem;
   align-items: center;
@@ -708,25 +708,25 @@
     color 140ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-segment:hover {
+.alpha-threshold-tool .alpha-selector-bay-segment:hover {
   color: rgb(241 245 249);
   background: rgb(255 255 255 / 0.04);
 }
 
 /* Neutral chrome — does not follow bay tone */
-.alpha-tool-route .alpha-selector-bay-segment-active {
+.alpha-threshold-tool .alpha-selector-bay-segment-active {
   border-color: rgb(255 255 255 / 0.18);
   background: rgb(15 23 42 / 0.72);
   color: rgb(248 250 252);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
 }
 
-.alpha-tool-route .alpha-selector-bay-segment:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-segment:focus-visible {
   outline: 2px solid rgb(148 163 184 / 0.65);
   outline-offset: 2px;
 }
 
-.alpha-tool-route .alpha-selector-bay-scroll {
+.alpha-threshold-tool .alpha-selector-bay-scroll {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -734,11 +734,11 @@
 }
 
 /* Tactical group rails */
-.alpha-tool-route .alpha-selector-bay-group + .alpha-selector-bay-group {
+.alpha-threshold-tool .alpha-selector-bay-group + .alpha-selector-bay-group {
   margin-top: 0.55rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle {
   display: flex;
   width: 100%;
   align-items: center;
@@ -753,17 +753,17 @@
   transition: border-color 140ms ease;
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle:hover {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle:hover {
   border-bottom-color: rgb(255 255 255 / 0.16);
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle:focus-visible {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle:focus-visible {
   outline: 2px solid var(--alpha-sel-accent);
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle-label {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-label {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -774,7 +774,7 @@
   color: rgb(203 213 225);
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle-label::before {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-label::before {
   content: '';
   width: 2px;
   height: 0.85rem;
@@ -783,24 +783,24 @@
   opacity: 0.55;
 }
 
-.alpha-tool-route .alpha-selector-bay-group-toggle-chev {
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-chev {
   font-size: 0.85rem;
   font-weight: 700;
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-selector-bay-group-body {
+.alpha-threshold-tool .alpha-selector-bay-group-body {
   display: grid;
   gap: 0.55rem;
   padding: 0.35rem 0 0.15rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-subgroup {
+.alpha-threshold-tool .alpha-selector-bay-subgroup {
   display: grid;
   gap: 0.35rem;
 }
 
-.alpha-tool-route .alpha-selector-bay-subhead {
+.alpha-threshold-tool .alpha-selector-bay-subhead {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -809,7 +809,7 @@
   border-bottom: 1px solid rgb(255 255 255 / 0.05);
 }
 
-.alpha-tool-route .alpha-selector-bay-subhead-title {
+.alpha-threshold-tool .alpha-selector-bay-subhead-title {
   margin: 0;
   font-size: 0.68rem;
   font-weight: 700;
@@ -818,7 +818,7 @@
   color: rgb(186 198 216);
 }
 
-.alpha-tool-route .alpha-selector-bay-subhead-count {
+.alpha-threshold-tool .alpha-selector-bay-subhead-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -832,19 +832,19 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-selector-bay-empty {
+.alpha-threshold-tool .alpha-selector-bay-empty {
   padding: 1.25rem 0.5rem;
   text-align: center;
 }
 
-.alpha-tool-route .alpha-selector-bay-empty-title {
+.alpha-threshold-tool .alpha-selector-bay-empty-title {
   margin: 0;
   font-size: 0.88rem;
   font-weight: 600;
   color: rgb(226 232 240);
 }
 
-.alpha-tool-route .alpha-selector-bay-visually-hidden {
+.alpha-threshold-tool .alpha-selector-bay-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -857,17 +857,17 @@
 }
 
 /* Result cards — matrix cell language, less inner chrome */
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(6.75rem, 1fr));
   gap: 0.32rem;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
   grid-template-columns: repeat(auto-fill, minmax(7.25rem, 1fr));
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
   border: 1px solid rgb(255 255 255 / 0.09);
   border-radius: 0.85rem;
   background: rgb(8 11 18);
@@ -878,7 +878,7 @@
     box-shadow 120ms ease;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card:hover {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card:hover {
   border-color: rgb(255 255 255 / 0.2);
   background: rgb(11 15 24);
   box-shadow:
@@ -886,7 +886,7 @@
     0 0 0 1px rgb(255 255 255 / 0.06);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-selected {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-selected {
   border-color: rgb(45 212 191 / 0.55);
   background: rgb(7 14 18);
   box-shadow:
@@ -894,28 +894,28 @@
     0 0 14px rgb(45 212 191 / 0.12);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-role-active:not(.alpha-drawer-ship-card-selected) {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-role-active:not(.alpha-drawer-ship-card-selected) {
   border-color: rgb(125 211 252 / 0.32);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-body {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-body {
   border: 0;
   background: transparent;
   padding: 0;
   box-shadow: none;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card.alpha-drawer-weapon-overlay-card {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card.alpha-drawer-weapon-overlay-card {
   min-height: 5.25rem;
   padding: 0;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-card-body {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-card-body {
   padding: 0.36rem 0.4rem;
   gap: 0.16rem;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-name {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-name {
   display: block;
   font-size: 0.72rem;
   font-weight: 600;
@@ -924,7 +924,7 @@
   color: rgb(248 250 252);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-kicker {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-kicker {
   font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -932,30 +932,30 @@
   color: rgb(160 174 196);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-meta {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-meta {
   font-size: 0.62rem;
   line-height: 1.2;
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card:not(.alpha-drawer-weapon-overlay-card) {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card:not(.alpha-drawer-weapon-overlay-card) {
   padding: 0.38rem;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
   opacity: 0.55;
 }
 
-.alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-chip {
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-chip {
   border-color: rgb(45 212 191 / 0.35);
 }
 
-.alpha-tool-route .alpha-overlay-panel .alpha-drawer-results {
+.alpha-threshold-tool .alpha-overlay-panel .alpha-drawer-results {
   padding-right: 0.1rem;
 }
 
 @media (max-width: 1023px) {
-  .alpha-tool-route .alpha-selection-overlay {
+  .alpha-threshold-tool .alpha-selection-overlay {
     --alpha-board-top-inset: 0.35rem;
     --alpha-matrix-header-row-height: 7.35rem;
     --alpha-overlay-align-x: 1.225rem;
@@ -967,7 +967,7 @@
     --alpha-overlay-width: calc(100% - 0.8rem);
   }
 
-  .alpha-tool-route .alpha-selection-overlay::before {
+  .alpha-threshold-tool .alpha-selection-overlay::before {
     top: var(--alpha-overlay-top-offset);
     left: 0.4rem;
     right: auto;
@@ -975,7 +975,7 @@
     width: var(--alpha-overlay-width);
   }
 
-  .alpha-tool-route .alpha-overlay-panel {
+  .alpha-threshold-tool .alpha-overlay-panel {
     top: var(--alpha-overlay-top-offset);
     left: 0.4rem;
     right: auto;
@@ -983,32 +983,32 @@
     width: var(--alpha-overlay-width);
   }
 
-  .alpha-tool-route .alpha-selector-bay-slot-row {
+  .alpha-threshold-tool .alpha-selector-bay-slot-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .alpha-tool-route .alpha-selector-bay-slot-row-ship {
+  .alpha-threshold-tool .alpha-selector-bay-slot-row-ship {
     grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid {
     grid-template-columns: repeat(auto-fill, minmax(6.35rem, 1fr));
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
     grid-template-columns: repeat(auto-fill, minmax(6.75rem, 1fr));
   }
 }
 
-/* Match panel-command-responsive.css: .alpha-threshold-board padding on small viewports */
+/* Match panel-command-responsive.css: matrix / mobile layout padding on small viewports */
 @media (max-width: 767px) {
-  .alpha-tool-route .alpha-selection-overlay {
+  .alpha-threshold-tool .alpha-selection-overlay {
     --alpha-board-top-inset: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
-  .alpha-tool-route .alpha-selection-overlay {
+  .alpha-threshold-tool .alpha-selection-overlay {
     position: fixed;
     inset: 0;
     z-index: 1300;
@@ -1017,11 +1017,11 @@
     padding: 0;
   }
 
-  .alpha-tool-route .alpha-selection-overlay::before {
+  .alpha-threshold-tool .alpha-selection-overlay::before {
     display: none;
   }
 
-  .alpha-tool-route .alpha-overlay-panel {
+  .alpha-threshold-tool .alpha-overlay-panel {
     position: fixed;
     left: 0.5rem;
     right: 0.5rem;
@@ -1035,12 +1035,12 @@
     pointer-events: auto;
   }
 
-  .alpha-tool-route .alpha-selector-bay-shell {
+  .alpha-threshold-tool .alpha-selector-bay-shell {
     padding: 0.5rem;
     gap: 0.35rem;
   }
 
-  .alpha-tool-route .alpha-selector-bay-head {
+  .alpha-threshold-tool .alpha-selector-bay-head {
     position: sticky;
     top: 0;
     z-index: 4;
@@ -1048,19 +1048,19 @@
     background: rgb(6 9 14 / 0.95);
   }
 
-  .alpha-tool-route .alpha-selector-bay-slot-row,
-  .alpha-tool-route .alpha-selector-bay-slot-row-ship {
+  .alpha-threshold-tool .alpha-selector-bay-slot-row,
+  .alpha-threshold-tool .alpha-selector-bay-slot-row-ship {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.3rem;
   }
 
-  .alpha-tool-route .alpha-selector-bay-surface {
+  .alpha-threshold-tool .alpha-selector-bay-surface {
     display: flex;
     flex-direction: column;
     min-height: 0;
   }
 
-  .alpha-tool-route .alpha-selector-bay-controls {
+  .alpha-threshold-tool .alpha-selector-bay-controls {
     position: sticky;
     top: 0;
     z-index: 3;
@@ -1068,51 +1068,51 @@
     padding-bottom: 0.35rem;
   }
 
-  .alpha-tool-route .alpha-selector-bay-search {
+  .alpha-threshold-tool .alpha-selector-bay-search {
     min-height: 2.45rem;
     font-size: 0.92rem;
   }
 
-  .alpha-tool-route .alpha-selector-bay-scroll {
+  .alpha-threshold-tool .alpha-selector-bay-scroll {
     min-height: 0;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid,
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid,
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-grid.alpha-drawer-weapon-overlay-card-grid {
     grid-template-columns: 1fr;
     gap: 0.4rem;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
     min-height: 3.25rem;
     padding: 0.4rem;
     gap: 0.4rem;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
     width: 3rem;
     height: 2.3rem;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-media {
     display: none;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
     grid-template-columns: 1fr;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-name,
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-name {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-name,
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-name {
     font-size: 0.78rem;
     line-height: 1.15;
   }
 
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-meta,
-  .alpha-tool-route .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-meta {
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card-meta,
+  .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-meta {
     font-size: 0.64rem;
   }
 }

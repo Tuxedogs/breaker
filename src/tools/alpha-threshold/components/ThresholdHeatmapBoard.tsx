@@ -1,4 +1,4 @@
-import { ArmorInteractionTestbed } from './ArmorInteractionTestbed'
+import { ThresholdComparisonMatrix } from './ThresholdComparisonMatrix'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import type { AlphaThresholdOnboardingHighlight } from './AlphaThresholdOnboardingModal'
 import type { DefenseShieldState, SelectedWeaponComparison, Ship, WeaponRecord } from '../types'
@@ -30,60 +30,6 @@ type Props = {
   onboardingHighlight?: AlphaThresholdOnboardingHighlight
 }
 
-export function ThresholdHeatmapBoard({
-  ships,
-  selectedWeapons,
-  allWeapons,
-  shieldMode,
-  matrixMode,
-  targetWeaponFilterPreset,
-  onTargetWeaponFilterPresetChange,
-  targetWeaponSizeFilter,
-  onTargetWeaponSizeFilterChange,
-  analysisColumnCount,
-  onAnalysisColumnCountChange,
-  targetColumnCount,
-  onTargetColumnCountChange,
-  hideHeaderRow = false,
-  selectionMode,
-  nextShipSlotIndex,
-  nextWeaponSlotIndex,
-  onShieldModeChange,
-  onMatrixModeChange,
-  onOpenWeapons,
-  onOpenShips,
-  onOpenWeaponsAt,
-  onOpenShipsAt,
-  onboardingHighlight = null,
-}: Props) {
-  return (
-    <section className="alpha-threshold-board alpha-threshold-board-app" aria-label="Weapons Analysis board">
-      <ArmorInteractionTestbed
-        ships={ships}
-        selectedWeapons={selectedWeapons}
-        allWeapons={allWeapons}
-        shieldMode={shieldMode}
-        matrixMode={matrixMode}
-        targetWeaponFilterPreset={targetWeaponFilterPreset}
-        onTargetWeaponFilterPresetChange={onTargetWeaponFilterPresetChange}
-        targetWeaponSizeFilter={targetWeaponSizeFilter}
-        onTargetWeaponSizeFilterChange={onTargetWeaponSizeFilterChange}
-        analysisColumnCount={analysisColumnCount}
-        onAnalysisColumnCountChange={onAnalysisColumnCountChange}
-        targetColumnCount={targetColumnCount}
-        onTargetColumnCountChange={onTargetColumnCountChange}
-        hideHeaderRow={hideHeaderRow}
-        selectionMode={selectionMode}
-        nextShipSlotIndex={nextShipSlotIndex}
-        nextWeaponSlotIndex={nextWeaponSlotIndex}
-        onShieldModeChange={onShieldModeChange}
-        onMatrixModeChange={onMatrixModeChange}
-        onOpenWeapons={onOpenWeapons}
-        onOpenShips={onOpenShips}
-        onOpenWeaponsAt={onOpenWeaponsAt}
-        onOpenShipsAt={onOpenShipsAt}
-        onboardingHighlight={onboardingHighlight}
-      />
-    </section>
-  )
+export function ThresholdHeatmapBoard(props: Props) {
+  return <ThresholdComparisonMatrix {...props} />
 }

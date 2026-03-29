@@ -29,7 +29,10 @@ export function MobileThresholdComparisonLayout({
   ).length
 
   return (
-    <section className="alpha-mobile-layout" aria-label="Mobile threshold comparison">
+    <section
+      className="alpha-mobile-layout"
+      aria-label="Mobile threshold comparison"
+    >
       <AlphaMobileControlStrip
         shipCount={shipCount ?? shipSelectionCount}
         weaponCount={weaponCount ?? weaponSelectionCount}

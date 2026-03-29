@@ -1,51 +1,51 @@
 /* First-visit onboarding for Alpha Threshold: coachmarks + modal */
 
-.alpha-tool-route.alpha-threshold-onboarding-portal {
+.alpha-threshold-tool.alpha-threshold-onboarding-portal {
   position: fixed;
   inset: 0;
   z-index: 2100;
   pointer-events: none;
 }
 
-.alpha-tool-route.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-coach,
-.alpha-tool-route.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-dim-full,
-.alpha-tool-route.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-modal-layer {
+.alpha-threshold-tool.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-coach,
+.alpha-threshold-tool.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-dim-full,
+.alpha-threshold-tool.alpha-threshold-onboarding-portal > .alpha-threshold-onboarding-modal-layer {
   pointer-events: auto;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-coach,
-.alpha-tool-route .alpha-threshold-onboarding-dim-full {
+.alpha-threshold-tool .alpha-threshold-onboarding-coach,
+.alpha-threshold-tool .alpha-threshold-onboarding-dim-full {
   position: fixed;
   inset: 0;
   z-index: 1;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-coach-lines-overlay {
+.alpha-threshold-tool .alpha-threshold-onboarding-coach-lines-overlay {
   position: fixed;
   inset: 0;
   z-index: 3;
   pointer-events: none;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-coach-lines-svg {
+.alpha-threshold-tool .alpha-threshold-onboarding-coach-lines-svg {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-coach-svg {
+.alpha-threshold-tool .alpha-threshold-onboarding-coach-svg {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-dim-full {
+.alpha-threshold-tool .alpha-threshold-onboarding-dim-full {
   background: rgb(2 6 12 / 0.82);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-modal-layer {
+.alpha-threshold-tool .alpha-threshold-onboarding-modal-layer {
   position: fixed;
   inset: 0;
   z-index: 2; /* Dim (1) < Quick tour (2) < connector lines (3) */
@@ -55,26 +55,26 @@
   pointer-events: none;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-modal-layer .alpha-modal-shell {
+.alpha-threshold-tool .alpha-threshold-onboarding-modal-layer .alpha-modal-shell {
   pointer-events: auto;
   max-width: min(100%, 28rem);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-modal {
+.alpha-threshold-tool .alpha-threshold-onboarding-modal {
   width: min(100%, 28rem);
   max-height: min(90vh, 36rem);
   overflow: auto;
   border-radius: 0.75rem;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-modal-body {
+.alpha-threshold-tool .alpha-threshold-onboarding-modal-body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem 1.1rem 1.1rem;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-kicker {
+.alpha-threshold-tool .alpha-threshold-onboarding-kicker {
   margin: 0;
   font-size: 0.65rem;
   font-weight: 700;
@@ -83,7 +83,7 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-title {
+.alpha-threshold-tool .alpha-threshold-onboarding-title {
   margin: 0;
   font-size: 1.05rem;
   font-weight: 700;
@@ -91,7 +91,7 @@
   color: rgb(241 245 249);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-copy {
+.alpha-threshold-tool .alpha-threshold-onboarding-copy {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -101,11 +101,11 @@
   color: rgb(203 213 225);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-copy p {
+.alpha-threshold-tool .alpha-threshold-onboarding-copy p {
   margin: 0;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-tooltip-block {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-tooltip-block {
   display: flex;
   flex-direction: column;
   padding-top: 0.65rem;
@@ -113,14 +113,14 @@
   border-top: 1px solid rgb(255 255 255 / 0.08);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-tooltip {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-tooltip {
   margin: 0;
   font-size: 0.82rem;
   line-height: 1.45;
   color: rgb(186 198 216);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo {
   margin-top: 0.25rem;
   padding: 0.65rem 0.75rem;
   border: 1px solid rgb(255 255 255 / 0.1);
@@ -128,7 +128,7 @@
   background: rgb(255 255 255 / 0.03);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-caption {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-caption {
   margin: 0 0 0.5rem;
   font-size: 0.65rem;
   font-weight: 700;
@@ -137,13 +137,13 @@
   color: rgb(148 163 184);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-matrix {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-matrix {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-row {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -153,28 +153,28 @@
   background: rgb(0 0 0 / 0.2);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-weapon {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-weapon {
   font-size: 0.8rem;
   font-weight: 600;
   color: rgb(226 232 240);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-e {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-e {
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   font-variant-numeric: tabular-nums;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-e--high {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-e--high {
   color: rgb(74 222 128);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-e-demo-e--mid {
+.alpha-threshold-tool .alpha-threshold-onboarding-e-demo-e--mid {
   color: rgb(250 204 21);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-progress {
+.alpha-threshold-tool .alpha-threshold-onboarding-progress {
   margin: 0;
   font-size: 0.7rem;
   letter-spacing: 0.06em;
@@ -182,7 +182,7 @@
   color: rgb(100 116 139);
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-actions {
+.alpha-threshold-tool .alpha-threshold-onboarding-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -191,13 +191,13 @@
   margin-top: 0.25rem;
 }
 
-.alpha-tool-route .alpha-threshold-onboarding-actions .alpha-action-button {
+.alpha-threshold-tool .alpha-threshold-onboarding-actions .alpha-action-button {
   min-height: 2.75rem;
   padding: 0.5rem 1rem;
 }
 
 /* Matrix targets while onboarding is active (spotlight + outline) */
-.alpha-tool-route .alpha-onboarding-target-highlight {
+.alpha-threshold-tool .alpha-onboarding-target-highlight {
   position: relative;
   z-index: 4;
   border-radius: 0.5rem;
@@ -207,44 +207,44 @@
 }
 
 @media (max-width: 768px) {
-  .alpha-tool-route .alpha-threshold-onboarding-dim-full,
-  .alpha-tool-route .alpha-threshold-onboarding-coach,
-  .alpha-tool-route .alpha-threshold-onboarding-coach-lines-overlay {
+  .alpha-threshold-tool .alpha-threshold-onboarding-dim-full,
+  .alpha-threshold-tool .alpha-threshold-onboarding-coach,
+  .alpha-threshold-tool .alpha-threshold-onboarding-coach-lines-overlay {
     display: none;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-modal-layer {
+  .alpha-threshold-tool .alpha-threshold-onboarding-modal-layer {
     align-items: flex-end;
     justify-content: center;
     padding: 0.5rem;
     pointer-events: none;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-modal-layer .alpha-modal-shell {
+  .alpha-threshold-tool .alpha-threshold-onboarding-modal-layer .alpha-modal-shell {
     pointer-events: auto;
     width: min(100%, 28rem);
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-modal {
+  .alpha-threshold-tool .alpha-threshold-onboarding-modal {
     border-radius: 0.9rem;
     max-height: 56dvh;
     overflow: auto;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-modal-body {
+  .alpha-threshold-tool .alpha-threshold-onboarding-modal-body {
     padding: 0.75rem;
     gap: 0.55rem;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-title {
+  .alpha-threshold-tool .alpha-threshold-onboarding-title {
     font-size: 1rem;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-copy {
+  .alpha-threshold-tool .alpha-threshold-onboarding-copy {
     font-size: 0.82rem;
   }
 
-  .alpha-tool-route .alpha-threshold-onboarding-actions .alpha-action-button {
+  .alpha-threshold-tool .alpha-threshold-onboarding-actions .alpha-action-button {
     min-height: 2.2rem;
     padding: 0.45rem 0.7rem;
   }

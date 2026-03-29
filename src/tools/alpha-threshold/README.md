@@ -25,7 +25,7 @@ The main entry points are:
 
 - [AlphaThresholdToolPage.tsx](Moonbreaker/src/tools/alpha-threshold/AlphaThresholdToolPage.tsx)
 - [ThresholdHeatmapBoard.tsx](Moonbreaker/src/tools/alpha-threshold/components/ThresholdHeatmapBoard.tsx)
-- [ArmorInteractionTestbed.tsx](Moonbreaker/src/tools/alpha-threshold/components/ArmorInteractionTestbed.tsx)
+- [ThresholdComparisonMatrix.tsx](Moonbreaker/src/tools/alpha-threshold/components/ThresholdComparisonMatrix.tsx)
 - [ArmorInteractionSummaryPanel.tsx](Moonbreaker/src/tools/alpha-threshold/components/ArmorInteractionSummaryPanel.tsx)
 - [calculations.ts](Moonbreaker/src/tools/alpha-threshold/lib/calculations.ts)
 
@@ -199,7 +199,7 @@ Rendering path:
 - [ThresholdHeatmapBoard.tsx](Moonbreaker/src/tools/alpha-threshold/components/ThresholdHeatmapBoard.tsx)
   - owns the main `Analysis / Weapons Loadout` tabs
   - owns analysis-local chip filtering and related-weapon suggestions
-- [ArmorInteractionTestbed.tsx](Moonbreaker/src/tools/alpha-threshold/components/ArmorInteractionTestbed.tsx)
+- [ThresholdComparisonMatrix.tsx](Moonbreaker/src/tools/alpha-threshold/components/ThresholdComparisonMatrix.tsx)
   - builds the weapon-row x ship-column grid
   - caps visible ships at four
   - manages local active-cell hover/focus state
