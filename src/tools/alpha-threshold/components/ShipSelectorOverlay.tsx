@@ -1,21 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
-import {
-  getShipThumbnailCandidates,
-  type ShipThumbnailCandidate,
-} from '../lib/ships/thumbnail'
 import type { Ship } from '../types'
+
+const FIRST_MATRIX_CELL_SELECTOR =
+  '.alpha-threshold-tool .acm-body .acm-row:first-child article.acm-cell'
 
 type Props = {
   open: boolean
   allShips: Ship[]
   selectedShipNames: Array<string | null>
-  maxVictimShips: number
   activeSlotIndex: number
   selectionNotice: string | null
-  onSetActiveSlot: (slotIndex: number) => void
+  /** When true, use default half-panel layout (e.g. mobile bottom sheet). */
+  disableAnchor?: boolean
   onSelectShip: (shipName: string) => void
-  onClearShip: (slotIndex: number) => void
   onClose: () => void
 }
 
@@ -34,10 +33,10 @@ type ShipSizeRoleGroup = {
 }
 
 const OVERLAY_SIZE_GROUPS: Array<{ id: string; label: string }> = [
-  { id: 'capital', label: 'Capital' },
-  { id: 'large', label: 'Large' },
-  { id: 'medium', label: 'Medium' },
   { id: 'small', label: 'Small' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'large', label: 'Large' },
+  { id: 'capital', label: 'Capital' },
   { id: 'ground', label: 'Ground' },
 ]
 
@@ -99,64 +98,60 @@ function formatShipCardName(ship: Ship): string {
   return formatEntityLabel(ship.name)
 }
 
-function getShipFallbackMonogram(ship: Ship): string {
-  const make = formatEntityLabel(ship.manufacturer).replace(/\s+/g, '').slice(0, 1)
-  const name = formatEntityLabel(ship.name).replace(/\s+/g, '').slice(0, 1)
-  return `${make}${name}`.trim() || '??'
-}
-
-function OverlayShipThumbnail({ ship }: { ship: Ship }) {
-  const candidates = useMemo(
-    () => getShipThumbnailCandidates(ship),
-    [ship.id, ship.imageAlt, ship.imageSrc, ship.manufacturer, ship.name]
-  )
-  const [candidateIndex, setCandidateIndex] = useState(0)
-
-  useEffect(() => {
-    setCandidateIndex(0)
-  }, [ship.id, ship.imageSrc, ship.name])
-
-  const current = candidates[Math.min(candidateIndex, candidates.length - 1)] as ShipThumbnailCandidate
-  const canAdvance = candidateIndex < candidates.length - 1
-
-  return (
-    <div className="alpha-drawer-ship-card-media">
-      <img
-        src={current.src}
-        alt={current.alt}
-        loading="lazy"
-        onError={() => {
-          if (!canAdvance) return
-          setCandidateIndex((value) => Math.min(value + 1, candidates.length - 1))
-        }}
-      />
-      {current.source === 'placeholder' ? (
-        <div className="alpha-drawer-ship-card-media-fallback" aria-hidden="true">
-          {getShipFallbackMonogram(ship)}
-        </div>
-      ) : null}
-      <span className="alpha-drawer-ship-card-media-source" aria-hidden="true">
-        {current.source}
-      </span>
-    </div>
-  )
-}
-
 export function ShipSelectorOverlay({
   open,
   allShips,
   selectedShipNames,
-  maxVictimShips,
   activeSlotIndex,
   selectionNotice,
-  onSetActiveSlot,
+  disableAnchor = false,
   onSelectShip,
-  onClearShip,
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const searchRef = useRef<HTMLInputElement | null>(null)
+  const overlayRef = useRef<HTMLElement | null>(null)
+  const [firstCellAnchorStyle, setFirstCellAnchorStyle] = useState<CSSProperties | undefined>(
+    undefined
+  )
+
+  /** Top-left of the first matrix body cell only; size stays default (CSS `--alpha-overlay-width`). */
+  useLayoutEffect(() => {
+    if (!open || disableAnchor) {
+      setFirstCellAnchorStyle(undefined)
+      return
+    }
+
+    const overlay = overlayRef.current
+    if (!overlay) {
+      setFirstCellAnchorStyle(undefined)
+      return
+    }
+
+    const update = () => {
+      const cell = document.querySelector(FIRST_MATRIX_CELL_SELECTOR)
+      if (!(cell instanceof HTMLElement)) {
+        setFirstCellAnchorStyle(undefined)
+        return
+      }
+      const overlayRect = overlay.getBoundingClientRect()
+      const cellRect = cell.getBoundingClientRect()
+      setFirstCellAnchorStyle({
+        '--alpha-ship-anchor-top': `${cellRect.top - overlayRect.top}px`,
+        '--alpha-ship-anchor-left': `${cellRect.left - overlayRect.left}px`,
+      } as CSSProperties)
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    window.addEventListener('scroll', update, true)
+    return () => {
+      window.removeEventListener('resize', update)
+      window.removeEventListener('scroll', update, true)
+      setFirstCellAnchorStyle(undefined)
+    }
+  }, [open, disableAnchor])
 
   useEffect(() => {
     if (!open) return
@@ -253,8 +248,16 @@ export function ShipSelectorOverlay({
 
   const accentTone = SLOT_TONES[activeSlotIndex % SLOT_TONES.length]
 
+  const useFirstCellAnchor = Boolean(firstCellAnchorStyle)
+
   return (
-    <section className="alpha-selection-overlay" aria-label="Ship selection overlay">
+    <section
+      ref={overlayRef}
+      className="alpha-selection-overlay alpha-selection-overlay--ship-bay"
+      aria-label="Ship selection overlay"
+      style={firstCellAnchorStyle}
+      data-ship-first-cell-anchor={useFirstCellAnchor ? 'true' : undefined}
+    >
       <section
         className={[
           'alpha-overlay-panel',
@@ -266,62 +269,19 @@ export function ShipSelectorOverlay({
       >
         <div className="alpha-selector-bay-shell">
           <div className="alpha-selector-bay-head">
-            <div className="alpha-selector-bay-slot-row alpha-selector-bay-slot-row-ship" role="list" aria-label="Ship slots">
-              {Array.from({ length: maxVictimShips }, (_, index) => {
-                const shipKey = selectedShipNames[index]
-                const selectedShip = shipKey ? shipBySelectionKey.get(shipKey) : null
-                const isActive = index === activeSlotIndex
-                const toneClass = `acm-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
-                return (
-                  <article
-                    key={`ship-slot-${index + 1}`}
-                    className={[
-                      'acm-ship-card',
-                      'alpha-selector-bay-ship-slot',
-                      !selectedShip ? 'acm-ship-card-empty' : '',
-                      toneClass,
-                      isActive ? 'alpha-selector-bay-ship-slot-active' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    role="listitem"
-                  >
-                    <button
-                      type="button"
-                      className="alpha-selector-bay-ship-slot-main"
-                      onClick={() => onSetActiveSlot(index)}
-                    >
-                      {selectedShip ? (
-                        <>
-                          <p className="acm-ship-role">
-                            {formatEntityLabel(selectedShip.manufacturer)}
-                          </p>
-                          <h3 className="acm-ship-name">
-                            {formatShipCardName(selectedShip)}
-                          </h3>
-                        </>
-                      ) : (
-                        <div className="acm-ship-empty">
-                          <p className="acm-ship-empty-label">Ship {index + 1}</p>
-                        </div>
-                      )}
-                    </button>
-                    {selectedShip ? (
-                      <button
-                        type="button"
-                        className="alpha-selector-bay-slot-clear"
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          onClearShip(index)
-                        }}
-                        aria-label={`Clear ship slot ${index + 1}`}
-                      >
-                        Clear
-                      </button>
-                    ) : null}
-                  </article>
-                )
-              })}
+            <div className="alpha-selector-bay-search-wrap">
+              <label className="alpha-selector-bay-visually-hidden" htmlFor="alpha-overlay-ship-search">
+                Search ships
+              </label>
+              <input
+                ref={searchRef}
+                id="alpha-overlay-ship-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search — name, manufacturer, role…"
+                className="alpha-selector-bay-search"
+                autoComplete="off"
+              />
             </div>
             <button
               type="button"
@@ -340,23 +300,6 @@ export function ShipSelectorOverlay({
           ) : null}
 
           <div className="alpha-selector-bay-surface alpha-selector-bay-surface-ship">
-            <div className="alpha-selector-bay-controls">
-              <div className="alpha-selector-bay-search-wrap">
-                <label className="alpha-selector-bay-visually-hidden" htmlFor="alpha-overlay-ship-search">
-                  Search ships
-                </label>
-                <input
-                  ref={searchRef}
-                  id="alpha-overlay-ship-search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search — name, manufacturer, role…"
-                  className="alpha-selector-bay-search"
-                  autoComplete="off"
-                />
-              </div>
-            </div>
-
             <div className="alpha-selector-bay-scroll alpha-drawer-results">
                 {groupedShips.length > 0 ? (
                   groupedShips.map((group) => (
@@ -386,7 +329,7 @@ export function ShipSelectorOverlay({
                                   <h4 className="alpha-selector-bay-subhead-title">{roleGroup.label}</h4>
                                   <span className="alpha-selector-bay-subhead-count">{roleGroup.ships.length}</span>
                                 </header>
-                                <div className="alpha-drawer-ship-card-grid">
+                                <div className="alpha-drawer-ship-card-grid alpha-drawer-ship-card-grid--list">
                                   {roleGroup.ships.map((ship) => {
                                     const shipKey = getShipSelectionKey(ship)
                                     const isSelected = selectedKeySet.has(shipKey)
@@ -396,6 +339,7 @@ export function ShipSelectorOverlay({
                                         type="button"
                                         className={[
                                           'alpha-drawer-ship-card',
+                                          'alpha-drawer-ship-card--list',
                                           'alpha-selector-bay-sc',
                                           isSelected ? 'alpha-drawer-ship-card-selected' : '',
                                           isRoleActive ? 'alpha-drawer-ship-card-role-active' : '',
@@ -404,17 +348,21 @@ export function ShipSelectorOverlay({
                                           .join(' ')}
                                         onClick={() => onSelectShip(shipKey)}
                                       >
-                                        <OverlayShipThumbnail ship={ship} />
-                                        <div className="alpha-drawer-ship-card-body">
-                                          <p className="alpha-drawer-ship-card-manufacturer">
-                                            {formatEntityLabel(ship.manufacturer)}
-                                          </p>
-                                          <strong className="alpha-drawer-ship-card-name">
-                                            {formatShipCardName(ship)}
-                                          </strong>
-                                          <p className="alpha-drawer-ship-card-meta">
+                                        <div className="alpha-drawer-ship-card-body alpha-drawer-ship-card-body--list">
+                                          <span className="alpha-drawer-ship-card-list-primary">
+                                            <span className="alpha-drawer-ship-card-manufacturer">
+                                              {formatEntityLabel(ship.manufacturer)}
+                                            </span>
+                                            <span className="alpha-drawer-ship-card-list-sep" aria-hidden="true">
+                                              ·
+                                            </span>
+                                            <span className="alpha-drawer-ship-card-name">
+                                              {formatShipCardName(ship)}
+                                            </span>
+                                          </span>
+                                          <span className="alpha-drawer-ship-card-list-stats">
                                             B {ship.ballisticThreshold} · E {ship.energyThreshold}
-                                          </p>
+                                          </span>
                                         </div>
                                         {isSelected ? (
                                           <span className="alpha-drawer-ship-card-chip">Selected</span>

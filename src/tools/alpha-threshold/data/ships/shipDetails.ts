@@ -21,6 +21,19 @@ function buildCardStatDetails(): ShipDetailsSeed {
       const flight = pruneEmptyObject({
         scmSpeed: value.scmSpeed ?? null,
         navSpeed: value.navSpeed ?? null,
+        boostSpeed: value.boostSpeedForward ?? null,
+        boostSpeedForward: value.boostSpeedForward ?? null,
+        boostSpeedBackward: value.boostSpeedBackward ?? null,
+        forwardGs: value.forwardGs ?? null,
+        reverseGs: value.reverseGs ?? null,
+        boostForwardGs: value.boostForwardGs ?? null,
+        boostReverseGs: value.boostReverseGs ?? null,
+        pitch: value.pitch ?? null,
+        yaw: value.yaw ?? null,
+        roll: value.roll ?? null,
+        boostPitch: value.boostPitch ?? null,
+        boostYaw: value.boostYaw ?? null,
+        boostRoll: value.boostRoll ?? null,
       })
       const countermeasures = pruneEmptyObject({
         noiseCount: value.noiseCount ?? null,
