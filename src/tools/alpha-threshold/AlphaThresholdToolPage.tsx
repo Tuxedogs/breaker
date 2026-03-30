@@ -312,21 +312,6 @@ export default function AlphaThresholdToolPage() {
     setSelectionMode('weapon')
   }
 
-  /** Overlay slot button: manual target — next pick goes to this slot. */
-  function handleShipOverlaySlotActivate(index: number) {
-    setActiveShipSlotIndex(Math.max(0, Math.min(visibleShipCount - 1, index)))
-    setShipAutoAdvance(false)
-    setHoveredShipSlotIndex(null)
-    setSelectionNotice(null)
-  }
-
-  function handleWeaponOverlaySlotActivate(index: number) {
-    setActiveWeaponSlotIndex(Math.max(0, Math.min(visibleWeaponCount - 1, index)))
-    setWeaponAutoAdvance(false)
-    setHoveredWeaponSlotIndex(null)
-    setSelectionNotice(null)
-  }
-
   function handleOpenShips() {
     handleOpenShipsAt(nextShipSlotIndex, true)
   }
@@ -368,22 +353,10 @@ export default function AlphaThresholdToolPage() {
           open
           allShips={allShips}
           selectedShipNames={selectedShipNames}
-          maxVictimShips={visibleShipCount}
           activeSlotIndex={Math.max(0, Math.min(visibleShipCount - 1, activeShipSlotIndex))}
           selectionNotice={selectionMode === 'ship' ? selectionNotice : null}
-          onSetActiveSlot={handleShipOverlaySlotActivate}
+          disableAnchor={isMobileViewport}
           onSelectShip={handleShipSelect}
-          onClearShip={(slotIndex) => {
-            setVictimShipAt(slotIndex, null)
-            setActiveShipSlotIndex(slotIndex)
-            setHoveredShipSlotIndex(null)
-            setSelectionNotice(null)
-            shipClearStreakRef.current += 1
-            if (shipClearStreakRef.current >= 2) {
-              setShipAutoAdvance(true)
-              shipClearStreakRef.current = 0
-            }
-          }}
           onClose={() => setSelectionMode(null)}
         />
       ) : selectionMode === 'weapon' ? (
@@ -395,21 +368,8 @@ export default function AlphaThresholdToolPage() {
           activeSlotIndex={Math.max(0, Math.min(visibleWeaponCount - 1, activeWeaponSlotIndex))}
           selectionNotice={selectionMode === 'weapon' ? selectionNotice : null}
           weaponFilterPreset={weaponOverlayFilterPreset}
-          onSetActiveSlot={handleWeaponOverlaySlotActivate}
+          disableAnchor={isMobileViewport}
           onSelectWeapon={handleWeaponSelect}
-          onClearWeapon={(slotIndex) => {
-            const slot = slots[slotIndex]
-            if (!slot) return
-            setSlotWeapon(slot.id, null)
-            setActiveWeaponSlotIndex(slotIndex)
-            setHoveredWeaponSlotIndex(null)
-            setSelectionNotice(null)
-            weaponClearStreakRef.current += 1
-            if (weaponClearStreakRef.current >= 2) {
-              setWeaponAutoAdvance(true)
-              weaponClearStreakRef.current = 0
-            }
-          }}
           onClose={() => {
             setWeaponOverlayFilterPreset(null)
             setSelectionMode(null)

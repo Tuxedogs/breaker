@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { formatEntityLabel, formatMetric, getWeaponKey } from '../lib/calculations'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
+import { formatMetric, getWeaponKey } from '../lib/calculations'
 import { filterWeaponRecords, groupWeaponRecords } from '../lib/weapons/grouping'
 import { formatWeaponClassLabel, formatWeaponTypeLabel } from '../lib/weapons/normalize'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
@@ -14,9 +15,9 @@ type Props = {
   selectionNotice: string | null
   /** When opening from matrix header chips (Ballistic / class), seed overlay filters */
   weaponFilterPreset?: ArmorInteractionFilterChip | null
-  onSetActiveSlot: (slotIndex: number) => void
+  /** When true, use default half-panel layout (e.g. mobile bottom sheet). */
+  disableAnchor?: boolean
   onSelectWeapon: (weaponKey: string) => void
-  onClearWeapon: (slotIndex: number) => void
   onClose: () => void
 }
 
@@ -53,15 +54,74 @@ export function WeaponSelectorOverlay({
   activeSlotIndex,
   selectionNotice,
   weaponFilterPreset = null,
-  onSetActiveSlot,
+  disableAnchor = false,
   onSelectWeapon,
-  onClearWeapon,
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
   const [damageFilter, setDamageFilter] = useState<DamageFilter>('all')
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const searchRef = useRef<HTMLInputElement | null>(null)
+  const overlayRef = useRef<HTMLElement | null>(null)
+  const [firstCellAnchorStyle, setFirstCellAnchorStyle] = useState<CSSProperties | undefined>(
+    undefined
+  )
+
+  useLayoutEffect(() => {
+    if (!open || disableAnchor) {
+      setFirstCellAnchorStyle(undefined)
+      return
+    }
+
+    const overlay = overlayRef.current
+    if (!overlay) {
+      setFirstCellAnchorStyle(undefined)
+      return
+    }
+
+    const update = () => {
+      const header = document.querySelector(
+        `.alpha-threshold-tool .acm-header-row .acm-weapon-header[data-col-index="${activeSlotIndex}"]`
+      )
+      if (!(header instanceof HTMLElement)) {
+        setFirstCellAnchorStyle(undefined)
+        return
+      }
+      const lastRow = document.querySelector('.alpha-threshold-tool .acm-body .acm-row:last-child')
+      if (!(lastRow instanceof HTMLElement)) {
+        setFirstCellAnchorStyle(undefined)
+        return
+      }
+
+      const lastRowCells = Array.from(lastRow.querySelectorAll<HTMLElement>('article.acm-cell'))
+      const lastColumnCell =
+        lastRowCells[Math.max(0, Math.min(activeSlotIndex, lastRowCells.length - 1))]
+      if (!lastColumnCell) {
+        setFirstCellAnchorStyle(undefined)
+        return
+      }
+
+      const overlayRect = overlay.getBoundingClientRect()
+      const headerRect = header.getBoundingClientRect()
+      const lastCellRect = lastColumnCell.getBoundingClientRect()
+      const anchorHeight = Math.max(headerRect.height, lastCellRect.bottom - headerRect.top)
+      setFirstCellAnchorStyle({
+        '--alpha-weapon-anchor-top': `${headerRect.top - overlayRect.top}px`,
+        '--alpha-weapon-anchor-left': `${headerRect.left - overlayRect.left}px`,
+        '--alpha-weapon-anchor-width': `${headerRect.width}px`,
+        '--alpha-weapon-anchor-height': `${anchorHeight}px`,
+      } as CSSProperties)
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    window.addEventListener('scroll', update, true)
+    return () => {
+      window.removeEventListener('resize', update)
+      window.removeEventListener('scroll', update, true)
+      setFirstCellAnchorStyle(undefined)
+    }
+  }, [open, disableAnchor, activeSlotIndex])
 
   useEffect(() => {
     if (!open) {
@@ -144,10 +204,6 @@ export function WeaponSelectorOverlay({
       ),
     [slots]
   )
-  const weaponByKey = useMemo(
-    () => new Map(weapons.map((weapon) => [getWeaponKey(weapon), weapon] as const)),
-    [weapons]
-  )
 
   const accentTone = SLOT_TONES[activeSlotIndex % SLOT_TONES.length]
 
@@ -158,8 +214,16 @@ export function WeaponSelectorOverlay({
     }))
   }
 
+  const useColumnAnchor = Boolean(firstCellAnchorStyle)
+
   return (
-    <section className="alpha-selection-overlay" aria-label="Weapon selection overlay">
+    <section
+      ref={overlayRef}
+      className="alpha-selection-overlay alpha-selection-overlay--weapon-bay"
+      aria-label="Weapon selection overlay"
+      style={firstCellAnchorStyle}
+      data-weapon-column-anchor={useColumnAnchor ? 'true' : undefined}
+    >
       <section
         className={[
           'alpha-overlay-panel',
@@ -171,58 +235,19 @@ export function WeaponSelectorOverlay({
       >
         <div className="alpha-selector-bay-shell">
           <div className="alpha-selector-bay-head">
-            <div className="alpha-selector-bay-slot-row" role="list" aria-label="Weapon slots">
-              {slots.slice(0, 4).map((slot, index) => {
-                const assignedWeapon = slot.weaponKey ? weaponByKey.get(slot.weaponKey) : null
-                const isActive = index === activeSlotIndex
-                const toneClass = `acm-panel-tone-${SLOT_TONES[index % SLOT_TONES.length]}`
-                return (
-                  <header
-                    key={slot.id}
-                    className={[
-                      'acm-weapon-header',
-                      'alpha-selector-bay-slot',
-                      !assignedWeapon ? 'acm-weapon-header-empty' : '',
-                      toneClass,
-                      isActive ? 'acm-weapon-header-active' : '',
-                    ]
-                      .filter(Boolean)
-                      .join(' ')}
-                    role="listitem"
-                  >
-                    <button
-                      type="button"
-                      className="alpha-selector-bay-slot-main"
-                      onClick={() => onSetActiveSlot(index)}
-                    >
-                      {assignedWeapon ? (
-                        <h3 className="acm-weapon-name">
-                          {formatEntityLabel(assignedWeapon.name)}
-                        </h3>
-                      ) : (
-                        <div className="acm-weapon-empty">
-                          <p className="acm-weapon-empty-label">
-                            Weapon {index + 1}
-                          </p>
-                        </div>
-                      )}
-                    </button>
-                    {assignedWeapon ? (
-                      <button
-                        type="button"
-                        className="alpha-selector-bay-slot-clear"
-                        onClick={(event) => {
-                          event.stopPropagation()
-                          onClearWeapon(index)
-                        }}
-                        aria-label={`Clear weapon slot ${index + 1}`}
-                      >
-                        Clear
-                      </button>
-                    ) : null}
-                  </header>
-                )
-              })}
+            <div className="alpha-selector-bay-search-wrap">
+              <label className="alpha-selector-bay-visually-hidden" htmlFor="alpha-overlay-weapon-search">
+                Search weapons
+              </label>
+              <input
+                ref={searchRef}
+                id="alpha-overlay-weapon-search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search — name, class, size…"
+                className="alpha-selector-bay-search"
+                autoComplete="off"
+              />
             </div>
             <button
               type="button"
@@ -242,21 +267,6 @@ export function WeaponSelectorOverlay({
 
           <div className="alpha-selector-bay-surface">
             <div className="alpha-selector-bay-controls">
-              <div className="alpha-selector-bay-search-wrap">
-                <label className="alpha-selector-bay-visually-hidden" htmlFor="alpha-overlay-weapon-search">
-                  Search weapons
-                </label>
-                <input
-                  ref={searchRef}
-                  id="alpha-overlay-weapon-search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search — name, class, size…"
-                  className="alpha-selector-bay-search"
-                  autoComplete="off"
-                />
-              </div>
-
               <div className="alpha-selector-bay-segments" aria-label="Weapon damage filter">
                 {DAMAGE_FILTERS.map((value) => (
                   <button
