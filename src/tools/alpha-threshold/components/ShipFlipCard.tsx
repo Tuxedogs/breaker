@@ -9,6 +9,7 @@ type ShipFlipCardProps = {
   eyebrow: string
   name: string
   roleLabel: string
+  onClear?: () => void
 }
 
 export function ShipFlipCard({
@@ -17,6 +18,7 @@ export function ShipFlipCard({
   eyebrow,
   name,
   roleLabel,
+  onClear,
 }: ShipFlipCardProps) {
   const [flipped, setFlipped] = useState(false)
   const model = useMemo(() => buildShipFlipCardModel(ship), [ship])
@@ -24,6 +26,11 @@ export function ShipFlipCard({
   const toggleFlip = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation()
     setFlipped((value) => !value)
+  }
+
+  const clearShip = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    onClear?.()
   }
 
   return (
@@ -63,17 +70,18 @@ export function ShipFlipCard({
               </header>
 
               <div className="acm-ship-flip-thresholds-wrap">
-                <p className="acm-ship-flip-thresholds-heading">Thresholds</p>
-                <div className="acm-ship-flip-thresholds" aria-label="Ship thresholds">
-                  <div className="acm-ship-flip-threshold acm-ship-flip-threshold--energy">
-                    <span className="acm-ship-flip-threshold-label">Energy</span>
-                    <span className="acm-ship-flip-threshold-value">{model.energyThreshold}</span>
-                  </div>
-                  <div className="acm-ship-flip-threshold-gap" aria-hidden="true" />
-                  <div className="acm-ship-flip-threshold acm-ship-flip-threshold--ballistic">
-                    <span className="acm-ship-flip-threshold-label">Ballistic</span>
-                    <span className="acm-ship-flip-threshold-value">{model.ballisticThreshold}</span>
-                  </div>
+                <div className="acm-ship-flip-threshold-actions">
+                  <span className="acm-ship-flip-threshold-action-spacer" aria-hidden="true" />
+                  {onClear ? (
+                    <button
+                      type="button"
+                      className="acm-ship-flip-clear"
+                      onClick={clearShip}
+                      aria-label={`Clear ${name} from this ship slot`}
+                    >
+                      Clear
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -96,7 +104,17 @@ export function ShipFlipCard({
                   <div className="acm-ship-flip-durability-row">
                     <div className="acm-ship-flip-durability-item">
                       <dt className="acm-ship-flip-durability-label">Armor</dt>
-                      <dd className="acm-ship-flip-durability-value">{model.armor}</dd>
+                      <dd className="acm-ship-flip-durability-value">
+                        {model.armor}
+                        <span className="acm-ship-flip-threshold-inline acm-ship-flip-threshold-inline--energy">
+                          <span className="acm-ship-flip-threshold-inline-k">E</span>
+                          <span className="acm-ship-flip-threshold-inline-v">{model.energyThreshold}</span>
+                        </span>
+                        <span className="acm-ship-flip-threshold-inline acm-ship-flip-threshold-inline--ballistic">
+                          <span className="acm-ship-flip-threshold-inline-k">B</span>
+                          <span className="acm-ship-flip-threshold-inline-v">{model.ballisticThreshold}</span>
+                        </span>
+                      </dd>
                     </div>
                     <div className="acm-ship-flip-durability-gap" aria-hidden="true" />
                     <div className="acm-ship-flip-durability-item">

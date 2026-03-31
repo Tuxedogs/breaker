@@ -25,11 +25,26 @@ export function AlphaMobileControlStrip({
       </button>
       <button
         type="button"
-        className="acm-corner-seg alpha-mobile-control-strip-button"
+        className={[
+          'acm-corner-seg',
+          'alpha-mobile-control-strip-button',
+          shieldMode === 'up'
+            ? 'alpha-mobile-control-strip-button--shield-on'
+            : 'alpha-mobile-control-strip-button--shield-off',
+        ].join(' ')}
         aria-pressed={shieldMode === 'up'}
         onClick={() => onShieldModeChange(shieldMode === 'up' ? 'down' : 'up')}
       >
-        Shield: {shieldMode === 'up' ? 'ON' : 'DOWN'}
+        Shield:{' '}
+        <span
+          className={
+            shieldMode === 'up'
+              ? 'alpha-mobile-control-strip-state alpha-mobile-control-strip-state--shield-on'
+              : 'alpha-mobile-control-strip-state alpha-mobile-control-strip-state--shield-off'
+          }
+        >
+          {shieldMode === 'up' ? 'ON' : 'DOWN'}
+        </span>
       </button>
     </section>
   )

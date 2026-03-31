@@ -86,7 +86,6 @@
   isolation: isolate;
 }
 
-/* Readability veil */
 .alpha-threshold-tool .acm-ship-flip-foreground::before {
   content: "";
   position: absolute;
@@ -107,7 +106,6 @@
   z-index: 1;
 }
 
-/* Back: minimal inset — toggle is position:absolute, so no large top “reserve” */
 .alpha-threshold-tool .acm-ship-flip-foreground--back {
   min-height: 0;
   flex: 1 1 auto;
@@ -123,7 +121,6 @@
   );
 }
 
-/* Compact text control — small footprint, reads as a subtle HUD link */
 .alpha-threshold-tool .acm-ship-flip-toggle {
   position: absolute;
   top: 0.35rem;
@@ -181,79 +178,59 @@
 
 .alpha-threshold-tool .acm-ship-flip-thresholds-wrap {
   margin-top: auto;
-  padding-top: 0.375rem;
+  padding-top: 0.1rem;
 }
 
-.alpha-threshold-tool .acm-ship-flip-thresholds-heading {
-  margin: 0 0 0.2rem;
-  font-size: 0.5rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgb(148 163 184 / 0.95);
-}
-
-/* Compact strip: two readouts + hairline divider — no tall “bar” chrome */
-.alpha-threshold-tool .acm-ship-flip-thresholds {
+.alpha-threshold-tool .acm-ship-flip-threshold-actions {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 0;
-  align-items: stretch;
+  align-items: end;
+  margin: 0 0 0.14rem;
 }
 
-.alpha-threshold-tool .acm-ship-flip-threshold-gap {
-  width: 1px;
-  margin: 0.15rem 0.35rem;
-  align-self: stretch;
-  background: rgb(255 255 255 / 0.1);
-  flex-shrink: 0;
+.alpha-threshold-tool .acm-ship-flip-threshold-action-spacer {
+  grid-column: 1 / 3;
 }
 
-.alpha-threshold-tool .acm-ship-flip-threshold {
-  box-sizing: border-box;
-  display: flex;
-  min-width: 0;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.35rem;
-  padding: 0.2rem 0.3rem;
-  border-radius: 0.25rem;
-  border: 1px solid rgb(255 255 255 / 0.06);
-  background: rgb(0 0 0 / 0.2);
-  border-top: 2px solid rgb(56 189 248 / 0.75);
-}
-
-.alpha-threshold-tool .acm-ship-flip-threshold--ballistic {
-  border-top-color: rgb(251 191 36 / 0.8);
-}
-
-.alpha-threshold-tool .acm-ship-flip-threshold-label {
-  flex: 0 1 auto;
-  font-size: 0.5rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgb(148 163 184);
-  line-height: 1.2;
-}
-
-.alpha-threshold-tool .acm-ship-flip-threshold-value {
-  flex: 0 0 auto;
+.alpha-threshold-tool .acm-ship-flip-clear {
+  grid-column: 3;
+  justify-self: end;
+  appearance: none;
+  margin: 0;
+  padding: 0.08rem 0.26rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  border-radius: 0.2rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.02), transparent 100%),
+    rgb(9 13 22 / 0.82);
   font-family: "Orbitron", "Rajdhani", sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.42rem;
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  line-height: 1.1;
-  color: rgb(248 250 252);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.92);
+  cursor: pointer;
+  line-height: 1.05;
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease;
 }
 
-.alpha-threshold-tool .acm-ship-flip-threshold--ballistic .acm-ship-flip-threshold-value {
-  color: rgb(254 243 199);
+.alpha-threshold-tool .acm-ship-flip-clear:hover {
+  border-color: rgb(148 163 184 / 0.22);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    rgb(15 23 42 / 0.88);
+  color: rgb(226 232 240);
 }
 
-/* Back: no scroll — content must fit; overflow clipped */
+.alpha-threshold-tool .acm-ship-flip-clear:focus-visible {
+  outline: 2px solid rgb(125 211 252 / 0.45);
+  outline-offset: 2px;
+}
+
 .alpha-threshold-tool .acm-ship-flip-back-body {
   flex: 1 1 auto;
   min-height: 0;
@@ -300,12 +277,49 @@
 
 .alpha-threshold-tool .acm-ship-flip-durability-value {
   margin: 0;
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.22rem 0.34rem;
   font-family: "Rajdhani", system-ui, sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
   color: rgb(241 245 249);
+}
+
+.alpha-threshold-tool .acm-ship-flip-threshold-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.08rem;
+  white-space: nowrap;
+}
+
+.alpha-threshold-tool .acm-ship-flip-threshold-inline-k {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.alpha-threshold-tool .acm-ship-flip-threshold-inline-v {
+  font-family: "Rajdhani", system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.alpha-threshold-tool .acm-ship-flip-threshold-inline--energy .acm-ship-flip-threshold-inline-k,
+.alpha-threshold-tool .acm-ship-flip-threshold-inline--energy .acm-ship-flip-threshold-inline-v {
+  color: rgb(125 211 252);
+}
+
+.alpha-threshold-tool .acm-ship-flip-threshold-inline--ballistic .acm-ship-flip-threshold-inline-k,
+.alpha-threshold-tool .acm-ship-flip-threshold-inline--ballistic .acm-ship-flip-threshold-inline-v {
+  color: rgb(252 211 77);
 }
 
 .alpha-threshold-tool .acm-ship-flip-durability-gap {
@@ -324,12 +338,10 @@
   margin-bottom: 0;
 }
 
-/* No heading — reclaim vertical space for the movement grid */
 .alpha-threshold-tool .acm-ship-flip-section--movement {
   margin-top: 0;
 }
 
-/* Movement 2×2: three speed cells + compact P/Y/R block */
 .alpha-threshold-tool .acm-ship-flip-move-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

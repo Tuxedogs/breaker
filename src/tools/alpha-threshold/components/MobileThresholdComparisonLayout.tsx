@@ -11,6 +11,7 @@ type Props = {
   onShieldModeChange: (mode: DefenseShieldState) => void
   onOpenShips: () => void
   onOpenWeapons: () => void
+  onClearShipAt?: (slotIndex: number) => void
 }
 
 export function MobileThresholdComparisonLayout({
@@ -22,6 +23,7 @@ export function MobileThresholdComparisonLayout({
   onShieldModeChange,
   onOpenShips,
   onOpenWeapons,
+  onClearShipAt,
 }: Props) {
   const shipSelectionCount = ships.filter((ship) => ship.name !== '' && ship.manufacturer !== '').length
   const weaponSelectionCount = selectedWeapons.filter(
@@ -41,7 +43,12 @@ export function MobileThresholdComparisonLayout({
         onOpenWeapons={onOpenWeapons}
         onShieldModeChange={onShieldModeChange}
       />
-      <AlphaMobileResultsOnly ships={ships} selectedWeapons={selectedWeapons} shieldMode={shieldMode} />
+      <AlphaMobileResultsOnly
+        ships={ships}
+        selectedWeapons={selectedWeapons}
+        shieldMode={shieldMode}
+        onClearShipAt={onClearShipAt}
+      />
     </section>
   )
 }
