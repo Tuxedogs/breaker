@@ -26,6 +26,7 @@ import type {
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import { HeatmapTooltip } from './HeatmapTooltip'
 import { MobileThresholdComparisonLayout } from './MobileThresholdComparisonLayout'
+import { ShipFlipCard } from './ShipFlipCard'
 
 type Props = {
   controlStrip?: ReactNode
@@ -48,10 +49,14 @@ type Props = {
   onAnalysisColumnCountChange?: (count: number) => void
   targetColumnCount?: number
   onTargetColumnCountChange?: (count: number) => void
+  rowCount?: number
+  onRowCountChange?: (count: number) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onClearShipAt?: (slotIndex: number) => void
+  onClearWeaponAt?: (slotIndex: number) => void
   /** First-visit tour: spotlight matrix controls */
   onboardingHighlight?: 'ship-weapon' | 'shield' | null
 }
@@ -67,18 +72,16 @@ type MatrixColumnModel = {
 }
 
 const DESTINATION_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
-const ANALYSIS_COLUMN_MIN = 1
-const ANALYSIS_COLUMN_MAX = 4
+const ROW_COUNT_MIN = 3
+const ROW_COUNT_MAX = 7
+const ANALYSIS_COLUMN_MIN = 3
+const ANALYSIS_COLUMN_MAX = 7
 const TARGET_RECOMMENDATION_COLUMN_MIN = 3
-const TARGET_RECOMMENDATION_COLUMN_MAX = 6
+const TARGET_RECOMMENDATION_COLUMN_MAX = 7
 const WEAPON_SIZE_OPTIONS = [2, 3, 4, 5, 7, 8] as const
 
-function buildVisibleShips(ships: Ship[]) {
-  return ships.slice(0, 4)
-}
-
-function getShieldChipLabel(state: DefenseShieldState) {
-  return state === 'up' ? 'Shield Up' : 'Shield Down'
+function buildVisibleShips(ships: Ship[], rowCount: number) {
+  return ships.slice(0, rowCount)
 }
 
 function getEstimateTimingTone(estimate: ArmorInteractionEstimate) {
@@ -169,7 +172,6 @@ function buildEstimateViewModel(estimate: ArmorInteractionEstimate, shieldState:
     estimate,
     shieldState,
     tone,
-    shieldChipLabel: getShieldChipLabel(shieldState),
     stateLabel: getEstimateStateLabel(estimate),
     penetrationLabel: getEstimatePenetrationLabel(estimate),
     penetrationEffectivePercent: getPenetrationEffectivePercent(estimate),
@@ -329,11 +331,6 @@ function isPlaceholderWeapon(selection: SelectedWeaponComparison) {
   return selection.weapon.name === '' && selection.weapon.weaponClass === ''
 }
 
-function getCompactMetricLabel(value: number | null | undefined) {
-  if (value == null) return 'N/A'
-  return formatMetric(value)
-}
-
 function getShipRoleLabel(ship: Ship) {
   const raw = ship.role?.trim()
   if (!raw) return '-'
@@ -396,10 +393,14 @@ export function ThresholdComparisonMatrix({
   onAnalysisColumnCountChange,
   targetColumnCount = TARGET_RECOMMENDATION_COLUMN_MIN,
   onTargetColumnCountChange,
+  rowCount = 4,
+  onRowCountChange,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
   onOpenShipsAt,
+  onClearShipAt,
+  onClearWeaponAt,
   onboardingHighlight = null,
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
@@ -416,8 +417,10 @@ export function ThresholdComparisonMatrix({
     hero?: {
       leftLabel: string
       leftValue: string
+      leftValueColor?: string
       rightLabel: string
       rightValue: string
+      rightValueColor?: string
       description: string
     }
     lines: MatrixTooltipLine[]
@@ -428,9 +431,10 @@ export function ThresholdComparisonMatrix({
     title: '',
     lines: [],
   })
-  const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
+  const [sourceMode] = useState<'ptu' | 'live'>('live')
   const [isMobileLayout, setIsMobileLayout] = useState(false)
-  const visibleShips = buildVisibleShips(ships)
+  const normalizedRowCount = Math.max(ROW_COUNT_MIN, Math.min(ROW_COUNT_MAX, rowCount, ships.length || ROW_COUNT_MAX))
+  const visibleShips = buildVisibleShips(ships, normalizedRowCount)
   const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
     (visibleShips.length > 0 &&
@@ -600,6 +604,8 @@ export function ThresholdComparisonMatrix({
     )
   }, [matrixMode, visibleShips, bodyWeapons])
 
+  const showCornerControls = !hideHeaderRow && matrixMode !== 'target'
+
   if (isMobileLayout) {
     return (
       <MobileThresholdComparisonLayout
@@ -613,6 +619,7 @@ export function ThresholdComparisonMatrix({
         onShieldModeChange={onShieldModeChange}
         onOpenShips={onOpenShips}
         onOpenWeapons={onOpenWeapons}
+        onClearShipAt={onClearShipAt}
       />
     )
   }
@@ -631,228 +638,258 @@ export function ThresholdComparisonMatrix({
       aria-label="Weapons Analysis board"
     >
       {controlStrip ? <div className="alpha-analysis-control-shell">{controlStrip}</div> : null}
-      <div className="acm-toolbar" aria-label="Threshold controls">
-        <div className="acm-toolbar-group acm-toolbar-group--home">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) =>
-              [
-                'acm-toolbar-home',
-                isActive ? 'acm-toolbar-home-active' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')
-            }
-            aria-label="Home"
-          >
-            <svg aria-hidden viewBox="0 0 24 24" className="acm-toolbar-home-icon">
-              <path
-                d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
-                fill="currentColor"
-              />
-            </svg>
-          </NavLink>
-        </div>
-        <span className="acm-toolbar-divider" aria-hidden="true" />
-        <div className="acm-toolbar-group">
-          <span className="acm-toolbar-label">Source</span>
-          <div className="acm-toolbar-segments" role="radiogroup" aria-label="Source">
-            {(
-              [
-                ['ptu', 'PTU'],
-                ['live', 'LIVE'],
-              ] as const
-            ).map(([id, label], index) => (
-              <span key={id} className="acm-toolbar-seg-wrap">
-                {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
-                <button
-                  type="button"
-                  className={[
-                    'acm-toolbar-seg',
-                    sourceMode === id ? 'acm-toolbar-seg--active' : '',
-                  ].filter(Boolean).join(' ')}
-                  role="radio"
-                  aria-checked={sourceMode === id}
-                  onClick={() => setSourceMode(id)}
-                >
-                  {label}
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-        <span className="acm-toolbar-divider" aria-hidden="true" />
-        <div className="acm-toolbar-group">
-          <span className="acm-toolbar-label">Mode</span>
-          <div className="acm-toolbar-segments" role="radiogroup" aria-label="Mode">
-            {(
-              [
-                ['analysis', 'Analysis'],
-                ['target', 'Target'],
-              ] as const
-            ).map(([id, label], index) => (
-              <span key={id} className="acm-toolbar-seg-wrap">
-                {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
-                <button
-                  type="button"
-                  className={[
-                    'acm-toolbar-seg',
-                    matrixMode === id ? 'acm-toolbar-seg--active' : '',
-                  ].filter(Boolean).join(' ')}
-                  role="radio"
-                  aria-checked={matrixMode === id}
-                  onClick={() => onMatrixModeChange(id)}
-                >
-                  {label}
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-        <span className="acm-toolbar-divider" aria-hidden="true" />
-        <div className="acm-toolbar-group">
-          <span className="acm-toolbar-label">Shields</span>
-          <div className="acm-toolbar-segments" role="group" aria-label="Shields">
-            <button
-              type="button"
-              className={[
-                'acm-toolbar-seg',
-                shieldMode === 'up' ? 'acm-toolbar-seg--active-shield-on' : '',
-              ].filter(Boolean).join(' ')}
-              aria-pressed={shieldMode === 'up'}
-              onClick={() => onShieldModeChange('up')}
-            >
-              ON
-            </button>
-            <span className="acm-toolbar-seg-sep" aria-hidden>/</span>
-            <button
-              type="button"
-              className={[
-                'acm-toolbar-seg',
-                shieldMode === 'down' ? 'acm-toolbar-seg--active-shield-off' : '',
-              ].filter(Boolean).join(' ')}
-              aria-pressed={shieldMode === 'down'}
-              onClick={() => onShieldModeChange('down')}
-            >
-              OFF
-            </button>
-          </div>
-        </div>
-        <span className="acm-toolbar-divider" aria-hidden="true" />
-        <div className="acm-toolbar-group">
-          <span className="acm-toolbar-label">Columns</span>
-          <div className="acm-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
-            <button
-              type="button"
-              className="acm-toolbar-stepper-button"
-              aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
-              onClick={() =>
-                matrixMode === 'target'
-                  ? onTargetColumnCountChange?.(
-                      Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
-                    )
-                  : onAnalysisColumnCountChange?.(
-                      Math.max(ANALYSIS_COLUMN_MIN, normalizedAnalysisColumnCount - 1)
-                    )
-              }
-            >
-              -
-            </button>
-            <span className="acm-toolbar-stepper-value" aria-live="polite">
-              {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
-            </span>
-            <button
-              type="button"
-              className="acm-toolbar-stepper-button"
-              aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
-              onClick={() =>
-                matrixMode === 'target'
-                  ? onTargetColumnCountChange?.(
-                      Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
-                    )
-                  : onAnalysisColumnCountChange?.(
-                      Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
-                    )
-              }
-            >
-              +
-            </button>
-          </div>
-        </div>
-        {matrixMode === 'target' ? (
-          <>
+      <div className="acm-shell">
+        <div className="acm-shell-toolbar">
+          <div className="acm-toolbar" aria-label="Threshold controls">
+            <div className="acm-toolbar-group acm-toolbar-group--home">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  [
+                    'acm-toolbar-home',
+                    isActive ? 'acm-toolbar-home-active' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')
+                }
+                aria-label="Home"
+              >
+                <svg aria-hidden viewBox="0 0 24 24" className="acm-toolbar-home-icon">
+                  <path
+                    d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </NavLink>
+            </div>
             <span className="acm-toolbar-divider" aria-hidden="true" />
             <div className="acm-toolbar-group">
-              <span className="acm-toolbar-label">Type</span>
-              <div className="acm-toolbar-segments" role="radiogroup" aria-label="Weapon type filter">
-                {(['ballistic', 'energy'] as const).map((value, index) => (
-                  <span key={value} className="acm-toolbar-seg-wrap">
+              <div className="acm-toolbar-segments" role="radiogroup" aria-label="Source">
+                {(
+                  [
+                    ['live', 'LIVE'],
+                    ['ptu', 'PTU'],
+                  ] as const
+                ).map(([id, label], index) => (
+                  <span key={id} className="acm-toolbar-seg-wrap">
                     {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
                     <button
                       type="button"
                       className={[
                         'acm-toolbar-seg',
-                        targetWeaponFilterPreset?.kind === 'damageType' && targetWeaponFilterPreset.value === value
-                          ? 'acm-toolbar-seg--active'
-                          : '',
+                        sourceMode === id ? 'acm-toolbar-seg--active' : '',
+                        id === 'ptu' ? 'acm-toolbar-seg--disabled' : '',
                       ].filter(Boolean).join(' ')}
                       role="radio"
-                      aria-checked={
-                        targetWeaponFilterPreset?.kind === 'damageType'
-                          ? targetWeaponFilterPreset.value === value
-                          : false
-                      }
-                      onClick={() =>
-                        onTargetWeaponFilterPresetChange?.({
-                          kind: 'damageType',
-                          slotId: 'target',
-                          label: getDamageTypeLabel(value),
-                          value,
-                        })
-                      }
+                      aria-checked={sourceMode === id}
+                      disabled={id === 'ptu'}
                     >
-                      {getDamageTypeLabel(value)}
+                      {label}
                     </button>
                   </span>
                 ))}
               </div>
             </div>
-            <span className="acm-toolbar-divider" aria-hidden="true" />
-            <div className="acm-toolbar-group acm-toolbar-group--size">
-              <label className="acm-toolbar-label" htmlFor="acm-size-filter">
-                Size
-              </label>
-              <div className="acm-toolbar-select-wrap">
-                <select
-                  id="acm-size-filter"
-                  className="acm-toolbar-select"
-                  aria-label="Weapon size filter"
-                  value={targetWeaponSizeFilter == null ? 'all' : String(targetWeaponSizeFilter)}
-                  onChange={(event) =>
-                    onTargetWeaponSizeFilterChange?.(
-                      event.target.value === 'all' ? null : Number(event.target.value)
-                    )
+            {showCornerControls ? null : (
+              <>
+                <span className="acm-toolbar-divider" aria-hidden="true" />
+                <div className="acm-toolbar-group">
+                  <span className="acm-toolbar-label">Mode</span>
+                  <div className="acm-toolbar-segments" role="radiogroup" aria-label="Mode">
+                    {(
+                      [
+                        ['analysis', 'Analysis'],
+                        ['target', 'Target'],
+                      ] as const
+                    ).map(([id, label], index) => (
+                      <span key={id} className="acm-toolbar-seg-wrap">
+                        {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
+                        <button
+                          type="button"
+                          className={[
+                            'acm-toolbar-seg',
+                            matrixMode === id ? 'acm-toolbar-seg--active' : '',
+                          ].filter(Boolean).join(' ')}
+                          role="radio"
+                          aria-checked={matrixMode === id}
+                          onClick={() => onMatrixModeChange(id)}
+                        >
+                          {label}
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <span className="acm-toolbar-divider" aria-hidden="true" />
+                <div className="acm-toolbar-group">
+                  <span className="acm-toolbar-label">Shields</span>
+                  <div className="acm-toolbar-segments" role="group" aria-label="Shields">
+                    <button
+                      type="button"
+                      className={[
+                        'acm-toolbar-seg',
+                        shieldMode === 'up' ? 'acm-toolbar-seg--active-shield-on' : '',
+                      ].filter(Boolean).join(' ')}
+                      aria-pressed={shieldMode === 'up'}
+                      onClick={() => onShieldModeChange('up')}
+                    >
+                      ON
+                    </button>
+                    <span className="acm-toolbar-seg-sep" aria-hidden>/</span>
+                    <button
+                      type="button"
+                      className={[
+                        'acm-toolbar-seg',
+                        shieldMode === 'down' ? 'acm-toolbar-seg--active-shield-off' : '',
+                      ].filter(Boolean).join(' ')}
+                      aria-pressed={shieldMode === 'down'}
+                      onClick={() => onShieldModeChange('down')}
+                    >
+                      OFF
+                    </button>
+                  </div>
+                </div>
+                <span className="acm-toolbar-divider" aria-hidden="true" />
+              </>
+            )}
+            <div className="acm-toolbar-group">
+              <span className="acm-toolbar-label">Col.</span>
+              <div className="acm-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                  onClick={() =>
+                    matrixMode === 'target'
+                      ? onTargetColumnCountChange?.(
+                          Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
+                        )
+                      : onAnalysisColumnCountChange?.(
+                          Math.max(ANALYSIS_COLUMN_MIN, normalizedAnalysisColumnCount - 1)
+                        )
                   }
                 >
-                  <option value="all">All sizes</option>
-                  {WEAPON_SIZE_OPTIONS.map((size) => (
-                    <option key={size} value={size}>
-                      S{size}
-                    </option>
-                  ))}
-                </select>
-                <span className="acm-toolbar-select-caret" aria-hidden="true">
-                  v
+                  -
+                </button>
+                <span className="acm-toolbar-stepper-value" aria-live="polite">
+                  {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
                 </span>
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                  onClick={() =>
+                    matrixMode === 'target'
+                      ? onTargetColumnCountChange?.(
+                          Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
+                        )
+                      : onAnalysisColumnCountChange?.(
+                          Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
+                        )
+                  }
+                >
+                  +
+                </button>
               </div>
             </div>
-          </>
-        ) : null}
-      </div>
-
-      <div className="acm-shell">
-          <div className="acm-scroll">
+            <span className="acm-toolbar-divider" aria-hidden="true" />
+            <div className="acm-toolbar-group">
+              <span className="acm-toolbar-label">Row</span>
+              <div className="acm-toolbar-stepper" aria-label="Analysis rows">
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label="Decrease analysis rows"
+                  onClick={() => onRowCountChange?.(Math.max(ROW_COUNT_MIN, normalizedRowCount - 1))}
+                >
+                  -
+                </button>
+                <span className="acm-toolbar-stepper-value" aria-live="polite">
+                  {normalizedRowCount}
+                </span>
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label="Increase analysis rows"
+                  onClick={() => onRowCountChange?.(Math.min(ROW_COUNT_MAX, normalizedRowCount + 1))}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            {matrixMode === 'target' ? (
+              <>
+                <span className="acm-toolbar-divider" aria-hidden="true" />
+                <div className="acm-toolbar-group">
+                  <span className="acm-toolbar-label">Type</span>
+                  <div className="acm-toolbar-segments" role="radiogroup" aria-label="Weapon type filter">
+                    {(['ballistic', 'energy'] as const).map((value, index) => (
+                      <span key={value} className="acm-toolbar-seg-wrap">
+                        {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
+                        <button
+                          type="button"
+                          className={[
+                            'acm-toolbar-seg',
+                            targetWeaponFilterPreset?.kind === 'damageType' && targetWeaponFilterPreset.value === value
+                              ? 'acm-toolbar-seg--active'
+                              : '',
+                          ].filter(Boolean).join(' ')}
+                          role="radio"
+                          aria-checked={
+                            targetWeaponFilterPreset?.kind === 'damageType'
+                              ? targetWeaponFilterPreset.value === value
+                              : false
+                          }
+                          onClick={() =>
+                            onTargetWeaponFilterPresetChange?.({
+                              kind: 'damageType',
+                              slotId: 'target',
+                              label: getDamageTypeLabel(value),
+                              value,
+                            })
+                          }
+                        >
+                          {getDamageTypeLabel(value)}
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <span className="acm-toolbar-divider" aria-hidden="true" />
+                <div className="acm-toolbar-group acm-toolbar-group--size">
+                  <label className="acm-toolbar-label" htmlFor="acm-size-filter">
+                    Size
+                  </label>
+                  <div className="acm-toolbar-select-wrap">
+                    <select
+                      id="acm-size-filter"
+                      className="acm-toolbar-select"
+                      aria-label="Weapon size filter"
+                      value={targetWeaponSizeFilter == null ? 'all' : String(targetWeaponSizeFilter)}
+                      onChange={(event) =>
+                        onTargetWeaponSizeFilterChange?.(
+                          event.target.value === 'all' ? null : Number(event.target.value)
+                        )
+                      }
+                    >
+                      <option value="all">All sizes</option>
+                      {WEAPON_SIZE_OPTIONS.map((size) => (
+                        <option key={size} value={size}>
+                          S{size}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="acm-toolbar-select-caret" aria-hidden="true">
+                      v
+                    </span>
+                  </div>
+                </div>
+              </>
+            ) : null}
+          </div>
+        </div>
+        <div className="acm-scroll">
             <div
               className="acm-table"
               style={gridStyle}
@@ -866,9 +903,64 @@ export function ThresholdComparisonMatrix({
                       'acm-corner-spacer',
                       onboardingHighlight === 'shield' ? 'alpha-onboarding-target-highlight' : '',
                     ].filter(Boolean).join(' ')}
-                    aria-hidden="true"
                   >
-                    <div className="acm-corner-spacer-bar" />
+                    <div className="acm-corner-body">
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Mode</span>
+                        <div className="acm-corner-segments" role="radiogroup" aria-label="Mode">
+                          {(
+                            [
+                              ['analysis', 'Analysis'],
+                              ['target', 'Target'],
+                            ] as const
+                          ).map(([id, label], index) => (
+                            <span key={id} className="acm-corner-seg-wrap">
+                              {index > 0 ? <span className="acm-corner-seg-sep" aria-hidden>|</span> : null}
+                              <button
+                                type="button"
+                                className={[
+                                  'acm-corner-seg',
+                                  matrixMode === id ? 'acm-corner-seg--active' : '',
+                                ].filter(Boolean).join(' ')}
+                                role="radio"
+                                aria-checked={matrixMode === id}
+                                onClick={() => onMatrixModeChange(id)}
+                              >
+                                {label}
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Shields</span>
+                        <div className="acm-corner-segments" role="group" aria-label="Shields">
+                          <button
+                            type="button"
+                            className={[
+                              'acm-corner-seg',
+                              shieldMode === 'up' ? 'acm-corner-seg--active-shield-on' : '',
+                            ].filter(Boolean).join(' ')}
+                            aria-pressed={shieldMode === 'up'}
+                            onClick={() => onShieldModeChange('up')}
+                          >
+                            ON
+                          </button>
+                          <span className="acm-corner-seg-sep" aria-hidden>/</span>
+                          <button
+                            type="button"
+                            className={[
+                              'acm-corner-seg',
+                              shieldMode === 'down' ? 'acm-corner-seg--active-shield-off' : '',
+                            ].filter(Boolean).join(' ')}
+                            aria-pressed={shieldMode === 'down'}
+                            onClick={() => onShieldModeChange('down')}
+                          >
+                            OFF
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   {headerColumns.map(({ columnIndex, key, slotLabel: weaponSlotLabel, selection, placeholderWeapon }) => {
                     const isDestinationColumn =
@@ -932,7 +1024,7 @@ export function ThresholdComparisonMatrix({
                         }
                         onClick={() => {
                           if (onOpenWeaponsAt) {
-                            onOpenWeaponsAt(columnIndex, true)
+                            onOpenWeaponsAt(columnIndex, placeholderWeapon)
                             return
                           }
                           onOpenWeapons()
@@ -951,6 +1043,19 @@ export function ThresholdComparisonMatrix({
                             <p className="acm-weapon-meta">
                               {`${formatWeaponClassLabel(selection.weapon.weaponClass)} - ${getVelocityLabel(selection)}`}
                             </p>
+                            {onClearWeaponAt ? (
+                              <button
+                                type="button"
+                                className="acm-weapon-header-clear"
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  onClearWeaponAt(columnIndex)
+                                }}
+                                aria-label={`Clear ${formatEntityLabel(selection.weapon.name)} from this weapon slot`}
+                              >
+                                Clear
+                              </button>
+                            ) : null}
                           </div>
                         ) : null}
                       </header>
@@ -984,7 +1089,6 @@ export function ThresholdComparisonMatrix({
                         placeholderShip || (!isTargetMode && placeholderWeapon)
                       return !placeholderCell
                     })
-
                   return (
                     <div
                       key={ship.id}
@@ -1049,60 +1153,28 @@ export function ThresholdComparisonMatrix({
                             <p className="acm-ship-empty-hint">Select ship</p>
                           </div>
                         ) : (
-                          <>
-                            <div className="acm-ship-card-body">
-                              {ship.name ? (
-                                <MatrixShipThumbnail ship={ship} />
-                              ) : (
-                                <div
-                                  className="acm-ship-image-fallback acm-ship-image-fallback--fill"
-                                  aria-hidden="true"
-                                >
-                                  {formatEntityLabel(ship.manufacturer).slice(0, 2)}
-                                </div>
-                              )}
-                              <div className="acm-ship-fill-scrim" aria-hidden="true" />
-
-                              <div className="acm-ship-foreground">
-                                <div className="acm-ship-header">
-                                  <div className="acm-ship-copy">
-                                    <p className="acm-ship-eyebrow">
-                                      {formatEntityLabel(ship.manufacturer)}
-                                    </p>
-                                    <h3 className="acm-ship-name">
-                                      {formatEntityLabel(ship.name)}
-                                    </h3>
-                                    <span className="acm-ship-name-role">
-                                      {getShipRoleLabel(ship)}
-                                    </span>
+                          <div className="acm-ship-card-body">
+                            <ShipFlipCard
+                              key={ship.id}
+                              ship={ship}
+                              eyebrow={formatEntityLabel(ship.manufacturer)}
+                              name={formatEntityLabel(ship.name)}
+                              roleLabel={getShipRoleLabel(ship)}
+                              onClear={() => onClearShipAt?.(rowIndex)}
+                              thumbnail={
+                                ship.name ? (
+                                  <MatrixShipThumbnail ship={ship} />
+                                ) : (
+                                  <div
+                                    className="acm-ship-image-fallback acm-ship-image-fallback--fill"
+                                    aria-hidden="true"
+                                  >
+                                    {formatEntityLabel(ship.manufacturer).slice(0, 2)}
                                   </div>
-                                </div>
-
-                                <dl className="acm-ship-inline-stats" aria-label="Ship stats">
-                                  <div className="acm-ship-stat-box">
-                                    <div className="acm-ship-inline-stat">
-                                      <dt>NAV</dt>
-                                      <dd>{getCompactMetricLabel(ship.navSpeed)}</dd>
-                                    </div>
-                                    <div className="acm-ship-inline-stat">
-                                      <dt>SCM</dt>
-                                      <dd>{getCompactMetricLabel(ship.scmSpeed)}</dd>
-                                    </div>
-                                  </div>
-                                  <div className="acm-ship-stat-box">
-                                    <div className="acm-ship-inline-stat">
-                                      <dt>Armor HP</dt>
-                                      <dd>{formatMetric(ship.armorHp)}</dd>
-                                    </div>
-                                    <div className="acm-ship-inline-stat">
-                                      <dt>Hull HP</dt>
-                                      <dd>{formatMetric(ship.vitalHp)}</dd>
-                                    </div>
-                                  </div>
-                                </dl>
-                              </div>
-                            </div>
-                          </>
+                                )
+                              }
+                            />
+                          </div>
                         )}
                       </article>
 
@@ -1169,19 +1241,23 @@ export function ThresholdComparisonMatrix({
                             open: true,
                             x: rect.right - MATRIX_TOOLTIP_WIDTH_PX - MATRIX_TOOLTIP_VIEWPORT_GUTTER,
                             y: rect.top + MATRIX_TOOLTIP_VIEWPORT_GUTTER,
-                            title: activeResult
-                              ? `${getEstimatePenetrationLabel(activeResult.estimate)} - ${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`
-                              : `${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`,
+                            title: `${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`,
                             sectionTitle:
                               selection?.weapon.name ??
                               targetRecommendation?.weapon.name ??
                               `Weapon ${columnIndex + 1}`,
-                            hero: activeResult
+                                hero: activeResult
                               ? {
                                   leftLabel: 'Rating',
                                   leftValue: `E${getPenetrationEffectivePercent(activeResult.estimate)}`,
+                                  leftValueColor: getEffectivePenetrationSummaryColor(
+                                    getPenetrationEffectivePercent(activeResult.estimate)
+                                  ),
                                   rightLabel: 'Effective',
                                   rightValue: `${getPenetrationEffectivePercent(activeResult.estimate)}%`,
+                                  rightValueColor: getEffectivePenetrationSummaryColor(
+                                    getPenetrationEffectivePercent(activeResult.estimate)
+                                  ),
                                   description:
                                     'You only apply damage when the enemy ship armor is below this number in %.',
                                 }
@@ -1385,9 +1461,6 @@ export function ThresholdComparisonMatrix({
                                   <div className="acm-cell-meta-row">
                                     <p className="acm-cell-state acm-cell-detail-blur">
                                       {activeResult.stateLabel}
-                                    </p>
-                                    <p className="acm-cell-shield-chip">
-                                      {activeResult.shieldChipLabel}
                                     </p>
                                   </div>
                                   <div className="acm-cell-title-row">

@@ -96,6 +96,179 @@
   --alpha-sel-accent-soft: rgb(103 232 249 / 0.24);
 }
 
+/* Ship + weapon selectors: match acm-toolbar chrome — square corners, no nested surface frame. */
+.alpha-threshold-tool :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)::before {
+  border-radius: 0;
+}
+
+.alpha-threshold-tool
+  :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)
+  .alpha-overlay-panel.alpha-selector-bay {
+  border-radius: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+    rgb(9 13 22 / 0.96);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 10px 24px rgb(2 6 23 / 0.24);
+}
+
+.alpha-threshold-tool
+  :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)
+  .alpha-selector-bay-shell {
+  padding: 0.42rem 0.65rem 0.5rem;
+  background: rgb(6 9 14);
+}
+
+.alpha-threshold-tool
+  :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)
+  .alpha-selector-bay-surface {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  padding: 0.4rem 0 0.38rem;
+}
+
+/* Ship-only results: list rows (no thumbnails), hide visible scrollbars. */
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card-grid--list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card--list:not(.alpha-drawer-weapon-overlay-card) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.38rem;
+  border-radius: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+    rgb(9 13 22 / 0.96);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 10px 24px rgb(2 6 23 / 0.18);
+  text-align: left;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card-body--list {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card-list-primary {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card-list-sep {
+  display: none;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card--list
+  .alpha-drawer-ship-card-manufacturer {
+  margin: 0;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(160 174 196);
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card--list
+  .alpha-drawer-ship-card-name {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+  color: rgb(248 250 252);
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card-list-stats {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgb(148 163 184);
+  white-space: nowrap;
+  align-self: center;
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card--list:not(.alpha-drawer-weapon-overlay-card):hover {
+  border-color: rgb(255 255 255 / 0.2);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.034), transparent 100%),
+    rgb(11 15 24 / 0.98);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.alpha-threshold-tool
+  .alpha-selection-overlay--ship-bay
+  .alpha-overlay-panel.alpha-selector-bay
+  .alpha-drawer-ship-card--list.alpha-drawer-ship-card-selected {
+  border-color: rgb(45 212 191 / 0.55);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+    rgb(7 14 18 / 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgb(45 212 191 / 0.28),
+    0 0 14px rgb(45 212 191 / 0.12);
+}
+
+.alpha-threshold-tool .alpha-selection-overlay--ship-bay .alpha-selector-bay-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.alpha-threshold-tool .alpha-selection-overlay--ship-bay .alpha-selector-bay-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 .alpha-threshold-tool .alpha-selector-bay-shell {
   pointer-events: auto;
   display: flex;
@@ -108,9 +281,17 @@
 
 .alpha-threshold-tool .alpha-selector-bay-head {
   display: flex;
-  align-items: stretch;
+  flex-direction: row;
+  align-items: center;
   gap: 0.45rem;
   min-width: 0;
+}
+
+/* Search + close on one row; keep search compact */
+.alpha-threshold-tool .alpha-selector-bay-head .alpha-selector-bay-search-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 12rem;
 }
 
 .alpha-threshold-tool .alpha-selector-bay-slot-row {
@@ -127,6 +308,7 @@
 
 .alpha-threshold-tool .alpha-selector-bay-close {
   flex: 0 0 auto;
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -157,6 +339,10 @@
 .alpha-threshold-tool .alpha-selector-bay-close:focus-visible {
   outline: 2px solid rgb(125 211 252 / 0.55);
   outline-offset: 2px;
+}
+
+.alpha-threshold-tool .alpha-selector-bay-mobile-slots {
+  display: none;
 }
 
 /* Weapon column headers — compact matrix weapon header */
@@ -665,16 +851,18 @@
   border-color: rgb(255 255 255 / 0.14);
 }
 
-/* Static cyan (same as tone-cyan / group 1) — does not follow bay accent */
+/* Focus ring: subtle (ship + weapon selector search share this class). */
 .alpha-threshold-tool .alpha-selector-bay-search:focus {
   outline: none;
-  border-color: rgb(255 255 255 / 0.22);
-  box-shadow: inset 0 0 0 1px rgb(103 232 249 / 0.24);
+  border-color: rgb(255 255 255 / 0.14);
+  box-shadow:
+    inset 0 2px 6px rgb(0 0 0 / 0.45),
+    inset 0 0 0 1px rgb(103 232 249 / 0.1);
 }
 
 .alpha-threshold-tool .alpha-selector-bay-search:focus-visible {
-  outline: 2px solid rgb(103 232 249 / 0.55);
-  outline-offset: 2px;
+  outline: 1px solid rgb(125 211 252 / 0.22);
+  outline-offset: 1px;
 }
 
 .alpha-threshold-tool .alpha-selector-bay-segments {
@@ -774,6 +962,29 @@
   color: rgb(203 213 225);
 }
 
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-prefix {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+}
+
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-selected-count {
+  display: inline-flex;
+  min-width: 1rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: rgb(186 230 253);
+}
+
+.alpha-threshold-tool .alpha-selector-bay-group-toggle-plus {
+  font-size: 0.58rem;
+  font-weight: 800;
+  color: rgb(148 163 184);
+}
+
 .alpha-threshold-tool .alpha-selector-bay-group-toggle-label::before {
   content: '';
   width: 2px;
@@ -867,6 +1078,12 @@
   grid-template-columns: repeat(auto-fill, minmax(7.25rem, 1fr));
 }
 
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card {
   border: 1px solid rgb(255 255 255 / 0.09);
   border-radius: 0.85rem;
@@ -910,9 +1127,38 @@
   padding: 0;
 }
 
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card.alpha-drawer-weapon-overlay-card.alpha-drawer-weapon-overlay-card--list {
+  min-height: 0;
+  padding: 0.38rem;
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+    rgb(9 13 22 / 0.96);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.04),
+    0 10px 24px rgb(2 6 23 / 0.18);
+}
+
 .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-card-body {
   padding: 0.36rem 0.4rem;
   gap: 0.16rem;
+}
+
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-card--list .alpha-drawer-weapon-overlay-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.12rem;
+  padding: 0;
+}
+
+.alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-weapon-overlay-card-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.12rem;
 }
 
 .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-name {
@@ -936,6 +1182,28 @@
   font-size: 0.62rem;
   line-height: 1.2;
   color: rgb(148 163 184);
+  align-self: flex-end;
+}
+
+.alpha-threshold-tool .alpha-selection-overlay--weapon-bay .alpha-selector-bay-subhead {
+  padding: 0.22rem 0.4rem;
+  border-bottom: none;
+  border-radius: 0;
+  background: linear-gradient(90deg, rgb(56 189 248 / 0.24), rgb(9 13 22 / 0.92) 70%);
+}
+
+.alpha-threshold-tool .alpha-selection-overlay--weapon-bay .alpha-selector-bay-group-body {
+  gap: 0.42rem;
+}
+
+.alpha-threshold-tool .alpha-selection-overlay--weapon-bay .alpha-drawer-weapon-overlay-card--list:hover {
+  border-color: rgb(255 255 255 / 0.2);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.034), transparent 100%),
+    rgb(11 15 24 / 0.98);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.05),
+    0 0 0 1px rgb(255 255 255 / 0.06);
 }
 
 .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-drawer-ship-card:not(.alpha-drawer-weapon-overlay-card) {
@@ -1013,7 +1281,7 @@
     inset: 0;
     z-index: 1300;
     pointer-events: auto;
-    background: rgb(2 6 12 / 0.36);
+    background: rgb(2 6 12 / 0.68);
     padding: 0;
   }
 
@@ -1035,9 +1303,106 @@
     pointer-events: auto;
   }
 
+  .alpha-threshold-tool
+    :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)
+    .alpha-overlay-panel {
+    border-radius: 0;
+  }
+
   .alpha-threshold-tool .alpha-selector-bay-shell {
     padding: 0.5rem;
     gap: 0.35rem;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slots-top {
+    margin: -0.5rem -0.5rem 0;
+    padding: 0.5rem;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 100%),
+      rgb(7 10 16 / 0.98);
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.45rem 0.5rem;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.022), transparent 100%),
+      rgb(10 14 22 / 0.96);
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-active {
+    border-color: rgb(103 232 249 / 0.42);
+    box-shadow:
+      inset 0 0 0 1px rgb(103 232 249 / 0.16),
+      0 0 0 1px rgb(103 232 249 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(103 232 249 / 0.07), transparent 100%),
+      rgb(8 14 20 / 0.98);
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-copy {
+    min-width: 0;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-label {
+    margin: 0;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-value {
+    margin: 0.14rem 0 0;
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.18;
+    color: rgb(241 245 249);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-button {
+    min-width: 3.25rem;
+    min-height: 2rem;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.04);
+    color: rgb(226 232 240);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-button-clear {
+    border-color: rgb(127 29 29 / 0.7);
+    background: rgb(36 11 11 / 0.94);
+    color: rgb(252 165 165);
+  }
+
+  .alpha-threshold-tool .alpha-selector-bay-mobile-slot-button:focus-visible {
+    outline: 2px solid rgb(125 211 252 / 0.55);
+    outline-offset: 2px;
   }
 
   .alpha-threshold-tool .alpha-selector-bay-head {
@@ -1115,4 +1480,41 @@
   .alpha-threshold-tool .alpha-overlay-panel.alpha-selector-bay .alpha-selector-bay-wc-meta {
     font-size: 0.64rem;
   }
+}
+
+/* Ship selector: pin top-left to first matrix body cell (row 1, first weapon column); size unchanged. */
+.alpha-threshold-tool .alpha-selection-overlay[data-ship-first-cell-anchor='true']::before {
+  top: var(--alpha-ship-anchor-top);
+  right: auto;
+  bottom: 0.55rem;
+  left: var(--alpha-ship-anchor-left);
+  width: var(--alpha-ship-anchor-width);
+}
+
+.alpha-threshold-tool .alpha-selection-overlay[data-ship-first-cell-anchor='true'] .alpha-overlay-panel.alpha-selector-bay {
+  top: var(--alpha-ship-anchor-top);
+  right: auto;
+  bottom: 0.55rem;
+  left: var(--alpha-ship-anchor-left);
+  width: var(--alpha-ship-anchor-width);
+  max-width: none;
+}
+
+.alpha-threshold-tool .alpha-selection-overlay[data-weapon-column-anchor='true']::before {
+  top: var(--alpha-weapon-anchor-top);
+  right: auto;
+  bottom: auto;
+  left: var(--alpha-weapon-anchor-left);
+  width: var(--alpha-weapon-anchor-width);
+  height: var(--alpha-weapon-anchor-height);
+}
+
+.alpha-threshold-tool .alpha-selection-overlay[data-weapon-column-anchor='true'] .alpha-overlay-panel.alpha-selector-bay {
+  top: var(--alpha-weapon-anchor-top);
+  right: auto;
+  bottom: auto;
+  left: var(--alpha-weapon-anchor-left);
+  width: var(--alpha-weapon-anchor-width);
+  height: var(--alpha-weapon-anchor-height);
+  max-width: none;
 }

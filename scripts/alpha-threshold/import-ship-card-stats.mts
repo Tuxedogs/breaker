@@ -8,9 +8,23 @@ type JsonRecord = Record<string, unknown>
 type CardStats = {
   scmSpeed: number | null
   navSpeed: number | null
+  boostSpeedForward: number | null
+  boostSpeedBackward: number | null
+  forwardGs: number | null
+  reverseGs: number | null
+  boostForwardGs: number | null
+  boostReverseGs: number | null
+  pitch: number | null
+  yaw: number | null
+  roll: number | null
+  boostPitch: number | null
+  boostYaw: number | null
+  boostRoll: number | null
   noiseCount: number | null
   decoyCount: number | null
 }
+
+const EARTH_GRAVITY = 9.80665
 
 type CliArgs = {
   manifestPath: string
@@ -105,23 +119,99 @@ function inferManufacturer(input: JsonRecord, rawData: JsonRecord | null): strin
 }
 
 function extractSpeeds(rawData: JsonRecord | null): Pick<CardStats, 'scmSpeed' | 'navSpeed'> {
-  const controllers = Array.isArray(asRecord(rawData?.items)?.controllers)
-    ? (asRecord(rawData?.items)?.controllers as unknown[])
+  const ifcs = asRecord(rawData?.ifcs)
+  return {
+    scmSpeed: asNumber(ifcs?.scmSpeed),
+    navSpeed: asNumber(ifcs?.maxSpeed),
+  }
+}
+
+function roundGs(value: number | null) {
+  if (value == null || !Number.isFinite(value)) return null
+  return Math.round(value * 100) / 100
+}
+
+function sumThrusterCapacity(rawData: JsonRecord | null, thrusterType: string) {
+  const thrusters = Array.isArray(asRecord(rawData?.items)?.thrusters)
+    ? (asRecord(rawData?.items)?.thrusters as unknown[])
     : []
 
-  for (const entry of controllers) {
-    const controller = asRecord(entry)
-    const data = asRecord(controller?.data)
-    const ifcs = asRecord(data?.ifcs)
-    const scmSpeed = asNumber(ifcs?.scmSpeed)
-    const navSpeed = asNumber(ifcs?.maxSpeed)
+  return thrusters.reduce((total, entry) => {
+    const thrusterRecord = asRecord(entry)
+    const data = asRecord(thrusterRecord?.data)
+    const thruster = asRecord(data?.thruster)
 
-    if (scmSpeed !== null || navSpeed !== null) {
-      return { scmSpeed, navSpeed }
+    if (thruster?.thrusterType !== thrusterType) {
+      return total
+    }
+
+    return total + (asNumber(thruster.thrustCapacity) ?? 0)
+  }, 0)
+}
+
+function extractAccelerationStats(
+  rawData: JsonRecord | null
+): Pick<CardStats, 'boostSpeedForward' | 'boostSpeedBackward' | 'forwardGs' | 'reverseGs' | 'boostForwardGs' | 'boostReverseGs'> {
+  const ifcs = asRecord(rawData?.ifcs)
+  const afterburner = asRecord(ifcs?.afterburner)
+  const positiveMultiplier = asNumber(asRecord(afterburner?.afterburnAccelMultiplierPositive)?.y) ?? 1
+  const negativeMultiplier = asNumber(asRecord(afterburner?.afterburnAccelMultiplierNegative)?.y) ?? 1
+  const shipMass = asNumber(asRecord(rawData?.hull)?.mass)
+
+  if (shipMass == null || shipMass <= 0) {
+    return {
+      boostSpeedForward: asNumber(ifcs?.boostSpeedForward),
+      boostSpeedBackward: asNumber(ifcs?.boostSpeedBackward),
+      forwardGs: null,
+      reverseGs: null,
+      boostForwardGs: null,
+      boostReverseGs: null,
     }
   }
 
-  return { scmSpeed: null, navSpeed: null }
+  const forwardThrust = sumThrusterCapacity(rawData, 'Main')
+  const reverseThrust = sumThrusterCapacity(rawData, 'Retro')
+  const forwardGs = forwardThrust > 0 ? forwardThrust / shipMass / EARTH_GRAVITY : null
+  const reverseGs = reverseThrust > 0 ? reverseThrust / shipMass / EARTH_GRAVITY : null
+
+  return {
+    boostSpeedForward: asNumber(ifcs?.boostSpeedForward),
+    boostSpeedBackward: asNumber(ifcs?.boostSpeedBackward),
+    forwardGs: roundGs(forwardGs),
+    reverseGs: roundGs(reverseGs),
+    boostForwardGs: roundGs(forwardGs == null ? null : forwardGs * positiveMultiplier),
+    boostReverseGs: roundGs(reverseGs == null ? null : reverseGs * negativeMultiplier),
+  }
+}
+
+function roundAngularVelocity(value: number | null) {
+  if (value == null || !Number.isFinite(value)) return null
+  return Math.round(value * 10) / 10
+}
+
+function extractAngularStats(
+  rawData: JsonRecord | null
+): Pick<CardStats, 'pitch' | 'yaw' | 'roll' | 'boostPitch' | 'boostYaw' | 'boostRoll'> {
+  const ifcs = asRecord(rawData?.ifcs)
+  const angularVelocity = asRecord(ifcs?.angularVelocity)
+  const afterburner = asRecord(ifcs?.afterburner)
+  const afterburnMultiplier = asRecord(afterburner?.afterburnAngVelocityMultiplier)
+
+  const pitch = asNumber(angularVelocity?.x)
+  const yaw = asNumber(angularVelocity?.y)
+  const roll = asNumber(angularVelocity?.z)
+  const boostPitchMultiplier = asNumber(afterburnMultiplier?.x) ?? 1
+  const boostYawMultiplier = asNumber(afterburnMultiplier?.y) ?? 1
+  const boostRollMultiplier = asNumber(afterburnMultiplier?.z) ?? 1
+
+  return {
+    pitch: roundAngularVelocity(pitch),
+    yaw: roundAngularVelocity(yaw),
+    roll: roundAngularVelocity(roll),
+    boostPitch: roundAngularVelocity(pitch == null ? null : pitch * boostPitchMultiplier),
+    boostYaw: roundAngularVelocity(yaw == null ? null : yaw * boostYawMultiplier),
+    boostRoll: roundAngularVelocity(roll == null ? null : roll * boostRollMultiplier),
+  }
 }
 
 function extractCountermeasureCounts(rawData: JsonRecord | null): Pick<CardStats, 'noiseCount' | 'decoyCount'> {
@@ -160,6 +250,8 @@ function toCardStats(record: JsonRecord): { key: string; stats: CardStats } | nu
     key: createLookupKey(manufacturer, name),
     stats: {
       ...extractSpeeds(rawData),
+      ...extractAccelerationStats(rawData),
+      ...extractAngularStats(rawData),
       ...extractCountermeasureCounts(rawData),
     },
   }
@@ -187,6 +279,18 @@ async function main() {
       manifest.set(next.key, {
         scmSpeed: existing?.scmSpeed ?? next.stats.scmSpeed,
         navSpeed: existing?.navSpeed ?? next.stats.navSpeed,
+        boostSpeedForward: existing?.boostSpeedForward ?? next.stats.boostSpeedForward,
+        boostSpeedBackward: existing?.boostSpeedBackward ?? next.stats.boostSpeedBackward,
+        forwardGs: existing?.forwardGs ?? next.stats.forwardGs,
+        reverseGs: existing?.reverseGs ?? next.stats.reverseGs,
+        boostForwardGs: existing?.boostForwardGs ?? next.stats.boostForwardGs,
+        boostReverseGs: existing?.boostReverseGs ?? next.stats.boostReverseGs,
+        pitch: existing?.pitch ?? next.stats.pitch,
+        yaw: existing?.yaw ?? next.stats.yaw,
+        roll: existing?.roll ?? next.stats.roll,
+        boostPitch: existing?.boostPitch ?? next.stats.boostPitch,
+        boostYaw: existing?.boostYaw ?? next.stats.boostYaw,
+        boostRoll: existing?.boostRoll ?? next.stats.boostRoll,
         noiseCount: existing?.noiseCount ?? next.stats.noiseCount,
         decoyCount: existing?.decoyCount ?? next.stats.decoyCount,
       })
