@@ -15,32 +15,20 @@ type Props = {
   /** When true, use default half-panel layout (e.g. mobile bottom sheet). */
   disableAnchor?: boolean
   onSelectShip: (shipName: string) => void
+  onActivateSlot?: (slotIndex: number) => void
+  onClearSlot?: (slotIndex: number) => void
   onClose: () => void
 }
 
 const SLOT_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 
-type ShipRoleGroup = {
-  roleKey: string
+type ShipManufacturerGroup = {
+  id: string
   label: string
   ships: Ship[]
 }
 
-type ShipSizeRoleGroup = {
-  id: string
-  label: string
-  roles: ShipRoleGroup[]
-}
-
-const OVERLAY_SIZE_GROUPS: Array<{ id: string; label: string }> = [
-  { id: 'small', label: 'Small' },
-  { id: 'medium', label: 'Medium' },
-  { id: 'large', label: 'Large' },
-  { id: 'capital', label: 'Capital' },
-  { id: 'ground', label: 'Ground' },
-]
-
-/** Min search length before auto-expanding size groups that have matches. */
+/** Min search length before auto-expanding manufacturer groups that have matches. */
 const SHIP_SEARCH_EXPAND_MIN_CHARS = 3
 const MANUFACTURER_ALIASES: Record<string, string> = {
   AEGS: 'aegis dynamics',
@@ -60,38 +48,21 @@ const MANUFACTURER_ALIASES: Record<string, string> = {
   TMBL: 'tumbril land systems',
 }
 
-/** All collapsed until search is long enough; then groups with matches expand. */
 function getShipCollapsedGroupsForQuery(
   groupedShipIds: string[],
   queryTrimmed: string
 ): Record<string, boolean> {
   const searchActive = queryTrimmed.length >= SHIP_SEARCH_EXPAND_MIN_CHARS
   return Object.fromEntries(
-    OVERLAY_SIZE_GROUPS.map((group) => {
-      const hasMatches = groupedShipIds.includes(group.id)
-      if (!searchActive) return [group.id, true]
-      return [group.id, !hasMatches]
+    groupedShipIds.map((groupId) => {
+      if (!searchActive) return [groupId, true]
+      return [groupId, false]
     })
   )
 }
 
 function getShipSelectionKey(ship: Pick<Ship, 'manufacturer' | 'name'>): string {
   return `${ship.manufacturer}::${ship.name}`
-}
-
-function getShipRoleGroup(ship: Ship): { key: string; label: string } {
-  const roleLabel = ship.role?.trim()
-  if (!roleLabel) {
-    return {
-      key: 'utility',
-      label: 'Utility',
-    }
-  }
-
-  return {
-    key: roleLabel.toLowerCase(),
-    label: formatEntityLabel(roleLabel),
-  }
 }
 
 function formatShipCardName(ship: Ship): string {
@@ -106,17 +77,20 @@ export function ShipSelectorOverlay({
   selectionNotice,
   disableAnchor = false,
   onSelectShip,
+  onActivateSlot,
+  onClearSlot,
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const searchRef = useRef<HTMLInputElement | null>(null)
   const overlayRef = useRef<HTMLElement | null>(null)
+  const lastCollapseSeedKeyRef = useRef<string | null>(null)
   const [firstCellAnchorStyle, setFirstCellAnchorStyle] = useState<CSSProperties | undefined>(
     undefined
   )
 
-  /** Top-left of the first matrix body cell only; size stays default (CSS `--alpha-overlay-width`). */
+  /** Top-left + width of the first matrix body cell; keep ship bay anchored to that column footprint. */
   useLayoutEffect(() => {
     if (!open || disableAnchor) {
       setFirstCellAnchorStyle(undefined)
@@ -140,6 +114,7 @@ export function ShipSelectorOverlay({
       setFirstCellAnchorStyle({
         '--alpha-ship-anchor-top': `${cellRect.top - overlayRect.top}px`,
         '--alpha-ship-anchor-left': `${cellRect.left - overlayRect.left}px`,
+        '--alpha-ship-anchor-width': `${cellRect.width}px`,
       } as CSSProperties)
     }
 
@@ -168,22 +143,27 @@ export function ShipSelectorOverlay({
     [selectedShipNames]
   )
 
-  const selectedRoleBySize = useMemo<Record<string, Set<string>>>(
-    () => {
-      const selectedRoles: Record<string, Set<string>> = Object.fromEntries(
-        OVERLAY_SIZE_GROUPS.map((group) => [group.id, new Set<string>()])
-      )
-      selectedShipNames.forEach((shipKey) => {
-        if (!shipKey) return
-        const ship = shipBySelectionKey.get(shipKey)
-        if (!ship) return
-        const sizeGroupId = ship.isGroundVehicle ? 'ground' : ship.sizeGroup
-        selectedRoles[sizeGroupId]?.add(getShipRoleGroup(ship).key)
-      })
-      return selectedRoles
-    },
-    [selectedShipNames, shipBySelectionKey]
-  )
+  const selectedManufacturerSet = useMemo(() => {
+    const selectedManufacturers = new Set<string>()
+    selectedShipNames.forEach((shipKey) => {
+      if (!shipKey) return
+      const ship = shipBySelectionKey.get(shipKey)
+      if (!ship) return
+      selectedManufacturers.add(ship.manufacturer)
+    })
+    return selectedManufacturers
+  }, [selectedShipNames, shipBySelectionKey])
+
+  const selectedCountByManufacturer = useMemo(() => {
+    const counts = new Map<string, number>()
+    selectedShipNames.forEach((shipKey) => {
+      if (!shipKey) return
+      const ship = shipBySelectionKey.get(shipKey)
+      if (!ship) return
+      counts.set(ship.manufacturer, (counts.get(ship.manufacturer) ?? 0) + 1)
+    })
+    return counts
+  }, [selectedShipNames, shipBySelectionKey])
 
   const queryTrimmed = query.trim().toLowerCase()
 
@@ -193,50 +173,55 @@ export function ShipSelectorOverlay({
         if (!queryTrimmed) return true
         const manufacturerAliases = MANUFACTURER_ALIASES[ship.manufacturer] ?? ''
         const haystack =
-          `${ship.manufacturer} ${manufacturerAliases} ${ship.name} ${ship.sizeGroup} ${ship.role ?? ''} ${getShipRoleGroup(ship).label}`.toLowerCase()
+          `${ship.manufacturer} ${manufacturerAliases} ${ship.name} ${ship.sizeGroup} ${ship.role ?? ''}`.toLowerCase()
         return haystack.includes(queryTrimmed)
       }),
     [allShips, queryTrimmed]
   )
 
-  const groupedShips = useMemo<ShipSizeRoleGroup[]>(
+  const groupedShips = useMemo<ShipManufacturerGroup[]>(
     () =>
-      OVERLAY_SIZE_GROUPS.map((group) => {
-        const shipsInGroup = filteredShips.filter((ship) =>
-          group.id === 'ground' ? ship.isGroundVehicle : !ship.isGroundVehicle && ship.sizeGroup === group.id
-        )
-        const roleMap = new Map<string, ShipRoleGroup>()
-        shipsInGroup.forEach((ship) => {
-          const roleGroup = getShipRoleGroup(ship)
-          const existing = roleMap.get(roleGroup.key)
-          if (!existing) {
-            roleMap.set(roleGroup.key, {
-              roleKey: roleGroup.key,
-              label: roleGroup.label,
-              ships: [ship],
-            })
-            return
+      Array.from(
+        filteredShips.reduce((map, ship) => {
+          const existing = map.get(ship.manufacturer)
+          if (existing) {
+            existing.push(ship)
+            return map
           }
-          existing.ships.push(ship)
-        })
-        return {
-          id: group.id,
-          label: group.label,
-          roles: Array.from(roleMap.values())
-            .map((roleGroup) => ({
-              ...roleGroup,
-              ships: roleGroup.ships.slice().sort((left, right) => left.name.localeCompare(right.name)),
-            }))
-            .sort((left, right) => left.label.localeCompare(right.label)),
-        }
-      }).filter((group) => group.roles.length > 0),
+          map.set(ship.manufacturer, [ship])
+          return map
+        }, new Map<string, Ship[]>())
+      )
+        .map(([manufacturer, ships]) => ({
+          id: manufacturer,
+          label: formatEntityLabel(manufacturer),
+          ships: ships.slice().sort((left, right) => left.name.localeCompare(right.name)),
+        }))
+        .sort((left, right) => left.label.localeCompare(right.label)),
     [filteredShips]
   )
 
   useEffect(() => {
-    if (!open) return
-    const groupedShipIds = groupedShips.map((g) => g.id)
-    setCollapsedGroups(getShipCollapsedGroupsForQuery(groupedShipIds, queryTrimmed))
+    if (!open) {
+      lastCollapseSeedKeyRef.current = null
+      return
+    }
+    const groupedShipIds = groupedShips.map((group) => group.id)
+    const collapseSeedKey = `${queryTrimmed}::${groupedShipIds.join('|')}`
+    if (lastCollapseSeedKeyRef.current === collapseSeedKey) return
+    lastCollapseSeedKeyRef.current = collapseSeedKey
+    setCollapsedGroups((current) => {
+      const nextDefaults = getShipCollapsedGroupsForQuery(groupedShipIds, queryTrimmed)
+      const preservedEntries = Object.fromEntries(
+        groupedShipIds
+          .filter((groupId) => groupId in current)
+          .map((groupId) => [groupId, current[groupId]])
+      )
+      return {
+        ...nextDefaults,
+        ...preservedEntries,
+      }
+    })
   }, [open, groupedShips, queryTrimmed])
 
   function toggleGroup(groupId: string) {
@@ -247,7 +232,6 @@ export function ShipSelectorOverlay({
   }
 
   const accentTone = SLOT_TONES[activeSlotIndex % SLOT_TONES.length]
-
   const useFirstCellAnchor = Boolean(firstCellAnchorStyle)
 
   return (
@@ -278,7 +262,7 @@ export function ShipSelectorOverlay({
                 id="alpha-overlay-ship-search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search — name, manufacturer, role…"
+                placeholder="Search - name, manufacturer, role..."
                 className="alpha-selector-bay-search"
                 autoComplete="off"
               />
@@ -289,9 +273,54 @@ export function ShipSelectorOverlay({
               onClick={onClose}
               aria-label="Close ship selector"
             >
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true">x</span>
             </button>
           </div>
+
+          {disableAnchor ? (
+            <div className="alpha-selector-bay-mobile-slots" aria-label="Selected ships">
+              {selectedShipNames.map((shipKey, slotIndex) => {
+                const ship = shipKey ? shipBySelectionKey.get(shipKey) : null
+                const isActive = slotIndex === activeSlotIndex
+                return (
+                  <section
+                    key={`ship-slot-${slotIndex + 1}`}
+                    className={[
+                      'alpha-selector-bay-mobile-slot',
+                      isActive ? 'alpha-selector-bay-mobile-slot-active' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    <div className="alpha-selector-bay-mobile-slot-copy">
+                      <p className="alpha-selector-bay-mobile-slot-label">Ship {slotIndex + 1}</p>
+                      <p className="alpha-selector-bay-mobile-slot-value">
+                        {ship
+                          ? `${formatEntityLabel(ship.manufacturer)} ${formatShipCardName(ship)}`
+                          : 'Empty'}
+                      </p>
+                    </div>
+                    <div className="alpha-selector-bay-mobile-slot-actions">
+                      <button
+                        type="button"
+                        className="alpha-selector-bay-mobile-slot-button"
+                        onClick={() => onActivateSlot?.(slotIndex)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="alpha-selector-bay-mobile-slot-button alpha-selector-bay-mobile-slot-button-clear"
+                        onClick={() => onClearSlot?.(slotIndex)}
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </section>
+                )
+              })}
+            </div>
+          ) : null}
 
           {selectionNotice ? (
             <p className="alpha-overlay-selection-notice" role="status" aria-live="polite">
@@ -301,90 +330,86 @@ export function ShipSelectorOverlay({
 
           <div className="alpha-selector-bay-surface alpha-selector-bay-surface-ship">
             <div className="alpha-selector-bay-scroll alpha-drawer-results">
-                {groupedShips.length > 0 ? (
-                  groupedShips.map((group) => (
-                    <section key={group.id} className="alpha-selector-bay-group">
-                      <button
-                        type="button"
-                        className="alpha-selector-bay-group-toggle"
-                        onClick={() => toggleGroup(group.id)}
-                        aria-expanded={!(collapsedGroups[group.id] ?? true)}
-                      >
-                        <span className="alpha-selector-bay-group-toggle-label">{group.label}</span>
-                        <span className="alpha-selector-bay-group-toggle-chev" aria-hidden="true">
-                          {(collapsedGroups[group.id] ?? true) ? '+' : '−'}
-                        </span>
-                      </button>
-                      {!(collapsedGroups[group.id] ?? true) ? (
-                        <div className="alpha-selector-bay-group-body">
-                          {group.roles.map((roleGroup) => {
-                            const sizeSelectedRoles = selectedRoleBySize[group.id] ?? new Set<string>()
-                            const isRoleActive = sizeSelectedRoles.has(roleGroup.roleKey)
+              {groupedShips.length > 0 ? (
+                groupedShips.map((group) => (
+                  <section key={group.id} className="alpha-selector-bay-group">
+                    <button
+                      type="button"
+                      className="alpha-selector-bay-group-toggle"
+                      onClick={() => toggleGroup(group.id)}
+                      aria-expanded={!(collapsedGroups[group.id] ?? true)}
+                    >
+                      <span className="alpha-selector-bay-group-toggle-label">
+                        {selectedCountByManufacturer.get(group.id) ? (
+                          <span className="alpha-selector-bay-group-toggle-prefix">
+                            <span className="alpha-selector-bay-group-toggle-selected-count">
+                              {selectedCountByManufacturer.get(group.id)}
+                            </span>
+                            <span className="alpha-selector-bay-group-toggle-plus" aria-hidden="true">
+                              +
+                            </span>
+                          </span>
+                        ) : null}
+                        <span>{group.label}</span>
+                      </span>
+                      <span className="alpha-selector-bay-group-toggle-chev" aria-hidden="true">
+                        {(collapsedGroups[group.id] ?? true) ? '+' : '-'}
+                      </span>
+                    </button>
+                    {!(collapsedGroups[group.id] ?? true) ? (
+                      <div className="alpha-selector-bay-group-body">
+                        <div className="alpha-drawer-ship-card-grid alpha-drawer-ship-card-grid--list">
+                          {group.ships.map((ship) => {
+                            const shipKey = getShipSelectionKey(ship)
+                            const isSelected = selectedKeySet.has(shipKey)
+                            const isManufacturerActive = selectedManufacturerSet.has(ship.manufacturer)
+
                             return (
-                              <section
-                                key={`${group.id}-${roleGroup.roleKey}`}
-                                className="alpha-selector-bay-subgroup"
+                              <button
+                                key={shipKey}
+                                type="button"
+                                className={[
+                                  'alpha-drawer-ship-card',
+                                  'alpha-drawer-ship-card--list',
+                                  'alpha-selector-bay-sc',
+                                  isSelected ? 'alpha-drawer-ship-card-selected' : '',
+                                  isManufacturerActive ? 'alpha-drawer-ship-card-role-active' : '',
+                                ]
+                                  .filter(Boolean)
+                                  .join(' ')}
+                                onClick={() => onSelectShip(shipKey)}
                               >
-                                <header className="alpha-selector-bay-subhead">
-                                  <h4 className="alpha-selector-bay-subhead-title">{roleGroup.label}</h4>
-                                  <span className="alpha-selector-bay-subhead-count">{roleGroup.ships.length}</span>
-                                </header>
-                                <div className="alpha-drawer-ship-card-grid alpha-drawer-ship-card-grid--list">
-                                  {roleGroup.ships.map((ship) => {
-                                    const shipKey = getShipSelectionKey(ship)
-                                    const isSelected = selectedKeySet.has(shipKey)
-                                    return (
-                                      <button
-                                        key={shipKey}
-                                        type="button"
-                                        className={[
-                                          'alpha-drawer-ship-card',
-                                          'alpha-drawer-ship-card--list',
-                                          'alpha-selector-bay-sc',
-                                          isSelected ? 'alpha-drawer-ship-card-selected' : '',
-                                          isRoleActive ? 'alpha-drawer-ship-card-role-active' : '',
-                                        ]
-                                          .filter(Boolean)
-                                          .join(' ')}
-                                        onClick={() => onSelectShip(shipKey)}
-                                      >
-                                        <div className="alpha-drawer-ship-card-body alpha-drawer-ship-card-body--list">
-                                          <span className="alpha-drawer-ship-card-list-primary">
-                                            <span className="alpha-drawer-ship-card-manufacturer">
-                                              {formatEntityLabel(ship.manufacturer)}
-                                            </span>
-                                            <span className="alpha-drawer-ship-card-list-sep" aria-hidden="true">
-                                              ·
-                                            </span>
-                                            <span className="alpha-drawer-ship-card-name">
-                                              {formatShipCardName(ship)}
-                                            </span>
-                                          </span>
-                                          <span className="alpha-drawer-ship-card-list-stats">
-                                            B {ship.ballisticThreshold} · E {ship.energyThreshold}
-                                          </span>
-                                        </div>
-                                        {isSelected ? (
-                                          <span className="alpha-drawer-ship-card-chip">Selected</span>
-                                        ) : null}
-                                      </button>
-                                    )
-                                  })}
+                                <div className="alpha-drawer-ship-card-body alpha-drawer-ship-card-body--list">
+                                  <span className="alpha-drawer-ship-card-list-primary">
+                                    <span className="alpha-drawer-ship-card-manufacturer">
+                                      {formatEntityLabel(ship.manufacturer)}
+                                    </span>
+                                    <span className="alpha-drawer-ship-card-name">
+                                      {formatShipCardName(ship)}
+                                    </span>
+                                  </span>
+                                  <span className="alpha-drawer-ship-card-list-stats">
+                                    B {ship.ballisticThreshold} · E {ship.energyThreshold}
+                                  </span>
                                 </div>
-                              </section>
+                                {isSelected ? (
+                                  <span className="alpha-drawer-ship-card-chip">Selected</span>
+                                ) : null}
+                              </button>
                             )
                           })}
                         </div>
-                      ) : null}
-                    </section>
-                  ))
-                ) : (
-                  <section className="alpha-selector-bay-empty">
-                    <p className="alpha-selector-bay-empty-title">
-                      {queryTrimmed ? 'No ships match the current search.' : 'No ships available.'}
-                    </p>
+                      </div>
+                    ) : null}
                   </section>
-                )}
+                ))
+              ) : (
+                <section className="alpha-selector-bay-empty">
+                  <p className="alpha-selector-bay-empty-title">
+                    {queryTrimmed ? 'No ships match the current search.' : 'No ships available.'}
+                  </p>
+                </section>
+              )}
             </div>
           </div>
         </div>

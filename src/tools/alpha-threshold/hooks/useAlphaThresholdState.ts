@@ -35,8 +35,8 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
   'energy-desc',
   'manufacturer-asc',
 ]
-const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-ptu']
-const MAX_VICTIM_SHIPS = 4
+const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-live', 'erkul-ptu']
+const MAX_VICTIM_SHIPS = 7
 const MOBILE_MAX_VICTIM_SHIPS = 3
 const STORAGE_MIGRATION_VERSION_KEY = 'alpha-threshold.storage-migration-version'
 const STORAGE_MIGRATION_VERSION = 1
@@ -79,6 +79,27 @@ const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
     hardpointSize: 0,
     weaponKey: null,
     label: 'Weapon 4',
+  },
+  {
+    id: 'slot-5',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: null,
+    label: 'Weapon 5',
+  },
+  {
+    id: 'slot-6',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: null,
+    label: 'Weapon 6',
+  },
+  {
+    id: 'slot-7',
+    operator: 'weapon',
+    hardpointSize: 0,
+    weaponKey: null,
+    label: 'Weapon 7',
   },
 ]
 
@@ -124,7 +145,7 @@ function normalizeSortKey(value: ShipSortKey): ShipSortKey {
 }
 
 function normalizeDataSource(value: ThresholdDataSourceKey): ThresholdDataSourceKey {
-  return VALID_DATA_SOURCES.includes(value) ? value : 'erkul-ptu'
+  return VALID_DATA_SOURCES.includes(value) ? value : 'erkul-live'
 }
 
 function resolveAvailableDataSource(
@@ -136,7 +157,7 @@ function resolveAvailableDataSource(
     return source
   }
 
-  return 'erkul-ptu'
+  return 'erkul-live'
 }
 
 function normalizeSelectedShipNames(value: Array<string | null>, ships: Ship[]): Array<string | null> {
@@ -349,7 +370,7 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
   >('alpha-threshold.collapsed-groups', getDefaultCollapsedGroups())
   const [activeSource, setActiveSource] = useLocalStorageState<ThresholdDataSourceKey>(
     'alpha-threshold.data-source',
-    'erkul-ptu'
+    'erkul-live'
   )
 
   const normalizedActiveSource = useMemo(

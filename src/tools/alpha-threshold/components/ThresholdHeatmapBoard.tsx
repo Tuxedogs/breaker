@@ -17,6 +17,8 @@ type Props = {
   onAnalysisColumnCountChange?: (count: number) => void
   targetColumnCount?: number
   onTargetColumnCountChange?: (count: number) => void
+  rowCount?: number
+  onRowCountChange?: (count: number) => void
   hideHeaderRow?: boolean
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
@@ -27,6 +29,8 @@ type Props = {
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onClearShipAt?: (slotIndex: number) => void
+  onClearWeaponAt?: (slotIndex: number) => void
   onboardingHighlight?: AlphaThresholdOnboardingHighlight
 }
 

@@ -10,8 +10,10 @@ type Props = {
   hero?: {
     leftLabel: string
     leftValue: string
+    leftValueColor?: string
     rightLabel: string
     rightValue: string
+    rightValueColor?: string
     description: string
   }
   lines: Array<{
@@ -71,11 +73,21 @@ export function HeatmapTooltip({ open, x, y, title, sectionTitle, hero, lines }:
               <div className="alpha-heatmap-tooltip-hero-head">
                 <div className="alpha-heatmap-tooltip-hero-metric">
                   <span className="alpha-heatmap-tooltip-hero-label">{hero.leftLabel}</span>
-                  <span className="alpha-heatmap-tooltip-hero-value">{hero.leftValue}</span>
+                  <span
+                    className="alpha-heatmap-tooltip-hero-value"
+                    style={hero.leftValueColor ? { color: hero.leftValueColor } : undefined}
+                  >
+                    {hero.leftValue}
+                  </span>
                 </div>
                 <div className="alpha-heatmap-tooltip-hero-metric alpha-heatmap-tooltip-hero-metric-right">
                   <span className="alpha-heatmap-tooltip-hero-label">{hero.rightLabel}</span>
-                  <span className="alpha-heatmap-tooltip-hero-value">{hero.rightValue}</span>
+                  <span
+                    className="alpha-heatmap-tooltip-hero-value"
+                    style={hero.rightValueColor ? { color: hero.rightValueColor } : undefined}
+                  >
+                    {hero.rightValue}
+                  </span>
                 </div>
               </div>
               <p className="alpha-heatmap-tooltip-hero-copy">{hero.description}</p>

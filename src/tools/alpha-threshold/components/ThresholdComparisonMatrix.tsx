@@ -49,10 +49,14 @@ type Props = {
   onAnalysisColumnCountChange?: (count: number) => void
   targetColumnCount?: number
   onTargetColumnCountChange?: (count: number) => void
+  rowCount?: number
+  onRowCountChange?: (count: number) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
+  onClearShipAt?: (slotIndex: number) => void
+  onClearWeaponAt?: (slotIndex: number) => void
   /** First-visit tour: spotlight matrix controls */
   onboardingHighlight?: 'ship-weapon' | 'shield' | null
 }
@@ -68,14 +72,16 @@ type MatrixColumnModel = {
 }
 
 const DESTINATION_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
-const ANALYSIS_COLUMN_MIN = 1
-const ANALYSIS_COLUMN_MAX = 4
+const ROW_COUNT_MIN = 3
+const ROW_COUNT_MAX = 7
+const ANALYSIS_COLUMN_MIN = 3
+const ANALYSIS_COLUMN_MAX = 7
 const TARGET_RECOMMENDATION_COLUMN_MIN = 3
-const TARGET_RECOMMENDATION_COLUMN_MAX = 6
+const TARGET_RECOMMENDATION_COLUMN_MAX = 7
 const WEAPON_SIZE_OPTIONS = [2, 3, 4, 5, 7, 8] as const
 
-function buildVisibleShips(ships: Ship[]) {
-  return ships.slice(0, 4)
+function buildVisibleShips(ships: Ship[], rowCount: number) {
+  return ships.slice(0, rowCount)
 }
 
 function getEstimateTimingTone(estimate: ArmorInteractionEstimate) {
@@ -387,10 +393,14 @@ export function ThresholdComparisonMatrix({
   onAnalysisColumnCountChange,
   targetColumnCount = TARGET_RECOMMENDATION_COLUMN_MIN,
   onTargetColumnCountChange,
+  rowCount = 4,
+  onRowCountChange,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
   onOpenShipsAt,
+  onClearShipAt,
+  onClearWeaponAt,
   onboardingHighlight = null,
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
@@ -407,8 +417,10 @@ export function ThresholdComparisonMatrix({
     hero?: {
       leftLabel: string
       leftValue: string
+      leftValueColor?: string
       rightLabel: string
       rightValue: string
+      rightValueColor?: string
       description: string
     }
     lines: MatrixTooltipLine[]
@@ -419,9 +431,10 @@ export function ThresholdComparisonMatrix({
     title: '',
     lines: [],
   })
-  const [sourceMode, setSourceMode] = useState<'ptu' | 'live'>('ptu')
+  const [sourceMode] = useState<'ptu' | 'live'>('live')
   const [isMobileLayout, setIsMobileLayout] = useState(false)
-  const visibleShips = buildVisibleShips(ships)
+  const normalizedRowCount = Math.max(ROW_COUNT_MIN, Math.min(ROW_COUNT_MAX, rowCount, ships.length || ROW_COUNT_MAX))
+  const visibleShips = buildVisibleShips(ships, normalizedRowCount)
   const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
     (visibleShips.length > 0 &&
@@ -606,6 +619,7 @@ export function ThresholdComparisonMatrix({
         onShieldModeChange={onShieldModeChange}
         onOpenShips={onOpenShips}
         onOpenWeapons={onOpenWeapons}
+        onClearShipAt={onClearShipAt}
       />
     )
   }
@@ -651,12 +665,11 @@ export function ThresholdComparisonMatrix({
             </div>
             <span className="acm-toolbar-divider" aria-hidden="true" />
             <div className="acm-toolbar-group">
-              <span className="acm-toolbar-label">Source</span>
               <div className="acm-toolbar-segments" role="radiogroup" aria-label="Source">
                 {(
                   [
-                    ['ptu', 'PTU'],
                     ['live', 'LIVE'],
+                    ['ptu', 'PTU'],
                   ] as const
                 ).map(([id, label], index) => (
                   <span key={id} className="acm-toolbar-seg-wrap">
@@ -666,10 +679,11 @@ export function ThresholdComparisonMatrix({
                       className={[
                         'acm-toolbar-seg',
                         sourceMode === id ? 'acm-toolbar-seg--active' : '',
+                        id === 'ptu' ? 'acm-toolbar-seg--disabled' : '',
                       ].filter(Boolean).join(' ')}
                       role="radio"
                       aria-checked={sourceMode === id}
-                      onClick={() => setSourceMode(id)}
+                      disabled={id === 'ptu'}
                     >
                       {label}
                     </button>
@@ -740,7 +754,7 @@ export function ThresholdComparisonMatrix({
               </>
             )}
             <div className="acm-toolbar-group">
-              <span className="acm-toolbar-label">Columns</span>
+              <span className="acm-toolbar-label">Col.</span>
               <div className="acm-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
                 <button
                   type="button"
@@ -774,6 +788,31 @@ export function ThresholdComparisonMatrix({
                           Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
                         )
                   }
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <span className="acm-toolbar-divider" aria-hidden="true" />
+            <div className="acm-toolbar-group">
+              <span className="acm-toolbar-label">Row</span>
+              <div className="acm-toolbar-stepper" aria-label="Analysis rows">
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label="Decrease analysis rows"
+                  onClick={() => onRowCountChange?.(Math.max(ROW_COUNT_MIN, normalizedRowCount - 1))}
+                >
+                  -
+                </button>
+                <span className="acm-toolbar-stepper-value" aria-live="polite">
+                  {normalizedRowCount}
+                </span>
+                <button
+                  type="button"
+                  className="acm-toolbar-stepper-button"
+                  aria-label="Increase analysis rows"
+                  onClick={() => onRowCountChange?.(Math.min(ROW_COUNT_MAX, normalizedRowCount + 1))}
                 >
                   +
                 </button>
@@ -985,7 +1024,7 @@ export function ThresholdComparisonMatrix({
                         }
                         onClick={() => {
                           if (onOpenWeaponsAt) {
-                            onOpenWeaponsAt(columnIndex, true)
+                            onOpenWeaponsAt(columnIndex, placeholderWeapon)
                             return
                           }
                           onOpenWeapons()
@@ -1004,6 +1043,19 @@ export function ThresholdComparisonMatrix({
                             <p className="acm-weapon-meta">
                               {`${formatWeaponClassLabel(selection.weapon.weaponClass)} - ${getVelocityLabel(selection)}`}
                             </p>
+                            {onClearWeaponAt ? (
+                              <button
+                                type="button"
+                                className="acm-weapon-header-clear"
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  onClearWeaponAt(columnIndex)
+                                }}
+                                aria-label={`Clear ${formatEntityLabel(selection.weapon.name)} from this weapon slot`}
+                              >
+                                Clear
+                              </button>
+                            ) : null}
                           </div>
                         ) : null}
                       </header>
@@ -1108,6 +1160,7 @@ export function ThresholdComparisonMatrix({
                               eyebrow={formatEntityLabel(ship.manufacturer)}
                               name={formatEntityLabel(ship.name)}
                               roleLabel={getShipRoleLabel(ship)}
+                              onClear={() => onClearShipAt?.(rowIndex)}
                               thumbnail={
                                 ship.name ? (
                                   <MatrixShipThumbnail ship={ship} />
@@ -1188,19 +1241,23 @@ export function ThresholdComparisonMatrix({
                             open: true,
                             x: rect.right - MATRIX_TOOLTIP_WIDTH_PX - MATRIX_TOOLTIP_VIEWPORT_GUTTER,
                             y: rect.top + MATRIX_TOOLTIP_VIEWPORT_GUTTER,
-                            title: activeResult
-                              ? `${getEstimatePenetrationLabel(activeResult.estimate)} - ${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`
-                              : `${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`,
+                            title: `${formatEntityLabel(ship.name)} vs ${selection?.weapon.name ?? targetRecommendation?.weapon.name ?? `Weapon ${columnIndex + 1}`}`,
                             sectionTitle:
                               selection?.weapon.name ??
                               targetRecommendation?.weapon.name ??
                               `Weapon ${columnIndex + 1}`,
-                            hero: activeResult
+                                hero: activeResult
                               ? {
                                   leftLabel: 'Rating',
                                   leftValue: `E${getPenetrationEffectivePercent(activeResult.estimate)}`,
+                                  leftValueColor: getEffectivePenetrationSummaryColor(
+                                    getPenetrationEffectivePercent(activeResult.estimate)
+                                  ),
                                   rightLabel: 'Effective',
                                   rightValue: `${getPenetrationEffectivePercent(activeResult.estimate)}%`,
+                                  rightValueColor: getEffectivePenetrationSummaryColor(
+                                    getPenetrationEffectivePercent(activeResult.estimate)
+                                  ),
                                   description:
                                     'You only apply damage when the enemy ship armor is below this number in %.',
                                 }
