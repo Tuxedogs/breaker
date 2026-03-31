@@ -103,11 +103,22 @@ export type ShipDimensions = {
 
 export type ShipFlightDetails = {
   scmSpeed?: number | null
+  /** Reverse SCM speed (m/s) when available from source data */
+  scmSpeedReverse?: number | null
   navSpeed?: number | null
   boostSpeed?: number | null
+  boostSpeedForward?: number | null
+  boostSpeedBackward?: number | null
+  forwardGs?: number | null
+  reverseGs?: number | null
+  boostForwardGs?: number | null
+  boostReverseGs?: number | null
   pitch?: number | null
   yaw?: number | null
   roll?: number | null
+  boostPitch?: number | null
+  boostYaw?: number | null
+  boostRoll?: number | null
   acceleration?: number | null
   jerk?: number | null
 }
