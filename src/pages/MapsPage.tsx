@@ -4,8 +4,8 @@ import { perseusDeckFloors } from "../data/maps/perseusDeckFloorRegistry";
 import { perseusDeckMapConfig } from "../data/maps/perseusDeckMaps";
 
 const defaultPerseusView: ShipMapViewState = {
-  position: [-2.157, 2.254, 0.414],
-  target: [0, 0, 0],
+  position: [-1.946, 2.097, 0.398],
+  target: [0.004, -0.011, 0.4],
 };
 
 export default function MapsPage() {
