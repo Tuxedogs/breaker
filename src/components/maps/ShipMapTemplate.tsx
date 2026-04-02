@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Billboard, Html, OrbitControls, Text, useTexture } from "@react-three/drei";
+import { Billboard, Html, OrbitControls, Text } from "@react-three/drei";
 import {
   ACESFilmicToneMapping,
   Box3,
@@ -21,6 +21,8 @@ import {
   PerspectiveCamera,
   Raycaster,
   SRGBColorSpace,
+  Texture,
+  TextureLoader,
   Vector3,
   Vector2,
 } from "three";
@@ -222,6 +224,9 @@ type ShipMapTemplateProps = {
   modelPath: string;
   viewStorageKey: string;
   fallbackView: ShipMapViewState;
+  defaultDeckOverlayId?: string;
+  defaultInteriorEnabled?: boolean;
+  showDebugPanel?: boolean;
   showHeader?: boolean;
   /** Edge-to-edge viewer: fills main under nav; pair with AppShell maps layout. */
   immersiveFocus?: boolean;
@@ -239,6 +244,8 @@ const SHIP_VIEWER_FOG_DENSITY = 0.048;
 const SHIP_VIEWER_TONE_EXPOSURE = 0.92;
 /** Interior ↔ exterior blend duration; ref-driven (no per-frame React state). */
 const INTERIOR_TRANSITION_MS = 520;
+const INTERIOR_BOOT_MIN_MS = 420;
+const INTERIOR_CAMERA_MIN_Y = 0.492;
 
 function InteriorTransitionDriver({
   progressRef,
@@ -295,6 +302,37 @@ function InteriorTransitionDriver({
   return null;
 }
 
+function RenderInvalidateOnChange({
+  active,
+  depsKey,
+}: {
+  active: boolean;
+  depsKey: string;
+}) {
+  const { invalidate } = useThree();
+
+  useEffect(() => {
+    if (!active) return;
+
+    let firstFrame: number | null = null;
+    let secondFrame: number | null = null;
+
+    firstFrame = window.requestAnimationFrame(() => {
+      invalidate();
+      secondFrame = window.requestAnimationFrame(() => {
+        invalidate();
+      });
+    });
+
+    return () => {
+      if (firstFrame !== null) window.cancelAnimationFrame(firstFrame);
+      if (secondFrame !== null) window.cancelAnimationFrame(secondFrame);
+    };
+  }, [active, depsKey, invalidate]);
+
+  return null;
+}
+
 type ModelSource = "gltf" | "obj" | "ctm";
 
 type ResolvedModelTransform = {
@@ -317,8 +355,11 @@ type CachedModelAssetEntry = {
 };
 
 const MODEL_ASSET_CACHE = new Map<string, CachedModelAssetEntry>();
+const OVERLAY_TEXTURE_CACHE = new Map<string, Texture>();
+const OVERLAY_TEXTURE_PROMISE_CACHE = new Map<string, Promise<Texture>>();
 const gltfLoader = new GLTFLoader();
 const objLoader = new OBJLoader();
+const textureLoader = new TextureLoader();
 
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -532,6 +573,60 @@ function disposeMaterial(material: Material) {
     }
   }
   material.dispose();
+}
+
+function loadOverlayTexture(texturePath: string): Promise<Texture> {
+  const cachedTexture = OVERLAY_TEXTURE_CACHE.get(texturePath);
+  if (cachedTexture) {
+    return Promise.resolve(cachedTexture);
+  }
+
+  const pendingTexture = OVERLAY_TEXTURE_PROMISE_CACHE.get(texturePath);
+  if (pendingTexture) {
+    return pendingTexture;
+  }
+
+  const promise = textureLoader.loadAsync(texturePath).then((texture) => {
+    texture.colorSpace = SRGBColorSpace;
+    OVERLAY_TEXTURE_CACHE.set(texturePath, texture);
+    OVERLAY_TEXTURE_PROMISE_CACHE.delete(texturePath);
+    return texture;
+  }).catch((error) => {
+    OVERLAY_TEXTURE_PROMISE_CACHE.delete(texturePath);
+    throw error;
+  });
+
+  OVERLAY_TEXTURE_PROMISE_CACHE.set(texturePath, promise);
+  return promise;
+}
+
+function useOverlayTexture(texturePath: string) {
+  const cachedTexture = OVERLAY_TEXTURE_CACHE.get(texturePath) ?? null;
+  const [loadedTexture, setLoadedTexture] = useState<Texture | null>(cachedTexture);
+
+  useEffect(() => {
+    if (cachedTexture) {
+      return;
+    }
+
+    let cancelled = false;
+
+    loadOverlayTexture(texturePath)
+      .then((loadedTexture) => {
+        if (cancelled) return;
+        setLoadedTexture(loadedTexture);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLoadedTexture(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [cachedTexture, texturePath]);
+
+  return cachedTexture ?? loadedTexture;
 }
 
 function disposeObject3dResources(root: Object3D) {
@@ -933,7 +1028,7 @@ function DeckOverlayPlane({
   renderOrder: number;
   yOffset?: number;
 }) {
-  const texture = useTexture(texturePath);
+  const texture = useOverlayTexture(texturePath);
   const materialRef = useRef<MeshBasicMaterial | null>(null);
 
   const [planeWidth, planeDepth] = useMemo(
@@ -952,6 +1047,8 @@ function DeckOverlayPlane({
     const nextOpacity = Math.max(0, Math.min(1, progressRef.current * opacityScale));
     material.opacity = nextOpacity;
   });
+
+  if (!texture) return null;
 
   return (
     <group position={[offsetX, y, offsetZ]} rotation={[-Math.PI / 2, 0, rotationInPlane]}>
@@ -1188,6 +1285,9 @@ export default function ShipMapTemplate({
   modelPath,
   viewStorageKey,
   fallbackView,
+  defaultDeckOverlayId,
+  defaultInteriorEnabled = false,
+  showDebugPanel = false,
   showHeader = true,
   immersiveFocus = false,
   deckOverlayConfig,
@@ -1195,6 +1295,7 @@ export default function ShipMapTemplate({
   modelTransform,
 }: ShipMapTemplateProps) {
   const hasDeckOverlay = Boolean(deckOverlayConfig?.decks.length);
+  const initialInteriorEnabled = defaultInteriorEnabled && hasDeckOverlay;
   const initialView = useMemo(() => readSavedView(viewStorageKey, fallbackView), [viewStorageKey, fallbackView]);
   const [modelScene, setModelScene] = useState<Object3D | null>(null);
   const [modelBounds, setModelBounds] = useState<Box3 | null>(null);
@@ -1207,12 +1308,16 @@ export default function ShipMapTemplate({
   const [selectedAnnotationTraces, setSelectedAnnotationTraces] = useState<SelectedAnnotationTrace[]>([]);
   const [legendPaths, setLegendPaths] = useState<ScreenPath[]>([]);
   const [suggestedScale, setSuggestedScale] = useState<number | null>(null);
-  const [sliceEnabled, setSliceEnabled] = useState(false);
+  const [sliceEnabled, setSliceEnabled] = useState(initialInteriorEnabled);
   const [deckBounds, setDeckBounds] = useState<{ min: number; max: number }>({ min: -1, max: 1 });
-  const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(false);
+  const [deckOverlayEnabled, setDeckOverlayEnabled] = useState(initialInteriorEnabled);
   /** True while interior↔exterior blend is running (keeps slice/ghost mounted without per-frame React state). */
   const [interiorAnimating, setInteriorAnimating] = useState(false);
-  const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(getDefaultDeckOverlayId(deckOverlayConfig));
+  const [activeDeckOverlayId, setActiveDeckOverlayId] = useState(
+    defaultDeckOverlayId ?? getDefaultDeckOverlayId(deckOverlayConfig),
+  );
+  const [interiorAssetsReady, setInteriorAssetsReady] = useState(!initialInteriorEnabled);
+  const [bootOverlayVisible, setBootOverlayVisible] = useState(initialInteriorEnabled);
   const [modelFootprint, setModelFootprint] = useState<{ x: number; z: number }>({ x: 1, z: 1 });
   const [deckOverlayRegions, setDeckOverlayRegions] = useState<DeckOverlayRegion[]>([]);
   const [deckOverlayViewBox, setDeckOverlayViewBox] = useState<string | null>(null);
@@ -1226,8 +1331,9 @@ export default function ShipMapTemplate({
   const viewerShellRef = useRef<HTMLDivElement | null>(null);
   const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const selectedItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const deckOverlayVisualProgressRef = useRef(0);
-  const prevDeckOverlayEnabledRef = useRef<boolean | undefined>(undefined);
+  const deckOverlayVisualProgressRef = useRef(initialInteriorEnabled ? 1 : 0);
+  const prevDeckOverlayEnabledRef = useRef<boolean | undefined>(initialInteriorEnabled);
+  const bootStartTimeRef = useRef(initialInteriorEnabled ? performance.now() : 0);
   const controlsFrameRef = useRef<number | null>(null);
   const pickRayRef = useRef(new Raycaster());
   const pickPointerRef = useRef(new Vector2());
@@ -1321,6 +1427,7 @@ export default function ShipMapTemplate({
   }, [activeDeckRegion, deckOverlayViewBox, activeDeckOverlay]);
   const activeDeckShadowTextureUri = useMemo(() => buildDeckShadowTextureDataUri(), []);
   const deckOverlayVisualActive = deckOverlayEnabled || interiorAnimating;
+  const showInteriorBootOverlay = initialInteriorEnabled && !loadError && bootOverlayVisible;
   const viewerBackdropStyle = useMemo(
     () =>
       ({
@@ -1364,9 +1471,76 @@ export default function ShipMapTemplate({
 
   useEffect(() => {
     if (!deckOverlayConfig?.decks.length) return;
+
+    const texturePaths = new Set<string>([activeDeckShadowTextureUri]);
+    for (const deck of deckOverlayConfig.decks) {
+      if (deck.svgPath) {
+        texturePaths.add(deck.svgPath);
+      }
+    }
+
+    let cancelled = false;
+
+    Promise.all([...texturePaths].map((texturePath) => loadOverlayTexture(texturePath)))
+      .then(() => {
+        if (cancelled) return;
+        setInteriorAssetsReady(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setInteriorAssetsReady(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeDeckShadowTextureUri, deckOverlayConfig]);
+
+  useEffect(() => {
+    if (!initialInteriorEnabled) return;
+    if (loadError) {
+      setBootOverlayVisible(false);
+      return;
+    }
+    if (!modelScene || !interiorAssetsReady) return;
+
+    let cancelled = false;
+    let firstFrame: number | null = null;
+    let secondFrame: number | null = null;
+    let timeoutId: number | null = null;
+    const elapsed = performance.now() - bootStartTimeRef.current;
+    const remaining = Math.max(0, INTERIOR_BOOT_MIN_MS - elapsed);
+
+    const reveal = () => {
+      if (cancelled) return;
+      setBootOverlayVisible(false);
+    };
+
+    const queueReveal = () => {
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(reveal);
+      });
+    };
+
+    if (remaining > 0) {
+      timeoutId = window.setTimeout(queueReveal, remaining);
+    } else {
+      queueReveal();
+    }
+
+    return () => {
+      cancelled = true;
+      if (timeoutId !== null) window.clearTimeout(timeoutId);
+      if (firstFrame !== null) window.cancelAnimationFrame(firstFrame);
+      if (secondFrame !== null) window.cancelAnimationFrame(secondFrame);
+    };
+  }, [initialInteriorEnabled, interiorAssetsReady, loadError, modelScene]);
+
+  useEffect(() => {
+    if (!deckOverlayConfig?.decks.length) return;
     if (deckOverlayConfig.decks.some((deck) => deck.id === activeDeckOverlayId)) return;
-    setActiveDeckOverlayId(getDefaultDeckOverlayId(deckOverlayConfig));
-  }, [activeDeckOverlayId, deckOverlayConfig]);
+    setActiveDeckOverlayId(defaultDeckOverlayId ?? getDefaultDeckOverlayId(deckOverlayConfig));
+  }, [activeDeckOverlayId, deckOverlayConfig, defaultDeckOverlayId]);
 
   useEffect(() => {
     if (!hasDeckOverlay) {
@@ -1474,6 +1648,10 @@ export default function ShipMapTemplate({
       const controls = controlsRef.current;
       if (!controls) return;
       const camera = controls.object;
+      if (deckOverlayEnabled && camera.position.y < INTERIOR_CAMERA_MIN_Y) {
+        camera.position.y = INTERIOR_CAMERA_MIN_Y;
+        controls.update();
+      }
       setCurrentView({
         position: [round3(camera.position.x), round3(camera.position.y), round3(camera.position.z)],
         target: [round3(controls.target.x), round3(controls.target.y), round3(controls.target.z)],
@@ -1685,6 +1863,15 @@ export default function ShipMapTemplate({
             <div className={`ship-viewer-bg ${roundShell}`} />
             <div className={`ship-viewer-grid ${roundShell}`} />
             <div className={`ship-backlight ${roundShell}`} />
+            {showInteriorBootOverlay ? (
+              <div className="ship-viewer-boot-overlay">
+                <div className="ship-viewer-boot-panel">
+                  <span className="ship-viewer-boot-spinner" aria-hidden="true" />
+                  <p className="ship-viewer-boot-kicker">Initializing Viewer</p>
+                  <p className="ship-viewer-boot-copy">Loading Perseus mid-deck interior.</p>
+                </div>
+              </div>
+            ) : null}
             <div
               className={`map-deck-viewport relative h-full w-full min-h-0 flex-1 overflow-hidden ${roundShell}`}
               onClick={handleViewportPick}
@@ -1709,6 +1896,15 @@ export default function ShipMapTemplate({
                 progressRef={deckOverlayVisualProgressRef}
                 interiorTarget={deckOverlayEnabled}
                 onSettled={() => setInteriorAnimating(false)}
+              />
+              <RenderInvalidateOnChange
+                active={!showInteriorBootOverlay && Boolean(interactiveDeckOverlay && modelScene)}
+                depsKey={[
+                  activeDeckOverlayId,
+                  deckOverlayEnabled ? "interior" : "exterior",
+                  interactiveDeckOverlay?.annotations?.components.length ?? 0,
+                  interactiveDeckOverlay?.annotations?.labels.length ?? 0,
+                ].join(":")}
               />
               <hemisphereLight intensity={0.42} color="#9eb0c8" groundColor="#0a0c12" />
               <ambientLight intensity={0.2} color="#cbd5e1" />
@@ -1854,6 +2050,28 @@ export default function ShipMapTemplate({
                   </g>
                 ))}
               </svg>
+            ) : null}
+
+            {showDebugPanel ? (
+              <aside className="map-debug-panel">
+                <p className="map-debug-kicker">Viewer Debug</p>
+                <div className="map-debug-block">
+                  <p className="map-debug-label">Position</p>
+                  <code className="map-debug-value">
+                    [{currentView.position.map((value) => value.toFixed(3)).join(", ")}]
+                  </code>
+                </div>
+                <div className="map-debug-block">
+                  <p className="map-debug-label">Target</p>
+                  <code className="map-debug-value">
+                    [{currentView.target.map((value) => value.toFixed(3)).join(", ")}]
+                  </code>
+                </div>
+                <div className="map-debug-block">
+                  <p className="map-debug-label">Deck</p>
+                  <code className="map-debug-value">{activeDeckOverlayId || "none"}</code>
+                </div>
+              </aside>
             ) : null}
 
             <div

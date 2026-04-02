@@ -4,7 +4,7 @@ import { perseusDeckFloors } from "../data/maps/perseusDeckFloorRegistry";
 import { perseusDeckMapConfig } from "../data/maps/perseusDeckMaps";
 
 const defaultPerseusView: ShipMapViewState = {
-  position: [-3.165, 1.389, 0.111],
+  position: [-2.010, 2.367, -0.359],
   target: [0, 0, 0],
 };
 
@@ -46,6 +46,9 @@ export default function MapsPage() {
       modelPath="/models/perctex.glb"
       viewStorageKey="ship-map:perseus:default-view"
       fallbackView={defaultPerseusView}
+      defaultDeckOverlayId="percy_mid"
+      defaultInteriorEnabled
+      showDebugPanel
       deckOverlayConfig={deckOverlayConfig}
       showHeader={false}
       immersiveFocus
