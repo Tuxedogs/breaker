@@ -211,12 +211,15 @@ export function ShipSelectorOverlay({
     if (lastCollapseSeedKeyRef.current === collapseSeedKey) return
     lastCollapseSeedKeyRef.current = collapseSeedKey
     setCollapsedGroups((current) => {
+      const searchActive = queryTrimmed.length >= SHIP_SEARCH_EXPAND_MIN_CHARS
       const nextDefaults = getShipCollapsedGroupsForQuery(groupedShipIds, queryTrimmed)
-      const preservedEntries = Object.fromEntries(
-        groupedShipIds
-          .filter((groupId) => groupId in current)
-          .map((groupId) => [groupId, current[groupId]])
-      )
+      const preservedEntries = searchActive
+        ? {}
+        : Object.fromEntries(
+            groupedShipIds
+              .filter((groupId) => groupId in current)
+              .map((groupId) => [groupId, current[groupId]])
+          )
       return {
         ...nextDefaults,
         ...preservedEntries,

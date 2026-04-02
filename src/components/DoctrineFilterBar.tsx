@@ -35,12 +35,12 @@ function SelectField({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="flex min-w-0 flex-col gap-1 text-xs uppercase tracking-[0.16em] text-slate-300">
-      {label}
+    <label className="filter-field">
+      <span className="filter-field-label">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 rounded-lg border border-white/20 bg-slate-950/60 px-3 text-sm normal-case tracking-normal text-slate-100 outline-none"
+        className="filter-field-select"
       >
         <option value="">All</option>
         {values.map((item) => (
@@ -64,26 +64,27 @@ export default function DoctrineFilterBar({
   return (
     <section className="filter-doctrine">
       <div className="filter-head">
-        <h2 className="title-font text-lg text-cyan-200">{title}</h2>
-        <p className="mt-2 text-sm text-slate-300">{description}</p>
+        <div className="filter-head-copy">
+          <h2 className="filter-head-title">{title}</h2>
+          <p className="filter-head-description">{description}</p>
+        </div>
+        {onClear ? (
+          <button
+            type="button"
+            onClick={onClear}
+            className="filter-clear"
+          >
+            Clear Filters
+          </button>
+        ) : null}
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="filter-grid">
         <SelectField label="Ship" value={filters.ship} values={options.ships} onChange={(value) => onChange("ship", value)} />
         <SelectField label="Role" value={filters.role} values={options.roles} onChange={(value) => onChange("role", value)} />
         <SelectField label="Enemy" value={filters.enemy} values={options.enemies} onChange={(value) => onChange("enemy", value)} />
         <SelectField label="Status" value={filters.status} values={options.statuses} onChange={(value) => onChange("status", value)} />
       </div>
-
-      {onClear ? (
-        <button
-          type="button"
-          onClick={onClear}
-          className="mt-1 inline-flex h-11 items-center justify-center rounded-lg border border-white/30 bg-white/5 px-4 text-xs uppercase tracking-[0.18em] text-slate-200"
-        >
-          Clear Filters
-        </button>
-      ) : null}
     </section>
   );
 }

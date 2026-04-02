@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { CSSProperties, FocusEvent, PointerEvent, ReactNode } from 'react'
-import { NavLink } from 'react-router-dom'
+import type { CSSProperties, FocusEvent, PointerEvent } from 'react'
 
 import {
   estimateArmorInteraction,
@@ -29,7 +28,6 @@ import { MobileThresholdComparisonLayout } from './MobileThresholdComparisonLayo
 import { ShipFlipCard } from './ShipFlipCard'
 
 type Props = {
-  controlStrip?: ReactNode
   ships: Ship[]
   selectedWeapons: SelectedWeaponComparison[]
   allWeapons: WeaponRecord[]
@@ -373,7 +371,6 @@ function MatrixShipThumbnail({ ship }: { ship: Ship }) {
 }
 
 export function ThresholdComparisonMatrix({
-  controlStrip,
   ships,
   selectedWeapons,
   allWeapons,
@@ -559,15 +556,6 @@ export function ThresholdComparisonMatrix({
           ),
         ]
 
-        while (
-          filledRecommendations.length < normalizedTargetColumnCount &&
-          allRecommendations.length > 0
-        ) {
-          filledRecommendations.push(
-            allRecommendations[filledRecommendations.length % allRecommendations.length]
-          )
-        }
-
         return [ship.id, filledRecommendations.slice(0, normalizedTargetColumnCount)] as const
       })
     )
@@ -604,8 +592,6 @@ export function ThresholdComparisonMatrix({
     )
   }, [matrixMode, visibleShips, bodyWeapons])
 
-  const showCornerControls = !hideHeaderRow && matrixMode !== 'target'
-
   if (isMobileLayout) {
     return (
       <MobileThresholdComparisonLayout
@@ -637,265 +623,14 @@ export function ThresholdComparisonMatrix({
       ].filter(Boolean).join(' ')}
       aria-label="Weapons Analysis board"
     >
-      {controlStrip ? <div className="alpha-analysis-control-shell">{controlStrip}</div> : null}
       <div className="acm-shell">
-        <div className="acm-shell-toolbar">
-          <div className="acm-toolbar" aria-label="Threshold controls">
-            <div className="acm-toolbar-group acm-toolbar-group--home">
-              <NavLink
-                to="/"
-                end
-                className={({ isActive }) =>
-                  [
-                    'acm-toolbar-home',
-                    isActive ? 'acm-toolbar-home-active' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')
-                }
-                aria-label="Home"
-              >
-                <svg aria-hidden viewBox="0 0 24 24" className="acm-toolbar-home-icon">
-                  <path
-                    d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </NavLink>
-            </div>
-            <span className="acm-toolbar-divider" aria-hidden="true" />
-            <div className="acm-toolbar-group">
-              <div className="acm-toolbar-segments" role="radiogroup" aria-label="Source">
-                {(
-                  [
-                    ['live', 'LIVE'],
-                    ['ptu', 'PTU'],
-                  ] as const
-                ).map(([id, label], index) => (
-                  <span key={id} className="acm-toolbar-seg-wrap">
-                    {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
-                    <button
-                      type="button"
-                      className={[
-                        'acm-toolbar-seg',
-                        sourceMode === id ? 'acm-toolbar-seg--active' : '',
-                        id === 'ptu' ? 'acm-toolbar-seg--disabled' : '',
-                      ].filter(Boolean).join(' ')}
-                      role="radio"
-                      aria-checked={sourceMode === id}
-                      disabled={id === 'ptu'}
-                    >
-                      {label}
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
-            {showCornerControls ? null : (
-              <>
-                <span className="acm-toolbar-divider" aria-hidden="true" />
-                <div className="acm-toolbar-group">
-                  <span className="acm-toolbar-label">Mode</span>
-                  <div className="acm-toolbar-segments" role="radiogroup" aria-label="Mode">
-                    {(
-                      [
-                        ['analysis', 'Analysis'],
-                        ['target', 'Target'],
-                      ] as const
-                    ).map(([id, label], index) => (
-                      <span key={id} className="acm-toolbar-seg-wrap">
-                        {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
-                        <button
-                          type="button"
-                          className={[
-                            'acm-toolbar-seg',
-                            matrixMode === id ? 'acm-toolbar-seg--active' : '',
-                          ].filter(Boolean).join(' ')}
-                          role="radio"
-                          aria-checked={matrixMode === id}
-                          onClick={() => onMatrixModeChange(id)}
-                        >
-                          {label}
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <span className="acm-toolbar-divider" aria-hidden="true" />
-                <div className="acm-toolbar-group">
-                  <span className="acm-toolbar-label">Shields</span>
-                  <div className="acm-toolbar-segments" role="group" aria-label="Shields">
-                    <button
-                      type="button"
-                      className={[
-                        'acm-toolbar-seg',
-                        shieldMode === 'up' ? 'acm-toolbar-seg--active-shield-on' : '',
-                      ].filter(Boolean).join(' ')}
-                      aria-pressed={shieldMode === 'up'}
-                      onClick={() => onShieldModeChange('up')}
-                    >
-                      ON
-                    </button>
-                    <span className="acm-toolbar-seg-sep" aria-hidden>/</span>
-                    <button
-                      type="button"
-                      className={[
-                        'acm-toolbar-seg',
-                        shieldMode === 'down' ? 'acm-toolbar-seg--active-shield-off' : '',
-                      ].filter(Boolean).join(' ')}
-                      aria-pressed={shieldMode === 'down'}
-                      onClick={() => onShieldModeChange('down')}
-                    >
-                      OFF
-                    </button>
-                  </div>
-                </div>
-                <span className="acm-toolbar-divider" aria-hidden="true" />
-              </>
-            )}
-            <div className="acm-toolbar-group">
-              <span className="acm-toolbar-label">Col.</span>
-              <div className="acm-toolbar-stepper" aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}>
-                <button
-                  type="button"
-                  className="acm-toolbar-stepper-button"
-                  aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
-                  onClick={() =>
-                    matrixMode === 'target'
-                      ? onTargetColumnCountChange?.(
-                          Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
-                        )
-                      : onAnalysisColumnCountChange?.(
-                          Math.max(ANALYSIS_COLUMN_MIN, normalizedAnalysisColumnCount - 1)
-                        )
-                  }
-                >
-                  -
-                </button>
-                <span className="acm-toolbar-stepper-value" aria-live="polite">
-                  {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
-                </span>
-                <button
-                  type="button"
-                  className="acm-toolbar-stepper-button"
-                  aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
-                  onClick={() =>
-                    matrixMode === 'target'
-                      ? onTargetColumnCountChange?.(
-                          Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
-                        )
-                      : onAnalysisColumnCountChange?.(
-                          Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
-                        )
-                  }
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            <span className="acm-toolbar-divider" aria-hidden="true" />
-            <div className="acm-toolbar-group">
-              <span className="acm-toolbar-label">Row</span>
-              <div className="acm-toolbar-stepper" aria-label="Analysis rows">
-                <button
-                  type="button"
-                  className="acm-toolbar-stepper-button"
-                  aria-label="Decrease analysis rows"
-                  onClick={() => onRowCountChange?.(Math.max(ROW_COUNT_MIN, normalizedRowCount - 1))}
-                >
-                  -
-                </button>
-                <span className="acm-toolbar-stepper-value" aria-live="polite">
-                  {normalizedRowCount}
-                </span>
-                <button
-                  type="button"
-                  className="acm-toolbar-stepper-button"
-                  aria-label="Increase analysis rows"
-                  onClick={() => onRowCountChange?.(Math.min(ROW_COUNT_MAX, normalizedRowCount + 1))}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-            {matrixMode === 'target' ? (
-              <>
-                <span className="acm-toolbar-divider" aria-hidden="true" />
-                <div className="acm-toolbar-group">
-                  <span className="acm-toolbar-label">Type</span>
-                  <div className="acm-toolbar-segments" role="radiogroup" aria-label="Weapon type filter">
-                    {(['ballistic', 'energy'] as const).map((value, index) => (
-                      <span key={value} className="acm-toolbar-seg-wrap">
-                        {index > 0 ? <span className="acm-toolbar-seg-sep" aria-hidden>|</span> : null}
-                        <button
-                          type="button"
-                          className={[
-                            'acm-toolbar-seg',
-                            targetWeaponFilterPreset?.kind === 'damageType' && targetWeaponFilterPreset.value === value
-                              ? 'acm-toolbar-seg--active'
-                              : '',
-                          ].filter(Boolean).join(' ')}
-                          role="radio"
-                          aria-checked={
-                            targetWeaponFilterPreset?.kind === 'damageType'
-                              ? targetWeaponFilterPreset.value === value
-                              : false
-                          }
-                          onClick={() =>
-                            onTargetWeaponFilterPresetChange?.({
-                              kind: 'damageType',
-                              slotId: 'target',
-                              label: getDamageTypeLabel(value),
-                              value,
-                            })
-                          }
-                        >
-                          {getDamageTypeLabel(value)}
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <span className="acm-toolbar-divider" aria-hidden="true" />
-                <div className="acm-toolbar-group acm-toolbar-group--size">
-                  <label className="acm-toolbar-label" htmlFor="acm-size-filter">
-                    Size
-                  </label>
-                  <div className="acm-toolbar-select-wrap">
-                    <select
-                      id="acm-size-filter"
-                      className="acm-toolbar-select"
-                      aria-label="Weapon size filter"
-                      value={targetWeaponSizeFilter == null ? 'all' : String(targetWeaponSizeFilter)}
-                      onChange={(event) =>
-                        onTargetWeaponSizeFilterChange?.(
-                          event.target.value === 'all' ? null : Number(event.target.value)
-                        )
-                      }
-                    >
-                      <option value="all">All sizes</option>
-                      {WEAPON_SIZE_OPTIONS.map((size) => (
-                        <option key={size} value={size}>
-                          S{size}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="acm-toolbar-select-caret" aria-hidden="true">
-                      v
-                    </span>
-                  </div>
-                </div>
-              </>
-            ) : null}
-          </div>
-        </div>
         <div className="acm-scroll">
             <div
               className="acm-table"
               style={gridStyle}
               data-weapon-count={matrixMode === 'target' ? normalizedTargetColumnCount : bodyWeapons.length}
             >
-              {hideHeaderRow || matrixMode === 'target' ? null : (
+              {hideHeaderRow ? null : (
                 <div className="acm-header-row">
                   <div
                     className={[
@@ -905,6 +640,34 @@ export function ThresholdComparisonMatrix({
                     ].filter(Boolean).join(' ')}
                   >
                     <div className="acm-corner-body">
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Data</span>
+                        <div className="acm-corner-segments" role="radiogroup" aria-label="Source">
+                          {(
+                            [
+                              ['live', 'LIVE'],
+                              ['ptu', 'PTU'],
+                            ] as const
+                          ).map(([id, label], index) => (
+                            <span key={id} className="acm-corner-seg-wrap">
+                              {index > 0 ? <span className="acm-corner-seg-sep" aria-hidden>|</span> : null}
+                              <button
+                                type="button"
+                                className={[
+                                  'acm-corner-seg',
+                                  sourceMode === id ? 'acm-corner-seg--active' : '',
+                                  id === 'ptu' ? 'acm-corner-seg--disabled' : '',
+                                ].filter(Boolean).join(' ')}
+                                role="radio"
+                                aria-checked={sourceMode === id}
+                                disabled={id === 'ptu'}
+                              >
+                                {label}
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
                       <div className="acm-corner-row">
                         <span className="acm-corner-label">Mode</span>
                         <div className="acm-corner-segments" role="radiogroup" aria-label="Mode">
@@ -932,6 +695,137 @@ export function ThresholdComparisonMatrix({
                           ))}
                         </div>
                       </div>
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Cols</span>
+                        <div
+                          className="acm-corner-stepper"
+                          aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}
+                        >
+                          <button
+                            type="button"
+                            className="acm-corner-stepper-button"
+                            aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                            onClick={() =>
+                              matrixMode === 'target'
+                                ? onTargetColumnCountChange?.(
+                                    Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
+                                  )
+                                : onAnalysisColumnCountChange?.(
+                                    Math.max(ANALYSIS_COLUMN_MIN, normalizedAnalysisColumnCount - 1)
+                                  )
+                            }
+                          >
+                            -
+                          </button>
+                          <span className="acm-corner-stepper-value" aria-live="polite">
+                            {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
+                          </span>
+                          <button
+                            type="button"
+                            className="acm-corner-stepper-button"
+                            aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                            onClick={() =>
+                              matrixMode === 'target'
+                                ? onTargetColumnCountChange?.(
+                                    Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
+                                  )
+                                : onAnalysisColumnCountChange?.(
+                                    Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
+                                  )
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Rows</span>
+                        <div className="acm-corner-stepper" aria-label="Analysis rows">
+                          <button
+                            type="button"
+                            className="acm-corner-stepper-button"
+                            aria-label="Decrease analysis rows"
+                            onClick={() => onRowCountChange?.(Math.max(ROW_COUNT_MIN, normalizedRowCount - 1))}
+                          >
+                            -
+                          </button>
+                          <span className="acm-corner-stepper-value" aria-live="polite">
+                            {normalizedRowCount}
+                          </span>
+                          <button
+                            type="button"
+                            className="acm-corner-stepper-button"
+                            aria-label="Increase analysis rows"
+                            onClick={() => onRowCountChange?.(Math.min(ROW_COUNT_MAX, normalizedRowCount + 1))}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                      {matrixMode === 'target' ? (
+                        <div className="acm-corner-row">
+                          <span className="acm-corner-label">Type</span>
+                          <div className="acm-corner-segments" role="radiogroup" aria-label="Weapon type filter">
+                            {(['ballistic', 'energy'] as const).map((value, index) => (
+                              <span key={value} className="acm-corner-seg-wrap">
+                                {index > 0 ? <span className="acm-corner-seg-sep" aria-hidden>|</span> : null}
+                                <button
+                                  type="button"
+                                  className={[
+                                    'acm-corner-seg',
+                                    targetWeaponFilterPreset?.kind === 'damageType' && targetWeaponFilterPreset.value === value
+                                      ? 'acm-corner-seg--active'
+                                      : '',
+                                  ].filter(Boolean).join(' ')}
+                                  role="radio"
+                                  aria-checked={
+                                    targetWeaponFilterPreset?.kind === 'damageType'
+                                      ? targetWeaponFilterPreset.value === value
+                                      : false
+                                  }
+                                  onClick={() =>
+                                    onTargetWeaponFilterPresetChange?.({
+                                      kind: 'damageType',
+                                      slotId: 'target',
+                                      label: getDamageTypeLabel(value),
+                                      value,
+                                    })
+                                  }
+                                >
+                                  {getDamageTypeLabel(value)}
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                      {matrixMode === 'target' ? (
+                        <div className="acm-corner-row">
+                          <span className="acm-corner-label">Size</span>
+                          <div className="acm-corner-select-wrap">
+                            <select
+                              className="acm-corner-select"
+                              aria-label="Weapon size filter"
+                              value={targetWeaponSizeFilter == null ? 'all' : String(targetWeaponSizeFilter)}
+                              onChange={(event) =>
+                                onTargetWeaponSizeFilterChange?.(
+                                  event.target.value === 'all' ? null : Number(event.target.value)
+                                )
+                              }
+                            >
+                              <option value="all">All</option>
+                              {WEAPON_SIZE_OPTIONS.map((size) => (
+                                <option key={size} value={size}>
+                                  S{size}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="acm-corner-select-caret" aria-hidden="true">
+                              v
+                            </span>
+                          </div>
+                        </div>
+                      ) : null}
                       <div className="acm-corner-row">
                         <span className="acm-corner-label">Shields</span>
                         <div className="acm-corner-segments" role="group" aria-label="Shields">
@@ -1596,6 +1490,40 @@ export function ThresholdComparisonMatrix({
                 })}
               </div>
             </div>
+            {matrixMode === 'target' ? (
+              <aside className="acm-target-exclusions">
+                <p className="acm-target-exclusions-head">Excluded from recommendations</p>
+                <p className="acm-target-exclusions-body">
+                  These weapon families always penetrate all armor states from 100%&nbsp;— no
+                  per-ship evaluation is needed. They are omitted from the recommendation grid.
+                </p>
+                <div className="acm-target-exclusions-groups">
+                  <div className="acm-target-exclusions-group">
+                    <p className="acm-target-exclusions-label">Always E100 — Energy</p>
+                    <ul className="acm-target-exclusions-list">
+                      <li>Attrition cannons (size 4+)</li>
+                      <li>RSI Medusa</li>
+                      <li>Omnisky cannons</li>
+                      <li>M#A cannons — M4A, M5A, M6A, M7A</li>
+                    </ul>
+                  </div>
+                  <div className="acm-target-exclusions-group">
+                    <p className="acm-target-exclusions-label">Always E100 — Ballistic</p>
+                    <ul className="acm-target-exclusions-list">
+                      <li>Deadbolt cannons (size 4+)</li>
+                    </ul>
+                  </div>
+                  <div className="acm-target-exclusions-group">
+                    <p className="acm-target-exclusions-label">Edge cases / bespoke</p>
+                    <p className="acm-target-exclusions-note">
+                      Singe, Sledge, and other ship-specific or non-standard weapons are excluded
+                      due to insufficient data or non-standard armor interaction behavior.
+                      Evaluate these separately.
+                    </p>
+                  </div>
+                </div>
+              </aside>
+            ) : null}
           </div>
         </div>
 

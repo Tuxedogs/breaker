@@ -1,9 +1,7 @@
 import type {
   GroupedWeaponClass,
-  GroupedWeaponDamageType,
   GroupedWeaponSize,
   WeaponRecord,
-  WeaponThresholdType,
 } from './types'
 import {
   formatWeaponSizeLabel,
@@ -75,54 +73,30 @@ function sortWeaponRecords(left: WeaponRecord, right: WeaponRecord) {
 export function groupWeaponRecords(
   weapons: WeaponRecord[]
 ): GroupedWeaponSize[] {
-  const sizes = new Map<number, Map<WeaponThresholdType, Map<string, WeaponRecord[]>>>()
+  const sizes = new Map<number, Map<string, WeaponRecord[]>>()
 
   weapons.forEach((weapon) => {
     if (weapon.damageType === 'distortion') return
 
-    const sizeGroup =
-      sizes.get(weapon.size) ??
-      new Map<WeaponThresholdType, Map<string, WeaponRecord[]>>()
-    const damageTypeGroup =
-      sizeGroup.get(weapon.damageType) ?? new Map<string, WeaponRecord[]>()
-    const classGroup = damageTypeGroup.get(weapon.weaponClass) ?? []
+    const classMap = sizes.get(weapon.size) ?? new Map<string, WeaponRecord[]>()
+    const classGroup = classMap.get(weapon.weaponClass) ?? []
 
     classGroup.push(weapon)
-    damageTypeGroup.set(weapon.weaponClass, classGroup)
-    sizeGroup.set(weapon.damageType, damageTypeGroup)
-    sizes.set(weapon.size, sizeGroup)
+    classMap.set(weapon.weaponClass, classGroup)
+    sizes.set(weapon.size, classMap)
   })
 
   return Array.from(sizes.entries())
     .sort((left, right) => left[0] - right[0])
-    .map(([size, damageTypeMap]) => {
-      const damageTypes: GroupedWeaponDamageType[] = ([
-        'ballistic',
-        'energy',
-      ] as const)
-        .map((damageType) => {
-          const classMap = damageTypeMap.get(damageType)
+    .map(([size, classMap]) => {
+      const classes: GroupedWeaponClass[] = Array.from(classMap.entries())
+        .map(([weaponClass, groupedWeapons]) => ({
+          weaponClass,
+          weapons: [...groupedWeapons].sort(sortWeaponRecords),
+        }))
+        .sort(sortWeaponClassGroups)
 
-          if (!classMap || classMap.size === 0) return null
-
-          const classes: GroupedWeaponClass[] = Array.from(classMap.entries())
-            .map(([weaponClass, groupedWeapons]) => ({
-              weaponClass,
-              weapons: [...groupedWeapons].sort(sortWeaponRecords),
-            }))
-            .sort(sortWeaponClassGroups)
-
-          return {
-            damageType,
-            classes,
-          }
-        })
-        .filter(Boolean) as GroupedWeaponDamageType[]
-
-      return {
-        size,
-        damageTypes,
-      }
+      return { size, classes }
     })
-    .filter((group) => group.damageTypes.length > 0)
+    .filter((group) => group.classes.length > 0)
 }

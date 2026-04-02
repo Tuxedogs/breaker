@@ -5,6 +5,18 @@ import { shipHubBySlug, shipLoadError, type ShipRoleLens } from "../data/ships";
 import { useMemo, useState } from "react";
 
 const roleLensOrder: ShipRoleLens[] = ["pilot", "gunner", "engineer"];
+const shipSectionLorum = {
+  subhead: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  supporting: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  note: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
+  bullets: [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+    "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+  ],
+  cardBody: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+} as const;
 
 export default function ShipHubPage() {
   const { slug = "" } = useParams();
@@ -53,36 +65,37 @@ export default function ShipHubPage() {
 
   return (
     <section className="route-fade ship-framework pb-8 pt-2">
-      <div className="mx-auto max-w-[1180px] space-y-6">
-        <article className="base-card base-card--ships base-card--compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="grid gap-6">
-            <header className="card-head-ship">
-              <p className="base-card-kicker">Ship Hub</p>
-              <h1 className="title-font mt-2 text-4xl text-amber-100">{ship.name}</h1>
-              <p className="mt-3 text-xs uppercase tracking-[0.16em] text-amber-200/90">
-                Career: {ship.career} | Role: {ship.role}
-              </p>
-              {ship.loadoutAssumption ? <p className="mt-4 text-sm text-slate-300">{ship.loadoutAssumption}</p> : null}
-            </header>
-          </div>
+      <div className="mx-auto max-w-[1120px] space-y-3">
+        <article className="base-card base-card--compact ship-hub-panel ship-hub-panel--hero rounded-[1rem] border border-white/10 p-3 sm:p-4">
+          <header className="ship-hub-head">
+            <p className="base-card-kicker">Ship Hub</p>
+            <h1 className="title-font mt-1 text-3xl tracking-[0.05em] text-slate-100 sm:text-[2.4rem]">{ship.name}</h1>
+            <p className="mt-2 text-[0.68rem] uppercase tracking-[0.16em] text-slate-400">
+              Career: {ship.career} | Role: {ship.role}
+            </p>
+            {ship.loadoutAssumption ? (
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">{shipSectionLorum.supporting}</p>
+            ) : null}
+          </header>
         </article>
 
-        <article className="base-card base-card--ships base-card--compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="card-head-ship">
-            <h2 className="title-font text-2xl text-amber-100">Overview</h2>
-            <div className="mt-5 grid gap-6 lg:grid-cols-2">
-              <section>
-                <h3 className="title-font text-sm uppercase tracking-[0.16em] text-amber-200">Primary Role Flow</h3>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-200">
-                  {ship.primaryRoleFlow.map((line) => (
+        <article className="base-card base-card--compact ship-hub-panel rounded-[1rem] border border-white/10 p-3 sm:p-4">
+          <div className="ship-hub-head">
+            <h2 className="title-font text-[1.35rem] tracking-[0.04em] text-slate-100">Overview</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">{shipSectionLorum.subhead}</p>
+            <div className="mt-3 grid gap-3 lg:grid-cols-2">
+              <section className="ship-hub-section">
+                <h3 className="title-font text-[0.68rem] uppercase tracking-[0.16em] text-slate-400">Primary Role Flow</h3>
+                <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-200">
+                  {(ship.primaryRoleFlow.length > 0 ? shipSectionLorum.bullets.slice(0, ship.primaryRoleFlow.length) : shipSectionLorum.bullets.slice(0, 3)).map((line) => (
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
               </section>
-              <section>
-                <h3 className="title-font text-sm uppercase tracking-[0.16em] text-amber-200">Common Failure Modes</h3>
-                <ul className="mt-3 list-disc space-y-2 pl-5 text-slate-200">
-                  {ship.commonFailureModes.map((line) => (
+              <section className="ship-hub-section">
+                <h3 className="title-font text-[0.68rem] uppercase tracking-[0.16em] text-slate-400">Common Failure Modes</h3>
+                <ul className="mt-3 list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-200">
+                  {(ship.commonFailureModes.length > 0 ? shipSectionLorum.bullets.slice(0, ship.commonFailureModes.length) : shipSectionLorum.bullets.slice(0, 3)).map((line) => (
                     <li key={line}>{line}</li>
                   ))}
                 </ul>
@@ -91,20 +104,21 @@ export default function ShipHubPage() {
           </div>
         </article>
 
-        <article className="base-card base-card--ships base-card--compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="card-head-ship">
-            <h2 className="title-font text-2xl text-amber-100">Role Lenses</h2>
-            <div className="mt-4 flex flex-wrap gap-2">
+        <article className="base-card base-card--compact ship-hub-panel rounded-[1rem] border border-white/10 p-3 sm:p-4">
+          <div className="ship-hub-head">
+            <h2 className="title-font text-[1.35rem] tracking-[0.04em] text-slate-100">Role Lenses</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">{shipSectionLorum.note}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
               {roleLensOrder.map((lens) => (
                 <button
                   key={lens}
                   type="button"
                   onClick={() => setActiveLens(lens)}
                   className={[
-                    "inline-flex h-11 min-w-[120px] items-center justify-center rounded-lg border px-4 text-xs uppercase tracking-[0.16em]",
+                    "inline-flex h-11 min-w-[120px] items-center justify-center rounded-md border px-3 text-[0.68rem] uppercase tracking-[0.16em]",
                     activeLens === lens
-                      ? "border-amber-300/55 bg-amber-300/15 text-amber-100"
-                      : "border-white/25 bg-white/5 text-slate-200",
+                      ? "border-white/18 bg-white/[0.06] text-slate-100"
+                      : "border-white/10 bg-transparent text-slate-400",
                   ].join(" ")}
                 >
                   {lens}
@@ -113,14 +127,14 @@ export default function ShipHubPage() {
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {recommendedModules.map((module) => (
-              <article key={module.id} className="base-card-row rounded-xl p-4">
+              <article key={module.id} className="ship-hub-row">
                 <div className="min-w-0">
-                  <h3 className="title-font text-lg text-slate-100">{module.title}</h3>
-                  <p className="mt-1 text-sm text-slate-300">{module.intent}</p>
+                  <h3 className="title-font text-base tracking-[0.03em] text-slate-100">{module.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-slate-300">{shipSectionLorum.cardBody}</p>
                 </div>
-                <Link to={`/module/${module.id}`} className="ml-auto inline-flex h-11 items-center rounded-lg border border-amber-300/35 px-4 text-xs uppercase tracking-[0.16em] text-amber-100">
+                <Link to={`/module/${module.id}`} className="ml-auto inline-flex h-11 items-center rounded-md border border-white/10 px-3 text-[0.68rem] uppercase tracking-[0.16em] text-slate-200">
                   View Module
                 </Link>
               </article>
@@ -128,34 +142,34 @@ export default function ShipHubPage() {
           </div>
         </article>
 
-        <article className="base-card base-card--ships base-card--compact rounded-[1.9rem] border border-amber-300/35 p-4 sm:p-6">
-          <div className="card-head-ship">
-            <h2 className="title-font text-2xl text-amber-100">References</h2>
-            <p className="mt-2 text-sm text-slate-300">Reference pages only, no procedural doctrine.</p>
+        <article className="base-card base-card--compact ship-hub-panel rounded-[1rem] border border-white/10 p-3 sm:p-4">
+          <div className="ship-hub-head">
+            <h2 className="title-font text-[1.35rem] tracking-[0.04em] text-slate-100">References</h2>
+            <p className="mt-2 text-sm leading-6 text-slate-300">{shipSectionLorum.note}</p>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {ship.referenceIds.map((refId) => {
               const ref = refByKey.get(refId);
               if (!ref) return null;
               return (
-                <article key={refId} className="base-card-row rounded-xl p-4">
+                <article key={refId} className="ship-hub-row">
                   <div>
-                    <h3 className="title-font text-lg text-slate-100">{ref.title}</h3>
-                    <p className="mt-1 text-sm text-slate-300">{ref.summary ?? "Reference content."}</p>
+                    <h3 className="title-font text-base tracking-[0.03em] text-slate-100">{ref.title}</h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-300">{shipSectionLorum.cardBody}</p>
                   </div>
-                  <Link to={`/refs/${ref.refType}/${ref.id}`} className="ml-auto inline-flex h-11 items-center rounded-lg border border-amber-300/35 px-4 text-xs uppercase tracking-[0.16em] text-amber-100">
+                  <Link to={`/refs/${ref.refType}/${ref.id}`} className="ml-auto inline-flex h-11 items-center rounded-md border border-white/10 px-3 text-[0.68rem] uppercase tracking-[0.16em] text-slate-200">
                     Open Ref
                   </Link>
                 </article>
               );
             })}
             {ship.operationalLinks?.map((item) => (
-              <article key={item.id} className="base-card-row rounded-xl p-4">
+              <article key={item.id} className="ship-hub-row">
                 <div>
-                  <h3 className="title-font text-lg text-slate-100">{item.title}</h3>
-                  <p className="mt-1 text-sm text-slate-300">{item.summary}</p>
+                  <h3 className="title-font text-base tracking-[0.03em] text-slate-100">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-slate-300">{shipSectionLorum.cardBody}</p>
                 </div>
-                <Link to={item.to} className="ml-auto inline-flex h-11 items-center rounded-lg border border-amber-300/35 px-4 text-xs uppercase tracking-[0.16em] text-amber-100">
+                <Link to={item.to} className="ml-auto inline-flex h-11 items-center rounded-md border border-white/10 px-3 text-[0.68rem] uppercase tracking-[0.16em] text-slate-200">
                   Open Page
                 </Link>
               </article>

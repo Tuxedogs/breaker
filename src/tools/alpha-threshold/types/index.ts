@@ -423,5 +423,5 @@ export type GroupedWeaponDamageType = {
 
 export type GroupedWeaponSize = {
   size: number
-  damageTypes: GroupedWeaponDamageType[]
+  classes: GroupedWeaponClass[]
 }

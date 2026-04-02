@@ -49,7 +49,7 @@ const DEFAULT_EXAMPLE_SHIP_KEYS = ['ANVL::Paladin', 'RSI::Scorpius', 'RSI::Manti
 const DEFAULT_EXAMPLE_WEAPON_KEYS = [
   'energy:3:NDB-30',
   'energy:3:CF-337 Panther',
-  'energy:3:NN-15',
+  'ballistic:3:Tarantula',
 ] as const
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   {

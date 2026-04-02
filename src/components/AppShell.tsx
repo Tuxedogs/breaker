@@ -7,7 +7,7 @@ export default function AppShell() {
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
 
   const mainClassName = isAlphaThresholdRoute
-    ? "flex h-screen w-full flex-col"
+    ? "flex min-h-screen w-full flex-col pt-12"
     : isMapsRoute
       ? "flex h-screen w-full flex-col overflow-hidden px-0 pb-0"
       : [
