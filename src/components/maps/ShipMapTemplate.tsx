@@ -130,6 +130,7 @@ type ShipMapDeckAnnotationConfig = {
 };
 
 type DeckMarkerIconComponent = (props: { className?: string }) => React.JSX.Element;
+type LegendSectionKey = "ship-components" | "crew-stations" | "navigation";
 type LegendItemKey =
   | "power"
   | "radar"
@@ -151,17 +152,6 @@ type DeckMarkerTraceState = {
   color: string;
   startAnnotationId?: string;
 };
-type SelectedAnnotationTrace = {
-  id: string;
-  label: string;
-  color: string;
-};
-type SelectedLegendTrace = {
-  key: LegendItemKey;
-  label: string;
-  color: string;
-  annotationIds: readonly string[];
-};
 type DeckMarkerLegendItem = {
   key: LegendItemKey;
   label: string;
@@ -170,12 +160,14 @@ type DeckMarkerLegendItem = {
   annotationIds: readonly string[];
 };
 type DeckMarkerLegendSection = {
+  key: LegendSectionKey;
   title: string;
   items: readonly DeckMarkerLegendItem[];
 };
 
 const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
   {
+    key: "ship-components",
     title: "Ship Components",
     items: [
       { key: "power", label: "Power Plants", color: "#f59e0b", Icon: PowerPlantIcon, annotationIds: ["power-plant-1", "power-plant-2"] },
@@ -183,23 +175,25 @@ const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
       { key: "quantum", label: "Quantum Drive", color: "#911696", Icon: QuantumDriveIcon, annotationIds: ["qt-drive"] },
       { key: "radar", label: "Radar", color: "#1ed10e", Icon: RadarIcon, annotationIds: ["radar"] },
       { key: "cooler", label: "Coolers", color: "#93c5fd", Icon: CoolerIcon, annotationIds: ["cooler-1", "cooler-2"] },
-      { key: "crew-quarters", label: "Crew Quarters", color: "#e2e8f0", Icon: CrewQuartersIcon, annotationIds: ["crew-quarters-section"] },
     ],
   },
   {
+    key: "crew-stations",
     title: "Crew Stations",
     items: [
+      { key: "crew-quarters", label: "Crew Quarters", color: "#e2e8f0", Icon: CrewQuartersIcon, annotationIds: ["crew-quarters-section"] },
       { key: "main-turret", label: "Main Turret", color: "#f50b0b", Icon: TurretStationIcon, annotationIds: ["gun-01"] },
       { key: "torpedo-terminal", label: "Torpedo Terminal", color: "#f50b0b", Icon: TorpedoStationIcon, annotationIds: ["torpedo-operator-terminal"] },
       { key: "engineer-terminal", label: "Engineer Terminals", color: "#67a1f9", Icon: EngineeringTerminalIcon, annotationIds: ["engineer-terminal-1", "engineer-terminal-2"] },
+      { key: "armory", label: "Armory", color: "#fca5a5", Icon: ArmoryIcon, annotationIds: ["armory-section"] },
     ],
   },
   {
+    key: "navigation",
     title: "Navigation",
     items: [
       { key: "elevators", label: "Elevator", color: "#01ffd5", Icon: ElevatorIcon, annotationIds: ["elevator"] },
       { key: "ladders", label: "Ladders", color: "#01ffd5", Icon: LadderIcon, annotationIds: ["main-ladder", "secondary-ladder-port", "secondary-ladder-starboard"] },
-      { key: "armory", label: "Armory", color: "#fca5a5", Icon: ArmoryIcon, annotationIds: ["armory-section"] },
     ],
   },
 ];
@@ -1086,6 +1080,30 @@ function resolveDeckMarkerIcon(annotation: ShipMapDeckComponentAnnotation | Ship
   return null;
 }
 
+function getAnnotationBadgeText(annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation): string {
+  if (annotation.token?.trim()) return annotation.token.trim();
+  if (annotation.id === "crew-quarters-section") return "CQ";
+  if (annotation.id === "armory-section") return "AR";
+  if (annotation.id === "torpedo-operator-terminal") return "TT";
+  if (annotation.id === "engineer-terminal-1" || annotation.id === "engineer-terminal-2") return "ET";
+  if (annotation.id === "gun-01") return "MT";
+  if (annotation.id === "qt-drive") return "QT";
+  if (annotation.id === "power-plant-1" || annotation.id === "power-plant-2") return "PP";
+  if (annotation.id === "shield-generator-1" || annotation.id === "shield-generator-2") return "SG";
+  if (annotation.id === "cooler-1" || annotation.id === "cooler-2") return "CL";
+  if (annotation.id === "life-support") return "LS";
+  if (annotation.id === "main-ladder" || annotation.id.startsWith("secondary-ladder")) return "LD";
+  if (annotation.id === "elevator") return "EL";
+  if (annotation.id === "radar") return "RD";
+
+  return annotation.label
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("") || "MK";
+}
+
 function projectWorldPointToOverlay(
   point: Vector3,
   camera: PerspectiveCamera,
@@ -1128,7 +1146,7 @@ function chainLegendPath(start: ScreenPoint, points: ScreenPoint[]): ScreenPoint
 }
 
 function isExteriorMarkerVisible(annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation): boolean {
-  return annotation.kind === "Power" || annotation.kind === "Shield" || annotation.kind === "Quantum";
+  return annotation.kind === "Power" || annotation.kind === "Shield" || annotation.kind === "Quantum" || annotation.kind === "Cooler";
 }
 
 function getTraceStateForAnnotation(
@@ -1167,7 +1185,7 @@ function getVisibleLegendSections(
   deck: ShipMapDeckOverlay | null,
   showInterior: boolean,
 ): DeckMarkerLegendSection[] {
-  const exteriorKeys = new Set<LegendItemKey>(["power", "shield", "quantum"]);
+  const exteriorKeys = new Set<LegendItemKey>(["power", "shield", "quantum", "cooler"]);
   if (!showInterior) {
     return DECK_MARKER_LEGEND.map((section) => ({
       ...section,
@@ -1194,6 +1212,7 @@ function DeckAnnotations({
   deck,
   showExteriorSubsetOnly = false,
   activeTraceAnnotationIds,
+  visibleAnnotationIds,
   onAnnotationHover,
   onAnnotationLeave,
   onAnnotationClick,
@@ -1201,6 +1220,7 @@ function DeckAnnotations({
   deck: ShipMapDeckOverlay;
   showExteriorSubsetOnly?: boolean;
   activeTraceAnnotationIds?: readonly string[];
+  visibleAnnotationIds?: readonly string[];
   onAnnotationHover?: (annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation) => void;
   onAnnotationLeave?: () => void;
   onAnnotationClick?: (annotation: ShipMapDeckComponentAnnotation | ShipMapDeckLabelAnnotation) => void;
@@ -1211,8 +1231,9 @@ function DeckAnnotations({
   const stemHeight = Math.max(deck.annotations.fixedHeightAboveDeckMin, 0.02);
   const chipHeight = 0.012;
   const chipRadius = Math.max(Math.min((deck.deckMax - deck.deckMin) * 0.06, 0.026), 0.014);
+  const visibleIdSet = visibleAnnotationIds ? new Set(visibleAnnotationIds) : null;
   const items = [...deck.annotations.components, ...deck.annotations.labels].filter((annotation) =>
-    showExteriorSubsetOnly ? isExteriorMarkerVisible(annotation) : true,
+    showExteriorSubsetOnly ? isExteriorMarkerVisible(annotation) : visibleIdSet ? visibleIdSet.has(annotation.id) : true,
   );
 
   return (
@@ -1221,8 +1242,10 @@ function DeckAnnotations({
         const [worldX, , worldZ] = getAnnotationWorldPosition(annotation, deck.annotations);
         const MarkerIcon = resolveDeckMarkerIcon(annotation);
         const isTraceActive = activeTraceAnnotationIds?.includes(annotation.id) ?? false;
+        const showIconBadge = Boolean(MarkerIcon) && (!showExteriorSubsetOnly || isTraceActive);
         const markerColor = isTraceActive ? "#f8fafc" : annotation.colorHint ?? "#93c5fd";
         const markerOpacity = isTraceActive ? 1 : 0.96;
+        const badgeText = getAnnotationBadgeText(annotation);
         const handleAnnotationSelect = () => onAnnotationClick?.(annotation);
 
         return (
@@ -1245,7 +1268,7 @@ function DeckAnnotations({
               <meshBasicMaterial color={markerColor} transparent opacity={markerOpacity} depthTest={false} depthWrite={false} />
             </mesh>
             <Billboard position={[0, stemHeight + chipHeight + 0.012, 0]} follow lockX={false} lockY={false} lockZ={false}>
-              {MarkerIcon ? (
+              {MarkerIcon && showIconBadge ? (
                 <Html center>
                   <div
                     className={`deck-marker-icon-badge ${isTraceActive ? "deck-marker-icon-badge-active" : ""}`}
@@ -1260,15 +1283,16 @@ function DeckAnnotations({
                 </Html>
               ) : (
                 <Text
-                  fontSize={chipRadius * 0.95}
-                  maxWidth={chipRadius * 4}
+                  fontSize={chipRadius * 0.7}
+                  maxWidth={chipRadius * 4.8}
                   anchorX="center"
                   anchorY="middle"
-                  color="#f8fafc"
-                  outlineWidth={0.003}
+                  color={isTraceActive ? "#f8fafc" : markerColor}
+                  fillOpacity={isTraceActive ? 0.98 : 0.92}
+                  outlineWidth={0.0022}
                   outlineColor="#02040a"
                 >
-                  {annotation.token ?? annotation.label}
+                  {badgeText}
                 </Text>
               )}
             </Billboard>
@@ -1302,10 +1326,9 @@ export default function ShipMapTemplate({
   const [modelSource, setModelSource] = useState<ModelSource | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<ShipMapViewState>(initialView);
+  const [activeLegendSectionKey, setActiveLegendSectionKey] = useState<LegendSectionKey | null>("ship-components");
   const [hoveredLegendKey, setHoveredLegendKey] = useState<LegendItemKey | null>(null);
-  const [selectedLegendTraces, setSelectedLegendTraces] = useState<SelectedLegendTrace[]>([]);
   const [hoveredMarkerTrace, setHoveredMarkerTrace] = useState<DeckMarkerTraceState | null>(null);
-  const [selectedAnnotationTraces, setSelectedAnnotationTraces] = useState<SelectedAnnotationTrace[]>([]);
   const [legendPaths, setLegendPaths] = useState<ScreenPath[]>([]);
   const [suggestedScale, setSuggestedScale] = useState<number | null>(null);
   const [sliceEnabled, setSliceEnabled] = useState(initialInteriorEnabled);
@@ -1330,7 +1353,6 @@ export default function ShipMapTemplate({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const viewerShellRef = useRef<HTMLDivElement | null>(null);
   const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const selectedItemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const deckOverlayVisualProgressRef = useRef(initialInteriorEnabled ? 1 : 0);
   const prevDeckOverlayEnabledRef = useRef<boolean | undefined>(initialInteriorEnabled);
   const bootStartTimeRef = useRef(initialInteriorEnabled ? performance.now() : 0);
@@ -1364,25 +1386,12 @@ export default function ShipMapTemplate({
     };
   }, [activeDeckOverlay, deckOverlayConfig]);
   const interactiveDeckOverlay = deckOverlayEnabled ? activeDeckOverlay : exteriorDeckOverlay;
-  const pinnedLegendKey = selectedLegendTraces[0]?.key ?? null;
-  const activeLegendKey = pinnedLegendKey ?? hoveredLegendKey;
+  const activeLegendKey = hoveredLegendKey;
   const activeLegendItem = useMemo(
     () => DECK_MARKER_LEGEND.flatMap((section) => section.items).find((item) => item.key === activeLegendKey) ?? null,
     [activeLegendKey],
   );
-  const selectedAnnotationIds = useMemo(() => selectedAnnotationTraces.map((trace) => trace.id), [selectedAnnotationTraces]);
-  const selectedLegendAnnotationIds = useMemo(
-    () => [...new Set(selectedLegendTraces.flatMap((trace) => trace.annotationIds))],
-    [selectedLegendTraces],
-  );
   const activeTrace = useMemo<DeckMarkerTraceState | null>(() => {
-    if (selectedLegendTraces.length > 0) {
-      return {
-        key: `legend:${selectedLegendTraces.map((trace) => trace.key).join("|")}`,
-        annotationIds: selectedLegendAnnotationIds,
-        color: selectedLegendTraces[0]?.color ?? activeLegendItem?.color ?? "#a5f3fc",
-      };
-    }
     if (hoveredMarkerTrace) return hoveredMarkerTrace;
     if (hoveredLegendKey && activeLegendItem) {
       return {
@@ -1392,7 +1401,7 @@ export default function ShipMapTemplate({
       };
     }
     return null;
-  }, [activeLegendItem, hoveredLegendKey, hoveredMarkerTrace, selectedLegendAnnotationIds, selectedLegendTraces]);
+  }, [activeLegendItem, hoveredLegendKey, hoveredMarkerTrace]);
   const effectiveModelTransform = useMemo(
     () => resolveModelTransform(modelTransform, suggestedScale ?? 1),
     [modelTransform, suggestedScale],
@@ -1441,16 +1450,25 @@ export default function ShipMapTemplate({
     return Math.min(deckBounds.max, activeDeckOverlay.deckMin + 0.02);
   }, [sliceEnabled, deckOverlayVisualActive, activeDeckOverlay, deckBounds.max]);
   const activeAnnotationIds = useMemo(() => {
-    const ids = new Set<string>(selectedAnnotationIds);
+    const ids = new Set<string>();
     activeTrace?.annotationIds.forEach((id) => ids.add(id));
     return [...ids];
-  }, [activeTrace, selectedAnnotationIds]);
+  }, [activeTrace]);
   const visibleLegendSections = useMemo(
     () => getVisibleLegendSections(interactiveDeckOverlay, deckOverlayEnabled),
     [interactiveDeckOverlay, deckOverlayEnabled],
   );
+  const activeLegendSection = useMemo(
+    () => visibleLegendSections.find((section) => section.key === activeLegendSectionKey) ?? null,
+    [activeLegendSectionKey, visibleLegendSections],
+  );
+  const visibleLegendItems = useMemo(() => activeLegendSection?.items ?? [], [activeLegendSection]);
+  const visibleAnnotationIds = useMemo(
+    () => [...new Set(visibleLegendItems.flatMap((item) => item.annotationIds))],
+    [visibleLegendItems],
+  );
   const mobileLegendPreviewItems = useMemo(() => {
-    const items = visibleLegendSections.flatMap((section) => section.items);
+    const items = visibleLegendItems;
     const radarItem = items.find((item) => item.Icon === RadarIcon);
     const nonRadarItems = items.filter((item) => item.key !== radarItem?.key);
 
@@ -1459,7 +1477,7 @@ export default function ShipMapTemplate({
     }
 
     return items.slice(0, 3);
-  }, [visibleLegendSections]);
+  }, [visibleLegendItems]);
   const lowerHullClippingPlanes = useMemo(() => {
     if (activeDeckCutY === null) return [];
     return [new Plane(new Vector3(0, -1, 0), activeDeckCutY)];
@@ -1550,6 +1568,11 @@ export default function ShipMapTemplate({
   }, [hasDeckOverlay]);
 
   useEffect(() => {
+    setHoveredLegendKey(null);
+    setHoveredMarkerTrace(null);
+  }, [activeLegendSectionKey]);
+
+  useEffect(() => {
     if (!interactiveDeckOverlay?.annotations) {
       setLegendPaths([]);
       return;
@@ -1565,28 +1588,6 @@ export default function ShipMapTemplate({
     const overlayBounds = viewerShell.getBoundingClientRect();
     const y = interactiveDeckOverlay.deckMin + Math.max(interactiveDeckOverlay.annotations.fixedHeightAboveDeckMin, 0.02) + 0.012;
     const allAnnotations = [...interactiveDeckOverlay.annotations.components, ...interactiveDeckOverlay.annotations.labels];
-
-    if (selectedAnnotationIds.length > 0) {
-      const selectedScreenPaths = selectedAnnotationTraces
-        .map((trace) => {
-          const annotation = allAnnotations.find((item) => item.id === trace.id);
-          if (!annotation) return null;
-          const [worldX, , worldZ] = getAnnotationWorldPosition(annotation, interactiveDeckOverlay.annotations);
-          const targetPoint = projectWorldPointToOverlay(new Vector3(worldX, y, worldZ), camera, overlayBounds);
-          const sourceElement = selectedItemRefs.current[trace.id];
-          if (!targetPoint || !sourceElement) return null;
-          const sourceBounds = sourceElement.getBoundingClientRect();
-          const sourcePoint = {
-            x: sourceBounds.right - overlayBounds.left,
-            y: sourceBounds.top - overlayBounds.top + sourceBounds.height * 0.5,
-          };
-          return { points: [sourcePoint, targetPoint], color: trace.color };
-        })
-        .filter((path): path is ScreenPath => path !== null);
-
-      setLegendPaths(selectedScreenPaths);
-      return;
-    }
 
     if (!activeTrace) {
       setLegendPaths([]);
@@ -1639,7 +1640,7 @@ export default function ShipMapTemplate({
       .filter((point): point is ScreenPoint => point !== null);
 
     setLegendPaths([{ points: [startPoint, ...chainLegendPath(startPoint, chainedPoints)], color: activeTrace.color }]);
-  }, [interactiveDeckOverlay, activeLegendKey, activeTrace, currentView, selectedAnnotationIds, selectedAnnotationTraces]);
+  }, [interactiveDeckOverlay, activeLegendKey, activeTrace, currentView]);
 
   function handleControlsChange() {
     if (controlsFrameRef.current !== null) return;
@@ -1919,7 +1920,7 @@ export default function ShipMapTemplate({
                     opacityRef={deckOverlayVisualProgressRef}
                     invertProgress
                   />
-                  {deckOverlayVisualActive && activeDeckCutY !== null && lowerHullGhostScene ? (
+                  {lowerHullGhostScene ? (
                     <FitModelMesh
                       modelScene={lowerHullGhostScene}
                       transform={effectiveModelTransform}
@@ -1961,14 +1962,13 @@ export default function ShipMapTemplate({
                   deck={interactiveDeckOverlay}
                   showExteriorSubsetOnly={!deckOverlayEnabled}
                   activeTraceAnnotationIds={activeAnnotationIds}
+                  visibleAnnotationIds={deckOverlayEnabled ? visibleAnnotationIds : undefined}
                   onAnnotationHover={(annotation) => {
                     if (!deckOverlayEnabled) return;
-                    if (selectedAnnotationIds.length > 0 || selectedLegendTraces.length > 0) return;
                     setHoveredMarkerTrace(getTraceStateForAnnotation(annotation));
                   }}
                   onAnnotationLeave={() => {
                     if (!deckOverlayEnabled) return;
-                    if (selectedAnnotationIds.length > 0 || selectedLegendTraces.length > 0) return;
                     setHoveredMarkerTrace(null);
                   }}
                   onAnnotationClick={(annotation) => {
@@ -1977,31 +1977,13 @@ export default function ShipMapTemplate({
                     setHoveredLegendKey(null);
                     setHoveredMarkerTrace(null);
                     if (matchingLegendItem) {
-                      setSelectedAnnotationTraces([]);
-                      setSelectedLegendTraces((current) =>
-                        current.some((trace) => trace.key === matchingLegendItem.key)
-                          ? current.filter((trace) => trace.key !== matchingLegendItem.key)
-                          : [
-                              ...current,
-                              {
-                                key: matchingLegendItem.key,
-                                label: matchingLegendItem.label,
-                                color: matchingLegendItem.color,
-                                annotationIds: matchingLegendItem.annotationIds,
-                              },
-                            ],
+                      const parentSection = DECK_MARKER_LEGEND.find((section) =>
+                        section.items.some((item) => item.key === matchingLegendItem.key),
                       );
+                      setActiveLegendSectionKey(parentSection?.key ?? "ship-components");
+                      setHoveredLegendKey(matchingLegendItem.key);
                       return;
                     }
-
-                    const nextTrace = getTraceStateForAnnotation(annotation);
-                    const nextColor = nextTrace?.color ?? annotation.colorHint ?? "#93c5fd";
-                    setSelectedLegendTraces([]);
-                    setSelectedAnnotationTraces((current) =>
-                      current.some((entry) => entry.id === annotation.id)
-                        ? current.filter((entry) => entry.id !== annotation.id)
-                        : [...current, { id: annotation.id, label: annotation.label, color: nextColor }],
-                    );
                   }}
                 />
               ) : null}
@@ -2172,14 +2154,24 @@ export default function ShipMapTemplate({
                     </button>
                   </div>
 
-                  {visibleLegendSections.map((section) => (
+                  {visibleLegendSections.map((section) => {
+                    const sectionOpen = activeLegendSectionKey === section.key;
+
+                    return (
                     <div key={section.title} className="map-legend-section">
-                      <p className="map-legend-heading">{section.title}</p>
+                      <button
+                        type="button"
+                        className={`map-legend-heading ${sectionOpen ? "map-legend-heading-active" : ""}`}
+                        onClick={() => {
+                          setActiveLegendSectionKey((current) => (current === section.key ? null : section.key));
+                        }}
+                        aria-expanded={sectionOpen}
+                      >
+                        {section.title}
+                      </button>
+                      {sectionOpen ? (
                       <div className="map-legend-items">
-                        {section.items.map(({ key, label, color, Icon, annotationIds }) => {
-                          const isSelected =
-                            selectedLegendTraces.some((trace) => trace.key === key) ||
-                            annotationIds.some((annotationId) => selectedAnnotationIds.includes(annotationId));
+                        {section.items.map(({ key, label, color, Icon }) => {
                           const forcedRowClass =
                             Icon === RadarIcon
                               ? "map-legend-item-row-two"
@@ -2188,79 +2180,44 @@ export default function ShipMapTemplate({
                                 : "";
 
                           return (
-                          <div
-                            key={label}
-                            ref={(node) => {
-                              legendItemRefs.current[key] = node;
-                            }}
-                            className={`map-legend-item ${activeLegendKey === key ? "map-legend-item-active" : ""} ${forcedRowClass}`}
-                            style={{ "--legend-accent": color } as React.CSSProperties}
-                            title={label}
-                            aria-label={label}
-                            onMouseEnter={() => {
-                              if (selectedLegendTraces.length === 0 && selectedAnnotationIds.length === 0) setHoveredLegendKey(key);
-                            }}
-                            onMouseLeave={() => {
-                              if (selectedLegendTraces.length === 0 && selectedAnnotationIds.length === 0) setHoveredLegendKey(null);
-                            }}
-                            onClick={() => {
-                              setHoveredMarkerTrace(null);
-                              setHoveredLegendKey(null);
-                              setSelectedLegendTraces((current) =>
-                                current.some((trace) => trace.key === key)
-                                  ? current.filter((trace) => trace.key !== key)
-                                  : [...current, { key, label, color, annotationIds }],
-                              );
-                            }}
-                          >
-                            <span className="map-legend-icon" aria-hidden>
-                              <Icon className="map-legend-icon-svg" />
-                            </span>
-                            <span className="map-legend-label">{label}</span>
-                            <span className={`map-legend-select-box ${isSelected ? "map-legend-select-box-filled" : ""}`} aria-hidden />
-                          </div>
-                        )})}
+                            <button
+                              key={label}
+                              type="button"
+                              ref={(node) => {
+                                legendItemRefs.current[key] = node;
+                              }}
+                              className={`map-legend-item ${activeLegendKey === key ? "map-legend-item-active" : ""} ${forcedRowClass}`}
+                              style={{ "--legend-accent": color } as React.CSSProperties}
+                              title={label}
+                              aria-label={label}
+                              onMouseEnter={() => {
+                                setHoveredLegendKey(key);
+                              }}
+                              onMouseLeave={() => {
+                                setHoveredLegendKey(null);
+                              }}
+                              onFocus={() => {
+                                setHoveredLegendKey(key);
+                              }}
+                              onBlur={() => {
+                                setHoveredLegendKey(null);
+                              }}
+                              onClick={() => {
+                                setHoveredMarkerTrace(null);
+                                setHoveredLegendKey(key);
+                              }}
+                            >
+                              <span className="map-legend-icon" aria-hidden>
+                                <Icon className="map-legend-icon-svg" />
+                              </span>
+                              <span className="map-legend-label">{label}</span>
+                            </button>
+                          );
+                        })}
                       </div>
-                      {section.title === "Navigation" ? (
-                        <button
-                          type="button"
-                          className="map-legend-reset"
-                          onClick={() => {
-                            setSelectedLegendTraces([]);
-                            setHoveredLegendKey(null);
-                            setHoveredMarkerTrace(null);
-                            setSelectedAnnotationTraces([]);
-                          }}
-                        >
-                          Reset Selection
-                        </button>
                       ) : null}
                     </div>
-                  ))}
-                  {selectedAnnotationTraces.length > 0 ? (
-                    <div className="map-legend-section map-legend-section-selected">
-                      <p className="map-legend-heading">Selected</p>
-                      <div className="map-legend-items">
-                        {selectedAnnotationTraces.map((trace) => (
-                          <button
-                            key={trace.id}
-                            type="button"
-                            ref={(node) => {
-                              selectedItemRefs.current[trace.id] = node;
-                            }}
-                            className="map-legend-item map-legend-item-active w-full border-0 bg-transparent p-0 text-left"
-                            style={{ "--legend-accent": trace.color } as React.CSSProperties}
-                            onClick={() => {
-                              setSelectedAnnotationTraces((current) => current.filter((entry) => entry.id !== trace.id));
-                            }}
-                          >
-                            <span className="map-legend-swatch" aria-hidden />
-                            <span className="map-legend-label">{trace.label}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ) : null}
+                  )})}
                 </section>
               ) : null}
             </div>
