@@ -360,6 +360,68 @@
   pointer-events: none;
 }
 
+.ship-viewer-boot-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background:
+    linear-gradient(180deg, rgba(2, 6, 12, 0.78), rgba(2, 6, 12, 0.9)),
+    rgba(2, 6, 12, 0.84);
+  backdrop-filter: blur(10px);
+}
+
+.ship-viewer-boot-panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  min-width: min(100%, 18rem);
+  padding: 0.95rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 100%),
+    rgba(9, 13, 22, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 28px rgba(2, 6, 23, 0.34);
+  text-align: center;
+}
+
+.ship-viewer-boot-spinner {
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid rgba(148, 163, 184, 0.24);
+  border-top-color: rgba(186, 230, 253, 0.92);
+  border-radius: 999px;
+  animation: ship-viewer-boot-spin 0.9s linear infinite;
+}
+
+.ship-viewer-boot-kicker {
+  margin: 0;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.88);
+}
+
+.ship-viewer-boot-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(203, 213, 225, 0.88);
+}
+
+@keyframes ship-viewer-boot-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .ship-viewer-bg {
   background:
     radial-gradient(
@@ -405,6 +467,61 @@
 .ship-viewer-shell .map-deck-viewport canvas {
   position: relative;
   z-index: 1;
+}
+
+.map-debug-panel {
+  position: absolute;
+  top: calc(4.9rem + env(safe-area-inset-top, 0px));
+  right: 1rem;
+  z-index: 11;
+  display: grid;
+  gap: 0.45rem;
+  min-width: 14rem;
+  max-width: min(22rem, calc(100% - 2rem));
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 100%),
+    rgba(9, 13, 22, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 28px rgba(2, 6, 23, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.map-debug-kicker,
+.map-debug-label,
+.map-debug-value {
+  margin: 0;
+}
+
+.map-debug-kicker {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.88);
+}
+
+.map-debug-block {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.map-debug-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.map-debug-value {
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: rgba(226, 232, 240, 0.94);
+  white-space: normal;
+  word-break: break-word;
 }
 
 /* Immersive maps route: flex chain must allow the WebGL canvas to shrink and fill. */
@@ -459,6 +576,15 @@
   .ship-viewer-shell--immersive .map-mobile-overlay-cluster {
     top: calc(4.5rem + env(safe-area-inset-top, 0px));
     left: 1rem;
+  }
+
+  .map-debug-panel {
+    top: auto;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+    min-width: 0;
+    max-width: none;
   }
 
   .map-mobile-overlay-actions {
