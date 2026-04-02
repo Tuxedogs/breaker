@@ -3163,7 +3163,7 @@ export const erkulPtuShipSeeds = [
   },
   {
     "id": "fb484074-f33f-4977-a052-2937e8508acc",
-    "manufacturer": "",
+    "manufacturer": "DRAK",
     "name": "Mule",
     "role": "Light Freight",
     "career": "Transporter",

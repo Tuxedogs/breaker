@@ -61,10 +61,6 @@ export default function AppNav() {
     location.pathname === "/index" ||
     location.pathname === "/modules" ||
     location.pathname.startsWith("/module/");
-  if (isAlphaThresholdRoute) {
-    return null;
-  }
-
   function closeAllMenus() {
     if (closeTimerRef.current !== null) {
       window.clearTimeout(closeTimerRef.current);
@@ -104,76 +100,86 @@ export default function AppNav() {
     }, 140);
   }
 
-  const navItemClass =
-    "app-nav-link inline-flex h-9 items-center rounded-md px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70";
-
-  const menuButtonClass =
-    "app-nav-link inline-flex h-9 items-center gap-1 rounded-md px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70";
-
   return (
-    <header className="app-nav-band pointer-events-auto fixed inset-x-0 top-0 z-30 px-4 pb-2 pt-3 opacity-100 transition-opacity">
+    <header className="app-nav-band pointer-events-auto fixed inset-x-0 top-0 z-30 opacity-100 transition-opacity">
       <nav className="app-nav-shell" aria-label="Primary">
-        <div className="flex items-center justify-between">
-          <NavLink to="/" onClick={closeAllMenus} className="inline-flex h-9 items-center gap-2 rounded-md px-2 text-white">
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/45 bg-white/10">
-              <span className="h-2 w-2 rounded-full bg-white" />
-            </span>
-            <span className="title-font text-xs tracking-[0.18em] sm:text-sm">ARES</span>
-          </NavLink>
-
-          <div className="hidden items-center gap-1 lg:flex">
+        <div className="hidden site-toolbar lg:flex">
+          <div className="site-toolbar-group site-toolbar-group--home">
             <NavLink
               to="/"
               onClick={closeAllMenus}
-              className={[navItemClass, isHomeRoute ? "app-nav-link--home-active" : ""].join(" ")}
+              className={[ "site-toolbar-home", isHomeRoute ? "site-toolbar-home-active" : ""].join(" ")}
               aria-label="Home"
             >
               <HomeIcon />
             </NavLink>
+          </div>
 
+          <span className="site-toolbar-divider" aria-hidden="true" />
+
+          <div className="site-toolbar-group">
+            <span className="site-toolbar-brand">ARES</span>
+          </div>
+
+          <span className="site-toolbar-divider" aria-hidden="true" />
+
+          <div className="site-toolbar-group">
             <NavLink
               to="/tools/alpha-threshold"
               onClick={closeAllMenus}
               className={[
-                navItemClass,
-                "app-nav-link--alpha",
-                isAlphaThresholdRoute ? "app-nav-link--alpha-active" : "",
+                "site-toolbar-link",
+                isAlphaThresholdRoute ? "site-toolbar-link--alpha-active" : "",
               ].join(" ")}
             >
               Weapons Analysis
             </NavLink>
+          </div>
 
+          <span className="site-toolbar-divider" aria-hidden="true" />
+
+          <div className="site-toolbar-group">
             <NavLink
               to="/framework"
               onClick={closeAllMenus}
               className={[
-                navItemClass,
-                "app-nav-link--framework",
-                isFrameworkNavActive ? "app-nav-link--framework-active" : "",
+                "site-toolbar-link",
+                isFrameworkNavActive ? "site-toolbar-link--framework-active" : "",
               ].join(" ")}
             >
               Framework
             </NavLink>
+          </div>
 
+          <span className="site-toolbar-divider" aria-hidden="true" />
+
+          <div className="site-toolbar-group">
             <NavLink
               to="/maps"
               onClick={closeAllMenus}
               className={[
-                navItemClass,
-                "app-nav-link--maps",
-                isMapsRoute ? "app-nav-link--maps-active" : "",
+                "site-toolbar-link",
+                isMapsRoute ? "site-toolbar-link--maps-active" : "",
               ].join(" ")}
             >
               Maps
             </NavLink>
+          </div>
 
-            <div className="relative" onMouseEnter={() => openDesktopMenu("ships")} onMouseLeave={closeDesktopMenuSoon}>
+          <span className="site-toolbar-divider" aria-hidden="true" />
+
+          <div
+            className="relative"
+            onMouseEnter={() => openDesktopMenu("ships")}
+            onMouseLeave={closeDesktopMenuSoon}
+          >
+            <div className="site-toolbar-group">
               <button
                 type="button"
                 className={[
-                  menuButtonClass,
-                  "app-nav-link--ships",
-                  desktopMenu === "ships" || isShipsRoute ? "app-nav-link--ships-active" : "",
+                  "site-toolbar-link",
+                  "site-toolbar-link--menu",
+                  desktopMenu === "ships" || isShipsRoute ? "site-toolbar-link--ships-active" : "",
                 ].join(" ")}
                 aria-expanded={desktopMenu === "ships"}
                 aria-controls="desktop-ships-menu"
@@ -182,40 +188,46 @@ export default function AppNav() {
                 Ships
                 <ChevronIcon expanded={desktopMenu === "ships"} />
               </button>
+            </div>
 
-              <div
-                id="desktop-ships-menu"
-                className={[
-                  "pointer-events-none absolute left-1/2 top-full z-40 mt-1 w-52 -translate-x-1/2 rounded-md border border-amber-300/25 bg-black/80 p-2 opacity-0 shadow-[0_12px_24px_rgba(0,0,0,0.35)] backdrop-blur-md transition",
-                  desktopMenu === "ships" ? "pointer-events-auto opacity-100" : "",
-                ].join(" ")}
-              >
-                {shipItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    onClick={closeAllMenus}
-                    className={({ isActive }) =>
-                      [
-                        "flex h-9 items-center rounded px-2 text-[0.8rem] uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/60",
-                        isActive ? "text-amber-300" : "text-slate-200 hover:bg-amber-300/10 hover:text-amber-300",
-                      ].join(" ")
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                ))}
-              </div>
+            <div
+              id="desktop-ships-menu"
+              className={[
+                "site-toolbar-menu-panel",
+                desktopMenu === "ships" ? "site-toolbar-menu-panel--open" : "",
+              ].join(" ")}
+            >
+              {shipItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={closeAllMenus}
+                  className={({ isActive }) =>
+                    [
+                      "site-toolbar-menu-link",
+                      isActive ? "site-toolbar-menu-link--active" : "",
+                    ].join(" ")
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center justify-between lg:hidden">
+          <NavLink to="/" onClick={closeAllMenus} className="site-toolbar-mobile-brand">
+            <span className="site-toolbar-brand">ARES</span>
+          </NavLink>
+
+          <div className="flex items-center gap-2">
             <NavLink
               to="/"
               onClick={closeAllMenus}
               className={[
-                "inline-flex h-11 w-11 items-center justify-center rounded-md text-slate-200 transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70",
-                isHomeRoute ? "text-white" : "",
+                "site-toolbar-mobile-button",
+                isHomeRoute ? "site-toolbar-mobile-button--active" : "",
               ].join(" ")}
               aria-label="Home"
             >
@@ -224,7 +236,7 @@ export default function AppNav() {
 
             <button
               type="button"
-              className="inline-flex h-11 items-center gap-2 rounded-md border border-white/20 bg-black/35 px-3 text-xs uppercase tracking-[0.14em] text-slate-100 transition hover:border-white/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black/70"
+              className="site-toolbar-mobile-menu"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-main-menu"
               onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -242,13 +254,13 @@ export default function AppNav() {
             mobileMenuOpen ? "max-h-[70vh] pt-2 opacity-100" : "max-h-0 opacity-0",
           ].join(" ")}
         >
-          <div className="space-y-1 rounded-lg border border-white/15 bg-black/40 p-2">
+          <div className="site-toolbar-mobile-panel">
             <NavLink
               to="/tools/alpha-threshold"
               onClick={closeAllMenus}
               className={[
-                "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                isAlphaThresholdRoute ? "bg-blue-300/10 text-blue-300" : "text-slate-100 hover:bg-white/5",
+                "site-toolbar-mobile-link",
+                isAlphaThresholdRoute ? "site-toolbar-mobile-link--alpha-active" : "",
               ].join(" ")}
             >
               Weapons Analysis
@@ -258,8 +270,8 @@ export default function AppNav() {
               to="/framework"
               onClick={closeAllMenus}
               className={[
-                "flex min-h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                isFrameworkNavActive ? "bg-emerald-300/10 text-emerald-300" : "text-slate-100 hover:bg-white/5",
+                "site-toolbar-mobile-link",
+                isFrameworkNavActive ? "site-toolbar-mobile-link--framework-active" : "",
               ].join(" ")}
             >
               Framework
@@ -269,17 +281,17 @@ export default function AppNav() {
               to="/maps"
               onClick={closeAllMenus}
               className={[
-                "flex h-11 items-center rounded-md px-3 text-sm uppercase tracking-[0.1em] transition",
-                isMapsRoute ? "bg-amber-300/10 text-amber-300" : "text-slate-100 hover:bg-white/5",
+                "site-toolbar-mobile-link",
+                isMapsRoute ? "site-toolbar-mobile-link--maps-active" : "",
               ].join(" ")}
             >
               Maps
             </NavLink>
 
-            <div className="rounded-md border border-white/10">
+            <div className="site-toolbar-mobile-section">
               <button
                 type="button"
-                className="flex h-11 w-full items-center justify-between px-3 text-left text-sm uppercase tracking-[0.1em] text-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/60"
+                className="site-toolbar-mobile-link site-toolbar-mobile-link--menu"
                 aria-expanded={mobileSectionOpen === "ships"}
                 aria-controls="mobile-ships-menu"
                 onClick={() => toggleMobileSection("ships")}
@@ -301,8 +313,8 @@ export default function AppNav() {
                     onClick={closeAllMenus}
                     className={({ isActive }) =>
                       [
-                        "flex min-h-11 items-center border-t border-white/10 px-4 text-sm transition",
-                        isActive ? "text-amber-300" : "text-slate-300 hover:bg-amber-300/10 hover:text-amber-200",
+                        "site-toolbar-mobile-submenu-link",
+                        isActive ? "site-toolbar-mobile-submenu-link--active" : "",
                       ].join(" ")
                     }
                   >

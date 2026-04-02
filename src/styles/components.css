@@ -108,15 +108,12 @@
   }
 
   .app-nav-band {
-    border-bottom: 1px solid rgb(150 206 255 / 0.18);
-    background:
-      linear-gradient(180deg, rgba(18, 26, 38, 0.65) 0%, rgba(8, 14, 26, 0.96) 100%),
-      rgb(6, 10, 22);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.12),
-      0 8px 24px rgb(0 0 0 / 0.35);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    left: 0;
+    right: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   body.alpha-threshold-page .app-nav-band {
@@ -142,7 +139,8 @@
   }
 
   .app-nav-shell {
-    padding: 0.25rem 0.5rem;
+    width: 100%;
+    padding: 0;
   }
 
   .app-nav-shell--alpha-tool {
@@ -199,36 +197,287 @@
     background: rgb(255 255 255 / 0.05);
   }
 
-  .app-nav-link {
+  .site-toolbar {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 0.38rem 0.85rem;
+    padding: 0.42rem 0.65rem;
+    min-height: 2.39rem;
+    box-sizing: border-box;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+      rgb(9 13 22 / 0.96);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 10px 24px rgb(2 6 23 / 0.24);
+  }
+
+  .site-toolbar-group {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.24rem 0.42rem;
+    min-width: 0;
+  }
+
+  .site-toolbar-group--brand {
+    margin-left: auto;
+  }
+
+  .site-toolbar-divider {
+    width: 1px;
+    flex: 0 0 1px;
+    align-self: stretch;
+    background: linear-gradient(180deg, rgb(148 163 184 / 0), rgb(148 163 184 / 0.28), rgb(148 163 184 / 0));
+  }
+
+  .site-toolbar-home,
+  .site-toolbar-mobile-button,
+  .site-toolbar-mobile-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: rgb(226 232 240);
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease,
+      color 140ms ease;
   }
 
-  .app-nav-link:hover {
-    color: rgb(248 250 252);
+  .site-toolbar-home {
+    width: 1.55rem;
+    height: 1.55rem;
+    flex-shrink: 0;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: rgb(255 255 255 / 0.03);
   }
 
-  .app-nav-link--home-active {
+  .site-toolbar-home:hover,
+  .site-toolbar-home-active {
+    border-color: rgb(255 255 255 / 0.18);
+    background: rgb(255 255 255 / 0.05);
     color: rgb(255 255 255);
   }
 
-  .app-nav-link--alpha:hover,
-  .app-nav-link--alpha-active {
-    color: rgb(147 197 253);
+  .site-toolbar-home:focus-visible,
+  .site-toolbar-link:focus-visible,
+  .site-toolbar-mobile-button:focus-visible,
+  .site-toolbar-mobile-menu:focus-visible,
+  .site-toolbar-mobile-link:focus-visible,
+  .site-toolbar-menu-link:focus-visible {
+    outline: 2px solid rgb(125 211 252 / 0.45);
+    outline-offset: 2px;
   }
 
-  .app-nav-link--framework:hover,
-  .app-nav-link--framework-active {
-    color: rgb(110 231 183);
+  .site-toolbar-link {
+    appearance: none;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 1.55rem;
+    padding: 0.04rem 0.08rem;
+    border: none;
+    background: transparent;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(100 116 139);
+    text-decoration: none;
+    transition:
+      color 140ms ease,
+      text-shadow 140ms ease;
   }
 
-  .app-nav-link--maps:hover,
-  .app-nav-link--maps-active {
+  .site-toolbar-link:hover {
+    color: rgb(226 232 240);
+  }
+
+  .site-toolbar-link--alpha-active {
+    color: rgb(186 230 253);
+    text-shadow: 0 0 14px rgb(56 189 248 / 0.35);
+  }
+
+  .site-toolbar-link--framework-active {
+    color: rgb(167 243 208);
+    text-shadow: 0 0 14px rgb(16 185 129 / 0.24);
+  }
+
+  .site-toolbar-link--maps-active,
+  .site-toolbar-link--ships-active {
+    color: rgb(252 211 77);
+    text-shadow: 0 0 14px rgb(245 158 11 / 0.22);
+  }
+
+  .site-toolbar-brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    min-height: 1.55rem;
+    align-items: center;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(226 232 240);
+  }
+
+  .site-toolbar-menu-panel {
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: calc(100% + 0.45rem);
+    z-index: 40;
+    min-width: 12rem;
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.35rem;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.03), transparent 100%),
+      rgb(9 13 22 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 10px 24px rgb(2 6 23 / 0.3);
+    opacity: 0;
+    transform: translateY(-0.2rem);
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
+  }
+
+  .site-toolbar-menu-panel,
+  .site-toolbar-menu-link {
+    box-sizing: border-box;
+  }
+
+  .site-toolbar-menu-panel--open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .site-toolbar-menu-link {
+    display: flex;
+    min-height: 2.2rem;
+    align-items: center;
+    padding: 0.35rem 0.55rem;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(203 213 225);
+    text-decoration: none;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .site-toolbar-menu-link:hover,
+  .site-toolbar-menu-link--active {
+    background: rgb(245 158 11 / 0.08);
     color: rgb(252 211 77);
   }
 
-  .app-nav-link--ships:hover,
-  .app-nav-link--ships-active {
+  .site-toolbar-mobile-brand {
+    text-decoration: none;
+  }
+
+  .site-toolbar-mobile-button,
+  .site-toolbar-mobile-menu {
+    min-height: 2.75rem;
+    box-sizing: border-box;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+      rgb(9 13 22 / 0.96);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 10px 24px rgb(2 6 23 / 0.18);
+  }
+
+  .site-toolbar-mobile-button {
+    width: 2.75rem;
+  }
+
+  .site-toolbar-mobile-button--active {
+    color: rgb(255 255 255);
+    border-color: rgb(255 255 255 / 0.18);
+  }
+
+  .site-toolbar-mobile-menu {
+    gap: 0.45rem;
+    padding: 0 0.9rem;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .site-toolbar-mobile-panel {
+    display: grid;
+    gap: 0.28rem;
+    box-sizing: border-box;
+    padding: 0.35rem;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.028), transparent 100%),
+      rgb(9 13 22 / 0.98);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.04),
+      0 10px 24px rgb(2 6 23 / 0.24);
+  }
+
+  .site-toolbar-mobile-link,
+  .site-toolbar-mobile-submenu-link {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.45rem 0.7rem;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(148 163 184);
+    text-decoration: none;
+    transition:
+      background-color 140ms ease,
+      color 140ms ease;
+  }
+
+  .site-toolbar-mobile-link:hover,
+  .site-toolbar-mobile-submenu-link:hover {
+    color: rgb(226 232 240);
+    background: rgb(255 255 255 / 0.04);
+  }
+
+  .site-toolbar-mobile-link--alpha-active {
+    color: rgb(186 230 253);
+  }
+
+  .site-toolbar-mobile-link--framework-active {
+    color: rgb(167 243 208);
+  }
+
+  .site-toolbar-mobile-link--maps-active,
+  .site-toolbar-mobile-submenu-link--active {
     color: rgb(252 211 77);
+  }
+
+  .site-toolbar-mobile-section {
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+    padding-top: 0.2rem;
   }
 
   .page-kicker {

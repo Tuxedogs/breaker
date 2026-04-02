@@ -57,11 +57,13 @@ export default function ModuleIndexPage() {
 
   return (
     <section className="base-static route-fade py-3">
-      <div className="space-y-6">
-        <header className="page-hero-shell">
-          <p className="page-kicker">Doctrine Modules</p>
-          <h1 className="page-title">Module Index</h1>
-          <p className="mt-4 max-w-2xl text-sm text-slate-200/80 sm:text-base">
+      <div className="space-y-4">
+        <header className="module-index-head">
+          <div className="min-w-0">
+            <p className="module-index-kicker">Doctrine Modules</p>
+            <h1 className="module-index-title">Module Index</h1>
+          </div>
+          <p className="module-index-summary">
             Filter by context and open the module that matches your current fight state.
           </p>
         </header>

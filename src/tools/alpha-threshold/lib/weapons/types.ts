@@ -1,13 +1,12 @@
 import type {
   GroupedWeaponClass,
-  GroupedWeaponDamageType,
   GroupedWeaponSize,
   WeaponDamageType,
   WeaponRecord,
   WeaponThresholdType,
 } from '../../types'
 
-export type { GroupedWeaponClass, GroupedWeaponDamageType, GroupedWeaponSize }
+export type { GroupedWeaponClass, GroupedWeaponSize }
 export type { WeaponRecord, WeaponThresholdType }
 
 export type ManualWeaponSeed = {

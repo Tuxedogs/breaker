@@ -2806,7 +2806,7 @@ export const erkulLiveShipSeeds = [
   },
   {
     "id": "ec956be2-8e3a-460d-b3a8-97df4cb12b78",
-    "manufacturer": "",
+    "manufacturer": "RSI",
     "name": "Aurora_Mk_II",
     "role": "Starter / Light Fighter",
     "career": "Multi-Role",
@@ -3197,7 +3197,7 @@ export const erkulLiveShipSeeds = [
   },
   {
     "id": "fb484074-f33f-4977-a052-2937e8508acc",
-    "manufacturer": "",
+    "manufacturer": "DRAK",
     "name": "Mule",
     "role": "Light Freight",
     "career": "Transporter",

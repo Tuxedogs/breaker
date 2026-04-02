@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { formatMetric, getWeaponKey } from '../lib/calculations'
 import { filterWeaponRecords, groupWeaponRecords } from '../lib/weapons/grouping'
-import { formatWeaponClassLabel, formatWeaponTypeLabel } from '../lib/weapons/normalize'
+import { formatWeaponClassLabel } from '../lib/weapons/normalize'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import type { ComparisonSlot, WeaponRecord } from '../types'
 
@@ -391,64 +391,59 @@ export function WeaponSelectorOverlay({
                       </button>
                       {!isSizeCollapsed ? (
                         <div className="alpha-selector-bay-group-body">
-                          {sizeGroup.damageTypes.flatMap((damageTypeGroup) =>
-                            damageTypeGroup.classes.map((weaponClassGroup) => {
-                              const groupLabel = formatWeaponTypeLabel({
-                                damageType: damageTypeGroup.damageType,
-                                weaponClass: weaponClassGroup.weaponClass,
-                              })
-                              const groupKey = `${sizeGroup.size}-${damageTypeGroup.damageType}-${weaponClassGroup.weaponClass}`
-                              return (
-                                <section key={groupKey} className="alpha-selector-bay-subgroup">
-                                  <header className="alpha-selector-bay-subhead">
-                                    <h4 className="alpha-selector-bay-subhead-title">{groupLabel}</h4>
-                                    <span className="alpha-selector-bay-subhead-count">
-                                      {weaponClassGroup.weapons.length}
-                                    </span>
-                                  </header>
-                                  <div className="alpha-drawer-ship-card-grid alpha-drawer-weapon-overlay-list">
-                                    {weaponClassGroup.weapons.map((weapon) => {
-                                      const weaponKey = getWeaponKey(weapon)
-                                      const isAssigned = assignedWeaponKeys.has(weaponKey)
-                                      return (
-                                        <button
-                                          key={weaponKey}
-                                          type="button"
-                                          className={[
-                                            'alpha-drawer-ship-card',
-                                            'alpha-drawer-weapon-overlay-card',
-                                            'alpha-drawer-ship-card--list',
-                                            'alpha-drawer-weapon-overlay-card--list',
-                                            'alpha-selector-bay-wc',
-                                            isAssigned ? 'alpha-drawer-ship-card-selected' : '',
-                                          ]
-                                            .filter(Boolean)
-                                            .join(' ')}
-                                          onClick={() => onSelectWeapon(weaponKey)}
-                                        >
-                                          <div className="alpha-drawer-weapon-overlay-card-body">
-                                            <p className="alpha-drawer-ship-card-manufacturer alpha-selector-bay-wc-kicker">
-                                              S{weapon.size} · {formatWeaponClassLabel(weapon.weaponClass)}
-                                            </p>
-                                            <span className="alpha-selector-bay-wc-name">
-                                              {weapon.name}
-                                            </span>
-                                            <p className="alpha-drawer-ship-card-meta alpha-selector-bay-wc-meta">
-                                              {formatMetric(weapon.alpha ?? 0)} α ·{' '}
-                                              {formatMetric(weapon.projectileSpeed ?? 0)} m/s
-                                            </p>
-                                          </div>
-                                          {isAssigned ? (
-                                            <span className="alpha-drawer-ship-card-chip">Assigned</span>
-                                          ) : null}
-                                        </button>
-                                      )
-                                    })}
-                                  </div>
-                                </section>
-                              )
-                            })
-                          )}
+                          {sizeGroup.classes.map((weaponClassGroup) => {
+                            const groupLabel = formatWeaponClassLabel(weaponClassGroup.weaponClass)
+                            const groupKey = `${sizeGroup.size}-${weaponClassGroup.weaponClass}`
+                            return (
+                              <section key={groupKey} className="alpha-selector-bay-subgroup">
+                                <header className="alpha-selector-bay-subhead">
+                                  <h4 className="alpha-selector-bay-subhead-title">{groupLabel}</h4>
+                                  <span className="alpha-selector-bay-subhead-count">
+                                    {weaponClassGroup.weapons.length}
+                                  </span>
+                                </header>
+                                <div className="alpha-drawer-ship-card-grid alpha-drawer-weapon-overlay-list">
+                                  {weaponClassGroup.weapons.map((weapon) => {
+                                    const weaponKey = getWeaponKey(weapon)
+                                    const isAssigned = assignedWeaponKeys.has(weaponKey)
+                                    return (
+                                      <button
+                                        key={weaponKey}
+                                        type="button"
+                                        className={[
+                                          'alpha-drawer-ship-card',
+                                          'alpha-drawer-weapon-overlay-card',
+                                          'alpha-drawer-ship-card--list',
+                                          'alpha-drawer-weapon-overlay-card--list',
+                                          'alpha-selector-bay-wc',
+                                          isAssigned ? 'alpha-drawer-ship-card-selected' : '',
+                                        ]
+                                          .filter(Boolean)
+                                          .join(' ')}
+                                        onClick={() => onSelectWeapon(weaponKey)}
+                                      >
+                                        <div className="alpha-drawer-weapon-overlay-card-body">
+                                          <p className="alpha-drawer-ship-card-manufacturer alpha-selector-bay-wc-kicker">
+                                            S{weapon.size} · {weapon.damageType}
+                                          </p>
+                                          <span className="alpha-selector-bay-wc-name">
+                                            {weapon.name}
+                                          </span>
+                                          <p className="alpha-drawer-ship-card-meta alpha-selector-bay-wc-meta">
+                                            {formatMetric(weapon.alpha ?? 0)} α ·{' '}
+                                            {formatMetric(weapon.projectileSpeed ?? 0)} m/s
+                                          </p>
+                                        </div>
+                                        {isAssigned ? (
+                                          <span className="alpha-drawer-ship-card-chip">Assigned</span>
+                                        ) : null}
+                                      </button>
+                                    )
+                                  })}
+                                </div>
+                              </section>
+                            )
+                          })}
                         </div>
                       ) : null}
                     </section>
