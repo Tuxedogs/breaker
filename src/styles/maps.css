@@ -177,11 +177,22 @@
 
 .map-legend-heading {
   margin: 0 0 0.45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  appearance: none;
+  width: 100%;
+  text-align: left;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: rgba(224, 242, 254, 0.92);
+  cursor: pointer;
+}
+
+.map-legend-heading-active {
+  color: rgba(186, 230, 253, 0.98);
 }
 
 .map-legend-items {
@@ -252,44 +263,6 @@
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--legend-accent) 70%, rgba(255, 255, 255, 0.18)),
     0 0 8px color-mix(in srgb, var(--legend-accent) 30%, transparent);
-}
-
-.map-legend-reset {
-  margin-top: 0.55rem;
-  min-height: 2.75rem;
-  width: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 0.55rem;
-  background: rgba(15, 23, 42, 0.45);
-  color: rgba(224, 242, 254, 0.92);
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition:
-    background 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-.map-legend-reset:hover {
-  background: rgba(30, 41, 59, 0.68);
-  border-color: rgba(103, 232, 249, 0.35);
-}
-
-.map-legend-reset:focus-visible {
-  outline: 2px solid rgba(125, 211, 252, 0.88);
-  outline-offset: 2px;
-}
-
-.map-legend-swatch {
-  width: 0.7rem;
-  height: 0.7rem;
-  flex: 0 0 auto;
-  border-radius: 0.12rem;
-  background: var(--legend-accent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--legend-accent) 42%, rgba(255, 255, 255, 0.2));
 }
 
 .map-legend-path-overlay {
@@ -675,8 +648,7 @@
     stroke-width: 1.8;
   }
 
-  .map-legend-panel-mobile-closed .map-legend-section,
-  .map-legend-panel-mobile-closed .map-legend-section-selected {
+  .map-legend-panel-mobile-closed .map-legend-section {
     display: none;
   }
 
@@ -690,9 +662,7 @@
 
   .map-legend-heading,
   .map-legend-label,
-  .map-legend-select-box,
-  .map-legend-reset,
-  .map-legend-section-selected {
+  .map-legend-select-box {
     display: none;
   }
 
