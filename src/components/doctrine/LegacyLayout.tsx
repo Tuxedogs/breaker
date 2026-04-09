@@ -2,8 +2,8 @@ import type { DoctrineModule } from "../../data/modules";
 
 export function LegacyLayout({ module }: { module: DoctrineModule }) {
   return (
-    <div className="doctrine-layout-shell doctrine-layout--legacy space-y-5">
-      <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+    <div className="doctrine-layout-shell doctrine-layout--legacy space-y-1.5">
+      <article className="doctrine-card p-3 sm:p-4">
         <header className="doctrine-hero-shell">
           <div className="doctrine-hero-copy">
             <p className="doctrine-hero-eyebrow">Operational Doctrine</p>

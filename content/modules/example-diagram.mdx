@@ -1,0 +1,31 @@
+---
+id: "example-diagram"
+title: "Three-Ship Line Formation"
+moduleType: diagram
+status: draft
+owner: Tux
+summary: Standard line formation geometry for three-ship anti-cap engagements, showing overlapping fire arcs and dead zones.
+tags: [formation, diagram, pilot, FC]
+ships: [perseus]
+roles: [pilot, FC]
+enemies: [idris, javelin]
+relatedModuleIds: []
+prerequisites: []
+
+caption: Three-ship staggered line. Lead ship holds primary arc, wings hold secondary coverage. Dead zone behind the formation is intentional — it prevents blue-on-blue during turns.
+assetPath: /images/diagrams/three-ship-line.png
+
+legend:
+  - color: rgb(96 165 250)
+    label: Primary fire arc (lead)
+  - color: rgb(251 191 36)
+    label: Secondary arc (wings)
+  - color: rgb(71 85 105)
+    label: Dead zone
+  - color: rgb(74 222 128)
+    label: Recommended break vector
+---
+
+The staggered line keeps all three ships in a mutual support posture while minimizing the number of guns masked by friendly hulls. Lead calls range and commit. Wings hold position offset by roughly 0.3 km to preserve their own fire solutions.
+
+The dead zone behind the formation is not a weakness — it is intentional. Trying to cover the rear inverts the formation geometry and destroys the primary arc overlap. Use dedicated picket ships for rear coverage, not the formation itself.
