@@ -1,87 +1,30 @@
 import { Link, useParams } from "react-router-dom";
-import EngagementEnvelope from "../components/EngagementEnvelope";
-import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { moduleById, moduleLoadError } from "../data/modules";
-import { refByKey, refLoadError } from "../data/refs";
-import type { ReactNode } from "react";
+import type { DoctrineModule, ModuleType } from "../data/modules";
+import type { ComponentType } from "react";
+import { LegacyLayout } from "../components/doctrine/LegacyLayout";
+import { ProcedureLayout } from "../components/doctrine/ProcedureLayout";
+import { FrameworkLayout } from "../components/doctrine/FrameworkLayout";
+import { ReferenceLayout } from "../components/doctrine/ReferenceLayout";
+import { ConceptLayout } from "../components/doctrine/ConceptLayout";
+import { DiagramLayout } from "../components/doctrine/DiagramLayout";
+import { ChecklistLayout } from "../components/doctrine/ChecklistLayout";
 
-function SectionList({
-  title,
-  items,
-  variant = "default",
-  footer,
-}: {
-  title: string;
-  items: string[];
-  variant?: "default" | "steps" | "failure" | "validation";
-  footer?: ReactNode;
-}) {
-  const cardClass =
-    variant === "failure"
-      ? "doctrine-block doctrine-block-failure"
-      : variant === "validation"
-        ? "doctrine-block doctrine-block-validation"
-        : variant === "steps"
-          ? "doctrine-block doctrine-block-steps"
-          : "doctrine-block";
-
-  const listClass =
-    variant === "validation"
-      ? "doctrine-checklist"
-      : variant === "failure"
-        ? "list-disc space-y-1.5 pl-5"
-        : variant === "steps"
-          ? "list-decimal space-y-2 pl-5"
-        : "list-disc space-y-1.5 pl-5";
-
-  return (
-    <section className={`card-head-sm ${cardClass}`}>
-      <h2 className="surface-title">{title}</h2>
-      <ul className={`mt-3 text-slate-200 ${listClass}`}>
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-      {footer ? <div className="mt-3">{footer}</div> : null}
-    </section>
-  );
-}
-
-function VisualReferencePanel({ src, label }: { src: string; label?: string }) {
-  return (
-    <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
-      <div className="hidden sm:block">
-        <section className="card-head-panel">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="surface-title">Visual Reference</h2>
-            <span className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</span>
-          </div>
-          <div className="mt-3 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
-            <video className="aspect-video w-full object-cover" src={src} preload="metadata" controls playsInline muted />
-          </div>
-          {label ? <p className="mt-2 text-xs text-slate-400">{label}</p> : null}
-        </section>
-      </div>
-
-      <details className="sm:hidden">
-        <summary className="base-card-row cursor-pointer select-none rounded-lg p-3">
-          <span className="title-font text-base text-cyan-100">Visual Reference</span>
-          <span className="text-[11px] uppercase tracking-[0.12em] text-slate-400">Tap to Expand</span>
-        </summary>
-        <section className="base-card-head mt-3 rounded-xl border border-white/15 bg-slate-950/35 p-3">
-          <p className="text-xs uppercase tracking-[0.12em] text-slate-400">Illustrative Only</p>
-          <div className="mt-2 overflow-hidden rounded-lg border border-white/10 bg-slate-950/45">
-            <video className="aspect-video w-full object-cover" src={src} preload="metadata" controls playsInline muted />
-          </div>
-          {label ? <p className="mt-2 text-xs text-slate-400">{label}</p> : null}
-        </section>
-      </details>
-    </article>
-  );
-}
+const layouts: Record<ModuleType, ComponentType<{ module: DoctrineModule }>> = {
+  procedure: ProcedureLayout,
+  framework: FrameworkLayout,
+  reference: ReferenceLayout,
+  concept: ConceptLayout,
+  diagram: DiagramLayout,
+  checklist: ChecklistLayout,
+  flying: LegacyLayout,
+  manning: LegacyLayout,
+  facing: LegacyLayout,
+  recovery: LegacyLayout,
+};
 
 export default function DoctrineModulePage() {
-  const loaderError = moduleLoadError ?? refLoadError;
+  const loaderError = moduleLoadError;
   const { id = "" } = useParams();
   const module = moduleById.get(id);
 
@@ -116,101 +59,11 @@ export default function DoctrineModulePage() {
     );
   }
 
+  const Layout = layouts[module.moduleType] ?? LegacyLayout;
+
   return (
     <section className="route-fade py-3">
-      <div className="space-y-5">
-        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
-          <header className="card-head-md">
-            <p className="base-card-kicker">Doctrine Module</p>
-            <h1 className="detail-page-title-cyan">{module.title}</h1>
-            <p className="mt-3 rounded-lg border border-cyan-200/35 bg-cyan-950/45 px-3 py-2 text-base text-cyan-50">
-              {module.intent}
-            </p>
-            <p className="mt-4 text-xs uppercase tracking-[0.16em] text-slate-400">
-              Status: {module.status} | Last Validated: {module.lastValidated} | Owner: {module.owner}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {module.tags.map((tag) => (
-                <ModuleFilterChipLink
-                  key={tag}
-                  tag={tag}
-                  className="inline-flex h-8 items-center rounded-full border border-cyan-300/30 bg-cyan-300/10 px-3 text-xs uppercase tracking-[0.14em] text-cyan-100"
-                />
-              ))}
-            </div>
-          </header>
-        </article>
-
-        {module.videoSrc ? <VisualReferencePanel src={module.videoSrc} label={module.videoLabel} /> : null}
-
-        {module.powerProjection.length > 0 ? (
-          <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
-            <EngagementEnvelope items={module.powerProjection} />
-          </article>
-        ) : null}
-
-        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
-          <div className="grid gap-4 lg:grid-cols-2">
-            <SectionList
-              title="Use When"
-              items={module.useWhen}
-              footer={
-                module.id === "turret-keybind-baseline" ? (
-                  <Link to="/systems/turret-keybinds" className="base-card-row rounded-lg p-3">
-                    Common Keybindings Here
-                  </Link>
-                ) : undefined
-              }
-            />
-            <SectionList title="Steps" items={module.steps} variant="steps" />
-            <SectionList title="Failure Modes" items={module.failureModes} variant="failure" />
-            <SectionList title="Validation" items={module.validation} variant="validation" />
-          </div>
-        </article>
-
-        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
-          <div className="grid gap-4 lg:grid-cols-2">
-            <section className="card-head-sm">
-              <h2 className="surface-title">Prerequisites</h2>
-              <div className="mt-3 space-y-2">
-                {module.prerequisites.length === 0 ? <p className="text-slate-300">None</p> : null}
-                {module.prerequisites.map((refId) => {
-                  const ref = refByKey.get(refId);
-                  if (!ref) {
-                    return (
-                      <p key={refId} className="text-slate-300">
-                        {refId}
-                      </p>
-                    );
-                  }
-                  return (
-                    <Link key={refId} to={`/refs/${ref.refType}/${ref.id}`} className="base-card-row rounded-lg p-3">
-                      {ref.title}
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section className="card-head-sm">
-              <h2 className="surface-title">Related Modules</h2>
-              <div className="mt-3 space-y-2">
-                {module.relatedModuleIds.length === 0 ? <p className="text-slate-300">None</p> : null}
-                {module.relatedModuleIds.map((relatedId) => {
-                  const related = moduleById.get(relatedId);
-                  if (!related) return null;
-                  return (
-                    <Link key={relatedId} to={`/module/${relatedId}`} className="base-card-row rounded-lg p-3">
-                      {related.title}
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          </div>
-        </article>
-
-      </div>
+      <Layout module={module} />
     </section>
   );
 }

@@ -89,7 +89,7 @@ export default function ModuleIndexPage() {
                 <div className="module-card-hero">
                   <div className="min-w-0">
                     <h2 className="module-card-title">{module.title}</h2>
-                    <p className="module-card-subtitle">{module.intent}</p>
+                    <p className="module-card-subtitle">{module.intent ?? module.summary}</p>
                     {isManningIndex && manningPinnedModuleIds.includes(module.id as (typeof manningPinnedModuleIds)[number]) ? (
                       <p className="module-card-chip module-card-chip-pinned mt-2">
                         <span>Pinned Manning Baseline</span>
@@ -113,7 +113,7 @@ export default function ModuleIndexPage() {
                   ))}
                 </div>
                 <p className="module-card-validation-date">
-                  Last Validated: {module.lastValidated}
+                  Last Validated: {module.lastValidated ?? module.validatedDate}
                 </p>
               </div>
               <Link to={`/module/${module.id}`} className="module-card-cta">

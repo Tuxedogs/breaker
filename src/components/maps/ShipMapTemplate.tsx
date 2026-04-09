@@ -1352,7 +1352,7 @@ export default function ShipMapTemplate({
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const viewerShellRef = useRef<HTMLDivElement | null>(null);
-  const legendItemRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const legendItemRefs = useRef<Record<string, HTMLElement | null>>({});
   const deckOverlayVisualProgressRef = useRef(initialInteriorEnabled ? 1 : 0);
   const prevDeckOverlayEnabledRef = useRef<boolean | undefined>(initialInteriorEnabled);
   const bootStartTimeRef = useRef(initialInteriorEnabled ? performance.now() : 0);

@@ -1,24 +1,61 @@
 ---
 id: "anti-cap-target-triage"
 title: "Anti-Cap Target Triage"
-type: "module"
-status: "validated"
-moduleType: "facing"
-owner: "Tux"
-intent: "Rapidly classify hostile capital threats and assign engagement order."
-summary: "Threat assessment model for anti-cap fights."
-lastValidated: "2026-02-24"
-tags: ["anti-cap", "targeting", "pilot"]
-ships: ["perseus", "idris", "polaris"]
-roles: ["pilot", "gunner"]
-enemies: ["capital", "gunship"]
-maps: []
-useWhen: ["Multiple capital hulls are present.", "FC requires immediate kill priority order."]
-steps: ["Score hostiles by damage potential and relative position.", "Assign first kill target and secondary pressure target.", "Re-evaluate order after each disable event."]
-failureModes: ["Target swaps with no comms handoff.", "Undervaluing enemy engineering presence."]
-validation: ["Priority order is set within first engagement minute.", "All crew can repeat current target order on request."]
-prerequisites: ["diagram/perseus-component-priority"]
+moduleType: framework
+status: validated
+validatedDate: 2026-02-24
+owner: Tux
+context: anti-cap
+summary: Rapidly classify hostile capital threats and assign engagement order.
+tags: [anti-cap, targeting, pilot]
+ships: [perseus]
+roles: [pilot, FC]
+enemies: [idris, javelin]
+
+question: "Which capital hull do we kill first?"
+
+criteria:
+  - label: Damage potential
+    weight: high
+    description: Primary armament type and fire rate relative to your hull class
+  - label: Relative position
+    weight: high
+    description: Exposure to your weapons vs exposure to theirs
+  - label: Engineering presence
+    weight: med
+    description: Active repair capability extends effective hull life significantly
+
+matrix:
+  - condition: Single capital hull present
+    action: Assign all fire. No triage needed.
+  - condition: Two hulls, unequal threat
+    action: Primary kill on higher damage potential. Secondary pressure on the other.
+  - condition: Two hulls, equal threat
+    action: Assign by position. Kill the one your weapons already bear on.
+  - condition: Hull disabled mid-engagement
+    action: Re-evaluate order. Do not continue damage on a non-threat.
+
+output:
+  - label: Primary kill target
+    description: Full damage commitment until disabled
+  - label: Secondary pressure target
+    description: Maintain tracking position, do not fully commit
+
+failureModes:
+  - Target swaps with no comms handoff
+  - Undervaluing enemy engineering presence
+
 relatedModuleIds: ["perseus-component-sniping"]
+prerequisites: ["diagram/perseus-component-priority"]
 ---
 
-Use this module to decide who dies first.
+Triage is not about which ship is scariest — it's about which ship
+your weapons can realistically reach right now. A Javelin at range
+with its broadside away from you scores lower than an Idris already
+turned toward your formation, even if the Javelin is nominally the
+bigger threat.
+
+Engineering presence is the most commonly underweighted factor.
+A hull with active repair can absorb your damage output indefinitely.
+If you see support ships docked or running parallel, adjust your
+damage potential score upward accordingly.

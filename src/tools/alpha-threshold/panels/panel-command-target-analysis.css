@@ -1,0 +1,543 @@
+/* TargetAnalysisSurface layout
+   Root fills the parent grid slot (alpha-threshold-tab-panel),
+   header is always visible, body scrolls below. */
+
+.alpha-threshold-tool .acm-tas-root {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: rgb(5 7 12 / 0.98);
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(9 13 22 / 0.98);
+  min-height: 0;
+}
+
+/* The corner panel sits inline in the header — override its matrix-specific sticky positioning */
+.alpha-threshold-tool .acm-tas-control {
+  align-self: start;
+}
+
+.alpha-threshold-tool .acm-tas-control .acm-corner {
+  position: static;
+  width: 17.5rem;
+  border-right: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 0;
+}
+
+/* Ship identity block */
+.alpha-threshold-tool .acm-tas-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  min-width: 0;
+  border-right: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-threshold-tool .acm-tas-thumb {
+  width: 5.5rem;
+  height: 3.75rem;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(2 6 23 / 0.55);
+}
+
+.alpha-threshold-tool .acm-tas-identity-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.alpha-threshold-tool .acm-tas-mode-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.45);
+}
+
+.alpha-threshold-tool .acm-tas-ship-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgb(226 232 240);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alpha-threshold-tool .acm-tas-manufacturer {
+  font-size: 0.7rem;
+  color: rgb(148 163 184 / 0.5);
+}
+
+.alpha-threshold-tool .acm-tas-empty-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgb(148 163 184 / 0.4);
+}
+
+.alpha-threshold-tool .acm-tas-size-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.45rem;
+}
+
+.alpha-threshold-tool .acm-tas-size-filter-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.55);
+  flex-shrink: 0;
+}
+
+.alpha-threshold-tool .acm-tas-size-filter-segs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+}
+
+.alpha-threshold-tool .acm-tas-size-filter-segs .acm-corner-seg {
+  font-size: 0.72rem;
+  padding: 0.28rem 0.52rem;
+  min-height: 1.6rem;
+  letter-spacing: 0.06em;
+}
+
+/* ─── THRESHOLDS — the dominant focal point ──────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-thresholds {
+  display: flex;
+  align-items: stretch;
+}
+
+.alpha-threshold-tool .acm-tas-threshold {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.75rem 2.25rem;
+}
+
+.alpha-threshold-tool .acm-tas-threshold + .acm-tas-threshold {
+  border-left: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.alpha-threshold-tool .acm-tas-threshold-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.45);
+}
+
+.alpha-threshold-tool .acm-tas-threshold--energy .acm-tas-threshold-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: rgb(186 230 253);
+  text-shadow: 0 0 28px rgb(56 189 248 / 0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.alpha-threshold-tool .acm-tas-threshold--ballistic .acm-tas-threshold-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  color: rgb(252 211 77);
+  text-shadow: 0 0 22px rgb(251 191 36 / 0.35);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── BODY ───────────────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: 0.5rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 0;
+}
+
+/* ─── STAT GROUPS ────────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-stat-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.alpha-threshold-tool .acm-tas-stat-group {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  background: rgb(255 255 255 / 0.022);
+}
+
+.alpha-threshold-tool .acm-tas-stat-group-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin: 0 0 0.25rem;
+  padding: 0 0 0.2rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.45);
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.alpha-threshold-tool .acm-tas-stat-group-label:hover {
+  color: rgb(148 163 184 / 0.75);
+}
+
+.alpha-threshold-tool .acm-tas-stat-group-caret {
+  font-size: 0.5rem;
+  flex-shrink: 0;
+  opacity: 0.65;
+}
+
+.alpha-threshold-tool .acm-tas-stat-list {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.alpha-threshold-tool .acm-tas-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.12rem 0;
+  font-size: 0.72rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.04);
+}
+
+.alpha-threshold-tool .acm-tas-stat:last-child {
+  border-bottom: none;
+}
+
+.alpha-threshold-tool .acm-tas-stat dt {
+  color: rgb(148 163 184 / 0.6);
+  font-weight: 400;
+}
+
+.alpha-threshold-tool .acm-tas-stat dd {
+  margin: 0;
+  color: rgb(226 232 240 / 0.88);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ─── EXCLUSION BANNER ───────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-exclusion {
+  border: 1px solid rgb(255 255 255 / 0.07);
+  background: rgb(255 255 255 / 0.01);
+}
+
+.alpha-threshold-tool .acm-tas-exclusion-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.45rem 0.7rem;
+  background: transparent;
+  border: none;
+  color: rgb(148 163 184 / 0.5);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.alpha-threshold-tool .acm-tas-exclusion-toggle:hover {
+  color: rgb(148 163 184 / 0.8);
+}
+
+.alpha-threshold-tool .acm-tas-exclusion-caret {
+  font-size: 0.55rem;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.alpha-threshold-tool .acm-tas-exclusion-body {
+  margin: 0;
+  padding: 0 0.7rem 0.6rem;
+  font-size: 0.73rem;
+  color: rgb(148 163 184 / 0.5);
+  line-height: 1.6;
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+}
+
+/* ─── WEAPON SECTION ─────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-weapon-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-section-head {
+  margin: 0;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(148 163 184 / 0.4);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-empty {
+  margin: 0;
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: rgb(148 163 184 / 0.4);
+  border: 1px solid rgb(255 255 255 / 0.06);
+  text-align: center;
+}
+
+/* ─── WEAPON GRID ────────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-weapon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: 0.4rem;
+  align-content: start;
+}
+
+/* ─── WEAPON CARD ────────────────────────────────────────────────────── */
+
+.alpha-threshold-tool .acm-tas-weapon-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.025) 0%, transparent 100%),
+    rgb(255 255 255 / 0.015);
+  transition: border-color 0.1s ease, background 0.1s ease;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-card:hover {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.042) 0%, transparent 100%),
+    rgb(255 255 255 / 0.028);
+}
+
+/* Tone variants — left accent bar + border tint */
+.alpha-threshold-tool .acm-tas-weapon-card--pass {
+  border-color: rgb(74 222 128 / 0.22);
+  border-left-width: 2px;
+  border-left-color: rgb(74 222 128 / 0.5);
+}
+.alpha-threshold-tool .acm-tas-weapon-card--pass:hover {
+  border-color: rgb(74 222 128 / 0.38);
+  border-left-color: rgb(74 222 128 / 0.7);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-card--mid {
+  border-color: rgb(250 204 21 / 0.2);
+  border-left-width: 2px;
+  border-left-color: rgb(250 204 21 / 0.45);
+}
+.alpha-threshold-tool .acm-tas-weapon-card--mid:hover {
+  border-color: rgb(250 204 21 / 0.34);
+  border-left-color: rgb(250 204 21 / 0.65);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-card--late {
+  border-color: rgb(248 113 113 / 0.16);
+  border-left-width: 2px;
+  border-left-color: rgb(248 113 113 / 0.4);
+}
+.alpha-threshold-tool .acm-tas-weapon-card--late:hover {
+  border-color: rgb(248 113 113 / 0.28);
+  border-left-color: rgb(248 113 113 / 0.6);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-card--none {
+  border-color: rgb(255 255 255 / 0.05);
+  opacity: 0.45;
+}
+
+/* Card head */
+.alpha-threshold-tool .acm-tas-weapon-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  padding: 0.45rem 0.55rem 0.32rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgb(226 232 240 / 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-meta {
+  font-size: 0.66rem;
+  color: rgb(148 163 184 / 0.48);
+  text-transform: capitalize;
+}
+
+/* E-rating + badge row */
+.alpha-threshold-tool .acm-tas-weapon-rating {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.38rem 0.55rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-e {
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* State badges */
+.alpha-threshold-tool .acm-tas-weapon-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 0.18rem 0.42rem;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-badge--pass {
+  color: rgb(74 222 128);
+  background: rgb(74 222 128 / 0.09);
+  border-color: rgb(74 222 128 / 0.24);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-badge--mid {
+  color: rgb(250 204 21);
+  background: rgb(250 204 21 / 0.09);
+  border-color: rgb(250 204 21 / 0.24);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-badge--late {
+  color: rgb(248 113 113);
+  background: rgb(248 113 113 / 0.09);
+  border-color: rgb(248 113 113 / 0.22);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-badge--none {
+  color: rgb(148 163 184 / 0.4);
+  background: transparent;
+  border-color: rgb(255 255 255 / 0.08);
+}
+
+/* Card stats */
+.alpha-threshold-tool .acm-tas-weapon-stats {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.32rem 0.55rem 0.42rem;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.14rem 0;
+  font-size: 0.72rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.04);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-stat:last-child {
+  border-bottom: none;
+}
+
+.alpha-threshold-tool .acm-tas-weapon-stat dt {
+  color: rgb(148 163 184 / 0.52);
+}
+
+.alpha-threshold-tool .acm-tas-weapon-stat dd {
+  margin: 0;
+  color: rgb(226 232 240 / 0.82);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .alpha-threshold-tool .acm-tas-threshold {
+    padding: 0.65rem 1.5rem;
+  }
+
+  .alpha-threshold-tool .acm-tas-threshold--energy .acm-tas-threshold-value,
+  .alpha-threshold-tool .acm-tas-threshold--ballistic .acm-tas-threshold-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .alpha-threshold-tool .acm-tas-header {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .alpha-threshold-tool .acm-tas-thresholds {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+    border-left: none;
+  }
+
+  .alpha-threshold-tool .acm-tas-threshold {
+    flex: 1;
+    padding: 0.55rem 1rem;
+  }
+
+  .alpha-threshold-tool .acm-tas-stat-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .alpha-threshold-tool .acm-tas-stat-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .alpha-threshold-tool .acm-tas-weapon-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .alpha-threshold-tool .acm-tas-threshold--energy .acm-tas-threshold-value,
+  .alpha-threshold-tool .acm-tas-threshold--ballistic .acm-tas-threshold-value {
+    font-size: 1.65rem;
+  }
+}

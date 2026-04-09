@@ -1,43 +1,186 @@
 import type { ComponentType } from "react";
 import {
+  optionalObjectArray,
   optionalString,
   optionalStringArray,
   parseMdxFile,
   requireString,
-  requireStringArray,
 } from "./contentLoader";
 
-export type ModuleStatus = "draft" | "review" | "validated";
-export type ModuleType = "flying" | "manning" | "facing" | "recovery";
+// ── Status ────────────────────────────────────────────────────────────────────
+
+export type ModuleStatus = "draft" | "review" | "validated" | "deprecated";
+
+// ── Layout types ──────────────────────────────────────────────────────────────
+
+export type LegacyModuleType = "flying" | "manning" | "facing" | "recovery";
+export type NewModuleType =
+  | "procedure"
+  | "framework"
+  | "reference"
+  | "concept"
+  | "diagram"
+  | "checklist";
+export type ModuleType = NewModuleType | LegacyModuleType;
+
+// ── Layout-specific sub-types ─────────────────────────────────────────────────
+
+export type ProcedureStep = { label: string; detail: string };
+export type ValidationItem = { label: string; detail: string };
+export type CriteriaItem = {
+  label: string;
+  weight?: "high" | "med" | "low";
+  description: string;
+};
+export type MatrixRow = { condition: string; action: string };
+export type OutputItem = { label: string; description: string };
+export type TableRow = { label: string; value: string; note?: string };
+export type DoctrineTable = { heading: string; rows: TableRow[] };
+export type LegendItem = { color: string; label: string };
+export type Phase = { label: string; items: string[] };
+
+// ── Module shape ──────────────────────────────────────────────────────────────
 
 export type DoctrineModule = {
+  // Universal required
   id: string;
-  title: string;
-  type: "module";
-  status: ModuleStatus;
   moduleType: ModuleType;
+  title: string;
+  summary: string;
+  status: ModuleStatus;
   owner: string;
-  intent: string;
-  summary?: string;
-  videoSrc?: string;
-  videoLabel?: string;
-  lastValidated: string;
+  Content: ComponentType;
+
+  // Universal optional — always arrays (empty if absent)
   tags: string[];
   ships: string[];
   roles: string[];
+  enemies: string[];
+  relatedModuleIds: string[];
+  prerequisites: string[];
   excludeShips: string[];
   excludeRoles: string[];
-  enemies: string[];
-  maps: string[];
-  powerProjection: string[];
-  useWhen: string[];
-  steps: string[];
-  failureModes: string[];
-  validation: string[];
-  prerequisites: string[];
-  relatedModuleIds: string[];
-  Content: ComponentType;
+
+  // Universal optional scalars
+  validatedDate?: string;
+  context?: string;
+
+  // Legacy compatibility fields (used by LegacyLayout, kept for migration)
+  intent?: string;
+  lastValidated?: string;
+  videoSrc?: string;
+  videoLabel?: string;
+  powerProjection?: string[];
+  maps?: string[];
+
+  // procedure
+  steps?: ProcedureStep[];
+  useWhen?: string[];
+  validation?: ValidationItem[];
+  failureModes?: string[];
+
+  // framework
+  question?: string;
+  criteria?: CriteriaItem[];
+  matrix?: MatrixRow[];
+  output?: OutputItem[];
+
+  // reference
+  tables?: DoctrineTable[];
+  notes?: string[];
+
+  // diagram
+  assetPath?: string;
+  caption?: string;
+  legend?: LegendItem[];
+
+  // checklist
+  phases?: Phase[];
+  resetable?: boolean;
 };
+
+// ── Type helpers ──────────────────────────────────────────────────────────────
+
+const LEGACY_TYPES = new Set<string>(["flying", "manning", "facing", "recovery"]);
+const ALL_TYPES = new Set<string>([
+  "procedure",
+  "framework",
+  "reference",
+  "concept",
+  "diagram",
+  "checklist",
+  "flying",
+  "manning",
+  "facing",
+  "recovery",
+]);
+
+function toModuleStatus(value: string, filePath: string): ModuleStatus {
+  if (
+    value === "draft" ||
+    value === "review" ||
+    value === "validated" ||
+    value === "deprecated"
+  ) {
+    return value;
+  }
+  throw new Error(`[content] ${filePath} has invalid "status": "${value}"`);
+}
+
+function toModuleType(value: string, filePath: string): ModuleType {
+  if (ALL_TYPES.has(value)) return value as ModuleType;
+  throw new Error(`[content] ${filePath} has invalid "moduleType": "${value}"`);
+}
+
+// ── Object array mappers ──────────────────────────────────────────────────────
+
+function toProcedureSteps(
+  arr: Record<string, unknown>[]
+): ProcedureStep[] {
+  return arr.map((item) => ({
+    label: typeof item.label === "string" ? item.label : "",
+    detail: typeof item.detail === "string" ? item.detail : "",
+  }));
+}
+
+function toValidationItems(
+  arr: Record<string, unknown>[]
+): ValidationItem[] {
+  return arr.map((item) => ({
+    label: typeof item.label === "string" ? item.label : "",
+    detail: typeof item.detail === "string" ? item.detail : "",
+  }));
+}
+
+function isWeight(v: unknown): v is "high" | "med" | "low" {
+  return v === "high" || v === "med" || v === "low";
+}
+
+function toCriteriaItems(
+  arr: Record<string, unknown>[]
+): CriteriaItem[] {
+  return arr.map((item) => ({
+    label: typeof item.label === "string" ? item.label : "",
+    weight: isWeight(item.weight) ? item.weight : undefined,
+    description: typeof item.description === "string" ? item.description : "",
+  }));
+}
+
+function toMatrixRows(arr: Record<string, unknown>[]): MatrixRow[] {
+  return arr.map((item) => ({
+    condition: typeof item.condition === "string" ? item.condition : "",
+    action: typeof item.action === "string" ? item.action : "",
+  }));
+}
+
+function toOutputItems(arr: Record<string, unknown>[]): OutputItem[] {
+  return arr.map((item) => ({
+    label: typeof item.label === "string" ? item.label : "",
+    description: typeof item.description === "string" ? item.description : "",
+  }));
+}
+
+// ── Loader ────────────────────────────────────────────────────────────────────
 
 type MdxModule = {
   default: ComponentType;
@@ -79,73 +222,113 @@ async function resolveRawValue(value: unknown): Promise<unknown> {
   return current;
 }
 
-function toModuleStatus(value: string, filePath: string): ModuleStatus {
-  if (value === "draft" || value === "review" || value === "validated") {
-    return value;
-  }
-  throw new Error(`[content] ${filePath} has invalid "status": "${value}"`);
-}
-
-function toModuleType(value: string, filePath: string): ModuleType {
-  if (value === "flying" || value === "manning" || value === "facing" || value === "recovery") {
-    return value;
-  }
-  throw new Error(`[content] ${filePath} has invalid "moduleType": "${value}"`);
-}
-
 async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
   const rawByNormalizedPath = new Map(
-    Object.entries(moduleRawByPath).map(([path, value]) => [normalizePathKey(path), value] as const)
+    Object.entries(moduleRawByPath).map(
+      ([path, value]) => [normalizePathKey(path), value] as const
+    )
   );
   const paths = Object.keys(moduleComponentByPath).sort();
-  const modules = await Promise.all(paths.map(async (path) => {
-    const rawLoader = rawByNormalizedPath.get(normalizePathKey(path));
-    if (!rawLoader) {
-      throw new Error(`[content] ${path} is missing raw MDX source import`);
-    }
 
-    const raw = await resolveRawValue(await rawLoader());
-    const componentModule = moduleComponentByPath[path];
-    if (!componentModule?.default) {
-      throw new Error(`[content] ${path} failed to load MDX component export`);
-    }
+  const modules = await Promise.all(
+    paths.map(async (path) => {
+      const rawLoader = rawByNormalizedPath.get(normalizePathKey(path));
+      if (!rawLoader) {
+        throw new Error(`[content] ${path} is missing raw MDX source import`);
+      }
 
-    const { frontmatter } = parseMdxFile(raw, path);
+      const raw = await resolveRawValue(await rawLoader());
+      const componentModule = moduleComponentByPath[path];
+      if (!componentModule?.default) {
+        throw new Error(`[content] ${path} failed to load MDX component export`);
+      }
 
-    const type = requireString(frontmatter, "type", path);
-    if (type !== "module") {
-      throw new Error(`[content] ${path} must have type: "module"`);
-    }
+      const { frontmatter } = parseMdxFile(raw, path);
 
-    return {
-      id: requireString(frontmatter, "id", path),
-      title: requireString(frontmatter, "title", path),
-      type: "module" as const,
-      status: toModuleStatus(requireString(frontmatter, "status", path), path),
-      moduleType: toModuleType(requireString(frontmatter, "moduleType", path), path),
-      owner: requireString(frontmatter, "owner", path),
-      intent: requireString(frontmatter, "intent", path),
-      summary: typeof frontmatter.summary === "string" ? frontmatter.summary : undefined,
-      videoSrc: optionalString(frontmatter, "videoSrc"),
-      videoLabel: optionalString(frontmatter, "videoLabel"),
-      lastValidated: requireString(frontmatter, "lastValidated", path),
-      tags: requireStringArray(frontmatter, "tags", path),
-      ships: optionalStringArray(frontmatter, "ships"),
-      roles: optionalStringArray(frontmatter, "roles"),
-      excludeShips: optionalStringArray(frontmatter, "excludeShips"),
-      excludeRoles: optionalStringArray(frontmatter, "excludeRoles"),
-      enemies: optionalStringArray(frontmatter, "enemies"),
-      maps: optionalStringArray(frontmatter, "maps"),
-      powerProjection: optionalStringArray(frontmatter, "powerProjection"),
-      useWhen: requireStringArray(frontmatter, "useWhen", path),
-      steps: requireStringArray(frontmatter, "steps", path),
-      failureModes: requireStringArray(frontmatter, "failureModes", path),
-      validation: requireStringArray(frontmatter, "validation", path),
-      prerequisites: optionalStringArray(frontmatter, "prerequisites"),
-      relatedModuleIds: optionalStringArray(frontmatter, "relatedModuleIds"),
-      Content: componentModule.default,
-    };
-  }));
+      // type field is optional in new format
+      const typeField = frontmatter.type;
+      if (typeField !== undefined && typeField !== "module") {
+        throw new Error(`[content] ${path} must have type: "module" or omit type field`);
+      }
+
+      const moduleType = toModuleType(
+        requireString(frontmatter, "moduleType", path),
+        path
+      );
+      const isLegacy = LEGACY_TYPES.has(moduleType);
+
+      // summary: required for new types; falls back to intent for legacy
+      const summaryRaw =
+        optionalString(frontmatter, "summary") ??
+        optionalString(frontmatter, "intent") ??
+        "";
+      if (!isLegacy && !summaryRaw) {
+        throw new Error(
+          `[content] ${path} is missing required string field "summary"`
+        );
+      }
+
+      const base = {
+        id: requireString(frontmatter, "id", path),
+        moduleType,
+        title: requireString(frontmatter, "title", path),
+        summary: summaryRaw,
+        status: toModuleStatus(requireString(frontmatter, "status", path), path),
+        owner: requireString(frontmatter, "owner", path),
+        Content: componentModule.default,
+        tags: optionalStringArray(frontmatter, "tags"),
+        ships: optionalStringArray(frontmatter, "ships"),
+        roles: optionalStringArray(frontmatter, "roles"),
+        enemies: optionalStringArray(frontmatter, "enemies"),
+        relatedModuleIds: optionalStringArray(frontmatter, "relatedModuleIds"),
+        prerequisites: optionalStringArray(frontmatter, "prerequisites"),
+        excludeShips: optionalStringArray(frontmatter, "excludeShips"),
+        excludeRoles: optionalStringArray(frontmatter, "excludeRoles"),
+        validatedDate: optionalString(frontmatter, "validatedDate"),
+        context: optionalString(frontmatter, "context"),
+      };
+
+      if (isLegacy) {
+        return {
+          ...base,
+          intent: optionalString(frontmatter, "intent"),
+          lastValidated: optionalString(frontmatter, "lastValidated"),
+          videoSrc: optionalString(frontmatter, "videoSrc"),
+          videoLabel: optionalString(frontmatter, "videoLabel"),
+          powerProjection: optionalStringArray(frontmatter, "powerProjection"),
+          maps: optionalStringArray(frontmatter, "maps"),
+        };
+      }
+
+      if (moduleType === "procedure") {
+        return {
+          ...base,
+          steps: toProcedureSteps(optionalObjectArray(frontmatter, "steps")),
+          useWhen: optionalStringArray(frontmatter, "useWhen"),
+          validation: toValidationItems(
+            optionalObjectArray(frontmatter, "validation")
+          ),
+          failureModes: optionalStringArray(frontmatter, "failureModes"),
+        };
+      }
+
+      if (moduleType === "framework") {
+        return {
+          ...base,
+          question: optionalString(frontmatter, "question"),
+          criteria: toCriteriaItems(
+            optionalObjectArray(frontmatter, "criteria")
+          ),
+          matrix: toMatrixRows(optionalObjectArray(frontmatter, "matrix")),
+          output: toOutputItems(optionalObjectArray(frontmatter, "output")),
+          failureModes: optionalStringArray(frontmatter, "failureModes"),
+        };
+      }
+
+      // reference, concept, diagram, checklist — base only for now
+      return base;
+    })
+  );
 
   const seen = new Set<string>();
   for (const module of modules) {
@@ -189,7 +372,8 @@ export const modules: DoctrineModule[] = await (async () => {
   try {
     return await loadModulesUnsafe();
   } catch (error) {
-    const loadError = error instanceof Error ? error : new Error(String(error));
+    const loadError =
+      error instanceof Error ? error : new Error(String(error));
     moduleLoadError = loadError;
     if (import.meta.env.PROD) {
       throw loadError;
@@ -198,7 +382,9 @@ export const modules: DoctrineModule[] = await (async () => {
     return [];
   }
 })();
-export const moduleById = new Map(modules.map((module) => [module.id, module]));
+export const moduleById = new Map(
+  modules.map((module) => [module.id, module])
+);
 
 export function moduleMatchesShipRole(
   module: DoctrineModule,
@@ -222,7 +408,9 @@ export function moduleMatchesShipRole(
 
 export const moduleFilterOptions = {
   ships: [...new Set(modules.flatMap((module) => module.ships))].sort(),
-  roles: [...new Set([...modules.flatMap((module) => module.roles), "crew"])].sort(),
+  roles: [
+    ...new Set([...modules.flatMap((module) => module.roles), "crew"]),
+  ].sort(),
   enemies: [...new Set(modules.flatMap((module) => module.enemies))].sort(),
   statuses: [...new Set(modules.map((module) => module.status))].sort(),
 };
