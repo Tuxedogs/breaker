@@ -180,6 +180,40 @@ function toOutputItems(arr: Record<string, unknown>[]): OutputItem[] {
   }));
 }
 
+function toLegendItems(arr: Record<string, unknown>[]): LegendItem[] {
+  return arr.map((item) => {
+    let color = typeof item.color === "string" ? item.color : "";
+    if (
+      (color.startsWith('"') && color.endsWith('"')) ||
+      (color.startsWith("'") && color.endsWith("'"))
+    ) {
+      color = color.slice(1, -1);
+    }
+    return { color, label: typeof item.label === "string" ? item.label : "" };
+  });
+}
+
+function parseBracketList(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw.filter((s): s is string => typeof s === "string");
+  if (typeof raw !== "string") return [];
+  const t = raw.trim();
+  if (!t.startsWith("[") || !t.endsWith("]")) return [];
+  try {
+    const parsed = JSON.parse(t);
+    if (Array.isArray(parsed)) return parsed.filter((s): s is string => typeof s === "string");
+  } catch {
+    // fall through to comma split
+  }
+  return t.slice(1, -1).split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+function toPhases(arr: Record<string, unknown>[]): Phase[] {
+  return arr.map((item) => ({
+    label: typeof item.label === "string" ? item.label : "",
+    items: parseBracketList(item.items),
+  }));
+}
+
 // ── Loader ────────────────────────────────────────────────────────────────────
 
 type MdxModule = {
@@ -325,7 +359,31 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
         };
       }
 
-      // reference, concept, diagram, checklist — base only for now
+      if (moduleType === "reference") {
+        return {
+          ...base,
+          notes: optionalStringArray(frontmatter, "notes"),
+        };
+      }
+
+      if (moduleType === "checklist") {
+        return {
+          ...base,
+          phases: toPhases(optionalObjectArray(frontmatter, "phases")),
+          resetable: frontmatter.resetable === true || frontmatter.resetable === "true",
+        };
+      }
+
+      if (moduleType === "diagram") {
+        return {
+          ...base,
+          assetPath: optionalString(frontmatter, "assetPath"),
+          caption: optionalString(frontmatter, "caption"),
+          legend: toLegendItems(optionalObjectArray(frontmatter, "legend")),
+        };
+      }
+
+      // concept — base only
       return base;
     })
   );

@@ -1,0 +1,42 @@
+---
+id: "example-procedure"
+title: "Orbital Entry Sequence"
+moduleType: procedure
+status: draft
+owner: Tux
+summary: Standardized pre-entry checklist for transitioning from orbital distance to atmosphere or low-orbit engagement.
+tags: [navigation, procedure, pilot]
+ships: []
+roles: [pilot]
+enemies: []
+relatedModuleIds: []
+prerequisites: []
+
+useWhen:
+  - Before every atmospheric entry.
+  - During emergency descent from orbit.
+  - When transitioning from quantum travel to low-orbit engagement.
+
+steps:
+  - label: Confirm heading
+    detail: Verify entry angle is within the safe descent corridor before committing thrust.
+  - label: Set shield face
+    detail: Bring shield coverage to full front facing before hitting the boundary layer.
+  - label: Cut quantum drive
+    detail: Decouple the QT drive and transition to SCM speed before the atmospheric boundary.
+  - label: Announce descent
+    detail: Call out descent initiation on comms so the crew can brace and gunners hold fire.
+  - label: Monitor hull heat
+    detail: Watch hull heat during high-angle entries and extend to bleed speed if approaching threshold.
+  - label: Confirm SCM lock
+    detail: Verify you are fully transitioned to SCM before attempting any weapons fire or maneuvering.
+
+failureModes:
+  - Entering with wrong shield alignment exposes full hull to ground-based fire.
+  - No comms callout causes collision risk with other elements entering simultaneously.
+  - Overshooting the descent corridor forces a full re-orbit burn.
+---
+
+Standard orbital entries are predictable. The risk is not the maneuver itself — it is the crew being unprepared for the transition. Call out before you commit, not after.
+
+Heat management is the most commonly skipped step on high-angle entries. A few seconds of extended approach prevents a full cooldown cycle mid-engagement.

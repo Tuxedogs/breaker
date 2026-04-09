@@ -2,9 +2,9 @@ import type { DoctrineModule } from "../../data/modules";
 
 export function FrameworkLayout({ module }: { module: DoctrineModule }) {
   return (
-    <div className="doctrine-layout-shell doctrine-layout--framework space-y-2">
+    <div className="doctrine-layout-shell doctrine-layout--framework space-y-1.5">
       {/* Hero */}
-      <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+      <article className="doctrine-card p-3 sm:p-4">
         <header className="doctrine-hero-shell">
           <div className="doctrine-hero-copy">
             <p className="doctrine-hero-eyebrow">Decision Framework</p>
@@ -33,7 +33,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
       </article>
 
       {/* Decision question + criteria */}
-      <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+      <article className="doctrine-card p-3 sm:p-4">
         {module.question ? (
           <p className="doctrine-framework-question">{module.question}</p>
         ) : null}
@@ -67,7 +67,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
 
       {/* Decision matrix */}
       {module.matrix && module.matrix.length > 0 ? (
-        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="doctrine-card p-3 sm:p-4">
           <p className="doctrine-framework-section-label">Decision Matrix</p>
           <table className="doctrine-matrix">
             <thead>
@@ -91,7 +91,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
       {/* Output + failure modes */}
       {((module.output && module.output.length > 0) ||
         (module.failureModes && module.failureModes.length > 0)) ? (
-        <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+        <article className="doctrine-card p-3 sm:p-4">
           <div className="grid gap-5 lg:grid-cols-2">
             {module.output && module.output.length > 0 ? (
               <section>
@@ -124,7 +124,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
       ) : null}
 
       {/* MDX body prose */}
-      <article className="base-card base-card--systems base-card--compact rounded-[1.5rem] p-4 sm:p-6">
+      <article className="doctrine-card p-3 sm:p-4">
         <div className="doctrine-framework-prose">
           <module.Content />
         </div>
