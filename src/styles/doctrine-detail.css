@@ -236,9 +236,274 @@
   border-color: rgba(148, 163, 184, 0.3);
 }
 
+.doctrine-hero-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.doctrine-hero-copy {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.doctrine-hero-eyebrow,
+.doctrine-panel-eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.88);
+}
+
+.doctrine-hero-title {
+  margin: 0;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  line-height: 1.02;
+  letter-spacing: 0.01em;
+  color: rgba(240, 249, 255, 0.98);
+}
+
+.doctrine-hero-summary {
+  margin: 0;
+  max-width: 56rem;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: rgba(203, 213, 225, 0.9);
+}
+
+.doctrine-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.doctrine-meta-item {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 9rem;
+  padding: 0.65rem 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(2, 6, 16, 0.28);
+}
+
+.doctrine-meta-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.doctrine-meta-value {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(226, 232, 240, 0.96);
+}
+
+.doctrine-priority-strip {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.doctrine-priority-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+}
+
+.doctrine-priority-caption {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: rgba(148, 163, 184, 0.86);
+}
+
+.doctrine-priority-track {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doctrine-priority-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.75rem 0.85rem;
+  border-left: 2px solid rgba(56, 189, 248, 0.28);
+  background: linear-gradient(90deg, rgba(8, 20, 34, 0.72), rgba(5, 10, 20, 0.46));
+}
+
+.doctrine-priority-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.45rem;
+  right: 0.85rem;
+  bottom: -0.28rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2), rgba(56, 189, 248, 0));
+}
+
+.doctrine-priority-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 232, 249, 0.3);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(207, 250, 254, 0.95);
+}
+
+.doctrine-priority-text {
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(226, 232, 240, 0.96);
+}
+
+.doctrine-hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.doctrine-operational-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.doctrine-detail-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.doctrine-support-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.doctrine-panel-title {
+  margin: 0.2rem 0 0;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.18;
+  color: rgba(240, 249, 255, 0.98);
+}
+
+.doctrine-brief-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doctrine-brief-item {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 0.85rem;
+  border-left: 1px solid rgba(71, 85, 105, 0.48);
+}
+
+.doctrine-brief-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.doctrine-brief-support {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.doctrine-timeline {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doctrine-timeline-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.doctrine-timeline-rail {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 2.2rem;
+}
+
+.doctrine-timeline-node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(103, 232, 249, 0.3);
+  background: rgba(5, 11, 22, 0.96);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: rgba(207, 250, 254, 0.94);
+  box-shadow: 0 0 0 6px rgba(2, 6, 16, 0.64);
+}
+
+.doctrine-timeline-line {
+  width: 1px;
+  min-height: 100%;
+  margin-top: 0.3rem;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.5), rgba(71, 85, 105, 0.12));
+}
+
+.doctrine-timeline-body {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.2rem 0 0.8rem;
+}
+
+.doctrine-timeline-title {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.32;
+  color: rgba(240, 249, 255, 0.97);
+}
+
+.doctrine-timeline-support {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(148, 163, 184, 0.9);
+}
+
 .doctrine-block-failure {
   border-color: rgba(248, 113, 113, 0.48);
   border-radius: 0.75rem;
+  background:
+    linear-gradient(180deg, rgba(32, 12, 16, 0.88), rgba(20, 8, 12, 0.82)),
+    rgba(22, 8, 12, 0.76);
   box-shadow:
     inset 0 0 0 1px rgba(248, 113, 113, 0.34),
     0 10px 20px rgba(127, 29, 29, 0.22);
@@ -276,4 +541,34 @@
   border-radius: 9999px;
   background: rgba(16, 185, 129, 0.9);
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.26);
+}
+
+@media (min-width: 1024px) {
+  .doctrine-detail-grid {
+    grid-template-columns: minmax(0, 1.55fr) minmax(18rem, 0.95fr);
+    align-items: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .doctrine-hero-title {
+    font-size: 1.65rem;
+  }
+
+  .doctrine-meta-item {
+    min-width: 0;
+    flex: 1 1 9rem;
+  }
+
+  .doctrine-priority-item {
+    padding: 0.68rem 0.72rem;
+  }
+
+  .doctrine-priority-text {
+    font-size: 0.79rem;
+  }
+
+  .doctrine-timeline-item {
+    gap: 0.7rem;
+  }
 }

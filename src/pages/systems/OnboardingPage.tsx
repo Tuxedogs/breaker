@@ -128,10 +128,13 @@ export default function OnboardingPage() {
       <div className="onboarding-layout">
         <aside className="onboarding-sidebar-panel">
           <p className="title-font text-[11px] uppercase tracking-[0.24em] text-cyan-100/75">Onboarding</p>
-          <nav className="mt-2">
-            <ul className="space-y-0.5">
+          <nav className="mt-1.5">
+            <ul className="space-y-px">
               {sections.map((section, idx) => (
-                <li key={section.id}>
+                <li
+                  key={section.id}
+                  className={section.id === "checklist" ? "onboarding-side-item onboarding-side-item-checklist" : "onboarding-side-item"}
+                >
                   <a href={`#${section.id}`} className="onboarding-side-link">
                     <span className="onboarding-side-num">{String(idx + 1).padStart(2, "0")}</span>
                     <span>{section.label}</span>
@@ -141,7 +144,7 @@ export default function OnboardingPage() {
             </ul>
           </nav>
 
-          <div className="mt-3 border-t border-white/10 pt-3">
+          <div className="mt-2.5 border-t border-white/10 pt-2.5">
             <div className="flex items-center justify-between text-[11px] tracking-[0.16em] text-slate-300/75">
               <span>CHECKLIST</span>
               <span className="text-cyan-100/80">
@@ -151,7 +154,7 @@ export default function OnboardingPage() {
             <div className="mt-2 h-1.5 overflow-hidden rounded bg-white/10">
               <div className="h-full bg-cyan-300/85 transition-all duration-300" style={{ width: `${progress}%` }} />
             </div>
-            <div className="mt-2.5 space-y-0.5">
+            <div className="mt-2 space-y-px">
               {checklistItems.map((item) => (
                 <button
                   key={item.id}

@@ -26,6 +26,7 @@ import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import { HeatmapTooltip } from './HeatmapTooltip'
 import { MobileThresholdComparisonLayout } from './MobileThresholdComparisonLayout'
 import { ShipFlipCard } from './ShipFlipCard'
+import { TargetAnalysisSurface } from './TargetAnalysisSurface'
 
 type Props = {
   ships: Ship[]
@@ -456,6 +457,7 @@ export function ThresholdComparisonMatrix({
     TARGET_RECOMMENDATION_COLUMN_MIN,
     Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, targetColumnCount)
   )
+  const isTargetView = matrixMode === 'target'
   const filteredAnalysisWeapons = useMemo(() => {
     if (targetWeaponSizeFilter == null) return orderedWeapons
 
@@ -469,12 +471,12 @@ export function ThresholdComparisonMatrix({
     return [...matchingWeapons, ...remainingWeapons]
   }, [orderedWeapons, targetWeaponSizeFilter])
   const headerWeapons =
-    matrixMode === 'target'
+    isTargetView
       ? orderedWeapons
       : filteredAnalysisWeapons.slice(0, normalizedAnalysisColumnCount)
   const bodyWeapons = headerWeapons
   const firstEnergyColumnIndex = bodyWeapons.findIndex(
-    (selection) => matrixMode === 'target' ? false : selection.weapon.damageType === 'energy'
+    (selection) => isTargetView ? false : selection.weapon.damageType === 'energy'
   )
   const targetColumnIndexes = useMemo(
     () => Array.from({ length: normalizedTargetColumnCount }, (_, index) => index),
@@ -482,7 +484,7 @@ export function ThresholdComparisonMatrix({
   )
   const headerColumns = useMemo<MatrixColumnModel[]>(
     () =>
-      matrixMode === 'target'
+      isTargetView
         ? targetColumnIndexes.map((columnIndex) => ({
             columnIndex,
             key: `target-header-${columnIndex}`,
@@ -497,11 +499,11 @@ export function ThresholdComparisonMatrix({
             selection,
             placeholderWeapon: isPlaceholderWeapon(selection),
           })),
-    [headerWeapons, matrixMode, targetColumnIndexes]
+    [headerWeapons, isTargetView, targetColumnIndexes]
   )
   const bodyColumns = useMemo<MatrixColumnModel[]>(
     () =>
-      matrixMode === 'target'
+      isTargetView
         ? targetColumnIndexes.map((columnIndex) => ({
             columnIndex,
             key: `target-column-${columnIndex}`,
@@ -516,13 +518,13 @@ export function ThresholdComparisonMatrix({
             selection,
             placeholderWeapon: isPlaceholderWeapon(selection),
           })),
-    [bodyWeapons, matrixMode, targetColumnIndexes]
+    [bodyWeapons, isTargetView, targetColumnIndexes]
   )
   const gridStyle = getMatrixGridStyle(
-    matrixMode === 'target' ? normalizedTargetColumnCount : bodyWeapons.length
+    isTargetView ? normalizedTargetColumnCount : bodyWeapons.length
   )
   const targetRecommendationsByShip = useMemo(() => {
-    if (matrixMode !== 'target') return new Map<string, WeaponRecommendation[]>()
+    if (!isTargetView) return new Map<string, WeaponRecommendation[]>()
 
     return new Map(
       visibleShips.map((ship) => {
@@ -559,7 +561,7 @@ export function ThresholdComparisonMatrix({
         return [ship.id, filledRecommendations.slice(0, normalizedTargetColumnCount)] as const
       })
     )
-  }, [allWeapons, matrixMode, normalizedTargetColumnCount, targetWeaponFilterPreset, targetWeaponSizeFilter, visibleShips])
+  }, [allWeapons, isTargetView, normalizedTargetColumnCount, targetWeaponFilterPreset, targetWeaponSizeFilter, visibleShips])
 
   useEffect(() => {
     if (selectionMode) {
@@ -579,7 +581,7 @@ export function ThresholdComparisonMatrix({
   }, [])
 
   const cellModels = useMemo(() => {
-    if (matrixMode === 'target') {
+    if (isTargetView) {
       return new Map<string, MatrixCellModel>()
     }
     return new Map(
@@ -590,9 +592,31 @@ export function ThresholdComparisonMatrix({
         ] as const)
       )
     )
-  }, [matrixMode, visibleShips, bodyWeapons])
+  }, [isTargetView, visibleShips, bodyWeapons])
 
+  const selectedTargetShip = useMemo(
+    () => visibleShips.find((ship) => !isPlaceholderShip(ship)) ?? null,
+    [visibleShips]
+  )
   if (isMobileLayout) {
+    if (isTargetView) {
+      return (
+        <TargetAnalysisSurface
+          ship={selectedTargetShip}
+          allWeapons={allWeapons}
+          shieldMode={shieldMode}
+          onShieldModeChange={onShieldModeChange}
+          matrixMode={matrixMode}
+          onMatrixModeChange={onMatrixModeChange}
+          targetWeaponFilterPreset={targetWeaponFilterPreset}
+          onTargetWeaponFilterPresetChange={onTargetWeaponFilterPresetChange}
+          targetWeaponSizeFilter={targetWeaponSizeFilter}
+          onTargetWeaponSizeFilterChange={onTargetWeaponSizeFilterChange}
+          onboardingHighlight={onboardingHighlight}
+        />
+      )
+    }
+
     return (
       <MobileThresholdComparisonLayout
         ships={visibleShips}
@@ -610,12 +634,31 @@ export function ThresholdComparisonMatrix({
     )
   }
 
+  if (isTargetView) {
+    return (
+      <TargetAnalysisSurface
+        ship={selectedTargetShip}
+        allWeapons={allWeapons}
+        shieldMode={shieldMode}
+        onShieldModeChange={onShieldModeChange}
+        matrixMode={matrixMode}
+        onMatrixModeChange={onMatrixModeChange}
+        targetWeaponFilterPreset={targetWeaponFilterPreset}
+        onTargetWeaponFilterPresetChange={onTargetWeaponFilterPresetChange}
+        targetWeaponSizeFilter={targetWeaponSizeFilter}
+        onTargetWeaponSizeFilterChange={onTargetWeaponSizeFilterChange}
+        sourceMode={sourceMode}
+        onboardingHighlight={onboardingHighlight}
+      />
+    )
+  }
+
   return (
     <section
       className={[
         'alpha-threshold-tab-panel',
         'acm-panel',
-        matrixMode === 'target' ? 'acm-panel-target' : '',
+        isTargetView ? 'acm-panel-target' : '',
         isPlaceholderPreview ? 'acm-placeholder-preview' : '',
         selectionMode ? 'acm-selection-active' : '',
         selectionMode === 'ship' ? 'acm-selection-ship' : '',
@@ -628,7 +671,7 @@ export function ThresholdComparisonMatrix({
             <div
               className="acm-table"
               style={gridStyle}
-              data-weapon-count={matrixMode === 'target' ? normalizedTargetColumnCount : bodyWeapons.length}
+              data-weapon-count={isTargetView ? normalizedTargetColumnCount : bodyWeapons.length}
             >
               {hideHeaderRow ? null : (
                 <div className="acm-header-row">
@@ -699,14 +742,14 @@ export function ThresholdComparisonMatrix({
                         <span className="acm-corner-label">Cols</span>
                         <div
                           className="acm-corner-stepper"
-                          aria-label={`${matrixMode === 'target' ? 'Target recommendation' : 'Analysis'} columns`}
+                          aria-label={`${isTargetView ? 'Target recommendation' : 'Analysis'} columns`}
                         >
                           <button
                             type="button"
                             className="acm-corner-stepper-button"
-                            aria-label={`Decrease ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                            aria-label={`Decrease ${isTargetView ? 'target recommendation' : 'analysis'} columns`}
                             onClick={() =>
-                              matrixMode === 'target'
+                              isTargetView
                                 ? onTargetColumnCountChange?.(
                                     Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
                                   )
@@ -718,14 +761,14 @@ export function ThresholdComparisonMatrix({
                             -
                           </button>
                           <span className="acm-corner-stepper-value" aria-live="polite">
-                            {matrixMode === 'target' ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
+                            {isTargetView ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
                           </span>
                           <button
                             type="button"
                             className="acm-corner-stepper-button"
-                            aria-label={`Increase ${matrixMode === 'target' ? 'target recommendation' : 'analysis'} columns`}
+                            aria-label={`Increase ${isTargetView ? 'target recommendation' : 'analysis'} columns`}
                             onClick={() =>
-                              matrixMode === 'target'
+                              isTargetView
                                 ? onTargetColumnCountChange?.(
                                     Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
                                   )
@@ -762,7 +805,7 @@ export function ThresholdComparisonMatrix({
                           </button>
                         </div>
                       </div>
-                      {matrixMode === 'target' ? (
+                      {isTargetView ? (
                         <div className="acm-corner-row">
                           <span className="acm-corner-label">Type</span>
                           <div className="acm-corner-segments" role="radiogroup" aria-label="Weapon type filter">
@@ -799,7 +842,7 @@ export function ThresholdComparisonMatrix({
                           </div>
                         </div>
                       ) : null}
-                      {matrixMode === 'target' ? (
+                      {isTargetView ? (
                         <div className="acm-corner-row">
                           <span className="acm-corner-label">Size</span>
                           <div className="acm-corner-select-wrap">
@@ -970,7 +1013,7 @@ export function ThresholdComparisonMatrix({
                     ? `acm-destination-${activeShipTone}`
                     : ''
                   const shipSlotLabel = `Ship ${rowIndex + 1}`
-                  const isTargetMode = matrixMode === 'target'
+                  const isTargetMode = isTargetView
                   /** Mirrors matrix `rowSegmentActive`: only while a cell anchor exists — no full-row wash when the pointer is only on the row chrome. */
                   const shipRowMatrixAxisActive =
                     !selectionMode &&
@@ -1073,7 +1116,7 @@ export function ThresholdComparisonMatrix({
                       </article>
 
                       {bodyColumns.map(({ columnIndex, key, selection, placeholderWeapon }) => {
-                        const isTargetMode = matrixMode === 'target'
+                        const isTargetMode = isTargetView
                         const placeholderCell = placeholderShip || (!isTargetMode && placeholderWeapon)
                         const isDestinationColumnForCells =
                           selectionMode === 'weapon' &&
@@ -1246,7 +1289,7 @@ export function ThresholdComparisonMatrix({
                             }}
                           >
                             <div className="acm-cell-content" aria-hidden={shieldBlocked || undefined}>
-                              {matrixMode === 'target' ? (
+                              {isTargetView ? (
                                 targetRecommendation ? (
                                   <>
                                     <div className="acm-cell-meta-row">
@@ -1490,7 +1533,7 @@ export function ThresholdComparisonMatrix({
                 })}
               </div>
             </div>
-            {matrixMode === 'target' ? (
+            {isTargetView ? (
               <aside className="acm-target-exclusions">
                 <p className="acm-target-exclusions-head">Excluded from recommendations</p>
                 <p className="acm-target-exclusions-body">
@@ -1539,7 +1582,3 @@ export function ThresholdComparisonMatrix({
     </section>
   )
 }
-
-
-
-

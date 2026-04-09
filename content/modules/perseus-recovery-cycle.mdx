@@ -7,7 +7,7 @@ moduleType: "recovery"
 owner: "Doctrine Team"
 intent: "Recover combat effectiveness after a failed exchange without abandoning theater."
 summary: "Emergency reset flow for damaged Perseus crews."
-videoSrc: "/images/video/percy-position.mp4"
+videoSrc: ""
 videoLabel: "Perseus relative geometry clip"
 lastValidated: "2026-02-20"
 tags: ["perseus", "recovery", "engineer"]
@@ -20,7 +20,7 @@ steps: ["Pilot exits immediate kill envelope.", "Engineer restores priority comp
 failureModes: ["Pilot re-enters before repairs complete.", "Engineer repairs low-priority systems first.", "No comms confirmation of recommit state."]
 validation: ["Critical components restored to operational state.", "Crew resumes planned role flow with verified readiness."]
 prerequisites: ["keybind/perseus-gunner-preset"]
-relatedModuleIds: ["perseus-relative-tracking", "anti-cap-target-triage"]
+relatedModuleIds: ["perseus-aimpoint-orbit", "anti-cap-target-triage"]
 ---
 
 This module governs reset discipline and recommit timing.

@@ -39,8 +39,8 @@
 
 @layer components {
   .onboarding-side-link {
-    @apply flex items-center gap-2 rounded-lg border-l-2 border-transparent px-1.5 py-1.5 uppercase no-underline transition hover:border-cyan-200/70 hover:bg-cyan-300/10 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-200/50;
-    font-size: 0.72rem;
+    @apply flex items-center gap-2 rounded-lg border-l-2 border-transparent px-1.5 py-1 uppercase no-underline transition hover:border-cyan-200/70 hover:bg-cyan-300/10 hover:text-slate-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-200/50;
+    font-size: 0.7rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #cfddf6bf;
@@ -57,10 +57,10 @@
   }
 
   .onboarding-mini-item {
-    @apply flex w-full items-start gap-2 rounded-md border border-white/10 bg-white/5 px-1.5 py-1.5 transition hover:border-cyan-200/40 hover:bg-cyan-300/10;
+    @apply flex w-full items-start gap-2 rounded-md border border-white/10 bg-white/5 px-1.5 py-1 transition hover:border-cyan-200/40 hover:bg-cyan-300/10;
     background-color: #050a1459;
-    font-size: 0.85rem;
-    line-height: 1.28;
+    font-size: 0.8rem;
+    line-height: 1.22;
     color: #a5b7d6bd;
     text-align: left;
     cursor: pointer;
@@ -78,6 +78,12 @@
 
   .onboarding-mini-item.done .onboarding-mini-check {
     @apply border-cyan-200/30 bg-cyan-300/20 text-cyan-200;
+  }
+}
+
+@media (min-width: 1024px) {
+  .onboarding-side-item-checklist {
+    display: none;
   }
 }
 

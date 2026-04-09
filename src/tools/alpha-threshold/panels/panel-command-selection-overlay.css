@@ -124,6 +124,10 @@
 .alpha-threshold-tool
   :is(.alpha-selection-overlay--ship-bay, .alpha-selection-overlay--weapon-bay)
   .alpha-selector-bay-surface {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -1518,11 +1522,11 @@
   bottom: auto;
   left: var(--alpha-weapon-anchor-left);
   width: var(--alpha-weapon-anchor-width);
-  height: auto;
+  height: min(var(--alpha-weapon-anchor-height), calc(100vh - var(--alpha-weapon-anchor-top) - 0.75rem));
   max-height: calc(100vh - var(--alpha-weapon-anchor-top) - 0.75rem);
   max-width: none;
 }
 
 .alpha-threshold-tool .alpha-selection-overlay[data-weapon-column-anchor='true'] .alpha-selector-bay-shell {
-  height: auto;
+  height: 100%;
 }

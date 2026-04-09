@@ -45,7 +45,7 @@ const shipHubData: ShipHub[] = [
       "Crew commits before target state is verified.",
     ],
     recommendedModuleIds: [
-      "perseus-relative-tracking",
+      "perseus-aimpoint-orbit",
       "perseus-engagement-ranges",
       "perseus-component-sniping",
       "sub-targeting-component-cycle",
