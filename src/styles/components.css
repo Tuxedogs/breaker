@@ -270,7 +270,7 @@
   .site-toolbar-mobile-menu:focus-visible,
   .site-toolbar-mobile-link:focus-visible,
   .site-toolbar-menu-link:focus-visible {
-    outline: 2px solid rgb(125 211 252 / 0.45);
+outline: 2px solid rgb(148 163 184 / 0.4);
     outline-offset: 2px;
   }
 
@@ -300,21 +300,25 @@
     color: rgb(226 232 240);
   }
 
-  .site-toolbar-link--alpha-active {
-    color: rgb(186 230 253);
-    text-shadow: 0 0 14px rgb(56 189 248 / 0.35);
-  }
+.site-toolbar-link--alpha-active {
+  color: rgb(251 113 133);
+  text-shadow: 0 0 12px rgb(251 113 133 / 0.25);
+}
 
-  .site-toolbar-link--framework-active {
-    color: rgb(167 243 208);
-    text-shadow: 0 0 14px rgb(16 185 129 / 0.24);
-  }
+.site-toolbar-link--framework-active {
+  color: rgb(251 191 36);
+  text-shadow: 0 0 12px rgb(251 191 36 / 0.22);
+}
 
-  .site-toolbar-link--maps-active,
-  .site-toolbar-link--ships-active {
-    color: rgb(252 211 77);
-    text-shadow: 0 0 14px rgb(245 158 11 / 0.22);
-  }
+.site-toolbar-link--maps-active {
+  color: rgb(94 234 212);
+  text-shadow: 0 0 12px rgb(94 234 212 / 0.2);
+}
+
+.site-toolbar-link--ships-active {
+  color: rgb(148 163 184);
+  text-shadow: none;
+}
 
   .site-toolbar-brand {
     display: inline-flex;
@@ -381,11 +385,11 @@
       color 140ms ease;
   }
 
-  .site-toolbar-menu-link:hover,
-  .site-toolbar-menu-link--active {
-    background: rgb(245 158 11 / 0.08);
-    color: rgb(252 211 77);
-  }
+.site-toolbar-menu-link:hover,
+.site-toolbar-menu-link--active {
+  background: rgb(148 163 184 / 0.08);
+  color: rgb(148 163 184);
+}
 
   .site-toolbar-mobile-brand {
     text-decoration: none;
@@ -462,18 +466,21 @@
     background: rgb(255 255 255 / 0.04);
   }
 
-  .site-toolbar-mobile-link--alpha-active {
-    color: rgb(186 230 253);
-  }
+.site-toolbar-mobile-link--alpha-active {
+  color: rgb(251 113 133);
+}
 
-  .site-toolbar-mobile-link--framework-active {
-    color: rgb(167 243 208);
-  }
+.site-toolbar-mobile-link--framework-active {
+  color: rgb(251 191 36);
+}
 
-  .site-toolbar-mobile-link--maps-active,
-  .site-toolbar-mobile-submenu-link--active {
-    color: rgb(252 211 77);
-  }
+.site-toolbar-mobile-link--maps-active {
+  color: rgb(94 234 212);
+}
+
+.site-toolbar-mobile-submenu-link--active {
+  color: rgb(148 163 184);
+}
 
   .site-toolbar-mobile-section {
     border-top: 1px solid rgb(255 255 255 / 0.08);

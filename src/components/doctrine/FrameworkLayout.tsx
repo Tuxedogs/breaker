@@ -1,134 +1,116 @@
 import type { DoctrineModule } from "../../data/modules";
+import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+
+const RANK_CLASS: Record<number, string> = {
+  0: "dm-rank-1",
+  1: "dm-rank-2",
+  2: "dm-rank-3",
+};
 
 export function FrameworkLayout({ module }: { module: DoctrineModule }) {
+  const hasSidebar =
+    (module.matrix?.length ?? 0) > 0 || (module.output?.length ?? 0) > 0;
+
   return (
-    <div className="doctrine-layout-shell doctrine-layout--framework space-y-1.5">
-      {/* Hero */}
-      <article className="doctrine-card p-3 sm:p-4">
-        <header className="doctrine-hero-shell">
-          <div className="doctrine-hero-copy">
-            <p className="doctrine-hero-eyebrow">Decision Framework</p>
-            <h1 className="doctrine-hero-title">{module.title}</h1>
-            {module.summary ? (
-              <p className="doctrine-hero-summary">{module.summary}</p>
-            ) : null}
-          </div>
-          <div className="doctrine-meta-row">
-            <div className="doctrine-meta-item">
-              <span className="doctrine-meta-label">Status</span>
-              <span className="doctrine-meta-value">{module.status}</span>
-            </div>
-            {module.validatedDate ? (
-              <div className="doctrine-meta-item">
-                <span className="doctrine-meta-label">Validated</span>
-                <span className="doctrine-meta-value">{module.validatedDate}</span>
+    <div className="priority-shell">
+      <header className="priority-header">
+        <DoctrineModuleHeader module={module} eyebrow="Decision Framework" />
+      </header>
+
+      <div
+        className="priority-layout"
+        style={hasSidebar ? undefined : { gridTemplateColumns: "1fr" }}
+      >
+        <div className="priority-main">
+          {module.question ? (
+            <div className="priority-question">{module.question}</div>
+          ) : null}
+
+          {module.criteria && module.criteria.length > 0 ? (
+            <>
+              <span className="dm-section-label dm-section-label--padded">
+                Criteria
+              </span>
+              <div className="dm-ladder">
+                {module.criteria.map((item, i) => (
+                  <div key={i} className="dm-ladder-item">
+                    <div
+                      className={[
+                        "dm-ladder-rank",
+                        RANK_CLASS[i] ?? "dm-rank-4",
+                      ].join(" ")}
+                    >
+                      {i + 1}
+                    </div>
+                    <div className="dm-ladder-content">
+                      <p className="dm-ladder-title">{item.label}</p>
+                      {item.description ? (
+                        <p className="dm-ladder-desc">{item.description}</p>
+                      ) : null}
+                    </div>
+                    {item.weight ? (
+                      <div className="dm-ladder-weight">
+                        <span
+                          className={[
+                            "dm-weight-badge",
+                            `dm-weight-${item.weight}`,
+                          ].join(" ")}
+                        >
+                          {item.weight}
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+
+        {hasSidebar ? (
+          <aside className="priority-sidebar">
+            {module.matrix && module.matrix.length > 0 ? (
+              <div className="dm-sidebar-block">
+                <p className="dm-sidebar-title">Decision Matrix</p>
+                <table className="dm-matrix-table">
+                  <thead>
+                    <tr>
+                      <th>Condition</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {module.matrix.map((row, i) => (
+                      <tr key={i}>
+                        <td>{row.condition}</td>
+                        <td>{row.action}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : null}
-            <div className="doctrine-meta-item">
-              <span className="doctrine-meta-label">Owner</span>
-              <span className="doctrine-meta-value">{module.owner}</span>
-            </div>
-          </div>
-        </header>
-      </article>
 
-      {/* Decision question + criteria */}
-      <article className="doctrine-card p-3 sm:p-4">
-        {module.question ? (
-          <p className="doctrine-framework-question">{module.question}</p>
-        ) : null}
-
-        {module.criteria && module.criteria.length > 0 ? (
-          <section>
-            <p className="doctrine-framework-section-label">Scoring Criteria</p>
-            <ul className="doctrine-criteria-list">
-              {module.criteria.map((item, i) => (
-                <li key={i} className="doctrine-criteria-item">
-                  <span
-                    className={[
-                      "doctrine-criteria-weight",
-                      item.weight
-                        ? `doctrine-criteria-weight--${item.weight}`
-                        : "doctrine-criteria-weight--none",
-                    ].join(" ")}
-                  >
-                    {item.weight ?? ""}
-                  </span>
-                  <div className="doctrine-criteria-body">
-                    <span className="doctrine-criteria-label">{item.label}</span>
-                    <p className="doctrine-criteria-description">{item.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-      </article>
-
-      {/* Decision matrix */}
-      {module.matrix && module.matrix.length > 0 ? (
-        <article className="doctrine-card p-3 sm:p-4">
-          <p className="doctrine-framework-section-label">Decision Matrix</p>
-          <table className="doctrine-matrix">
-            <thead>
-              <tr>
-                <th>Condition</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {module.matrix.map((row, i) => (
-                <tr key={i}>
-                  <td className="doctrine-matrix-condition">{row.condition}</td>
-                  <td className="doctrine-matrix-action">{row.action}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </article>
-      ) : null}
-
-      {/* Output + failure modes */}
-      {((module.output && module.output.length > 0) ||
-        (module.failureModes && module.failureModes.length > 0)) ? (
-        <article className="doctrine-card p-3 sm:p-4">
-          <div className="grid gap-5 lg:grid-cols-2">
             {module.output && module.output.length > 0 ? (
-              <section>
-                <p className="doctrine-framework-section-label">Outputs</p>
-                <ul className="doctrine-output-list">
+              <div className="dm-sidebar-block dm-sidebar-block--info">
+                <p className="dm-sidebar-title">Outputs</p>
+                <div className="dm-sidebar-items">
                   {module.output.map((item, i) => (
-                    <li key={i} className="doctrine-output-item">
-                      <span className="doctrine-output-label">{item.label}</span>
-                      <p className="doctrine-output-description">{item.description}</p>
-                    </li>
+                    <div key={i} className="dm-sidebar-item">
+                      <span>
+                        <strong style={{ color: "var(--dm-text)", display: "block" }}>
+                          {item.label}
+                        </strong>
+                        {item.description}
+                      </span>
+                    </div>
                   ))}
-                </ul>
-              </section>
+                </div>
+              </div>
             ) : null}
-
-            {module.failureModes && module.failureModes.length > 0 ? (
-              <section>
-                <p className="doctrine-framework-section-label">Failure Modes</p>
-                <ul className="doctrine-brief-list">
-                  {module.failureModes.map((item, i) => (
-                    <li key={i} className="doctrine-brief-item">
-                      <span className="doctrine-brief-title">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
-          </div>
-        </article>
-      ) : null}
-
-      {/* MDX body prose */}
-      <article className="doctrine-card p-3 sm:p-4">
-        <div className="doctrine-framework-prose">
-          <module.Content />
-        </div>
-      </article>
+          </aside>
+        ) : null}
+      </div>
     </div>
   );
 }

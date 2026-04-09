@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import Background from "./components/Background";
 import AppShell from "./components/AppShell";
 import DoctrineIndexPage from "./pages/DoctrineIndexPage";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
@@ -32,6 +33,7 @@ function EntryGate() {
 export default function App() {
   return (
     <>
+      <Background />
       <Routes>
         <Route path="doctrine-landing" element={<DoctrineLanding />} />
         <Route element={<AppShell />}>

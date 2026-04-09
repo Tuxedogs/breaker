@@ -1,65 +1,97 @@
+import { useState, useCallback } from "react";
 import type { DoctrineModule } from "../../data/modules";
+import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
 
 export function ChecklistLayout({ module }: { module: DoctrineModule }) {
-  return (
-    <div className="doctrine-layout-shell doctrine-layout--checklist space-y-1.5">
-      {/* Hero */}
-      <article className="doctrine-card p-3 sm:p-4">
-        <header className="doctrine-hero-shell">
-          <div className="doctrine-hero-copy">
-            <p className="doctrine-hero-eyebrow">Checklist</p>
-            <h1 className="doctrine-hero-title">{module.title}</h1>
-            {module.summary ? (
-              <p className="doctrine-hero-summary">{module.summary}</p>
-            ) : null}
-          </div>
-          <div className="doctrine-meta-row">
-            <div className="doctrine-meta-item">
-              <span className="doctrine-meta-label">Status</span>
-              <span className="doctrine-meta-value">{module.status}</span>
-            </div>
-            {module.validatedDate ? (
-              <div className="doctrine-meta-item">
-                <span className="doctrine-meta-label">Validated</span>
-                <span className="doctrine-meta-value">{module.validatedDate}</span>
-              </div>
-            ) : null}
-            <div className="doctrine-meta-item">
-              <span className="doctrine-meta-label">Owner</span>
-              <span className="doctrine-meta-value">{module.owner}</span>
-            </div>
-          </div>
-        </header>
-      </article>
+  const [checked, setChecked] = useState<Set<string>>(new Set());
 
-      {/* Phases */}
-      {module.phases && module.phases.length > 0 ? (
-        <article className="doctrine-card p-3 sm:p-4">
-          <p className="doctrine-framework-section-label">Phases</p>
-          <div className="doctrine-phase-grid">
-            {module.phases.map((phase, i) => (
-              <div key={i} className="doctrine-phase">
-                <p className="doctrine-phase-label">{phase.label}</p>
-                <ul className="doctrine-phase-items">
-                  {phase.items.map((item, j) => (
-                    <li key={j} className="doctrine-phase-item">
-                      <span className="doctrine-phase-check" aria-hidden="true" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+  const phases = module.phases ?? [];
+  const allItems = phases.flatMap((ph, pi) =>
+    ph.items.map((_, ii) => `${pi}-${ii}`)
+  );
+  const total = allItems.length;
+  const done = allItems.filter((k) => checked.has(k)).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  const toggle = useCallback((key: string) => {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
+
+  const reset = useCallback(() => setChecked(new Set()), []);
+
+  const singleCol = phases.length > 2;
+
+  return (
+    <div className="checklist-shell">
+      <header className="checklist-header">
+        <DoctrineModuleHeader module={module} eyebrow="Checklist" />
+        {module.resetable !== false ? (
+          <button className="dm-reset-btn" onClick={reset} type="button">
+            Reset
+          </button>
+        ) : null}
+      </header>
+
+      {total > 0 ? (
+        <div className="checklist-progress">
+          <div className="dm-progress-track">
+            <div
+              className="dm-progress-fill"
+              style={{ width: `${pct}%` }}
+            />
           </div>
-        </article>
+          <span className="dm-progress-label">
+            {done}/{total}
+          </span>
+        </div>
       ) : null}
 
-      {/* Body prose */}
-      <article className="doctrine-card p-3 sm:p-4">
-        <div className="doctrine-framework-prose">
-          <module.Content />
+      {phases.length > 0 ? (
+        <div
+          className={[
+            "checklist-body",
+            singleCol ? "checklist-body--single-col" : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          {phases.map((phase, pi) => (
+            <div key={pi} className="dm-phase-col">
+              <div className="dm-phase-header">
+                <span className="dm-phase-icon" />
+                <p className="dm-phase-title">{phase.label}</p>
+                <span className="dm-phase-count">{phase.items.length}</span>
+              </div>
+              <div className="dm-check-items">
+                {phase.items.map((item, ii) => {
+                  const key = `${pi}-${ii}`;
+                  const isChecked = checked.has(key);
+                  return (
+                    <div
+                      key={ii}
+                      className={[
+                        "dm-check-item",
+                        isChecked ? "dm-check-item--checked" : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onClick={() => toggle(key)}
+                    >
+                      <div className="dm-custom-check" />
+                      <span className="dm-check-text">{item}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
-      </article>
+      ) : null}
     </div>
   );
 }
