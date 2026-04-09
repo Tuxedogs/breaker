@@ -1,0 +1,894 @@
+/* ──────────────────────────────────────────────
+   Doctrine Module Layouts
+   Design tokens, shared atoms, and per-layout
+   shells for all six module layout types.
+   ────────────────────────────────────────────── */
+
+/* ── Design Tokens ──────────────────────────────────────────────────────── */
+
+:root {
+  --dm-bg:           #080a0c;
+  --dm-bg1:          #0d1117;
+  --dm-bg2:          #111820;
+  --dm-bg3:          #151e2a;
+  --dm-border:       rgba(255,255,255,0.07);
+  --dm-border-bright:rgba(255,255,255,0.15);
+  --dm-text:         #c8d4e0;
+  --dm-text-muted:   #5a6a7a;
+  --dm-text-dim:     #3a4a5a;
+
+  --dm-amber:        #e8a020;
+  --dm-amber-dim:    rgba(232,160,32,0.15);
+  --dm-amber-glow:   rgba(232,160,32,0.06);
+  --dm-blue:         #3a9fd8;
+  --dm-blue-dim:     rgba(58,159,216,0.12);
+  --dm-teal:         #2ab8a0;
+  --dm-amber: rgb(251 191 36);
+  --dm-teal-dim:     rgba(42,184,160,0.12);
+  --dm-red:          #c84840;
+  --dm-red-dim:      rgba(200,72,64,0.12);
+  --dm-purple:       #8060d0;
+  --dm-purple-dim:   rgba(128,96,208,0.12);
+  --dm-green:        #3a9860;
+  --dm-green-dim:    rgba(58,152,96,0.12);
+  --dm-gray:         #6a7a8a;
+  --dm-gray-dim:     rgba(106,122,138,0.12);
+}
+
+/* ── Shared Atoms ───────────────────────────────────────────────────────── */
+
+.dm-related-strip {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgb(255 255 255 / 0.07);
+}
+
+.dm-related-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(100 116 139);
+  margin: 0 0 0.75rem;
+}
+
+.dm-related-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.dm-related-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background: rgb(255 255 255 / 0.02);
+  text-decoration: none;
+  max-width: 22rem;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.dm-related-card:hover {
+  border-color: rgb(251 191 36 / 0.3);
+  background: rgb(251 191 36 / 0.04);
+}
+
+.dm-related-card-title {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(226 232 240);
+}
+
+.dm-related-card-summary {
+  font-size: 0.75rem;
+  color: rgb(100 116 139);
+  line-height: 1.4;
+}
+
+.dm-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dm-text-muted);
+  margin-bottom: 8px;
+}
+
+.dm-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: #e8eef4;
+  margin: 0 0 8px;
+}
+
+.dm-summary {
+  font-family: 'Barlow', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--dm-text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.dm-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 32px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--dm-border);
+  align-items: center;
+}
+
+.dm-meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dm-meta-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+}
+
+.dm-meta-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dm-text);
+}
+
+.dm-meta-value--validated { color: var(--dm-amber); }
+
+.dm-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.dm-tag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid var(--dm-border-bright);
+  border-radius: 2px;
+  color: var(--dm-text-muted);
+}
+
+.dm-section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+  margin: 0 0 14px;
+}
+
+.dm-sidebar-block {
+  background: var(--dm-bg2);
+  border: 1px solid var(--dm-border);
+  padding: 14px 16px;
+}
+
+.dm-sidebar-block--warn { border-left: 2px solid var(--dm-red); }
+.dm-sidebar-block--info { border-left: 2px solid var(--dm-blue); }
+
+.dm-sidebar-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+  margin: 0 0 10px;
+}
+
+.dm-sidebar-items {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.dm-sidebar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.4;
+}
+
+.dm-sidebar-item::before {
+  content: '›';
+  color: var(--dm-text-dim);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.dm-sidebar-item--danger { color: #c87878; }
+.dm-sidebar-item--danger::before { color: var(--dm-red); content: '!'; font-weight: 700; }
+
+/* ── Layout 1: Procedure (blue) ─────────────────────────────────────────── */
+
+.procedure-shell {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--dm-border);
+  background: var(--dm-bg1);
+}
+
+.procedure-header {
+  grid-column: 1 / -1;
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  border-left: 3px solid var(--dm-blue);
+  background: linear-gradient(90deg, rgba(58,159,216,0.04) 0%, transparent 60%);
+}
+
+.procedure-body {
+  padding: 28px 32px;
+  border-right: 1px solid var(--dm-border);
+}
+
+.procedure-sidebar {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dm-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.dm-step-item {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+
+.dm-step-item:not(:last-child) .dm-step-connector {
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 1px;
+  background: var(--dm-border);
+}
+
+.dm-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--dm-blue);
+  background: var(--dm-blue-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--dm-blue);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.dm-step-content {
+  padding: 6px 0 24px 16px;
+  flex: 1;
+}
+
+.dm-step-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e0eaf4;
+  margin-bottom: 4px;
+}
+
+.dm-step-detail {
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Layout 2: Concept (purple) ─────────────────────────────────────────── */
+
+.concept-shell {
+  background: var(--dm-bg1);
+  border: 1px solid var(--dm-border);
+  border-top: 2px solid var(--dm-purple);
+}
+
+.concept-header {
+  padding: 28px 36px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  background: linear-gradient(180deg, var(--dm-purple-dim) 0%, transparent 100%);
+}
+
+.concept-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.concept-col {
+  padding: 28px 32px;
+}
+
+.concept-col:first-child {
+  border-right: 1px solid var(--dm-border);
+}
+
+.concept-col:only-child {
+  grid-column: 1 / -1;
+  border-right: none;
+}
+
+.concept-col h2,
+.concept-col h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #d8e4f0;
+  margin: 0 0 12px;
+}
+
+.concept-col p {
+  font-size: 14px;
+  color: var(--dm-text-muted);
+  line-height: 1.7;
+  margin: 0 0 12px;
+}
+
+.concept-col blockquote,
+.concept-callout {
+  background: var(--dm-purple-dim);
+  border-left: 2px solid var(--dm-purple);
+  padding: 12px 16px;
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: #b0a0e0;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Layout 3: Framework / Priority Ladder (amber) ───────────────────────── */
+
+.priority-shell {
+  background: var(--dm-bg1);
+  border: 1px solid var(--dm-border);
+  border-top: 2px solid var(--dm-amber);
+}
+
+.priority-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  background: linear-gradient(90deg, var(--dm-amber-glow) 0%, transparent 70%);
+}
+
+.priority-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+}
+
+.priority-main {
+  border-right: 1px solid var(--dm-border);
+}
+
+.priority-question {
+  padding: 20px 32px;
+  background: var(--dm-amber-dim);
+  border-bottom: 1px solid rgba(232,160,32,0.2);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--dm-amber);
+}
+
+.dm-section-label--padded {
+  padding: 16px 24px 0;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.dm-ladder {
+  display: flex;
+  flex-direction: column;
+}
+
+.dm-ladder-item {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  border-bottom: 1px solid var(--dm-border);
+  transition: background 0.15s;
+}
+
+.dm-ladder-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.dm-ladder-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border-right: 1px solid var(--dm-border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 20px 0;
+}
+
+.dm-rank-1 { color: var(--dm-amber); }
+.dm-rank-2 { color: var(--dm-blue); }
+.dm-rank-3 { color: var(--dm-teal); }
+.dm-rank-4 { color: var(--dm-text-dim); }
+
+.dm-ladder-content {
+  padding: 16px 20px;
+}
+
+.dm-ladder-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #d8e4f0;
+  margin: 0 0 3px;
+}
+
+.dm-ladder-desc {
+  font-size: 12px;
+  color: var(--dm-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.dm-ladder-weight {
+  padding: 0 20px;
+}
+
+.dm-weight-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 7px;
+  border: 1px solid;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.dm-weight-high {
+  color: var(--dm-amber);
+  border-color: rgba(232,160,32,0.4);
+  background: var(--dm-amber-dim);
+}
+
+.dm-weight-med {
+  color: var(--dm-blue);
+  border-color: rgba(58,159,216,0.3);
+  background: var(--dm-blue-dim);
+}
+
+.dm-weight-low {
+  color: var(--dm-text-muted);
+  border-color: var(--dm-border);
+  background: transparent;
+}
+
+.priority-sidebar {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dm-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.dm-matrix-table th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+  text-align: left;
+  padding: 0 0 8px 0;
+  border-bottom: 1px solid var(--dm-border);
+}
+
+.dm-matrix-table td {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--dm-border);
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+.dm-matrix-table tr:last-child td {
+  border-bottom: none;
+}
+
+.dm-matrix-table td:first-child {
+  color: var(--dm-text-muted);
+  padding-right: 12px;
+  width: 45%;
+}
+
+.dm-matrix-table td:last-child {
+  color: #a8c0d8;
+}
+
+/* ── Layout 4: Diagram / Gallery (teal) ─────────────────────────────────── */
+
+.gallery-shell {
+  background: var(--dm-bg1);
+  border: 1px solid var(--dm-border);
+  border-top: 2px solid var(--dm-teal);
+}
+
+.gallery-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  background: linear-gradient(90deg, var(--dm-teal-dim) 0%, transparent 60%);
+}
+
+.gallery-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+}
+
+.gallery-main {
+  border-right: 1px solid var(--dm-border);
+}
+
+.dm-mosaic {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+}
+
+.dm-mosaic-cell {
+  background: var(--dm-bg3);
+  border: 1px solid var(--dm-border);
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.dm-mosaic-cell:hover {
+  border-color: var(--dm-teal);
+}
+
+.dm-mosaic-cell--primary {
+  grid-row: 1 / 3;
+  aspect-ratio: unset;
+}
+
+.dm-mosaic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dm-mosaic-more {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  z-index: 2;
+}
+
+.gallery-sidebar {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dm-gallery-meta-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+  margin: 0 0 4px;
+}
+
+.dm-gallery-meta-val {
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.dm-note-card {
+  background: var(--dm-bg2);
+  border: 1px solid var(--dm-border);
+  border-left: 2px solid var(--dm-teal);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.5;
+}
+
+.dm-note-card strong {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dm-teal);
+  margin-bottom: 4px;
+}
+
+/* ── Layout 5: Checklist (green) ────────────────────────────────────────── */
+
+.checklist-shell {
+  background: var(--dm-bg1);
+  border: 1px solid var(--dm-border);
+  border-top: 2px solid var(--dm-green);
+}
+
+.checklist-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  background: linear-gradient(90deg, var(--dm-green-dim) 0%, transparent 60%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.dm-reset-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dm-text-muted);
+  background: none;
+  border: 1px solid var(--dm-border);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.dm-reset-btn:hover {
+  color: var(--dm-text);
+  border-color: var(--dm-border-bright);
+}
+
+.checklist-progress {
+  padding: 12px 32px;
+  border-bottom: 1px solid var(--dm-border);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dm-progress-track {
+  flex: 1;
+  height: 2px;
+  background: var(--dm-border);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.dm-progress-fill {
+  height: 100%;
+  background: var(--dm-green);
+  border-radius: 1px;
+  transition: width 0.3s;
+}
+
+.dm-progress-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--dm-text-muted);
+  min-width: 48px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.checklist-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.checklist-body--single-col {
+  grid-template-columns: 1fr;
+}
+
+.dm-phase-col {
+  border-right: 1px solid var(--dm-border);
+}
+
+.dm-phase-col:last-child {
+  border-right: none;
+}
+
+.checklist-body--single-col .dm-phase-col {
+  border-right: none;
+}
+
+.dm-phase-header {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--dm-bg2);
+}
+
+.dm-phase-icon {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dm-green);
+  flex-shrink: 0;
+}
+
+.dm-phase-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dm-text);
+  margin: 0;
+}
+
+.dm-phase-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--dm-text-dim);
+  margin-left: auto;
+}
+
+.dm-check-items {
+  padding: 8px 0;
+}
+
+.dm-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 24px;
+  cursor: pointer;
+  transition: background 0.1s;
+  user-select: none;
+}
+
+.dm-check-item:hover {
+  background: rgba(255,255,255,0.02);
+}
+
+.dm-check-item--checked .dm-check-text {
+  color: var(--dm-text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--dm-text-dim);
+}
+
+.dm-custom-check {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--dm-border-bright);
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.dm-check-item--checked .dm-custom-check {
+  background: var(--dm-green);
+  border-color: var(--dm-green);
+}
+
+.dm-check-item--checked .dm-custom-check::after {
+  content: '';
+  width: 4px;
+  height: 7px;
+  border-right: 1.5px solid #fff;
+  border-bottom: 1.5px solid #fff;
+  transform: rotate(45deg) translate(-1px,-1px);
+}
+
+.dm-check-text {
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.4;
+  transition: color 0.15s;
+}
+
+/* ── Layout 6: Reference (gray) ──────────────────────────────────────────── */
+
+.reference-shell {
+  background: var(--dm-bg1);
+  border: 1px solid var(--dm-border);
+  border-top: 2px solid var(--dm-gray);
+}
+
+.reference-header {
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid var(--dm-border);
+  background: linear-gradient(90deg, var(--dm-gray-dim) 0%, transparent 60%);
+}
+
+.reference-body {
+  padding: 28px 32px;
+}
+
+.dm-reference-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--dm-border);
+  font-size: 13px;
+  color: var(--dm-text-muted);
+  line-height: 1.5;
+}
+
+.dm-reference-note:last-child {
+  border-bottom: none;
+}
+
+.dm-reference-note::before {
+  content: '›';
+  color: var(--dm-gray);
+  flex-shrink: 0;
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.dm-reference-prose {
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--dm-text-muted);
+}
+
+.dm-reference-prose p {
+  margin: 0 0 12px;
+}
+
+.dm-reference-prose p:last-child {
+  margin-bottom: 0;
+}

@@ -8,6 +8,7 @@ const validationStatusClassName = {
   draft: "module-card-validation-status-draft",
   review: "module-card-validation-status-review",
   validated: "module-card-validation-status-validated",
+  deprecated: "module-card-validation-status-deprecated",
 } as const;
 
 const manningPinnedModuleIds = ["turret-keybind-baseline"] as const;
@@ -84,7 +85,7 @@ export default function ModuleIndexPage() {
 
         <div className="deck-doctrine">
           {orderedModules.map((module) => (
-            <article key={module.id} className="module-card-doctrine">
+            <article key={module.id} className="module-card-doctrine" style={module.accent ? { "--card-accent": module.accent } as React.CSSProperties : undefined}>
               <div className="module-card-content">
                 <div className="module-card-hero">
                   <div className="min-w-0">

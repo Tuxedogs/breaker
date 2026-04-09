@@ -37,6 +37,7 @@ export type OutputItem = { label: string; description: string };
 export type TableRow = { label: string; value: string; note?: string };
 export type DoctrineTable = { heading: string; rows: TableRow[] };
 export type LegendItem = { color: string; label: string };
+export type DiagramImage = { src: string; caption?: string };
 export type Phase = { label: string; items: string[] };
 
 // ── Module shape ──────────────────────────────────────────────────────────────
@@ -64,6 +65,7 @@ export type DoctrineModule = {
   // Universal optional scalars
   validatedDate?: string;
   context?: string;
+  accent?: string;
 
   // Legacy compatibility fields (used by LegacyLayout, kept for migration)
   intent?: string;
@@ -93,6 +95,7 @@ export type DoctrineModule = {
   assetPath?: string;
   caption?: string;
   legend?: LegendItem[];
+  images?: DiagramImage[];
 
   // checklist
   phases?: Phase[];
@@ -205,6 +208,15 @@ function parseBracketList(raw: unknown): string[] {
     // fall through to comma split
   }
   return t.slice(1, -1).split(",").map((s) => s.trim()).filter(Boolean);
+}
+
+function toDiagramImages(arr: Record<string, unknown>[]): DiagramImage[] {
+  return arr
+    .map((item) => ({
+      src: typeof item.src === "string" ? item.src : "",
+      caption: typeof item.caption === "string" ? item.caption : undefined,
+    }))
+    .filter((item) => item.src);
 }
 
 function toPhases(arr: Record<string, unknown>[]): Phase[] {
@@ -320,6 +332,7 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
         excludeRoles: optionalStringArray(frontmatter, "excludeRoles"),
         validatedDate: optionalString(frontmatter, "validatedDate"),
         context: optionalString(frontmatter, "context"),
+        accent: optionalString(frontmatter, "accent"),
       };
 
       if (isLegacy) {
@@ -380,6 +393,7 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
           assetPath: optionalString(frontmatter, "assetPath"),
           caption: optionalString(frontmatter, "caption"),
           legend: toLegendItems(optionalObjectArray(frontmatter, "legend")),
+          images: toDiagramImages(optionalObjectArray(frontmatter, "images")),
         };
       }
 

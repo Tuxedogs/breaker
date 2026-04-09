@@ -1,8 +1,8 @@
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { moduleById, moduleLoadError } from "../data/modules";
 import type { DoctrineModule, ModuleType } from "../data/modules";
 import type { ComponentType } from "react";
-import { LegacyLayout } from "../components/doctrine/LegacyLayout";
 import { ProcedureLayout } from "../components/doctrine/ProcedureLayout";
 import { FrameworkLayout } from "../components/doctrine/FrameworkLayout";
 import { ReferenceLayout } from "../components/doctrine/ReferenceLayout";
@@ -17,16 +17,28 @@ const layouts: Record<ModuleType, ComponentType<{ module: DoctrineModule }>> = {
   concept: ConceptLayout,
   diagram: DiagramLayout,
   checklist: ChecklistLayout,
-  flying: LegacyLayout,
-  manning: LegacyLayout,
-  facing: LegacyLayout,
-  recovery: LegacyLayout,
+  flying: ProcedureLayout,
+  manning: ProcedureLayout,
+  facing: ProcedureLayout,
+  recovery: ProcedureLayout,
 };
 
 export default function DoctrineModulePage() {
   const loaderError = moduleLoadError;
   const { id = "" } = useParams();
   const module = moduleById.get(id);
+
+  useEffect(() => {
+    if (module?.accent) {
+      document.documentElement.style.setProperty("--module-accent", module.accent);
+    } else {
+      document.documentElement.style.removeProperty("--module-accent");
+    }
+
+    return () => {
+      document.documentElement.style.removeProperty("--module-accent");
+    };
+  }, [module?.accent]);
 
   if (loaderError) {
     return (
@@ -59,7 +71,7 @@ export default function DoctrineModulePage() {
     );
   }
 
-  const Layout = layouts[module.moduleType] ?? LegacyLayout;
+  const Layout = layouts[module.moduleType] ?? ProcedureLayout;
 
   return (
     <section className="route-fade py-3">

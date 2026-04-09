@@ -1,13 +1,22 @@
 import { useLocation } from "react-router-dom";
 
+const BASE_BG = "#0f0f11";
+
 export default function Background() {
   const { pathname } = useLocation();
 
-  let bgClass = "/src/public/images/bg-states/starting.png";
+  const bgColor = pathname.startsWith("/tools/")
+    ? `color-mix(in srgb, rgb(251 113 133) 3%, ${BASE_BG})`
+    : `color-mix(in srgb, var(--module-accent, transparent) 4%, ${BASE_BG})`;
 
-  if (pathname.startsWith("/docs/systems") || pathname.startsWith("/docs/getting-started")) bgClass = "bg-systems";
-  else if (pathname.startsWith("/docs/ships")) bgClass = "bg-ships";
-  else if (pathname.startsWith("/docs/doctrine") || pathname.startsWith("/docs/writing-mdx")) bgClass = "bg-doctrine";
-
-  return <div className={`app-bg ${bgClass}`} />;
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: -1,
+        backgroundColor: bgColor,
+      }}
+    />
+  );
 }
