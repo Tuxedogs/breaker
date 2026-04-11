@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "content:check": "node scripts/validate-content.mjs",
+        "content:check": "node --import tsx scripts/validate-content.mts",
         "preview": "vite preview",
         "changelog": "git-cliff -c cliff.toml -o CHANGELOG.md",
         "release:tag": "node scripts/release-tag.js",

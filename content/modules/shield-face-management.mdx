@@ -3,23 +3,35 @@ id: "shield-face-management"
 title: "Shield Face Management"
 type: "module"
 status: "review"
-moduleType: "flying"
+moduleType: "concept"
 owner: "Doctrine Team"
-intent: "Extend survivability by preserving shielded faces and minimizing repeated exposure on recovering faces."
-summary: "Pilot and crew posture rules for sustained shield pressure."
-lastValidated: "2026-03-05"
+summary: "Conceptual model for presenting the right shield face, rotating off collapsing arcs, and avoiding survivability loss through bad geometry."
+validatedDate: "2026-03-05"
 tags: ["shield", "survivability", "pilot", "engineering"]
 ships: ["perseus", "idris", "polaris"]
 roles: ["pilot", "engineer"]
 enemies: []
-maps: []
-powerProjection: []
-useWhen: ["Under sustained shield pressure.", "Before committing to high risk kill lanes."]
-steps: ["Identify the currently weakest shield face convey intent to crew.", "Adjust orientation to rotate stronger faces toward incoming pressure.", "Coordinate short movement corrections rather than over-rotating and exposing multiple weak arcs."]
-failureModes: ["Pilot holds a collapsing face too long under concentrated fire.", "Over-rotation exposes multiple arcs and accelerates collapse."]
-validation: ["Crew consistently rotates away from collapsing faces before break.", "Shield survival time improves in repeated pressure drills.", "Recommit timing aligns with confirmed shield recovery state."]
 prerequisites: []
-relatedModuleIds: ["signature-management-em-ir-cs-awareness", "damage-control-priority-ladder"]
+relatedModuleIds: ["signature-management", "damage-control-priority-ladder"]
 ---
 
-Shield face discipline is a continuous control task, not a one-time reaction.
+## Core Idea
+
+Shield faces are directional survivability pools. The crew's job is not to watch
+them break in sequence. The crew's job is to decide which face should be taking
+pressure right now and rotate away before that answer becomes the worst possible one.
+
+## Practical Reads
+
+- A weak face is a geometry problem, not just an engineering problem.
+- Over-rotation is often worse than holding slightly too long.
+- A clean call like "front face soft" should trigger a controlled presentation change,
+  not a panic maneuver.
+
+## Crew Discipline
+
+- Pilots manage presentation.
+- Engineers call face state early enough to matter.
+- Gunners report whether the required rotation is breaking their firing lane.
+
+> Good shield management buys time. Bad shield management spends time you do not have.

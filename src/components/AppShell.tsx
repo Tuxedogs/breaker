@@ -11,8 +11,8 @@ export default function AppShell() {
     : isMapsRoute
       ? "flex h-screen w-full flex-col overflow-hidden px-0 pb-0"
       : [
-          "relative z-20 mx-auto min-h-screen w-full px-4 pb-8 text-slate-100 sm:px-6 lg:px-8",
-          "max-w-7xl pt-12",
+            "relative z-20 mx-auto min-h-screen w-full pb-8 text-slate-100 px-12",
+          "max-w-7xl pt-12 app-main",
         ].join(" ");
 
   return (

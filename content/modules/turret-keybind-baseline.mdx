@@ -3,23 +3,68 @@ id: "turret-keybind-baseline"
 title: "Turret Keybind Baseline"
 type: "module"
 status: "review"
-moduleType: "manning"
+moduleType: "reference"
 owner: "Doctrine Team"
-intent: "Establish a reliable turret input baseline for faster target handling and fewer operator errors."
-summary: "Condensed setup flow from the existing Turret Keybindings page."
-lastValidated: "2026-03-01"
-tags: ["turret", "keybind", "gunner"]
+summary: "Reference baseline for remote turret entry, target cycling, turret control, and the recommended settings that materially improve turret use."
+validatedDate: "2026-03-01"
+tags: ["turret", "keybind", "gunner", "settings"]
 ships: ["perseus", "polaris", "idris"]
 roles: ["gunner"]
 enemies: ["capital", "fighter"]
-maps: []
-useWhen: ["Before op start.", "After patch changes.", "Initial bindings setup."]
-steps: ["Backup user folder to preserve settings changes.", "Confirm remote turret entry/exit binds.", "Set MFD cycle and MFD select binds to your fighter baseline.", "Check sub-target forward/backwards and validate in test target pass.", "Verify gyro/recenter/turret swap controls operate."]
-failureModes: ["Inability to sub-target during combat.", "Inconsistent MFD binds between fighter and turret roles.", "Operator toggles unintended movement mode mid-fight."]
-validation: ["Operator can switch turret configurations without MFD interfacing.", "Turret handoff and exit/re-entry cycle is completed cleanly."]
 prerequisites: ["keybind/turret-bind-baseline"]
-relatedModuleIds: ["sub-targeting-component-cycle", "perseus-component-sniping"]
+relatedModuleIds: ["sub-targeting", "component-sniping", "remote-turret-entry-and-keybind-baseline"]
+notes:
+  - Mirror your turret MFD binds to your fighter baseline whenever possible.
+  - Modifier-based binds are preferred over extra toggles for high-frequency controls.
+  - The binds below are the baseline to verify before an op, not an exhaustive personal profile.
 ---
 
-Primary systems page: [Turret Keybindings](/systems/turret-keybinds).
+## Remote Turret Entry
 
+| Action | Baseline | Why it matters |
+| --- | --- | --- |
+| Enter Remote Turret 1 / 2 / 3 | Bound | Every multicrew turret user needs a reliable seat-entry path |
+| Exit Remote Turret | `Y` | Fast exit matters for handoff and emergency movement |
+| Next Remote Turret | `D` | Lets one operator rotate between seats without leaving turret mode |
+
+## Targeting And Turret Control
+
+| Action | Baseline | Why it matters |
+| --- | --- | --- |
+| Cycle Sub-Target Forward | Bound | Core bind for subsystem selection |
+| Cycle Sub-Target Back | Bound if stable in current patch | Recovery option when you overshoot the intended subsystem |
+| Turret Gyro Stabilization | `E` | Observable state change, acceptable as a toggle |
+| Recenter Turret | `C` hold | Frequent reset input during tracking and handoff |
+| Toggle Turret Mouse Movement | Unbind unless you deliberately use it | Accidental mode swaps are a common operator failure |
+
+## MFD Baseline
+
+| Action | Baseline | Why it matters |
+| --- | --- | --- |
+| Cycle Page Forward | `E` | Quick page changes under load |
+| Cycle Page Backward | `Left Shift + E` | Reverse navigation without mousing |
+| Select MFD 1 | `Left Alt + Q` | Keeps resource and systems access familiar |
+| Select MFD 2 | `Left Alt + E` | Keeps comms and targeting access familiar |
+
+## Recommended Settings
+
+Only the turret-relevant settings from the old Additional Settings page belong here.
+General client tuning and non-turret quality-of-life settings should stay in the broader
+setup pages.
+
+| Setting | Recommended value | Why it matters |
+| --- | --- | --- |
+| Turret - Look Ahead - Enabled | `No` | Prevents unwanted prediction behavior in turret use |
+| Automatically Enable Target Padlock | `No` | Avoids forced view behavior during active tracking |
+| Max Auto Zoom Level | `0` | Keeps the sight picture stable |
+| Precision Lines | `Yes` | Helps maintain deliberate aim placement |
+| Gunnery UI Magnification | `No` | Preserves consistent view and target context |
+| Gimbals Locked (gunner) | `No` | Allows intended turret behavior instead of forcing the wrong model |
+| Mouse Deadzone | Minimum practical | Reduces wasted input travel |
+| Use Raw Input | `Yes` | Improves consistency for mouse-based turret control |
+
+## Flight-Ready Reset Hooks
+
+If your crew uses a reset or flight-ready bind, the turret-relevant items worth chaining
+are auto-targeting off, fixed/expected gimbal state, precision lines on, staggered fire off,
+and any view or zoom settings that commonly get corrupted during live sessions.

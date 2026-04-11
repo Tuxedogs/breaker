@@ -1,25 +1,37 @@
 ---
 id: "interdiction-snare-and-dampener-baseline"
-title: "Interdiction: Snare vs Dampener Baseline"
+title: "Interdiction Baseline"
 type: "module"
 status: "validated"
-moduleType: "facing"
+moduleType: "procedure"
 owner: "Tux"
-intent: "Apply the correct interdiction tool so targets cannot leave or engage only on their terms."
-summary: "Operational baseline for Mantis snare charging and dampener use by pilots and Antares, Cutlass and ZeusMR crew."
-lastValidated: "2026-03-05"
+summary: "Operational baseline for choosing snare versus dampener and holding the range discipline required for real escape denial."
+validatedDate: "2026-03-05"
 tags: ["interdiction", "mantis", "snare", "dampener", "tackle"]
 ships: []
 roles: ["pilot", "gunner"]
 enemies: []
-maps: []
-powerProjection: []
-useWhen: ["Encounters require Snare/interdiction .", "Quantum pull setups.", "Escape/Engagement denial after initial contact."]
-steps: ["When pulling targets out of an established Quantum lane, Mantis snare and account for required charge-up time(90s).", "If preventing ships from escaping during a fight, use Dampener, which has no charge.", "Treat dampener as ~11 km effective and hold around 10 km for optimal control.", "Keep tackle calls clear: announce tails immediately, Snare Charging, Snare Active, or Dampener Active states.", "Maintain position discipline to avoid drifting outside effective dampener control range."]
-failureModes: ["Crew uses snare when dampener is required for immediate escape denial.", "Tackle ship drifts outside practical dampener envelope and loses control.", "Crew fails to power down snare, power on dampener after snare event."]
-validation: ["Crew correctly selects snare vs dampener based on objective.", "Tackle ship maintains interdiction near 10 km during live pressure.", "Callouts reflect interdictor damage states, successful pulls, bubble up/down status."]
 prerequisites: []
-relatedModuleIds: ["decoy-noise-timing-missile-defense", "comms-callout-standard"]
+relatedModuleIds: ["missile-countermeasures", "comms-callout-standard"]
+useWhen:
+  - Encounters require interdiction
+  - Quantum pull setups
+  - Escape or engagement denial after initial contact
+steps:
+  - label: Choose the correct tool
+    detail: Use snare for lane pulls and planned interdiction windows. Use dampener for immediate escape denial during an active fight.
+  - label: Account for snare charge time
+    detail: A Mantis snare needs meaningful setup time, so start the process before the target is in the pull lane.
+  - label: Hold dampener distance
+    detail: Treat the dampener as an approximately 11 km practical tool and stay near 10 km when possible.
+  - label: Keep tackle calls explicit
+    detail: Call snare charging, snare active, dampener active, and any tails or damage states clearly.
+  - label: Reconfigure after the event
+    detail: Do not leave the ship in the wrong interdiction state after the pull or chase shifts phases.
+failureModes:
+  - Crew uses snare when dampener is required for immediate escape denial
+  - Tackle ship drifts outside the effective dampener envelope
+  - Crew forgets to swap from snare posture to dampener posture after the event
 ---
 
-Mantis baseline: snare reaches up to 20 km and requires charging. Dampener must be active to stop Nav mode and QT jumping after snare. with ~12 km effect and ~11 km optimal working distance.
+Mantis baseline: snare reaches farther but costs time. Dampener is the immediate fight tool.

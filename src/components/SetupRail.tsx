@@ -9,7 +9,7 @@ const setupItems = [
   {
     title: "Keybind Presets",
     subtitle: "Configure and verify keybind baselines.",
-    to: "/systems/turret-keybinds",
+    to: "/module/turret-keybind-baseline",
   },
   {
     title: "Camera & Tracking",

@@ -118,6 +118,19 @@ const ALL_TYPES = new Set<string>([
   "recovery",
 ]);
 
+const MODULE_TYPE_ACCENTS: Record<ModuleType, string> = {
+  procedure: "rgb(96 165 250)",
+  framework: "rgb(251 191 36)",
+  reference: "rgb(45 212 191)",
+  concept: "rgb(167 139 250)",
+  diagram: "rgb(148 163 184)",
+  checklist: "rgb(74 222 128)",
+  flying: "rgb(71 85 105)",
+  manning: "rgb(71 85 105)",
+  facing: "rgb(71 85 105)",
+  recovery: "rgb(71 85 105)",
+};
+
 function toModuleStatus(value: string, filePath: string): ModuleStatus {
   if (
     value === "draft" ||
@@ -133,6 +146,13 @@ function toModuleStatus(value: string, filePath: string): ModuleStatus {
 function toModuleType(value: string, filePath: string): ModuleType {
   if (ALL_TYPES.has(value)) return value as ModuleType;
   throw new Error(`[content] ${filePath} has invalid "moduleType": "${value}"`);
+}
+
+function resolveModuleAccent(
+  moduleType: ModuleType,
+  frontmatter: Record<string, unknown>
+) {
+  return optionalString(frontmatter, "accent") ?? MODULE_TYPE_ACCENTS[moduleType];
 }
 
 // ── Object array mappers ──────────────────────────────────────────────────────
@@ -332,7 +352,7 @@ async function loadModulesUnsafe(): Promise<DoctrineModule[]> {
         excludeRoles: optionalStringArray(frontmatter, "excludeRoles"),
         validatedDate: optionalString(frontmatter, "validatedDate"),
         context: optionalString(frontmatter, "context"),
-        accent: optionalString(frontmatter, "accent"),
+        accent: resolveModuleAccent(moduleType, frontmatter),
       };
 
       if (isLegacy) {

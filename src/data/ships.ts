@@ -45,13 +45,13 @@ const shipHubData: ShipHub[] = [
       "Crew commits before target state is verified.",
     ],
     recommendedModuleIds: [
-      "perseus-aimpoint-orbit",
+      "aimpoint-orbit",
       "perseus-engagement-ranges",
-      "perseus-component-sniping",
-      "sub-targeting-component-cycle",
+      "component-sniping",
+      "sub-targeting",
       "turret-keybind-baseline",
       "anti-cap-target-triage",
-      "perseus-recovery-cycle",
+      "multicrew-recovery-cycle",
     ],
     referenceIds: [
       "diagram/perseus-component-priority",
@@ -60,9 +60,9 @@ const shipHubData: ShipHub[] = [
     operationalLinks: [
       {
         id: "perseus-turret-keybinds",
-        title: "Turret Keybinds",
-        summary: "Current keybind baseline for all gunners until reference pages are refactored.",
-        to: "/systems/turret-keybinds",
+        title: "Turret Keybind Baseline",
+        summary: "Reference baseline for remote turret entry, target cycling, and recommended turret settings.",
+        to: "/module/turret-keybind-baseline",
       },
       {
         id: "perseus-maps",

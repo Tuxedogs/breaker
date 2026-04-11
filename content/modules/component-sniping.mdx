@@ -1,0 +1,34 @@
+---
+id: "component-sniping"
+title: "Component Sniping"
+type: "module"
+status: "validated"
+moduleType: "diagram"
+owner: "Doctrine Team"
+summary: "Canonical gallery for subsystem kill-chain confirmation once stable geometry is established."
+validatedDate: "2026-02-26"
+tags: ["gunner", "components", "sub-targeting"]
+ships: []
+roles: ["gunner"]
+enemies: ["capital"]
+prerequisites: ["diagram/perseus-component-priority", "keybind/turret-bind-baseline"]
+relatedModuleIds: ["aimpoint-orbit", "sub-targeting", "perseus-engagement-ranges"]
+caption: "Use one target frame, one subsystem call, and one kill chain at a time. The gallery below is the canonical reference for acquisition, confirmation, and hold."
+images:
+  - src: "/images/subtargeting/idrispower1.png"
+    caption: "Acquire the correct frame before cycling."
+  - src: "/images/subtargeting/idrispower2.png"
+    caption: "Confirm the selected component in target status before calling committed fire."
+  - src: "/images/subtargeting/idrisgrimbal.png"
+    caption: "Hold pressure on one subsystem until disable confirmation."
+legend:
+  - color: rgb(251 191 36)
+    label: Initial acquisition frame
+  - color: rgb(94 234 212)
+    label: Confirmation frame
+  - color: rgb(148 163 184)
+    label: Sustained hold / follow-through
+---
+
+Component sniping is not free-fire precision. It is a crew agreement to focus a
+single subsystem until the disable call is confirmed.

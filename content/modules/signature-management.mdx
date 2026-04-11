@@ -1,0 +1,39 @@
+---
+id: "signature-management"
+title: "Signature Management"
+type: "module"
+status: "validated"
+moduleType: "reference"
+owner: "Tux"
+summary: "Reference baseline for EM, IR, and CS control during approach, ambush setup, disengage, and missile-threat management."
+validatedDate: "2026-03-05"
+tags: ["signature", "em", "ir", "cs", "pilot", "engineer"]
+ships: []
+roles: ["pilot", "engineer"]
+enemies: []
+prerequisites: []
+relatedModuleIds: ["missile-countermeasures", "shield-face-management"]
+notes:
+  - Power posture is a tactical control, not a static setup.
+  - Signature reduction matters most when it changes enemy lock timing and engagement distance.
+  - Crew callouts should include meaningful power assignment changes.
+---
+
+## Signature Reference
+
+| Signature | What Drives It | Why The Crew Cares |
+| --- | --- | --- |
+| EM | Power allocation, active systems such as shields, thrusters and QT drives | Passive detectability and lock windows, especially during setup and withdrawal |
+| IR | Heat state, sustained boosting, prolonged output, on board fires | Expands your visibility and can punish extended high-output posture |
+| CS | Physical presence, active radar detection and evasion | Can be managed with good habits, but geometry still changes how easy you are to classify |
+
+## Baseline Rules
+
+- Reduce power allocation of shields to online minimums if evading detection.
+- Coordinate power changes on comms so pilot and engineer do not create accidental lock windows.
+- Posture with your lowest cross section visible towards the enemy, for most hulls, nose-on.
+
+## Cross-Link
+
+Use this reference together with Missile Countermeasures. Signature control changes
+how early you get targeted; countermeasures change what you do after the threat is already active.

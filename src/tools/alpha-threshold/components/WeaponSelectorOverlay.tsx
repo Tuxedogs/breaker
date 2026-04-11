@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import type { CSSProperties } from 'react'
 import { formatMetric, getWeaponKey } from '../lib/calculations'
 import { filterWeaponRecords, groupWeaponRecords } from '../lib/weapons/grouping'
 import { formatWeaponClassLabel } from '../lib/weapons/normalize'
@@ -31,6 +30,33 @@ const SLOT_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
 const WEAPON_SEARCH_EXPAND_MIN_CHARS = 3
 
 type DamageFilter = (typeof DAMAGE_FILTERS)[number]
+
+function getInitialWeaponOverlayFilters(weaponFilterPreset: ArmorInteractionFilterChip | null): {
+  query: string
+  damageFilter: DamageFilter
+} {
+  if (!weaponFilterPreset) {
+    return { query: '', damageFilter: 'all' }
+  }
+
+  switch (weaponFilterPreset.kind) {
+    case 'damageType':
+      return {
+        query: '',
+        damageFilter: weaponFilterPreset.value === 'energy' ? 'energy' : 'ballistic',
+      }
+    case 'weaponClass':
+      return { query: weaponFilterPreset.value, damageFilter: 'all' }
+    case 'velocity': {
+      const v = weaponFilterPreset.value
+      if (v != null && v > 0) {
+        const bandFloor = Math.floor(v / 250) * 250
+        return { query: String(bandFloor), damageFilter: 'all' }
+      }
+      return { query: weaponFilterPreset.label, damageFilter: 'all' }
+    }
+  }
+}
 
 /**
  * All size groups collapsed until search is long enough; then size 3+ with matches
@@ -64,45 +90,38 @@ export function WeaponSelectorOverlay({
   onClearSlot,
   onClose,
 }: Props) {
-  const [query, setQuery] = useState('')
-  const [damageFilter, setDamageFilter] = useState<DamageFilter>('all')
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
+  const initialFilters = useMemo(
+    () => getInitialWeaponOverlayFilters(weaponFilterPreset),
+    [weaponFilterPreset]
+  )
+  const [query, setQuery] = useState(initialFilters.query)
+  const [damageFilter, setDamageFilter] = useState<DamageFilter>(initialFilters.damageFilter)
+  const [groupCollapseOverrides, setGroupCollapseOverrides] = useState<Record<string, boolean>>({})
   const searchRef = useRef<HTMLInputElement | null>(null)
   const overlayRef = useRef<HTMLElement | null>(null)
-  const lastCollapseSeedKeyRef = useRef<string | null>(null)
-  const [firstCellAnchorStyle, setFirstCellAnchorStyle] = useState<CSSProperties | undefined>(
-    undefined
-  )
   const resolvedAnchorSlotIndex = anchorSlotIndex ?? activeSlotIndex
 
   useLayoutEffect(() => {
-    if (!open || disableAnchor) {
-      setFirstCellAnchorStyle(undefined)
-      return
-    }
-
     const overlay = overlayRef.current
-    if (!overlay) {
-      setFirstCellAnchorStyle(undefined)
-      return
-    }
+    if (!open || disableAnchor || !overlay) return
 
     const update = () => {
       const header = document.querySelector(
         `.alpha-threshold-tool .acm-header-row .acm-weapon-header[data-col-index="${resolvedAnchorSlotIndex}"]`
       )
       if (!(header instanceof HTMLElement)) {
-        setFirstCellAnchorStyle(undefined)
+        overlay.style.removeProperty('--alpha-weapon-anchor-top')
+        overlay.style.removeProperty('--alpha-weapon-anchor-left')
+        overlay.style.removeProperty('--alpha-weapon-anchor-width')
+        overlay.style.removeProperty('--alpha-weapon-anchor-height')
         return
       }
       const lastRow = document.querySelector('.alpha-threshold-tool .acm-body .acm-row:last-child')
       if (!(lastRow instanceof HTMLElement)) {
-        setFirstCellAnchorStyle(undefined)
         return
       }
       const firstRow = document.querySelector('.alpha-threshold-tool .acm-body .acm-row:first-child')
       if (!(firstRow instanceof HTMLElement)) {
-        setFirstCellAnchorStyle(undefined)
         return
       }
 
@@ -113,7 +132,6 @@ export function WeaponSelectorOverlay({
       const lastColumnCell =
         lastRowCells[Math.max(0, Math.min(resolvedAnchorSlotIndex, lastRowCells.length - 1))]
       if (!firstColumnCell || !lastColumnCell) {
-        setFirstCellAnchorStyle(undefined)
         return
       }
 
@@ -122,12 +140,10 @@ export function WeaponSelectorOverlay({
       const firstCellRect = firstColumnCell.getBoundingClientRect()
       const lastCellRect = lastColumnCell.getBoundingClientRect()
       const anchorHeight = Math.max(firstCellRect.height, lastCellRect.bottom - firstCellRect.top)
-      setFirstCellAnchorStyle({
-        '--alpha-weapon-anchor-top': `${firstCellRect.top - overlayRect.top}px`,
-        '--alpha-weapon-anchor-left': `${headerRect.left - overlayRect.left}px`,
-        '--alpha-weapon-anchor-width': `${headerRect.width}px`,
-        '--alpha-weapon-anchor-height': `${anchorHeight}px`,
-      } as CSSProperties)
+      overlay.style.setProperty('--alpha-weapon-anchor-top', `${firstCellRect.top - overlayRect.top}px`)
+      overlay.style.setProperty('--alpha-weapon-anchor-left', `${headerRect.left - overlayRect.left}px`)
+      overlay.style.setProperty('--alpha-weapon-anchor-width', `${headerRect.width}px`)
+      overlay.style.setProperty('--alpha-weapon-anchor-height', `${anchorHeight}px`)
     }
 
     update()
@@ -136,47 +152,12 @@ export function WeaponSelectorOverlay({
     return () => {
       window.removeEventListener('resize', update)
       window.removeEventListener('scroll', update, true)
-      setFirstCellAnchorStyle(undefined)
+      overlay.style.removeProperty('--alpha-weapon-anchor-top')
+      overlay.style.removeProperty('--alpha-weapon-anchor-left')
+      overlay.style.removeProperty('--alpha-weapon-anchor-width')
+      overlay.style.removeProperty('--alpha-weapon-anchor-height')
     }
   }, [open, disableAnchor, resolvedAnchorSlotIndex])
-
-  useEffect(() => {
-    if (!open) {
-      setQuery('')
-      setDamageFilter('all')
-      return
-    }
-
-    if (!weaponFilterPreset) {
-      setQuery('')
-      setDamageFilter('all')
-      return
-    }
-
-    switch (weaponFilterPreset.kind) {
-      case 'damageType': {
-        setDamageFilter(weaponFilterPreset.value === 'energy' ? 'energy' : 'ballistic')
-        setQuery('')
-        break
-      }
-      case 'weaponClass': {
-        setDamageFilter('all')
-        setQuery(weaponFilterPreset.value)
-        break
-      }
-      case 'velocity': {
-        setDamageFilter('all')
-        const v = weaponFilterPreset.value
-        if (v != null && v > 0) {
-          const bandFloor = Math.floor(v / 250) * 250
-          setQuery(String(bandFloor))
-        } else {
-          setQuery(weaponFilterPreset.label)
-        }
-        break
-      }
-    }
-  }, [open, weaponFilterPreset])
 
   useEffect(() => {
     if (!open) return
@@ -207,28 +188,15 @@ export function WeaponSelectorOverlay({
 
   const queryTrimmed = query.trim()
 
-  useEffect(() => {
-    if (!open) {
-      lastCollapseSeedKeyRef.current = null
-      return
-    }
-    const collapseSeedKey = `${queryTrimmed}::${sizesInView.join('|')}`
-    if (lastCollapseSeedKeyRef.current === collapseSeedKey) return
-    lastCollapseSeedKeyRef.current = collapseSeedKey
-    setCollapsedGroups((current) => {
-      const nextDefaults = getWeaponCollapsedGroupsForQuery(sizesInView, queryTrimmed)
-      const preservedEntries = Object.fromEntries(
-        sizesInView
-          .map((size) => String(size))
-          .filter((groupId) => groupId in current)
-          .map((groupId) => [groupId, current[groupId]])
-      )
-      return {
-        ...nextDefaults,
-        ...preservedEntries,
-      }
-    })
-  }, [open, sizesInView, queryTrimmed])
+  const collapsedGroups = useMemo(() => {
+    const defaults = getWeaponCollapsedGroupsForQuery(sizesInView, queryTrimmed)
+    return Object.fromEntries(
+      sizesInView.map((size) => {
+        const key = String(size)
+        return [key, groupCollapseOverrides[key] ?? defaults[key] ?? true]
+      })
+    )
+  }, [groupCollapseOverrides, sizesInView, queryTrimmed])
 
   const assignedWeaponKeys = useMemo(
     () =>
@@ -247,21 +215,18 @@ export function WeaponSelectorOverlay({
   const accentTone = SLOT_TONES[activeSlotIndex % SLOT_TONES.length]
 
   function toggleGroup(groupId: string) {
-    setCollapsedGroups((current) => ({
+    setGroupCollapseOverrides((current) => ({
       ...current,
-      [groupId]: !(current[groupId] ?? true),
+      [groupId]: !(collapsedGroups[groupId] ?? true),
     }))
   }
-
-  const useColumnAnchor = Boolean(firstCellAnchorStyle)
 
   return (
     <section
       ref={overlayRef}
       className="alpha-selection-overlay alpha-selection-overlay--weapon-bay"
       aria-label="Weapon selection overlay"
-      style={firstCellAnchorStyle}
-      data-weapon-column-anchor={useColumnAnchor ? 'true' : undefined}
+      data-weapon-column-anchor={!disableAnchor ? 'true' : undefined}
     >
       <section
         className={[
