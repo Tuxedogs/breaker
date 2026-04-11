@@ -4,6 +4,16 @@
    sidebar workspace layout, and doctrine blocks.
    ------------------------------------------------------------------ */
 
+/* App background layer */
+.app-bg {
+  background-color: rgb(10, 12, 16);
+  background-image:
+    radial-gradient(80% 40% at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 70%),
+    radial-gradient(40% 20% at 50% 0%, rgba(255, 255, 255, 0.025) 0%, transparent 55%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: auto, auto, 28px 28px;
+}
+
 @layer components {
   :root {
     --app-sticky-top: 4.75rem;
@@ -110,7 +120,9 @@
   .app-nav-band {
     left: 0;
     right: 0;
-    background: transparent;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 100%),
+      rgb(7, 9, 12);
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -285,7 +297,7 @@ outline: 2px solid rgb(148 163 184 / 0.4);
     border: none;
     background: transparent;
     font-family: "Orbitron", "Rajdhani", sans-serif;
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -635,4 +647,478 @@ outline: 2px solid rgb(148 163 184 / 0.4);
   .page-title-hero {
     font-size: 4.5rem;
   }
+}
+
+/* ── Framework page (fw-) ──────────────────────────────────────────────── */
+
+.fw-header {
+  padding: 1.5rem 3rem;
+  background: #0d0f15;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.fw-eyebrow {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #708090;
+  margin: 0 0 0.625rem;
+}
+
+.fw-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #e8eef4;
+  margin: 0 0 0.5rem;
+}
+
+.fw-descriptor {
+  font-family: "Barlow", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #708090;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Role card grid */
+.fw-role-grid {
+  display: grid;
+  gap: 0.625rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .fw-role-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.fw-role-card {
+  --role-accent: var(--accent-teal);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--card-blue);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 2px solid var(--role-accent);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.fw-role-card:not(.fw-role-card--disabled):hover {
+  background: var(--card-blue-hover);
+  border-color: var(--role-accent);
+  border-top-width: 2px;
+}
+
+.fw-role-card--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.fw-role-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--role-accent);
+  flex-shrink: 0;
+}
+
+.fw-role-icon svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fw-role-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e8eef4;
+  margin: 0.125rem 0 0;
+}
+
+.fw-role-soon {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f59e0b;
+  margin: 0;
+}
+
+.fw-role-desc {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #708090;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.fw-role-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: transparent;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  margin-top: 0.625rem;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+.fw-role-card:not(.fw-role-card--disabled):hover .fw-role-btn {
+  color: var(--role-accent);
+  border-color: color-mix(in srgb, var(--role-accent) 40%, transparent);
+}
+
+/* Tool banners */
+.fw-tool-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 6.25rem;
+  padding: 0 1.25rem;
+  background: var(--card-blue);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  text-decoration: none;
+  transition: background 140ms ease;
+}
+
+.fw-tool-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fw-tool-banner--maps:hover {
+  border-color: color-mix(in srgb, var(--accent-maps) 78%, transparent);
+  background-color: color-mix(in srgb, var(--accent-maps) 4%, var(--card-blue));
+}
+
+.fw-tool-banner--maps:hover::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--accent-maps) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent-maps) 10%, transparent) 1px, transparent 1px);
+}
+
+.fw-tool-banner--alpha:hover {
+  border-color: color-mix(in srgb, var(--accent-alpha) 78%, transparent);
+  background-color: color-mix(in srgb, var(--accent-alpha) 4%, var(--card-blue));
+}
+
+.fw-tool-banner--alpha:hover::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--accent-alpha) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent-alpha) 10%, transparent) 1px, transparent 1px);
+}
+
+.fw-tool-banner--alpha {
+  border-color: color-mix(in srgb, var(--accent-alpha) 28%, transparent);
+  background-color: var(--card-blue);
+}
+
+.fw-tool-banner--maps {
+  border-color: color-mix(in srgb, var(--accent-maps) 28%, transparent);
+  background-color: var(--card-blue);
+}
+
+.fw-tool-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-self: center;
+  text-align: center;
+  align-items: center;
+}
+
+.fw-tool-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(232, 238, 244);
+}
+
+.fw-tool-sub {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.fw-tool-banner--alpha .fw-tool-sub { color: var(--accent-alpha); }
+.fw-tool-banner--maps .fw-tool-sub { color: var(--accent-maps); }
+
+.fw-tool-arrow {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 140ms ease;
+}
+
+.fw-tool-title,
+.fw-tool-sub {
+  margin: 0;
+  display: block;
+}
+
+.fw-tool-title {
+  line-height: 1;
+}
+
+.fw-tool-sub {
+  line-height: 1.2;
+}
+
+.fw-tool-banner:hover .fw-tool-arrow { color: rgba(255, 255, 255, 0.55); }
+
+/* Secondary module cards */
+.fw-secondary-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .fw-secondary-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.fw-sec-card {
+  --sec-accent: var(--accent-cyan);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--card-blue);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 2px solid var(--sec-accent);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.fw-sec-card:hover {
+  background: color-mix(in srgb, var(--sec-accent) 4%, var(--card-blue));
+  border-right-color: rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--sec-accent);
+}
+
+.fw-sec-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e8eef4;
+  margin: 0;
+}
+
+.fw-sec-desc {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #708090;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Setup & Configuration */
+.fw-setup-block {
+  padding: 1.25rem 0 0;
+}
+
+.fw-setup-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e8eef4;
+  margin: 0 0 0.25rem;
+}
+
+.fw-setup-desc {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: #708090;
+  margin: 0 0 0.875rem;
+}
+
+.fw-chip-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .fw-chip-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.fw-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: #0d0f15;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.fw-chip:hover {
+  background: #11141e;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.fw-chip-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(232, 238, 244, 0.85);
+}
+
+.fw-chip-desc {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #708090;
+  line-height: 1.4;
+}
+
+/* ── ARES home page (ares-) ────────────────────────────────────────────── */
+
+.ares-hero-block {
+  padding: 1.75rem 3rem;
+  background: #0d0f15;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.ares-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.0;
+  color: #e8eef4;
+  margin: 0.625rem 0 0;
+}
+
+.ares-title-accent {
+  color: var(--accent-teal);
+}
+
+.ares-card-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .ares-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.ares-card {
+  --ares-accent: var(--accent-teal);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: var(--card-blue);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 2px solid var(--ares-accent);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.ares-card:hover {
+  background: color-mix(in srgb, var(--ares-accent) 4%, var(--card-blue));
+  border-top-color: rgba(255, 255, 255, 0.08);
+  border-right-color: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--ares-accent);
+}
+
+.ares-card-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--ares-accent) 45%, transparent);
+  color: var(--ares-accent);
+  background: color-mix(in srgb, var(--ares-accent) 8%, transparent);
+}
+
+.ares-card-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ares-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ares-card-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #e8eef4;
+  margin: 0;
+}
+
+.ares-card-desc {
+  font-family: "Barlow", sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: #708090;
+  margin: 0;
+  line-height: 1.4;
 }

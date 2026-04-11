@@ -217,9 +217,11 @@ export default function AppNav() {
         </div>
 
         <div className="flex items-center justify-between lg:hidden">
-          <NavLink to="/" onClick={closeAllMenus} className="site-toolbar-mobile-brand">
-            <span className="site-toolbar-brand">ARES</span>
-          </NavLink>
+          <div className="site-toolbar-mobile-brand-wrap">
+            <NavLink to="/" onClick={closeAllMenus} className="site-toolbar-mobile-brand">
+              <span className="site-toolbar-brand">ARES</span>
+            </NavLink>
+          </div>
 
           <div className="flex items-center gap-2">
             <NavLink

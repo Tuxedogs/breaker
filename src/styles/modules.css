@@ -46,6 +46,7 @@
   }
 
   .module-card-doctrine {
+    --module-card-accent: var(--card-accent, rgb(251 191 36));
     position: relative;
     display: grid;
     min-height: 0;
@@ -53,22 +54,37 @@
     gap: 0.75rem;
     overflow: hidden;
     border-radius: 4px;
-    border: 1px solid rgb(255 255 255 / 0.08);
-    background: rgb(255 255 255 / 0.02);
+    border: 1px solid color-mix(in srgb, var(--module-card-accent) 20%, rgb(255 255 255 / 0.08));
+    background: var(--card-blue);
     padding: 0.85rem;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--module-card-accent) 10%, transparent);
     transition:
       border-color 160ms ease,
-      background-color 160ms ease;
+      background-color 160ms ease,
+      box-shadow 160ms ease;
   }
 
-  .module-card-doctrine::before,
-  .module-card-doctrine::after {
-    content: none;
+  .module-card-doctrine::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: color-mix(in srgb, var(--module-card-accent) 55%, transparent);
+    opacity: 0.55;
+    pointer-events: none;
   }
 
   .module-card-doctrine:hover {
-    border-color: color-mix(in srgb, var(--card-accent, rgb(251 191 36)) 40%, transparent);
-    background: color-mix(in srgb, var(--card-accent, rgb(251 191 36)) 4%, rgb(0 0 0));
+    border-color: color-mix(in srgb, var(--module-card-accent) 52%, rgb(255 255 255 / 0.08));
+    background: color-mix(in srgb, var(--module-card-accent) 7%, var(--card-blue));
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--module-card-accent) 20%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--module-card-accent) 14%, transparent),
+      0 0 16px color-mix(in srgb, var(--module-card-accent) 12%, transparent);
+  }
+
+  .module-card-doctrine:hover::before {
+    opacity: 0.85;
   }
 
   .deck-doctrine {
@@ -210,9 +226,9 @@
     flex-direction: column;
     gap: 0.8rem;
     overflow: hidden;
-    border-radius: 1.15rem;
+    border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 22%), rgba(4, 8, 18, 0.94);
+    background: var(--card-blue);
     padding: 0.85rem;
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -293,7 +309,7 @@
     width: 100%;
     border-radius: 0.8rem;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(2, 6, 23, 0.85);
+    background: #000;
     padding: 0 0.8rem;
     font-size: 0.9rem;
     color: rgb(248 250 252);

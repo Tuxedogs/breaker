@@ -81,6 +81,7 @@ export default function ModuleIndexPage() {
           options={moduleFilterOptions}
           onChange={updateFilter}
           onClear={() => setSearchParams(writeModuleFilters(emptyModuleFilters), { replace: true })}
+          kicker="Operational Index"
         />
 
         <div className="deck-doctrine">
@@ -90,7 +91,6 @@ export default function ModuleIndexPage() {
                 <div className="module-card-hero">
                   <div className="min-w-0">
                     <h2 className="module-card-title">{module.title}</h2>
-                    <p className="module-card-subtitle">{module.intent ?? module.summary}</p>
                     {isManningIndex && manningPinnedModuleIds.includes(module.id as (typeof manningPinnedModuleIds)[number]) ? (
                       <p className="module-card-chip module-card-chip-pinned mt-2">
                         <span>Pinned Manning Baseline</span>
