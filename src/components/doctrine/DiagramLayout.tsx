@@ -113,7 +113,7 @@ export function DiagramLayout({ module }: { module: DoctrineModule }) {
   return (
     <div className="gallery-shell">
       <header className="gallery-header">
-        <DoctrineModuleHeader module={module} eyebrow="Diagram" />
+        <DoctrineModuleHeader module={module} eyebrow="Gallery / Maps" />
       </header>
 
       <div

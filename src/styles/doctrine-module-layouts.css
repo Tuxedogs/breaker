@@ -7,14 +7,14 @@
 /* ── Design Tokens ──────────────────────────────────────────────────────── */
 
 :root {
-  --dm-bg:           #080a0c;
-  --dm-bg1:          #0d1117;
-  --dm-bg2:          #111820;
-  --dm-bg3:          #151e2a;
+  --dm-bg:           #050607;
+  --dm-bg1:          #07090c;
+  --dm-bg2:          #090b0e;
+  --dm-bg3:          #0c0f13;
   --dm-border:       rgba(255,255,255,0.07);
   --dm-border-bright:rgba(255,255,255,0.15);
   --dm-text:         #c8d4e0;
-  --dm-text-muted:   #5a6a7a;
+  --dm-text-muted:   #708090;
   --dm-text-dim:     #3a4a5a;
 
   --dm-amber:        #e8a020;
@@ -370,6 +370,45 @@
   color: #b0a0e0;
   line-height: 1.5;
   font-style: italic;
+}
+
+.concept-col ul,
+.concept-col ol {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  color: var(--dm-text-muted);
+}
+
+.concept-col li {
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.dm-inline-video {
+  margin: 0 0 20px;
+}
+
+.dm-inline-video-frame {
+  overflow: hidden;
+  border: 1px solid var(--dm-border);
+  background: var(--dm-bg2);
+  aspect-ratio: 16 / 9;
+}
+
+.dm-inline-video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dm-inline-video-caption {
+  margin: 8px 0 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
 }
 
 /* ── Layout 3: Framework / Priority Ladder (amber) ───────────────────────── */
@@ -891,4 +930,92 @@
 
 .dm-reference-prose p:last-child {
   margin-bottom: 0;
+}
+
+.dm-reference-prose h2,
+.dm-reference-prose h3 {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #d8e4f0;
+  margin: 0 0 12px;
+}
+
+.dm-reference-prose ul,
+.dm-reference-prose ol {
+  margin: 0 0 16px;
+  padding-left: 20px;
+}
+
+.dm-reference-prose li {
+  margin: 0 0 8px;
+}
+
+.dm-reference-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 16px;
+}
+
+.dm-reference-prose th,
+.dm-reference-prose td {
+  border-bottom: 1px solid var(--dm-border);
+  padding: 10px 12px 10px 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dm-reference-prose th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dm-text-dim);
+}
+
+.dm-reference-prose code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.88em;
+  color: var(--dm-text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 0.1em 0.4em;
+}
+
+.dm-reference-prose h2 + table,
+.dm-reference-prose h3 + table {
+  margin-top: 8px;
+}
+
+.dm-reference-prose h2 {
+  margin-top: 28px;
+}
+
+.dm-reference-prose h2:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 767px) {
+  .concept-body,
+  .priority-layout,
+  .gallery-layout,
+  .procedure-shell,
+  .checklist-body {
+    grid-template-columns: 1fr;
+  }
+
+  .concept-col:first-child,
+  .priority-main,
+  .gallery-main,
+  .procedure-body,
+  .dm-phase-col {
+    border-right: none;
+  }
+
+  .procedure-sidebar,
+  .priority-sidebar,
+  .gallery-sidebar {
+    border-top: 1px solid var(--dm-border);
+  }
 }

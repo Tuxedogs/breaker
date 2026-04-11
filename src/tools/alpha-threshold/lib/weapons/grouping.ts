@@ -1,5 +1,6 @@
 import type {
   GroupedWeaponClass,
+  GroupedWeaponDamageType,
   GroupedWeaponSize,
   WeaponRecord,
 } from './types'
@@ -73,30 +74,43 @@ function sortWeaponRecords(left: WeaponRecord, right: WeaponRecord) {
 export function groupWeaponRecords(
   weapons: WeaponRecord[]
 ): GroupedWeaponSize[] {
-  const sizes = new Map<number, Map<string, WeaponRecord[]>>()
+  const sizes = new Map<number, Map<string, Map<string, WeaponRecord[]>>>()
 
   weapons.forEach((weapon) => {
     if (weapon.damageType === 'distortion') return
 
-    const classMap = sizes.get(weapon.size) ?? new Map<string, WeaponRecord[]>()
+    const damageTypeKey = weapon.damageType
+    const damageTypeMap =
+      sizes.get(weapon.size) ?? new Map<string, Map<string, WeaponRecord[]>>()
+    const classMap = damageTypeMap.get(damageTypeKey) ?? new Map<string, WeaponRecord[]>()
     const classGroup = classMap.get(weapon.weaponClass) ?? []
 
     classGroup.push(weapon)
     classMap.set(weapon.weaponClass, classGroup)
-    sizes.set(weapon.size, classMap)
+    damageTypeMap.set(damageTypeKey, classMap)
+    sizes.set(weapon.size, damageTypeMap)
   })
 
   return Array.from(sizes.entries())
     .sort((left, right) => left[0] - right[0])
-    .map(([size, classMap]) => {
-      const classes: GroupedWeaponClass[] = Array.from(classMap.entries())
-        .map(([weaponClass, groupedWeapons]) => ({
-          weaponClass,
-          weapons: [...groupedWeapons].sort(sortWeaponRecords),
+    .map(([size, damageTypeMap]) => {
+      const damageTypes: GroupedWeaponDamageType[] = Array.from(damageTypeMap.entries())
+        .sort(([leftDamageType], [rightDamageType]) =>
+          leftDamageType.localeCompare(rightDamageType)
+        )
+        .map(([damageType, classMap]) => ({
+          damageType: damageType as GroupedWeaponDamageType['damageType'],
+          classes: Array.from(classMap.entries())
+            .map(([weaponClass, groupedWeapons]) => ({
+              weaponClass,
+              weapons: [...groupedWeapons].sort(sortWeaponRecords),
+            }))
+            .sort(sortWeaponClassGroups),
         }))
-        .sort(sortWeaponClassGroups)
 
-      return { size, classes }
+      const classes = damageTypes.flatMap((damageTypeGroup) => damageTypeGroup.classes)
+
+      return { size, damageTypes, classes }
     })
-    .filter((group) => group.classes.length > 0)
+    .filter((group) => group.damageTypes.length > 0)
 }

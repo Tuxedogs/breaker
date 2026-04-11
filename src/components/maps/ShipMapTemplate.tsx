@@ -253,7 +253,10 @@ function InteriorTransitionDriver({
   const { invalidate } = useThree();
   const rafRef = useRef<number | null>(null);
   const onSettledRef = useRef(onSettled);
-  onSettledRef.current = onSettled;
+
+  useEffect(() => {
+    onSettledRef.current = onSettled;
+  }, [onSettled]);
 
   useEffect(() => {
     const target = interiorTarget ? 1 : 0;
@@ -937,6 +940,7 @@ function FitModelMesh({
   const ghostColorBackupRef = useRef<Map<Material, Color>>(new Map());
 
   useLayoutEffect(() => {
+    const ghostColorBackup = ghostColorBackupRef.current;
     materialsRef.current = [];
     modelScene.traverse((node) => {
       if (!(node instanceof Mesh)) return;
@@ -948,7 +952,7 @@ function FitModelMesh({
         material.clipShadows = Boolean(clippingPlanes?.length);
         if (ghosted && "color" in material && material.color instanceof Color) {
           const base = material.color.clone();
-          ghostColorBackupRef.current.set(material, base);
+          ghostColorBackup.set(material, base);
           material.color.copy(base).multiplyScalar(0.72);
         }
         material.needsUpdate = true;
@@ -959,11 +963,11 @@ function FitModelMesh({
       for (const material of materialsRef.current) {
         material.clippingPlanes = [];
         material.clipShadows = false;
-        const base = ghostColorBackupRef.current.get(material);
+        const base = ghostColorBackup.get(material);
         if (base && "color" in material && material.color instanceof Color) {
           material.color.copy(base);
         }
-        ghostColorBackupRef.current.delete(material);
+        ghostColorBackup.delete(material);
         material.transparent = false;
         material.opacity = 1;
         material.depthWrite = true;
@@ -974,7 +978,7 @@ function FitModelMesh({
   }, [modelScene, clippingPlanes, ghosted, renderOrder]);
 
   useFrame(() => {
-    const materials = materialsRef.current;
+    const materials = materialsRef.current.slice();
     if (materials.length === 0) return;
 
     let op: number;

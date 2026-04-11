@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import type { CSSProperties } from 'react'
 import { formatEntityLabel } from '../lib/calculations'
 import type { Ship } from '../types'
 
@@ -82,40 +81,28 @@ export function ShipSelectorOverlay({
   onClose,
 }: Props) {
   const [query, setQuery] = useState('')
-  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
+  const [groupCollapseOverrides, setGroupCollapseOverrides] = useState<Record<string, boolean>>({})
   const searchRef = useRef<HTMLInputElement | null>(null)
   const overlayRef = useRef<HTMLElement | null>(null)
-  const lastCollapseSeedKeyRef = useRef<string | null>(null)
-  const [firstCellAnchorStyle, setFirstCellAnchorStyle] = useState<CSSProperties | undefined>(
-    undefined
-  )
 
   /** Top-left + width of the first matrix body cell; keep ship bay anchored to that column footprint. */
   useLayoutEffect(() => {
-    if (!open || disableAnchor) {
-      setFirstCellAnchorStyle(undefined)
-      return
-    }
-
     const overlay = overlayRef.current
-    if (!overlay) {
-      setFirstCellAnchorStyle(undefined)
-      return
-    }
+    if (!open || disableAnchor || !overlay) return
 
     const update = () => {
       const cell = document.querySelector(FIRST_MATRIX_CELL_SELECTOR)
       if (!(cell instanceof HTMLElement)) {
-        setFirstCellAnchorStyle(undefined)
+        overlay.style.removeProperty('--alpha-ship-anchor-top')
+        overlay.style.removeProperty('--alpha-ship-anchor-left')
+        overlay.style.removeProperty('--alpha-ship-anchor-width')
         return
       }
       const overlayRect = overlay.getBoundingClientRect()
       const cellRect = cell.getBoundingClientRect()
-      setFirstCellAnchorStyle({
-        '--alpha-ship-anchor-top': `${cellRect.top - overlayRect.top}px`,
-        '--alpha-ship-anchor-left': `${cellRect.left - overlayRect.left}px`,
-        '--alpha-ship-anchor-width': `${cellRect.width}px`,
-      } as CSSProperties)
+      overlay.style.setProperty('--alpha-ship-anchor-top', `${cellRect.top - overlayRect.top}px`)
+      overlay.style.setProperty('--alpha-ship-anchor-left', `${cellRect.left - overlayRect.left}px`)
+      overlay.style.setProperty('--alpha-ship-anchor-width', `${cellRect.width}px`)
     }
 
     update()
@@ -124,7 +111,9 @@ export function ShipSelectorOverlay({
     return () => {
       window.removeEventListener('resize', update)
       window.removeEventListener('scroll', update, true)
-      setFirstCellAnchorStyle(undefined)
+      overlay.style.removeProperty('--alpha-ship-anchor-top')
+      overlay.style.removeProperty('--alpha-ship-anchor-left')
+      overlay.style.removeProperty('--alpha-ship-anchor-width')
     }
   }, [open, disableAnchor])
 
@@ -201,49 +190,31 @@ export function ShipSelectorOverlay({
     [filteredShips]
   )
 
-  useEffect(() => {
-    if (!open) {
-      lastCollapseSeedKeyRef.current = null
-      return
-    }
+  const collapsedGroups = useMemo(() => {
     const groupedShipIds = groupedShips.map((group) => group.id)
-    const collapseSeedKey = `${queryTrimmed}::${groupedShipIds.join('|')}`
-    if (lastCollapseSeedKeyRef.current === collapseSeedKey) return
-    lastCollapseSeedKeyRef.current = collapseSeedKey
-    setCollapsedGroups((current) => {
-      const searchActive = queryTrimmed.length >= SHIP_SEARCH_EXPAND_MIN_CHARS
-      const nextDefaults = getShipCollapsedGroupsForQuery(groupedShipIds, queryTrimmed)
-      const preservedEntries = searchActive
-        ? {}
-        : Object.fromEntries(
-            groupedShipIds
-              .filter((groupId) => groupId in current)
-              .map((groupId) => [groupId, current[groupId]])
-          )
-      return {
-        ...nextDefaults,
-        ...preservedEntries,
-      }
-    })
-  }, [open, groupedShips, queryTrimmed])
+    const defaults = getShipCollapsedGroupsForQuery(groupedShipIds, queryTrimmed)
+    return Object.fromEntries(
+      groupedShipIds.map((groupId) => [
+        groupId,
+        groupCollapseOverrides[groupId] ?? defaults[groupId] ?? true,
+      ])
+    )
+  }, [groupCollapseOverrides, groupedShips, queryTrimmed])
 
   function toggleGroup(groupId: string) {
-    setCollapsedGroups((current) => ({
+    setGroupCollapseOverrides((current) => ({
       ...current,
-      [groupId]: !(current[groupId] ?? true),
+      [groupId]: !(collapsedGroups[groupId] ?? true),
     }))
   }
 
   const accentTone = SLOT_TONES[activeSlotIndex % SLOT_TONES.length]
-  const useFirstCellAnchor = Boolean(firstCellAnchorStyle)
-
   return (
     <section
       ref={overlayRef}
       className="alpha-selection-overlay alpha-selection-overlay--ship-bay"
       aria-label="Ship selection overlay"
-      style={firstCellAnchorStyle}
-      data-ship-first-cell-anchor={useFirstCellAnchor ? 'true' : undefined}
+      data-ship-first-cell-anchor={!disableAnchor ? 'true' : undefined}
     >
       <section
         className={[

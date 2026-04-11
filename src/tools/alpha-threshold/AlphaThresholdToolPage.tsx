@@ -159,7 +159,7 @@ export default function AlphaThresholdToolPage() {
         history: placeholderHistory,
       }
     })
-  }, [selectedShipNames, shipBySelectionKey, activeShipLimit])
+  }, [selectedShipNames, shipBySelectionKey, visibleShipCount])
 
   const previewWeapons = useMemo<SelectedWeaponComparison[]>(() => {
     const selectedWeaponBySlotId = new Map(
@@ -190,7 +190,7 @@ export default function AlphaThresholdToolPage() {
           weapon: placeholderWeapon,
         }
       })
-  }, [selectedWeapons, slots, activeWeaponLimit])
+  }, [selectedWeapons, slots, visibleWeaponCount])
 
   function handleShieldModeChange(mode: 'up' | 'down') {
     const next = new URLSearchParams(searchParams)

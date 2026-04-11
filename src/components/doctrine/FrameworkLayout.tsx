@@ -14,7 +14,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
   return (
     <div className="priority-shell">
       <header className="priority-header">
-        <DoctrineModuleHeader module={module} eyebrow="Decision Framework" />
+        <DoctrineModuleHeader module={module} eyebrow="Priority Ladder" />
       </header>
 
       <div

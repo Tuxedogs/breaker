@@ -344,15 +344,14 @@ function getMatrixGridStyle(columnCount: number): CSSProperties {
 }
 
 function MatrixShipThumbnail({ ship }: { ship: Ship }) {
-  const candidates = useMemo(
-    () => getShipThumbnailCandidates(ship),
-    [ship.id, ship.imageAlt, ship.imageSrc, ship.manufacturer, ship.name]
-  )
-  const [candidateIndex, setCandidateIndex] = useState(0)
-
-  useEffect(() => {
-    setCandidateIndex(0)
-  }, [ship.id, ship.imageSrc, ship.name])
+  const candidates = useMemo(() => getShipThumbnailCandidates(ship), [ship])
+  const shipIdentity = `${ship.id}:${ship.imageSrc ?? ''}:${ship.name}`
+  const [candidateState, setCandidateState] = useState({
+    shipIdentity,
+    candidateIndex: 0,
+  })
+  const candidateIndex =
+    candidateState.shipIdentity === shipIdentity ? candidateState.candidateIndex : 0
 
   const current = candidates[Math.min(candidateIndex, candidates.length - 1)]
   const canAdvance = candidateIndex < candidates.length - 1
@@ -365,7 +364,13 @@ function MatrixShipThumbnail({ ship }: { ship: Ship }) {
       loading="lazy"
       onError={() => {
         if (!canAdvance) return
-        setCandidateIndex((value) => Math.min(value + 1, candidates.length - 1))
+        setCandidateState((currentState) => ({
+          shipIdentity,
+          candidateIndex:
+            currentState.shipIdentity === shipIdentity
+              ? Math.min(currentState.candidateIndex + 1, candidates.length - 1)
+              : 1,
+        }))
       }}
     />
   )
@@ -523,6 +528,10 @@ export function ThresholdComparisonMatrix({
   const gridStyle = getMatrixGridStyle(
     isTargetView ? normalizedTargetColumnCount : bodyWeapons.length
   )
+  const effectiveActiveRowId = selectionMode ? null : activeRowId
+  const effectiveActiveColumnId = selectionMode ? null : activeColumnId
+  const effectiveHoverAnchorRowIndex = selectionMode ? null : hoverAnchorRowIndex
+  const effectiveHoverAnchorColumnIndex = selectionMode ? null : hoverAnchorColumnIndex
   const targetRecommendationsByShip = useMemo(() => {
     if (!isTargetView) return new Map<string, WeaponRecommendation[]>()
 
@@ -562,15 +571,6 @@ export function ThresholdComparisonMatrix({
       })
     )
   }, [allWeapons, isTargetView, normalizedTargetColumnCount, targetWeaponFilterPreset, targetWeaponSizeFilter, visibleShips])
-
-  useEffect(() => {
-    if (selectionMode) {
-      setActiveRowId(null)
-      setActiveColumnId(null)
-      setHoverAnchorRowIndex(null)
-      setHoverAnchorColumnIndex(null)
-    }
-  }, [selectionMode])
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)')
@@ -920,7 +920,7 @@ export function ThresholdComparisonMatrix({
                           destinationToneClass,
                           !selectionMode &&
                           selection &&
-                          activeColumnId === selection.slotId
+                          effectiveActiveColumnId === selection.slotId
                             ? 'acm-weapon-header-matrix-axis-active'
                             : '',
                           onboardingHighlight === 'ship-weapon' && columnIndex === 0
@@ -1018,10 +1018,10 @@ export function ThresholdComparisonMatrix({
                   const shipRowMatrixAxisActive =
                     !selectionMode &&
                     !placeholderShip &&
-                    activeRowId === ship.id &&
-                    hoverAnchorColumnIndex !== null &&
+                    effectiveActiveRowId === ship.id &&
+                    effectiveHoverAnchorColumnIndex !== null &&
                     bodyColumns.some(({ columnIndex, placeholderWeapon }) => {
-                      if (columnIndex > hoverAnchorColumnIndex) return false
+                      if (columnIndex > effectiveHoverAnchorColumnIndex) return false
                       const placeholderCell =
                         placeholderShip || (!isTargetMode && placeholderWeapon)
                       return !placeholderCell
@@ -1140,19 +1140,19 @@ export function ThresholdComparisonMatrix({
                               : model.shieldsOff
                             : null
                         const rowSegmentActive =
-                          activeRowId === ship.id &&
+                          effectiveActiveRowId === ship.id &&
                           !placeholderShip &&
                           !selectionMode &&
                           !placeholderCell &&
-                          hoverAnchorColumnIndex !== null &&
-                          columnIndex <= hoverAnchorColumnIndex
+                          effectiveHoverAnchorColumnIndex !== null &&
+                          columnIndex <= effectiveHoverAnchorColumnIndex
                         const columnSegmentActive =
                           !!selection &&
-                          activeColumnId === selection.slotId &&
+                          effectiveActiveColumnId === selection.slotId &&
                           !placeholderCell &&
                           !selectionMode &&
-                          hoverAnchorRowIndex !== null &&
-                          rowIndex <= hoverAnchorRowIndex
+                          effectiveHoverAnchorRowIndex !== null &&
+                          rowIndex <= effectiveHoverAnchorRowIndex
                         const shieldBlocked =
                           !isTargetMode &&
                           shieldMode === 'up' &&

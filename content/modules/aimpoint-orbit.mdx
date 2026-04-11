@@ -1,0 +1,44 @@
+---
+id: "aimpoint-orbit"
+title: "Aimpoint Orbit"
+type: "module"
+status: "validated"
+moduleType: "concept"
+owner: "Tux"
+summary: "Close-range geometry concept for holding an aft pressure window on capital targets."
+validatedDate: "2026-02-26"
+tags: ["orbit", "positioning", "pilot", "anti-cap"]
+ships: ["perseus"]
+roles: ["pilot"]
+enemies: ["capital"]
+prerequisites: []
+relatedModuleIds: ["component-sniping", "anti-cap-target-triage", "perseus-engagement-ranges"]
+---
+
+<div className="dm-inline-video">
+  <div className="dm-inline-video-frame">
+    <video src="/images/video/percy-position.mp4" preload="metadata" controls playsInline />
+  </div>
+  <p className="dm-inline-video-caption">Relative geometry clip</p>
+</div>
+
+## Core Idea
+
+Aimpoint orbit is the pilot's geometry job. The goal is to stay aft of the target,
+hold a stable angle on the intended subsystem, and avoid movement that breaks gunner
+tracking windows.
+
+## What Good Looks Like
+
+- The target remains in a predictable firing lane for your gunners.
+- Your nose stays disciplined around the intended component or quadrant.
+- Thrust corrections are deliberate and small instead of reactive and sweeping.
+
+## Common Breaks
+
+- Oversteering to chase the target's hull instead of preserving the slot.
+- Lateral thrust corrections that mask turret shots.
+- Boosting without a purpose and collapsing the range too fast.
+
+> This concept is about geometry control. Target selection still belongs to the
+> crew and should flow from Component Sniping or higher-level target triage.

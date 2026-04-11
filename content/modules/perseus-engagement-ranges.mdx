@@ -1,27 +1,29 @@
 ---
 id: "perseus-engagement-ranges"
-title: "Perseus Engagement Ranges"
+title: "Engagement Ranges"
 type: "module"
 status: "validated"
-moduleType: "flying"
+moduleType: "diagram"
 owner: "Tux"
-intent: "Maintain range discipline, ensuring main battery uptime."
-summary: "Power Projection profile for Main Battery and Stalker V torpedoes."
-videoSrc: "/images/video/percy-position.mp4"
-videoLabel: "Perseus relative geometry clip"
-lastValidated: "2026-02-26"
-tags: ["perseus", "pilot", "range"]
+summary: "Perseus canonical range-band reference for main battery pressure and Stalker V torpedo employment."
+validatedDate: "2026-02-26"
+tags: ["perseus", "range", "pilot", "gunner"]
 ships: ["perseus"]
-roles: ["pilot"]
+roles: ["pilot", "gunner"]
 enemies: ["capital"]
-maps: []
-powerProjection: ["Main Battery: Optimal 0.5-1.2 km", "Main Battery: Degraded 1.2-2.0 km", "Main Battery: Maximum 2.0-5.6 km", "Torpedo: Stalker V 2-30 km"]
-useWhen: ["Preparing first commit.", "Re-entering after repair cycle.", "Managing power projection against anti-cap targets."]
-steps: ["Stage at long approach distance before full commit.", "Attempt to utilize Drop strategy with fleetmates or scout.", "If unable to drop, perform standard nav merge.", "Use torpedoes liberally from ranges beyond 2 km.", "Gunners hold fire until clear solutions are acquired via ranging and delta.", "Use main thrusters extensively for changes in vector and velocity as required.", "Maintain awareness of incoming damage, then extend or hold position accordingly."]
-failureModes: ["Starving boost, causing loss of position which is critical in Aimpoint Orbiting maneuvers.", "Holding ineffective ranges, guns overheating when entering optimal.", "No pilot callouts when crossing critical range bands."]
-validation: ["Crew can state range requests band on demand.", "Damage throughput remains stable during mid-range pressure.", "Crew can state current range band or request respositioning on demand.", "Effective fire on target."]
 prerequisites: ["map/perseus-deck-map"]
-relatedModuleIds: ["perseus-aimpoint-orbit", "perseus-recovery-cycle"]
+relatedModuleIds: ["aimpoint-orbit", "multicrew-recovery-cycle"]
+caption: "One canonical image defines the operating bands: hold outside main-battery waste, commit through degraded, and preserve the optimal gun window whenever the ship can safely stay in it."
+assetPath: "/images/diagrams/perseus-engagement-range-bands.svg"
+legend:
+  - color: rgb(94 234 212)
+    label: Optimal main battery band
+  - color: rgb(251 191 36)
+    label: Degraded but usable gun band
+  - color: rgb(248 113 113)
+    label: Inefficient gun band
+  - color: rgb(148 163 184)
+    label: Torpedo employment envelope
 ---
 
-Coasting in decoupled, try it
+The image above is the single source of truth for Perseus range calls.

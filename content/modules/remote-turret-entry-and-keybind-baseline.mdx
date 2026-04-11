@@ -1,24 +1,33 @@
 ---
 id: "remote-turret-entry-and-keybind-baseline"
-title: "Remote Turret Entry and Keybind Baseline"
+title: "Remote Turret Entry"
 type: "module"
 status: "validated"
-moduleType: "manning"
+moduleType: "procedure"
 owner: "Tux"
-intent: "Ensure all personnel can enter remote turrets quickly and confirm the keybind location before combat."
-summary: "Universal baseline for entering remote turret stations and validating keybind reference access."
-lastValidated: "2026-03-05"
-tags: ["turret", "remote", "keybind", "crew"]
+summary: "Universal procedure for confirming turret access, seat-entry binds, and emergency exit readiness before combat."
+validatedDate: "2026-03-05"
+tags: ["turret", "remote", "entry", "crew"]
 ships: []
 roles: ["pilot", "gunner", "engineer"]
 enemies: []
-maps: []
-useWhen: ["Prior to entering ships that have remote turrets as crew", "Crew role swaps during live operations.", "After keybind resets or profile changes."]
-steps: ["Move to the assigned remote turret station and confirm seat prompt interaction is working or if keybind is required.", "Set Keybind Vehicle - Seats and Operator Modes: Enter Remote Turret 1.", "Enter the turret, verify weapon control and camera movement response."]
-failureModes: ["Crew cannot enter assigned turret due to missing or conflicting keybind.", "Operator enters turret but cannot quickly exit for emergency handoff.", "Different keybind baselines across crew create avoidable delays."]
-validation: ["All crew can easily access any remote turrets."]
 prerequisites: ["keybind/turret-bind-baseline"]
 relatedModuleIds: ["turret-keybind-baseline"]
+useWhen:
+  - Prior to boarding ships with remote turrets
+  - Crew role swaps during live operations
+  - After keybind resets or profile changes
+steps:
+  - label: Confirm the assigned station
+    detail: Move to the correct remote turret station and verify the interaction prompt or seat workflow.
+  - label: Validate seat-entry binds
+    detail: Confirm the crew member has the required remote turret entry bind on the intended seat index.
+  - label: Test the turret loop
+    detail: Enter the turret, verify camera and weapon response, then confirm the emergency exit bind still works.
+failureModes:
+  - Crew cannot enter the assigned turret because the entry bind is missing or conflicting
+  - Operator can enter the turret but cannot quickly exit for handoff or survival
+  - Different baselines across the crew create avoidable delays during launch
 ---
 
 Use this as the minimum readiness gate before assigning live turret responsibilities.

@@ -12,6 +12,7 @@ type DoctrineFilterBarProps = {
   options: FilterOptionSet;
   onChange: (key: keyof ModuleFilters, value: string) => void;
   onClear?: () => void;
+  kicker?: string;
   title?: string;
   description?: string;
 };
@@ -58,6 +59,7 @@ export default function DoctrineFilterBar({
   options,
   onChange,
   onClear,
+  kicker = "Doctrine Modules",
   title = "Global Module Filters",
   description = "Ship, role, enemy, and status.",
 }: DoctrineFilterBarProps) {
@@ -65,6 +67,7 @@ export default function DoctrineFilterBar({
     <section className="filter-doctrine">
       <div className="filter-head">
         <div className="filter-head-copy">
+          <p className="filter-head-kicker">{kicker}</p>
           <h2 className="filter-head-title">{title}</h2>
           <p className="filter-head-description">{description}</p>
         </div>

@@ -1,0 +1,49 @@
+---
+id: "multicrew-recovery-cycle"
+title: "Multicrew Recovery Cycle"
+type: "module"
+status: "review"
+moduleType: "framework"
+owner: "Doctrine Team"
+summary: "Priority ladder for resetting any damaged multicrew ship without abandoning the fight too early or recommitting too soon."
+validatedDate: "2026-02-20"
+tags: ["multicrew", "recovery", "pilot", "engineer"]
+ships: []
+roles: ["pilot", "gunner", "engineer"]
+enemies: []
+prerequisites: []
+relatedModuleIds: ["damage-control-priority-ladder", "shield-face-management", "signature-management"]
+question: "What gets restored before a multicrew ship recommits?"
+criteria:
+  - label: Exit the kill lane
+    weight: high
+    description: Survive first. Pilot breaks line of fire and stops avoidable follow-on damage.
+  - label: Restore command and movement
+    weight: high
+    description: Recover flight control, comms clarity, and any mobility-critical systems before damage output.
+  - label: Recover survivability
+    weight: med
+    description: Stabilize shields, fire state, and engineering posture so the ship can absorb the next exchange.
+  - label: Restore weapons by mission value
+    weight: med
+    description: Bring back the systems required for the next intended task, not every damaged subsystem.
+  - label: Recommit only on crew confirmation
+    weight: high
+    description: Pilot, gunners, and engineer confirm readiness before the ship turns back in.
+matrix:
+  - condition: Still inside concentrated fire
+    action: Extend farther. Recovery does not start until the ship can stop bleeding.
+  - condition: Mobility degraded
+    action: Restore escape and orientation control before weapon systems.
+  - condition: Weapons degraded but survivability stable
+    action: Recover the minimum weapon package needed for the next task.
+  - condition: Crew status unclear
+    action: Hold outside the fight and force a readiness check before recommit.
+output:
+  - label: Recovery state
+    description: Crew can state whether the ship is extending, stabilizing, or ready.
+  - label: Recommit gate
+    description: The ship turns back in only after explicit cross-crew confirmation.
+---
+
+This is a multicrew discipline rule, not a Perseus-only emergency script.

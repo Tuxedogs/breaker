@@ -37,10 +37,10 @@ const shipItems: FrameworkItem[] = [
 ];
 
 const systemItems: FrameworkItem[] = [
-  { label: "Sub-Targeting", to: "/systems/sub-targeting", glyph: "TG" },
+  { label: "Sub-Targeting", to: "/module/sub-targeting", glyph: "TG" },
   {
-    label: "Turret Keybinds",
-    to: "/systems/turret-keybinds",
+    label: "Turret Keybind Baseline",
+    to: "/module/turret-keybind-baseline",
     glyph: "KB",
   },
   { label: "Additional Settings & Binds", to: "/systems/additional-settings-binds", glyph: "AD" },
@@ -50,7 +50,7 @@ const systemItems: FrameworkItem[] = [
 ];
 
 const antiCapItems: FrameworkItem[] = [
-  { label: "Component Sniping", to: "/anti-cap/component-sniping", glyph: "CS" },
+  { label: "Component Sniping", to: "/module/component-sniping", glyph: "CS" },
 ];
 
 function FrameworkCard({
@@ -137,7 +137,7 @@ export default function DoctrineFirstFramework() {
           title="SYSTEMS"
           subtitle="Procedures & Operations"
           ctaLabel="Enter Systems"
-          ctaTo="/systems/sub-targeting"
+          ctaTo="/module/sub-targeting"
           items={systemItems}
           accentClass="systems"
         />
@@ -153,7 +153,7 @@ export default function DoctrineFirstFramework() {
           title="STRATEGY"
           subtitle="Application."
           ctaLabel="Enter Anti-Cap"
-          ctaTo="/anti-cap/component-sniping"
+          ctaTo="/module/component-sniping"
           items={antiCapItems}
           accentClass="systems"
         />

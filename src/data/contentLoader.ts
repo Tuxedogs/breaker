@@ -86,11 +86,7 @@ function parseValue(rawValue: string, filePath: string, key: string): unknown {
 // Parse a YAML block sequence into an array of strings or objects.
 // Input: lines already known to be indented block content.
 // Each "- " line starts a new item; subsequent deeper lines are object fields.
-function parseYamlBlockSequence(
-  blockLines: string[],
-  filePath: string,
-  _key: string
-): unknown[] {
+function parseYamlBlockSequence(blockLines: string[]): unknown[] {
   const items: unknown[] = [];
   let currentObj: Record<string, string> | null = null;
 
@@ -197,7 +193,7 @@ export function parseMdxFile(rawContent: unknown, filePath: string): ParsedMdx {
       } else {
         const first = nonEmpty[0].trimStart();
         if (first.startsWith("- ") || first === "-") {
-          frontmatter[key] = parseYamlBlockSequence(blockLines, filePath, key);
+          frontmatter[key] = parseYamlBlockSequence(blockLines);
         } else {
           throw new Error(
             `[content] ${filePath} unsupported block value type for "${key}" — only sequence blocks (- item) are supported`

@@ -13,8 +13,6 @@ import ShipHubPage from "./pages/ShipHubPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
 import OnboardingPage from "./pages/systems/OnboardingPage";
-import SubTargetingPage from "./pages/systems/SubTargetingPage";
-import TurretKeybindsPage from "./pages/systems/TurretKeybindsPage";
 import TraditionalModulePage from "./pages/TraditionalModulePage";
 import WipPage from "./pages/WipPage";
 import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
@@ -49,12 +47,12 @@ export default function App() {
 
           <Route path="ships/:slug" element={<ShipHubPage />} />
 
-          <Route path="systems/sub-targeting" element={<SubTargetingPage />} />
-          <Route path="systems/turret-keybinds" element={<TurretKeybindsPage />} />
+          <Route path="systems/sub-targeting" element={<Navigate to="/module/sub-targeting" replace />} />
+          <Route path="systems/turret-keybinds" element={<Navigate to="/module/turret-keybind-baseline" replace />} />
           <Route path="systems/additional-settings-binds" element={<AdditionalSettingsPage />} />
           <Route
             path="systems/turret-keybinds/additional"
-            element={<Navigate to="/systems/additional-settings-binds" replace />}
+            element={<Navigate to="/module/turret-keybind-baseline" replace />}
           />
           <Route path="systems/gunnery-with-luna" element={<GunneryWithLunaPage />} />
           <Route path="systems/communications" element={<TraditionalModulePage />} />
@@ -69,7 +67,7 @@ export default function App() {
           <Route path="wip/performance" element={<WipPage section="Systems" title="Performance" />} />
           <Route
             path="anti-cap/component-sniping"
-            element={<WipPage section="Anti-Cap" title="Component Sniping" />}
+            element={<Navigate to="/module/component-sniping" replace />}
           />
 
           <Route path="*" element={<Navigate to="/" replace />} />
