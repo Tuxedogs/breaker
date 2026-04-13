@@ -22,10 +22,6 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
         style={hasSidebar ? undefined : { gridTemplateColumns: "1fr" }}
       >
         <div className="priority-main">
-          {module.question ? (
-            <div className="priority-question">{module.question}</div>
-          ) : null}
-
           {module.criteria && module.criteria.length > 0 ? (
             <>
               <span className="dm-section-label dm-section-label--padded">
@@ -71,7 +67,6 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
           <aside className="priority-sidebar">
             {module.matrix && module.matrix.length > 0 ? (
               <div className="dm-sidebar-block">
-                <p className="dm-sidebar-title">Decision Matrix</p>
                 <table className="dm-matrix-table">
                   <thead>
                     <tr>
@@ -93,7 +88,6 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
 
             {module.output && module.output.length > 0 ? (
               <div className="dm-sidebar-block dm-sidebar-block--info">
-                <p className="dm-sidebar-title">Outputs</p>
                 <div className="dm-sidebar-items">
                   {module.output.map((item, i) => (
                     <div key={i} className="dm-sidebar-item">

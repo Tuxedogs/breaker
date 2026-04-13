@@ -5,8 +5,9 @@ export default function AppShell() {
   const location = useLocation();
   const isMapsRoute = location.pathname.startsWith("/maps");
   const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
+  const isGunneryRoute = location.pathname.startsWith("/tools/gunnery");
 
-  const mainClassName = isAlphaThresholdRoute
+  const mainClassName = (isAlphaThresholdRoute || isGunneryRoute)
     ? "flex min-h-screen w-full flex-col pt-12"
     : isMapsRoute
       ? "flex h-screen w-full flex-col overflow-hidden px-0 pb-0"

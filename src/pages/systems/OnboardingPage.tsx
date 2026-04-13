@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
 
 type GroupKey = "setup" | "ingame" | "crew" | "doc";
 
@@ -18,7 +17,6 @@ const sections = [
   { id: "staging", label: "Staging" },
   { id: "opsflow", label: "Ops Flow" },
   { id: "comms", label: "Comms" },
-  { id: "checklist", label: "Checklist" },
 ] as const;
 
 const checklistItems: ChecklistItem[] = [
@@ -32,18 +30,12 @@ const checklistItems: ChecklistItem[] = [
   { id: "c8", label: "Identify Orgmates that can help you, it's rewarding to collaborate", group: "ingame" },
   { id: "c10", label: "How to Attended a HWLR led introductory session", group: "crew" },
   { id: "c11", label: "Resource gathering/Crafting/Materials Sourcing activity", group: "crew" },
-  
+
   { id: "c12", label: "Crewed or Piloted a multi-crew combat ship", group: "doc" },
   { id: "c13", label: "Understanding how to use Framework Routing page if needed", group: "doc" },
   { id: "c14", label: "Practice standard callout format on comms", group: "doc" },
 ];
 
-const groups: Array<{ key: GroupKey; title: string; accentClass: string }> = [
-  { key: "setup", title: "Setup & Access", accentClass: "bg-cyan-300/85" },
-  { key: "ingame", title: "First Steps In-Game", accentClass: "bg-amber-300/85" },
-  { key: "crew", title: "Crew Readiness", accentClass: "bg-violet-300/85" },
-  { key: "doc", title: "Doctrine Basics", accentClass: "bg-emerald-300/85" },
-];
 
 const basicsCards = [
   {
@@ -113,7 +105,6 @@ export default function OnboardingPage() {
 
   const doneCount = useMemo(() => checklistItems.filter((item) => checked[item.id]).length, [checked]);
   const progress = Math.round((doneCount / checklistItems.length) * 100);
-  const isComplete = doneCount === checklistItems.length;
 
   function toggle(id: string) {
     setChecked((prev) => {
@@ -131,10 +122,7 @@ export default function OnboardingPage() {
           <nav className="mt-1.5">
             <ul className="space-y-px">
               {sections.map((section, idx) => (
-                <li
-                  key={section.id}
-                  className={section.id === "checklist" ? "onboarding-side-item onboarding-side-item-checklist" : "onboarding-side-item"}
-                >
+                <li key={section.id} className="onboarding-side-item">
                   <a href={`#${section.id}`} className="onboarding-side-link">
                     <span className="onboarding-side-num">{String(idx + 1).padStart(2, "0")}</span>
                     <span>{section.label}</span>
@@ -184,12 +172,12 @@ export default function OnboardingPage() {
               <div>
                 <p className="title-font text-xs uppercase tracking-[0.16em] text-cyan-100/70">Sons of Ares - Active Roster</p>
                 <p className="mt-2 text-sm text-slate-200/85">
-                  The Sons of Ares operate in a grey area and have <span className="text-red-500 font-bold">very few in game restrictions.</span> 
+                  The Sons of Ares operate in a grey area and have <span className="text-red-500 font-bold">very few in game restrictions.</span>
               </p>
                 <p className="mt-2 text-sm text-slate-200/85">The most common activity you will find us doing is maintaining a flexible roaming fleet, allowing for freedom between activities. Scouting around active areas is a primary source of content for the Org.</p>
-              
+
                 <p className="mt-2 text-sm text-slate-200/85">
-                  [LEGN] ranking and above are individuals that train together, stage together, and fight together. Centurions 
+                  [LEGN] ranking and above are individuals that train together, stage together, and fight together. Centurions
                   Read this briefing, run the checklist, and get yourself staged. We&apos;ll handle the rest.
                 </p>
               </div>
@@ -218,7 +206,7 @@ export default function OnboardingPage() {
                       <div className="onboarding-rank-cell">
                         <span>Prospect</span>
                         <span className="onboarding-rank-pips new">
-                     
+
                         </span>
                       </div>
                     </td>
@@ -304,7 +292,7 @@ export default function OnboardingPage() {
                     <td>Op planning, Training & Doctrine Implementation</td>
                     <td>Appointed by leadership</td>
                   </tr>
-                    
+
                   <tr>
                     <td>
                       <div className="onboarding-rank-cell">
@@ -313,7 +301,7 @@ export default function OnboardingPage() {
                           <i className="filled" />
                           <i className="filled" />
                           <i className="filled" />
-                          <i className="filled" />                          
+                          <i className="filled" />
                           <i className="filled" />
 
                         </span>
@@ -326,7 +314,7 @@ export default function OnboardingPage() {
                     <td>Appointed by leadership</td>
                   </tr>
                   {/* Future Ranks - maybe specialty badges instead? */}
-                  <tr> 
+                  <tr>
                     <td>
                       <div className="onboarding-rank-cell mt-3">
                         <span></span>
@@ -476,70 +464,9 @@ export default function OnboardingPage() {
                 <div className="onboarding-callout-line"><strong>What:</strong> Enemy ships. An Arrow and Hornet</div>
                 <div className="onboarding-callout-line"><strong>Where:</strong> Bearing/Landmark, Altitude, Range</div>
                 <div className="onboarding-callout-line"><strong>Percieved Intent:</strong> Engaging, Burning out, relative delta.</div>
-                
+
               </div>
               <div className="title-font text-sm text-slate-300/100 mt-4"><strong></strong> <span className="font-bold text-cyan-500">Tux</span> has two incoming, <span className="font-bold text-red-700">Mish</span> and <span className="font-bold text-red-700">Omen</span>. <span className="text-orange-500">Hornet, Arrow</span>, towards <span className="font-bold text-slate-500">Crusader</span>, <span className="font-bold text-blue-700">High</span> at <span className="font-bold text-slate-500">14km</span>. <span className="text-red-700">Positive Delta.</span></div>
-            </div>
-          </section>
-
-          <section id="checklist" className="onboarding-panel">
-            <p className="onboarding-eyebrow">07 - Checklist</p>
-            <h2 className="surface-title-lg mt-2">Milestone Tracker</h2>
-            <p className="mt-2 text-sm text-slate-300/80">
-              Work through these before your first real op. Tick them off as you go - progress saves in your browser.
-            </p>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {groups.map((group) => {
-                const items = checklistItems.filter((item) => item.group === group.key);
-                const groupDone = items.filter((item) => checked[item.id]).length;
-                return (
-                  <article key={group.key} className="onboarding-check-group">
-                    <div className="mb-2 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className={`h-2.5 w-2.5 rounded-full ${group.accentClass}`} />
-                        <h3 className="title-font text-sm text-cyan-100">{group.title}</h3>
-                      </div>
-                      <span className="text-xs text-slate-300/75">
-                        {groupDone}/{items.length}
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {items.map((item) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => toggle(item.id)}
-                          className={`onboarding-check-item ${checked[item.id] ? "done" : ""}`}
-                        >
-                          <span className="onboarding-check-box">{checked[item.id] ? "\u2713" : ""}</span>
-                          <span>{item.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-
-            <div className="mt-5">
-              {isComplete ? (
-                <div className="rounded-xl border border-emerald-300/35 bg-emerald-400/10 p-4">
-                  <p className="title-font text-sm text-emerald-100">Onboarding Complete - Welcome to the Crew.</p>
-                  <p className="mt-1 text-sm text-emerald-50/85">
-                    While optional, congrats and thanks for completing the onboarding checklist. You're all set to jump in and find content with the org. Welcome aboard.
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <Link
-                      to="/framework"
-                      className="rounded-md border border-emerald-200/45 bg-emerald-300/15 px-4 py-2 text-xs uppercase tracking-[0.15em] text-emerald-100"
-                    >
-                      Enter Framework
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <p className="text-sm text-slate-300/75">Checklist is for those who want to track progress and is not mandatory.</p>
-              )}
             </div>
           </section>
         </main>

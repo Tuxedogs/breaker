@@ -7,7 +7,13 @@ const shipItems = [
   { to: "/ships/idris", label: "Idris" },
 ];
 
-type MenuKey = "ships";
+const toolItems = [
+  { to: "/tools/alpha-threshold", label: "Weapons Analysis" },
+  { to: "/tools/gunnery",         label: "Gunnery" },
+  { to: "/maps",                  label: "Maps" },
+];
+
+type MenuKey = "ships" | "tools";
 
 function HomeIcon() {
   return (
@@ -52,8 +58,9 @@ export default function AppNav() {
   const closeTimerRef = useRef<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSectionOpen, setMobileSectionOpen] = useState<MenuKey | null>(null);
-  const isMapsRoute = location.pathname.startsWith("/maps");
-  const isAlphaThresholdRoute = location.pathname.startsWith("/tools/alpha-threshold");
+  const isToolsRoute =
+    location.pathname.startsWith("/tools/") ||
+    location.pathname.startsWith("/maps");
   const isShipsRoute = location.pathname.startsWith("/ships");
   const isHomeRoute = location.pathname === "/";
   const isFrameworkNavActive =
@@ -123,17 +130,51 @@ export default function AppNav() {
 
           <span className="site-toolbar-divider" aria-hidden="true" />
 
-          <div className="site-toolbar-group">
-            <NavLink
-              to="/tools/alpha-threshold"
-              onClick={closeAllMenus}
+          <div
+            className="relative"
+            onMouseEnter={() => openDesktopMenu("tools")}
+            onMouseLeave={closeDesktopMenuSoon}
+          >
+            <div className="site-toolbar-group">
+              <button
+                type="button"
+                className={[
+                  "site-toolbar-link",
+                  "site-toolbar-link--menu",
+                  desktopMenu === "tools" || isToolsRoute ? "site-toolbar-link--alpha-active" : "",
+                ].join(" ")}
+                aria-expanded={desktopMenu === "tools"}
+                aria-controls="desktop-tools-menu"
+                onClick={() => toggleDesktopMenu("tools")}
+              >
+                Tools
+                <ChevronIcon expanded={desktopMenu === "tools"} />
+              </button>
+            </div>
+
+            <div
+              id="desktop-tools-menu"
               className={[
-                "site-toolbar-link",
-                isAlphaThresholdRoute ? "site-toolbar-link--alpha-active" : "",
+                "site-toolbar-menu-panel",
+                desktopMenu === "tools" ? "site-toolbar-menu-panel--open" : "",
               ].join(" ")}
             >
-              Weapons Analysis
-            </NavLink>
+              {toolItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  onClick={closeAllMenus}
+                  className={({ isActive }) =>
+                    [
+                      "site-toolbar-menu-link",
+                      isActive ? "site-toolbar-menu-link--active" : "",
+                    ].join(" ")
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
           </div>
 
           <span className="site-toolbar-divider" aria-hidden="true" />
@@ -148,21 +189,6 @@ export default function AppNav() {
               ].join(" ")}
             >
               Framework
-            </NavLink>
-          </div>
-
-          <span className="site-toolbar-divider" aria-hidden="true" />
-
-          <div className="site-toolbar-group">
-            <NavLink
-              to="/maps"
-              onClick={closeAllMenus}
-              className={[
-                "site-toolbar-link",
-                isMapsRoute ? "site-toolbar-link--maps-active" : "",
-              ].join(" ")}
-            >
-              Maps
             </NavLink>
           </div>
 
@@ -257,16 +283,45 @@ export default function AppNav() {
           ].join(" ")}
         >
           <div className="site-toolbar-mobile-panel">
-            <NavLink
-              to="/tools/alpha-threshold"
-              onClick={closeAllMenus}
-              className={[
-                "site-toolbar-mobile-link",
-                isAlphaThresholdRoute ? "site-toolbar-mobile-link--alpha-active" : "",
-              ].join(" ")}
-            >
-              Weapons Analysis
-            </NavLink>
+            <div className="site-toolbar-mobile-section">
+              <button
+                type="button"
+                className={[
+                  "site-toolbar-mobile-link",
+                  "site-toolbar-mobile-link--menu",
+                  isToolsRoute ? "site-toolbar-mobile-link--alpha-active" : "",
+                ].join(" ")}
+                aria-expanded={mobileSectionOpen === "tools"}
+                aria-controls="mobile-tools-menu"
+                onClick={() => toggleMobileSection("tools")}
+              >
+                Tools
+                <ChevronIcon expanded={mobileSectionOpen === "tools"} />
+              </button>
+              <div
+                id="mobile-tools-menu"
+                className={[
+                  "overflow-hidden transition-[max-height] duration-200",
+                  mobileSectionOpen === "tools" ? "max-h-64" : "max-h-0",
+                ].join(" ")}
+              >
+                {toolItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    onClick={closeAllMenus}
+                    className={({ isActive }) =>
+                      [
+                        "site-toolbar-mobile-submenu-link",
+                        isActive ? "site-toolbar-mobile-submenu-link--active" : "",
+                      ].join(" ")
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
 
             <NavLink
               to="/framework"
@@ -277,17 +332,6 @@ export default function AppNav() {
               ].join(" ")}
             >
               Framework
-            </NavLink>
-
-            <NavLink
-              to="/maps"
-              onClick={closeAllMenus}
-              className={[
-                "site-toolbar-mobile-link",
-                isMapsRoute ? "site-toolbar-mobile-link--maps-active" : "",
-              ].join(" ")}
-            >
-              Maps
             </NavLink>
 
             <div className="site-toolbar-mobile-section">
