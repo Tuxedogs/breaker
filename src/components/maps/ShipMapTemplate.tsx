@@ -170,11 +170,11 @@ const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
     key: "ship-components",
     title: "Ship Components",
     items: [
-      { key: "power", label: "Power Plants", color: "#f59e0b", Icon: PowerPlantIcon, annotationIds: ["power-plant-1", "power-plant-2"] },
-      { key: "shield", label: "Shield Generators", color: "#06a7bd", Icon: ShieldGeneratorIcon, annotationIds: ["shield-generator-1", "shield-generator-2"] },
-      { key: "quantum", label: "Quantum Drive", color: "#911696", Icon: QuantumDriveIcon, annotationIds: ["qt-drive"] },
-      { key: "radar", label: "Radar", color: "#1ed10e", Icon: RadarIcon, annotationIds: ["radar"] },
-      { key: "cooler", label: "Coolers", color: "#93c5fd", Icon: CoolerIcon, annotationIds: ["cooler-1", "cooler-2"] },
+      { key: "power", label: "Power Plants", color: "var(--component-power)", Icon: PowerPlantIcon, annotationIds: ["power-plant-1", "power-plant-2"] },
+      { key: "shield", label: "Shield Generators", color: "var(--component-shield)", Icon: ShieldGeneratorIcon, annotationIds: ["shield-generator-1", "shield-generator-2"] },
+      { key: "quantum", label: "Quantum Drive", color: "var(--component-qt)", Icon: QuantumDriveIcon, annotationIds: ["qt-drive"] },
+      { key: "radar", label: "Radar", color: "var(--component-radar)", Icon: RadarIcon, annotationIds: ["radar"] },
+      { key: "cooler", label: "Coolers", color: "var(--component-cooler)", Icon: CoolerIcon, annotationIds: ["cooler-1", "cooler-2"] },
     ],
   },
   {
@@ -182,8 +182,8 @@ const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
     title: "Crew Stations",
     items: [
       { key: "crew-quarters", label: "Crew Quarters", color: "#e2e8f0", Icon: CrewQuartersIcon, annotationIds: ["crew-quarters-section"] },
-      { key: "main-turret", label: "Main Turret", color: "#f50b0b", Icon: TurretStationIcon, annotationIds: ["gun-01"] },
-      { key: "torpedo-terminal", label: "Torpedo Terminal", color: "#f50b0b", Icon: TorpedoStationIcon, annotationIds: ["torpedo-operator-terminal"] },
+      { key: "main-turret", label: "Main Turret", color: "var(--component-gun)", Icon: TurretStationIcon, annotationIds: ["gun-01"] },
+      { key: "torpedo-terminal", label: "Torpedo Terminal", color: "var(--component-gun)", Icon: TorpedoStationIcon, annotationIds: ["torpedo-operator-terminal"] },
       { key: "engineer-terminal", label: "Engineer Terminals", color: "#67a1f9", Icon: EngineeringTerminalIcon, annotationIds: ["engineer-terminal-1", "engineer-terminal-2"] },
       { key: "armory", label: "Armory", color: "#fca5a5", Icon: ArmoryIcon, annotationIds: ["armory-section"] },
     ],
@@ -192,8 +192,8 @@ const DECK_MARKER_LEGEND: readonly DeckMarkerLegendSection[] = [
     key: "navigation",
     title: "Navigation",
     items: [
-      { key: "elevators", label: "Elevator", color: "#01ffd5", Icon: ElevatorIcon, annotationIds: ["elevator"] },
-      { key: "ladders", label: "Ladders", color: "#01ffd5", Icon: LadderIcon, annotationIds: ["main-ladder", "secondary-ladder-port", "secondary-ladder-starboard"] },
+      { key: "elevators", label: "Elevator", color: "var(--component-navigation)", Icon: ElevatorIcon, annotationIds: ["elevator"] },
+      { key: "ladders", label: "Ladders", color: "var(--component-navigation)", Icon: LadderIcon, annotationIds: ["main-ladder", "secondary-ladder-port", "secondary-ladder-starboard"] },
     ],
   },
 ];

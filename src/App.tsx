@@ -16,6 +16,7 @@ import OnboardingPage from "./pages/systems/OnboardingPage";
 import TraditionalModulePage from "./pages/TraditionalModulePage";
 import WipPage from "./pages/WipPage";
 import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
+import { GunneryToolPage } from "./tools/gunnery";
 
 const ENTRY_STORAGE_KEY = "ares:entered-framework";
 
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
           <Route path="maps" element={<MapsPage />} />
           <Route path="tools/alpha-threshold" element={<AlphaThresholdToolPage />} />
+          <Route path="tools/gunnery" element={<GunneryToolPage />} />
 
           <Route path="ships/:slug" element={<ShipHubPage />} />
 

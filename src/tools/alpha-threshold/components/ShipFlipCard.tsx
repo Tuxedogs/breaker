@@ -70,6 +70,16 @@ export function ShipFlipCard({
               </header>
 
               <div className="acm-ship-flip-thresholds-wrap">
+                <div className="acm-tas-thresholds">
+                  <div className="acm-tas-threshold acm-tas-threshold--energy">
+                    <span className="acm-tas-threshold-label">Energy</span>
+                    <span className="acm-tas-threshold-value">{model.energyThreshold}</span>
+                  </div>
+                  <div className="acm-tas-threshold acm-tas-threshold--ballistic">
+                    <span className="acm-tas-threshold-label">Ballistic</span>
+                    <span className="acm-tas-threshold-value">{model.ballisticThreshold}</span>
+                  </div>
+                </div>
                 <div className="acm-ship-flip-threshold-actions">
                   <span className="acm-ship-flip-threshold-action-spacer" aria-hidden="true" />
                   {onClear ? (

@@ -177,8 +177,39 @@
 }
 
 .alpha-threshold-tool .acm-ship-flip-thresholds-wrap {
+  position: relative;
   margin-top: auto;
   padding-top: 0.1rem;
+}
+
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-thresholds {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-threshold {
+  align-items: flex-start;
+  padding: 0 0.6rem 0 0;
+  gap: 0.08rem;
+}
+
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-threshold + .acm-tas-threshold {
+  border-left: none;
+  padding-left: 0.6rem;
+  border-left: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-threshold--energy .acm-tas-threshold-value,
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-threshold--ballistic .acm-tas-threshold-value {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.alpha-threshold-tool .acm-ship-flip-thresholds-wrap .acm-tas-threshold-label {
+  font-size: 0.6rem;
 }
 
 .alpha-threshold-tool .acm-ship-flip-threshold-actions {

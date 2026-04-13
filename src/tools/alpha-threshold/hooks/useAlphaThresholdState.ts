@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getShipThresholdsForSource } from '../data/ships/ships'
 import { getWeaponsForSource } from '../data/weapons/weapons'
 import {
@@ -45,11 +45,9 @@ const LEGACY_STORAGE_KEYS_TO_CLEAR = [
   'alpha-threshold.weapon-analysis-filter',
   'alpha-threshold.filter-chip',
 ] as const
-const DEFAULT_EXAMPLE_SHIP_KEYS = ['ANVL::Paladin', 'RSI::Scorpius', 'RSI::Mantis'] as const
+const DEFAULT_EXAMPLE_SHIP_KEYS = ['MRAI::Guardian_MX'] as const
 const DEFAULT_EXAMPLE_WEAPON_KEYS = [
-  'energy:3:NDB-30',
-  'energy:3:CF-337 Panther',
-  'ballistic:3:Tarantula',
+  'ballistic:3:Tarantula GT-870 Mk 3',
 ] as const
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   {
@@ -63,14 +61,14 @@ const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
     id: 'slot-2',
     operator: 'weapon',
     hardpointSize: 0,
-    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[1],
+    weaponKey: null,
     label: 'Weapon 2',
   },
   {
     id: 'slot-3',
     operator: 'weapon',
     hardpointSize: 0,
-    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[2],
+    weaponKey: null,
     label: 'Weapon 3',
   },
   {
@@ -341,12 +339,8 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     'alpha-threshold.sort',
     'health-desc'
   )
-  const [storedSlots, setSlots] = useLocalStorageState<ComparisonSlot[]>(
-    `alpha-threshold.${matrixMode}.slots`,
-    buildDefaultWeaponSlots()
-  )
-  const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<Array<string | null>>(
-    `alpha-threshold.${matrixMode}.selected-ships`,
+  const [storedSlots, setSlots] = useState<ComparisonSlot[]>(() => buildDefaultWeaponSlots())
+  const [selectedShipNames, setSelectedShipNames] = useState<Array<string | null>>(
     Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => DEFAULT_EXAMPLE_SHIP_KEYS[index] ?? null)
   )
   const [shipSearch, setShipSearch] = useLocalStorageState<string>(

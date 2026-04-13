@@ -95,7 +95,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "Gun 01",
       kind: "Main Turret",
       worldPosition: [0.013,-0.052,-1.42],
-      colorHint: "#f50b0b",
+      colorHint: "#f50b0b", // --component-gun
     },
     {
       id: "engineer-terminal-1",
@@ -113,7 +113,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "TORP TRM",
       kind: "Terminal",
       worldPosition: [0.170,-0.052,-0.785],
-      colorHint: "#f50b0b",
+      colorHint: "#f50b0b", // --component-gun
     },
     {
       id: "power-plant-1",
@@ -122,7 +122,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "PWR",
       kind: "Power",
       worldPosition: [0.318,-0.052,-0.43],
-      colorHint: "#f59e0b",
+      colorHint: "#f59e0b", // --component-power
     },
     {
       id: "cooler-1",
@@ -131,7 +131,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "CLR",
       kind: "Cooler",
       worldPosition: [-0.295, -0.052, -0.42],
-      colorHint: "#93c5fd",
+      colorHint: "#93c5fd", // --component-cooler
     },
     {
       id: "shield-generator-1",
@@ -140,7 +140,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "SHD",
       kind: "Shield",
       worldPosition: [0.108, -0.052, -1.0999],
-      colorHint: "#06a7bd",
+      colorHint: "#06a7bd", // --component-shield
     },
     {
       id: "power-plant-2",
@@ -149,7 +149,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "PWR",
       kind: "Power",
       worldPosition: [0.267, -0.052, 1.526],
-      colorHint: "#f59e0b",
+      colorHint: "#f59e0b", // --component-power
     },
     {
       id: "shield-generator-2",
@@ -158,7 +158,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "Shield",
       kind: "Shield",
       worldPosition: [0.280,-0.052,1.70],
-      colorHint: "#06a7bd",
+      colorHint: "#06a7bd", // --component-shield
     },
     {
       id: "radar",
@@ -167,7 +167,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "RADAR",
       kind: "Radar",
       worldPosition: [0.23,-0.052,1.645],
-      colorHint: "#1ed10e",
+      colorHint: "#1ed10e", // --component-radar
     },
     {
       id: "qt-drive",
@@ -176,7 +176,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "QT",
       kind: "Quantum",
       worldPosition: [0.02,-0.052,1.86],
-      colorHint: "#911696",
+      colorHint: "#911696", // --component-qt
     },
     {
       id: "life-support",
@@ -194,7 +194,7 @@ export const perseusMidDeckAnnotations: PerseusDeckAnnotationConfig = {
       token: "CLR",
       kind: "Cooler",
       worldPosition: [-0.216,-0.052,1.52],
-      colorHint: "#93c5fd",
+      colorHint: "#93c5fd", // --component-cooler
     },
     {
       id: "engineer-terminal-2",
