@@ -28,6 +28,135 @@
     -webkit-backdrop-filter: blur(24px);
   }
 
+  .tool-page-head {
+    --tool-accent: rgb(94 234 212);
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.5rem 3rem;
+    background: var(--card-blue);
+    border: 1px solid rgb(255 255 255 / 0.07);
+  }
+
+  .tool-page-kicker,
+  .tool-section-label {
+    margin: 0;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #708090;
+  }
+
+  .tool-page-title {
+    margin: 0;
+    font-family: "Rajdhani", sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #e8eef4;
+  }
+
+  .tool-page-subtitle {
+    margin: 0;
+    max-width: 48rem;
+    font-family: "Barlow", sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.55;
+    color: #708090;
+  }
+
+  .tool-panel,
+  .tool-info-card {
+    --tool-accent: rgb(94 234 212);
+    position: relative;
+    overflow: hidden;
+    background: var(--card-blue);
+    border: 1px solid rgb(255 255 255 / 0.05);
+    border-radius: 4px;
+  }
+
+  .tool-info-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 2px;
+    background: var(--tool-accent);
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .tool-choice-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .tool-choice-button {
+    --tool-accent: rgb(94 234 212);
+    min-height: 2.75rem;
+    padding: 0.58rem 1rem;
+    border: 1px solid rgb(255 255 255 / 0.06);
+    border-radius: 4px;
+    background: var(--card-blue);
+    font-family: "Rajdhani", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #708090;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .tool-choice-button:hover {
+    border-color: color-mix(in srgb, var(--tool-accent) 42%, rgb(255 255 255 / 0.06));
+    background: var(--card-blue-hover);
+    color: #e8eef4;
+  }
+
+  .tool-choice-button:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--tool-accent) 40%, transparent);
+    outline-offset: 2px;
+  }
+
+  .tool-choice-button.is-active,
+  .tool-choice-button[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--tool-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--tool-accent) 4%, var(--card-blue));
+    color: color-mix(in srgb, var(--tool-accent) 72%, white 18%);
+  }
+
+  .tool-choice-button--compact {
+    min-height: 2.35rem;
+    padding: 0.44rem 0.82rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-family: "Share Tech Mono", monospace;
+  }
+
+  .tool-chip {
+    --tool-chip-color: var(--tool-accent, rgb(94 234 212));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 1.65rem;
+    padding: 0.2rem 0.58rem;
+    border: 1px solid color-mix(in srgb, var(--tool-chip-color) 40%, transparent);
+    border-radius: 4px;
+    background: transparent;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--tool-chip-color) 78%, white 14%);
+  }
+
   .card-head,
   .card-head-sm,
   .card-head-md,
