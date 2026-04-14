@@ -48,12 +48,12 @@ export function ModeRecommender({
     <div className="gun-recommender">
       {/* Inputs */}
       <div className="gun-selector-group">
-        <div className="gun-selector-label">Your Ship Type</div>
-        <div className="gun-option-row">
+        <div className="gun-selector-label tool-section-label">Your Ship Type</div>
+        <div className="gun-option-row tool-choice-row">
           {OPERATOR_TYPES.map(o => (
             <button
               key={o.id}
-              className={`gun-option-btn${operatorType === o.id ? ' is-selected' : ''}`}
+              className={`gun-option-btn tool-choice-button${operatorType === o.id ? ' is-active' : ''}`}
               onClick={() => setOperatorType(operatorType === o.id ? null : o.id)}
             >
               {o.label}
@@ -63,12 +63,12 @@ export function ModeRecommender({
       </div>
 
       <div className="gun-selector-group">
-        <div className="gun-selector-label">Target Type</div>
-        <div className="gun-option-row">
+        <div className="gun-selector-label tool-section-label">Target Type</div>
+        <div className="gun-option-row tool-choice-row">
           {TARGET_TYPES.map(t => (
             <button
               key={t.id}
-              className={`gun-option-btn${targetType === t.id ? ' is-selected' : ''}`}
+              className={`gun-option-btn tool-choice-button${targetType === t.id ? ' is-active' : ''}`}
               onClick={() => setTargetType(targetType === t.id ? null : t.id)}
             >
               {t.label}
@@ -78,12 +78,12 @@ export function ModeRecommender({
       </div>
 
       <div className="gun-selector-group">
-        <div className="gun-selector-label">Range</div>
-        <div className="gun-option-row">
+        <div className="gun-selector-label tool-section-label">Range</div>
+        <div className="gun-option-row tool-choice-row">
           {RANGES.map(r => (
             <button
               key={r.id}
-              className={`gun-option-btn${range === r.id ? ' is-selected' : ''}`}
+              className={`gun-option-btn tool-choice-button${range === r.id ? ' is-active' : ''}`}
               onClick={() => setRange(range === r.id ? null : r.id)}
             >
               {r.label}
@@ -93,12 +93,12 @@ export function ModeRecommender({
       </div>
 
       <div className="gun-selector-group">
-        <div className="gun-selector-label">Target Speed</div>
-        <div className="gun-option-row">
+        <div className="gun-selector-label tool-section-label">Target Speed</div>
+        <div className="gun-option-row tool-choice-row">
           {SPEEDS.map(s => (
             <button
               key={s.id}
-              className={`gun-option-btn${speed === s.id ? ' is-selected' : ''}`}
+              className={`gun-option-btn tool-choice-button${speed === s.id ? ' is-active' : ''}`}
               onClick={() => setSpeed(speed === s.id ? null : s.id)}
             >
               {s.label}
@@ -108,7 +108,7 @@ export function ModeRecommender({
       </div>
 
       {/* Result */}
-      <div className="gun-result">
+      <div className="gun-result tool-panel">
         {!recommendation ? (
           <div className="gun-result-empty">
             Select target type, range, and speed to get a mode recommendation.
@@ -116,10 +116,10 @@ export function ModeRecommender({
         ) : (
           <>
             <div className="gun-result-mode">
-              <span className={`gun-mode-badge ${recommendation.mode.toLowerCase()}`}>
+              <span className={`gun-mode-badge tool-chip ${recommendation.mode.toLowerCase()}`}>
                 {recommendation.mode === 'AM' ? 'Auto Manual' : recommendation.mode === 'PM' ? 'Precision Manual' : 'Fixed'}
               </span>
-              <span className={`gun-confidence-tag ${recommendation.confidence}`}>
+              <span className={`gun-confidence-tag tool-chip ${recommendation.confidence}`}>
                 {recommendation.confidence === 'strong' ? 'Strong match' : 'Moderate'}
               </span>
             </div>
@@ -135,6 +135,7 @@ export function ModeRecommender({
             key={mode.id}
             className={[
               'gun-mode-card',
+              'tool-info-card',
               mode.id.toLowerCase(),
               recommendation?.mode === mode.id ? 'is-recommended' : '',
             ].join(' ').trim()}
@@ -158,7 +159,7 @@ export function ModeRecommender({
 
       {(operatorType || targetType || range || speed) && (
         <button
-          className="gun-option-btn"
+          className="gun-option-btn tool-choice-button"
           style={{ alignSelf: 'flex-start' }}
           onClick={clearRecommender}
         >

@@ -20,11 +20,14 @@ type Props = {
 export function GunnerySectionNav({ active, onChange }: Props) {
   return (
     <nav className="gun-nav">
-      <div className="gun-nav-header">Gunnery</div>
+      <div className="gun-nav-header">
+        <p className="tool-section-label">Tool Sections</p>
+        <span className="gun-nav-title">Gunnery</span>
+      </div>
       {NAV_ITEMS.map(item => (
         <button
           key={item.id}
-          className={`gun-nav-item${active === item.id ? ' is-active' : ''}`}
+          className={`gun-nav-item tool-choice-button${active === item.id ? ' is-active' : ''}`}
           onClick={() => onChange(item.id)}
         >
           <span className="gun-nav-item-dot" />

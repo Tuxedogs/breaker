@@ -4,12 +4,12 @@ type Props = Pick<GunneryState, 'scenarios' | 'activeScenarioId' | 'activeScenar
 
 export function ScenarioSection({ scenarios, activeScenarioId, activeScenario, selectScenario }: Props) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div className="gun-scenario-grid">
+    <div className="gun-section-stack">
+      <div className="gun-scenario-grid tool-choice-row">
         {scenarios.map(s => (
           <button
             key={s.id}
-            className={`gun-scenario-btn${activeScenarioId === s.id ? ' is-active' : ''}`}
+            className={`gun-scenario-btn tool-choice-button${activeScenarioId === s.id ? ' is-active' : ''}`}
             onClick={() => selectScenario(activeScenarioId === s.id ? null : s.id)}
           >
             {s.label}
@@ -18,12 +18,12 @@ export function ScenarioSection({ scenarios, activeScenarioId, activeScenario, s
       </div>
 
       {activeScenario ? (
-        <div className="gun-scenario-display">
+        <div className="gun-scenario-display tool-panel">
           <div className="gun-scenario-meta">
-            <span className={`gun-mode-badge ${activeScenario.recommendedMode.toLowerCase()}`}>
+            <span className={`gun-mode-badge tool-chip ${activeScenario.recommendedMode.toLowerCase()}`}>
               {activeScenario.recommendedMode === 'AM' ? 'Auto Manual' : 'Precision Manual'}
             </span>
-            <span style={{ fontSize: '0.72rem', color: 'rgba(180,200,220,0.45)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <span className="gun-scenario-context tool-section-label">
               {activeScenario.targetType} · {activeScenario.range} · {activeScenario.speed}
             </span>
           </div>
@@ -37,7 +37,7 @@ export function ScenarioSection({ scenarios, activeScenarioId, activeScenario, s
           </div>
         </div>
       ) : (
-        <div className="gun-result">
+        <div className="gun-result tool-panel">
           <div className="gun-result-empty">Select a scenario to see recommended mode and key rules.</div>
         </div>
       )}

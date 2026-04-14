@@ -30,10 +30,11 @@ export function GunneryContentArea({ state }: Props) {
 
   return (
     <div className="gun-content">
-      <div className="gun-section-header">
-        <h1 className="gun-section-title">{meta.title}</h1>
-        <p className="gun-section-sub">{meta.sub}</p>
-      </div>
+      <header className="tool-page-head gun-page-head">
+        <p className="tool-page-kicker">Crew Gunnery Tool</p>
+        <h1 className="tool-page-title">{meta.title}</h1>
+        <p className="tool-page-subtitle">{meta.sub}</p>
+      </header>
 
       {state.activeSection === 'mode-recommender' && (
         <ModeRecommender

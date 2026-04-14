@@ -38,7 +38,7 @@ export type Scenario = {
 
 // ── Sub-targeting ────────────────────────────────────────────────────────────
 
-export type ComponentPriority = 1 | 2 | 3 | 4
+export type ComponentPriority = 1 | 2 | 3 | 4 | 5
 
 // wPx/hPx override the % w/h when set — useful for fixed-size hit zones on flexible containers
 export type ZonePosition = { x: number; y: number; w: number; h: number; wPx?: number; hPx?: number }

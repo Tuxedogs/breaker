@@ -15,6 +15,7 @@ type ConnectionState = {
   svgH: number
   paths: string[]
   dots: Dot[]
+  color: string  // inherits from the active zone's --zone-color
 }
 
 type PctPoint  = { x: number; y: number }
@@ -57,13 +58,14 @@ export function SubTargetSection({
     const el = silhouetteRef.current
     if (!el) return null
     const { width, height } = el.getBoundingClientRect()
-    const x = Math.min(a.x, b.x)
-    const y = Math.min(a.y, b.y)
-    const w = Math.abs(a.x - b.x)
-    const h = Math.abs(a.y - b.y)
+    const tlX = Math.min(a.x, b.x)
+    const tlY = Math.min(a.y, b.y)
+    const w   = Math.abs(a.x - b.x)
+    const h   = Math.abs(a.y - b.y)
+    // x / y are CENTER coordinates — matches the zone data convention
     return {
-      x:   Math.round(x * 10) / 10,
-      y:   Math.round(y * 10) / 10,
+      x:   Math.round((tlX + w / 2) * 10) / 10,
+      y:   Math.round((tlY + h / 2) * 10) / 10,
       w:   Math.round(w * 10) / 10,
       h:   Math.round(h * 10) / 10,
       wPx: Math.round(w / 100 * width),
@@ -161,7 +163,7 @@ export function SubTargetSection({
     paths.push(`M ${right.x} ${right.y} C ${midX} ${right.y} ${midX} ${ry} ${rx} ${ry}`)
     dots.push({ x: rx, y: ry })
 
-    setConnection({ svgW: trainerRect.width, svgH: trainerRect.height, paths, dots })
+    setConnection({ svgW: trainerRect.width, svgH: trainerRect.height, paths, dots, color: activeZone.color })
   }, [activeZoneId, activeView, selectedShipId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function setZoneRef(id: string, el: HTMLButtonElement | null) {
@@ -179,14 +181,14 @@ export function SubTargetSection({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div className="gun-section-stack">
 
       {/* Ship picker */}
-      <div className="gun-ship-picker">
+      <div className="gun-ship-picker tool-choice-row">
         {ships.map(ship => (
           <button
             key={ship.id}
-            className={`gun-ship-btn${selectedShipId === ship.id ? ' is-active' : ''}`}
+            className={`gun-ship-btn tool-choice-button${selectedShipId === ship.id ? ' is-active' : ''}`}
             onClick={() => selectShip(selectedShipId === ship.id ? null : ship.id)}
           >
             {ship.label}
@@ -197,12 +199,12 @@ export function SubTargetSection({
       {selectedShip ? (
         <>
           {/* View selector + debug toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div className="gun-view-selector">
+          <div className="gun-toolbar-row">
+            <div className="gun-view-selector tool-choice-row">
               {selectedShip.viewDefs.map(v => (
                 <button
                   key={v.id}
-                  className={`gun-view-btn${activeView === v.id ? ' is-active' : ''}`}
+                  className={`gun-view-btn tool-choice-button tool-choice-button--compact${activeView === v.id ? ' is-active' : ''}`}
                   onClick={() => { setActiveView(v.id); setActiveZoneId(null) }}
                 >
                   {v.label}
@@ -211,7 +213,7 @@ export function SubTargetSection({
             </div>
 
             <button
-              className={`gun-view-btn${debugMode ? ' is-active' : ''}`}
+              className={`gun-view-btn tool-choice-button tool-choice-button--compact${debugMode ? ' is-active' : ''}`}
               onClick={toggleDebug}
               title="Toggle zone calibration tool"
             >
@@ -232,12 +234,12 @@ export function SubTargetSection({
                 {connection.paths.map((d, i) => (
                   <path
                     key={i} d={d}
-                    stroke="var(--gun-accent)" strokeWidth="1.5"
+                    stroke={connection.color} strokeWidth="1.5"
                     strokeDasharray="5 3" fill="none" opacity="0.7"
                   />
                 ))}
                 {connection.dots.map((dot, i) => (
-                  <circle key={i} cx={dot.x} cy={dot.y} r="3" fill="var(--gun-accent)" opacity="0.9" />
+                  <circle key={i} cx={dot.x} cy={dot.y} r="3" fill={connection.color} opacity="0.9" />
                 ))}
               </svg>
             )}
@@ -302,16 +304,16 @@ export function SubTargetSection({
                 />
               )}
 
-              {/* Frozen drawn box */}
+              {/* Frozen drawn box — centered on drawnBox.x / drawnBox.y */}
               {debugMode && drawnBox && !isDragging && (
                 <div
                   style={{
-                    position: 'absolute',
-                    left:    `${drawnBox.x}%`,
-                    top:     `${drawnBox.y}%`,
-                    width:   `${drawnBox.w}%`,
-                    height:  `${drawnBox.h}%`,
-                    border:  '1px solid var(--gun-accent)',
+                    position:  'absolute',
+                    left:      `calc(${drawnBox.x}% - ${drawnBox.w / 2}%)`,
+                    top:       `calc(${drawnBox.y}% - ${drawnBox.h / 2}%)`,
+                    width:     `${drawnBox.w}%`,
+                    height:    `${drawnBox.h}%`,
+                    border:    '1px solid var(--gun-accent)',
                     background: 'rgba(74, 222, 128, 0.1)',
                     pointerEvents: 'none',
                   }}
@@ -329,33 +331,32 @@ export function SubTargetSection({
             </div>
 
             {/* Zone result / debug panel */}
-            <div ref={resultRef} className="gun-zone-result">
+            <div ref={resultRef} className="gun-zone-result tool-panel">
               {debugMode ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
-                  <div className="gun-diagnosis-block-label">Zone Calibration</div>
+                <div className="gun-debug-stack">
+                  <div className="gun-diagnosis-block-label tool-section-label">Zone Calibration</div>
 
                   {drawnBox && !isDragging ? (
                     <>
-                      <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '0.8rem', lineHeight: 2, color: 'var(--gun-accent)' }}>
-                        x: {drawnBox.x}<br />
-                        y: {drawnBox.y}<br />
-                        w: {drawnBox.w} <span style={{ color: 'rgba(180,200,220,0.4)' }}>({drawnBox.wPx}px)</span><br />
-                        h: {drawnBox.h} <span style={{ color: 'rgba(180,200,220,0.4)' }}>({drawnBox.hPx}px)</span>
+                      <div className="gun-debug-readout">
+                        x: {drawnBox.x} <span className="gun-debug-readout-meta">center</span><br />
+                        y: {drawnBox.y} <span className="gun-debug-readout-meta">center</span><br />
+                        w: {drawnBox.w} <span className="gun-debug-readout-dim">({drawnBox.wPx}px)</span><br />
+                        h: {drawnBox.h} <span className="gun-debug-readout-dim">({drawnBox.hPx}px)</span>
                       </div>
-                      <div style={{ fontFamily: 'Share Tech Mono, monospace', fontSize: '0.72rem', color: 'rgba(180,200,220,0.45)', lineHeight: 1.6 }}>
+                      <div className="gun-debug-readout-secondary">
                         wPx: {drawnBox.wPx}<br />
                         hPx: {drawnBox.hPx}
                       </div>
                       <button
-                        className="gun-view-btn"
-                        style={{ alignSelf: 'flex-start', marginTop: '0.25rem' }}
+                        className="gun-view-btn tool-choice-button tool-choice-button--compact gun-debug-clear"
                         onClick={() => setDrawnBox(null)}
                       >
                         Clear
                       </button>
                     </>
                   ) : (
-                    <div className="gun-zone-effect" style={{ fontSize: '0.8rem' }}>
+                    <div className="gun-zone-effect gun-zone-effect-debug">
                       Drag on the image to measure a zone box.<br />
                       Release to see % and px dimensions.
                     </div>
@@ -372,7 +373,7 @@ export function SubTargetSection({
                       border:     `1px solid color-mix(in srgb, ${activeZone.color} 40%, transparent)`,
                     }}
                   >
-                    P{activeZone.priority} — {PRIORITY_LABELS[activeZone.priority]}
+                    P{activeZone.priority} · {PRIORITY_LABELS[activeZone.priority]}
                   </div>
                   <div className="gun-zone-effect">{activeZone.effect}</div>
                 </>
@@ -385,7 +386,7 @@ export function SubTargetSection({
           </div>
         </>
       ) : (
-        <div className="gun-result">
+        <div className="gun-result tool-panel">
           <div className="gun-result-empty">Select a ship to begin sub-target training.</div>
         </div>
       )}
