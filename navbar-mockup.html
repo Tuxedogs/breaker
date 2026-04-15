@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navbar Mockup — ARES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Barlow", system-ui, sans-serif;
+      background-color: rgb(9, 12, 18);
+      background-image:
+        radial-gradient(80% 40% at 50% 0%, rgba(56, 189, 248, 0.045) 0%, transparent 70%),
+        radial-gradient(circle, rgba(255, 255, 255, 0.075) 1px, transparent 1px);
+      background-size: auto, 22px 22px;
+      color: rgb(226, 232, 240);
+      min-height: 100vh;
+    }
+
+    /* ── Tokens ─────────────────────────────────────────────────── */
+    :root {
+      --nav-bg:        rgb(7, 9, 13);
+      --nav-border:    rgb(255 255 255 / 0.08);
+      --nav-divider:   rgb(148 163 184 / 0.22);
+      --text-muted:    rgb(71, 85, 105);
+      --text-hover:    rgb(148, 163, 184);
+      --text-bright:   rgb(214, 224, 236);
+      --amber:         rgb(251, 191, 36);
+      --amber-dim:     rgb(251, 191, 36, 0.65);
+      --card-bg:       rgb(11, 14, 22);
+    }
+
+    /* ── Navbar band ─────────────────────────────────────────────── */
+    .nav-band {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      border-bottom: 1px solid var(--nav-border);
+      background:
+        linear-gradient(180deg, rgb(255 255 255 / 0.03) 0%, transparent 100%),
+        var(--nav-bg);
+      box-shadow: 0 1px 0 rgb(255 255 255 / 0.035) inset,
+                  0 8px 24px rgb(0, 0, 0, 0.28);
+    }
+
+    .nav-shell {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 2.75rem;
+      padding: 0 1rem;
+      gap: 0;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────────── */
+    .nav-sep {
+      flex: 0 0 1px;
+      align-self: stretch;
+      margin: 0 0.55rem;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        var(--nav-divider) 30%,
+        var(--nav-divider) 70%,
+        transparent 100%
+      );
+    }
+
+    /* ── Home icon button ────────────────────────────────────────── */
+    .nav-home {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      flex-shrink: 0;
+      border: 1px solid rgb(255 255 255 / 0.09);
+      background: rgb(255 255 255 / 0.025);
+      color: var(--text-hover);
+      cursor: pointer;
+      transition: border-color 130ms, background 130ms, color 130ms;
+      text-decoration: none;
+    }
+    .nav-home:hover {
+      border-color: rgb(255 255 255 / 0.16);
+      background: rgb(255 255 255 / 0.05);
+      color: var(--text-bright);
+    }
+    .nav-home svg { display: block; width: 0.9rem; height: 0.9rem; }
+
+    /* ── Brand wordmark ─────────────────────────────────────────── */
+    .nav-brand {
+      font-family: "Orbitron", sans-serif;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-bright);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* ── Nav link (flat text) ────────────────────────────────────── */
+    .nav-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.28rem;
+      height: 100%;
+      padding: 0 0.1rem;
+      border: none;
+      background: transparent;
+      font-family: "Orbitron", sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 130ms;
+    }
+    .nav-link:hover { color: var(--text-hover); }
+
+    /* Active state: slim amber underline, no glow */
+    .nav-link--active {
+      color: var(--amber);
+    }
+    .nav-link--active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;            /* sits on the nav bottom border */
+      height: 2px;
+      background: var(--amber);
+      opacity: 0.9;
+    }
+
+    /* Tools semi-active (dropdown open) */
+    .nav-link--open {
+      color: var(--text-hover);
+    }
+
+    /* ── Chevron ────────────────────────────────────────────────── */
+    .chevron {
+      display: inline-block;
+      width: 0.55rem;
+      height: 0.55rem;
+      flex-shrink: 0;
+      opacity: 0.55;
+      transition: transform 160ms, opacity 160ms;
+    }
+    .nav-link--open .chevron,
+    .nav-link:hover .chevron {
+      opacity: 0.85;
+    }
+    .chevron--open { transform: rotate(180deg); }
+
+    /* ── Dropdown wrapper ────────────────────────────────────────── */
+    .nav-dropdown-wrap {
+      position: relative;
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* ── Dropdown panel ─────────────────────────────────────────── */
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 3px);
+      left: 0;
+      min-width: 14rem;
+      padding: 0.3rem;
+      border: 1px solid var(--nav-border);
+      background:
+        linear-gradient(180deg, rgb(255 255 255 / 0.025) 0%, transparent 100%),
+        rgb(8, 11, 18);
+      box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.04),
+        0 12px 28px rgb(0, 0, 0, 0.38);
+      display: grid;
+      gap: 0.18rem;
+    }
+
+    .nav-dropdown-label {
+      padding: 0.3rem 0.5rem 0.2rem;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+    }
+
+    .nav-dropdown-rule {
+      height: 1px;
+      background: var(--nav-border);
+      margin: 0.1rem 0.2rem;
+    }
+
+    .nav-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 2.1rem;
+      padding: 0 0.5rem;
+      font-family: "Orbitron", sans-serif;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgb(148, 163, 184);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 130ms, color 130ms;
+    }
+    .nav-dropdown-item:hover {
+      background: rgb(148 163 184 / 0.065);
+      color: var(--text-bright);
+    }
+    .nav-dropdown-item--active {
+      color: rgb(251, 113, 133);
+    }
+
+    /* dot before each item */
+    .nav-dropdown-item::before {
+      content: "";
+      width: 3px;
+      height: 3px;
+      flex-shrink: 0;
+      background: currentColor;
+      opacity: 0.45;
+    }
+
+    /* ── Right-side utility ─────────────────────────────────────── */
+    .nav-right {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .nav-util-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border: 1px solid rgb(255 255 255 / 0.07);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: border-color 130ms, color 130ms;
+    }
+    .nav-util-btn:hover {
+      border-color: rgb(255 255 255 / 0.14);
+      color: var(--text-hover);
+    }
+    .nav-util-btn svg { display: block; width: 0.85rem; height: 0.85rem; }
+
+    /* status pip next to utility */
+    .nav-status-pip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+    }
+    .nav-status-pip::before {
+      content: "";
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgb(52, 211, 153);
+      box-shadow: 0 0 5px rgb(52 211 153 / 0.55);
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       MOCKUP ANNOTATION LAYERS
+       ══════════════════════════════════════════════════════════════ */
+
+    .mockup-page {
+      padding: 3rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .mockup-label {
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+      margin-bottom: 0.9rem;
+    }
+
+    .mockup-section {
+      margin-bottom: 4rem;
+    }
+
+    /* ── Second variant: dropdown open ─────────────────────────── */
+    .nav-band--variant {
+      position: static;
+      margin-top: 0;
+    }
+
+    /* ── Framework page content stub ────────────────────────────── */
+    .page-head {
+      margin-top: 2.5rem;
+      padding: 2rem 3rem;
+      border: 1px solid var(--nav-border);
+      background: var(--card-bg);
+    }
+    .page-head-kicker {
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+      margin-bottom: 0.4rem;
+    }
+    .page-head-title {
+      font-family: "Rajdhani", sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: rgb(214, 224, 236);
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+    .page-head-sub {
+      font-family: "Barlow", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: rgb(71, 85, 105);
+      max-width: 46rem;
+      line-height: 1.6;
+    }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .page-card {
+      padding: 1.25rem;
+      border: 1px solid var(--nav-border);
+      background: var(--card-bg);
+    }
+    .page-card-label {
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+      margin-bottom: 0.5rem;
+    }
+    .page-card-value {
+      font-family: "Rajdhani", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: rgb(214, 224, 236);
+    }
+
+    .annotation {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .annotation-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: "Share Tech Mono", monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgb(71, 85, 105);
+    }
+    .annotation-swatch {
+      width: 1.5rem;
+      height: 2px;
+    }
+    .annotation-swatch--amber { background: var(--amber); }
+    .annotation-swatch--muted { background: var(--text-muted); }
+    .annotation-swatch--hover { background: var(--text-hover); }
+    .annotation-swatch--border {
+      height: 1px;
+      background: var(--nav-border);
+      border-top: 1px dashed rgb(255 255 255 / 0.22);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       STATE 1 — Default: FRAMEWORK active, TOOLS closed
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="nav-band">
+    <nav class="nav-shell" aria-label="Primary">
+
+      <!-- Home -->
+      <a href="#" class="nav-home" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"/>
+        </svg>
+      </a>
+
+      <span class="nav-sep" aria-hidden="true"></span>
+
+      <!-- Brand -->
+      <span class="nav-brand">ARES</span>
+
+      <span class="nav-sep" aria-hidden="true"></span>
+
+      <!-- TOOLS dropdown trigger (closed) -->
+      <div class="nav-dropdown-wrap">
+        <button type="button" class="nav-link" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg class="chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 1l4 4 4-4"/>
+          </svg>
+        </button>
+      </div>
+
+      <span class="nav-sep" aria-hidden="true"></span>
+
+      <!-- FRAMEWORK — active -->
+      <a href="#" class="nav-link nav-link--active" aria-current="page">
+        Framework
+      </a>
+
+      <!-- Right utility area -->
+      <div class="nav-right">
+        <span class="nav-status-pip">LIVE</span>
+        <span class="nav-sep" aria-hidden="true" style="margin: 0 0.1rem 0 0.35rem;"></span>
+        <!-- Signal / comms icon -->
+        <button type="button" class="nav-util-btn" aria-label="System status">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+            <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+            <circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </button>
+        <!-- Settings icon -->
+        <button type="button" class="nav-util-btn" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </button>
+      </div>
+
+    </nav>
+  </div>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       STATE 2 — TOOLS dropdown open
+       ════════════════════════════════════════════════════════════════ -->
+  <div class="mockup-page">
+    <div class="mockup-section">
+      <p class="mockup-label">State · Tools dropdown expanded</p>
+
+      <div class="nav-band nav-band--variant">
+        <nav class="nav-shell" aria-label="Primary (variant)">
+
+          <a href="#" class="nav-home" aria-label="Home">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"/>
+            </svg>
+          </a>
+
+          <span class="nav-sep" aria-hidden="true"></span>
+          <span class="nav-brand">ARES</span>
+          <span class="nav-sep" aria-hidden="true"></span>
+
+          <!-- TOOLS — open state -->
+          <div class="nav-dropdown-wrap">
+            <button type="button" class="nav-link nav-link--open" aria-haspopup="true" aria-expanded="true">
+              Tools
+              <svg class="chevron chevron--open" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 1l4 4 4-4"/>
+              </svg>
+            </button>
+
+            <!-- Dropdown panel — rendered open -->
+            <div class="nav-dropdown" role="menu">
+              <span class="nav-dropdown-label">Tools</span>
+              <div class="nav-dropdown-rule"></div>
+              <a href="#" class="nav-dropdown-item" role="menuitem">Weapons Gunnery</a>
+              <a href="#" class="nav-dropdown-item nav-dropdown-item--active" role="menuitem">Weapons Analysis</a>
+              <a href="#" class="nav-dropdown-item" role="menuitem">Maps</a>
+            </div>
+          </div>
+
+          <span class="nav-sep" aria-hidden="true"></span>
+
+          <a href="#" class="nav-link nav-link--active" aria-current="page">
+            Framework
+          </a>
+
+          <div class="nav-right">
+            <span class="nav-status-pip">LIVE</span>
+            <span class="nav-sep" aria-hidden="true" style="margin: 0 0.1rem 0 0.35rem;"></span>
+            <button type="button" class="nav-util-btn" aria-label="System status">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </button>
+            <button type="button" class="nav-util-btn" aria-label="Settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+              </svg>
+            </button>
+          </div>
+
+        </nav>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         Page context — shows nav integrated with framework page below
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="mockup-section">
+      <p class="mockup-label">Context · Framework page beneath nav</p>
+
+      <div class="nav-band nav-band--variant">
+        <nav class="nav-shell" aria-label="Primary (context)">
+          <a href="#" class="nav-home" aria-label="Home">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 4.5 4.5 10.7a1 1 0 1 0 1.3 1.54l.7-.58V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-3.4h1.4V19a1 1 0 0 0 1 1h3.8a1 1 0 0 0 1-1v-7.34l.7.58a1 1 0 1 0 1.3-1.54L12 4.5Z"/>
+            </svg>
+          </a>
+          <span class="nav-sep"></span>
+          <span class="nav-brand">ARES</span>
+          <span class="nav-sep"></span>
+          <button type="button" class="nav-link">
+            Tools
+            <svg class="chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 1l4 4 4-4"/>
+            </svg>
+          </button>
+          <span class="nav-sep"></span>
+          <a href="#" class="nav-link nav-link--active">Framework</a>
+          <div class="nav-right">
+            <span class="nav-status-pip">LIVE</span>
+            <span class="nav-sep" style="margin: 0 0.1rem 0 0.35rem;"></span>
+            <button type="button" class="nav-util-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </button>
+            <button type="button" class="nav-util-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+              </svg>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <div class="page-head">
+        <p class="page-head-kicker">ARES · Combat Framework · v3.1</p>
+        <h1 class="page-head-title">Tactical Doctrine Index</h1>
+        <p class="page-head-sub">
+          Org-level engagement frameworks, threat-response protocols, and command structure references for coordinated strike operations.
+        </p>
+      </div>
+
+      <div class="page-grid">
+        <div class="page-card">
+          <p class="page-card-label">Active Modules</p>
+          <p class="page-card-value">14</p>
+        </div>
+        <div class="page-card">
+          <p class="page-card-label">Doctrine Revision</p>
+          <p class="page-card-value">3.1.4</p>
+        </div>
+        <div class="page-card">
+          <p class="page-card-label">Last Updated</p>
+          <p class="page-card-value" style="font-size:1.1rem; color: rgb(71,85,105);">2026-04-14</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         Design annotations
+         ════════════════════════════════════════════════════════════════ -->
+    <div class="mockup-section">
+      <p class="mockup-label">Tokens</p>
+      <div class="annotation">
+        <span class="annotation-item">
+          <span class="annotation-swatch annotation-swatch--amber"></span>
+          Active — rgb(251, 191, 36) · 2px underline
+        </span>
+        <span class="annotation-item">
+          <span class="annotation-swatch annotation-swatch--muted"></span>
+          Inactive — rgb(71, 85, 105)
+        </span>
+        <span class="annotation-item">
+          <span class="annotation-swatch annotation-swatch--hover"></span>
+          Hover — rgb(148, 163, 184)
+        </span>
+        <span class="annotation-item">
+          <span class="annotation-swatch annotation-swatch--border"></span>
+          Border — rgb(255 255 255 / 0.08)
+        </span>
+        <span class="annotation-item" style="color: rgb(52,211,153);">
+          ● LIVE pip — rgb(52, 211, 153)
+        </span>
+      </div>
+    </div>
+
+  </div><!-- /mockup-page -->
+
+</body>
+</html>

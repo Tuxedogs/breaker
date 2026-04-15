@@ -9,7 +9,6 @@ import DoctrineReferencePage from "./pages/DoctrineReferencePage";
 import HeroOpening from "./pages/HeroOpening";
 import MapsPage from "./pages/MapsPage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
-import ShipHubPage from "./pages/ShipHubPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
 import OnboardingPage from "./pages/systems/OnboardingPage";
@@ -47,9 +46,7 @@ export default function App() {
           <Route path="tools/alpha-threshold" element={<AlphaThresholdToolPage />} />
           <Route path="tools/gunnery" element={<GunneryToolPage />} />
 
-          <Route path="ships/:slug" element={<ShipHubPage />} />
-
-          <Route path="systems/sub-targeting" element={<Navigate to="/module/sub-targeting" replace />} />
+<Route path="systems/sub-targeting" element={<Navigate to="/module/sub-targeting" replace />} />
           <Route path="systems/turret-keybinds" element={<Navigate to="/module/turret-keybind-baseline" replace />} />
           <Route path="systems/additional-settings-binds" element={<AdditionalSettingsPage />} />
           <Route

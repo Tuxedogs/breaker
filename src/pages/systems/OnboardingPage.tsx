@@ -115,11 +115,38 @@ export default function OnboardingPage() {
   }
 
   return (
-    <section className="route-fade onboarding-shell py-4 sm:py-6">
-      <div className="onboarding-layout">
+    <section className="base-static route-fade onboarding-shell reference-modern relative overflow-hidden py-3">
+      <div className="base-trend-bg pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-cyan-300/10 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 top-32 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl" />
+
+      <div className="relative z-10 space-y-6">
+        <header className="page-hero-shell onboarding-hero">
+          <p className="page-kicker">Reference</p>
+          <h1 className="page-title-wide">
+            ONBOARDING
+            <span className="base-trend-text block">FRAMEWORK</span>
+          </h1>
+          <p className="mt-4 max-w-3xl text-sm text-slate-200/80 sm:text-base">
+            Use the same routing logic as the framework page: get oriented, clear setup friction, stage correctly, and
+            join fleet without slowing the group down.
+          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <span className="onboarding-hero-chip onboarding-hero-chip--cyan">Checklist Tracking</span>
+            <span className="onboarding-hero-chip onboarding-hero-chip--amber">Staging Discipline</span>
+            <span className="onboarding-hero-chip onboarding-hero-chip--cyan">Ops Flow</span>
+            <span className="onboarding-hero-chip onboarding-hero-chip--neutral">Comms Standards</span>
+          </div>
+        </header>
+
+        <div className="onboarding-layout">
         <aside className="onboarding-sidebar-panel">
-          <p className="title-font text-[11px] uppercase tracking-[0.24em] text-cyan-100/75">Onboarding</p>
-          <nav className="mt-1.5">
+          <div className="base-card-head">
+            <p className="base-card-kicker">Route Summary</p>
+            <h2 className="title-font base-card-title onboarding-sidebar-title">Onboarding</h2>
+          </div>
+
+          <nav className="mt-4">
             <ul className="space-y-px">
               {sections.map((section, idx) => (
                 <li key={section.id} className="onboarding-side-item">
@@ -132,14 +159,14 @@ export default function OnboardingPage() {
             </ul>
           </nav>
 
-          <div className="mt-2.5 border-t border-white/10 pt-2.5">
+          <div className="onboarding-progress-panel">
             <div className="flex items-center justify-between text-[11px] tracking-[0.16em] text-slate-300/75">
-              <span>CHECKLIST</span>
+              <span className="base-card-kicker">Checklist</span>
               <span className="text-cyan-100/80">
                 {doneCount} / {checklistItems.length}
               </span>
             </div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded bg-white/10">
+            <div className="onboarding-progress-bar mt-2">
               <div className="h-full bg-cyan-300/85 transition-all duration-300" style={{ width: `${progress}%` }} />
             </div>
             <div className="mt-2 space-y-px">
@@ -161,7 +188,7 @@ export default function OnboardingPage() {
         </aside>
 
         <main className="min-w-0 space-y-5">
-          <section id="welcome" className="onboarding-panel-lg">
+          <section id="welcome" className="onboarding-panel-lg onboarding-panel-frame">
             <p className="onboarding-eyebrow">01 - Welcome</p>
             <h1 className="detail-page-title-cyan">New Member Briefing</h1>
             <p className="mt-3 text-slate-300/85">
@@ -187,7 +214,7 @@ export default function OnboardingPage() {
             </div>
           </section>
 
-          <section id="org" className="onboarding-panel">
+          <section id="org" className="onboarding-panel onboarding-panel-frame">
             <p className="onboarding-eyebrow">02 - Organization</p>
             <h2 className="surface-title-lg mt-2">Sons of Ares Rank Flow</h2>
             <div className="mt-4 overflow-x-auto">
@@ -356,7 +383,7 @@ export default function OnboardingPage() {
             <div className="onboarding-note mt-4">Ref Structure/ColorGrading/Tag consistency</div>
           </section>
 
-          <section id="basics" className="onboarding-panel">
+          <section id="basics" className="onboarding-panel onboarding-panel-frame">
             <p className="onboarding-eyebrow">03 - Star Citizen Basics</p>
             <h2 className="surface-title-lg mt-2">Getting where we're going</h2>
             <p className="mt-2 text-sm text-slate-300/85">
@@ -373,7 +400,7 @@ export default function OnboardingPage() {
             </div>
           </section>
 
-          <section id="staging" className="onboarding-panel">
+          <section id="staging" className="onboarding-panel onboarding-panel-frame">
             <p className="onboarding-eyebrow">04 - Staging Locations</p>
             <h2 className="surface-title-lg mt-2">Where to Base Out Of</h2>
             <p className="mt-2 text-sm text-slate-300/85">
@@ -412,7 +439,7 @@ export default function OnboardingPage() {
             <div className="onboarding-note mt-4">Roaming operations into Pyro and Nyx typically stage out of Crusader.</div>
           </section>
 
-          <section id="opsflow" className="onboarding-panel">
+          <section id="opsflow" className="onboarding-panel onboarding-panel-frame">
             <p className="onboarding-eyebrow">05 - Daily Ops Flow</p>
             <h2 className="surface-title-lg mt-2">How a Standard Event Runs</h2>
             <p className="mt-2 text-sm text-slate-300/85">
@@ -437,7 +464,7 @@ export default function OnboardingPage() {
             </ol>
           </section>
 
-          <section id="comms" className="onboarding-panel">
+          <section id="comms" className="onboarding-panel onboarding-panel-frame">
             <p className="onboarding-eyebrow">06 - Comms Discipline</p>
             <h2 className="surface-title-lg mt-2">How We Talk on Ops</h2>
             <p className="mt-2 text-sm text-slate-300/85">
@@ -470,6 +497,7 @@ export default function OnboardingPage() {
             </div>
           </section>
         </main>
+        </div>
       </div>
     </section>
   );

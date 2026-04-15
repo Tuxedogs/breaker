@@ -1840,8 +1840,8 @@ export default function ShipMapTemplate({
         }
       >
         {showHeader ? (
-          <article className="base-card base-card--ships rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-4 backdrop-blur sm:p-6">
-            <header className="base-card-head rounded-[1.2rem] border border-white/15 p-5">
+          <article className="base-card base-card--maps p-4 sm:p-6">
+            <header className="base-card-head p-5">
               <p className="base-card-kicker">Ship Maps</p>
               <h1 className="title-font mt-2 text-4xl tracking-[0.07em] text-amber-200 sm:text-5xl">{title}</h1>
               <p className="mt-4 max-w-3xl text-base leading-relaxed text-slate-200 sm:text-lg">{subtitle}</p>
@@ -1852,8 +1852,8 @@ export default function ShipMapTemplate({
         <article
           className={
             immersiveFocus
-              ? "base-card base-card--ships flex min-h-0 flex-1 flex-col overflow-hidden border-0 bg-black/35 p-0 backdrop-blur sm:rounded-none"
-              : "base-card base-card--ships overflow-hidden rounded-[1.9rem] border border-amber-300/35 bg-black/35 p-2 backdrop-blur sm:p-3"
+              ? "base-card base-card--maps flex min-h-0 flex-1 flex-col overflow-hidden border-0 p-0 sm:rounded-none"
+              : "base-card base-card--maps overflow-hidden p-2 sm:p-3"
           }
         >
           <div
@@ -2127,7 +2127,7 @@ export default function ShipMapTemplate({
 
               {hasDeckOverlay && deckOverlayEnabled ? (
                 <section
-                  className={`map-legend-panel rounded-xl border border-white/20 bg-black/55 p-3 backdrop-blur-md ${
+                  className={`map-legend-panel ${
                     mobileLegendOpen ? "map-legend-panel-mobile-open" : "map-legend-panel-mobile-closed"
                   }`}
                 >

@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { moduleLoadError } from "../data/modules";
 import { refLoadError } from "../data/refs";
-import { shipLoadError } from "../data/ships";
 import { readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
 function buildTarget(filters: ModuleFilters, preset: Partial<ModuleFilters>) {
@@ -97,7 +96,7 @@ const setupChips = [
 export default function DoctrineIndexPage() {
   const [searchParams] = useSearchParams();
   const filters = readModuleFilters(searchParams);
-  const loaderError = moduleLoadError ?? refLoadError ?? shipLoadError;
+  const loaderError = moduleLoadError ?? refLoadError;
 
   return (
     <section className="base-static route-fade relative overflow-visible py-3">
