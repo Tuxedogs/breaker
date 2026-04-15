@@ -1,17 +1,15 @@
 export type GimbalMode = 'AM' | 'PM' | 'Fixed'
-export type OperatorType = 'heavy-fighter' | 'medium-fighter' | 'gunship' | 'capital-gunner'
-export type TargetType = 'capital' | 'medium' | 'small'
+export type WeaponType = 'cf-repeaters' | 'ndb' | 'medusa'
+export type TargetType = 'fighter' | 'heavy-fighter' | 'large' | 'capital'
 export type Range = 'close' | 'mid' | 'far'
 export type TargetSpeed = 'slow' | 'medium' | 'fast'
-export type GunnerySection = 'mode-recommender' | 'scenarios' | 'sub-targeting' | 'diagnosis'
+export type GunnerySection = 'mode-recommender' | 'sub-targeting' | 'diagnosis'
 
 export type ModeRecommendation = {
   mode: GimbalMode
   confidence: 'strong' | 'moderate'
   reasoning: string
 }
-
-// ── Mode reference data ──────────────────────────────────────────────────────
 
 export type GimbalModeDefinition = {
   id: GimbalMode
@@ -22,43 +20,30 @@ export type GimbalModeDefinition = {
   bestFor: string
 }
 
-// ── Scenarios ────────────────────────────────────────────────────────────────
-
-export type Scenario = {
-  id: string
-  label: string
-  description: string
-  targetType: TargetType
-  range: Range
-  speed: TargetSpeed
-  recommendedMode: GimbalMode
-  keyRules: string[]
-  emphasis: string
+export type ComponentPriority = 1 | 2 | 3 | 4 | 5 | 6
+export type ZonePosition = {
+  // Normalized to the specific source image for that view, in the 0-1 range.
+  x: number
+  y: number
+  w: number
+  h: number
+  wPx?: number
+  hPx?: number
 }
 
-// ── Sub-targeting ────────────────────────────────────────────────────────────
-
-export type ComponentPriority = 1 | 2 | 3 | 4 | 5
-
-// wPx/hPx override the % w/h when set — useful for fixed-size hit zones on flexible containers
-export type ZonePosition = { x: number; y: number; w: number; h: number; wPx?: number; hPx?: number }
-
-// Views are data-driven per ship — no fixed union.
-// Each ship declares its own ordered view list.
 export type ShipViewDef = {
-  id: string    // used as key in views and zone positions
-  label: string // displayed in the view selector
+  id: string
+  label: string
 }
 
 export type ComponentZone = {
   id: string
   label: string
-  shortLabel?: string  // short label shown on the zone button (e.g. "P1"); full label used in result panel
-  groupId?: string     // zones sharing a groupId are connected by lines when any one is active
+  shortLabel?: string
+  groupId?: string
   priority: ComponentPriority
-  color: string   // CSS var, e.g. 'var(--component-power)'
+  color: string
   effect: string
-  // Keyed by view id. A zone only renders in views where a position is defined.
   positions: Record<string, ZonePosition>
 }
 
@@ -66,12 +51,10 @@ export type SubTargetShip = {
   id: string
   label: string
   class: 'capital' | 'medium' | 'small'
-  viewDefs: ShipViewDef[]          // ordered — first entry is the default view
-  views: Record<string, string>    // view id → image path (relative to /public)
+  viewDefs: ShipViewDef[]
+  views: Record<string, string>
   zones: ComponentZone[]
 }
-
-// ── Diagnosis ────────────────────────────────────────────────────────────────
 
 export type DiagnosisEntry = {
   id: string
@@ -80,8 +63,6 @@ export type DiagnosisEntry = {
   correction: string
   relatedMode: GimbalMode | null
 }
-
-// ── Visual toggles ───────────────────────────────────────────────────────────
 
 export type VisualToggles = {
   showGimbalCone: boolean

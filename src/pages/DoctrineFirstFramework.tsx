@@ -15,27 +15,6 @@ type FrameworkItem = {
   glyph: string;
 };
 
-const shipItems: FrameworkItem[] = [
-  {
-    label: "Perseus",
-    description: "Heavy Gunship - Size 8 Mains",
-    to: "/ships/perseus",
-    glyph: "PS",
-  },
-  {
-    label: "Polaris",
-    description: "Torpedo Deployment - Nuclear Submarine",
-    to: "/ships/polaris",
-    glyph: "PL",
-  },
-  {
-    label: "Idris",
-    description: "Super Carrier - Size 10 Wallet",
-    to: "/ships/idris",
-    glyph: "ID",
-  },
-];
-
 const systemItems: FrameworkItem[] = [
   { label: "Sub-Targeting", to: "/module/sub-targeting", glyph: "TG" },
   {
@@ -66,7 +45,7 @@ function FrameworkCard({
   ctaLabel: string;
   ctaTo: string;
   items: FrameworkItem[];
-  accentClass: "ships" | "systems";
+  accentClass: "systems";
 }) {
   return (
     <article className={`base-card base-card--${accentClass}`}>
@@ -140,14 +119,6 @@ export default function DoctrineFirstFramework() {
           ctaTo="/module/sub-targeting"
           items={systemItems}
           accentClass="systems"
-        />
-        <FrameworkCard
-          title="SHIPS"
-          subtitle="Combat Platforms"
-          ctaLabel="Enter Ships"
-          ctaTo="/ships/perseus"
-          items={shipItems}
-          accentClass="ships"
         />
         <FrameworkCard
           title="STRATEGY"

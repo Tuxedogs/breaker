@@ -1,45 +1,19 @@
 import type { GunneryState } from '../hooks/useGunneryState'
-import { ModeRecommender } from './mode/ModeRecommender'
-import { ScenarioSection } from './scenarios/ScenarioSection'
-import { SubTargetSection } from './subtarget/SubTargetSection'
 import { DiagnosisSection } from './diagnosis/DiagnosisSection'
-
-const SECTION_META = {
-  'mode-recommender': {
-    title: 'Recommended Modes',
-    sub: 'Select target parameters — get an immediate mode recommendation.',
-  },
-  'scenarios': {
-    title: 'Scenarios',
-    sub: 'Named engagements. Select one to see the recommended approach and key rules.',
-  },
-  'sub-targeting': {
-    title: 'Sub-Target Trainer',
-    sub: 'Select a ship and click component zones to review priority and effect.',
-  },
-  'diagnosis': {
-    title: 'Failure Diagnosis',
-    sub: 'Select a symptom to identify the likely cause and correction.',
-  },
-}
+import { ModeRecommender } from './mode/ModeRecommender'
+import { SubTargetSection } from './subtarget/SubTargetSection'
 
 type Props = { state: GunneryState }
 
 export function GunneryContentArea({ state }: Props) {
-  const meta = SECTION_META[state.activeSection]
+  const isModeRecommender = state.activeSection === 'mode-recommender'
 
   return (
-    <div className="gun-content">
-      <header className="tool-page-head gun-page-head">
-        <p className="tool-page-kicker">Crew Gunnery Tool</p>
-        <h1 className="tool-page-title">{meta.title}</h1>
-        <p className="tool-page-subtitle">{meta.sub}</p>
-      </header>
-
-      {state.activeSection === 'mode-recommender' && (
+    <div className={`gun-content${state.activeSection === 'sub-targeting' ? ' gun-content--viewport' : ''}`}>
+      {isModeRecommender && (
         <ModeRecommender
-          operatorType={state.operatorType}
-          setOperatorType={state.setOperatorType}
+          weaponType={state.weaponType}
+          setWeaponType={state.setWeaponType}
           targetType={state.targetType}
           setTargetType={state.setTargetType}
           range={state.range}
@@ -48,15 +22,6 @@ export function GunneryContentArea({ state }: Props) {
           setSpeed={state.setSpeed}
           recommendation={state.recommendation}
           clearRecommender={state.clearRecommender}
-        />
-      )}
-
-      {state.activeSection === 'scenarios' && (
-        <ScenarioSection
-          scenarios={state.scenarios}
-          activeScenarioId={state.activeScenarioId}
-          activeScenario={state.activeScenario}
-          selectScenario={state.selectScenario}
         />
       )}
 

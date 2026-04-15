@@ -730,7 +730,7 @@ export function ThresholdComparisonMatrix({
                                 ].filter(Boolean).join(' ')}
                                 role="radio"
                                 aria-checked={matrixMode === id}
-                                onClick={() => onMatrixModeChange(id)}
+                                //onClick={() => onMatrixModeChange(id)}
                               >
                                 {label}
                               </button>

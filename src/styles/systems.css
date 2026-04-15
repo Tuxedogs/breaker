@@ -139,21 +139,22 @@
 }
 
 .turret-modern .turret-table {
-  background: rgba(7, 12, 24, 0.62);
-  border-radius: 0.95rem;
+  background: #0d0f15;
+  border-radius: 4px;
 }
 
 .turret-modern .turret-table-head {
   display: grid;
   grid-template-columns: 1.4fr 0.8fr 1.8fr;
   border-bottom: 1px solid rgba(103, 232, 249, 0.2);
-  background: rgba(8, 35, 58, 0.42);
+  background: color-mix(in srgb, var(--accent-cyan) 10%, #0d0f15);
   padding: 0.72rem 1rem;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.13em;
-  color: rgba(165, 243, 252, 0.95);
+  letter-spacing: 0.18em;
+  color: #708090;
 }
 
 .turret-modern .turret-table-row {
@@ -172,19 +173,17 @@
 }
 
 .turret-modern .turret-table-row:hover {
-  background: rgba(34, 211, 238, 0.1);
+  background: color-mix(in srgb, var(--accent-cyan) 7%, #0d0f15);
   border-left-color: rgba(103, 232, 249, 0.7);
 }
 
 .turret-modern .base-card {
   min-height: 0;
-  background:
-    linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02) 44%, rgba(0, 0, 0, 0.27)),
-    rgba(6, 10, 22, 0.52);
+  background: var(--card-blue);
 }
 
 .turret-modern .base-card-head {
-  background: rgba(6, 11, 23, 0.56);
+  background: #0d0f15;
 }
 
 .turret-modern .turret-keybind-chip {
@@ -194,12 +193,15 @@
 
 .turret-modern .turret-keybind-empty {
   display: inline-flex;
-  border-radius: 9999px;
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  background: rgba(15, 23, 42, 0.48);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0d0f15;
   padding: 0.08rem 0.55rem;
-  font-size: 0.74rem;
-  color: rgba(203, 213, 225, 0.86);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #708090;
 }
 
 @media (max-width: 900px) {
@@ -217,10 +219,11 @@
     content: attr(data-label);
     display: block;
     margin-bottom: 0.15rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.13em;
+    font-family: "Share Tech Mono", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(125, 211, 252, 0.84);
+    color: #708090;
   }
 
   .turret-modern .turret-cell-action {
@@ -235,18 +238,18 @@
 .additional-modern .additional-hero {
   min-height: 0;
   background:
-    radial-gradient(circle at 10% 18%, rgba(34, 211, 238, 0.16), transparent 34%),
-    radial-gradient(circle at 85% 72%, rgba(125, 211, 252, 0.12), transparent 38%),
-    linear-gradient(150deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02) 44%, rgba(0, 0, 0, 0.27)),
-    rgba(6, 10, 22, 0.52);
+    radial-gradient(circle at 10% 18%, rgba(34, 211, 238, 0.12), transparent 34%),
+    radial-gradient(circle at 85% 72%, rgba(125, 211, 252, 0.08), transparent 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018), transparent 100%),
+    var(--card-blue);
 }
 
 .additional-modern .base-card {
   min-height: 0;
   gap: 0.65rem;
   padding: 0.95rem;
-  border-color: rgba(103, 232, 249, 0.16);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
 }
 
 .additional-modern .base-card::before {
@@ -255,14 +258,17 @@
 
 .additional-modern .additional-chip {
   display: inline-flex;
-  border-radius: 9999px;
-  border: 1px solid rgba(103, 232, 249, 0.35);
-  background: rgba(8, 35, 58, 0.35);
+  min-height: 1.6rem;
+  align-items: center;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0d0f15;
   padding: 0.2rem 0.65rem;
-  font-size: 0.67rem;
-  letter-spacing: 0.12em;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(165, 243, 252, 0.95);
+  color: color-mix(in srgb, var(--accent-cyan) 64%, #e8eef4);
 }
 
 .additional-modern .additional-panel {
@@ -271,9 +277,7 @@
 
 .additional-modern .additional-panel-head {
   border-color: rgba(103, 232, 249, 0.12);
-  background:
-    linear-gradient(155deg, rgba(34, 211, 238, 0.05), rgba(3, 7, 18, 0.09) 28%, rgba(3, 7, 18, 0.38)),
-    rgba(6, 11, 23, 0.46);
+  background: color-mix(in srgb, var(--accent-cyan) 4%, #0d0f15);
   padding: 0.9rem;
 }
 
@@ -282,20 +286,20 @@
 }
 
 .additional-modern .additional-table {
-  background: rgba(5, 10, 22, 0.62);
+  background: #0d0f15;
   border-color: rgba(103, 232, 249, 0.18);
 }
 
 .additional-modern .additional-table-row:nth-child(odd) {
-  background: rgba(8, 17, 34, 0.38);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .additional-modern .additional-table-row:nth-child(even) {
-  background: rgba(6, 13, 27, 0.18);
+  background: transparent;
 }
 
 .additional-modern .additional-table-row:hover {
-  background: rgba(34, 211, 238, 0.14);
+  background: color-mix(in srgb, var(--accent-cyan) 7%, #0d0f15);
 }
 
 .module-chip-link {
@@ -321,4 +325,113 @@
   outline-offset: 2px;
   border-color: rgba(186, 230, 253, 0.72);
   box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.36);
+}
+
+.reference-modern {
+  --reference-accent: rgb(148 163 184);
+  --reference-accent-soft: rgb(148 163 184 / 0.14);
+  --reference-border: rgb(255 255 255 / 0.08);
+  --reference-surface: #0d0f15;
+  --reference-surface-strong: rgb(255 255 255 / 0.02);
+}
+
+.reference-modern .base-card {
+  border: 1px solid var(--reference-border);
+  border-top: 2px solid var(--reference-accent);
+  background: var(--reference-surface);
+  box-shadow: none;
+}
+
+.reference-modern .base-card::before {
+  opacity: 0;
+}
+
+.reference-modern .base-card-head,
+.reference-modern .additional-panel-head {
+  border-color: var(--reference-border);
+  background: linear-gradient(90deg, var(--reference-accent-soft) 0%, transparent 60%), var(--reference-surface);
+}
+
+.reference-modern .base-card-kicker {
+  color: #708090;
+}
+
+.reference-modern h1,
+.reference-modern h2,
+.reference-modern h3,
+.reference-modern .detail-page-title-cyan,
+.reference-modern .detail-page-title-blue,
+.reference-modern .surface-title-lg,
+.reference-modern .page-title-wide {
+  color: #d8e4f0;
+}
+
+.reference-modern .tool-section-label,
+.reference-modern .page-kicker,
+.reference-modern .onboarding-eyebrow {
+  color: #708090;
+}
+
+.reference-modern p[class*="text-cyan-"],
+.reference-modern span[class*="text-cyan-"] {
+  color: rgba(203, 213, 225, 0.88);
+}
+
+.reference-modern .additional-chip,
+.reference-modern .onboarding-hero-chip {
+  border-color: var(--reference-border);
+  background: var(--reference-surface-strong);
+  color: rgb(203 213 225 / 0.88);
+  backdrop-filter: none;
+}
+
+.reference-modern .additional-hero,
+.reference-modern .onboarding-hero {
+  background: var(--reference-surface);
+}
+
+.reference-modern .turret-table,
+.reference-modern .additional-table {
+  border-color: var(--reference-border);
+  background: var(--reference-surface);
+}
+
+.reference-modern .turret-table-head {
+  border-bottom-color: var(--reference-border);
+  background: linear-gradient(90deg, var(--reference-accent-soft) 0%, transparent 60%);
+  color: #708090;
+}
+
+.reference-modern .turret-table-row:hover,
+.reference-modern .additional-table-row:hover {
+  background: rgb(255 255 255 / 0.04);
+  border-left-color: var(--reference-accent);
+}
+
+.reference-modern [class*="bg-cyan-950/20"],
+.reference-modern [class*="bg-amber-900/20"],
+.reference-modern [class*="bg-red-900/20"] {
+  background: rgb(255 255 255 / 0.03);
+}
+
+.reference-modern [class*="border-cyan-300/30"],
+.reference-modern [class*="border-amber-300/35"],
+.reference-modern [class*="border-red-300/35"] {
+  border-color: var(--reference-border);
+}
+
+.reference-modern [class*="text-amber-200"],
+.reference-modern [class*="text-red-200"] {
+  color: rgba(203, 213, 225, 0.9);
+}
+
+.reference-modern .turret-keybind-chip,
+.reference-modern .turret-keybind-empty {
+  border-color: rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.03);
+  color: rgb(226 232 240 / 0.92);
+}
+
+.reference-modern .turret-keybind-chip-wrap .text-slate-400 {
+  color: rgb(148 163 184 / 0.85);
 }
