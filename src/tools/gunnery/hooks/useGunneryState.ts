@@ -8,6 +8,7 @@ import type {
   SubTargetShip,
   TargetSpeed,
   TargetType,
+  ViewId,
   VisualToggles,
   WeaponType,
 } from '../types'
@@ -45,7 +46,7 @@ export function useGunneryState() {
   }
 
   const [selectedShipId, setSelectedShipId] = useState<string | null>(null)
-  const [activeView, setActiveView] = useState<string>('top')
+  const [activeView, setActiveView] = useState<ViewId>('top')
   const [activeZoneId, setActiveZoneId] = useState<string | null>(null)
 
   const selectedShip = useMemo<SubTargetShip | null>(
@@ -62,7 +63,7 @@ export function useGunneryState() {
     setSelectedShipId(id)
     setActiveZoneId(null)
     const ship = id ? SHIPS.find((entry) => entry.id === id) : null
-    setActiveView(ship?.viewDefs[0]?.id ?? 'top')
+    setActiveView(ship?.viewTabs[0]?.id ?? 'top')
   }
 
   const [activeSymptomId, setActiveSymptomId] = useState<string | null>(null)
