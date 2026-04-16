@@ -25,17 +25,21 @@ export function GunnerySectionNav({ active, onChange, isOpen }: Props) {
           <p className="tool-section-label">Tool Sections</p>
           <span className="gun-nav-title">Gunnery</span>
         </div>
-        {NAV_ITEMS.map(item => (
-          <button
-            key={item.id}
-            className={`gun-nav-item tool-choice-button${active === item.id ? ' is-active' : ''}`}
-            aria-pressed={active === item.id}
-            onClick={() => onChange(item.id)}
-          >
-            <span className="gun-nav-item-dot" />
-            {item.label}
-          </button>
-        ))}
+        {NAV_ITEMS.map(item => {
+          const disabled = item.id === 'diagnosis'
+          return (
+            <button
+              key={item.id}
+              className={`gun-nav-item tool-choice-button${active === item.id ? ' is-active' : ''}${disabled ? ' is-disabled' : ''}`}
+              aria-pressed={active === item.id}
+              disabled={disabled}
+              onClick={() => !disabled && onChange(item.id)}
+            >
+              <span className="gun-nav-item-dot" />
+              {item.label}
+            </button>
+          )
+        })}
       </div>
     </nav>
   )

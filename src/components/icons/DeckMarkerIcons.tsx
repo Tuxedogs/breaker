@@ -207,11 +207,11 @@ export function ElevatorDownIcon({ className = "size-6" }: DeckMarkerIconProps) 
 export function AirlockIcon({ className = "size-6" }: DeckMarkerIconProps) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="1.5" />
-      <rect x="7" y="7" width="10" height="10" rx="1" stroke="currentColor" strokeWidth="1.5" fill="currentColor" opacity="0.2" />
-      <circle cx="15" cy="12" r="1.5" fill="currentColor" />
-      <path d="M9 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M11 4v3M11 17v3M4 11h3M17 11h3" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+      <path d="M6 4h7a2 2 0 012 2v14H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M14 6l4 2v12l-4-2V6z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M14 6l4 2M14 18l4 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.65" />
+      <circle cx="10" cy="12" r="1.25" fill="currentColor" />
+      <path d="M7.5 8.5v7M7.5 5.5v1.5M7.5 17v1.5" stroke="currentColor" strokeWidth="1" opacity="0.35" strokeLinecap="round" />
     </svg>
   );
 }

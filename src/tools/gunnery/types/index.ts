@@ -20,41 +20,24 @@ export type GimbalModeDefinition = {
   bestFor: string
 }
 
-export type ComponentPriority = 1 | 2 | 3 | 4 | 5 | 6
-export type ZonePosition = {
-  // Normalized to the specific source image for that view, in the 0-1 range.
-  x: number
-  y: number
-  w: number
-  h: number
-  wPx?: number
-  hPx?: number
-}
+export type {
+  ComponentPriority,
+  ComponentSize,
+  NormalizedShipDefinition,
+  NormalizedShipZone,
+  ShipDefinition,
+  ShipValidationIssue,
+  ShipViewTab,
+  ViewId,
+  ZoneComponentMeta,
+  ZonePosition,
+  ZoneType,
+} from '../data/subtarget-ships/types'
 
-export type ShipViewDef = {
-  id: string
-  label: string
-}
+export type { ShipZone } from '../data/subtarget-ships/types'
 
-export type ComponentZone = {
-  id: string
-  label: string
-  shortLabel?: string
-  groupId?: string
-  priority: ComponentPriority
-  color: string
-  effect: string
-  positions: Record<string, ZonePosition>
-}
-
-export type SubTargetShip = {
-  id: string
-  label: string
-  class: 'capital' | 'medium' | 'small'
-  viewDefs: ShipViewDef[]
-  views: Record<string, string>
-  zones: ComponentZone[]
-}
+export type ComponentZone = import('../data/subtarget-ships/types').NormalizedShipZone
+export type SubTargetShip = import('../data/subtarget-ships/types').NormalizedShipDefinition
 
 export type DiagnosisEntry = {
   id: string

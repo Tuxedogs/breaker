@@ -6,7 +6,6 @@ import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLanding from "./pages/DoctrineLanding";
 import DoctrineModulePage from "./pages/DoctrineModulePage";
 import DoctrineReferencePage from "./pages/DoctrineReferencePage";
-import HeroOpening from "./pages/HeroOpening";
 import MapsPage from "./pages/MapsPage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
@@ -17,17 +16,6 @@ import WipPage from "./pages/WipPage";
 import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
 import { GunneryToolPage } from "./tools/gunnery";
 
-const ENTRY_STORAGE_KEY = "ares:entered-framework";
-
-function EntryGate() {
-  const hasEntered = sessionStorage.getItem(ENTRY_STORAGE_KEY) === "true";
-  if (hasEntered) {
-    return <Navigate to="/framework" replace />;
-  }
-
-  return <HeroOpening />;
-}
-
 export default function App() {
   return (
     <>
@@ -35,7 +23,7 @@ export default function App() {
       <Routes>
         <Route path="doctrine-landing" element={<DoctrineLanding />} />
         <Route element={<AppShell />}>
-          <Route index element={<EntryGate />} />
+          <Route index element={<DoctrineIndexPage />} />
           <Route path="index" element={<DoctrineIndexPage />} />
           <Route path="framework" element={<DoctrineIndexPage />} />
           <Route path="framework-legacy" element={<DoctrineFirstFramework />} />
