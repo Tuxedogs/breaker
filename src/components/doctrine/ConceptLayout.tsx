@@ -1,5 +1,6 @@
 import type { DoctrineModule } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 export function ConceptLayout({ module }: { module: DoctrineModule }) {
   return (
@@ -9,7 +10,7 @@ export function ConceptLayout({ module }: { module: DoctrineModule }) {
       </header>
       <div className="concept-body">
         <div className="concept-col">
-          <module.Content />
+          <DoctrineContent module={module} />
         </div>
       </div>
     </div>
