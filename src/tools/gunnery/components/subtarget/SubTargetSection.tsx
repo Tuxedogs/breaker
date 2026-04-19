@@ -42,6 +42,11 @@ type LegendState = {
   expandedGroups: ExpandedGroups
 }
 
+function buildOrthogonalPath(start: PctPoint, end: PctPoint): string {
+  const midX = Math.round(((start.x + end.x) / 2) * 100) / 100
+  return `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`
+}
+
 function formatNormalizedPosition(percent: number): string {
   return (Math.round(percent * 10) / 1000).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')
 }
@@ -195,7 +200,7 @@ export function SubTargetSection({
     setDragCurrent(point)
     setIsDragging(true)
     setDrawnBox(null)
-  }, [debugMode, getPct])
+  }, [debugMode, getPct, setDrawnBox])
 
   const handleDebugMouseMove = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
     const point = getPct(event.clientX, event.clientY)
@@ -215,7 +220,7 @@ export function SubTargetSection({
     setIsDragging(false)
     setDragStart(null)
     setDragCurrent(null)
-  }, [computeBox, dragStart, getPct, isDragging])
+  }, [computeBox, dragStart, getPct, isDragging, setDrawnBox])
 
   const handleDebugMouseLeave = useCallback(() => {
     setHoverCoords(null)
@@ -233,7 +238,7 @@ export function SubTargetSection({
     setIsDragging(false)
     setDrawnBox(null)
     setHoverCoords(null)
-  }, [])
+  }, [setDrawnBox])
 
   const toggleCategoryVisibility = useCallback((category: ZoneCategory) => {
     setLegendState((current) => {
@@ -381,23 +386,19 @@ export function SubTargetSection({
       return () => window.cancelAnimationFrame(frame)
     }
 
-    const arcHeight = 20
     const paths: string[] = []
     const dots: Dot[] = zoneCenters.map(c => ({ x: c.x, y: c.y }))
 
     for (let i = 0; i < zoneCenters.length - 1; i++) {
       const a = zoneCenters[i]
       const b = zoneCenters[i + 1]
-      const mid = (a.x + b.x) / 2
-      const cy = Math.min(a.y, b.y) - arcHeight
-      paths.push(`M ${a.x} ${a.y} Q ${mid} ${cy} ${b.x} ${b.y}`)
+      paths.push(buildOrthogonalPath(a, b))
     }
 
     const last = zoneCenters[zoneCenters.length - 1]
     const rx = resultRect.left - bodyRect.left
     const ry = 100
-    const mx = (last.x + rx) / 2
-    paths.push(`M ${last.x} ${last.y} C ${mx} ${last.y} ${mx} ${ry} ${rx} ${ry}`)
+    paths.push(buildOrthogonalPath(last, { x: rx, y: ry }))
     dots.push({ x: rx, y: ry })
 
     frame = window.requestAnimationFrame(() => {
@@ -430,6 +431,7 @@ export function SubTargetSection({
 
   useLayoutEffect(() => {
     if (selectedShipId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setHullPromptLine(null)
       return
     }

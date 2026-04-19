@@ -331,6 +331,8 @@ function buildBalanceFieldChanges(
 }
 
 export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
+  void matrixMode
+
   const [isMobileViewport, setIsMobileViewport] = useLocalStorageState<boolean>(
     'alpha-threshold.mobile-viewport',
     false
@@ -456,6 +458,7 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
 
   useEffect(() => {
     if (!areSlotsEqual(storedSlots, slots)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSlots(slots)
     }
   }, [setSlots, slots, storedSlots])
@@ -468,6 +471,7 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
 
   useEffect(() => {
     if (JSON.stringify(selectedShipNames) !== JSON.stringify(normalizedSelectedShipNames)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedShipNames(normalizedSelectedShipNames)
     }
   }, [normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])
@@ -478,6 +482,7 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     )
 
     if (JSON.stringify(selectedShipNames) !== JSON.stringify(limitedSelection)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedShipNames(limitedSelection)
     }
   }, [maxVictimShips, normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])

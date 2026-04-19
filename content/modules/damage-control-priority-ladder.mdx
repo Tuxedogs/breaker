@@ -18,29 +18,29 @@ criteria:
   - label: Fire suppression
     weight: high
     description: Fires cascade into ship loss. Put them out before any other repair work.
-  - label: Power and command-critical systems
+  - label: Power plants
     weight: high
     description: Restore the systems that keep the ship alive, steerable, and coordinated.
   - label: Shields and survivability layers
     weight: med
     description: Recover the systems that let the ship survive the next exchange.
-  - label: Mission-value weapons and support systems
+  - label: Primary weapons systems
     weight: med
-    description: Repair the systems required for the next task before low-impact extras.
+    description: Hull survival is priority, provide advantages for friendlies still applying damage.
 matrix:
   - condition: Active fires present
     action: Suppress them immediately. No exceptions.
-  - condition: Mobility or power is degraded
-    action: Restore ship control and survival before offensive capability.
-  - condition: Weapons degraded but ship stable
-    action: Repair the smallest set needed to return mission value.
+  - condition: Power supply is crippled
+    action: Restore ship power prioritize survival before offensive capability.
+  - condition: Primary weapon disabled
+    action: Turret operator and Engineer repair weapon system until priority shift.
   - condition: Crew wants to recommit early
-    action: Hold until critical systems are restored and acknowledged on comms.
+    action: Verify ship viability with engineering and make determination
 output:
   - label: Repair order
     description: Everyone can state the same top priority without debate.
-  - label: Recommit gate
-    description: The ship does not turn back in while the ladder is still unresolved.
+  - label: Last Stand
+    description: Ship is no longer capapable of providing offensive assistance and all crew shift to active repairs.
 ---
 
 This ladder is a hard priority rule, not a suggestion.
