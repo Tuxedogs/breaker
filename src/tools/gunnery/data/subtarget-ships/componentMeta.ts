@@ -20,7 +20,7 @@ export const PRIORITY_LABELS: Record<ComponentPriority, string> = {
   1: 'Primary - Weapons',
   2: 'Secondary - Power Plant',
   3: 'Tertiary - QT Drive',
-  4: 'Quaternary - Shields',
+  4: 'Quaternary - Prio. only when ordered',
   5: 'Navigation - Entry Point',
   6: 'Other - No Immediate Effect',
 }
@@ -56,7 +56,7 @@ export const ZONE_COMPONENT_META: Record<ZoneType, ZoneComponentMeta> = {
     color: 'var(--component-navigation)',
     Icon: AirlockIcon,
   },
-}
+  }
 
 export const ZONE_CATEGORY_GROUP_ORDER: ZoneCategoryGroup[] = ['components', 'externals', 'entry-points']
 

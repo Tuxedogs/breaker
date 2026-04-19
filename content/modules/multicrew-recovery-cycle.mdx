@@ -15,18 +15,18 @@ prerequisites: []
 relatedModuleIds: ["damage-control-priority-ladder", "shield-face-management", "signature-management"]
 question: "What gets restored before a multicrew ship recommits?"
 criteria:
-  - label: Exit the kill lane
+  - label: Exit the kill lane if able
     weight: high
-    description: Survive first. Pilot breaks line of fire and stops avoidable follow-on damage.
-  - label: Restore command and movement
+    description: Survive first. Break LOS of high damage enemies and assess situation.
+  - label: Stabilize ongoing damage conditions
     weight: high
-    description: Recover flight control, comms clarity, and any mobility-critical systems before damage output.
-  - label: Recover survivability
+    description: Firefighting takes immediate priority. In some cases even the bridge crew will change to firefighting.
+  - label: Recover survivability, once fires are controlled
     weight: med
-    description: Stabilize shields, fire state, and engineering posture so the ship can absorb the next exchange.
+    description: Stabilize power plants, shields so the ship can effectively defend itself.
   - label: Restore weapons by mission value
     weight: med
-    description: Bring back the systems required for the next intended task, not every damaged subsystem.
+    description: Restore enough functionality to complete mission or defend itself to port, not every damaged subsystem.
   - label: Recommit only on crew confirmation
     weight: high
     description: Pilot, gunners, and engineer confirm readiness before the ship turns back in.

@@ -1189,6 +1189,17 @@ outline: 2px solid rgb(148 163 184 / 0.4);
     linear-gradient(90deg, color-mix(in srgb, var(--accent-maps) 10%, transparent) 1px, transparent 1px);
 }
 
+.fw-tool-banner--gunnery:hover {
+  border-color: color-mix(in srgb, var(--crew-blue) 78%, transparent);
+  background-color: color-mix(in srgb, var(--crew-blue) 4%, var(--card-blue));
+}
+
+.fw-tool-banner--gunnery:hover::before {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--crew-blue) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--crew-blue) 10%, transparent) 1px, transparent 1px);
+}
+
 .fw-tool-banner--alpha:hover {
   border-color: color-mix(in srgb, var(--accent-alpha) 78%, transparent);
   background-color: color-mix(in srgb, var(--accent-alpha) 4%, var(--card-blue));
@@ -1202,6 +1213,11 @@ outline: 2px solid rgb(148 163 184 / 0.4);
 
 .fw-tool-banner--alpha {
   border-color: color-mix(in srgb, var(--accent-alpha) 28%, transparent);
+  background-color: var(--card-blue);
+}
+
+.fw-tool-banner--gunnery {
+  border-color: color-mix(in srgb, var(--crew-blue) 28%, transparent);
   background-color: var(--card-blue);
 }
 
@@ -1237,6 +1253,7 @@ outline: 2px solid rgb(148 163 184 / 0.4);
 }
 
 .fw-tool-banner--alpha .fw-tool-sub { color: var(--accent-alpha); }
+.fw-tool-banner--gunnery .fw-tool-sub { color: var(--crew-blue); }
 .fw-tool-banner--maps .fw-tool-sub { color: var(--accent-maps); }
 
 .fw-tool-arrow {

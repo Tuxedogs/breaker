@@ -67,6 +67,12 @@ const disabledCard = {
 
 const toolBanners = [
   {
+    title: "GUNNERY",
+    sub: "Targeting, sub-targeting, and firing mode guidance for crew stations.",
+    to: "/tools/gunnery",
+    mod: "fw-tool-banner--gunnery",
+  },
+  {
     title: "ARMOR THRESHOLD MAPPING",
     sub: "Compare weapon alpha against ship ballistic and energy thresholds.",
     to: "/tools/alpha-threshold",

@@ -189,7 +189,7 @@ export function ModeRecommender({
           </div>
         </div>
 
-        {recommendedMode && alternateMode ? (
+        {recommendation && recommendedMode && alternateMode ? (
           <div className="gun-recommendation-stack">
             <article
               className={[
