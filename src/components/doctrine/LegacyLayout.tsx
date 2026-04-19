@@ -1,4 +1,5 @@
 import type { DoctrineModule } from "../../data/modules";
+import { DoctrineContent } from "./DoctrineContent";
 
 export function LegacyLayout({ module }: { module: DoctrineModule }) {
   return (
@@ -30,6 +31,9 @@ export function LegacyLayout({ module }: { module: DoctrineModule }) {
             This module uses a legacy layout type and needs migration.
           </div>
         </header>
+        <div className="mt-4">
+          <DoctrineContent module={module} />
+        </div>
       </article>
     </div>
   );

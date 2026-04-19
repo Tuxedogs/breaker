@@ -1,5 +1,6 @@
 import type { DoctrineModule } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 export function ProcedureLayout({ module }: { module: DoctrineModule }) {
   const hasUseWhen = (module.useWhen?.length ?? 0) > 0;
@@ -38,6 +39,7 @@ export function ProcedureLayout({ module }: { module: DoctrineModule }) {
             </div>
           </>
         ) : null}
+        <DoctrineContent module={module} />
       </main>
 
       {hasSidebar ? (

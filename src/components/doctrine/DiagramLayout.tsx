@@ -1,5 +1,6 @@
 import type { DoctrineModule, DiagramImage } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 function buildImageList(module: DoctrineModule): DiagramImage[] {
   if (module.images && module.images.length > 0) return module.images;
@@ -122,6 +123,9 @@ export function DiagramLayout({ module }: { module: DoctrineModule }) {
       >
         <div className="gallery-main">
           <Mosaic images={images} />
+          <div className="gallery-content">
+            <DoctrineContent module={module} />
+          </div>
         </div>
 
         {hasSidebar ? (

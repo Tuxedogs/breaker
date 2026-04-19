@@ -4,7 +4,7 @@ title: "Sub-Targeting"
 type: "module"
 status: "validated"
 moduleType: "concept"
-owner: "Doctrine Team"
+owner: "Tux"
 summary: "General targeting logic for when to hold center mass, when to cycle subsystems, and how to confirm the lock you actually need."
 validatedDate: "2026-02-26"
 tags: ["sub-targeting", "gunner", "targeting"]
@@ -15,22 +15,29 @@ prerequisites: ["keybind/turret-bind-baseline", "diagram/subtarget-reference-fra
 relatedModuleIds: ["component-sniping", "turret-keybind-baseline"]
 ---
 
-## WIP What Sub-Targeting Changes
 
-Sub-targeting changes where and how you apply your damage, mechanically and systematically via in-game assists. 
-It is a crucial targeting discipline tool for gunners, pilots, and missile users. 
-Understanding its functionality and when to use it is required for Ares/Howler crews.
 
-## When To Hold Center Mass
+## Vehicles - Target Cycling
+| Keybind Description | Default Key | Effect |
+| --- | --- | --- |
+| Cycle Lock Sub-Target-Forward | `R` | Rotates through components starting at crosshair |
 
-- Initial armor burn for friendlies with smaller weapons. 
-- You need raw pressure more than precision.
-- The target is already near destruction and a clean kill matters more than a specific disable.
+## What does it do? 
+ - Sub-targeting changes where and how you apply your damage, mechanically and systematically via in-game assists. 
+ - Targeted components will become the focus point for Fixed Assist and ESP, allowing significantly higher hit rates.
+ - Understanding its functionality and when to use it is required for Ares/Howler crews.
 
-## When To Cycle A Sub-Target
+<div className="dm-inline-video">
+  <div className="dm-inline-video-frame">
+    <video src="/images/video/subtargetam.mp4" preload="metadata" autoPlay muted loop playsInline />
+  </div>
+  <p className="dm-inline-video-caption">Perseus Sub-Targeting in AM mode</p>
+</div>
+
+>Sub-targeting can only be achieved in precision mode, once acquired freedom return to normal view is often preferred.
+## When To Cycle through Sub-Targets
 
 - Before the merge, on approach. Nav mode does not interfere with precision and sub target cycling.
-- You need to collapse an enemies power, mobility, shields, or weapon output in a known order.
 - The crew can maintain a stable enough angle to keep the selected component in view.
 - You can confirm the selected subsystem in precision mode or via MFD.
 
@@ -41,6 +48,3 @@ Understanding its functionality and when to use it is required for Ares/Howler c
 - Reset the lock if the game state becomes ambiguous instead of guessing.
 - Remember that missiles and torpedoes follow the same intent logic: a good sub-target selection changes the strike result.
 
-
-> Sub-targeting is broader than component sniping. It is the targeting decision that
-> tells the crew whether precision is worth the attention cost right now.

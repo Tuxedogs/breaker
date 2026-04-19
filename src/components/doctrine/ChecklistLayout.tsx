@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import type { DoctrineModule } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 export function ChecklistLayout({ module }: { module: DoctrineModule }) {
   const [checked, setChecked] = useState<Set<string>>(new Set());
@@ -92,6 +93,10 @@ export function ChecklistLayout({ module }: { module: DoctrineModule }) {
           ))}
         </div>
       ) : null}
+
+      <div className="checklist-content">
+        <DoctrineContent module={module} />
+      </div>
     </div>
   );
 }

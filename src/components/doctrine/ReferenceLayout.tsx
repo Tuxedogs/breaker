@@ -1,5 +1,6 @@
 import type { DoctrineModule } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 export function ReferenceLayout({ module }: { module: DoctrineModule }) {
   return (
@@ -30,7 +31,7 @@ export function ReferenceLayout({ module }: { module: DoctrineModule }) {
               : undefined
           }
         >
-          <module.Content />
+          <DoctrineContent module={module} />
         </div>
       </div>
     </div>

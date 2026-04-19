@@ -1,5 +1,6 @@
 import type { DoctrineModule } from "../../data/modules";
 import { DoctrineModuleHeader } from "./DoctrineModuleHeader";
+import { DoctrineContent } from "./DoctrineContent";
 
 const RANK_CLASS: Record<number, string> = {
   0: "dm-rank-1",
@@ -61,6 +62,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
               </div>
             </>
           ) : null}
+          <DoctrineContent module={module} />
         </div>
 
         {hasSidebar ? (
