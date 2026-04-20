@@ -6,8 +6,8 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'mode-recommender', label: 'Recommended Modes' },
   { id: 'sub-targeting',    label: 'Component Mapping' },
+  { id: 'mode-recommender', label: 'Recommended Modes' },
   { id: 'diagnosis',        label: 'Failure Diagnosis' },
 ]
 

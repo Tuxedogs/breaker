@@ -1,3 +1,4 @@
+import { pow } from 'three/tsl'
 import type { ShipDefinition } from './types'
 
 export const idris: ShipDefinition = {
@@ -10,11 +11,15 @@ export const idris: ShipDefinition = {
       { id: 'top', label: 'Top' },
       { id: 'side', label: 'Side' },
       { id: 'rear', label: 'Rear' },
+      { id: 'radar', label: 'Radar' },
+      { id: 'power', label: 'Power Plant' },
     ],
     assets: {
       top: '/ships/gunnery/idris-top.jpg',
       side: '/ships/gunnery/idris-side.jpg',
       rear: '/ships/gunnery/idris-lower.jpg',
+      radar: '/ships/gunnery/idris-radar.jpg',
+      power: '/ships/gunnery/idris-powerplant.jpg',
     },
   },
   zones: [
@@ -31,6 +36,7 @@ export const idris: ShipDefinition = {
       positions: {
         top: { x: 0.77, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
         rear: { x: 0.596, y: 0.563, w: 0, h: 0, wPx: 40, hPx: 40 },
+        power: { x: 0.534, y: 0.661, w: 0, h: 0, wPx: 40, hPx: 40 },
       },
     },
     {
@@ -46,6 +52,7 @@ export const idris: ShipDefinition = {
       positions: {
         top: { x: 0.803, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
         rear: { x: 0.63, y: 0.523, w: 0, h: 0, wPx: 40, hPx: 40 },
+        power: { x: 0.494, y: 0.667, w: 0, h: 0, wPx: 40, hPx: 40 },
       },
     },
     {
@@ -105,6 +112,7 @@ export const idris: ShipDefinition = {
       positions: {
         top: { x: 0.618, y: 0.508, w: 0, h: 0, wPx: 32, hPx: 32 },
         side: { x: 0.617, y: 0.248, w: 0, h: 0, wPx: 56, hPx: 42 },
+        power: { x: 0.868, y: 0.211, w: 0, h: 0, wPx: 56, hPx: 42 },
       },
     },
     {
@@ -186,7 +194,7 @@ export const idris: ShipDefinition = {
       priority: 6,
       effect: 'Primary Solodris weapons system. Do not prioritize unless instructed to.',
       positions: {
-        side: { x: 0.159, y: 0.87, w: 0, h: 0, wPx: 424, hPx: 81 },
+        side: { x: 0.159, y: 0.87, w: 0, h: 0, wPx: 324, hPx: 81 },
       },
     },
     {
@@ -229,7 +237,8 @@ export const idris: ShipDefinition = {
       positions: {
         top: { x: 0.796, y: 0.735, w: 0, h: 0, wPx: 12, hPx: 11 },
         rear: { x: 0.167, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
-      },
+        power: {  x: 0.372, y: 0.419, w: 0, h: 0, wPx: 20, hPx: 20 },
+    },
     },
     {
       id: 'pdc-2',
@@ -243,7 +252,6 @@ export const idris: ShipDefinition = {
       effect: 'PDC are weak to ballistic fire and can be suppressed easily by just a few fighters.',
       positions: {
         top: { x: 0.81, y: 0.262, w: 0, h: 0, wPx: 12, hPx: 11 },
-        rear: { x: 0.167, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
       },
     },
     {
@@ -258,7 +266,7 @@ export const idris: ShipDefinition = {
       effect: 'PDC are weak to ballistic fire and can be suppressed easily by just a few fighters.',
       positions: {
         top: { x: 0.302, y: 0.625, w: 0, h: 0, wPx: 12, hPx: 11},
-        rear: { x: 0.167, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
+        rear: { x: 0.666, y: 0.372, w: 0, h: 0, wPx: 20, hPx: 20 },
       },
     },
     {
@@ -273,7 +281,7 @@ export const idris: ShipDefinition = {
       effect: 'PDC are weak to ballistic fire and can be suppressed easily by just a few fighters.',
       positions: {
         top: { x: 0.375, y: 0.489, w: 0, h: 0, wPx: 12, hPx: 11 },
-        rear: { x: 0.167, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
+        rear: { x: 0.825, y: 0.459, w: 0, h: 0, wPx: 20, hPx: 20 },
       },
     },
     {
@@ -302,6 +310,7 @@ export const idris: ShipDefinition = {
       effect: 'PDC are weak to ballistic fire and can be suppressed easily by just a few fighters.',
       positions: {
         top: { x: 0.303, y: 0.351, w: 0, h: 0, wPx: 12, hPx: 11 },
+        rear: { x: 0.235, y: 0.841, w: 0, h: 0, wPx: 20, hPx: 20 },
       },
     },
     {
@@ -358,6 +367,20 @@ export const idris: ShipDefinition = {
       effect: 'PDC are weak to ballistic fire and can be suppressed easily by just a few fighters.',
       positions: {
         top: { x: 0.303, y: 0.351, w: 0, h: 0, wPx: 12, hPx: 11 },
+      },
+    },
+      {
+      id: 'lower-turret-1',
+      type: 'weapon',
+      category: 'main-weapon',
+      label: 'Starboard Manned Turret - S5 x2',
+      resultName: 'Starboard Manned Turret - S5 x2',
+      shortLabel: 'Stbd. Shoulder',
+      groupId: 'idr-stbd-shoulder',
+      priority: 1,
+      effect: 'Secondary suppression target.',
+      positions: {
+        top: { x: 0.263, y: 0.834, w: 0, h: 0, wPx: 30, hPx: 30 },
       },
     },
     

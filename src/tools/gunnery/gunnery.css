@@ -709,92 +709,152 @@
   z-index: 2;
 }
 
-.gun-zone-legend {
-  position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  width: min(13.5rem, calc(100% - 1.5rem));
-  display: grid;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 6px;
-  background: rgba(5, 10, 18, 0.86);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
-  pointer-events: auto;
-  z-index: 3;
-}
+/* ── Viewer filter rail ── */
 
-.gun-zone-legend-group {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.gun-zone-legend-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.gun-zone-legend-toggle,
-.gun-zone-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-height: 2rem;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(241, 245, 249, 0.92);
-}
-
-.gun-zone-legend-item {
-  min-height: 1.75rem;
-  padding-left: 1.5rem;
-}
-
-.gun-zone-legend-items {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.gun-zone-legend-checkbox {
-  width: 0.9rem;
-  height: 0.9rem;
-  margin: 0;
-  accent-color: var(--component-navigation);
-}
-
-.gun-zone-legend-swatch {
-  --legend-color: var(--component-navigation);
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 999px;
-  background: var(--legend-color);
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
+.gun-vfilter-col {
   flex-shrink: 0;
+  width: 9rem;
+  padding: 1rem 0.5rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--cmap-border);
+  overflow-y: auto;
 }
 
-.gun-zone-legend-collapse {
-  min-width: 1.5rem;
-  min-height: 1.5rem;
-  padding: 0;
-  border: none;
+.gun-vfilter-group {
+  border-left: 2px solid transparent;
+  padding-left: 0.5rem;
+  margin-bottom: 0.15rem;
+  transition: border-left-color 0.14s ease;
+}
+
+.gun-vfilter-group.is-active {
+  border-left-color: var(--cmap-accent);
+}
+
+.gun-vfilter-group.is-partial {
+  border-left-color: color-mix(in srgb, var(--cmap-accent) 34%, transparent);
+}
+
+.gun-vfilter-group-head {
+  display: flex;
+  align-items: center;
+}
+
+.gun-vfilter-group-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.44rem 0;
   background: transparent;
-  color: rgba(241, 245, 249, 0.64);
-  font-family: "Share Tech Mono", monospace;
-  font-size: 1rem;
-  line-height: 1;
+  border: none;
   cursor: pointer;
-  transition: color 0.12s ease, transform 0.12s ease;
+  text-align: left;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cmap-muted);
+  transition: color 0.12s ease;
 }
 
-.gun-zone-legend-collapse:hover,
-.gun-zone-legend-collapse:focus-visible {
-  color: rgba(241, 245, 249, 0.96);
-  transform: scale(1.06);
+.gun-vfilter-group-btn:hover {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+.gun-vfilter-group-btn.is-active {
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.gun-vfilter-group-btn.is-partial {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.gun-vfilter-pip {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 1px;
+  transition: opacity 0.12s ease, box-shadow 0.12s ease;
+}
+
+.gun-vfilter-group-btn .gun-vfilter-pip {
+  background: var(--cmap-accent);
+  opacity: 0.2;
+}
+
+.gun-vfilter-group-btn.is-partial .gun-vfilter-pip {
+  opacity: 0.52;
+}
+
+.gun-vfilter-group-btn.is-active .gun-vfilter-pip {
+  opacity: 1;
+  box-shadow: 0 0 5px color-mix(in srgb, var(--cmap-accent) 40%, transparent);
+}
+
+.gun-vfilter-collapse {
+  flex-shrink: 0;
+  padding: 0 0.3rem;
+  min-height: 1.6rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--cmap-muted);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.12s ease;
+}
+
+.gun-vfilter-collapse:hover {
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.gun-vfilter-items {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.3rem;
+}
+
+.gun-vfilter-item {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.2rem 0 0.2rem 0.55rem;
+  background: transparent;
+  border: none;
+  border-left: 1px solid transparent;
+  cursor: pointer;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.61rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--cmap-muted);
+  transition: color 0.12s ease, border-left-color 0.12s ease;
+}
+
+.gun-vfilter-item:hover {
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.gun-vfilter-item.is-active {
+  color: color-mix(in srgb, var(--cmap-accent) 88%, white 12%);
+  border-left-color: var(--item-color, var(--cmap-accent));
+}
+
+.gun-vfilter-item .gun-vfilter-pip {
+  background: var(--item-color, var(--cmap-accent));
+  opacity: 0.22;
+}
+
+.gun-vfilter-item.is-active .gun-vfilter-pip {
+  opacity: 1;
+  box-shadow: 0 0 4px color-mix(in srgb, var(--item-color, var(--cmap-accent)) 60%, transparent);
 }
 
 .gun-debug-capture {
@@ -869,7 +929,8 @@
   border-color: var(--zone-color);
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--zone-color) 36%, transparent),
-    0 0 10px color-mix(in srgb, var(--zone-color) 24%, transparent);
+    0 0 0 3px color-mix(in srgb, var(--zone-color) 12%, transparent),
+    0 0 14px color-mix(in srgb, var(--zone-color) 28%, transparent);
   opacity: 1;
 }
 
@@ -884,48 +945,114 @@
     drop-shadow(0 0 4px rgba(0, 0, 0, 0.85));
 }
 
-/* ── Sidebar ── */
-
-.gun-zone-sidebar,
-.cmap-sidebar {
-  flex-shrink: 0;
-  width: 17rem;
-  min-height: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid var(--cmap-border);
-  background: var(--cmap-surface);
-}
-
-.gun-zone-result,
-.cmap-sidebar-content {
-  width: 17rem;
-  flex: 1;
-  min-height: 0;
-  padding: 1rem;
+.gun-anchored-inspector {
+  position: fixed;
+  z-index: 80;
+  width: min(18rem, calc(100vw - 1.5rem));
+  max-height: min(32rem, calc(100dvh - 1.5rem));
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 100%),
+    rgba(7, 9, 14, 0.96);
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(96, 242, 255, 0.04);
+  animation: gun-inspector-in 110ms ease-out;
 }
 
-.gun-zone-intel,
-.cmap-intel {
+.gun-anchored-inspector::before {
+  content: "";
+  position: absolute;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(7, 9, 14, 0.96);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gun-anchored-inspector[data-placement="right"]::before {
+  left: 0;
+  top: var(--inspector-arrow-y);
+}
+
+.gun-anchored-inspector[data-placement="left"]::before {
+  left: var(--inspector-arrow-x);
+  top: var(--inspector-arrow-y);
+  transform: translate(-50%, -50%) rotate(225deg);
+}
+
+.gun-anchored-inspector[data-placement="bottom-sheet"] {
+  width: calc(100vw - 1.5rem);
+  max-height: min(28rem, calc(100dvh - 1.5rem));
+}
+
+.gun-anchored-inspector[data-placement="bottom-sheet"]::before {
+  left: var(--inspector-arrow-x);
+  top: 0;
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.gun-anchored-inspector[data-placement="center"]::before {
+  display: none;
+}
+
+@keyframes gun-inspector-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gun-zone-intel {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
 }
 
-.gun-zone-intel-head,
-.cmap-intel-head {
+.gun-zone-intel-head {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.gun-zone-result-name,
-.cmap-intel-name {
+.gun-zone-intel-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.gun-inspector-close {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(226, 232, 240, 0.7);
+  cursor: pointer;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.gun-inspector-close:hover,
+.gun-inspector-close:focus-visible {
+  border-color: rgba(96, 242, 255, 0.28);
+  background: rgba(96, 242, 255, 0.08);
+  color: rgba(248, 250, 252, 0.96);
+}
+
+.gun-zone-result-name {
   font-family: "Orbitron", sans-serif;
   font-size: 0.7rem;
   font-weight: 700;
@@ -934,8 +1061,7 @@
   color: var(--cmap-text);
 }
 
-.gun-priority-badge,
-.cmap-intel-badge {
+.gun-priority-badge {
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -947,15 +1073,13 @@
   border-radius: 999px;
 }
 
-.gun-zone-intel-meta,
-.cmap-meta-grid {
+.gun-zone-intel-meta {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.45rem;
 }
 
-.gun-zone-meta-block,
-.cmap-meta-block {
+.gun-zone-meta-block {
   padding: 0.55rem 0.65rem;
   border: 1px solid var(--cmap-border);
   border-radius: 3px;
@@ -965,8 +1089,7 @@
   gap: 0.2rem;
 }
 
-.gun-zone-meta-label,
-.cmap-meta-label {
+.gun-zone-meta-label {
   font-family: "Share Tech Mono", monospace;
   font-size: 0.6rem;
   letter-spacing: 0.12em;
@@ -974,16 +1097,14 @@
   color: var(--cmap-muted);
 }
 
-.gun-zone-meta-value,
-.cmap-meta-value {
+.gun-zone-meta-value {
   font-family: "Rajdhani", sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--cmap-text);
 }
 
-.gun-zone-effect,
-.cmap-intel-effect {
+.gun-zone-effect {
   margin: 0;
   font-size: 0.86rem;
   line-height: 1.65;
@@ -994,28 +1115,14 @@
   font-size: 0.82rem;
 }
 
-.gun-zone-result-empty,
-.cmap-intel-empty {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.gun-empty-title,
-.cmap-empty-title {
-  margin: 0;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgba(226, 232, 240, 0.38);
-}
-
-.gun-empty-copy,
-.cmap-empty-copy {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.55;
-  color: rgba(148, 163, 184, 0.38);
+.gun-zone-intel-img {
+  display: block;
+  width: 100%;
+  max-height: 10rem;
+  object-fit: cover;
+  border: 1px solid var(--cmap-border);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .gun-debug-overlay {
@@ -1041,10 +1148,21 @@
   letter-spacing: 0.05em;
 }
 
-.gun-debug-stack {
+.gun-debug-panel {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  width: min(17rem, calc(100% - 1.5rem));
+  max-height: calc(100% - 1.5rem);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(5, 10, 18, 0.88);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
 }
 
 .gun-debug-readout,

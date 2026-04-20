@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Background from "./components/Background";
 import AppShell from "./components/AppShell";
@@ -6,7 +7,6 @@ import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLanding from "./pages/DoctrineLanding";
 import DoctrineModulePage from "./pages/DoctrineModulePage";
 import DoctrineReferencePage from "./pages/DoctrineReferencePage";
-import MapsPage from "./pages/MapsPage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 import AdditionalSettingsPage from "./pages/systems/AdditionalSettingsPage";
 import GunneryWithLunaPage from "./pages/systems/GunneryWithLunaPage";
@@ -15,6 +15,8 @@ import TraditionalModulePage from "./pages/TraditionalModulePage";
 import WipPage from "./pages/WipPage";
 import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
 import { GunneryToolPage } from "./tools/gunnery";
+
+const MapsPage = lazy(() => import("./tools/maps/MapsPage"));
 
 export default function App() {
   return (
@@ -30,7 +32,14 @@ export default function App() {
           <Route path="modules" element={<ModuleIndexPage />} />
           <Route path="module/:id" element={<DoctrineModulePage />} />
           <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
-          <Route path="maps" element={<MapsPage />} />
+          <Route
+            path="maps"
+            element={(
+              <Suspense fallback={<div className="p-6 text-sm text-slate-300">Loading maps viewer…</div>}>
+                <MapsPage />
+              </Suspense>
+            )}
+          />
           <Route path="tools/alpha-threshold" element={<AlphaThresholdToolPage />} />
           <Route path="tools/gunnery" element={<GunneryToolPage />} />
 
