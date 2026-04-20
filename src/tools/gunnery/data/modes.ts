@@ -5,46 +5,61 @@ export const GIMBAL_MODES: GimbalModeDefinition[] = [
     id: 'AM',
     label: 'Auto Manual',
     tagline: 'System-assisted tracking within the gimbal cone',
+    behaviorProfile: [
+      'Uses gimbal cone assistance, attempts to automatically track and find a solution on target.',
+      'Forgives small pilot and gunner micro-adjustments without demanding constant pip correction.',
+      'Reduces workload during sustained tracking, especially when the turret crew is also managing callouts or component focus.',
+  
+    ],
+    bestUse: [
+      'Capital work where component tracking matters more than maximum manual precision.',
+    ],
     strengths: [
-      'Auto-corrects for pilot micro-inputs',
-      'Easily maintains lock on slow capital components',
-      'Low mental load for most engagements',
+      'Low mental load combat, promoting situaional awareness.',
+      'Strong tracking continuity against slow targets.',
     ],
-    weaknesses: [
-      'Cone desync on fast or evasive targets',
-      'Easy to defend against inexperienced gunners',
-      'Ineffective beyond mid-range(800m) on moving targets',
+    tradeoffs: [
+      'The cone can be defeated by hard lateral movement, offset vectors, or range extension.',
+      'Target switching can be annoying, AM takes additional time to acquire solutions.',
+      'Extremely weak against agile targets.',
     ],
-    bestFor: 'Capital ships, close range, slow-moving targets',
+    switchWhen: [
+      'Switch to PM when the target repeatedly outranges the cone or forces offset lead.',
+      'Switch to PM when component saturation matters more than precision firing while holding.',
+    ],
+    exampleTargets: [
+      'Capital ships',
+      'Large ships',
+    ],
   },
   {
     id: 'PM',
     label: 'Precision Manual',
-    tagline: 'Full manual crosshair — you control the lead',
+    tagline: 'Full manual pip placement with no tracking assist',
+    behaviorProfile: [
+      'Places the crosshair fully under gunner control with no tracking assist or cone correction.',
+      'Handles agile, offset, or harder-to-hold targets better.',
+    ],
+    bestUse: [
+      'All scenarios.',
+    ],
     strengths: [
-      'Almost exact placement on any target',
-      'Subtarget to change pip location',
-      'Effective at most normal ranges and target speeds',
+      'Highest control over pip placement and lead.',
+      'Better answer for fast, angular, or evasive movement.',
+      'Strong precision ceiling for experienced gunners.',
     ],
-    weaknesses: [
-      'Requires active lead and strafe calculation',
-      'Higher skill floor for fast or kiting targets',
-      'No auto-correction — every miss is yours',
+    tradeoffs: [
+      'No automatic correction for pilot movement, turret drift, or bad lead.',
+      'Can underperform AM when the target is slow and pilot control requires multiple small boosted inputs.',
     ],
-    bestFor: 'Fast, small, or dynamic targets at any range',
-  },
-  {
-    id: 'Fixed',
-    label: 'Fixed',
-    tagline: 'No gimbal — minor ROF gain only',
-    strengths: [
-      'Slight rate of fire increase',
+    switchWhen: [
+      'Engaging capitals in rate-locks.',
     ],
-    weaknesses: [
-      'Locked to turret rotation rates',
-      'Extremely limited firing arc',
-      'Not recommended for most engagements',
+    exampleTargets: [
+      'Light fighters',
+      'Fast heavy fighters',
+      'Offset or kiting targets',
+      'Components at range',
     ],
-    bestFor: 'Rarely — only if ROF margin is meaningful for your loadout',
   },
 ]

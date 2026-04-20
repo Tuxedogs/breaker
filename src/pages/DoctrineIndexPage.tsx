@@ -68,18 +68,21 @@ const disabledCard = {
 const toolBanners = [
   {
     title: "GUNNERY",
+    label: "TARGET SYS",
     sub: "Targeting, sub-targeting, and firing mode guidance for crew stations.",
     to: "/tools/gunnery",
     mod: "fw-tool-banner--gunnery",
   },
   {
-    title: "ARMOR THRESHOLD MAPPING",
+    title: "ARMOR THRESHOLDS",
+    label: "DAMAGE INTEL",
     sub: "Compare weapon alpha against ship ballistic and energy thresholds.",
     to: "/tools/alpha-threshold",
     mod: "fw-tool-banner--alpha",
   },
   {
     title: "MAPS",
+    label: "NAV DECK",
     sub: "Deck views, overlays, and ship reference layouts.",
     to: "/maps",
     mod: "fw-tool-banner--maps",
@@ -154,12 +157,27 @@ export default function DoctrineIndexPage() {
         {/* Tool banners */}
         <div className="space-y-4">
           {toolBanners.map((b) => (
-            <Link key={b.to} to={b.to} className={`fw-tool-banner ${b.mod}`}>
+            <Link key={b.to} to={b.to} className={`fw-tool-banner ${b.mod}`} aria-label={`${b.title}: ${b.sub}`}>
+              <span className="fw-tool-panel-lines" aria-hidden="true" />
+              <span className="fw-tool-mark" aria-hidden="true">
+                {b.mod === "fw-tool-banner--maps" ? (
+                  <svg className="fw-tool-blueprint-icon" viewBox="0 0 32 32" focusable="false">
+                    <path className="fw-tool-blueprint-frame" d="M6.5 5.5h19v21h-19z" />
+                    <path d="M10 9h6v5h-6zM18.5 9h4v7h-4zM10 17h5v5.5h-5zM17.5 19h5v3.5h-5z" />
+                    <path d="M16 11.5h2.5M15 19.5h2.5M12.5 14v3M20.5 16v3" />
+                    <path className="fw-tool-blueprint-ticks" d="M8 8h2M8 24h2M22 8h2M22 24h2M6.5 12h2M6.5 20h2M23.5 14h2" />
+                    <circle className="fw-tool-blueprint-node" cx="20.5" cy="20.8" r="1.65" />
+                  </svg>
+                ) : (
+                  <span className="fw-tool-mark-core" />
+                )}
+              </span>
               <div className="fw-tool-copy">
+                <span className="fw-tool-kicker">{b.label}</span>
                 <span className="fw-tool-title">{b.title}</span>
                 <span className="fw-tool-sub">{b.sub}</span>
               </div>
-              <span className="fw-tool-arrow">›</span>
+              <span className="fw-tool-arrow" aria-hidden="true">›</span>
             </Link>
           ))}
         </div>

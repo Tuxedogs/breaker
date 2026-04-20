@@ -1,4 +1,3 @@
-import { pow } from 'three/tsl'
 import type { ShipDefinition } from './types'
 
 export const idris: ShipDefinition = {
@@ -32,7 +31,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'F. P1',
       groupId: 'idr-power',
       priority: 2,
-      effect: 'AM Enabled on turrets when attacking capital weapons and internals.',
+      effect: 'Starboard side, where the neck of the bridge meets the main hull.',
       positions: {
         top: { x: 0.77, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
         rear: { x: 0.596, y: 0.563, w: 0, h: 0, wPx: 40, hPx: 40 },
@@ -48,7 +47,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'R. P2',
       groupId: 'idr-power',
       priority: 2,
-      effect: 'AM Enabled on turrets when attacking capital weapons and internals.',
+      effect: 'Forward of the rear radar disc, on the starboard side.',
       positions: {
         top: { x: 0.803, y: 0.483, w: 0, h: 0, wPx: 40, hPx: 40 },
         rear: { x: 0.63, y: 0.523, w: 0, h: 0, wPx: 40, hPx: 40 },
@@ -137,7 +136,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Stbd. Shoulder',
       groupId: 'idr-stbd-shoulder',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         top: { x: 0.565, y: 0.188, w: 0, h: 0, wPx: 72, hPx: 40 },
       },
@@ -151,7 +150,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Stbd. Shoulder',
       groupId: 'idr-stbd-shoulder',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         top: { x: 0.705, y: 0.188, w: 0, h: 0, wPx: 72, hPx: 40 },
       },
@@ -165,7 +164,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'P. Shoulder',
       groupId: 'idr-port-shoulder',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         top: { x: 0.555, y: 0.799, w: 0, h: 0, wPx: 72, hPx: 40 },
       },
@@ -179,7 +178,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'P. Shoulder',
       groupId: 'idr-port-shoulder',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         top: { x: 0.688, y: 0.799, w: 0, h: 0, wPx: 72, hPx: 40 },
       },
@@ -219,7 +218,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Rear Lower',
       groupId: 'idr-rear-lower',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         rear: { x: 0.835, y: 0.373, w: 0, h: 0, wPx: 121, hPx: 81 },
       },
@@ -378,7 +377,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Stbd. Shoulder',
       groupId: 'idr-stbd-shoulder',
       priority: 1,
-      effect: 'Secondary suppression target.',
+      effect: 'Primary suppression target.',
       positions: {
         top: { x: 0.263, y: 0.834, w: 0, h: 0, wPx: 30, hPx: 30 },
       },
@@ -386,5 +385,4 @@ export const idris: ShipDefinition = {
     
   ],
 }
-
 

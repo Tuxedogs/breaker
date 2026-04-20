@@ -16,7 +16,15 @@ import WipPage from "./pages/WipPage";
 import { AlphaThresholdToolPage } from "./tools/alpha-threshold";
 import { GunneryToolPage } from "./tools/gunnery";
 
-const MapsPage = lazy(() => import("./tools/maps/MapsPage"));
+const ViewerPage = lazy(() => import("./tools/viewer/ViewerPage"));
+
+function ViewerRouteFallback() {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center px-4 text-center">
+      <p className="base-card-kicker">Loading viewer...</p>
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -24,7 +32,9 @@ export default function App() {
       <Background />
       <Routes>
         <Route path="doctrine-landing" element={<DoctrineLanding />} />
+
         <Route element={<AppShell />}>
+          {/* Doctrine */}
           <Route index element={<DoctrineIndexPage />} />
           <Route path="index" element={<DoctrineIndexPage />} />
           <Route path="framework" element={<DoctrineIndexPage />} />
@@ -32,24 +42,33 @@ export default function App() {
           <Route path="modules" element={<ModuleIndexPage />} />
           <Route path="module/:id" element={<DoctrineModulePage />} />
           <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
+
+          {/* Tools */}
           <Route
             path="maps"
             element={(
-              <Suspense fallback={<div className="p-6 text-sm text-slate-300">Loading maps viewer…</div>}>
-                <MapsPage />
+              <Suspense fallback={<ViewerRouteFallback />}>
+                <ViewerPage />
               </Suspense>
             )}
           />
           <Route path="tools/alpha-threshold" element={<AlphaThresholdToolPage />} />
           <Route path="tools/gunnery" element={<GunneryToolPage />} />
 
-<Route path="systems/sub-targeting" element={<Navigate to="/module/sub-targeting" replace />} />
+          {/* Redirects */}
+          <Route path="systems/sub-targeting" element={<Navigate to="/module/sub-targeting" replace />} />
           <Route path="systems/turret-keybinds" element={<Navigate to="/module/turret-keybind-baseline" replace />} />
-          <Route path="systems/additional-settings-binds" element={<AdditionalSettingsPage />} />
           <Route
             path="systems/turret-keybinds/additional"
             element={<Navigate to="/module/turret-keybind-baseline" replace />}
           />
+          <Route
+            path="anti-cap/component-sniping"
+            element={<Navigate to="/module/component-sniping" replace />}
+          />
+
+          {/* Legacy/WIP pages */}
+          <Route path="systems/additional-settings-binds" element={<AdditionalSettingsPage />} />
           <Route path="systems/gunnery-with-luna" element={<GunneryWithLunaPage />} />
           <Route path="systems/communications" element={<TraditionalModulePage />} />
           <Route
@@ -61,10 +80,6 @@ export default function App() {
           <Route path="wip/organization" element={<WipPage section="Systems" title="Organization" />} />
           <Route path="wip/camera-tracking" element={<WipPage section="Systems" title="Camera and Tracking" />} />
           <Route path="wip/performance" element={<WipPage section="Systems" title="Performance" />} />
-          <Route
-            path="anti-cap/component-sniping"
-            element={<Navigate to="/module/component-sniping" replace />}
-          />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
