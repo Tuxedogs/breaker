@@ -14,20 +14,18 @@ enemies: []
 prerequisites: ["keybind/turret-bind-baseline"]
 relatedModuleIds: ["turret-keybind-baseline"]
 useWhen:
-  - Prior to boarding ships with remote turrets
-  - Crew role swaps during live operations
-  - After keybind resets or profile changes
+  - 
+  - 
 steps:
   - label: Confirm the assigned station
-    detail: Move to the correct remote turret station and verify the interaction prompt or seat workflow.
-  - label: Validate seat-entry binds
-    detail: Confirm the crew member has the required remote turret entry bind on the intended seat index.
-  - label: Test the turret loop
-    detail: Enter the turret, verify camera and weapon response, then confirm the emergency exit bind still works.
+    detail: Some ships have multiple remote stations.
+  - label: Power On the station.
+    detail: Some ships require interaction mode, others will use your flight ready keybind.
+  - label: Press your Enter Remote Turret Keybind 
+    detail: Can be found in Vehicle Seats and Operator Modes, towards the bottom.
 failureModes:
   - Crew cannot enter the assigned turret because the entry bind is missing or conflicting
-  - Operator can enter the turret but cannot quickly exit for handoff or survival
   - Different baselines across the crew create avoidable delays during launch
 ---
 
-Use this as the minimum readiness gate before assigning live turret responsibilities.
+Use this as the minimum readiness gate before assigning turret responsibilities.

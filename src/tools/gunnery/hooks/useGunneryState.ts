@@ -19,7 +19,7 @@ import { recommendMode } from '../lib/recommend'
 export type GunneryState = ReturnType<typeof useGunneryState>
 
 export function useGunneryState() {
-  const [activeSection, setActiveSection] = useState<GunnerySection>('mode-recommender')
+  const [activeSection, setActiveSection] = useState<GunnerySection>('sub-targeting')
 
   const [weaponType, setWeaponType] = useState<WeaponType | null>(null)
   const [targetType, setTargetType] = useState<TargetType | null>(null)

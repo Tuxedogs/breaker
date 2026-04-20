@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState, useLayoutEffect, useCallback, useEffect } from 'react'
+import { useRef, useState, useLayoutEffect, useCallback, useEffect } from 'react'
 import type { CSSProperties } from 'react'
 import type { GunneryState } from '../../hooks/useGunneryState'
 import {
@@ -7,8 +7,9 @@ import {
   ZONE_CATEGORY_META,
   ZONE_CATEGORY_ORDER,
 } from '../../data/subtarget-ships/componentMeta'
-import type { ZoneCategory, ZoneCategoryGroup } from '../../data/subtarget-ships/types'
+import type { NormalizedShipDefinition, NormalizedShipZone, ZoneCategory, ZoneCategoryGroup } from '../../data/subtarget-ships/types'
 import { getIntelImage } from '../../lib/getIntelImage'
+import { AnchoredInspector } from './AnchoredInspector'
 
 type Props = Pick<GunneryState,
   | 'ships' | 'selectedShipId' | 'selectedShip'
@@ -17,14 +18,6 @@ type Props = Pick<GunneryState,
   | 'activeZone' | 'selectShip'
 >
 
-type Dot = { x: number; y: number }
-type ConnectionState = {
-  svgW: number
-  svgH: number
-  paths: string[]
-  dots: Dot[]
-  zoneType: string
-}
 type PctPoint = { x: number; y: number }
 type DrawnBox = { x: number; y: number; w: number; h: number; wPx: number; hPx: number }
 type OverlayBounds = {
@@ -42,11 +35,6 @@ type LegendState = {
   expandedGroups: ExpandedGroups
 }
 
-function buildOrthogonalPath(start: PctPoint, end: PctPoint): string {
-  const midX = Math.round(((start.x + end.x) / 2) * 100) / 100
-  return `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`
-}
-
 function formatNormalizedPosition(percent: number): string {
   return (Math.round(percent * 10) / 1000).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')
 }
@@ -62,8 +50,85 @@ function buildDefaultCategoryVisibility(): VisibilityByCategory {
 
 function buildDefaultExpandedGroups(): ExpandedGroups {
   return Object.fromEntries(
-    ZONE_CATEGORY_GROUP_ORDER.map((group) => [group, ZONE_CATEGORY_GROUP_META[group].defaultExpanded])
+    ZONE_CATEGORY_GROUP_ORDER.map((group) => [group, true])
   ) as ExpandedGroups
+}
+
+type ZoneIntelProps = {
+  activeViewLabel: string
+  groupCount: number
+  headingId?: string
+  onClose?: () => void
+  ship: NormalizedShipDefinition | null
+  zone: NormalizedShipZone
+}
+
+function ZoneIntel({
+  activeViewLabel,
+  groupCount,
+  headingId,
+  onClose,
+  ship,
+  zone,
+}: ZoneIntelProps) {
+  const intelImage = ship ? getIntelImage(ship, zone) : null
+
+  return (
+    <div className="gun-zone-intel">
+      <div className="gun-zone-intel-head">
+        <div className="gun-zone-intel-title-row">
+          <div id={headingId} className="gun-zone-result-name">{zone.resultName}</div>
+          {onClose ? (
+            <button
+              type="button"
+              className="gun-inspector-close"
+              onClick={onClose}
+              aria-label="Close component inspector"
+            >
+              x
+            </button>
+          ) : null}
+        </div>
+        <div
+          className="gun-priority-badge"
+          style={{
+            color: zone.color,
+            background: `color-mix(in srgb, ${zone.color} 10%, transparent)`,
+            border: `1px solid color-mix(in srgb, ${zone.color} 36%, transparent)`,
+          }}
+        >
+          P{zone.priority} / {zone.priorityLabel}
+        </div>
+      </div>
+
+      <div className="gun-zone-intel-meta">
+        <div className="gun-zone-meta-block">
+          <span className="gun-zone-meta-label">View</span>
+          <span className="gun-zone-meta-value">{activeViewLabel}</span>
+        </div>
+        <div className="gun-zone-meta-block">
+          <span className="gun-zone-meta-label">Group</span>
+          <span className="gun-zone-meta-value">
+            {groupCount > 1 ? `${groupCount} zones` : 'Single'}
+          </span>
+        </div>
+      </div>
+
+      <p className="gun-zone-effect">{zone.effect}</p>
+
+      {intelImage ? (
+        <>
+          <div className="gun-zone-result-name">Component Outline</div>
+          <img
+            src={intelImage}
+            alt={`${zone.type} component reference`}
+            className="gun-zone-intel-img"
+          />
+        </>
+      ) : null}
+
+    </div>
+  )
 }
 
 export function SubTargetSection({
@@ -75,15 +140,14 @@ export function SubTargetSection({
   const subtargetRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLDivElement>(null)
-  const resultRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const zoneRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
   const shipBtnRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
   const hullPromptRef = useRef<HTMLDivElement>(null)
 
   const [debugMode, setDebugMode] = useState(false)
-  const [connection, setConnection] = useState<ConnectionState | null>(null)
   const [overlayBounds, setOverlayBounds] = useState<OverlayBounds | null>(null)
+  const [activeAnchorRect, setActiveAnchorRect] = useState<DOMRect | null>(null)
   const [layoutVersion, setLayoutVersion] = useState(0)
   const [dragStart, setDragStart] = useState<PctPoint | null>(null)
   const [dragCurrent, setDragCurrent] = useState<PctPoint | null>(null)
@@ -320,9 +384,8 @@ export function SubTargetSection({
   useEffect(() => {
     const body = bodyRef.current
     const canvas = canvasRef.current
-    const result = resultRef.current
     const image = imageRef.current
-    if (!body || !canvas || !result || !image) return
+    if (!body || !canvas || !image) return
 
     let frame = 0
     const schedule = () => {
@@ -336,7 +399,6 @@ export function SubTargetSection({
     const observer = new ResizeObserver(schedule)
     observer.observe(body)
     observer.observe(canvas)
-    observer.observe(result)
     observer.observe(image)
     window.addEventListener('resize', schedule)
 
@@ -352,67 +414,18 @@ export function SubTargetSection({
   useLayoutEffect(() => {
     let frame = 0
 
-    if (!activeZone || !bodyRef.current || !resultRef.current) {
-      frame = window.requestAnimationFrame(() => setConnection(null))
+    if (!activeZoneId) {
+      frame = window.requestAnimationFrame(() => setActiveAnchorRect(null))
       return () => window.cancelAnimationFrame(frame)
     }
-
-    const bodyRect = bodyRef.current.getBoundingClientRect()
-    const resultRect = resultRef.current.getBoundingClientRect()
-
-    const groupId = activeZone.groupId
-    const groupZones = selectedShip?.zones.filter(zone =>
-      groupId
-        ? zone.groupId === groupId && zone.positions[activeView]
-        : zone.id === activeZone.id && zone.positions[activeView]
-    ) ?? []
-
-    const zoneCenters = groupZones
-      .map(zone => {
-        const el = zoneRefs.current.get(zone.id)
-        if (!el) return null
-        const rect = el.getBoundingClientRect()
-        return {
-          id: zone.id,
-          x: rect.left + rect.width / 2 - bodyRect.left,
-          y: rect.top + rect.height / 2 - bodyRect.top,
-        }
-      })
-      .filter((c): c is { id: string; x: number; y: number } => c !== null)
-      .sort((a, b) => a.x - b.x)
-
-    if (zoneCenters.length === 0) {
-      frame = window.requestAnimationFrame(() => setConnection(null))
-      return () => window.cancelAnimationFrame(frame)
-    }
-
-    const paths: string[] = []
-    const dots: Dot[] = zoneCenters.map(c => ({ x: c.x, y: c.y }))
-
-    for (let i = 0; i < zoneCenters.length - 1; i++) {
-      const a = zoneCenters[i]
-      const b = zoneCenters[i + 1]
-      paths.push(buildOrthogonalPath(a, b))
-    }
-
-    const last = zoneCenters[zoneCenters.length - 1]
-    const rx = resultRect.left - bodyRect.left
-    const ry = 100
-    paths.push(buildOrthogonalPath(last, { x: rx, y: ry }))
-    dots.push({ x: rx, y: ry })
 
     frame = window.requestAnimationFrame(() => {
-      setConnection({
-        svgW: bodyRect.width,
-        svgH: bodyRect.height,
-        paths,
-        dots,
-        zoneType: activeZone.type,
-      })
+      const anchor = zoneRefs.current.get(activeZoneId)
+      setActiveAnchorRect(anchor?.getBoundingClientRect() ?? null)
     })
 
     return () => window.cancelAnimationFrame(frame)
-  }, [activeZoneId, activeView, selectedShipId, layoutVersion]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeZoneId, activeView, selectedShipId, layoutVersion])
 
   const handleImageLoad = useCallback(() => {
     recomputeOverlayBounds()
@@ -428,6 +441,11 @@ export function SubTargetSection({
     if (el) shipBtnRefs.current.set(id, el)
     else shipBtnRefs.current.delete(id)
   }
+
+  const closeInspector = useCallback(() => {
+    setActiveZoneId(null)
+    setActiveAnchorRect(null)
+  }, [setActiveZoneId])
 
   useLayoutEffect(() => {
     if (selectedShipId) {
@@ -537,35 +555,63 @@ export function SubTargetSection({
       {/* ── Body ───────────────────────────────────── */}
       <div ref={bodyRef} className="gun-trainer">
 
-        {/* SVG connection overlay */}
-        {!debugMode && connection && (
-          <svg
-            width={connection.svgW}
-            height={connection.svgH}
-            className="gun-connection-svg"
-            data-zone-type={connection.zoneType}
-          >
-            {connection.paths.map((path, i) => (
-              <Fragment key={i}>
-                <path
-                  d={path}
-                  className="gun-connection-path-underlay"
-                  fill="none"
-                />
-                <path
-                  d={path}
-                  className="gun-connection-path-main"
-                  fill="none"
-                />
-              </Fragment>
-            ))}
-            {connection.dots.map((dot, i) => (
-              <Fragment key={i}>
-                <circle cx={dot.x} cy={dot.y} r="4" className="gun-connection-dot-underlay" />
-                <circle cx={dot.x} cy={dot.y} r="2.5" className="gun-connection-dot-main" />
-              </Fragment>
-            ))}
-          </svg>
+        {selectedShip && !debugMode && shipCategories.length > 0 && (
+          <div className="gun-vfilter-col" aria-label="Zone visibility filters">
+            {ZONE_CATEGORY_GROUP_ORDER.map((group) => {
+              const categories = groupCategories[group]
+              if (categories.length === 0) return null
+
+              const groupMeta = ZONE_CATEGORY_GROUP_META[group]
+              const allChecked = categories.every((category) => visibleCategories[category])
+              const someChecked = categories.some((category) => visibleCategories[category])
+              const showChildren = groupMeta.collapsible && expandedGroups[group]
+              const groupState = allChecked ? 'is-active' : someChecked ? 'is-partial' : ''
+
+              return (
+                <div key={group} className={`gun-vfilter-group${groupState ? ` ${groupState}` : ''}`}>
+                  <div className="gun-vfilter-group-head">
+                    <button
+                      type="button"
+                      className={`gun-vfilter-group-btn${groupState ? ` ${groupState}` : ''}`}
+                      aria-pressed={allChecked}
+                      onClick={() => toggleGroupVisibility(group)}
+                    >
+                      <span className="gun-vfilter-pip" aria-hidden="true" />
+                      {groupMeta.label}
+                    </button>
+                    {groupMeta.collapsible ? (
+                      <button
+                        type="button"
+                        className="gun-vfilter-collapse"
+                        aria-expanded={expandedGroups[group]}
+                        aria-label={`${expandedGroups[group] ? 'Collapse' : 'Expand'} ${groupMeta.label}`}
+                        onClick={() => toggleGroupExpanded(group)}
+                      >
+                        {expandedGroups[group] ? '−' : '+'}
+                      </button>
+                    ) : null}
+                  </div>
+                  {showChildren ? (
+                    <div className="gun-vfilter-items">
+                      {categories.map((category) => (
+                        <button
+                          key={category}
+                          type="button"
+                          className={`gun-vfilter-item${visibleCategories[category] ? ' is-active' : ''}`}
+                          aria-pressed={visibleCategories[category]}
+                          style={{ '--item-color': ZONE_CATEGORY_META[category].color } as CSSProperties}
+                          onClick={() => toggleCategoryVisibility(category)}
+                        >
+                          <span className="gun-vfilter-pip" aria-hidden="true" />
+                          {ZONE_CATEGORY_META[category].label}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )
+            })}
+          </div>
         )}
 
         {/* Canvas */}
@@ -600,73 +646,6 @@ export function SubTargetSection({
                 height: `${overlayBounds.height}px`,
               }}
             >
-              {!debugMode && shipCategories.length > 0 && (
-                <div className="gun-zone-legend" aria-label="Zone visibility filters">
-                  {ZONE_CATEGORY_GROUP_ORDER.map((group) => {
-                    const categories = groupCategories[group]
-                    if (categories.length === 0) return null
-
-                    const groupMeta = ZONE_CATEGORY_GROUP_META[group]
-                    const allChecked = categories.every((category) => visibleCategories[category])
-                    const someChecked = categories.some((category) => visibleCategories[category])
-                    const showChildren = groupMeta.collapsible && expandedGroups[group]
-
-                    return (
-                      <section key={group} className="gun-zone-legend-group">
-                        <div className="gun-zone-legend-head">
-                          <label className="gun-zone-legend-toggle">
-                            <input
-                              type="checkbox"
-                              className="gun-zone-legend-checkbox"
-                              checked={allChecked}
-                              ref={(element) => {
-                                if (element) {
-                                  element.indeterminate = someChecked && !allChecked
-                                }
-                              }}
-                              onChange={() => toggleGroupVisibility(group)}
-                            />
-                            <span>{groupMeta.label}</span>
-                          </label>
-
-                          {groupMeta.collapsible ? (
-                            <button
-                              type="button"
-                              className="gun-zone-legend-collapse"
-                              aria-expanded={expandedGroups[group]}
-                              onClick={() => toggleGroupExpanded(group)}
-                            >
-                              <span aria-hidden="true">{expandedGroups[group] ? '⌄' : '›'}</span>
-                            </button>
-                          ) : null}
-                        </div>
-
-                        {showChildren ? (
-                          <div className="gun-zone-legend-items">
-                            {categories.map((category) => (
-                              <label key={category} className="gun-zone-legend-item">
-                                <input
-                                  type="checkbox"
-                                  className="gun-zone-legend-checkbox"
-                                  checked={visibleCategories[category]}
-                                  onChange={() => toggleCategoryVisibility(category)}
-                                />
-                                <span
-                                  className="gun-zone-legend-swatch"
-                                  style={{ '--legend-color': ZONE_CATEGORY_META[category].color } as CSSProperties}
-                                  aria-hidden="true"
-                                />
-                                <span>{ZONE_CATEGORY_META[category].label}</span>
-                              </label>
-                            ))}
-                          </div>
-                        ) : null}
-                      </section>
-                    )
-                  })}
-                </div>
-              )}
-
               {!debugMode && visibleZones.map(zone => {
                 const pos = zone.positions[activeView]!
                 const isGroupActive = activeZone?.groupId
@@ -689,7 +668,15 @@ export function SubTargetSection({
                       '--zone-color': zone.color,
                     } as CSSProperties}
                     aria-pressed={isGroupActive}
-                    onClick={() => setActiveZoneId(activeZoneId === zone.id ? null : zone.id)}
+                    onClick={(event) => {
+                      if (activeZoneId === zone.id) {
+                        closeInspector()
+                        return
+                      }
+
+                      setActiveAnchorRect(event.currentTarget.getBoundingClientRect())
+                      setActiveZoneId(zone.id)
+                    }}
                     title={`${zone.label} | P${zone.priority}`}
                   >
                     <ZoneIcon className="gun-zone-icon" />
@@ -744,101 +731,61 @@ export function SubTargetSection({
                       </div>
                     </div>
                   )}
+
+                  <div className="gun-debug-panel" onMouseDown={(event) => event.stopPropagation()}>
+                    <div className="gun-diagnosis-block-label tool-section-label">Zone Calibration</div>
+
+                    {drawnBox && !isDragging ? (
+                      <>
+                        <div className="gun-debug-readout">
+                          x: {formatNormalizedPosition(drawnBox.x)}, y: {formatNormalizedPosition(drawnBox.y)}<br />
+                          w: {formatNormalizedPosition(drawnBox.w)} <span className="gun-debug-readout-dim">({drawnBox.w}% / {drawnBox.wPx}px)</span><br />
+                          h: {formatNormalizedPosition(drawnBox.h)} <span className="gun-debug-readout-dim">({drawnBox.h}% / {drawnBox.hPx}px)</span>
+                        </div>
+                        <div className="gun-debug-readout-secondary">
+                          positions: {'{'} x: {formatNormalizedPosition(drawnBox.x)}, y: {formatNormalizedPosition(drawnBox.y)}, w: 0, h: 0, wPx: {drawnBox.wPx}, hPx: {drawnBox.hPx} {'}'}<br />
+                          <br />
+                          wPx: {drawnBox.wPx}<br />
+                          hPx: {drawnBox.hPx}
+                        </div>
+                        <button
+                          className="gun-view-btn tool-choice-button tool-choice-button--compact gun-debug-clear"
+                          onClick={() => setDrawnBox(null)}
+                        >
+                          Clear
+                        </button>
+                      </>
+                    ) : (
+                      <div className="gun-zone-effect gun-zone-effect-debug">
+                        Drag on the image to measure a zone box.<br />
+                        Release to see % and px dimensions.
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* Sidebar */}
-        <aside className="gun-zone-sidebar">
-          <div ref={resultRef} className="gun-zone-result">
-            {debugMode ? (
-              <div className="gun-debug-stack">
-                <div className="gun-diagnosis-block-label tool-section-label">Zone Calibration</div>
-
-                {drawnBox && !isDragging ? (
-                  <>
-                    <div className="gun-debug-readout">
-                      x: {formatNormalizedPosition(drawnBox.x)}, y: {formatNormalizedPosition(drawnBox.y)}<br />
-                      w: {formatNormalizedPosition(drawnBox.w)} <span className="gun-debug-readout-dim">({drawnBox.w}% / {drawnBox.wPx}px)</span><br />
-                      h: {formatNormalizedPosition(drawnBox.h)} <span className="gun-debug-readout-dim">({drawnBox.h}% / {drawnBox.hPx}px)</span>
-                    </div>
-                    <div className="gun-debug-readout-secondary">
-                      positions: {'{'} x: {formatNormalizedPosition(drawnBox.x)}, y: {formatNormalizedPosition(drawnBox.y)}, w: 0, h: 0, wPx: {drawnBox.wPx}, hPx: {drawnBox.hPx} {'}'}<br />
-                      <br />
-                      wPx: {drawnBox.wPx}<br />
-                      hPx: {drawnBox.hPx}
-                    </div>
-                    <button
-                      className="gun-view-btn tool-choice-button tool-choice-button--compact gun-debug-clear"
-                      onClick={() => setDrawnBox(null)}
-                    >
-                      Clear
-                    </button>
-                  </>
-                ) : (
-                  <div className="gun-zone-effect gun-zone-effect-debug">
-                    Drag on the image to measure a zone box.<br />
-                    Release to see % and px dimensions.
-                  </div>
-                )}
-              </div>
-            ) : activeZone ? (
-              <div className="gun-zone-intel">
-                <div className="gun-zone-intel-head">
-                  <div className="gun-zone-result-name">{activeZone.resultName}</div>
-                  <div
-                    className="gun-priority-badge"
-                    style={{
-                      color: activeZone.color,
-                      background: `color-mix(in srgb, ${activeZone.color} 10%, transparent)`,
-                      border: `1px solid color-mix(in srgb, ${activeZone.color} 36%, transparent)`,
-                    }}
-                  >
-                    P{activeZone.priority} · {activeZone.priorityLabel}
-                  </div>
-                </div>
-
-                <div className="gun-zone-intel-meta">
-                  <div className="gun-zone-meta-block">
-                    <span className="gun-zone-meta-label">View</span>
-                    <span className="gun-zone-meta-value">{activeViewLabel}</span>
-                  </div>
-                  <div className="gun-zone-meta-block">
-                    <span className="gun-zone-meta-label">Group</span>
-                    <span className="gun-zone-meta-value">
-                      {activeGroupZones.length > 1 ? `${activeGroupZones.length} zones` : 'Single'}
-                    </span>
-                  </div>
-                </div>
-
-                <p className="gun-zone-effect">{activeZone.effect}</p>
-
-                {selectedShip && (() => {
-                  const intelImage = getIntelImage(selectedShip, activeZone)
-                  return intelImage ? (
-                    <>
-                      <div className="gun-zone-result-name">Component Outline</div>
-                      <img
-                        src={intelImage}
-                        alt={`${activeZone.type} component reference`}
-                        className="gun-zone-intel-img"
-                      />
-                    </>
-                  ) : null
-                })()}
-              </div>
-            ) : (
-              <div className="gun-zone-result-empty">
-                <p className="gun-empty-title">No component selected</p>
-                <p className="gun-empty-copy">
-                  Click a zone on the hull to inspect its priority and combat effect.
-                </p>
-              </div>
-            )}
-          </div>
-        </aside>
+        {activeZone && activeAnchorRect ? (
+          <AnchoredInspector
+            anchorRect={activeAnchorRect}
+            isOpen={!debugMode}
+            labelledBy="gun-active-zone-inspector-title"
+            onClose={closeInspector}
+            version={layoutVersion}
+          >
+            <ZoneIntel
+              activeViewLabel={activeViewLabel}
+              groupCount={activeGroupZones.length}
+              headingId="gun-active-zone-inspector-title"
+              onClose={closeInspector}
+              ship={selectedShip}
+              zone={activeZone}
+            />
+          </AnchoredInspector>
+        ) : null}
 
       </div>
     </div>
