@@ -3,47 +3,17 @@ import type {
   ComponentZone,
   DiagnosisEntry,
   GunnerySection,
-  ModeRecommendation,
-  Range,
   SubTargetShip,
-  TargetSpeed,
-  TargetType,
   ViewId,
   VisualToggles,
-  WeaponType,
 } from '../types'
 import { DIAGNOSIS } from '../data/diagnosis'
 import { SHIPS } from '../data/ships'
-import { recommendMode } from '../lib/recommend'
 
 export type GunneryState = ReturnType<typeof useGunneryState>
 
 export function useGunneryState() {
   const [activeSection, setActiveSection] = useState<GunnerySection>('sub-targeting')
-
-  const [weaponType, setWeaponType] = useState<WeaponType | null>(null)
-  const [targetType, setTargetType] = useState<TargetType | null>(null)
-  const [range, setRange] = useState<Range | null>(null)
-  const [speed, setSpeed] = useState<TargetSpeed | null>(null)
-
-  const resolvedTargetType =
-    targetType === null
-      ? null
-      : weaponType === 'medusa'
-        ? (targetType === 'fighter' || targetType === 'large' || targetType === 'capital' ? targetType : null)
-        : (targetType === 'fighter' || targetType === 'heavy-fighter' || targetType === 'large' ? targetType : null)
-
-  const recommendation = useMemo<ModeRecommendation | null>(() => {
-    if (!weaponType || !resolvedTargetType || !range || !speed) return null
-    return recommendMode(weaponType, resolvedTargetType, range, speed)
-  }, [weaponType, resolvedTargetType, range, speed])
-
-  const clearRecommender = () => {
-    setWeaponType(null)
-    setTargetType(null)
-    setRange(null)
-    setSpeed(null)
-  }
 
   const [selectedShipId, setSelectedShipId] = useState<string | null>(null)
   const [activeView, setActiveView] = useState<ViewId>('top')
@@ -85,16 +55,6 @@ export function useGunneryState() {
   return {
     activeSection,
     setActiveSection,
-    weaponType,
-    setWeaponType,
-    targetType,
-    setTargetType,
-    range,
-    setRange,
-    speed,
-    setSpeed,
-    recommendation,
-    clearRecommender,
     selectedShipId,
     selectedShip,
     activeView,

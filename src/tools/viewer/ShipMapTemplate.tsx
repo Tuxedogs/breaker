@@ -30,7 +30,7 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { GLTFLoader, type GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import CTM from "./lib/openctm/ctm.js";
+import CTM from "../../lib/openctm/ctm.js";
 import {
   ArmoryIcon,
   CoolerIcon,

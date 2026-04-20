@@ -1,23 +1,16 @@
-export type GimbalMode = 'AM' | 'PM' | 'Fixed'
-export type WeaponType = 'cf-repeaters' | 'ndb' | 'medusa'
-export type TargetType = 'fighter' | 'heavy-fighter' | 'large' | 'capital'
-export type Range = 'close' | 'mid' | 'far'
-export type TargetSpeed = 'slow' | 'medium' | 'fast'
+export type GimbalMode = 'AM' | 'PM'
 export type GunnerySection = 'mode-recommender' | 'sub-targeting' | 'diagnosis'
-
-export type ModeRecommendation = {
-  mode: GimbalMode
-  confidence: 'strong' | 'moderate'
-  reasoning: string
-}
 
 export type GimbalModeDefinition = {
   id: GimbalMode
   label: string
   tagline: string
+  behaviorProfile: string[]
+  bestUse: string[]
   strengths: string[]
-  weaknesses: string[]
-  bestFor: string
+  tradeoffs: string[]
+  switchWhen: string[]
+  exampleTargets: string[]
 }
 
 export type {

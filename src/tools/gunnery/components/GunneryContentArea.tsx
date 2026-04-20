@@ -11,18 +11,7 @@ export function GunneryContentArea({ state }: Props) {
   return (
     <div className={`gun-content${state.activeSection === 'sub-targeting' ? ' gun-content--viewport' : ''}`}>
       {isModeRecommender && (
-        <ModeRecommender
-          weaponType={state.weaponType}
-          setWeaponType={state.setWeaponType}
-          targetType={state.targetType}
-          setTargetType={state.setTargetType}
-          range={state.range}
-          setRange={state.setRange}
-          speed={state.speed}
-          setSpeed={state.setSpeed}
-          recommendation={state.recommendation}
-          clearRecommender={state.clearRecommender}
-        />
+        <ModeRecommender />
       )}
 
       {state.activeSection === 'sub-targeting' && (

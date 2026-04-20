@@ -1,9 +1,9 @@
 .gun-tool {
-  --gun-accent: var(--card-blue);
+  --gun-accent: var(--crew-blue);
   --gun-accent-dim: color-mix(in srgb, var(--gun-accent) 18%, transparent);
   --gun-accent-glow: color-mix(in srgb, var(--gun-accent) 28%, transparent);
-  --gun-am-color: #60f2ff;
-  --gun-am-dim: rgba(96, 242, 255, 0.16);
+  --gun-am-color: var(--crew-blue);
+  --gun-am-dim: color-mix(in srgb, var(--gun-am-color) 16%, transparent);
   --gun-pm: var(--accent-violet);
   --gun-pm-color: var(--gun-pm);
   --gun-pm-dim: color-mix(in srgb, var(--gun-pm) 16%, transparent);
@@ -75,8 +75,13 @@
 }
 
 .gun-nav-toggle:hover {
-  background: var(--gun-surface-raise);
-  color: rgb(255 255 255 / 0.7);
+  background: color-mix(in srgb, var(--gun-accent) 5%, var(--gun-surface-raise));
+  color: color-mix(in srgb, var(--gun-accent) 72%, white 18%);
+}
+
+.gun-nav-toggle:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--gun-accent) 58%, transparent);
+  outline-offset: -2px;
 }
 
 .gun-nav-chevron {
@@ -115,6 +120,22 @@
   --tool-accent: var(--gun-accent);
 }
 
+.gun-nav .gun-nav-item:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--gun-accent) 34%, rgb(255 255 255 / 0.06));
+  background: color-mix(in srgb, var(--gun-accent) 6%, var(--card-blue-hover));
+  color: color-mix(in srgb, var(--gun-accent) 62%, white 28%);
+}
+
+.gun-nav .gun-nav-item.is-active,
+.gun-nav .gun-nav-item[aria-pressed="true"] {
+  border-color: var(--gun-accent);
+  background: color-mix(in srgb, var(--gun-accent) 7%, var(--card-blue));
+  color: var(--gun-accent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gun-accent) 10%, transparent),
+    0 0 10px color-mix(in srgb, var(--gun-accent) 12%, transparent);
+}
+
 .gun-nav-item-dot {
   width: 6px;
   height: 6px;
@@ -125,8 +146,10 @@
   transition: opacity 0.16s ease;
 }
 
-.gun-nav-item.is-active .gun-nav-item-dot,
-.gun-nav-item[aria-pressed="true"] .gun-nav-item-dot {
+.gun-nav .gun-nav-item.is-active .gun-nav-item-dot,
+.gun-nav .gun-nav-item[aria-pressed="true"] .gun-nav-item-dot {
+  background: var(--gun-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--gun-accent) 34%, transparent);
   opacity: 1;
 }
 
@@ -157,76 +180,13 @@
 .gun-recommender {
   display: grid;
   gap: 1rem;
+  width: 100%;
 }
 
 .gun-recommender-layout {
-  grid-template-columns: minmax(18rem, 23rem) minmax(0, 1fr);
   align-items: start;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1rem;
-}
-
-.gun-recommender-panel,
-.gun-recommendation-panel {
-  --tool-accent: var(--gun-accent);
-}
-
-.gun-recommender-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.gun-selector-group,
-.gun-debug-block {
-  min-width: 0;
-}
-
-.gun-selector-group {
-  gap: 0.45rem;
-  padding: 0.45rem 0.45rem;
-}
-
-.gun-selector-label {
-  color: rgba(203, 213, 225, 0.68);
-}
-
-.gun-option-row {
-  gap: 0.45rem;
-}
-
-.gun-option-btn {
-  align-items: flex-start;
-  gap: 0.12rem;
-  min-height: 3rem;
-  padding: 0.3rem 0.4rem;
-}
-
-.gun-option-meta {
-  margin-top: 0.2rem;
-  display: block;
-  font-family: "Barlow", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 500;
-  line-height: 1.45;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  color: rgb(226 232 240 / 0.92);
-  text-shadow: none;
-}
-
-.gun-option-btn.is-active .gun-option-meta,
-.gun-option-btn[aria-pressed="true"] .gun-option-meta {
-  color: rgb(248 250 252);
-}
-
-.gun-option-btn,
-.gun-ship-btn,
-.gun-view-btn {
-  --tool-accent: var(--gun-accent);
-}
-
-.gun-result-empty-state {
-  min-height: 10.5rem;
-  text-align: left;
 }
 
 .gun-mode-badge {
@@ -244,39 +204,34 @@
   --tool-chip-color: var(--gun-pm-color);
 }
 
-.gun-result-summary-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.gun-summary-chip {
-  --tool-chip-color: rgba(203, 213, 225, 0.78);
-}
-
 .gun-recommendation-stack {
-  display: grid;
-  gap: 0.85rem;
+  display: flex;
+  gap: 1rem;
 }
 
-.gun-recommendation-panel {
-  min-width: 0;
+.gun-recommendation-stack--reference {
+  align-items: stretch;
+}
+
+.gun-mode-reference-hero {
+  --tool-accent: var(--gun-accent);
+  max-width: none;
+}
+
+.gun-mode-reference-hero .tool-control-copy,
+.gun-mode-reference-hero .tool-panel-copy {
+  max-width: 58rem;
 }
 
 .gun-mode-card {
   --tool-accent: var(--gun-accent);
-  padding: 1rem;
+  padding: 1.35rem;
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 100%),
     var(--card-blue);
-  transition:
-    opacity 160ms ease,
-    transform 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
+    width: 45%;
 }
 
 .gun-mode-card.am {
@@ -287,45 +242,22 @@
   --tool-accent: var(--gun-pm-color);
 }
 
-.gun-mode-card.is-recommended.am {
-  --tool-accent: var(--gun-am-color);
-  border-color: color-mix(in srgb, var(--gun-am-color) 28%, rgba(255, 255, 255, 0.06));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0 0 1px color-mix(in srgb, var(--gun-am-color) 24%, transparent),
-    0 0 28px color-mix(in srgb, var(--gun-am-color) 14%, transparent);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--gun-am-color) 7%, transparent), transparent 100%),
-    var(--card-blue);
-}
 
-.gun-mode-card.is-recommended.pm {
-  --tool-accent: var(--gun-pm-color);
-  border-color: color-mix(in srgb, var(--gun-pm-color) 28%, rgba(255, 255, 255, 0.06));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 0 0 1px color-mix(in srgb, var(--gun-pm-color) 24%, transparent),
-    0 0 28px color-mix(in srgb, var(--gun-pm-color) 14%, transparent);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--gun-pm-color) 7%, transparent), transparent 100%),
-    var(--card-blue);
-}
-
-.gun-mode-card.is-muted {
-  opacity: 0.72;
-  transform: scale(0.992);
-  box-shadow: none;
-}
-
-.gun-mode-card--secondary .gun-mode-card-status {
-  --tool-chip-color: rgba(203, 213, 225, 0.72);
-}
 
 .gun-mode-card-header {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   align-items: flex-start;
+}
+
+.gun-mode-card-title {
+  margin: 0.3rem 0 0;
+  font-family: "Orbitron", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 0.95;
+  color: rgb(248 250 252);
 }
 
 .gun-mode-card-label {
@@ -344,22 +276,17 @@
   color: var(--gun-pm-color);
 }
 
-.gun-mode-card-status {
-  --tool-chip-color: var(--tool-accent);
-  flex-shrink: 0;
-}
-
 .gun-mode-card-tagline {
   margin-top: 0.42rem;
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   color: rgba(203, 213, 225, 0.68);
   line-height: 1.45;
 }
 
 .gun-mode-card-best {
   display: grid;
-  gap: 0.4rem;
-  padding: 0.9rem 1rem;
+  gap: 0.65rem;
+  padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 4px;
   background: rgba(13, 15, 21, 0.78);
@@ -367,31 +294,29 @@
 
 .gun-mode-card-best p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.94rem;
   line-height: 1.55;
   color: rgba(241, 245, 249, 0.86);
 }
 
 .gun-mode-card-columns {
   display: grid;
-  gap: 0.75rem;
+  gap: 1rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.gun-mode-card-columns--decision {
+.gun-mode-card-columns--wide {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .gun-mode-card-block {
   display: grid;
-  gap: 0.5rem;
-}
-
-.gun-mode-card-note {
-  margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  color: rgba(226, 232, 240, 0.82);
+  gap: 0.6rem;
+  min-width: 0;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.055);
+  border-radius: 4px;
+  background: rgb(13 15 21 / 0.68);
 }
 
 .gun-mode-card-list {
@@ -400,14 +325,14 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .gun-mode-card-list li {
   position: relative;
   padding-left: 0.95rem;
-  font-size: 0.84rem;
-  line-height: 1.5;
+  font-size: 0.88rem;
+  line-height: 1.55;
   color: rgba(226, 232, 240, 0.82);
 }
 
@@ -428,6 +353,21 @@
 
 .gun-mode-card-list.weaknesses li::before {
   background: color-mix(in srgb, var(--accent-alpha) 62%, white 8%);
+}
+
+.gun-mode-target-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gun-mode-target-chip {
+  --tool-chip-color: var(--tool-accent);
+}
+
+.gun-ship-btn,
+.gun-view-btn {
+  --tool-accent: var(--gun-accent);
 }
 
 /* ── Component Mapping ─────────────────────────── */
@@ -959,7 +899,7 @@
     rgba(7, 9, 14, 0.96);
   box-shadow:
     0 16px 36px rgba(0, 0, 0, 0.42),
-    0 0 0 1px rgba(96, 242, 255, 0.04);
+    0 0 0 1px color-mix(in srgb, var(--gun-accent) 4%, transparent);
   animation: gun-inspector-in 110ms ease-out;
 }
 
@@ -1047,8 +987,8 @@
 
 .gun-inspector-close:hover,
 .gun-inspector-close:focus-visible {
-  border-color: rgba(96, 242, 255, 0.28);
-  background: rgba(96, 242, 255, 0.08);
+  border-color: color-mix(in srgb, var(--gun-accent) 28%, transparent);
+  background: color-mix(in srgb, var(--gun-accent) 8%, transparent);
   color: rgba(248, 250, 252, 0.96);
 }
 
@@ -1275,72 +1215,17 @@
   }
 
   .gun-recommender-layout {
-    height: 100%;
-    grid-template-columns: minmax(17rem, 21rem) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 0.85rem;
   }
 
-  .gun-recommender-panel,
-  .gun-recommendation-panel {
-    padding: 0.95rem;
-  }
-
-  .gun-recommender-panel .tool-control-panel-head,
-  .gun-recommendation-panel .tool-control-panel-head {
-    gap: 0.75rem;
-    margin-bottom: 0.7rem;
-  }
-
-  .gun-recommender-panel .tool-control-copy,
-  .gun-recommendation-panel .tool-control-copy {
-    gap: 0.2rem;
-  }
-
-  .gun-recommender-panel .tool-panel-title,
-  .gun-recommendation-panel .tool-panel-title {
-    font-size: 1.2rem;
-    line-height: 1.05;
-  }
-
-  .gun-recommender-panel .tool-panel-copy,
-  .gun-recommendation-panel .tool-panel-copy {
-    font-size: 0.84rem;
-    line-height: 1.4;
-  }
-
-  .gun-recommender-grid,
   .gun-recommendation-stack {
-    gap: 0.65rem;
-  }
-
-  .gun-selector-group {
-    gap: 0.35rem;
-    padding: 0.38rem 0.42rem;
-  }
-
-  .gun-option-row {
-    gap: 0.35rem;
-  }
-
-  .gun-option-btn {
-    min-height: 2.5rem;
-    padding: 0.24rem 0.35rem;
-    gap: 0.08rem;
-  }
-
-  .gun-option-meta {
-    margin-top: 0.08rem;
-    font-size: 0.72rem;
-    line-height: 1.3;
-  }
-
-  .gun-result-empty-state {
-    min-height: 0;
+    gap: 0.8rem;
   }
 
   .gun-mode-card {
-    padding: 0.8rem;
-    gap: 0.65rem;
+    padding: 1rem;
+    gap: 0.75rem;
   }
 
   .gun-mode-card-header {
@@ -1348,7 +1233,6 @@
   }
 
   .gun-mode-card-tagline,
-  .gun-mode-card-note,
   .gun-mode-card-list li,
   .gun-mode-card-best p {
     font-size: 0.8rem;
@@ -1356,16 +1240,12 @@
   }
 
   .gun-mode-card-best {
-    padding: 0.6rem 0.72rem;
-    gap: 0.28rem;
+    padding: 0.85rem;
+    gap: 0.45rem;
   }
 
   .gun-mode-card-columns {
     gap: 0.6rem;
-  }
-
-  .gun-result-summary-list {
-    gap: 0.3rem;
   }
 
   .gun-symptom-list {
@@ -1434,21 +1314,15 @@
     padding-inline: 0.6rem;
   }
 
-  .gun-option-btn {
-    width: 100%;
-  }
-
-  .gun-recommender-panel,
-  .gun-recommendation-panel {
-    padding: 1rem;
-  }
-
   .gun-mode-card {
     padding: 1rem;
   }
 
-  .gun-mode-card-header,
-  .gun-mode-card-columns--decision {
+  .gun-mode-card-title {
+    font-size: 1.8rem;
+  }
+
+  .gun-mode-card-header {
     flex-direction: column;
     align-items: flex-start;
   }
