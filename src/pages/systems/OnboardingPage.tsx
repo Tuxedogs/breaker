@@ -117,31 +117,8 @@ export default function OnboardingPage() {
   return (
     <section className="base-static route-fade onboarding-shell reference-modern relative overflow-visible py-3">
       <div className="relative z-10 space-y-6">
-        <header className="page-hero-shell">
-          <p className="page-kicker">Reference</p>
-          <h1 className="page-title-wide">
-            ONBOARDING
-            <span className="text-cyan-200 block">FRAMEWORK</span>
-          </h1>
-          <p className="mt-4 max-w-3xl text-sm text-slate-200/80 sm:text-base">
-            Use the same routing logic as the framework page: get oriented, clear setup friction, stage correctly, and
-            join fleet without slowing the group down.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span className="onboarding-hero-chip onboarding-hero-chip--cyan">Checklist Tracking</span>
-            <span className="onboarding-hero-chip onboarding-hero-chip--amber">Staging Discipline</span>
-            <span className="onboarding-hero-chip onboarding-hero-chip--cyan">Ops Flow</span>
-            <span className="onboarding-hero-chip onboarding-hero-chip--neutral">Comms Standards</span>
-          </div>
-        </header>
-
         <div className="onboarding-layout">
         <aside className="onboarding-sidebar-panel">
-          <div className="base-card-head">
-            <p className="base-card-kicker">Route Summary</p>
-            <h2 className="title-font base-card-title onboarding-sidebar-title">Onboarding</h2>
-          </div>
-
           <nav className="mt-4">
             <ul className="space-y-px">
               {sections.map((section, idx) => (
@@ -157,7 +134,7 @@ export default function OnboardingPage() {
 
           <div className="onboarding-progress-panel">
             <div className="flex items-center justify-between text-[11px] tracking-[0.16em] text-slate-300/75">
-              <span className="base-card-kicker">Checklist</span>
+              <span>Checklist</span>
               <span className="text-cyan-100/80">
                 {doneCount} / {checklistItems.length}
               </span>
@@ -193,7 +170,7 @@ export default function OnboardingPage() {
             </p>
             <div className="onboarding-welcome mt-4 lg:grid-cols-[1fr_auto] lg:items-start">
               <div>
-                <p className="title-font text-xs uppercase tracking-[0.16em] text-cyan-100/70">Sons of Ares - Active Roster</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-cyan-100/70">Sons of Ares - Active Roster</p>
                 <p className="mt-2 text-sm text-slate-200/85">
                   The Sons of Ares operate in a grey area and have <span className="text-red-500 font-bold">very few in game restrictions.</span>
               </p>
@@ -389,7 +366,7 @@ export default function OnboardingPage() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {basicsCards.map((item) => (
                 <article key={item.title} className="onboarding-tile">
-                  <h3 className="title-font text-sm text-cyan-100">{item.title}</h3>
+                  <h3 className="text-sm text-cyan-100">{item.title}</h3>
                   <p className="mt-2">{item.body}</p>
                 </article>
               ))}
@@ -405,7 +382,7 @@ export default function OnboardingPage() {
             </p>
             <div className="mt-4 grid gap-3 md:grid-cols-3">
               <article className="onboarding-stage-card recommended">
-                <h3 className="title-font text-lg text-cyan-100">Grim Hex</h3>
+                <h3 className="text-lg text-cyan-100">Grim Hex</h3>
                 <p className="text-xs text-slate-400">Crusader / Yela Belt</p>
                 <ul className="onboarding-list mt-2">
                   <li>No comms array, criminal states accepted</li>
@@ -414,7 +391,7 @@ export default function OnboardingPage() {
                 </ul>
               </article>
               <article className="onboarding-stage-card recommended">
-                <h3 className="title-font text-lg text-cyan-100">Seraphim Station</h3>
+                <h3 className="text-lg text-cyan-100">Seraphim Station</h3>
                 <p className="text-xs text-slate-400">Crusader Orbit</p>
                 <ul className="onboarding-list mt-2">
                   <li>Significantly faster response times for capitals</li>
@@ -423,7 +400,7 @@ export default function OnboardingPage() {
                 </ul>
               </article>
               <article className="onboarding-stage-card">
-                <h3 className="title-font text-lg text-cyan-100">CRU-L1</h3>
+                <h3 className="text-lg text-cyan-100">CRU-L1</h3>
                 <p className="text-xs text-slate-400">Crusader L1</p>
                 <ul className="onboarding-list mt-2">
                   <li>Lighter Traffic Zero G staging</li>
@@ -445,7 +422,7 @@ export default function OnboardingPage() {
               {opsSteps.map((step) => (
                 <li key={step.title} className="onboarding-step">
                   <div>
-                    <p className="title-font text-xs uppercase tracking-[0.12em] text-cyan-100/85">{step.title}</p>
+                    <p className="text-xs uppercase tracking-[0.12em] text-cyan-100/85">{step.title}</p>
                     <p className="mt-1 text-sm text-slate-200/85">{step.body}</p>
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {step.tags.map((tag) => (
@@ -481,7 +458,7 @@ export default function OnboardingPage() {
               ))}
             </div>
             <div className="onboarding-callout mt-4">
-              <p className="title-font text-xs uppercase tracking-[0.18em] text-cyan-100/80">Hathor Callout Format Example</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-cyan-100/80">Hathor Callout Format Example</p>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 <div className="onboarding-callout-line"><strong>Who: </strong> Use your name, Hi I'm Tux.</div>
                 <div className="onboarding-callout-line"><strong>What:</strong> Enemy ships. An Arrow and Hornet</div>
@@ -489,7 +466,7 @@ export default function OnboardingPage() {
                 <div className="onboarding-callout-line"><strong>Percieved Intent:</strong> Engaging, Burning out, relative delta.</div>
 
               </div>
-              <div className="title-font text-sm text-slate-300/100 mt-4"><strong></strong> <span className="font-bold text-cyan-500">Tux</span> has two incoming, <span className="font-bold text-red-700">Mish</span> and <span className="font-bold text-red-700">Omen</span>. <span className="text-orange-500">Hornet, Arrow</span>, towards <span className="font-bold text-slate-500">Crusader</span>, <span className="font-bold text-blue-700">High</span> at <span className="font-bold text-slate-500">14km</span>. <span className="text-red-700">Positive Delta.</span></div>
+              <div className="text-sm text-slate-300/100 mt-4"><strong></strong> <span className="font-bold text-cyan-500">Tux</span> has two incoming, <span className="font-bold text-red-700">Mish</span> and <span className="font-bold text-red-700">Omen</span>. <span className="text-orange-500">Hornet, Arrow</span>, towards <span className="font-bold text-slate-500">Crusader</span>, <span className="font-bold text-blue-700">High</span> at <span className="font-bold text-slate-500">14km</span>. <span className="text-red-700">Positive Delta.</span></div>
             </div>
           </section>
         </main>

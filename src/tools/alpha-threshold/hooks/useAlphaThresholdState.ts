@@ -9,6 +9,7 @@ import {
 } from '../lib/calculations'
 import { mergeShipOverride, mergeWeaponOverride } from '../lib/mergeOverrides'
 import { sortShips } from '../lib/sortShips'
+import { isExcludedFromThresholdWeaponPool } from '../lib/weapons/exclusions'
 import type {
   ComparisonSlot,
   Ship,
@@ -273,6 +274,7 @@ function shouldExcludeWeapon(weapon: WeaponRecord): boolean {
   const normalizedClass = weapon.weaponClass.trim().toLowerCase()
 
   return (
+    isExcludedFromThresholdWeaponPool(weapon) ||
     normalizedName.includes('suregrip') ||
     normalizedName.includes('viselock') ||
     normalizedClass === 'rocket pod'

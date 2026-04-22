@@ -1,6 +1,7 @@
 import { normalizeErkulWeapon } from '../../lib/weapons/adapters/erkul'
 import { normalizeManualWeaponRecord } from '../../lib/weapons/adapters/manual'
 import { normalizeSpviewerWeapon } from '../../lib/weapons/adapters/spviewer'
+import { isExcludedFromThresholdWeaponPool } from '../../lib/weapons/exclusions'
 import { mergeWeaponRecords } from '../../lib/weapons/merge'
 import type { ThresholdDataSourceKey, WeaponRecord } from '../../types'
 import { erkulLiveWeaponSeeds } from './erkulLiveSeeds'
@@ -15,16 +16,20 @@ const erkulLiveRecords = erkulLiveWeaponSeeds.map((seed) => normalizeErkulWeapon
 const erkulPtuRecords = erkulPtuWeaponSeeds.map((seed) => normalizeErkulWeapon(seed))
 const spviewerRecords = spviewerWeaponSeeds.map((seed) => normalizeSpviewerWeapon(seed))
 
+function filterThresholdWeaponPool(records: WeaponRecord[]): WeaponRecord[] {
+  return records.filter((weapon) => !isExcludedFromThresholdWeaponPool(weapon))
+}
+
 const weaponDatasets: Record<ThresholdDataSourceKey, WeaponRecord[]> = {
-  manual: manualRecords,
-  'erkul-live': erkulLiveRecords,
-  'erkul-ptu': erkulPtuRecords,
-  spviewer: spviewerRecords,
+  manual: filterThresholdWeaponPool(manualRecords),
+  'erkul-live': filterThresholdWeaponPool(erkulLiveRecords),
+  'erkul-ptu': filterThresholdWeaponPool(erkulPtuRecords),
+  spviewer: filterThresholdWeaponPool(spviewerRecords),
   merged: mergeWeaponRecords([
-    ...manualRecords,
-    ...spviewerRecords,
-    ...erkulLiveRecords,
-    ...erkulPtuRecords,
+    ...filterThresholdWeaponPool(manualRecords),
+    ...filterThresholdWeaponPool(spviewerRecords),
+    ...filterThresholdWeaponPool(erkulLiveRecords),
+    ...filterThresholdWeaponPool(erkulPtuRecords),
   ]),
 }
 
