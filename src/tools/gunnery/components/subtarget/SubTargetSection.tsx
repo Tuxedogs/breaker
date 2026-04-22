@@ -35,6 +35,8 @@ type LegendState = {
   expandedGroups: ExpandedGroups
 }
 
+const MAP_ZOOM_LEVELS = [1, 1.35, 1.7] as const
+
 function formatNormalizedPosition(percent: number): string {
   return (Math.round(percent * 10) / 1000).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')
 }
@@ -155,6 +157,7 @@ export function SubTargetSection({
   const [drawnBox, setDrawnBox] = useState<DrawnBox | null>(null)
   const [hoverCoords, setHoverCoords] = useState<PctPoint | null>(null)
   const [hullPromptLine, setHullPromptLine] = useState<{ path: string; svgW: number; svgH: number } | null>(null)
+  const [mapZoomIndex, setMapZoomIndex] = useState(0)
 
   const [legendState, setLegendState] = useState<LegendState>(() => ({
     shipId: selectedShipId,
@@ -183,6 +186,7 @@ export function SubTargetSection({
   const activeGroupZones = activeZone
     ? visibleZones.filter(zone => activeZone.groupId ? zone.groupId === activeZone.groupId : zone.id === activeZone.id)
     : []
+  const mapZoom = MAP_ZOOM_LEVELS[mapZoomIndex]
   const liveRect = (isDragging && dragStart && dragCurrent)
     ? {
         x: Math.min(dragStart.x, dragCurrent.x),
@@ -209,8 +213,8 @@ export function SubTargetSection({
     }
 
     setOverlayBounds({
-      left: imageRect.left - canvasRect.left,
-      top: imageRect.top - canvasRect.top,
+      left: imageRect.left - canvasRect.left + canvas.scrollLeft,
+      top: imageRect.top - canvasRect.top + canvas.scrollTop,
       width: imageRect.width,
       height: imageRect.height,
     })
@@ -304,6 +308,14 @@ export function SubTargetSection({
     setHoverCoords(null)
   }, [setDrawnBox])
 
+  const zoomOut = useCallback(() => {
+    setMapZoomIndex((current) => Math.max(0, current - 1))
+  }, [])
+
+  const zoomIn = useCallback(() => {
+    setMapZoomIndex((current) => Math.min(MAP_ZOOM_LEVELS.length - 1, current + 1))
+  }, [])
+
   const toggleCategoryVisibility = useCallback((category: ZoneCategory) => {
     setLegendState((current) => {
       const currentVisibility = current.shipId === selectedShipId
@@ -379,7 +391,7 @@ export function SubTargetSection({
     })
 
     return () => window.cancelAnimationFrame(frame)
-  }, [recomputeOverlayBounds, activeView, selectedShipId, layoutVersion])
+  }, [recomputeOverlayBounds, activeView, selectedShipId, layoutVersion, mapZoomIndex])
 
   useEffect(() => {
     const body = bodyRef.current
@@ -401,6 +413,7 @@ export function SubTargetSection({
     observer.observe(canvas)
     observer.observe(image)
     window.addEventListener('resize', schedule)
+    canvas.addEventListener('scroll', schedule, { passive: true })
 
     schedule()
 
@@ -408,8 +421,9 @@ export function SubTargetSection({
       window.cancelAnimationFrame(frame)
       observer.disconnect()
       window.removeEventListener('resize', schedule)
+      canvas.removeEventListener('scroll', schedule)
     }
-  }, [recomputeOverlayBounds, activeView, selectedShipId])
+  }, [recomputeOverlayBounds, activeView, selectedShipId, mapZoomIndex])
 
   useLayoutEffect(() => {
     let frame = 0
@@ -518,7 +532,10 @@ export function SubTargetSection({
               ref={el => setShipBtnRef(ship.id, el)}
               className={`gun-ship-btn${selectedShipId === ship.id ? ' is-active' : ''}`}
               aria-pressed={selectedShipId === ship.id}
-              onClick={() => selectShip(selectedShipId === ship.id ? null : ship.id)}
+              onClick={() => {
+                setMapZoomIndex(0)
+                selectShip(selectedShipId === ship.id ? null : ship.id)
+              }}
             >
               {ship.label}
             </button>
@@ -535,7 +552,11 @@ export function SubTargetSection({
                 key={`toolbar-${view.id}`}
                 className={`gun-view-btn${activeView === view.id ? ' is-active' : ''}`}
                 aria-pressed={activeView === view.id}
-                onClick={() => { setActiveView(view.id); setActiveZoneId(null) }}
+                onClick={() => {
+                  setMapZoomIndex(0)
+                  setActiveView(view.id)
+                  setActiveZoneId(null)
+                }}
               >
                 {view.label}
               </button>
@@ -617,7 +638,10 @@ export function SubTargetSection({
         {/* Canvas */}
         <div ref={canvasRef} className="gun-canvas-area">
           {selectedShip ? (
-            <div className="gun-silhouette-shell">
+            <div
+              className="gun-silhouette-shell"
+              style={{ '--map-zoom': mapZoom } as CSSProperties}
+            >
               <img
                 key={`${selectedShip.id}-${activeView}`}
                 ref={imageRef}
@@ -635,6 +659,32 @@ export function SubTargetSection({
               </div>
             </div>
           )}
+
+          {selectedShip && !debugMode ? (
+            <div className="gun-map-zoom-controls" aria-label="Map zoom controls">
+              <button
+                type="button"
+                className="gun-map-zoom-btn"
+                onClick={zoomOut}
+                disabled={mapZoomIndex === 0}
+                aria-label="Zoom map out"
+              >
+                -
+              </button>
+              <span className="gun-map-zoom-readout" aria-live="polite">
+                {Math.round(mapZoom * 100)}%
+              </span>
+              <button
+                type="button"
+                className="gun-map-zoom-btn"
+                onClick={zoomIn}
+                disabled={mapZoomIndex === MAP_ZOOM_LEVELS.length - 1}
+                aria-label="Zoom map in"
+              >
+                +
+              </button>
+            </div>
+          ) : null}
 
           {selectedShip && overlayBounds && (
             <div

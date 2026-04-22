@@ -57,6 +57,21 @@ export function useAnchoredPosition({
       const availableWidth = viewportWidth - margin * 2
       const availableHeight = viewportHeight - margin * 2
 
+      if (viewportWidth <= 1024) {
+        const sheetWidth = Math.min(width, availableWidth)
+        const sheetLeft = clamp((viewportWidth - sheetWidth) / 2, margin, viewportWidth - sheetWidth - margin)
+        const sheetTop = Math.max(margin, viewportHeight - Math.min(height, availableHeight) - margin)
+
+        setPosition({
+          left: sheetLeft,
+          top: sheetTop,
+          placement: 'bottom-sheet',
+          arrowX: clamp(anchorCenterX - sheetLeft, 16, Math.max(16, sheetWidth - 16)),
+          arrowY: 0,
+        })
+        return
+      }
+
       if (availableWidth < 340 || availableHeight < 360) {
         if (availableHeight >= 300) {
           const sheetTop = Math.max(margin, viewportHeight - Math.min(height, availableHeight) - margin)

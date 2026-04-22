@@ -21,7 +21,6 @@ Test at minimum:
 - 1280×800 (desktop)
 
 Rules:
-- Use fluid containers with max widths; avoid fixed widths.
 - Touch targets: 44px minimum.
 - Avoid hard-coded heights for content containers unless necessary.
 - Prefer CSS grid/flex patterns already used in the repo.
