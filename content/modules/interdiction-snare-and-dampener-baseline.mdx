@@ -20,18 +20,16 @@ useWhen:
 steps:
   - label: Choose the correct tool
     detail: Use snare for lane pulls and planned interdiction windows. Use dampener for immediate escape denial during an active fight.
-  - label: Account for snare charge time
+  - label: Once established within the lane, charge and fire snare.
     detail: The snare is the QID weapon selector. The physical snare button is on the left pilot seat armrest.
-  - label: Once snared, drop snare and activate dampener.
-    detail: Treat the dampener as an approximately 11 km practical tool and stay near 10 km when possible.
-  - label: Keep tackle calls explicit
-    detail: Call snare charging, snare active, dampener active, and any tails or damage states clearly.
-  - label: Reconfigure after the event
-    detail: Do not leave the ship in the wrong interdiction state after the pull or chase shifts phases.
+  - label: Once a target is snared, drop snare and activate dampener.
+    detail: Fire QID to stop snare, switch to QED and fire dampener. Alternatively use the right armrest switch "Activate dampener" 
+  - label: Maintain range at all times 
+    detail: The dampener as an approximately 11 km practical tool and stay near 10 km when possible.
+  - label: Reconfigure after the event by looping back to charging snare.
+    detail: Running multiple interdictors reduces turnaround time on  phases.
 failureModes:
   - Crew uses snare when dampener is required for immediate escape denial
   - Tackle ship drifts outside the effective dampener envelope
-  - Crew forgets to swap from snare posture to dampener posture after the event
+  - Crew forgets to swap from snare to dampener after the quantum interdiction event
 ---
-
-Mantis baseline: snare reaches farther but costs time. Dampener is the immediate fight tool.
