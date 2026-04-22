@@ -63,7 +63,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Shield 1',
       groupId: 'idr-shield',
       priority: 4,
-      effect: 'Target only if no other higher priority solution exists or after disable.',
+      effect: 'Housed behind the forward starboard nacelle.',
       positions: {
         top: { x: 0.381, y: 0.279, w: 0, h: 0, wPx: 103, hPx: 33 },
       },
@@ -77,7 +77,7 @@ export const idris: ShipDefinition = {
       shortLabel: 'Shield 2',
       groupId: 'idr-shield',
       priority: 4,
-      effect: 'Target only if no other higher priority solution exists or after disable. Housed behind the forward port nacelle.',
+      effect: 'Housed behind the forward port nacelle.',
       positions: {
         top: { x: 0.381, y: 0.69, w: 0, h: 0, wPx: 103, hPx: 33 },
         side: { x: 0.376, y: 0.734, w: 0, h: 0, wPx: 48, hPx: 37 },
@@ -191,7 +191,7 @@ export const idris: ShipDefinition = {
       resultName: 'Railgun/Laser/Torpedo',
       shortLabel: 'Spinal',
       priority: 6,
-      effect: 'Primary Solodris weapons system. Do not prioritize unless instructed to.',
+      effect: 'Primary Sol Idris weapons system. Do not prioritize unless instructed to.',
       positions: {
         side: { x: 0.159, y: 0.87, w: 0, h: 0, wPx: 324, hPx: 81 },
       },
@@ -385,4 +385,5 @@ export const idris: ShipDefinition = {
     
   ],
 }
+
 

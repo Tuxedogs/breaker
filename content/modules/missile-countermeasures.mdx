@@ -12,7 +12,7 @@ ships: []
 roles: ["pilot"]
 excludeShips: []
 excludeRoles: []
-enemies: ["fighter", "capital"]
+enemies: []
 prerequisites: []
 relatedModuleIds: ["signature-management", "interdiction-snare-and-dampener-baseline"]
 
@@ -22,21 +22,21 @@ useWhen:
   - Covering disengage windows under hostile missile threat
 
 steps:
-  - label: Classify the threat
-    detail: Read the incoming cadence and lock state before spending inventory.
-  - label: Use decoys (flares) for incoming ordnance
-    detail: Release decoys in measured bursts when the threat is already inbound and tracking.
-  - label: Use noise (chaff) to break or complicate targeting
-    detail: Noise is for target denial and lock disruption, not for magically deleting a missile that is already committed.
-  - label: Do not dump everything early
-    detail: Preserve enough inventory for the follow-up volley and report remaining state on comms.
-  - label: Adjust the ship plan
-    detail: If inventory is getting low, change commit, extension, or support posture before the next wave arrives.
+  - label: Identify, defending against certain missile types varies. 
+    detail: Callout, missile locked and launch vs incoming.
+  - label: Use decoys H(flares) for incoming ordnance.
+    detail: Search for missile track on radar or visual, callout launch heading/altitude.
+  - label: Use noise (chaff) to break enemy target locking.
+    detail: Noise is for target denial and lock disruption, it does not aid in defeating missiles that are already committed.
+  - label: Signatures
+    detail: Dumping signature is highly effective in lowering the expenditure of flares required to defeat incoming.
+  - label: Posture ship against probable hits.
+    detail: Align the strongest aspect of your ship with the track of the missile/torpedo to minimize hull damage.
 
 failureModes:
-  - Panic dumping early leaves no protection for follow-up volleys
-  - Crew treats noise (chaff) like a substitute for timed decoys (flares)
-  - Crew overcommits while low on countermeasure inventory
+  - Panic dumping early leaves no protection for follow-up volleys.
+  - Crew treats noise (chaff) like a substitute for timed decoys (flares).
+  - Crew overcommits while low on countermeasure inventory.
 ---
 
-Scope: pilots of combat ships.
+Scope: pilots of all ships.

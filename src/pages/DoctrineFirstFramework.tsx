@@ -15,18 +15,7 @@ type FrameworkItem = {
   glyph: string;
 };
 
-const systemItems: FrameworkItem[] = [
-  { label: "Sub-Targeting", to: "/module/sub-targeting", glyph: "TG" },
-  {
-    label: "Turret Keybind Baseline",
-    to: "/module/turret-keybind-baseline",
-    glyph: "KB",
-  },
-  { label: "Additional Settings & Binds", to: "/systems/additional-settings-binds", glyph: "AD" },
-  { label: "Gunnery with Luna", to: "/systems/gunnery-with-luna", glyph: "GN" },
-  { label: "Communications", to: "/systems/communications", glyph: "CM" },
-  { label: "Additional Resources", to: "/systems/additional-resources", glyph: "RS" },
-];
+
 
 const antiCapItems: FrameworkItem[] = [
   { label: "Component Sniping", to: "/module/component-sniping", glyph: "CS" },
