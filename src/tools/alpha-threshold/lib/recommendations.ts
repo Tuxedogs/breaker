@@ -3,6 +3,7 @@ import {
   evaluateThresholdCell,
   getThresholdForWeaponType,
 } from './calculations'
+import { isExcludedFromThresholdWeaponPool } from './weapons/exclusions'
 import type { Ship, WeaponRecord, WeaponThresholdType } from '../types'
 
 export type RecommendationBand = 'guaranteed' | 'strong' | 'viable' | 'weak'
@@ -123,6 +124,7 @@ function shouldExcludeRecommendationWeapon(weapon: WeaponRecord) {
   ]
 
   return (
+    isExcludedFromThresholdWeaponPool(weapon) ||
     normalizedName.includes('sledge') ||
     normalizedName.includes('singe') ||
     normalizedName.includes('deadbolt') ||

@@ -60,15 +60,6 @@ export const observedBreakpoints = {
         notes: ['Estimated as immediate shield-down armor damage on Perseus based on M7A alpha class.'],
       },
     },
-    'energy:5:Omnisky XV': {
-      shieldsDown: {
-        source: 'estimated',
-        damagesFreshArmor: false,
-        armorDamageStartsAtPercent: 71,
-        estimatedArmorOnsetBand: [68, 74],
-        notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
-      },
-    },
     'energy:3:NDB-30': {
       shieldsDown: {
         source: 'observed',
@@ -137,15 +128,6 @@ export const observedBreakpoints = {
         damagesFreshArmor: true,
         armorDamageStartsAtPercent: 100,
         notes: ['Estimated as immediate shield-down armor damage on Perseus based on M7A alpha class.'],
-      },
-    },
-    'energy:5:Omnisky XV': {
-      shieldsDown: {
-        source: 'estimated',
-        damagesFreshArmor: false,
-        armorDamageStartsAtPercent: 71,
-        estimatedArmorOnsetBand: [68, 74],
-        notes: ['Estimated as a late shield-down armor onset on Perseus from current observed ballistic anchors and Omnisky XV alpha.'],
       },
     },
     'energy:3:NDB-30': {
