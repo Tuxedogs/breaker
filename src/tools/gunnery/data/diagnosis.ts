@@ -35,6 +35,7 @@ export const DIAGNOSIS: DiagnosisEntry[] = [
     cause: 'Not using Precision Mode (ADS) to acquire the component. Sub-target acquisition requires PM mode to be active during selection.',
     correction: 'Enter ADS (Precision Mode) and aim at the component until the sub-target pip locks. Exit ADS immediately after. The sub-target persists after you exit.',
     relatedMode: 'PM',
+    
   },
   {
     id: 'am-not-tracking',

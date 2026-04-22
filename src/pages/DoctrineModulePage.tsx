@@ -9,6 +9,7 @@ import { ReferenceLayout } from "../components/doctrine/ReferenceLayout";
 import { ConceptLayout } from "../components/doctrine/ConceptLayout";
 import { DiagramLayout } from "../components/doctrine/DiagramLayout";
 import { ChecklistLayout } from "../components/doctrine/ChecklistLayout";
+import { getModuleIndexHref } from "../lib/moduleIndexNavigation";
 
 const layouts: Record<ModuleType, ComponentType<{ module: DoctrineModule }>> = {
   procedure: ProcedureLayout,
@@ -27,6 +28,7 @@ export default function DoctrineModulePage() {
   const loaderError = moduleLoadError;
   const { id = "" } = useParams();
   const module = moduleById.get(id);
+  const moduleIndexHref = getModuleIndexHref();
 
   useEffect(() => {
     if (module?.accent) {
@@ -48,7 +50,7 @@ export default function DoctrineModulePage() {
             <h1 className="detail-title-cyan">Module Content Error</h1>
             <p className="mt-3 text-slate-300">{loaderError.message}</p>
           </div>
-          <Link to="/modules" className="base-card-cta mt-2">
+          <Link to={moduleIndexHref} className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -63,7 +65,7 @@ export default function DoctrineModulePage() {
           <div className="card-head-md">
             <h1 className="detail-title-cyan">Module Not Found</h1>
           </div>
-          <Link to="/modules" className="base-card-cta mt-2">
+          <Link to={moduleIndexHref} className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>

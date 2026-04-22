@@ -115,17 +115,13 @@ export default function OnboardingPage() {
   }
 
   return (
-    <section className="base-static route-fade onboarding-shell reference-modern relative overflow-hidden py-3">
-      <div className="base-trend-bg pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute -left-16 top-8 h-56 w-56 rounded-full bg-cyan-300/10 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 top-32 h-72 w-72 rounded-full bg-amber-300/10 blur-3xl" />
-
+    <section className="base-static route-fade onboarding-shell reference-modern relative overflow-visible py-3">
       <div className="relative z-10 space-y-6">
-        <header className="page-hero-shell onboarding-hero">
+        <header className="page-hero-shell">
           <p className="page-kicker">Reference</p>
           <h1 className="page-title-wide">
             ONBOARDING
-            <span className="base-trend-text block">FRAMEWORK</span>
+            <span className="text-cyan-200 block">FRAMEWORK</span>
           </h1>
           <p className="mt-4 max-w-3xl text-sm text-slate-200/80 sm:text-base">
             Use the same routing logic as the framework page: get oriented, clear setup friction, stage correctly, and

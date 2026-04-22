@@ -117,13 +117,6 @@ export default function DoctrineIndexPage() {
           </article>
         ) : null}
 
-        {/* Header */}
-        <header className="fw-header">
-          <p className="fw-eyebrow">Doctrine Index</p>
-          <h1 className="fw-title">Framework Routing</h1>
-          <p className="fw-descriptor">Filter by context and open the module that matches your intent.</p>
-        </header>
-
         {/* Role cards */}
         <div className="fw-role-grid">
           {roleCards.map((card) => (

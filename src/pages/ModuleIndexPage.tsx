@@ -1,7 +1,8 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import DoctrineFilterBar from "../components/DoctrineFilterBar";
 import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { moduleFilterOptions, moduleLoadError, moduleMatchesShipRole, modules, type DoctrineModule } from "../data/modules";
+import { useRememberModuleIndexSearch } from "../lib/moduleIndexNavigation";
 import { emptyModuleFilters, readModuleFilters, writeModuleFilters, type ModuleFilters } from "../lib/moduleFilters";
 
 const validationStatusClassName = {
@@ -28,8 +29,10 @@ function matchesRoleSelection(module: DoctrineModule, role: string) {
 }
 
 export default function ModuleIndexPage() {
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const filters = readModuleFilters(searchParams);
+  useRememberModuleIndexSearch(location.search);
 
   function updateFilter(key: keyof ModuleFilters, value: string) {
     const nextFilters = { ...filters, [key]: value };
@@ -59,16 +62,7 @@ export default function ModuleIndexPage() {
   return (
     <section className="base-static route-fade py-3">
       <div className="space-y-4">
-        <header className="module-index-head">
-          <div className="min-w-0">
-            <p className="module-index-kicker">Doctrine Modules</p>
-            <h1 className="module-index-title">Module Index</h1>
-          </div>
-          <p className="module-index-summary">
-            Filter by context and open the module that matches your current fight state.
-          </p>
-        </header>
-
+        
         {moduleLoadError ? (
           <article className="rounded-2xl border border-red-300/35 bg-red-950/40 p-4">
             <p className="title-font text-xs uppercase tracking-[0.16em] text-red-100">Module Content Error</p>

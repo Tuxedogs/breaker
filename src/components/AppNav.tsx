@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { getModuleIndexHref } from "../lib/moduleIndexNavigation";
 
 const navItems = [
   {
@@ -86,6 +87,10 @@ export default function AppNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const homeItem = navItems[0];
   const primaryNavItems = navItems.slice(1);
+  const getNavHref = (to: string) =>
+    to === "/modules"
+      ? getModuleIndexHref(location.pathname === "/modules" ? location.search : "")
+      : to;
 
   function closeAllMenus() {
     setMobileMenuOpen(false);
@@ -97,7 +102,7 @@ export default function AppNav() {
         <div className="hidden site-toolbar lg:flex">
           <div className="site-toolbar-group site-toolbar-group--home">
             <NavLink
-              to={homeItem.to}
+              to={getNavHref(homeItem.to)}
               onClick={closeAllMenus}
               className={[
                 "site-toolbar-home",
@@ -113,7 +118,7 @@ export default function AppNav() {
             <div key={item.to} className="site-toolbar-group">
               <span className="site-toolbar-divider" aria-hidden="true" />
               <NavLink
-                to={item.to}
+                to={getNavHref(item.to)}
                 onClick={closeAllMenus}
                 className={[
                   "site-toolbar-link",
@@ -142,7 +147,7 @@ export default function AppNav() {
 
           <div className="flex items-center gap-2">
             <NavLink
-              to={homeItem.to}
+              to={getNavHref(homeItem.to)}
               onClick={closeAllMenus}
               className={[
                 "site-toolbar-mobile-button",
@@ -177,7 +182,7 @@ export default function AppNav() {
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
-                to={item.to}
+                to={getNavHref(item.to)}
                 onClick={closeAllMenus}
                 className={[
                   "site-toolbar-mobile-link",

@@ -18,7 +18,7 @@ export function useLocalStorageState<T>(key: string, initialValue: T) {
     try {
       window.localStorage.setItem(key, JSON.stringify(state))
     } catch {
-      // Ignore storage failures.
+      //Ignore storage failures.
     }
   }, [key, state])
 

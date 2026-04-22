@@ -1,5 +1,10 @@
+import { Link } from "react-router-dom";
 import { moduleById } from "../../data/modules";
 import type { DoctrineModule } from "../../data/modules";
+import {
+  getModuleIndexHref,
+  getModuleIndexReturnLabel,
+} from "../../lib/moduleIndexNavigation";
 import ModuleFilterChipLink from "../ModuleFilterChipLink";
 
 type Props = {
@@ -8,8 +13,15 @@ type Props = {
 };
 
 export function DoctrineModuleHeader({ module, eyebrow }: Props) {
+  const moduleIndexHref = getModuleIndexHref();
+  const moduleIndexLabel = getModuleIndexReturnLabel();
+
   return (
     <div>
+      <Link to={moduleIndexHref} className="dm-index-link">
+        <span className="dm-index-link-icon" aria-hidden="true">&larr;</span>
+        <span className="dm-index-link-label">{moduleIndexLabel}</span>
+      </Link>
       <p className="dm-eyebrow">{eyebrow}</p>
       <h1 className="dm-title">{module.title}</h1>
       {module.summary ? <p className="dm-summary">{module.summary}</p> : null}

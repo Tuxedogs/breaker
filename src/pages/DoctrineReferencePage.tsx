@@ -1,9 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import ModuleFilterChipLink from "../components/ModuleFilterChipLink";
 import { refLoadError, refs } from "../data/refs";
+import { getModuleIndexHref } from "../lib/moduleIndexNavigation";
 
 export default function DoctrineReferencePage() {
   const { type = "", id = "" } = useParams();
+  const moduleIndexHref = getModuleIndexHref();
 
   if (refLoadError) {
     return (
@@ -13,7 +15,7 @@ export default function DoctrineReferencePage() {
             <h1 className="detail-title-blue">Reference Content Error</h1>
             <p className="mt-3 text-slate-300">{refLoadError.message}</p>
           </div>
-          <Link to="/modules" className="base-card-cta mt-2">
+          <Link to={moduleIndexHref} className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
@@ -29,7 +31,7 @@ export default function DoctrineReferencePage() {
           <div className="card-head-md">
             <h1 className="detail-title-blue">Reference Not Found</h1>
           </div>
-          <Link to="/modules" className="base-card-cta mt-2">
+          <Link to={moduleIndexHref} className="base-card-cta mt-2">
             Back to Module Index
           </Link>
         </article>
