@@ -23,6 +23,11 @@ import WipPage from "./pages/WipPage";
 /* Lazy loaded tools because shipping everything up front is a cry for help */
 const ViewerPage = lazy(() => import("./tools/viewer/ViewerPage"));
 
+const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
+const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
+const LocationsPage = lazy(() => import("./pages/logistics/LocationsPage"));
+const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
+
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
     default: module.AlphaThresholdToolPage,
@@ -51,9 +56,25 @@ export default function App() {
       <Routes>
         <Route path="doctrine-landing" element={<DoctrineLanding />} />
 
-        {/* Dashboard */}
+        {/* Dashboard + Logistics share the same shell */}
         <Route element={<DashboardShell />}>
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route
+            path="logistics"
+            element={<Suspense fallback={<RouteFallback />}><LogisticsPage /></Suspense>}
+          />
+          <Route
+            path="logistics/inventory"
+            element={<Suspense fallback={<RouteFallback />}><InventoryPage /></Suspense>}
+          />
+          <Route
+            path="logistics/locations"
+            element={<Suspense fallback={<RouteFallback />}><LocationsPage /></Suspense>}
+          />
+          <Route
+            path="logistics/build-queue"
+            element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
+          />
         </Route>
 
         {/* Main App */}

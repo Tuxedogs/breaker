@@ -1,0 +1,816 @@
+/* ──────────────────────────────────────────────
+   Logistics Feature Styles
+   Scoped to .logi-* to avoid conflicts.
+   Uses same dark palette and fonts as dashboard.
+   ────────────────────────────────────────────── */
+
+/* ── Page shell ───────────────────────────────── */
+
+.logi-page {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+.logi-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.logi-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.35);
+  margin-bottom: 0.3rem;
+}
+
+.logi-breadcrumb-link {
+  color: rgba(160, 180, 220, 0.4);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.logi-breadcrumb-link:hover {
+  color: rgba(160, 180, 220, 0.7);
+}
+
+.logi-breadcrumb-sep { opacity: 0.35; }
+
+.logi-breadcrumb-active { color: rgba(167, 139, 250, 0.65); }
+
+.logi-page-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #e7edff;
+  margin: 0;
+}
+
+.logi-page-subtitle {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.45);
+  margin-top: 0.18rem;
+}
+
+/* ── Buttons ──────────────────────────────────── */
+
+.logi-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.9rem;
+  background: #7c3aed;
+  border: none;
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+
+.logi-btn-primary:hover { background: #6d28d9; }
+
+.logi-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(199, 210, 230, 0.65);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.logi-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(199, 210, 230, 0.9);
+}
+
+/* ── Stats row ────────────────────────────────── */
+
+.logi-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+.logi-stat-card {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+}
+
+.logi-stat-card--alert {
+  border-color: rgba(248, 113, 113, 0.15);
+}
+
+.logi-stat-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.4);
+  margin-bottom: 0.3rem;
+}
+
+.logi-stat-value {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e7edff;
+  line-height: 1;
+}
+
+.logi-stat-value--shortage { color: #f87171; }
+
+.logi-stat-unit {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(160, 180, 220, 0.5);
+  margin-left: 0.18rem;
+}
+
+/* ── Nav card grid (overview hub) ────────────── */
+
+.logi-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.logi-nav-card {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s;
+  cursor: pointer;
+}
+
+.logi-nav-card:hover {
+  background: rgba(167, 139, 250, 0.05);
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+.logi-nav-card--wip {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
+.logi-nav-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a78bfa;
+  flex-shrink: 0;
+}
+
+.logi-nav-card-icon--wip {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.07);
+  color: rgba(160, 180, 220, 0.4);
+}
+
+.logi-nav-card-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #e7edff;
+  letter-spacing: 0.02em;
+}
+
+.logi-nav-card-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.4);
+}
+
+.logi-nav-card-count--wip { color: rgba(160, 180, 220, 0.3); }
+
+/* ── Filter bar ───────────────────────────────── */
+
+.logi-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.logi-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  flex: 1;
+  max-width: 280px;
+  min-width: 160px;
+}
+
+.logi-search-icon {
+  width: 13px;
+  height: 13px;
+  color: rgba(160, 180, 220, 0.35);
+  flex-shrink: 0;
+}
+
+.logi-search-input {
+  background: none;
+  border: none;
+  outline: none;
+  color: rgba(160, 180, 220, 0.8);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.84rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.logi-search-input::placeholder { color: rgba(160, 180, 220, 0.32); }
+
+.logi-select {
+  padding: 0.3rem 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.84rem;
+  color: rgba(160, 180, 220, 0.8);
+  cursor: pointer;
+  outline: none;
+  min-width: 140px;
+}
+
+.logi-filter-count {
+  margin-left: auto;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.3);
+  white-space: nowrap;
+}
+
+/* ── Inventory split layout ───────────────────── */
+
+.logi-inv-layout {
+  display: flex;
+  gap: 0;
+  min-height: 260px;
+}
+
+.logi-inv-table-col {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.logi-inv-panel-col {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: width 0.18s ease, border-left-color 0.18s ease;
+  border-left: 1px solid transparent;
+}
+
+.logi-inv-layout--panel-open .logi-inv-panel-col {
+  width: 360px;
+  border-left-color: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Table ────────────────────────────────────── */
+
+.logi-table-wrap {
+  overflow-x: auto;
+}
+
+.logi-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logi-table th {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.38);
+  text-align: left;
+  padding: 0 0.75rem 0.45rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+
+.logi-table td {
+  padding: 0.52rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(199, 210, 230, 0.82);
+  vertical-align: middle;
+}
+
+.logi-table tr:last-child td { border-bottom: none; }
+
+.logi-table tr:hover td { background: rgba(255, 255, 255, 0.015); }
+
+.logi-mat-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.logi-mat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.45);
+  flex-shrink: 0;
+}
+
+.logi-qty-cell {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.76rem;
+  color: rgba(160, 180, 220, 0.65);
+}
+
+.logi-muted-cell {
+  color: rgba(160, 180, 220, 0.42);
+  font-size: 0.8rem;
+}
+
+.logi-table-actions {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: flex-end;
+}
+
+.logi-action-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.38);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.logi-action-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(199, 210, 230, 0.8);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+.logi-action-btn--delete:hover {
+  background: rgba(248, 113, 113, 0.08);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.18);
+}
+
+/* ── Empty state ──────────────────────────────── */
+
+.logi-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 0.5rem;
+  color: rgba(160, 180, 220, 0.3);
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.logi-empty-icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.22;
+  margin-bottom: 0.2rem;
+}
+
+/* ── Entry panel ──────────────────────────────── */
+
+.logi-entry-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.85rem 1rem 1rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.12) transparent;
+}
+
+.logi-entry-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.logi-entry-panel-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.55);
+}
+
+.logi-panel-close-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: rgba(160, 180, 220, 0.38);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: color 0.12s, background 0.12s;
+}
+
+.logi-panel-close-btn:hover {
+  color: rgba(199, 210, 230, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.logi-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  margin-bottom: 0.8rem;
+}
+
+.logi-form-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.42);
+}
+
+.logi-form-input,
+.logi-form-select {
+  padding: 0.42rem 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: rgba(199, 210, 230, 0.85);
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.12s;
+}
+
+.logi-form-input:focus,
+.logi-form-select:focus {
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+.logi-form-input::placeholder { color: rgba(160, 180, 220, 0.28); }
+
+.logi-entry-panel-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+/* ── Badges ───────────────────────────────────── */
+
+.logi-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.logi-badge--queued     { background: rgba(160,180,220,0.07); color: rgba(160,180,220,0.52); border: 1px solid rgba(160,180,220,0.11); }
+.logi-badge--in-progress { background: rgba(167,139,250,0.12); color: #a78bfa;               border: 1px solid rgba(167,139,250,0.22); }
+.logi-badge--paused     { background: rgba(245,158,11,0.1);  color: #f59e0b;               border: 1px solid rgba(245,158,11,0.18); }
+.logi-badge--complete   { background: rgba(74,222,128,0.1);  color: #4ade80;               border: 1px solid rgba(74,222,128,0.18); }
+.logi-badge--cancelled  { background: rgba(248,113,113,0.07); color: rgba(248,113,113,0.55); border: 1px solid rgba(248,113,113,0.12); }
+.logi-badge--station    { background: rgba(56,189,248,0.08); color: rgba(56,189,248,0.7);  border: 1px solid rgba(56,189,248,0.15); }
+.logi-badge--city       { background: rgba(167,139,250,0.08); color: rgba(167,139,250,0.7); border: 1px solid rgba(167,139,250,0.15); }
+.logi-badge--outpost    { background: rgba(245,158,11,0.08); color: rgba(245,158,11,0.7);  border: 1px solid rgba(245,158,11,0.15); }
+.logi-badge--ship       { background: rgba(74,222,128,0.08); color: rgba(74,222,128,0.7);  border: 1px solid rgba(74,222,128,0.15); }
+.logi-badge--shortage   { background: rgba(248,113,113,0.1); color: #f87171;               border: 1px solid rgba(248,113,113,0.2); }
+
+/* ── Location cards ───────────────────────────── */
+
+.logi-location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+}
+
+.logi-location-card {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.logi-location-card-header {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.logi-location-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e7edff;
+}
+
+.logi-location-meta {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.38);
+  margin-top: 0.1rem;
+  letter-spacing: 0.06em;
+}
+
+.logi-location-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.logi-location-scu {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.logi-location-card-body {
+  padding: 0.65rem 1rem;
+}
+
+.logi-location-material-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.logi-location-material-row:last-child { border-bottom: none; }
+
+.logi-location-material-name {
+  flex: 1;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: rgba(199, 210, 230, 0.72);
+}
+
+.logi-location-material-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  color: rgba(160, 180, 220, 0.52);
+}
+
+.logi-location-empty {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.74rem;
+  color: rgba(160, 180, 220, 0.28);
+  text-align: center;
+  padding: 0.65rem 0;
+}
+
+/* ── Build queue ──────────────────────────────── */
+
+.logi-bq-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.logi-section-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.logi-bq-group {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.logi-bq-group-header {
+  padding: 0.55rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.logi-bq-group-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.55);
+}
+
+.logi-bq-group-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  color: rgba(160, 180, 220, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.06rem 0.3rem;
+  border-radius: 3px;
+}
+
+.logi-bq-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.62rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+}
+
+.logi-bq-item:last-child { border-bottom: none; }
+
+.logi-bq-priority {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  color: rgba(160, 180, 220, 0.38);
+  flex-shrink: 0;
+}
+
+.logi-bq-item-name {
+  flex: 1;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(199, 210, 230, 0.88);
+}
+
+.logi-bq-item-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  color: rgba(160, 180, 220, 0.42);
+  white-space: nowrap;
+}
+
+/* ── Shortage panel ───────────────────────────── */
+
+.logi-shortage-section {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.logi-shortage-header {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logi-shortage-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.52);
+}
+
+.logi-shortage-alert-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.18);
+  padding: 0.06rem 0.32rem;
+  border-radius: 3px;
+}
+
+.logi-shortage-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logi-shortage-table th {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.32);
+  text-align: left;
+  padding: 0.45rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.logi-shortage-table td {
+  padding: 0.48rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(199, 210, 230, 0.8);
+}
+
+.logi-shortage-table tr:last-child td { border-bottom: none; }
+
+.logi-shortage-no-items {
+  padding: 0.85rem 1rem;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(74, 222, 128, 0.55);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Responsive ───────────────────────────────── */
+
+@media (max-width: 1100px) {
+  .logi-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .logi-nav-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 700px) {
+  .logi-page { padding: 1rem; }
+  .logi-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .logi-nav-grid  { grid-template-columns: repeat(2, 1fr); }
+  .logi-inv-layout--panel-open .logi-inv-panel-col { width: 100%; }
+  .logi-inv-layout--panel-open { flex-direction: column; }
+}
