@@ -17,6 +17,11 @@ type FrameworkItem = {
 
 
 
+const systemItems: FrameworkItem[] = [
+  { label: "Sub-Targeting", to: "/module/sub-targeting", glyph: "ST" },
+  { label: "Turret Keybinds", to: "/module/turret-keybind-baseline", glyph: "TK" },
+];
+
 const antiCapItems: FrameworkItem[] = [
   { label: "Component Sniping", to: "/module/component-sniping", glyph: "CS" },
 ];
