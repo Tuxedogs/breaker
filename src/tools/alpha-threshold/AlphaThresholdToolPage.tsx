@@ -15,14 +15,7 @@ import type { ArmorInteractionFilterChip } from './components/ArmorInteractionSu
 import type { Ship, SelectedWeaponComparison, SlotTone, WeaponRecord } from './types'
 import { parseShieldMode } from './lib/shieldMode'
 
-const PREVIEW_WEAPON_COUNT = 7
-const MOBILE_PREVIEW_WEAPON_COUNT = 4
-const MOBILE_PREVIEW_SHIP_COUNT = 4
-const DESKTOP_PREVIEW_SHIP_COUNT = 7
-const DESKTOP_ROW_COUNT_MIN = 3
-const DESKTOP_ROW_COUNT_MAX = 7
-const DESKTOP_COLUMN_COUNT_MIN = 3
-const DESKTOP_COLUMN_COUNT_MAX = 7
+const MATRIX_VISIBLE_SLOT_COUNT = 6
 const SLOT_TONES: SlotTone[] = ['cyan', 'violet', 'amber', 'emerald']
 
 export default function AlphaThresholdToolPage() {
@@ -40,9 +33,6 @@ export default function AlphaThresholdToolPage() {
   const [targetWeaponFilterPreset, setTargetWeaponFilterPreset] =
     useState<ArmorInteractionFilterChip | null>(null)
   const [targetWeaponSizeFilter, setTargetWeaponSizeFilter] = useState<number | null>(null)
-  const [analysisColumnCount, setAnalysisColumnCount] = useState(4)
-  const [targetColumnCount, setTargetColumnCount] = useState(3)
-  const [rowCount, setRowCount] = useState(4)
   /** Clears in the overlay; at 2+ re-enable auto-advance (per ship / weapon flows). */
   const shipClearStreakRef = useRef(0)
   const weaponClearStreakRef = useRef(0)
@@ -68,27 +58,23 @@ export default function AlphaThresholdToolPage() {
     selectedShipNames,
     setVictimShipAt,
     maxVictimShips,
+    shipPresets,
+    weaponSizePresets,
+    weaponPresets,
+    activeShipPresetId,
+    activeWeaponPresetId,
+    activeWeaponSizePresetId,
+    applyShipPreset,
+    applyWeaponSizePreset,
+    applyWeaponPreset,
+    clearShipPreset,
+    clearWeaponPreset,
   } = useAlphaThresholdState(matrixMode)
   const shieldMode = parseShieldMode(searchParams.get('shield'))
-  const visibleShipCount = isMobileViewport
-    ? Math.min(maxVictimShips, MOBILE_PREVIEW_SHIP_COUNT)
-    : Math.min(maxVictimShips, DESKTOP_PREVIEW_SHIP_COUNT)
-  const visibleWeaponCount = isMobileViewport
-    ? Math.min(slots.length, MOBILE_PREVIEW_WEAPON_COUNT)
-    : Math.min(slots.length, PREVIEW_WEAPON_COUNT)
-  const activeShipLimit = isMobileViewport
-    ? visibleShipCount
-    : Math.max(DESKTOP_ROW_COUNT_MIN, Math.min(DESKTOP_ROW_COUNT_MAX, rowCount, visibleShipCount))
-  const activeWeaponLimit = isMobileViewport
-    ? visibleWeaponCount
-    : Math.max(
-        DESKTOP_COLUMN_COUNT_MIN,
-        Math.min(
-          DESKTOP_COLUMN_COUNT_MAX,
-          matrixMode === 'target' ? targetColumnCount : analysisColumnCount,
-          visibleWeaponCount
-        )
-      )
+  const visibleShipCount = Math.min(maxVictimShips, MATRIX_VISIBLE_SLOT_COUNT)
+  const visibleWeaponCount = Math.min(slots.length, MATRIX_VISIBLE_SLOT_COUNT)
+  const activeShipLimit = visibleShipCount
+  const activeWeaponLimit = visibleWeaponCount
 
   const handleOnboardingHighlight = useCallback((highlight: AlphaThresholdOnboardingHighlight) => {
     setOnboardingHighlight(highlight)
@@ -445,12 +431,6 @@ export default function AlphaThresholdToolPage() {
         onTargetWeaponFilterPresetChange={setTargetWeaponFilterPreset}
         targetWeaponSizeFilter={targetWeaponSizeFilter}
         onTargetWeaponSizeFilterChange={setTargetWeaponSizeFilter}
-        analysisColumnCount={analysisColumnCount}
-        onAnalysisColumnCountChange={setAnalysisColumnCount}
-        targetColumnCount={targetColumnCount}
-        onTargetColumnCountChange={setTargetColumnCount}
-        rowCount={rowCount}
-        onRowCountChange={setRowCount}
         hideHeaderRow={false}
         selectionMode={selectionMode}
         nextShipSlotIndex={effectiveShipSlotIndex}
@@ -463,6 +443,17 @@ export default function AlphaThresholdToolPage() {
         onOpenShipsAt={handleOpenShipsAt}
         onClearShipAt={handleClearShipAt}
         onClearWeaponAt={handleClearWeaponAt}
+        shipPresets={shipPresets}
+        weaponSizePresets={weaponSizePresets}
+        weaponPresets={weaponPresets}
+        activeShipPresetId={activeShipPresetId}
+        activeWeaponPresetId={activeWeaponPresetId}
+        activeWeaponSizePresetId={activeWeaponSizePresetId}
+        onApplyShipPreset={applyShipPreset}
+        onApplyWeaponSizePreset={applyWeaponSizePreset}
+        onApplyWeaponPreset={applyWeaponPreset}
+        onClearShipPreset={clearShipPreset}
+        onClearWeaponPreset={clearWeaponPreset}
         onboardingHighlight={onboardingHighlight}
       />
       {selectionMode === 'ship' ? (
@@ -510,4 +501,3 @@ export default function AlphaThresholdToolPage() {
     </section>
   )
 }
-

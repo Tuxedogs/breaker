@@ -72,8 +72,8 @@ export type UpdateEntry = {
 export const mockUpdates: UpdateEntry[] = [
   {
     id: 1,
-    title: "Alpha 3.23.1 PTU",
-    description: "Component balance and ship adjustments.",
+    title: "Alpha 4.8 PTU",
+    description: "Desync issues resolved, forever!",
     date: "May 23, 2025",
     accentColor: "#a78bfa",
   },
@@ -86,7 +86,7 @@ export const mockUpdates: UpdateEntry[] = [
   },
   {
     id: 3,
-    title: "New Ship: Starlancer TAC",
+    title: "New Ship: Kruger Big",
     description: "Component and hardpoint data available.",
     date: "May 20, 2025",
     accentColor: "#f59e0b",
@@ -96,7 +96,7 @@ export const mockUpdates: UpdateEntry[] = [
 export const mockSystemStatus = {
   overall: "All Systems Operational",
   dataUpdated: "2 min ago",
-  apiStatus: "Operational",
+  apiStatus: "deg",
   buildEngine: "Operational",
   database: "Operational",
 } as const;

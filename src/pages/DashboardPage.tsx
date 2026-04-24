@@ -129,11 +129,11 @@ export default function DashboardPage() {
           <div className="dash-hero-content">
             <p className="dash-hero-kicker">Welcome to Scintel</p>
             <h1 className="dash-hero-title">
-              Intelligence for Citizens<br />Who Build the Verse.
+              Intelligence for those<br />who Build the Verse.
             </h1>
             <p className="dash-hero-subtitle">
               Tools, data, and planning systems for<br />
-              combat, industry, and exploration.
+              combat and industry.
             </p>
             <Link to="/tools/alpha-threshold" className="dash-hero-cta">
               Explore Tools

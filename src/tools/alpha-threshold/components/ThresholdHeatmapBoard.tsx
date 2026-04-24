@@ -1,6 +1,11 @@
 import { ThresholdComparisonMatrix } from './ThresholdComparisonMatrix'
 import type { ArmorInteractionFilterChip } from './ArmorInteractionSummaryPanel'
 import type { AlphaThresholdOnboardingHighlight } from './AlphaThresholdOnboardingModal'
+import type {
+  ShipPresetDefinition,
+  WeaponPresetDefinition,
+  WeaponSizePresetDefinition,
+} from '../data/presets'
 import type { DefenseShieldState, SelectedWeaponComparison, Ship, WeaponRecord } from '../types'
 
 type Props = {
@@ -13,12 +18,6 @@ type Props = {
   onTargetWeaponFilterPresetChange?: (chip: ArmorInteractionFilterChip | null) => void
   targetWeaponSizeFilter?: number | null
   onTargetWeaponSizeFilterChange?: (size: number | null) => void
-  analysisColumnCount?: number
-  onAnalysisColumnCountChange?: (count: number) => void
-  targetColumnCount?: number
-  onTargetColumnCountChange?: (count: number) => void
-  rowCount?: number
-  onRowCountChange?: (count: number) => void
   hideHeaderRow?: boolean
   selectionMode: 'ship' | 'weapon' | null
   nextShipSlotIndex: number
@@ -31,6 +30,17 @@ type Props = {
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onClearShipAt?: (slotIndex: number) => void
   onClearWeaponAt?: (slotIndex: number) => void
+  shipPresets: ShipPresetDefinition[]
+  weaponSizePresets: WeaponSizePresetDefinition[]
+  weaponPresets: WeaponPresetDefinition[]
+  activeShipPresetId: string | null
+  activeWeaponPresetId: string | null
+  activeWeaponSizePresetId: string | null
+  onApplyShipPreset: (presetId: string) => void
+  onApplyWeaponSizePreset: (presetId: string) => void
+  onApplyWeaponPreset: (presetId: string) => void
+  onClearShipPreset: () => void
+  onClearWeaponPreset: () => void
   onboardingHighlight?: AlphaThresholdOnboardingHighlight
 }
 

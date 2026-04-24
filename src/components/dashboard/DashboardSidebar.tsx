@@ -96,10 +96,9 @@ const sections = [
   {
     label: "DATA",
     items: [
-      { label: "Prices", to: "/dashboard", icon: "tag", wip: true },
       { label: "Patch Changes", to: "/dashboard", icon: "zap", wip: true },
       { label: "Meta Trends", to: "/dashboard", icon: "trending", wip: true },
-      { label: "Raw Tables", to: "/dashboard", icon: "database", wip: true },
+
     ],
   },
 ] as const;
@@ -162,15 +161,14 @@ export default function DashboardSidebar() {
 
       {/* PRO upsell */}
       <div className="dash-pro-card">
-        <div className="dash-pro-label">Scintel Pro</div>
         <div className="dash-pro-title">Unlock Advanced Tools</div>
-        <p className="dash-pro-desc">Saved builds, priority data, and more.</p>
-        <a href="#" className="dash-pro-btn">Upgrade Now</a>
+        <p className="dash-pro-desc">Saved builds, track inventory, and more.</p>
+        <a href="#" className="dash-pro-btn">Login with Discord</a>
       </div>
 
       {/* Footer */}
       <div className="dash-sidebar-footer">
-        <span className="dash-sidebar-version">SCINTEL v1.7.2</span>
+        <span className="dash-sidebar-version">SCINTEL Alpha 1.0</span>
         <button type="button" className="dash-sidebar-footer-btn" aria-label="Toggle theme">
           <Icon d={ICONS.sun} size={13} />
         </button>
