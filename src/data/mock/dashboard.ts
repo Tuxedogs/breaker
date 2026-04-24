@@ -31,7 +31,7 @@ export const mockMaterialShortages: MaterialRow[] = [
   { id: "savrilium", name: "Savrilium", owned: "0.86 SCU", needed: "1.39 SCU", shortage: "0.53 SCU" },
 ];
 
-export type BuildQueueItem = {
+export type DashBuildQueueItem = {
   id: number;
   name: string;
   qty: number;
@@ -39,7 +39,7 @@ export type BuildQueueItem = {
   accentColor: string;
 };
 
-export const mockBuildQueue: BuildQueueItem[] = [
+export const mockBuildQueue: DashBuildQueueItem[] = [
   { id: 1, name: "Avalanche Cooler", qty: 1, progress: 45, accentColor: "#a78bfa" },
   { id: 2, name: "TS-2 Quantum Drive", qty: 1, progress: 20, accentColor: "#38bdf8" },
   { id: 3, name: "VK-00 Quantum Drive", qty: 1, progress: 0, accentColor: "#6b7280" },
@@ -47,14 +47,14 @@ export const mockBuildQueue: BuildQueueItem[] = [
   { id: 5, name: "Arbor Mining Laser", qty: 1, progress: -1, accentColor: "#f59e0b" },
 ];
 
-export type LocationEntry = {
+export type DashLocationEntry = {
   id: string;
   name: string;
   scu: number;
   type: "station" | "city" | "outpost";
 };
 
-export const mockLocations: LocationEntry[] = [
+export const mockLocations: DashLocationEntry[] = [
   { id: "everus-harbor", name: "Everus Harbor", scu: 10.40, type: "station" },
   { id: "orison", name: "Orison", scu: 7.10, type: "city" },
   { id: "area18", name: "Area18", scu: 6.23, type: "city" },
@@ -96,7 +96,7 @@ export const mockUpdates: UpdateEntry[] = [
 export const mockSystemStatus = {
   overall: "All Systems Operational",
   dataUpdated: "2 min ago",
-  apiStatus: "deg",
+  apiStatus: "Operational",
   buildEngine: "Operational",
   database: "Operational",
 } as const;

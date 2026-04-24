@@ -1,0 +1,102 @@
+import type { InventoryEntry, Material, Location } from '../../data/models';
+
+interface Props {
+  entries: InventoryEntry[];
+  materials: Material[];
+  locations: Location[];
+  onEdit: (entry: InventoryEntry) => void;
+  onDelete: (id: string) => void;
+}
+
+function formatQty(entry: InventoryEntry, material: Material | undefined): string {
+  const unit = material?.unitType ?? 'units';
+  if (unit === 'count') return `${entry.quantity}×`;
+  return `${entry.quantity} ${unit}`;
+}
+
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+export default function InventoryTable({ entries, materials, locations, onEdit, onDelete }: Props) {
+  if (entries.length === 0) {
+    return (
+      <div className="logi-empty">
+        <svg
+          className="logi-empty-icon"
+          aria-hidden
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        No entries match the current filters.
+      </div>
+    );
+  }
+
+  return (
+    <div className="logi-table-wrap">
+      <table className="logi-table">
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Qty</th>
+            <th>Location</th>
+            <th>Container</th>
+            <th>Updated</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          {entries.map((entry) => {
+            const mat = materials.find((m) => m.id === entry.materialId);
+            const loc = locations.find((l) => l.id === entry.locationId);
+            return (
+              <tr key={entry.id}>
+                <td>
+                  <div className="logi-mat-cell">
+                    <span className="logi-mat-dot" aria-hidden />
+                    {mat?.name ?? entry.materialId}
+                  </div>
+                </td>
+                <td className="logi-qty-cell">{formatQty(entry, mat)}</td>
+                <td>{loc?.name ?? entry.locationId}</td>
+                <td className="logi-muted-cell">{entry.containerName ?? '—'}</td>
+                <td className="logi-muted-cell">{formatDate(entry.updatedAt)}</td>
+                <td>
+                  <div className="logi-table-actions">
+                    <button
+                      type="button"
+                      className="logi-action-btn"
+                      onClick={() => onEdit(entry)}
+                      aria-label={`Edit ${mat?.name ?? entry.materialId}`}
+                    >
+                      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className="logi-action-btn logi-action-btn--delete"
+                      onClick={() => onDelete(entry.id)}
+                      aria-label={`Delete ${mat?.name ?? entry.materialId}`}
+                    >
+                      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+                        <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}

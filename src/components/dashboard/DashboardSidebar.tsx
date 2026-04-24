@@ -87,10 +87,10 @@ const sections = [
   {
     label: "LOGISTICS",
     items: [
-      { label: "Inventory", to: "/dashboard", icon: "clipboard", wip: true },
-      { label: "Locations", to: "/dashboard", icon: "pin", wip: true },
-      { label: "Transfers", to: "/dashboard", icon: "arrows", wip: true },
-      { label: "Build Queue", to: "/dashboard", icon: "list", wip: true },
+      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard" },
+      { label: "Locations",   to: "/logistics/locations",   icon: "pin" },
+      { label: "Transfers",   to: "/dashboard",             icon: "arrows", wip: true },
+      { label: "Build Queue", to: "/logistics/build-queue", icon: "list" },
     ],
   },
   {
