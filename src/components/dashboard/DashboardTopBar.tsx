@@ -118,7 +118,7 @@ export default function DashboardTopBar() {
             placeholder="Search Scintel..."
             aria-label="Search Scintel"
           />
-          <span className="dash-search-kbd" aria-hidden>CTRL K</span>
+          
         </div>
 
         {/* Favourites */}
@@ -134,10 +134,10 @@ export default function DashboardTopBar() {
 
         {/* User */}
         <button type="button" className="dash-user-btn" aria-label="User menu">
-          <div className="dash-user-avatar" aria-hidden>AP</div>
+          <div className="dash-user-avatar" aria-hidden>TA</div>
           <div className="dash-user-info">
-            <span className="dash-user-name">Aegis Pilot</span>
-            <span className="dash-user-level">Level 42</span>
+            <span className="dash-user-name">Tux-Actual</span>
+            <span className="dash-user-level">Admin</span>
           </div>
           <ChevronDownIcon />
         </button>

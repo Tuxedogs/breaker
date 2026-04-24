@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { getShipThresholdsForSource } from '../data/ships/ships'
 import { getWeaponsForSource } from '../data/weapons/weapons'
+import { SHIP_PRESETS, WEAPON_PRESETS, WEAPON_SIZE_PRESETS } from '../data/presets'
 import {
   getDefaultCollapsedGroups,
   getDefaultSelectedShips,
@@ -10,6 +11,10 @@ import {
 import { mergeShipOverride, mergeWeaponOverride } from '../lib/mergeOverrides'
 import { sortShips } from '../lib/sortShips'
 import { isExcludedFromThresholdWeaponPool } from '../lib/weapons/exclusions'
+import {
+  resolveShipPresetSelection,
+  resolveWeaponPresetSelection,
+} from '../lib/presets'
 import type {
   ComparisonSlot,
   Ship,
@@ -37,8 +42,8 @@ const VALID_SORT_KEYS: ShipSortKey[] = [
   'manufacturer-asc',
 ]
 const VALID_DATA_SOURCES: ThresholdDataSourceKey[] = ['erkul-live', 'erkul-ptu']
-const MAX_VICTIM_SHIPS = 7
-const MOBILE_MAX_VICTIM_SHIPS = 3
+const MAX_VICTIM_SHIPS = 6
+const MOBILE_MAX_VICTIM_SHIPS = 6
 const STORAGE_MIGRATION_VERSION_KEY = 'alpha-threshold.storage-migration-version'
 const STORAGE_MIGRATION_VERSION = 1
 const LEGACY_STORAGE_KEYS_TO_CLEAR = [
@@ -46,9 +51,19 @@ const LEGACY_STORAGE_KEYS_TO_CLEAR = [
   'alpha-threshold.weapon-analysis-filter',
   'alpha-threshold.filter-chip',
 ] as const
-const DEFAULT_EXAMPLE_SHIP_KEYS = ['MRAI::Guardian_MX'] as const
+const DEFAULT_EXAMPLE_SHIP_KEYS = [
+  'ANVL::Arrow',
+  'ANVL::F7A_Hornet_Mk_II',
+  'ANVL::F8C_Lightning',
+  'CRUS::A2_Hercules_Starlifter',
+  'RSI::Perseus',
+  'AEGS::Idris_M',
+] as const
 const DEFAULT_EXAMPLE_WEAPON_KEYS = [
-  'ballistic:3:Tarantula GT-870 Mk 3',
+  'ballistic:1:SW16BR1 "Buzzsaw"',
+  'ballistic:2:BRVS',
+  'ballistic:2:SW16BR2 "Sawbuck"',
+  'ballistic:3:SW16BR3 "Shredder"',
 ] as const
 const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
   {
@@ -62,21 +77,21 @@ const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
     id: 'slot-2',
     operator: 'weapon',
     hardpointSize: 0,
-    weaponKey: null,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[1],
     label: 'Weapon 2',
   },
   {
     id: 'slot-3',
     operator: 'weapon',
     hardpointSize: 0,
-    weaponKey: null,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[2],
     label: 'Weapon 3',
   },
   {
     id: 'slot-4',
     operator: 'weapon',
     hardpointSize: 0,
-    weaponKey: null,
+    weaponKey: DEFAULT_EXAMPLE_WEAPON_KEYS[3],
     label: 'Weapon 4',
   },
   {
@@ -92,13 +107,6 @@ const DEFAULT_WEAPON_SLOTS: ComparisonSlot[] = [
     hardpointSize: 0,
     weaponKey: null,
     label: 'Weapon 6',
-  },
-  {
-    id: 'slot-7',
-    operator: 'weapon',
-    hardpointSize: 0,
-    weaponKey: null,
-    label: 'Weapon 7',
   },
 ]
 
@@ -343,9 +351,25 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     'alpha-threshold.sort',
     'health-desc'
   )
-  const [storedSlots, setSlots] = useState<ComparisonSlot[]>(() => buildDefaultWeaponSlots())
-  const [selectedShipNames, setSelectedShipNames] = useState<Array<string | null>>(
+  const [storedSlots, setSlots] = useLocalStorageState<ComparisonSlot[]>(
+    'alpha-threshold.selected-weapon-slots',
+    buildDefaultWeaponSlots()
+  )
+  const [selectedShipNames, setSelectedShipNames] = useLocalStorageState<Array<string | null>>(
+    'alpha-threshold.selected-ships',
     Array.from({ length: MAX_VICTIM_SHIPS }, (_, index) => DEFAULT_EXAMPLE_SHIP_KEYS[index] ?? null)
+  )
+  const [activeShipPresetId, setActiveShipPresetId] = useLocalStorageState<string | null>(
+    'alpha-threshold.active-ship-preset',
+    'pu-mix'
+  )
+  const [activeWeaponPresetId, setActiveWeaponPresetId] = useLocalStorageState<string | null>(
+    'alpha-threshold.active-weapon-preset',
+    'ballistic-repeater'
+  )
+  const [activeWeaponSizePresetId, setActiveWeaponSizePresetId] = useLocalStorageState<string | null>(
+    'alpha-threshold.active-weapon-size-preset',
+    'size-1-3'
   )
   const [shipSearch, setShipSearch] = useLocalStorageState<string>(
     'alpha-threshold.ship-search',
@@ -460,7 +484,6 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
 
   useEffect(() => {
     if (!areSlotsEqual(storedSlots, slots)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSlots(slots)
     }
   }, [setSlots, slots, storedSlots])
@@ -473,7 +496,6 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
 
   useEffect(() => {
     if (JSON.stringify(selectedShipNames) !== JSON.stringify(normalizedSelectedShipNames)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedShipNames(normalizedSelectedShipNames)
     }
   }, [normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])
@@ -484,7 +506,6 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     )
 
     if (JSON.stringify(selectedShipNames) !== JSON.stringify(limitedSelection)) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedShipNames(limitedSelection)
     }
   }, [maxVictimShips, normalizedSelectedShipNames, selectedShipNames, setSelectedShipNames])
@@ -776,6 +797,73 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     setShowSelectedOnly((prev) => !prev)
   }
 
+  function applyShipPreset(presetId: string) {
+    const preset = SHIP_PRESETS.find((entry) => entry.id === presetId)
+    if (!preset) return
+
+    const resolved = resolveShipPresetSelection(preset, allShips, MAX_VICTIM_SHIPS)
+    setSelectedShipNames(() => {
+      const next = Array.from<string | null>({ length: MAX_VICTIM_SHIPS }).fill(null)
+      resolved.forEach((shipName, index) => {
+        if (index < MAX_VICTIM_SHIPS) next[index] = shipName
+      })
+      return next
+    })
+    setActiveShipPresetId(preset.id)
+  }
+
+  function clearShipPreset() {
+    setActiveShipPresetId(null)
+  }
+
+  function applyWeaponSizePreset(presetId: string) {
+    const preset = WEAPON_SIZE_PRESETS.find((entry) => entry.id === presetId)
+    if (!preset) return
+
+    setActiveWeaponSizePresetId(preset.id)
+    setActiveWeaponPresetId(null)
+  }
+
+  function applyWeaponPreset(presetId: string) {
+    const preset = WEAPON_PRESETS.find((entry) => entry.id === presetId)
+    if (!preset) return
+
+    const activeSizePreset =
+      WEAPON_SIZE_PRESETS.find((entry) => entry.id === activeWeaponSizePresetId) ?? null
+
+    const resolved = resolveWeaponPresetSelection(
+      preset,
+      allWeapons,
+      DEFAULT_WEAPON_SLOTS.length,
+      {
+        sizePreset: activeSizePreset,
+      }
+    )
+    setSlots(() => {
+      const next: ComparisonSlot[] = buildDefaultWeaponSlots().map((slot) => ({
+        ...slot,
+        weaponKey: null,
+      }))
+      resolved.forEach((weaponKey, index) => {
+        if (!next[index]) return
+        next[index] = {
+          ...next[index],
+          weaponKey,
+        }
+      })
+      return next
+    })
+    if (activeSizePreset) {
+      setActiveWeaponSizePresetId(activeSizePreset.id)
+    }
+    setActiveWeaponPresetId(preset.id)
+  }
+
+  function clearWeaponPreset() {
+    setActiveWeaponPresetId(null)
+    setActiveWeaponSizePresetId(null)
+  }
+
   return {
     activeSource: resolvedActiveSource,
     setActiveSource,
@@ -817,5 +905,16 @@ export function useAlphaThresholdState(matrixMode: 'analysis' | 'target') {
     setWeaponOverride,
     resetWeaponOverride,
     resetAllOverrides,
+    shipPresets: SHIP_PRESETS,
+    weaponSizePresets: WEAPON_SIZE_PRESETS,
+    weaponPresets: WEAPON_PRESETS,
+    activeShipPresetId,
+    activeWeaponPresetId,
+    activeWeaponSizePresetId,
+    applyShipPreset,
+    applyWeaponSizePreset,
+    applyWeaponPreset,
+    clearShipPreset,
+    clearWeaponPreset,
   }
 }

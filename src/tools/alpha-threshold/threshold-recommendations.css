@@ -369,6 +369,14 @@
   min-width: 0;
 }
 
+.alpha-threshold-tool .acm-corner-preset-controls {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.34rem;
+  min-width: 0;
+}
+
 .alpha-threshold-tool .acm-corner-select {
   appearance: none;
   min-height: 1rem;
@@ -854,7 +862,7 @@
   justify-content: center;
   align-items: stretch;
   gap: 0.18rem;
-  min-height: 3.5rem;
+  min-height: var(--alpha-matrix-cell-min-height);
   border: none;
   border-left: 1px solid rgb(255 255 255 / 0.06);
   border-radius: 0;
@@ -875,6 +883,41 @@
   gap: 0.32rem;
   width: 100%;
   text-align: left;
+}
+
+.alpha-threshold-tool .acm-empty-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+  width: 100%;
+  min-height: 100%;
+  text-align: center;
+}
+
+.alpha-threshold-tool .acm-empty-slot--compact {
+  min-height: 100%;
+}
+
+.alpha-threshold-tool .acm-empty-slot-plus {
+  display: grid;
+  place-items: center;
+  width: auto;
+  height: auto;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1;
+  font-weight: 400;
+  color: rgb(148 163 184 / 0.48);
+}
+
+.alpha-threshold-tool .acm-empty-slot-label {
+  display: none;
+}
+
+.alpha-threshold-tool .acm-empty-slot-hint {
+  display: none;
 }
 
 .alpha-threshold-tool .acm-weapon-empty-target {
@@ -1178,7 +1221,13 @@
 }
 
 .alpha-threshold-tool .acm-ship-card-empty {
-  align-content: center;
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  height: 100%;
+  min-height: var(--alpha-matrix-cell-min-height);
+  padding: 0;
+  overflow: hidden;
   /* No dashed outline: match filled ship column chrome (same as `.acm-ship-card` divider). */
   border: none;
   border-right: 1px solid rgb(255 255 255 / 0.08);
@@ -1186,6 +1235,18 @@
   background:
     linear-gradient(180deg, rgb(9 13 22 / 0.72), rgb(9 13 22 / 0.9)),
     rgb(255 255 255 / 0.02);
+}
+
+.alpha-threshold-tool .acm-ship-card-empty .acm-empty-slot {
+  flex: 1 1 auto;
+  min-height: 100%;
+  padding: 0 0.5rem 0.5rem;
+  box-sizing: border-box;
+}
+
+.alpha-threshold-tool .acm-cell.acm-panel-placeholder {
+  display: grid;
+  place-items: center;
 }
 
 /* Empty weapon column headers: dashed border uses same accent as panel tone */

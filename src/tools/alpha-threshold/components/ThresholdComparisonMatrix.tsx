@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { CSSProperties, FocusEvent, PointerEvent } from 'react'
+import type {
+  ShipPresetDefinition,
+  WeaponPresetDefinition,
+  WeaponSizePresetDefinition,
+} from '../data/presets'
 
 import {
   estimateArmorInteraction,
@@ -44,18 +49,23 @@ type Props = {
   onTargetWeaponFilterPresetChange?: (chip: ArmorInteractionFilterChip | null) => void
   targetWeaponSizeFilter?: number | null
   onTargetWeaponSizeFilterChange?: (size: number | null) => void
-  analysisColumnCount?: number
-  onAnalysisColumnCountChange?: (count: number) => void
-  targetColumnCount?: number
-  onTargetColumnCountChange?: (count: number) => void
-  rowCount?: number
-  onRowCountChange?: (count: number) => void
   onOpenWeapons: () => void
   onOpenShips: () => void
   onOpenWeaponsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onOpenShipsAt?: (slotIndex: number, autoAdvance?: boolean) => void
   onClearShipAt?: (slotIndex: number) => void
   onClearWeaponAt?: (slotIndex: number) => void
+  shipPresets: ShipPresetDefinition[]
+  weaponSizePresets: WeaponSizePresetDefinition[]
+  weaponPresets: WeaponPresetDefinition[]
+  activeShipPresetId: string | null
+  activeWeaponPresetId: string | null
+  activeWeaponSizePresetId: string | null
+  onApplyShipPreset: (presetId: string) => void
+  onApplyWeaponSizePreset: (presetId: string) => void
+  onApplyWeaponPreset: (presetId: string) => void
+  onClearShipPreset: () => void
+  onClearWeaponPreset: () => void
   /** First-visit tour: spotlight matrix controls */
   onboardingHighlight?: 'ship-weapon' | 'shield' | null
 }
@@ -71,16 +81,11 @@ type MatrixColumnModel = {
 }
 
 const DESTINATION_TONES = ['cyan', 'violet', 'amber', 'emerald'] as const
-const ROW_COUNT_MIN = 3
-const ROW_COUNT_MAX = 7
-const ANALYSIS_COLUMN_MIN = 3
-const ANALYSIS_COLUMN_MAX = 7
-const TARGET_RECOMMENDATION_COLUMN_MIN = 3
-const TARGET_RECOMMENDATION_COLUMN_MAX = 7
+const FIXED_MATRIX_SLOT_COUNT = 6
 const WEAPON_SIZE_OPTIONS = [2, 3, 4, 5, 7, 8] as const
 
-function buildVisibleShips(ships: Ship[], rowCount: number) {
-  return ships.slice(0, rowCount)
+function buildVisibleShips(ships: Ship[]) {
+  return ships.slice(0, FIXED_MATRIX_SLOT_COUNT)
 }
 
 function getEstimateTimingTone(estimate: ArmorInteractionEstimate) {
@@ -330,6 +335,26 @@ function isPlaceholderWeapon(selection: SelectedWeaponComparison) {
   return selection.weapon.name === '' && selection.weapon.weaponClass === ''
 }
 
+function EmptySlot({
+  label,
+  hint,
+  compact = false,
+}: {
+  label?: string
+  hint?: string
+  compact?: boolean
+}) {
+  return (
+    <div className={['acm-empty-slot', compact ? 'acm-empty-slot--compact' : ''].filter(Boolean).join(' ')}>
+      <span className="acm-empty-slot-plus" aria-hidden="true">
+        +
+      </span>
+      {label ? <p className="acm-empty-slot-label">{label}</p> : null}
+      {hint ? <p className="acm-empty-slot-hint">{hint}</p> : null}
+    </div>
+  )
+}
+
 function getShipRoleLabel(ship: Ship) {
   const raw = ship.role?.trim()
   if (!raw) return '-'
@@ -392,18 +417,23 @@ export function ThresholdComparisonMatrix({
   onTargetWeaponFilterPresetChange,
   targetWeaponSizeFilter = null,
   onTargetWeaponSizeFilterChange,
-  analysisColumnCount = ANALYSIS_COLUMN_MAX,
-  onAnalysisColumnCountChange,
-  targetColumnCount = TARGET_RECOMMENDATION_COLUMN_MIN,
-  onTargetColumnCountChange,
-  rowCount = 4,
-  onRowCountChange,
   onOpenWeapons,
   onOpenShips,
   onOpenWeaponsAt,
   onOpenShipsAt,
   onClearShipAt,
   onClearWeaponAt,
+  shipPresets,
+  weaponSizePresets,
+  weaponPresets,
+  activeShipPresetId,
+  activeWeaponPresetId,
+  activeWeaponSizePresetId,
+  onApplyShipPreset,
+  onApplyWeaponSizePreset,
+  onApplyWeaponPreset,
+  onClearShipPreset,
+  onClearWeaponPreset,
   onboardingHighlight = null,
 }: Props) {
   const [activeRowId, setActiveRowId] = useState<string | null>(null)
@@ -436,8 +466,7 @@ export function ThresholdComparisonMatrix({
   })
   const [sourceMode] = useState<'ptu' | 'live'>('live')
   const [isMobileLayout, setIsMobileLayout] = useState(false)
-  const normalizedRowCount = Math.max(ROW_COUNT_MIN, Math.min(ROW_COUNT_MAX, rowCount, ships.length || ROW_COUNT_MAX))
-  const visibleShips = buildVisibleShips(ships, normalizedRowCount)
+  const visibleShips = buildVisibleShips(ships)
   const orderedWeapons = selectedWeapons
   const isPlaceholderPreview =
     (visibleShips.length > 0 &&
@@ -454,13 +483,20 @@ export function ThresholdComparisonMatrix({
   const activeShipTone = DESTINATION_TONES[activeShipDestinationIndex % DESTINATION_TONES.length]
   const activeWeaponTone =
     DESTINATION_TONES[activeWeaponDestinationIndex % DESTINATION_TONES.length]
-  const normalizedAnalysisColumnCount = Math.max(
-    ANALYSIS_COLUMN_MIN,
-    Math.min(ANALYSIS_COLUMN_MAX, analysisColumnCount, orderedWeapons.length || ANALYSIS_COLUMN_MAX)
+  const normalizedAnalysisColumnCount = FIXED_MATRIX_SLOT_COUNT
+  const normalizedTargetColumnCount = FIXED_MATRIX_SLOT_COUNT
+  const activeWeaponSizePreset = useMemo(
+    () =>
+      weaponSizePresets.find((preset) => preset.id === activeWeaponSizePresetId) ?? null,
+    [activeWeaponSizePresetId, weaponSizePresets]
   )
-  const normalizedTargetColumnCount = Math.max(
-    TARGET_RECOMMENDATION_COLUMN_MIN,
-    Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, targetColumnCount)
+  const visibleWeaponPresets = useMemo(
+    () =>
+      weaponPresets.filter((preset) => {
+        if (!activeWeaponSizePresetId) return true
+        return !preset.sizePresetIds || preset.sizePresetIds.includes(activeWeaponSizePresetId)
+      }),
+    [activeWeaponSizePresetId, weaponPresets]
   )
   const isTargetView = matrixMode === 'target'
   const filteredAnalysisWeapons = useMemo(() => {
@@ -739,70 +775,93 @@ export function ThresholdComparisonMatrix({
                         </div>
                       </div>
                       <div className="acm-corner-row">
-                        <span className="acm-corner-label">Cols</span>
-                        <div
-                          className="acm-corner-stepper"
-                          aria-label={`${isTargetView ? 'Target recommendation' : 'Analysis'} columns`}
-                        >
-                          <button
-                            type="button"
-                            className="acm-corner-stepper-button"
-                            aria-label={`Decrease ${isTargetView ? 'target recommendation' : 'analysis'} columns`}
-                            onClick={() =>
-                              isTargetView
-                                ? onTargetColumnCountChange?.(
-                                    Math.max(TARGET_RECOMMENDATION_COLUMN_MIN, normalizedTargetColumnCount - 1)
-                                  )
-                                : onAnalysisColumnCountChange?.(
-                                    Math.max(ANALYSIS_COLUMN_MIN, normalizedAnalysisColumnCount - 1)
-                                  )
-                            }
-                          >
-                            -
-                          </button>
-                          <span className="acm-corner-stepper-value" aria-live="polite">
-                            {isTargetView ? normalizedTargetColumnCount : normalizedAnalysisColumnCount}
-                          </span>
-                          <button
-                            type="button"
-                            className="acm-corner-stepper-button"
-                            aria-label={`Increase ${isTargetView ? 'target recommendation' : 'analysis'} columns`}
-                            onClick={() =>
-                              isTargetView
-                                ? onTargetColumnCountChange?.(
-                                    Math.min(TARGET_RECOMMENDATION_COLUMN_MAX, normalizedTargetColumnCount + 1)
-                                  )
-                                : onAnalysisColumnCountChange?.(
-                                    Math.min(ANALYSIS_COLUMN_MAX, normalizedAnalysisColumnCount + 1)
-                                  )
-                            }
-                          >
-                            +
-                          </button>
+                        <span className="acm-corner-label">Size</span>
+                        <div className="acm-corner-preset-controls">
+                          <div className="acm-corner-select-wrap">
+                            <select
+                              className="acm-corner-select"
+                              aria-label="Weapon size preset"
+                              value={activeWeaponSizePresetId ?? ''}
+                              onChange={(event) => {
+                                const nextId = event.target.value
+                                if (!nextId) {
+                                  onClearWeaponPreset()
+                                  return
+                                }
+                                onApplyWeaponSizePreset(nextId)
+                              }}
+                            >
+                              <option value="">Select</option>
+                              {weaponSizePresets.map((preset) => (
+                                <option key={preset.id} value={preset.id}>
+                                  {preset.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="acm-corner-select-caret" aria-hidden="true">
+                              v
+                            </span>
+                          </div>
                         </div>
                       </div>
                       <div className="acm-corner-row">
-                        <span className="acm-corner-label">Rows</span>
-                        <div className="acm-corner-stepper" aria-label="Analysis rows">
-                          <button
-                            type="button"
-                            className="acm-corner-stepper-button"
-                            aria-label="Decrease analysis rows"
-                            onClick={() => onRowCountChange?.(Math.max(ROW_COUNT_MIN, normalizedRowCount - 1))}
-                          >
-                            -
-                          </button>
-                          <span className="acm-corner-stepper-value" aria-live="polite">
-                            {normalizedRowCount}
-                          </span>
-                          <button
-                            type="button"
-                            className="acm-corner-stepper-button"
-                            aria-label="Increase analysis rows"
-                            onClick={() => onRowCountChange?.(Math.min(ROW_COUNT_MAX, normalizedRowCount + 1))}
-                          >
-                            +
-                          </button>
+                        <span className="acm-corner-label">Weapons</span>
+                        <div className="acm-corner-preset-controls">
+                          <div className="acm-corner-select-wrap">
+                            <select
+                              className="acm-corner-select"
+                              aria-label="Weapon preset"
+                              value={activeWeaponPresetId ?? ''}
+                              disabled={!activeWeaponSizePreset}
+                              onChange={(event) => {
+                                const nextId = event.target.value
+                                if (!nextId) return
+                                onApplyWeaponPreset(nextId)
+                              }}
+                            >
+                              <option value="">
+                                {activeWeaponSizePreset ? 'Select' : 'Select size first'}
+                              </option>
+                              {visibleWeaponPresets.map((preset) => (
+                                <option key={preset.id} value={preset.id}>
+                                  {preset.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="acm-corner-select-caret" aria-hidden="true">
+                              v
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="acm-corner-row">
+                        <span className="acm-corner-label">Targets</span>
+                        <div className="acm-corner-preset-controls">
+                          <div className="acm-corner-select-wrap">
+                            <select
+                              className="acm-corner-select"
+                              aria-label="Target preset"
+                              value={activeShipPresetId ?? ''}
+                              onChange={(event) => {
+                                const nextId = event.target.value
+                                if (!nextId) {
+                                  onClearShipPreset()
+                                  return
+                                }
+                                onApplyShipPreset(nextId)
+                              }}
+                            >
+                              <option value="">Select</option>
+                              {shipPresets.map((preset) => (
+                                <option key={preset.id} value={preset.id}>
+                                  {preset.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span className="acm-corner-select-caret" aria-hidden="true">
+                              v
+                            </span>
+                          </div>
                         </div>
                       </div>
                       {isTargetView ? (
@@ -968,10 +1027,7 @@ export function ThresholdComparisonMatrix({
                         }}
                       >
                         {placeholderWeapon ? (
-                          <div className="acm-weapon-empty">
-                            <p className="acm-weapon-empty-label">{weaponSlotLabel}</p>
-                            <p className="acm-weapon-empty-hint">Select weapon</p>
-                          </div>
+                          <EmptySlot label={weaponSlotLabel} hint="Select weapon" />
                         ) : selection ? (
                           <div className="acm-weapon-header-body">
                             <h3 className="acm-weapon-name">
@@ -1085,10 +1141,7 @@ export function ThresholdComparisonMatrix({
                         }}
                       >
                         {placeholderShip ? (
-                          <div className="acm-ship-empty">
-                            <p className="acm-ship-empty-label">{shipSlotLabel}</p>
-                            <p className="acm-ship-empty-hint">Select ship</p>
-                          </div>
+                          <EmptySlot label={shipSlotLabel} hint="Select target" />
                         ) : (
                           <div className="acm-ship-card-body">
                             <ShipFlipCard
@@ -1343,56 +1396,7 @@ export function ThresholdComparisonMatrix({
                                   </div>
                                 )
                               ) : placeholderCell ? (
-                                <>
-                                  <div className="acm-cell-meta-row">
-                                    <p className="acm-cell-state acm-cell-detail-blur">Armor</p>
-                                  </div>
-                                  <div className="acm-cell-title-row">
-                                    <p
-                                      className="acm-cell-summary acm-cell-detail-blur"
-                                      style={{
-                                        color: getEffectivePenetrationSummaryColor(0),
-                                      }}
-                                    >
-                                      E0
-                                    </p>
-                                    <div className="acm-cell-inline-metrics acm-cell-detail-blur">
-                                      <span>
-                                        <strong>T</strong>0
-                                      </span>
-                                      <span>
-                                        <strong>A</strong>0
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div className="acm-cell-chart">
-                                    <div className="acm-cell-track-scale acm-cell-detail-blur">
-                                      <span>100% armor</span>
-                                      <span>0% armor</span>
-                                    </div>
-                                    <div
-                                      className="acm-cell-track acm-cell-detail-blur"
-                                      aria-label="Armor placeholder threshold marker"
-                                    >
-                                      <div
-                                        className="acm-cell-track-fill acm-cell-track-fill--full acm-cell-detail-blur"
-                                        style={{ width: '100%' }}
-                                      />
-                                      <span
-                                        className="acm-cell-marker"
-                                        style={{ left: '100%' }}
-                                      />
-                                    </div>
-                                    <div className="acm-cell-track-caption-row">
-                                      <span
-                                        className="acm-cell-track-caption acm-cell-track-caption-end acm-cell-detail-blur"
-                                        style={{ left: '100%' }}
-                                      >
-                                        Damage start
-                                      </span>
-                                    </div>
-                                  </div>
-                                </>
+                                <EmptySlot compact />
                               ) : activeResult ? (
                                 <>
                                   <div className="acm-cell-meta-row">
