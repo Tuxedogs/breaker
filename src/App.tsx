@@ -2,6 +2,8 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Background from "./components/Background";
 import AppShell from "./components/AppShell";
+import DashboardShell from "./components/dashboard/DashboardShell";
+import DashboardPage from "./pages/DashboardPage";
 import DoctrineIndexPage from "./pages/DoctrineIndexPage";
 import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLanding from "./pages/DoctrineLanding";
@@ -32,6 +34,11 @@ export default function App() {
       <Background />
       <Routes>
         <Route path="doctrine-landing" element={<DoctrineLanding />} />
+
+        {/* Dashboard — own shell (sidebar + topbar) */}
+        <Route element={<DashboardShell />}>
+          <Route path="dashboard" element={<DashboardPage />} />
+        </Route>
 
         <Route element={<AppShell />}>
           {/* Doctrine */}
