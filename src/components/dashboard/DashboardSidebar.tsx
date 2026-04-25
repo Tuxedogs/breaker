@@ -69,7 +69,7 @@ const sections = [
   {
     label: "SHIPS",
     items: [
-      { label: "Ship Maps", to: "/maps", icon: "map" },
+      { label: "Ship Maps", to: "/ships/maps", icon: "map" },
       { label: "Components", to: "/dashboard", icon: "cpu", wip: true },
       { label: "Hardpoints", to: "/dashboard", icon: "anchor", wip: true },
       { label: "Ship Compare", to: "/dashboard", icon: "scale", wip: true },
