@@ -776,6 +776,350 @@
   margin-left: 0.1rem;
 }
 
+/* Doctrine workspace */
+.dash-doctrine-workspace {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.dash-doctrine-page {
+  display: grid;
+  gap: 1rem;
+  min-height: 100%;
+  padding: 1rem;
+}
+
+.dash-doctrine-page-header {
+  min-width: 0;
+}
+
+.dash-doctrine-page-header h1 {
+  margin: 0;
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e7edff;
+}
+
+.dash-doctrine-page-header p:last-child {
+  margin: 0.25rem 0 0;
+  max-width: 42rem;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(160, 180, 220, 0.58);
+}
+
+.dash-doctrine-toolbar,
+.dash-doctrine-rolebar,
+.dash-doctrine-filters,
+.dash-doctrine-card,
+.dash-doctrine-empty,
+.dash-doctrine-error {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+}
+
+.dash-doctrine-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.dash-doctrine-heading {
+  min-width: 0;
+}
+
+.dash-doctrine-eyebrow,
+.dash-doctrine-field-label,
+.dash-doctrine-status,
+.dash-doctrine-date,
+.dash-doctrine-pin {
+  font-family: "Share Tech Mono", monospace;
+  text-transform: uppercase;
+}
+
+.dash-doctrine-eyebrow {
+  margin: 0 0 0.32rem;
+  font-size: 0.57rem;
+  letter-spacing: 0.18em;
+  color: rgba(160, 180, 220, 0.5);
+}
+
+.dash-doctrine-heading h2,
+.dash-doctrine-empty h3 {
+  margin: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #e7edff;
+}
+
+.dash-doctrine-heading p:last-child,
+.dash-doctrine-empty p,
+.dash-doctrine-error p:last-child {
+  margin: 0.2rem 0 0;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(160, 180, 220, 0.58);
+}
+
+.dash-doctrine-clear,
+.dash-doctrine-role,
+.dash-doctrine-link {
+  min-height: 44px;
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.dash-doctrine-clear {
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0 0.95rem;
+  color: rgba(199, 210, 230, 0.75);
+  cursor: pointer;
+}
+
+.dash-doctrine-clear:hover:not(:disabled) {
+  border-color: rgba(167, 139, 250, 0.22);
+  background: rgba(167, 139, 250, 0.08);
+  color: #e7edff;
+}
+
+.dash-doctrine-clear:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.dash-doctrine-rolebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0.55rem;
+}
+
+.dash-doctrine-role {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 0 0.9rem;
+  color: rgba(199, 210, 230, 0.62);
+  cursor: pointer;
+}
+
+.dash-doctrine-role:hover,
+.dash-doctrine-role--active {
+  border-color: rgba(167, 139, 250, 0.26);
+  background: rgba(167, 139, 250, 0.12);
+  color: #ffffff;
+}
+
+.dash-doctrine-filters {
+  display: grid;
+  grid-template-columns: minmax(12rem, 1.4fr) repeat(4, minmax(8rem, 1fr));
+  gap: 0.65rem;
+  padding: 0.75rem;
+}
+
+.dash-doctrine-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.dash-doctrine-field-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.dash-doctrine-input,
+.dash-doctrine-select {
+  min-height: 44px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(7, 11, 20, 0.78);
+  color: rgba(231, 237, 255, 0.86);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.86rem;
+  outline: none;
+}
+
+.dash-doctrine-input {
+  padding: 0 0.8rem;
+}
+
+.dash-doctrine-select {
+  padding: 0 0.7rem;
+}
+
+.dash-doctrine-input:focus-visible,
+.dash-doctrine-select:focus-visible,
+.dash-doctrine-clear:focus-visible,
+.dash-doctrine-role:focus-visible,
+.dash-doctrine-link:focus-visible,
+.dash-doctrine-tag:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+.dash-doctrine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.65rem;
+}
+
+.dash-doctrine-card {
+  --module-card-accent: var(--card-accent, #a78bfa);
+  display: flex;
+  min-width: 0;
+  min-height: 15.25rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border-top: 2px solid color-mix(in srgb, var(--module-card-accent) 70%, transparent);
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.dash-doctrine-card:hover {
+  border-color: color-mix(in srgb, var(--module-card-accent) 35%, rgba(255, 255, 255, 0.07));
+  background: color-mix(in srgb, var(--module-card-accent) 5%, #0d1117);
+}
+
+.dash-doctrine-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dash-doctrine-card-title-wrap {
+  min-width: 0;
+}
+
+.dash-doctrine-card-title {
+  margin: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e7edff;
+}
+
+.dash-doctrine-status {
+  flex-shrink: 0;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+}
+
+.dash-doctrine-status--draft { color: rgba(148, 163, 184, 0.78); }
+.dash-doctrine-status--review { color: #5eead4; }
+.dash-doctrine-status--validated { color: #fbbf24; }
+.dash-doctrine-status--deprecated { color: #f87171; }
+
+.dash-doctrine-pin {
+  display: inline-flex;
+  margin-top: 0.35rem;
+  border: 1px solid color-mix(in srgb, var(--module-card-accent) 30%, transparent);
+  border-radius: 3px;
+  padding: 0.18rem 0.42rem;
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--module-card-accent) 75%, #e7edff);
+}
+
+.dash-doctrine-summary {
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(160, 180, 220, 0.58);
+}
+
+.dash-doctrine-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.dash-doctrine-tag {
+  display: inline-flex;
+  min-height: 1.55rem;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  background: rgba(7, 11, 20, 0.78);
+  padding: 0.2rem 0.5rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(199, 210, 230, 0.7);
+  text-decoration: none;
+}
+
+.dash-doctrine-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dash-doctrine-date {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  color: rgba(160, 180, 220, 0.4);
+}
+
+.dash-doctrine-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  background: rgba(167, 139, 250, 0.08);
+  padding: 0 0.8rem;
+  color: rgba(231, 237, 255, 0.86);
+}
+
+.dash-doctrine-link:hover {
+  background: rgba(167, 139, 250, 0.16);
+  color: #ffffff;
+}
+
+.dash-doctrine-empty,
+.dash-doctrine-error {
+  padding: 1rem;
+}
+
 /* ── Inventory overview (donut chart) ─────────── */
 
 .dash-inventory-body {
@@ -1309,6 +1653,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
+  .dash-doctrine-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dash-doctrine-field--search {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 900px) {
@@ -1330,4 +1680,23 @@
   .dash-bottom-row { grid-template-columns: 1fr; }
   .dash-right-col { grid-template-columns: 1fr; }
   .dash-quick-grid { grid-template-columns: repeat(3, 1fr); }
+  .dash-doctrine-toolbar {
+    flex-direction: column;
+  }
+  .dash-doctrine-clear {
+    width: 100%;
+  }
+  .dash-doctrine-filters {
+    grid-template-columns: 1fr;
+  }
+  .dash-doctrine-role {
+    flex: 1 1 7rem;
+  }
+  .dash-doctrine-card-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .dash-doctrine-link {
+    width: 100%;
+  }
 }

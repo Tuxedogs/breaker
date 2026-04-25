@@ -30,14 +30,14 @@ export function rememberModuleIndexSearch(search: string) {
 
 export function getModuleIndexHref(fallbackSearch = "") {
   const normalizedFallback = normalizeSearch(fallbackSearch);
-  if (normalizedFallback) return `/modules${normalizedFallback}`;
+  if (normalizedFallback) return `/doctrine${normalizedFallback}`;
 
-  if (typeof window === "undefined") return "/modules";
+  if (typeof window === "undefined") return "/doctrine";
 
   const storedSearch = normalizeSearch(
     window.sessionStorage.getItem(moduleIndexSearchStorageKey) ?? "",
   );
-  return storedSearch ? `/modules${storedSearch}` : "/modules";
+  return storedSearch ? `/doctrine${storedSearch}` : "/doctrine";
 }
 
 function getModuleIndexSearch(fallbackSearch = "") {

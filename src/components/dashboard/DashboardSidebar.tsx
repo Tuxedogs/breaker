@@ -63,7 +63,7 @@ const sections = [
       { label: "Weapons Matrix", to: "/tools/alpha-threshold", icon: "crosshair" },
       { label: "Armor Threshold", to: "/tools/alpha-threshold", icon: "shield" },
       { label: "Gunnery Modules", to: "/tools/gunnery", icon: "target" },
-      { label: "Doctrine Library", to: "/modules", icon: "book" },
+      { label: "Doctrine Library", to: "/doctrine", icon: "book", exact: true },
     ],
   },
   {

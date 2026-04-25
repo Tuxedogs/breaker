@@ -112,10 +112,6 @@ function LocationIcon({ type }: { type: string }) {
   );
 }
 
-// ══════════════════════════════════════════════════════════════════════
-// Main DashboardPage
-// ══════════════════════════════════════════════════════════════════════
-
 export default function DashboardPage() {
   const ownedPct = Math.round((mockInventory.owned / mockInventory.needed) * 100);
 

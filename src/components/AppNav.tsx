@@ -4,18 +4,19 @@ import { getModuleIndexHref } from "../lib/moduleIndexNavigation";
 
 const navItems = [
   {
-    to: "/framework",
+    to: "/dashboard",
     label: "Home",
     desktopActiveClassName: "site-toolbar-link--home-active",
     mobileActiveClassName: "site-toolbar-mobile-link--home-active",
-    isActive: (pathname: string) => pathname === "/" || pathname === "/framework" || pathname === "/index",
+    isActive: (pathname: string) => pathname === "/dashboard",
   },
   {
-    to: "/modules",
+    to: "/doctrine",
     label: "Doctrine",
     desktopActiveClassName: "site-toolbar-link--doctrine-active",
     mobileActiveClassName: "site-toolbar-mobile-link--doctrine-active",
-    isActive: (pathname: string) => pathname === "/modules" || pathname.startsWith("/module/"),
+    isActive: (pathname: string) => pathname.startsWith("/module/"),
+    preserveModuleSearch: true,
   },
   {
     to: "/tools/gunnery",
@@ -87,10 +88,10 @@ export default function AppNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const homeItem = navItems[0];
   const primaryNavItems = navItems.slice(1);
-  const getNavHref = (to: string) =>
-    to === "/modules"
-      ? getModuleIndexHref(location.pathname === "/modules" ? location.search : "")
-      : to;
+  const getNavHref = (item: (typeof navItems)[number]) =>
+    "preserveModuleSearch" in item && item.preserveModuleSearch
+      ? getModuleIndexHref(location.pathname === "/doctrine" ? location.search : "")
+      : item.to;
 
   function closeAllMenus() {
     setMobileMenuOpen(false);
@@ -102,7 +103,7 @@ export default function AppNav() {
         <div className="hidden site-toolbar lg:flex">
           <div className="site-toolbar-group site-toolbar-group--home">
             <NavLink
-              to={getNavHref(homeItem.to)}
+              to={getNavHref(homeItem)}
               onClick={closeAllMenus}
               className={[
                 "site-toolbar-home",
@@ -118,7 +119,7 @@ export default function AppNav() {
             <div key={item.to} className="site-toolbar-group">
               <span className="site-toolbar-divider" aria-hidden="true" />
               <NavLink
-                to={getNavHref(item.to)}
+                to={getNavHref(item)}
                 onClick={closeAllMenus}
                 className={[
                   "site-toolbar-link",
@@ -147,7 +148,7 @@ export default function AppNav() {
 
           <div className="flex items-center gap-2">
             <NavLink
-              to={getNavHref(homeItem.to)}
+              to={getNavHref(homeItem)}
               onClick={closeAllMenus}
               className={[
                 "site-toolbar-mobile-button",
@@ -182,7 +183,7 @@ export default function AppNav() {
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
-                to={getNavHref(item.to)}
+                to={getNavHref(item)}
                 onClick={closeAllMenus}
                 className={[
                   "site-toolbar-mobile-link",

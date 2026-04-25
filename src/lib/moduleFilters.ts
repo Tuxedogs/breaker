@@ -4,6 +4,7 @@ export type ModuleFilters = {
   enemy: string;
   status: string;
   domain: string;
+  query: string;
 };
 
 export const emptyModuleFilters: ModuleFilters = {
@@ -12,6 +13,7 @@ export const emptyModuleFilters: ModuleFilters = {
   enemy: "",
   status: "",
   domain: "",
+  query: "",
 };
 
 export function readModuleFilters(searchParams: URLSearchParams): ModuleFilters {
@@ -21,6 +23,7 @@ export function readModuleFilters(searchParams: URLSearchParams): ModuleFilters 
     enemy: searchParams.get("enemy") ?? "",
     status: searchParams.get("status") ?? "",
     domain: searchParams.get("domain") ?? "",
+    query: searchParams.get("q") ?? "",
   };
 }
 
@@ -29,7 +32,7 @@ export function writeModuleFilters(filters: ModuleFilters): URLSearchParams {
   const entries = Object.entries(filters) as Array<[keyof ModuleFilters, string]>;
   for (const [key, value] of entries) {
     if (value) {
-      params.set(key, value);
+      params.set(key === "query" ? "q" : key, value);
     }
   }
   return params;

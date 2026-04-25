@@ -12,6 +12,7 @@ interface Props {
 export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
   const [materialId, setMaterialId] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [quality, setQuality] = useState('');
   const [locationId, setLocationId] = useState('');
   const [containerName, setContainerName] = useState('');
 
@@ -36,6 +37,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       id: entry?.id ?? String(Date.now()),
       materialId,
       quantity: qty,
+      quality: parseInt(quality) || 0,
       locationId,
       containerName: containerName.trim() || undefined,
       updatedAt: new Date().toISOString(),
@@ -96,6 +98,23 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
           ))}
         </select>
       </div>
+
+      <div className="logi-form-field">
+        <label htmlFor="inv-quality" className="logi-form-label">Quality</label>
+        <input
+          id="inv-quality"
+          type="number"
+          className="logi-form-input"
+          value={quality}
+          onChange={(e) => setQuality(e.target.value)}
+          placeholder="0"
+          min="0"
+          max="1000"
+          step="1"
+        />
+      </div>
+
+      
 
       <div className="logi-form-field">
         <label htmlFor="inv-container" className="logi-form-label">Container (optional)</label>
