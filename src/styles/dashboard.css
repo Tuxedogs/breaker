@@ -465,6 +465,14 @@
 
 /* ── Scrollable content area ──────────────────── */
 
+/*
+  --dash-topbar-h is used by full-height tool overrides below.
+  Keep this in sync with .dash-topbar height (52px).
+*/
+:root {
+  --dash-topbar-h: 52px;
+}
+
 .dash-content {
   flex: 1;
   overflow-y: auto;
@@ -478,6 +486,28 @@
   max-width: 1760px;
   min-height: 100%;
   margin: 0 auto;
+  /* Column flex so children with flex:1 fill the frame height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Full-height tool overrides ───────────────── */
+/*
+  alpha-threshold and gunnery use "display:flex; flex:1 1 auto; overflow:hidden"
+  internally. They need a definite parent height — provided here via the dashboard
+  topbar CSS variable so sticky panels and internal scroll areas work correctly.
+*/
+
+.dash-content-frame > .alpha-threshold-tool {
+  height: calc(100vh - var(--dash-topbar-h));
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.dash-content-frame > .gun-tool {
+  height: calc(100vh - var(--dash-topbar-h));
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .dash-content-grid {
