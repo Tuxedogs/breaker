@@ -12,12 +12,12 @@ import DoctrineReferencePage from "./pages/DoctrineReferencePage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
-const ViewerPage = lazy(() => import("./tools/viewer/ViewerPage"));
-
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const LocationsPage = lazy(() => import("./pages/logistics/LocationsPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
+
+const ShipMapsPage = lazy(() => import("./pages/ships/maps/ShipMapsPage"));
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -52,10 +52,15 @@ export default function App() {
       <Route path="framework" element={<RedirectToDashboard />} />
       <Route path="modules" element={<ModuleIndexPage />} />
 
-      {/* Dashboard + Logistics share the same shell */}
+      {/* Legacy redirects — preserve old standalone tool URLs */}
+      <Route path="maps" element={<Navigate to="/ships/maps" replace />} />
+
+      {/* Dashboard shell — sidebar + topbar always visible */}
       <Route element={<DashboardShell />}>
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="doctrine" element={<DoctrineLibraryPage />} />
+
+        {/* Logistics */}
         <Route
           path="logistics"
           element={<Suspense fallback={<RouteFallback />}><LogisticsPage /></Suspense>}
@@ -72,25 +77,8 @@ export default function App() {
           path="logistics/build-queue"
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />
-      </Route>
 
-      {/* Main App */}
-      <Route element={<AppShell />}>
-        {/* Doctrine */}
-        <Route path="framework-legacy" element={<DoctrineFirstFramework />} />
-        <Route path="module/:id" element={<DoctrineModulePage />} />
-        <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
-
-        {/* Tools */}
-        <Route
-          path="maps"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <ViewerPage />
-            </Suspense>
-          }
-        />
-
+        {/* Combat tools */}
         <Route
           path="tools/alpha-threshold"
           element={
@@ -99,7 +87,6 @@ export default function App() {
             </Suspense>
           }
         />
-
         <Route
           path="tools/gunnery"
           element={
@@ -109,22 +96,36 @@ export default function App() {
           }
         />
 
-        {/* Legacy redirects — preserve old URLs */}
+        {/* Ships */}
+        <Route
+          path="ships/maps"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <ShipMapsPage />
+            </Suspense>
+          }
+        />
+      </Route>
+
+      {/* Main App — doctrine + legacy module pages */}
+      <Route element={<AppShell />}>
+        <Route path="framework-legacy" element={<DoctrineFirstFramework />} />
+        <Route path="module/:id" element={<DoctrineModulePage />} />
+        <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
+
+        {/* Legacy redirects — preserve old module URLs */}
         <Route
           path="systems/sub-targeting"
           element={<Navigate to="/module/sub-targeting" replace />}
         />
-
         <Route
           path="systems/turret-keybinds"
           element={<Navigate to="/module/turret-keybind-baseline" replace />}
         />
-
         <Route
           path="systems/turret-keybinds/additional"
           element={<Navigate to="/module/turret-keybind-baseline" replace />}
         />
-
         <Route
           path="anti-cap/component-sniping"
           element={<Navigate to="/module/component-sniping" replace />}

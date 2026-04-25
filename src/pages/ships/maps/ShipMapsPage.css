@@ -1,0 +1,615 @@
+/*
+  Ship Maps page — renders inside DashboardShell outlet.
+  Scoped to .smap-* to prevent collisions.
+*/
+
+/* ═══════════════════════════════════════════════
+   Page root
+   ═══════════════════════════════════════════════ */
+
+.smap-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   Page header (title + mode tabs)
+   ═══════════════════════════════════════════════ */
+
+.smap-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.smap-kicker {
+  display: block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.7);
+  margin-bottom: 0.2rem;
+}
+
+.smap-title {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #e7edff;
+  margin: 0 0 0.2rem;
+}
+
+.smap-subtitle {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  color: rgba(160, 180, 220, 0.58);
+  margin: 0;
+  line-height: 1.4;
+  max-width: 52ch;
+}
+
+/* ── Mode tabs ────────────────────────────────── */
+
+.smap-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.smap-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.6);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.smap-tab:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(199, 210, 230, 0.88);
+}
+
+.smap-tab--active {
+  background: #5b21b6;
+  border-color: rgba(167, 139, 250, 0.3);
+  color: #ffffff;
+}
+
+.smap-tab--active:hover {
+  background: #6d28d9;
+}
+
+.smap-tab:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+/* ── 2D mode body ─────────────────────────────── */
+
+.smap-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   3D viewer layout
+   ═══════════════════════════════════════════════ */
+
+.smap-viewer-layout {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #070b14;
+  overflow: hidden;
+  /*
+    Height: viewport minus topbar (52px), page padding (2rem),
+    page header area (approx 4.5rem), and gap (0.75rem).
+  */
+  height: calc(100vh - var(--dash-topbar-h, 52px) - 2rem - 4.5rem - 0.75rem);
+  min-height: 420px;
+}
+
+/* CSS-only fullscreen fallback (used when browser API is unavailable) */
+.smap-viewer-layout--fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  border-radius: 0;
+  border: none;
+  height: 100dvh;
+  min-height: 0;
+}
+
+/* ── Inner topbar ─────────────────────────────── */
+
+.smap-viewer-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  height: 44px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 11, 20, 0.95);
+}
+
+.smap-viewer-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.smap-breadcrumb-seg {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.smap-breadcrumb-seg--current {
+  color: rgba(160, 180, 220, 0.75);
+}
+
+.smap-breadcrumb-sep {
+  font-size: 0.62rem;
+  color: rgba(160, 180, 220, 0.25);
+}
+
+.smap-viewer-heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.smap-viewer-title {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #e7edff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smap-viewer-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.smap-viewer-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 30px;
+  padding: 0 0.75rem;
+  background: rgba(7, 11, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(199, 210, 230, 0.82);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.smap-viewer-action-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e7edff;
+}
+
+.smap-viewer-action-btn--secondary {
+  color: rgba(167, 139, 250, 0.85);
+  border-color: rgba(167, 139, 250, 0.18);
+}
+
+.smap-viewer-action-btn--secondary:hover {
+  background: rgba(167, 139, 250, 0.08);
+  border-color: rgba(167, 139, 250, 0.32);
+  color: #a78bfa;
+}
+
+.smap-viewer-action-btn:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+/* ── 3-column body ────────────────────────────── */
+
+.smap-viewer-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Left icon rail ───────────────────────────── */
+
+.smap-viewer-rail {
+  display: flex;
+  flex-direction: column;
+  width: 72px;
+  flex-shrink: 0;
+  padding: 0.5rem 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 11, 20, 0.9);
+  gap: 0.1rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.smap-viewer-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.smap-rail-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  width: 100%;
+  min-height: 56px;
+  padding: 0.5rem 0.25rem;
+  background: none;
+  border: none;
+  color: rgba(160, 180, 220, 0.4);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+}
+
+.smap-rail-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(199, 210, 230, 0.8);
+}
+
+.smap-rail-btn--active {
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.08);
+}
+
+.smap-rail-btn--active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 2px;
+  background: #a78bfa;
+  border-radius: 0 2px 2px 0;
+}
+
+.smap-rail-btn:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: -2px;
+}
+
+.smap-rail-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── Centre canvas ────────────────────────────── */
+
+.smap-viewer-canvas {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  background: #050810;
+}
+
+.smap-viewer-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background: #070b14;
+  color: rgba(160, 180, 220, 0.5);
+}
+
+/* ── Right ship info panel ────────────────────── */
+
+.smap-viewer-info {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 11, 20, 0.9);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.15) transparent;
+}
+
+.smap-info-section {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.smap-info-section--presets {
+  padding: 0.85rem 1rem;
+}
+
+.smap-info-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+  margin: 0 0 0.5rem;
+}
+
+.smap-info-ship-name {
+  font-family: "Orbitron", "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #e7edff;
+  margin: 0 0 0.2rem;
+}
+
+.smap-info-ship-class {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.55);
+  margin: 0;
+}
+
+.smap-info-stats {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.smap-info-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.32rem 1rem;
+}
+
+.smap-info-stat-label {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.55);
+}
+
+.smap-info-stat-value {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.72rem;
+  color: rgba(199, 210, 230, 0.88);
+  text-align: right;
+}
+
+.smap-info-preset-select {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 0.7rem;
+  background: rgba(7, 11, 20, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(199, 210, 230, 0.86);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.84rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.smap-info-preset-select:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+.smap-info-save-btn {
+  margin: 0.75rem 1rem 1rem;
+  width: calc(100% - 2rem);
+  min-height: 38px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(199, 210, 230, 0.82);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.smap-info-save-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.smap-info-save-btn:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+/* ── Bottom controls bar ──────────────────────── */
+
+.smap-viewer-footer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 1.25rem;
+  height: 40px;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(7, 11, 20, 0.95);
+}
+
+.smap-footer-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(160, 180, 220, 0.5);
+  pointer-events: none;
+  user-select: none;
+}
+
+.smap-footer-reset {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  height: 28px;
+  padding: 0 0.7rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(160, 180, 220, 0.65);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.smap-footer-reset:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(199, 210, 230, 0.88);
+}
+
+.smap-footer-reset:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.72);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   Large display adaptations
+   ═══════════════════════════════════════════════ */
+
+@media (min-width: 1600px) {
+  .smap-page {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .smap-viewer-layout {
+    height: calc(100vh - var(--dash-topbar-h, 52px) - 2.5rem - 4.5rem - 0.75rem);
+  }
+
+  .smap-viewer-info {
+    width: 240px;
+  }
+}
+
+/* Ultrawide — prevent the info panel from becoming huge */
+@media (min-width: 2560px) {
+  .smap-viewer-info {
+    width: 260px;
+  }
+
+  .smap-viewer-rail {
+    width: 80px;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Mobile / tablet
+   ═══════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  /* Hide right panel on medium screens — too narrow */
+  .smap-viewer-info {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .smap-header {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .smap-tabs {
+    width: 100%;
+  }
+
+  .smap-tab {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .smap-viewer-layout {
+    height: calc(100vh - var(--dash-topbar-h, 52px) - 2rem - 7rem - 0.75rem);
+    min-height: 300px;
+  }
+
+  /* Collapse rail to icon-only on mobile */
+  .smap-rail-label {
+    display: none;
+  }
+
+  .smap-viewer-rail {
+    width: 48px;
+  }
+
+  .smap-rail-btn {
+    min-height: 44px;
+  }
+
+  /* Stack breadcrumb + actions vertically in viewer topbar */
+  .smap-viewer-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.4rem 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .smap-viewer-actions {
+    order: 3;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .smap-viewer-action-btn {
+    font-size: 0.7rem;
+    padding: 0 0.55rem;
+  }
+
+  .smap-footer-ctrl span {
+    display: none;
+  }
+
+  .smap-viewer-footer {
+    gap: 1rem;
+    padding: 0 0.75rem;
+  }
+}
