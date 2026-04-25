@@ -19,18 +19,18 @@ export const mockLocations: Location[] = [
 ];
 
 export const mockInventory: InventoryEntry[] = [
-  { id: 'inv-1',  materialId: 'stileron',   quantity: 3.5,  locationId: 'everus-harbor',    updatedAt: '2026-04-18T10:22:00Z' },
-  { id: 'inv-2',  materialId: 'stileron',   quantity: 1.2,  locationId: 'orison',           updatedAt: '2026-04-17T14:05:00Z' },
-  { id: 'inv-3',  materialId: 'stileron',   quantity: 0.8,  locationId: 'seraphim-station', updatedAt: '2026-04-15T08:00:00Z' },
-  { id: 'inv-4',  materialId: 'borase',     quantity: 2.0,  locationId: 'everus-harbor',    containerName: 'Box A',   updatedAt: '2026-04-19T09:15:00Z' },
-  { id: 'inv-5',  materialId: 'borase',     quantity: 0.5,  locationId: 'orison',           updatedAt: '2026-04-16T11:30:00Z' },
-  { id: 'inv-6',  materialId: 'feynmaline', quantity: 85,   locationId: 'area18',           updatedAt: '2026-04-20T07:00:00Z' },
-  { id: 'inv-7',  materialId: 'feynmaline', quantity: 30,   locationId: 'seraphim-station', updatedAt: '2026-04-14T16:45:00Z' },
-  { id: 'inv-8',  materialId: 'tungsten',   quantity: 1.5,  locationId: 'everus-harbor',    updatedAt: '2026-04-21T12:00:00Z' },
-  { id: 'inv-9',  materialId: 'savrilium',  quantity: 0.86, locationId: 'seraphim-station', updatedAt: '2026-04-13T09:30:00Z' },
-  { id: 'inv-10', materialId: 'laranite',   quantity: 0.8,  locationId: 'area18',           updatedAt: '2026-04-22T08:20:00Z' },
-  { id: 'inv-11', materialId: 'copper-ore', quantity: 0.5,  locationId: 'area18',           updatedAt: '2026-04-22T08:25:00Z' },
-  { id: 'inv-12', materialId: 'titanium',   quantity: 3.0,  locationId: 'everus-harbor',    containerName: 'Vault 1', updatedAt: '2026-04-20T15:00:00Z' },
+  { id: 'inv-1',  materialId: 'stileron',   quantity: 3.5, quality: 900,  locationId: 'everus-harbor',    updatedAt: '2026-04-18T10:22:00Z' },
+  { id: 'inv-2',  materialId: 'stileron',   quantity: 1.2, quality: 300,  locationId: 'orison',           updatedAt: '2026-04-17T14:05:00Z' },
+  { id: 'inv-3',  materialId: 'stileron',   quantity: 0.8, quality: 860,  locationId: 'seraphim-station', updatedAt: '2026-04-15T08:00:00Z' },
+  { id: 'inv-4',  materialId: 'borase',     quantity: 2.0, quality: 500,  locationId: 'everus-harbor',    containerName: '520',   updatedAt: '2026-04-19T09:15:00Z' },
+  { id: 'inv-5',  materialId: 'borase',     quantity: 0.5, quality: 740,  locationId: 'orison',           updatedAt: '2026-04-16T11:30:00Z' },
+  { id: 'inv-6',  materialId: 'feynmaline', quantity: 85, quality: 240,   locationId: 'area18',           updatedAt: '2026-04-20T07:00:00Z' },
+  { id: 'inv-7',  materialId: 'feynmaline', quantity: 30, quality: 100,   locationId: 'seraphim-station', containerName: '920', updatedAt: '2026-04-14T16:45:00Z' },
+  { id: 'inv-8',  materialId: 'tungsten',   quantity: 1.5, quality: 0,  locationId: 'everus-harbor',    updatedAt: '2026-04-21T12:00:00Z' },
+  { id: 'inv-9',  materialId: 'savrilium',  quantity: 0.86, quality: 0,  locationId: 'seraphim-station', updatedAt: '2026-04-13T09:30:00Z' },
+  { id: 'inv-10', materialId: 'laranite',   quantity: 0.8, quality: 0,  locationId: 'area18',           updatedAt: '2026-04-22T08:20:00Z' },
+  { id: 'inv-11', materialId: 'copper-ore', quantity: 0.5, quality: 0,  locationId: 'area18',           updatedAt: '2026-04-22T08:25:00Z' },
+  { id: 'inv-12', materialId: 'titanium',   quantity: 3.0, quality: 0,  locationId: 'everus-harbor',    containerName: '1000', updatedAt: '2026-04-20T15:00:00Z' },
 ];
 
 // Active statuses: in_progress, paused, queued all count toward shortages.

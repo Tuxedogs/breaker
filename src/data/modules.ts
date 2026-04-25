@@ -504,5 +504,6 @@ export const moduleFilterOptions = {
     ...new Set([...modules.flatMap((module) => module.roles), "crew"]),
   ].sort(),
   enemies: [...new Set(modules.flatMap((module) => module.enemies))].sort(),
+  domains: [...new Set(modules.flatMap((module) => module.tags))].sort(),
   statuses: [...new Set(modules.map((module) => module.status))].sort(),
 };

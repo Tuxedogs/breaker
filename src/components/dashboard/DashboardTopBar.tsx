@@ -56,7 +56,7 @@ const tabs = [
   {
     label: "Combat",
     icon: "M12 2l9 4.5v7c0 5-3.6 9.7-9 11-5.4-1.3-9-6-9-11V6.5L12 2z",
-    activePaths: ["/tools/alpha-threshold", "/tools/gunnery", "/modules"],
+    activePaths: ["/doctrine", "/tools/alpha-threshold", "/tools/gunnery", "/dashboard"],
   },
   {
     label: "Ships",

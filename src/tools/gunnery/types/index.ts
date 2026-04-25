@@ -1,5 +1,5 @@
 export type GimbalMode = 'AM' | 'PM'
-export type GunnerySection = 'mode-recommender' | 'sub-targeting' | 'diagnosis'
+export type GunnerySection = 'mode-recommender' | 'sub-targeting' | 'diagnosis' | 'ground-school'
 
 export type GimbalModeDefinition = {
   id: GimbalMode
