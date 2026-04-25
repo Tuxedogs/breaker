@@ -9,7 +9,9 @@ export default function DashboardShell() {
       <div className="dash-body">
         <DashboardTopBar />
         <div className="dash-content">
-          <Outlet />
+          <div className="dash-content-frame">
+            <Outlet />
+          </div>
         </div>
       </div>
     </div>

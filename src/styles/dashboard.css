@@ -473,6 +473,13 @@
   scrollbar-color: rgba(167, 139, 250, 0.15) transparent;
 }
 
+.dash-content-frame {
+  width: 100%;
+  max-width: 1760px;
+  min-height: 100%;
+  margin: 0 auto;
+}
+
 .dash-content-grid {
   display: grid;
   grid-template-columns: 1fr 280px;
@@ -930,8 +937,12 @@
 
 .dash-doctrine-filters {
   display: grid;
-  grid-template-columns: minmax(12rem, 1.4fr) repeat(4, minmax(8rem, 1fr));
+  width: 100%;
+  max-width: 84rem;
+  box-sizing: border-box;
+  grid-template-columns: minmax(18rem, 2fr) repeat(4, minmax(9.5rem, 1fr));
   gap: 0.65rem;
+  justify-content: start;
   padding: 0.75rem;
 }
 
@@ -980,7 +991,7 @@
 
 .dash-doctrine-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
   gap: 0.65rem;
 }
 
