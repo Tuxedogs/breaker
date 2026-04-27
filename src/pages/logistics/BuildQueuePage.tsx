@@ -1,23 +1,26 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { ItemCategory } from '../../data/models';
-import { mockBuildQueue, mockInventory, mockRecipes, mockMaterials } from '../../data/mock/logistics';
-import { computeShortages } from '../../lib/logistics/shortages';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
+import { mockBuildQueue, mockInventory, mockLocations, mockMaterials, mockRecipes } from '../../data/mock/logistics';
+import type { ItemCategory } from '../../data/models';
+import { computeShortages } from '../../lib/logistics/shortages';
+import type { SourceStrategy } from '../../lib/logistics/inventory';
+
+const SOURCE_OPTIONS: Array<{ id: SourceStrategy; label: string }> = [
+  { id: 'nearest', label: 'Nearest / single location mats' },
+  { id: 'highest-quality', label: 'Highest quality mats' },
+  { id: 'minimize-splits', label: 'Minimize split locations' },
+];
 
 export default function BuildQueuePage() {
+  const [sourceStrategy, setSourceStrategy] = useState<SourceStrategy>('minimize-splits');
   const shortages = computeShortages(mockInventory, mockBuildQueue, mockRecipes);
+  const grouped = mockBuildQueue.reduce<Partial<Record<ItemCategory, typeof mockBuildQueue>>>((acc, item) => {
+    (acc[item.category] ??= []).push(item);
+    return acc;
+  }, {});
 
-  // Group by category, sorted by priority within each group
-  const grouped = mockBuildQueue.reduce<Partial<Record<ItemCategory, typeof mockBuildQueue>>>(
-    (acc, item) => {
-      (acc[item.category] ??= []).push(item);
-      return acc;
-    },
-    {},
-  );
-  for (const items of Object.values(grouped)) {
-    items?.sort((a, b) => a.priority - b.priority);
-  }
+  for (const items of Object.values(grouped)) items?.sort((a, b) => a.priority - b.priority);
   const categories = Object.keys(grouped) as ItemCategory[];
 
   return (
@@ -31,18 +34,28 @@ export default function BuildQueuePage() {
           </div>
           <h1 className="logi-page-title">Build Queue</h1>
           <p className="logi-page-subtitle">
-            {mockBuildQueue.length} items · {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
+            {mockBuildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
           </p>
         </div>
       </div>
 
-      {/* Shortages */}
+      <div className="logi-strategy-bar" aria-label="Material source optimization">
+        {SOURCE_OPTIONS.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            className={`logi-strategy-btn${sourceStrategy === option.id ? ' logi-strategy-btn--active' : ''}`}
+            onClick={() => setSourceStrategy(option.id)}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+
       <div className="logi-shortage-section">
         <div className="logi-shortage-header">
           <span className="logi-shortage-title">Material Shortages</span>
-          {shortages.length > 0 && (
-            <span className="logi-shortage-alert-count">{shortages.length} materials</span>
-          )}
+          {shortages.length > 0 && <span className="logi-shortage-alert-count">{shortages.length} materials</span>}
         </div>
         {shortages.length === 0 ? (
           <div className="logi-shortage-no-items">
@@ -62,18 +75,15 @@ export default function BuildQueuePage() {
               </tr>
             </thead>
             <tbody>
-              {shortages.map((s) => {
-                const mat = mockMaterials.find((m) => m.id === s.materialId);
-                const unit = mat?.unitType ?? 'units';
-                const fmt = (n: number) => unit === 'count' ? `${n}×` : `${n.toFixed(2)} ${unit}`;
+              {shortages.map((shortage) => {
+                const material = mockMaterials.find((item) => item.id === shortage.materialId);
+                const fmt = (quantity: number) => material?.unitType === 'count' ? `${quantity}x` : `${quantity.toFixed(2)} ${material?.unitType ?? 'units'}`;
                 return (
-                  <tr key={s.materialId}>
-                    <td>{mat?.name ?? s.materialId}</td>
-                    <td>{fmt(s.have)}</td>
-                    <td>{fmt(s.needed)}</td>
-                    <td>
-                      <span className="logi-badge logi-badge--shortage">−{fmt(s.shortfall)}</span>
-                    </td>
+                  <tr key={shortage.materialId}>
+                    <td>{material?.name ?? shortage.materialId}</td>
+                    <td>{fmt(shortage.have)}</td>
+                    <td>{fmt(shortage.needed)}</td>
+                    <td><span className="logi-badge logi-badge--shortage">-{fmt(shortage.shortfall)}</span></td>
                   </tr>
                 );
               })}
@@ -82,14 +92,18 @@ export default function BuildQueuePage() {
         )}
       </div>
 
-      {/* Queue by category */}
       <div className="logi-bq-section">
         <div className="logi-section-label">Queue by Category</div>
-        {categories.map((cat) => (
+        {categories.map((category) => (
           <BuildQueueGroup
-            key={cat}
-            category={cat}
-            items={grouped[cat] ?? []}
+            key={category}
+            category={category}
+            items={grouped[category] ?? []}
+            recipes={mockRecipes}
+            inventory={mockInventory}
+            materials={mockMaterials}
+            locations={mockLocations}
+            strategy={sourceStrategy}
           />
         ))}
       </div>

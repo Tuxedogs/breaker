@@ -32,10 +32,12 @@ export default function InventoryPage() {
     });
   }, [entries, search, materialFilter, locationFilter]);
 
-  function handleSave(updated: InventoryEntry) {
+  function handleSave(updatedEntries: InventoryEntry[]) {
     setEntries((prev) => {
-      const exists = prev.some((e) => e.id === updated.id);
-      return exists ? prev.map((e) => (e.id === updated.id ? updated : e)) : [...prev, updated];
+      return updatedEntries.reduce((next, updated) => {
+        const exists = next.some((entry) => entry.id === updated.id);
+        return exists ? next.map((entry) => (entry.id === updated.id ? updated : entry)) : [...next, updated];
+      }, prev);
     });
     setPanel(null);
   }
@@ -57,6 +59,7 @@ export default function InventoryPage() {
             <span className="logi-breadcrumb-active">Inventory</span>
           </div>
           <h1 className="logi-page-title">Inventory</h1>
+          <p className="logi-page-subtitle">Fast-add stacks by location, material, quality, and quantity.</p>
         </div>
         <button
           type="button"
@@ -126,6 +129,7 @@ export default function InventoryPage() {
         <div className="logi-inv-panel-col">
           {panel && (
             <InventoryEntryPanel
+              key={panel.mode === 'edit' ? panel.entry.id : 'new'}
               entry={editingEntry}
               materials={mockMaterials}
               locations={mockLocations}

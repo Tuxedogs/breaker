@@ -78,6 +78,10 @@ export default function App() {
           element={<Suspense fallback={<RouteFallback />}><LocationsPage /></Suspense>}
         />
         <Route
+          path="logistics/locations/:locationId"
+          element={<Suspense fallback={<RouteFallback />}><LocationsPage /></Suspense>}
+        />
+        <Route
           path="logistics/build-queue"
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />

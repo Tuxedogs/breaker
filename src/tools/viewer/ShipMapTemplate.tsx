@@ -69,7 +69,7 @@ export type ShipMapViewState = {
   target: [number, number, number];
 };
 
-type ShipMapDeckOverlay = {
+export type ShipMapDeckOverlay = {
   title: string;
   id: string;
   deckMin: number;
@@ -85,7 +85,7 @@ type ShipMapDeckOverlay = {
   heightMultiplier?: number;
 };
 
-type ShipMapDeckAnnotationKind =
+export type ShipMapDeckAnnotationKind =
   | "Main Turret"
   | "Terminal"
   | "Power"
@@ -98,12 +98,12 @@ type ShipMapDeckAnnotationKind =
   | "Elevator"
   | "Cargo";
 
-type ShipMapDeckAnnotationPathing = {
+export type ShipMapDeckAnnotationPathing = {
   connectsDeckIds: Array<"bottom" | "mid" | "top">;
   toLabels?: string[];
 };
 
-type ShipMapDeckAnnotationBase = {
+export type ShipMapDeckAnnotationBase = {
   id: string;
   label: string;
   token?: string;
@@ -114,15 +114,15 @@ type ShipMapDeckAnnotationBase = {
   pathing?: ShipMapDeckAnnotationPathing;
 };
 
-type ShipMapDeckComponentAnnotation = ShipMapDeckAnnotationBase & {
+export type ShipMapDeckComponentAnnotation = ShipMapDeckAnnotationBase & {
   annotationType: "component";
 };
 
-type ShipMapDeckLabelAnnotation = ShipMapDeckAnnotationBase & {
+export type ShipMapDeckLabelAnnotation = ShipMapDeckAnnotationBase & {
   annotationType: "label";
 };
 
-type ShipMapDeckAnnotationConfig = {
+export type ShipMapDeckAnnotationConfig = {
   fixedHeightAboveDeckMin: number;
   worldOffset?: [number, number, number];
   components: ShipMapDeckComponentAnnotation[];
@@ -385,7 +385,7 @@ function resolveDeckPlaneSize(
   return [width * scaleMultiplier * widthMultiplier, depth * scaleMultiplier * heightMultiplier];
 }
 
-type ShipMapDeckOverlayConfig = {
+export type ShipMapDeckOverlayConfig = {
   decks: ShipMapDeckOverlay[];
 };
 

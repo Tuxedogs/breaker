@@ -8,6 +8,8 @@ export interface InventoryEntry {
   /** References Material.id */
   materialId: string;
   quantity: number;
+  /** Numeric material quality, 0-1000. */
+  quality: number;
   /** References Location.id */
   locationId: string;
   /** Optional label for the specific box, rack, or ship hold. */
