@@ -88,15 +88,7 @@ export default function ShipMapsPage() {
     <div className="smap-page">
       {/* ── Page header with mode tabs ── */}
       <div className="smap-header">
-        <div className="smap-header-text">
-          <span className="smap-kicker">SHIPS</span>
-          <h1 className="smap-title">Ship Maps</h1>
-          <p className="smap-subtitle">
-            {mode === "2d"
-              ? "Static deck references for quick layout checks."
-              : "Interactive 3D vessel viewer with deck overlays."}
-          </p>
-        </div>
+        
 
         <div className="smap-tabs" role="tablist" aria-label="Map view mode">
           <button

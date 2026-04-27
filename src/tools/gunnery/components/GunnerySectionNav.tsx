@@ -6,10 +6,8 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: 'sub-targeting',    label: 'Component Mapping' },
-  { id: 'mode-recommender', label: 'Recommended Modes' },
-  { id: 'diagnosis',        label: 'Failure Diagnosis' },
-  { id: 'ground-school',    label: 'Ground School' },
+  { id: 'sub-targeting', label: 'Component Mapping' },
+  { id: 'diagnosis',     label: 'Failure Diagnosis' },
 ]
 
 type Props = {

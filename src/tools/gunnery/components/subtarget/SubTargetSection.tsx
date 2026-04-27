@@ -541,8 +541,26 @@ export function SubTargetSection({
             </button>
           ))}
         </div>
-
       </div>
+
+      {/* ── Metadata bar ───────────────────────────── */}
+      {selectedShip && (
+        <div className="gun-meta-bar">
+          <span className="gun-meta-ship-name">{selectedShip.label}</span>
+          <span className="gun-meta-divider" aria-hidden="true" />
+          <span className="gun-meta-badge gun-meta-badge--class">{selectedShip.class}</span>
+          <span className="gun-meta-badge gun-meta-badge--size">{selectedShip.componentSize}</span>
+          <span className="gun-meta-divider" aria-hidden="true" />
+          <span className="gun-meta-stat">
+            <span className="gun-meta-stat-label">Zones</span>
+            <span className="gun-meta-stat-value">{selectedShip.zones.length}</span>
+          </span>
+          <span className="gun-meta-stat">
+            <span className="gun-meta-stat-label">Views</span>
+            <span className="gun-meta-stat-value">{selectedShip.viewTabs.length}</span>
+          </span>
+        </div>
+      )}
 
       {selectedShip && (
         <div className="gun-toolbar-row">
@@ -578,6 +596,10 @@ export function SubTargetSection({
 
         {selectedShip && !debugMode && shipCategories.length > 0 && (
           <div className="gun-vfilter-col" aria-label="Zone visibility filters">
+            <div className="gun-vfilter-header">
+              <span className="gun-vfilter-title">Zone Legend</span>
+            </div>
+            <div className="gun-vfilter-scroll">
             {ZONE_CATEGORY_GROUP_ORDER.map((group) => {
               const categories = groupCategories[group]
               if (categories.length === 0) return null
@@ -632,6 +654,7 @@ export function SubTargetSection({
                 </div>
               )
             })}
+            </div>
           </div>
         )}
 

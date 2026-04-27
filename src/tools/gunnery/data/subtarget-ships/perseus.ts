@@ -12,8 +12,8 @@ export const perseus: ShipDefinition = {
       { id: 'side', label: 'Side' },
     ],
     assets: {
-      top: '/ships/gunnery/perseus-top.jpg',
-      side: '/ships/gunnery/perseus-side.jpg',
+      top: '/ships/gunnery/perseus-top.png',
+      side: '/ships/gunnery/perseus-side.png',
     },
   },
   zones: [

@@ -196,6 +196,32 @@ export default function DoctrineWorkspace() {
       </div>
 
       <div className="dash-doctrine-grid">
+        <article
+          className="dash-doctrine-card"
+          style={{ "--card-accent": "rgb(167 139 250)" } as CSSProperties}
+        >
+          <div className="dash-doctrine-card-head">
+            <div className="dash-doctrine-card-title-wrap">
+              <h3 className="dash-doctrine-card-title">Gimbal Modes</h3>
+            </div>
+            <span className="dash-doctrine-status dash-doctrine-status--validated">validated</span>
+          </div>
+          <p className="dash-doctrine-summary">
+            AM vs PM targeting doctrine — when to use each mode, behavioral profiles, and switch conditions for capital component engagements.
+          </p>
+          <div className="dash-doctrine-tags">
+            <span className="dash-doctrine-tag">gunnery</span>
+            <span className="dash-doctrine-tag">gimbal</span>
+            <span className="dash-doctrine-tag">targeting</span>
+          </div>
+          <div className="dash-doctrine-card-footer">
+            <span className="dash-doctrine-date">2025-01-15</span>
+            <Link to="/doctrine/gimbal-modes" className="dash-doctrine-link">
+              View Module
+            </Link>
+          </div>
+        </article>
+
         {orderedModules.map((module) => {
           const isPinned = isManningIndex && manningPinnedModuleIds.includes(module.id as (typeof manningPinnedModuleIds)[number]);
           return (

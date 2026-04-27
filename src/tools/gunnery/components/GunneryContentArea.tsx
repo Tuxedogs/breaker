@@ -1,24 +1,16 @@
 import type { GunneryState } from '../hooks/useGunneryState'
 import { DiagnosisSection } from './diagnosis/DiagnosisSection'
-import { GroundSchoolSection } from './GroundSchoolSection'
-import { ModeRecommender } from './mode/ModeRecommender'
 import { SubTargetSection } from './subtarget/SubTargetSection'
 
 type Props = { state: GunneryState }
 
 export function GunneryContentArea({ state }: Props) {
-  const isModeRecommender = state.activeSection === 'mode-recommender'
-
-  let contentClass = 'gun-content'
-  if (state.activeSection === 'sub-targeting') contentClass += ' gun-content--viewport'
-  else if (state.activeSection === 'ground-school') contentClass += ' gun-content--scroll'
+  const contentClass = state.activeSection === 'sub-targeting'
+    ? 'gun-content gun-content--viewport'
+    : 'gun-content'
 
   return (
     <div className={contentClass}>
-      {isModeRecommender && (
-        <ModeRecommender />
-      )}
-
       {state.activeSection === 'sub-targeting' && (
         <SubTargetSection
           ships={state.ships}
@@ -40,10 +32,6 @@ export function GunneryContentArea({ state }: Props) {
           setActiveSymptomId={state.setActiveSymptomId}
           diagnosisResult={state.diagnosisResult}
         />
-      )}
-
-      {state.activeSection === 'ground-school' && (
-        <GroundSchoolSection />
       )}
     </div>
   )

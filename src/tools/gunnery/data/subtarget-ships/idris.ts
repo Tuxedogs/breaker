@@ -14,11 +14,11 @@ export const idris: ShipDefinition = {
       { id: 'power', label: 'Power Plant' },
     ],
     assets: {
-      top: '/ships/gunnery/idris-top.jpg',
-      side: '/ships/gunnery/idris-side.jpg',
-      rear: '/ships/gunnery/idris-lower.jpg',
+      top: '/ships/gunnery/idris-top.png',
+      side: '/ships/gunnery/idris-side.png',
+      rear: '/ships/gunnery/idris-lower.png',
       radar: '/ships/gunnery/idris-radar.jpg',
-      power: '/ships/gunnery/idris-powerplant.jpg',
+      power: '/ships/gunnery/idris-powerplant.png',
     },
   },
   zones: [

@@ -25,11 +25,15 @@ const AlphaThresholdToolPage = lazy(() =>
   }))
 );
 
-const GunneryToolPage = lazy(() =>
-  import("./tools/gunnery").then((module) => ({
-    default: module.GunneryToolPage,
+const ComponentMappingPage = lazy(() =>
+  import("./tools/gunnery/ComponentMappingPage").then((module) => ({
+    default: module.ComponentMappingPage,
   }))
 );
+
+const GimbalModesPage = lazy(() => import("./pages/GimbalModesPage"));
+
+const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 
 function RouteFallback() {
   return (
@@ -88,10 +92,31 @@ export default function App() {
           }
         />
         <Route
-          path="tools/gunnery"
+          path="combat/component-mapping"
           element={
             <Suspense fallback={<RouteFallback />}>
-              <GunneryToolPage />
+              <ComponentMappingPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="doctrine/gimbal-modes"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <GimbalModesPage />
+            </Suspense>
+          }
+        />
+        {/* Legacy redirect — preserve old gunnery URL */}
+        <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
+        <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />
+
+        {/* Industry */}
+        <Route
+          path="industry/crafting"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryCraftingPage />
             </Suspense>
           }
         />
