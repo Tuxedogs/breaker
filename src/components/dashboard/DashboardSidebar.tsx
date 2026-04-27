@@ -62,7 +62,7 @@ const sections = [
     items: [
       { label: "Weapons Matrix", to: "/tools/alpha-threshold", icon: "crosshair" },
       { label: "Armor Threshold", to: "/tools/alpha-threshold", icon: "shield" },
-      { label: "Gunnery Modules", to: "/tools/gunnery", icon: "target" },
+      { label: "Component Mapping", to: "/combat/component-mapping", icon: "target" },
       { label: "Doctrine Library", to: "/doctrine", icon: "book", exact: true },
     ],
   },
@@ -78,7 +78,7 @@ const sections = [
   {
     label: "INDUSTRY",
     items: [
-      { label: "Crafting", to: "/dashboard", icon: "hammer", wip: true },
+      { label: "Crafting", to: "/industry/crafting", icon: "hammer" },
       { label: "Mining", to: "/dashboard", icon: "pickaxe", wip: true },
       { label: "Refining", to: "/dashboard", icon: "flask", wip: true },
       { label: "Material Sources", to: "/dashboard", icon: "box", wip: true },
