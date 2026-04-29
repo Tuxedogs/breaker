@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
-import { mockBuildQueue, mockInventory, mockLocations, mockMaterials, mockRecipes } from '../../data/mock/logistics';
-import type { ItemCategory } from '../../data/models';
-import { computeShortages } from '../../lib/logistics/shortages';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
+import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
+import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
+import { useLogisticsStore } from '../../stores/logisticsStore';
 
 const SOURCE_OPTIONS: Array<{ id: SourceStrategy; label: string }> = [
   { id: 'nearest', label: 'Nearest / single location mats' },
@@ -14,14 +14,29 @@ const SOURCE_OPTIONS: Array<{ id: SourceStrategy; label: string }> = [
 
 export default function BuildQueuePage() {
   const [sourceStrategy, setSourceStrategy] = useState<SourceStrategy>('minimize-splits');
-  const shortages = computeShortages(mockInventory, mockBuildQueue, mockRecipes);
-  const grouped = mockBuildQueue.reduce<Partial<Record<ItemCategory, typeof mockBuildQueue>>>((acc, item) => {
-    (acc[item.category] ??= []).push(item);
+  const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const buildQueue = useLogisticsStore((state) => state.buildQueue);
+  const locations = useLogisticsStore((state) => state.locations);
+  const materials = useLogisticsStore((state) => state.materialTemplates);
+  const recipes = useLogisticsStore((state) => state.recipeTemplates);
+  const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
+  const updateBuildQueueItemStatus = useLogisticsStore((state) => state.updateBuildQueueItemStatus);
+  const updateBuildQueueItemPriority = useLogisticsStore((state) => state.updateBuildQueueItemPriority);
+  const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
+  const toggleBuildQueueAllocation = useLogisticsStore((state) => state.toggleBuildQueueAllocation);
+  const clearBuildQueueItemAllocations = useLogisticsStore((state) => state.clearBuildQueueItemAllocations);
+  const clearStaleBuildQueueItemAllocations = useLogisticsStore((state) => state.clearStaleBuildQueueItemAllocations);
+  const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipes, recipeInputsByRecipeId);
+  const shortages = shortageSummary.shortages;
+  const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
+    const recipe = recipes.find((entry) => entry.id === item.recipeId);
+    const category = recipe?.category ?? 'other';
+    (acc[category] ??= []).push(item);
     return acc;
   }, {});
 
-  for (const items of Object.values(grouped)) items?.sort((a, b) => a.priority - b.priority);
-  const categories = Object.keys(grouped) as ItemCategory[];
+  for (const items of Object.values(grouped)) items?.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+  const categories = Object.keys(grouped);
 
   return (
     <div className="logi-page">
@@ -34,7 +49,7 @@ export default function BuildQueuePage() {
           </div>
           <h1 className="logi-page-title">Build Queue</h1>
           <p className="logi-page-subtitle">
-            {mockBuildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
+            {buildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
           </p>
         </div>
       </div>
@@ -69,15 +84,15 @@ export default function BuildQueuePage() {
             <thead>
               <tr>
                 <th>Material</th>
-                <th>Have</th>
+                <th>Owned</th>
                 <th>Needed</th>
                 <th>Shortfall</th>
               </tr>
             </thead>
             <tbody>
               {shortages.map((shortage) => {
-                const material = mockMaterials.find((item) => item.id === shortage.materialId);
-                const fmt = (quantity: number) => material?.unitType === 'count' ? `${quantity}x` : `${quantity.toFixed(2)} ${material?.unitType ?? 'units'}`;
+                const material = materials.find((item) => item.id === shortage.materialId);
+                const fmt = (quantity: number) => getInventoryUnitLabel(material) === 'count' ? `${quantity}x` : `${quantity.toFixed(2)} ${getInventoryUnitLabel(material)}`;
                 return (
                   <tr key={shortage.materialId}>
                     <td>{material?.name ?? shortage.materialId}</td>
@@ -99,11 +114,19 @@ export default function BuildQueuePage() {
             key={category}
             category={category}
             items={grouped[category] ?? []}
-            recipes={mockRecipes}
-            inventory={mockInventory}
-            materials={mockMaterials}
-            locations={mockLocations}
+            recipes={recipes}
+            recipeInputsByRecipeId={recipeInputsByRecipeId}
+            buildQueue={buildQueue}
+            inventory={inventoryEntries}
+            materials={materials}
+            locations={locations}
             strategy={sourceStrategy}
+            onStatusChange={updateBuildQueueItemStatus}
+            onPriorityChange={updateBuildQueueItemPriority}
+            onRemove={removeBuildQueueItem}
+            onToggleAllocation={toggleBuildQueueAllocation}
+            onClearAllocations={clearBuildQueueItemAllocations}
+            onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
           />
         ))}
       </div>

@@ -1,16 +1,21 @@
 import { Link } from 'react-router-dom';
-import { mockInventory, mockLocations, mockBuildQueue, mockMaterials, mockRecipes } from '../../data/mock/logistics';
-import { computeShortages } from '../../lib/logistics/shortages';
+import { useLogisticsStore } from '../../stores/logisticsStore';
+import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
+import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 
 export default function LogisticsPage() {
-  const shortages = computeShortages(mockInventory, mockBuildQueue, mockRecipes);
+  const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const locations = useLogisticsStore((state) => state.locations);
+  const buildQueue = useLogisticsStore((state) => state.buildQueue);
+  const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
+  const recipeTemplates = useLogisticsStore((state) => state.recipeTemplates);
+  const recipeInputTemplates = useLogisticsStore((state) => state.recipeInputTemplates);
+  const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipeTemplates, recipeInputTemplates);
+  const shortages = shortageSummary.shortages;
+  const activeQueueCount = shortageSummary.activeQueueItems.length;
 
-  const activeQueueCount = mockBuildQueue.filter(
-    (i) => i.status !== 'complete' && i.status !== 'cancelled',
-  ).length;
-
-  const totalSCU = mockInventory
-    .filter((e) => mockMaterials.find((m) => m.id === e.materialId)?.unitType === 'SCU')
+  const totalSCU = inventoryEntries
+    .filter((e) => getInventoryUnitLabel(materialTemplates.find((m) => m.id === e.materialId)) === 'SCU')
     .reduce((sum, e) => sum + e.quantity, 0);
 
   return (
@@ -29,7 +34,7 @@ export default function LogisticsPage() {
       <div className="logi-stats-row">
         <div className="logi-stat-card">
           <div className="logi-stat-label">Materials Tracked</div>
-          <div className="logi-stat-value">{mockMaterials.length}</div>
+          <div className="logi-stat-value">{materialTemplates.length}</div>
         </div>
         <div className="logi-stat-card">
           <div className="logi-stat-label">Total Stored</div>
@@ -40,7 +45,7 @@ export default function LogisticsPage() {
         </div>
         <div className="logi-stat-card">
           <div className="logi-stat-label">Active Locations</div>
-          <div className="logi-stat-value">{mockLocations.length}</div>
+          <div className="logi-stat-value">{locations.length}</div>
         </div>
         <div className={`logi-stat-card${shortages.length > 0 ? ' logi-stat-card--alert' : ''}`}>
           <div className="logi-stat-label">Shortages</div>
@@ -59,7 +64,7 @@ export default function LogisticsPage() {
             </svg>
           </div>
           <div className="logi-nav-card-label">Inventory</div>
-          <div className="logi-nav-card-count">{mockInventory.length} entries</div>
+          <div className="logi-nav-card-count">{inventoryEntries.length} entries</div>
         </Link>
 
         <Link to="/logistics/locations" className="logi-nav-card">
@@ -69,7 +74,7 @@ export default function LogisticsPage() {
             </svg>
           </div>
           <div className="logi-nav-card-label">Locations</div>
-          <div className="logi-nav-card-count">{mockLocations.length} active</div>
+          <div className="logi-nav-card-count">{locations.length} active</div>
         </Link>
 
         <Link to="/logistics/build-queue" className="logi-nav-card">
@@ -111,8 +116,8 @@ export default function LogisticsPage() {
             </thead>
             <tbody>
               {shortages.map((s) => {
-                const mat = mockMaterials.find((m) => m.id === s.materialId);
-                const unit = mat?.unitType ?? 'units';
+                const mat = materialTemplates.find((m) => m.id === s.materialId);
+                const unit = getInventoryUnitLabel(mat);
                 const fmt = (n: number) => unit === 'count' ? `${n}×` : `${n.toFixed(2)} ${unit}`;
                 return (
                   <tr key={s.materialId}>

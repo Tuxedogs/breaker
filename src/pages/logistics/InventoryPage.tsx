@@ -1,14 +1,19 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { mockInventory as initialInventory, mockMaterials, mockLocations } from '../../data/mock/logistics';
-import type { InventoryEntry } from '../../data/models';
+import { useLogisticsStore } from '../../stores/logisticsStore';
+import type { InventoryEntry } from '../../types/logistics';
 import InventoryTable from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 
 export default function InventoryPage() {
-  const [entries, setEntries] = useState<InventoryEntry[]>(initialInventory);
+  const entries = useLogisticsStore((state) => state.inventoryEntries);
+  const materials = useLogisticsStore((state) => state.materialTemplates);
+  const locations = useLogisticsStore((state) => state.locations);
+  const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
+  const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
+  const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [search, setSearch] = useState('');
   const [materialFilter, setMaterialFilter] = useState('');
@@ -19,31 +24,30 @@ export default function InventoryPage() {
       if (materialFilter && e.materialId !== materialFilter) return false;
       if (locationFilter && e.locationId !== locationFilter) return false;
       if (search) {
-        const mat = mockMaterials.find((m) => m.id === e.materialId);
-        const loc = mockLocations.find((l) => l.id === e.locationId);
+        const mat = materials.find((m) => m.id === e.materialId);
+        const loc = locations.find((l) => l.id === e.locationId);
         const q = search.toLowerCase();
         const hit =
           (mat?.name.toLowerCase().includes(q) ?? false) ||
           (loc?.name.toLowerCase().includes(q) ?? false) ||
-          (e.containerName?.toLowerCase().includes(q) ?? false);
+          (e.container?.toLowerCase().includes(q) ?? false);
         if (!hit) return false;
       }
       return true;
     });
-  }, [entries, search, materialFilter, locationFilter]);
+  }, [entries, materials, locations, search, materialFilter, locationFilter]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
-    setEntries((prev) => {
-      return updatedEntries.reduce((next, updated) => {
-        const exists = next.some((entry) => entry.id === updated.id);
-        return exists ? next.map((entry) => (entry.id === updated.id ? updated : entry)) : [...next, updated];
-      }, prev);
-    });
+    const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
+    updatedEntries
+      .filter((updated) => entries.some((entry) => entry.id === updated.id))
+      .forEach(updateInventoryEntry);
+    if (additions.length > 0) addInventoryEntries(additions);
     setPanel(null);
   }
 
   function handleDelete(id: string) {
-    setEntries((prev) => prev.filter((e) => e.id !== id));
+    deleteInventoryEntry(id);
     if (panel?.mode === 'edit' && panel.entry.id === id) setPanel(null);
   }
 
@@ -96,7 +100,7 @@ export default function InventoryPage() {
           aria-label="Filter by material"
         >
           <option value="">All Materials</option>
-          {mockMaterials.map((m) => (
+          {materials.map((m) => (
             <option key={m.id} value={m.id}>{m.name}</option>
           ))}
         </select>
@@ -108,7 +112,7 @@ export default function InventoryPage() {
           aria-label="Filter by location"
         >
           <option value="">All Locations</option>
-          {mockLocations.map((l) => (
+          {locations.map((l) => (
             <option key={l.id} value={l.id}>{l.name}</option>
           ))}
         </select>
@@ -120,8 +124,8 @@ export default function InventoryPage() {
         <div className="logi-inv-table-col">
           <InventoryTable
             entries={filtered}
-            materials={mockMaterials}
-            locations={mockLocations}
+            materials={materials}
+            locations={locations}
             onEdit={(entry) => setPanel({ mode: 'edit', entry })}
             onDelete={handleDelete}
           />
@@ -131,8 +135,8 @@ export default function InventoryPage() {
             <InventoryEntryPanel
               key={panel.mode === 'edit' ? panel.entry.id : 'new'}
               entry={editingEntry}
-              materials={mockMaterials}
-              locations={mockLocations}
+              materials={materials}
+              locations={locations}
               onSave={handleSave}
               onCancel={() => setPanel(null)}
             />

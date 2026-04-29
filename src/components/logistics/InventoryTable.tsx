@@ -1,10 +1,10 @@
-import type { InventoryEntry, Location, Material } from '../../data/models';
+import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
 import { formatQuantity } from '../../lib/logistics/inventory';
 
 interface Props {
   entries: InventoryEntry[];
-  materials: Material[];
-  locations: Location[];
+  materials: MaterialTemplate[];
+  locations: InventoryLocation[];
   onEdit: (entry: InventoryEntry) => void;
   onDelete: (id: string) => void;
 }
@@ -53,9 +53,9 @@ export default function InventoryTable({ entries, materials, locations, onEdit, 
                   </div>
                 </td>
                 <td className="logi-qty-cell">{formatQuantity(entry.quantity, material)}</td>
-                <td><span className="logi-quality-pill">Q{entry.quality}</span></td>
+                <td><span className="logi-quality-pill">Q{entry.quality ?? 0}</span></td>
                 <td>{location?.name ?? entry.locationId}</td>
-                <td className="logi-muted-cell">{entry.containerName ?? '-'}</td>
+                <td className="logi-muted-cell">{entry.container ?? '-'}</td>
                 <td className="logi-muted-cell">{formatDate(entry.updatedAt)}</td>
                 <td>
                   <div className="logi-table-actions">
