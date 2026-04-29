@@ -1,4 +1,5 @@
-import type { InventoryEntry, BuildQueueItem, CraftingRecipe } from '../../data/models';
+import type { BuildQueueItem, InventoryEntry } from '../../types/logistics';
+import type { RecipeInputTemplate } from '../../data/logistics/seed';
 
 export interface Shortage {
   materialId: string;
@@ -10,7 +11,7 @@ export interface Shortage {
 export function computeShortages(
   inventory: InventoryEntry[],
   queue: BuildQueueItem[],
-  recipes: CraftingRecipe[],
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
 ): Shortage[] {
   const haveByMaterial: Record<string, number> = {};
   for (const entry of inventory) {
@@ -19,10 +20,9 @@ export function computeShortages(
 
   const neededByMaterial: Record<string, number> = {};
   for (const item of queue) {
-    if (item.status === 'cancelled' || item.status === 'complete') continue;
-    const recipe = recipes.find((r) => r.itemName === item.itemName);
-    if (!recipe) continue;
-    for (const input of recipe.inputs) {
+    if (item.status === 'complete') continue;
+    const inputs = recipeInputsByRecipeId[item.recipeId] ?? [];
+    for (const input of inputs) {
       neededByMaterial[input.materialId] =
         (neededByMaterial[input.materialId] ?? 0) + input.quantity * item.quantity;
     }

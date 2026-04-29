@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import type { InventoryEntry, Location, Material } from '../../data/models';
+import { createInventoryEntryDraft } from '../../stores/logisticsStore';
+import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
 
 interface Props {
   entry: InventoryEntry | null;
-  materials: Material[];
-  locations: Location[];
+  materials: MaterialTemplate[];
+  locations: InventoryLocation[];
   onSave: (entries: InventoryEntry[]) => void;
   onCancel: () => void;
 }
@@ -15,7 +16,7 @@ interface DraftRow {
   materialId: string;
   quality: string;
   quantity: string;
-  containerName: string;
+  container: string;
 }
 
 function createDraftRow(locationId: string, materialId: string): DraftRow {
@@ -25,7 +26,7 @@ function createDraftRow(locationId: string, materialId: string): DraftRow {
     materialId,
     quality: '',
     quantity: '',
-    containerName: '',
+    container: '',
   };
 }
 
@@ -38,20 +39,21 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   const [quantity, setQuantity] = useState(entry ? String(entry.quantity) : '');
   const [quality, setQuality] = useState(entry ? String(entry.quality) : '');
   const [locationId, setLocationId] = useState(entry?.locationId ?? defaultLocationId);
-  const [containerName, setContainerName] = useState(entry?.containerName ?? '');
+  const [container, setContainer] = useState(entry?.container ?? '');
 
   function handleSave() {
     const qty = parseFloat(quantity);
     if (!materialId || !locationId || isNaN(qty) || qty <= 0) return;
-    onSave([{
+    onSave([createInventoryEntryDraft({
       id: entry?.id ?? String(Date.now()),
       materialId,
       quantity: qty,
       quality: Math.max(0, Math.min(1000, parseInt(quality) || 0)),
       locationId,
-      containerName: containerName.trim() || undefined,
+      container: container.trim() || undefined,
+      createdAt: entry?.createdAt,
       updatedAt: new Date().toISOString(),
-    }]);
+    })]);
   }
 
   function updateRow(id: string, patch: Partial<DraftRow>) {
@@ -76,15 +78,15 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     rows.forEach((row, index) => {
       const qty = parseFloat(row.quantity);
       if (!row.locationId || !row.materialId || isNaN(qty) || qty <= 0) return;
-      nextEntries.push({
+      nextEntries.push(createInventoryEntryDraft({
         id: `inv-${Date.now()}-${index}`,
         materialId: row.materialId,
         quantity: qty,
         quality: Math.max(0, Math.min(1000, parseInt(row.quality) || 0)),
         locationId: row.locationId,
-        containerName: row.containerName.trim() || undefined,
+        container: row.container.trim() || undefined,
         updatedAt: timestamp,
-      });
+      }));
     });
 
     if (nextEntries.length === 0) return;
@@ -146,7 +148,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
                 </div>
                 <div className="logi-form-field">
                   <label htmlFor={`fast-container-${row.id}`} className="logi-form-label">Container (optional)</label>
-                  <input id={`fast-container-${row.id}`} type="text" className="logi-form-input" value={row.containerName} onChange={(event) => updateRow(row.id, { containerName: event.target.value })} placeholder="Box A, hold 3" />
+                  <input id={`fast-container-${row.id}`} type="text" className="logi-form-input" value={row.container} onChange={(event) => updateRow(row.id, { container: event.target.value })} placeholder="Box A, hold 3" />
                 </div>
               </div>
             ))}
@@ -181,7 +183,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
           </div>
           <div className="logi-form-field">
             <label htmlFor="inv-container" className="logi-form-label">Container (optional)</label>
-            <input id="inv-container" type="text" className="logi-form-input" value={containerName} onChange={(event) => setContainerName(event.target.value)} placeholder="Box A, Storage Unit 3" />
+            <input id="inv-container" type="text" className="logi-form-input" value={container} onChange={(event) => setContainer(event.target.value)} placeholder="Box A, Storage Unit 3" />
           </div>
           <div className="logi-entry-panel-actions">
             <button type="button" className="logi-btn-primary" onClick={handleSave}>Save Changes</button>
