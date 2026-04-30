@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
-import { formatQuantity, materialTypeClass } from '../../lib/logistics/inventory';
+import { formatQuantity, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
 import { getInventoryByMaterial, getLocationInventorySummary } from '../../lib/logistics/selectors';
 
 interface Props {
@@ -50,7 +50,7 @@ export default function LocationCard({ location, inventory, materials, onEdit, o
           </div>
           <div>
             <span className="logi-stat-label">Highest Stack</span>
-            <strong>{summary.bestQualityStack ? `Q${summary.bestQualityStack.quality ?? 0}` : '—'}</strong>
+            <strong className={rarityClass(summary.bestQualityStack?.rarity)}>{summary.bestQualityStack ? summary.bestQualityStack.quality ?? 0 : '—'}</strong>
           </div>
         </div>
         {summary.bestQualityStack && (

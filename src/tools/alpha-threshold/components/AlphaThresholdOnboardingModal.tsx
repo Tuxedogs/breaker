@@ -94,7 +94,7 @@ export function AlphaThresholdOnboardingModal({ onHighlightChange, onComplete }:
             {step === 0 ? (
               <div className="alpha-threshold-onboarding-copy">
                 <p>
-                  Select up to <strong>4 ships</strong> and compare them against up to <strong>6 weapon choices</strong>.
+                  Select up to <strong>6 ships</strong> and compare them against up to <strong>5 weapon choices</strong>.
                 </p>
               </div>
             ) : step === 1 ? (
@@ -104,16 +104,15 @@ export function AlphaThresholdOnboardingModal({ onHighlightChange, onComplete }:
                   is evaluated. <strong>Shields OFF</strong> models armor as if shields are down.
                 </p>
                 <p>
-                  For <strong>ballistic</strong> weapons, that pass-through changes how much effective α reaches
-                  armor—toggle shields when you want to compare damage through shields versus straight to armor.
+                  Presets for weapons and ship groups can be selected here.
                 </p>
               </div>
             ) : (
               <div className="alpha-threshold-onboarding-copy">
                 <p>
-                  <strong>E</strong> is <strong>effective armor damage start</strong> as a percent of the
+                  <strong>E</strong> is <strong>when your weapons become effective</strong> as a percent of the
                   threshold bar. <strong>E100</strong> means armor is taking meaningful damage from the first
-                  shot.
+                  shot. E50, means at 50% armor you wil start doing damage.
                 </p>
                 <div className="alpha-threshold-onboarding-e-tooltip-block">
                   <p className="alpha-threshold-onboarding-e-tooltip" role="note">

@@ -1,4 +1,4 @@
-import type { InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate } from '../../types/logistics';
+import type { InventoryEntry, InventoryLocation, MaterialTemplate, RarityInfo, RecipeTemplate } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 
 export type SourceStrategy = 'nearest' | 'highest-quality' | 'minimize-splits';
@@ -26,6 +26,10 @@ export function formatQuantity(quantity: number, material: MaterialTemplate | un
 
 export function materialTypeClass(material: MaterialTemplate | undefined, fallback?: MaterialTemplate['materialType']): string {
   return `logi-material-type--${material?.materialType ?? fallback ?? 'special'}`;
+}
+
+export function rarityClass(rarity: RarityInfo | undefined): string {
+  return `logi-rarity--${rarity?.tier ?? 'common'}`;
 }
 
 export function getInventoryStacks(

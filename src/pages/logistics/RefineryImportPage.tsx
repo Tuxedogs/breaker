@@ -683,7 +683,7 @@ export default function RefineryImportPage() {
                       {section.rows.map((row, j) => (
                         <div key={j} className="logi-refimport-lightbox-row">
                           <span className="logi-refimport-lightbox-name">{row.name}</span>
-                          <span className="logi-refimport-lightbox-val">Q {row.quality}</span>
+                          <span className="logi-refimport-lightbox-val">{row.quality}</span>
                           <span className="logi-refimport-lightbox-val">{row.qty} {row.unit}</span>
                         </div>
                       ))}

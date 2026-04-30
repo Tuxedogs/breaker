@@ -1,6 +1,6 @@
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
-import { formatQuantity, getInventoryStacks, getRecipeForQueueItem, getRecipeInputs, materialTypeClass, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
+import { formatQuantity, getInventoryStacks, getRecipeForQueueItem, getRecipeInputs, materialTypeClass, rarityClass, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
 import {
   getAvailableQuantityForInventoryEntry,
   getBuildQueueMaterialNeedSummary,
@@ -246,7 +246,7 @@ export default function BuildQueueGroup({
                               />
                               <span>{stack.location?.name ?? stack.locationId}</span>
                               <span>{stack.container ?? '-'}</span>
-                              <span className={materialTypeClass(stack.material, stack.materialType)}>Q{stack.quality}</span>
+                              <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
                               <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
                               {checked ? (
                                 <span className="logi-source-qty-cell">
