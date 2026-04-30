@@ -24,6 +24,8 @@ const layouts: Record<ModuleType, ComponentType<{ module: DoctrineModule }>> = {
   recovery: ProcedureLayout,
 };
 
+
+
 export default function DoctrineModulePage() {
   const loaderError = moduleLoadError;
   const { id = "" } = useParams();

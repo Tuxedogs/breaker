@@ -216,7 +216,7 @@ export default function DoctrineWorkspace() {
           </div>
           <div className="dash-doctrine-card-footer">
             <span className="dash-doctrine-date">2025-01-15</span>
-            <Link to="/doctrine/gimbal-modes" className="dash-doctrine-link">
+            <Link to="/dashboard/doctrine/gimbal-modes" className="dash-doctrine-link">
               View Module
             </Link>
           </div>
@@ -252,7 +252,7 @@ export default function DoctrineWorkspace() {
                 <span className="dash-doctrine-date">
                   {module.lastValidated ?? module.validatedDate ?? "Unvalidated"}
                 </span>
-                <Link to={`/module/${module.id}`} className="dash-doctrine-link">
+                <Link to={`/dashboard/doctrine/module/${module.id}`} className="dash-doctrine-link">
                   View Module
                 </Link>
               </div>

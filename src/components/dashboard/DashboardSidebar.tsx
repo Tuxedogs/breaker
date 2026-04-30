@@ -60,10 +60,10 @@ const sections = [
   {
     label: "COMBAT",
     items: [
-      { label: "Weapons Matrix", to: "/tools/alpha-threshold", icon: "crosshair" },
-      { label: "Armor Threshold", to: "/tools/alpha-threshold", icon: "shield" },
+      { label: "Weapons Matrix", to: "/dashboard/doctrine/weapons-matrix", icon: "crosshair" },
+      { label: "Armor Threshold", to: "/dashboard/doctrine/armor-threshold", icon: "shield" },
       { label: "Component Mapping", to: "/combat/component-mapping", icon: "target" },
-      { label: "Doctrine Library", to: "/doctrine", icon: "book", exact: true },
+      { label: "Doctrine Library", to: "/dashboard/doctrine/library", icon: "book", exact: true },
     ],
   },
   {

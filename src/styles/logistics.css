@@ -699,7 +699,7 @@
 
 .logi-stack-row strong {
   font-size: 0.85rem;
-  color: #a78bfa;
+  color: var(--logi-material-accent, #a78bfa);
 }
 
 .logi-stack-row span,
@@ -730,8 +730,8 @@
   min-height: 24px;
   padding: 0.05rem 0.34rem;
   border-radius: 3px;
-  border: 1px solid rgba(167, 139, 250, 0.18);
-  background: rgba(167, 139, 250, 0.09);
+  border: 1px solid var(--logi-material-accent-border, rgba(167, 139, 250, 0.18));
+  background: var(--logi-material-accent-bg, rgba(167, 139, 250, 0.09));
   color: rgba(199, 210, 230, 0.9);
   font-family: "Rajdhani", sans-serif;
   font-size: 0.85rem;
@@ -900,7 +900,7 @@
 }
 
 .logi-source-option {
-  grid-template-columns: 18px minmax(0, 1fr) auto auto;
+  grid-template-columns: 18px minmax(6rem, 1fr) minmax(3.25rem, auto) auto auto minmax(7rem, auto) auto;
   min-height: 32px;
   font-family: "Rajdhani", sans-serif;
   font-size: 0.78rem;
@@ -918,6 +918,33 @@
   font-family: "Barlow", sans-serif;
   font-size: 0.74rem;
   color: rgba(160, 180, 220, 0.32);
+}
+
+.logi-source-qty-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  color: rgba(160, 180, 220, 0.45);
+  white-space: nowrap;
+}
+
+.logi-source-qty {
+  width: 54px;
+  padding: 0.1rem 0.28rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(167, 139, 250, 0.28);
+  border-radius: 3px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.72rem;
+  color: rgba(199, 210, 230, 0.9);
+  outline: none;
+  text-align: right;
+}
+
+.logi-source-qty:focus {
+  border-color: rgba(167, 139, 250, 0.55);
 }
 
 .logi-fast-add-grid {
@@ -1023,6 +1050,679 @@
   gap: 0.4rem;
 }
 
+/* ── Refinery Import ──────────────────────────── */
+
+.logi-refimport-layout {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.logi-refimport-upload-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 340px;
+  flex-shrink: 0;
+}
+
+.logi-refimport-review-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.logi-refimport-dropzone {
+  width: 100%;
+  min-height: 200px;
+  border: 1.5px dashed rgba(167, 139, 250, 0.22);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.logi-refimport-dropzone:hover,
+.logi-refimport-dropzone--drag {
+  border-color: rgba(167, 139, 250, 0.48);
+  background: rgba(167, 139, 250, 0.04);
+}
+
+
+.logi-refimport-dropzone-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.logi-refimport-drop-label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: rgba(199, 210, 230, 0.55);
+}
+
+.logi-refimport-drop-hint {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  color: rgba(160, 180, 220, 0.28);
+  text-transform: uppercase;
+}
+
+.logi-refimport-preview {
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Per-screenshot section inside the review column */
+.logi-refimport-ss-section {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 1.1rem;
+}
+
+.logi-refimport-ss-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.logi-refimport-ss-col-thumb {
+  width: 190px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+}
+
+.logi-refimport-ss-namebar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.logi-refimport-preview--thumb {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: zoom-in;
+  transition: border-color 0.12s;
+}
+
+.logi-refimport-preview--thumb:hover {
+  border-color: rgba(167, 139, 250, 0.38);
+}
+
+.logi-refimport-ss-col-data {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Lightbox */
+.logi-refimport-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.logi-refimport-lightbox {
+  position: relative;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.logi-refimport-lightbox-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: rgba(199, 210, 230, 0.7);
+  font-size: 1.1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+  transition: background 0.12s, color 0.12s;
+}
+
+.logi-refimport-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: #e7edff;
+}
+
+.logi-refimport-lightbox-body {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1rem;
+  overflow: auto;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.logi-refimport-lightbox-img {
+  max-height: 80vh;
+  max-width: 72vw;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.logi-refimport-lightbox-data {
+  flex-shrink: 0;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  overflow-y: auto;
+  max-height: 80vh;
+  padding-right: 0.25rem;
+}
+
+.logi-refimport-lightbox-section-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.7);
+  margin-bottom: 0.25rem;
+}
+
+.logi-refimport-lightbox-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.06rem;
+  padding: 0.22rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.logi-refimport-lightbox-row:last-child {
+  border-bottom: none;
+}
+
+.logi-refimport-lightbox-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(199, 210, 230, 0.82);
+}
+
+.logi-refimport-lightbox-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.48);
+}
+
+.logi-refimport-file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logi-type-label {
+  font-size: 0.72rem;
+  font-family: "Share Tech Mono", monospace;
+  letter-spacing: 0.06em;
+  color: var(--logi-material-accent, rgba(160, 180, 220, 0.5));
+}
+
+.logi-qty-cell,
+.logi-location-material-qty,
+.logi-stack-row span:last-child {
+  color: var(--logi-material-accent, rgba(160, 180, 220, 0.52));
+}
+
+.logi-material-type--ore {
+  --logi-material-accent: rgba(56, 189, 248, 0.76);
+  --logi-material-accent-border: rgba(56, 189, 248, 0.24);
+  --logi-material-accent-bg: rgba(56, 189, 248, 0.08);
+}
+
+.logi-material-type--refined {
+  --logi-material-accent: rgba(167, 139, 250, 0.78);
+  --logi-material-accent-border: rgba(167, 139, 250, 0.24);
+  --logi-material-accent-bg: rgba(167, 139, 250, 0.09);
+}
+
+.logi-material-type--raw {
+  --logi-material-accent: rgba(245, 158, 11, 0.78);
+  --logi-material-accent-border: rgba(245, 158, 11, 0.24);
+  --logi-material-accent-bg: rgba(245, 158, 11, 0.08);
+}
+
+.logi-material-type--special {
+  --logi-material-accent: rgba(74, 222, 128, 0.74);
+  --logi-material-accent-border: rgba(74, 222, 128, 0.22);
+  --logi-material-accent-bg: rgba(74, 222, 128, 0.08);
+}
+
+.logi-refimport-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.logi-refimport-filename {
+  flex: 1;
+  min-width: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  color: rgba(160, 180, 220, 0.5);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-refimport-btn-sm {
+  padding: 0.28rem 0.6rem;
+  font-size: 0.74rem;
+}
+
+.logi-refimport-parse-btn {
+  width: 100%;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.logi-refimport-parse-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logi-refimport-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: refimport-spin 0.65s linear infinite;
+}
+
+@keyframes refimport-spin {
+  to { transform: rotate(360deg); }
+}
+
+.logi-refimport-error {
+  padding: 0.55rem 0.75rem;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  border-radius: 5px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.82rem;
+  color: #fca5a5;
+}
+
+.logi-refimport-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+}
+
+.logi-refimport-meta-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  color: rgba(160, 180, 220, 0.38);
+  text-transform: uppercase;
+}
+
+.logi-refimport-meta-value {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #e7edff;
+}
+
+.logi-refimport-unit {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(160, 180, 220, 0.5);
+}
+
+.logi-refimport-no-rows {
+  padding: 0.75rem 0.85rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  color: rgba(160, 180, 220, 0.55);
+}
+
+.logi-refimport-rawtext {
+  margin-top: 0.5rem;
+  font-size: 0.74rem;
+}
+
+.logi-refimport-rawtext summary {
+  cursor: pointer;
+  color: rgba(167, 139, 250, 0.6);
+}
+
+.logi-refimport-rawtext pre {
+  margin-top: 0.35rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.5);
+  overflow: auto;
+  white-space: pre-wrap;
+  max-height: 200px;
+}
+
+/* Review column */
+
+.logi-refimport-review-hdr {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.logi-refimport-review-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.logi-refimport-review-hint {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.77rem;
+  color: rgba(160, 180, 220, 0.42);
+}
+
+.logi-refimport-review-hint strong {
+  color: rgba(167, 139, 250, 0.8);
+}
+
+.logi-refimport-location-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.logi-refimport-field-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.42);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.logi-refimport-table td {
+  vertical-align: middle;
+}
+
+.logi-refimport-check {
+  accent-color: #7c3aed;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+.logi-refimport-row--excluded {
+  opacity: 0.35;
+}
+
+.logi-refimport-unmatched-tag {
+  display: block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(251, 191, 36, 0.7);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.06em;
+}
+
+.logi-refimport-mat-select {
+  width: 100%;
+  max-width: 180px;
+}
+
+.logi-refimport-mat-select--warn {
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.logi-refimport-num {
+  width: 72px;
+  padding: 0.2rem 0.35rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(199, 210, 230, 0.9);
+  outline: none;
+  text-align: right;
+}
+
+.logi-refimport-num:focus {
+  border-color: rgba(167, 139, 250, 0.45);
+}
+
+.logi-refimport-import-btn {
+  align-self: flex-start;
+}
+
+.logi-refimport-import-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.logi-refimport-success {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 5px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(74, 222, 128, 0.85);
+}
+
+.logi-refimport-inv-link {
+  color: rgba(167, 139, 250, 0.8);
+  text-decoration: none;
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+
+.logi-refimport-inv-link:hover {
+  color: #a78bfa;
+}
+
+/* Screen type badge */
+.logi-refimport-screen-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid;
+  width: fit-content;
+}
+
+.logi-refimport-screen-badge--complete {
+  background: rgba(74, 222, 128, 0.07);
+  border-color: rgba(74, 222, 128, 0.22);
+  color: rgba(74, 222, 128, 0.8);
+}
+
+.logi-refimport-screen-badge--input {
+  background: rgba(96, 165, 250, 0.07);
+  border-color: rgba(96, 165, 250, 0.22);
+  color: rgba(96, 165, 250, 0.8);
+}
+
+.logi-refimport-screen-badge--unknown {
+  background: rgba(251, 191, 36, 0.07);
+  border-color: rgba(251, 191, 36, 0.22);
+  color: rgba(251, 191, 36, 0.7);
+}
+
+/* Input screen — type pill (ORE / RAW) */
+.logi-refimport-type-pill {
+  display: inline-block;
+  padding: 0.1rem 0.32rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.55);
+  letter-spacing: 0.08em;
+}
+
+.logi-refimport-type-pill--none {
+  color: rgba(160, 180, 220, 0.22);
+  border-color: transparent;
+  background: none;
+}
+
+/* Input screen — yield display (read-only) */
+.logi-refimport-yield-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(96, 165, 250, 0.8);
+}
+
+.logi-refimport-yield-null {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+  color: rgba(160, 180, 220, 0.22);
+}
+
+/* Duplicate stack detection */
+.logi-refimport-row--duplicate {
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.logi-refimport-panel-count {
+  margin-left: 0.55rem;
+  font-size: 0.55rem;
+  opacity: 0.7;
+  letter-spacing: 0.1em;
+}
+
+.logi-refimport-wo-group {
+  margin-bottom: 1.25rem;
+}
+
+.logi-refimport-wo-group:last-child {
+  margin-bottom: 0;
+}
+
+.logi-refimport-wo-hdr {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.35rem 0 0.35rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.logi-refimport-wo-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.7);
+}
+
+.logi-refimport-wo-yield {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(160, 220, 160, 0.85);
+}
+
+.logi-refimport-duplicate-tag {
+  display: inline-block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245, 158, 11, 0.85);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-right: 4px;
+  vertical-align: middle;
+  cursor: help;
+}
+
+.logi-refimport-review-tag {
+  display: inline-block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(99, 179, 237, 0.85);
+  background: rgba(99, 179, 237, 0.08);
+  border: 1px solid rgba(99, 179, 237, 0.22);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-right: 4px;
+  vertical-align: middle;
+  cursor: help;
+}
+
 /* ── Responsive ───────────────────────────────── */
 
 @media (max-width: 1100px) {
@@ -1038,8 +1738,91 @@
   .logi-inv-layout--panel-open { flex-direction: column; }
   .logi-insight-grid { grid-template-columns: 1fr; }
   .logi-source-grid { grid-template-columns: 1fr; padding-left: 0; }
+  .logi-source-option { grid-template-columns: 18px minmax(0, 1fr) auto; }
+  .logi-source-option span:nth-child(n + 4) { grid-column: 2 / -1; }
   .logi-bq-item-main { flex-wrap: wrap; }
   .logi-stack-row { grid-template-columns: minmax(0, 1fr) auto; }
   .logi-stack-row span:last-child { grid-column: 1 / -1; }
   .logi-fast-add-pair { grid-template-columns: 1fr; }
+  .logi-refimport-layout { flex-direction: column; }
+  .logi-refimport-upload-col { width: 100%; }
+  .logi-refimport-ss-section { flex-direction: column; }
+  .logi-refimport-ss-col-thumb { width: 100%; }
+  .logi-refimport-lightbox-body { flex-direction: column; }
+  .logi-refimport-lightbox-img { max-width: 100%; max-height: 60vh; }
+  .logi-refimport-lightbox-data { width: 100%; max-height: none; }
+}
+
+/* ── Inventory sort headers ───────────────────── */
+
+.logi-th-sort {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.1s;
+}
+.logi-th-sort:hover { color: rgba(160, 180, 220, 0.7); }
+.logi-th-sort--active { color: rgba(167, 139, 250, 0.8); }
+
+.logi-row--best > td { background: rgba(167, 139, 250, 0.038); }
+.logi-row--best > td:first-child { border-left: 2px solid rgba(167, 139, 250, 0.35); }
+
+/* ── Location card with action footer ─────────── */
+
+.logi-location-card-wrap {
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.12s;
+  display: flex;
+  flex-direction: column;
+}
+.logi-location-card-wrap:hover { border-color: rgba(167, 139, 250, 0.18); }
+.logi-location-card-wrap > .logi-location-card {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  flex: 1;
+}
+.logi-location-card-wrap > .logi-location-card:hover {
+  background: rgba(167, 139, 250, 0.03);
+  border-color: transparent;
+}
+.logi-location-card-footer {
+  padding: 0.38rem 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Inline location form ─────────────────────── */
+
+.logi-loc-form {
+  background: #0d1117;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+}
+.logi-loc-form-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.6);
+  margin-bottom: 0.75rem;
+}
+.logi-loc-form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.65rem;
+  align-items: end;
+  margin-bottom: 0.7rem;
+}
+.logi-loc-form-actions {
+  display: flex;
+  gap: 0.45rem;
 }

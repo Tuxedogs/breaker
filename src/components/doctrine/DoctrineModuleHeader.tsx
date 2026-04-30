@@ -58,7 +58,7 @@ export function DoctrineModuleHeader({ module, eyebrow }: Props) {
               const rel = moduleById.get(id);
               if (!rel) return null;
               return (
-                <a key={id} href={`/module/${id}`} className="dm-related-card">
+                <a key={id} href={`/dashboard/doctrine/module/${id}`} className="dm-related-card">
                   <span className="dm-related-card-title">{rel.title}</span>
                   {rel.summary ? (
                     <span className="dm-related-card-summary">{rel.summary}</span>

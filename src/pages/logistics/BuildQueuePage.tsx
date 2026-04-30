@@ -5,6 +5,7 @@ import type { SourceStrategy } from '../../lib/logistics/inventory';
 import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import { useLogisticsStore } from '../../stores/logisticsStore';
+import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 
 const SOURCE_OPTIONS: Array<{ id: SourceStrategy; label: string }> = [
   { id: 'nearest', label: 'Nearest / single location mats' },
@@ -24,6 +25,7 @@ export default function BuildQueuePage() {
   const updateBuildQueueItemPriority = useLogisticsStore((state) => state.updateBuildQueueItemPriority);
   const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
   const toggleBuildQueueAllocation = useLogisticsStore((state) => state.toggleBuildQueueAllocation);
+  const updateBuildQueueAllocationQuantity = useLogisticsStore((state) => state.updateBuildQueueAllocationQuantity);
   const clearBuildQueueItemAllocations = useLogisticsStore((state) => state.clearBuildQueueItemAllocations);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((state) => state.clearStaleBuildQueueItemAllocations);
   const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipes, recipeInputsByRecipeId);
@@ -52,6 +54,7 @@ export default function BuildQueuePage() {
             {buildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
           </p>
         </div>
+        <ScreenshotImportButton source="build-queue" />
       </div>
 
       <div className="logi-strategy-bar" aria-label="Material source optimization">
@@ -125,6 +128,7 @@ export default function BuildQueuePage() {
             onPriorityChange={updateBuildQueueItemPriority}
             onRemove={removeBuildQueueItem}
             onToggleAllocation={toggleBuildQueueAllocation}
+            onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
             onClearAllocations={clearBuildQueueItemAllocations}
             onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
           />

@@ -1,19 +1,60 @@
+import { useMemo } from 'react';
 import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
-import { formatQuantity } from '../../lib/logistics/inventory';
+import { formatQuantity, materialTypeClass } from '../../lib/logistics/inventory';
+
+export type SortKey = 'quality' | 'quantity' | 'material' | 'location';
 
 interface Props {
   entries: InventoryEntry[];
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
+  sortKey: SortKey;
+  sortDir: 'asc' | 'desc';
+  onSort: (key: SortKey) => void;
   onEdit: (entry: InventoryEntry) => void;
   onDelete: (id: string) => void;
 }
+
+const TYPE_LABELS: Record<string, string> = {
+  ore: 'Ore', refined: 'Refined', raw: 'Raw', special: 'Special',
+};
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-export default function InventoryTable({ entries, materials, locations, onEdit, onDelete }: Props) {
+function SortChevron({ active, dir }: { active: boolean; dir: 'asc' | 'desc' }) {
+  return (
+    <span aria-hidden style={{ marginLeft: 3, fontSize: '0.65em', opacity: active ? 0.9 : 0.22 }}>
+      {!active ? '⇅' : dir === 'desc' ? '↓' : '↑'}
+    </span>
+  );
+}
+
+function SortTh({
+  label, sortK, active, dir, onSort,
+}: { label: string; sortK: SortKey; active: boolean; dir: 'asc' | 'desc'; onSort: (k: SortKey) => void }) {
+  return (
+    <th
+      className={`logi-th-sort${active ? ' logi-th-sort--active' : ''}`}
+      onClick={() => onSort(sortK)}
+    >
+      {label}<SortChevron active={active} dir={dir} />
+    </th>
+  );
+}
+
+export default function InventoryTable({ entries, materials, locations, sortKey, sortDir, onSort, onEdit, onDelete }: Props) {
+  const bestIds = useMemo(() => {
+    const best = new Map<string, { id: string; quality: number }>();
+    for (const entry of entries) {
+      const q = entry.quality ?? -1;
+      const current = best.get(entry.materialId);
+      if (!current || q > current.quality) best.set(entry.materialId, { id: entry.id, quality: q });
+    }
+    return new Set(Array.from(best.values()).map((v) => v.id));
+  }, [entries]);
+
   if (entries.length === 0) {
     return (
       <div className="logi-empty">
@@ -30,10 +71,11 @@ export default function InventoryTable({ entries, materials, locations, onEdit, 
       <table className="logi-table">
         <thead>
           <tr>
-            <th>Material</th>
-            <th>Qty</th>
-            <th>Quality</th>
-            <th>Location</th>
+            <SortTh label="Material" sortK="material" active={sortKey === 'material'} dir={sortDir} onSort={onSort} />
+            <th>Type</th>
+            <SortTh label="Quality" sortK="quality" active={sortKey === 'quality'} dir={sortDir} onSort={onSort} />
+            <SortTh label="Qty" sortK="quantity" active={sortKey === 'quantity'} dir={sortDir} onSort={onSort} />
+            <SortTh label="Location" sortK="location" active={sortKey === 'location'} dir={sortDir} onSort={onSort} />
             <th>Container</th>
             <th>Updated</th>
             <th />
@@ -41,21 +83,33 @@ export default function InventoryTable({ entries, materials, locations, onEdit, 
         </thead>
         <tbody>
           {entries.map((entry) => {
-            const material = materials.find((item) => item.id === entry.materialId);
-            const location = locations.find((item) => item.id === entry.locationId);
+            const material = materials.find((m) => m.id === entry.materialId);
+            const location = locations.find((l) => l.id === entry.locationId);
             const materialName = material?.name ?? entry.materialId;
+            const isBest = bestIds.has(entry.id);
+            const typeKey = material?.materialType ?? entry.materialType;
             return (
-              <tr key={entry.id}>
+              <tr key={entry.id} className={isBest ? 'logi-row--best' : undefined}>
                 <td>
                   <div className="logi-mat-cell">
                     <span className="logi-mat-dot" aria-hidden />
                     {materialName}
+                    {isBest && (
+                      <span title="Highest quality stack for this material" style={{ marginLeft: 4, fontSize: '0.6rem', color: 'rgba(167,139,250,0.55)', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.05em' }}>
+                        BEST
+                      </span>
+                    )}
                   </div>
                 </td>
-                <td className="logi-qty-cell">{formatQuantity(entry.quantity, material)}</td>
-                <td><span className="logi-quality-pill">Q{entry.quality ?? 0}</span></td>
-                <td>{location?.name ?? entry.locationId}</td>
-                <td className="logi-muted-cell">{entry.container ?? '-'}</td>
+                <td>
+                  <span className={`logi-type-label ${materialTypeClass(material, entry.materialType)}`}>
+                    {TYPE_LABELS[typeKey] ?? typeKey}
+                  </span>
+                </td>
+                <td><span className={`logi-quality-pill ${materialTypeClass(material, entry.materialType)}`}>Q{entry.quality ?? 0}</span></td>
+                <td className={`logi-qty-cell ${materialTypeClass(material, entry.materialType)}`}>{formatQuantity(entry.quantity, material)}</td>
+                <td>{location?.name ?? <span className="logi-muted-cell">—</span>}</td>
+                <td className="logi-muted-cell">{entry.container ?? '—'}</td>
                 <td className="logi-muted-cell">{formatDate(entry.updatedAt)}</td>
                 <td>
                   <div className="logi-table-actions">

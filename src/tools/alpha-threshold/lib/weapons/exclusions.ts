@@ -33,18 +33,6 @@ const THRESHOLD_POOL_EXCLUDED_NAME_PATTERNS = [
     pattern: 'omnisky',
     reason: 'Currently treated as universal E100 overmatch and omitted from per-target threshold comparisons.',
   },
-  {
-    pattern: 'attrition',
-    reason: 'Excluded from threshold preset pools.',
-  },
-  {
-    pattern: 'ardor',
-    reason: 'Excluded from threshold preset pools.',
-  },
-  {
-    pattern: 'tormenter',
-    reason: 'Excluded from threshold preset pools.',
-  },
 ]
 
 export function getThresholdWeaponPoolExclusionReason(weapon: WeaponRecord): string | null {

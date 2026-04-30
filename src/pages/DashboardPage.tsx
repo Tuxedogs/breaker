@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import DonutChart from "../components/dashboard/DonutChart";
 import {
@@ -7,11 +8,11 @@ import {
   mockBuildQueue,
   mockLocations,
   mockUpdates,
-  mockSystemStatus,
   quickAccessItems,
   popularToolItems,
   type QuickAccessItem,
 } from "../data/mock/dashboard";
+import { useLogisticsStore, createInventoryEntryDraft } from "../stores/logisticsStore";
 
 // ── Shared arrow icon for footer links ─────────────────────────────
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -89,15 +90,6 @@ function QuickIcon({ icon }: { icon: string }) {
   );
 }
 
-// ── Status row icons ───────────────────────────────────────────────
-function StatusRowIcon({ d }: { d: string }) {
-  return (
-    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="dash-status-row-icon">
-      <path d={d} />
-    </svg>
-  );
-}
-
 // ── Location icon ──────────────────────────────────────────────────
 function LocationIcon({ type }: { type: string }) {
   const d = type === "station"
@@ -125,11 +117,11 @@ export default function DashboardPage() {
           <div className="dash-hero-content">
             <p className="dash-hero-kicker">Welcome to Scintel</p>
             <h1 className="dash-hero-title">
-              Intelligence for those<br />who Build the Verse.
+              Parse screenshots<br />keep track of your loot.
             </h1>
             <p className="dash-hero-subtitle">
-              Tools, data, and planning systems for<br />
-              combat and industry.
+              Upload refinery job quotes or completed<br />
+              jobs and have them logged to your account.
             </p>
             <Link to="/tools/alpha-threshold" className="dash-hero-cta">
               Explore Tools
@@ -371,27 +363,8 @@ export default function DashboardPage() {
       {/* ── Right column ── */}
       <aside className="dash-right-col" aria-label="System panels">
 
-        {/* System Status */}
-        <div className="dash-panel">
-          <div className="dash-panel-header">
-            <span className="dash-panel-title">System Status</span>
-          </div>
-          <div className="dash-panel-body">
-            <div className="dash-status-all-good">
-              <div className="dash-status-green-dot" aria-hidden />
-              <span className="dash-status-ok-text">{mockSystemStatus.overall}</span>
-            </div>
-            <div className="dash-status-rows">
-              <StatusRow icon="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 5v5l3 3" label="Data Updated" value={mockSystemStatus.dataUpdated} muted />
-              <StatusRow icon="M12 2l9 4.5v7c0 5-3.6 9.7-9 11-5.4-1.3-9-6-9-11V6.5L12 2z" label="API Status" value={mockSystemStatus.apiStatus} />
-              <StatusRow icon="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" label="Build Engine" value={mockSystemStatus.buildEngine} />
-              <StatusRow icon="M21 5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5z M3 10h18" label="Database" value={mockSystemStatus.database} />
-            </div>
-          </div>
-          <div className="dash-panel-footer">
-            <a href="#" className="dash-panel-link">View Status Page <ArrowRight size={10} /></a>
-          </div>
-        </div>
+        {/* Quick Inventory */}
+        <QuickInventoryPanel />
 
         {/* Favorite Locations */}
         <div className="dash-panel">
@@ -449,26 +422,125 @@ export default function DashboardPage() {
 
 // ── Sub-components ─────────────────────────────────────────────────
 
-function StatusRow({
-  icon,
-  label,
-  value,
-  muted = false,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-  muted?: boolean;
-}) {
+function QuickInventoryPanel() {
+  const { locations, materialTemplates, addInventoryEntries } = useLogisticsStore();
+  const [locationId, setLocationId] = useState(() => locations[0]?.id ?? "");
+  const [materialSearch, setMaterialSearch] = useState("");
+  const [materialId, setMaterialId] = useState("");
+  const [quality, setQuality] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [error, setError] = useState("");
+  const [added, setAdded] = useState(false);
+
+  function handleMaterialInput(value: string) {
+    setMaterialSearch(value);
+    const match = materialTemplates.find((m) => m.name.toLowerCase() === value.toLowerCase());
+    setMaterialId(match?.id ?? "");
+    setError("");
+  }
+
+  function handleAdd() {
+    const qty = parseFloat(quantity);
+    if (!locationId) { setError("Select a location."); return; }
+    if (!materialId) { setError("Select a valid material."); return; }
+    if (isNaN(qty) || qty <= 0) { setError("Enter a valid quantity."); return; }
+    addInventoryEntries([createInventoryEntryDraft({
+      id: `inv-${Date.now()}`,
+      materialId,
+      quantity: qty,
+      quality: Math.max(0, Math.min(1000, parseInt(quality) || 0)),
+      locationId,
+    })]);
+    setMaterialSearch("");
+    setMaterialId("");
+    setQuality("");
+    setQuantity("");
+    setError("");
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  }
+
   return (
-    <div className="dash-status-row">
-      <span className="dash-status-row-label">
-        <StatusRowIcon d={icon} />
-        {label}
-      </span>
-      <span className={["dash-status-row-value", muted ? "dash-status-row-value--muted" : ""].filter(Boolean).join(" ")}>
-        {value}
-      </span>
+    <div className="dash-panel">
+      <div className="dash-panel-header">
+        <span className="dash-panel-title">Quick Inventory</span>
+      </div>
+      <div className="dash-panel-body">
+        <div className="logi-form-field" style={{ marginBottom: "0.55rem" }}>
+          <label htmlFor="qinv-location" className="logi-form-label">Location</label>
+          <select
+            id="qinv-location"
+            className="logi-form-select"
+            value={locationId}
+            onChange={(e) => { setLocationId(e.target.value); setError(""); }}
+          >
+            {locations.map((loc) => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
+          </select>
+        </div>
+        <div className="logi-form-field" style={{ marginBottom: "0.55rem" }}>
+          <label htmlFor="qinv-material" className="logi-form-label">Material</label>
+          <input
+            id="qinv-material"
+            type="text"
+            list="qinv-materials-list"
+            className="logi-form-input"
+            value={materialSearch}
+            onChange={(e) => handleMaterialInput(e.target.value)}
+            placeholder="Search material…"
+            autoComplete="off"
+          />
+          <datalist id="qinv-materials-list">
+            {materialTemplates.map((m) => <option key={m.id} value={m.name} />)}
+          </datalist>
+        </div>
+        <div className="logi-fast-add-pair" style={{ marginBottom: "0.55rem" }}>
+          <div className="logi-form-field" style={{ marginBottom: 0 }}>
+            <label htmlFor="qinv-quality" className="logi-form-label">Quality</label>
+            <input
+              id="qinv-quality"
+              type="number"
+              className="logi-form-input"
+              value={quality}
+              onChange={(e) => { setQuality(e.target.value); setError(""); }}
+              placeholder="0–1000"
+              min="0"
+              max="1000"
+              step="1"
+            />
+          </div>
+          <div className="logi-form-field" style={{ marginBottom: 0 }}>
+            <label htmlFor="qinv-qty" className="logi-form-label">Qty (SCU)</label>
+            <input
+              id="qinv-qty"
+              type="number"
+              className="logi-form-input"
+              value={quantity}
+              onChange={(e) => { setQuantity(e.target.value); setError(""); }}
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
+            />
+          </div>
+        </div>
+        {error && (
+          <p style={{ color: "#f87171", fontFamily: '"Share Tech Mono", monospace', fontSize: "0.6rem", letterSpacing: "0.06em", margin: "0 0 0.5rem" }}>
+            {error}
+          </p>
+        )}
+        <button
+          type="button"
+          className="logi-btn-primary"
+          style={{ width: "100%", justifyContent: "center" }}
+          onClick={handleAdd}
+        >
+          {added ? "Stack Added ✓" : "Add Stack"}
+        </button>
+      </div>
+      <div className="dash-panel-footer" style={{ display: "flex", gap: "0.75rem" }}>
+        <Link to="/logistics/inventory" className="dash-panel-link">Open Inventory <ArrowRight size={10} /></Link>
+        <Link to="/logistics/refinery-import?source=dashboard" className="dash-panel-link">Screenshot Import <ArrowRight size={10} /></Link>
+      </div>
     </div>
   );
 }

@@ -1,14 +1,11 @@
 import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
-import AppShell from "./components/AppShell";
 import DashboardShell from "./components/dashboard/DashboardShell";
 
 import DashboardPage from "./pages/DashboardPage";
-import DoctrineFirstFramework from "./pages/DoctrineFirstFramework";
 import DoctrineLibraryPage from "./pages/DoctrineLibraryPage";
 import DoctrineModulePage from "./pages/DoctrineModulePage";
-import DoctrineReferencePage from "./pages/DoctrineReferencePage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
@@ -16,6 +13,7 @@ const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const LocationsPage = lazy(() => import("./pages/logistics/LocationsPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
+const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 
 const ShipMapsPage = lazy(() => import("./pages/ships/maps/ShipMapsPage"));
 
@@ -31,7 +29,6 @@ const ComponentMappingPage = lazy(() =>
   }))
 );
 
-const GimbalModesPage = lazy(() => import("./pages/GimbalModesPage"));
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 
@@ -48,6 +45,21 @@ function RedirectToDashboard() {
   return <Navigate to={`/dashboard${location.search}`} replace />;
 }
 
+function RedirectToDashboardDoctrine() {
+  const location = useLocation();
+  return <Navigate to={`/dashboard/doctrine${location.search}`} replace />;
+}
+
+function RedirectToDashboardDoctrineLibrary() {
+  const location = useLocation();
+  return <Navigate to={`/dashboard/doctrine/library${location.search}`} replace />;
+}
+
+function RedirectLegacyDoctrineModule() {
+  const location = useLocation();
+  return <Navigate to={`/dashboard/doctrine/module/${location.pathname.split("/").pop() ?? ""}`} replace />;
+}
+
 export default function App() {
   return (
     <Routes>
@@ -55,6 +67,29 @@ export default function App() {
       <Route path="index" element={<RedirectToDashboard />} />
       <Route path="framework" element={<RedirectToDashboard />} />
       <Route path="modules" element={<ModuleIndexPage />} />
+      <Route path="doctrine" element={<RedirectToDashboardDoctrine />} />
+      <Route path="doctrine/library" element={<RedirectToDashboardDoctrineLibrary />} />
+      <Route path="doctrine/weapons-matrix" element={<Navigate to="/dashboard/doctrine/weapons-matrix" replace />} />
+      <Route path="doctrine/armor-threshold" element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />} />
+      <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
+      <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+      <Route path="framework-legacy" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+      <Route
+        path="systems/sub-targeting"
+        element={<Navigate to="/dashboard/doctrine/module/sub-targeting" replace />}
+      />
+      <Route
+        path="systems/turret-keybinds"
+        element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+      />
+      <Route
+        path="systems/turret-keybinds/additional"
+        element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+      />
+      <Route
+        path="anti-cap/component-sniping"
+        element={<Navigate to="/dashboard/doctrine/module/component-sniping" replace />}
+      />
 
       {/* Legacy redirects — preserve old standalone tool URLs */}
       <Route path="maps" element={<Navigate to="/ships/maps" replace />} />
@@ -62,7 +97,17 @@ export default function App() {
       {/* Dashboard shell — sidebar + topbar always visible */}
       <Route element={<DashboardShell />}>
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="doctrine" element={<DoctrineLibraryPage />} />
+        <Route path="dashboard/doctrine" element={<DoctrineLibraryPage />} />
+        <Route path="dashboard/doctrine/library" element={<DoctrineLibraryPage />} />
+        <Route path="dashboard/doctrine/module/:id" element={<DoctrineModulePage />} />
+        <Route
+          path="dashboard/doctrine/weapons-matrix"
+          element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}
+        />
+        <Route
+          path="dashboard/doctrine/armor-threshold"
+          element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}
+        />
 
         {/* Logistics */}
         <Route
@@ -85,6 +130,10 @@ export default function App() {
           path="logistics/build-queue"
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />
+        <Route
+          path="logistics/refinery-import"
+          element={<Suspense fallback={<RouteFallback />}><RefineryImportPage /></Suspense>}
+        />
 
         {/* Combat tools */}
         <Route
@@ -100,14 +149,6 @@ export default function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <ComponentMappingPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="doctrine/gimbal-modes"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <GimbalModesPage />
             </Suspense>
           }
         />
@@ -136,33 +177,8 @@ export default function App() {
         />
       </Route>
 
-      {/* Main App — doctrine + legacy module pages */}
-      <Route element={<AppShell />}>
-        <Route path="framework-legacy" element={<DoctrineFirstFramework />} />
-        <Route path="module/:id" element={<DoctrineModulePage />} />
-        <Route path="refs/:type/:id" element={<DoctrineReferencePage />} />
+      <Route path="*" element={<RedirectToDashboard />} />
 
-        {/* Legacy redirects — preserve old module URLs */}
-        <Route
-          path="systems/sub-targeting"
-          element={<Navigate to="/module/sub-targeting" replace />}
-        />
-        <Route
-          path="systems/turret-keybinds"
-          element={<Navigate to="/module/turret-keybind-baseline" replace />}
-        />
-        <Route
-          path="systems/turret-keybinds/additional"
-          element={<Navigate to="/module/turret-keybind-baseline" replace />}
-        />
-        <Route
-          path="anti-cap/component-sniping"
-          element={<Navigate to="/module/component-sniping" replace />}
-        />
-
-        {/* Catch all */}
-        <Route path="*" element={<RedirectToDashboard />} />
-      </Route>
     </Routes>
   );
 }

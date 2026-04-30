@@ -31,6 +31,9 @@ interface LogisticsStoreState {
   locations: InventoryLocation[];
   inventoryEntries: InventoryEntry[];
   buildQueue: BuildQueueItem[];
+  addLocation: (location: InventoryLocation) => void;
+  updateLocation: (location: InventoryLocation) => void;
+  deleteLocation: (id: string) => void;
   addInventoryEntries: (entries: InventoryEntry[]) => void;
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
@@ -39,6 +42,7 @@ interface LogisticsStoreState {
   removeBuildQueueItem: (id: string) => void;
   setBuildQueueItemAllocations: (buildQueueItemId: string, allocations: ReservedMaterialAllocation[]) => void;
   toggleBuildQueueAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
+  updateBuildQueueAllocationQuantity: (buildQueueItemId: string, inventoryEntryId: string, quantity: number) => void;
   clearBuildQueueItemAllocations: (buildQueueItemId: string) => void;
   clearStaleBuildQueueItemAllocations: (buildQueueItemId: string) => void;
   resetLogisticsState: () => void;
@@ -119,10 +123,10 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
 
 export function getRarityForQuality(quality?: number, material?: MaterialTemplate): RarityInfo {
   if (material?.isQuantanium) return rarityCatalog.quantanium;
-  if ((quality ?? 0) >= 950) return rarityCatalog.legendary;
-  if ((quality ?? 0) >= 850) return rarityCatalog.epic;
-  if ((quality ?? 0) >= 700) return rarityCatalog.rare;
-  if ((quality ?? 0) >= 450) return rarityCatalog.uncommon;
+  if ((quality ?? 0) >= 899) return rarityCatalog.legendary;
+  if ((quality ?? 0) >= 800) return rarityCatalog.epic;
+  if ((quality ?? 0) >= 750) return rarityCatalog.rare;
+  if ((quality ?? 0) >= 650) return rarityCatalog.uncommon;
   return rarityCatalog.common;
 }
 
@@ -157,6 +161,18 @@ export function normalizeOwnedItemRarity(item: OwnedItem): OwnedItem {
   return {
     ...item,
     rarity: normalizeRarity(item.rarity, rarityCatalog.common),
+  };
+}
+
+function coercePersistedLocation(value: unknown): InventoryLocation | null {
+  if (!isRecord(value) || !isString(value.id) || !isString(value.name)) return null;
+  return {
+    id: value.id,
+    name: value.name,
+    category: isString(value.category) ? value.category : undefined,
+    system: isString(value.system) ? value.system : undefined,
+    type: (value.type === "station" || value.type === "city" || value.type === "outpost" || value.type === "ship")
+      ? (value.type as InventoryLocation["type"]) : undefined,
   };
 }
 
@@ -304,6 +320,15 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       locations: inventoryLocations,
       inventoryEntries: initialInventoryEntries,
       buildQueue: initialBuildQueue,
+      addLocation: (location) => {
+        set((state) => ({ locations: [...state.locations, location] }));
+      },
+      updateLocation: (location) => {
+        set((state) => ({ locations: state.locations.map((l) => l.id === location.id ? location : l) }));
+      },
+      deleteLocation: (id) => {
+        set((state) => ({ locations: state.locations.filter((l) => l.id !== id) }));
+      },
       addInventoryEntries: (entries) => {
         set((state) => ({
           inventoryEntries: [
@@ -368,6 +393,30 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           }),
         }));
       },
+      updateBuildQueueAllocationQuantity: (buildQueueItemId, inventoryEntryId, quantity) => {
+        set((state) => ({
+          buildQueue: state.buildQueue.map((item) => {
+            if (item.id !== buildQueueItemId) return item;
+            const inventoryEntry = state.inventoryEntries.find((e) => e.id === inventoryEntryId);
+            if (!inventoryEntry) return item;
+            const allocations = item.reservedAllocations ?? [];
+            const allocation = allocations.find((entry) => entry.inventoryEntryId === inventoryEntryId);
+            if (!allocation || allocation.materialId !== inventoryEntry.materialId) return item;
+            const reservedByOthers = getReservedQuantityForStack(state.buildQueue, inventoryEntryId, buildQueueItemId);
+            const maxQuantity = Math.max(0, inventoryEntry.quantity - reservedByOthers);
+            const clamped = Math.max(0, Math.min(quantity, maxQuantity));
+            if (clamped <= 0) {
+              return { ...item, reservedAllocations: allocations.filter((a) => a.inventoryEntryId !== inventoryEntryId) };
+            }
+            return {
+              ...item,
+              reservedAllocations: allocations.map((a) =>
+                a.inventoryEntryId === inventoryEntryId ? createValidatedAllocation(a, inventoryEntry, clamped) : a,
+              ),
+            };
+          }),
+        }));
+      },
       clearBuildQueueItemAllocations: (buildQueueItemId) => {
         set((state) => ({
           buildQueue: state.buildQueue.map((item) =>
@@ -408,21 +457,27 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       partialize: (state) => ({
         inventoryEntries: state.inventoryEntries,
         buildQueue: state.buildQueue,
+        locations: state.locations,
       }),
       merge: (persisted, current) => {
         const persistedInventory = getPersistedArray(persisted, "inventoryEntries");
         const persistedBuildQueue = getPersistedArray(persisted, "buildQueue");
+        const persistedLocations = getPersistedArray(persisted, "locations");
         const inventoryEntries = persistedInventory
           ?.map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
           .filter((entry): entry is InventoryEntry => entry !== null);
         const buildQueue = persistedBuildQueue
           ?.map(coercePersistedBuildQueueItem)
           .filter((item): item is BuildQueueItem => item !== null);
+        const locations = persistedLocations
+          ?.map(coercePersistedLocation)
+          .filter((l): l is InventoryLocation => l !== null);
 
         return {
           ...current,
           inventoryEntries: inventoryEntries ?? current.inventoryEntries,
           buildQueue: buildQueue ?? current.buildQueue,
+          locations: locations?.length ? locations : current.locations,
         };
       },
     },

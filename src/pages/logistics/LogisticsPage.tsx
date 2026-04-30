@@ -87,15 +87,15 @@ export default function LogisticsPage() {
           <div className="logi-nav-card-count">{activeQueueCount} active</div>
         </Link>
 
-        <div className="logi-nav-card logi-nav-card--wip">
-          <div className="logi-nav-card-icon logi-nav-card-icon--wip">
+        <Link to="/logistics/refinery-import" className="logi-nav-card">
+          <div className="logi-nav-card-icon">
             <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-              <path d="M14.5 4l5.5 5.5-11 11L3.5 15 14.5 4zM9 9l6 6" />
+              <path d="M4 16l4-4 4 4 4-8 4 4M2 20h20" />
             </svg>
           </div>
-          <div className="logi-nav-card-label">Mining Planner</div>
-          <div className="logi-nav-card-count logi-nav-card-count--wip">Coming soon</div>
-        </div>
+          <div className="logi-nav-card-label">Refinery Import</div>
+          <div className="logi-nav-card-count">Screenshot → inventory</div>
+        </Link>
       </div>
 
       {/* Shortages quick view */}

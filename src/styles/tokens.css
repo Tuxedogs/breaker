@@ -14,7 +14,10 @@
   --glow-cyan: rgba(120, 220, 240, 0.2);
   --glow-cyan-strong: rgba(120, 220, 240, 0.35);
   --glow-amber: rgba(240, 170, 90, 0.2);
+  --pilot-gold:var(--accent-gold);
   --crew-blue: #3d7ad6;
+  --engineer:var(--accent-cyan);
+  --gunnery: #df720d;
   --leaders-red: #ff001d;
   --orange: #ff3c00;
   --shadow-deep: rgba(0, 0, 0, 0.55);
@@ -45,6 +48,20 @@
   --component-qt:     #911696;
   --component-navigation: #01ffd5;
   --component-pdc:    #fffb11;
+
+  /* Logistics rarity colors */
+  --rarity-legendary-rgb: 255 215 0;
+  --rarity-epic-rgb: 157 0 255;
+  --rarity-rare-rgb: 45 104 196;
+  --rarity-uncommon-rgb: 76 187 23;
+  --rarity-common-rgb: 109 129 150;
+  --rarity-quantanium-rgb: 184 115 51;
+  --rarity-legendary: rgb(var(--rarity-legendary-rgb));
+  --rarity-epic: rgb(var(--rarity-epic-rgb));
+  --rarity-rare: rgb(var(--rarity-rare-rgb));
+  --rarity-uncommon: rgb(var(--rarity-uncommon-rgb));
+  --rarity-common: rgb(var(--rarity-common-rgb));
+  --rarity-quantanium: rgb(var(--rarity-quantanium-rgb));
 }
 
 body {

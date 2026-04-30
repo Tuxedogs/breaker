@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { readModuleFilters } from "./moduleFilters";
 
 const moduleIndexSearchStorageKey = "moonbreaker:last-module-index-search";
+const moduleIndexPath = "/dashboard/doctrine/library";
 
 const roleIndexLabels: Record<string, string> = {
   crew: "Crew",
@@ -30,14 +31,14 @@ export function rememberModuleIndexSearch(search: string) {
 
 export function getModuleIndexHref(fallbackSearch = "") {
   const normalizedFallback = normalizeSearch(fallbackSearch);
-  if (normalizedFallback) return `/doctrine${normalizedFallback}`;
+  if (normalizedFallback) return `${moduleIndexPath}${normalizedFallback}`;
 
-  if (typeof window === "undefined") return "/doctrine";
+  if (typeof window === "undefined") return moduleIndexPath;
 
   const storedSearch = normalizeSearch(
     window.sessionStorage.getItem(moduleIndexSearchStorageKey) ?? "",
   );
-  return storedSearch ? `/doctrine${storedSearch}` : "/doctrine";
+  return storedSearch ? `${moduleIndexPath}${storedSearch}` : moduleIndexPath;
 }
 
 function getModuleIndexSearch(fallbackSearch = "") {
