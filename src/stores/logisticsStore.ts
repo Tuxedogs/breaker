@@ -123,7 +123,7 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
 
 export function getRarityForQuality(quality?: number, material?: MaterialTemplate): RarityInfo {
   if (material?.isQuantanium) return rarityCatalog.quantanium;
-  if ((quality ?? 0) >= 899) return rarityCatalog.legendary;
+  if ((quality ?? 0) >= 900) return rarityCatalog.legendary;
   if ((quality ?? 0) >= 800) return rarityCatalog.epic;
   if ((quality ?? 0) >= 750) return rarityCatalog.rare;
   if ((quality ?? 0) >= 650) return rarityCatalog.uncommon;

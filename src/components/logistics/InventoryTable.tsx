@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
-import { formatQuantity, materialTypeClass } from '../../lib/logistics/inventory';
+import { formatQuantity, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
 
 export type SortKey = 'quality' | 'quantity' | 'material' | 'location';
 
@@ -106,7 +106,7 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
                     {TYPE_LABELS[typeKey] ?? typeKey}
                   </span>
                 </td>
-                <td><span className={`logi-quality-pill ${materialTypeClass(material, entry.materialType)}`}>Q{entry.quality ?? 0}</span></td>
+                <td><span className={`logi-quality-pill ${rarityClass(entry.rarity)}`}>{entry.quality ?? 0}</span></td>
                 <td className={`logi-qty-cell ${materialTypeClass(material, entry.materialType)}`}>{formatQuantity(entry.quantity, material)}</td>
                 <td>{location?.name ?? <span className="logi-muted-cell">—</span>}</td>
                 <td className="logi-muted-cell">{entry.container ?? '—'}</td>

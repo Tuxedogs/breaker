@@ -4,7 +4,7 @@ import LocationCard from '../../components/logistics/LocationCard';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import { formatQuantity, getInventoryStacks, materialTypeClass } from '../../lib/logistics/inventory';
+import { formatQuantity, getInventoryStacks, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
 import {
   getBestAvailableStacksForMaterial,
   getInventoryByMaterial,
@@ -148,7 +148,7 @@ export default function LocationsPage() {
             <h1 className="logi-page-title">{selectedLocation.name}</h1>
             <p className="logi-page-subtitle">
               {summary.materialCount} materials · {formatQuantity(summary.totalQuantity, undefined)} stored
-              {summary.bestQualityStack && ` · Best Q${summary.bestQualityStack.quality ?? 0}`}
+              {summary.bestQualityStack && ` · Best ${summary.bestQualityStack.quality ?? 0}`}
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
@@ -172,7 +172,7 @@ export default function LocationsPage() {
               <div className="logi-shortage-header">
                 <span className="logi-shortage-title">Location Inventory</span>
                 {summary.bestQualityStack && (
-                  <span className="logi-shortage-alert-count">Best Q{summary.bestQualityStack.quality ?? 0}</span>
+                  <span className="logi-shortage-alert-count">Best {summary.bestQualityStack.quality ?? 0}</span>
                 )}
               </div>
               <table className="logi-shortage-table">
@@ -196,7 +196,7 @@ export default function LocationsPage() {
                       <tr key={entry.id}>
                         <td>{materialName}</td>
                         <td className={materialTypeClass(material, entry.materialType)}>{formatQuantity(entry.quantity, material)}</td>
-                        <td><span className={`logi-quality-pill ${materialTypeClass(material, entry.materialType)}`}>Q{entry.quality ?? 0}</span></td>
+                        <td><span className={`logi-quality-pill ${rarityClass(entry.rarity)}`}>{entry.quality ?? 0}</span></td>
                         <td>{entry.container ?? '—'}</td>
                         <td>{formatUpdatedDate(entry.updatedAt)}</td>
                         <td>
@@ -355,7 +355,7 @@ export default function LocationsPage() {
                   return (
                     <div key={entry.id} className={`logi-stack-row ${materialTypeClass(material, entry.materialType)}`}>
                       <span>{material?.name ?? entry.materialId}</span>
-                      <strong className={materialTypeClass(material, entry.materialType)}>Q{entry.quality ?? 0}</strong>
+                      <strong className={rarityClass(entry.rarity)}>{entry.quality ?? 0}</strong>
                       <span>{location?.name ?? '—'}</span>
                     </div>
                   );
@@ -365,14 +365,14 @@ export default function LocationsPage() {
 
             <section className="logi-shortage-section logi-premium-widget">
               <div className="logi-shortage-header">
-                <span className="logi-shortage-title">Premium Stash Q900+</span>
+                <span className="logi-shortage-title">Premium Stash 900+</span>
                 <span className="logi-shortage-alert-count">{premiumStacks.length} stacks</span>
               </div>
               <div className="logi-stack-list">
                 {premiumStacks.map((stack) => (
                   <div key={stack.id} className={`logi-stack-row ${materialTypeClass(stack.material, stack.materialType)}`}>
                     <span>{stack.material?.name ?? stack.materialId}</span>
-                    <strong className={materialTypeClass(stack.material, stack.materialType)}>Q{stack.quality ?? 0}</strong>
+                    <strong className={rarityClass(stack.rarity)}>{stack.quality ?? 0}</strong>
                     <span>{formatQuantity(stack.quantity, stack.material)} / {stack.location?.name ?? '—'}</span>
                   </div>
                 ))}
@@ -399,7 +399,7 @@ export default function LocationsPage() {
                 {breakdown.map((stack) => (
                   <tr key={stack.id}>
                     <td>{stack.material?.name ?? stack.materialId}</td>
-                    <td><span className={`logi-quality-pill ${materialTypeClass(stack.material, stack.materialType)}`}>Q{stack.quality ?? 0}</span></td>
+                    <td><span className={`logi-quality-pill ${rarityClass(stack.rarity)}`}>{stack.quality ?? 0}</span></td>
                     <td>{stack.location?.name ?? '—'}</td>
                     <td className={materialTypeClass(stack.material, stack.materialType)}>{formatQuantity(stack.quantity, stack.material)}</td>
                     <td>{stack.container ?? '—'}</td>
