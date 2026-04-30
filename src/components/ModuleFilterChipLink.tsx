@@ -21,7 +21,7 @@ function toModulesFilterHref(tag: string) {
     params.set("domain", normalized);
   }
 
-  return `/doctrine?${params.toString()}`;
+  return `/dashboard/doctrine/library?${params.toString()}`;
 }
 
 type ModuleFilterChipLinkProps = {

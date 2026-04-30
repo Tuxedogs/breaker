@@ -8,7 +8,7 @@ export interface InventoryEntry {
   /** References Material.id */
   materialId: string;
   quantity: number;
-  /** Numeric material quality, 0-1000. */
+  /**Materials quality */
   quality: number;
   /** References Location.id */
   locationId: string;

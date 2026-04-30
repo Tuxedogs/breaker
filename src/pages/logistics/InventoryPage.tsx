@@ -2,8 +2,9 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import type { InventoryEntry } from '../../types/logistics';
-import InventoryTable from '../../components/logistics/InventoryTable';
+import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
+import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 
@@ -14,15 +15,29 @@ export default function InventoryPage() {
   const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
   const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
+
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [search, setSearch] = useState('');
   const [materialFilter, setMaterialFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
+  const [qualityMin, setQualityMin] = useState(0);
+  const [sortKey, setSortKey] = useState<SortKey>('quality');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
+
+  function handleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDir('desc');
+    }
+  }
 
   const filtered = useMemo(() => {
-    return entries.filter((e) => {
+    const data = entries.filter((e) => {
       if (materialFilter && e.materialId !== materialFilter) return false;
       if (locationFilter && e.locationId !== locationFilter) return false;
+      if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
         const mat = materials.find((m) => m.id === e.materialId);
         const loc = locations.find((l) => l.id === e.locationId);
@@ -35,7 +50,34 @@ export default function InventoryPage() {
       }
       return true;
     });
-  }, [entries, materials, locations, search, materialFilter, locationFilter]);
+
+    data.sort((a, b) => {
+      let cmp = 0;
+      switch (sortKey) {
+        case 'quality':
+          cmp = (a.quality ?? -1) - (b.quality ?? -1);
+          break;
+        case 'quantity':
+          cmp = a.quantity - b.quantity;
+          break;
+        case 'material': {
+          const ma = materials.find((m) => m.id === a.materialId)?.name ?? a.materialId;
+          const mb = materials.find((m) => m.id === b.materialId)?.name ?? b.materialId;
+          cmp = ma.localeCompare(mb);
+          break;
+        }
+        case 'location': {
+          const la = locations.find((l) => l.id === a.locationId)?.name ?? '';
+          const lb = locations.find((l) => l.id === b.locationId)?.name ?? '';
+          cmp = la.localeCompare(lb);
+          break;
+        }
+      }
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+
+    return data;
+  }, [entries, materials, locations, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
@@ -63,18 +105,21 @@ export default function InventoryPage() {
             <span className="logi-breadcrumb-active">Inventory</span>
           </div>
           <h1 className="logi-page-title">Inventory</h1>
-          <p className="logi-page-subtitle">Fast-add stacks by location, material, quality, and quantity.</p>
+          <p className="logi-page-subtitle">All recorded material stacks across locations.</p>
         </div>
-        <button
-          type="button"
-          className="logi-btn-primary"
-          onClick={() => setPanel({ mode: 'new' })}
-        >
-          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-          Add Entry
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
+          <ScreenshotImportButton source="inventory" />
+          <button
+            type="button"
+            className="logi-btn-primary"
+            onClick={() => setPanel({ mode: 'new' })}
+          >
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Add Stack
+          </button>
+        </div>
       </div>
 
       <div className="logi-filter-bar">
@@ -86,7 +131,7 @@ export default function InventoryPage() {
           <input
             type="search"
             className="logi-search-input"
-            placeholder="Search materials, locations…"
+            placeholder="Search material, location…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search inventory"
@@ -117,6 +162,22 @@ export default function InventoryPage() {
           ))}
         </select>
 
+        <div className="logi-search-wrap" style={{ maxWidth: 120, minWidth: 90, gap: '0.35rem' }}>
+          <span style={{ fontSize: '0.7rem', color: 'rgba(160,180,220,0.4)', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.06em', flexShrink: 0 }}>Q≥</span>
+          <input
+            type="number"
+            className="logi-search-input"
+            placeholder="0"
+            min={0}
+            max={1000}
+            step={50}
+            value={qualityMin || ''}
+            onChange={(e) => setQualityMin(parseInt(e.target.value) || 0)}
+            aria-label="Minimum quality"
+            style={{ width: 40 }}
+          />
+        </div>
+
         <span className="logi-filter-count">{filtered.length} of {entries.length}</span>
       </div>
 
@@ -126,6 +187,9 @@ export default function InventoryPage() {
             entries={filtered}
             materials={materials}
             locations={locations}
+            sortKey={sortKey}
+            sortDir={sortDir}
+            onSort={handleSort}
             onEdit={(entry) => setPanel({ mode: 'edit', entry })}
             onDelete={handleDelete}
           />

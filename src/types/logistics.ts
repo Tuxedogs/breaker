@@ -11,6 +11,7 @@ export interface RarityInfo {
   label: string;
   colorRgb: [number, number, number];
   colorHex: string;
+  colorToken: string;
 }
 
 export interface MaterialTemplate {

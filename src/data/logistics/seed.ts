@@ -15,12 +15,48 @@ export interface RecipeInputTemplate {
 }
 
 export const rarityCatalog = {
-  legendary: { tier: "legendary", label: "Legendary", colorRgb: [255, 215, 0], colorHex: "#FFD700" },
-  epic: { tier: "epic", label: "Epic", colorRgb: [157, 0, 255], colorHex: "#9D00FF" },
-  rare: { tier: "rare", label: "Rare", colorRgb: [45, 104, 196], colorHex: "#2D68C4" },
-  uncommon: { tier: "uncommon", label: "Uncommon", colorRgb: [76, 187, 23], colorHex: "#4CBB17" },
-  common: { tier: "common", label: "Common", colorRgb: [109, 129, 150], colorHex: "#6D8196" },
-  quantanium: { tier: "quantanium", label: "Quantanium", colorRgb: [184, 115, 51], colorHex: "#B87333" },
+  legendary: {
+    tier: "legendary",
+    label: "Legendary",
+    colorRgb: [255, 215, 0],
+    colorHex: "#FFD700",
+    colorToken: "var(--rarity-legendary)",
+  },
+  epic: {
+    tier: "epic",
+    label: "Epic",
+    colorRgb: [157, 0, 255],
+    colorHex: "#9D00FF",
+    colorToken: "var(--rarity-epic)",
+  },
+  rare: {
+    tier: "rare",
+    label: "Rare",
+    colorRgb: [45, 104, 196],
+    colorHex: "#2D68C4",
+    colorToken: "var(--rarity-rare)",
+  },
+  uncommon: {
+    tier: "uncommon",
+    label: "Uncommon",
+    colorRgb: [76, 187, 23],
+    colorHex: "#4CBB17",
+    colorToken: "var(--rarity-uncommon)",
+  },
+  common: {
+    tier: "common",
+    label: "Common",
+    colorRgb: [109, 129, 150],
+    colorHex: "#6D8196",
+    colorToken: "var(--rarity-common)",
+  },
+  quantanium: {
+    tier: "quantanium",
+    label: "Quantanium",
+    colorRgb: [184, 115, 51],
+    colorHex: "#B87333",
+    colorToken: "var(--rarity-quantanium)",
+  },
 } satisfies Record<RarityTier, RarityInfo>;
 
 export const materialTemplates: MaterialTemplate[] = [
@@ -33,6 +69,21 @@ export const materialTemplates: MaterialTemplate[] = [
   { id: "laranite", name: "Laranite", materialType: "ore" },
   { id: "copper-ore", name: "Copper Ore", materialType: "ore" },
   { id: "titanium", name: "Titanium", materialType: "ore" },
+  // Refined outputs that appear in refinery completed orders
+  { id: "gold", name: "Gold", materialType: "refined" },
+  { id: "agricium", name: "Agricium", materialType: "refined" },
+  { id: "aslarite", name: "Aslarite", materialType: "refined" },
+  { id: "bexalite", name: "Bexalite", materialType: "refined" },
+  { id: "corundum", name: "Corundum", materialType: "refined" },
+  { id: "hephaestanite", name: "Hephaestanite", materialType: "refined" },
+  { id: "iron", name: "Iron", materialType: "refined" },
+  { id: "torite", name: "Torite", materialType: "refined" },
+  { id: "pressurized-ice", name: "Pressurized Ice", materialType: "refined" },
+  // Ore/raw inputs that appear in MATERIALS SELECTED pre-refine screenshots
+  { id: "stileron-ore", name: "Stileron (Ore)", materialType: "ore" },
+  { id: "quartz", name: "Quartz", materialType: "raw" },
+  { id: "taranite", name: "Taranite", materialType: "ore" },
+  { id: "riccite", name: "Riccite", materialType: "ore" },
 ];
 
 export const inventoryLocations: InventoryLocation[] = [
@@ -85,11 +136,11 @@ function materialTypeFor(materialId: string): MaterialTemplate["materialType"] {
 }
 
 export const initialInventoryEntries: InventoryEntry[] = [
-  { id: "inv-1", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 3.5, quality: 900, locationId: "everus-harbor", rarity: rarityCatalog.epic, createdAt: now, updatedAt: "2026-04-18T10:22:00Z" },
+  { id: "inv-1", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 3.5, quality: 900, locationId: "everus-harbor", rarity: rarityCatalog.legendary, createdAt: now, updatedAt: "2026-04-18T10:22:00Z" },
   { id: "inv-2", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 1.2, quality: 300, locationId: "orison", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-17T14:05:00Z" },
-  { id: "inv-3", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 0.8, quality: 860, locationId: "seraphim-station", rarity: rarityCatalog.rare, createdAt: now, updatedAt: "2026-04-15T08:00:00Z" },
-  { id: "inv-4", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 2, quality: 500, locationId: "everus-harbor", container: "520", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-19T09:15:00Z" },
-  { id: "inv-5", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 0.5, quality: 740, locationId: "orison", rarity: rarityCatalog.rare, createdAt: now, updatedAt: "2026-04-16T11:30:00Z" },
+  { id: "inv-3", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 0.8, quality: 860, locationId: "seraphim-station", rarity: rarityCatalog.epic, createdAt: now, updatedAt: "2026-04-15T08:00:00Z" },
+  { id: "inv-4", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 2, quality: 500, locationId: "everus-harbor", container: "520", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-19T09:15:00Z" },
+  { id: "inv-5", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 0.5, quality: 740, locationId: "orison", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-16T11:30:00Z" },
   { id: "inv-6", materialId: "feynmaline", materialType: materialTypeFor("feynmaline"), quantity: 85, quality: 240, locationId: "area18", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-20T07:00:00Z" },
   { id: "inv-7", materialId: "feynmaline", materialType: materialTypeFor("feynmaline"), quantity: 30, quality: 100, locationId: "seraphim-station", container: "920", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-14T16:45:00Z" },
   { id: "inv-8", materialId: "tungsten", materialType: materialTypeFor("tungsten"), quantity: 1.5, quality: 0, locationId: "everus-harbor", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-21T12:00:00Z" },

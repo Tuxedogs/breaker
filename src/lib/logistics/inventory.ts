@@ -24,6 +24,10 @@ export function formatQuantity(quantity: number, material: MaterialTemplate | un
   return `${quantity.toFixed(2)} ${unit}`;
 }
 
+export function materialTypeClass(material: MaterialTemplate | undefined, fallback?: MaterialTemplate['materialType']): string {
+  return `logi-material-type--${material?.materialType ?? fallback ?? 'special'}`;
+}
+
 export function getInventoryStacks(
   inventory: InventoryEntry[],
   materials: MaterialTemplate[],

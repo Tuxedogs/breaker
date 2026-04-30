@@ -8,19 +8,27 @@ const RANK_CLASS: Record<number, string> = {
   2: "dm-rank-3",
 };
 
+const ROLE_COLOR: Record<string, string> = {
+  pilot: 'var(--pilot-gold)',
+  gunner: 'var(--gunnery)',
+  engineer: 'var(--engineer)',
+  crew: 'var(--crew-blue)',
+};
+
 export function FrameworkLayout({ module }: { module: DoctrineModule }) {
   const hasSidebar =
     (module.matrix?.length ?? 0) > 0 || (module.output?.length ?? 0) > 0;
 
+  const roleColor = ROLE_COLOR[module.roles?.[0] ?? 'crew'] ?? 'var(--crew-blue)';
+
   return (
-    <div className="priority-shell">
+    <div className="priority-shell" style={{ borderTopColor: roleColor }}>
       <header className="priority-header">
         <DoctrineModuleHeader module={module} eyebrow="Priority Ladder" />
       </header>
-
       <div
         className="priority-layout"
-        style={hasSidebar ? undefined : { gridTemplateColumns: "1fr" }}
+        style={hasSidebar ? { alignItems: 'start' } : { gridTemplateColumns: "1fr", alignItems: 'start' }}
       >
         <div className="priority-main">
           {module.criteria && module.criteria.length > 0 ? (
@@ -31,12 +39,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
               <div className="dm-ladder">
                 {module.criteria.map((item, i) => (
                   <div key={i} className="dm-ladder-item">
-                    <div
-                      className={[
-                        "dm-ladder-rank",
-                        RANK_CLASS[i] ?? "dm-rank-4",
-                      ].join(" ")}
-                    >
+                    <div className={["dm-ladder-rank", RANK_CLASS[i] ?? "dm-rank-4"].join(" ")}>
                       {i + 1}
                     </div>
                     <div className="dm-ladder-content">
@@ -47,12 +50,7 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
                     </div>
                     {item.weight ? (
                       <div className="dm-ladder-weight">
-                        <span
-                          className={[
-                            "dm-weight-badge",
-                            `dm-weight-${item.weight}`,
-                          ].join(" ")}
-                        >
+                        <span className={["dm-weight-badge", `dm-weight-${item.weight}`].join(" ")}>
                           {item.weight}
                         </span>
                       </div>
@@ -64,7 +62,6 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
           ) : null}
           <DoctrineContent module={module} />
         </div>
-
         {hasSidebar ? (
           <aside className="priority-sidebar">
             {module.matrix && module.matrix.length > 0 ? (
@@ -87,7 +84,6 @@ export function FrameworkLayout({ module }: { module: DoctrineModule }) {
                 </table>
               </div>
             ) : null}
-
             {module.output && module.output.length > 0 ? (
               <div className="dm-sidebar-block dm-sidebar-block--info">
                 <div className="dm-sidebar-items">

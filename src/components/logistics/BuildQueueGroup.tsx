@@ -1,11 +1,30 @@
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
-import { formatQuantity, getInventoryStacks, getRecipeForQueueItem, getRecipeInputs, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
+import { formatQuantity, getInventoryStacks, getRecipeForQueueItem, getRecipeInputs, materialTypeClass, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
 import {
   getAvailableQuantityForInventoryEntry,
   getBuildQueueMaterialNeedSummary,
   getMaterialReservationCoverage,
 } from '../../lib/logistics/selectors';
+
+function AllocationQtyInput({ value, max, onCommit }: { value: number; max: number; onCommit: (val: number) => void }) {
+  return (
+    <input
+      type="number"
+      className="logi-source-qty"
+      aria-label="Reserved quantity"
+      min={0}
+      max={max}
+      step="0.01"
+      value={value}
+      onClick={(e) => e.stopPropagation()}
+      onChange={(e) => {
+        const nextValue = e.target.value === '' ? 0 : Number(e.target.value);
+        onCommit(Number.isFinite(nextValue) ? nextValue : value);
+      }}
+    />
+  );
+}
 
 interface Props {
   category: string;
@@ -21,6 +40,7 @@ interface Props {
   onPriorityChange: (id: string, priority: number) => void;
   onRemove: (id: string) => void;
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
+  onUpdateAllocationQuantity: (buildQueueItemId: string, inventoryEntryId: string, quantity: number) => void;
   onClearAllocations: (buildQueueItemId: string) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
 }
@@ -101,6 +121,7 @@ export default function BuildQueueGroup({
   onPriorityChange,
   onRemove,
   onToggleAllocation,
+  onUpdateAllocationQuantity,
   onClearAllocations,
   onClearStaleAllocations,
 }: Props) {
@@ -182,13 +203,13 @@ export default function BuildQueueGroup({
                     <div key={input.materialId} className="logi-source-card">
                       <div className="logi-source-card-head">
                         <span>{material?.name ?? input.materialId}</span>
-                        <strong>{formatQuantity(coverage.reservedQuantity, material)} / {formatQuantity(required, material)}</strong>
+                        <strong className={materialTypeClass(material)}>{formatQuantity(coverage.reservedQuantity, material)} / {formatQuantity(required, material)}</strong>
                         <span className={`logi-badge ${coverage.coverageState === 'covered' ? 'logi-badge--complete' : coverage.coverageState === 'missing' ? 'logi-badge--shortage' : 'logi-badge--paused'}`}>
                           {COVERAGE_LABELS[coverage.coverageState]}
                         </span>
                       </div>
                       <div className="logi-source-empty">
-                        Owned {formatQuantity(needSummary.ownedQuantity, material)} / Available {formatQuantity(needSummary.availableQuantity, material)} / Still needed {formatQuantity(needSummary.stillNeeded, material)}
+                        <span className={materialTypeClass(material)}>Owned {formatQuantity(needSummary.ownedQuantity, material)} / Available {formatQuantity(needSummary.availableQuantity, material)} / Still needed {formatQuantity(needSummary.stillNeeded, material)}</span>
                       </div>
                       {staleAllocations.map(({ allocation, staleReason }) => (
                         <div key={allocation.id} className="logi-source-empty">
@@ -206,8 +227,10 @@ export default function BuildQueueGroup({
                         stacks.map((stack) => {
                           const reservedQuantity = ownReservedByStack.get(stack.id) ?? 0;
                           const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
+                          const availableAfterThisReservation = Math.max(0, availableQuantity - reservedQuantity);
+                          const maxReservedQuantity = availableAfterThisReservation + reservedQuantity;
                           const checked = reservedQuantity > 0;
-                          const nextQuantity = Math.min(remainingRequired, availableQuantity);
+                          const nextQuantity = Math.min(remainingRequired, availableAfterThisReservation);
                           const disabled = !checked && nextQuantity <= 0;
                           return (
                             <label key={stack.id} className="logi-source-option">
@@ -223,10 +246,21 @@ export default function BuildQueueGroup({
                               />
                               <span>{stack.location?.name ?? stack.locationId}</span>
                               <span>{stack.container ?? '-'}</span>
-                              <span>Q{stack.quality}</span>
-                              <span style={{ color: stack.rarity.colorHex }}>{stack.rarity.label}</span>
-                              <span>{formatQuantity(reservedQuantity, material)} / {formatQuantity(stack.quantity, material)}</span>
-                              <span>{formatQuantity(availableQuantity, material)} avail</span>
+                              <span className={materialTypeClass(stack.material, stack.materialType)}>Q{stack.quality}</span>
+                              <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
+                              {checked ? (
+                                <span className="logi-source-qty-cell">
+                                  Reserved
+                                  <AllocationQtyInput
+                                    value={reservedQuantity}
+                                    max={maxReservedQuantity}
+                                    onCommit={(val) => onUpdateAllocationQuantity(item.id, stack.id, val)}
+                                  />
+                                </span>
+                              ) : (
+                                <span className={materialTypeClass(material)}>{formatQuantity(reservedQuantity, material)} / {formatQuantity(stack.quantity, material)}</span>
+                              )}
+                              <span className={materialTypeClass(material)}>{formatQuantity(availableAfterThisReservation, material)} avail</span>
                             </label>
                           );
                         })
