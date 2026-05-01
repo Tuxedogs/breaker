@@ -8,7 +8,7 @@ export function getBlueprintSourcesForRecipe(
   recipe: Pick<ComponentRecipe, "blueprint_id" | "component_name">,
   blueprintRewards: BlueprintReward[]
 ): BlueprintReward[] {
-  // blueprint-rewards.json has no blueprint_id or output_entityClass fields —
+  // blueprint-rewards.json has no blueprint_id or output_entityClass fields -
   // only blueprint_name. Use exact normalized name match to avoid false positives.
   const normalizedComponent = normalizeName(recipe.component_name);
 

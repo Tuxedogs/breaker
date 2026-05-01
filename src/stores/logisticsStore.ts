@@ -192,6 +192,10 @@ function coercePersistedInventoryEntry(value: unknown, materials: MaterialTempla
     quantity: value.quantity,
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : isString(value.containerName) ? value.containerName : undefined,
+    source: isString(value.source) ? value.source : undefined,
+    sourceHistory: Array.isArray(value.sourceHistory) ? value.sourceHistory.filter(isString) : undefined,
+    workOrderId: isString(value.workOrderId) ? value.workOrderId : undefined,
+    workOrderIds: Array.isArray(value.workOrderIds) ? value.workOrderIds.filter(isString) : undefined,
     rarity: isRecord(value.rarity) && isRarityTier(value.rarity.tier)
       ? rarityCatalog[value.rarity.tier]
       : rarityCatalog.common,
@@ -331,10 +335,36 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       addInventoryEntries: (entries) => {
         set((state) => ({
-          inventoryEntries: [
-            ...state.inventoryEntries,
-            ...entries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
-          ],
+          inventoryEntries: entries.reduce((inventory, entry) => {
+            const normalized = normalizeInventoryEntry(entry, state.materialTemplates);
+            const existingIdx = inventory.findIndex((current) =>
+              current.materialId === normalized.materialId &&
+              (current.locationId ?? "") === (normalized.locationId ?? "") &&
+              (current.quality ?? 0) === (normalized.quality ?? 0)
+            );
+            if (existingIdx === -1) return [...inventory, normalized];
+
+            const existing = inventory[existingIdx];
+            const sourceHistory = Array.from(new Set([
+              ...(existing.sourceHistory ?? (existing.source ? [existing.source] : [])),
+              ...(normalized.sourceHistory ?? (normalized.source ? [normalized.source] : [])),
+            ]));
+            const workOrderIds = Array.from(new Set([
+              ...(existing.workOrderIds ?? (existing.workOrderId ? [existing.workOrderId] : [])),
+              ...(normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : [])),
+            ]));
+            const merged = normalizeInventoryEntry({
+              ...existing,
+              quantity: existing.quantity + normalized.quantity,
+              source: normalized.source ?? existing.source,
+              sourceHistory: sourceHistory.length ? sourceHistory : undefined,
+              workOrderId: normalized.workOrderId ?? existing.workOrderId,
+              workOrderIds: workOrderIds.length ? workOrderIds : undefined,
+              updatedAt: new Date().toISOString(),
+            }, state.materialTemplates, existing.createdAt);
+
+            return inventory.map((current, idx) => idx === existingIdx ? merged : current);
+          }, state.inventoryEntries),
         }));
       },
       updateInventoryEntry: (entry) => {
@@ -500,6 +530,10 @@ export function createInventoryEntryDraft(
     quantity: input.quantity,
     locationId: input.locationId,
     container: input.container,
+    source: input.source,
+    sourceHistory: input.sourceHistory,
+    workOrderId: input.workOrderId,
+    workOrderIds: input.workOrderIds,
     rarity: getRarityForQuality(quality, material),
     createdAt: input.createdAt ?? timestamp,
     updatedAt: input.updatedAt ?? timestamp,

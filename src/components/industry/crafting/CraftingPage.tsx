@@ -1,10 +1,11 @@
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useEffect, useState, useMemo, lazy, Suspense } from "react";
 import "./crafting.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { aggregateMaterials } from "./utils/craftingCalculations";
 import { useBuildQueue } from "./hooks/useBuildQueue";
 import { useMaterialInventory } from "./hooks/useMaterialInventory";
+import { getCraftingItems } from "../../../lib/craftingData";
 
 import ComponentRecipeTable from "./components/ComponentRecipeTable";
 import BuildQueuePanel from "./components/BuildQueuePanel";
@@ -15,10 +16,6 @@ import MaterialSourcePlaceholder from "./components/MaterialSourcePlaceholder";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
-
-import recipesRaw from "./data/components-long.json";
-
-const recipes = recipesRaw as ComponentRecipe[];
 
 type Tab = "recipes" | "queue" | "analytics" | "quality" | "sources";
 
@@ -32,13 +29,31 @@ const TABS: { id: Tab; label: string }[] = [
 
 export default function CraftingModule() {
   const [tab, setTab] = useState<Tab>("recipes");
+  const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const { queue, addItem, setQuantity, removeItem, clearQueue } = useBuildQueue();
   const { inventory, setAmount, clearInventory } = useMaterialInventory();
 
+  useEffect(() => {
+    let cancelled = false;
+    getCraftingItems()
+      .then((items) => {
+        if (!cancelled) setRecipes(items);
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          setLoadError(error instanceof Error ? error.message : "Failed to load crafting data");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const aggregated = useMemo(
     () => aggregateMaterials(queue, recipes, inventory),
-    [queue, inventory]
+    [queue, recipes, inventory]
   );
 
   function handleAddToQueue(recipe: ComponentRecipe) {
@@ -47,6 +62,8 @@ export default function CraftingModule() {
       component_name: recipe.component_name,
       component_type: recipe.component_type,
       size: recipe.size,
+      item_kind: recipe.item_kind,
+      materials: recipe.materials,
     });
   }
 
@@ -106,6 +123,12 @@ export default function CraftingModule() {
       </div>
 
       <div className="craft-tab-content">
+        {loadError && (
+          <div className="craft-empty-state">
+            <p>{loadError}</p>
+          </div>
+        )}
+
         {tab === "recipes" && (
           <ComponentRecipeTable recipes={recipes} onAddToQueue={handleAddToQueue} />
         )}

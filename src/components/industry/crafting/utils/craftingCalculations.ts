@@ -16,8 +16,9 @@ export function aggregateMaterials(
 
   for (const item of queue) {
     const recipe = recipes.find((r) => r.blueprint_id === item.blueprint_id);
-    if (!recipe) continue;
-    for (const mat of recipe.materials) {
+    const materials = recipe?.materials ?? item.materials ?? [];
+    if (materials.length === 0) continue;
+    for (const mat of materials) {
       const key = mat.cost_id || mat.material_name;
       const existing = totals.get(key);
       const add = mat.quantity * item.quantity;

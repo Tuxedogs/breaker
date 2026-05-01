@@ -57,6 +57,10 @@ export interface InventoryEntry {
   quantity: number;
   locationId?: string;
   container?: string;
+  source?: string;
+  sourceHistory?: string[];
+  workOrderId?: string;
+  workOrderIds?: string[];
   rarity: RarityInfo;
   createdAt: string;
   updatedAt: string;

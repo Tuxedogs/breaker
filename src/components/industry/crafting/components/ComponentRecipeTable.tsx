@@ -1,10 +1,9 @@
 import { useState, useMemo, Fragment } from "react";
-import type { ComponentRecipe, QualityModifier, BlueprintReward } from "../utils/craftingTypes";
+import type { ComponentRecipe, BlueprintReward } from "../utils/craftingTypes";
 import { formatCraftTime } from "../utils/craftingCalculations";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
-  getModifiersGroupedByMaterial,
   summariseUnmatchedModifiers,
   formatProperty,
 } from "../utils/qualityModifiers";
@@ -15,25 +14,10 @@ import {
   type RecipeMaterialQualityState,
 } from "../utils/materialQuality";
 import { getBlueprintSourcesForRecipe } from "../utils/blueprintSources";
-import qualityRaw from "../data/quality-modifiers.json";
 import rewardsRaw from "../data/blueprint-rewards.json";
 
-const ALL_QUALITY_MODIFIERS = qualityRaw as QualityModifier[];
 const ALL_BLUEPRINT_REWARDS = rewardsRaw as BlueprintReward[];
 
-const COMPONENT_TYPES = [
-  "cooler",
-  "mininglaser",
-  "powerplant",
-  "quantumdrive",
-  "radar",
-  "salvage",
-  "shield",
-  "tractorbeam",
-  "weapons",
-] as const;
-
-const SIZES = ["0", "1", "2", "3", "4"];
 const PAGE_SIZES = [25, 50, 100] as const;
 
 interface Props {
@@ -43,7 +27,7 @@ interface Props {
 
 // -- Unmatched modifier display (no material slot match) -------------------
 
-function UnmatchedModifierGroups({ modifiers }: { modifiers: ReturnType<typeof summariseUnmatchedModifiers> }) {
+export function UnmatchedModifierGroups({ modifiers }: { modifiers: ReturnType<typeof summariseUnmatchedModifiers> }) {
   // Group summaries by slot.
   const bySlot = new Map<string, typeof modifiers>();
   for (const s of modifiers) {
@@ -81,6 +65,62 @@ function UnmatchedModifierGroups({ modifiers }: { modifiers: ReturnType<typeof s
   );
 }
 
+function OverallModifierGroup({
+  modifiers,
+  quality,
+}: {
+  modifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
+  quality?: number;
+}) {
+  if (modifiers.length === 0) return null;
+
+  return (
+    <div className="craft-mod-group craft-mod-group--general">
+      <div className="craft-mod-group-header">
+        <span className="craft-drawer-mat-slot">ASPECTS</span>
+        <span className="craft-mod-group-sep">/</span>
+        <span className="craft-mod-group-mat craft-muted">Component HP Modifier</span>
+        {quality !== undefined && <span className="craft-mod-group-q">{quality}</span>}
+      </div>
+      {quality === undefined ? (
+        <div className="craft-drawer-modifier-list">
+          {summariseUnmatchedModifiers(modifiers).map(({ property, minPercent, maxPercent }, i) => (
+            <div key={i} className="craft-drawer-modifier-row">
+              <span className="craft-badge craft-badge--sm craft-badge--slot craft-drawer-modifier-slot">
+                ASPECTS
+              </span>
+              <span className="craft-drawer-modifier-prop">{formatProperty(property)}</span>
+              <span className="craft-drawer-modifier-val craft-mod-range">
+                {minPercent.toFixed(1)}% â†’ {maxPercent >= 0 ? "+" : ""}
+                {maxPercent.toFixed(1)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="craft-drawer-modifier-list">
+          {getModifiersAtQuality(modifiers, quality).map((m, i) => (
+            <div key={i} className="craft-drawer-modifier-row">
+              <span className="craft-badge craft-badge--sm craft-badge--slot craft-drawer-modifier-slot">
+                {m.slot}
+              </span>
+              <span className="craft-drawer-modifier-prop">{formatProperty(m.property)}</span>
+              <span
+                className={`craft-drawer-modifier-val ${
+                  m.value >= 0 ? "craft-ok" : "craft-shortage"
+                }`}
+              >
+                {m.value >= 0 ? "+" : ""}
+                {m.value.toFixed(1)}%
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // -- Expanded detail drawer ------------------------------------------------
 
 function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
@@ -89,17 +129,26 @@ function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
   );
   const [debugOpen, setDebugOpen] = useState(false);
 
-  const { matched: matchedGroups, unmatched: unmatchedMods } = useMemo(
-    () => getModifiersGroupedByMaterial(recipe, ALL_QUALITY_MODIFIERS),
+  const matchedGroups = useMemo(
+    () =>
+      recipe.materials
+        .filter((material) => (material.qualityModifiers?.length ?? 0) > 0)
+        .map((material) => ({
+          materialSlot: material.slot,
+          modifiers: material.qualityModifiers ?? [],
+        })),
     [recipe]
   );
 
-  const unmatchedSummaries = useMemo(
-    () => summariseUnmatchedModifiers(unmatchedMods),
-    [unmatchedMods]
-  );
+  const overallModifiers = recipe.overallQualityModifiers ?? [];
+  const overallQualityMaterial = recipe.materials[2];
+  const overallQualitySource =
+    overallQualityMaterial !== undefined
+      ? materialQualities[getMaterialQualityKey(recipe, overallQualityMaterial)]
+      : undefined;
 
-  const hasAnyModifiers = matchedGroups.length > 0 || unmatchedMods.length > 0;
+  // TODO: confirm actual ASPECTS/result quality formula.
+  const hasAnyModifiers = matchedGroups.length > 0 || overallModifiers.length > 0;
 
   const sources = useMemo(
     () => getBlueprintSourcesForRecipe(recipe, ALL_BLUEPRINT_REWARDS),
@@ -166,6 +215,7 @@ function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
           </div>
         ) : (
           <div className="craft-mod-groups">
+           
             {matchedGroups.map(({ materialSlot, modifiers }) => {
               const mat = recipe.materials.find((m) => m.slot === materialSlot)!;
               const key = getMaterialQualityKey(recipe, mat);
@@ -208,73 +258,30 @@ function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
                 </div>
               );
             })}
-            {unmatchedSummaries.length > 0 && (
-              <UnmatchedModifierGroups modifiers={unmatchedSummaries} />
-            )}
+             <OverallModifierGroup modifiers={overallModifiers} quality={overallQualitySource} />
           </div>
         )}
       </div>
 
       {/* Right -- Blueprint source + debug */}
-      <div className="craft-drawer-col">
-        <div className="craft-drawer-col-title">Blueprint Source</div>
-        {sources.length === 0 ? (
-          <div className="craft-drawer-empty">
-            Blueprint source not found in parsed reward data
-          </div>
-        ) : (
-          <div className="craft-drawer-sources">
-            {sources.map((s, i) => (
-              <div key={i} className="craft-drawer-source-item">
-                <div className="craft-drawer-source-name">{s.blueprint_name}</div>
-                <div className="craft-drawer-source-meta">
-                  <span className="craft-badge craft-badge--sm craft-badge--type">
-                    {s.reward_group}
-                  </span>
-                  {s.reward_source && (
-                    <span className="craft-muted craft-drawer-source-detail">
-                      {s.reward_source}
-                    </span>
-                  )}
-                  {s.category && (
-                    <span className="craft-badge craft-badge--sm">{s.category}</span>
-                  )}
-                </div>
-                {s.weight !== undefined && (
-                  <div className="craft-muted craft-drawer-source-detail">
-                    Weight: {s.weight}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+      {/* Right -- Blueprint source */}
+<div className="craft-drawer-col">
+  <div className="craft-drawer-col-title">Blueprint Source</div>
 
-        <button
-          type="button"
-          className="craft-debug-toggle"
-          onClick={() => setDebugOpen((v) => !v)}
-        >
-          <span className="craft-debug-toggle-arrow">{debugOpen ? "v" : ">"}</span>
-          Raw Debug
-        </button>
-        {debugOpen && (
-          <div className="craft-debug-fields">
-            <div className="craft-debug-row">
-              <span className="craft-debug-key">component_name</span>
-              <span className="craft-debug-val">{recipe.component_name}</span>
-            </div>
-            <div className="craft-debug-row">
-              <span className="craft-debug-key">blueprint_id</span>
-              <span className="craft-debug-val craft-cell-mono">{recipe.blueprint_id}</span>
-            </div>
-            <div className="craft-debug-row">
-              <span className="craft-debug-key">output_entityClass</span>
-              <span className="craft-debug-val craft-cell-mono">{recipe.output_entityClass}</span>
-            </div>
-          </div>
-        )}
-      </div>
+  {!recipe.rewardPools || recipe.rewardPools.length === 0 ? (
+    <div className="craft-drawer-empty">
+      Blueprint source not found in parsed reward data
+    </div>
+  ) : (
+    <div className="craft-drawer-sources">
+      {(recipe.rewardPools as { displayName: string }[]).map((pool, i) => (
+        <div key={`${pool.displayName}-${i}`} className="craft-drawer-source-item">
+          <div className="craft-drawer-source-name">{pool.displayName}</div>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
     </div>
   );
 }
@@ -283,6 +290,7 @@ function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
 
 export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
   const [search, setSearch] = useState("");
+  const [kindFilter, setKindFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [sizeFilter, setSizeFilter] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -293,27 +301,41 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
     const q = search.toLowerCase();
     return recipes
       .filter((r) => {
-        const displayName = getComponentDisplayName(r.component_name).toLowerCase();
-        const rawName = r.component_name.toLowerCase();
+        const displayName = (r.item_kind === "vehicle" ? r.component_name : getComponentDisplayName(r.component_name)).toLowerCase();
+        const searchFields = [
+          displayName,
+          r.fallback_name,
+          r.internal_name,
+          r.component_name,
+          r.manufacturer,
+          r.class,
+          r.grade,
+          r.category,
+          r.component_type,
+          r.blueprint_id,
+        ].map((value) => String(value ?? "").toLowerCase());
+        if (kindFilter && r.item_kind !== kindFilter) return false;
         if (typeFilter && r.component_type !== typeFilter) return false;
         if (sizeFilter && r.size !== sizeFilter) return false;
-        if (
-          q &&
-          !rawName.includes(q) &&
-          !displayName.includes(q) &&
-          !r.component_type.includes(q) &&
-          !r.blueprint_id.includes(q)
-        )
-          return false;
+        if (q && !searchFields.some((field) => field.includes(q))) return false;
         return true;
       })
       .sort((a, b) => {
-        const nd = getComponentDisplayName(a.component_name).localeCompare(
-          getComponentDisplayName(b.component_name)
-        );
+        const aName = a.item_kind === "vehicle" ? a.component_name : getComponentDisplayName(a.component_name);
+        const bName = b.item_kind === "vehicle" ? b.component_name : getComponentDisplayName(b.component_name);
+        const nd = aName.localeCompare(bName);
         return nd !== 0 ? nd : (a.size || "").localeCompare(b.size || "");
       });
-  }, [recipes, search, typeFilter, sizeFilter]);
+  }, [recipes, search, kindFilter, typeFilter, sizeFilter]);
+
+  const componentTypes = useMemo(
+    () => Array.from(new Set(recipes.map((recipe) => recipe.component_type).filter(Boolean))).sort(),
+    [recipes]
+  );
+  const sizes = useMemo(
+    () => Array.from(new Set(recipes.map((recipe) => recipe.size).filter(Boolean))).sort((a, b) => Number(a) - Number(b)),
+    [recipes]
+  );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages - 1);
@@ -366,6 +388,19 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
 
         <select
           className="craft-select"
+          value={kindFilter}
+          onChange={(e) => {
+            setKindFilter(e.target.value);
+            resetPage();
+          }}
+        >
+          <option value="">All Gear</option>
+          <option value="vehicle">Vehicle</option>
+          <option value="fps">FPS</option>
+        </select>
+
+        <select
+          className="craft-select"
           value={typeFilter}
           onChange={(e) => {
             setTypeFilter(e.target.value);
@@ -373,7 +408,7 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           }}
         >
           <option value="">All Types</option>
-          {COMPONENT_TYPES.map((t) => (
+          {componentTypes.map((t) => (
             <option key={t} value={t}>
               {t}
             </option>
@@ -389,7 +424,7 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           }}
         >
           <option value="">All Sizes</option>
-          {SIZES.map((s) => (
+          {sizes.map((s) => (
             <option key={s} value={s}>
               Size {s}
             </option>
@@ -412,7 +447,7 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           <tbody>
             {paginated.map((recipe) => {
               const isOpen = expanded === recipe.blueprint_id;
-              const displayName = getComponentDisplayName(recipe.component_name);
+              const displayName = recipe.item_kind === "vehicle" ? recipe.component_name : getComponentDisplayName(recipe.component_name);
               return (
                 <Fragment key={recipe.blueprint_id}>
                   <tr
@@ -422,6 +457,11 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
                   >
                     <td className="craft-cell-name" title={recipe.component_name}>
                       {displayName}
+                      {recipe.item_kind && (
+                        <span className="craft-badge craft-badge--sm craft-badge--type">
+                          {recipe.item_kind}
+                        </span>
+                      )}
                     </td>
                     <td>
                       <span className="craft-badge craft-badge--type">
