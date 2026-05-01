@@ -41,12 +41,14 @@ export default function BuildQueuePanel({ queue, recipes, onSetQuantity, onRemov
         <div className="craft-queue-list">
           {queue.map((item) => {
             const recipe = recipes.find((r) => r.blueprint_id === item.blueprint_id);
-            const displayName = getComponentDisplayName(item.component_name);
+            const displayName = item.item_kind === "vehicle" ? item.component_name : getComponentDisplayName(item.component_name);
+            const materials = recipe?.materials ?? item.materials ?? [];
             return (
               <div key={item.blueprint_id} className="craft-queue-item">
                 <div className="craft-queue-item-info">
                   <span className="craft-queue-item-name" title={item.component_name}>{displayName}</span>
                   <span className="craft-queue-item-meta">
+                    {item.item_kind && <span className="craft-badge craft-badge--type">{item.item_kind}</span>}
                     <span className="craft-badge craft-badge--type">{item.component_type}</span>
                     {item.size && <span className="craft-badge craft-badge--size">S{item.size}</span>}
                     {recipe && (
@@ -55,6 +57,17 @@ export default function BuildQueuePanel({ queue, recipes, onSetQuantity, onRemov
                       </span>
                     )}
                   </span>
+                  {materials.length > 0 && (
+                    <div className="craft-queue-materials">
+                      {materials.map((material) => (
+                        <span key={`${item.blueprint_id}:${material.slot}:${material.cost_id}`} className="craft-queue-material">
+                          <span className="craft-badge craft-badge--sm craft-badge--slot">{material.slot}</span>
+                          <span>{material.material_name}</span>
+                          <span className="craft-cell-mono">x{(material.quantity * item.quantity).toFixed(2)}</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="craft-queue-item-controls">
                   <button

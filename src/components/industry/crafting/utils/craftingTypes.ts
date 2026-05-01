@@ -6,7 +6,10 @@ export interface ComponentMaterial {
   material_name: string;
   cost_id: string;
   quantity: number;
+  qualityModifiers?: QualityModifier[];
 }
+
+export type CraftingItemKind = "vehicle" | "fps";
 
 export interface ComponentRecipe {
   blueprint_id: string;
@@ -16,6 +19,25 @@ export interface ComponentRecipe {
   craft_time_seconds: number;
   output_entityClass: string;
   materials: ComponentMaterial[];
+  item_kind?: CraftingItemKind;
+  internal_name?: string | null;
+  fallback_name?: string | null;
+  wiki_resolved?: boolean;
+  wiki_url?: string | null;
+  category?: string | null;
+  grade?: string | null;
+  class?: string | null;
+  manufacturer?: string | null;
+  source_file?: string | null;
+  raw_name?: string | null;
+  name_source?: string | null;
+  wiki_uuid?: string | null;
+  wiki_class_name?: string | null;
+  wiki_type?: string | null;
+  wiki_version?: string | null;
+  qualityModifiers?: QualityModifier[];
+  overallQualityModifiers?: QualityModifier[];
+  rewardPools?: unknown[];
 }
 
 export interface QualityModifier {
@@ -55,6 +77,8 @@ export interface BuildQueueItem {
   component_type: string;
   size: string;
   quantity: number;
+  item_kind?: CraftingItemKind;
+  materials?: ComponentMaterial[];
 }
 
 export type MaterialInventory = Record<string, number>;

@@ -1,6 +1,6 @@
 ﻿import { useState, useMemo, Fragment } from "react";
-import type { QualityModifier } from "../utils/craftingTypes";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
+import type { QualityModifier } from "../utils/craftingTypes";
 import { formatProperty, modifierValueAt } from "../utils/qualityModifiers";
 import qualityRaw from "../data/quality-modifiers.json";
 

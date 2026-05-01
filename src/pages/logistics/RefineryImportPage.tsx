@@ -69,6 +69,10 @@ function cscuToScu(quantityCscu: number): number {
   return quantityCscu / 100;
 }
 
+function getWorkOrderId(screenshotId: string, workOrderNumber: number): string {
+  return `${screenshotId}:work-order-${workOrderNumber}`;
+}
+
 // ── Dedup helpers (input screen only) ────────────────────────────────────────
 
 function makeDedupeKey(row: InputDraftRow): string {
@@ -86,6 +90,20 @@ function applyDuplicateFlags(rows: InputDraftRow[], newRowsStart: number): Input
     seen.add(key);
     return { ...row, isDuplicate: false };
   });
+}
+
+function applyDuplicateFlagsByGroup(rows: InputDraftRow[], groups: ScreenshotGroup[]): InputDraftRow[] {
+  let offset = 0;
+  const next = [...rows];
+  for (const group of groups) {
+    const groupRows = next.slice(offset, offset + group.rowCount);
+    const flagged = applyDuplicateFlags(groupRows, groupRows.length);
+    flagged.forEach((row, idx) => {
+      next[offset + idx] = row;
+    });
+    offset += group.rowCount;
+  }
+  return next;
 }
 
 // ── Parse state union ─────────────────────────────────────────────────────────
@@ -216,7 +234,7 @@ export default function RefineryImportPage() {
             type: "refinery_input",
             lastRawText: ocrResult.data.rawText,
             screenshotCount: existingCount + 1,
-            rows: applyDuplicateFlags([...existingRows, ...newRows], existingRows.length),
+            rows: applyDuplicateFlagsByGroup([...existingRows, ...newRows], [...existingGroups, { screenshotId: screenshot.id, rowCount: newRows.length }]),
             screenshotGroups: [...existingGroups, { screenshotId: screenshot.id, rowCount: newRows.length }],
           };
         } else {
@@ -255,40 +273,96 @@ export default function RefineryImportPage() {
       if (!s || s.type !== "refinery_input") return s;
       const updated = s.rows.map((r, i) => (i === idx ? { ...r, ...patch } : r));
       const needsDedup = "selectedMaterialId" in patch || "editedQuality" in patch;
-      return { ...s, rows: needsDedup ? applyDuplicateFlags(updated, updated.length) : updated };
+      return { ...s, rows: needsDedup ? applyDuplicateFlagsByGroup(updated, s.screenshotGroups) : updated };
+    });
+  }
+
+  function updateCompleteColumn(woIdx: number, patch: Partial<DraftRow>) {
+    setParseState((s) => {
+      if (!s || s.type !== "refinery_complete") return s;
+      return {
+        ...s,
+        workOrders: s.workOrders.map((wo, wi) =>
+          wi === woIdx ? { ...wo, rows: wo.rows.map((row) => ({ ...row, ...patch })) } : wo,
+        ),
+      };
+    });
+  }
+
+  function clearCompleteColumn(woIdx: number) {
+    setParseState((s) => {
+      if (!s || s.type !== "refinery_complete") return s;
+      return { ...s, workOrders: s.workOrders.map((wo, wi) => wi === woIdx ? { ...wo, rows: [] } : wo) };
+    });
+  }
+
+  function updateInputColumn(startIdx: number, rowCount: number, patch: Partial<InputDraftRow>) {
+    setParseState((s) => {
+      if (!s || s.type !== "refinery_input") return s;
+      return {
+        ...s,
+        rows: s.rows.map((row, idx) => idx >= startIdx && idx < startIdx + rowCount ? { ...row, ...patch } : row),
+      };
+    });
+  }
+
+  function clearInputColumn(groupIdx: number, startIdx: number, rowCount: number) {
+    setParseState((s) => {
+      if (!s || s.type !== "refinery_input") return s;
+      return {
+        ...s,
+        rows: s.rows.filter((_, idx) => idx < startIdx || idx >= startIdx + rowCount),
+        screenshotGroups: s.screenshotGroups.map((group, idx) => idx === groupIdx ? { ...group, rowCount: 0 } : group),
+      };
     });
   }
 
   function handleImport() {
     if (!parseState || parseState.type === "unknown") return;
+    if (!locationId) {
+      setParseError("Choose a location before saving parsed rows.");
+      return;
+    }
     const entries =
       parseState.type === "refinery_complete"
         ? parseState.workOrders.flatMap((wo) =>
             wo.rows
-              .filter((r) => r.include && r.selectedMaterialId)
+              .filter((r) => r.include)
+              .filter((r) => r.selectedMaterialId && r.editedQuality >= 0 && r.editedQuantity > 0)
               .map((r) =>
                 createInventoryEntryDraft({
                   id: crypto.randomUUID(),
                   materialId: r.selectedMaterialId,
                   quantity: cscuToScu(r.editedQuantity),
                   quality: r.editedQuality,
-                  locationId: locationId || undefined,
+                  locationId,
+                  source: "screenshot_parser",
+                  sourceHistory: ["screenshot_parser"],
+                  workOrderId: getWorkOrderId(wo.screenshotId, wo.workOrderNumber),
+                  workOrderIds: [getWorkOrderId(wo.screenshotId, wo.workOrderNumber)],
                 }),
               ),
           )
         : parseState.rows
-            .filter((r) => r.include && r.selectedMaterialId)
+            .filter((r) => r.include)
+            .filter((r) => r.selectedMaterialId && r.editedQuality >= 0 && r.editedQtyCscu > 0)
             .map((r) =>
               createInventoryEntryDraft({
                 id: crypto.randomUUID(),
                 materialId: r.selectedMaterialId,
                 quantity: cscuToScu(r.editedQtyCscu),
                 quality: r.editedQuality,
-                locationId: locationId || undefined,
+                locationId,
+                source: "screenshot_parser",
+                sourceHistory: ["screenshot_parser"],
               }),
             );
-    if (entries.length === 0) return;
+    if (entries.length === 0) {
+      setParseError("Selected rows need material, quality, quantity, and location before saving.");
+      return;
+    }
     addInventoryEntries(entries);
+    setParseError(null);
     setImported(true);
   }
 
@@ -574,21 +648,25 @@ export default function RefineryImportPage() {
                 {woItems.length === 0 ? (
                   <div className="ri-empty-rows">No work orders detected in this screenshot.</div>
                 ) : (
-                  woItems.map(({ wo, idx: woIdx }) => (
-                    <div key={woIdx} className="ri-wo-group">
-                      <div className="ri-wo-hdr">
-                        <span className="ri-wo-label">// WORK ORDER {wo.workOrderNumber}</span>
-                        {wo.totalYieldCscu != null && (
-                          <span className="ri-wo-yield">{wo.totalYieldCscu} <small className="logi-refimport-unit">cSCU</small></span>
-                        )}
-                      </div>
-                      <CompleteOrderTable
-                        rows={wo.rows}
-                        materials={materials}
-                        onUpdate={(rowIdx, patch) => updateCompleteRow(woIdx, rowIdx, patch)}
-                      />
-                    </div>
-                  ))
+                  <div className="ri-wo-columns">
+                    {woItems.map(({ wo, idx: woIdx }) => (
+                      <WorkOrderColumn
+                        key={woIdx}
+                        label={`// WORK ORDER ${wo.workOrderNumber}`}
+                        selectedCount={wo.rows.filter((row) => row.include && row.selectedMaterialId).length}
+                        totalYieldCscu={wo.totalYieldCscu}
+                        onSelectAll={() => updateCompleteColumn(woIdx, { include: true })}
+                        onDeselectAll={() => updateCompleteColumn(woIdx, { include: false })}
+                        onClear={() => clearCompleteColumn(woIdx)}
+                      >
+                        <CompleteOrderTable
+                          rows={wo.rows}
+                          materials={materials}
+                          onUpdate={(rowIdx, patch) => updateCompleteRow(woIdx, rowIdx, patch)}
+                        />
+                      </WorkOrderColumn>
+                    ))}
+                  </div>
                 )}
               </ScreenshotCard>
             );
@@ -597,7 +675,7 @@ export default function RefineryImportPage() {
           {/* Materials selected cards */}
           {parseState.type === "refinery_input" && (() => {
             let rowOffset = 0;
-            return parseState.screenshotGroups.map(({ screenshotId, rowCount }) => {
+            return parseState.screenshotGroups.map(({ screenshotId, rowCount }, groupIdx) => {
               const screenshot = screenshots.find((s) => s.id === screenshotId);
               const startIdx = rowOffset;
               rowOffset += rowCount;
@@ -614,19 +692,26 @@ export default function RefineryImportPage() {
                   disabled={parsing}
                 >
                   <div className="ri-wo-group">
-                    <div className="ri-wo-hdr">
-                      <span className="ri-wo-label">// MATERIALS SELECTED</span>
+                    <div className="ri-wo-columns">
+                      <WorkOrderColumn
+                        label="// MATERIALS SELECTED"
+                        selectedCount={groupRows.filter((row) => row.include && row.selectedMaterialId).length}
+                        onSelectAll={() => updateInputColumn(startIdx, rowCount, { include: true })}
+                        onDeselectAll={() => updateInputColumn(startIdx, rowCount, { include: false })}
+                        onClear={() => clearInputColumn(groupIdx, startIdx, rowCount)}
+                      >
+                        {rowCount === 0 ? (
+                          <div className="ri-empty-rows">No rows detected.</div>
+                        ) : (
+                          <InputTable
+                            rows={groupRows}
+                            materials={materials}
+                            startIdx={startIdx}
+                            onUpdate={updateInputRow}
+                          />
+                        )}
+                      </WorkOrderColumn>
                     </div>
-                    {rowCount === 0 ? (
-                      <div className="ri-empty-rows">No rows detected.</div>
-                    ) : (
-                      <InputTable
-                        rows={groupRows}
-                        materials={materials}
-                        startIdx={startIdx}
-                        onUpdate={updateInputRow}
-                      />
-                    )}
                   </div>
                 </ScreenshotCard>
               );
@@ -709,6 +794,7 @@ export default function RefineryImportPage() {
           locations={locations}
           imported={imported}
           onImport={handleImport}
+          onCancel={handleClear}
         />
       )}
     </div>
@@ -772,6 +858,46 @@ function ScreenshotCard({ screenshot, detectedType, hasRows, onRemove, onEnlarge
 }
 
 // ── CompleteOrderTable ────────────────────────────────────────────────────────
+
+interface WorkOrderColumnProps {
+  label: string;
+  selectedCount: number;
+  totalYieldCscu?: number | null;
+  onSelectAll: () => void;
+  onDeselectAll: () => void;
+  onClear: () => void;
+  children: React.ReactNode;
+}
+
+function WorkOrderColumn({
+  label,
+  selectedCount,
+  totalYieldCscu,
+  onSelectAll,
+  onDeselectAll,
+  onClear,
+  children,
+}: WorkOrderColumnProps) {
+  return (
+    <section className="ri-wo-column" aria-label={label.replace("// ", "")}>
+      <div className="ri-wo-column-head">
+        <div>
+          <div className="ri-wo-label">{label}</div>
+          <div className="ri-wo-count">{selectedCount} selected</div>
+        </div>
+        {totalYieldCscu != null && (
+          <span className="ri-wo-yield">{totalYieldCscu} <small className="logi-refimport-unit">cSCU</small></span>
+        )}
+      </div>
+      <div className="ri-wo-actions" aria-label={`${label} actions`}>
+        <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onSelectAll}>Select all</button>
+        <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onDeselectAll}>Deselect all</button>
+        <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onClear}>Clear column</button>
+      </div>
+      {children}
+    </section>
+  );
+}
 
 interface CompleteOrderTableProps {
   rows: DraftRow[];
@@ -982,6 +1108,7 @@ interface ImportBarProps {
   locations: { id: string; name: string }[];
   imported: boolean;
   onImport: () => void;
+  onCancel: () => void;
 }
 
 function ImportBar({
@@ -995,6 +1122,7 @@ function ImportBar({
   locations,
   imported,
   onImport,
+  onCancel,
 }: ImportBarProps) {
   return (
     <div className="ri-import-bar">
@@ -1058,9 +1186,10 @@ function ImportBar({
             onClick={onImport}
             disabled={includedCount === 0}
           >
-            Import {includedCount > 0 ? `${includedCount} ` : ""}{includedCount === 1 ? "Entry" : "Entries"}
+            Save selected rows to inventory
           </button>
         )}
+        <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
       </div>
     </div>
   );

@@ -1173,6 +1173,25 @@
 
 /* ── Responsive ───────────────────────────────── */
 
+.craft-queue-materials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
+}
+
+.craft-queue-material {
+  display: inline-flex;
+  min-height: 1.75rem;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(160, 180, 220, 0.14);
+  border-radius: 4px;
+  padding: 0.2rem 0.45rem;
+  color: rgba(220, 230, 255, 0.82);
+  font-size: 0.72rem;
+}
+
 @media (max-width: 900px) {
   .craft-queue-layout {
     grid-template-columns: 1fr;
