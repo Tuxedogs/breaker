@@ -1,49 +1,70 @@
-# Breaker — Cursor Rules
+Rules: Read files first. Write complete solution. Test once. No over-engineering.
 
-## What this project is
-Breaker is a Star Citizen combat analysis tool built for an org. It calculates effective alpha damage through shields using an E-rating system. E100 = weapon damages fresh armor. E0 = weapon never damages armor regardless of conditions. The tool is both a portfolio piece and a genuine utility used by real players.
+# scintel / breaker — Claude Context (Optimized)
+
+## Project Overview
+**Scintel** (repo: breaker) is a **Star Citizen org dashboard** and companion tool suite. It includes:
+- **Dashboard** hub
+- Doctrine / knowledge base (library + modular articles)
+- **Logistics**: Inventory, locations, build queue, refinery import
+- **Industry**: Crafting system
+- **Combat tools**: Alpha Threshold (armor/shield analysis), Component Mapping
+- **Ships**: Maps and visualization
+
+It evolved from a focused alpha-threshold analyzer into a full-featured org operations + combat analysis platform.
 
 ## Stack
-- React 19, Vite 7, TypeScript strict mode
-- Tailwind CSS + custom CSS (do not remove custom CSS in favor of pure Tailwind)
-- Framer Motion for animation
-- React Three Fiber + Three.js for the ship viewport
-- React Router 7
-- Vitest (being introduced — no tests exist yet)
+- React 19 + Vite 7 + TypeScript (strict mode)
+- Tailwind CSS + custom CSS (preserve custom CSS)
+- Framer Motion, Zustand, React Router 7
+- React Three Fiber + Three.js (ship viewport where used)
+- MDX for doctrine/content pages
+- Lazy-loaded routes for tools (performance)
 
-## Architecture
-- Pure calculation logic lives in `src/tools/alpha-threshold/lib/calculations.ts` — no UI, no side effects, just functions
-- Ship data flows: ManualShipSeed → normalizeManualShipRecord() → ShipRecord[]
-- Weapon and ship adapters live in `lib/ships/adapters/` and `lib/weapons/`
-- Data is pulled from erkul.games, normalized, and stored in typed records
-- The matrix component is `ThresholdComparisonMatrix` — it is large by design and should be split carefully, not rewritten
+## Architecture Highlights
+- **DashboardShell** wraps most routes (sidebar + topbar persistent)
+- Lazy loading for heavy sections (`Suspense` + `RouteFallback`)
+- Pure calculation logic preferred (especially in combat tools)
+- Content in `content/` (MDX) + doctrine modules
+- Data pipelines/scripts in `/scripts` (imports for ships, refinery, etc.)
+- Stores in `src/stores/`
+- Main entry: `src/App.tsx` (heavy use of redirects for legacy paths)
 
-## Naming conventions
-- Matrix component classes use `acm-` prefix (e.g. `acm-toolbar`, `acm-weapon-header`)
-- Top control strip classes use `alpha-top-control-strip-` prefix
-- Do not introduce new long-form BEM prefixes
-- CSS class names should be short and scoped to their component
+## Key Sections & Files
+- **Core Dashboard**: `src/pages/DashboardPage.tsx`, `src/components/dashboard/`
+- **Doctrine**: `DoctrineLibraryPage`, `DoctrineModulePage`, MDX content
+- **Logistics**: `pages/logistics/*` (Inventory, Locations, BuildQueue, RefineryImport)
+- **Alpha Threshold**: `src/tools/alpha-threshold/` (still critical)
+  - Pure calcs: `lib/calculations.ts`
+  - Matrix: `ThresholdComparisonMatrix` (large — edit carefully)
+- **Industry Crafting**: `pages/industry/CraftingPage`
+- **Ship Maps**: `pages/ships/maps/ShipMapsPage`
+- **Component Mapping**: `tools/gunnery/ComponentMappingPage`
 
-## How to work on this project
-- Make surgical changes — do not rewrite working components
-- Explain why before what
-- Do not add new dependencies without flagging it first
-- Do not convert custom CSS to Tailwind utilities without asking
-- TypeScript strict mode is on — do not use `any` or type assertions without justification
-- Prefer pure functions for calculations — keep logic out of components
+## Important Rules
+- **Surgical, small diffs** — avoid big rewrites.
+- Strict TS, no `any` without justification.
+- Keep custom CSS; do not blindly convert to Tailwind.
+- No new deps without discussion.
+- Mobile-first responsive (no horizontal scroll, good touch targets).
+- Performance: lazy load tools, optimize 3D where present.
+- Naming: `acm-*` for matrix, scoped short classes.
 
-## Known issues (work in progress)
-- Performance hurdles on the ship viewer
-- Possible logic boundaries and loops with selectors in matrix
+## Three.js / Viewport (where applicable)
+- Per-deck ship meshes.
+- Holo material: `MeshBasicMaterial`, transparent, low opacity, `depthWrite: false`.
+- Avoid material changes that hurt perf.
 
-## Three.js viewport notes
-- Ship meshes are loaded per-deck, not as full ship
-- Holo deck overlay uses MeshBasicMaterial with transparent: true, opacity: 0.15, depthWrite: false
-- Do not switch holo material back to MeshStandardMaterial — performance regression
-- Overdraw at shallow camera angles is a known issue, camera angle locking is intentionally avoided to preserve user freedom
+## Working Style
+- Explain **why** before **what**.
+- Direct, concise feedback. Flag issues clearly.
+- After edits: lint, typecheck (`npm run build`), manual test (mobile + nav).
+- Stay in scope of the current task.
 
-## Tone
-- Direct feedback preferred, no hand-holding
-- Flag problems clearly, don't soften them
-- Short explanations over long ones
-- Don't suggest things that are out of scope for the current task
+## Data & Scripts
+- Ship data imports, manual seeds, observed breakpoints (PTU-aware).
+- Refinery/import scripts for logistics.
+- Content validation: `npm run content:check`
+
+Use this file as primary context. Dive into specific folders/files only when the task requires deep implementation details.
+

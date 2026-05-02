@@ -49,8 +49,8 @@ export default function BuildQueuePanel({ queue, recipes, onSetQuantity, onRemov
                   <span className="craft-queue-item-name" title={item.component_name}>{displayName}</span>
                   <span className="craft-queue-item-meta">
                     {item.item_kind && <span className="craft-badge craft-badge--type">{item.item_kind}</span>}
-                    <span className="craft-badge craft-badge--type">{item.component_type}</span>
-                    {item.size && <span className="craft-badge craft-badge--size">S{item.size}</span>}
+                    <span className="craft-badge craft-badge--neutral">{item.component_type}</span>
+                    {item.size && <span className="craft-badge craft-badge--neutral">S{item.size}</span>}
                     {recipe && (
                       <span className="craft-muted craft-cell-mono">
                         {formatCraftTime(recipe.craft_time_seconds * item.quantity)}
