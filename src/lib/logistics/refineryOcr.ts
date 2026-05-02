@@ -3,7 +3,10 @@ import type { MaterialTemplate } from "../../types/logistics";
 
 // ── Shared types ────────────────────────────────────────────────────────────
 
-export type RefineryScreenType = "refinery_complete" | "refinery_input" | "unknown";
+export type RefineryScreenType =
+  | "refinery_complete"
+  | "refinery_input"
+  | "unknown";
 
 export interface ParsedRefineryRow {
   rawName: string;
@@ -11,6 +14,17 @@ export interface ParsedRefineryRow {
   quality: number;
   quantity: number;
   needsReview: boolean;
+}
+
+// Internal-only parse row. The UI/API still receives ParsedRefineryRow.
+type ParsedRefineryRowWithY = ParsedRefineryRow & { y?: number };
+
+function stripMaterialNoise(input: string): string {
+  return input
+    .replace(/^\/\/\s*/, "")
+    .replace(/^[^A-Za-z]+/, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export interface ParsedWorkOrder {
@@ -215,7 +229,8 @@ function levenshtein(a: string, b: string): number {
 
     for (let j = 1; j <= n; j++) {
       const oldDp = dp[j];
-      dp[j] = a[i - 1] === b[j - 1] ? prev : 1 + Math.min(prev, dp[j], dp[j - 1]);
+      dp[j] =
+        a[i - 1] === b[j - 1] ? prev : 1 + Math.min(prev, dp[j], dp[j - 1]);
       prev = oldDp;
     }
   }
@@ -228,12 +243,21 @@ function levenshtein(a: string, b: string): number {
 export function detectScreenType(text: string): RefineryScreenType {
   if (/MATERIALS\s+YIELDED/i.test(text)) return "refinery_complete";
   if (/MATERIALS\s+SELECTED/i.test(text)) return "refinery_input";
-  if (/\bCOMPLETED\b/i.test(text) && /\bYIELD\b/i.test(text)) return "refinery_complete";
-  if (/\bSELECTED\b/i.test(text) && /\bQTY\b/i.test(text) && /\bREFINE\b/i.test(text)) return "refinery_input";
+  if (/\bCOMPLETED\b/i.test(text) && /\bYIELD\b/i.test(text))
+    return "refinery_complete";
+  if (
+    /\bSELECTED\b/i.test(text) &&
+    /\bQTY\b/i.test(text) &&
+    /\bREFINE\b/i.test(text)
+  )
+    return "refinery_input";
   return "unknown";
 }
 
-export function normalizeMaterialName(rawName: string, templates: MaterialTemplate[]): string | null {
+export function normalizeMaterialName(
+  rawName: string,
+  templates: MaterialTemplate[],
+): string | null {
   const key = cleanText(rawName);
 
   const aliasId = MATERIAL_ALIASES[key];
@@ -391,7 +415,7 @@ export function preprocessImageRegion(
 
 // ── OCR helpers ──────────────────────────────────────────────────────────────
 
-interface PanelRegion {
+export interface PanelRegion {
   sx: number;
   sy: number;
   sw: number;
@@ -427,28 +451,35 @@ function getOcrWords(blocks: OcrBlock[] | null | undefined): OcrWord[] {
   return getOcrLines(blocks).flatMap((line) => line.words ?? []);
 }
 
-function buildPanelRegions(centers: number[], W: number, H: number): PanelRegion[] {
+function inferPanelCountFromWidth(W: number): number {
+  if (W >= 2200) return 4;
+  if (W >= 1500) return 3;
+  if (W >= 950) return 2;
+  return 1;
+}
+
+function buildPanelRegions(
+  _centers: number[],
+  W: number,
+  H: number,
+): PanelRegion[] {
   const sy = Math.floor(H * 0.02);
-  const sh = Math.floor(H * 0.92);
+  const sh = H - sy;
 
-  if (centers.length === 0) {
-    return [{ sx: Math.floor(W * 0.15), sy, sw: Math.floor(W * 0.35), sh }];
-  }
+  // OCR can hallucinate/miss the COMPLETED headers, so use screenshot geometry.
+  // Panels are laid out evenly left-to-right for complete work-order screens.
+  const count = inferPanelCountFromWidth(W);
 
-  if (centers.length === 1) {
-    const cx = centers[0];
+  return Array.from({ length: count }, (_, i) => {
+    const sx = Math.round((W / count) * i);
+    const nextX = i === count - 1 ? W : Math.round((W / count) * (i + 1));
 
-    if (cx < W * 0.4) {
-      return [{ sx: Math.floor(W * 0.15), sy, sw: Math.floor(W * 0.35), sh }];
-    }
-
-    return [{ sx: 0, sy, sw: W, sh }];
-  }
-
-  return centers.map((_, i) => {
-    const sx = Math.round((W / centers.length) * i);
-    const nextX = i === centers.length - 1 ? W : Math.round((W / centers.length) * (i + 1));
-    return { sx, sy, sw: nextX - sx, sh };
+    return {
+      sx,
+      sy,
+      sw: nextX - sx,
+      sh,
+    };
   });
 }
 
@@ -459,15 +490,65 @@ function extractWorkOrderNumber(text: string): number | null {
   return m ? parseInt(m[1], 10) : null;
 }
 
-function deduplicateCompleteRows(rows: ParsedRefineryRow[]): ParsedRefineryRow[] {
+function getCompleteRowKey(row: ParsedRefineryRow): string {
+  return `${row.materialId ?? cleanText(row.rawName)}|${row.quality}|${row.quantity}`;
+}
+
+function sortAndDeduplicateCompleteRows(
+  rows: ParsedRefineryRowWithY[],
+): ParsedRefineryRow[] {
   const seen = new Set<string>();
 
-  return rows.filter((row) => {
-    const key = `${cleanText(row.rawName)}|${row.quality}|${row.quantity}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  return rows
+    .filter((row) => {
+      const key = getCompleteRowKey(row);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => {
+      const ay = typeof a.y === "number" ? a.y : Number.POSITIVE_INFINITY;
+      const by = typeof b.y === "number" ? b.y : Number.POSITIVE_INFINITY;
+      if (ay !== by) return ay - by;
+      return a.quality - b.quality;
+    })
+    .map(({ y: _y, ...row }) => row);
+}
+
+function inferRowYFromNumbers(
+  row: ParsedRefineryRow,
+  ocrLines: OcrLine[],
+): number | undefined {
+  const nums = ocrLines
+    .map((line) => ({
+      line,
+      value: parseOcrInteger(line.text ?? ""),
+      y: (line.bbox.y0 + line.bbox.y1) / 2,
+    }))
+    .filter((n): n is { line: OcrLine; value: number; y: number } => n.value !== null);
+
+  const qualityCells = nums.filter((n) => n.value === row.quality);
+  const quantityCells = nums.filter((n) => n.value === row.quantity);
+
+  let best: { y: number; distance: number } | null = null;
+
+  for (const q of qualityCells) {
+    for (const qty of quantityCells) {
+      const dy = Math.abs(q.y - qty.y);
+
+      if (qty.line.bbox.x0 <= q.line.bbox.x0) continue;
+      if (dy > 70) continue;
+
+      const distance = dy + Math.abs(q.line.bbox.x0 - qty.line.bbox.x0) * 0.01;
+      const y = (q.y + qty.y) / 2;
+
+      if (!best || distance < best.distance) {
+        best = { y, distance };
+      }
+    }
+  }
+
+  return best?.y;
 }
 
 // ── Main export ──────────────────────────────────────────────────────────────
@@ -476,6 +557,7 @@ export async function parseRefineryScreenshot(
   imageFile: File,
   templates: MaterialTemplate[],
   onProgress?: (pct: number) => void,
+  manualPanelRegions?: PanelRegion[],
 ): Promise<RefineryParseResult> {
   const dims = await getImageDimensions(imageFile);
 
@@ -491,7 +573,9 @@ export async function parseRefineryScreenshot(
     await worker.setParameters({ tessedit_pageseg_mode: PSM.SPARSE_TEXT });
 
     const detBlob = await scaleImageForDetection(imageFile);
-    const { data: detData } = await worker.recognize(detBlob, undefined, { blocks: true });
+    const { data: detData } = await worker.recognize(detBlob, undefined, {
+      blocks: true,
+    });
     const detText = detData.text;
 
     if (/MATERIALS\s+SELECTED/i.test(detText)) {
@@ -509,19 +593,23 @@ export async function parseRefineryScreenshot(
       };
     }
 
-    const detScale = Math.min(1, 600 / dims.w);
-    const words = getOcrWords(detData.blocks);
+    let panelRegions = manualPanelRegions?.filter((region) => region.sw > 0 && region.sh > 0) ?? [];
 
-    const rawCenters = words
-      .filter((w) => /^completed$/i.test(w.text.trim()))
-      .map((w) => Math.round((w.bbox.x0 + w.bbox.x1) / 2 / detScale))
-      .sort((a, b) => a - b);
+    if (panelRegions.length === 0) {
+      const detScale = Math.min(1, 600 / dims.w);
+      const words = getOcrWords(detData.blocks);
 
-    const centers = rawCenters.filter(
-      (c, i, arr) => i === 0 || c - arr[i - 1] > dims.w * 0.1,
-    );
+      const rawCenters = words
+        .filter((w) => /^completed$/i.test(w.text.trim()))
+        .map((w) => Math.round((w.bbox.x0 + w.bbox.x1) / 2 / detScale))
+        .sort((a, b) => a - b);
 
-    const panelRegions = buildPanelRegions(centers, dims.w, dims.h);
+      const centers = rawCenters.filter(
+        (c, i, arr) => i === 0 || c - arr[i - 1] > dims.w * 0.1,
+      );
+
+      panelRegions = buildPanelRegions(centers, dims.w, dims.h);
+    }
 
     const workOrders: ParsedWorkOrder[] = [];
     let lastRawText = detText;
@@ -534,37 +622,52 @@ export async function parseRefineryScreenshot(
       }
 
       const panelBlob = await preprocessImageRegion(imageFile, sx, sy, sw, sh);
-      const { data: pd } = await worker.recognize(panelBlob, undefined, { blocks: true });
+      const { data: pd } = await worker.recognize(panelBlob, undefined, {
+        blocks: true,
+      });
 
       await worker.setParameters({ tessedit_char_whitelist: "0123456789" });
-      const { data: digitData } = await worker.recognize(panelBlob, undefined, { blocks: true });
+      const { data: digitData } = await worker.recognize(panelBlob, undefined, {
+        blocks: true,
+      });
       await worker.setParameters({ tessedit_char_whitelist: "" });
 
       lastRawText = pd.text;
 
       const screenType = detectScreenType(pd.text);
       const lowConf = (pd.confidence as number) < 70;
-      const lines = pd.text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const lines = pd.text
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
 
-      let rows = extractCompleteRowsFromOcrLines(
-        [...getOcrLines(pd.blocks), ...getOcrLines(digitData.blocks)],
+      const allPanelLines = [
+        ...getOcrLines(pd.blocks),
+        ...getOcrLines(digitData.blocks),
+      ];
+
+      const ocrRows = extractCompleteRowsFromOcrLines(
+        allPanelLines,
         templates,
         lowConf,
       );
 
-      if (rows.length === 0) {
-        rows = extractCompleteRows(lines, templates, screenType === "refinery_complete", lowConf);
-      }
+      const sequentialRows = extractCompleteRowsSequential(
+        lines,
+        templates,
+        lowConf,
+      ).map((row) => ({ ...row, y: inferRowYFromNumbers(row, allPanelLines) }));
 
-      if (rows.length === 0) {
-        rows = extractCompleteRows(lines, templates, false, true);
-      }
+      let rows =
+        sequentialRows.length >= ocrRows.length
+          ? sequentialRows
+          : ocrRows;
 
-      rows = deduplicateCompleteRows(rows);
+      rows = sortAndDeduplicateCompleteRows(rows);
 
       if (rows.length > 0 || screenType !== "unknown") {
         workOrders.push({
-          workOrderNumber: extractWorkOrderNumber(pd.text) ?? i + 1,
+          workOrderNumber: i + 1,
           rows,
           totalYieldCscu: extractTotalYield(lines),
         });
@@ -577,9 +680,20 @@ export async function parseRefineryScreenshot(
       return { screenType: "refinery_complete", workOrders };
     }
 
-    const fullBlob = await preprocessImageRegion(imageFile, 0, 0, dims.w, dims.h);
-    const { data: fullData } = await worker.recognize(fullBlob, undefined, { blocks: true });
-    const fullLines = fullData.text.split("\n").map((l) => l.trim()).filter(Boolean);
+    const fullBlob = await preprocessImageRegion(
+      imageFile,
+      0,
+      0,
+      dims.w,
+      dims.h,
+    );
+    const { data: fullData } = await worker.recognize(fullBlob, undefined, {
+      blocks: true,
+    });
+    const fullLines = fullData.text
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
     const fullScreenType = detectScreenType(fullData.text);
 
     if (fullScreenType === "refinery_input") {
@@ -587,9 +701,17 @@ export async function parseRefineryScreenshot(
       if (data.rows.length > 0) return { screenType: "refinery_input", data };
     }
 
-    const fallbackRows = deduplicateCompleteRows([
-      ...extractCompleteRowsFromOcrLines(getOcrLines(fullData.blocks), templates, true),
-      ...extractCompleteRows(fullLines, templates, false, true),
+    const fullOcrLines = getOcrLines(fullData.blocks);
+    const fallbackRows = sortAndDeduplicateCompleteRows([
+      ...extractCompleteRowsFromOcrLines(fullOcrLines, templates, true),
+      ...extractCompleteRows(fullLines, templates, false, true).map((row) => ({
+        ...row,
+        y: inferRowYFromNumbers(row, fullOcrLines),
+      })),
+      ...extractCompleteRowsSequential(fullLines, templates, true).map((row) => ({
+        ...row,
+        y: inferRowYFromNumbers(row, fullOcrLines),
+      })),
     ]);
 
     if (fallbackRows.length > 0) {
@@ -619,7 +741,8 @@ export async function parseRefineryScreenshot(
 // ── Completed order row extractor ────────────────────────────────────────────
 
 const ROW_PATTERN_STRICT = /^([A-Z][A-Z\s-]{1,29}?)\s+(\d{1,4})\s+(\d{1,7})$/;
-const ROW_PATTERN_LOOSE = /^([A-Z]{3,}(?:\s+[A-Z]+)?)\s+(\d{2,4})\s+(\d{1,7})(?:\s|$)/;
+const ROW_PATTERN_LOOSE =
+  /^([A-Z]{3,}(?:\s+[A-Z]+)?)\s+(\d{2,4})\s+(\d{1,7})(?:\s|$)/;
 
 const COMPLETE_STOP = [
   /^YIELD\s+\d/i,
@@ -664,7 +787,7 @@ function extractCompleteRows(
 
     if (!m) continue;
 
-    const rawName = m[1].trim();
+    const rawName = stripMaterialNoise(m[1]);
     const cleanedName = cleanText(rawName);
 
     if (JUNK_NAMES.has(cleanedName.toUpperCase())) continue;
@@ -685,6 +808,62 @@ function extractCompleteRows(
       quantity,
       needsReview: looseMatch || lowConfidence || materialId === null,
     });
+  }
+
+  return rows;
+}
+
+function extractCompleteRowsSequential(
+  lines: string[],
+  templates: MaterialTemplate[],
+  lowConfidence: boolean,
+): ParsedRefineryRow[] {
+  const rows: ParsedRefineryRow[] = [];
+
+  for (let i = 0; i < lines.length - 2; i++) {
+    const line = lines[i];
+    const cleanedLine = cleanText(line.replace(/^\/\/\s*/, ""));
+
+    // Header/footer handling:
+    // The table header contains "YIELD" before any material rows, so do not break
+    // until at least one real row has already been recovered.
+    if (/^YIELD\b/i.test(line) || /RESULTS/i.test(line)) {
+      if (rows.length > 0) break;
+      continue;
+    }
+
+    if (SKIP_LINES.has(cleanedLine)) continue;
+    if (JUNK_NAMES.has(cleanedLine.toUpperCase())) continue;
+
+    const rawName = stripMaterialNoise(line);
+
+    const materialId = normalizeMaterialName(rawName, templates);
+
+    // Reject weak/noisy material candidates before pairing nearby numbers.
+    if (!materialId) continue;
+    if (rawName.length < 4) continue;
+    if (/^\d+$/.test(rawName)) continue;
+
+    const quality = parseOcrInteger(lines[i + 1]);
+    const quantity = parseOcrInteger(lines[i + 2]);
+
+    if (quality === null || quantity === null) continue;
+    if (quality < 0 || quality > 1000) continue;
+    if (quantity <= 0) continue;
+
+    // Prevent footer/UI noise like "7" and "2" from becoming fake material rows.
+    if (quality < 10 && quantity < 10) continue;
+    if (quality > 2000 || quantity > 2000) continue;
+
+    rows.push({
+      rawName,
+      materialId,
+      quality,
+      quantity,
+      needsReview: lowConfidence,
+    });
+
+    i += 2;
   }
 
   return rows;
@@ -719,12 +898,13 @@ function extractCompleteRowsFromOcrLines(
   ocrLines: OcrLine[],
   templates: MaterialTemplate[],
   lowConfidence: boolean,
-): ParsedRefineryRow[] {
+): ParsedRefineryRowWithY[] {
   const materialLines = ocrLines
     .map((line) => {
       const raw = line.text ?? "";
-      const text = cleanText(raw);
-      return { line, raw, text };
+      const materialText = stripMaterialNoise(raw);
+      const text = cleanText(materialText);
+      return { line, raw, materialText, text };
     })
     .filter(({ text }) => {
       if (text.length < 3) return false;
@@ -747,10 +927,10 @@ function extractCompleteRowsFromOcrLines(
         entry.value !== null,
     );
 
-  const rows: ParsedRefineryRow[] = [];
+  const rows: ParsedRefineryRowWithY[] = [];
   const usedYs = new Set<number>();
 
-  for (const { line, raw, text } of materialLines) {
+  for (const { line, raw, materialText, text } of materialLines) {
     const materialId = normalizeMaterialName(text, templates);
     if (!materialId) continue;
 
@@ -762,27 +942,51 @@ function extractCompleteRowsFromOcrLines(
         const numberMidY = (numberLine.bbox.y0 + numberLine.bbox.y1) / 2;
 
         return (
-          Math.abs(numberMidY - rowMidY) <= rowHeight * 0.85 &&
+          Math.abs(numberMidY - rowMidY) <= Math.max(rowHeight * 2.4, 56) &&
           numberLine.bbox.x0 > line.bbox.x1
         );
       })
       .sort((a, b) => a.line.bbox.x0 - b.line.bbox.x0)
-      .reduce<Array<{ line: OcrLine; value: number; digitCount: number }>>((cells, entry) => {
-        const previous = cells[cells.length - 1];
+      .reduce<Array<{ line: OcrLine; value: number; digitCount: number }>>(
+        (cells, entry) => {
+          const previous = cells[cells.length - 1];
 
-        if (!previous || Math.abs(entry.line.bbox.x0 - previous.line.bbox.x0) > 12) {
-          cells.push(entry);
-        } else if (
-          entry.digitCount > previous.digitCount ||
-          (entry.digitCount === previous.digitCount && entry.value > previous.value)
-        ) {
-          cells[cells.length - 1] = entry;
+          if (
+            !previous ||
+            Math.abs(entry.line.bbox.x0 - previous.line.bbox.x0) > 12
+          ) {
+            cells.push(entry);
+          } else if (
+            entry.digitCount > previous.digitCount ||
+            (entry.digitCount === previous.digitCount &&
+              entry.value > previous.value)
+          ) {
+            cells[cells.length - 1] = entry;
+          }
+
+          return cells;
+        },
+        [],
+      );
+
+    if (rowNumbers.length < 2) {
+      if (rowNumbers.length === 1) {
+        const quality = rowNumbers[0].value;
+
+        if (quality >= 0 && quality <= 1000) {
+          rows.push({
+            rawName: materialText || raw.trim() || text,
+            materialId,
+            quality,
+            quantity: 0,
+            needsReview: true,
+            y: rowMidY,
+          });
         }
+      }
 
-        return cells;
-      }, []);
-
-    if (rowNumbers.length < 2) continue;
+      continue;
+    }
 
     const quality = rowNumbers[0].value;
     const quantity = rowNumbers[1].value;
@@ -795,15 +999,16 @@ function extractCompleteRowsFromOcrLines(
     usedYs.add(yKey);
 
     rows.push({
-      rawName: raw.trim() || text,
+      rawName: materialText || raw.trim() || text,
       materialId,
       quality,
       quantity,
       needsReview: lowConfidence,
+      y: rowMidY,
     });
   }
 
-  return rows;
+  return rows.sort((a, b) => (a.y ?? 0) - (b.y ?? 0));
 }
 
 function extractTotalYield(lines: string[]): number | null {
@@ -826,14 +1031,23 @@ const INPUT_STOP = [
   /^REFINERY\s+CAPACITY/i,
 ];
 
-function extractInputData(text: string, templates: MaterialTemplate[]): ParsedInputResult {
-  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+function extractInputData(
+  text: string,
+  templates: MaterialTemplate[],
+): ParsedInputResult {
+  const lines = text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
   const matIdx = lines.findIndex((l) => /MATERIALS\s+SELECTED/i.test(l));
 
   const rows: ParsedInputRow[] = [];
   let i = matIdx === -1 ? 0 : matIdx + 1;
 
-  while (i < lines.length && /^(QUALITY|QTY|YIELD|REFINE|MATERIAL|\/\/)$/i.test(lines[i])) {
+  while (
+    i < lines.length &&
+    /^(QUALITY|QTY|YIELD|REFINE|MATERIAL|\/\/)$/i.test(lines[i])
+  ) {
     i++;
   }
 
