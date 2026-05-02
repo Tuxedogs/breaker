@@ -494,25 +494,6 @@
 }
 
 .logi-form-input,
-.logi-form-select {
-  padding: 0.42rem 0.65rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 5px;
-  font-family: "Rajdhani", sans-serif;
-  font-size: 0.87rem;
-  font-weight: 500;
-  color: rgba(199, 210, 230, 0.85);
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-  transition: border-color 0.12s;
-}
-
-.logi-form-input:focus,
-.logi-form-select:focus {
-  border-color: rgba(167, 139, 250, 0.35);
-}
 
 .logi-form-input::placeholder { color: rgba(160, 180, 220, 0.28); }
 
@@ -533,10 +514,12 @@
   padding: 0.1rem 0.38rem;
   border-radius: 3px;
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.57rem;
+  font-size: 0.67rem;
+  font-weight: 200;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
+  max-width: max-content;
 }
 
 .logi-badge--queued     { background: rgba(160,180,220,0.07); color: rgba(160,180,220,0.52); border: 1px solid rgba(160,180,220,0.11); }
@@ -890,9 +873,10 @@
 .logi-source-card-head {
   margin-bottom: 0.35rem;
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   color: rgba(160, 180, 220, 0.52);
   text-transform: uppercase;
+  font-weight: 200;
 }
 
 .logi-source-card-head strong {

@@ -1,6 +1,5 @@
 import { useState, useMemo, Fragment } from "react";
 import type { ComponentRecipe, BlueprintReward } from "../utils/craftingTypes";
-import { formatCraftTime } from "../utils/craftingCalculations";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
@@ -286,6 +285,20 @@ function RecipeDrawer({ recipe }: { recipe: ComponentRecipe }) {
   );
 }
 
+// -- Component type accent color -------------------------------------------
+
+function getComponentTypeColor(componentType: string | undefined | null): string | undefined {
+  if (!componentType) return undefined;
+  const ct = componentType.toLowerCase();
+  if (ct.includes("weapon") || ct.includes("gun")) return "var(--component-gun)";
+  if (ct.includes("power")) return "var(--component-power)";
+  if (ct.includes("shield")) return "var(--component-shield)";
+  if (ct.includes("cooler")) return "var(--component-cooler)";
+  if (ct.includes("radar")) return "var(--component-radar)";
+  if (ct.includes("quantum") || ct === "qt") return "var(--component-qt)";
+  return undefined;
+}
+
 // -- Main table ------------------------------------------------------------
 
 export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
@@ -439,8 +452,8 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
               <th>Component</th>
               <th>Type</th>
               <th>Size</th>
-              <th>Craft Time</th>
-              <th>Materials</th>
+              <th>Grade</th>
+              <th>Class</th>
               <th></th>
             </tr>
           </thead>
@@ -448,6 +461,10 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
             {paginated.map((recipe) => {
               const isOpen = expanded === recipe.blueprint_id;
               const displayName = recipe.item_kind === "vehicle" ? recipe.component_name : getComponentDisplayName(recipe.component_name);
+              const typeDisplay = recipe.item_kind === "vehicle"
+                ? (recipe.component_type || null)
+                : (recipe.category || null);
+              const typeColor = getComponentTypeColor(recipe.component_type);
               return (
                 <Fragment key={recipe.blueprint_id}>
                   <tr
@@ -457,26 +474,25 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
                   >
                     <td className="craft-cell-name" title={recipe.component_name}>
                       {displayName}
-                      {recipe.item_kind && (
-                        <span className="craft-badge craft-badge--sm craft-badge--type">
-                          {recipe.item_kind}
+                    </td>
+                    
+                    <td>
+                      {typeDisplay ? (
+                        <span
+                          className="craft-badge craft-badge--neutral craft-badge--ctype"
+                    
+                        >
+                          {typeDisplay}
                         </span>
-                      )}
+                      ) : null}
                     </td>
+                    
                     <td>
-                      <span className="craft-badge craft-badge--type">
-                        {recipe.component_type}
-                      </span>
+                      {recipe.grade ? (
+                        <span className="craft-badge craft-badge--sm craft-badge--neutral">{recipe.grade}</span>
+                      ) : null}
                     </td>
-                    <td>
-                      <span className="craft-badge craft-badge--size">
-                        {recipe.size || "---"}
-                      </span>
-                    </td>
-                    <td className="craft-cell-mono">
-                      {formatCraftTime(recipe.craft_time_seconds)}
-                    </td>
-                    <td className="craft-cell-mono">{recipe.materials.length}</td>
+                    <td className="craft-cell-subdued">{recipe.class ?? ""}</td>
                     <td>
                       <button
                         type="button"

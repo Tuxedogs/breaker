@@ -150,16 +150,6 @@ export default function BuildQueueGroup({
               <div className="logi-bq-item-name">{itemName}</div>
               <div className="logi-bq-item-qty">{item.quantity}x</div>
               <span className={`logi-badge ${STATUS_CLASS[status]}`}>{STATUS_LABELS[status]}</span>
-              <select
-                className="logi-form-select"
-                value={status}
-                onChange={(event) => onStatusChange(item.id, event.target.value as NonNullable<BuildQueueItem['status']>)}
-                aria-label={`Status for ${itemName}`}
-              >
-                {STATUS_OPTIONS.map((option) => (
-                  <option key={option} value={option}>{STATUS_LABELS[option]}</option>
-                ))}
-              </select>
               <button
                 type="button"
                 className="logi-action-btn logi-action-btn--delete"
