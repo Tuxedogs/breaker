@@ -8,6 +8,7 @@ import type {
   ParsedWorkOrder,
   ParsedInputRow,
   RefineryScreenType,
+  PanelRegion,
 } from "../../lib/logistics/refineryOcr";
 import type { MaterialTemplate } from "../../types/logistics";
 
@@ -123,6 +124,40 @@ interface QueuedScreenshot {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+type AlignmentMode = "auto" | "manual";
+
+interface ManualAlignment {
+  panelCount: 1 | 2 | 3 | 4;
+  dividers: number[];
+  naturalWidth: number;
+  naturalHeight: number;
+}
+
+function defaultDividers(panelCount: 1 | 2 | 3 | 4): number[] {
+  return Array.from({ length: panelCount - 1 }, (_, idx) => (idx + 1) / panelCount);
+}
+
+function buildManualRegions(alignment: ManualAlignment | undefined): PanelRegion[] | undefined {
+  if (!alignment?.naturalWidth || !alignment.naturalHeight) return undefined;
+
+  const bounds = [0, ...alignment.dividers, 1]
+    .map((value) => Math.max(0, Math.min(1, value)))
+    .sort((a, b) => a - b);
+
+  return bounds.slice(0, -1).map((left, idx) => {
+    const right = bounds[idx + 1];
+    const sx = Math.round(left * alignment.naturalWidth);
+    const ex = Math.round(right * alignment.naturalWidth);
+
+    return {
+      sx,
+      sy: 0,
+      sw: Math.max(1, ex - sx),
+      sh: alignment.naturalHeight,
+    };
+  });
+}
+
 const SCREEN_LABEL: Record<RefineryScreenType, string> = {
   refinery_complete: "Completed Order",
   refinery_input: "Materials Selected",
@@ -160,6 +195,8 @@ export default function RefineryImportPage() {
   const [imported, setImported] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const [lightboxId, setLightboxId] = useState<string | null>(null);
+  const [alignmentMode, setAlignmentMode] = useState<AlignmentMode>("auto");
+  const [manualAlignments, setManualAlignments] = useState<Record<string, ManualAlignment>>({});
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -196,6 +233,33 @@ export default function RefineryImportPage() {
     });
     setParseState(null);
     setImported(false);
+    setManualAlignments((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  }
+
+  function updateManualAlignment(id: string, patch: Partial<ManualAlignment>) {
+    setManualAlignments((prev) => {
+      const current = prev[id] ?? {
+        panelCount: 3,
+        dividers: defaultDividers(3),
+        naturalWidth: 0,
+        naturalHeight: 0,
+      };
+      const panelCount = patch.panelCount ?? current.panelCount;
+
+      return {
+        ...prev,
+        [id]: {
+          ...current,
+          ...patch,
+          panelCount,
+          dividers: patch.panelCount ? defaultDividers(panelCount) : (patch.dividers ?? current.dividers),
+        },
+      };
+    });
   }
 
   async function handleParse() {
@@ -209,9 +273,15 @@ export default function RefineryImportPage() {
 
       for (let i = 0; i < screenshots.length; i++) {
         const screenshot = screenshots[i];
-        const ocrResult = await parseRefineryScreenshot(screenshot.file, materials, (pct) => {
-          setParseProgress(Math.round(((i + pct / 100) / screenshots.length) * 100));
-        });
+        const manualPanelRegions = alignmentMode === "manual" ? buildManualRegions(manualAlignments[screenshot.id]) : undefined;
+        const ocrResult = await parseRefineryScreenshot(
+          screenshot.file,
+          materials,
+          (pct) => {
+            setParseProgress(Math.round(((i + pct / 100) / screenshots.length) * 100));
+          },
+          manualPanelRegions,
+        );
 
         if (ocrResult.screenType === "refinery_complete") {
           if (nextState?.type === "refinery_input") {
@@ -372,6 +442,7 @@ export default function RefineryImportPage() {
     setParseState(null);
     setParseError(null);
     setImported(false);
+    setManualAlignments({});
   }
 
   // ── Derived state ─────────────────────────────────────────────────────────
@@ -598,6 +669,60 @@ export default function RefineryImportPage() {
             </button>
           </div>
 
+          <div className="ri-align-panel">
+            <div className="ri-align-controls">
+              <div className="ri-align-mode" aria-label="Panel alignment mode">
+                <button
+                  type="button"
+                  className={alignmentMode === "auto" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
+                  onClick={() => setAlignmentMode("auto")}
+                  disabled={parsing}
+                >
+                  Auto Detect
+                </button>
+                <button
+                  type="button"
+                  className={alignmentMode === "manual" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
+                  onClick={() => setAlignmentMode("manual")}
+                  disabled={parsing}
+                >
+                  Manual Align
+                </button>
+              </div>
+              {alignmentMode === "manual" && (
+                <div className="ri-panel-count" aria-label="Panel count">
+                  {[1, 2, 3, 4].map((count) => (
+                    <button
+                      key={count}
+                      type="button"
+                      className={(manualAlignments[screenshots[0]?.id]?.panelCount ?? 3) === count ? "ri-panel-count-btn ri-panel-count-btn--active" : "ri-panel-count-btn"}
+                      onClick={() => {
+                        screenshots.forEach((ss) => updateManualAlignment(ss.id, { panelCount: count as 1 | 2 | 3 | 4 }));
+                      }}
+                      disabled={parsing}
+                    >
+                      {count}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {alignmentMode === "manual" && (
+              <div className="ri-align-previews">
+                {screenshots.map((ss) => (
+                  <ManualAlignmentPreview
+                    key={ss.id}
+                    screenshot={ss}
+                    alignment={manualAlignments[ss.id]}
+                    onChange={(patch) => updateManualAlignment(ss.id, patch)}
+                    disabled={parsing}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
           <button type="button" className="logi-btn-primary ri-parse-btn" onClick={handleParse} disabled={parsing}>
             {parsing ? (
               <><span className="logi-refimport-spinner" aria-hidden /> Parsing… {parseProgress}%</>
@@ -635,40 +760,44 @@ export default function RefineryImportPage() {
             const woItems = parseState.workOrders
               .map((wo, idx) => ({ wo, idx }))
               .filter(({ wo }) => wo.screenshotId === screenshot.id);
+            if (woItems.length === 0) return null;
+            const totalPanels = woItems.length;
             return (
-              <ScreenshotCard
-                key={screenshot.id}
-                screenshot={screenshot}
-                detectedType="refinery_complete"
-                hasRows={woItems.some(({ wo }) => wo.rows.length > 0)}
-                onRemove={() => removeScreenshot(screenshot.id)}
-                onEnlarge={() => setLightboxId(screenshot.id)}
-                disabled={parsing}
-              >
-                {woItems.length === 0 ? (
-                  <div className="ri-empty-rows">No work orders detected in this screenshot.</div>
-                ) : (
-                  <div className="ri-wo-columns">
-                    {woItems.map(({ wo, idx: woIdx }) => (
-                      <WorkOrderColumn
-                        key={woIdx}
-                        label={`// WORK ORDER ${wo.workOrderNumber}`}
-                        selectedCount={wo.rows.filter((row) => row.include && row.selectedMaterialId).length}
-                        totalYieldCscu={wo.totalYieldCscu}
-                        onSelectAll={() => updateCompleteColumn(woIdx, { include: true })}
-                        onDeselectAll={() => updateCompleteColumn(woIdx, { include: false })}
-                        onClear={() => clearCompleteColumn(woIdx)}
-                      >
-                        <CompleteOrderTable
-                          rows={wo.rows}
-                          materials={materials}
-                          onUpdate={(rowIdx, patch) => updateCompleteRow(woIdx, rowIdx, patch)}
-                        />
-                      </WorkOrderColumn>
-                    ))}
-                  </div>
-                )}
-              </ScreenshotCard>
+              <div key={screenshot.id} className="ri-ss-group">
+                <div className="ri-ss-group-hdr">
+                  <span className="ri-ss-card-name">{screenshot.file.name}</span>
+                  <span className={`logi-refimport-screen-badge ${SCREEN_MOD["refinery_complete"]}`}>
+                    {SCREEN_LABEL["refinery_complete"]}
+                  </span>
+                  {!woItems.some(({ wo }) => wo.rows.length > 0) && (
+                    <span className="logi-refimport-screen-badge logi-refimport-screen-badge--unknown">No rows</span>
+                  )}
+                  <button
+                    type="button"
+                    className="logi-btn-ghost logi-refimport-btn-sm ri-ss-remove"
+                    onClick={() => removeScreenshot(screenshot.id)}
+                    disabled={parsing}
+                  >
+                    Remove
+                  </button>
+                </div>
+                {woItems.map(({ wo, idx: woIdx }, panelIdx) => (
+                  <WorkOrderReviewCard
+                    key={woIdx}
+                    workOrder={wo}
+                    totalPanelsInScreenshot={totalPanels}
+                    panelIdxInScreenshot={panelIdx}
+                    screenshot={screenshot}
+                    materials={materials}
+                    onUpdate={(rowIdx, patch) => updateCompleteRow(woIdx, rowIdx, patch)}
+                    onSelectAll={() => updateCompleteColumn(woIdx, { include: true })}
+                    onDeselectAll={() => updateCompleteColumn(woIdx, { include: false })}
+                    onClear={() => clearCompleteColumn(woIdx)}
+                    onEnlarge={() => setLightboxId(screenshot.id)}
+                    disabled={parsing}
+                  />
+                ))}
+              </div>
             );
           })}
 
@@ -803,6 +932,101 @@ export default function RefineryImportPage() {
 
 // ── ScreenshotCard ────────────────────────────────────────────────────────────
 
+interface ManualAlignmentPreviewProps {
+  screenshot: QueuedScreenshot;
+  alignment: ManualAlignment | undefined;
+  onChange: (patch: Partial<ManualAlignment>) => void;
+  disabled: boolean;
+}
+
+function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: ManualAlignmentPreviewProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const panelCount = alignment?.panelCount ?? 3;
+  const dividers = alignment?.dividers ?? defaultDividers(panelCount);
+  const bounds = [0, ...dividers, 1];
+
+  const SNAP_PX = 8;
+
+  function moveDivider(idx: number, clientX: number) {
+    const rect = wrapRef.current?.getBoundingClientRect();
+    if (!rect || rect.width <= 0) return;
+
+    const min = idx === 0 ? 0.02 : dividers[idx - 1] + 0.02;
+    const max = idx === dividers.length - 1 ? 0.98 : dividers[idx + 1] - 0.02;
+    let nextValue = Math.max(min, Math.min(max, (clientX - rect.left) / rect.width));
+
+    const snapFrac = SNAP_PX / rect.width;
+    for (let n = 1; n < panelCount; n++) {
+      const target = n / panelCount;
+      if (target >= min && target <= max && Math.abs(nextValue - target) < snapFrac) {
+        nextValue = target;
+        break;
+      }
+    }
+
+    onChange({ dividers: dividers.map((value, i) => i === idx ? nextValue : value) });
+  }
+
+  return (
+    <div className="ri-align-preview-card">
+      <div className="ri-align-preview-head">
+        <span>{screenshot.file.name}</span>
+        <span>{panelCount} panel{panelCount === 1 ? "" : "s"}</span>
+      </div>
+      <p className="ri-align-instruction">Drag the vertical handles to align each work order panel.</p>
+      <div className="ri-align-image-wrap" ref={wrapRef}>
+        <img
+          src={screenshot.preview}
+          alt="Refinery screenshot alignment preview"
+          className="ri-align-image"
+          onLoad={(event) => {
+            const img = event.currentTarget;
+            onChange({ naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight });
+          }}
+          draggable={false}
+        />
+        {bounds.slice(0, -1).map((left, panelIdx) => (
+          <div
+            key={panelIdx}
+            className="ri-align-panel-tint"
+            style={{
+              left: `${left * 100}%`,
+              width: `${(bounds[panelIdx + 1] - left) * 100}%`,
+              background: panelIdx % 2 === 0 ? "rgba(167, 139, 250, 0.07)" : "rgba(96, 165, 250, 0.07)",
+            }}
+          >
+            <span className="ri-align-panel-label">Panel {panelIdx + 1}</span>
+          </div>
+        ))}
+        {dividers.map((divider, idx) => (
+          <button
+            key={idx}
+            type="button"
+            className="ri-align-divider"
+            style={{ left: `${divider * 100}%` }}
+            onPointerDown={(event) => {
+              if (disabled) return;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              moveDivider(idx, event.clientX);
+            }}
+            onPointerMove={(event) => {
+              if (disabled || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
+              moveDivider(idx, event.clientX);
+            }}
+            onPointerUp={(event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+            }}
+            aria-label={`Move divider ${idx + 1}`}
+            disabled={disabled}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 interface ScreenshotCardProps {
   screenshot: QueuedScreenshot;
   detectedType: RefineryScreenType;
@@ -853,6 +1077,192 @@ function ScreenshotCard({ screenshot, detectedType, hasRows, onRemove, onEnlarge
           {children}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── WorkOrderReviewCard ───────────────────────────────────────────────────────
+
+interface WorkOrderReviewCardProps {
+  workOrder: DraftWorkOrder;
+  totalPanelsInScreenshot: number;
+  panelIdxInScreenshot: number;
+  screenshot: QueuedScreenshot;
+  materials: MaterialTemplate[];
+  onUpdate: (rowIdx: number, patch: Partial<DraftRow>) => void;
+  onSelectAll: () => void;
+  onDeselectAll: () => void;
+  onClear: () => void;
+  onEnlarge: () => void;
+  disabled: boolean;
+}
+
+function WorkOrderReviewCard({
+  workOrder,
+  totalPanelsInScreenshot,
+  panelIdxInScreenshot,
+  screenshot,
+  materials,
+  onUpdate,
+  onSelectAll,
+  onDeselectAll,
+  onClear,
+  onEnlarge,
+  disabled,
+}: WorkOrderReviewCardProps) {
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+  const [bandHover, setBandHover] = useState<number | null>(null);
+  const rows = workOrder.rows;
+  const n = rows.length;
+  const selectedCount = rows.filter((r) => r.include && r.selectedMaterialId).length;
+
+  return (
+    <div className="ri-wo-review-card">
+      <div className="ri-wo-review-hdr">
+        <div className="ri-wo-review-hdr-left">
+          <span className="ri-wo-label">// Work Order {workOrder.workOrderNumber}</span>
+          <span className="ri-wo-count">{selectedCount} selected</span>
+          {workOrder.totalYieldCscu != null && (
+            <span className="ri-wo-yield">
+              {workOrder.totalYieldCscu} <small className="logi-refimport-unit">cSCU</small>
+            </span>
+          )}
+        </div>
+        <div className="ri-wo-review-hdr-actions">
+          <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onSelectAll} disabled={disabled}>Select all</button>
+          <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onDeselectAll} disabled={disabled}>Deselect all</button>
+          <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onClear} disabled={disabled}>Clear</button>
+          <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={onEnlarge} disabled={disabled}>
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="11" height="11">
+              <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+            </svg>
+            Enlarge
+          </button>
+        </div>
+      </div>
+
+      {n === 0 ? (
+        <div className="ri-empty-rows" style={{ padding: "0.75rem 1rem" }}>No rows detected in this panel.</div>
+      ) : (
+        <div className="ri-wo-review-body">
+          <div className="ri-wo-panel-col">
+            <div className="ri-wo-panel-clip">
+              <img
+                src={screenshot.preview}
+                className="ri-wo-panel-img"
+                style={{
+                  width: `${totalPanelsInScreenshot * 100}%`,
+                  transform: `translateX(${-(panelIdxInScreenshot / totalPanelsInScreenshot) * 100}%)`,
+                }}
+                alt="Work order panel"
+                draggable={false}
+                onClick={onEnlarge}
+              />
+              {hoveredRow !== null && (
+                <div
+                  className="ri-wo-row-hl"
+                  style={{
+                    top: `${(hoveredRow / n) * 100}%`,
+                    height: `${(1 / n) * 100}%`,
+                  }}
+                />
+              )}
+              {rows.map((_, idx) => (
+                <div
+                  key={idx}
+                  className="ri-wo-img-band"
+                  style={{
+                    top: `${(idx / n) * 100}%`,
+                    height: `${(1 / n) * 100}%`,
+                  }}
+                  onMouseEnter={() => setBandHover(idx)}
+                  onMouseLeave={() => setBandHover(null)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="ri-wo-review-rows">
+            <table className="logi-table logi-refimport-table">
+              <thead>
+                <tr>
+                  <th style={{ width: 28 }} />
+                  <th>Material</th>
+                  <th>Quality</th>
+                  <th>Yield (cSCU)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, rowIdx) => (
+                  <tr
+                    key={rowIdx}
+                    className={[
+                      !row.include ? "logi-refimport-row--excluded" : "",
+                      bandHover === rowIdx ? "ri-wo-row--band-hl" : "",
+                    ].filter(Boolean).join(" ")}
+                    onMouseEnter={() => setHoveredRow(rowIdx)}
+                    onMouseLeave={() => setHoveredRow(null)}
+                  >
+                    <td>
+                      <input
+                        type="checkbox"
+                        className="logi-refimport-check"
+                        checked={row.include}
+                        onChange={(e) => onUpdate(rowIdx, { include: e.target.checked })}
+                        aria-label={`Include ${row.rawName}`}
+                      />
+                    </td>
+                    <td>
+                      {row.needsReview && row.materialId !== null && (
+                        <span className="logi-refimport-review-tag" title="Low OCR confidence — please verify">REVIEW</span>
+                      )}
+                      {row.materialId === null && (
+                        <span className="logi-refimport-unmatched-tag">{row.rawName}</span>
+                      )}
+                      <select
+                        className={`logi-select logi-refimport-mat-select${row.materialId === null ? " logi-refimport-mat-select--warn" : ""}`}
+                        value={row.selectedMaterialId}
+                        onChange={(e) => onUpdate(rowIdx, { selectedMaterialId: e.target.value })}
+                        aria-label="Material"
+                      >
+                        <option value="">— select —</option>
+                        {materials.map((m) => (
+                          <option key={m.id} value={m.id}>{m.name}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        className="logi-refimport-num"
+                        min={0}
+                        max={1000}
+                        value={row.editedQuality}
+                        onChange={(e) =>
+                          onUpdate(rowIdx, { editedQuality: Math.max(0, Math.min(1000, parseInt(e.target.value, 10) || 0)) })
+                        }
+                        aria-label="Quality"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="number"
+                        className="logi-refimport-num"
+                        min={0}
+                        value={row.editedQuantity}
+                        onChange={(e) =>
+                          onUpdate(rowIdx, { editedQuantity: Math.max(0, parseInt(e.target.value, 10) || 0) })
+                        }
+                        aria-label="Yield (cSCU)"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
