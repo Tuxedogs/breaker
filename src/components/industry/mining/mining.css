@@ -1,0 +1,1327 @@
+/* ──────────────────────────────────────────────
+   Industry / Mining Module Styles
+   Scoped to .mine-* / .mex-* to avoid conflicts.
+   ────────────────────────────────────────────── */
+
+/* ── Page shell ───────────────────────────────── */
+
+.mine-page {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Breadcrumb ───────────────────────────────── */
+
+.mine-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.35);
+  margin-bottom: 0.3rem;
+}
+
+.mine-breadcrumb-root { color: rgba(160, 180, 220, 0.4); }
+.mine-breadcrumb-sep { opacity: 0.35; }
+.mine-breadcrumb-active { color: rgba(96, 165, 250, 0.65); }
+
+/* ── Page header ──────────────────────────────── */
+
+.mine-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mine-page-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #e7edff;
+  margin: 0;
+}
+
+.mine-page-subtitle {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.45);
+  margin-top: 0.18rem;
+}
+
+/* ── Stat strip ───────────────────────────────── */
+
+.mine-stat-strip {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mine-stat-card {
+  flex: 1 1 120px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(96, 165, 250, 0.1);
+  border-radius: 6px;
+  padding: 0.7rem 1rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.mine-stat-value {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #e7edff;
+  line-height: 1;
+}
+
+.mine-stat-value--pending {
+  color: rgba(160, 180, 220, 0.2);
+}
+
+.mine-stat-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+/* ── Layout: main + sidebar ───────────────────── */
+
+.mine-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .mine-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mine-panels {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mine-intent-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.mine-sidebar-section-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(96, 165, 250, 0.4);
+  padding: 0 0.25rem;
+}
+
+/* ── Panel ────────────────────────────────────── */
+
+.mine-panel {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mine-panel-header {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mine-panel-header--row {
+  justify-content: space-between;
+}
+
+.mine-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mine-panel-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.55);
+}
+
+.mine-panel-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: rgba(96, 165, 250, 0.45);
+  background: rgba(96, 165, 250, 0.06);
+  border: 1px solid rgba(96, 165, 250, 0.12);
+  border-radius: 3px;
+  padding: 0.08rem 0.35rem;
+}
+
+/* ── Empty states ─────────────────────────────── */
+
+.mine-empty-state {
+  padding: 2rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mine-empty-state--sm {
+  padding: 0.85rem 1rem;
+}
+
+.mine-empty-text {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  color: rgba(160, 180, 220, 0.3);
+  text-align: center;
+  max-width: 36rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.mine-empty-text--warn {
+  color: rgba(251, 191, 36, 0.55);
+}
+
+/* ── Status states ────────────────────────────── */
+
+.mine-status-state {
+  padding: 2rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mine-status-state--error {
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.mine-status-text {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  color: rgba(160, 180, 220, 0.4);
+}
+
+.mine-status-state--error .mine-status-text {
+  color: rgba(239, 68, 68, 0.7);
+}
+
+/* ── Warning panel variant ────────────────────── */
+
+.mine-panel--warning {
+  border-color: rgba(251, 191, 36, 0.18);
+}
+
+.mine-panel--warning .mine-panel-header {
+  background: rgba(251, 191, 36, 0.04);
+}
+
+.mine-panel--warning .mine-panel-title {
+  color: rgba(251, 191, 36, 0.6);
+}
+
+/* ── Intent panel variant ─────────────────────── */
+
+.mine-panel--intent {
+  border-color: rgba(96, 165, 250, 0.14);
+}
+
+.mine-panel--intent .mine-panel-header {
+  background: rgba(96, 165, 250, 0.04);
+}
+
+/* ── Debug panel variant ──────────────────────── */
+
+.mine-panel--debug {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Badges ───────────────────────────────────── */
+
+.mine-badge {
+  display: inline-block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.mine-badge--ship {
+  background: rgba(96, 165, 250, 0.1);
+  color: rgba(96, 165, 250, 0.8);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+}
+
+.mine-badge--surface {
+  background: rgba(74, 222, 128, 0.08);
+  color: rgba(74, 222, 128, 0.7);
+  border: 1px solid rgba(74, 222, 128, 0.18);
+}
+
+/* ── Material demand compact list ─────────────── */
+
+.mine-demand-compact-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mine-demand-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.mine-demand-compact-row:last-child {
+  border-bottom: none;
+}
+
+.mine-demand-compact-row:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.mine-demand-compact-rank {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(96, 165, 250, 0.35);
+  min-width: 1.1rem;
+  text-align: right;
+}
+
+.mine-demand-compact-name {
+  flex: 1;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  min-width: 0;
+}
+
+.mine-demand-compact-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.75);
+  white-space: nowrap;
+}
+
+.mine-demand-compact-slots {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.35);
+  white-space: nowrap;
+  max-width: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mine-demand-compact-used {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.4);
+  white-space: nowrap;
+}
+
+/* ── Route cards ──────────────────────────────── */
+
+.mine-routes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mine-route-card {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  transition: background 0.12s;
+}
+
+.mine-route-card:last-child {
+  border-bottom: none;
+}
+
+.mine-route-card:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.mine-route-card--starred {
+  background: rgba(250, 204, 21, 0.022);
+  border-left: 2px solid rgba(250, 204, 21, 0.28);
+}
+
+.mine-route-card--starred:hover {
+  background: rgba(250, 204, 21, 0.035);
+}
+
+.mine-route-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.mine-route-rank {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(96, 165, 250, 0.35);
+  min-width: 1.8rem;
+  flex-shrink: 0;
+}
+
+.mine-route-id {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.mine-route-location {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c8d8f8;
+}
+
+.mine-route-system {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.4);
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+}
+
+.mine-route-coverage-inline {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.mine-route-coverage-pct {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(74, 222, 128, 0.85);
+}
+
+.mine-route-coverage-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.07em;
+  color: rgba(74, 222, 128, 0.4);
+  text-transform: uppercase;
+}
+
+.mine-route-sources-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.4);
+  flex-shrink: 0;
+}
+
+/* Score pills — planner-only */
+
+.mine-route-scores {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.mine-score-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 3px;
+  padding: 0.12rem 0.4rem;
+}
+
+.mine-score-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+}
+
+.mine-score-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.67rem;
+  color: rgba(160, 180, 220, 0.7);
+}
+
+.mine-route-covered {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.mine-mat-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  background: rgba(96, 165, 250, 0.07);
+  border: 1px solid rgba(96, 165, 250, 0.14);
+  border-radius: 3px;
+  padding: 0.08rem 0.35rem;
+  color: rgba(96, 165, 250, 0.65);
+}
+
+.mine-route-reason {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.38);
+  line-height: 1.4;
+}
+
+/* ── Sources by material ──────────────────────── */
+
+.mine-sources-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mine-source-block {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mine-source-block:last-child {
+  border-bottom: none;
+}
+
+.mine-source-block-header--btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.mine-source-block-header--btn:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mine-source-mat-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+}
+
+.mine-source-meta {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.mine-source-toggle {
+  font-size: 0.55rem;
+  color: rgba(160, 180, 220, 0.28);
+  flex-shrink: 0;
+}
+
+.mine-source-locations {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mine-source-loc-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.45rem 1rem 0.45rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.mine-source-loc-row:last-child {
+  border-bottom: none;
+}
+
+.mine-source-loc-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mine-source-loc-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b8ccf0;
+}
+
+.mine-source-loc-sys {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.mine-source-loc-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mine-source-loc-reason {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.7rem;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.mine-source-loc-reason--pub {
+  padding-left: 0;
+}
+
+/* ── Priority stack ───────────────────────────── */
+
+.mine-priority-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mine-priority-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mine-priority-row:last-child { border-bottom: none; }
+
+.mine-priority-row--pinned {
+  background: rgba(96, 165, 250, 0.04);
+}
+
+.mine-priority-rank {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(96, 165, 250, 0.45);
+  min-width: 1.2rem;
+}
+
+.mine-priority-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.mine-priority-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mine-priority-source {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mine-priority-source--requiredMaterial { color: rgba(96, 165, 250, 0.5); }
+.mine-priority-source--manual { color: rgba(74, 222, 128, 0.5); }
+
+.mine-priority-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+/* ── Intent note ──────────────────────────────── */
+
+.mine-intent-note {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  color: rgba(96, 165, 250, 0.3);
+  padding: 0.5rem 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  line-height: 1.5;
+}
+
+/* ── Manual demand form ───────────────────────── */
+
+.mine-demand-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mine-demand-form-row {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.mine-demand-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.mine-input,
+.mine-select {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #c8d8f8;
+  padding: 0.3rem 0.55rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.mine-input:focus,
+.mine-select:focus {
+  border-color: rgba(96, 165, 250, 0.4);
+}
+
+.mine-input { flex: 1 1 0; min-width: 0; }
+.mine-input--short { flex: 0 0 70px; }
+.mine-input--notes { flex: 1 1 0; min-width: 0; }
+
+.mine-select {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.mine-select option { background: #0e1120; }
+
+.mine-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.6);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mine-form-error {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(239, 68, 68, 0.7);
+  padding: 0 1rem 0.5rem;
+}
+
+/* ── Manual demand list ───────────────────────── */
+
+.mine-demand-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.mine-demand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mine-demand-row:last-child { border-bottom: none; }
+
+.mine-demand-body {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.mine-demand-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #c8d8f8;
+}
+
+.mine-demand-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.7rem;
+  color: rgba(160, 180, 220, 0.75);
+}
+
+.mine-demand-type {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(74, 222, 128, 0.5);
+}
+
+.mine-demand-notes {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.68rem;
+  color: rgba(160, 180, 220, 0.38);
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 10rem;
+}
+
+/* ── JSON preview panel ───────────────────────── */
+
+.mine-panel-header--split {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mine-panel-header--split .mine-collapsible-header {
+  flex: 1;
+  border-bottom: none;
+}
+
+.mine-btn-export {
+  flex-shrink: 0;
+  padding: 0 1rem;
+  background: rgba(56, 130, 246, 0.1);
+  border: none;
+  border-left: 1px solid rgba(56, 130, 246, 0.18);
+  color: rgba(100, 170, 255, 0.75);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mine-btn-export:hover {
+  background: rgba(56, 130, 246, 0.18);
+}
+
+.mine-collapsible-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: none;
+  cursor: pointer;
+}
+
+.mine-collapsible-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mine-collapse-arrow {
+  font-size: 0.55rem;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mine-json-preview {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  color: rgba(160, 180, 220, 0.55);
+  line-height: 1.55;
+  padding: 0.85rem 1rem;
+  margin: 0;
+  overflow-x: auto;
+  max-height: 22rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ── Mode toggle ──────────────────────────────── */
+
+.mine-mode-toggle {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 0.15rem;
+}
+
+.mine-mode-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.4);
+  padding: 0.28rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mine-mode-btn:hover {
+  border-color: rgba(96, 165, 250, 0.22);
+  color: rgba(160, 180, 220, 0.65);
+}
+
+.mine-mode-btn--active {
+  border-color: rgba(96, 165, 250, 0.35);
+  color: rgba(96, 165, 250, 0.85);
+  background: rgba(96, 165, 250, 0.07);
+}
+
+.mine-mode-btn--public.mine-mode-btn--active {
+  border-color: rgba(74, 222, 128, 0.3);
+  color: rgba(74, 222, 128, 0.8);
+  background: rgba(74, 222, 128, 0.06);
+}
+
+/* ── Shared icon buttons ──────────────────────── */
+
+.mine-move-btn,
+.mine-pin-btn,
+.mine-remove-btn,
+.mine-star-btn,
+.mine-add-priority-btn,
+.mine-clear-btn,
+.mine-filter-btn,
+.mine-add-btn {
+  font-family: "Barlow", sans-serif;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.mine-move-btn {
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.4);
+  padding: 0.15rem 0.28rem;
+  border-radius: 3px;
+}
+
+.mine-move-btn:hover:not(:disabled) {
+  color: rgba(160, 180, 220, 0.85);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mine-move-btn:disabled { opacity: 0.18; cursor: default; }
+
+.mine-remove-btn {
+  font-size: 0.6rem;
+  color: rgba(239, 68, 68, 0.38);
+  padding: 0.15rem 0.28rem;
+  border-radius: 3px;
+}
+
+.mine-remove-btn:hover {
+  color: rgba(239, 68, 68, 0.8);
+  background: rgba(239, 68, 68, 0.06);
+}
+
+.mine-pin-btn {
+  font-size: 0.62rem;
+  opacity: 0.3;
+  padding: 0.15rem 0.22rem;
+  border-radius: 3px;
+}
+
+.mine-pin-btn--on { opacity: 0.9; }
+.mine-pin-btn:hover { opacity: 0.75; background: rgba(255, 255, 255, 0.04); }
+
+.mine-clear-btn {
+  font-size: 0.58rem;
+  color: rgba(239, 68, 68, 0.42);
+  padding: 0.13rem 0.38rem;
+  border-radius: 3px;
+  border-color: rgba(239, 68, 68, 0.13);
+}
+
+.mine-clear-btn:hover {
+  color: rgba(239, 68, 68, 0.8);
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+.mine-star-btn {
+  font-size: 0.85rem;
+  color: rgba(160, 180, 220, 0.28);
+  padding: 0.1rem 0.22rem;
+  border-radius: 3px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.mine-star-btn--on {
+  color: rgba(250, 204, 21, 0.85);
+}
+
+.mine-star-btn:hover {
+  color: rgba(250, 204, 21, 0.6);
+  background: rgba(250, 204, 21, 0.05);
+}
+
+.mine-filter-btn {
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.4);
+  padding: 0.18rem 0.5rem;
+  border-radius: 4px;
+  border-color: rgba(255, 255, 255, 0.08);
+  letter-spacing: 0.04em;
+}
+
+.mine-filter-btn--active {
+  color: rgba(250, 204, 21, 0.8);
+  border-color: rgba(250, 204, 21, 0.25);
+  background: rgba(250, 204, 21, 0.05);
+}
+
+.mine-filter-btn:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(160, 180, 220, 0.65);
+}
+
+.mine-td-action {
+  text-align: center;
+  width: 2.5rem;
+}
+
+.mine-add-priority-btn {
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.3);
+  padding: 0.08rem 0.28rem;
+  border-radius: 3px;
+}
+
+.mine-add-priority-btn--active {
+  color: rgba(96, 165, 250, 0.7);
+  cursor: default;
+}
+
+.mine-add-priority-btn:not(:disabled):hover {
+  color: rgba(96, 165, 250, 0.65);
+  background: rgba(96, 165, 250, 0.07);
+}
+
+.mine-add-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(96, 165, 250, 0.85);
+  padding: 0.28rem 0.75rem;
+  border-radius: 4px;
+  border-color: rgba(96, 165, 250, 0.25);
+  background: rgba(96, 165, 250, 0.07);
+}
+
+.mine-add-btn:hover {
+  background: rgba(96, 165, 250, 0.13);
+  border-color: rgba(96, 165, 250, 0.38);
+}
+
+/* ── Material Explorer ────────────────────────── */
+
+.mex-root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mex-access-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(74, 222, 128, 0.03);
+  border: 1px solid rgba(74, 222, 128, 0.1);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+}
+
+.mex-access-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(74, 222, 128, 0.8);
+  background: rgba(74, 222, 128, 0.08);
+  border: 1px solid rgba(74, 222, 128, 0.18);
+  border-radius: 3px;
+  padding: 0.13rem 0.4rem;
+  flex-shrink: 0;
+}
+
+.mex-access-text {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.75rem;
+  color: rgba(160, 180, 220, 0.42);
+  line-height: 1.4;
+}
+
+.mex-badge-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.7rem 1rem;
+}
+
+.mex-mat-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.55);
+  padding: 0.22rem 0.55rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mex-mat-btn:hover {
+  border-color: rgba(96, 165, 250, 0.28);
+  color: rgba(96, 165, 250, 0.8);
+  background: rgba(96, 165, 250, 0.06);
+}
+
+.mex-mat-btn--active {
+  border-color: rgba(96, 165, 250, 0.42);
+  color: rgba(96, 165, 250, 0.95);
+  background: rgba(96, 165, 250, 0.11);
+}
+
+.mex-filter-status {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.75rem;
+  color: rgba(160, 180, 220, 0.48);
+  padding: 0.25rem 1rem 0.65rem;
+}
+
+.mex-filter-status strong {
+  color: rgba(96, 165, 250, 0.85);
+  font-weight: 600;
+}
+
+/* Location card grid */
+
+.mex-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+}
+
+@media (max-width: 640px) {
+  .mex-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mex-location-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  outline: none;
+}
+
+.mex-location-card:hover {
+  border-color: rgba(96, 165, 250, 0.2);
+  background: rgba(96, 165, 250, 0.025);
+}
+
+.mex-location-card--expanded {
+  border-color: rgba(96, 165, 250, 0.32);
+  background: rgba(96, 165, 250, 0.045);
+}
+
+.mex-location-card:focus-visible {
+  outline: 1px solid rgba(96, 165, 250, 0.5);
+  outline-offset: 1px;
+}
+
+.mex-card-image-placeholder {
+  height: 48px;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(20, 30, 60, 0.4) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mex-card-image-label {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(96, 165, 250, 0.22);
+}
+
+.mex-card-body {
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.mex-card-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mex-card-system {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.mex-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.mex-card-kind {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+}
+
+.mex-card-stations {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.mex-card-stations-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mex-station-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  padding: 0.08rem 0.32rem;
+  border-radius: 3px;
+  background: rgba(251, 191, 36, 0.05);
+  border: 1px solid rgba(251, 191, 36, 0.13);
+  color: rgba(251, 191, 36, 0.55);
+}
+
+.mex-card-mat-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  color: rgba(160, 180, 220, 0.25);
+  margin-top: 0.05rem;
+}
+
+.mex-card-materials {
+  margin-top: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.mex-card-materials-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(96, 165, 250, 0.38);
+}
+
+.mex-card-material-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.mex-mat-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  background: rgba(96, 165, 250, 0.07);
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  color: rgba(96, 165, 250, 0.72);
+}
+
+.mex-fixture-note {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  color: rgba(160, 180, 220, 0.22);
+  text-align: center;
+  padding: 0.2rem 0 0.45rem;
+  line-height: 1.5;
+}

@@ -435,7 +435,6 @@ function MaterialQualityRow({
   onBandChange,
   getBandsForMaterial,
   getBandEffectiveQuality,
-  getBandLabel,
 }: {
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
@@ -449,10 +448,49 @@ function MaterialQualityRow({
   const bands = getBandsForMaterial(materialName);
   const safeBandIndex = clampBandIndex(bandIndex, bands);
   const quality = getBandEffectiveQuality(materialName, safeBandIndex);
-  const bandLabel = getBandLabel(materialName, safeBandIndex);
+
   const atQuality = useMemo(
     () => getModifiersAtQuality(modifiers, quality),
     [modifiers, quality],
+  );
+
+  const railMarkers = useMemo(
+    () =>
+      bands.map((band, i) => {
+        const mappedValue = Number(band.mappedValue ?? 0);
+        const left = Math.max(0, Math.min(100, (mappedValue / 1000) * 100));
+        const edge = left < 4 ? "start" : left > 96 ? "end" : "middle";
+
+        return {
+          index: i,
+          mappedValue,
+          left,
+          edge,
+        };
+      }),
+    [bands],
+  );
+
+  const findNearestBandForMappedValue = useCallback(
+    (value: number) => {
+      if (bands.length === 0) return 0;
+
+      let nearestIndex = 0;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      for (let i = 0; i < bands.length; i += 1) {
+        const mappedValue = Number(bands[i]?.mappedValue ?? 0);
+        const distance = Math.abs(mappedValue - value);
+
+        if (distance < nearestDistance) {
+          nearestIndex = i;
+          nearestDistance = distance;
+        }
+      }
+
+      return nearestIndex;
+    },
+    [bands],
   );
 
   return (
@@ -470,46 +508,47 @@ function MaterialQualityRow({
           <span className="craft-matq-quality-label">
             Band {safeBandIndex + 1}
           </span>
-
-          <button
-            type="button"
-            className="craft-matq-reset-btn"
-            onClick={() => onBandChange(DEFAULT_BAND_INDEX)}
-          >
-            Reset to 500
-          </button>
-
           <span className="craft-matq-quality-value">{quality}</span>
         </div>
       </div>
 
       <div className="craft-matq-slider-wrap">
-        <input
-          type="range"
-          min={0}
-          max={Math.max(0, bands.length - 1)}
-          step={1}
-          value={safeBandIndex}
-          onChange={(e) => onBandChange(Number(e.target.value))}
-          className="craft-matq-slider"
-          data-band={safeBandIndex}
-          aria-label={`Quality band for ${mat.material_name}`}
-        />
+        <div className="craft-matq-rail-wrap">
+          <input
+            type="range"
+            min={0}
+            max={1000}
+            step={1}
+            value={quality}
+            onChange={(e) => {
+              const rawValue = Number(e.target.value);
+              onBandChange(findNearestBandForMappedValue(rawValue));
+            }}
+            className="craft-matq-slider"
+            aria-label={`Quality band for ${mat.material_name}`}
+          />
 
-        <div
-          className="craft-matq-slider-labels craft-matq-band-labels"
-          aria-hidden
-        >
-          {bands.map((band, i) => (
-            <span
-              key={`${band.start}-${band.end}-${i}`}
-              className={i === safeBandIndex ? "is-active" : ""}
-            >
-              <small>
-                {band.start}–{band.end}
-              </small>
-            </span>
-          ))}
+          <div className="craft-matq-rail">
+            <div
+              className="craft-matq-rail-fill"
+              style={{ width: `${Math.max(0, Math.min(100, (quality / 1000) * 100))}%` }}
+            />
+
+            {railMarkers.map((marker) => (
+              <button
+                type="button"
+                key={`${marker.index}-${marker.mappedValue}`}
+                className={`craft-matq-band-marker${marker.index === safeBandIndex ? " is-active" : ""}`}
+                style={{ left: `${marker.left}%` }}
+                data-edge={marker.edge}
+                onClick={() => onBandChange(marker.index)}
+                aria-label={`Use mapped quality ${marker.mappedValue}`}
+              >
+                <span className="craft-matq-dot" />
+                <span className="craft-matq-marker-value">{marker.mappedValue}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -1006,6 +1045,16 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState<number>(50);
   const [page, setPage] = useState(0);
+  const expandedRowRef = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const el = expandedRowRef.current;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, [expanded]);
 
   const resetPage = useCallback(() => setPage(0), []);
 
@@ -1292,7 +1341,7 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
               <th>Size</th>
               <th>Grade</th>
               <th>Class</th>
-              <th className="craft-th-action">Action</th>
+              <th className="craft-th-action"></th>
             </tr>
           </thead>
 
@@ -1314,7 +1363,10 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
               return (
                 <Fragment key={recipe.blueprint_id}>
                   <tr
+                    ref={isOpen ? expandedRowRef : undefined}
                     className={`craft-table-row${isOpen ? " craft-table-row--open" : ""}`}
+                    onClick={() => setExpanded(isOpen ? null : recipe.blueprint_id)}
+                    style={{ cursor: "pointer" }}
                   >
                     <td className="craft-cell-name">
                       <div className="craft-name-wrap">
@@ -1396,42 +1448,23 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
                     </td>
 
                     <td className="craft-cell-action">
-                      <div className="craft-action-row">
-                        <button
-                          type="button"
-                          className="craft-btn-add-full"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onAddToQueue(recipe);
-                          }}
-                          title="Add to Build Queue"
+                      <span
+                        className={`craft-btn-chevron${isOpen ? " craft-btn-chevron--open" : ""}`}
+                        aria-hidden
+                      >
+                        <svg
+                          viewBox="0 0 10 6"
+                          width="10"
+                          height="6"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          + Add
-                        </button>
-
-                        <button
-                          type="button"
-                          className={`craft-btn-chevron${isOpen ? " craft-btn-chevron--open" : ""}`}
-                          onClick={() =>
-                            setExpanded(isOpen ? null : recipe.blueprint_id)
-                          }
-                          title={isOpen ? "Collapse" : "Expand details"}
-                          aria-expanded={isOpen}
-                        >
-                          <svg
-                            viewBox="0 0 10 6"
-                            width="10"
-                            height="6"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.8"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M1 1l4 4 4-4" />
-                          </svg>
-                        </button>
-                      </div>
+                          <path d="M1 1l4 4 4-4" />
+                        </svg>
+                      </span>
                     </td>
                   </tr>
 
