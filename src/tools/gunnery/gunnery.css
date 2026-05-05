@@ -385,6 +385,13 @@
   overflow-y: auto;
 }
 
+.gun-tool,
+.gun-layout,
+.gun-content--viewport {
+  min-height: 0;
+  height: 100%;
+}
+
 .gun-subtarget,
 .cmap-tool {
   --cmap-accent: var(--crew-blue);
@@ -394,8 +401,9 @@
   --cmap-text: rgba(226, 232, 240, 0.88);
   --cmap-muted: rgba(148, 163, 184, 0.42);
 
-  position: relative;
-  height: calc(100vh - 3rem - var(--gun-page-header-h));
+   flex: 1;
+  min-height: 0;
+  height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -446,6 +454,11 @@
   border-bottom: 1px solid var(--cmap-border);
 }
 
+.gun-subtarget-head {
+  padding: 0.75rem 1.25rem 0.6rem;
+  border-bottom: 1px solid var(--cmap-border);
+}
+
 .gun-toolbar-row {
   flex-shrink: 0;
   display: flex;
@@ -453,14 +466,33 @@
   justify-content: space-between;
   gap: 0.5rem 1rem;
   flex-wrap: wrap;
-  padding: 0.5rem 1.25rem 0;
-  background: rgba(6, 9, 16, 0.35);
+  padding: 0 1.25rem 0.75rem;
+  background: transparent;
 }
+
+/* ── Ship selector row ── */
 
 .gun-ship-picker,
 .cmap-ship-bar {
   display: flex;
   gap: 0;
+}
+
+.gun-ship-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gun-ship-row-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+  white-space: nowrap;
+  min-width: 2.8rem;
+  flex-shrink: 0;
 }
 
 .gun-ship-btn,
@@ -480,22 +512,68 @@
   transition: color 0.12s ease, border-color 0.12s ease;
 }
 
-.gun-ship-btn:hover,
+.gun-ship-btn {
+  min-height: 30px;
+  padding: 0 0.95rem;
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(199, 210, 230, 0.45);
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.gun-ship-btn:hover {
+  color: rgba(226, 232, 240, 0.8);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
 .cmap-tab:hover {
   color: rgba(226, 232, 240, 0.75);
 }
 
-.gun-ship-btn.is-active,
+.gun-ship-btn.is-active {
+  color: rgba(245, 198, 98, 0.9);
+  border-bottom-color: rgba(245, 158, 11, 0.55);
+}
+
 .cmap-tab.is-active {
   color: var(--cmap-accent);
   border-bottom-color: var(--cmap-accent);
 }
+
+/* ── View selector row ── */
 
 .gun-view-selector,
 .cmap-view-bar {
   display: flex;
   gap: 0;
   border-top: 1px solid var(--cmap-border);
+}
+
+.gun-view-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: none;
+}
+
+.gun-view-row-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+  white-space: nowrap;
+  min-width: 2.8rem;
+  flex-shrink: 0;
 }
 
 .gun-view-btn,
@@ -514,15 +592,46 @@
   transition: color 0.12s ease, border-color 0.12s ease;
 }
 
-.gun-view-btn:hover,
+.gun-view-btn {
+  min-height: 28px;
+  padding: 0 0.75rem;
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.42);
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.gun-view-btn:hover {
+  color: rgba(226, 232, 240, 0.75);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
 .cmap-view-tab:hover {
   color: rgba(226, 232, 240, 0.68);
 }
 
-.gun-view-btn.is-active,
+.gun-view-btn.is-active {
+  color: rgba(245, 198, 98, 0.88);
+  border-bottom-color: rgba(245, 158, 11, 0.48);
+}
+
 .cmap-view-tab.is-active {
   color: color-mix(in srgb, var(--cmap-accent) 82%, white 18%);
   border-bottom-color: color-mix(in srgb, var(--cmap-accent) 55%, transparent);
+}
+
+.gun-ship-btn:focus-visible,
+.gun-view-btn:focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.55);
+  outline-offset: 2px;
 }
 
 /* ── Body ── */
@@ -614,6 +723,24 @@
   min-width: 0;
   overflow: hidden;
   position: relative;
+}
+
+/* ── Canvas badges strip ── */
+
+.gun-canvas-badges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  flex-wrap: wrap;
+  padding: 0.3rem 0.85rem;
+  background: rgba(7, 9, 14, 0.82);
+  border-bottom: 1px solid var(--cmap-border);
+  pointer-events: none;
 }
 
 .gun-silhouette-shell,

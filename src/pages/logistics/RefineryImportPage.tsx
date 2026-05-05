@@ -197,6 +197,7 @@ export default function RefineryImportPage() {
   const [lightboxId, setLightboxId] = useState<string | null>(null);
   const [alignmentMode, setAlignmentMode] = useState<AlignmentMode>("auto");
   const [manualAlignments, setManualAlignments] = useState<Record<string, ManualAlignment>>({});
+  const [alignmentConfirmed, setAlignmentConfirmed] = useState<Record<string, boolean>>({});
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -238,6 +239,11 @@ export default function RefineryImportPage() {
       delete next[id];
       return next;
     });
+    setAlignmentConfirmed((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   }
 
   function updateManualAlignment(id: string, patch: Partial<ManualAlignment>) {
@@ -260,6 +266,9 @@ export default function RefineryImportPage() {
         },
       };
     });
+    if (patch.panelCount !== undefined) {
+      setAlignmentConfirmed((prev) => ({ ...prev, [id]: false }));
+    }
   }
 
   async function handleParse() {
@@ -443,6 +452,7 @@ export default function RefineryImportPage() {
     setParseError(null);
     setImported(false);
     setManualAlignments({});
+    setAlignmentConfirmed({});
   }
 
   // ── Derived state ─────────────────────────────────────────────────────────
@@ -546,23 +556,6 @@ export default function RefineryImportPage() {
 
   return (
     <div className="logi-page ri-page">
-      <div className="logi-page-header">
-        <div>
-          <div className="logi-breadcrumb">
-            <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>
-            {returnLink && (
-              <>
-                <span className="logi-breadcrumb-sep">/</span>
-                <Link to={returnLink.to} className="logi-breadcrumb-link">Back to {returnLink.label}</Link>
-              </>
-            )}
-            <span className="logi-breadcrumb-sep">/</span>
-            <span className="logi-breadcrumb-active">Refinery Import</span>
-          </div>
-          <h1 className="logi-page-title">Refinery Import</h1>
-          <p className="logi-page-subtitle">Upload refinery screenshots to import materials into inventory.</p>
-        </div>
-      </div>
 
       <input
         ref={inputRef}
@@ -649,83 +642,147 @@ export default function RefineryImportPage() {
             <span className="ri-drop-label">{screenshots.length} file{screenshots.length !== 1 ? "s" : ""} queued — drop more or click to add</span>
           </div>
 
-          <div className="ri-file-stack">
-            {screenshots.map((ss, idx) => (
-              <div key={ss.id} className="ri-file-row">
-                <img src={ss.preview} alt="" className="ri-file-thumb" />
-                <span className="ri-file-name">{idx + 1}. {ss.file.name}</span>
-                <button
-                  type="button"
-                  className="logi-btn-ghost logi-refimport-btn-sm"
-                  onClick={() => removeScreenshot(ss.id)}
-                  disabled={parsing}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+          <div className="ri-preparse-top">
+            <div className="ri-align-mode" aria-label="Panel alignment mode">
+              <button
+                type="button"
+                className={alignmentMode === "auto" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
+                onClick={() => setAlignmentMode("auto")}
+                disabled={parsing}
+              >
+                Auto Detect
+              </button>
+              <button
+                type="button"
+                className={alignmentMode === "manual" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
+                onClick={() => setAlignmentMode("manual")}
+                disabled={parsing}
+              >
+                Manual Align
+              </button>
+            </div>
             <button type="button" className="logi-btn-ghost logi-refimport-btn-sm" onClick={handleClear} disabled={parsing}>
               Clear all
             </button>
           </div>
 
-          <div className="ri-align-panel">
-            <div className="ri-align-controls">
-              <div className="ri-align-mode" aria-label="Panel alignment mode">
-                <button
-                  type="button"
-                  className={alignmentMode === "auto" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
-                  onClick={() => setAlignmentMode("auto")}
-                  disabled={parsing}
-                >
-                  Auto Detect
-                </button>
-                <button
-                  type="button"
-                  className={alignmentMode === "manual" ? "ri-align-mode-btn ri-align-mode-btn--active" : "ri-align-mode-btn"}
-                  onClick={() => setAlignmentMode("manual")}
-                  disabled={parsing}
-                >
-                  Manual Align
-                </button>
-              </div>
-              {alignmentMode === "manual" && (
-                <div className="ri-panel-count" aria-label="Panel count">
-                  {[1, 2, 3, 4].map((count) => (
-                    <button
-                      key={count}
-                      type="button"
-                      className={(manualAlignments[screenshots[0]?.id]?.panelCount ?? 3) === count ? "ri-panel-count-btn ri-panel-count-btn--active" : "ri-panel-count-btn"}
-                      onClick={() => {
-                        screenshots.forEach((ss) => updateManualAlignment(ss.id, { panelCount: count as 1 | 2 | 3 | 4 }));
-                      }}
-                      disabled={parsing}
-                    >
-                      {count}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {alignmentMode === "manual" && (
-              <div className="ri-align-previews">
-                {screenshots.map((ss) => (
-                  <ManualAlignmentPreview
-                    key={ss.id}
-                    screenshot={ss}
-                    alignment={manualAlignments[ss.id]}
-                    onChange={(patch) => updateManualAlignment(ss.id, patch)}
+          {alignmentMode === "auto" ? (
+            <div className="ri-file-stack">
+              {screenshots.map((ss, idx) => (
+                <div key={ss.id} className="ri-file-row">
+                  <img src={ss.preview} alt="" className="ri-file-thumb" />
+                  <span className="ri-file-name">{idx + 1}. {ss.file.name}</span>
+                  <button
+                    type="button"
+                    className="logi-btn-ghost logi-refimport-btn-sm"
+                    onClick={() => removeScreenshot(ss.id)}
                     disabled={parsing}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="ri-align-cards">
+              {screenshots.map((ss, idx) => {
+                const alignment = manualAlignments[ss.id];
+                const confirmed = alignmentConfirmed[ss.id] ?? false;
+                const panelCount = alignment?.panelCount ?? 3;
+                return (
+                  <div key={ss.id} className={`ri-ss-align-card${confirmed ? " ri-ss-align-card--confirmed" : ""}`}>
+                    <div className="ri-ss-align-hdr">
+                      <span className="ri-ss-card-name">{idx + 1}. {ss.file.name}</span>
+                      {confirmed ? (
+                        <span className="ri-align-status ri-align-status--ready">
+                          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="10" height="10"><polyline points="20 6 9 17 4 12" /></svg>
+                          Ready
+                        </span>
+                      ) : (
+                        <span className="ri-align-status ri-align-status--warn">Alignment required</span>
+                      )}
+                      <button
+                        type="button"
+                        className="logi-btn-ghost logi-refimport-btn-sm"
+                        onClick={() => removeScreenshot(ss.id)}
+                        disabled={parsing}
+                      >
+                        Remove
+                      </button>
+                    </div>
 
-          <button type="button" className="logi-btn-primary ri-parse-btn" onClick={handleParse} disabled={parsing}>
+                    <div className="ri-align-step-row">
+                      <span className="ri-align-step">Step 1 — Select panel count</span>
+                      <div className="ri-panel-count" aria-label="Panel count">
+                        {([1, 2, 3, 4] as (1 | 2 | 3 | 4)[]).map((count) => (
+                          <button
+                            key={count}
+                            type="button"
+                            className={panelCount === count ? "ri-panel-count-btn ri-panel-count-btn--active" : "ri-panel-count-btn"}
+                            onClick={() => updateManualAlignment(ss.id, { panelCount: count })}
+                            disabled={parsing}
+                          >
+                            {count}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {panelCount > 1 && (
+                      <div className="ri-align-step-row">
+                        <span className="ri-align-step">Step 2 — Drag dividers to align panels</span>
+                      </div>
+                    )}
+
+                    <ManualAlignmentPreview
+                      screenshot={ss}
+                      alignment={alignment}
+                      onChange={(patch) => updateManualAlignment(ss.id, patch)}
+                      disabled={parsing}
+                    />
+
+                    <div className="ri-align-confirm-row">
+                      {confirmed ? (
+                        <button
+                          type="button"
+                          className="ri-align-confirmed"
+                          onClick={() => setAlignmentConfirmed((prev) => ({ ...prev, [ss.id]: false }))}
+                          disabled={parsing}
+                        >
+                          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="11" height="11"><polyline points="20 6 9 17 4 12" /></svg>
+                          Alignment confirmed — click to redo
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="ri-align-confirm-btn"
+                          onClick={() => setAlignmentConfirmed((prev) => ({ ...prev, [ss.id]: true }))}
+                          disabled={parsing}
+                        >
+                          Confirm alignment
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {alignmentMode === "manual" && !parsing && screenshots.some((ss) => !(alignmentConfirmed[ss.id] ?? false)) && (
+            <p className="ri-align-warning-text">Panel alignment is required before parsing.</p>
+          )}
+
+          <button
+            type="button"
+            className="logi-btn-primary ri-parse-btn"
+            onClick={handleParse}
+            disabled={parsing || (alignmentMode === "manual" && screenshots.some((ss) => !(alignmentConfirmed[ss.id] ?? false)))}
+          >
             {parsing ? (
               <><span className="logi-refimport-spinner" aria-hidden /> Parsing… {parseProgress}%</>
+            ) : (alignmentMode === "manual" && screenshots.some((ss) => !(alignmentConfirmed[ss.id] ?? false))) ? (
+              "Confirm all alignments to parse"
             ) : (
               `Parse ${screenshots.length === 1 ? "Screenshot" : `${screenshots.length} Screenshots`}`
             )}
@@ -968,13 +1025,7 @@ function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: M
   }
 
   return (
-    <div className="ri-align-preview-card">
-      <div className="ri-align-preview-head">
-        <span>{screenshot.file.name}</span>
-        <span>{panelCount} panel{panelCount === 1 ? "" : "s"}</span>
-      </div>
-      <p className="ri-align-instruction">Drag the vertical handles to align each work order panel.</p>
-      <div className="ri-align-image-wrap" ref={wrapRef}>
+    <div className="ri-align-image-wrap" ref={wrapRef}>
         <img
           src={screenshot.preview}
           alt="Refinery screenshot alignment preview"
@@ -992,7 +1043,6 @@ function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: M
             style={{
               left: `${left * 100}%`,
               width: `${(bounds[panelIdx + 1] - left) * 100}%`,
-              background: panelIdx % 2 === 0 ? "rgba(167, 139, 250, 0.07)" : "rgba(96, 165, 250, 0.07)",
             }}
           >
             <span className="ri-align-panel-label">Panel {panelIdx + 1}</span>
@@ -1007,6 +1057,8 @@ function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: M
             onPointerDown={(event) => {
               if (disabled) return;
               event.currentTarget.setPointerCapture(event.pointerId);
+              event.currentTarget.dataset.dragging = "true";
+              if (wrapRef.current) wrapRef.current.dataset.dragging = "true";
               moveDivider(idx, event.clientX);
             }}
             onPointerMove={(event) => {
@@ -1016,13 +1068,14 @@ function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: M
             onPointerUp={(event) => {
               if (event.currentTarget.hasPointerCapture(event.pointerId)) {
                 event.currentTarget.releasePointerCapture(event.pointerId);
+                delete event.currentTarget.dataset.dragging;
+                if (wrapRef.current) delete wrapRef.current.dataset.dragging;
               }
             }}
             aria-label={`Move divider ${idx + 1}`}
             disabled={disabled}
           />
         ))}
-      </div>
     </div>
   );
 }
@@ -1590,14 +1643,19 @@ function ImportBar({
             <Link to="/logistics/inventory" className="logi-refimport-inv-link">View Inventory →</Link>
           </div>
         ) : (
-          <button
-            type="button"
-            className="logi-btn-primary"
-            onClick={onImport}
-            disabled={includedCount === 0}
-          >
-            Save selected rows to inventory
-          </button>
+          <>
+            {!locationId && (
+              <span className="ri-import-location-warn">Location required</span>
+            )}
+            <button
+              type="button"
+              className="logi-btn-primary"
+              onClick={onImport}
+              disabled={includedCount === 0 || !locationId}
+            >
+              Save selected rows to inventory
+            </button>
+          </>
         )}
         <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
       </div>

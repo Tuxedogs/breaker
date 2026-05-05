@@ -1,0 +1,79 @@
+/* DeckFloorViewport — ship & view selector controls */
+
+.dfv-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(7, 11, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+}
+
+.dfv-row-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+  white-space: nowrap;
+  min-width: 2.8rem;
+  flex-shrink: 0;
+}
+
+.dfv-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.dfv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(199, 210, 230, 0.65);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.dfv-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #e7edff;
+}
+
+.dfv-btn--active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+}
+
+.dfv-btn--active:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.dfv-btn--disabled,
+.dfv-btn:disabled {
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.06);
+  color: rgba(160, 180, 220, 0.22);
+}
+
+.dfv-btn:focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.55);
+  outline-offset: 2px;
+}

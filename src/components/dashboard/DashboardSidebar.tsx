@@ -160,11 +160,6 @@ export default function DashboardSidebar() {
       </nav>
 
       {/* PRO upsell */}
-      <div className="dash-pro-card">
-        <div className="dash-pro-title">Unlock Advanced Tools</div>
-        <p className="dash-pro-desc">Saved builds, track inventory, and more.</p>
-        <a href="#" className="dash-pro-btn">Login with Discord</a>
-      </div>
 
       {/* Footer */}
       <div className="dash-sidebar-footer">

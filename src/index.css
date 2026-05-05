@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap");
-
 /* Component Layer (each file wraps content in @layer components) */
 @import "./styles/components.css";
 @import "./styles/alpha-threshold.css";
@@ -24,6 +22,74 @@
 @import "./styles/doctrine-module-layouts.css";
 @import "./styles/systems.css";
 @import "./styles/maps.css";
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+/* Orbitron */
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("/fonts/Orbitron-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Rajdhani */
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Rajdhani";
+  src: url("/fonts/Rajdhani-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
