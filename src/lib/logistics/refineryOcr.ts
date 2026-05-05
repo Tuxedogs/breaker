@@ -522,7 +522,7 @@ function sortAndDeduplicateCompleteRows(
       if (ay !== by) return ay - by;
       return a.quality - b.quality;
     })
-    .map(({ y: _y, ...row }) => row);
+    .map((row) => { const { y, ...rest } = row; void y; return rest; });
 }
 
 function inferRowYFromNumbers(

@@ -10,14 +10,13 @@ import ScreenshotImportButton from '../../components/logistics/ScreenshotImportB
 
 
 export default function BuildQueuePage() {
-  const [sourceStrategy, setSourceStrategy] = useState<SourceStrategy>('minimize-splits');
+  const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const locations = useLogisticsStore((state) => state.locations);
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const recipes = useLogisticsStore((state) => state.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
-  const updateBuildQueueItemStatus = useLogisticsStore((state) => state.updateBuildQueueItemStatus);
   const updateBuildQueueItemPriority = useLogisticsStore((state) => state.updateBuildQueueItemPriority);
   const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
   const toggleBuildQueueAllocation = useLogisticsStore((state) => state.toggleBuildQueueAllocation);
@@ -109,7 +108,6 @@ export default function BuildQueuePage() {
             materials={materials}
             locations={locations}
             strategy={sourceStrategy}
-            onStatusChange={updateBuildQueueItemStatus}
             onPriorityChange={updateBuildQueueItemPriority}
             onRemove={removeBuildQueueItem}
             onToggleAllocation={toggleBuildQueueAllocation}

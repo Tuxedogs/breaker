@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CraftTabBar from "../crafting/CraftTabBar";
 import {
   getMiningRecommendations,
@@ -122,24 +122,14 @@ function RoutesPanel({
 }) {
   const isAdvanced = accessMode === "planner";
 
-  // REMOVE FROM PROD: public mode shows 3 shuffled routes, stable for the session.
-  // Delete the ref + the ternary below and replace visibleRoutes with `routes` to restore full list.
-  const publicRoutesRef = useRef<BestRoute[] | null>(null);
-  if (accessMode === "public" && publicRoutesRef.current === null) {
-    const shuffled = [...routes].sort(() => Math.random() - 0.5);
-    publicRoutesRef.current = shuffled.slice(0, 3);
-  }
-
-  const visibleRoutes = accessMode === "public" ? (publicRoutesRef.current ?? []) : routes;
-
-  const displayed = showOnlyStarred ? visibleRoutes.filter((r) => isFavorite(r)) : visibleRoutes;
+  const displayed = showOnlyStarred ? routes.filter((r) => isFavorite(r)) : routes;
 
   return (
     <div className="mine-panel">
       <div className="mine-panel-header mine-panel-header--row">
         <div className="mine-panel-header-left">
           <span className="mine-panel-title">Recommended Routes</span>
-          <span className="mine-panel-count">{visibleRoutes.length} routes</span>
+          <span className="mine-panel-count">{routes.length} routes</span>
         </div>
         <button
           className={`mine-filter-btn${showOnlyStarred ? " mine-filter-btn--active" : ""}`}

@@ -389,8 +389,10 @@ export function SubTargetSection({
 
   if (!defaultShip) return
 
-  setMapZoomIndex(0)
-  selectShip(defaultShip.id)
+  queueMicrotask(() => {
+    setMapZoomIndex(0)
+    selectShip(defaultShip.id)
+  })
 
   const defaultView =
     defaultShip.viewTabs?.find(view => view.id === 'top')?.id ??
