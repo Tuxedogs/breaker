@@ -16,7 +16,6 @@ export async function getMiningRecommendations(
   intentPayload?: MiningPlannerIntentPayload
 ): Promise<BuildQueueRecommendationFixture> {
   if (intentPayload && import.meta.env.DEV) {
-    // eslint-disable-next-line no-console
     console.debug("[recommenderAdapter] intent payload (not used for scoring):", intentPayload);
   }
   return fixture as BuildQueueRecommendationFixture;

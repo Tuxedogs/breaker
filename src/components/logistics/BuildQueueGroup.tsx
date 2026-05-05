@@ -36,7 +36,6 @@ interface Props {
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
   strategy: SourceStrategy;
-  onStatusChange: (id: string, status: NonNullable<BuildQueueItem['status']>) => void;
   onPriorityChange: (id: string, priority: number) => void;
   onRemove: (id: string) => void;
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
@@ -68,7 +67,6 @@ const STATUS_LABELS: Record<NonNullable<BuildQueueItem['status']>, string> = {
   complete: 'Complete',
 };
 
-const STATUS_OPTIONS: Array<NonNullable<BuildQueueItem['status']>> = ['queued', 'active', 'paused', 'complete'];
 
 const COVERAGE_LABELS = {
   covered: 'Covered',
@@ -117,7 +115,6 @@ export default function BuildQueueGroup({
   materials,
   locations,
   strategy,
-  onStatusChange,
   onPriorityChange,
   onRemove,
   onToggleAllocation,

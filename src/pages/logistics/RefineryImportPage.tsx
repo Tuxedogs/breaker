@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLogisticsStore, createInventoryEntryDraft } from "../../stores/logisticsStore";
 import { formatQuantity } from "../../lib/logistics/inventory";
 import { parseRefineryScreenshot } from "../../lib/logistics/refineryOcr";
@@ -170,18 +170,9 @@ const SCREEN_MOD: Record<RefineryScreenType, string> = {
   unknown: "logi-refimport-screen-badge--unknown",
 };
 
-const RETURN_LINKS: Record<string, { label: string; to: string }> = {
-  inventory: { label: "Inventory", to: "/logistics/inventory" },
-  locations: { label: "Locations", to: "/logistics/locations" },
-  "build-queue": { label: "Build Queue", to: "/logistics/build-queue" },
-  dashboard: { label: "Dashboard", to: "/dashboard" },
-};
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function RefineryImportPage() {
-  const [searchParams] = useSearchParams();
-  const returnLink = RETURN_LINKS[searchParams.get("source") ?? ""] ?? null;
   const materials = useLogisticsStore((s) => s.materialTemplates);
   const locations = useLogisticsStore((s) => s.locations);
   const addInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
@@ -1359,89 +1350,6 @@ function WorkOrderColumn({
       </div>
       {children}
     </section>
-  );
-}
-
-interface CompleteOrderTableProps {
-  rows: DraftRow[];
-  materials: MaterialTemplate[];
-  onUpdate: (rowIdx: number, patch: Partial<DraftRow>) => void;
-}
-
-function CompleteOrderTable({ rows, materials, onUpdate }: CompleteOrderTableProps) {
-  if (rows.length === 0) {
-    return <div className="ri-empty-rows">No rows detected in this panel.</div>;
-  }
-  return (
-    <table className="logi-table logi-refimport-table">
-      <thead>
-        <tr>
-          <th style={{ width: 28 }} />
-          <th>Material</th>
-          <th>Quality</th>
-          <th>Yield (cSCU)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, rowIdx) => (
-          <tr key={rowIdx} className={!row.include ? "logi-refimport-row--excluded" : ""}>
-            <td>
-              <input
-                type="checkbox"
-                className="logi-refimport-check"
-                checked={row.include}
-                onChange={(e) => onUpdate(rowIdx, { include: e.target.checked })}
-                aria-label={`Include ${row.rawName}`}
-              />
-            </td>
-            <td>
-              {row.needsReview && row.materialId !== null && (
-                <span className="logi-refimport-review-tag" title="Low OCR confidence — please verify">REVIEW</span>
-              )}
-              {row.materialId === null && (
-                <span className="logi-refimport-unmatched-tag">{row.rawName}</span>
-              )}
-              <select
-                className={`logi-select logi-refimport-mat-select${row.materialId === null ? " logi-refimport-mat-select--warn" : ""}`}
-                value={row.selectedMaterialId}
-                onChange={(e) => onUpdate(rowIdx, { selectedMaterialId: e.target.value })}
-                aria-label="Material"
-              >
-                <option value="">— select —</option>
-                {materials.map((m) => (
-                  <option key={m.id} value={m.id}>{m.name}</option>
-                ))}
-              </select>
-            </td>
-            <td>
-              <input
-                type="number"
-                className="logi-refimport-num"
-                min={0}
-                max={1000}
-                value={row.editedQuality}
-                onChange={(e) =>
-                  onUpdate(rowIdx, { editedQuality: Math.max(0, Math.min(1000, parseInt(e.target.value, 10) || 0)) })
-                }
-                aria-label="Quality"
-              />
-            </td>
-            <td>
-              <input
-                type="number"
-                className="logi-refimport-num"
-                min={0}
-                value={row.editedQuantity}
-                onChange={(e) =>
-                  onUpdate(rowIdx, { editedQuantity: Math.max(0, parseInt(e.target.value, 10) || 0) })
-                }
-                aria-label="Yield (cSCU)"
-              />
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
   );
 }
 
