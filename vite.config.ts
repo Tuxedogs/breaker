@@ -4,6 +4,7 @@ import mdx from "@mdx-js/rollup";
 import svgr from "vite-plugin-svgr";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
+import path from "node:path";
 
 export default defineConfig({
   plugins: [
@@ -14,4 +15,9 @@ export default defineConfig({
       remarkPlugins: [remarkFrontmatter, remarkGfm],
     }),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
 });

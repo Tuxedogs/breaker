@@ -7,42 +7,10 @@ const ShipMapViewer = lazy(() => import("../../../tools/viewer/ViewerPage"));
 
 type ViewMode = "2d" | "3d";
 
-// ── Left-rail icons ────────────────────────────────────────────────────────
-const RAIL_ICONS = {
-  camera:
-    "M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2zM12 17a4 4 0 100-8 4 4 0 000 8z",
-  lighting:
-    "M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 006 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5m-6 0h6m-3 4v-4",
-  background:
-    "M3 3h18v18H3V3zm3 3v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2z",
-  hud: "M2 3h20v14H2V3zm0 18l4-4h12l4 4M9 8h6m-3-2v6",
-  stats: "M18 20V10m-6 10V4M6 20v-6",
-  bookmarks:
-    "M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z",
-};
-
-function RailIcon({ d }: { d: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      width="18"
-      height="18"
-      aria-hidden
-    >
-      <path d={d} />
-    </svg>
-  );
-}
-
 function ViewerLoading() {
   return (
     <div className="smap-viewer-loading">
-      <p className="base-card-kicker">Loading 3D viewer…</p>
+      <p className="base-card-kicker">Loading Ship Systems…</p>
     </div>
   );
 }
@@ -65,7 +33,6 @@ const PERSEUS_INFO = {
 export default function ShipMapsPage() {
   const [mode, setMode] = useState<ViewMode>("2d");
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [activeRailItem, setActiveRailItem] = useState<string | null>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
 
   function handleFullscreenToggle() {
@@ -107,7 +74,7 @@ export default function ShipMapsPage() {
             className={`smap-tab${mode === "3d" ? " smap-tab--active" : ""}`}
             onClick={() => setMode("3d")}
           >
-            3D Viewer
+            Ship Systems
           </button>
         </div>
       </div>
@@ -117,7 +84,7 @@ export default function ShipMapsPage() {
         <div className="smap-body">
           <DeckFloorViewport
             title="RSI Perseus Deck Maps"
-            subtitle="Static deck references for quick layout checks without loading the 3D viewer."
+            subtitle="Static deck references for quick layout checks without loading Ship Systems."
             deckDefinitions={perseusDeckFloors}
           />
         </div>
@@ -135,12 +102,12 @@ export default function ShipMapsPage() {
               <span className="smap-breadcrumb-seg">Maps &amp; Data</span>
               <span className="smap-breadcrumb-sep" aria-hidden>/</span>
               <span className="smap-breadcrumb-seg smap-breadcrumb-seg--current">
-                3D Viewer
+                Ship Systems
               </span>
             </nav>
 
             <div className="smap-viewer-heading">
-              <h2 className="smap-viewer-title">3D Viewer</h2>
+              <h2 className="smap-viewer-title">Ship Systems</h2>
             </div>
 
             <div className="smap-viewer-actions">
@@ -193,43 +160,9 @@ export default function ShipMapsPage() {
             </div>
           </div>
 
-          {/* 3-column body */}
+          {/* 2-column body: canvas + ship info */}
           <div className="smap-viewer-body">
-            {/* Left icon rail */}
-            <nav
-              className="smap-viewer-rail"
-              aria-label="Viewer controls"
-            >
-              {(
-                [
-                  { id: "camera", label: "Camera", icon: RAIL_ICONS.camera },
-                  { id: "lighting", label: "Lighting", icon: RAIL_ICONS.lighting },
-                  { id: "background", label: "Background", icon: RAIL_ICONS.background },
-                  { id: "hud", label: "HUD", icon: RAIL_ICONS.hud },
-                  { id: "stats", label: "Stats", icon: RAIL_ICONS.stats },
-                  { id: "bookmarks", label: "Bookmarks", icon: RAIL_ICONS.bookmarks },
-                ] as const
-              ).map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`smap-rail-btn${activeRailItem === item.id ? " smap-rail-btn--active" : ""}`}
-                  onClick={() =>
-                    setActiveRailItem((prev) =>
-                      prev === item.id ? null : item.id
-                    )
-                  }
-                  title={item.label}
-                  aria-label={item.label}
-                  aria-pressed={activeRailItem === item.id}
-                >
-                  <RailIcon d={item.icon} />
-                  <span className="smap-rail-label">{item.label}</span>
-                </button>
-              ))}
-            </nav>
-
-            {/* Centre: 3D canvas */}
+            {/* Centre: Ship Systems canvas */}
             <div className="smap-viewer-canvas">
               <Suspense fallback={<ViewerLoading />}>
                 <ShipMapViewer />
@@ -252,76 +185,9 @@ export default function ShipMapsPage() {
                   </div>
                 ))}
               </div>
-
-              <div className="smap-info-section smap-info-section--presets">
-                <p className="smap-info-label">View Presets</p>
-                <select className="smap-info-preset-select" aria-label="View preset">
-                  <option value="default">Default</option>
-                  <option value="overview">Overview</option>
-                  <option value="interior">Interior</option>
-                  <option value="aft">Aft Deck</option>
-                </select>
-              </div>
-
-              <button type="button" className="smap-info-save-btn">
-                Save Current View
-              </button>
             </aside>
           </div>
 
-          {/* Bottom controls bar */}
-          <div className="smap-viewer-footer" role="toolbar" aria-label="Camera controls">
-            {(
-              [
-                {
-                  label: "Rotate",
-                  icon: "M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v4m0 12v4M2 12h4m12 0h4",
-                },
-                {
-                  label: "Pan",
-                  icon: "M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M12 12h.01",
-                },
-                {
-                  label: "Zoom",
-                  icon: "M11 5a6 6 0 100 12A6 6 0 0011 5zm9 9l-4.35-4.35M11 8v6m-3-3h6",
-                },
-              ] as const
-            ).map((ctrl) => (
-              <div key={ctrl.label} className="smap-footer-ctrl">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  width="14"
-                  height="14"
-                  aria-hidden
-                >
-                  <path d={ctrl.icon} />
-                </svg>
-                <span>{ctrl.label}</span>
-              </div>
-            ))}
-
-            <button type="button" className="smap-footer-reset">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                width="14"
-                height="14"
-                aria-hidden
-              >
-                <path d="M1 4v6h6M23 20v-6h-6M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15" />
-              </svg>
-              Reset Camera
-            </button>
-          </div>
         </div>
       )}
     </div>

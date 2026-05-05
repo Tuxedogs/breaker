@@ -17,6 +17,12 @@ export function getQualityModifiersForComponent(
 }
 
 function interpolateInRange(mod: QualityModifier, quality: number): number {
+  if (mod.modifier_mode === "integerAdditive") {
+    const { start_quality, end_quality, modifier_start, modifier_end } = mod;
+    if (end_quality === start_quality) return modifier_start;
+    const t = (quality - start_quality) / (end_quality - start_quality);
+    return modifier_start + t * (modifier_end - modifier_start);
+  }
   const { start_quality, end_quality, modifier_start_percent, modifier_end_percent } = mod;
   if (end_quality === start_quality) return modifier_start_percent;
   const t = (quality - start_quality) / (end_quality - start_quality);
@@ -27,6 +33,7 @@ export interface ModifierAtQuality {
   slot: string;
   property: string;
   value: number;
+  modifierMode?: string;
 }
 
 export function getModifiersAtQuality(
@@ -43,6 +50,7 @@ export function getModifiersAtQuality(
         slot: mod.slot,
         property: mod.gameplay_property,
         value: interpolateInRange(mod, q),
+        modifierMode: mod.modifier_mode,
       });
     }
   }
@@ -61,6 +69,7 @@ export function getModifiersAtQuality(
         slot: mod.slot,
         property: mod.gameplay_property,
         value: interpolateInRange(mod, Math.min(q, mod.end_quality)),
+        modifierMode: mod.modifier_mode,
       });
     }
   }
@@ -72,11 +81,31 @@ export function formatProperty(raw: string): string {
   return raw.replace(/^GPP_/, "").replace(/_/g, " ");
 }
 
+export function formatModifierAtQuality(m: ModifierAtQuality): string {
+  if (m.modifierMode === "integerAdditive") {
+    const v = Math.round(m.value);
+    const suffix =
+      m.property === "GPP_ItemResource_PowerGeneration"
+        ? ` ${Math.abs(v) === 1 ? "power pip" : "power pips"}`
+        : "";
+    return `${v >= 0 ? "+" : ""}${v}${suffix}`;
+  }
+  return `${m.value >= 0 ? "+" : ""}${m.value.toFixed(1)}%`;
+}
+
 export function modifierValueAt(modifiers: QualityModifier[], property: string, slot: string, quality: number): string {
   const q = Math.max(0, Math.min(1000, quality));
   for (const mod of modifiers) {
     if (mod.gameplay_property === property && mod.slot === slot && q >= mod.start_quality && q <= mod.end_quality) {
       const v = interpolateInRange(mod, q);
+      if (mod.modifier_mode === "integerAdditive") {
+        const rv = Math.round(v);
+        const suffix =
+          mod.gameplay_property === "GPP_ItemResource_PowerGeneration"
+            ? ` ${Math.abs(rv) === 1 ? "power pip" : "power pips"}`
+            : "";
+        return `${rv >= 0 ? "+" : ""}${rv}${suffix}`;
+      }
       return `${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
     }
   }

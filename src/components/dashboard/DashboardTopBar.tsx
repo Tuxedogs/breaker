@@ -129,15 +129,15 @@ export default function DashboardTopBar() {
         {/* Notifications */}
         <button type="button" className="dash-util-btn" aria-label="Notifications (3 unread)">
           <BellIcon />
-          <span className="dash-util-badge" aria-hidden>3</span>
+          <span className="dash-util-badge" aria-hidden></span>
         </button>
 
         {/* User */}
         <button type="button" className="dash-user-btn" aria-label="User menu">
-          <div className="dash-user-avatar" aria-hidden>TA</div>
+          <div className="dash-user-avatar" aria-hidden></div>
           <div className="dash-user-info">
-            <span className="dash-user-name">Tux-Actual</span>
-            <span className="dash-user-level">Admin</span>
+            <span className="dash-user-name"></span>
+            <span className="dash-user-level"></span>
           </div>
           <ChevronDownIcon />
         </button>

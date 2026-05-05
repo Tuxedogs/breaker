@@ -287,7 +287,7 @@
 .craft-table tbody td {
   padding: 0.45rem 0.85rem;
   color: rgba(200, 215, 255, 0.85);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(rgba(200, 215, 255, 0.85));
   vertical-align: middle;
 }
 
@@ -721,6 +721,7 @@
   flex-direction: column;
   gap: 0.5rem;
   min-width: 0;
+  min-height: 0;
 }
 
 .craft-drawer-col-title {
@@ -766,8 +767,9 @@
 
 .craft-drawer-mat-name {
   font-family: "Barlow", sans-serif;
-  font-size: 0.78rem;
-  color: rgba(200, 215, 255, 0.85);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: #dde6ff;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1074,50 +1076,6 @@
   font-size: 0.76rem;
 }
 
-/* ── Per-material quality blocks ──────────────── */
-
-.craft-drawer-mat-blocks {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.craft-drawer-mat-block {
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  padding: 0.45rem 0.55rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
-}
-
-.craft-drawer-mat-block-header {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.craft-drawer-mat-block-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.65rem;
-}
-
-.craft-drawer-mat-q-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding-top: 0.3rem;
-}
-
-.craft-drawer-mat-q-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
 /* ── Modifier groups ──────────────────────────── */
 
@@ -1189,6 +1147,534 @@
   flex-shrink: 0;
 }
 
+/* ── Recipe browser header ────────────────────── */
+
+.craft-recipe-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.craft-recipe-header-left { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.craft-recipe-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #e7edff;
+  margin: 0;
+}
+
+.craft-recipe-subtitle {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.76rem;
+  color: rgba(160, 180, 220, 0.4);
+  margin: 0;
+}
+
+.craft-recipe-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.68rem;
+  color: rgba(160, 180, 220, 0.4);
+  white-space: nowrap;
+  padding-top: 0.15rem;
+}
+
+/* ── Filter popover ───────────────────────────── */
+
+.craft-filter-popover-wrap {
+  position: relative;
+}
+
+.craft-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.34rem 0.65rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.79rem;
+  color: rgba(200, 215, 255, 0.65);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.craft-filter-btn:hover {
+  border-color: rgba(167, 139, 250, 0.3);
+  color: rgba(200, 215, 255, 0.9);
+}
+
+.craft-filter-btn--active {
+  border-color: rgba(167, 139, 250, 0.4);
+  color: #a78bfa;
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.craft-filter-btn-icon { display: flex; align-items: center; color: inherit; opacity: 0.6; }
+
+.craft-filter-chevron {
+  opacity: 0.4;
+  margin-left: 0.1rem;
+}
+
+.craft-filter-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  min-width: 170px;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #0f1220;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 5px;
+  padding: 0.35rem 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.15) transparent;
+}
+
+.craft-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0.75rem;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.8rem;
+  color: rgba(200, 215, 255, 0.75);
+  cursor: pointer;
+  transition: background 0.08s;
+}
+
+.craft-filter-option:hover { background: rgba(167, 139, 250, 0.08); }
+
+.craft-filter-checkbox {
+  accent-color: #7c3aed;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.craft-filter-clear {
+  display: block;
+  width: calc(100% - 1.5rem);
+  margin: 0.35rem 0.75rem 0.1rem;
+  padding: 0.25rem;
+  background: none;
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 3px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(248, 113, 113, 0.55);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.craft-filter-clear:hover {
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #f87171;
+}
+
+.craft-filter-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.34rem 0.65rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.12s, border-color 0.12s;
+}
+
+.craft-filter-reset:hover {
+  color: rgba(160, 180, 220, 0.75);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ── Table: column sizing ─────────────────────── */
+
+.craft-th-name { min-width: 260px; }
+.craft-th-action { width: 130px; }
+
+/* ── Name cell ────────────────────────────────── */
+
+.craft-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.craft-thumb {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+.craft-name-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.craft-name-primary {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e7edff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.craft-name-sub {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.71rem;
+  color: rgba(160, 180, 220, 0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Type badges ──────────────────────────────── */
+
+.craft-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.craft-badge--type-chip {
+  background: rgba(32, 210, 180, 0.08);
+  color: #5ee8d0;
+  border: 1px solid rgba(32, 210, 180, 0.22);
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  white-space: nowrap;
+  
+}
+
+.craft-badge--fps {
+  background: rgba(167, 139, 250, 0.08);
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.22);
+}
+
+/* ── Size badge ───────────────────────────────── */
+
+.craft-badge--size-chip {
+  background: rgba(56, 189, 248, 0.08);
+  color: #7dd3fc;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+}
+
+/* ── Grade badge ──────────────────────────────── */
+
+.craft-badge--grade {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(200, 215, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 0.1rem 0.42rem;
+  border-radius: 3px;
+}
+
+.craft-badge--grade-a {
+  background: rgba(251, 191, 36, 0.08);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+/* ── Muted dash ───────────────────────────────── */
+
+.craft-dash {
+  color: rgba(160, 180, 220, 0.2);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.75rem;
+}
+
+/* ── Cell alignment ───────────────────────────── */
+
+.craft-cell-type { vertical-align: middle; }
+.craft-cell-size { vertical-align: middle; white-space: nowrap; }
+.craft-cell-grade { vertical-align: middle; white-space: nowrap; }
+.craft-cell-class { vertical-align: middle; }
+
+/* ── Action cell ──────────────────────────────── */
+
+.craft-cell-action { vertical-align: middle; }
+
+.craft-action-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.craft-btn-add-full {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.3rem 0.7rem;
+  background: rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 4px;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #a78bfa;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.craft-btn-add-full:hover {
+  background: rgba(124, 58, 237, 0.38);
+  border-color: rgba(167, 139, 250, 0.55);
+}
+
+.craft-btn-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.45);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, border-color 0.1s, transform 0.15s;
+  flex-shrink: 0;
+}
+
+.craft-btn-chevron:hover {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: #a78bfa;
+}
+
+.craft-btn-chevron--open {
+  transform: rotate(180deg);
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.35);
+  background: rgba(124, 58, 237, 0.12);
+}
+
+/* ── Expanded drawer layout ───────────────────── */
+
+.craft-expanded-content {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+  padding: 20px 32px 24px;
+}
+
+.craft-expanded-main {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+.craft-expanded-sidebar {
+  grid-column: span 5;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+/* ── Sidebar section cards ────────────────────── */
+
+
+.craft-detail-section-header {
+  margin-bottom: 0;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.craft-empty-card {
+  padding: 14px 16px;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.73rem;
+  font-style: italic;
+  color: rgba(120, 130, 160, 0.5);
+  min-height: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+
+
+/* Override to remove box border on each group — section card provides the container */
+.craft-mod-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.craft-mod-group {
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  border-left: 2px solid rgba(52, 211, 153, 0.25);
+  border-radius: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  margin-left: 0;
+}
+
+.craft-mod-group:last-child {
+  border-bottom: none;
+}
+
+.craft-mod-group--general {
+  border-left-color: rgba(160, 180, 220, 0.15);
+}
+
+.craft-mod-group-header {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.craft-drawer-modifier-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.craft-drawer-modifier-row:last-child {
+  border-bottom: none;
+}
+
+.craft-drawer-modifier-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+/* ── Blueprint source ─────────────────────────── */
+
+.craft-drawer-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.craft-drawer-source-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.craft-drawer-source-item:last-child {
+  border-bottom: none;
+}
+
+.craft-drawer-source-tag {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+  flex-shrink: 0;
+}
+
+.craft-drawer-source-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(200, 215, 255, 0.88);
+}
+
+/* ── Add to Build Queue CTA ───────────────────── */
+
+.craft-add-queue-card {
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(109, 40, 217, 0.22) 0%, rgba(79, 70, 229, 0.14) 100%);
+  color: rgba(221, 214, 254, 0.95);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.craft-add-queue-card:hover {
+  background: linear-gradient(135deg, rgba(109, 40, 217, 0.38) 0%, rgba(79, 70, 229, 0.26) 100%);
+  border-color: rgba(167, 139, 250, 0.65);
+  box-shadow: 0 0 22px rgba(124, 58, 237, 0.18);
+}
+
+.craft-add-queue-title {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c4b5fd;
+}
+
+.craft-add-queue-subtitle {
+  margin-top: 3px;
+  font-family: "Barlow", sans-serif;
+  font-size: 0.68rem;
+  color: rgba(167, 139, 250, 0.5);
+}
+
 /* ── Responsive ───────────────────────────────── */
 
 .craft-queue-materials {
@@ -1227,9 +1713,1265 @@
     grid-template-columns: 1fr;
   }
 
+  .craft-expanded-main,
+  .craft-expanded-sidebar {
+    grid-column: 1 / -1;
+  }
+
+  .craft-material-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .craft-material-quality {
+    grid-template-columns: minmax(220px, 260px) 92px;
+  }
+
+  .craft-material-info {
+    max-width: none;
+  }
+
   .craft-pagination {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
 }
+
+
+/* ── OVERRIDE: Blueprint-input style material drawer ─────────── */
+
+.craft-expanded-main .craft-material-list {
+  display: grid;
+  gap: 16px;
+  padding: 0;
+}
+
+.craft-expanded-main .craft-material-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.75fr) minmax(420px, 1.25fr);
+  gap: 22px;
+  align-items: start;
+
+  min-height: 138px;
+  padding: 22px 20px;
+
+  border: 1px solid rgba(56, 189, 248, 0.14);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.07), transparent 34%),
+    linear-gradient(180deg, rgba(13, 22, 40, 0.96), rgba(9, 14, 29, 0.96));
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+.craft-expanded-main .craft-material-info {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.craft-expanded-main .craft-material-title {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.craft-expanded-main .craft-material-badge {
+  width: fit-content;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: rgba(226, 232, 255, 0.9);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.craft-expanded-main .craft-material-name {
+  color: #38bdf8;
+  font-family: "Barlow", sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.craft-expanded-main .craft-material-required {
+  color: rgba(226, 232, 255, 0.88);
+  font-family: "Barlow", sans-serif;
+  font-size: 13px;
+}
+
+.craft-expanded-main .craft-material-required strong {
+  margin-left: 6px;
+  color: rgba(226, 232, 255, 1);
+  font-family: "Share Tech Mono", monospace;
+  font-weight: 900;
+}
+
+.craft-expanded-main .craft-material-quality {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  min-width: 0;
+}
+
+.craft-expanded-main .craft-quality-control {
+  min-width: 0;
+}
+
+.craft-expanded-main .craft-band-rail-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 28px;
+}
+
+.craft-expanded-main .craft-band-rail-wrap::before {
+  content: "Quality";
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  color: rgba(226, 232, 255, 0.92);
+  font-family: "Barlow", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.craft-expanded-main .craft-band-range {
+  position: absolute;
+  inset: 28px 0 0;
+  z-index: 5;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.craft-expanded-main .craft-band-ticks {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+.craft-expanded-main .craft-band-tick {
+  height: 34px;
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 6px;
+  background: rgba(18, 24, 42, 0.92);
+
+  color: rgba(148, 163, 184, 0.38);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.craft-expanded-main .craft-band-tick--active {
+  border-color: rgba(125, 211, 252, 0.75);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.95), rgba(14, 165, 233, 0.72));
+  color: rgba(3, 7, 18, 0.96);
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.2),
+    0 0 20px rgba(56, 189, 248, 0.18);
+}
+
+.craft-expanded-main .craft-material-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+.craft-expanded-main .craft-material-band,
+.craft-expanded-main .craft-material-mapped,
+.craft-expanded-main .craft-material-raw {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 10px;
+  border: 1px solid rgba(20, 184, 166, 0.24);
+  border-radius: 8px;
+  background: rgba(20, 184, 166, 0.08);
+
+  color: rgba(226, 232, 255, 0.88);
+  font-family: "Barlow", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.craft-expanded-main .craft-material-band {
+  color: rgba(196, 181, 253, 1);
+  border-color: rgba(167, 139, 250, 0.28);
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.craft-expanded-main .craft-material-mapped {
+  color: rgba(45, 212, 191, 0.95);
+}
+
+.craft-expanded-main .craft-material-raw {
+  color: rgba(186, 198, 232, 0.78);
+  border-color: rgba(148, 163, 184, 0.14);
+  background: rgba(148, 163, 184, 0.045);
+}
+
+/* Right side gets closer to the reference panel */
+
+.craft-expanded-sidebar .craft-detail-section {
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.08), transparent 38%),
+    rgba(13, 22, 40, 0.92);
+}
+
+.craft-expanded-sidebar .craft-detail-section-header {
+  padding: 12px 16px;
+  color: rgba(196, 181, 253, 0.9);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.craft-expanded-sidebar .craft-empty-card {
+  padding: 16px;
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.craft-expanded-sidebar .craft-add-queue-card {
+  min-height: 76px;
+  border-radius: 12px;
+  border-color: rgba(167, 139, 250, 0.52);
+  background:
+    radial-gradient(circle at 100% 50%, rgba(167, 139, 250, 0.18), transparent 34%),
+    linear-gradient(135deg, rgba(88, 28, 135, 0.48), rgba(30, 41, 59, 0.62));
+}
+
+/* Responsive */
+
+@media (max-width: 1100px) {
+  .craft-expanded-main .craft-material-row {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-expanded-main .craft-material-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Material quality card (new slider design) ── */
+
+.craft-matq-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-left: 2px solid rgba(45, 212, 191, 0.22);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(14, 18, 34, 0.98), rgba(9, 13, 28, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025), 0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+.craft-matq-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.craft-matq-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.craft-matq-slot {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(220, 230, 255, 0.82);
+}
+
+.craft-matq-name {
+  font-family: "Barlow", sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #38cfff;
+  line-height: 1.15;
+}
+
+.craft-matq-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  color: rgba(150, 156, 194, 0.9);
+}
+
+.craft-matq-qty strong {
+  color: rgba(196, 181, 253, 1);
+  font-weight: 900;
+}
+
+.craft-matq-quality-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.craft-matq-quality-label {
+  font-family: "Barlow", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(230, 238, 255, 0.84);
+}
+
+.craft-matq-reset-btn {
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: rgba(200, 215, 255, 0.6);
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.craft-matq-reset-btn:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+}
+
+.craft-matq-quality-value {
+  font-family: "Orbitron", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #38cfff;
+  min-width: 36px;
+  text-align: right;
+}
+
+.craft-matq-slider-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.craft-matq-slider {
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  background: linear-gradient(
+    to right,
+    #38bdf8 calc(var(--val, 50) * 1%),
+    rgba(255, 255, 255, 0.1) calc(var(--val, 50) * 1%)
+  );
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.craft-matq-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #fff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.craft-matq-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+.craft-matq-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+.craft-matq-mods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.craft-matq-mod-card {
+  padding: 10px 12px;
+  background: rgba(14, 22, 40, 0.82);
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.craft-matq-mod-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.craft-matq-mod-prop {
+  font-family: "Barlow", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(200, 215, 255, 0.85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.craft-matq-mod-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.craft-matq-mod-hint {
+  font-family: "Barlow", sans-serif;
+  font-size: 10px;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+@media (max-width: 900px) {
+  .craft-matq-mods {
+    grid-template-columns: 1fr;
+  }
+  .craft-matq-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* ── Crafted item summary panel ──────────────── */
+
+.craft-summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid rgba(56, 189, 248, 0.16);
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.08), transparent 38%),
+    rgba(13, 22, 40, 0.92);
+  overflow: hidden;
+  position: sticky;
+  top: 16px;
+}
+
+.craft-summary-head {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.craft-summary-title {
+  font-family: "Barlow", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e7edff;
+  line-height: 1.2;
+}
+
+.craft-summary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.craft-summary-section {
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.craft-summary-section--grow {
+  flex: 1;
+}
+
+.craft-summary-section-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(196, 181, 253, 0.75);
+}
+
+.craft-summary-mod-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.craft-summary-mod-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.craft-summary-mod-row:last-child {
+  border-bottom: none;
+}
+
+.craft-summary-mod-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.craft-summary-mod-slot {
+  flex-shrink: 0;
+}
+
+.craft-summary-mod-prop {
+  font-family: "Barlow", sans-serif;
+  font-size: 12px;
+  color: rgba(200, 215, 255, 0.75);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.craft-summary-mod-val {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.craft-summary-mod-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 4px;
+}
+
+.craft-summary-mod-contrib {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.craft-summary-mod-contrib + .craft-summary-mod-contrib::before {
+  content: "·";
+  margin-right: 6px;
+  color: rgba(160, 180, 220, 0.2);
+}
+
+.craft-summary-overall-mods {
+  margin-top: 2px;
+}
+
+.craft-summary-empty {
+  font-family: "Barlow", sans-serif;
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(120, 130, 160, 0.5);
+  padding: 4px 0;
+}
+
+.craft-summary-queue-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 18px;
+  border: none;
+  border-top: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 0;
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.44), rgba(30, 41, 59, 0.58));
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c4b5fd;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.craft-summary-queue-btn:hover {
+  background: linear-gradient(135deg, rgba(109, 40, 217, 0.55), rgba(30, 41, 59, 0.72));
+  color: #ddd6fe;
+}
+
+/* ── PATCH: drawer legibility pass ───────────── */
+/* ── POLISH PATCH: keep colors, improve hierarchy ───────────── */
+
+/* Make the expanded area feel less floaty */
+.craft-expanded-content {
+  padding: 22px 56px 28px;
+  gap: 22px;
+  background:
+    radial-gradient(circle at 25% 0%, rgba(56, 189, 248, 0.045), transparent 36%),
+    rgba(5, 8, 18, 0.34);
+}
+
+/* Left column rhythm */
+.craft-expanded-main .craft-material-list {
+  gap: 12px;
+}
+
+/* Material cards: cleaner, less chunky border soup */
+.craft-expanded-main .craft-material-row {
+  min-height: 138px;
+  padding: 20px 22px;
+
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  border-left: 2px solid rgba(45, 212, 191, 0.22);
+  border-radius: 12px;
+
+  background:
+    linear-gradient(135deg, rgba(14, 18, 34, 0.98), rgba(9, 13, 28, 0.98));
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 10px 26px rgba(0, 0, 0, 0.18);
+}
+
+/* Material identity: less screaming, more readable */
+.craft-expanded-main .craft-material-badge {
+  color: rgba(220, 230, 255, 0.82);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.craft-expanded-main .craft-material-name {
+  color: #38cfff;
+  font-size: 18px;
+  line-height: 1.15;
+}
+
+.craft-expanded-main .craft-material-required {
+  margin-top: 4px;
+  color: rgba(210, 220, 250, 0.76);
+  font-size: 14px;
+}
+
+.craft-expanded-main .craft-material-required strong {
+  color: rgba(245, 248, 255, 0.92);
+}
+
+/* Quality label */
+.craft-expanded-main .craft-band-rail-wrap::before {
+  color: rgba(230, 238, 255, 0.84);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Band buttons: softer inactive state, clearer active state */
+.craft-expanded-main .craft-band-ticks {
+  gap: 7px;
+}
+
+.craft-expanded-main .craft-band-tick {
+  height: 32px;
+  border-radius: 7px;
+  border-color: rgba(148, 163, 184, 0.13);
+  background: rgba(20, 25, 43, 0.78);
+
+  color: rgba(155, 166, 205, 0.42);
+  font-size: 11px;
+}
+
+.craft-expanded-main .craft-band-tick--active {
+  border-color: rgba(56, 189, 248, 0.85);
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.95), rgba(14, 165, 233, 0.82));
+  color: rgba(4, 10, 20, 0.98);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 18px rgba(56, 189, 248, 0.22);
+}
+
+/* Meta chips: stop looking like random buttons */
+.craft-expanded-main .craft-material-meta {
+  margin-top: 2px;
+}
+
+.craft-expanded-main .craft-material-band,
+.craft-expanded-main .craft-material-mapped,
+.craft-expanded-main .craft-material-raw {
+  min-height: 32px;
+  padding: 7px 12px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.craft-expanded-main .craft-material-band {
+  border-color: rgba(56, 189, 248, 0.26);
+  background: rgba(56, 189, 248, 0.08);
+  color: rgba(205, 226, 255, 0.9);
+}
+
+.craft-expanded-main .craft-material-mapped {
+  border-color: rgba(20, 184, 166, 0.24);
+  background: rgba(20, 184, 166, 0.07);
+  color: rgba(72, 245, 223, 0.92);
+}
+
+.craft-expanded-main .craft-material-raw {
+  border-color: rgba(148, 163, 184, 0.11);
+  background: rgba(148, 163, 184, 0.035);
+  color: rgba(180, 190, 220, 0.68);
+}
+
+/* Right sidebar: less oversized, better alignment */
+.craft-expanded-sidebar {
+  gap: 14px;
+}
+
+.craft-expanded-sidebar .craft-detail-section {
+  border-radius: 13px;
+  border-color: rgba(56, 189, 248, 0.13);
+  background:
+    linear-gradient(135deg, rgba(14, 22, 39, 0.96), rgba(8, 13, 28, 0.96));
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 10px 26px rgba(0, 0, 0, 0.14);
+}
+
+.craft-expanded-sidebar .craft-detail-section-header {
+  padding: 13px 18px;
+  color: rgba(195, 210, 255, 0.78);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+/* Modifier rows: make them feel like rows, not text floating in soup */
+.craft-expanded-sidebar .craft-mod-group {
+  padding: 13px 18px;
+  border-left-width: 2px;
+  border-bottom-color: rgba(255, 255, 255, 0.055);
+}
+
+.craft-expanded-sidebar .craft-mod-group-header {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.craft-expanded-sidebar .craft-mod-group-mat {
+  color: rgba(190, 203, 240, 0.78);
+  font-size: 14px;
+}
+
+.craft-expanded-sidebar .craft-drawer-modifier-prop {
+  color: rgba(190, 203, 240, 0.76);
+  font-size: 14px;
+}
+
+.craft-expanded-sidebar .craft-drawer-modifier-val {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+/* CTA: same colors, better proportions */
+.craft-expanded-sidebar .craft-add-queue-card {
+  width: 44%;
+  min-width: 300px;
+  min-height: 72px;
+
+  border-radius: 13px;
+  border-color: rgba(56, 189, 248, 0.22);
+  background:
+    linear-gradient(135deg, rgba(14, 22, 39, 0.98), rgba(12, 18, 34, 0.98));
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.craft-expanded-sidebar .craft-add-queue-title {
+  color: rgba(100, 255, 236, 0.92);
+  font-size: 14px;
+}
+
+.craft-expanded-sidebar .craft-add-queue-subtitle {
+  color: rgba(150, 165, 205, 0.58);
+  font-size: 12px;
+}
+
+/* ==========================================================
+   Quantized material quality drawer
+   Final rail-style 8-band slider patch
+
+   Works with ComponentRecipeTable.quantized.final.tsx.
+   This intentionally wins over older .craft-band-* and .craft-matq-* blocks above.
+   ========================================================== */
+
+.craft-expanded-content {
+  padding: 22px 56px 28px;
+  gap: 22px;
+  background:
+    radial-gradient(circle at 25% 0%, rgba(56, 189, 248, 0.045), transparent 36%),
+    rgba(5, 8, 18, 0.34);
+}
+
+.craft-expanded-main .craft-material-list {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+}
+
+.craft-matq-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px 18px;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-left: 2px solid rgba(45, 212, 191, 0.26);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.055), transparent 34%),
+    linear-gradient(135deg, rgba(11, 16, 31, 0.98), rgba(8, 12, 26, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.craft-matq-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.craft-matq-identity {
+  display: block;
+  min-width: 0;
+}
+
+.craft-matq-slot {
+  display: block;
+  margin-bottom: 6px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 255, 0.78);
+}
+
+.craft-matq-name {
+  display: block;
+  font-family: "Barlow", sans-serif;
+  font-size: 18px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: #38cfff;
+}
+
+.craft-matq-qty {
+  display: block;
+  margin-top: 8px;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 11px;
+  color: rgba(160, 180, 220, 0.76);
+}
+
+.craft-matq-qty strong {
+  color: rgba(196, 181, 253, 1);
+  font-weight: 900;
+}
+
+.craft-matq-quality-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.craft-matq-quality-label {
+  font-family: "Barlow", sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  color: rgba(226, 232, 255, 0.9);
+}
+
+.craft-matq-reset-btn {
+  height: 26px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(200, 215, 255, 0.62);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.craft-matq-reset-btn:hover {
+  border-color: rgba(56, 189, 248, 0.42);
+  background: rgba(56, 189, 248, 0.08);
+  color: #7dd3fc;
+}
+
+.craft-matq-quality-value {
+  min-width: 42px;
+  text-align: right;
+  font-family: "Orbitron", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.24);
+}
+
+.craft-matq-slider-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.craft-matq-slider {
+  --progress: 0%;
+  width: 100%;
+  height: 20px;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.craft-matq-slider[data-band="0"] { --progress: 0%; }
+.craft-matq-slider[data-band="1"] { --progress: 14.2857%; }
+.craft-matq-slider[data-band="2"] { --progress: 28.5714%; }
+.craft-matq-slider[data-band="3"] { --progress: 42.8571%; }
+.craft-matq-slider[data-band="4"] { --progress: 57.1428%; }
+.craft-matq-slider[data-band="5"] { --progress: 71.4285%; }
+.craft-matq-slider[data-band="6"] { --progress: 85.7142%; }
+.craft-matq-slider[data-band="7"] { --progress: 100%; }
+
+.craft-matq-slider::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      #38bdf8 0%,
+      #22d3ee var(--progress),
+      rgba(255, 255, 255, 0.13) var(--progress),
+      rgba(255, 255, 255, 0.13) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 14px rgba(56, 189, 248, 0.08);
+}
+
+.craft-matq-slider::-moz-range-track {
+  height: 5px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      #38bdf8 0%,
+      #22d3ee var(--progress),
+      rgba(255, 255, 255, 0.13) var(--progress),
+      rgba(255, 255, 255, 0.13) 100%
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 14px rgba(56, 189, 248, 0.08);
+}
+
+.craft-matq-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6.5px;
+  border-radius: 999px;
+  background: #38cfff;
+  border: 3px solid rgba(240, 249, 255, 0.95);
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.16),
+    0 0 18px rgba(56, 189, 248, 0.75);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.craft-matq-slider:hover::-webkit-slider-thumb {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.2),
+    0 0 24px rgba(56, 189, 248, 0.9);
+}
+
+.craft-matq-slider:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.craft-matq-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #38cfff;
+  border: 3px solid rgba(240, 249, 255, 0.95);
+  box-shadow:
+    0 0 0 3px rgba(56, 189, 248, 0.16),
+    0 0 18px rgba(56, 189, 248, 0.75);
+}
+
+.craft-matq-band-labels,
+.craft-matq-slider-labels.craft-matq-band-labels {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-items: start;
+  gap: 0;
+  margin-top: -2px;
+  pointer-events: none;
+}
+
+.craft-matq-band-labels span,
+.craft-matq-slider-labels.craft-matq-band-labels span {
+  display: block;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 700;
+  color: rgba(120, 135, 170, 0.38);
+}
+
+.craft-matq-band-labels span.is-active,
+.craft-matq-slider-labels.craft-matq-band-labels span.is-active {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: rgba(170, 190, 225, 0.58);
+}
+
+.craft-matq-band-labels small,
+.craft-matq-slider-labels.craft-matq-band-labels small {
+  display: block;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 700;
+  color: inherit;
+}
+
+.craft-matq-band-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0;
+  margin-top: 2px;
+  padding-top: 0;
+  font-family: "Barlow", sans-serif;
+  font-size: 14px;
+  color: rgba(210, 220, 250, 0.86);
+}
+
+.craft-matq-band-summary span {
+  color: rgba(185, 198, 230, 0.86);
+}
+
+.craft-matq-band-summary strong {
+  color: rgba(226, 232, 255, 0.98);
+  font-weight: 800;
+}
+
+.craft-matq-mods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.craft-matq-mod-card {
+  min-width: 0;
+  padding: 10px 12px;
+  background: rgba(14, 22, 40, 0.82);
+  border: 1px solid rgba(45, 212, 191, 0.14);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.craft-matq-mod-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.craft-matq-mod-prop {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "Barlow", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(200, 215, 255, 0.85);
+}
+
+.craft-matq-mod-val {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.craft-matq-mod-hint {
+  font-family: "Barlow", sans-serif;
+  font-size: 10px;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+.craft-expanded-sidebar {
+  gap: 14px;
+}
+
+.craft-expanded-sidebar .craft-detail-section {
+  border-radius: 13px;
+  border-color: rgba(56, 189, 248, 0.13);
+  background:
+    linear-gradient(135deg, rgba(14, 22, 39, 0.96), rgba(8, 13, 28, 0.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 10px 26px rgba(0, 0, 0, 0.14);
+}
+
+.craft-expanded-sidebar .craft-detail-section-header {
+  padding: 13px 18px;
+  color: rgba(195, 210, 255, 0.78);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+.craft-expanded-sidebar .craft-mod-group {
+  padding: 13px 18px;
+  border-left-width: 2px;
+  border-bottom-color: rgba(255, 255, 255, 0.055);
+}
+
+.craft-expanded-sidebar .craft-mod-group-header {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.craft-expanded-sidebar .craft-mod-group-mat,
+.craft-expanded-sidebar .craft-drawer-modifier-prop {
+  color: rgba(190, 203, 240, 0.78);
+  font-size: 14px;
+}
+
+.craft-expanded-sidebar .craft-drawer-modifier-val {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.craft-expanded-sidebar .craft-add-queue-card {
+  width: 44%;
+  min-width: 300px;
+  min-height: 72px;
+  border-radius: 13px;
+  border-color: rgba(56, 189, 248, 0.22);
+  background:
+    linear-gradient(135deg, rgba(14, 22, 39, 0.98), rgba(12, 18, 34, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+.craft-expanded-sidebar .craft-add-queue-title {
+  color: rgba(100, 255, 236, 0.92);
+  font-size: 14px;
+}
+
+.craft-expanded-sidebar .craft-add-queue-subtitle {
+  color: rgba(150, 165, 205, 0.58);
+  font-size: 12px;
+}
+
+@media (max-width: 1100px) {
+  .craft-expanded-content {
+    padding: 20px 28px 24px;
+  }
+
+  .craft-matq-header {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-matq-quality-header {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .craft-expanded-content {
+    padding: 18px 18px 22px;
+  }
+
+  .craft-matq-mods {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-matq-quality-header {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .craft-expanded-sidebar .craft-add-queue-card {
+    width: 100%;
+    min-width: 0;
+  }
+}
+

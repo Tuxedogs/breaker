@@ -1,11 +1,27 @@
 import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import type { DeckFloorDefinition } from "../data/perseusDeckFloorRegistry";
+import "./DeckFloorViewport.css";
 
 type DeckFloorViewportProps = {
   title: string;
   subtitle: string;
   deckDefinitions: DeckFloorDefinition[];
 };
+
+const SHIPS = [
+  { id: "perseus", label: "RSI Perseus", enabled: true },
+  { id: "idris", label: "Aegis Idris", enabled: false },
+] as const;
+
+// Map deck ids to the short view names shown in the selector.
+const VIEW_LABEL: Record<string, string> = {
+  cargo: "Rear",
+  mid: "Side",
+  top: "Top",
+};
+
+// Extra stubs shown in the view selector that have no deck data yet.
+const VIEW_STUBS = ["Radar", "Power Plant"] as const;
 
 function labelizeRegion(id: string): string {
   return id
@@ -82,28 +98,56 @@ export default function DeckFloorViewport({ title, subtitle, deckDefinitions }: 
           <p className="mt-3 text-sm leading-relaxed text-slate-200 sm:text-base">{subtitle}</p>
         </header>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          {deckDefinitions.map((deck) => {
-            const isActive = deck.id === activeDeck.id;
-            return (
+        {/* ── Ship selector row ── */}
+        <div className="dfv-controls-row">
+          <span className="dfv-row-label">Ship</span>
+          <div className="dfv-btn-group">
+            {SHIPS.map((ship) => (
               <button
-                key={deck.id}
+                key={ship.id}
                 type="button"
-                disabled={!deck.enabled}
-                onClick={() => handleDeckSwitch(deck.id)}
+                disabled={!ship.enabled}
                 className={[
-                  "min-h-11 rounded-md border px-3 py-2 text-xs uppercase tracking-[0.14em] transition",
-                  deck.enabled
-                    ? isActive
-                      ? "border-amber-300/55 bg-black/55 text-amber-100"
-                      : "border-white/35 bg-black/40 text-white hover:bg-black/55"
-                    : "cursor-not-allowed border-white/20 bg-black/20 text-slate-500",
-                ].join(" ")}
+                  "dfv-btn",
+                  ship.id === "perseus" ? "dfv-btn--active" : "",
+                  !ship.enabled ? "dfv-btn--disabled" : "",
+                ].filter(Boolean).join(" ")}
               >
-                {deck.label}
+                {ship.label}
               </button>
-            );
-          })}
+            ))}
+          </div>
+        </div>
+
+        {/* ── View selector row ── */}
+        <div className="dfv-controls-row">
+          <span className="dfv-row-label">View</span>
+          <div className="dfv-btn-group">
+            {deckDefinitions.map((deck) => {
+              const isActive = deck.id === activeDeck.id;
+              const viewLabel = VIEW_LABEL[deck.id] ?? deck.label;
+              return (
+                <button
+                  key={deck.id}
+                  type="button"
+                  disabled={!deck.enabled}
+                  onClick={() => handleDeckSwitch(deck.id)}
+                  className={[
+                    "dfv-btn",
+                    deck.enabled && isActive ? "dfv-btn--active" : "",
+                    !deck.enabled ? "dfv-btn--disabled" : "",
+                  ].filter(Boolean).join(" ")}
+                >
+                  {viewLabel}
+                </button>
+              );
+            })}
+            {VIEW_STUBS.map((label) => (
+              <button key={label} type="button" disabled className="dfv-btn dfv-btn--disabled">
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-4 overflow-hidden rounded-[1.2rem] border border-white/15 bg-black/30 p-3">

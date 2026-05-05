@@ -380,6 +380,27 @@ export function SubTargetSection({
   }, [selectedShipId])
 
   useEffect(() => {
+  if (selectedShipId || ships.length === 0) return
+
+  const defaultShip =
+    ships.find(ship => ship.id.toLowerCase().includes('perseus')) ??
+    ships.find(ship => ship.label?.toLowerCase().includes('perseus')) ??
+    ships[0]
+
+  if (!defaultShip) return
+
+  setMapZoomIndex(0)
+  selectShip(defaultShip.id)
+
+  const defaultView =
+    defaultShip.viewTabs?.find(view => view.id === 'top')?.id ??
+    defaultShip.viewTabs?.[0]?.id ??
+    'top'
+
+  setActiveView(defaultView)
+}, [ships, selectedShipId, selectShip, setActiveView])
+
+  useEffect(() => {
     if (activeZone && !visibleCategories[activeZone.category]) {
       setActiveZoneId(null)
     }
@@ -526,45 +547,28 @@ export function SubTargetSection({
       {/* ── Header ─────────────────────────────────── */}
       <div className="gun-subtarget-head">
         <div className="gun-ship-picker">
+      <span className="gun-ship-row-label">Ship</span>
           {ships.map(ship => (
             <button
-              key={ship.id}
-              ref={el => setShipBtnRef(ship.id, el)}
-              className={`gun-ship-btn${selectedShipId === ship.id ? ' is-active' : ''}`}
-              aria-pressed={selectedShipId === ship.id}
+               key={ship.id}
+               ref={el => setShipBtnRef(ship.id, el)}
+                className={`gun-ship-btn${selectedShipId === ship.id ? ' is-active' : ''}`}
+                aria-pressed={selectedShipId === ship.id}
               onClick={() => {
-                setMapZoomIndex(0)
-                selectShip(selectedShipId === ship.id ? null : ship.id)
-              }}
-            >
-              {ship.label}
-            </button>
-          ))}
+              setMapZoomIndex(0)
+              selectShip(ship.id)
+    }}
+  >
+    {ship.label}
+  </button>
+))}
         </div>
       </div>
-
-      {/* ── Metadata bar ───────────────────────────── */}
-      {selectedShip && (
-        <div className="gun-meta-bar">
-          <span className="gun-meta-ship-name">{selectedShip.label}</span>
-          <span className="gun-meta-divider" aria-hidden="true" />
-          <span className="gun-meta-badge gun-meta-badge--class">{selectedShip.class}</span>
-          <span className="gun-meta-badge gun-meta-badge--size">{selectedShip.componentSize}</span>
-          <span className="gun-meta-divider" aria-hidden="true" />
-          <span className="gun-meta-stat">
-            <span className="gun-meta-stat-label">Zones</span>
-            <span className="gun-meta-stat-value">{selectedShip.zones.length}</span>
-          </span>
-          <span className="gun-meta-stat">
-            <span className="gun-meta-stat-label">Views</span>
-            <span className="gun-meta-stat-value">{selectedShip.viewTabs.length}</span>
-          </span>
-        </div>
-      )}
 
       {selectedShip && (
         <div className="gun-toolbar-row">
           <div className="gun-view-selector">
+            <span className="gun-view-row-label">View</span>
             {selectedShip.viewTabs.map(view => (
               <button
                 key={`toolbar-${view.id}`}
@@ -660,6 +664,20 @@ export function SubTargetSection({
 
         {/* Canvas */}
         <div ref={canvasRef} className="gun-canvas-area">
+          {selectedShip && (
+            <div className="gun-canvas-badges" aria-label="Ship metadata">
+              <span className="gun-meta-badge gun-meta-badge--class">{selectedShip.class}</span>
+              <span className="gun-meta-badge gun-meta-badge--size">{selectedShip.componentSize}</span>
+              <span className="gun-meta-stat">
+                <span className="gun-meta-stat-label">Zones</span>
+                <span className="gun-meta-stat-value">{selectedShip.zones.length}</span>
+              </span>
+              <span className="gun-meta-stat">
+                <span className="gun-meta-stat-label">Views</span>
+                <span className="gun-meta-stat-value">{selectedShip.viewTabs.length}</span>
+              </span>
+            </div>
+          )}
           {selectedShip ? (
             <div
               className="gun-silhouette-shell"

@@ -52,6 +52,7 @@ export interface QualityModifier {
   modifier_end: number;
   modifier_start_percent: number;
   modifier_end_percent: number;
+  modifier_mode?: string;
   gameplay_property_id: string;
   blueprint_id: string;
 }
