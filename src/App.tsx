@@ -31,6 +31,7 @@ const ComponentMappingPage = lazy(() =>
 
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
+const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 
 function RouteFallback() {
   return (
@@ -162,6 +163,14 @@ export default function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <IndustryCraftingPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="industry/mining"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryMiningPage />
             </Suspense>
           }
         />

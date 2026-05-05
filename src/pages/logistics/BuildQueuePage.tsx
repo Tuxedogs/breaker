@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
 import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
@@ -7,11 +8,6 @@ import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 
-const SOURCE_OPTIONS: Array<{ id: SourceStrategy; label: string }> = [
-  { id: 'nearest', label: 'Nearest / single location mats' },
-  { id: 'highest-quality', label: 'Highest quality mats' },
-  { id: 'minimize-splits', label: 'Minimize split locations' },
-];
 
 export default function BuildQueuePage() {
   const [sourceStrategy, setSourceStrategy] = useState<SourceStrategy>('minimize-splits');
@@ -57,18 +53,7 @@ export default function BuildQueuePage() {
         <ScreenshotImportButton source="build-queue" />
       </div>
 
-      <div className="logi-strategy-bar" aria-label="Material source optimization">
-        {SOURCE_OPTIONS.map((option) => (
-          <button
-            key={option.id}
-            type="button"
-            className={`logi-strategy-btn${sourceStrategy === option.id ? ' logi-strategy-btn--active' : ''}`}
-            onClick={() => setSourceStrategy(option.id)}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
+      <CraftTabBar activeTab="queue" missingCount={shortages.length} queueBadge={buildQueue.length > 0 ? buildQueue.length : null} />
 
       <div className="logi-shortage-section">
         <div className="logi-shortage-header">

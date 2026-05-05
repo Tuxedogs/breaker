@@ -57,6 +57,24 @@ const sections = [
       { label: "Dashboard", to: "/dashboard", icon: "grid", exact: true },
     ],
   },
+    {
+    label: "INDUSTRY",
+    items: [
+      { label: "Crafting", to: "/industry/crafting", icon: "hammer" },
+      { label: "Build Queue", to: "/logistics/build-queue", icon: "list" },
+      { label: "Mining", to: "/industry/mining", icon: "pickaxe" },
+      { label: "Refining", to: "/dashboard", icon: "flask", wip: true },
+      { label: "Material Sources", to: "/dashboard", icon: "box", wip: true },
+    ],
+  },
+  {
+    label: "LOGISTICS",
+    items: [
+      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard" },
+      { label: "Locations",   to: "/logistics/locations",   icon: "pin" },
+      { label: "Transfers",   to: "/dashboard",             icon: "arrows", wip: true },
+    ],
+  },
   {
     label: "COMBAT",
     items: [
@@ -75,24 +93,7 @@ const sections = [
       { label: "Ship Compare", to: "/dashboard", icon: "scale", wip: true },
     ],
   },
-  {
-    label: "INDUSTRY",
-    items: [
-      { label: "Crafting", to: "/industry/crafting", icon: "hammer" },
-      { label: "Mining", to: "/dashboard", icon: "pickaxe", wip: true },
-      { label: "Refining", to: "/dashboard", icon: "flask", wip: true },
-      { label: "Material Sources", to: "/dashboard", icon: "box", wip: true },
-    ],
-  },
-  {
-    label: "LOGISTICS",
-    items: [
-      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard" },
-      { label: "Locations",   to: "/logistics/locations",   icon: "pin" },
-      { label: "Transfers",   to: "/dashboard",             icon: "arrows", wip: true },
-      { label: "Build Queue", to: "/logistics/build-queue", icon: "list" },
-    ],
-  },
+
   {
     label: "DATA",
     items: [

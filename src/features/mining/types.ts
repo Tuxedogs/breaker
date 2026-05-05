@@ -1,0 +1,215 @@
+export interface RecommendationSummary {
+  queueItems: number;
+  requiredMaterials: number;
+  matchedMaterials: number;
+  unmatchedMaterials: number;
+  missingBlueprints: number;
+  recommendedRoutes: number;
+  limitSources?: number;
+  limitRoutes?: number;
+}
+
+export interface QueueItem {
+  blueprintGuid: string;
+  quantity: number;
+  targetQualities: Record<string, unknown>;
+}
+
+export interface UsedByBlueprint {
+  blueprintGuid: string;
+  displayName: string;
+  componentType: string;
+  size: string;
+  quantity: number;
+  slot: string;
+  materialQuantity: number;
+}
+
+export interface RequiredMaterial {
+  materialId: string;
+  materialName: string;
+  requiredQuantity: number;
+  usedBy: UsedByBlueprint[];
+  slots: string[];
+}
+
+export interface ScoreInputs {
+  probabilityScore: number;
+  compositionScore: number;
+  qualityScore: number;
+  spawnTypeWeight: number;
+}
+
+export interface Composition {
+  minPercentage: number;
+  maxPercentage: number;
+  averagePercentage: number;
+  curveExponent: number;
+  qualityScale: number;
+}
+
+export interface BestSource {
+  materialId: string;
+  materialName: string;
+  system: string;
+  location: string;
+  locationType: string;
+  spawnType: string;
+  providerGuid?: string;
+  providerName?: string;
+  groupName?: string;
+  probability?: number;
+  composition?: Composition;
+  scoreInputs?: ScoreInputs;
+  overallScore: number;
+  reason: string;
+}
+
+export interface BestSourcesByMaterial {
+  materialId: string;
+  materialName: string;
+  requiredQuantity: number;
+  slots: string[];
+  usedBy: UsedByBlueprint[];
+  sourceCount: number;
+  bestSources: BestSource[];
+}
+
+export interface BestRoute {
+  system: string;
+  location: string;
+  spawnType: string;
+  materialsCovered?: string[];
+  queuedMaterialsCovered: string[];
+  queuedCoverageRatio: number;
+  routeScore: number;
+  queueRouteScore: number;
+  sourceCount: number;
+  bestSourceScore: number;
+  averageSourceScore: number;
+  reason: string;
+  bestSources?: BestSource[];
+}
+
+export interface UnmatchedMaterial {
+  materialId: string;
+  materialName: string;
+  requiredQuantity: number;
+}
+
+export interface MissingBlueprint {
+  blueprintGuid: string;
+  quantity: number;
+}
+
+export interface BuildQueueRecommendationFixture {
+  summary: RecommendationSummary;
+  queueItems: QueueItem[];
+  requiredMaterials: RequiredMaterial[];
+  bestSourcesByMaterial: BestSourcesByMaterial[];
+  bestRoutes: BestRoute[];
+  unmatchedMaterials: UnmatchedMaterial[];
+  missingBlueprints: MissingBlueprint[];
+}
+
+// ── Planner intent types (Phase 2) ──────────────────────────────────────────
+
+export interface MiningPriorityItem {
+  id: string;
+  materialId: string | null;
+  materialName: string;
+  priorityRank: number;
+  pinned: boolean;
+  source: "requiredMaterial" | "manual";
+  createdAt: string;
+}
+
+export interface ManualMiningDemandItem {
+  id: string;
+  materialName: string;
+  desiredQuantity: number;
+  sourceType: "ore" | "raw" | "refined" | "unknown";
+  notes: string;
+  addToPriority: boolean;
+  createdAt: string;
+}
+
+export interface FavoriteMiningLocation {
+  key: string;
+  system: string;
+  location: string;
+  spawnType: string;
+  starredAt: string;
+}
+
+export interface MiningPlannerFilters {
+  showOnlyStarred: boolean;
+}
+
+export interface MiningPlannerIntentPayload {
+  priorityStack: MiningPriorityItem[];
+  manualDemand: ManualMiningDemandItem[];
+  favoriteLocationIds: string[];
+  filters: MiningPlannerFilters;
+}
+
+// ── Public explorer types (Phase 3B) ────────────────────────────────────────
+
+/**
+ * Sanitized location entry safe for public display.
+ * All scoring, probability, composition, and quality fields are intentionally
+ * absent — advanced intelligence requires Discord auth (future phase).
+ */
+export interface PublicLocationEntry {
+  locationKey: string; // deduplication key: `${systemName}|${locationName}|${spawnType}`
+  locationName: string;
+  systemName: string;
+  locationKind: string;
+  spawnType: string;
+  nearbyStations: string[];
+  materials: string[]; // materialNames present at this location
+}
+
+export interface MaterialExplorerExportRequest {
+  mode: "material_explorer";
+  version: "1.0";
+  generatedAt: string;
+  selectedMaterial: string | null;
+  visibleLocations: Array<{
+    locationName: string;
+    systemName: string;
+    locationKind: string;
+    spawnType: string;
+    nearbyStations: string[];
+    materials: string[];
+  }>;
+  totalLocations: number;
+  totalMaterials: number;
+  accessMode: "public";
+}
+
+// ── Recommender request contract (Phase 3) ───────────────────────────────────
+
+export interface MiningRecommendationRequest {
+  /** Semver-style contract version so the backend script can validate compatibility. */
+  version: "1.0";
+  generatedAt: string;
+  /** Derived from the active build queue fixture — populated when data is loaded. */
+  requiredMaterials: Array<{
+    materialId: string;
+    materialName: string;
+    requiredQuantity: number;
+  }>;
+  priorityStack: MiningPriorityItem[];
+  manualDemand: ManualMiningDemandItem[];
+  favoriteLocationIds: string[];
+  filters: MiningPlannerFilters;
+  /** Placeholder for future refinery context (active refinery, processing speed, etc.). */
+  refineryContext: null;
+  /** Snapshot of the fixture the request was built against — for traceability. */
+  currentFixtureSummary: {
+    queueItems: number;
+    requiredMaterials: number;
+    recommendedRoutes: number;
+  } | null;
+}

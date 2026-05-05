@@ -1,0 +1,723 @@
+{
+  "summary": {
+    "queueItems": 3,
+    "requiredMaterials": 4,
+    "matchedMaterials": 4,
+    "unmatchedMaterials": 0,
+    "missingBlueprints": 0,
+    "recommendedRoutes": 5,
+    "limitSources": 2,
+    "limitRoutes": 5
+  },
+  "queueItems": [
+    {
+      "blueprintGuid": "demo-blueprint-cooler-01",
+      "quantity": 1.0,
+      "targetQualities": {}
+    },
+    {
+      "blueprintGuid": "demo-blueprint-power-01",
+      "quantity": 1.0,
+      "targetQualities": {}
+    },
+    {
+      "blueprintGuid": "demo-blueprint-shield-01",
+      "quantity": 1.0,
+      "targetQualities": {}
+    }
+  ],
+  "requiredMaterials": [
+    {
+      "materialId": "demo-material-iron",
+      "materialName": "Iron",
+      "requiredQuantity": 0,
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-cooler-01",
+          "displayName": "Demo Cooler Assembly",
+          "componentType": "cooler",
+          "size": "0",
+          "quantity": 1.0,
+          "slot": "SHELL",
+          "materialQuantity": 0
+        }
+      ],
+      "slots": [
+        "SHELL"
+      ]
+    },
+    {
+      "materialId": "demo-material-pressurized-ice",
+      "materialName": "Pressurized Ice",
+      "requiredQuantity": 0,
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-power-01",
+          "displayName": "Demo Power Assembly",
+          "componentType": "power_plant",
+          "size": "1",
+          "quantity": 1.0,
+          "slot": "COOLANT",
+          "materialQuantity": 0
+        }
+      ],
+      "slots": [
+        "COOLANT"
+      ]
+    },
+    {
+      "materialId": "demo-material-tin",
+      "materialName": "Tin",
+      "requiredQuantity": 0,
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-shield-01",
+          "displayName": "Demo Shield Assembly",
+          "componentType": "shield",
+          "size": "1",
+          "quantity": 1.0,
+          "slot": "PUMP IMPELLER",
+          "materialQuantity": 0
+        }
+      ],
+      "slots": [
+        "PUMP IMPELLER"
+      ]
+    },
+    {
+      "materialId": "demo-material-torite",
+      "materialName": "Torite",
+      "requiredQuantity": 0,
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-cooler-01",
+          "displayName": "Demo Cooler Assembly",
+          "componentType": "cooler",
+          "size": "0",
+          "quantity": 1.0,
+          "slot": "CORE",
+          "materialQuantity": 0
+        }
+      ],
+      "slots": [
+        "CORE"
+      ]
+    }
+  ],
+  "bestSourcesByMaterial": [
+    {
+      "materialId": "demo-material-iron",
+      "materialName": "Iron",
+      "requiredQuantity": 0,
+      "slots": [
+        "SHELL"
+      ],
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-cooler-01",
+          "displayName": "Demo Cooler Assembly",
+          "componentType": "cooler",
+          "size": "0",
+          "quantity": 1.0,
+          "slot": "SHELL",
+          "materialQuantity": 0
+        }
+      ],
+      "sourceCount": 2,
+      "bestSources": [
+        {
+          "materialId": "demo-material-iron",
+          "materialName": "Iron",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Surface Field",
+          "locationName": "Demo Surface Field",
+          "locationRaw": "Demo Surface Field",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-1-1",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Iron UI testing only."
+        },
+        {
+          "materialId": "demo-material-iron",
+          "materialName": "Iron",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Asteroid Belt",
+          "locationName": "Demo Asteroid Belt",
+          "locationRaw": "Demo Asteroid Belt",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-1-2",
+          "spawnType": "surface_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Iron UI testing only."
+        }
+      ]
+    },
+    {
+      "materialId": "demo-material-pressurized-ice",
+      "materialName": "Pressurized Ice",
+      "requiredQuantity": 0,
+      "slots": [
+        "COOLANT"
+      ],
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-power-01",
+          "displayName": "Demo Power Assembly",
+          "componentType": "power_plant",
+          "size": "1",
+          "quantity": 1.0,
+          "slot": "COOLANT",
+          "materialQuantity": 0
+        }
+      ],
+      "sourceCount": 2,
+      "bestSources": [
+        {
+          "materialId": "demo-material-pressurized-ice",
+          "materialName": "Pressurized Ice",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Asteroid Belt",
+          "locationName": "Demo Asteroid Belt",
+          "locationRaw": "Demo Asteroid Belt",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-2-1",
+          "spawnType": "surface_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Pressurized Ice UI testing only."
+        },
+        {
+          "materialId": "demo-material-pressurized-ice",
+          "materialName": "Pressurized Ice",
+          "system": "Nyx",
+          "systemName": "Nyx",
+          "location": "Demo Cave Network",
+          "locationName": "Demo Cave Network",
+          "locationRaw": "Demo Cave Network",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Nyx:demo-2-2",
+          "spawnType": "hand_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Pressurized Ice UI testing only."
+        }
+      ]
+    },
+    {
+      "materialId": "demo-material-tin",
+      "materialName": "Tin",
+      "requiredQuantity": 0,
+      "slots": [
+        "PUMP IMPELLER"
+      ],
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-shield-01",
+          "displayName": "Demo Shield Assembly",
+          "componentType": "shield",
+          "size": "1",
+          "quantity": 1.0,
+          "slot": "PUMP IMPELLER",
+          "materialQuantity": 0
+        }
+      ],
+      "sourceCount": 2,
+      "bestSources": [
+        {
+          "materialId": "demo-material-tin",
+          "materialName": "Tin",
+          "system": "Nyx",
+          "systemName": "Nyx",
+          "location": "Demo Cave Network",
+          "locationName": "Demo Cave Network",
+          "locationRaw": "Demo Cave Network",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Nyx:demo-3-1",
+          "spawnType": "hand_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Tin UI testing only."
+        },
+        {
+          "materialId": "demo-material-tin",
+          "materialName": "Tin",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Orbital Cluster",
+          "locationName": "Demo Orbital Cluster",
+          "locationRaw": "Demo Orbital Cluster",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-3-2",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Tin UI testing only."
+        }
+      ]
+    },
+    {
+      "materialId": "demo-material-torite",
+      "materialName": "Torite",
+      "requiredQuantity": 0,
+      "slots": [
+        "CORE"
+      ],
+      "usedBy": [
+        {
+          "blueprintGuid": "demo-blueprint-cooler-01",
+          "displayName": "Demo Cooler Assembly",
+          "componentType": "cooler",
+          "size": "0",
+          "quantity": 1.0,
+          "slot": "CORE",
+          "materialQuantity": 0
+        }
+      ],
+      "sourceCount": 2,
+      "bestSources": [
+        {
+          "materialId": "demo-material-torite",
+          "materialName": "Torite",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Orbital Cluster",
+          "locationName": "Demo Orbital Cluster",
+          "locationRaw": "Demo Orbital Cluster",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-4-1",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Torite UI testing only."
+        },
+        {
+          "materialId": "demo-material-torite",
+          "materialName": "Torite",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Surface Field",
+          "locationName": "Demo Surface Field",
+          "locationRaw": "Demo Surface Field",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-4-2",
+          "spawnType": "surface_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo source for Torite UI testing only."
+        }
+      ]
+    }
+  ],
+  "bestRoutes": [
+    {
+      "system": "Stanton",
+      "systemName": "Stanton",
+      "location": "Demo Surface Field",
+      "locationName": "Demo Surface Field",
+      "locationRaw": "Demo Surface Field",
+      "locationMetadataKey": "Stanton:demo-route-1",
+      "locationKind": "demo_location",
+      "parentBody": null,
+      "nearbyStations": [],
+      "spawnType": "surface_mineable",
+      "materialsCovered": [
+        "Iron",
+        "Tin"
+      ],
+      "materialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-tin"
+      ],
+      "queuedMaterialsCovered": [
+        "iron",
+        "tin"
+      ],
+      "queuedMaterialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-tin"
+      ],
+      "queuedMaterialIdsMissing": [],
+      "queuedCoverageRatio": 0,
+      "routeScore": 0,
+      "queueRouteScore": 0,
+      "sourceCount": 2,
+      "bestSourceScore": 0,
+      "averageSourceScore": 0,
+      "reason": "Public demo mining route for UI testing. Covers Iron, Tin.",
+      "bestSources": [
+        {
+          "materialId": "demo-material-iron",
+          "materialName": "Iron",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Surface Field",
+          "locationName": "Demo Surface Field",
+          "locationRaw": "Demo Surface Field",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-route-1",
+          "spawnType": "surface_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Iron."
+        },
+        {
+          "materialId": "demo-material-tin",
+          "materialName": "Tin",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Surface Field",
+          "locationName": "Demo Surface Field",
+          "locationRaw": "Demo Surface Field",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-route-1",
+          "spawnType": "surface_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Tin."
+        }
+      ]
+    },
+    {
+      "system": "Pyro",
+      "systemName": "Pyro",
+      "location": "Demo Asteroid Belt",
+      "locationName": "Demo Asteroid Belt",
+      "locationRaw": "Demo Asteroid Belt",
+      "locationMetadataKey": "Pyro:demo-route-2",
+      "locationKind": "demo_location",
+      "parentBody": null,
+      "nearbyStations": [],
+      "spawnType": "ship_mineable",
+      "materialsCovered": [
+        "Iron",
+        "Pressurized Ice",
+        "Torite"
+      ],
+      "materialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-pressurized-ice",
+        "demo-material-torite"
+      ],
+      "queuedMaterialsCovered": [
+        "iron",
+        "pressurized ice",
+        "torite"
+      ],
+      "queuedMaterialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-pressurized-ice",
+        "demo-material-torite"
+      ],
+      "queuedMaterialIdsMissing": [],
+      "queuedCoverageRatio": 0,
+      "routeScore": 0,
+      "queueRouteScore": 0,
+      "sourceCount": 3,
+      "bestSourceScore": 0,
+      "averageSourceScore": 0,
+      "reason": "Public demo mining route for UI testing. Covers Iron, Pressurized Ice, Torite.",
+      "bestSources": [
+        {
+          "materialId": "demo-material-iron",
+          "materialName": "Iron",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Asteroid Belt",
+          "locationName": "Demo Asteroid Belt",
+          "locationRaw": "Demo Asteroid Belt",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-2",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Iron."
+        },
+        {
+          "materialId": "demo-material-pressurized-ice",
+          "materialName": "Pressurized Ice",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Asteroid Belt",
+          "locationName": "Demo Asteroid Belt",
+          "locationRaw": "Demo Asteroid Belt",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-2",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Pressurized Ice."
+        },
+        {
+          "materialId": "demo-material-torite",
+          "materialName": "Torite",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Asteroid Belt",
+          "locationName": "Demo Asteroid Belt",
+          "locationRaw": "Demo Asteroid Belt",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-2",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Torite."
+        }
+      ]
+    },
+    {
+      "system": "Nyx",
+      "systemName": "Nyx",
+      "location": "Demo Orbital Cluster",
+      "locationName": "Demo Orbital Cluster",
+      "locationRaw": "Demo Orbital Cluster",
+      "locationMetadataKey": "Nyx:demo-route-3",
+      "locationKind": "demo_location",
+      "parentBody": null,
+      "nearbyStations": [],
+      "spawnType": "ship_mineable",
+      "materialsCovered": [
+        "Pressurized Ice",
+        "Torite"
+      ],
+      "materialIdsCovered": [
+        "demo-material-pressurized-ice",
+        "demo-material-torite"
+      ],
+      "queuedMaterialsCovered": [
+        "pressurized ice",
+        "torite"
+      ],
+      "queuedMaterialIdsCovered": [
+        "demo-material-pressurized-ice",
+        "demo-material-torite"
+      ],
+      "queuedMaterialIdsMissing": [],
+      "queuedCoverageRatio": 0,
+      "routeScore": 0,
+      "queueRouteScore": 0,
+      "sourceCount": 2,
+      "bestSourceScore": 0,
+      "averageSourceScore": 0,
+      "reason": "Public demo mining route for UI testing. Covers Pressurized Ice, Torite.",
+      "bestSources": [
+        {
+          "materialId": "demo-material-pressurized-ice",
+          "materialName": "Pressurized Ice",
+          "system": "Nyx",
+          "systemName": "Nyx",
+          "location": "Demo Orbital Cluster",
+          "locationName": "Demo Orbital Cluster",
+          "locationRaw": "Demo Orbital Cluster",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Nyx:demo-route-3",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Pressurized Ice."
+        },
+        {
+          "materialId": "demo-material-torite",
+          "materialName": "Torite",
+          "system": "Nyx",
+          "systemName": "Nyx",
+          "location": "Demo Orbital Cluster",
+          "locationName": "Demo Orbital Cluster",
+          "locationRaw": "Demo Orbital Cluster",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Nyx:demo-route-3",
+          "spawnType": "ship_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Torite."
+        }
+      ]
+    },
+    {
+      "system": "Stanton",
+      "systemName": "Stanton",
+      "location": "Demo Cave Network",
+      "locationName": "Demo Cave Network",
+      "locationRaw": "Demo Cave Network",
+      "locationMetadataKey": "Stanton:demo-route-4",
+      "locationKind": "demo_location",
+      "parentBody": null,
+      "nearbyStations": [],
+      "spawnType": "hand_mineable",
+      "materialsCovered": [
+        "Tin",
+        "Torite"
+      ],
+      "materialIdsCovered": [
+        "demo-material-tin",
+        "demo-material-torite"
+      ],
+      "queuedMaterialsCovered": [
+        "tin",
+        "torite"
+      ],
+      "queuedMaterialIdsCovered": [
+        "demo-material-tin",
+        "demo-material-torite"
+      ],
+      "queuedMaterialIdsMissing": [],
+      "queuedCoverageRatio": 0,
+      "routeScore": 0,
+      "queueRouteScore": 0,
+      "sourceCount": 2,
+      "bestSourceScore": 0,
+      "averageSourceScore": 0,
+      "reason": "Public demo mining route for UI testing. Covers Tin, Torite.",
+      "bestSources": [
+        {
+          "materialId": "demo-material-tin",
+          "materialName": "Tin",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Cave Network",
+          "locationName": "Demo Cave Network",
+          "locationRaw": "Demo Cave Network",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-route-4",
+          "spawnType": "hand_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Tin."
+        },
+        {
+          "materialId": "demo-material-torite",
+          "materialName": "Torite",
+          "system": "Stanton",
+          "systemName": "Stanton",
+          "location": "Demo Cave Network",
+          "locationName": "Demo Cave Network",
+          "locationRaw": "Demo Cave Network",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Stanton:demo-route-4",
+          "spawnType": "hand_mineable",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Torite."
+        }
+      ]
+    },
+    {
+      "system": "Pyro",
+      "systemName": "Pyro",
+      "location": "Demo Mixed Route",
+      "locationName": "Demo Mixed Route",
+      "locationRaw": "Demo Mixed Route",
+      "locationMetadataKey": "Pyro:demo-route-5",
+      "locationKind": "demo_location",
+      "parentBody": null,
+      "nearbyStations": [],
+      "spawnType": "mixed_mining",
+      "materialsCovered": [
+        "Iron",
+        "Pressurized Ice",
+        "Tin",
+        "Torite"
+      ],
+      "materialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-pressurized-ice",
+        "demo-material-tin",
+        "demo-material-torite"
+      ],
+      "queuedMaterialsCovered": [
+        "iron",
+        "pressurized ice",
+        "tin",
+        "torite"
+      ],
+      "queuedMaterialIdsCovered": [
+        "demo-material-iron",
+        "demo-material-pressurized-ice",
+        "demo-material-tin",
+        "demo-material-torite"
+      ],
+      "queuedMaterialIdsMissing": [],
+      "queuedCoverageRatio": 0,
+      "routeScore": 0,
+      "queueRouteScore": 0,
+      "sourceCount": 3,
+      "bestSourceScore": 0,
+      "averageSourceScore": 0,
+      "reason": "Public demo mining route for UI testing. Covers Iron, Pressurized Ice, Tin, Torite.",
+      "bestSources": [
+        {
+          "materialId": "demo-material-iron",
+          "materialName": "Iron",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Mixed Route",
+          "locationName": "Demo Mixed Route",
+          "locationRaw": "Demo Mixed Route",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-5",
+          "spawnType": "mixed_mining",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Iron."
+        },
+        {
+          "materialId": "demo-material-pressurized-ice",
+          "materialName": "Pressurized Ice",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Mixed Route",
+          "locationName": "Demo Mixed Route",
+          "locationRaw": "Demo Mixed Route",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-5",
+          "spawnType": "mixed_mining",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Pressurized Ice."
+        },
+        {
+          "materialId": "demo-material-tin",
+          "materialName": "Tin",
+          "system": "Pyro",
+          "systemName": "Pyro",
+          "location": "Demo Mixed Route",
+          "locationName": "Demo Mixed Route",
+          "locationRaw": "Demo Mixed Route",
+          "locationType": "demo_location",
+          "locationKind": "demo_location",
+          "locationMetadataKey": "Pyro:demo-route-5",
+          "spawnType": "mixed_mining",
+          "nearbyStations": [],
+          "overallScore": 0,
+          "reason": "Public demo route source for Tin."
+        }
+      ]
+    }
+  ],
+  "unmatchedMaterials": [],
+  "missingBlueprints": []
+}

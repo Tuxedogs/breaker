@@ -31,6 +31,8 @@ export interface ParsedWorkOrder {
   workOrderNumber: number;
   rows: ParsedRefineryRow[];
   totalYieldCscu: number | null;
+  /** Processing screens only. The current page can ignore this until the review UI is upgraded. */
+  timeRemainingSeconds?: number | null;
 }
 
 export interface ParsedInputRow {
@@ -252,6 +254,14 @@ export function detectScreenType(text: string): RefineryScreenType {
   )
     return "refinery_input";
   return "unknown";
+}
+
+function isProcessingScreenText(text: string): boolean {
+  return (
+    /\bPROCESSING\b/i.test(text) ||
+    /\bTIME\s+REMAINING\b/i.test(text) ||
+    (/\bTODO\b|\bTO\s+DO\b/i.test(text) && /\bDONE\b/i.test(text))
+  );
 }
 
 export function normalizeMaterialName(
@@ -551,6 +561,134 @@ function inferRowYFromNumbers(
   return best?.y;
 }
 
+
+// ── Processing order row extractor ──────────────────────────────────────────
+
+const PROCESSING_ROW_PATTERN =
+  /^([A-Z][A-Z\s-]{1,34}?)\s+(\d{1,4})\s+(\d{1,7})(?:\s+(\d{1,7}))?(?:\s+(\d{1,7}))?$/i;
+
+const PROCESSING_STOP = [
+  /^YIELD\s+\d/i,
+  /^TIME\s+REMAINING/i,
+  /^WORK\s+ORDER/i,
+  /^PROCESSING$/i,
+  /^TODO$/i,
+  /^TO\s+DO$/i,
+  /^DONE$/i,
+  /^QUALITY$/i,
+  /^MATERIAL$/i,
+];
+
+function parseTimeRemainingSeconds(text: string): number | null {
+  const compact = text.replace(/\s+/g, " ");
+
+  const hms = compact.match(
+    /(\d{1,2})\s*h(?:ours?)?\s*(\d{1,2})\s*m(?:in(?:utes?)?)?\s*(\d{1,2})\s*s?/i,
+  );
+  if (hms) return Number(hms[1]) * 3600 + Number(hms[2]) * 60 + Number(hms[3]);
+
+  const ms =
+    compact.match(/(\d{1,2})\s*m(?:in(?:utes?)?)?\s*(\d{1,2})\s*s/i) ||
+    compact.match(/\b(\d{1,2}):(\d{2})\s*s?\b/i);
+  if (ms) return Number(ms[1]) * 60 + Number(ms[2]);
+
+  const seconds = compact.match(/\b(\d{1,4})\s*s(?:ec(?:onds?)?)?\b/i);
+  if (seconds) return Number(seconds[1]);
+
+  return null;
+}
+
+function isProcessingMaterialCandidate(line: string, templates: MaterialTemplate[]): boolean {
+  const rawName = stripMaterialNoise(line);
+  const cleanedName = cleanText(rawName);
+
+  if (cleanedName.length < 3) return false;
+  if (/^\d+$/.test(cleanedName)) return false;
+  if (SKIP_LINES.has(cleanedName)) return false;
+  if (JUNK_NAMES.has(cleanedName.toUpperCase())) return false;
+  if (PROCESSING_STOP.some((p) => p.test(line))) return false;
+
+  return normalizeMaterialName(rawName, templates) !== null;
+}
+
+function extractProcessingRowsInline(
+  lines: string[],
+  templates: MaterialTemplate[],
+  lowConfidence: boolean,
+): ParsedRefineryRow[] {
+  const rows: ParsedRefineryRow[] = [];
+
+  for (const line of lines) {
+    const m = PROCESSING_ROW_PATTERN.exec(line);
+    if (!m) continue;
+
+    const rawName = stripMaterialNoise(m[1]);
+    const materialId = normalizeMaterialName(rawName, templates);
+    if (!materialId) continue;
+
+    const quality = parseInt(m[2], 10);
+    const quantity = parseInt(m[3], 10); // Processing: Yield column becomes inventory quantity.
+
+    if (quality < 0 || quality > 1000) continue;
+    if (quantity <= 0) continue;
+
+    rows.push({
+      rawName,
+      materialId,
+      quality,
+      quantity,
+      needsReview: lowConfidence || materialId === null,
+    });
+  }
+
+  return rows;
+}
+
+function extractProcessingRowsSequential(
+  lines: string[],
+  templates: MaterialTemplate[],
+  lowConfidence: boolean,
+): ParsedRefineryRow[] {
+  const rows: ParsedRefineryRow[] = [];
+
+  for (let i = 0; i < lines.length - 2; i++) {
+    const rawName = stripMaterialNoise(lines[i]);
+    if (!isProcessingMaterialCandidate(rawName, templates)) continue;
+
+    const quality = parseOcrInteger(lines[i + 1]);
+    const quantity = parseOcrInteger(lines[i + 2]); // Processing: Yield column becomes inventory quantity.
+
+    if (quality === null || quantity === null) continue;
+    if (quality < 0 || quality > 1000) continue;
+    if (quantity <= 0) continue;
+
+    const materialId = normalizeMaterialName(rawName, templates);
+
+    rows.push({
+      rawName,
+      materialId,
+      quality,
+      quantity,
+      needsReview: lowConfidence || materialId === null,
+    });
+
+    i += 2;
+  }
+
+  return rows;
+}
+
+function extractProcessingRows(
+  lines: string[],
+  templates: MaterialTemplate[],
+  lowConfidence: boolean,
+): ParsedRefineryRow[] {
+  const inlineRows = extractProcessingRowsInline(lines, templates, lowConfidence);
+  const sequentialRows = extractProcessingRowsSequential(lines, templates, lowConfidence);
+
+  return inlineRows.length >= sequentialRows.length ? inlineRows : sequentialRows;
+}
+
 // ── Main export ──────────────────────────────────────────────────────────────
 
 export async function parseRefineryScreenshot(
@@ -641,6 +779,20 @@ export async function parseRefineryScreenshot(
         .map((l) => l.trim())
         .filter(Boolean);
 
+      if (isProcessingScreenText(pd.text)) {
+        const rows = extractProcessingRows(lines, templates, lowConf);
+
+        if (rows.length > 0) {
+          workOrders.push({
+            workOrderNumber: extractWorkOrderNumber(pd.text) ?? i + 1,
+            rows,
+            totalYieldCscu: extractTotalYield(lines),
+            timeRemainingSeconds: parseTimeRemainingSeconds(pd.text),
+          });
+          continue;
+        }
+      }
+
       const allPanelLines = [
         ...getOcrLines(pd.blocks),
         ...getOcrLines(digitData.blocks),
@@ -695,6 +847,24 @@ export async function parseRefineryScreenshot(
       .map((l) => l.trim())
       .filter(Boolean);
     const fullScreenType = detectScreenType(fullData.text);
+
+    if (isProcessingScreenText(fullData.text)) {
+      const rows = extractProcessingRows(fullLines, templates, true);
+
+      if (rows.length > 0) {
+        return {
+          screenType: "refinery_complete",
+          workOrders: [
+            {
+              workOrderNumber: extractWorkOrderNumber(fullData.text) ?? 1,
+              rows,
+              totalYieldCscu: extractTotalYield(fullLines),
+              timeRemainingSeconds: parseTimeRemainingSeconds(fullData.text),
+            },
+          ],
+        };
+      }
+    }
 
     if (fullScreenType === "refinery_input") {
       const data = extractInputData(fullData.text, templates);

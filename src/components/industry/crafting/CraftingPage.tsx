@@ -1,39 +1,37 @@
-import { useEffect, useState, useMemo, lazy, Suspense } from "react";
+import { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import "./crafting.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
-import { aggregateMaterials } from "./utils/craftingCalculations";
-import { useBuildQueue } from "./hooks/useBuildQueue";
-import { useMaterialInventory } from "./hooks/useMaterialInventory";
+import { useLogisticsStore } from "../../../stores/logisticsStore";
+import { getBuildQueueShortageSummary } from "../../../lib/logistics/selectors";
 import { getCraftingItems } from "../../../lib/craftingData";
 
 import ComponentRecipeTable from "./components/ComponentRecipeTable";
-import BuildQueuePanel from "./components/BuildQueuePanel";
-import MaterialInventoryPanel from "./components/MaterialInventoryPanel";
-import MissingMaterialsTable from "./components/MissingMaterialsTable";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import MaterialSourcePlaceholder from "./components/MaterialSourcePlaceholder";
+import CraftTabBar from "./CraftTabBar";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
 
-type Tab = "recipes" | "queue" | "analytics" | "quality" | "sources";
+type Tab = "recipes" | "analytics" | "quality" | "sources";
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: "recipes", label: "Recipe Browser" },
-  { id: "queue", label: "Build Queue" },
-  { id: "analytics", label: "Demand Analytics" },
-  { id: "quality", label: "Quality Modifiers" },
-  { id: "sources", label: "Material Sources" },
-];
+function nameToSlug(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-");
+}
 
 export default function CraftingModule() {
   const [tab, setTab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
 
-  const { queue, addItem, setQuantity, removeItem, clearQueue } = useBuildQueue();
-  const { inventory, setAmount, clearInventory } = useMaterialInventory();
+  const buildQueue = useLogisticsStore((state) => state.buildQueue);
+  const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
+  const recipeTemplates = useLogisticsStore((state) => state.recipeTemplates);
+  const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
+  const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
+  const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 
   useEffect(() => {
     let cancelled = false;
@@ -46,29 +44,32 @@ export default function CraftingModule() {
           setLoadError(error instanceof Error ? error.message : "Failed to load crafting data");
         }
       });
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
-  const aggregated = useMemo(
-    () => aggregateMaterials(queue, recipes, inventory),
-    [queue, recipes, inventory]
-  );
+  const handleAddToQueue = useCallback((recipe: ComponentRecipe) => {
+    const recipeId = `craft-${recipe.blueprint_id}`;
+    const category = recipe.component_type ?? recipe.item_kind ?? "component";
 
-  function handleAddToQueue(recipe: ComponentRecipe) {
-    addItem({
-      blueprint_id: recipe.blueprint_id,
-      component_name: recipe.component_name,
-      component_type: recipe.component_type,
-      size: recipe.size,
-      item_kind: recipe.item_kind,
-      materials: recipe.materials,
+    const inputs = (recipe.materials ?? []).flatMap((mat) => {
+      // Try exact name match first, then slug match
+      const material =
+        materialTemplates.find((m) => m.name.toLowerCase() === mat.material_name.toLowerCase()) ??
+        materialTemplates.find((m) => m.id === nameToSlug(mat.material_name));
+      if (!material) return [];
+      return [{ materialId: material.id, quantity: mat.quantity }];
     });
-  }
 
-  const queueBadge = queue.length > 0 ? queue.length : null;
-  const missingCount = aggregated.filter((m) => m.missing > 0).length;
+    registerCraftingRecipe({ recipeId, name: recipe.component_name, category, inputs });
+    addBuildQueueItem(recipeId);
+  }, [materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
+
+  const { shortages } = getBuildQueueShortageSummary(
+    inventoryEntries, buildQueue, recipeTemplates, recipeInputsByRecipeId,
+  );
+  const activeQueue = buildQueue.filter((item) => item.status !== "complete");
+  const queueBadge = activeQueue.length > 0 ? activeQueue.length : null;
+  const missingCount = shortages.length;
 
   return (
     <div className="craft-page">
@@ -91,8 +92,8 @@ export default function CraftingModule() {
             <div className="craft-stat-value">{recipes.length}</div>
           </div>
           <div className="craft-stat">
-            <div className="craft-stat-label">Queue Items</div>
-            <div className="craft-stat-value">{queue.reduce((s, i) => s + i.quantity, 0)}</div>
+            <div className="craft-stat-label">Queued</div>
+            <div className="craft-stat-value">{activeQueue.reduce((s, i) => s + i.quantity, 0)}</div>
           </div>
           <div className={`craft-stat${missingCount > 0 ? " craft-stat--alert" : ""}`}>
             <div className="craft-stat-label">Shortages</div>
@@ -103,24 +104,14 @@ export default function CraftingModule() {
         </div>
       </div>
 
-      <div className="craft-tab-bar">
-        {TABS.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            className={`craft-tab${tab === id ? " craft-tab--active" : ""}`}
-            onClick={() => setTab(id)}
-          >
-            {label}
-            {id === "queue" && queueBadge !== null && (
-              <span className="craft-tab-badge">{queueBadge}</span>
-            )}
-            {id === "queue" && missingCount > 0 && (
-              <span className="craft-tab-badge craft-tab-badge--alert">{missingCount}</span>
-            )}
-          </button>
-        ))}
-      </div>
+      <CraftTabBar
+        activeTab={tab as "recipes" | "queue" | "analytics" | "quality" | "sources"}
+        onTabChange={(t) => {
+          if (t !== "queue") setTab(t as Tab);
+        }}
+        queueBadge={queueBadge}
+        missingCount={missingCount}
+      />
 
       <div className="craft-tab-content">
         {loadError && (
@@ -131,29 +122,6 @@ export default function CraftingModule() {
 
         {tab === "recipes" && (
           <ComponentRecipeTable recipes={recipes} onAddToQueue={handleAddToQueue} />
-        )}
-
-        {tab === "queue" && (
-          <div className="craft-queue-layout">
-            <div className="craft-queue-main">
-              <BuildQueuePanel
-                queue={queue}
-                recipes={recipes}
-                onSetQuantity={setQuantity}
-                onRemove={removeItem}
-                onClear={clearQueue}
-              />
-              <MissingMaterialsTable materials={aggregated} />
-            </div>
-            <div className="craft-queue-side">
-              <MaterialInventoryPanel
-                inventory={inventory}
-                needed={aggregated}
-                onSetAmount={setAmount}
-                onClear={clearInventory}
-              />
-            </div>
-          </div>
         )}
 
         {tab === "analytics" && (

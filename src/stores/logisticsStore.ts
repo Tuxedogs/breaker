@@ -23,6 +23,13 @@ import type {
   ReservedMaterialAllocation,
 } from "../types/logistics";
 
+export interface CraftingRecipeRegistration {
+  recipeId: string;
+  name: string;
+  category?: string;
+  inputs: RecipeInputTemplate[];
+}
+
 interface LogisticsStoreState {
   materialTemplates: MaterialTemplate[];
   itemTemplates: ItemTemplate[];
@@ -37,6 +44,8 @@ interface LogisticsStoreState {
   addInventoryEntries: (entries: InventoryEntry[]) => void;
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
+  registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
+  addBuildQueueItem: (recipeId: string, quantity?: number) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
   removeBuildQueueItem: (id: string) => void;
@@ -381,6 +390,39 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           inventoryEntries: state.inventoryEntries.filter((entry) => entry.id !== id),
         }));
       },
+      registerCraftingRecipe: ({ recipeId, name, category, inputs }) => {
+        set((state) => {
+          const existingRecipe = state.recipeTemplates.find((r) => r.id === recipeId);
+          const nextRecipes = existingRecipe
+            ? state.recipeTemplates
+            : [...state.recipeTemplates, { id: recipeId, name, category }];
+          return {
+            recipeTemplates: nextRecipes,
+            recipeInputTemplates: { ...state.recipeInputTemplates, [recipeId]: inputs },
+          };
+        });
+      },
+      addBuildQueueItem: (recipeId, quantity = 1) => {
+        set((state) => {
+          const existing = state.buildQueue.find((item) => item.recipeId === recipeId);
+          if (existing) {
+            return {
+              buildQueue: state.buildQueue.map((item) =>
+                item.recipeId === recipeId ? { ...item, quantity: item.quantity + quantity } : item,
+              ),
+            };
+          }
+          const nextPriority = state.buildQueue.reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
+          const newItem: BuildQueueItem = {
+            id: `bq-craft-${recipeId}-${Date.now()}`,
+            recipeId,
+            quantity,
+            status: "queued",
+            priority: nextPriority,
+          };
+          return { buildQueue: [...state.buildQueue, newItem] };
+        });
+      },
       updateBuildQueueItemStatus: (id, status) => {
         set((state) => ({
           buildQueue: state.buildQueue.map((item) => (item.id === id ? { ...item, status } : item)),
@@ -483,16 +525,21 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
     }),
     {
       name: LOGISTICS_STORAGE_KEY,
-      version: 1,
+      version: 2,
       partialize: (state) => ({
         inventoryEntries: state.inventoryEntries,
         buildQueue: state.buildQueue,
         locations: state.locations,
+        recipeTemplates: state.recipeTemplates,
+        recipeInputTemplates: state.recipeInputTemplates,
       }),
       merge: (persisted, current) => {
         const persistedInventory = getPersistedArray(persisted, "inventoryEntries");
         const persistedBuildQueue = getPersistedArray(persisted, "buildQueue");
         const persistedLocations = getPersistedArray(persisted, "locations");
+        const persistedRecipes = getPersistedArray(persisted, "recipeTemplates");
+        const persistedInputs = isRecord(persisted) ? persisted["recipeInputTemplates"] : undefined;
+
         const inventoryEntries = persistedInventory
           ?.map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
           .filter((entry): entry is InventoryEntry => entry !== null);
@@ -503,11 +550,37 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           ?.map(coercePersistedLocation)
           .filter((l): l is InventoryLocation => l !== null);
 
+        // Merge persisted recipe templates over seed — seed entries win for known IDs
+        const seedRecipeIds = new Set(current.recipeTemplates.map((r) => r.id));
+        const extraRecipes: RecipeTemplate[] = Array.isArray(persistedRecipes)
+          ? persistedRecipes.filter(
+              (r): r is RecipeTemplate =>
+                isRecord(r) && isString(r.id) && isString(r.name) && !seedRecipeIds.has(r.id as string),
+            )
+          : [];
+        const mergedRecipes = [...current.recipeTemplates, ...extraRecipes];
+
+        const mergedInputs: Record<string, RecipeInputTemplate[]> = { ...current.recipeInputTemplates };
+        if (isRecord(persistedInputs)) {
+          for (const [recipeId, inputs] of Object.entries(persistedInputs)) {
+            if (seedRecipeIds.has(recipeId)) continue;
+            if (Array.isArray(inputs)) {
+              const coerced = inputs.filter(
+                (inp): inp is RecipeInputTemplate =>
+                  isRecord(inp) && isString(inp.materialId) && isNumber(inp.quantity),
+              );
+              if (coerced.length) mergedInputs[recipeId] = coerced;
+            }
+          }
+        }
+
         return {
           ...current,
           inventoryEntries: inventoryEntries ?? current.inventoryEntries,
           buildQueue: buildQueue ?? current.buildQueue,
           locations: locations?.length ? locations : current.locations,
+          recipeTemplates: mergedRecipes,
+          recipeInputTemplates: mergedInputs,
         };
       },
     },
