@@ -19,13 +19,34 @@ export interface RecommendationResponse {
   warnings: RecommenderWarning[];
 }
 
+type RecommenderApiRequest = Omit<MiningRecommendationRequest, "requiredMaterials"> & {
+  materialRequirements: MiningRecommendationRequest["requiredMaterials"];
+};
+
+function toRecommenderApiRequest(request: MiningRecommendationRequest): RecommenderApiRequest {
+  const { requiredMaterials, ...rest } = request;
+  return {
+    ...rest,
+    materialRequirements: requiredMaterials.map((material) => ({
+      materialId: material.materialId,
+      materialName: material.materialName,
+      requiredQuantity: material.requiredQuantity,
+      selectedQuality: material.selectedQuality,
+      unitType: material.unitType,
+      modifierName: material.modifierName,
+      modifierType: material.modifierType,
+      modifierValue: material.modifierValue,
+    })),
+  };
+}
+
 export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
 ): Promise<RecommendationResponse> {
   const response = await fetch("/api/recommender/recommendations", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(request),
+    body: JSON.stringify(toRecommenderApiRequest(request)),
   });
 
   if (!response.ok) {
