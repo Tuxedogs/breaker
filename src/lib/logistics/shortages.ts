@@ -1,7 +1,9 @@
 import type { BuildQueueItem, InventoryEntry } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
+import { getBuildQueueItemInputs } from './inventory';
 
 export interface Shortage {
+  materialKey: string;
   materialId: string;
   needed: number;
   have: number;
@@ -15,25 +17,29 @@ export function computeShortages(
 ): Shortage[] {
   const haveByMaterial: Record<string, number> = {};
   for (const entry of inventory) {
-    haveByMaterial[entry.materialId] = (haveByMaterial[entry.materialId] ?? 0) + entry.quantity;
+    if (!entry.materialId) continue;
+    const materialKey = entry.materialId;
+    haveByMaterial[materialKey] = (haveByMaterial[materialKey] ?? 0) + entry.quantity;
   }
 
   const neededByMaterial: Record<string, number> = {};
   for (const item of queue) {
     if (item.status === 'complete') continue;
-    const inputs = recipeInputsByRecipeId[item.recipeId] ?? [];
+    const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
     for (const input of inputs) {
-      neededByMaterial[input.materialId] =
-        (neededByMaterial[input.materialId] ?? 0) + input.quantity * item.quantity;
+      const materialKey = input.materialKey ?? input.materialId;
+      neededByMaterial[materialKey] =
+        (neededByMaterial[materialKey] ?? 0) + input.quantity * item.quantity;
     }
   }
 
   return Object.entries(neededByMaterial)
-    .map(([materialId, needed]) => ({
-      materialId,
+    .map(([materialKey, needed]) => ({
+      materialKey,
+      materialId: materialKey,
       needed,
-      have: haveByMaterial[materialId] ?? 0,
-      shortfall: Math.max(0, needed - (haveByMaterial[materialId] ?? 0)),
+      have: haveByMaterial[materialKey] ?? 0,
+      shortfall: Math.max(0, needed - (haveByMaterial[materialKey] ?? 0)),
     }))
     .filter((s) => s.shortfall > 0);
 }

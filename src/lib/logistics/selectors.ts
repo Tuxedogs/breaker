@@ -226,13 +226,14 @@ export function getInventoryByMaterial(
 ): Map<string, MaterialInventoryGroup> {
   const grouped = new Map<string, MaterialInventoryGroup>();
   for (const entry of inventoryEntries) {
-    const current = grouped.get(entry.materialId) ?? {
-      materialId: entry.materialId,
-      material: getMaterial(materialTemplates, entry.materialId),
+    const materialId = entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id;
+    const current = grouped.get(materialId) ?? {
+      materialId,
+      material: entry.materialId ? getMaterial(materialTemplates, entry.materialId) : undefined,
       entries: [],
       totalQuantity: 0,
     };
-    grouped.set(entry.materialId, {
+    grouped.set(materialId, {
       ...current,
       entries: [...current.entries, entry],
       totalQuantity: current.totalQuantity + entry.quantity,

@@ -1,6 +1,13 @@
 import { useMemo, useState } from 'react';
 import { createInventoryEntryDraft } from '../../stores/logisticsStore';
-import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
+import type {
+  InventoryCatalogSource,
+  InventoryEntry,
+  InventoryItemKind,
+  InventoryLocation,
+  InventoryUnitType,
+  MaterialTemplate,
+} from '../../types/logistics';
 
 interface Props {
   entry: InventoryEntry | null;
@@ -10,100 +17,343 @@ interface Props {
   onCancel: () => void;
 }
 
-interface DraftRow {
-  id: string;
-  locationId: string;
-  materialId: string;
-  quality: string;
-  quantity: string;
-  container: string;
+// Default unitType per itemKind
+const KIND_DEFAULT_UNIT: Record<InventoryItemKind, InventoryUnitType> = {
+  material: 'scu',
+  ore: 'scu',
+  raw_mineable: 'unit',
+  ice: 'unit',
+  fps_weapon: 'unit',
+  fps_armor: 'unit',
+  vehicle_component: 'unit',
+  crafted_item: 'unit',
+  manual: 'unit',
+  unknown: 'unit',
+};
+
+const KIND_LABELS: Record<InventoryItemKind, string> = {
+  material: 'Refined Material',
+  ore: 'Ore',
+  raw_mineable: 'Raw Mineable',
+  ice: 'Ice',
+  fps_weapon: 'FPS Weapon',
+  fps_armor: 'FPS Armor',
+  vehicle_component: 'Vehicle Component',
+  crafted_item: 'Crafted Item Tracking',
+  manual: 'Misc / Custom',
+  unknown: 'Unknown',
+};
+
+const ALL_KINDS: InventoryItemKind[] = [
+  'ore', 'material', 'raw_mineable', 'ice',
+  'fps_weapon', 'fps_armor', 'vehicle_component', 'crafted_item', 'manual',
+];
+
+// Map itemKind → which materialTypes match it in the catalog
+function kindMatchesMaterial(kind: InventoryItemKind, mat: MaterialTemplate): boolean {
+  if (mat.id === 'rawice') return kind === 'ice';
+  switch (kind) {
+    case 'ore': return mat.materialType === 'ore' || mat.materialType === 'refined';
+    case 'material': return mat.materialType === 'refined' || mat.materialType === 'ore';
+    case 'raw_mineable': return mat.materialType === 'raw' || mat.materialType === 'special';
+    case 'ice': return mat.id === 'rawice';
+    default: return false; // fps_weapon, fps_armor, vehicle_component, crafted_item, manual → no catalog entries yet
+  }
 }
 
-function createDraftRow(locationId: string, materialId: string): DraftRow {
+// Derive unit from catalog material, falling back to kind default
+function resolveUnitFromMaterial(mat: MaterialTemplate | undefined, kind: InventoryItemKind): InventoryUnitType {
+  if (!mat) return KIND_DEFAULT_UNIT[kind];
+  if (mat.materialType === 'ore' || mat.materialType === 'refined') return 'scu';
+  if (mat.materialType === 'raw' || mat.materialType === 'special') return 'unit';
+  return KIND_DEFAULT_UNIT[kind];
+}
+
+function parseOptionalQuality(value: string): number | undefined {
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  const parsed = parseInt(trimmed, 10);
+  if (!Number.isFinite(parsed)) return undefined;
+  return Math.max(0, Math.min(1000, parsed));
+}
+
+function deriveKindFromMaterial(mat: MaterialTemplate | undefined): InventoryItemKind {
+  if (!mat) return 'manual';
+  if (mat.id === 'rawice') return 'ice';
+  if (mat.materialType === 'ore' || mat.materialType === 'refined') return 'ore';
+  if (mat.materialType === 'raw' || mat.materialType === 'special') return 'raw_mineable';
+  return 'material';
+}
+
+function deriveKindFromEntry(entry: InventoryEntry, mat?: MaterialTemplate): InventoryItemKind {
+  return entry.itemKind ?? deriveKindFromMaterial(mat);
+}
+
+// ─── Single-entry draft state ─────────────────────────────────────────────────
+
+interface DraftState {
+  // catalog lookup (legacy materialId path)
+  catalogMode: 'catalog' | 'manual';
+  materialId: string;      // only used when catalogMode === 'catalog'
+  // manual / generalized
+  itemName: string;
+  itemKind: InventoryItemKind;
+  unitType: InventoryUnitType;
+  quantity: string;
+  quality: string;
+  locationId: string;
+  locationSearch: string;  // text field value for location typeahead
+  container: string;
+  notes: string;
+}
+
+function initDraftFromEntry(
+  entry: InventoryEntry,
+  materials: MaterialTemplate[],
+  locations: InventoryLocation[],
+  defaultLocationId: string,
+): DraftState {
+  const mat = entry.materialId ? materials.find((m) => m.id === entry.materialId) : undefined;
+  const kind = deriveKindFromEntry(entry, mat);
+  const isCatalog = !!entry.materialId && !!mat;
+  const locationName = locations.find((l) => l.id === (entry.locationId ?? defaultLocationId))?.name ?? '';
   return {
-    id: `draft-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-    locationId,
-    materialId,
-    quality: '',
-    quantity: '',
-    container: '',
+    catalogMode: isCatalog ? 'catalog' : 'manual',
+    materialId: entry.materialId ?? '',
+    itemName: entry.itemName ?? entry.materialName ?? mat?.name ?? '',
+    itemKind: kind,
+    unitType: entry.unitType ?? KIND_DEFAULT_UNIT[kind],
+    quantity: entry.quantity > 0 ? String(entry.quantity) : '',
+    quality: entry.quality !== undefined ? String(entry.quality) : '',
+    locationId: entry.locationId ?? defaultLocationId,
+    locationSearch: locationName,
+    container: entry.container ?? '',
+    notes: entry.notes ?? '',
   };
 }
 
-export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
-  const defaultMaterialId = materials[0]?.id ?? '';
-  const defaultLocationId = locations[0]?.id ?? '';
-  const [stickyLocationId, setStickyLocationId] = useState(defaultLocationId);
-  const [rows, setRows] = useState<DraftRow[]>(() => [createDraftRow(defaultLocationId, defaultMaterialId)]);
-  const [materialId, setMaterialId] = useState(entry?.materialId ?? defaultMaterialId);
-  const [quantity, setQuantity] = useState(entry ? String(entry.quantity) : '');
-  const [quality, setQuality] = useState(entry ? String(entry.quality) : '');
-  const [locationId, setLocationId] = useState(entry?.locationId ?? defaultLocationId);
-  const [container, setContainer] = useState(entry?.container ?? '');
+function initBlankDraft(defaultLocationId: string, _defaultMaterialId: string, locations: InventoryLocation[]): DraftState {
+  const locationName = locations.find((l) => l.id === defaultLocationId)?.name ?? '';
+  return {
+    catalogMode: 'catalog',
+    materialId: '',
+    itemName: '',
+    itemKind: 'ore',
+    unitType: KIND_DEFAULT_UNIT['ore'],
+    quantity: '',
+    quality: '',
+    locationId: defaultLocationId,
+    locationSearch: locationName,
+    container: '',
+    notes: '',
+  };
+}
 
-  function handleSave() {
-    const qty = parseFloat(quantity);
-    if (!materialId || !locationId || isNaN(qty) || qty <= 0) return;
-    onSave([createInventoryEntryDraft({
-      id: entry?.id ?? String(Date.now()),
+// ─── Location Typeahead ───────────────────────────────────────────────────────
+
+interface LocationTypeaheadProps {
+  locations: InventoryLocation[];
+  locationId: string;
+  locationSearch: string;
+  open: boolean;
+  onSearchChange: (search: string) => void;
+  onSelect: (id: string, name: string) => void;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+function LocationTypeahead({
+  locations, locationId, locationSearch, open,
+  onSearchChange, onSelect, onOpen, onClose,
+}: LocationTypeaheadProps) {
+  const filtered = useMemo(() => {
+    const q = locationSearch.trim().toLowerCase();
+    if (!q) return locations;
+    return locations.filter((l) => l.name.toLowerCase().includes(q));
+  }, [locations, locationSearch]);
+
+  const selectedName = locationId ? locations.find((l) => l.id === locationId)?.name : undefined;
+
+  return (
+    <div className="logi-form-field">
+      <label htmlFor="inv-location-search" className="logi-form-label">Location</label>
+      <div className="logi-location-typeahead">
+        <input
+          id="inv-location-search"
+          type="text"
+          className={`logi-form-input${locationId ? ' logi-form-input--selected' : ''}`}
+          value={locationSearch}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onFocus={onOpen}
+          onBlur={() => setTimeout(onClose, 150)}
+          placeholder="Search or type location…"
+          autoComplete="off"
+        />
+        {locationId && selectedName && (
+          <span className="logi-form-hint logi-form-hint--value">{selectedName}</span>
+        )}
+        {open && filtered.length > 0 && (
+          <ul className="logi-location-suggestions" role="listbox">
+            {filtered.map((l) => (
+              <li
+                key={l.id}
+                role="option"
+                aria-selected={l.id === locationId}
+                className={`logi-location-suggestion${l.id === locationId ? ' logi-location-suggestion--active' : ''}`}
+                onMouseDown={() => onSelect(l.id, l.name)}
+              >
+                <span className="logi-location-suggestion-name">{l.name}</span>
+                {l.type && (
+                  <span className="logi-location-suggestion-meta">{l.type}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        {open && filtered.length === 0 && locationSearch.trim() && (
+          <div className="logi-location-suggestions logi-location-suggestions--empty">
+            No matching locations — add one in Locations first
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
+  const defaultLocationId = locations[0]?.id ?? '';
+  const defaultMaterialId = materials[0]?.id ?? '';
+  const isNew = entry === null;
+
+  const [draft, setDraft] = useState<DraftState>(() =>
+    entry
+      ? initDraftFromEntry(entry, materials, locations, defaultLocationId)
+      : initBlankDraft(defaultLocationId, defaultMaterialId, locations),
+  );
+  const [locationOpen, setLocationOpen] = useState(false);
+
+  function patch(updates: Partial<DraftState>) {
+    setDraft((d) => ({ ...d, ...updates }));
+  }
+
+  // Kind changed: clear selected item, keep kind-default unitType.
+  // Does NOT switch catalogMode.
+  function handleKindChange(kind: InventoryItemKind) {
+    patch({ itemKind: kind, materialId: '', itemName: '', unitType: KIND_DEFAULT_UNIT[kind] });
+  }
+
+  function handleCatalogModeChange(mode: 'catalog' | 'manual') {
+    if (mode === 'catalog') {
+      patch({ catalogMode: 'catalog', materialId: '', unitType: KIND_DEFAULT_UNIT[draft.itemKind] });
+    } else {
+      patch({ catalogMode: 'manual', materialId: '' });
+    }
+  }
+
+  // Catalog item selected: derive unitType from catalog. Do NOT overwrite user's itemKind.
+  function handleMaterialSelect(materialId: string) {
+    const mat = materials.find((m) => m.id === materialId);
+    patch({
       materialId,
+      itemName: mat?.name ?? '',
+      unitType: resolveUnitFromMaterial(mat, draft.itemKind),
+    });
+  }
+
+  function buildEntry(overrideId?: string): InventoryEntry | null {
+    const qty = parseFloat(draft.quantity);
+    if (isNaN(qty) || qty <= 0) return null;
+    if (!resolvedLocationId) return null;
+
+    let resolvedMaterialId: string | undefined;
+    let resolvedItemName: string | undefined;
+    let catalogSource: InventoryCatalogSource;
+
+    const usingCatalog = draft.catalogMode === 'catalog' &&
+      materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)).length > 0;
+
+    if (usingCatalog) {
+      const mat = materials.find((m) => m.id === draft.materialId);
+      if (!mat) return null;
+      resolvedMaterialId = mat.id;
+      resolvedItemName = mat.name;
+      catalogSource = 'seed';
+    } else {
+      const name = draft.itemName.trim();
+      if (!name) return null;
+      resolvedMaterialId = undefined;
+      resolvedItemName = name;
+      catalogSource = 'manual';
+    }
+
+    return createInventoryEntryDraft({
+      id: overrideId ?? entry?.id ?? String(Date.now()),
+      materialId: resolvedMaterialId,
+      itemName: resolvedItemName,
+      itemKind: draft.itemKind,
+      unitType: draft.unitType,
+      catalogSource,
+      quality: parseOptionalQuality(draft.quality),
       quantity: qty,
-      quality: Math.max(0, Math.min(1000, parseInt(quality) || 0)),
-      locationId,
-      container: container.trim() || undefined,
+      locationId: resolvedLocationId,
+      container: draft.container.trim() || undefined,
+      notes: draft.notes.trim() || undefined,
       createdAt: entry?.createdAt,
       updatedAt: new Date().toISOString(),
-    })]);
-  }
-
-  function updateRow(id: string, patch: Partial<DraftRow>) {
-    setRows((current) => current.map((row) => {
-      if (row.id !== id) return row;
-      if (patch.locationId) setStickyLocationId(patch.locationId);
-      return { ...row, ...patch };
-    }));
-  }
-
-  function addRow(location = stickyLocationId) {
-    setRows((current) => [...current, createDraftRow(location || defaultLocationId, defaultMaterialId)]);
-  }
-
-  function removeRow(id: string) {
-    setRows((current) => current.length === 1 ? current : current.filter((row) => row.id !== id));
-  }
-
-  function handleBatchSave() {
-    const timestamp = new Date().toISOString();
-    const nextEntries: InventoryEntry[] = [];
-    rows.forEach((row, index) => {
-      const qty = parseFloat(row.quantity);
-      if (!row.locationId || !row.materialId || isNaN(qty) || qty <= 0) return;
-      nextEntries.push(createInventoryEntryDraft({
-        id: `inv-${Date.now()}-${index}`,
-        materialId: row.materialId,
-        quantity: qty,
-        quality: Math.max(0, Math.min(1000, parseInt(row.quality) || 0)),
-        locationId: row.locationId,
-        container: row.container.trim() || undefined,
-        updatedAt: timestamp,
-      }));
     });
-
-    if (nextEntries.length === 0) return;
-    onSave(nextEntries);
-    setRows([createDraftRow(stickyLocationId || defaultLocationId, defaultMaterialId)]);
   }
 
-  const isNew = entry === null;
-  const validBatchRows = useMemo(
-    () => rows.filter((row) => parseFloat(row.quantity) > 0 && row.locationId && row.materialId).length,
-    [rows],
+  function handleSave() {
+    const built = buildEntry();
+    if (!built) return;
+    onSave([built]);
+  }
+
+  // Derived preview: unitType label
+  const unitLabel = draft.unitType === 'scu' ? 'SCU' : 'units';
+  const qty = parseFloat(draft.quantity);
+  const quantityPreview = isNaN(qty) || qty <= 0
+    ? null
+    : draft.unitType === 'scu'
+      ? `${qty} SCU`
+      : `×${qty}`;
+
+  // Resolve locationId: exact pick, or single-match from search text
+  const resolvedLocationId = useMemo(() => {
+    if (draft.locationId) return draft.locationId;
+    const q = draft.locationSearch.trim().toLowerCase();
+    if (!q) return '';
+    const matches = locations.filter((l) => l.name.toLowerCase() === q);
+    return matches.length === 1 ? matches[0].id : '';
+  }, [draft.locationId, draft.locationSearch, locations]);
+
+  const canSave = useMemo(() => {
+    const q = parseFloat(draft.quantity);
+    if (isNaN(q) || q <= 0) return false;
+    if (!resolvedLocationId) return false;
+    const usingCatalog = draft.catalogMode === 'catalog' && materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)).length > 0;
+    if (usingCatalog) return !!draft.materialId;
+    return draft.itemName.trim().length > 0;
+  }, [draft, materials, resolvedLocationId]);
+
+  const filteredCatalogItems = useMemo(
+    () => materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)),
+    [materials, draft.itemKind],
   );
+
+  const selectedMat = draft.catalogMode === 'catalog'
+    ? materials.find((m) => m.id === draft.materialId)
+    : undefined;
+
+  // In catalog mode, kinds with no catalog entries force manual
+  const hasCatalogForKind = filteredCatalogItems.length > 0;
 
   return (
     <div className="logi-entry-panel">
       <div className="logi-entry-panel-header">
-        <span className="logi-entry-panel-title">{isNew ? 'Fast Add Inventory' : 'Edit Stack'}</span>
+        <span className="logi-entry-panel-title">{isNew ? 'Add Inventory Item' : 'Edit Inventory Item'}</span>
         <button type="button" className="logi-panel-close-btn" onClick={onCancel} aria-label="Close panel">
           <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="14" height="14">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -111,86 +361,190 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         </button>
       </div>
 
-      {isNew ? (
-        <>
-          <div className="logi-fast-add-grid" role="group" aria-label="Fast add inventory rows">
-            {rows.map((row, index) => (
-              <div key={row.id} className="logi-fast-add-row">
-                <div className="logi-fast-add-row-head">
-                  <span>Stack {index + 1}</span>
-                  <button type="button" className="logi-panel-close-btn" onClick={() => removeRow(row.id)} aria-label={`Remove row ${index + 1}`}>
-                    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="13" height="13">
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <div className="logi-form-field">
-                  <label htmlFor={`fast-location-${row.id}`} className="logi-form-label">Location</label>
-                  <select id={`fast-location-${row.id}`} className="logi-form-select" value={row.locationId} onChange={(event) => updateRow(row.id, { locationId: event.target.value })}>
-                    {locations.map((location) => <option key={location.id} value={location.id}>{location.name}</option>)}
-                  </select>
-                </div>
-                <div className="logi-form-field">
-                  <label htmlFor={`fast-material-${row.id}`} className="logi-form-label">Material</label>
-                  <select id={`fast-material-${row.id}`} className="logi-form-select" value={row.materialId} onChange={(event) => updateRow(row.id, { materialId: event.target.value })}>
-                    {materials.map((material) => <option key={material.id} value={material.id}>{material.name}</option>)}
-                  </select>
-                </div>
-                <div className="logi-fast-add-pair">
-                  <div className="logi-form-field">
-                    <label htmlFor={`fast-quality-${row.id}`} className="logi-form-label">Quality</label>
-                    <input id={`fast-quality-${row.id}`} type="number" className="logi-form-input" value={row.quality} onChange={(event) => updateRow(row.id, { quality: event.target.value })} placeholder="900" min="0" max="1000" step="1" />
-                  </div>
-                  <div className="logi-form-field">
-                    <label htmlFor={`fast-quantity-${row.id}`} className="logi-form-label">Quantity</label>
-                    <input id={`fast-quantity-${row.id}`} type="number" className="logi-form-input" value={row.quantity} onChange={(event) => updateRow(row.id, { quantity: event.target.value })} onKeyDown={(event) => { if (event.key === 'Enter') addRow(row.locationId); }} placeholder="0.00" min="0" step="0.01" />
-                  </div>
-                </div>
-                <div className="logi-form-field">
-                  <label htmlFor={`fast-container-${row.id}`} className="logi-form-label">Container (optional)</label>
-                  <input id={`fast-container-${row.id}`} type="text" className="logi-form-input" value={row.container} onChange={(event) => updateRow(row.id, { container: event.target.value })} placeholder="Box A, hold 3" />
-                </div>
-              </div>
+      {/* 1. Item Source */}
+      <div className="logi-form-field">
+        <span className="logi-form-label">Item Source</span>
+        <div className="logi-inv-mode-toggle">
+          <button
+            type="button"
+            className={`logi-inv-mode-btn${draft.catalogMode === 'catalog' ? ' logi-inv-mode-btn--active' : ''}`}
+            onClick={() => handleCatalogModeChange('catalog')}
+          >
+            Catalog
+          </button>
+          <button
+            type="button"
+            className={`logi-inv-mode-btn${draft.catalogMode === 'manual' ? ' logi-inv-mode-btn--active' : ''}`}
+            onClick={() => handleCatalogModeChange('manual')}
+          >
+            Manual / Custom
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Item Kind */}
+      <div className="logi-form-field">
+        <label htmlFor="inv-item-kind" className="logi-form-label">Item Kind</label>
+        <select
+          id="inv-item-kind"
+          className="logi-form-select"
+          value={draft.itemKind}
+          onChange={(e) => handleKindChange(e.target.value as InventoryItemKind)}
+        >
+          {ALL_KINDS.map((k) => (
+            <option key={k} value={k}>{KIND_LABELS[k]}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* 3. Item — filtered by kind in catalog mode; free-text in manual mode */}
+      {draft.catalogMode === 'catalog' && hasCatalogForKind ? (
+        <div className="logi-form-field">
+          <label htmlFor="inv-material" className="logi-form-label">Item</label>
+          <select
+            id="inv-material"
+            className="logi-form-select"
+            value={draft.materialId}
+            onChange={(e) => e.target.value ? handleMaterialSelect(e.target.value) : patch({ materialId: '', itemName: '' })}
+          >
+            <option value="">Select item…</option>
+            {filteredCatalogItems.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
             ))}
-          </div>
-          <div className="logi-entry-panel-actions">
-            <button type="button" className="logi-btn-primary" onClick={handleBatchSave}>Add {validBatchRows || ''} Stack{validBatchRows === 1 ? '' : 's'}</button>
-            <button type="button" className="logi-btn-ghost" onClick={() => addRow()}>Add Row</button>
-            <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
-          </div>
-        </>
+          </select>
+          {selectedMat && (
+            <span className="logi-form-hint">{selectedMat.materialType}</span>
+          )}
+        </div>
       ) : (
-        <>
-          <div className="logi-form-field">
-            <label htmlFor="inv-location" className="logi-form-label">Location</label>
-            <select id="inv-location" className="logi-form-select" value={locationId} onChange={(event) => setLocationId(event.target.value)}>
-              {locations.map((location) => <option key={location.id} value={location.id}>{location.name}</option>)}
-            </select>
-          </div>
-          <div className="logi-form-field">
-            <label htmlFor="inv-material" className="logi-form-label">Material</label>
-            <select id="inv-material" className="logi-form-select" value={materialId} onChange={(event) => setMaterialId(event.target.value)}>
-              {materials.map((material) => <option key={material.id} value={material.id}>{material.name}</option>)}
-            </select>
-          </div>
-          <div className="logi-form-field">
-            <label htmlFor="inv-quality" className="logi-form-label">Quality</label>
-            <input id="inv-quality" type="number" className="logi-form-input" value={quality} onChange={(event) => setQuality(event.target.value)} placeholder="0" min="0" max="1000" step="1" />
-          </div>
-          <div className="logi-form-field">
-            <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
-            <input id="inv-quantity" type="number" className="logi-form-input" value={quantity} onChange={(event) => setQuantity(event.target.value)} placeholder="0.00" min="0" step="0.01" />
-          </div>
-          <div className="logi-form-field">
-            <label htmlFor="inv-container" className="logi-form-label">Container (optional)</label>
-            <input id="inv-container" type="text" className="logi-form-input" value={container} onChange={(event) => setContainer(event.target.value)} placeholder="Box A, Storage Unit 3" />
-          </div>
-          <div className="logi-entry-panel-actions">
-            <button type="button" className="logi-btn-primary" onClick={handleSave}>Save Changes</button>
-            <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
-          </div>
-        </>
+        <div className="logi-form-field">
+          <label htmlFor="inv-item-name" className="logi-form-label">Item Name</label>
+          <input
+            id="inv-item-name"
+            type="text"
+            className="logi-form-input"
+            value={draft.itemName}
+            onChange={(e) => patch({ itemName: e.target.value })}
+            placeholder={
+              draft.itemKind === 'fps_weapon' ? 'e.g. Nightstalker P4-AR, S38 Combine…' :
+              draft.itemKind === 'fps_armor' ? 'e.g. Caldera Medium Helmet…' :
+              draft.itemKind === 'ice' ? 'e.g. Raw Ice, Pressurized Ice…' :
+              draft.itemKind === 'raw_mineable' ? 'e.g. Aphorite, Feynmaline…' :
+              'Item name…'
+            }
+            autoFocus={isNew}
+          />
+          {draft.catalogMode === 'catalog' && !hasCatalogForKind && (
+            <span className="logi-form-hint">No catalog entries for this kind — enter manually</span>
+          )}
+        </div>
       )}
+
+      {/* Quantity + Unit Type */}
+      <div className="logi-form-row-pair">
+        <div className="logi-form-field">
+          <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
+          <input
+            id="inv-quantity"
+            type="number"
+            className="logi-form-input"
+            value={draft.quantity}
+            onChange={(e) => patch({ quantity: e.target.value })}
+            placeholder={draft.unitType === 'scu' ? '0.00' : '1'}
+            min="0"
+            step={draft.unitType === 'scu' ? '0.01' : '1'}
+          />
+          {quantityPreview && (
+            <span className="logi-form-hint logi-form-hint--value">{quantityPreview}</span>
+          )}
+        </div>
+        <div className="logi-form-field">
+          <label htmlFor="inv-unit-type" className="logi-form-label">Unit</label>
+          <select
+            id="inv-unit-type"
+            className="logi-form-select"
+            value={draft.unitType}
+            onChange={(e) => patch({ unitType: e.target.value as InventoryUnitType })}
+          >
+            <option value="scu">SCU (cargo volume)</option>
+            <option value="unit">Units / items (×)</option>
+          </select>
+          <span className="logi-form-hint">Displays as: {unitLabel}</span>
+        </div>
+      </div>
+
+      {/* Quality (accent only) */}
+      <div className="logi-form-field">
+        <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0–1000, accent color only)</span></label>
+        <input
+          id="inv-quality"
+          type="number"
+          className="logi-form-input"
+          value={draft.quality}
+          onChange={(e) => patch({ quality: e.target.value })}
+          placeholder="Leave blank if unknown"
+          min="0"
+          max="1000"
+          step="1"
+        />
+        <span className="logi-form-hint">Blank quality shows as — (no color accent)</span>
+      </div>
+
+      {/* Location — typeahead */}
+      <LocationTypeahead
+        locations={locations}
+        locationId={draft.locationId}
+        locationSearch={draft.locationSearch}
+        open={locationOpen}
+        onSearchChange={(search) => {
+          patch({ locationSearch: search, locationId: '' });
+          setLocationOpen(true);
+        }}
+        onSelect={(id, name) => {
+          patch({ locationId: id, locationSearch: name });
+          setLocationOpen(false);
+        }}
+        onOpen={() => setLocationOpen(true)}
+        onClose={() => setLocationOpen(false)}
+      />
+
+      {/* Container */}
+      <div className="logi-form-field">
+        <label htmlFor="inv-container" className="logi-form-label">Container <span className="logi-form-label-sub">(optional)</span></label>
+        <input
+          id="inv-container"
+          type="text"
+          className="logi-form-input"
+          value={draft.container}
+          onChange={(e) => patch({ container: e.target.value })}
+          placeholder="Box A, Hold 3, Storage Unit…"
+        />
+      </div>
+
+      {/* Notes */}
+      <div className="logi-form-field">
+        <label htmlFor="inv-notes" className="logi-form-label">Notes <span className="logi-form-label-sub">(optional)</span></label>
+        <input
+          id="inv-notes"
+          type="text"
+          className="logi-form-input"
+          value={draft.notes}
+          onChange={(e) => patch({ notes: e.target.value })}
+          placeholder="e.g. from PvP loot, mission reward…"
+        />
+      </div>
+
+      <div className="logi-entry-panel-actions">
+        <button
+          type="button"
+          className="logi-btn-primary"
+          onClick={handleSave}
+          disabled={!canSave}
+        >
+          {isNew ? 'Add to Inventory' : 'Save Changes'}
+        </button>
+        <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
+      </div>
     </div>
   );
 }

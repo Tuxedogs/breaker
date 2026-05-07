@@ -1,6 +1,7 @@
 /* ──────────────────────────────────────────────
    Industry / Mining Module Styles
-   Scoped to .mine-* / .mex-* to avoid conflicts.
+   Scoped to .mine-* / .mloc-* / .msb-* to avoid conflicts.
+   Follows the same dark palette as logistics.css / crafting.css.
    ────────────────────────────────────────────── */
 
 /* ── Page shell ───────────────────────────────── */
@@ -28,9 +29,9 @@
   margin-bottom: 0.3rem;
 }
 
-.mine-breadcrumb-root { color: rgba(160, 180, 220, 0.4); }
-.mine-breadcrumb-sep { opacity: 0.35; }
-.mine-breadcrumb-active { color: rgba(96, 165, 250, 0.65); }
+.mine-breadcrumb-root  { color: rgba(160, 180, 220, 0.4); }
+.mine-breadcrumb-sep   { opacity: 0.35; }
+.mine-breadcrumb-active { color: rgba(167, 139, 250, 0.65); }
 
 /* ── Page header ──────────────────────────────── */
 
@@ -60,141 +61,1164 @@
   margin-top: 0.18rem;
 }
 
-/* ── Stat strip ───────────────────────────────── */
+/* ── Two-column layout ────────────────────────── */
 
-.mine-stat-strip {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.mine-stat-card {
-  flex: 1 1 120px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(96, 165, 250, 0.1);
-  border-radius: 6px;
-  padding: 0.7rem 1rem 0.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.mine-stat-value {
-  font-family: "Orbitron", sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #e7edff;
-  line-height: 1;
-}
-
-.mine-stat-value--pending {
-  color: rgba(160, 180, 220, 0.2);
-}
-
-.mine-stat-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.38);
-}
-
-/* ── Layout: main + sidebar ───────────────────── */
-
-.mine-layout {
+.mloc-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 1rem;
+  grid-template-columns: 240px 1fr;
+  gap: 1.1rem;
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .mine-layout {
+@media (max-width: 960px) {
+  .mloc-layout {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+/* ── Main content area ────────────────────────── */
+
+.mloc-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+/* ── Toolbar ──────────────────────────────────── */
+
+.mloc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.mloc-filter-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  color: rgba(167, 139, 250, 0.75);
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 3px;
+  padding: 0.06rem 0.32rem;
+}
+
+.mloc-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.mloc-clear-filters-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.45);
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.mloc-clear-filters-btn:hover {
+  border-color: rgba(248, 113, 113, 0.3);
+  color: rgba(248, 113, 113, 0.7);
+  background: rgba(248, 113, 113, 0.04);
+}
+
+/* ── Location strip ───────────────────────────── */
+
+.mloc-strip-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.mloc-strip-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.mloc-strip-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+.mloc-strip-count {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.22);
+}
+
+.mloc-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+@media (max-width: 1200px) {
+  .mloc-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .mloc-strip {
     grid-template-columns: 1fr;
   }
 }
 
-.mine-panels {
+/* ── Location panel (strip card) ──────────────── */
+
+.mloc-panel {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.mine-intent-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  position: sticky;
-  top: 1rem;
-}
-
-.mine-sidebar-section-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(96, 165, 250, 0.4);
-  padding: 0 0.25rem;
-}
-
-/* ── Panel ────────────────────────────────────── */
-
-.mine-panel {
+  gap: 0.6rem;
   background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;
+  padding: 0.9rem 1rem 0.85rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+  min-height: 160px;
+  position: relative;
+}
+
+.mloc-panel:hover {
+  background: rgba(167, 139, 250, 0.05);
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+.mloc-panel--selected {
+  background: rgba(167, 139, 250, 0.07);
+  border-color: rgba(167, 139, 250, 0.32);
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.12);
+}
+
+.mloc-panel--starred {
+  border-left: 2px solid rgba(245, 158, 11, 0.4);
+}
+
+.mloc-panel-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mloc-panel-system {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.38);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mloc-panel-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e7edff;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* Coverage bar */
+
+.mloc-panel-coverage {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.mloc-cov-bar {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
   overflow: hidden;
 }
 
-.mine-panel-header {
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(255, 255, 255, 0.02);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.mloc-cov-fill {
+  height: 100%;
+  background: rgba(167, 139, 250, 0.55);
+  border-radius: 2px;
+  transition: width 0.2s;
 }
 
-.mine-panel-header--row {
-  justify-content: space-between;
+.mloc-cov-fill--full {
+  background: rgba(74, 222, 128, 0.6);
 }
 
-.mine-panel-header-left {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.mine-panel-title {
+.mloc-cov-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.65rem;
+  font-size: 0.52rem;
+  letter-spacing: 0.05em;
+  color: rgba(160, 180, 220, 0.38);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mloc-panel-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+
+.mloc-view-all-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.06em;
+  color: rgba(160, 180, 220, 0.3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  text-align: left;
+  transition: color 0.12s;
+}
+
+.mloc-view-all-btn:hover {
+  color: rgba(160, 180, 220, 0.65);
+}
+
+/* ── Location detail panel ────────────────────── */
+
+.mloc-detail {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 1.1rem 1.25rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.mloc-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.mloc-detail-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.mloc-detail-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e7edff;
+  letter-spacing: 0.025em;
+  line-height: 1.1;
+}
+
+.mloc-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mloc-detail-system {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.mloc-detail-kind {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mloc-detail-stations {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.mloc-detail-reason {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.82rem;
+  color: rgba(160, 180, 220, 0.55);
+  line-height: 1.5;
+  padding: 0.55rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid rgba(167, 139, 250, 0.2);
+  border-radius: 0 4px 4px 0;
+}
+
+.mloc-detail-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .mloc-detail-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mloc-detail-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.mloc-detail-col-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mloc-detail-col-label--covered { color: rgba(74, 222, 128, 0.6); }
+.mloc-detail-col-label--missing  { color: rgba(248, 113, 113, 0.5); }
+
+.mloc-detail-mat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.mloc-detail-mat-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.32rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  flex-wrap: wrap;
+}
+
+.mloc-detail-mat-row--covered {
+  background: rgba(74, 222, 128, 0.04);
+  border-color: rgba(74, 222, 128, 0.1);
+}
+
+.mloc-detail-mat-row--missing {
+  background: rgba(248, 113, 113, 0.03);
+  border-color: rgba(248, 113, 113, 0.08);
+}
+
+.mloc-detail-mat-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+  min-width: 80px;
+}
+
+.mloc-detail-mat-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.45);
+  flex-shrink: 0;
+  margin-top: 0.08rem;
+}
+
+.mloc-detail-mat-usedby {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+  width: 100%;
+}
+
+.mloc-detail-none {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.75rem;
+  color: rgba(160, 180, 220, 0.25);
+  margin: 0;
+}
+
+.mloc-detail-all-mats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mloc-detail-all-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.25);
+}
+
+/* ── Resource demand panel ────────────────────── */
+
+.mres-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mres-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mres-title {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.mres-meta {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mres-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+/* ── Material demand row ──────────────────────── */
+
+.mdem-row {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: background 0.1s;
+}
+
+.mdem-row--covered {
+  border-color: rgba(74, 222, 128, 0.08);
+  background: rgba(74, 222, 128, 0.02);
+}
+
+.mdem-row--missing {
+  border-color: rgba(255, 255, 255, 0.045);
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.mdem-main {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.38rem 0.65rem;
+}
+
+.mdem-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.mdem-dot--covered { background: rgba(74, 222, 128, 0.65); }
+.mdem-dot--missing  { background: rgba(255, 255, 255, 0.15); }
+
+.mdem-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mdem-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.5);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.mdem-tag {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.08rem 0.32rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.mdem-tag--ok {
+  color: rgba(74, 222, 128, 0.65);
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.mdem-ore-hint {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  color: rgba(160, 180, 220, 0.3);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.mdem-right {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.mdem-status {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.08rem 0.32rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.mdem-status--covered {
+  color: rgba(74, 222, 128, 0.75);
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.mdem-status--missing {
+  color: rgba(160, 180, 220, 0.35);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.mdem-expand-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.04em;
+  color: rgba(160, 180, 220, 0.3);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0.1rem 0.38rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.mdem-expand-btn:hover {
+  color: rgba(160, 180, 220, 0.65);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.mdem-expand-arrow {
+  font-size: 0.44rem;
+}
+
+.mdem-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem 0.5rem 1.65rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mdem-expanded-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mdem-exp-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.25);
+  white-space: nowrap;
+  padding-top: 0.12rem;
+  flex-shrink: 0;
+}
+
+.mdem-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+}
+
+/* ── Missing variant of used chip ─────────────── */
+
+.mbq-used-chip--missing {
+  background: rgba(248, 113, 113, 0.04);
+  border-color: rgba(248, 113, 113, 0.1);
+  color: rgba(248, 113, 113, 0.5);
+}
+
+/* ── Mining type badge */
+
+.mloc-badge {
+  display: inline-block;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.67rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.mloc-badge--ship    { background: rgba(56, 189, 248, 0.08); color: rgba(56, 189, 248, 0.7); border: 1px solid rgba(56, 189, 248, 0.15); }
+.mloc-badge--surface { background: rgba(74, 222, 128, 0.08); color: rgba(74, 222, 128, 0.7); border: 1px solid rgba(74, 222, 128, 0.15); }
+.mloc-badge--hand    { background: rgba(245, 158, 11, 0.08); color: rgba(245, 158, 11, 0.7); border: 1px solid rgba(245, 158, 11, 0.15); }
+.mloc-badge--mixed   { background: rgba(167, 139, 250, 0.08); color: rgba(167, 139, 250, 0.7); border: 1px solid rgba(167, 139, 250, 0.15); }
+
+/* Star button */
+
+.mloc-star-btn {
+  font-size: 0.95rem;
+  color: rgba(160, 180, 220, 0.2);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 0.06rem 0.18rem;
+  cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.13s, background 0.13s;
+}
+
+.mloc-star-btn--on  { color: rgba(245, 158, 11, 0.85); }
+.mloc-star-btn:hover { color: rgba(245, 158, 11, 0.6); background: rgba(245, 158, 11, 0.05); }
+
+/* Card body */
+
+.mloc-card-body {
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  flex: 1;
+}
+
+/* Stats row */
+
+.mloc-card-metrics {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mloc-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  padding: 0.38rem 0.65rem;
+  min-width: 4rem;
+}
+
+.mloc-metric-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.55);
+  color: rgba(160, 180, 220, 0.38);
 }
 
-.mine-panel-count {
+.mloc-metric-val {
+  font-family: "Orbitron", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e7edff;
+}
+
+/* Material chips */
+
+.mloc-mat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.mloc-mat-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(160, 180, 220, 0.5);
+}
+
+.mloc-mat-chip--selected {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: rgba(167, 139, 250, 0.95);
+}
+
+.mloc-mat-chip--bq {
+  background: rgba(74, 222, 128, 0.06);
+  border-color: rgba(74, 222, 128, 0.18);
+  color: rgba(74, 222, 128, 0.7);
+}
+
+.mloc-empty-chips {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.74rem;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mloc-chip-more {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.55rem;
+  color: rgba(160, 180, 220, 0.35);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0.1rem 0.35rem;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.mloc-chip-more:hover {
+  color: rgba(160, 180, 220, 0.7);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* Nearby stations */
+
+.mloc-stations-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.mloc-stations-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.25);
+}
+
+.mloc-station-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.54rem;
+  padding: 0.06rem 0.28rem;
+  border-radius: 3px;
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.12);
+  color: rgba(245, 158, 11, 0.5);
+}
+
+/* Card footer */
+
+.mloc-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+  background: rgba(255, 255, 255, 0.012);
+  margin-top: auto;
+}
+
+.mloc-footer-view {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.59rem;
+  letter-spacing: 0.09em;
+  color: rgba(160, 180, 220, 0.35);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.12s;
+}
+
+.mloc-footer-view:hover {
+  color: rgba(160, 180, 220, 0.75);
+}
+
+/* ── Filter sidebar ────────────────────────────── */
+
+.msb-sidebar {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
+}
+
+.msb-sidebar::-webkit-scrollbar { width: 4px; }
+.msb-sidebar::-webkit-scrollbar-track { background: transparent; }
+.msb-sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.07); border-radius: 2px; }
+
+/* ── Sidebar section ──────────────────────────── */
+
+.msb-section {
+  padding: 0.75rem 0.85rem 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.msb-section-label {
+  display: block;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+  margin-bottom: 0.45rem;
+}
+
+.msb-section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.msb-section-label-row .msb-section-label {
+  margin-bottom: 0;
+}
+
+/* ── Chip rail ────────────────────────────────── */
+
+.msb-chip-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+/* ── Sidebar chips ────────────────────────────── */
+
+.msb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-family: "Share Tech Mono", monospace;
   font-size: 0.58rem;
-  letter-spacing: 0.06em;
-  color: rgba(96, 165, 250, 0.45);
-  background: rgba(96, 165, 250, 0.06);
-  border: 1px solid rgba(96, 165, 250, 0.12);
+  letter-spacing: 0.03em;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 3px;
-  padding: 0.08rem 0.35rem;
+  color: rgba(160, 180, 220, 0.5);
+  padding: 0.18rem 0.45rem;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+  height: 26px;
+  box-sizing: border-box;
 }
 
-/* ── Empty states ─────────────────────────────── */
+.msb-chip:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(160, 180, 220, 0.85);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Selected state: violet accent, same as logistics/crafting */
+.msb-chip--active {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: rgba(167, 139, 250, 0.95);
+}
+
+.msb-chip--active:hover:not(:disabled) {
+  background: rgba(167, 139, 250, 0.16);
+  border-color: rgba(167, 139, 250, 0.45);
+}
+
+/* Selected removable chip: shows × */
+.msb-chip--selected {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: rgba(167, 139, 250, 0.9);
+}
+
+.msb-chip--selected:hover {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.28);
+  color: rgba(248, 113, 113, 0.8);
+}
+
+.msb-chip-x {
+  font-size: 0.62rem;
+  opacity: 0.65;
+}
+
+.msb-chip:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Sidebar divider ──────────────────────────── */
+
+.msb-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Collapsible panels ───────────────────────── */
+
+.msb-collapsible {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.msb-collapsible:last-child {
+  border-bottom: none;
+}
+
+.msb-collapsible-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+}
+
+.msb-collapsible-header:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.msb-collapsible-header .msb-section-label {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.msb-count-pill {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.52rem;
+  color: rgba(160, 180, 220, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+  padding: 0.05rem 0.28rem;
+  flex-shrink: 0;
+}
+
+.msb-collapse-arrow {
+  font-size: 0.46rem;
+  color: rgba(160, 180, 220, 0.2);
+  flex-shrink: 0;
+}
+
+.msb-collapsible-body {
+  padding: 0 0.85rem 0.65rem;
+}
+
+/* ── Priority compact ─────────────────────────── */
+
+.msb-priority-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.msb-priority-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.2rem;
+}
+
+.msb-priority-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.26rem 0.38rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.msb-priority-row--pinned {
+  background: rgba(167, 139, 250, 0.04);
+  border-color: rgba(167, 139, 250, 0.1);
+}
+
+.msb-priority-rank {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: rgba(160, 180, 220, 0.35);
+  min-width: 1rem;
+  flex-shrink: 0;
+}
+
+.msb-priority-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msb-priority-btns {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  flex-shrink: 0;
+}
+
+.msb-priority-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ── Manual demand compact ────────────────────── */
+
+.msb-demand-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.msb-demand-form {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.msb-demand-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+}
+
+.msb-demand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.24rem 0.38rem;
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+}
+
+.msb-demand-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.msb-demand-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.62rem;
+  color: rgba(160, 180, 220, 0.5);
+  flex-shrink: 0;
+}
+
+.msb-demand-clear {
+  align-self: flex-end;
+  margin-top: 0.1rem;
+}
+
+/* ── Request preview compact ──────────────────── */
+
+.msb-req-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.msb-req-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.msb-toggle-json-btn {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  color: rgba(160, 180, 220, 0.4);
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.msb-toggle-json-btn:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(160, 180, 220, 0.7);
+}
+
+/* ── Empty / status states ────────────────────── */
 
 .mine-empty-state {
-  padding: 2rem 1.25rem;
+  padding: 3rem 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.mine-empty-state--sm {
-  padding: 0.85rem 1rem;
 }
 
 .mine-empty-text {
@@ -207,12 +1231,6 @@
   margin: 0;
 }
 
-.mine-empty-text--warn {
-  color: rgba(251, 191, 36, 0.55);
-}
-
-/* ── Status states ────────────────────────────── */
-
 .mine-status-state {
   padding: 2rem 1.25rem;
   display: flex;
@@ -221,9 +1239,9 @@
 }
 
 .mine-status-state--error {
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(248, 113, 113, 0.2);
   border-radius: 8px;
-  background: rgba(239, 68, 68, 0.04);
+  background: rgba(248, 113, 113, 0.04);
 }
 
 .mine-status-text {
@@ -233,231 +1251,513 @@
 }
 
 .mine-status-state--error .mine-status-text {
-  color: rgba(239, 68, 68, 0.7);
+  color: rgba(248, 113, 113, 0.7);
 }
 
-/* ── Warning panel variant ────────────────────── */
+/* ── Shared interactive buttons ───────────────── */
 
-.mine-panel--warning {
-  border-color: rgba(251, 191, 36, 0.18);
+.mine-move-btn,
+.mine-pin-btn,
+.mine-remove-btn,
+.mine-clear-btn,
+.mine-filter-btn,
+.mine-add-btn,
+.mine-btn-export {
+  font-family: "Rajdhani", sans-serif;
+  background: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.13s;
 }
 
-.mine-panel--warning .mine-panel-header {
-  background: rgba(251, 191, 36, 0.04);
+.mine-move-btn {
+  font-size: 0.55rem;
+  color: rgba(160, 180, 220, 0.35);
+  padding: 0.12rem 0.22rem;
+  border-radius: 3px;
 }
 
-.mine-panel--warning .mine-panel-title {
-  color: rgba(251, 191, 36, 0.6);
+.mine-move-btn:hover:not(:disabled) {
+  color: rgba(160, 180, 220, 0.8);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* ── Intent panel variant ─────────────────────── */
+.mine-move-btn:disabled { opacity: 0.15; cursor: default; }
 
-.mine-panel--intent {
-  border-color: rgba(96, 165, 250, 0.14);
+.mine-remove-btn {
+  font-size: 0.6rem;
+  color: rgba(248, 113, 113, 0.35);
+  padding: 0.12rem 0.24rem;
+  border-radius: 3px;
 }
 
-.mine-panel--intent .mine-panel-header {
-  background: rgba(96, 165, 250, 0.04);
+.mine-remove-btn:hover {
+  color: rgba(248, 113, 113, 0.8);
+  background: rgba(248, 113, 113, 0.06);
 }
 
-/* ── Debug panel variant ──────────────────────── */
-
-.mine-panel--debug {
-  border-color: rgba(255, 255, 255, 0.05);
+.mine-pin-btn {
+  font-size: 0.62rem;
+  opacity: 0.28;
+  padding: 0.12rem 0.2rem;
+  border-radius: 3px;
 }
 
-/* ── Badges ───────────────────────────────────── */
+.mine-pin-btn--on { opacity: 0.9; }
+.mine-pin-btn:hover { opacity: 0.72; background: rgba(255, 255, 255, 0.04); }
 
-.mine-badge {
-  display: inline-block;
+.mine-clear-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(248, 113, 113, 0.45);
+  padding: 0.1rem 0.32rem;
+  border-radius: 3px;
+  border-color: rgba(248, 113, 113, 0.12);
+  background: none;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.mine-clear-btn:hover {
+  color: rgba(248, 113, 113, 0.8);
+  background: rgba(248, 113, 113, 0.05);
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+.mine-filter-btn {
   font-family: "Share Tech Mono", monospace;
   font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.15rem 0.45rem;
-  border-radius: 3px;
+  letter-spacing: 0.04em;
+  color: rgba(160, 180, 220, 0.4);
+  padding: 0.2rem 0.52rem;
+  border-radius: 4px;
+  border-color: rgba(255, 255, 255, 0.08);
+  background: none;
+  cursor: pointer;
+  transition: all 0.13s;
+}
+
+.mine-filter-btn--active {
+  color: rgba(245, 158, 11, 0.8);
+  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.mine-filter-btn:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(160, 180, 220, 0.65);
+}
+
+.mine-add-btn {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(167, 139, 250, 0.9);
+  padding: 0.28rem 0.65rem;
+  border-radius: 4px;
+  border-color: rgba(167, 139, 250, 0.22);
+  background: rgba(167, 139, 250, 0.07);
   white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.13s;
 }
 
-.mine-badge--ship {
-  background: rgba(96, 165, 250, 0.1);
-  color: rgba(96, 165, 250, 0.8);
-  border: 1px solid rgba(96, 165, 250, 0.2);
+.mine-add-btn:hover {
+  background: rgba(167, 139, 250, 0.13);
+  border-color: rgba(167, 139, 250, 0.35);
 }
 
-.mine-badge--surface {
-  background: rgba(74, 222, 128, 0.08);
-  color: rgba(74, 222, 128, 0.7);
-  border: 1px solid rgba(74, 222, 128, 0.18);
+/* ── Export button ────────────────────────────── */
+
+.mine-btn-export {
+  flex-shrink: 0;
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  color: rgba(160, 180, 220, 0.45);
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.57rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.13s;
 }
 
-/* ── Material demand compact list ─────────────── */
+.mine-btn-export:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(160, 180, 220, 0.75);
+}
 
-.mine-demand-compact-list {
+/* ── Form elements ────────────────────────────── */
+
+.mine-input,
+.mine-select {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #c8d8f8;
+  padding: 0.28rem 0.5rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.mine-input:focus,
+.mine-select:focus {
+  border-color: rgba(167, 139, 250, 0.35);
+}
+
+.mine-input       { flex: 1 1 0; min-width: 0; }
+.mine-input--short { flex: 0 0 76px; }
+.mine-select       { flex: 0 0 auto; cursor: pointer; }
+.mine-select option { background: #0a0e20; }
+
+.mine-input--no-spinner {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.mine-input--no-spinner::-webkit-outer-spin-button,
+.mine-input--no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.mine-form-error {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.7rem;
+  color: rgba(248, 113, 113, 0.7);
+  padding: 0.1rem 0;
+}
+
+/* ── JSON preview ─────────────────────────────── */
+
+.mine-json-preview {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.6rem;
+  color: rgba(160, 180, 220, 0.45);
+  line-height: 1.55;
+  padding: 0.7rem 0.5rem;
+  margin: 0;
+  overflow-x: auto;
+  max-height: 18rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+/* ── Build Queue Panel ────────────────────────── */
+
+.mbq-panel {
   display: flex;
   flex-direction: column;
+  gap: 1.1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 0.5rem;
 }
 
-.mine-demand-compact-row {
+.mbq-section-header {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.mine-demand-compact-row:last-child {
-  border-bottom: none;
+.mbq-section-header--second {
+  margin-top: 0.5rem;
 }
 
-.mine-demand-compact-row:hover {
-  background: rgba(255, 255, 255, 0.015);
-}
-
-.mine-demand-compact-rank {
+.mbq-section-title {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  color: rgba(96, 165, 250, 0.35);
-  min-width: 1.1rem;
-  text-align: right;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.45);
 }
 
-.mine-demand-compact-name {
-  flex: 1;
+.mbq-section-meta {
   font-family: "Barlow", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #c8d8f8;
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.28);
+}
+
+.mbq-empty {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.78rem;
+  color: rgba(160, 180, 220, 0.28);
+  margin: 0;
+}
+
+/* Component grid */
+
+.mbq-component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.85rem;
+}
+
+.mbq-comp-card {
+  background: rgba(255, 255, 255, 0.027);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mbq-comp-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem 0.75rem;
+  background: rgba(255, 255, 255, 0.015);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mbq-comp-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
   min-width: 0;
 }
 
-.mine-demand-compact-qty {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.72rem;
-  color: rgba(160, 180, 220, 0.75);
+.mbq-comp-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e7edff;
+  letter-spacing: 0.02em;
   white-space: nowrap;
-}
-
-.mine-demand-compact-slots {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.35);
-  white-space: nowrap;
-  max-width: 8rem;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mine-demand-compact-used {
+.mbq-comp-type {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.4);
-  white-space: nowrap;
-}
-
-/* ── Route cards ──────────────────────────────── */
-
-.mine-routes-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.mine-route-card {
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  transition: background 0.12s;
-}
-
-.mine-route-card:last-child {
-  border-bottom: none;
-}
-
-.mine-route-card:hover {
-  background: rgba(255, 255, 255, 0.015);
-}
-
-.mine-route-card--starred {
-  background: rgba(250, 204, 21, 0.022);
-  border-left: 2px solid rgba(250, 204, 21, 0.28);
-}
-
-.mine-route-card--starred:hover {
-  background: rgba(250, 204, 21, 0.035);
-}
-
-.mine-route-card-top {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-
-.mine-route-rank {
-  font-family: "Orbitron", sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(96, 165, 250, 0.35);
-  min-width: 1.8rem;
-  flex-shrink: 0;
-}
-
-.mine-route-id {
-  flex: 1;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  min-width: 0;
-}
-
-.mine-route-location {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #c8d8f8;
-}
-
-.mine-route-system {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.4);
-  letter-spacing: 0.07em;
-  white-space: nowrap;
-}
-
-.mine-route-coverage-inline {
-  display: flex;
-  align-items: baseline;
-  gap: 0.2rem;
-  flex-shrink: 0;
-}
-
-.mine-route-coverage-pct {
-  font-family: "Orbitron", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: rgba(74, 222, 128, 0.85);
-}
-
-.mine-route-coverage-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.07em;
-  color: rgba(74, 222, 128, 0.4);
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  color: rgba(160, 180, 220, 0.35);
   text-transform: uppercase;
 }
 
-.mine-route-sources-count {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  color: rgba(160, 180, 220, 0.4);
+.mbq-comp-stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  padding: 0.32rem 0.6rem;
+  text-align: center;
   flex-shrink: 0;
 }
 
-/* Score pills — planner-only */
+.mbq-stat-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.47rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.35);
+}
+
+.mbq-stat-val {
+  font-family: "Orbitron", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #e7edff;
+  line-height: 1;
+}
+
+/* Material rows inside component card */
+
+.mbq-comp-body {
+  padding: 0.65rem 1rem 0.8rem;
+}
+
+.mbq-mat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.mbq-mat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+.mbq-mat-row--covered {
+  background: rgba(74, 222, 128, 0.04);
+  border-color: rgba(74, 222, 128, 0.1);
+}
+
+.mbq-mat-row--missing {
+  background: rgba(255, 255, 255, 0.018);
+  border-color: rgba(255, 255, 255, 0.04);
+}
+
+.mbq-mat-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c8d8f8;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mbq-mat-qty {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.45);
+  flex-shrink: 0;
+}
+
+.mbq-mat-status {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+}
+
+.mbq-mat-status--covered {
+  color: rgba(74, 222, 128, 0.75);
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.mbq-mat-status--missing {
+  color: rgba(248, 113, 113, 0.5);
+  background: rgba(248, 113, 113, 0.04);
+  border: 1px solid rgba(248, 113, 113, 0.1);
+}
+
+/* Resource Demand grid */
+
+.mbq-demand-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.7rem;
+}
+
+.mbq-demand-card {
+  background: rgba(255, 255, 255, 0.027);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+}
+
+.mbq-demand-card--covered {
+  border-color: rgba(74, 222, 128, 0.12);
+}
+
+.mbq-demand-card--missing {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.mbq-demand-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.mbq-demand-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e7edff;
+  letter-spacing: 0.02em;
+  flex: 1;
+  min-width: 0;
+}
+
+.mbq-demand-badge {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.mbq-demand-badge--covered {
+  color: rgba(74, 222, 128, 0.75);
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.mbq-demand-badge--missing {
+  color: rgba(248, 113, 113, 0.5);
+  background: rgba(248, 113, 113, 0.04);
+  border: 1px solid rgba(248, 113, 113, 0.1);
+}
+
+.mbq-demand-stats {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.mbq-demand-used-by {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.mbq-used-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.54rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(167, 139, 250, 0.05);
+  border: 1px solid rgba(167, 139, 250, 0.12);
+  color: rgba(167, 139, 250, 0.6);
+}
+
+.mbq-demand-locations {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mbq-locations-label {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.25);
+}
+
+.mbq-location-chip {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.54rem;
+  padding: 0.08rem 0.3rem;
+  border-radius: 3px;
+  background: rgba(74, 222, 128, 0.04);
+  border: 1px solid rgba(74, 222, 128, 0.1);
+  color: rgba(74, 222, 128, 0.55);
+}
+
+/* ── Score pills — advanced mode only ────────── */
 
 .mine-route-scores {
   display: flex;
@@ -472,856 +1772,38 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 3px;
-  padding: 0.12rem 0.4rem;
+  padding: 0.1rem 0.38rem;
 }
 
 .mine-score-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.3);
+  color: rgba(160, 180, 220, 0.28);
 }
 
 .mine-score-val {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.67rem;
-  color: rgba(160, 180, 220, 0.7);
-}
-
-.mine-route-covered {
-  display: flex;
-  gap: 0.3rem;
-  flex-wrap: wrap;
-}
-
-.mine-mat-chip {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.04em;
-  text-transform: capitalize;
-  background: rgba(96, 165, 250, 0.07);
-  border: 1px solid rgba(96, 165, 250, 0.14);
-  border-radius: 3px;
-  padding: 0.08rem 0.35rem;
-  color: rgba(96, 165, 250, 0.65);
-}
-
-.mine-route-reason {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.72rem;
-  color: rgba(160, 180, 220, 0.38);
-  line-height: 1.4;
-}
-
-/* ── Sources by material ──────────────────────── */
-
-.mine-sources-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.mine-source-block {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mine-source-block:last-child {
-  border-bottom: none;
-}
-
-.mine-source-block-header--btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.6rem 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.12s;
-}
-
-.mine-source-block-header--btn:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.mine-source-mat-name {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #c8d8f8;
-  flex: 1;
-}
-
-.mine-source-meta {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.06em;
-  color: rgba(160, 180, 220, 0.38);
-}
-
-.mine-source-toggle {
-  font-size: 0.55rem;
-  color: rgba(160, 180, 220, 0.28);
-  flex-shrink: 0;
-}
-
-.mine-source-locations {
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mine-source-loc-row {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.45rem 1rem 0.45rem 1.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-}
-
-.mine-source-loc-row:last-child {
-  border-bottom: none;
-}
-
-.mine-source-loc-main {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.mine-source-loc-name {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #b8ccf0;
-}
-
-.mine-source-loc-sys {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.07em;
-  color: rgba(160, 180, 220, 0.38);
-}
-
-.mine-source-loc-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.mine-source-loc-reason {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.7rem;
-  color: rgba(160, 180, 220, 0.38);
-}
-
-.mine-source-loc-reason--pub {
-  padding-left: 0;
-}
-
-/* ── Priority stack ───────────────────────────── */
-
-.mine-priority-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.mine-priority-row {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.45rem 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mine-priority-row:last-child { border-bottom: none; }
-
-.mine-priority-row--pinned {
-  background: rgba(96, 165, 250, 0.04);
-}
-
-.mine-priority-rank {
-  font-family: "Orbitron", sans-serif;
   font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(96, 165, 250, 0.45);
-  min-width: 1.2rem;
-}
-
-.mine-priority-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.08rem;
-  min-width: 0;
-}
-
-.mine-priority-name {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #c8d8f8;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mine-priority-source {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.mine-priority-source--requiredMaterial { color: rgba(96, 165, 250, 0.5); }
-.mine-priority-source--manual { color: rgba(74, 222, 128, 0.5); }
-
-.mine-priority-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-/* ── Intent note ──────────────────────────────── */
-
-.mine-intent-note {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.56rem;
-  letter-spacing: 0.05em;
-  color: rgba(96, 165, 250, 0.3);
-  padding: 0.5rem 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-  line-height: 1.5;
-}
-
-/* ── Manual demand form ───────────────────────── */
-
-.mine-demand-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.7rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mine-demand-form-row {
-  display: flex;
-  gap: 0.4rem;
-  align-items: center;
-}
-
-.mine-demand-form-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.4rem;
-}
-
-.mine-input,
-.mine-select {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.78rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  color: #c8d8f8;
-  padding: 0.3rem 0.55rem;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.mine-input:focus,
-.mine-select:focus {
-  border-color: rgba(96, 165, 250, 0.4);
-}
-
-.mine-input { flex: 1 1 0; min-width: 0; }
-.mine-input--short { flex: 0 0 70px; }
-.mine-input--notes { flex: 1 1 0; min-width: 0; }
-
-.mine-select {
-  flex: 0 0 auto;
-  cursor: pointer;
-}
-
-.mine-select option { background: #0e1120; }
-
-.mine-checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: "Barlow", sans-serif;
-  font-size: 0.72rem;
-  color: rgba(160, 180, 220, 0.6);
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.mine-form-error {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.72rem;
-  color: rgba(239, 68, 68, 0.7);
-  padding: 0 1rem 0.5rem;
-}
-
-/* ── Manual demand list ───────────────────────── */
-
-.mine-demand-list {
-  display: flex;
-  flex-direction: column;
-}
-
-.mine-demand-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mine-demand-row:last-child { border-bottom: none; }
-
-.mine-demand-body {
-  flex: 1;
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-
-.mine-demand-name {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #c8d8f8;
-}
-
-.mine-demand-qty {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.7rem;
-  color: rgba(160, 180, 220, 0.75);
-}
-
-.mine-demand-type {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.56rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(74, 222, 128, 0.5);
-}
-
-.mine-demand-notes {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.68rem;
-  color: rgba(160, 180, 220, 0.38);
-  font-style: italic;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 10rem;
-}
-
-/* ── JSON preview panel ───────────────────────── */
-
-.mine-panel-header--split {
-  display: flex;
-  align-items: stretch;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.mine-panel-header--split .mine-collapsible-header {
-  flex: 1;
-  border-bottom: none;
-}
-
-.mine-btn-export {
-  flex-shrink: 0;
-  padding: 0 1rem;
-  background: rgba(56, 130, 246, 0.1);
-  border: none;
-  border-left: 1px solid rgba(56, 130, 246, 0.18);
-  color: rgba(100, 170, 255, 0.75);
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.62rem;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.mine-btn-export:hover {
-  background: rgba(56, 130, 246, 0.18);
-}
-
-.mine-collapsible-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: none;
-  cursor: pointer;
-}
-
-.mine-collapsible-header:hover {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.mine-collapse-arrow {
-  font-size: 0.55rem;
-  color: rgba(160, 180, 220, 0.28);
-}
-
-.mine-json-preview {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.65rem;
-  color: rgba(160, 180, 220, 0.55);
-  line-height: 1.55;
-  padding: 0.85rem 1rem;
-  margin: 0;
-  overflow-x: auto;
-  max-height: 22rem;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-/* ── Mode toggle ──────────────────────────────── */
-
-.mine-mode-toggle {
-  display: flex;
-  gap: 0.3rem;
-  align-items: center;
-  flex-shrink: 0;
-  padding-top: 0.15rem;
-}
-
-.mine-mode-btn {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  color: rgba(160, 180, 220, 0.4);
-  padding: 0.28rem 0.65rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.mine-mode-btn:hover {
-  border-color: rgba(96, 165, 250, 0.22);
   color: rgba(160, 180, 220, 0.65);
 }
 
-.mine-mode-btn--active {
-  border-color: rgba(96, 165, 250, 0.35);
-  color: rgba(96, 165, 250, 0.85);
-  background: rgba(96, 165, 250, 0.07);
-}
-
-.mine-mode-btn--public.mine-mode-btn--active {
-  border-color: rgba(74, 222, 128, 0.3);
-  color: rgba(74, 222, 128, 0.8);
-  background: rgba(74, 222, 128, 0.06);
-}
-
-/* ── Shared icon buttons ──────────────────────── */
-
-.mine-move-btn,
-.mine-pin-btn,
-.mine-remove-btn,
-.mine-star-btn,
-.mine-add-priority-btn,
-.mine-clear-btn,
-.mine-filter-btn,
-.mine-add-btn {
-  font-family: "Barlow", sans-serif;
-  background: none;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: opacity 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
-}
-
-.mine-move-btn {
-  font-size: 0.58rem;
-  color: rgba(160, 180, 220, 0.4);
-  padding: 0.15rem 0.28rem;
-  border-radius: 3px;
-}
-
-.mine-move-btn:hover:not(:disabled) {
-  color: rgba(160, 180, 220, 0.85);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.mine-move-btn:disabled { opacity: 0.18; cursor: default; }
-
-.mine-remove-btn {
-  font-size: 0.6rem;
-  color: rgba(239, 68, 68, 0.38);
-  padding: 0.15rem 0.28rem;
-  border-radius: 3px;
-}
-
-.mine-remove-btn:hover {
-  color: rgba(239, 68, 68, 0.8);
-  background: rgba(239, 68, 68, 0.06);
-}
-
-.mine-pin-btn {
-  font-size: 0.62rem;
-  opacity: 0.3;
-  padding: 0.15rem 0.22rem;
-  border-radius: 3px;
-}
-
-.mine-pin-btn--on { opacity: 0.9; }
-.mine-pin-btn:hover { opacity: 0.75; background: rgba(255, 255, 255, 0.04); }
-
-.mine-clear-btn {
-  font-size: 0.58rem;
-  color: rgba(239, 68, 68, 0.42);
-  padding: 0.13rem 0.38rem;
-  border-radius: 3px;
-  border-color: rgba(239, 68, 68, 0.13);
-}
-
-.mine-clear-btn:hover {
-  color: rgba(239, 68, 68, 0.8);
-  background: rgba(239, 68, 68, 0.06);
-  border-color: rgba(239, 68, 68, 0.28);
-}
-
-.mine-star-btn {
-  font-size: 0.85rem;
-  color: rgba(160, 180, 220, 0.28);
-  padding: 0.1rem 0.22rem;
-  border-radius: 3px;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.mine-star-btn--on {
-  color: rgba(250, 204, 21, 0.85);
-}
-
-.mine-star-btn:hover {
-  color: rgba(250, 204, 21, 0.6);
-  background: rgba(250, 204, 21, 0.05);
-}
-
-.mine-filter-btn {
-  font-size: 0.58rem;
-  color: rgba(160, 180, 220, 0.4);
-  padding: 0.18rem 0.5rem;
-  border-radius: 4px;
-  border-color: rgba(255, 255, 255, 0.08);
-  letter-spacing: 0.04em;
-}
-
-.mine-filter-btn--active {
-  color: rgba(250, 204, 21, 0.8);
-  border-color: rgba(250, 204, 21, 0.25);
-  background: rgba(250, 204, 21, 0.05);
-}
-
-.mine-filter-btn:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  color: rgba(160, 180, 220, 0.65);
-}
-
-.mine-td-action {
-  text-align: center;
-  width: 2.5rem;
-}
-
-.mine-add-priority-btn {
-  font-size: 0.78rem;
-  color: rgba(160, 180, 220, 0.3);
-  padding: 0.08rem 0.28rem;
-  border-radius: 3px;
-}
-
-.mine-add-priority-btn--active {
-  color: rgba(96, 165, 250, 0.7);
-  cursor: default;
-}
-
-.mine-add-priority-btn:not(:disabled):hover {
-  color: rgba(96, 165, 250, 0.65);
-  background: rgba(96, 165, 250, 0.07);
-}
-
-.mine-add-btn {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: rgba(96, 165, 250, 0.85);
-  padding: 0.28rem 0.75rem;
-  border-radius: 4px;
-  border-color: rgba(96, 165, 250, 0.25);
-  background: rgba(96, 165, 250, 0.07);
-}
-
-.mine-add-btn:hover {
-  background: rgba(96, 165, 250, 0.13);
-  border-color: rgba(96, 165, 250, 0.38);
-}
-
-/* ── Material Explorer ────────────────────────── */
-
-.mex-root {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.mex-access-notice {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  background: rgba(74, 222, 128, 0.03);
-  border: 1px solid rgba(74, 222, 128, 0.1);
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-}
-
-.mex-access-badge {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(74, 222, 128, 0.8);
-  background: rgba(74, 222, 128, 0.08);
-  border: 1px solid rgba(74, 222, 128, 0.18);
-  border-radius: 3px;
-  padding: 0.13rem 0.4rem;
-  flex-shrink: 0;
-}
-
-.mex-access-text {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.75rem;
-  color: rgba(160, 180, 220, 0.42);
-  line-height: 1.4;
-}
-
-.mex-badge-rail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  padding: 0.7rem 1rem;
-}
-
-.mex-mat-btn {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.05em;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  color: rgba(160, 180, 220, 0.55);
-  padding: 0.22rem 0.55rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.mex-mat-btn:hover {
-  border-color: rgba(96, 165, 250, 0.28);
-  color: rgba(96, 165, 250, 0.8);
-  background: rgba(96, 165, 250, 0.06);
-}
-
-.mex-mat-btn--active {
-  border-color: rgba(96, 165, 250, 0.42);
-  color: rgba(96, 165, 250, 0.95);
-  background: rgba(96, 165, 250, 0.11);
-}
-
-.mex-filter-status {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.75rem;
-  color: rgba(160, 180, 220, 0.48);
-  padding: 0.25rem 1rem 0.65rem;
-}
-
-.mex-filter-status strong {
-  color: rgba(96, 165, 250, 0.85);
-  font-weight: 600;
-}
-
-/* Location card grid */
-
-.mex-card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 0.65rem;
-  padding: 0.85rem 1rem;
-}
-
-@media (max-width: 640px) {
-  .mex-card-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.mex-location-card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 6px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-  outline: none;
-}
-
-.mex-location-card:hover {
-  border-color: rgba(96, 165, 250, 0.2);
-  background: rgba(96, 165, 250, 0.025);
-}
-
-.mex-location-card--expanded {
-  border-color: rgba(96, 165, 250, 0.32);
-  background: rgba(96, 165, 250, 0.045);
-}
-
-.mex-location-card:focus-visible {
-  outline: 1px solid rgba(96, 165, 250, 0.5);
-  outline-offset: 1px;
-}
-
-.mex-card-image-placeholder {
-  height: 48px;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, rgba(20, 30, 60, 0.4) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.mex-card-image-label {
-  font-family: "Orbitron", sans-serif;
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(96, 165, 250, 0.22);
-}
-
-.mex-card-body {
-  padding: 0.6rem 0.7rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.mex-card-name {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #c8d8f8;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mex-card-system {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.38);
-}
-
-.mex-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-
-.mex-card-kind {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.3);
-}
-
-.mex-card-stations {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  flex-wrap: wrap;
-}
-
-.mex-card-stations-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.06em;
-  color: rgba(160, 180, 220, 0.28);
-}
-
-.mex-station-chip {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.56rem;
-  padding: 0.08rem 0.32rem;
-  border-radius: 3px;
-  background: rgba(251, 191, 36, 0.05);
-  border: 1px solid rgba(251, 191, 36, 0.13);
-  color: rgba(251, 191, 36, 0.55);
-}
-
-.mex-card-mat-count {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.56rem;
-  letter-spacing: 0.05em;
-  color: rgba(160, 180, 220, 0.25);
-  margin-top: 0.05rem;
-}
-
-.mex-card-materials {
-  margin-top: 0.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.mex-card-materials-label {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: rgba(96, 165, 250, 0.38);
-}
-
-.mex-card-material-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.28rem;
-}
-
-.mex-mat-badge {
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
-  padding: 0.1rem 0.38rem;
-  border-radius: 3px;
-  background: rgba(96, 165, 250, 0.07);
-  border: 1px solid rgba(96, 165, 250, 0.16);
-  color: rgba(96, 165, 250, 0.72);
-}
+/* ── Misc ─────────────────────────────────────── */
 
 .mex-fixture-note {
   font-family: "Share Tech Mono", monospace;
-  font-size: 0.56rem;
+  font-size: 0.53rem;
   letter-spacing: 0.05em;
-  color: rgba(160, 180, 220, 0.22);
+  color: rgba(160, 180, 220, 0.2);
   text-align: center;
-  padding: 0.2rem 0 0.45rem;
+  padding: 0.4rem 0;
+}
+
+.msb-empty {
+  font-family: "Barlow", sans-serif;
+  font-size: 0.73rem;
+  color: rgba(160, 180, 220, 0.28);
+  margin: 0;
   line-height: 1.5;
 }

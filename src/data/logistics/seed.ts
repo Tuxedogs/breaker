@@ -8,11 +8,45 @@ import type {
   RarityTier,
   RecipeTemplate,
 } from "../../types/logistics";
+import type { QualityModifier } from "../../components/industry/crafting/utils/craftingTypes";
+import type { QualityBand } from "../../components/industry/crafting/utils/qualityBands";
 
 export interface RecipeInputTemplate {
+  /** Stable line-level id for editing duplicate material contributors independently. */
+  requirementId?: string;
+  /** Stable canonical material key used for queue/inventory/mining matching. */
+  materialKey?: string;
   materialId: string;
+  costId?: string;
+  materialGuid?: string;
+  materialName?: string;
+  displayName?: string;
+  rawName?: string;
+  sourceName?: string;
+  sourceType?: string;
   quantity: number;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  selectedQuality?: number;
+  mappedQuality?: number;
+  modifierName?: string;
+  modifierType?: string;
+  modifierValue?: number;
+  qualityModifiers?: QualityModifier[];
+  qualityBands?: QualityBand[];
 }
+
+export type MaterialSourceGroup = "ores" | "vehicleMining" | "fpsMining";
+
+export type LogisticsMaterialTemplate = MaterialTemplate & {
+  /** Display/source grouping used by inventory/material browser. */
+  sourceGroups: MaterialSourceGroup[];
+  /** True only for ship/ore refinery materials accepted from Processing/Complete refinery screenshots. */
+  acceptedInRefineryImport: boolean;
+  /** True only for materials that can come through refinery jobs. Vehicle/FPS mineables are false. */
+  canComeFromRefinery: boolean;
+  /** True when the mined resource is refined through refinery gameplay. Vehicle/FPS mineables are false. */
+  isRefinable: boolean;
+};
 
 export const rarityCatalog = {
   legendary: {
@@ -59,38 +93,195 @@ export const rarityCatalog = {
   },
 } satisfies Record<RarityTier, RarityInfo>;
 
-export const materialTemplates: MaterialTemplate[] = [
-  { id: "stileron", name: "Stileron", materialType: "refined" },
-  { id: "borase", name: "Borase", materialType: "raw" },
-  { id: "feynmaline", name: "Feynmaline", materialType: "special" },
-  { id: "tungsten", name: "Tungsten", materialType: "ore" },
-  { id: "savrilium", name: "Savrilium", materialType: "refined" },
-  { id: "quantanium", name: "Quantanium", materialType: "special", isQuantanium: true },
-  { id: "laranite", name: "Laranite", materialType: "ore" },
-  { id: "copper-ore", name: "Copper Ore", materialType: "ore" },
-  { id: "titanium", name: "Titanium", materialType: "ore" },
-  // Refined outputs that appear in refinery completed orders
-  { id: "gold", name: "Gold", materialType: "refined" },
-  { id: "agricium", name: "Agricium", materialType: "refined" },
-  { id: "aslarite", name: "Aslarite", materialType: "refined" },
-  { id: "bexalite", name: "Bexalite", materialType: "refined" },
-  { id: "corundum", name: "Corundum", materialType: "refined" },
-  { id: "hephaestanite", name: "Hephaestanite", materialType: "refined" },
-  { id: "iron", name: "Iron", materialType: "refined" },
-  { id: "torite", name: "Torite", materialType: "refined" },
-  { id: "pressurized-ice", name: "Pressurized Ice", materialType: "refined" },
-  // Ore/raw inputs that appear in MATERIALS SELECTED pre-refine screenshots
-  { id: "stileron-ore", name: "Stileron (Ore)", materialType: "ore" },
-  { id: "quartz", name: "Quartz", materialType: "raw" },
-  { id: "taranite", name: "Taranite", materialType: "ore" },
-  { id: "riccite", name: "Riccite", materialType: "ore" },
+function refineryMaterial(id: string, name: string, extra?: Partial<LogisticsMaterialTemplate>): LogisticsMaterialTemplate {
+  return {
+    id,
+    name,
+    materialType: "ore",
+    sourceGroups: ["ores"],
+    acceptedInRefineryImport: true,
+    canComeFromRefinery: true,
+    isRefinable: true,
+    ...extra,
+  };
+}
+
+function vehicleMineable(id: string, name: string, extra?: Partial<LogisticsMaterialTemplate>): LogisticsMaterialTemplate {
+  return {
+    id,
+    name,
+    materialType: "raw",
+    sourceGroups: ["vehicleMining"],
+    acceptedInRefineryImport: false,
+    canComeFromRefinery: false,
+    isRefinable: false,
+    ...extra,
+  };
+}
+
+function fpsMineable(id: string, name: string, extra?: Partial<LogisticsMaterialTemplate>): LogisticsMaterialTemplate {
+  return {
+    id,
+    name,
+    materialType: "special",
+    sourceGroups: ["fpsMining"],
+    acceptedInRefineryImport: false,
+    canComeFromRefinery: false,
+    isRefinable: false,
+    ...extra,
+  };
+}
+
+/**
+ * Canonical material ids for inventory and crafting.
+ *
+ * Important rules:
+ * - Only `sourceGroups: ["ores"]` materials can be imported from refinery screenshots.
+ * - Vehicle mining and FPS mining materials cannot be refined and must never appear in the refinery parser dropdown.
+ * - Quality can still exist for any material. Refinery eligibility and quality quantization are separate concepts.
+ * - Carinite is stored once and displayed in both Vehicle Mining and FPS Mining source groups.
+ */
+export const materialTemplates: LogisticsMaterialTemplate[] = [
+  // ORES / refinery job outputs accepted from Processing and Complete screenshots.
+  refineryMaterial("agricium", "Agricium"),
+  refineryMaterial("aluminum", "Aluminium"),
+  refineryMaterial("aslarite", "Aslarite"),
+  refineryMaterial("beryl", "Beryl"),
+  refineryMaterial("bexalite", "Bexalite"),
+  refineryMaterial("borase", "Borase"),
+  refineryMaterial("copper", "Copper"),
+  refineryMaterial("corundum", "Corundum"),
+  refineryMaterial("gold", "Gold"),
+  refineryMaterial("hephaestanite", "Hephaestanite"),
+  refineryMaterial("rawice", "Ice"),
+  refineryMaterial("iron", "Iron"),
+  refineryMaterial("laranite", "Laranite"),
+  refineryMaterial("lindinium", "Lindinium"),
+  refineryMaterial("ouratite", "Ouratite"),
+  refineryMaterial("quantanium", "Quantanium", { isQuantanium: true }),
+  refineryMaterial("quartz", "Quartz"),
+  refineryMaterial("riccite", "Riccite"),
+  refineryMaterial("savrilium", "Savrilium"),
+  refineryMaterial("silicon", "Silicon"),
+  refineryMaterial("stileron", "Stileron"),
+  refineryMaterial("taranite", "Taranite"),
+  refineryMaterial("tin", "Tin"),
+  refineryMaterial("titanium", "Titanium"),
+  refineryMaterial("torite", "Torite"),
+  refineryMaterial("tungsten", "Tungsten"),
+
+  // VEHICLE MINING / ROC-type mineables. These cannot be refined.
+  vehicleMineable("beradom", "Beradom"),
+  vehicleMineable("carinite", "Carinite", { sourceGroups: ["vehicleMining", "fpsMining"] }),
+  vehicleMineable("feynmaline", "Feynmaline"),
+  vehicleMineable("glacosite", "Glacosite"),
+
+  // FPS MINING / hand mineables. These cannot be refined.
+  fpsMineable("aphorite", "Aphorite"),
+  fpsMineable("carinite-pure", "Carinite Pure"),
+  fpsMineable("dolivine", "Dolivine"),
+  fpsMineable("hadanite", "Hadanite"),
+  fpsMineable("jaclium", "Jaclium"),
+  fpsMineable("janalite", "Janalite"),
+  fpsMineable("sadaryx", "Sadaryx"),
+  fpsMineable("saldynium", "Saldynium"),
 ];
 
+export const materialSourceGroups: Record<MaterialSourceGroup, string[]> = {
+  ores: [
+    "agricium",
+    "aluminum",
+    "aslarite",
+    "beryl",
+    "bexalite",
+    "borase",
+    "copper",
+    "corundum",
+    "gold",
+    "hephaestanite",
+    "rawice",
+    "iron",
+    "laranite",
+    "lindinium",
+    "ouratite",
+    "quantanium",
+    "quartz",
+    "riccite",
+    "savrilium",
+    "silicon",
+    "stileron",
+    "taranite",
+    "tin",
+    "titanium",
+    "torite",
+    "tungsten",
+  ],
+  vehicleMining: ["beradom", "carinite", "feynmaline", "glacosite"],
+  fpsMining: [
+    "aphorite",
+    "carinite",
+    "carinite-pure",
+    "dolivine",
+    "hadanite",
+    "jaclium",
+    "janalite",
+    "sadaryx",
+    "saldynium",
+  ],
+};
+
+export const refineryImportMaterialIds = materialTemplates
+  .filter((material) => material.acceptedInRefineryImport)
+  .map((material) => material.id);
+
+export const nonRefinableMaterialIds = materialTemplates
+  .filter((material) => !material.isRefinable)
+  .map((material) => material.id);
+
+export function isRefineryImportMaterial(materialId: string): boolean {
+  return refineryImportMaterialIds.includes(materialId);
+}
+
+export function isNonRefinableMaterial(materialId: string): boolean {
+  return nonRefinableMaterialIds.includes(materialId);
+}
+
 export const inventoryLocations: InventoryLocation[] = [
-  { id: "everus-harbor", name: "Everus Harbor", category: "station", system: "Stanton", type: "station" },
-  { id: "orison", name: "Orison", category: "city", system: "Stanton", type: "city" },
+  // Stanton refinery locations
+  { id: "arc-l1", name: "ARC-L1", category: "station", system: "Stanton", type: "station" },
+  { id: "arc-l2", name: "ARC-L2", category: "station", system: "Stanton", type: "station" },
+  { id: "arc-l4", name: "ARC-L4", category: "station", system: "Stanton", type: "station" },
+  { id: "cru-l1", name: "CRU-L1", category: "station", system: "Stanton", type: "station" },
+  { id: "hur-l1", name: "HUR-L1", category: "station", system: "Stanton", type: "station" },
+  { id: "hur-l2", name: "HUR-L2", category: "station", system: "Stanton", type: "station" },
+  { id: "mic-l1", name: "MIC-L1", category: "station", system: "Stanton", type: "station" },
+  { id: "mic-l2", name: "MIC-L2", category: "station", system: "Stanton", type: "station" },
+  { id: "mic-l5", name: "MIC-L5", category: "station", system: "Stanton", type: "station" },
+  { id: "nyx-gateway-stanton", name: "Nyx Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
+  { id: "pyro-gateway-stanton", name: "Pyro Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
+  { id: "terra-gateway-stanton", name: "Terra Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
+
+  // Pyro refinery locations
+  { id: "checkmate", name: "Checkmate", category: "station", system: "Pyro", type: "station" },
+  { id: "orbituary", name: "Orbituary", category: "station", system: "Pyro", type: "station" },
+  { id: "ruin-station", name: "Ruin Station", category: "station", system: "Pyro", type: "station" },
+  { id: "nyx-gateway-pyro", name: "Nyx Gateway (Pyro)", category: "station", system: "Pyro", type: "station" },
+  { id: "stanton-gateway-pyro", name: "Stanton Gateway (Pyro)", category: "station", system: "Pyro", type: "station" },
+
+  // Nyx refinery locations
+  { id: "levski", name: "Levski", category: "city", system: "Nyx", type: "city" },
+  { id: "pyro-gateway-nyx", name: "Pyro Gateway (Nyx)", category: "station", system: "Nyx", type: "station" },
+  { id: "stanton-gateway-nyx", name: "Stanton Gateway (Nyx)", category: "station", system: "Nyx", type: "station" },
+
+  // Major non-refinery inventory hubs
   { id: "area18", name: "Area18", category: "city", system: "Stanton", type: "city" },
-  { id: "seraphim-station", name: "Seraphim Station", category: "station", system: "Pyro", type: "station" },
+  { id: "orison", name: "Orison", category: "city", system: "Stanton", type: "city" },
+  { id: "lorville", name: "Lorville", category: "city", system: "Stanton", type: "city" },
+  { id: "new-babbage", name: "New Babbage", category: "city", system: "Stanton", type: "city" },
+  { id: "everus-harbor", name: "Everus Harbor", category: "station", system: "Stanton", type: "station" },
+  { id: "baijini-point", name: "Baijini Point", category: "station", system: "Stanton", type: "station" },
+  { id: "port-tressler", name: "Port Tressler", category: "station", system: "Stanton", type: "station" },
+  { id: "seraphim-station", name: "Seraphim Station", category: "station", system: "Stanton", type: "station" },
 ];
 
 export const recipeTemplates: RecipeTemplate[] = [
@@ -98,6 +289,8 @@ export const recipeTemplates: RecipeTemplate[] = [
   { id: "recipe-2", name: "TS-2 Quantum Drive", category: "ship_part", outputTemplateId: "ts-2-quantum-drive", outputQuantity: 1 },
   { id: "recipe-3", name: "VK-00 Quantum Drive", category: "ship_part", outputTemplateId: "vk-00-quantum-drive", outputQuantity: 1 },
   { id: "recipe-4", name: "Arbor Mining Laser", category: "weapon", outputTemplateId: "arbor-mining-laser", outputQuantity: 1 },
+  { id: "recipe-5", name: "SnowBlind Cooler", category: "ship_part", outputTemplateId: "snowblind-cooler", outputQuantity: 1 },
+  { id: "recipe-6", name: "Demeco LMG", category: "weapon", outputTemplateId: "demeco-lmg", outputQuantity: 1 },
 ];
 
 export const recipeInputTemplates: Record<string, RecipeInputTemplate[]> = {
@@ -116,7 +309,16 @@ export const recipeInputTemplates: Record<string, RecipeInputTemplate[]> = {
   ],
   "recipe-4": [
     { materialId: "laranite", quantity: 2 },
-    { materialId: "copper-ore", quantity: 0.8 },
+    { materialId: "copper", quantity: 0.8 },
+  ],
+  "recipe-5": [
+    { materialId: "rawice", quantity: 1.25 },
+    { materialId: "silicon", quantity: 0.75 },
+  ],
+  "recipe-6": [
+    { materialId: "titanium", quantity: 2 },
+    { materialId: "tungsten", quantity: 0.75 },
+    { materialId: "copper", quantity: 0.5 },
   ],
 };
 
@@ -124,9 +326,9 @@ export const itemTemplates: ItemTemplate[] = [
   { id: "avalanche-cooler", name: "Avalanche Cooler", category: "ship_part", recipeId: "recipe-1" },
   { id: "ts-2-quantum-drive", name: "TS-2 Quantum Drive", category: "ship_part", size: 2, grade: "A", class: "military", recipeId: "recipe-2" },
   { id: "vk-00-quantum-drive", name: "VK-00 Quantum Drive", category: "ship_part", size: 1, grade: "A", class: "competition", recipeId: "recipe-3" },
-  { id: "snowblind-cooler", name: "SnowBlind Cooler", category: "ship_part" },
   { id: "arbor-mining-laser", name: "Arbor Mining Laser", category: "weapon", recipeId: "recipe-4" },
-  { id: "demeco-lmg", name: "Demeco LMG", category: "weapon" },
+  { id: "snowblind-cooler", name: "SnowBlind Cooler", category: "ship_part", recipeId: "recipe-5" },
+  { id: "demeco-lmg", name: "Demeco LMG", category: "weapon", recipeId: "recipe-6" },
 ];
 
 const now = "2026-04-22T08:25:00Z";
@@ -136,25 +338,28 @@ function materialTypeFor(materialId: string): MaterialTemplate["materialType"] {
 }
 
 export const initialInventoryEntries: InventoryEntry[] = [
-  { id: "inv-1", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 3.5, quality: 900, locationId: "everus-harbor", rarity: rarityCatalog.legendary, createdAt: now, updatedAt: "2026-04-18T10:22:00Z" },
-  { id: "inv-2", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 1.2, quality: 300, locationId: "orison", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-17T14:05:00Z" },
-  { id: "inv-3", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 0.8, quality: 860, locationId: "seraphim-station", rarity: rarityCatalog.epic, createdAt: now, updatedAt: "2026-04-15T08:00:00Z" },
-  { id: "inv-4", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 2, quality: 500, locationId: "everus-harbor", container: "520", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-19T09:15:00Z" },
-  { id: "inv-5", materialId: "borase", materialType: materialTypeFor("borase"), quantity: 0.5, quality: 740, locationId: "orison", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-16T11:30:00Z" },
-  { id: "inv-6", materialId: "feynmaline", materialType: materialTypeFor("feynmaline"), quantity: 85, quality: 240, locationId: "area18", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-20T07:00:00Z" },
-  { id: "inv-7", materialId: "feynmaline", materialType: materialTypeFor("feynmaline"), quantity: 30, quality: 100, locationId: "seraphim-station", container: "920", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-14T16:45:00Z" },
-  { id: "inv-8", materialId: "tungsten", materialType: materialTypeFor("tungsten"), quantity: 1.5, quality: 0, locationId: "everus-harbor", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-21T12:00:00Z" },
-  { id: "inv-9", materialId: "savrilium", materialType: materialTypeFor("savrilium"), quantity: 0.86, quality: 0, locationId: "seraphim-station", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-13T09:30:00Z" },
-  { id: "inv-10", materialId: "laranite", materialType: materialTypeFor("laranite"), quantity: 0.8, quality: 0, locationId: "area18", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-22T08:20:00Z" },
-  { id: "inv-11", materialId: "copper-ore", materialType: materialTypeFor("copper-ore"), quantity: 0.5, quality: 0, locationId: "area18", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-22T08:25:00Z" },
-  { id: "inv-12", materialId: "titanium", materialType: materialTypeFor("titanium"), quantity: 3, quality: 0, locationId: "everus-harbor", container: "1000", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-20T15:00:00Z" },
+  // Refinery/import examples.
+  { id: "inv-1", materialId: "stileron", materialType: materialTypeFor("stileron"), quantity: 3.5, quality: 947, locationId: "orbituary", rarity: rarityCatalog.legendary, createdAt: now, updatedAt: "2026-04-18T10:22:00Z" },
+  { id: "inv-2", materialId: "iron", materialType: materialTypeFor("iron"), quantity: 87, quality: 325, locationId: "orbituary", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-17T14:05:00Z" },
+  { id: "inv-3", materialId: "iron", materialType: materialTypeFor("iron"), quantity: 10, quality: 710, locationId: "orbituary", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-15T08:00:00Z" },
+  { id: "inv-4", materialId: "hephaestanite", materialType: materialTypeFor("hephaestanite"), quantity: 129, quality: 330, locationId: "orbituary", container: "520", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-19T09:15:00Z" },
+  { id: "inv-5", materialId: "quartz", materialType: materialTypeFor("quartz"), quantity: 7, quality: 522, locationId: "orbituary", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-16T11:30:00Z" },
+  { id: "inv-6", materialId: "silicon", materialType: materialTypeFor("silicon"), quantity: 11, quality: 510, locationId: "orbituary", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-20T07:00:00Z" },
+
+  // Non-refinable inventory examples. These should never come from the refinery screenshot parser.
+  { id: "inv-7", materialId: "feynmaline", materialType: materialTypeFor("feynmaline"), quantity: 30, quality: 561, locationId: "area18", container: "920", rarity: rarityCatalog.rare, createdAt: now, updatedAt: "2026-04-14T16:45:00Z" },
+  { id: "inv-8", materialId: "beradom", materialType: materialTypeFor("beradom"), quantity: 12, quality: 578, locationId: "everus-harbor", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-21T12:00:00Z" },
+  { id: "inv-9", materialId: "carinite", materialType: materialTypeFor("carinite"), quantity: 8, quality: 716, locationId: "seraphim-station", rarity: rarityCatalog.common, createdAt: now, updatedAt: "2026-04-13T09:30:00Z" },
+  { id: "inv-10", materialId: "hadanite", materialType: materialTypeFor("hadanite"), quantity: 18, quality: 867, locationId: "area18", rarity: rarityCatalog.epic, createdAt: now, updatedAt: "2026-04-22T08:20:00Z" },
+  { id: "inv-11", materialId: "aphorite", materialType: materialTypeFor("aphorite"), quantity: 22, quality: 686, locationId: "area18", rarity: rarityCatalog.uncommon, createdAt: now, updatedAt: "2026-04-22T08:25:00Z" },
+  { id: "inv-12", materialId: "carinite-pure", materialType: materialTypeFor("carinite-pure"), quantity: 3, quality: 880, locationId: "everus-harbor", container: "1000", rarity: rarityCatalog.rare, createdAt: now, updatedAt: "2026-04-20T15:00:00Z" },
 ];
 
 export const initialBuildQueue: BuildQueueItem[] = [
   { id: "bq-1", recipeId: "recipe-1", quantity: 1, status: "active", priority: 1 },
   { id: "bq-2", recipeId: "recipe-2", quantity: 1, status: "active", priority: 2 },
   { id: "bq-3", recipeId: "recipe-3", quantity: 1, status: "paused", priority: 3 },
-  { id: "bq-4", recipeId: "snowblind-cooler", quantity: 1, status: "queued", priority: 4 },
+  { id: "bq-4", recipeId: "recipe-5", quantity: 1, status: "queued", priority: 4 },
   { id: "bq-5", recipeId: "recipe-4", quantity: 1, status: "queued", priority: 5 },
-  { id: "bq-6", recipeId: "demeco-lmg", quantity: 1, status: "queued", priority: 6 },
+  { id: "bq-6", recipeId: "recipe-6", quantity: 1, status: "queued", priority: 6 },
 ];

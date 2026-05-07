@@ -23,7 +23,12 @@
       "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\\\\data\\\\recommendations\" -File)",
       "Bash(Select-Object Name)",
       "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\\\\pages\\\\industry\" -Filter \"*Mining*\")",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('public/api/crafting/blueprints.json','utf8'\\)\\); const sample=data.slice\\(0,5\\); console.log\\(JSON.stringify\\(sample.map\\(x=>\\({name:x.displayName,grade:x.grade,class:x.class}\\)\\),null,2\\)\\); const withGrade=data.filter\\(x=>x.grade\\); const withClass=data.filter\\(x=>x.class\\); console.log\\('total:',data.length,'withGrade:',withGrade.length,'withClass:',withClass.length\\);\")",
+      "Bash(node -e \"const chunks=[]; process.stdin.on\\('data',c=>chunks.push\\(c\\)\\); process.stdin.on\\('end',\\(\\)=>{ const data=JSON.parse\\(Buffer.concat\\(chunks\\)\\); const withGrade=data.filter\\(x=>x.grade\\); const withClass=data.filter\\(x=>x.class\\); console.log\\('total:',data.length,'withGrade:',withGrade.length,'withClass:',withClass.length\\); if\\(withGrade.length\\) console.log\\('sample grade:',JSON.stringify\\(withGrade[0]\\)\\); }\\);\")",
+      "Bash(node -e \"const chunks=[]; process.stdin.on\\('data',c=>chunks.push\\(c\\)\\); process.stdin.on\\('end',\\(\\)=>{ const pkg=JSON.parse\\(Buffer.concat\\(chunks\\)\\); console.log\\(JSON.stringify\\(pkg.scripts,null,2\\)\\); }\\);\")",
+      "Bash(xargs grep -l \"unit\\\\|Unit\")",
+      "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\\\\components\\\\industry\\\\crafting\\\\\" -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName | Sort-Object)"
     ]
   }
 }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
-import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
+import { formatQuantity } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
@@ -17,7 +17,9 @@ export default function BuildQueuePage() {
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const recipes = useLogisticsStore((state) => state.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
-  const updateBuildQueueItemPriority = useLogisticsStore((state) => state.updateBuildQueueItemPriority);
+  const toggleBuildQueueItemPriority = useLogisticsStore((state) => state.toggleBuildQueueItemPriority);
+  const updateBuildQueueItemQuantity = useLogisticsStore((state) => state.updateBuildQueueItemQuantity);
+  const updateBuildQueueMaterialRequirement = useLogisticsStore((state) => state.updateBuildQueueMaterialRequirement);
   const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
   const toggleBuildQueueAllocation = useLogisticsStore((state) => state.toggleBuildQueueAllocation);
   const updateBuildQueueAllocationQuantity = useLogisticsStore((state) => state.updateBuildQueueAllocationQuantity);
@@ -32,7 +34,9 @@ export default function BuildQueuePage() {
     return acc;
   }, {});
 
-  for (const items of Object.values(grouped)) items?.sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+  for (const items of Object.values(grouped)) {
+    items?.sort((a, b) => Number(b.priorityActive ?? false) - Number(a.priorityActive ?? false) || (a.priority ?? 0) - (b.priority ?? 0));
+  }
   const categories = Object.keys(grouped);
 
   return (
@@ -79,13 +83,12 @@ export default function BuildQueuePage() {
             <tbody>
               {shortages.map((shortage) => {
                 const material = materials.find((item) => item.id === shortage.materialId);
-                const fmt = (quantity: number) => getInventoryUnitLabel(material) === 'count' ? `${quantity}x` : `${quantity.toFixed(2)} ${getInventoryUnitLabel(material)}`;
                 return (
                   <tr key={shortage.materialId}>
                     <td>{material?.name ?? shortage.materialId}</td>
-                    <td>{fmt(shortage.have)}</td>
-                    <td>{fmt(shortage.needed)}</td>
-                    <td><span className="logi-badge logi-badge--shortage">-{fmt(shortage.shortfall)}</span></td>
+                    <td>{formatQuantity(shortage.have, material)}</td>
+                    <td>{formatQuantity(shortage.needed, material)}</td>
+                    <td><span className="logi-badge logi-badge--shortage">-{formatQuantity(shortage.shortfall, material)}</span></td>
                   </tr>
                 );
               })}
@@ -108,7 +111,9 @@ export default function BuildQueuePage() {
             materials={materials}
             locations={locations}
             strategy={sourceStrategy}
-            onPriorityChange={updateBuildQueueItemPriority}
+            onPriorityToggle={toggleBuildQueueItemPriority}
+            onQuantityChange={updateBuildQueueItemQuantity}
+            onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
             onRemove={removeBuildQueueItem}
             onToggleAllocation={toggleBuildQueueAllocation}
             onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}

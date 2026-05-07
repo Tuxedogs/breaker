@@ -2,778 +2,736 @@ import { useEffect, useMemo, useState } from "react";
 import CraftTabBar from "../crafting/CraftTabBar";
 import {
   getMiningRecommendations,
-  buildRecommendationRequest,
-  downloadRecommendationRequest,
   projectToPublicLocations,
-  buildExplorerRequest,
-  downloadExplorerRequest,
 } from "../../../features/mining/recommenderAdapter";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 import type {
   BuildQueueRecommendationFixture,
-  BestSourcesByMaterial,
-  BestRoute,
   PublicLocationEntry,
   RequiredMaterial,
-  MiningPriorityItem,
   ManualMiningDemandItem,
-  MiningPlannerIntentPayload,
 } from "../../../features/mining/types";
 import "./mining.css";
+import { useLogisticsStore } from "../../../stores/logisticsStore";
+import { getBuildQueueItemInputs, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
+import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
+import { getBuildQueueShortageSummary } from "../../../lib/logistics/selectors";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Access mode ───────────────────────────────────────────────────────────────
 
-function getRouteFavoriteKey(route: Pick<BestRoute, "system" | "location" | "spawnType">): string {
-  return `${route.system}|${route.location}|${route.spawnType}`;
-}
+const accessMode = "public";
+const showAdvancedScores = accessMode !== "public";
 
-// ── Sub-components ──────────────────────────────────────────────────────────
-
-function StatCard({ label, value }: { label: string; value: string | number | null }) {
-  const isEmpty = value === null;
-  return (
-    <div className="mine-stat-card">
-      <div className={`mine-stat-value${isEmpty ? " mine-stat-value--pending" : ""}`}>
-        {isEmpty ? "—" : value}
-      </div>
-      <div className="mine-stat-label">{label}</div>
-    </div>
-  );
-}
-
-function SummaryStrip({ data }: { data: BuildQueueRecommendationFixture }) {
-  const s = data.summary;
-  return (
-    <div className="mine-stat-strip">
-      <StatCard label="Queue Items" value={s.queueItems} />
-      <StatCard label="Materials Needed" value={s.requiredMaterials} />
-      <StatCard label="Matched" value={s.matchedMaterials} />
-      <StatCard label="Unmatched" value={s.unmatchedMaterials} />
-      <StatCard label="Missing Blueprints" value={s.missingBlueprints} />
-      <StatCard label="Routes Found" value={s.recommendedRoutes} />
-    </div>
-  );
-}
-
-function MaterialDemandTable({
-  materials,
-  priorityStack,
-  onAddPriority,
-}: {
-  materials: RequiredMaterial[];
-  priorityStack: MiningPriorityItem[];
-  onAddPriority: (m: RequiredMaterial) => void;
-}) {
-  const sorted = [...materials].sort((a, b) => b.requiredQuantity - a.requiredQuantity);
-  return (
-    <div className="mine-panel">
-      <div className="mine-panel-header">
-        <span className="mine-panel-title">Material Demand</span>
-        <span className="mine-panel-count">{sorted.length} materials</span>
-      </div>
-      <div className="mine-demand-compact-list">
-        {sorted.map((m, i) => {
-          const inStack = priorityStack.some((p) => p.materialId === m.materialId);
-          return (
-            <div key={m.materialId} className="mine-demand-compact-row">
-              <span className="mine-demand-compact-rank">{i + 1}</span>
-              <span className="mine-demand-compact-name">{m.materialName}</span>
-              <span className="mine-demand-compact-qty">{m.requiredQuantity.toFixed(2)}</span>
-              <span className="mine-demand-compact-slots">{m.slots.join(", ")}</span>
-              <span className="mine-demand-compact-used">×{m.usedBy.length}</span>
-              <button
-                className={`mine-add-priority-btn${inStack ? " mine-add-priority-btn--active" : ""}`}
-                onClick={() => !inStack && onAddPriority(m)}
-                disabled={inStack}
-                title={inStack ? "In priority stack" : "Add to priority stack"}
-              >
-                {inStack ? "★" : "☆"}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function spawnBadge(spawnType: string) {
-  const label = spawnType.replace(/_/g, " ");
-  const cls = spawnType.includes("ship") ? "mine-badge--ship" : "mine-badge--surface";
-  return <span className={`mine-badge ${cls}`}>{label}</span>;
-}
-
-type AccessMode = "planner" | "explorer" | "public";
-
-function RoutesPanel({
-  routes,
-  isFavorite,
-  onToggleFavorite,
-  showOnlyStarred,
-  onToggleShowOnlyStarred,
-  accessMode,
-}: {
-  routes: BestRoute[];
-  isFavorite: (r: Pick<BestRoute, "system" | "location" | "spawnType">) => boolean;
-  onToggleFavorite: (r: Pick<BestRoute, "system" | "location" | "spawnType">) => void;
-  showOnlyStarred: boolean;
-  onToggleShowOnlyStarred: () => void;
-  accessMode: AccessMode;
-}) {
-  const isAdvanced = accessMode === "planner";
-
-  const displayed = showOnlyStarred ? routes.filter((r) => isFavorite(r)) : routes;
-
-  return (
-    <div className="mine-panel">
-      <div className="mine-panel-header mine-panel-header--row">
-        <div className="mine-panel-header-left">
-          <span className="mine-panel-title">Recommended Routes</span>
-          <span className="mine-panel-count">{routes.length} routes</span>
-        </div>
-        <button
-          className={`mine-filter-btn${showOnlyStarred ? " mine-filter-btn--active" : ""}`}
-          onClick={onToggleShowOnlyStarred}
-          title="Show only starred routes"
-        >
-          ★ Starred
-        </button>
-      </div>
-      {displayed.length === 0 && (
-        <div className="mine-empty-state">
-          <p className="mine-empty-text">No starred routes yet. Click ☆ on a route to star it.</p>
-        </div>
-      )}
-      <div className="mine-routes-list">
-        {displayed.map((route, i) => {
-          const starred = isFavorite(route);
-          return (
-            <div
-              key={getRouteFavoriteKey(route)}
-              className={`mine-route-card${starred ? " mine-route-card--starred" : ""}`}
-            >
-              <div className="mine-route-card-top">
-                <span className="mine-route-rank">#{i + 1}</span>
-                <button
-                  className={`mine-star-btn${starred ? " mine-star-btn--on" : ""}`}
-                  onClick={() => onToggleFavorite(route)}
-                  title={starred ? "Unstar route" : "Star route"}
-                  aria-label={starred ? "Unstar" : "Star"}
-                >
-                  {starred ? "★" : "☆"}
-                </button>
-                <div className="mine-route-id">
-                  <span className="mine-route-location">{route.location}</span>
-                  <span className="mine-route-system">{route.system}</span>
-                </div>
-                {spawnBadge(route.spawnType)}
-                <div className="mine-route-coverage-inline">
-                  <span className="mine-route-coverage-pct">
-                    {(route.queuedCoverageRatio * 100).toFixed(0)}%
-                  </span>
-                  <span className="mine-route-coverage-label">coverage</span>
-                </div>
-                <span className="mine-route-sources-count">
-                  {route.sourceCount} src
-                </span>
-              </div>
-
-              {isAdvanced && (
-                <div className="mine-route-scores">
-                  <span className="mine-score-pill">
-                    <span className="mine-score-label">Queue</span>
-                    <span className="mine-score-val">{route.queueRouteScore.toFixed(3)}</span>
-                  </span>
-                  <span className="mine-score-pill">
-                    <span className="mine-score-label">Route</span>
-                    <span className="mine-score-val">{route.routeScore.toFixed(3)}</span>
-                  </span>
-                  <span className="mine-score-pill">
-                    <span className="mine-score-label">Best Src</span>
-                    <span className="mine-score-val">{route.bestSourceScore.toFixed(3)}</span>
-                  </span>
-                  <span className="mine-score-pill">
-                    <span className="mine-score-label">Avg Src</span>
-                    <span className="mine-score-val">{route.averageSourceScore.toFixed(3)}</span>
-                  </span>
-                </div>
-              )}
-
-              {route.queuedMaterialsCovered.length > 0 && (
-                <div className="mine-route-covered">
-                  {route.queuedMaterialsCovered.map((m) => (
-                    <span key={m} className="mine-mat-chip">{m}</span>
-                  ))}
-                </div>
-              )}
-
-              <div className="mine-route-reason">{route.reason}</div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function SourcesByMaterialPanel({
-  items,
-  accessMode,
-}: {
-  items: BestSourcesByMaterial[];
-  accessMode: AccessMode;
-}) {
-  const [openIds, setOpenIds] = useState<Set<string>>(new Set());
-  const isAdvanced = accessMode === "planner";
-
-  function toggle(id: string) {
-    setOpenIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
-
-  return (
-    <div className="mine-panel">
-      <div className="mine-panel-header">
-        <span className="mine-panel-title">Sources by Material</span>
-        <span className="mine-panel-count">{items.length} materials</span>
-      </div>
-      <div className="mine-sources-list">
-        {items.map((item) => {
-          const open = openIds.has(item.materialId);
-          return (
-            <div key={item.materialId} className="mine-source-block">
-              <button
-                className="mine-source-block-header mine-source-block-header--btn"
-                onClick={() => toggle(item.materialId)}
-                aria-expanded={open}
-              >
-                <span className="mine-source-mat-name">{item.materialName}</span>
-                <span className="mine-source-meta">
-                  {item.requiredQuantity.toFixed(2)} qty · {item.sourceCount} locations
-                </span>
-                <span className="mine-source-toggle">{open ? "▲" : "▼"}</span>
-              </button>
-              {open && item.bestSources.length > 0 && (
-                <div className="mine-source-locations">
-                  {item.bestSources.map((src, si) => (
-                    <div key={`${src.location}-${si}`} className="mine-source-loc-row">
-                      <div className="mine-source-loc-main">
-                        <span className="mine-source-loc-name">{src.location}</span>
-                        <span className="mine-source-loc-sys">{src.system}</span>
-                        {spawnBadge(src.spawnType)}
-                      </div>
-                      {isAdvanced && (
-                        <div className="mine-source-loc-meta">
-                          <span className="mine-score-pill">
-                            <span className="mine-score-label">Score</span>
-                            <span className="mine-score-val">{src.overallScore.toFixed(3)}</span>
-                          </span>
-                          <span className="mine-source-loc-reason">{src.reason}</span>
-                        </div>
-                      )}
-                      {!isAdvanced && src.reason && (
-                        <span className="mine-source-loc-reason mine-source-loc-reason--pub">{src.reason}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function DataGapPanel({ title, message }: { title: string; message: string }) {
-  return (
-    <div className="mine-panel mine-panel--warning">
-      <div className="mine-panel-header">
-        <span className="mine-panel-title">{title}</span>
-      </div>
-      <div className="mine-empty-state">
-        <p className="mine-empty-text mine-empty-text--warn">{message}</p>
-      </div>
-    </div>
-  );
-}
-
-// ── Priority Stack panel ─────────────────────────────────────────────────────
-
-function PriorityStackPanel({
-  items,
-  onMoveUp,
-  onMoveDown,
-  onRemove,
-  onTogglePin,
-  onClear,
-}: {
-  items: MiningPriorityItem[];
-  onMoveUp: (id: string) => void;
-  onMoveDown: (id: string) => void;
-  onRemove: (id: string) => void;
-  onTogglePin: (id: string) => void;
-  onClear: () => void;
-}) {
-  return (
-    <div className="mine-panel mine-panel--intent">
-      <div className="mine-panel-header mine-panel-header--row">
-        <span className="mine-panel-title">Priority Stack</span>
-        {items.length > 0 && (
-          <button className="mine-clear-btn" onClick={onClear} title="Clear all priorities">
-            Clear
-          </button>
-        )}
-      </div>
-      {items.length === 0 ? (
-        <div className="mine-empty-state mine-empty-state--sm">
-          <p className="mine-empty-text">
-            Star a material to add it here.
-          </p>
-        </div>
-      ) : (
-        <div className="mine-priority-list">
-          {items.map((item, i) => (
-            <div key={item.id} className={`mine-priority-row${item.pinned ? " mine-priority-row--pinned" : ""}`}>
-              <div className="mine-priority-rank">{item.priorityRank}</div>
-              <div className="mine-priority-body">
-                <span className="mine-priority-name">{item.materialName}</span>
-                <span className={`mine-priority-source mine-priority-source--${item.source}`}>
-                  {item.source === "requiredMaterial" ? "queue" : "manual"}
-                </span>
-              </div>
-              <div className="mine-priority-actions">
-                <button
-                  className={`mine-pin-btn${item.pinned ? " mine-pin-btn--on" : ""}`}
-                  onClick={() => onTogglePin(item.id)}
-                  title={item.pinned ? "Unpin" : "Pin"}
-                >
-                  📌
-                </button>
-                <button
-                  className="mine-move-btn"
-                  onClick={() => onMoveUp(item.id)}
-                  disabled={i === 0}
-                  title="Move up"
-                >
-                  ▲
-                </button>
-                <button
-                  className="mine-move-btn"
-                  onClick={() => onMoveDown(item.id)}
-                  disabled={i === items.length - 1}
-                  title="Move down"
-                >
-                  ▼
-                </button>
-                <button
-                  className="mine-remove-btn"
-                  onClick={() => onRemove(item.id)}
-                  title="Remove"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      <div className="mine-intent-note">
-        Priority stack is saved locally and sent to the recommender in a later phase.
-      </div>
-    </div>
-  );
-}
-
-// ── Manual Demand panel ──────────────────────────────────────────────────────
-
-const SOURCE_TYPES = ["ore", "raw", "refined", "unknown"] as const;
-
-function ManualDemandPanel({
-  items,
-  onAdd,
-  onRemove,
-  onClear,
-}: {
-  items: ManualMiningDemandItem[];
-  onAdd: (opts: Omit<ManualMiningDemandItem, "id" | "createdAt">) => void;
-  onRemove: (id: string) => void;
-  onClear: () => void;
-}) {
-  const [name, setName] = useState("");
-  const [qty, setQty] = useState("");
-  const [sourceType, setSourceType] = useState<ManualMiningDemandItem["sourceType"]>("ore");
-  const [notes, setNotes] = useState("");
-  const [addToPriority, setAddToPriority] = useState(false);
-  const [error, setError] = useState("");
-
-  function handleAdd() {
-    const trimName = name.trim();
-    const parsedQty = parseFloat(qty);
-    if (!trimName) { setError("Material name required."); return; }
-    if (isNaN(parsedQty) || parsedQty <= 0) { setError("Quantity must be a positive number."); return; }
-    setError("");
-    onAdd({ materialName: trimName, desiredQuantity: parsedQty, sourceType, notes: notes.trim(), addToPriority });
-    setName("");
-    setQty("");
-    setNotes("");
-    setAddToPriority(false);
-  }
-
-  return (
-    <div className="mine-panel mine-panel--intent">
-      <div className="mine-panel-header mine-panel-header--row">
-        <span className="mine-panel-title">Manual Demand</span>
-        {items.length > 0 && (
-          <button className="mine-clear-btn" onClick={onClear} title="Clear all manual demand">
-            Clear
-          </button>
-        )}
-      </div>
-
-      <div className="mine-demand-form">
-        <div className="mine-demand-form-row">
-          <input
-            className="mine-input"
-            placeholder="Material name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            className="mine-input mine-input--short"
-            placeholder="Qty"
-            type="number"
-            min="0"
-            step="any"
-            value={qty}
-            onChange={(e) => setQty(e.target.value)}
-          />
-        </div>
-        <div className="mine-demand-form-row">
-          <select
-            className="mine-select"
-            value={sourceType}
-            onChange={(e) => setSourceType(e.target.value as ManualMiningDemandItem["sourceType"])}
-          >
-            {SOURCE_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-          <input
-            className="mine-input mine-input--notes"
-            placeholder="Notes (optional)"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-          />
-        </div>
-        <div className="mine-demand-form-footer">
-          <label className="mine-checkbox-label">
-            <input
-              type="checkbox"
-              checked={addToPriority}
-              onChange={(e) => setAddToPriority(e.target.checked)}
-            />
-            <span>Add to priority</span>
-          </label>
-          <button className="mine-add-btn" onClick={handleAdd}>
-            Add
-          </button>
-        </div>
-      </div>
-      {error && <div className="mine-form-error">{error}</div>}
-
-      {items.length > 0 && (
-        <div className="mine-demand-list">
-          {items.map((item) => (
-            <div key={item.id} className="mine-demand-row">
-              <div className="mine-demand-body">
-                <span className="mine-demand-name">{item.materialName}</span>
-                <span className="mine-demand-qty">{item.desiredQuantity}</span>
-                <span className="mine-demand-type">{item.sourceType}</span>
-                {item.notes && <span className="mine-demand-notes">{item.notes}</span>}
-              </div>
-              <button
-                className="mine-remove-btn"
-                onClick={() => onRemove(item.id)}
-                title="Remove"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {items.length === 0 && (
-        <div className="mine-empty-state mine-empty-state--sm">
-          <p className="mine-empty-text">No manual demand entries yet.</p>
-        </div>
-      )}
-
-      <div className="mine-intent-note">
-        Manual demand is saved locally. Recommender integration comes in a later phase.
-      </div>
-    </div>
-  );
-}
-
-// ── Request Preview panel ────────────────────────────────────────────────────
-
-function RequestPreviewPanel({
-  payload,
-  fixture,
-}: {
-  payload: MiningPlannerIntentPayload;
-  fixture: BuildQueueRecommendationFixture | null;
-}) {
-  const [open, setOpen] = useState(false);
-
-  function handleExport() {
-    const request = buildRecommendationRequest(payload, fixture);
-    downloadRecommendationRequest(request);
-  }
-
-  return (
-    <div className="mine-panel mine-panel--debug">
-      <div className="mine-panel-header--split">
-        <button className="mine-collapsible-header" onClick={() => setOpen((p) => !p)}>
-          <span className="mine-panel-title">Recommender Request Preview</span>
-          <span className="mine-collapse-arrow">{open ? "▲" : "▼"}</span>
-        </button>
-        <button className="mine-btn-export" onClick={handleExport} title="Download request payload as JSON">
-          Export JSON
-        </button>
-      </div>
-      {open && (
-        <pre className="mine-json-preview">
-          {JSON.stringify(buildRecommendationRequest(payload, fixture), null, 2)}
-        </pre>
-      )}
-    </div>
-  );
-}
-
-// ── Material Explorer (public-safe) ──────────────────────────────────────────
-
-const KIND_LABEL: Record<string, string> = {
-  provider_preset: "Provider Preset",
-  planet: "Planet",
-  moon: "Moon",
-  asteroid_belt: "Asteroid Belt",
-  ring: "Ring",
-  lagrange: "Lagrange Point",
-};
-
-function kindLabel(kind: string): string {
-  return KIND_LABEL[kind] ?? kind.replace(/_/g, " ");
-}
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function spawnTypeLabel(spawnType: string): string {
+  const s = spawnType.toLowerCase();
+  if (s.includes("ship") || s === "mineable") return "Ship";
+  if (s.includes("surface")) return "Surface";
+  if (s.includes("hand") || s.includes("fps")) return "Hand";
+  if (s.includes("mixed")) return "Mixed";
   return spawnType.replace(/_/g, " ");
 }
 
-function spawnBadgeCls(spawnType: string): string {
-  if (spawnType.includes("ship") || spawnType === "mineable") return "mine-badge--ship";
-  return "mine-badge--surface";
+function spawnTypeBadgeClass(spawnType: string): string {
+  const s = spawnType.toLowerCase();
+  if (s.includes("ship") || s === "mineable") return "mloc-badge--ship";
+  if (s.includes("surface")) return "mloc-badge--surface";
+  if (s.includes("hand") || s.includes("fps")) return "mloc-badge--hand";
+  return "mloc-badge--mixed";
 }
 
-function LocationCard({
-  entry,
-  expanded,
-  onToggle,
-}: {
-  entry: PublicLocationEntry;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <div
-      className={`mex-location-card${expanded ? " mex-location-card--expanded" : ""}`}
-      onClick={onToggle}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onToggle()}
-    >
-      <div className="mex-card-image-placeholder">
-        <span className="mex-card-image-label">{entry.systemName}</span>
-      </div>
-      <div className="mex-card-body">
-        <div className="mex-card-name">{entry.locationName}</div>
-        <div className="mex-card-system">{entry.systemName}</div>
-        <div className="mex-card-meta">
-          <span className="mex-card-kind">{kindLabel(entry.locationKind)}</span>
-          <span className={`mine-badge ${spawnBadgeCls(entry.spawnType)}`}>
-            {spawnTypeLabel(entry.spawnType)}
-          </span>
-        </div>
-        {entry.nearbyStations.length > 0 && (
-          <div className="mex-card-stations">
-            <span className="mex-card-stations-label">Nearby:</span>
-            {entry.nearbyStations.map((s) => (
-              <span key={s} className="mex-station-chip">{s}</span>
-            ))}
-          </div>
-        )}
-        {expanded && (
-          <div className="mex-card-materials">
-            <div className="mex-card-materials-label">Materials at this location</div>
-            <div className="mex-card-material-list">
-              {entry.materials.map((m) => (
-                <span key={m} className="mex-mat-badge">{m}</span>
-              ))}
-            </div>
-          </div>
-        )}
-        {!expanded && (
-          <div className="mex-card-mat-count">
-            {entry.materials.length} material{entry.materials.length !== 1 ? "s" : ""} · tap to expand
-          </div>
-        )}
-      </div>
-    </div>
-  );
+function miningTypeFromSpawn(spawnType: string): string {
+  const s = spawnType.toLowerCase();
+  if (s.includes("ship") || s === "mineable") return "Ship";
+  if (s.includes("surface")) return "Surface";
+  if (s.includes("hand") || s.includes("fps")) return "Hand";
+  return "Mixed";
 }
 
-function MaterialExplorer({ fixture }: { fixture: BuildQueueRecommendationFixture }) {
-  const locations = useMemo(() => projectToPublicLocations(fixture), [fixture]);
-  const allMaterials = useMemo(
-    () => Array.from(new Set(locations.flatMap((l) => l.materials))).sort(),
-    [locations]
-  );
+function formatMiningQuantity(quantity: number, unitType?: "unit" | "SCU" | "scu" | "cscu"): string {
+  return unitType === "unit" ? `x${quantity}` : `${quantity.toFixed(2)} SCU`;
+}
 
-  const [selectedMaterial, setSelectedMaterial] = useState<string | null>(null);
-  const [expandedKey, setExpandedKey] = useState<string | null>(null);
+function isRefinableMaterial(material: unknown): boolean {
+  return typeof material === "object" && material !== null && "isRefinable" in material
+    ? Boolean((material as { isRefinable?: boolean }).isRefinable)
+    : false;
+}
 
-  const filtered = useMemo(() => {
-    if (!selectedMaterial) return locations;
-    return locations.filter((l) => l.materials.includes(selectedMaterial));
-  }, [locations, selectedMaterial]);
-
-  function handleExport() {
-    const req = buildExplorerRequest(filtered, selectedMaterial, allMaterials.length);
-    downloadExplorerRequest(req);
+// Derives a deterministic reason string from existing data.
+function deriveLocationReason(
+  entry: PublicLocationEntry,
+  coveredBQ: string[],
+  missingBQ: string[],
+): string {
+  const total = coveredBQ.length + missingBQ.length;
+  const method = spawnTypeLabel(entry.spawnType).toLowerCase();
+  if (total === 0) return `${entry.locationName} has no tracked queue materials.`;
+  if (coveredBQ.length === 0) return `No queue materials found here via ${method} mining.`;
+  if (coveredBQ.length === total) {
+    const list = coveredBQ.slice(0, 3).join(", ") + (coveredBQ.length > 3 ? ` +${coveredBQ.length - 3} more` : "");
+    return `Full queue coverage via ${method} mining: ${list}.`;
   }
-
-  return (
-    <div className="mex-root">
-      <div className="mex-access-notice">
-        <span className="mex-access-badge">PUBLIC</span>
-        <span className="mex-access-text">
-          Location presence only — advanced quality and route intelligence requires authentication.
-        </span>
-      </div>
-
-      {allMaterials.length === 0 && (
-        <div className="mine-panel">
-          <div className="mine-empty-state">
-            <p className="mine-empty-text">
-              No location data in the current fixture.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {allMaterials.length > 0 && (
-        <>
-          <div className="mine-panel">
-            <div className="mine-panel-header mine-panel-header--row">
-              <div className="mine-panel-header-left">
-                <span className="mine-panel-title">Filter by Material</span>
-                <span className="mine-panel-count">{allMaterials.length} materials</span>
-              </div>
-              {selectedMaterial && (
-                <button
-                  className="mine-filter-btn mine-filter-btn--active"
-                  onClick={() => setSelectedMaterial(null)}
-                >
-                  ✕ Clear
-                </button>
-              )}
-            </div>
-            <div className="mex-badge-rail">
-              {allMaterials.map((mat) => (
-                <button
-                  key={mat}
-                  className={`mex-mat-btn${selectedMaterial === mat ? " mex-mat-btn--active" : ""}`}
-                  onClick={() => setSelectedMaterial(selectedMaterial === mat ? null : mat)}
-                >
-                  {mat}
-                </button>
-              ))}
-            </div>
-            {selectedMaterial && (
-              <div className="mex-filter-status">
-                {filtered.length} location{filtered.length !== 1 ? "s" : ""} with <strong>{selectedMaterial}</strong>
-              </div>
-            )}
-          </div>
-
-          <div className="mine-panel">
-            <div className="mine-panel-header mine-panel-header--row">
-              <div className="mine-panel-header-left">
-                <span className="mine-panel-title">
-                  {selectedMaterial ? `Locations · ${selectedMaterial}` : "All Locations"}
-                </span>
-                <span className="mine-panel-count">{filtered.length}</span>
-              </div>
-              <button className="mine-btn-export" onClick={handleExport} title="Download explorer request as JSON">
-                Export
-              </button>
-            </div>
-
-            {filtered.length === 0 ? (
-              <div className="mine-empty-state">
-                <p className="mine-empty-text">
-                  No locations found for the selected material.
-                </p>
-              </div>
-            ) : (
-              <div className="mex-card-grid">
-                {filtered.map((entry) => (
-                  <LocationCard
-                    key={entry.locationKey}
-                    entry={entry}
-                    expanded={expandedKey === entry.locationKey}
-                    onToggle={() =>
-                      setExpandedKey(expandedKey === entry.locationKey ? null : entry.locationKey)
-                    }
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="mex-fixture-note">
-            Explorer data reflects the currently loaded build-queue fixture only.
-          </div>
-        </>
-      )}
-    </div>
-  );
+  const coveredList = coveredBQ.slice(0, 2).join(", ") + (coveredBQ.length > 2 ? ` +${coveredBQ.length - 2} more` : "");
+  const missingList = missingBQ.slice(0, 2).join(", ") + (missingBQ.length > 2 ? ` +${missingBQ.length - 2} more` : "");
+  return `Covers ${coveredBQ.length} of ${total} queue materials via ${method} mining (${coveredList}). Still needs: ${missingList}.`;
 }
 
-// ── Main page ───────────────────────────────────────────────────────────────
+// ── Load state ────────────────────────────────────────────────────────────────
 
 type LoadState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ok"; data: BuildQueueRecommendationFixture };
 
+// ── Location strip panel ──────────────────────────────────────────────────────
+
+function LocationPanel({
+  entry,
+  selectedMaterials,
+  buildQueueMaterialDisplayNames,
+  starred,
+  selected,
+  onSelect,
+  onToggleStar,
+}: {
+  entry: PublicLocationEntry;
+  selectedMaterials: Set<string>;
+  buildQueueMaterialDisplayNames: Set<string>;
+  starred: boolean;
+  selected: boolean;
+  onSelect: () => void;
+  onToggleStar: (e: React.MouseEvent) => void;
+}) {
+  const coveredBQ = useMemo(
+    () => entry.materials.filter((m) => buildQueueMaterialDisplayNames.has(m)),
+    [entry.materials, buildQueueMaterialDisplayNames]
+  );
+  const coveredSelected = useMemo(
+    () => entry.materials.filter((m) => selectedMaterials.has(m)),
+    [entry.materials, selectedMaterials]
+  );
+
+  const primaryCovered = selectedMaterials.size > 0 ? coveredSelected : coveredBQ;
+  const totalRelevant = selectedMaterials.size > 0 ? selectedMaterials.size : buildQueueMaterialDisplayNames.size;
+  const coveragePct = totalRelevant > 0 ? Math.round((primaryCovered.length / totalRelevant) * 100) : 0;
+
+  const chipLimit = 4;
+  const chips = primaryCovered.slice(0, chipLimit);
+  const extraCount = primaryCovered.length - chipLimit;
+
+  return (
+    <button
+      className={`mloc-panel${selected ? " mloc-panel--selected" : ""}${starred ? " mloc-panel--starred" : ""}`}
+      onClick={onSelect}
+      type="button"
+    >
+      <div className="mloc-panel-topbar">
+        <span className="mloc-panel-system">{entry.systemName}</span>
+        <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>
+          {spawnTypeLabel(entry.spawnType)}
+        </span>
+        <button
+          className={`mloc-star-btn${starred ? " mloc-star-btn--on" : ""}`}
+          onClick={onToggleStar}
+          title={starred ? "Unstar" : "Star"}
+          aria-label={starred ? "Unstar" : "Star"}
+        >
+          {starred ? "★" : "☆"}
+        </button>
+      </div>
+
+      <div className="mloc-panel-name">{entry.locationName}</div>
+
+      {totalRelevant > 0 && (
+        <div className="mloc-panel-coverage">
+          <div className="mloc-cov-bar">
+            <div
+              className={`mloc-cov-fill${coveragePct === 100 ? " mloc-cov-fill--full" : ""}`}
+              style={{ width: `${coveragePct}%` }}
+            />
+          </div>
+          <span className="mloc-cov-label">{primaryCovered.length}/{totalRelevant} materials</span>
+        </div>
+      )}
+
+      <div className="mloc-panel-chips">
+        {chips.map((m) => (
+          <span key={m} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
+        ))}
+        {extraCount > 0 && <span className="mloc-mat-chip">+{extraCount}</span>}
+        {chips.length === 0 && (
+          <span className="mloc-empty-chips">No queue materials</span>
+        )}
+      </div>
+    </button>
+  );
+}
+
+// ── Location detail panel ─────────────────────────────────────────────────────
+
+function LocationDetail({
+  entry,
+  buildQueueMaterialDisplayNames,
+  selectedMaterials,
+  requiredMaterials,
+}: {
+  entry: PublicLocationEntry;
+  buildQueueMaterialDisplayNames: Set<string>;
+  selectedMaterials: Set<string>;
+  requiredMaterials: RequiredMaterial[];
+}) {
+  const coveredBQ = useMemo(
+    () => entry.materials.filter((m) => buildQueueMaterialDisplayNames.has(m)),
+    [entry.materials, buildQueueMaterialDisplayNames]
+  );
+  const missingBQ = useMemo(
+    () => [...buildQueueMaterialDisplayNames].filter((m) => !entry.materials.includes(m)),
+    [entry.materials, buildQueueMaterialDisplayNames]
+  );
+
+  const reason = useMemo(
+    () => deriveLocationReason(entry, coveredBQ, missingBQ),
+    [entry, coveredBQ, missingBQ]
+  );
+
+  const coveredRequirements = useMemo(
+    () => requiredMaterials.filter((mat) => coveredBQ.includes(mat.materialName)),
+    [requiredMaterials, coveredBQ]
+  );
+
+  const missingRequirements = useMemo(
+    () => requiredMaterials.filter((mat) => missingBQ.includes(mat.materialName)),
+    [requiredMaterials, missingBQ]
+  );
+
+  return (
+    <div className="mloc-detail">
+      <div className="mloc-detail-header">
+        <div className="mloc-detail-title-group">
+          <div className="mloc-detail-name">{entry.locationName}</div>
+          <div className="mloc-detail-meta">
+            <span className="mloc-detail-system">{entry.systemName}</span>
+            {entry.locationKind && (
+              <span className="mloc-detail-kind">{entry.locationKind.replace(/_/g, " ")}</span>
+            )}
+            <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>
+              {spawnTypeLabel(entry.spawnType)} Mining
+            </span>
+          </div>
+        </div>
+        {entry.nearbyStations.length > 0 && (
+          <div className="mloc-detail-stations">
+            <span className="mloc-stations-label">Nearby</span>
+            {entry.nearbyStations.map((s) => (
+              <span key={s} className="mloc-station-chip">{s}</span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="mloc-detail-reason">{reason}</div>
+
+      <div className="mloc-detail-split">
+        <div className="mloc-detail-col">
+          <div className="mloc-detail-col-label mloc-detail-col-label--covered">
+            Covered ({coveredBQ.length})
+          </div>
+          {coveredRequirements.length > 0 ? (
+            <div className="mloc-detail-mat-list">
+              {coveredRequirements.map((mat) => (
+                <div key={mat.materialId} className="mloc-detail-mat-row mloc-detail-mat-row--covered">
+                  <span className="mloc-detail-mat-name">{mat.materialName}</span>
+                  <span className="mloc-detail-mat-qty">{formatMiningQuantity(mat.requiredQuantity, mat.unitType)}</span>
+                  <div className="mloc-detail-mat-usedby">
+                    {mat.usedBy.slice(0, 2).map((ub) => (
+                      <span key={ub.blueprintGuid + ub.slot} className="mbq-used-chip">{ub.displayName}</span>
+                    ))}
+                    {mat.usedBy.length > 2 && (
+                      <span className="mbq-used-chip">+{mat.usedBy.length - 2}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : coveredBQ.length > 0 ? (
+            <div className="mloc-panel-chips">
+              {coveredBQ.map((m) => (
+                <span key={m} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
+              ))}
+            </div>
+          ) : (
+            <p className="mloc-detail-none">None</p>
+          )}
+        </div>
+
+        <div className="mloc-detail-col">
+          <div className="mloc-detail-col-label mloc-detail-col-label--missing">
+            Missing ({missingBQ.length})
+          </div>
+          {missingRequirements.length > 0 ? (
+            <div className="mloc-detail-mat-list">
+              {missingRequirements.map((mat) => (
+                <div key={mat.materialId} className="mloc-detail-mat-row mloc-detail-mat-row--missing">
+                  <span className="mloc-detail-mat-name">{mat.materialName}</span>
+                  <span className="mloc-detail-mat-qty">{formatMiningQuantity(mat.requiredQuantity, mat.unitType)}</span>
+                  <div className="mloc-detail-mat-usedby">
+                    {mat.usedBy.slice(0, 2).map((ub) => (
+                      <span key={ub.blueprintGuid + ub.slot} className="mbq-used-chip mbq-used-chip--missing">{ub.displayName}</span>
+                    ))}
+                    {mat.usedBy.length > 2 && (
+                      <span className="mbq-used-chip mbq-used-chip--missing">+{mat.usedBy.length - 2}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : missingBQ.length > 0 ? (
+            <div className="mloc-panel-chips">
+              {missingBQ.map((m) => (
+                <span key={m} className="mloc-mat-chip">{m}</span>
+              ))}
+            </div>
+          ) : (
+            <p className="mloc-detail-none">None — full coverage!</p>
+          )}
+        </div>
+      </div>
+
+      {/* Show all materials when there's no queue or selection context */}
+      {buildQueueMaterialDisplayNames.size === 0 && selectedMaterials.size === 0 && entry.materials.length > 0 && (
+        <div className="mloc-detail-all-mats">
+          <span className="mloc-detail-all-label">All materials at this location</span>
+          <div className="mloc-panel-chips">
+            {entry.materials.map((m) => (
+              <span key={m} className="mloc-mat-chip">{m}</span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Collapsible panel ─────────────────────────────────────────────────────────
+
+function CollapsiblePanel({
+  title,
+  count,
+  children,
+}: {
+  title: string;
+  count?: number;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="msb-collapsible">
+      <button className="msb-collapsible-header" onClick={() => setOpen((p) => !p)}>
+        <span className="msb-section-label">{title}</span>
+        {count !== undefined && count > 0 && (
+          <span className="msb-count-pill">{count}</span>
+        )}
+        <span className="msb-collapse-arrow">{open ? "▲" : "▼"}</span>
+      </button>
+      {open && <div className="msb-collapsible-body">{children}</div>}
+    </div>
+  );
+}
+
+// ── Manual Demand (compact) ───────────────────────────────────────────────────
+
+function ManualDemandCompact({
+  items,
+  materials,
+  onAdd,
+  onRemove,
+  onClear,
+}: {
+  items: ManualMiningDemandItem[];
+  materials: string[];
+  onAdd: (opts: Omit<ManualMiningDemandItem, "id" | "createdAt">) => void;
+  onRemove: (id: string) => void;
+  onClear: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [quality, setQuality] = useState("");
+  const [ore, setOre] = useState("");
+  const [error, setError] = useState("");
+  const materialListId = "mining-manual-materials";
+
+  function handleAdd() {
+    const trimName = name.trim();
+    const parsedQuality = parseFloat(quality);
+    if (!trimName) { setError("Name required"); return; }
+    if (isNaN(parsedQuality) || parsedQuality < 0) { setError("Quality required"); return; }
+    setError("");
+    onAdd({ materialName: trimName, desiredQuantity: parsedQuality, sourceType: "ore", notes: ore.trim(), addToPriority: false });
+    setName(""); setQuality(""); setOre("");
+  }
+
+  return (
+    <div className="msb-demand-wrap">
+      <div className="msb-demand-form">
+        <input className="mine-input" list={materialListId} placeholder="Search materials" value={name} onChange={(e) => setName(e.target.value)} />
+        <datalist id={materialListId}>
+          {materials.map((material) => <option key={material} value={material} />)}
+        </datalist>
+        <input className="mine-input mine-input--short mine-input--no-spinner" placeholder="Quality" type="number" min="0" max="100" step="any" value={quality} onChange={(e) => setQuality(e.target.value)} />
+        <input className="mine-input mine-input--short" placeholder="Ore" value={ore} onChange={(e) => setOre(e.target.value)} />
+        <button className="mine-add-btn" onClick={handleAdd}>Add</button>
+      </div>
+      {error && <div className="mine-form-error">{error}</div>}
+      {items.length > 0 && (
+        <div className="msb-demand-list">
+          {items.map((item) => (
+            <div key={item.id} className="msb-demand-row">
+              <span className="msb-demand-name">{item.materialName}</span>
+              <span className="msb-demand-qty">Q {item.desiredQuantity}</span>
+              {item.notes && <span className="msb-demand-qty">{item.notes}</span>}
+              <button className="mine-remove-btn" onClick={() => onRemove(item.id)}>✕</button>
+            </div>
+          ))}
+          <button className="mine-clear-btn msb-demand-clear" onClick={onClear}>Clear all</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Material demand row ───────────────────────────────────────────────────────
+
+function MaterialDemandRow({
+  materialName,
+  totalQty,
+  unitType,
+  selectedQuality,
+  estimatedRawOreNeeded,
+  usedByItems,
+  covered,
+  sourceLocationNames,
+}: {
+  materialName: string;
+  totalQty: number;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  selectedQuality?: number;
+  estimatedRawOreNeeded?: number;
+  usedByItems: string[];
+  covered: boolean;
+  sourceLocationNames: string[];
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className={`mdem-row${covered ? " mdem-row--covered" : " mdem-row--missing"}`}>
+      <div className="mdem-main">
+        <span className={`mdem-dot${covered ? " mdem-dot--covered" : " mdem-dot--missing"}`} />
+        <span className="mdem-name">{materialName}</span>
+        <span className="mdem-qty">{formatMiningQuantity(totalQty, unitType)}</span>
+        {totalQty <= 0 && <span className="mdem-tag mdem-tag--ok">In inventory</span>}
+        {estimatedRawOreNeeded !== undefined && estimatedRawOreNeeded > 0 && (
+          <span className="mdem-ore-hint">≈ {formatMiningQuantity(estimatedRawOreNeeded, "SCU")} raw</span>
+        )}
+        <div className="mdem-right">
+          <span className={`mdem-status${covered ? " mdem-status--covered" : " mdem-status--missing"}`}>
+            {covered ? "Covered" : "Not in results"}
+          </span>
+          <button
+            className="mdem-expand-btn"
+            onClick={() => setExpanded((p) => !p)}
+            title="Show queue items"
+          >
+            {usedByItems.length} item{usedByItems.length !== 1 ? "s" : ""}
+            <span className="mdem-expand-arrow">{expanded ? " ▲" : " ▼"}</span>
+          </button>
+        </div>
+      </div>
+
+      {expanded && (
+        <div className="mdem-expanded">
+          <div className="mdem-expanded-row">
+            <span className="mdem-exp-label">Used by</span>
+            <div className="mdem-chip-group">
+              {usedByItems.map((n) => (
+                <span key={n} className="mbq-used-chip">{n}</span>
+              ))}
+            </div>
+          </div>
+          {covered && sourceLocationNames.length > 0 && (
+            <div className="mdem-expanded-row">
+              <span className="mdem-exp-label">Found at</span>
+              <div className="mdem-chip-group">
+                {sourceLocationNames.map((loc) => (
+                  <span key={loc} className="mbq-location-chip">{loc}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {selectedQuality !== undefined && (
+            <div className="mdem-expanded-row">
+              <span className="mdem-exp-label">Selected quality</span>
+              <span className="mbq-location-chip">Q {selectedQuality}</span>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Resource demand panel ─────────────────────────────────────────────────────
+
+function ResourceDemandPanel({
+  requiredMaterials,
+  visibleMaterialKeys,
+  visibleLocationNames,
+}: {
+  requiredMaterials: RequiredMaterial[];
+  visibleMaterialKeys: Set<string>;
+  visibleLocationNames: string[];
+}) {
+  const coveredCount = requiredMaterials.filter((m) => visibleMaterialKeys.has(m.materialId)).length;
+
+  return (
+    <div className="mres-panel">
+      <div className="mres-header">
+        <span className="mres-title">RESOURCE DEMAND</span>
+        <span className="mres-meta">
+          {coveredCount}/{requiredMaterials.length} covered by visible locations
+        </span>
+      </div>
+      <div className="mres-list">
+        {requiredMaterials.map((mat) => (
+          <MaterialDemandRow
+            key={mat.materialId}
+            materialName={mat.materialName}
+            totalQty={mat.requiredQuantity}
+            unitType={mat.unitType}
+            selectedQuality={mat.selectedQuality}
+            estimatedRawOreNeeded={mat.estimatedRawOreNeeded}
+            usedByItems={mat.usedBy.map((ub) => ub.displayName)}
+            covered={visibleMaterialKeys.has(mat.materialId)}
+            sourceLocationNames={visibleMaterialKeys.has(mat.materialId) ? visibleLocationNames : []}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────────
+
 export default function MiningModule() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
-  const [accessMode, setAccessMode] = useState<AccessMode>("planner");
   const planner = useMiningPlannerState();
+  const buildQueue = useLogisticsStore((store) => store.buildQueue);
+  const recipeInputsByRecipeId = useLogisticsStore((store) => store.recipeInputTemplates);
+  const recipes = useLogisticsStore((store) => store.recipeTemplates);
+  const inventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
+  const materials = useLogisticsStore((store) => store.materialTemplates);
+
+  const [selectedMaterials, setSelectedMaterials] = useState<Set<string>>(new Set());
+  const [selectedSystems, setSelectedSystems] = useState<Set<string>>(new Set());
+  const [selectedMiningTypes, setSelectedMiningTypes] = useState<Set<string>>(new Set());
+  const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
+  const [showAllLocations, setShowAllLocations] = useState(false);
 
   useEffect(() => {
     getMiningRecommendations()
       .then((data) => setState({ status: "ok", data }))
       .catch((err) => setState({ status: "error", message: String(err) }));
   }, []);
+
+  const locations = useMemo(
+    () => state.status === "ok" ? projectToPublicLocations(state.data) : [],
+    [state]
+  );
+
+  const liveRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
+    const map = new Map<string, RequiredMaterial>();
+    const availableByMaterial = new Map<string, number>();
+    const reservedByMaterial = new Map<string, number>();
+
+    for (const entry of inventoryEntries) {
+      if (!entry.materialId) continue;
+      availableByMaterial.set(entry.materialId, (availableByMaterial.get(entry.materialId) ?? 0) + entry.quantity);
+    }
+
+    for (const item of buildQueue) {
+      if (item.status === "complete") continue;
+      for (const allocation of item.reservedAllocations ?? []) {
+        reservedByMaterial.set(
+          allocation.materialId,
+          (reservedByMaterial.get(allocation.materialId) ?? 0) + allocation.quantityReserved,
+        );
+      }
+    }
+
+    for (const item of buildQueue) {
+      if (item.status === "complete") continue;
+      const recipe = recipes.find((entry) => entry.id === item.recipeId);
+      for (const [inputIndex, input] of getBuildQueueItemInputs(item, recipeInputsByRecipeId).entries()) {
+        const materialKey = input.materialKey ?? input.materialId;
+        const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? "material"}`;
+        const material = materials.find((entry) => entry.id === materialKey);
+        const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
+        const originalRequired = input.quantity * item.quantity;
+        const existing = map.get(materialKey);
+        const usedBy = {
+          requirementId,
+          blueprintGuid: item.itemId ?? item.recipeId,
+          displayName: item.itemName ?? recipe?.name ?? item.recipeId,
+          componentType: recipe?.category ?? "",
+          size: "",
+          quantity: item.quantity,
+          slot: displayName,
+          materialQuantity: originalRequired,
+          selectedQuality: input.selectedQuality,
+          unitType: input.unitType ?? getInventoryUnitLabel(material),
+        };
+
+        if (existing) {
+          existing.requiredQuantity += originalRequired;
+          existing.usedBy.push(usedBy);
+          if (input.selectedQuality !== undefined) existing.selectedQuality = input.selectedQuality;
+        } else {
+          map.set(materialKey, {
+            materialId: materialKey,
+            materialName: displayName,
+            requiredQuantity: originalRequired,
+            selectedQuality: input.selectedQuality,
+            unitType: input.unitType ?? getInventoryUnitLabel(material),
+            usedBy: [usedBy],
+            slots: [displayName],
+          });
+        }
+      }
+    }
+
+    return Array.from(map.values()).map((requirement) => {
+      const reserved = reservedByMaterial.get(requirement.materialId) ?? 0;
+      const availableInventory = availableByMaterial.get(requirement.materialId) ?? 0;
+      const remaining = Math.max(0, requirement.requiredQuantity - reserved - availableInventory);
+      const material = materials.find((entry) => entry.id === requirement.materialId);
+      return {
+        ...requirement,
+        originalRequiredQuantity: requirement.requiredQuantity,
+        requiredQuantity: remaining,
+        estimatedRawOreNeeded: isRefinableMaterial(material) ? Math.ceil(remaining * 2.5) : undefined,
+      } as RequiredMaterial;
+    });
+  }, [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId, recipes]);
+
+  const miningRequiredMaterials = liveRequiredMaterials.length > 0
+    ? liveRequiredMaterials
+    : state.status === "ok"
+      ? state.data.requiredMaterials
+      : [];
+
+  const buildQueueMaterials = useMemo<Set<string>>(() => {
+    return new Set(miningRequiredMaterials.map((m) => m.materialId));
+  }, [miningRequiredMaterials]);
+
+  const allSystems = useMemo(
+    () => Array.from(new Set(locations.map((l) => l.systemName))).sort(),
+    [locations]
+  );
+
+  const allMiningTypes = useMemo(
+    () => Array.from(new Set(locations.map((l) => miningTypeFromSpawn(l.spawnType)))).sort(),
+    [locations]
+  );
+
+  const allMaterials = useMemo(
+    () => Array.from(new Set(locations.flatMap((l) => l.materials))).sort(),
+    [locations]
+  );
+
+  const materialKeyByDisplayName = useMemo(() => {
+    const resolve = createMaterialResolver(materials);
+    return new Map(allMaterials.map((name) => [name, resolve({ displayName: name, materialName: name })?.materialKey ?? name]));
+  }, [allMaterials, materials]);
+
+  const buildQueueMaterialDisplayNames = useMemo(() => {
+    return new Set([...buildQueueMaterials].map((key) => materials.find((material) => material.id === key)?.name ?? key));
+  }, [buildQueueMaterials, materials]);
+
+  const filteredLocations = useMemo(() => {
+    let result = locations;
+    if (selectedSystems.size > 0) result = result.filter((l) => selectedSystems.has(l.systemName));
+    if (selectedMiningTypes.size > 0) result = result.filter((l) => selectedMiningTypes.has(miningTypeFromSpawn(l.spawnType)));
+    if (selectedMaterials.size > 0) result = result.filter((l) => l.materials.some((m) => selectedMaterials.has(m)));
+    if (planner.filters.showOnlyStarred) {
+      result = result.filter((l) =>
+        planner.isFavorite({ system: l.systemName, location: l.locationName, spawnType: l.spawnType })
+      );
+    }
+    return result;
+  }, [locations, selectedSystems, selectedMiningTypes, selectedMaterials, planner.filters.showOnlyStarred, planner.isFavorite]);
+
+  const stripLocations = showAllLocations ? filteredLocations : filteredLocations.slice(0, 4);
+
+  const selectedEntry = useMemo(() => {
+    if (selectedLocationKey) {
+      return filteredLocations.find((l) => l.locationKey === selectedLocationKey) ?? filteredLocations[0] ?? null;
+    }
+    return filteredLocations[0] ?? null;
+  }, [selectedLocationKey, filteredLocations]);
+
+  useEffect(() => {
+    setSelectedLocationKey(null);
+  }, [selectedMaterials, selectedSystems, selectedMiningTypes]);
+
+  function toggleMaterial(mat: string) {
+    setSelectedMaterials((prev) => {
+      const next = new Set(prev);
+      if (next.has(mat)) next.delete(mat); else next.add(mat);
+      return next;
+    });
+  }
+
+  function toggleSystem(sys: string) {
+    setSelectedSystems((prev) => {
+      const next = new Set(prev);
+      if (next.has(sys)) next.delete(sys); else next.add(sys);
+      return next;
+    });
+  }
+
+  function toggleMiningType(type: string) {
+    setSelectedMiningTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type); else next.add(type);
+      return next;
+    });
+  }
+
+  function selectBuildQueueMaterials() {
+    setSelectedMaterials(new Set([...buildQueueMaterials].map((key) => materials.find((material) => material.id === key)?.name ?? key)));
+  }
+
+  function clearAllFilters() {
+    setSelectedMaterials(new Set());
+    setSelectedSystems(new Set());
+    setSelectedMiningTypes(new Set());
+  }
+
+  const activeFilterCount = selectedMaterials.size + selectedSystems.size + selectedMiningTypes.size;
+  const activeQueue = buildQueue.filter((item) => item.status !== "complete");
+  const queueBadge = activeQueue.length > 0 ? activeQueue.length : null;
+  const { shortages } = getBuildQueueShortageSummary(
+    inventoryEntries,
+    buildQueue,
+    recipes,
+    recipeInputsByRecipeId,
+  );
+
+  const visibleCards = filteredLocations.slice(0, 4);
+  const visibleMaterialKeys = new Set(visibleCards.flatMap((c) =>
+    c.materials.map((name) => materialKeyByDisplayName.get(name) ?? name),
+  ));
+  const visibleLocationNames = visibleCards.map((c) => c.locationName);
 
   return (
     <div className="mine-page">
@@ -785,129 +743,228 @@ export default function MiningModule() {
             <span className="mine-breadcrumb-active">Mining</span>
           </div>
           <h1 className="mine-page-title">Mining Planner</h1>
-          <p className="mine-page-subtitle">
-            Build queue demand · source coverage · recommended routes
-          </p>
-        </div>
-        <div className="mine-mode-toggle">
-          <button
-            className={`mine-mode-btn${accessMode === "planner" ? " mine-mode-btn--active" : ""}`}
-            onClick={() => setAccessMode("planner")}
-          >
-            Planner
-          </button>
-          <button
-            className={`mine-mode-btn${accessMode === "explorer" ? " mine-mode-btn--active" : ""}`}
-            onClick={() => setAccessMode("explorer")}
-          >
-            Explorer
-          </button>
-          <button
-            className={`mine-mode-btn${accessMode === "public" ? " mine-mode-btn--active mine-mode-btn--public" : ""}`}
-            onClick={() => setAccessMode("public")}
-            title="Public view — hides advanced scoring fields"
-          >
-            Public
-          </button>
+          <p className="mine-page-subtitle">Where can I mine the materials I need?</p>
         </div>
       </div>
 
-      <CraftTabBar activeTab="mining" />
+      <CraftTabBar activeTab="mining" queueBadge={queueBadge} missingCount={shortages.length} />
 
       {state.status === "loading" && (
         <div className="mine-status-state">
           <span className="mine-status-text">Loading recommendations…</span>
         </div>
       )}
-
       {state.status === "error" && (
         <div className="mine-status-state mine-status-state--error">
           <span className="mine-status-text">Failed to load: {state.message}</span>
         </div>
       )}
 
-      {state.status === "ok" && state.data && accessMode === "explorer" && (
-        <MaterialExplorer fixture={state.data} />
-      )}
+      {state.status === "ok" && (
+        <div className="mloc-layout">
 
-      {state.status === "ok" && state.data && (accessMode === "planner" || accessMode === "public") && (
-        <>
-          <SummaryStrip data={state.data} />
-
-          <div className="mine-layout">
-            {/* Main column */}
-            <div className="mine-panels">
-              <MaterialDemandTable
-                materials={state.data.requiredMaterials}
-                priorityStack={planner.priorityStack}
-                onAddPriority={(m) =>
-                  planner.addToPriorityStack({
-                    materialId: m.materialId,
-                    materialName: m.materialName,
-                    source: "requiredMaterial",
-                  })
-                }
-              />
-              <RoutesPanel
-                routes={state.data.bestRoutes}
-                isFavorite={planner.isFavorite}
-                onToggleFavorite={planner.toggleFavorite}
-                showOnlyStarred={planner.filters.showOnlyStarred}
-                onToggleShowOnlyStarred={planner.toggleShowOnlyStarred}
-                accessMode={accessMode}
-              />
-              <SourcesByMaterialPanel
-                items={state.data.bestSourcesByMaterial}
-                accessMode={accessMode}
-              />
-
-              {state.data.unmatchedMaterials.length > 0 && (
-                <DataGapPanel
-                  title="Unmatched Materials"
-                  message="Materials needed by the build queue but missing source recommendations."
-                />
-              )}
-              {state.data.missingBlueprints.length > 0 && (
-                <DataGapPanel
-                  title="Missing Blueprints"
-                  message="Queued blueprints could not be matched to blueprints.json."
-                />
-              )}
-
-              {accessMode === "planner" && (
-                <RequestPreviewPanel payload={planner.intentPayload} fixture={state.data} />
-              )}
+          {/* ── Filter sidebar ──────────────────────────────────────── */}
+          <div className="msb-sidebar">
+            <div className="msb-section">
+              <div className="msb-section-label">BUILD QUEUE</div>
+              <div className="msb-chip-rail">
+                <button
+                  className={`msb-chip msb-chip--action${[...buildQueueMaterialDisplayNames].every((m) => selectedMaterials.has(m)) && buildQueueMaterialDisplayNames.size > 0 ? " msb-chip--active" : ""}`}
+                  onClick={selectBuildQueueMaterials}
+                  title="Select all build queue materials"
+                >
+                  Explore Build Queue
+                </button>
+              </div>
             </div>
 
-            {/* Sidebar — Planner Inputs */}
-            <div className="mine-intent-sidebar">
-              <div className="mine-sidebar-section-label">Planner Inputs</div>
-              <PriorityStackPanel
-                items={planner.priorityStack}
-                onMoveUp={planner.movePriorityUp}
-                onMoveDown={planner.movePriorityDown}
-                onRemove={planner.removePriorityItem}
-                onTogglePin={planner.togglePriorityPin}
-                onClear={planner.clearPriorityStack}
-              />
-              <ManualDemandPanel
+            {allSystems.length > 0 && (
+              <div className="msb-section">
+                <div className="msb-section-label">SYSTEM</div>
+                <div className="msb-chip-rail">
+                  {allSystems.map((sys) => (
+                    <button
+                      key={sys}
+                      className={`msb-chip${selectedSystems.has(sys) ? " msb-chip--active" : ""}`}
+                      onClick={() => toggleSystem(sys)}
+                    >
+                      {sys}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {allMiningTypes.length > 0 && (
+              <div className="msb-section">
+                <div className="msb-section-label">MINING TYPE</div>
+                <div className="msb-chip-rail">
+                  {allMiningTypes.map((type) => (
+                    <button
+                      key={type}
+                      className={`msb-chip${selectedMiningTypes.has(type) ? " msb-chip--active" : ""}`}
+                      onClick={() => toggleMiningType(type)}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {allMaterials.length > 0 && (
+              <div className="msb-section">
+                <div className="msb-section-label">RESOURCES</div>
+                <div className="msb-chip-rail">
+                  {allMaterials.map((m) => {
+                    const isBQ = buildQueueMaterials.has(materialKeyByDisplayName.get(m) ?? m);
+                    const isActive = selectedMaterials.has(m);
+                    return (
+                      <button
+                        key={m}
+                        className={`msb-chip${isActive ? " msb-chip--active" : ""}${isBQ && !isActive ? " msb-chip--bq" : ""}`}
+                        onClick={() => toggleMaterial(m)}
+                      >
+                        {m}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {selectedMaterials.size > 0 && (
+              <div className="msb-section">
+                <div className="msb-section-label-row">
+                  <span className="msb-section-label">SELECTED</span>
+                  <button className="mine-clear-btn" onClick={() => setSelectedMaterials(new Set())}>Clear</button>
+                </div>
+                <div className="msb-chip-rail">
+                  {[...selectedMaterials].map((m) => (
+                    <button
+                      key={m}
+                      className="msb-chip msb-chip--selected"
+                      onClick={() => toggleMaterial(m)}
+                    >
+                      {m} <span className="msb-chip-x">×</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="msb-divider" />
+
+            <CollapsiblePanel title="MANUAL DEMAND" count={planner.manualDemand.length}>
+              <ManualDemandCompact
                 items={planner.manualDemand}
+                materials={allMaterials}
                 onAdd={planner.addManualDemand}
                 onRemove={planner.removeManualDemand}
                 onClear={planner.clearManualDemand}
               />
-            </div>
+            </CollapsiblePanel>
           </div>
-        </>
-      )}
 
-      {state.status === "ok" &&
-        !state.data.requiredMaterials.length &&
-        !state.data.bestRoutes.length && (
-          <div className="mine-status-state">
-            <span className="mine-status-text">No recommendation data in fixture.</span>
+          {/* ── Main content ───────────────────────────────────────── */}
+          <div className="mloc-main">
+            <div className="mloc-toolbar">
+              <div className="mloc-toolbar-right">
+                <button
+                  className={`mine-filter-btn${planner.filters.showOnlyStarred ? " mine-filter-btn--active" : ""}`}
+                  onClick={planner.toggleShowOnlyStarred}
+                  title="Starred only"
+                >
+                  ★ Starred
+                </button>
+                {activeFilterCount > 0 && (
+                  <button className="mloc-clear-filters-btn" onClick={clearAllFilters}>
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {filteredLocations.length === 0 ? (
+              <div className="mine-empty-state">
+                <p className="mine-empty-text">
+                  {planner.filters.showOnlyStarred
+                    ? "No starred locations. Click ☆ on a panel to star it."
+                    : "No locations match the current filters."}
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* ── Location strip ─────────────────────────────── */}
+                <div className="mloc-strip-section">
+                  <div className="mloc-strip-header">
+                    <span className="mloc-strip-label">RECOMMENDED LOCATIONS</span>
+                    <span className="mloc-strip-count">{filteredLocations.length} total</span>
+                  </div>
+                  <div className="mloc-strip">
+                    {stripLocations.map((entry) => (
+                      <LocationPanel
+                        key={entry.locationKey}
+                        entry={entry}
+                        selectedMaterials={selectedMaterials}
+                        buildQueueMaterialDisplayNames={buildQueueMaterialDisplayNames}
+                        starred={planner.isFavorite({
+                          system: entry.systemName,
+                          location: entry.locationName,
+                          spawnType: entry.spawnType,
+                        })}
+                        selected={selectedEntry?.locationKey === entry.locationKey}
+                        onSelect={() => setSelectedLocationKey(entry.locationKey)}
+                        onToggleStar={(e) => {
+                          e.stopPropagation();
+                          planner.toggleFavorite({
+                            system: entry.systemName,
+                            location: entry.locationName,
+                            spawnType: entry.spawnType,
+                          });
+                        }}
+                      />
+                    ))}
+                  </div>
+                  {filteredLocations.length > 4 && (
+                    <button
+                      className="mloc-view-all-btn"
+                      onClick={() => setShowAllLocations((p) => !p)}
+                    >
+                      {showAllLocations
+                        ? "Show top 4 ↑"
+                        : `View all ${filteredLocations.length} locations ↓`}
+                    </button>
+                  )}
+                </div>
+
+                {/* ── Selected location detail ───────────────────── */}
+                {selectedEntry && (
+                  <LocationDetail
+                    entry={selectedEntry}
+                    buildQueueMaterialDisplayNames={buildQueueMaterialDisplayNames}
+                    selectedMaterials={selectedMaterials}
+                    requiredMaterials={miningRequiredMaterials}
+                  />
+                )}
+              </>
+            )}
+
+            {/* ── Resource demand ────────────────────────────────── */}
+            {miningRequiredMaterials.length > 0 && (
+              <ResourceDemandPanel
+                requiredMaterials={miningRequiredMaterials}
+                visibleMaterialKeys={visibleMaterialKeys}
+                visibleLocationNames={visibleLocationNames}
+              />
+            )}
+
+            {showAdvancedScores && (
+              <div className="mex-fixture-note">Advanced scoring active · fixture data</div>
+            )}
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
-import { formatQuantity, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
+import {
+  formatEntryQuantity,
+  formatQuantity,
+  materialTypeClass,
+  rarityClass,
+  resolveInventoryItemName,
+} from '../../lib/logistics/inventory';
 import { getInventoryByMaterial, getLocationInventorySummary } from '../../lib/logistics/selectors';
 
 interface Props {
@@ -25,7 +31,7 @@ export default function LocationCard({ location, inventory, materials, onEdit, o
   const locationType = location.type ?? location.category ?? 'station';
   const locationTypeLabel = TYPE_LABELS[locationType] ?? location.category ?? 'Location';
   const locationMeta = location.system ? `${location.system} / ${locationTypeLabel}` : locationTypeLabel;
-  const highestMaterial = summary.bestQualityStack
+  const highestMaterial = summary.bestQualityStack?.materialId
     ? materials.find((material) => material.id === summary.bestQualityStack?.materialId)
     : undefined;
 
@@ -45,18 +51,20 @@ export default function LocationCard({ location, inventory, materials, onEdit, o
       <div className="logi-location-card-body">
         <div className="logi-location-metrics">
           <div>
-            <span className="logi-stat-label">Unique Materials</span>
+            <span className="logi-stat-label">Unique Items</span>
             <strong>{summary.materialCount}</strong>
           </div>
           <div>
             <span className="logi-stat-label">Highest Stack</span>
-            <strong className={rarityClass(summary.bestQualityStack?.rarity)}>{summary.bestQualityStack ? summary.bestQualityStack.quality ?? 0 : '—'}</strong>
+            <strong className={rarityClass(summary.bestQualityStack?.quality === undefined ? undefined : summary.bestQualityStack?.rarity)}>
+              {summary.bestQualityStack?.quality ?? '-'}
+            </strong>
           </div>
         </div>
         {summary.bestQualityStack && (
           <div className="logi-location-feature">
-            <span>{highestMaterial?.name ?? summary.bestQualityStack.materialId}</span>
-            <span>{formatQuantity(summary.bestQualityStack.quantity, highestMaterial)}</span>
+            <span>{resolveInventoryItemName(summary.bestQualityStack, highestMaterial)}</span>
+            <span>{formatEntryQuantity(summary.bestQualityStack, highestMaterial)}</span>
           </div>
         )}
         {materialTotals.length === 0 ? (

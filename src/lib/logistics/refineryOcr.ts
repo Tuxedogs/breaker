@@ -1,6 +1,26 @@
 import { createWorker, PSM } from "tesseract.js";
 import type { MaterialTemplate } from "../../types/logistics";
 
+interface QualityQuantizationBand {
+  start: number;
+  end: number;
+  mappedValue: number;
+}
+
+interface QualityQuantizationRecord {
+  guid: string;
+  recordName: string;
+  recordType: string;
+  path: string;
+  bands: QualityQuantizationBand[];
+}
+
+const QUALITY_QUANTIZATION_URL_CANDIDATES = [
+  "/api/crafting/quality_quantization",
+  "/api/crafting/quality_quantization.json",
+];
+
+
 // ── Shared types ────────────────────────────────────────────────────────────
 
 export type RefineryScreenType =
@@ -11,7 +31,18 @@ export type RefineryScreenType =
 export interface ParsedRefineryRow {
   rawName: string;
   materialId: string | null;
+  /** Final quality used by inventory. This should be a quantized mappedValue when available. */
   quality: number;
+  /** OCR/visible quality before quantization validation or snapping. */
+  qualityObserved?: number;
+  /** Material-specific quantized mappedValue from qualityQuantizationRecords. */
+  qualityMapped?: number;
+  qualityBandStart?: number;
+  qualityBandEnd?: number;
+  qualityQuantized?: boolean;
+  qualityNeedsReview?: boolean;
+  /** Vertical center of the OCR row inside the cropped panel, 0..1. Used only for review UI alignment. */
+  rowYRatio?: number;
   quantity: number;
   needsReview: boolean;
 }
@@ -31,15 +62,24 @@ export interface ParsedWorkOrder {
   workOrderNumber: number;
   rows: ParsedRefineryRow[];
   totalYieldCscu: number | null;
-  /** Processing screens only. The current page can ignore this until the review UI is upgraded. */
-  timeRemainingSeconds?: number | null;
+  /** Best-effort OCR from the full screenshot header, e.g. ORBITUARY. */
+  sourceLocationName?: string | null;
 }
 
 export interface ParsedInputRow {
   rawName: string;
   rawType: "RAW" | "ORE" | null;
   materialId: string | null;
+  /** Final quality used by inventory. This should be a quantized mappedValue when available. */
   quality: number;
+  /** OCR/visible quality before quantization validation or snapping. */
+  qualityObserved?: number;
+  /** Material-specific quantized mappedValue from qualityQuantizationRecords. */
+  qualityMapped?: number;
+  qualityBandStart?: number;
+  qualityBandEnd?: number;
+  qualityQuantized?: boolean;
+  qualityNeedsReview?: boolean;
   qtyCscu: number;
   yieldCscu: number | null;
   selectedForRefine: boolean;
@@ -63,6 +103,19 @@ const MATERIAL_ALIASES: Record<string, string> = {
   beryl: "beryl",
   diamond: "diamond",
   quartz: "quartz",
+  silicon: "silicon",
+  silicn: "silicon",
+  sillcon: "silicon",
+  "silic on": "silicon",
+  "silicon ore": "silicon",
+  beradom: "beradom",
+  carinite: "carinite",
+  glacosite: "glacosite",
+  janalite: "janalite",
+  lindinium: "lindinium",
+  ouratite: "ouratite",
+  sadaryx: "sadaryx",
+  saldynium: "saldynium",
   taranite: "taranite",
   riccite: "riccite",
   hadanite: "hadanite",
@@ -118,6 +171,13 @@ const INPUT_MATERIAL_ALIASES: Record<string, string> = {
 
   diamond: "diamond",
   "diamond ore": "diamond",
+
+  silicon: "silicon",
+  silicn: "silicon",
+  sillcon: "silicon",
+  "silic on": "silicon",
+  "silicon raw": "silicon",
+  "silicon ore": "silicon",
 
   hadanite: "hadanite",
   aphorite: "aphorite",
@@ -219,6 +279,259 @@ function cleanText(input: string): string {
     .trim();
 }
 
+function isRawIceOnlyName(input: string | null | undefined): boolean {
+  const key = cleanText(input ?? "").replace(/\s+/g, "");
+  return key === "ice" || key === "rawice";
+}
+
+function isPressurizedIceName(input: string | null | undefined): boolean {
+  return /pressurized\s+ice/i.test(input ?? "");
+}
+
+// ── Quality quantization ────────────────────────────────────────────────────
+
+interface ResolvedQualityQuantization {
+  quality: number;
+  qualityObserved: number;
+  qualityMapped?: number;
+  qualityBandStart?: number;
+  qualityBandEnd?: number;
+  qualityQuantized: boolean;
+  qualityNeedsReview: boolean;
+}
+
+function normalizeQuantizationKey(input: string | null | undefined): string {
+  if (!input) return "";
+
+  return cleanText(input)
+    .replace(/^quantization\s+/, "")
+    .replace(/\b(raw|ore)\b/g, "")
+    .replace(/\s+/g, "")
+    .trim();
+}
+
+const QUANTIZATION_KEY_ALIASES: Record<string, string> = {
+  aluminium: "aluminum",
+  quantanium: "quantainium",
+  quantainium: "quantainium",
+  pressurizedice: "rawice",
+  rawice: "rawice",
+  recycledmaterialcomposite: "rmc",
+  constructionmaterial: "constructionmaterials",
+  constructionmaterials: "constructionmaterials",
+  copperore: "copper",
+  stileronore: "stileron",
+};
+
+function canonicalQuantizationKey(input: string | null | undefined): string {
+  const key = normalizeQuantizationKey(input);
+  return QUANTIZATION_KEY_ALIASES[key] ?? key;
+}
+
+let QUALITY_QUANTIZATION_BY_KEY = new Map<string, QualityQuantizationRecord>();
+let qualityQuantizationLoadPromise: Promise<void> | null = null;
+
+function buildQualityQuantizationMap(records: QualityQuantizationRecord[]): Map<string, QualityQuantizationRecord> {
+  const map = new Map<string, QualityQuantizationRecord>();
+
+  for (const record of records) {
+    const recordKey = canonicalQuantizationKey(record.recordName);
+    const pathKey = canonicalQuantizationKey(record.path.split("/").pop()?.replace(/\.xml$/i, ""));
+
+    if (recordKey) map.set(recordKey, record);
+    if (pathKey) map.set(pathKey, record);
+  }
+
+  return map;
+}
+
+async function ensureQualityQuantizationLoaded(): Promise<void> {
+  if (QUALITY_QUANTIZATION_BY_KEY.size > 0) return;
+
+  if (!qualityQuantizationLoadPromise) {
+    qualityQuantizationLoadPromise = (async () => {
+      for (const url of QUALITY_QUANTIZATION_URL_CANDIDATES) {
+        try {
+          const response = await fetch(url, { cache: "force-cache" });
+          if (!response.ok) continue;
+
+          const records = (await response.json()) as QualityQuantizationRecord[];
+          if (!Array.isArray(records)) continue;
+
+          QUALITY_QUANTIZATION_BY_KEY = buildQualityQuantizationMap(records);
+          return;
+        } catch {
+          // Try the next candidate path. If all fail, parsing still works but
+          // quality values are marked for review instead of being quantized.
+        }
+      }
+    })();
+  }
+
+  await qualityQuantizationLoadPromise;
+}
+
+function getQualityQuantizationRecord(materialId: string | null, rawName: string) {
+  const candidates = [materialId, rawName, getKnownMaterialAliasId(rawName)]
+    .map((value) => canonicalQuantizationKey(value))
+    .filter(Boolean);
+
+  for (const candidate of candidates) {
+    const record = QUALITY_QUANTIZATION_BY_KEY.get(candidate);
+    if (record) return record;
+  }
+
+  return null;
+}
+
+function isQuantizedQualityForMaterial(materialId: string | null, rawName: string, value: number): boolean {
+  const record = getQualityQuantizationRecord(materialId, rawName);
+  if (!record) return value >= 100 && value <= 1000;
+  return record.bands.some((band) => band.mappedValue === value);
+}
+
+function isPlausibleObservedQualityForMaterial(materialId: string | null, rawName: string, value: number): boolean {
+  const record = getQualityQuantizationRecord(materialId, rawName);
+  if (!record) return value >= 100 && value <= 1000;
+
+  if (record.bands.some((band) => band.mappedValue === value)) return true;
+
+  const nearest = record.bands.reduce((best, band) => {
+    const distance = Math.abs(band.mappedValue - value);
+    const bestDistance = Math.abs(best.mappedValue - value);
+    return distance < bestDistance ? band : best;
+  }, record.bands[0]);
+
+  const snapDistance = value >= 900 ? 8 : 5;
+  return Math.abs(nearest.mappedValue - value) <= snapDistance;
+}
+
+function pickProcessingQualityYield(
+  materialId: string | null,
+  rawName: string,
+  numbers: number[],
+): { quality: number; quantity: number } | null {
+  let best: { quality: number; quantity: number; score: number } | null = null;
+
+  for (let idx = 0; idx < numbers.length - 1; idx++) {
+    const quality = numbers[idx];
+    const quantity = numbers[idx + 1];
+
+    if (!Number.isFinite(quality) || !Number.isFinite(quantity)) continue;
+    if (quality < 0 || quality > 1000) continue;
+    if (quantity <= 0) continue;
+    if (!isPlausibleObservedQualityForMaterial(materialId, rawName, quality)) continue;
+
+    let score = 0;
+    if (isQuantizedQualityForMaterial(materialId, rawName, quality)) score += 1000;
+    if (quality >= 100) score += 100;
+    if (quality < 20) score -= 300;
+    if (quantity <= 10000) score += 20;
+    if (idx === 0) score += 5;
+
+    // Processing rows are usually QUALITY | YIELD | TO DO | DONE. If there are
+    // more numbers after the pair, the selected pair is more plausible when the
+    // following values can be todo/done metadata.
+    if (numbers.length >= idx + 4) score += 15;
+
+    if (!best || score > best.score) best = { quality, quantity, score };
+  }
+
+  if (!best) return null;
+
+  // Do not accept nonsense like quality 8 / yield 0 or quality 7 / yield 522.
+  // If a quantization record exists, the quality should be a mapped value unless
+  // OCR only missed by a tiny amount and the quantization pass can flag it.
+  if (best.quality < 100 && !isQuantizedQualityForMaterial(materialId, rawName, best.quality)) {
+    return null;
+  }
+
+  return { quality: best.quality, quantity: best.quantity };
+}
+
+function resolveQualityQuantization(
+  materialId: string | null,
+  rawName: string,
+  observedQuality: number,
+): ResolvedQualityQuantization {
+  const record = getQualityQuantizationRecord(materialId, rawName);
+
+  if (!record) {
+    return {
+      quality: observedQuality,
+      qualityObserved: observedQuality,
+      qualityQuantized: false,
+      qualityNeedsReview: false,
+    };
+  }
+
+  const exactMappedBand = record.bands.find((band) => band.mappedValue === observedQuality);
+  if (exactMappedBand) {
+    return {
+      quality: exactMappedBand.mappedValue,
+      qualityObserved: observedQuality,
+      qualityMapped: exactMappedBand.mappedValue,
+      qualityBandStart: exactMappedBand.start,
+      qualityBandEnd: exactMappedBand.end,
+      qualityQuantized: true,
+      qualityNeedsReview: false,
+    };
+  }
+
+  const nearestMappedBand = record.bands.reduce((best, band) => {
+    const distance = Math.abs(band.mappedValue - observedQuality);
+    const bestDistance = Math.abs(best.mappedValue - observedQuality);
+    return distance < bestDistance ? band : best;
+  }, record.bands[0]);
+
+  // OCR can read 710 as 71O, 522 as 523, etc. Snap only very close values.
+  // Do not turn nonsense like 7 into Quartz 522; that should remain reviewable.
+  const SNAP_DISTANCE = observedQuality >= 900 ? 8 : 5;
+  if (Math.abs(nearestMappedBand.mappedValue - observedQuality) <= SNAP_DISTANCE) {
+    return {
+      quality: nearestMappedBand.mappedValue,
+      qualityObserved: observedQuality,
+      qualityMapped: nearestMappedBand.mappedValue,
+      qualityBandStart: nearestMappedBand.start,
+      qualityBandEnd: nearestMappedBand.end,
+      qualityQuantized: true,
+      qualityNeedsReview: true,
+    };
+  }
+
+  return {
+    quality: observedQuality,
+    qualityObserved: observedQuality,
+    qualityBandStart: nearestMappedBand.start,
+    qualityBandEnd: nearestMappedBand.end,
+    qualityMapped: nearestMappedBand.mappedValue,
+    qualityQuantized: false,
+    qualityNeedsReview: true,
+  };
+}
+
+function isRejectedRefineryRow(row: Pick<ParsedRefineryRow, "rawName" | "materialId">): boolean {
+  return (isRawIceOnlyName(row.rawName) || isRawIceOnlyName(row.materialId)) && !isPressurizedIceName(row.rawName);
+}
+
+function applyQualityQuantizationToRow<T extends { rawName: string; materialId: string | null; quality: number; needsReview?: boolean }>(
+  row: T,
+): T & Pick<ParsedRefineryRow, "qualityObserved" | "qualityMapped" | "qualityBandStart" | "qualityBandEnd" | "qualityQuantized" | "qualityNeedsReview"> {
+  const resolved = resolveQualityQuantization(row.materialId, row.rawName, row.quality);
+
+  return {
+    ...row,
+    quality: resolved.quality,
+    qualityObserved: resolved.qualityObserved,
+    qualityMapped: resolved.qualityMapped,
+    qualityBandStart: resolved.qualityBandStart,
+    qualityBandEnd: resolved.qualityBandEnd,
+    qualityQuantized: resolved.qualityQuantized,
+    qualityNeedsReview: resolved.qualityNeedsReview,
+    needsReview: Boolean(row.needsReview || resolved.qualityNeedsReview),
+  };
+}
+
 // ── Levenshtein distance ─────────────────────────────────────────────────────
 
 function levenshtein(a: string, b: string): number {
@@ -256,19 +569,16 @@ export function detectScreenType(text: string): RefineryScreenType {
   return "unknown";
 }
 
-function isProcessingScreenText(text: string): boolean {
-  return (
-    /\bPROCESSING\b/i.test(text) ||
-    /\bTIME\s+REMAINING\b/i.test(text) ||
-    (/\bTODO\b|\bTO\s+DO\b/i.test(text) && /\bDONE\b/i.test(text))
-  );
-}
-
 export function normalizeMaterialName(
   rawName: string,
   templates: MaterialTemplate[],
 ): string | null {
   const key = cleanText(rawName);
+
+  // Processing/Complete refinery output should say PRESSURIZED ICE.
+  // Standalone ICE/RAW ICE is pre-refine naming or OCR noise, so do not let
+  // fuzzy matching promote it into a refinery import row.
+  if (isRawIceOnlyName(rawName) && !isPressurizedIceName(rawName)) return null;
 
   const aliasId = MATERIAL_ALIASES[key];
   if (aliasId && templates.some((t) => t.id === aliasId)) return aliasId;
@@ -295,6 +605,43 @@ export function normalizeMaterialName(
   }
 
   return bestDist <= threshold ? bestId : null;
+}
+
+function getKnownMaterialAliasId(rawName: string): string | null {
+  const key = cleanText(rawName);
+  if (isRawIceOnlyName(rawName) && !isPressurizedIceName(rawName)) return null;
+  if (MATERIAL_ALIASES[key]) return MATERIAL_ALIASES[key];
+
+  // OCR sometimes splits Silicon into "SILIC ON" or drops one letter. Keep this
+  // fallback intentionally tiny so junk UI labels do not become material rows.
+  const compact = key.replace(/\s+/g, "");
+  if (compact === "silicon" || compact === "silicn" || compact === "sillcon") {
+    return "silicon";
+  }
+
+  return null;
+}
+
+function resolveMaterialCandidate(
+  rawName: string,
+  templates: MaterialTemplate[],
+): { materialId: string | null; isKnownMaterial: boolean } {
+  if (isRawIceOnlyName(rawName) && !isPressurizedIceName(rawName)) {
+    return { materialId: null, isKnownMaterial: false };
+  }
+
+  const materialId = normalizeMaterialName(rawName, templates);
+  if (materialId) return { materialId, isKnownMaterial: true };
+
+  const aliasId = getKnownMaterialAliasId(rawName);
+  if (!aliasId) return { materialId: null, isKnownMaterial: false };
+
+  // If the current material template set does not contain the recovered alias,
+  // still surface the row for manual review instead of silently dropping it.
+  return {
+    materialId: templates.some((t) => t.id === aliasId) ? aliasId : null,
+    isKnownMaterial: true,
+  };
 }
 
 function normalizeInputMaterialName(
@@ -434,7 +781,7 @@ export interface PanelRegion {
 
 interface OcrWord {
   text: string;
-  bbox: { x0: number; x1: number };
+  bbox: { x0: number; x1: number; y0?: number; y1?: number };
 }
 
 interface OcrLine {
@@ -506,10 +853,13 @@ function getCompleteRowKey(row: ParsedRefineryRow): string {
 
 function sortAndDeduplicateCompleteRows(
   rows: ParsedRefineryRowWithY[],
+  processedPanelHeight?: number,
 ): ParsedRefineryRow[] {
   const seen = new Set<string>();
 
   return rows
+    .map((row) => applyQualityQuantizationToRow(row))
+    .filter((row) => row.quantity > 0 && row.quality >= 0 && row.quality <= 1000)
     .filter((row) => {
       const key = getCompleteRowKey(row);
       if (seen.has(key)) return false;
@@ -522,7 +872,15 @@ function sortAndDeduplicateCompleteRows(
       if (ay !== by) return ay - by;
       return a.quality - b.quality;
     })
-    .map((row) => { const { y, ...rest } = row; void y; return rest; });
+    .map(({ y, ...row }) => {
+      if (typeof y === "number" && processedPanelHeight && processedPanelHeight > 0) {
+        return {
+          ...row,
+          rowYRatio: Math.max(0, Math.min(1, y / processedPanelHeight)),
+        };
+      }
+      return row;
+    });
 }
 
 function inferRowYFromNumbers(
@@ -562,131 +920,43 @@ function inferRowYFromNumbers(
 }
 
 
-// ── Processing order row extractor ──────────────────────────────────────────
+function cleanLocationCandidate(input: string): string | null {
+  const text = cleanText(input)
+    .replace(/^\/+\s*/, "")
+    .replace(/\bREFINERY\b/gi, "")
+    .replace(/\bSYSTEM\b/gi, "")
+    .replace(/\bC\d+(?:\.\d+)?\b/gi, "")
+    .trim();
 
-const PROCESSING_ROW_PATTERN =
-  /^([A-Z][A-Z\s-]{1,34}?)\s+(\d{1,4})\s+(\d{1,7})(?:\s+(\d{1,7}))?(?:\s+(\d{1,7}))?$/i;
-
-const PROCESSING_STOP = [
-  /^YIELD\s+\d/i,
-  /^TIME\s+REMAINING/i,
-  /^WORK\s+ORDER/i,
-  /^PROCESSING$/i,
-  /^TODO$/i,
-  /^TO\s+DO$/i,
-  /^DONE$/i,
-  /^QUALITY$/i,
-  /^MATERIAL$/i,
-];
-
-function parseTimeRemainingSeconds(text: string): number | null {
-  const compact = text.replace(/\s+/g, " ");
-
-  const hms = compact.match(
-    /(\d{1,2})\s*h(?:ours?)?\s*(\d{1,2})\s*m(?:in(?:utes?)?)?\s*(\d{1,2})\s*s?/i,
-  );
-  if (hms) return Number(hms[1]) * 3600 + Number(hms[2]) * 60 + Number(hms[3]);
-
-  const ms =
-    compact.match(/(\d{1,2})\s*m(?:in(?:utes?)?)?\s*(\d{1,2})\s*s/i) ||
-    compact.match(/\b(\d{1,2}):(\d{2})\s*s?\b/i);
-  if (ms) return Number(ms[1]) * 60 + Number(ms[2]);
-
-  const seconds = compact.match(/\b(\d{1,4})\s*s(?:ec(?:onds?)?)?\b/i);
-  if (seconds) return Number(seconds[1]);
-
-  return null;
+  if (!text) return null;
+  if (/^(user|funds|module|refinement|center|station|profile|material|yield)$/i.test(text)) return null;
+  if (text.length < 3 || text.length > 32) return null;
+  if (!/[a-z]/i.test(text)) return null;
+  return text.toUpperCase();
 }
 
-function isProcessingMaterialCandidate(line: string, templates: MaterialTemplate[]): boolean {
-  const rawName = stripMaterialNoise(line);
-  const cleanedName = cleanText(rawName);
+async function extractSourceLocationName(
+  worker: Awaited<ReturnType<typeof createWorker>>,
+  imageFile: File,
+  dims: { w: number; h: number },
+): Promise<string | null> {
+  try {
+    const sx = 0;
+    const sy = 0;
+    const sw = Math.max(1, Math.floor(dims.w * 0.34));
+    const sh = Math.max(1, Math.floor(dims.h * 0.12));
+    const blob = await preprocessImageRegion(imageFile, sx, sy, sw, sh);
+    const { data } = await worker.recognize(blob);
+    const candidates = (data.text ?? "")
+      .split("\n")
+      .map(cleanLocationCandidate)
+      .filter((value): value is string => Boolean(value));
 
-  if (cleanedName.length < 3) return false;
-  if (/^\d+$/.test(cleanedName)) return false;
-  if (SKIP_LINES.has(cleanedName)) return false;
-  if (JUNK_NAMES.has(cleanedName.toUpperCase())) return false;
-  if (PROCESSING_STOP.some((p) => p.test(line))) return false;
-
-  return normalizeMaterialName(rawName, templates) !== null;
-}
-
-function extractProcessingRowsInline(
-  lines: string[],
-  templates: MaterialTemplate[],
-  lowConfidence: boolean,
-): ParsedRefineryRow[] {
-  const rows: ParsedRefineryRow[] = [];
-
-  for (const line of lines) {
-    const m = PROCESSING_ROW_PATTERN.exec(line);
-    if (!m) continue;
-
-    const rawName = stripMaterialNoise(m[1]);
-    const materialId = normalizeMaterialName(rawName, templates);
-    if (!materialId) continue;
-
-    const quality = parseInt(m[2], 10);
-    const quantity = parseInt(m[3], 10); // Processing: Yield column becomes inventory quantity.
-
-    if (quality < 0 || quality > 1000) continue;
-    if (quantity <= 0) continue;
-
-    rows.push({
-      rawName,
-      materialId,
-      quality,
-      quantity,
-      needsReview: lowConfidence || materialId === null,
-    });
+    // Prefer the largest uppercase title-looking token. In refinery screens this is the station/location name.
+    return candidates.sort((a, b) => b.length - a.length)[0] ?? null;
+  } catch {
+    return null;
   }
-
-  return rows;
-}
-
-function extractProcessingRowsSequential(
-  lines: string[],
-  templates: MaterialTemplate[],
-  lowConfidence: boolean,
-): ParsedRefineryRow[] {
-  const rows: ParsedRefineryRow[] = [];
-
-  for (let i = 0; i < lines.length - 2; i++) {
-    const rawName = stripMaterialNoise(lines[i]);
-    if (!isProcessingMaterialCandidate(rawName, templates)) continue;
-
-    const quality = parseOcrInteger(lines[i + 1]);
-    const quantity = parseOcrInteger(lines[i + 2]); // Processing: Yield column becomes inventory quantity.
-
-    if (quality === null || quantity === null) continue;
-    if (quality < 0 || quality > 1000) continue;
-    if (quantity <= 0) continue;
-
-    const materialId = normalizeMaterialName(rawName, templates);
-
-    rows.push({
-      rawName,
-      materialId,
-      quality,
-      quantity,
-      needsReview: lowConfidence || materialId === null,
-    });
-
-    i += 2;
-  }
-
-  return rows;
-}
-
-function extractProcessingRows(
-  lines: string[],
-  templates: MaterialTemplate[],
-  lowConfidence: boolean,
-): ParsedRefineryRow[] {
-  const inlineRows = extractProcessingRowsInline(lines, templates, lowConfidence);
-  const sequentialRows = extractProcessingRowsSequential(lines, templates, lowConfidence);
-
-  return inlineRows.length >= sequentialRows.length ? inlineRows : sequentialRows;
 }
 
 // ── Main export ──────────────────────────────────────────────────────────────
@@ -698,6 +968,7 @@ export async function parseRefineryScreenshot(
   manualPanelRegions?: PanelRegion[],
 ): Promise<RefineryParseResult> {
   const dims = await getImageDimensions(imageFile);
+  await ensureQualityQuantizationLoaded();
 
   const worker = await createWorker("eng", 1, {
     logger: (m: { status: string; progress: number }) => {
@@ -715,6 +986,7 @@ export async function parseRefineryScreenshot(
       blocks: true,
     });
     const detText = detData.text;
+    const sourceLocationName = await extractSourceLocationName(worker, imageFile, dims);
 
     if (/MATERIALS\s+SELECTED/i.test(detText)) {
       const sx = Math.floor(dims.w * 0.15);
@@ -779,30 +1051,15 @@ export async function parseRefineryScreenshot(
         .map((l) => l.trim())
         .filter(Boolean);
 
-      if (isProcessingScreenText(pd.text)) {
-        const rows = extractProcessingRows(lines, templates, lowConf);
-
-        if (rows.length > 0) {
-          workOrders.push({
-            workOrderNumber: extractWorkOrderNumber(pd.text) ?? i + 1,
-            rows,
-            totalYieldCscu: extractTotalYield(lines),
-            timeRemainingSeconds: parseTimeRemainingSeconds(pd.text),
-          });
-          continue;
-        }
-      }
-
       const allPanelLines = [
         ...getOcrLines(pd.blocks),
         ...getOcrLines(digitData.blocks),
       ];
 
-      const ocrRows = extractCompleteRowsFromOcrLines(
-        allPanelLines,
-        templates,
-        lowConf,
-      );
+      const ocrRows = [
+        ...extractCompleteRowsFromOcrLines(allPanelLines, templates, lowConf),
+        ...extractRowsFromKnownLineText(allPanelLines, templates, lowConf),
+      ];
 
       const sequentialRows = extractCompleteRowsSequential(
         lines,
@@ -815,13 +1072,14 @@ export async function parseRefineryScreenshot(
           ? sequentialRows
           : ocrRows;
 
-      rows = sortAndDeduplicateCompleteRows(rows);
+      rows = sortAndDeduplicateCompleteRows(rows, sh * 2).filter((row) => !isRejectedRefineryRow(row));
 
       if (rows.length > 0 || screenType !== "unknown") {
         workOrders.push({
           workOrderNumber: i + 1,
           rows,
           totalYieldCscu: extractTotalYield(lines),
+          sourceLocationName,
         });
       }
     }
@@ -848,24 +1106,6 @@ export async function parseRefineryScreenshot(
       .filter(Boolean);
     const fullScreenType = detectScreenType(fullData.text);
 
-    if (isProcessingScreenText(fullData.text)) {
-      const rows = extractProcessingRows(fullLines, templates, true);
-
-      if (rows.length > 0) {
-        return {
-          screenType: "refinery_complete",
-          workOrders: [
-            {
-              workOrderNumber: extractWorkOrderNumber(fullData.text) ?? 1,
-              rows,
-              totalYieldCscu: extractTotalYield(fullLines),
-              timeRemainingSeconds: parseTimeRemainingSeconds(fullData.text),
-            },
-          ],
-        };
-      }
-    }
-
     if (fullScreenType === "refinery_input") {
       const data = extractInputData(fullData.text, templates);
       if (data.rows.length > 0) return { screenType: "refinery_input", data };
@@ -874,6 +1114,7 @@ export async function parseRefineryScreenshot(
     const fullOcrLines = getOcrLines(fullData.blocks);
     const fallbackRows = sortAndDeduplicateCompleteRows([
       ...extractCompleteRowsFromOcrLines(fullOcrLines, templates, true),
+      ...extractRowsFromKnownLineText(fullOcrLines, templates, true),
       ...extractCompleteRows(fullLines, templates, false, true).map((row) => ({
         ...row,
         y: inferRowYFromNumbers(row, fullOcrLines),
@@ -882,7 +1123,7 @@ export async function parseRefineryScreenshot(
         ...row,
         y: inferRowYFromNumbers(row, fullOcrLines),
       })),
-    ]);
+    ], dims.h * 2).filter((row) => !isRejectedRefineryRow(row));
 
     if (fallbackRows.length > 0) {
       return {
@@ -892,6 +1133,7 @@ export async function parseRefineryScreenshot(
             workOrderNumber: extractWorkOrderNumber(fullData.text) ?? 1,
             rows: fallbackRows,
             totalYieldCscu: extractTotalYield(fullLines),
+            sourceLocationName,
           },
         ],
       };
@@ -1007,10 +1249,11 @@ function extractCompleteRowsSequential(
 
     const rawName = stripMaterialNoise(line);
 
-    const materialId = normalizeMaterialName(rawName, templates);
+    const resolved = resolveMaterialCandidate(rawName, templates);
+    const materialId = resolved.materialId;
 
     // Reject weak/noisy material candidates before pairing nearby numbers.
-    if (!materialId) continue;
+    if (!resolved.isKnownMaterial) continue;
     if (rawName.length < 4) continue;
     if (/^\d+$/.test(rawName)) continue;
 
@@ -1030,7 +1273,7 @@ function extractCompleteRowsSequential(
       materialId,
       quality,
       quantity,
-      needsReview: lowConfidence,
+      needsReview: lowConfidence || materialId === null,
     });
 
     i += 2;
@@ -1064,72 +1307,293 @@ function getOcrDigitCount(text: string): number {
   return text.replace(/\D/g, "").length;
 }
 
+function getMaterialCandidateFromLine(
+  line: OcrLine,
+  templates: MaterialTemplate[],
+): {
+  rawName: string;
+  materialId: string | null;
+  x1: number;
+  y: number;
+  height: number;
+  lineText: string;
+} | null {
+  const words = (line.words ?? [])
+    .map((word) => ({
+      text: stripMaterialNoise(word.text ?? ""),
+      bbox: word.bbox,
+    }))
+    .filter((word) => /[A-Za-z]/.test(word.text));
+
+  const rowMidY = (line.bbox.y0 + line.bbox.y1) / 2;
+  const rowHeight = Math.max(18, line.bbox.y1 - line.bbox.y0);
+
+  let best:
+    | {
+        rawName: string;
+        materialId: string | null;
+        x1: number;
+        score: number;
+      }
+    | null = null;
+
+  // Prefer actual OCR words over the full line bbox. Processing rows often OCR as
+  // "QUARTZ 522 7 8 0". If the full line bbox is used, the quality value 522 is
+  // treated as part of the material label and gets skipped. Word-level material
+  // candidates keep the material x-boundary tight, so the first numeric cell stays
+  // eligible.
+  for (let start = 0; start < words.length; start++) {
+    for (let end = start; end < Math.min(words.length, start + 3); end++) {
+      const phrase = words
+        .slice(start, end + 1)
+        .map((word) => word.text)
+        .join(" ")
+        .replace(/[^A-Za-z\s-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (phrase.length < 3) continue;
+      if (JUNK_NAMES.has(cleanText(phrase).toUpperCase())) continue;
+
+      const resolved = resolveMaterialCandidate(phrase, templates);
+      if (!resolved.isKnownMaterial) continue;
+
+      const score = phrase.length + (resolved.materialId ? 4 : 0);
+      const x1 = words[end].bbox.x1;
+
+      if (!best || score > best.score) {
+        best = { rawName: phrase, materialId: resolved.materialId, x1, score };
+      }
+    }
+  }
+
+  if (best) {
+    return {
+      rawName: best.rawName,
+      materialId: best.materialId,
+      x1: best.x1,
+      y: rowMidY,
+      height: rowHeight,
+      lineText: line.text ?? "",
+    };
+  }
+
+  const raw = line.text ?? "";
+  const materialText = stripMaterialNoise(raw).replace(/[^A-Za-z\s-]/g, " ").trim();
+  const text = cleanText(materialText);
+  const resolved = resolveMaterialCandidate(text, templates);
+
+  if (!resolved.isKnownMaterial) return null;
+  if (text.length < 3) return null;
+  if (JUNK_NAMES.has(text.toUpperCase())) return null;
+
+  return {
+    rawName: materialText || raw.trim() || text,
+    materialId: resolved.materialId,
+    x1: line.bbox.x1,
+    y: rowMidY,
+    height: rowHeight,
+    lineText: line.text ?? "",
+  };
+}
+
+function isNonMaterialProcessingLine(text: string): boolean {
+  const cleaned = cleanText(text);
+  if (!cleaned) return true;
+
+  // These lines live below/above the material table. OCR can read TIME as TIN,
+  // then pair 3m 53s or 5m 20s as fake quality/yield rows. Reject those lines
+  // before material matching, while still allowing PRESSURIZED ICE as a real row.
+  if (/\bpressurized\s+ice\b/i.test(text)) return false;
+
+  return /\b(time|remaining|processing|storage|option|stop|collect|work\s*order|details|refinement|center|user|funds|configuration|secure|select|refinery|capacity|yield)\b/i.test(cleaned);
+}
+
+function getNumberCellsFromOcrLines(
+  ocrLines: OcrLine[],
+): Array<{
+  x0: number;
+  x1: number;
+  y: number;
+  value: number;
+  digitCount: number;
+}> {
+  const cells: Array<{
+    x0: number;
+    x1: number;
+    y: number;
+    value: number;
+    digitCount: number;
+  }> = [];
+
+  for (const line of ocrLines) {
+    const lineY = (line.bbox.y0 + line.bbox.y1) / 2;
+
+    for (const word of line.words ?? []) {
+      const value = parseOcrInteger(word.text ?? "");
+      const digitCount = getOcrDigitCount(word.text ?? "");
+      if (value === null || digitCount === 0) continue;
+
+      cells.push({
+        x0: word.bbox.x0,
+        x1: word.bbox.x1,
+        y:
+          typeof word.bbox.y0 === "number" && typeof word.bbox.y1 === "number"
+            ? (word.bbox.y0 + word.bbox.y1) / 2
+            : lineY,
+        value,
+        digitCount,
+      });
+    }
+
+    // Fallback for OCR engines/configs that do not expose word boxes.
+    if (!line.words?.length) {
+      const value = parseOcrInteger(line.text ?? "");
+      const digitCount = getOcrDigitCount(line.text ?? "");
+      if (value !== null && digitCount > 0) {
+        cells.push({
+          x0: line.bbox.x0,
+          x1: line.bbox.x1,
+          y: lineY,
+          value,
+          digitCount,
+        });
+      }
+    }
+  }
+
+  return cells;
+}
+
+
+function extractNumericSequenceFromLineText(text: string): number[] {
+  return (text.match(/\d+/g) ?? [])
+    .map((token) => parseInt(token, 10))
+    .filter((value) => Number.isFinite(value));
+}
+
+function getLineTextNearMaterial(material: { y: number; height: number }, ocrLines: OcrLine[]): string | null {
+  const maxDelta = Math.max(material.height * 2.4, 56);
+  const nearest = ocrLines
+    .map((line) => ({
+      line,
+      y: (line.bbox.y0 + line.bbox.y1) / 2,
+    }))
+    .filter((entry) => Math.abs(entry.y - material.y) <= maxDelta)
+    .sort((a, b) => Math.abs(a.y - material.y) - Math.abs(b.y - material.y))[0];
+
+  return nearest?.line.text ?? null;
+}
+
+function getKnownMaterialNames(templates: MaterialTemplate[]): string[] {
+  const names = new Set<string>();
+
+  for (const template of templates) {
+    const name = cleanText(template.name);
+    if (name.length >= 3) names.add(name);
+  }
+
+  for (const key of Object.keys(MATERIAL_ALIASES)) {
+    if (key.length >= 3) names.add(cleanText(key));
+  }
+
+  return Array.from(names).sort((a, b) => b.length - a.length);
+}
+
+function extractRowsFromKnownLineText(
+  ocrLines: OcrLine[],
+  templates: MaterialTemplate[],
+  lowConfidence: boolean,
+): ParsedRefineryRowWithY[] {
+  const candidates = getKnownMaterialNames(templates);
+  const rows: ParsedRefineryRowWithY[] = [];
+
+  for (const line of ocrLines) {
+    const raw = line.text ?? "";
+    if (!raw.trim()) continue;
+    if (isNonMaterialProcessingLine(raw)) continue;
+
+    const cleaned = cleanText(raw.replace(/[^A-Za-z0-9\s-]/g, " "));
+    const matched = candidates.filter((name) => {
+      const compactName = name.replace(/\s+/g, "");
+      const compactLine = cleaned.replace(/\s+/g, "");
+      return (
+        new RegExp(`(^|\\s)${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?=\\s|$|\\d)`).test(cleaned) ||
+        (compactName.length >= 5 && compactLine.includes(compactName))
+      );
+    });
+
+    // If OCR merged multiple rows into one huge line, the shared numeric sequence is
+    // too ambiguous for this conservative fallback. Word-box parsing handles that
+    // case better.
+    if (matched.length !== 1) continue;
+
+    const resolved = resolveMaterialCandidate(matched[0], templates);
+    if (!resolved.isKnownMaterial) continue;
+
+    const nums = extractNumericSequenceFromLineText(raw);
+    if (nums.length < 2) continue;
+
+    const picked = pickProcessingQualityYield(resolved.materialId, matched[0], nums);
+    if (!picked) continue;
+
+    const { quality, quantity } = picked;
+
+    rows.push({
+      rawName: matched[0].replace(/\b\w/g, (m) => m.toUpperCase()),
+      materialId: resolved.materialId,
+      quality,
+      quantity,
+      needsReview: lowConfidence || resolved.materialId === null,
+      y: (line.bbox.y0 + line.bbox.y1) / 2,
+    });
+  }
+
+  return rows;
+}
+
 function extractCompleteRowsFromOcrLines(
   ocrLines: OcrLine[],
   templates: MaterialTemplate[],
   lowConfidence: boolean,
 ): ParsedRefineryRowWithY[] {
   const materialLines = ocrLines
-    .map((line) => {
-      const raw = line.text ?? "";
-      const materialText = stripMaterialNoise(raw);
-      const text = cleanText(materialText);
-      return { line, raw, materialText, text };
-    })
-    .filter(({ text }) => {
-      if (text.length < 3) return false;
-      if (JUNK_NAMES.has(text.toUpperCase())) return false;
-      return normalizeMaterialName(text, templates) !== null;
-    });
-
-  const numberLines = ocrLines
-    .map((line) => {
-      const text = line.text ?? "";
-
-      return {
-        line,
-        value: parseOcrInteger(text),
-        digitCount: getOcrDigitCount(text),
-      };
-    })
+    .map((line) => getMaterialCandidateFromLine(line, templates))
     .filter(
-      (entry): entry is { line: OcrLine; value: number; digitCount: number } =>
-        entry.value !== null,
+      (
+        candidate,
+      ): candidate is {
+        rawName: string;
+        materialId: string | null;
+        x1: number;
+        y: number;
+        height: number;
+        lineText: string;
+      } => candidate !== null && !isNonMaterialProcessingLine(candidate.lineText),
     );
 
+  const numberCells = getNumberCellsFromOcrLines(ocrLines);
   const rows: ParsedRefineryRowWithY[] = [];
   const usedYs = new Set<number>();
 
-  for (const { line, raw, materialText, text } of materialLines) {
-    const materialId = normalizeMaterialName(text, templates);
-    if (!materialId) continue;
-
-    const rowMidY = (line.bbox.y0 + line.bbox.y1) / 2;
-    const rowHeight = Math.max(18, line.bbox.y1 - line.bbox.y0);
-
-    const rowNumbers = numberLines
-      .filter(({ line: numberLine }) => {
-        const numberMidY = (numberLine.bbox.y0 + numberLine.bbox.y1) / 2;
-
+  for (const material of materialLines) {
+    const rowNumbers = numberCells
+      .filter((cell) => {
         return (
-          Math.abs(numberMidY - rowMidY) <= Math.max(rowHeight * 2.4, 56) &&
-          numberLine.bbox.x0 > line.bbox.x1
+          Math.abs(cell.y - material.y) <= Math.max(material.height * 2.4, 56) &&
+          cell.x0 > material.x1 - 4
         );
       })
-      .sort((a, b) => a.line.bbox.x0 - b.line.bbox.x0)
-      .reduce<Array<{ line: OcrLine; value: number; digitCount: number }>>(
+      .sort((a, b) => a.x0 - b.x0)
+      .reduce<Array<{ x0: number; x1: number; y: number; value: number; digitCount: number }>>(
         (cells, entry) => {
           const previous = cells[cells.length - 1];
 
-          if (
-            !previous ||
-            Math.abs(entry.line.bbox.x0 - previous.line.bbox.x0) > 12
-          ) {
+          if (!previous || Math.abs(entry.x0 - previous.x0) > 12) {
             cells.push(entry);
           } else if (
             entry.digitCount > previous.digitCount ||
-            (entry.digitCount === previous.digitCount &&
-              entry.value > previous.value)
+            (entry.digitCount === previous.digitCount && entry.value > previous.value)
           ) {
             cells[cells.length - 1] = entry;
           }
@@ -1140,41 +1604,42 @@ function extractCompleteRowsFromOcrLines(
       );
 
     if (rowNumbers.length < 2) {
-      if (rowNumbers.length === 1) {
-        const quality = rowNumbers[0].value;
-
-        if (quality >= 0 && quality <= 1000) {
-          rows.push({
-            rawName: materialText || raw.trim() || text,
-            materialId,
-            quality,
-            quantity: 0,
-            needsReview: true,
-            y: rowMidY,
-          });
-        }
-      }
-
       continue;
     }
 
-    const quality = rowNumbers[0].value;
-    const quantity = rowNumbers[1].value;
+    const nearestLineText = getLineTextNearMaterial(material, ocrLines);
+    if (nearestLineText && isNonMaterialProcessingLine(nearestLineText)) continue;
+    const lineNumbers = nearestLineText ? extractNumericSequenceFromLineText(nearestLineText) : [];
+    const rowNumberValues = rowNumbers.map((entry) => entry.value);
+
+    // Prefer full-line text because word boxes occasionally sort merged tokens
+    // strangely. Example: QUARTZ 522 7 8 0 should become quality 522, yield 7.
+    const pickedFromLine = pickProcessingQualityYield(material.materialId, material.rawName, lineNumbers);
+    const pickedFromCells = pickProcessingQualityYield(material.materialId, material.rawName, rowNumberValues);
+    const picked = pickedFromLine ?? pickedFromCells;
+
+    if (!picked) continue;
+
+    const { quality, quantity } = picked;
 
     if (quality < 0 || quality > 1000) continue;
     if (quantity <= 0) continue;
 
-    const yKey = Math.round(rowMidY / 4);
+    // In processing screenshots the visible row shape is:
+    // MATERIAL | QUALITY | YIELD | TO DO | DONE.
+    // We intentionally use the first two numeric cells after the material label:
+    // quality and yield. Todo/done are metadata later, not inventory quantity.
+    const yKey = Math.round(material.y / 4);
     if (usedYs.has(yKey)) continue;
     usedYs.add(yKey);
 
     rows.push({
-      rawName: materialText || raw.trim() || text,
-      materialId,
+      rawName: material.rawName,
+      materialId: material.materialId,
       quality,
       quantity,
-      needsReview: lowConfidence,
-      y: rowMidY,
+      needsReview: lowConfidence || material.materialId === null,
+      y: material.y,
     });
   }
 
@@ -1239,15 +1704,18 @@ function extractInputData(
     if (quality < 0 || quality > 1000) continue;
     if (qtyCscu <= 0) continue;
 
-    rows.push({
-      rawName,
-      rawType,
-      materialId: normalizeInputMaterialName(rawName, rawType, templates),
-      quality,
-      qtyCscu,
-      yieldCscu,
-      selectedForRefine: yieldCscu !== null,
-    });
+    rows.push(
+      applyQualityQuantizationToRow({
+        rawName,
+        rawType,
+        materialId: normalizeInputMaterialName(rawName, rawType, templates),
+        quality,
+        qtyCscu,
+        yieldCscu,
+        selectedForRefine: yieldCscu !== null,
+        needsReview: false,
+      }),
+    );
   }
 
   return { rows, rawText: text };

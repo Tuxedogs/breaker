@@ -16,6 +16,7 @@ export interface QueueItem {
 }
 
 export interface UsedByBlueprint {
+  requirementId?: string;
   blueprintGuid: string;
   displayName: string;
   componentType: string;
@@ -23,12 +24,18 @@ export interface UsedByBlueprint {
   quantity: number;
   slot: string;
   materialQuantity: number;
+  selectedQuality?: number;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
 }
 
 export interface RequiredMaterial {
   materialId: string;
   materialName: string;
+  originalRequiredQuantity?: number;
   requiredQuantity: number;
+  selectedQuality?: number;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  estimatedRawOreNeeded?: number;
   usedBy: UsedByBlueprint[];
   slots: string[];
 }
@@ -199,6 +206,11 @@ export interface MiningRecommendationRequest {
     materialId: string;
     materialName: string;
     requiredQuantity: number;
+    selectedQuality?: number;
+    unitType?: "unit" | "SCU" | "scu" | "cscu";
+    modifierName?: string;
+    modifierType?: string;
+    modifierValue?: number;
   }>;
   priorityStack: MiningPriorityItem[];
   manualDemand: ManualMiningDemandItem[];

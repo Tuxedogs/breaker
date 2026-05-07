@@ -16,6 +16,8 @@ NAMED_JSON = API_DIR / "ship_components_named.json"
 UNRESOLVED_CSV = API_DIR / "ship_component_unresolved.csv"
 PUBLIC_VEHICLE_JSON = Path("public/api/vehicle_components.json")
 
+TODO: delete this page it is not used.
+
 WIKI_TYPES = [
     "Cooler",
     "PowerPlant",

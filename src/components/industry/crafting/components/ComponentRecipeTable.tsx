@@ -19,10 +19,17 @@ import {
   getDirectionLabel,
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
+import {
+  DEFAULT_BAND_INDEX,
+  FALLBACK_QUALITY_BANDS,
+  clampBandIndex,
+  findNearestBandForQuality,
+  getBandEffectiveQuality as getEffectiveQualityFromBands,
+  type QualityBand,
+} from "../utils/qualityBands";
 
 const PAGE_SIZES = [25, 50, 100] as const;
 const NO_VALUE = "__none__";
-const DEFAULT_BAND_INDEX = 1;
 const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
 
 const QUERY_ALIAS_MAP: Record<string, string> = {
@@ -128,12 +135,6 @@ function getImpactWord(impact: "good" | "bad" | "neutral"): string {
   return "";
 }
 
-type QualityBand = {
-  start: string | number;
-  end: string | number;
-  mappedValue: string | number;
-};
-
 type MaterialQuantization = {
   name?: string;
   recordName?: string;
@@ -144,17 +145,6 @@ type MaterialQuantization = {
   path?: string;
   bands: QualityBand[];
 };
-
-const FALLBACK_QUALITY_BANDS: QualityBand[] = [
-  { start: "0", end: "399", mappedValue: "346" },
-  { start: "400", end: "599", mappedValue: "500" },
-  { start: "600", end: "699", mappedValue: "650" },
-  { start: "700", end: "799", mappedValue: "750" },
-  { start: "800", end: "899", mappedValue: "850" },
-  { start: "900", end: "949", mappedValue: "925" },
-  { start: "950", end: "998", mappedValue: "975" },
-  { start: "999", end: "1000", mappedValue: "1000" },
-];
 
 function normalizeMaterialLookup(value: string | null | undefined): string {
   return String(value ?? "")
@@ -201,12 +191,6 @@ function getQuantizationLookupKeys(item: MaterialQuantization): string[] {
 
 function getMaterialName(mat: ComponentRecipe["materials"][number]): string {
   return String(mat.material_name ?? "");
-}
-
-function clampBandIndex(value: number, bands: QualityBand[]): number {
-  const max = Math.max(0, bands.length - 1);
-  if (!Number.isFinite(value)) return DEFAULT_BAND_INDEX;
-  return Math.max(0, Math.min(max, Math.round(value)));
 }
 
 function useQualityQuantization() {
@@ -282,8 +266,7 @@ function useQualityQuantization() {
   const getBandEffectiveQuality = useCallback(
     (materialName: string, bandIndex: number): number => {
       const bands = getBandsForMaterial(materialName);
-      const safeIndex = clampBandIndex(bandIndex, bands);
-      return Number(bands[safeIndex]?.mappedValue ?? 500);
+      return getEffectiveQualityFromBands(bands, bandIndex);
     },
     [getBandsForMaterial],
   );
@@ -449,10 +432,15 @@ function MaterialQualityRow({
   const safeBandIndex = clampBandIndex(bandIndex, bands);
   const quality = getBandEffectiveQuality(materialName, safeBandIndex);
 
-  const atQuality = useMemo(
-    () => getModifiersAtQuality(modifiers, quality),
-    [modifiers, quality],
-  );
+  const atQuality = useMemo(() => {
+    const mods = getModifiersAtQuality(modifiers, quality);
+    // Weapon Recoil Kick must appear directly above Weapon Recoil Smoothness
+    return [...mods].sort((a, b) => {
+      const order = (p: string) =>
+        p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2;
+      return order(a.property) - order(b.property);
+    });
+  }, [modifiers, quality]);
 
   const railMarkers = useMemo(
     () =>
@@ -473,22 +461,7 @@ function MaterialQualityRow({
 
   const findNearestBandForMappedValue = useCallback(
     (value: number) => {
-      if (bands.length === 0) return 0;
-
-      let nearestIndex = 0;
-      let nearestDistance = Number.POSITIVE_INFINITY;
-
-      for (let i = 0; i < bands.length; i += 1) {
-        const mappedValue = Number(bands[i]?.mappedValue ?? 0);
-        const distance = Math.abs(mappedValue - value);
-
-        if (distance < nearestDistance) {
-          nearestIndex = i;
-          nearestDistance = distance;
-        }
-      }
-
-      return nearestIndex;
+      return findNearestBandForQuality(bands, value);
     },
     [bands],
   );
@@ -531,7 +504,8 @@ function MaterialQualityRow({
           <div className="craft-matq-rail">
             <div
               className="craft-matq-rail-fill"
-              style={{ width: `${Math.max(0, Math.min(100, (quality / 1000) * 100))}%` }}
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              style={{ '--selected-pct': `${Math.max(0, Math.min(100, (quality / 1000) * 100))}%` } as any}
             />
 
             {railMarkers.map((marker) => (
@@ -588,7 +562,6 @@ function MaterialQualityRow({
 
 interface TotalModifierRow {
   property: string;
-  slot: string;
   totalValue: number;
   modifierMode?: string;
   contributions: { materialName: string; value: number }[];
@@ -610,13 +583,13 @@ function computeTotalModifiers(
     const atQuality = getModifiersAtQuality(modifiers, quality);
 
     for (const m of atQuality) {
-      const rowKey = `${m.slot}||${m.property}`;
+      // Group by property + modifierMode so same stat from different slots combine
+      const rowKey = `${m.property}||${m.modifierMode ?? ""}`;
       const existing = map.get(rowKey);
 
       if (!existing) {
         map.set(rowKey, {
           property: m.property,
-          slot: m.slot,
           totalValue: m.value,
           modifierMode: m.modifierMode,
           contributions: [{ materialName: getMaterialName(mat), value: m.value }],
@@ -659,6 +632,9 @@ function CraftedItemSummaryPanel({
   overallQualitySource,
   rewardPools,
   onAddToQueue,
+  getBandEffectiveQuality,
+  getBandsForMaterial,
+  materialQualities,
 }: {
   recipe: ComponentRecipe;
   displayName: string;
@@ -666,7 +642,10 @@ function CraftedItemSummaryPanel({
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   rewardPools: { displayName: string }[];
-  onAddToQueue: (r: ComponentRecipe) => void;
+  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
+  getBandsForMaterial: (materialName: string) => QualityBand[];
+  materialQualities: Record<string, number>;
 }) {
   const typeBadges = getTypeBadges(recipe);
   const sizeLabel = formatSize(recipe.size);
@@ -716,11 +695,8 @@ function CraftedItemSummaryPanel({
                 const hasBreakdown = row.contributions.length > 1;
 
                 return (
-                  <div key={`${row.slot}||${row.property}`} className="craft-summary-mod-row">
+                  <div key={row.property} className="craft-summary-mod-row">
                     <div className="craft-summary-mod-top">
-                      <span className="craft-badge craft-badge--sm craft-badge--slot craft-summary-mod-slot">
-                        {row.slot}
-                      </span>
                       <span className="craft-summary-mod-prop">
                         {formatProperty(row.property)}
                       </span>
@@ -731,11 +707,14 @@ function CraftedItemSummaryPanel({
                     </div>
                     {hasBreakdown && (
                       <div className="craft-summary-mod-breakdown">
+                        {"("}
                         {row.contributions.map((c, i) => (
                           <span key={i} className="craft-summary-mod-contrib">
-                            {formatContributionValue(c.value, row.modifierMode)} {c.materialName}
+                            {i > 0 && " + "}
+                            {formatContributionValue(c.value, row.modifierMode)} from {c.materialName}
                           </span>
                         ))}
+                        {")"}
                       </div>
                     )}
                   </div>
@@ -780,7 +759,19 @@ function CraftedItemSummaryPanel({
       <button
         type="button"
         className="craft-summary-queue-btn"
-        onClick={() => onAddToQueue(recipe)}
+        onClick={() => {
+          const selectedQualities = Object.fromEntries(
+            recipe.materials.map((mat) => {
+              const key = getMaterialQualityKey(recipe, mat);
+              const materialName = getMaterialName(mat);
+              return [key, {
+                quality: getBandEffectiveQuality(materialName, materialQualities[key] ?? DEFAULT_BAND_INDEX),
+                bands: getBandsForMaterial(materialName),
+              }];
+            }),
+          );
+          onAddToQueue(recipe, selectedQualities);
+        }}
       >
         <svg
           viewBox="0 0 24 24"
@@ -808,7 +799,7 @@ function RecipeDrawer({
   onAddToQueue,
 }: {
   recipe: ComponentRecipe;
-  onAddToQueue: (r: ComponentRecipe) => void;
+  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
 }) {
   const {
     loading: quantizationLoading,
@@ -899,6 +890,9 @@ function RecipeDrawer({
           overallQualitySource={overallQualitySource}
           rewardPools={rewardPools}
           onAddToQueue={onAddToQueue}
+          getBandEffectiveQuality={getBandEffectiveQuality}
+          getBandsForMaterial={getBandsForMaterial}
+          materialQualities={materialQualities}
         />
       </div>
     </div>
@@ -1032,7 +1026,7 @@ function FilterPopover({
 
 interface Props {
   recipes: ComponentRecipe[];
-  onAddToQueue: (recipe: ComponentRecipe) => void;
+  onAddToQueue: (recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
 }
 
 export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
