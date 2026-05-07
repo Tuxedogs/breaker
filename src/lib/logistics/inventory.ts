@@ -1,4 +1,13 @@
-import type { InventoryEntry, InventoryLocation, MaterialTemplate, RarityInfo, RecipeTemplate } from '../../types/logistics';
+import type {
+  BuildQueueItem,
+  InventoryEntry,
+  InventoryItemKind,
+  InventoryLocation,
+  InventoryUnitType,
+  MaterialTemplate,
+  RarityInfo,
+  RecipeTemplate,
+} from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 
 export type SourceStrategy = 'nearest' | 'highest-quality' | 'minimize-splits';
@@ -13,15 +22,72 @@ export interface StackAllocation {
   quantity: number;
 }
 
-export function getInventoryUnitLabel(entryOrTemplate: InventoryEntry | MaterialTemplate | undefined): string {
-  // TODO: move inventory unit labels into template/catalog data when the global catalog exists.
-  return entryOrTemplate?.materialType === 'special' ? 'count' : 'SCU';
+export function getLegacyMaterialItemKind(material: MaterialTemplate | undefined): InventoryItemKind {
+  if (!material) return 'unknown';
+  if (material.id === 'rawice') return 'ice';
+  if (material.materialType === 'ore' || material.materialType === 'refined') return 'ore';
+  if (material.materialType === 'raw') return 'raw_mineable';
+  if (material.materialType === 'special') return 'raw_mineable';
+  return 'material';
+}
+
+export function resolveInventoryItemName(entry: InventoryEntry, material?: MaterialTemplate): string {
+  return entry.itemName ?? entry.materialName ?? material?.name ?? entry.materialId ?? entry.catalogItemId ?? 'Custom Item';
+}
+
+export function resolveInventoryItemKind(entry: InventoryEntry, material?: MaterialTemplate): InventoryItemKind {
+  return entry.itemKind ?? getLegacyMaterialItemKind(material ?? undefined);
+}
+
+export function resolveInventoryUnitType(
+  entryOrTemplate: InventoryEntry | MaterialTemplate | undefined,
+  material?: MaterialTemplate,
+): InventoryUnitType {
+  if (!entryOrTemplate) return 'unit';
+  if ('unitType' in entryOrTemplate && entryOrTemplate.unitType) return entryOrTemplate.unitType;
+  const template = material ?? ('materialType' in entryOrTemplate && 'id' in entryOrTemplate ? entryOrTemplate : undefined);
+  if (template && 'sourceGroups' in template) {
+    const groups = (template as { sourceGroups: string[] }).sourceGroups;
+    if (groups.includes('vehicleMining') || groups.includes('fpsMining')) return 'unit';
+  }
+  const materialType = template?.materialType ?? ('materialType' in entryOrTemplate ? entryOrTemplate.materialType : undefined);
+  if (materialType === 'special' || materialType === 'raw') return 'unit';
+  if (materialType === 'ore' || materialType === 'refined') return 'scu';
+  return 'unit';
+}
+
+export function getInventoryUnitLabel(entryOrTemplate: InventoryEntry | MaterialTemplate | undefined): 'unit' | 'SCU' {
+  if (!entryOrTemplate) return 'unit';
+  if ('unitType' in entryOrTemplate && entryOrTemplate.unitType) return entryOrTemplate.unitType === 'scu' ? 'SCU' : 'unit';
+  if ('sourceGroups' in entryOrTemplate) {
+    const groups = (entryOrTemplate as { sourceGroups: string[] }).sourceGroups;
+    if (groups.includes('vehicleMining') || groups.includes('fpsMining')) return 'unit';
+  }
+  // FPS mineables stored as InventoryEntry carry materialType 'special'; vehicle mineables carry 'raw'.
+  if (entryOrTemplate.materialType === 'special' || entryOrTemplate.materialType === 'raw') return 'unit';
+  return 'SCU';
 }
 
 export function formatQuantity(quantity: number, material: MaterialTemplate | undefined): string {
-  const unit = getInventoryUnitLabel(material);
-  if (unit === 'count') return `${quantity}x`;
-  return `${quantity.toFixed(2)} ${unit}`;
+  return formatInventoryQuantity(quantity, material ? resolveInventoryUnitType(material) : 'unit');
+}
+
+export function formatInventoryQuantity(quantity: number, unitType: InventoryUnitType | undefined): string {
+  if (unitType === 'scu') return `${quantity} SCU`;
+  return `x${quantity}`;
+}
+
+export function formatEntryQuantity(entry: InventoryEntry, material?: MaterialTemplate): string {
+  return formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material));
+}
+
+export function formatRequirementQuantity(
+  quantity: number,
+  unitType: 'unit' | 'SCU' | 'scu' | 'cscu' | undefined,
+  material: MaterialTemplate | undefined,
+): string {
+  const resolved = unitType === 'SCU' || unitType === 'scu' || unitType === 'cscu' ? 'scu' : unitType ?? resolveInventoryUnitType(material);
+  return formatInventoryQuantity(quantity, resolved);
 }
 
 export function materialTypeClass(material: MaterialTemplate | undefined, fallback?: MaterialTemplate['materialType']): string {
@@ -39,7 +105,7 @@ export function getInventoryStacks(
 ): InventoryStack[] {
   return inventory.map((entry) => ({
     ...entry,
-    material: materials.find((material) => material.id === entry.materialId),
+    material: entry.materialId ? materials.find((material) => material.id === entry.materialId) : undefined,
     location: locations.find((location) => location.id === entry.locationId),
   }));
 }
@@ -50,7 +116,7 @@ export function summarizeLocation(
   materials: MaterialTemplate[],
 ) {
   const entries = inventory.filter((entry) => entry.locationId === location.id);
-  const materialIds = new Set(entries.map((entry) => entry.materialId));
+  const materialIds = new Set(entries.map((entry) => entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id));
   const totalQuantity = entries.reduce((sum, entry) => sum + entry.quantity, 0);
   const highestStack = entries.reduce<InventoryEntry | null>(
     (best, entry) => (!best || (entry.quality ?? 0) > (best.quality ?? 0) ? entry : best),
@@ -70,12 +136,13 @@ export function summarizeLocation(
 export function getGlobalTopQualityMaterials(inventory: InventoryEntry[], materials: MaterialTemplate[]) {
   const bestByMaterial = new Map<string, InventoryEntry>();
   for (const entry of inventory) {
-    const current = bestByMaterial.get(entry.materialId);
-    if (!current || (entry.quality ?? 0) > (current.quality ?? 0)) bestByMaterial.set(entry.materialId, entry);
+    const key = entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id;
+    const current = bestByMaterial.get(key);
+    if (!current || (entry.quality ?? -1) > (current.quality ?? -1)) bestByMaterial.set(key, entry);
   }
   return Array.from(bestByMaterial.values())
-    .map((entry) => ({ entry, material: materials.find((material) => material.id === entry.materialId) }))
-    .sort((a, b) => (b.entry.quality ?? 0) - (a.entry.quality ?? 0));
+    .map((entry) => ({ entry, material: entry.materialId ? materials.find((material) => material.id === entry.materialId) : undefined }))
+    .sort((a, b) => (b.entry.quality ?? -1) - (a.entry.quality ?? -1));
 }
 
 export function getMaterialBreakdown(
@@ -84,9 +151,9 @@ export function getMaterialBreakdown(
   locations: InventoryLocation[],
 ) {
   return getInventoryStacks(inventory, materials, locations).sort((a, b) => {
-    const materialCompare = (a.material?.name ?? a.materialId).localeCompare(b.material?.name ?? b.materialId);
+    const materialCompare = resolveInventoryItemName(a, a.material).localeCompare(resolveInventoryItemName(b, b.material));
     if (materialCompare !== 0) return materialCompare;
-    return (b.quality ?? 0) - (a.quality ?? 0);
+    return (b.quality ?? -1) - (a.quality ?? -1);
   });
 }
 
@@ -103,6 +170,13 @@ export function getPremiumStacks(
 
 export function getRecipeInputs(recipeId: string, inputsByRecipeId: Record<string, RecipeInputTemplate[]>) {
   return inputsByRecipeId[recipeId] ?? [];
+}
+
+export function getBuildQueueItemInputs(
+  item: BuildQueueItem,
+  inputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+) {
+  return item.materialRequirements ?? getRecipeInputs(item.recipeId, inputsByRecipeId);
 }
 
 export function getRecipeForQueueItem(recipeId: string, recipes: RecipeTemplate[]) {

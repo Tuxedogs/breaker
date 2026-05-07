@@ -1670,10 +1670,11 @@
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-/* Filled portion — restrained purple */
+/* Filled portion — starts at selected quality marker, extends to right */
 .craft-matq-rail-fill {
   position: absolute;
-  left: 0;
+  left: var(--selected-pct, 0%);
+  width: calc(100% - var(--selected-pct, 0%));
   top: 0;
   bottom: 0;
   border-radius: inherit;
@@ -1758,9 +1759,10 @@
 /* ── Per-material modifier cards ─────────────── */
 
 .craft-matq-mods {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
 }
 
 .craft-matq-mod-card {

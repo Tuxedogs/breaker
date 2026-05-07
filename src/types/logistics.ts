@@ -1,3 +1,5 @@
+import type { RecipeInputTemplate } from "../data/logistics/seed";
+
 export type RarityTier =
   | "legendary"
   | "epic"
@@ -13,6 +15,22 @@ export interface RarityInfo {
   colorHex: string;
   colorToken: string;
 }
+
+export type InventoryItemKind =
+  | "material"
+  | "ore"
+  | "raw_mineable"
+  | "ice"
+  | "fps_weapon"
+  | "fps_armor"
+  | "vehicle_component"
+  | "crafted_item"
+  | "manual"
+  | "unknown";
+
+export type InventoryUnitType = "scu" | "unit";
+
+export type InventoryCatalogSource = "api" | "seed" | "manual" | "unknown";
 
 export interface MaterialTemplate {
   id: string;
@@ -50,17 +68,29 @@ export interface InventoryLocation {
 
 export interface InventoryEntry {
   id: string;
-  materialId: string;
+  /** Legacy material identifier used by refinery and build queue flows. */
+  materialId?: string;
   materialName?: string;
-  materialType: MaterialTemplate["materialType"];
+  materialType?: MaterialTemplate["materialType"];
+  catalogItemId?: string;
+  catalogSource?: InventoryCatalogSource;
+  itemName?: string;
+  itemKind?: InventoryItemKind;
+  category?: string;
+  unitType?: InventoryUnitType;
   quality?: number;
   quantity: number;
   locationId?: string;
   container?: string;
+  notes?: string;
   source?: string;
   sourceHistory?: string[];
   workOrderId?: string;
   workOrderIds?: string[];
+  accentTier?: RarityTier;
+  valueAUEC?: number;
+  valueUnit?: "per_scu" | "per_unit";
+  valueSource?: "manual" | "api" | "estimated" | "unknown";
   rarity: RarityInfo;
   createdAt: string;
   updatedAt: string;
@@ -105,8 +135,12 @@ export interface ReservedMaterialAllocation {
 export interface BuildQueueItem {
   id: string;
   recipeId: string;
+  itemId?: string;
+  itemName?: string;
   quantity: number;
   priority?: number;
+  priorityActive?: boolean;
   status?: "queued" | "active" | "paused" | "complete";
   reservedAllocations?: ReservedMaterialAllocation[];
+  materialRequirements?: RecipeInputTemplate[];
 }

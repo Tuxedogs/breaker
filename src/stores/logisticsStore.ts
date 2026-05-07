@@ -11,10 +11,19 @@ import {
   rarityCatalog,
   type RecipeInputTemplate,
 } from "../data/logistics/seed";
+import { normalizeRecipeInputTemplate } from "../lib/logistics/materialResolver";
+import {
+  getLegacyMaterialItemKind,
+  resolveInventoryItemName,
+  resolveInventoryUnitType,
+} from "../lib/logistics/inventory";
 import type {
   BuildQueueItem,
+  InventoryCatalogSource,
   InventoryEntry,
+  InventoryItemKind,
   InventoryLocation,
+  InventoryUnitType,
   ItemTemplate,
   MaterialTemplate,
   OwnedItem,
@@ -45,9 +54,12 @@ interface LogisticsStoreState {
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
   registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
-  addBuildQueueItem: (recipeId: string, quantity?: number) => void;
+  addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "itemId" | "itemName" | "materialRequirements">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
+  toggleBuildQueueItemPriority: (id: string) => void;
+  updateBuildQueueItemQuantity: (id: string, quantity: number) => void;
+  updateBuildQueueMaterialRequirement: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   removeBuildQueueItem: (id: string) => void;
   setBuildQueueItemAllocations: (buildQueueItemId: string, allocations: ReservedMaterialAllocation[]) => void;
   toggleBuildQueueAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
@@ -69,7 +81,8 @@ function migrateLegacyLogisticsStorage() {
   storage.setItem(LOGISTICS_STORAGE_KEY, legacyState);
 }
 
-function getMaterialTemplate(materialId: string, materials: MaterialTemplate[]): MaterialTemplate | undefined {
+function getMaterialTemplate(materialId: string | undefined, materials: MaterialTemplate[]): MaterialTemplate | undefined {
+  if (!materialId) return undefined;
   return materials.find((material) => material.id === materialId);
 }
 
@@ -100,8 +113,57 @@ function isMaterialType(value: unknown): value is MaterialTemplate["materialType
   return value === "ore" || value === "refined" || value === "raw" || value === "special";
 }
 
+function isInventoryItemKind(value: unknown): value is InventoryItemKind {
+  return (
+    value === "material" ||
+    value === "ore" ||
+    value === "raw_mineable" ||
+    value === "ice" ||
+    value === "fps_weapon" ||
+    value === "fps_armor" ||
+    value === "vehicle_component" ||
+    value === "crafted_item" ||
+    value === "manual" ||
+    value === "unknown"
+  );
+}
+
+function isInventoryUnitType(value: unknown): value is InventoryUnitType {
+  return value === "scu" || value === "unit";
+}
+
+function isInventoryCatalogSource(value: unknown): value is InventoryCatalogSource {
+  return value === "api" || value === "seed" || value === "manual" || value === "unknown";
+}
+
 function isBuildStatus(value: unknown): value is BuildQueueItem["status"] {
   return value === "queued" || value === "active" || value === "paused" || value === "complete";
+}
+
+function coercePersistedRecipeInput(value: unknown, materials: MaterialTemplate[]): RecipeInputTemplate | null {
+  if (!isRecord(value) || !isNumber(value.quantity)) return null;
+  const materialId =
+    isString(value.materialId) ? value.materialId :
+    isString(value.materialKey) ? value.materialKey :
+    isString(value.rawName) ? value.rawName :
+    isString(value.materialName) ? value.materialName :
+    isString(value.displayName) ? value.displayName :
+    "";
+  if (!materialId) return null;
+  return normalizeRecipeInputTemplate({
+    ...value,
+    materialId,
+    materialKey: isString(value.materialKey) ? value.materialKey : undefined,
+    requirementId: isString(value.requirementId) ? value.requirementId : undefined,
+    costId: isString(value.costId) ? value.costId : undefined,
+    materialGuid: isString(value.materialGuid) ? value.materialGuid : isString(value.costId) ? value.costId : undefined,
+    materialName: isString(value.materialName) ? value.materialName : undefined,
+    displayName: isString(value.displayName) ? value.displayName : undefined,
+    rawName: isString(value.rawName) ? value.rawName : undefined,
+    sourceName: isString(value.sourceName) ? value.sourceName : undefined,
+    sourceType: isString(value.sourceType) ? value.sourceType : undefined,
+    quantity: value.quantity,
+  } as RecipeInputTemplate, materials);
 }
 
 function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllocation | null {
@@ -131,11 +193,12 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
 }
 
 export function getRarityForQuality(quality?: number, material?: MaterialTemplate): RarityInfo {
+  if (quality === undefined) return rarityCatalog.common;
   if (material?.isQuantanium) return rarityCatalog.quantanium;
-  if ((quality ?? 0) >= 900) return rarityCatalog.legendary;
-  if ((quality ?? 0) >= 800) return rarityCatalog.epic;
-  if ((quality ?? 0) >= 750) return rarityCatalog.rare;
-  if ((quality ?? 0) >= 650) return rarityCatalog.uncommon;
+  if (quality >= 900) return rarityCatalog.legendary;
+  if (quality >= 800) return rarityCatalog.epic;
+  if (quality >= 750) return rarityCatalog.rare;
+  if (quality >= 650) return rarityCatalog.uncommon;
   return rarityCatalog.common;
 }
 
@@ -155,11 +218,20 @@ function normalizeInventoryEntry(
     : quality !== undefined
       ? getRarityForQuality(quality, material)
       : normalizeRarity(entry.rarity, rarityCatalog.common);
+  const itemName = resolveInventoryItemName(entry, material);
+  const itemKind = entry.itemKind ?? getLegacyMaterialItemKind(material);
+  const unitType = entry.unitType ?? resolveInventoryUnitType(entry, material);
   return {
     ...entry,
     materialName: material?.name ?? entry.materialName,
     materialType: material?.materialType ?? entry.materialType,
+    catalogItemId: entry.catalogItemId ?? entry.materialId,
+    catalogSource: entry.catalogSource ?? (material ? "seed" : "manual"),
+    itemName,
+    itemKind,
+    unitType,
     quality,
+    accentTier: quality !== undefined ? rarity.tier : entry.accentTier,
     rarity,
     createdAt: entry.createdAt ?? fallbackCreatedAt ?? new Date().toISOString(),
     updatedAt: entry.updatedAt ?? new Date().toISOString(),
@@ -171,6 +243,16 @@ export function normalizeOwnedItemRarity(item: OwnedItem): OwnedItem {
     ...item,
     rarity: normalizeRarity(item.rarity, rarityCatalog.common),
   };
+}
+
+function getInventoryMergeKey(entry: InventoryEntry): string {
+  return [
+    entry.materialId ?? "",
+    entry.catalogItemId ?? "",
+    entry.itemName ?? entry.materialName ?? "",
+    entry.itemKind ?? "",
+    entry.unitType ?? "",
+  ].join("|");
 }
 
 function coercePersistedLocation(value: unknown): InventoryLocation | null {
@@ -186,25 +268,37 @@ function coercePersistedLocation(value: unknown): InventoryLocation | null {
 }
 
 function coercePersistedInventoryEntry(value: unknown, materials: MaterialTemplate[]): InventoryEntry | null {
-  if (!isRecord(value) || !isString(value.id) || !isString(value.materialId) || !isNumber(value.quantity)) {
+  if (!isRecord(value) || !isString(value.id) || !isNumber(value.quantity)) {
     return null;
   }
+  const materialId = isString(value.materialId) ? value.materialId : undefined;
+  const itemName = isString(value.itemName) ? value.itemName : isString(value.materialName) ? value.materialName : undefined;
+  const catalogItemId = isString(value.catalogItemId) ? value.catalogItemId : materialId;
+  if (!materialId && !itemName && !catalogItemId) return null;
 
-  const material = getMaterialTemplate(value.materialId, materials);
+  const material = getMaterialTemplate(materialId, materials);
   const materialType = material?.materialType ?? (isMaterialType(value.materialType) ? value.materialType : "special");
   const entry: InventoryEntry = {
     id: value.id,
-    materialId: value.materialId,
+    materialId,
     materialName: isString(value.materialName) ? value.materialName : undefined,
     materialType,
+    catalogItemId,
+    catalogSource: isInventoryCatalogSource(value.catalogSource) ? value.catalogSource : undefined,
+    itemName,
+    itemKind: isInventoryItemKind(value.itemKind) ? value.itemKind : undefined,
+    category: isString(value.category) ? value.category : undefined,
+    unitType: isInventoryUnitType(value.unitType) ? value.unitType : undefined,
     quality: isNumber(value.quality) ? value.quality : undefined,
     quantity: value.quantity,
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : isString(value.containerName) ? value.containerName : undefined,
+    notes: isString(value.notes) ? value.notes : undefined,
     source: isString(value.source) ? value.source : undefined,
     sourceHistory: Array.isArray(value.sourceHistory) ? value.sourceHistory.filter(isString) : undefined,
     workOrderId: isString(value.workOrderId) ? value.workOrderId : undefined,
     workOrderIds: Array.isArray(value.workOrderIds) ? value.workOrderIds.filter(isString) : undefined,
+    accentTier: isRarityTier(value.accentTier) ? value.accentTier : undefined,
     rarity: isRecord(value.rarity) && isRarityTier(value.rarity.tier)
       ? rarityCatalog[value.rarity.tier]
       : rarityCatalog.common,
@@ -215,7 +309,7 @@ function coercePersistedInventoryEntry(value: unknown, materials: MaterialTempla
   return normalizeInventoryEntry(entry, materials);
 }
 
-function coercePersistedBuildQueueItem(value: unknown): BuildQueueItem | null {
+function coercePersistedBuildQueueItem(value: unknown, materials: MaterialTemplate[]): BuildQueueItem | null {
   if (!isRecord(value) || !isString(value.id) || !isString(value.recipeId) || !isNumber(value.quantity)) {
     return null;
   }
@@ -223,13 +317,21 @@ function coercePersistedBuildQueueItem(value: unknown): BuildQueueItem | null {
   return {
     id: value.id,
     recipeId: value.recipeId,
+    itemId: isString(value.itemId) ? value.itemId : undefined,
+    itemName: isString(value.itemName) ? value.itemName : undefined,
     quantity: value.quantity,
     priority: isNumber(value.priority) ? value.priority : undefined,
+    priorityActive: typeof value.priorityActive === "boolean" ? value.priorityActive : undefined,
     status: isBuildStatus(value.status) ? value.status : undefined,
     reservedAllocations: Array.isArray(value.reservedAllocations)
       ? value.reservedAllocations
           .map(coercePersistedReservedAllocation)
           .filter((allocation): allocation is ReservedMaterialAllocation => allocation !== null)
+      : undefined,
+    materialRequirements: Array.isArray(value.materialRequirements)
+      ? value.materialRequirements
+          .map((input) => coercePersistedRecipeInput(input, materials))
+          .filter((input): input is RecipeInputTemplate => input !== null)
       : undefined,
   };
 }
@@ -256,17 +358,22 @@ function getReservedQuantityForStack(
   }, 0);
 }
 
+function getRequirementLineId(item: BuildQueueItem, input: RecipeInputTemplate, index: number): string {
+  return input.requirementId ?? `${item.id}:${index}:${input.materialKey ?? input.materialId}:${input.modifierName ?? input.modifierType ?? "material"}`;
+}
+
 function createValidatedAllocation(
   allocation: ReservedMaterialAllocation,
   inventoryEntry: InventoryEntry,
   quantityReserved: number,
 ): ReservedMaterialAllocation {
+  const materialId = inventoryEntry.materialId ?? allocation.materialId;
   return {
-    id: allocation.id || `${inventoryEntry.id}-${inventoryEntry.materialId}`,
+    id: allocation.id || `${inventoryEntry.id}-${materialId}`,
     inventoryEntryId: inventoryEntry.id,
-    materialId: inventoryEntry.materialId,
+    materialId,
     quantityReserved,
-    materialName: inventoryEntry.materialName ?? allocation.materialName,
+    materialName: inventoryEntry.itemName ?? inventoryEntry.materialName ?? allocation.materialName,
     quality: inventoryEntry.quality,
     rarity: normalizeRarity(inventoryEntry.rarity, rarityCatalog.common),
     locationId: inventoryEntry.locationId,
@@ -287,7 +394,7 @@ function sanitizeReservedAllocationsForItem(
   for (const allocation of allocations) {
     if (!allocation.inventoryEntryId || allocation.quantityReserved <= 0) continue;
     const inventoryEntry = state.inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
-    if (!inventoryEntry || inventoryEntry.materialId !== allocation.materialId) continue;
+    if (!inventoryEntry?.materialId || inventoryEntry.materialId !== allocation.materialId) continue;
 
     const reservedByOthers = getReservedQuantityForStack(
       state.buildQueue,
@@ -314,6 +421,7 @@ function removeStaleReservedAllocations(
     const inventoryEntry = inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
     return (
       inventoryEntry !== undefined &&
+      inventoryEntry.materialId !== undefined &&
       inventoryEntry.materialId === allocation.materialId &&
       allocation.quantityReserved > 0 &&
       allocation.quantityReserved <= inventoryEntry.quantity
@@ -346,10 +454,23 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         set((state) => ({
           inventoryEntries: entries.reduce((inventory, entry) => {
             const normalized = normalizeInventoryEntry(entry, state.materialTemplates);
+            const incomingWorkOrderIds = normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : []);
+            if (
+              incomingWorkOrderIds.length > 0 &&
+              inventory.some((current) => {
+                const currentWorkOrderIds = current.workOrderIds ?? (current.workOrderId ? [current.workOrderId] : []);
+                return current.materialId !== undefined &&
+                  current.materialId === normalized.materialId &&
+                  currentWorkOrderIds.some((id) => incomingWorkOrderIds.includes(id));
+              })
+            ) {
+              return inventory;
+            }
             const existingIdx = inventory.findIndex((current) =>
-              current.materialId === normalized.materialId &&
+              getInventoryMergeKey(current) === getInventoryMergeKey(normalized) &&
               (current.locationId ?? "") === (normalized.locationId ?? "") &&
-              (current.quality ?? 0) === (normalized.quality ?? 0)
+              (current.container ?? "") === (normalized.container ?? "") &&
+              (current.quality ?? "__none") === (normalized.quality ?? "__none")
             );
             if (existingIdx === -1) return [...inventory, normalized];
 
@@ -392,23 +513,27 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       registerCraftingRecipe: ({ recipeId, name, category, inputs }) => {
         set((state) => {
+          const normalizedInputs = inputs.map((input) => normalizeRecipeInputTemplate(input, state.materialTemplates));
           const existingRecipe = state.recipeTemplates.find((r) => r.id === recipeId);
           const nextRecipes = existingRecipe
             ? state.recipeTemplates
             : [...state.recipeTemplates, { id: recipeId, name, category }];
           return {
             recipeTemplates: nextRecipes,
-            recipeInputTemplates: { ...state.recipeInputTemplates, [recipeId]: inputs },
+            recipeInputTemplates: { ...state.recipeInputTemplates, [recipeId]: normalizedInputs },
           };
         });
       },
-      addBuildQueueItem: (recipeId, quantity = 1) => {
+      addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {
-          const existing = state.buildQueue.find((item) => item.recipeId === recipeId);
+          const existing = state.buildQueue.find((item) =>
+            item.recipeId === recipeId &&
+            JSON.stringify(item.materialRequirements ?? null) === JSON.stringify(snapshot?.materialRequirements ?? null)
+          );
           if (existing) {
             return {
               buildQueue: state.buildQueue.map((item) =>
-                item.recipeId === recipeId ? { ...item, quantity: item.quantity + quantity } : item,
+                item.id === existing.id ? { ...item, quantity: item.quantity + quantity } : item,
               ),
             };
           }
@@ -416,9 +541,16 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           const newItem: BuildQueueItem = {
             id: `bq-craft-${recipeId}-${Date.now()}`,
             recipeId,
+            itemId: snapshot?.itemId,
+            itemName: snapshot?.itemName,
             quantity,
             status: "queued",
             priority: nextPriority,
+            priorityActive: false,
+            materialRequirements: snapshot?.materialRequirements?.map((input, index) => ({
+              ...input,
+              requirementId: input.requirementId ?? `${recipeId}:${index}:${input.materialKey ?? input.materialId}:${input.modifierName ?? input.modifierType ?? "material"}`,
+            })),
           };
           return { buildQueue: [...state.buildQueue, newItem] };
         });
@@ -434,6 +566,44 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             item.id === id ? { ...item, priority: Math.max(1, Math.trunc(priority)) } : item,
           ),
         }));
+      },
+      toggleBuildQueueItemPriority: (id) => {
+        set((state) => ({
+          buildQueue: state.buildQueue.map((item) =>
+            item.id === id ? { ...item, priorityActive: !(item.priorityActive ?? false) } : item,
+          ),
+        }));
+      },
+      updateBuildQueueItemQuantity: (id, quantity) => {
+        set((state) => ({
+          buildQueue: state.buildQueue.map((item) =>
+            item.id === id ? { ...item, quantity: Math.max(1, Math.trunc(quantity)) } : item,
+          ),
+        }));
+      },
+      updateBuildQueueMaterialRequirement: (id, requirementId, input) => {
+        set((state) => {
+          const item = state.buildQueue.find((entry) => entry.id === id);
+          if (!item) return {};
+          const inputs = (item.materialRequirements ?? state.recipeInputTemplates[item.recipeId] ?? []).map((entry, index) => ({
+            ...entry,
+            requirementId: getRequirementLineId(item, entry, index),
+          }));
+          return {
+            buildQueue: state.buildQueue.map((entry) =>
+              entry.id === id
+                ? {
+                    ...entry,
+                    materialRequirements: inputs.map((entry) =>
+                      entry.requirementId === requirementId
+                        ? { ...entry, ...input, requirementId: entry.requirementId, materialId: entry.materialId, quantity: entry.quantity }
+                        : entry,
+                    ),
+                  }
+                : entry,
+            ),
+          };
+        });
       },
       removeBuildQueueItem: (id) => {
         set((state) => ({
@@ -544,7 +714,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           ?.map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
           .filter((entry): entry is InventoryEntry => entry !== null);
         const buildQueue = persistedBuildQueue
-          ?.map(coercePersistedBuildQueueItem)
+          ?.map((item) => coercePersistedBuildQueueItem(item, current.materialTemplates))
           .filter((item): item is BuildQueueItem => item !== null);
         const locations = persistedLocations
           ?.map(coercePersistedLocation)
@@ -565,10 +735,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           for (const [recipeId, inputs] of Object.entries(persistedInputs)) {
             if (seedRecipeIds.has(recipeId)) continue;
             if (Array.isArray(inputs)) {
-              const coerced = inputs.filter(
-                (inp): inp is RecipeInputTemplate =>
-                  isRecord(inp) && isString(inp.materialId) && isNumber(inp.quantity),
-              );
+              const coerced = inputs
+                .map((input) => coercePersistedRecipeInput(input, current.materialTemplates))
+                .filter((input): input is RecipeInputTemplate => input !== null);
               if (coerced.length) mergedInputs[recipeId] = coerced;
             }
           }
@@ -588,29 +757,38 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
 );
 
 export function createInventoryEntryDraft(
-  input: Pick<InventoryEntry, "id" | "materialId" | "quantity"> &
-    Partial<Omit<InventoryEntry, "id" | "materialId" | "quantity" | "rarity">>,
+  input: Pick<InventoryEntry, "id" | "quantity"> &
+    Partial<Omit<InventoryEntry, "id" | "quantity" | "rarity">>,
 ): InventoryEntry {
   const material = getMaterialTemplate(input.materialId, get().materialTemplates);
   const timestamp = new Date().toISOString();
-  const quality = Math.max(0, Math.min(1000, input.quality ?? 0));
-  return {
+  const quality = input.quality === undefined ? undefined : Math.max(0, Math.min(1000, input.quality));
+  const rarity = quality !== undefined ? getRarityForQuality(quality, material) : rarityCatalog.common;
+  return normalizeInventoryEntry({
     id: input.id,
     materialId: input.materialId,
-    materialName: material?.name,
-    materialType: material?.materialType ?? "special",
+    materialName: material?.name ?? input.materialName,
+    materialType: material?.materialType ?? input.materialType,
+    catalogItemId: input.catalogItemId ?? input.materialId,
+    catalogSource: input.catalogSource,
+    itemName: input.itemName,
+    itemKind: input.itemKind,
+    category: input.category,
+    unitType: input.unitType,
     quality,
     quantity: input.quantity,
     locationId: input.locationId,
     container: input.container,
+    notes: input.notes,
     source: input.source,
     sourceHistory: input.sourceHistory,
     workOrderId: input.workOrderId,
     workOrderIds: input.workOrderIds,
-    rarity: getRarityForQuality(quality, material),
+    accentTier: quality !== undefined ? rarity.tier : input.accentTier,
+    rarity,
     createdAt: input.createdAt ?? timestamp,
     updatedAt: input.updatedAt ?? timestamp,
-  };
+  }, get().materialTemplates);
 }
 
 function get() {

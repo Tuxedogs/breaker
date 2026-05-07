@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import DonutChart from "../components/dashboard/DonutChart";
 import {
   mockStats,
@@ -7,12 +7,11 @@ import {
   mockMaterialShortages,
   mockBuildQueue,
   mockLocations,
-  mockUpdates,
-  quickAccessItems,
-  popularToolItems,
-  type QuickAccessItem,
+  miningRecommendations,
 } from "../data/mock/dashboard";
-import { useLogisticsStore, createInventoryEntryDraft } from "../stores/logisticsStore";
+import { useLogisticsStore } from "../stores/logisticsStore";
+import { deriveUserDashStats } from "../lib/dashboardStats";
+import type { LogisticsMaterialTemplate } from "../data/logistics/seed";
 
 // ── Shared arrow icon for footer links ─────────────────────────────
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -24,14 +23,18 @@ function ArrowRight({ size = 12 }: { size?: number }) {
 }
 
 // ── Stat card icon shapes ──────────────────────────────────────────
-function StatIcon({ type }: { type: "materials" | "owned" | "needed" | "shortage" | "queue" }) {
-  const configs = {
+type StatIconType = "materials" | "owned" | "needed" | "shortage" | "queue" | "volume" | "high" | "low";
+function StatIcon({ type }: { type: StatIconType }) {
+  const configs: Record<StatIconType, { bg: string; color: string; d: string }> = {
     materials: { bg: "rgba(167,139,250,0.12)", color: "#a78bfa", d: "M12 2L2 7v10l10 5 10-5V7L12 2zm0 5l5 2.5v5L12 17l-5-2.5v-5L12 7z" },
     owned: { bg: "rgba(56,189,248,0.12)", color: "#38bdf8", d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z" },
     needed: { bg: "rgba(167,139,250,0.12)", color: "#a78bfa", d: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01" },
     shortage: { bg: "rgba(248,113,113,0.12)", color: "#f87171", d: "M12 2L2 19h20L12 2zm0 6v5m0 4h.01" },
     queue: { bg: "rgba(251,146,60,0.12)", color: "#fb923c", d: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" },
-  } as const;
+    volume: { bg: "rgba(56,189,248,0.12)", color: "#38bdf8", d: "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" },
+    high: { bg: "rgba(74,222,128,0.12)", color: "#4ade80", d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" },
+    low: { bg: "rgba(248,113,113,0.12)", color: "#f87171", d: "M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" },
+  };
   const c = configs[type];
   return (
     <div className="dash-stat-icon-wrap" style={{ background: c.bg }}>
@@ -39,6 +42,30 @@ function StatIcon({ type }: { type: "materials" | "owned" | "needed" | "shortage
         <path d={c.d} />
       </svg>
     </div>
+  );
+}
+
+// ── Stat tooltip ──────────────────────────────────────────────────
+function StatTooltip({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <span className="dash-stat-tooltip-wrap">
+      <button
+        type="button"
+        className="dash-stat-info-btn"
+        aria-label="More info"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+      >
+        <svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+          <circle cx="7" cy="7" r="6" />
+          <path d="M7 6v4M7 4.5v.5" />
+        </svg>
+      </button>
+      {open && <div className="dash-stat-tooltip" role="tooltip">{children}</div>}
+    </span>
   );
 }
 
@@ -65,31 +92,6 @@ function BqThumb({ color }: { color: string }) {
   );
 }
 
-// ── Quick access icon factory ──────────────────────────────────────
-const quickIcons: Record<string, string> = {
-  inventory: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
-  materials: "M12 2L2 7v10l10 5 10-5V7L12 2z",
-  mining: "M15 12l-9 9a2 2 0 01-3-3l9-9M18 9l2-2-4-4-2 2",
-  ship: "M12 2L2 7v10l10 5 10-5V7L12 2zM12 22V12M2 7l10 5 10-5",
-  build: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2m-6 9l2 2 4-4",
-  star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
-  weapons: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4v4l3 3",
-  armor: "M12 2l7 3v5c0 5-3 9-7 10C8 19 5 15 5 10V5l7-3z",
-  compare: "M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18",
-  refinery: "M9 3h6m-6 0v6l-4 9h14l-4-9V3m-3 0v6",
-  price: "M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6",
-};
-
-function QuickIcon({ icon }: { icon: string }) {
-  return (
-    <div className="dash-quick-icon">
-      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="17" height="17">
-        <path d={quickIcons[icon] ?? quickIcons.inventory} />
-      </svg>
-    </div>
-  );
-}
-
 // ── Location icon ──────────────────────────────────────────────────
 function LocationIcon({ type }: { type: string }) {
   const d = type === "station"
@@ -106,6 +108,8 @@ function LocationIcon({ type }: { type: string }) {
 
 export default function DashboardPage() {
   const ownedPct = Math.round((mockInventory.owned / mockInventory.needed) * 100);
+  const { inventoryEntries, materialTemplates } = useLogisticsStore();
+  const userStats = deriveUserDashStats(inventoryEntries, materialTemplates as LogisticsMaterialTemplate[]);
 
   return (
     <div className="dash-content-grid">
@@ -155,40 +159,81 @@ export default function DashboardPage() {
 
         {/* Stats row */}
         <section className="dash-stats-row" aria-label="Summary statistics">
-          {/* Total Materials */}
+          {/* Total Recorded / User */}
           <div className="dash-stat-card">
             <div className="dash-stat-main">
-              <div className="dash-stat-label">Total Materials</div>
-              <div className="dash-stat-value">{mockStats.totalMaterials.count}</div>
-              <div className="dash-stat-sublabel">{mockStats.totalMaterials.label}</div>
+              <div className="dash-stat-label">
+                Total Recorded
+                <StatTooltip>
+                  <div className="dash-stat-tooltip-title">Your top volumes</div>
+                  {userStats.top3Volume.length > 0 ? userStats.top3Volume.map((v) => (
+                    <div key={v.name} className="dash-stat-tooltip-row">
+                      <span>{v.name}</span>
+                      <span>{v.unit === "x" ? `x${v.quantity}` : `${v.quantity} SCU`}</span>
+                    </div>
+                  )) : <div className="dash-stat-tooltip-empty">No inventory recorded</div>}
+                </StatTooltip>
+              </div>
+              <div className="dash-stat-value">
+                {userStats.totalVolume > 0
+                  ? (userStats.totalVolumeUnit === "x"
+                    ? <><span>x</span>{userStats.totalVolume}</>
+                    : <>{userStats.totalVolume}<span className="dash-stat-unit"> SCU</span></>)
+                  : "—"}
+              </div>
+              <div className="dash-stat-sublabel">Across all inventory</div>
             </div>
-            <StatIcon type="materials" />
+            <StatIcon type="volume" />
           </div>
 
-          {/* Total Owned */}
+          {/* Highest Recorded Material */}
           <div className="dash-stat-card">
             <div className="dash-stat-main">
-              <div className="dash-stat-label">Total Owned</div>
-              <div className="dash-stat-value">
-                {mockStats.totalOwned.value}
-                <span className="dash-stat-unit">{mockStats.totalOwned.unit}</span>
+              <div className="dash-stat-label">
+                Highest Recorded
+                <StatTooltip>
+                  <div className="dash-stat-tooltip-title">Top 3 qualities</div>
+                  {userStats.top3Highest.length > 0 ? userStats.top3Highest.map((q) => (
+                    <div key={q.name + q.quality} className="dash-stat-tooltip-row">
+                      <span>{q.name}</span>
+                      <span className="dash-stat-tooltip-val">{q.quality}</span>
+                    </div>
+                  )) : <div className="dash-stat-tooltip-empty">No quality data recorded</div>}
+                </StatTooltip>
               </div>
-              <div className="dash-stat-sublabel">{mockStats.totalOwned.label}</div>
+              <div className="dash-stat-value" style={{ color: "#4ade80" }}>
+                {userStats.highestQuality ?? "—"}
+              </div>
+              <div className="dash-stat-sublabel">
+                {userStats.highestQualityMaterial ?? "Material quality"}
+              </div>
             </div>
-            <StatIcon type="owned" />
+            <StatIcon type="high" />
           </div>
 
-          {/* Total Needed */}
+          {/* Lowest Ever */}
           <div className="dash-stat-card">
             <div className="dash-stat-main">
-              <div className="dash-stat-label">Total Needed</div>
-              <div className="dash-stat-value">
-                {mockStats.totalNeeded.value}
-                <span className="dash-stat-unit">{mockStats.totalNeeded.unit}</span>
+              <div className="dash-stat-label">
+                Lowest Ever
+                <StatTooltip>
+                  <div className="dash-stat-tooltip-title">Bottom 3 qualities</div>
+                  {userStats.bottom3Lowest.length > 0 ? userStats.bottom3Lowest.map((q) => (
+                    <div key={q.name + q.quality} className="dash-stat-tooltip-row">
+                      <span>{q.name}</span>
+                      <span className="dash-stat-tooltip-val">{q.quality}</span>
+                    </div>
+                  )) : <div className="dash-stat-tooltip-empty">No quality data recorded</div>}
+                </StatTooltip>
               </div>
-              <div className="dash-stat-sublabel">{mockStats.totalNeeded.label}</div>
+              <div className="dash-stat-value" style={{ color: "#f87171" }}>
+                {userStats.lowestQuality ?? "—"}
+              </div>
+              <div className="dash-stat-sublabel">
+                {userStats.lowestQualityMaterial ?? "Material quality"}
+              </div>
             </div>
-            <StatIcon type="needed" />
+            <StatIcon type="low" />
           </div>
 
           {/* Shortage */}
@@ -353,11 +398,6 @@ export default function DashboardPage() {
           </article>
         </div>
 
-        {/* Quick Access + Popular Tools */}
-        <div className="dash-bottom-row">
-          <QuickSection title="Quick Access" items={quickAccessItems} />
-          <QuickSection title="Popular Tools" items={popularToolItems} />
-        </div>
       </div>
 
       {/* ── Right column ── */}
@@ -366,10 +406,10 @@ export default function DashboardPage() {
         {/* Quick Inventory */}
         <QuickInventoryPanel />
 
-        {/* Favorite Locations */}
+        {/* Primary Locations */}
         <div className="dash-panel">
           <div className="dash-panel-header">
-            <span className="dash-panel-title">Favorite Locations</span>
+            <span className="dash-panel-title">Primary Locations</span>
           </div>
           <div className="dash-panel-body">
             <ul className="dash-locations-list" role="list">
@@ -387,32 +427,32 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Latest Updates */}
+        {/* Mining Recommendations */}
         <div className="dash-panel">
           <div className="dash-panel-header">
-            <span className="dash-panel-title">Latest Updates</span>
+            <span className="dash-panel-title">Mining Recommendations</span>
           </div>
           <div className="dash-panel-body">
             <ul className="dash-updates-list" role="list">
-              {mockUpdates.map((update) => (
-                <li key={update.id} className="dash-update-item">
+              {miningRecommendations.map((rec) => (
+                <li key={rec.id} className="dash-update-item">
                   <div className="dash-update-thumb" aria-hidden>
                     <svg viewBox="0 0 20 14" width="24" height="17" fill="none">
-                      <rect width="20" height="14" rx="2" fill={update.accentColor} fillOpacity="0.15" />
-                      <path d="M6 4h8M6 7h5M6 10h7" stroke={update.accentColor} strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.7" />
+                      <rect width="20" height="14" rx="2" fill="rgba(167,139,250,0.15)" />
+                      <path d="M10 7l-3 4h6zM10 3v1M6 5l.7.7M14 5l-.7.7" stroke="#a78bfa" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.85" />
                     </svg>
                   </div>
                   <div className="dash-update-info">
-                    <div className="dash-update-title">{update.title}</div>
-                    <div className="dash-update-desc">{update.description}</div>
-                    <div className="dash-update-date">{update.date}</div>
+                    <div className="dash-update-title">{rec.material}</div>
+                    <div className="dash-update-desc">{rec.location}</div>
+                    <div className="dash-update-date dash-rec-reason">{rec.reason}</div>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
           <div className="dash-panel-footer">
-            <a href="#" className="dash-panel-link">View All Updates <ArrowRight size={10} /></a>
+            <Link to="/industry/mining" className="dash-panel-link">View Mining <ArrowRight size={10} /></Link>
           </div>
         </div>
       </aside>
@@ -423,144 +463,29 @@ export default function DashboardPage() {
 // ── Sub-components ─────────────────────────────────────────────────
 
 function QuickInventoryPanel() {
-  const { locations, materialTemplates, addInventoryEntries } = useLogisticsStore();
-  const [locationId, setLocationId] = useState(() => locations[0]?.id ?? "");
-  const [materialSearch, setMaterialSearch] = useState("");
-  const [materialId, setMaterialId] = useState("");
-  const [quality, setQuality] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [error, setError] = useState("");
-  const [added, setAdded] = useState(false);
-
-  function handleMaterialInput(value: string) {
-    setMaterialSearch(value);
-    const match = materialTemplates.find((m) => m.name.toLowerCase() === value.toLowerCase());
-    setMaterialId(match?.id ?? "");
-    setError("");
-  }
-
-  function handleAdd() {
-    const qty = parseFloat(quantity);
-    if (!locationId) { setError("Select a location."); return; }
-    if (!materialId) { setError("Select a valid material."); return; }
-    if (isNaN(qty) || qty <= 0) { setError("Enter a valid quantity."); return; }
-    addInventoryEntries([createInventoryEntryDraft({
-      id: `inv-${Date.now()}`,
-      materialId,
-      quantity: qty,
-      quality: Math.max(0, Math.min(1000, parseInt(quality) || 0)),
-      locationId,
-    })]);
-    setMaterialSearch("");
-    setMaterialId("");
-    setQuality("");
-    setQuantity("");
-    setError("");
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
-  }
-
   return (
     <div className="dash-panel">
       <div className="dash-panel-header">
         <span className="dash-panel-title">Quick Inventory</span>
       </div>
       <div className="dash-panel-body">
-        <div className="logi-form-field" style={{ marginBottom: "0.55rem" }}>
-          <label htmlFor="qinv-location" className="logi-form-label">Location</label>
-          <select
-            id="qinv-location"
-            className="logi-form-select"
-            value={locationId}
-            onChange={(e) => { setLocationId(e.target.value); setError(""); }}
-          >
-            {locations.map((loc) => <option key={loc.id} value={loc.id}>{loc.name}</option>)}
-          </select>
+        <p className="dash-panel-desc">Manage stock records and imports.</p>
+        <div className="dash-qinv-actions">
+          <Link to="/logistics/inventory" className="dash-qinv-btn">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+              <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
+            </svg>
+            View Inventory
+          </Link>
+          <Link to="/logistics/refinery-import?source=dashboard" className="dash-qinv-btn">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Import Screenshot
+          </Link>
         </div>
-        <div className="logi-form-field" style={{ marginBottom: "0.55rem" }}>
-          <label htmlFor="qinv-material" className="logi-form-label">Material</label>
-          <input
-            id="qinv-material"
-            type="text"
-            list="qinv-materials-list"
-            className="logi-form-input"
-            value={materialSearch}
-            onChange={(e) => handleMaterialInput(e.target.value)}
-            placeholder="Search material…"
-            autoComplete="off"
-          />
-          <datalist id="qinv-materials-list">
-            {materialTemplates.map((m) => <option key={m.id} value={m.name} />)}
-          </datalist>
-        </div>
-        <div className="logi-fast-add-pair" style={{ marginBottom: "0.55rem" }}>
-          <div className="logi-form-field" style={{ marginBottom: 0 }}>
-            <label htmlFor="qinv-quality" className="logi-form-label">Quality</label>
-            <input
-              id="qinv-quality"
-              type="number"
-              className="logi-form-input"
-              value={quality}
-              onChange={(e) => { setQuality(e.target.value); setError(""); }}
-              placeholder="0–1000"
-              min="0"
-              max="1000"
-              step="1"
-            />
-          </div>
-          <div className="logi-form-field" style={{ marginBottom: 0 }}>
-            <label htmlFor="qinv-qty" className="logi-form-label">Qty (SCU)</label>
-            <input
-              id="qinv-qty"
-              type="number"
-              className="logi-form-input"
-              value={quantity}
-              onChange={(e) => { setQuantity(e.target.value); setError(""); }}
-              placeholder="0.00"
-              min="0"
-              step="0.01"
-              onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
-            />
-          </div>
-        </div>
-        {error && (
-          <p style={{ color: "#f87171", fontFamily: '"Share Tech Mono", monospace', fontSize: "0.6rem", letterSpacing: "0.06em", margin: "0 0 0.5rem" }}>
-            {error}
-          </p>
-        )}
-        <button
-          type="button"
-          className="logi-btn-primary"
-          style={{ width: "100%", justifyContent: "center" }}
-          onClick={handleAdd}
-        >
-          {added ? "Stack Added ✓" : "Add Stack"}
-        </button>
-      </div>
-      <div className="dash-panel-footer" style={{ display: "flex", gap: "0.75rem" }}>
-        <Link to="/logistics/inventory" className="dash-panel-link">Open Inventory <ArrowRight size={10} /></Link>
-        <Link to="/logistics/refinery-import?source=dashboard" className="dash-panel-link">Screenshot Import <ArrowRight size={10} /></Link>
       </div>
     </div>
   );
 }
 
-function QuickSection({ title, items }: { title: string; items: readonly QuickAccessItem[] }) {
-  return (
-    <div className="dash-section-card">
-      <div className="dash-section-header">
-        <span className="dash-section-title">{title}</span>
-      </div>
-      <div className="dash-section-body">
-        <div className="dash-quick-grid">
-          {items.map((item) => (
-            <Link key={item.label} to={item.to} className="dash-quick-item">
-              <QuickIcon icon={item.icon} />
-              <span className="dash-quick-label">{item.label}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}

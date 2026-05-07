@@ -1,0 +1,935 @@
+{
+  "configPath": "D:\\scintel\\scripts\\link\\fps_variant_config.json",
+  "totalBlueprintRecords": 1082,
+  "weaponFamilyCount": 161,
+  "armorFamilyCount": 588,
+  "combinedFamilyCount": 749,
+  "multiVariantFamilyCount": 71,
+  "singletonFamilyCount": 678,
+  "groupSourceCounts": {
+    "exact_name_default": 711,
+    "known_variant_phrase": 111,
+    "known_variant_token_suffix": 206,
+    "separator": 54
+  },
+  "topVariantNames": {
+    "Default": 711,
+    "Camo": 30,
+    "Red": 26,
+    "Green": 26,
+    "Desert": 24,
+    "Defiance": 21,
+    "Woodland": 16,
+    "Twilight": 16,
+    "Modified": 16,
+    "Orange": 13,
+    "Yellow": 13,
+    "Blue": 13,
+    "Purple": 13,
+    "White": 13,
+    "Grey": 13,
+    "Black": 13,
+    "Tan": 13,
+    "Olive": 8,
+    "Tactical": 8,
+    "45 Cap": 6,
+    "Citadel": 6,
+    "Venture": 5,
+    "12 Cap": 4,
+    "Sunchaser": 4,
+    "Sand": 4,
+    "Forest": 4,
+    "Executive": 4,
+    "30 Cap": 3,
+    "8 Cap": 3,
+    "Arctic": 3,
+    "Dust Devil": 3,
+    "Red Alert": 3,
+    "20 Cap": 2,
+    "16 Cap": 2,
+    "60 Cap": 2,
+    "Fortifier": 2,
+    "Refurbished": 2,
+    "75 Cap": 1,
+    "40 Cap": 1,
+    "150 Cap": 1,
+    "25 Cap": 1,
+    "50 Cap": 1,
+    "15 Cap": 1,
+    "6 Cap": 1,
+    "120 Cap": 1,
+    "10 Cap": 1,
+    "22 Cap": 1,
+    "100 Cap": 1,
+    "165 Cap": 1,
+    "35 Cap": 1
+  },
+  "multiVariantExamples": [
+    {
+      "familyKey": "fps_weapon:pistol:coda-pistol",
+      "displayName": "Coda Pistol",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Modified"
+      ]
+    },
+    {
+      "familyKey": "fps_weapon:shotgun:devastator-shotgun",
+      "displayName": "Devastator Shotgun",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_weapon:rifle:karna-rifle",
+      "displayName": "Karna Rifle",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:flightsuit-helmet:01",
+      "displayName": "01",
+      "variantCount": 9,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:flightsuit-undersuit:01",
+      "displayName": "01",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-arms:adp-arms",
+      "displayName": "ADP Arms",
+      "variantCount": 14,
+      "variants": [
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Modified",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Woodland",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-arms:adp-arms-dark",
+      "displayName": "ADP Arms Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-torso:adp-core",
+      "displayName": "ADP Core",
+      "variantCount": 14,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Modified",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-torso:adp-core-dark",
+      "displayName": "ADP Core Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-legs:adp-legs",
+      "displayName": "ADP Legs",
+      "variantCount": 13,
+      "variants": [
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Woodland",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-legs:adp-legs-dark",
+      "displayName": "ADP Legs Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-arms:antium-arms",
+      "displayName": "Antium Arms",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Sand"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-torso:antium-core",
+      "displayName": "Antium Core",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Sand"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-helmet:antium-helmet",
+      "displayName": "Antium Helmet",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Sand"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-legs:antium-legs",
+      "displayName": "Antium Legs",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Sand"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:engineer-helmet:argus-helmet-black-silver",
+      "displayName": "Argus Helmet Black/Silver",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:engineer-helmet:argus-helmet-silver-gold-grey",
+      "displayName": "Argus Helmet Silver/Gold/Grey",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-arms:artimex-arms",
+      "displayName": "Artimex Arms",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Modified",
+        "Red Alert"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-torso:artimex-core",
+      "displayName": "Artimex Core",
+      "variantCount": 7,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-helmet:artimex-helmet",
+      "displayName": "Artimex Helmet",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Default",
+        "Red Alert"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-legs:artimex-legs",
+      "displayName": "Artimex Legs",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Default",
+        "Red Alert"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-helmet:balor-hch-helmet",
+      "displayName": "Balor HCH Helmet",
+      "variantCount": 13,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-helmet:balor-hch-helmet-dark",
+      "displayName": "Balor HCH Helmet Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-helmet:cbh-3-helmet",
+      "displayName": "CBH-3 Helmet",
+      "variantCount": 12,
+      "variants": [
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-helmet:cbh-3-helmet-dark",
+      "displayName": "CBH-3 Helmet Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-arms:calico-arms",
+      "displayName": "Calico Arms",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-torso:calico-core",
+      "displayName": "Calico Core",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-helmet:calico-helmet",
+      "displayName": "Calico Helmet",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-legs:calico-legs",
+      "displayName": "Calico Legs",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-torso:core-firestarter",
+      "displayName": "Core Firestarter",
+      "variantCount": 2,
+      "variants": [
+        "Defiance",
+        "Defiance"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-arms:defiance-arms",
+      "displayName": "Defiance Arms",
+      "variantCount": 2,
+      "variants": [
+        "Modified",
+        "Sunchaser"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-torso:defiance-core",
+      "displayName": "Defiance Core",
+      "variantCount": 2,
+      "variants": [
+        "Modified",
+        "Sunchaser"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-helmet:defiance-helmet",
+      "displayName": "Defiance Helmet",
+      "variantCount": 2,
+      "variants": [
+        "Modified",
+        "Sunchaser"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:heavy-legs:defiance-legs",
+      "displayName": "Defiance Legs",
+      "variantCount": 2,
+      "variants": [
+        "Modified",
+        "Sunchaser"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-arms:dustup-arms",
+      "displayName": "DustUp Arms",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-torso:dustup-core",
+      "displayName": "DustUp Core",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-helmet:dustup-helmet",
+      "displayName": "DustUp Helmet",
+      "variantCount": 2,
+      "variants": [
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-legs:dustup-legs",
+      "displayName": "DustUp Legs",
+      "variantCount": 3,
+      "variants": [
+        "Desert",
+        "Desert",
+        "Tactical"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-helmet:g-2-helmet",
+      "displayName": "G-2 Helmet",
+      "variantCount": 13,
+      "variants": [
+        "Black",
+        "Blue",
+        "Desert",
+        "Green",
+        "Grey",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Woodland",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-helmet:g-2-helmet-dark",
+      "displayName": "G-2 Helmet Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-arms:geist-armor-arms",
+      "displayName": "Geist Armor Arms",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Desert",
+        "Forest"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-torso:geist-armor-core",
+      "displayName": "Geist Armor Core",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Desert",
+        "Forest"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-helmet:geist-armor-helmet",
+      "displayName": "Geist Armor Helmet",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Desert",
+        "Forest"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:stealth-legs:geist-armor-legs",
+      "displayName": "Geist Armor Legs",
+      "variantCount": 3,
+      "variants": [
+        "Default",
+        "Desert",
+        "Forest"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-arms:inquisitor-arms",
+      "displayName": "Inquisitor Arms",
+      "variantCount": 12,
+      "variants": [
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-arms:inquisitor-arms-dark",
+      "displayName": "Inquisitor Arms Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-torso:inquisitor-core",
+      "displayName": "Inquisitor Core",
+      "variantCount": 21,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-legs:inquisitor-legs",
+      "displayName": "Inquisitor Legs",
+      "variantCount": 13,
+      "variants": [
+        "Black",
+        "Blue",
+        "Green",
+        "Grey",
+        "Olive",
+        "Olive",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-legs:inquisitor-legs-dark",
+      "displayName": "Inquisitor Legs Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-arms:morozov-sh-arms",
+      "displayName": "Morozov-SH Arms",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Modified"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-torso:morozov-sh-core",
+      "displayName": "Morozov-SH Core",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Modified"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:hunter-legs:morozov-sh-legs",
+      "displayName": "Morozov-SH Legs",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Modified"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:environment-backpack:novikov-backpack",
+      "displayName": "Novikov Backpack",
+      "variantCount": 4,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-arms:orc-mkv-arms",
+      "displayName": "ORC-mkV Arms",
+      "variantCount": 14,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Desert",
+        "Desert",
+        "Green",
+        "Grey",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-arms:orc-mkv-arms-dark",
+      "displayName": "ORC-mkV Arms Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-torso:orc-mkv-core",
+      "displayName": "ORC-mkV Core",
+      "variantCount": 22,
+      "variants": [
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-legs:orc-mkv-legs",
+      "displayName": "ORC-mkV Legs",
+      "variantCount": 15,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Desert",
+        "Desert",
+        "Green",
+        "Grey",
+        "Modified",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-legs:orc-mkv-legs-dark",
+      "displayName": "ORC-mkV Legs Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-arms:orc-mkx-arms",
+      "displayName": "ORC-mkX Arms",
+      "variantCount": 5,
+      "variants": [
+        "Arctic",
+        "Desert",
+        "Modified",
+        "Twilight",
+        "Woodland"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-torso:orc-mkx-core",
+      "displayName": "ORC-mkX Core",
+      "variantCount": 5,
+      "variants": [
+        "Woodland",
+        "Woodland",
+        "Woodland",
+        "Woodland",
+        "Woodland"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-helmet:orc-mkx-helmet",
+      "displayName": "ORC-mkX Helmet",
+      "variantCount": 4,
+      "variants": [
+        "Arctic",
+        "Desert",
+        "Twilight",
+        "Woodland"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:medium-legs:orc-mkx-legs",
+      "displayName": "ORC-mkX Legs",
+      "variantCount": 4,
+      "variants": [
+        "Arctic",
+        "Desert",
+        "Twilight",
+        "Woodland"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-arms:pab-1-arms",
+      "displayName": "PAB-1 Arms",
+      "variantCount": 13,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Desert",
+        "Green",
+        "Grey",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-arms:pab-1-arms-dark",
+      "displayName": "PAB-1 Arms Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-torso:pab-1-core",
+      "displayName": "PAB-1 Core",
+      "variantCount": 13,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Desert",
+        "Green",
+        "Grey",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-torso:pab-1-core-dark",
+      "displayName": "PAB-1 Core Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-legs:pab-1-legs",
+      "displayName": "PAB-1 Legs",
+      "variantCount": 13,
+      "variants": [
+        "Default",
+        "Black",
+        "Blue",
+        "Desert",
+        "Green",
+        "Grey",
+        "Orange",
+        "Purple",
+        "Red",
+        "Tan",
+        "Twilight",
+        "White",
+        "Yellow"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:light-legs:pab-1-legs-dark",
+      "displayName": "PAB-1 Legs Dark",
+      "variantCount": 2,
+      "variants": [
+        "Green",
+        "Red"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:engineer-arms:truedef-pro-arms-black-silver",
+      "displayName": "TrueDef-Pro Arms Black/Silver",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:engineer-torso:truedef-pro-core-base",
+      "displayName": "TrueDef-Pro Core Base",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    },
+    {
+      "familyKey": "fps_armor:engineer-legs:truedef-pro-legs-black-silver",
+      "displayName": "TrueDef-Pro Legs Black/Silver",
+      "variantCount": 2,
+      "variants": [
+        "Default",
+        "Default"
+      ]
+    }
+  ],
+  "lowConfidenceExamples": [],
+  "lowConfidenceCount": 0,
+  "rawOrNullExamples": [],
+  "rawOrNullCount": 0
+}

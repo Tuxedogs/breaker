@@ -24,12 +24,13 @@ export async function getMiningRecommendations(
 /** Builds the formal request object that the backend script will eventually consume. */
 export function buildRecommendationRequest(
   intentPayload: MiningPlannerIntentPayload,
-  fixture: BuildQueueRecommendationFixture | null
+  fixture: BuildQueueRecommendationFixture | null,
+  queuedRequirements?: MiningRecommendationRequest["requiredMaterials"],
 ): MiningRecommendationRequest {
   return {
     version: "1.0",
     generatedAt: new Date().toISOString(),
-    requiredMaterials: (fixture?.requiredMaterials ?? []).map((m) => ({
+    requiredMaterials: queuedRequirements ?? (fixture?.requiredMaterials ?? []).map((m) => ({
       materialId: m.materialId,
       materialName: m.materialName,
       requiredQuantity: m.requiredQuantity,

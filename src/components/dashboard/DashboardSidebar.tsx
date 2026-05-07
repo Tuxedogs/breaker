@@ -1,4 +1,17 @@
+import { useState, useEffect, useCallback } from "react";
+import type { ComponentType, SVGProps } from "react";
+import { createPortal } from "react-dom";
 import { NavLink, useLocation } from "react-router-dom";
+import HomeDashboardIcon from "@/assets/sidebar-icons/01-home-dashboard.svg?react";
+import CraftingIcon from "@/assets/sidebar-icons/02-crafting.svg?react";
+import BuildQueueIcon from "@/assets/sidebar-icons/03-build-queue.svg?react";
+import MiningIcon from "@/assets/sidebar-icons/04-mining.svg?react";
+import MaterialSourcesIcon from "@/assets/sidebar-icons/05-material-sources.svg?react";
+import InventoryIcon from "@/assets/sidebar-icons/07-inventory.svg?react";
+import InventoryLocationsIcon from "@/assets/sidebar-icons/08-inventory-locations.svg?react";
+import TransfersIcon from "@/assets/sidebar-icons/09-transfers.svg?react";
+import ArmorThresholdIcon from "@/assets/sidebar-icons/10-armor-threshold.svg?react";
+import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.svg?react";
 
 // ── Inline icon primitives ─────────────────────────────────────────
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -18,6 +31,63 @@ function Icon({ d, size = 15 }: { d: string; size?: number }) {
       <path d={d} />
     </svg>
   );
+}
+
+function SidebarSvgIcon({
+  component: SvgIcon,
+  size = 15,
+}: {
+  component: ComponentType<SVGProps<SVGSVGElement>>;
+  size?: number;
+}) {
+  return (
+    <SvgIcon
+      aria-hidden
+      width={size}
+      height={size}
+      className="dash-sidebar-icon"
+    />
+  );
+}
+
+// ── Portal tooltip ─────────────────────────────────────────────────
+interface TooltipState {
+  label: string;
+  top: number;
+  left: number;
+}
+
+function SidebarTooltip({ tip }: { tip: TooltipState | null }) {
+  if (!tip) return null;
+  return createPortal(
+    <div
+      className="dash-sidebar-tooltip"
+      style={{ top: tip.top, left: tip.left }}
+      role="tooltip"
+      aria-hidden
+    >
+      {tip.label}
+    </div>,
+    document.body
+  );
+}
+
+// ── Hook: tooltip anchor handlers ──────────────────────────────────
+function useNavTooltip(collapsed: boolean) {
+  const [tip, setTip] = useState<TooltipState | null>(null);
+
+  const show = useCallback(
+    (e: React.MouseEvent<HTMLElement>, label: string) => {
+      if (!collapsed) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      setTip({ label, top: r.top + r.height / 2, left: r.right + 10 });
+    },
+    [collapsed]
+  );
+
+  const hide = useCallback(() => setTip(null), []);
+
+  return { tip, show, hide };
 }
 
 // Icon path dictionary
@@ -46,41 +116,57 @@ const ICONS: Record<string, string> = {
   database: "M12 2C7.58 2 4 3.79 4 6v12c0 2.21 3.58 4 8 4s8-1.79 8-4V6c0-2.21-3.58-4-8-4zm8 12c0 1.66-3.58 3-8 3s-8-1.34-8-3m16-5c0 1.66-3.58 3-8 3S4 11.66 4 10",
   sun: "M12 2v2m0 16v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M2 12h2m16 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 6a6 6 0 100 12A6 6 0 0012 6z",
   chevrons: "M11 17l-5-5 5-5M18 17l-5-5 5-5",
+  chevronsRight: "M13 17l5-5-5-5M6 17l5-5-5-5",
+  user: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z",
+  settings: "M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
 };
+
+const SIDEBAR_SVG_ICONS = {
+  homeDashboard: HomeDashboardIcon,
+  crafting: CraftingIcon,
+  buildQueue: BuildQueueIcon,
+  mining: MiningIcon,
+  materialSources: MaterialSourcesIcon,
+  inventory: InventoryIcon,
+  inventoryLocations: InventoryLocationsIcon,
+  transfers: TransfersIcon,
+  armorThreshold: ArmorThresholdIcon,
+  componentMapping: ComponentMappingIcon,
+} as const;
 
 // ── Section data ───────────────────────────────────────────────────
 const sections = [
   {
     label: "HOME",
     items: [
-      { label: "Home", to: "/dashboard", icon: "home", exact: true },
-      { label: "Dashboard", to: "/dashboard", icon: "grid", exact: true },
+      { label: "Home", to: "/dashboard", icon: "home", svgIcon: "homeDashboard", exact: true },
+      { label: "Dashboard", to: "/dashboard", icon: "grid", svgIcon: "homeDashboard", exact: true },
     ],
   },
-    {
+  {
     label: "INDUSTRY",
     items: [
-      { label: "Crafting", to: "/industry/crafting", icon: "hammer" },
-      { label: "Build Queue", to: "/logistics/build-queue", icon: "list" },
-      { label: "Mining", to: "/industry/mining", icon: "pickaxe" },
+      { label: "Crafting", to: "/industry/crafting", icon: "hammer", svgIcon: "crafting" },
+      { label: "Build Queue", to: "/logistics/build-queue", icon: "list", svgIcon: "buildQueue" },
+      { label: "Mining", to: "/industry/mining", icon: "pickaxe", svgIcon: "mining" },
       { label: "Refining", to: "/dashboard", icon: "flask", wip: true },
-      { label: "Material Sources", to: "/dashboard", icon: "box", wip: true },
+      { label: "Material Sources", to: "/dashboard", icon: "box", svgIcon: "materialSources", wip: true },
     ],
   },
   {
     label: "LOGISTICS",
     items: [
-      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard" },
-      { label: "Locations",   to: "/logistics/locations",   icon: "pin" },
-      { label: "Transfers",   to: "/dashboard",             icon: "arrows", wip: true },
+      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard", svgIcon: "inventory" },
+      { label: "Locations",   to: "/logistics/locations",   icon: "pin", svgIcon: "inventoryLocations" },
+      { label: "Transfers",   to: "/dashboard",             icon: "arrows", svgIcon: "transfers", wip: true },
     ],
   },
   {
     label: "COMBAT",
     items: [
       { label: "Weapons Matrix", to: "/dashboard/doctrine/weapons-matrix", icon: "crosshair" },
-      { label: "Armor Threshold", to: "/dashboard/doctrine/armor-threshold", icon: "shield" },
-      { label: "Component Mapping", to: "/combat/component-mapping", icon: "target" },
+      { label: "Armor Threshold", to: "/dashboard/doctrine/armor-threshold", icon: "shield", svgIcon: "armorThreshold" },
+      { label: "Component Mapping", to: "/combat/component-mapping", icon: "target", svgIcon: "componentMapping" },
       { label: "Doctrine Library", to: "/dashboard/doctrine/library", icon: "book", exact: true },
     ],
   },
@@ -93,20 +179,38 @@ const sections = [
       { label: "Ship Compare", to: "/dashboard", icon: "scale", wip: true },
     ],
   },
-
   {
     label: "DATA",
     items: [
       { label: "Patch Changes", to: "/dashboard", icon: "zap", wip: true },
       { label: "Meta Trends", to: "/dashboard", icon: "trending", wip: true },
-
     ],
   },
 ] as const;
 
+const STORAGE_KEY = "scintel-sidebar-collapsed";
+
 // ── Component ──────────────────────────────────────────────────────
 export default function DashboardSidebar() {
   const location = useLocation();
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored !== null ? stored === "true" : true;
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, String(collapsed));
+    } catch {
+      // ignore
+    }
+  }, [collapsed]);
+
+  const { tip, show, hide } = useNavTooltip(collapsed);
 
   function isActive(to: string, exact = false) {
     return exact
@@ -115,63 +219,114 @@ export default function DashboardSidebar() {
   }
 
   return (
-    <aside className="dash-sidebar" aria-label="Main navigation">
-      {/* Logo */}
-      <div className="dash-sidebar-logo">
-        <div className="dash-sidebar-logo-icon" aria-hidden>
-          <svg viewBox="0 0 20 20" width="14" height="14" fill="none">
-            <polygon points="10,2 18,7 18,13 10,18 2,13 2,7" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" fill="none" />
-            <circle cx="10" cy="10" r="2.5" fill="rgba(255,255,255,0.85)" />
-          </svg>
-        </div>
-        <div className="dash-sidebar-logo-text">
-          <span className="dash-sidebar-logo-name">SCINTEL</span>
-          <span className="dash-sidebar-logo-tagline">KNOW. PLAN. BUILD.</span>
-        </div>
-      </div>
-
-      {/* Nav sections */}
-      <nav className="dash-sidebar-nav">
-        {sections.map((section) => (
-          <div key={section.label} className="dash-sidebar-section">
-            <span className="dash-sidebar-section-label">{section.label}</span>
-            {section.items.map((item) => {
-              const active = item.label === "Home"
-                ? location.pathname === "/dashboard"
-                : isActive(item.to, "exact" in item ? item.exact : false);
-
-              return (
-                <NavLink
-                  key={item.label + item.to}
-                  to={item.to}
-                  className={[
-                    "dash-sidebar-item",
-                    active ? "active" : "",
-                    "wip" in item && item.wip ? "wip" : "",
-                  ].filter(Boolean).join(" ")}
-                  aria-current={active ? "page" : undefined}
-                >
-                  <Icon d={ICONS[item.icon] ?? ICONS.grid} />
-                  {item.label}
-                </NavLink>
-              );
-            })}
+    <>
+      <aside
+        className={["dash-sidebar", collapsed ? "dash-sidebar--collapsed" : ""].filter(Boolean).join(" ")}
+        aria-label="Main navigation"
+      >
+        {/* Logo */}
+        <div className="dash-sidebar-logo">
+          <div className="dash-sidebar-logo-icon" aria-hidden>
+            <svg viewBox="0 0 20 20" width="14" height="14" fill="none">
+              <polygon points="10,2 18,7 18,13 10,18 2,13 2,7" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" fill="none" />
+              <circle cx="10" cy="10" r="2.5" fill="rgba(255,255,255,0.85)" />
+            </svg>
           </div>
-        ))}
-      </nav>
+          {!collapsed && (
+            <div className="dash-sidebar-logo-text">
+              <span className="dash-sidebar-logo-name">SCINTEL</span>
+              <span className="dash-sidebar-logo-tagline">KNOW. PLAN. BUILD.</span>
+            </div>
+          )}
+        </div>
 
-      {/* PRO upsell */}
+        {/* Nav sections */}
+        <nav className="dash-sidebar-nav">
+          {sections.map((section) => (
+            <div key={section.label} className="dash-sidebar-section">
+              {!collapsed && (
+                <span className="dash-sidebar-section-label">{section.label}</span>
+              )}
+              {collapsed && <div className="dash-sidebar-section-divider" aria-hidden />}
+              {section.items.map((item) => {
+                const active = item.label === "Home"
+                  ? location.pathname === "/dashboard"
+                  : isActive(item.to, "exact" in item ? item.exact : false);
 
-      {/* Footer */}
-      <div className="dash-sidebar-footer">
-        <span className="dash-sidebar-version">SCINTEL Alpha 1.0</span>
-        <button type="button" className="dash-sidebar-footer-btn" aria-label="Toggle theme">
-          <Icon d={ICONS.sun} size={13} />
-        </button>
-        <button type="button" className="dash-sidebar-footer-btn" aria-label="Collapse sidebar">
-          <Icon d={ICONS.chevrons} size={13} />
-        </button>
-      </div>
-    </aside>
+                return (
+                  <NavLink
+                    key={item.label + item.to}
+                    to={item.to}
+                    aria-label={collapsed ? item.label : undefined}
+                    onMouseEnter={(e) => show(e, item.label)}
+                    onMouseLeave={hide}
+                    className={[
+                      "dash-sidebar-item",
+                      active ? "active" : "",
+                      "wip" in item && item.wip ? "wip" : "",
+                      collapsed ? "dash-sidebar-item--icon" : "",
+                    ].filter(Boolean).join(" ")}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {"svgIcon" in item && item.svgIcon ? (
+                      <SidebarSvgIcon component={SIDEBAR_SVG_ICONS[item.svgIcon]} />
+                    ) : (
+                      <Icon d={ICONS[item.icon] ?? ICONS.grid} />
+                    )}
+                    {!collapsed && item.label}
+                  </NavLink>
+                );
+              })}
+            </div>
+          ))}
+        </nav>
+
+        {/* Footer */}
+        <div className="dash-sidebar-footer">
+          {/* User button */}
+          <button
+            type="button"
+            className={["dash-sidebar-user-btn", collapsed ? "dash-sidebar-user-btn--icon" : ""].filter(Boolean).join(" ")}
+            aria-label="User menu"
+            onMouseEnter={(e) => show(e, "User menu")}
+            onMouseLeave={hide}
+          >
+            <div className="dash-user-avatar" aria-hidden />
+            {!collapsed && (
+              <div className="dash-user-info">
+                <span className="dash-user-name">Pilot</span>
+                <span className="dash-user-level">ALPHA</span>
+              </div>
+            )}
+          </button>
+
+          {/* Bottom controls */}
+          <div className="dash-sidebar-footer-controls">
+            {!collapsed && (
+              <span className="dash-sidebar-version">SCINTEL α1.0</span>
+            )}
+            <button
+              type="button"
+              className="dash-sidebar-footer-btn"
+              aria-label="Toggle theme"
+              title="Toggle theme"
+            >
+              <Icon d={ICONS.sun} size={13} />
+            </button>
+            <button
+              type="button"
+              className="dash-sidebar-footer-btn"
+              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              onClick={() => setCollapsed((c) => !c)}
+            >
+              <Icon d={collapsed ? ICONS.chevronsRight : ICONS.chevrons} size={13} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <SidebarTooltip tip={tip} />
+    </>
   );
 }

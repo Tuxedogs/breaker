@@ -118,7 +118,7 @@ export default function LogisticsPage() {
               {shortages.map((s) => {
                 const mat = materialTemplates.find((m) => m.id === s.materialId);
                 const unit = getInventoryUnitLabel(mat);
-                const fmt = (n: number) => unit === 'count' ? `${n}×` : `${n.toFixed(2)} ${unit}`;
+                const fmt = (n: number) => unit === 'unit' ? `${n}` : `${n.toFixed(2)} ${unit}`;
                 return (
                   <tr key={s.materialId}>
                     <td>{mat?.name ?? s.materialId}</td>

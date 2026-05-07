@@ -101,26 +101,17 @@ export const mockSystemStatus = {
   database: "Operational",
 } as const;
 
-export type QuickAccessItem = {
-  label: string;
-  icon: string;
-  to: string;
+
+export type MiningRecommendationRow = {
+  id: string;
+  material: string;
+  location: string;
+  reason: string;
 };
 
-export const quickAccessItems: QuickAccessItem[] = [
-  { label: "Inventory Overview", icon: "inventory", to: "/dashboard" },
-  { label: "TS-2 Materials", icon: "materials", to: "/dashboard" },
-  { label: "Mining Routes", icon: "mining", to: "/dashboard" },
-  { label: "Perseus Loadout", icon: "ship", to: "/maps" },
-  { label: "Build Queue", icon: "build", to: "/dashboard" },
-  { label: "Favorite Ships", icon: "star", to: "/dashboard" },
-];
-
-export const popularToolItems: QuickAccessItem[] = [
-  { label: "Weapons Matrix", icon: "weapons", to: "/tools/alpha-threshold" },
-  { label: "Armor Threshold", icon: "armor", to: "/tools/alpha-threshold" },
-  { label: "Ship Compare", icon: "compare", to: "/dashboard" },
-  { label: "Mining Planner", icon: "mining", to: "/dashboard" },
-  { label: "Refinery Calculator", icon: "refinery", to: "/dashboard" },
-  { label: "Price Tracker", icon: "price", to: "/dashboard" },
+export const miningRecommendations: MiningRecommendationRow[] = [
+  { id: "1", material: "Aphorite", location: "Stanton3a (Ita)", reason: "Primary route" },
+  { id: "2", material: "Dolivine", location: "Stanton3a (Ita)", reason: "Good yield" },
+  { id: "3", material: "Janalite", location: "Stanton3a (Ita)", reason: "High demand" },
+  { id: "4", material: "Hadanite", location: "Stanton4 (microTech)", reason: "Queue shortage" },
 ];

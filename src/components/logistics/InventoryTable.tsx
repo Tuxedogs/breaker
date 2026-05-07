@@ -1,6 +1,12 @@
 import { useMemo } from 'react';
 import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
-import { formatQuantity, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
+import {
+  formatEntryQuantity,
+  materialTypeClass,
+  rarityClass,
+  resolveInventoryItemKind,
+  resolveInventoryItemName,
+} from '../../lib/logistics/inventory';
 
 export type SortKey = 'quality' | 'quantity' | 'material' | 'location';
 
@@ -17,6 +23,9 @@ interface Props {
 
 const TYPE_LABELS: Record<string, string> = {
   ore: 'Ore', refined: 'Refined', raw: 'Raw', special: 'Special',
+  material: 'Material', raw_mineable: 'Raw Mineable', ice: 'Ice', fps_weapon: 'FPS Weapon',
+  fps_armor: 'FPS Armor', vehicle_component: 'Vehicle Component', crafted_item: 'Crafted Item',
+  manual: 'Manual', unknown: 'Unknown',
 };
 
 function formatDate(iso: string): string {
@@ -49,8 +58,9 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
     const best = new Map<string, { id: string; quality: number }>();
     for (const entry of entries) {
       const q = entry.quality ?? -1;
-      const current = best.get(entry.materialId);
-      if (!current || q > current.quality) best.set(entry.materialId, { id: entry.id, quality: q });
+      const key = entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id;
+      const current = best.get(key);
+      if (!current || q > current.quality) best.set(key, { id: entry.id, quality: q });
     }
     return new Set(Array.from(best.values()).map((v) => v.id));
   }, [entries]);
@@ -71,7 +81,7 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
       <table className="logi-table">
         <thead>
           <tr>
-            <SortTh label="Material" sortK="material" active={sortKey === 'material'} dir={sortDir} onSort={onSort} />
+            <SortTh label="Item" sortK="material" active={sortKey === 'material'} dir={sortDir} onSort={onSort} />
             <th>Type</th>
             <SortTh label="Quality" sortK="quality" active={sortKey === 'quality'} dir={sortDir} onSort={onSort} />
             <SortTh label="Qty" sortK="quantity" active={sortKey === 'quantity'} dir={sortDir} onSort={onSort} />
@@ -83,11 +93,11 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
         </thead>
         <tbody>
           {entries.map((entry) => {
-            const material = materials.find((m) => m.id === entry.materialId);
+            const material = entry.materialId ? materials.find((m) => m.id === entry.materialId) : undefined;
             const location = locations.find((l) => l.id === entry.locationId);
-            const materialName = material?.name ?? entry.materialId;
+            const materialName = resolveInventoryItemName(entry, material);
             const isBest = bestIds.has(entry.id);
-            const typeKey = material?.materialType ?? entry.materialType;
+            const typeKey = material?.materialType ?? entry.materialType ?? resolveInventoryItemKind(entry, material);
             return (
               <tr key={entry.id} className={isBest ? 'logi-row--best' : undefined}>
                 <td>
@@ -106,8 +116,8 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
                     {TYPE_LABELS[typeKey] ?? typeKey}
                   </span>
                 </td>
-                <td><span className={`logi-quality-pill ${rarityClass(entry.rarity)}`}>{entry.quality ?? 0}</span></td>
-                <td className={`logi-qty-cell ${materialTypeClass(material, entry.materialType)}`}>{formatQuantity(entry.quantity, material)}</td>
+                <td><span className={`logi-quality-pill ${rarityClass(entry.quality === undefined ? undefined : entry.rarity)}`}>{entry.quality ?? '—'}</span></td>
+                <td className={`logi-qty-cell ${materialTypeClass(material, entry.materialType)}`}>{formatEntryQuantity(entry, material)}</td>
                 <td>{location?.name ?? <span className="logi-muted-cell">—</span>}</td>
                 <td className="logi-muted-cell">{entry.container ?? '—'}</td>
                 <td className="logi-muted-cell">{formatDate(entry.updatedAt)}</td>

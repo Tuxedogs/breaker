@@ -5,6 +5,7 @@ import type { InventoryEntry } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
+import { resolveInventoryItemName } from '../../lib/logistics/inventory';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 
@@ -39,13 +40,14 @@ export default function InventoryPage() {
       if (locationFilter && e.locationId !== locationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
-        const mat = materials.find((m) => m.id === e.materialId);
+        const mat = e.materialId ? materials.find((m) => m.id === e.materialId) : undefined;
         const loc = locations.find((l) => l.id === e.locationId);
         const q = search.toLowerCase();
         const hit =
-          (mat?.name.toLowerCase().includes(q) ?? false) ||
+          resolveInventoryItemName(e, mat).toLowerCase().includes(q) ||
           (loc?.name.toLowerCase().includes(q) ?? false) ||
-          (e.container?.toLowerCase().includes(q) ?? false);
+          (e.container?.toLowerCase().includes(q) ?? false) ||
+          (e.notes?.toLowerCase().includes(q) ?? false);
         if (!hit) return false;
       }
       return true;
@@ -61,8 +63,8 @@ export default function InventoryPage() {
           cmp = a.quantity - b.quantity;
           break;
         case 'material': {
-          const ma = materials.find((m) => m.id === a.materialId)?.name ?? a.materialId;
-          const mb = materials.find((m) => m.id === b.materialId)?.name ?? b.materialId;
+          const ma = resolveInventoryItemName(a, a.materialId ? materials.find((m) => m.id === a.materialId) : undefined);
+          const mb = resolveInventoryItemName(b, b.materialId ? materials.find((m) => m.id === b.materialId) : undefined);
           cmp = ma.localeCompare(mb);
           break;
         }
@@ -105,7 +107,7 @@ export default function InventoryPage() {
             <span className="logi-breadcrumb-active">Inventory</span>
           </div>
           <h1 className="logi-page-title">Inventory</h1>
-          <p className="logi-page-subtitle">All recorded material stacks across locations.</p>
+          <p className="logi-page-subtitle">All recorded inventory across locations.</p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
           <ScreenshotImportButton source="inventory" />
@@ -142,9 +144,9 @@ export default function InventoryPage() {
           className="logi-select"
           value={materialFilter}
           onChange={(e) => setMaterialFilter(e.target.value)}
-          aria-label="Filter by material"
+          aria-label="Filter by item"
         >
-          <option value="">All Materials</option>
+          <option value="">All Items</option>
           {materials.map((m) => (
             <option key={m.id} value={m.id}>{m.name}</option>
           ))}
@@ -181,7 +183,7 @@ export default function InventoryPage() {
         <span className="logi-filter-count">{filtered.length} of {entries.length}</span>
       </div>
 
-      <div className={`logi-inv-layout${panel ? ' logi-inv-layout--panel-open' : ''}`}>
+      <div className="logi-inv-layout">
         <div className="logi-inv-table-col">
           <InventoryTable
             entries={filtered}
@@ -194,18 +196,23 @@ export default function InventoryPage() {
             onDelete={handleDelete}
           />
         </div>
-        <div className="logi-inv-panel-col">
-          {panel && (
-            <InventoryEntryPanel
-              key={panel.mode === 'edit' ? panel.entry.id : 'new'}
-              entry={editingEntry}
-              materials={materials}
-              locations={locations}
-              onSave={handleSave}
-              onCancel={() => setPanel(null)}
-            />
-          )}
-        </div>
+      </div>
+
+      {/* Slide-over drawer */}
+      {panel && (
+        <div className="logi-drawer-overlay" onClick={() => setPanel(null)} aria-hidden />
+      )}
+      <div className={`logi-drawer${panel ? ' logi-drawer--open' : ''}`} role="dialog" aria-modal aria-label={panel?.mode === 'edit' ? 'Edit Stack' : 'Add Stack'}>
+        {panel && (
+          <InventoryEntryPanel
+            key={panel.mode === 'edit' ? panel.entry.id : 'new'}
+            entry={editingEntry}
+            materials={materials}
+            locations={locations}
+            onSave={handleSave}
+            onCancel={() => setPanel(null)}
+          />
+        )}
       </div>
     </div>
   );
