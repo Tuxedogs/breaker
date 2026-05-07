@@ -39,27 +39,6 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
   };
 
   try {
-    const scores = JSON.parse(await readFile(apiPaths.materialSourceScores, "utf8")) as {
-      materials?: Array<{ materialId?: string; materialName?: string }>;
-    };
-    for (const material of scores.materials ?? []) {
-      if (!material.materialName && !material.materialId) continue;
-      const resolved = {
-        materialId: material.materialId ?? material.materialName ?? "",
-        materialName: material.materialName ?? material.materialId ?? "",
-      };
-      add(resolved.materialId, resolved);
-      add(resolved.materialName, resolved);
-    }
-  } catch (error) {
-    addWarning(warnings, {
-      code: "api_material_index_unreadable",
-      message: `Unable to load material source scores for material resolution: ${error instanceof Error ? error.message : String(error)}`,
-      path: "public/api/recommendations/material_source_scores.json",
-    });
-  }
-
-  try {
     const enriched = JSON.parse(await readFile(apiPaths.materialSourcesQualityEnriched, "utf8")) as Array<{
       materialId?: string;
       materialName?: string;
@@ -81,6 +60,27 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
       code: "api_material_index_unreadable",
       message: `Unable to load enriched mining sources for material resolution: ${error instanceof Error ? error.message : String(error)}`,
       path: "public/api/mining/material_sources_quality_enriched.json",
+    });
+  }
+
+  try {
+    const scores = JSON.parse(await readFile(apiPaths.materialSourceScores, "utf8")) as {
+      materials?: Array<{ materialId?: string; materialName?: string }>;
+    };
+    for (const material of scores.materials ?? []) {
+      if (!material.materialName && !material.materialId) continue;
+      const resolved = {
+        materialId: material.materialId ?? material.materialName ?? "",
+        materialName: material.materialName ?? material.materialId ?? "",
+      };
+      add(resolved.materialId, resolved);
+      add(resolved.materialName, resolved);
+    }
+  } catch (error) {
+    addWarning(warnings, {
+      code: "api_material_index_unreadable",
+      message: `Unable to load material source scores for material resolution: ${error instanceof Error ? error.message : String(error)}`,
+      path: "public/api/recommendations/material_source_scores.json",
     });
   }
 
