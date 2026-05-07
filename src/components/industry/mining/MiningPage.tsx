@@ -1,19 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import CraftTabBar from "../crafting/CraftTabBar";
 import {
+  buildRecommendationRequest,
   getMiningRecommendations,
-  projectToPublicLocations,
+  type RecommendationResponse,
 } from "../../../features/mining/recommenderAdapter";
+import { getBuildQueueRequirements } from "../../../features/buildQueue/buildQueueRequirementsApi";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 import type {
-  BuildQueueRecommendationFixture,
+  ManualMiningDemandItem,
   PublicLocationEntry,
   RequiredMaterial,
-  ManualMiningDemandItem,
 } from "../../../features/mining/types";
 import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
-import { getBuildQueueItemInputs, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 import { getBuildQueueShortageSummary } from "../../../lib/logistics/selectors";
 
@@ -83,7 +83,7 @@ function deriveLocationReason(
 type LoadState =
   | { status: "loading" }
   | { status: "error"; message: string }
-  | { status: "ok"; data: BuildQueueRecommendationFixture };
+  | { status: "ok"; data: RecommendationResponse };
 
 // ── Location strip panel ──────────────────────────────────────────────────────
 
@@ -536,98 +536,49 @@ export default function MiningModule() {
   const [selectedMiningTypes, setSelectedMiningTypes] = useState<Set<string>>(new Set());
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
+  const [requirementState, setRequirementState] = useState<
+    | { status: "loading" }
+    | { status: "error"; message: string }
+    | { status: "ok"; data: RequiredMaterial[] }
+  >({ status: "loading" });
 
   useEffect(() => {
-    getMiningRecommendations()
+    setRequirementState({ status: "loading" });
+    getBuildQueueRequirements({ buildQueue, recipeInputTemplates: recipeInputsByRecipeId, inventoryEntries })
+      .then((data) => {
+        setRequirementState({
+          status: "ok",
+          data: data.requirements.map((requirement) => {
+            const material = materials.find((entry) => entry.id === requirement.materialId);
+            return {
+              ...requirement,
+              estimatedRawOreNeeded: isRefinableMaterial(material) ? Math.ceil(requirement.requiredQuantity * 2.5) : undefined,
+            };
+          }),
+        });
+      })
+      .catch((err) => setRequirementState({ status: "error", message: String(err) }));
+  }, [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId]);
+
+  const miningRequiredMaterials = requirementState.status === "ok" ? requirementState.data : [];
+
+  useEffect(() => {
+    const request = buildRecommendationRequest({
+      priorityStack: planner.priorityStack,
+      manualDemand: planner.manualDemand,
+      favoriteLocationIds: planner.favorites.map((favorite) => favorite.key),
+      filters: planner.filters,
+    }, null, miningRequiredMaterials);
+    setState({ status: "loading" });
+    getMiningRecommendations(request)
       .then((data) => setState({ status: "ok", data }))
       .catch((err) => setState({ status: "error", message: String(err) }));
-  }, []);
+  }, [miningRequiredMaterials, planner.favorites, planner.filters, planner.manualDemand, planner.priorityStack]);
 
   const locations = useMemo(
-    () => state.status === "ok" ? projectToPublicLocations(state.data) : [],
-    [state]
+    () => state.status === "ok" ? state.data.recommendations : [],
+    [state],
   );
-
-  const liveRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
-    const map = new Map<string, RequiredMaterial>();
-    const availableByMaterial = new Map<string, number>();
-    const reservedByMaterial = new Map<string, number>();
-
-    for (const entry of inventoryEntries) {
-      if (!entry.materialId) continue;
-      availableByMaterial.set(entry.materialId, (availableByMaterial.get(entry.materialId) ?? 0) + entry.quantity);
-    }
-
-    for (const item of buildQueue) {
-      if (item.status === "complete") continue;
-      for (const allocation of item.reservedAllocations ?? []) {
-        reservedByMaterial.set(
-          allocation.materialId,
-          (reservedByMaterial.get(allocation.materialId) ?? 0) + allocation.quantityReserved,
-        );
-      }
-    }
-
-    for (const item of buildQueue) {
-      if (item.status === "complete") continue;
-      const recipe = recipes.find((entry) => entry.id === item.recipeId);
-      for (const [inputIndex, input] of getBuildQueueItemInputs(item, recipeInputsByRecipeId).entries()) {
-        const materialKey = input.materialKey ?? input.materialId;
-        const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? "material"}`;
-        const material = materials.find((entry) => entry.id === materialKey);
-        const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
-        const originalRequired = input.quantity * item.quantity;
-        const existing = map.get(materialKey);
-        const usedBy = {
-          requirementId,
-          blueprintGuid: item.itemId ?? item.recipeId,
-          displayName: item.itemName ?? recipe?.name ?? item.recipeId,
-          componentType: recipe?.category ?? "",
-          size: "",
-          quantity: item.quantity,
-          slot: displayName,
-          materialQuantity: originalRequired,
-          selectedQuality: input.selectedQuality,
-          unitType: input.unitType ?? getInventoryUnitLabel(material),
-        };
-
-        if (existing) {
-          existing.requiredQuantity += originalRequired;
-          existing.usedBy.push(usedBy);
-          if (input.selectedQuality !== undefined) existing.selectedQuality = input.selectedQuality;
-        } else {
-          map.set(materialKey, {
-            materialId: materialKey,
-            materialName: displayName,
-            requiredQuantity: originalRequired,
-            selectedQuality: input.selectedQuality,
-            unitType: input.unitType ?? getInventoryUnitLabel(material),
-            usedBy: [usedBy],
-            slots: [displayName],
-          });
-        }
-      }
-    }
-
-    return Array.from(map.values()).map((requirement) => {
-      const reserved = reservedByMaterial.get(requirement.materialId) ?? 0;
-      const availableInventory = availableByMaterial.get(requirement.materialId) ?? 0;
-      const remaining = Math.max(0, requirement.requiredQuantity - reserved - availableInventory);
-      const material = materials.find((entry) => entry.id === requirement.materialId);
-      return {
-        ...requirement,
-        originalRequiredQuantity: requirement.requiredQuantity,
-        requiredQuantity: remaining,
-        estimatedRawOreNeeded: isRefinableMaterial(material) ? Math.ceil(remaining * 2.5) : undefined,
-      } as RequiredMaterial;
-    });
-  }, [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId, recipes]);
-
-  const miningRequiredMaterials = liveRequiredMaterials.length > 0
-    ? liveRequiredMaterials
-    : state.status === "ok"
-      ? state.data.requiredMaterials
-      : [];
 
   const buildQueueMaterials = useMemo<Set<string>>(() => {
     return new Set(miningRequiredMaterials.map((m) => m.materialId));

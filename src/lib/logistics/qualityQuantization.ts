@@ -1,6 +1,3 @@
-// src/lib/logistics/qualityQuantization.ts
-import qualityQuantizationRecords from "../../data/quality_quantization.json";
-
 export type QualityBand = {
   start: number;
   end: number;
@@ -15,7 +12,27 @@ export type QualityQuantizationRecord = {
   bands: QualityBand[];
 };
 
-const records = qualityQuantizationRecords as QualityQuantizationRecord[];
+const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
+let records: QualityQuantizationRecord[] = [];
+let loadPromise: Promise<QualityQuantizationRecord[]> | null = null;
+
+export async function loadQualityQuantizationRecords(): Promise<QualityQuantizationRecord[]> {
+  loadPromise ??= fetch(QUALITY_QUANTIZATION_URL)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Failed to load quality quantization: ${response.status}`);
+      return response.json() as Promise<QualityQuantizationRecord[]>;
+    })
+    .then((loadedRecords) => {
+      records = loadedRecords;
+      return records;
+    });
+  return loadPromise;
+}
+
+export function primeQualityQuantizationRecords(loadedRecords: QualityQuantizationRecord[]): void {
+  records = loadedRecords;
+  loadPromise = Promise.resolve(records);
+}
 
 function normalizeMaterialName(name: string): string {
   return name

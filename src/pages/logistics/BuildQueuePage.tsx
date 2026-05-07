@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
@@ -7,17 +7,18 @@ import { formatQuantity } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
+import { getBuildQueueRequirements } from '../../features/buildQueue/buildQueueRequirementsApi';
 
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
+  const [serverRequirementWarningCount, setServerRequirementWarningCount] = useState(0);
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const locations = useLogisticsStore((state) => state.locations);
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const recipes = useLogisticsStore((state) => state.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
-  const toggleBuildQueueItemPriority = useLogisticsStore((state) => state.toggleBuildQueueItemPriority);
   const updateBuildQueueItemQuantity = useLogisticsStore((state) => state.updateBuildQueueItemQuantity);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((state) => state.updateBuildQueueMaterialRequirement);
   const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
@@ -39,6 +40,20 @@ export default function BuildQueuePage() {
   }
   const categories = Object.keys(grouped);
 
+  useEffect(() => {
+    let cancelled = false;
+    getBuildQueueRequirements({ buildQueue, recipeInputTemplates: recipeInputsByRecipeId, inventoryEntries })
+      .then((response) => {
+        if (!cancelled) setServerRequirementWarningCount(response.warnings.length);
+      })
+      .catch(() => {
+        if (!cancelled) setServerRequirementWarningCount(1);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [buildQueue, inventoryEntries, recipeInputsByRecipeId]);
+
   return (
     <div className="logi-page">
       <div className="logi-page-header">
@@ -51,6 +66,7 @@ export default function BuildQueuePage() {
           <h1 className="logi-page-title">Build Queue</h1>
           <p className="logi-page-subtitle">
             {buildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
+            {serverRequirementWarningCount > 0 ? ` / ${serverRequirementWarningCount} requirement warning${serverRequirementWarningCount === 1 ? '' : 's'}` : ''}
           </p>
         </div>
         <ScreenshotImportButton source="build-queue" />
@@ -111,7 +127,6 @@ export default function BuildQueuePage() {
             materials={materials}
             locations={locations}
             strategy={sourceStrategy}
-            onPriorityToggle={toggleBuildQueueItemPriority}
             onQuantityChange={updateBuildQueueItemQuantity}
             onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
             onRemove={removeBuildQueueItem}

@@ -26,11 +26,11 @@ Current active recommender script:
 
 
 
-Current generated output:
+Current generated fixture output:
 
 
 
-`D:\\scintel\\api\\recommendations\\build\_queue\_recommendation\_fixture.json`
+`D:\\scintel\\scripts\\fixtures\\build\_queue\_recommendation\_fixture.json`
 
 
 
@@ -38,7 +38,7 @@ Frontend fixture copy:
 
 
 
-`src/data/recommendations/build\_queue\_recommendation\_fixture.json`
+Removed. The frontend now calls `POST /api/recommender/recommendations`.
 
 
 
@@ -60,7 +60,7 @@ python "D:\\scintel\\scripts\\link\\build\_queue\_recommendation\_fixture.py" `
 
 &#x20; --api-root "D:\\scintel\\api" `
 
-&#x20; --request "D:\\scintel\\api\\recommendations\\mining\_recommender\_request.json" `
+&#x20; --request "D:\\scintel\\scripts\\fixtures\\mining\_recommender\_request.json" `
 
-&#x20; --output "D:\\scintel\\api\\recommendations\\build\_queue\_recommendation\_fixture.json"
+&#x20; --output "D:\\scintel\\scripts\\fixtures\\build\_queue\_recommendation\_fixture.json"
 

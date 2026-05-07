@@ -60,7 +60,6 @@ interface Props {
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
   strategy: SourceStrategy;
-  onPriorityToggle: (id: string) => void;
   onQuantityChange: (id: string, quantity: number) => void;
   onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   onRemove: (id: string) => void;
@@ -302,7 +301,6 @@ export default function BuildQueueGroup({
   materials,
   locations,
   strategy,
-  onPriorityToggle,
   onQuantityChange,
   onMaterialRequirementChange,
   onRemove,
