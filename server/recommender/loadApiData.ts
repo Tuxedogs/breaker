@@ -21,15 +21,15 @@ export async function loadApiData(warnings: RecommenderWarning[]): Promise<Recom
   const enrichedSources = await readJson<MaterialSourceGroup[]>(apiPaths.materialSourcesQualityEnriched, warnings);
   const locationMetadata = await readJson<RecommenderApiData["locationMetadata"]>(apiPaths.locationMetadata, warnings);
 
-  const materialGroups = sourceScores?.materials?.length
-    ? sourceScores.materials
-    : enrichedSources ?? [];
+  const materialGroups = enrichedSources?.length
+    ? enrichedSources
+    : sourceScores?.materials ?? [];
 
-  if (!sourceScores?.materials?.length) {
+  if (!enrichedSources?.length) {
     addWarning(warnings, {
       code: "api_field_missing",
-      message: "recommendations/material_source_scores.json did not expose materials[]; using enriched mining sources.",
-      path: "public/api/recommendations/material_source_scores.json:materials",
+      message: "mining/material_sources_quality_enriched.json did not expose source groups; using recommendation source scores.",
+      path: "public/api/mining/material_sources_quality_enriched.json",
     });
   }
 
