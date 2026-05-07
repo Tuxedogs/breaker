@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLogisticsStore, createInventoryEntryDraft } from "../../stores/logisticsStore";
 import { formatQuantity } from "../../lib/logistics/inventory";
 import { parseRefineryScreenshot } from "../../lib/logistics/refineryOcr";
@@ -313,18 +313,9 @@ const SCREEN_MOD: Record<RefineryScreenType, string> = {
   unknown: "logi-refimport-screen-badge--unknown",
 };
 
-const RETURN_LINKS: Record<string, { label: string; to: string }> = {
-  inventory: { label: "Inventory", to: "/logistics/inventory" },
-  locations: { label: "Locations", to: "/logistics/locations" },
-  "build-queue": { label: "Build Queue", to: "/logistics/build-queue" },
-  dashboard: { label: "Dashboard", to: "/dashboard" },
-};
-
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function RefineryImportPage() {
-  const [searchParams] = useSearchParams();
-  const returnLink = RETURN_LINKS[searchParams.get("source") ?? ""] ?? null;
   const materials = useLogisticsStore((s) => s.materialTemplates);
   const refineryReviewMaterials = useMemo(() => materials.filter(isRefineryReviewMaterial), [materials]);
   const reviewMaterials = useMemo(() => withFallbackReviewMaterials(refineryReviewMaterials), [refineryReviewMaterials]);
@@ -1793,6 +1784,8 @@ function CompleteOrderTable({ rows, materials, onUpdate }: CompleteOrderTablePro
 }
 
 // ── InputTable ────────────────────────────────────────────────────────────────
+
+void CompleteOrderTable;
 
 interface InputTableProps {
   rows: InputDraftRow[];
