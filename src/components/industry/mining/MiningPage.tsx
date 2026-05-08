@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent, type MouseEvent } from "react";
 import CraftTabBar from "../crafting/CraftTabBar";
 import {
   buildRecommendationRequest,
@@ -102,7 +102,7 @@ function LocationPanel({
   starred: boolean;
   selected: boolean;
   onSelect: () => void;
-  onToggleStar: (e: React.MouseEvent) => void;
+  onToggleStar: (e: MouseEvent<HTMLButtonElement>) => void;
 }) {
   const coveredBQ = useMemo(
     () => entry.materials.filter((m) => buildQueueMaterialDisplayNames.has(m)),
@@ -121,11 +121,20 @@ function LocationPanel({
   const chips = primaryCovered.slice(0, chipLimit);
   const extraCount = primaryCovered.length - chipLimit;
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onSelect();
+    }
+  };
+
   return (
-    <button
+    <div
       className={`mloc-panel${selected ? " mloc-panel--selected" : ""}${starred ? " mloc-panel--starred" : ""}`}
       onClick={onSelect}
-      type="button"
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
     >
       <div className="mloc-panel-topbar">
         <span className="mloc-panel-system">{entry.systemName}</span>
@@ -157,15 +166,15 @@ function LocationPanel({
       )}
 
       <div className="mloc-panel-chips">
-        {chips.map((m) => (
-          <span key={m} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
+        {chips.map((m, index) => (
+          <span key={`${entry.locationKey}:panel:${m}:${index}`} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
         ))}
         {extraCount > 0 && <span className="mloc-mat-chip">+{extraCount}</span>}
         {chips.length === 0 && (
           <span className="mloc-empty-chips">No queue materials</span>
         )}
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -224,8 +233,8 @@ function LocationDetail({
         {entry.nearbyStations.length > 0 && (
           <div className="mloc-detail-stations">
             <span className="mloc-stations-label">Nearby</span>
-            {entry.nearbyStations.map((s) => (
-              <span key={s} className="mloc-station-chip">{s}</span>
+            {entry.nearbyStations.map((s, index) => (
+              <span key={`${entry.locationKey}:nearby:${s}:${index}`} className="mloc-station-chip">{s}</span>
             ))}
           </div>
         )}
@@ -240,13 +249,13 @@ function LocationDetail({
           </div>
           {coveredRequirements.length > 0 ? (
             <div className="mloc-detail-mat-list">
-              {coveredRequirements.map((mat) => (
-                <div key={mat.materialId} className="mloc-detail-mat-row mloc-detail-mat-row--covered">
+              {coveredRequirements.map((mat, index) => (
+                <div key={`${entry.locationKey}:covered:${mat.materialId}:${mat.selectedQuality ?? "any"}:${mat.unitType ?? "unit"}:${index}`} className="mloc-detail-mat-row mloc-detail-mat-row--covered">
                   <span className="mloc-detail-mat-name">{mat.materialName}</span>
                   <span className="mloc-detail-mat-qty">{formatMiningQuantity(mat.requiredQuantity, mat.unitType)}</span>
                   <div className="mloc-detail-mat-usedby">
-                    {mat.usedBy.slice(0, 2).map((ub) => (
-                      <span key={ub.blueprintGuid + ub.slot} className="mbq-used-chip">{ub.displayName}</span>
+                    {mat.usedBy.slice(0, 2).map((ub, usedByIndex) => (
+                      <span key={`${entry.locationKey}:covered:${mat.materialId}:${ub.requirementId ?? ub.blueprintGuid}:${ub.slot}:${ub.selectedQuality ?? "any"}:${ub.unitType ?? "unit"}:${usedByIndex}`} className="mbq-used-chip">{ub.displayName}</span>
                     ))}
                     {mat.usedBy.length > 2 && (
                       <span className="mbq-used-chip">+{mat.usedBy.length - 2}</span>
@@ -257,8 +266,8 @@ function LocationDetail({
             </div>
           ) : coveredBQ.length > 0 ? (
             <div className="mloc-panel-chips">
-              {coveredBQ.map((m) => (
-                <span key={m} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
+              {coveredBQ.map((m, index) => (
+                <span key={`${entry.locationKey}:covered-chip:${m}:${index}`} className="mloc-mat-chip mloc-mat-chip--bq">{m}</span>
               ))}
             </div>
           ) : (
@@ -272,13 +281,13 @@ function LocationDetail({
           </div>
           {missingRequirements.length > 0 ? (
             <div className="mloc-detail-mat-list">
-              {missingRequirements.map((mat) => (
-                <div key={mat.materialId} className="mloc-detail-mat-row mloc-detail-mat-row--missing">
+              {missingRequirements.map((mat, index) => (
+                <div key={`${entry.locationKey}:missing:${mat.materialId}:${mat.selectedQuality ?? "any"}:${mat.unitType ?? "unit"}:${index}`} className="mloc-detail-mat-row mloc-detail-mat-row--missing">
                   <span className="mloc-detail-mat-name">{mat.materialName}</span>
                   <span className="mloc-detail-mat-qty">{formatMiningQuantity(mat.requiredQuantity, mat.unitType)}</span>
                   <div className="mloc-detail-mat-usedby">
-                    {mat.usedBy.slice(0, 2).map((ub) => (
-                      <span key={ub.blueprintGuid + ub.slot} className="mbq-used-chip mbq-used-chip--missing">{ub.displayName}</span>
+                    {mat.usedBy.slice(0, 2).map((ub, usedByIndex) => (
+                      <span key={`${entry.locationKey}:missing:${mat.materialId}:${ub.requirementId ?? ub.blueprintGuid}:${ub.slot}:${ub.selectedQuality ?? "any"}:${ub.unitType ?? "unit"}:${usedByIndex}`} className="mbq-used-chip mbq-used-chip--missing">{ub.displayName}</span>
                     ))}
                     {mat.usedBy.length > 2 && (
                       <span className="mbq-used-chip mbq-used-chip--missing">+{mat.usedBy.length - 2}</span>
@@ -289,8 +298,8 @@ function LocationDetail({
             </div>
           ) : missingBQ.length > 0 ? (
             <div className="mloc-panel-chips">
-              {missingBQ.map((m) => (
-                <span key={m} className="mloc-mat-chip">{m}</span>
+              {missingBQ.map((m, index) => (
+                <span key={`${entry.locationKey}:missing-chip:${m}:${index}`} className="mloc-mat-chip">{m}</span>
               ))}
             </div>
           ) : (
@@ -304,8 +313,8 @@ function LocationDetail({
         <div className="mloc-detail-all-mats">
           <span className="mloc-detail-all-label">All materials at this location</span>
           <div className="mloc-panel-chips">
-            {entry.materials.map((m) => (
-              <span key={m} className="mloc-mat-chip">{m}</span>
+            {entry.materials.map((m, index) => (
+              <span key={`${entry.locationKey}:all:${m}:${index}`} className="mloc-mat-chip">{m}</span>
             ))}
           </div>
         </div>
@@ -376,7 +385,7 @@ function ManualDemandCompact({
       <div className="msb-demand-form">
         <input className="mine-input" list={materialListId} placeholder="Search materials" value={name} onChange={(e) => setName(e.target.value)} />
         <datalist id={materialListId}>
-          {materials.map((material) => <option key={material} value={material} />)}
+          {materials.map((material, index) => <option key={`manual-material:${material}:${index}`} value={material} />)}
         </datalist>
         <input className="mine-input mine-input--short mine-input--no-spinner" placeholder="Quality" type="number" min="0" max="100" step="any" value={quality} onChange={(e) => setQuality(e.target.value)} />
         <input className="mine-input mine-input--short" placeholder="Ore" value={ore} onChange={(e) => setOre(e.target.value)} />
@@ -453,8 +462,8 @@ function MaterialDemandRow({
           <div className="mdem-expanded-row">
             <span className="mdem-exp-label">Used by</span>
             <div className="mdem-chip-group">
-              {usedByItems.map((n) => (
-                <span key={n} className="mbq-used-chip">{n}</span>
+              {usedByItems.map((n, index) => (
+                <span key={`used-by:${n}:${index}`} className="mbq-used-chip">{n}</span>
               ))}
             </div>
           </div>
@@ -462,8 +471,8 @@ function MaterialDemandRow({
             <div className="mdem-expanded-row">
               <span className="mdem-exp-label">Found at</span>
               <div className="mdem-chip-group">
-                {sourceLocationNames.map((loc) => (
-                  <span key={loc} className="mbq-location-chip">{loc}</span>
+                {sourceLocationNames.map((loc, index) => (
+                  <span key={`source-location:${loc}:${index}`} className="mbq-location-chip">{loc}</span>
                 ))}
               </div>
             </div>
@@ -502,9 +511,9 @@ function ResourceDemandPanel({
         </span>
       </div>
       <div className="mres-list">
-        {requiredMaterials.map((mat) => (
+        {requiredMaterials.map((mat, index) => (
           <MaterialDemandRow
-            key={mat.materialId}
+            key={`demand:${mat.materialId}:${mat.selectedQuality ?? "any"}:${mat.unitType ?? "unit"}:${index}`}
             materialName={mat.materialName}
             totalQty={mat.requiredQuantity}
             unitType={mat.unitType}
@@ -772,7 +781,7 @@ export default function MiningModule() {
                     const isActive = selectedMaterials.has(m);
                     return (
                       <button
-                        key={m}
+                        key={`resource-filter:${materialKeyByDisplayName.get(m) ?? m}:${m}`}
                         className={`msb-chip${isActive ? " msb-chip--active" : ""}${isBQ && !isActive ? " msb-chip--bq" : ""}`}
                         onClick={() => toggleMaterial(m)}
                       >
@@ -793,7 +802,7 @@ export default function MiningModule() {
                 <div className="msb-chip-rail">
                   {[...selectedMaterials].map((m) => (
                     <button
-                      key={m}
+                      key={`selected-resource:${materialKeyByDisplayName.get(m) ?? m}:${m}`}
                       className="msb-chip msb-chip--selected"
                       onClick={() => toggleMaterial(m)}
                     >

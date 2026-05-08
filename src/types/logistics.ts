@@ -125,6 +125,10 @@ export interface ReservedMaterialAllocation {
   materialId: string;
   inventoryEntryId: string;
   quantityReserved: number;
+  requirementId?: string;
+  selectedQuality?: number;
+  allowLowerQualityOverride?: boolean;
+  unitType?: RecipeInputTemplate["unitType"];
   materialName?: string;
   quality?: number;
   rarity: RarityInfo;
@@ -138,6 +142,7 @@ export interface BuildQueueItem {
   itemId?: string;
   itemName?: string;
   quantity: number;
+  allowLowerQuality?: boolean;
   priority?: number;
   priorityActive?: boolean;
   status?: "queued" | "active" | "paused" | "complete";

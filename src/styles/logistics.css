@@ -715,6 +715,28 @@
 .logi-badge--ship       { background: rgba(74,222,128,0.08); color: rgba(74,222,128,0.7);  border: 1px solid rgba(74,222,128,0.15); }
 .logi-badge--shortage   { background: rgba(248,113,113,0.1); color: #f87171;               border: 1px solid rgba(248,113,113,0.2); }
 
+.quantity {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25em;
+}
+
+.quantity-value {
+  font: inherit;
+  color: inherit;
+}
+
+.quantity-sign {
+  color: inherit;
+}
+
+.quantity-unit {
+  font-size: 0.72em;
+  opacity: 0.65;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 /* ── Location cards ───────────────────────────── */
 
 .logi-location-grid {
@@ -987,7 +1009,7 @@
   flex-direction: column;
   gap: 0.45rem;
   border-radius: 6px;
-  height: 100%;
+  align-self: start;
   box-sizing: border-box;
   min-height: 0;
 }
@@ -1037,7 +1059,6 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: auto;
   padding-top: 0.25rem;
 }
 
@@ -1062,6 +1083,69 @@
 .logi-bq-summary-edit-actions > button {
   flex: 1;
   justify-content: center;
+}
+
+.logi-bq-lower-quality-toggle {
+  display: inline-grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.32rem;
+  width: fit-content;
+  max-width: 100%;
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(160, 180, 220, 0.58);
+  cursor: pointer;
+}
+
+.logi-bq-lower-quality-toggle.is-enabled {
+  color: rgba(245, 190, 115, 0.78);
+}
+
+.logi-bq-lower-quality-toggle input {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  border: 1px solid rgba(160, 180, 220, 0.34);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(245, 200, 135, 0.92);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+
+.logi-bq-lower-quality-toggle input::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  transform: scale(0);
+  transition: transform 0.1s ease;
+  clip-path: polygon(14% 44%, 0 58%, 38% 96%, 100% 22%, 86% 8%, 36% 68%);
+  background: currentColor;
+}
+
+.logi-bq-lower-quality-toggle:hover input {
+  border-color: rgba(205, 215, 232, 0.52);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.logi-bq-lower-quality-toggle input:checked {
+  border-color: rgba(245, 158, 11, 0.48);
+  background: rgba(245, 158, 11, 0.18);
+}
+
+.logi-bq-lower-quality-toggle input:checked::before {
+  transform: scale(1);
+}
+
+.logi-bq-lower-quality-toggle input:focus-visible {
+  outline: 2px solid rgba(205, 215, 232, 0.42);
+  outline-offset: 2px;
 }
 
 /* Material card in quality-edit mode: let the craft-matq-card fill it */
@@ -1213,6 +1297,8 @@
 .logi-source-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  align-items: start;
+  grid-auto-rows: auto;
   gap: 0.65rem;
 }
 
@@ -1225,12 +1311,25 @@
   flex-direction: column;
   gap: 0.36rem;
   position: relative;
-  min-height: 0;
+  align-self: start;
+  min-height: 240px;
   overflow: hidden;
 }
 
 .logi-source-card--missing {
-  border-color: rgba(200, 60, 60, 0.25);
+  border-color: rgba(248, 113, 113, 0.34);
+}
+
+.logi-source-card--needed {
+  border-color: rgba(80, 120, 180, 0.18);
+}
+
+.logi-source-card--partial {
+  border-color: rgba(218, 186, 10, 0.41);
+}
+
+.logi-source-card--covered {
+  border-color: rgba(74, 222, 128, 0.28);
 }
 
 /* Material name + coverage badge */
@@ -1434,7 +1533,132 @@
 .logi-source-option input {
   width: 16px;
   height: 16px;
-  accent-color: #4a7ec7;
+  appearance: none;
+  display: grid;
+  place-content: center;
+  margin: 0;
+  border: 1px solid rgba(160, 180, 220, 0.34);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(205, 215, 232, 0.86);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.12s, opacity 0.12s;
+}
+
+.logi-source-option input::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  transform: scale(0);
+  transition: transform 0.1s ease;
+  clip-path: polygon(14% 44%, 0 58%, 38% 96%, 100% 22%, 86% 8%, 36% 68%);
+  background: currentColor;
+}
+
+.logi-source-option:hover input:not(:disabled) {
+  border-color: rgba(205, 215, 232, 0.52);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.logi-source-option input:checked {
+  border-color: rgba(190, 205, 225, 0.5);
+  background: rgba(148, 163, 184, 0.24);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.045);
+}
+
+.logi-source-option input:checked::before {
+  transform: scale(1);
+}
+
+.logi-source-option input:focus-visible {
+  outline: 2px solid rgba(205, 215, 232, 0.42);
+  outline-offset: 2px;
+}
+
+.logi-source-option input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.logi-source-option--disabled {
+  opacity: 0.52;
+}
+
+.logi-source-option--disabled input {
+  border-color: rgba(160, 180, 220, 0.18);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.logi-lower-quality-section {
+  margin-top: 0.25rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(245, 158, 11, 0.14);
+}
+
+.logi-lower-quality-toggle {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: transparent;
+  color: rgba(180, 190, 210, 0.62);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logi-lower-quality-toggle:hover {
+  color: rgba(215, 222, 235, 0.8);
+}
+
+.logi-lower-quality-chevron {
+  width: 1rem;
+  color: rgba(245, 180, 85, 0.66);
+}
+
+.logi-lower-quality-count {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(160, 180, 220, 0.34);
+  white-space: nowrap;
+}
+
+.logi-source-option--lower {
+  grid-template-columns: 18px minmax(6rem, 1fr) minmax(5.5rem, auto) minmax(5.5rem, auto);
+  padding-left: 1.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+.logi-source-option--lower:first-of-type {
+  margin-top: 0.15rem;
+}
+
+.logi-source-quality-rarity {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.logi-source-option--override-selected {
+  background: rgba(245, 158, 11, 0.055);
+}
+
+.logi-source-option--override-selected input:checked {
+  border-color: rgba(245, 158, 11, 0.52);
+  background: rgba(245, 158, 11, 0.2);
+  color: rgba(255, 225, 175, 0.98);
+}
+
+.logi-source-override-note {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.56rem;
+  color: rgba(245, 180, 85, 0.72);
+  white-space: nowrap;
 }
 
 .logi-source-empty {
@@ -1572,6 +1796,77 @@
   font-weight: 500;
   color: rgba(199, 210, 230, 0.8);
 }
+
+.logi-shortage-parent-row {
+  cursor: pointer;
+  outline: none;
+}
+
+.logi-shortage-parent-row:hover td,
+.logi-shortage-parent-row:focus-visible td {
+  background: rgba(255, 255, 255, 0.024);
+}
+
+.logi-shortage-parent-row:focus-visible td:first-child {
+  box-shadow: inset 2px 0 0 rgba(167, 139, 250, 0.42);
+}
+
+.logi-shortage-parent-material {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.logi-shortage-toggle {
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(160, 180, 220, 0.54);
+  cursor: pointer;
+}
+
+.logi-shortage-toggle:hover {
+  color: rgba(199, 210, 230, 0.82);
+}
+
+.logi-shortage-caret {
+  width: 0;
+  height: 0;
+  border-top: 0.24rem solid transparent;
+  border-bottom: 0.24rem solid transparent;
+  border-left: 0.32rem solid currentColor;
+  transition: transform 0.12s ease;
+}
+
+.logi-shortage-parent-row[aria-expanded="true"] .logi-shortage-caret {
+  transform: rotate(90deg);
+}
+
+.logi-shortage-child-row td {
+  color: rgba(160, 174, 200, 0.62);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.12);
+  padding-top: 0.34rem;
+  padding-bottom: 0.34rem;
+  border-bottom-color: rgba(255, 255, 255, 0.025);
+}
+
+.logi-shortage-child-row td:first-child {
+  position: relative;
+  padding-left: 2.6rem;
+  color: var(--logi-rarity-accent, rgba(115, 186, 255, 0.82))
+}
+
+
 
 .logi-shortage-table tr:last-child td { border-bottom: none; }
 

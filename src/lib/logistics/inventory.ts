@@ -73,8 +73,17 @@ export function formatQuantity(quantity: number, material: MaterialTemplate | un
 }
 
 export function formatInventoryQuantity(quantity: number, unitType: InventoryUnitType | undefined): string {
-  if (unitType === 'scu') return `${quantity} SCU`;
-  return `x${quantity}`;
+  const sign = quantity < 0 ? '-' : '';
+  const absoluteQuantity = Math.abs(quantity);
+  const roundedQuantity = unitType === 'scu'
+    ? Math.round(absoluteQuantity * 100) / 100
+    : absoluteQuantity;
+  const displayQuantity = Number.isInteger(roundedQuantity)
+    ? String(roundedQuantity)
+    : roundedQuantity.toFixed(2).replace(/\.?0+$/, '');
+
+  if (unitType === 'scu') return `${sign}${displayQuantity} SCU`;
+  return `${sign}x${displayQuantity}`;
 }
 
 export function formatEntryQuantity(entry: InventoryEntry, material?: MaterialTemplate): string {
