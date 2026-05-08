@@ -87,6 +87,13 @@ export interface BuildQueueMaterialNeedSummary {
   stillNeeded: number;
 }
 
+export interface BuildQueueRequirementIdentity {
+  requirementId?: string;
+  selectedQuality?: number;
+  unitType?: RecipeInputTemplate["unitType"];
+  allowLowerQuality?: boolean;
+}
+
 function compareQualityDesc(a: InventoryEntry, b: InventoryEntry): number {
   return (b.quality ?? -1) - (a.quality ?? -1);
 }
@@ -103,6 +110,7 @@ export function getReservedQuantityByInventoryEntry(
   for (const item of buildQueue) {
     if (item.id === excludeBuildQueueItemId) continue;
     for (const allocation of item.reservedAllocations ?? []) {
+      if (allocation.allowLowerQualityOverride && item.allowLowerQuality !== true) continue;
       reservedByStack.set(
         allocation.inventoryEntryId,
         (reservedByStack.get(allocation.inventoryEntryId) ?? 0) + allocation.quantityReserved,
@@ -119,6 +127,37 @@ export function getAvailableQuantityForInventoryEntry(
 ): number {
   const reservedByOthers = getReservedQuantityByInventoryEntry(buildQueue, currentBuildQueueItemId);
   return Math.max(0, inventoryEntry.quantity - (reservedByOthers.get(inventoryEntry.id) ?? 0));
+}
+
+export function isInventoryEntryEligibleForRequirement(
+  inventoryEntry: InventoryEntry,
+  materialId: string,
+  selectedQuality?: number,
+  allowLowerQuality = false,
+): boolean {
+  if (inventoryEntry.materialId !== materialId) return false;
+  if (inventoryEntry.quantity <= 0) return false;
+  if (allowLowerQuality) return true;
+  if (selectedQuality === undefined) return true;
+  return inventoryEntry.quality !== undefined && inventoryEntry.quality >= selectedQuality;
+}
+
+export function allocationMatchesRequirement(
+  allocation: ReservedMaterialAllocation,
+  materialId: string,
+  identity?: BuildQueueRequirementIdentity,
+): boolean {
+  if (allocation.materialId !== materialId) return false;
+  if (allocation.allowLowerQualityOverride && !identity?.allowLowerQuality) return false;
+  if (!identity) return true;
+  if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
+  if (
+    identity.selectedQuality !== undefined &&
+    allocation.selectedQuality !== identity.selectedQuality &&
+    !(identity.allowLowerQuality && allocation.allowLowerQualityOverride)
+  ) return false;
+  if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
+  return true;
 }
 
 export function validateReservedAllocations(
@@ -148,9 +187,10 @@ export function getMaterialReservationCoverage(
   materialId: string,
   requiredQuantity: number,
   inventoryEntries: InventoryEntry[],
+  identity?: BuildQueueRequirementIdentity,
 ): MaterialReservationCoverage {
   const allocations = (buildQueueItem.reservedAllocations ?? []).filter(
-    (allocation) => allocation.materialId === materialId,
+    (allocation) => allocationMatchesRequirement(allocation, materialId, identity),
   );
   const validations = validateReservedAllocations(allocations, inventoryEntries);
   const reservedQuantity = allocations.reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
@@ -180,20 +220,24 @@ export function getBuildQueueMaterialNeedSummary(
   requiredQuantity: number,
   inventoryEntries: InventoryEntry[],
   buildQueue: BuildQueueItem[],
+  identity?: BuildQueueRequirementIdentity,
 ): BuildQueueMaterialNeedSummary {
   const ownedQuantity = inventoryEntries
-    .filter((entry) => entry.materialId === materialId)
+    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId, identity?.selectedQuality, identity?.allowLowerQuality))
     .reduce((sum, entry) => sum + entry.quantity, 0);
   const reservedByThisQueueItem = (buildQueueItem.reservedAllocations ?? [])
-    .filter((allocation) => allocation.materialId === materialId)
+    .filter((allocation) => allocationMatchesRequirement(allocation, materialId, identity))
     .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
   const reservedByOtherQueueItems = buildQueue
     .filter((item) => item.id !== buildQueueItem.id)
-    .flatMap((item) => item.reservedAllocations ?? [])
-    .filter((allocation) => allocation.materialId === materialId)
-    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+    .flatMap((item) => (item.reservedAllocations ?? []).map((allocation) => ({ allocation, item })))
+    .filter(({ allocation, item }) =>
+      allocation.materialId === materialId &&
+      (!allocation.allowLowerQualityOverride || item.allowLowerQuality === true)
+    )
+    .reduce((sum, { allocation }) => sum + allocation.quantityReserved, 0);
   const availableQuantity = inventoryEntries
-    .filter((entry) => entry.materialId === materialId)
+    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId, identity?.selectedQuality, identity?.allowLowerQuality))
     .reduce((sum, entry) => sum + getAvailableQuantityForInventoryEntry(entry, buildQueue, buildQueueItem.id), 0);
 
   return {

@@ -4,31 +4,15 @@ import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import { formatQuantity, formatRequirementQuantity, getBuildQueueItemInputs, getInventoryStacks, getRecipeForQueueItem, materialTypeClass, rarityClass, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
 import {
   getAvailableQuantityForInventoryEntry,
+  allocationMatchesRequirement,
   getBuildQueueMaterialNeedSummary,
   getMaterialReservationCoverage,
+  isInventoryEntryEligibleForRequirement,
 } from '../../lib/logistics/selectors';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality } from '../industry/crafting/utils/qualityBands';
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { getDirectionLabel, getModifierImpact } from '../../lib/gameplay/propertyUtils';
-
-function AllocationQtyInput({ value, max, onCommit }: { value: number; max: number; onCommit: (val: number) => void }) {
-  return (
-    <input
-      type="number"
-      className="logi-source-qty"
-      aria-label="Reserved quantity"
-      min={0}
-      max={max}
-      step="0.01"
-      value={value}
-      onClick={(e) => e.stopPropagation()}
-      onChange={(e) => {
-        const nextValue = e.target.value === '' ? 0 : Number(e.target.value);
-        onCommit(Number.isFinite(nextValue) ? nextValue : value);
-      }}
-    />
-  );
-}
+import QuantityText from './QuantityText';
 
 function QtyStepBtn({ children, onClick, disabled }: { children: React.ReactNode; onClick: () => void; disabled?: boolean }) {
   return (
@@ -61,11 +45,10 @@ interface Props {
   locations: InventoryLocation[];
   strategy: SourceStrategy;
   onQuantityChange: (id: string, quantity: number) => void;
+  onAllowLowerQualityChange: (id: string, allowLowerQuality: boolean) => void;
   onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   onRemove: (id: string) => void;
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
-  onUpdateAllocationQuantity: (buildQueueItemId: string, inventoryEntryId: string, quantity: number) => void;
-  onClearAllocations: (buildQueueItemId: string) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
 }
 
@@ -115,22 +98,53 @@ function sortStacks(stacks: InventoryStack[], strategy: SourceStrategy): Invento
   });
 }
 
-function createAllocation(stack: InventoryStack, materialName: string | undefined, quantityReserved: number): ReservedMaterialAllocation {
+function getAllocationId(
+  itemId: string,
+  requirementId: string,
+  materialId: string,
+  selectedQuality: number | undefined,
+  unitType: RecipeInputTemplate['unitType'] | undefined,
+  stack: InventoryStack,
+): string {
+  return [
+    itemId,
+    requirementId,
+    materialId,
+    selectedQuality ?? 'any',
+    unitType ?? 'unit',
+    stack.id,
+  ].join(':');
+}
+
+function createAllocation(
+  itemId: string,
+  requirementId: string,
+  selectedQuality: number | undefined,
+  unitType: RecipeInputTemplate['unitType'] | undefined,
+  stack: InventoryStack,
+  materialName: string | undefined,
+  quantityReserved: number,
+  allowLowerQualityOverride = false,
+): ReservedMaterialAllocation {
   if (!stack.materialId) throw new Error('Cannot allocate inventory stack without a materialId');
   return {
-    id: `${stack.id}-${stack.materialId}`,
+    id: getAllocationId(itemId, requirementId, stack.materialId, selectedQuality, unitType, stack),
     materialId: stack.materialId,
+    requirementId,
     inventoryEntryId: stack.id,
     quantityReserved,
     materialName,
+    selectedQuality,
     quality: stack.quality,
     rarity: stack.rarity,
     locationId: stack.locationId,
     container: stack.container,
+    unitType,
+    allowLowerQualityOverride,
   };
 }
 
-function qualityToRarity(quality: number, isQuantanium?: boolean): string {
+export function qualityToRarity(quality: number, isQuantanium?: boolean): string {
   if (isQuantanium) return 'quantanium';
   if (quality >= 900) return 'legendary';
   if (quality >= 800) return 'epic';
@@ -302,17 +316,17 @@ export default function BuildQueueGroup({
   locations,
   strategy,
   onQuantityChange,
+  onAllowLowerQualityChange,
   onMaterialRequirementChange,
   onRemove,
   onToggleAllocation,
-  onUpdateAllocationQuantity,
-  onClearAllocations,
   onClearStaleAllocations,
 }: Props) {
   // editingItemId: which queue item has quality editing open
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   // draft band indices: itemId:requirementId -> bandIndex
   const [draftBandIndices, setDraftBandIndices] = useState<Record<string, number>>({});
+  const [expandedLowerQuality, setExpandedLowerQuality] = useState<Record<string, boolean>>({});
 
   function openEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
     // Initialise draft indices from current selected qualities
@@ -404,6 +418,16 @@ export default function BuildQueueGroup({
                 <span className="logi-mat-amount-label">Materials</span>
                 <span className="logi-bq-summary-total-val">{coveredCount}/{inputs.length}</span>
               </div>
+              {inputs.length > 0 && (
+                <label className="logi-bq-lower-quality-toggle">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(item.allowLowerQuality)}
+                    onChange={(event) => onAllowLowerQualityChange(item.id, event.target.checked)}
+                  />
+                  <span>Allow lower quality</span>
+                </label>
+              )}
 
               <div className="logi-bq-summary-controls">
                 <div className="logi-bq-qty-control">
@@ -439,12 +463,9 @@ export default function BuildQueueGroup({
                 )
               )}
 
+              
+
               <div className="logi-bq-summary-actions">
-                {(item.reservedAllocations?.length ?? 0) > 0 && (
-                  <button type="button" className="logi-btn-ghost" onClick={() => onClearAllocations(item.id)}>
-                    Clear
-                  </button>
-                )}
                 <button
                   type="button"
                   className="logi-action-btn logi-action-btn--delete"
@@ -464,6 +485,7 @@ export default function BuildQueueGroup({
                 {inputs.map((input, inputIndex) => {
                   const materialKey = input.materialKey ?? input.materialId;
                   const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
+                  const requirementCardKey = `${item.id}:${requirementId}:${materialKey}:${input.selectedQuality ?? 'any'}:${input.unitType ?? 'unit'}:${inputIndex}`;
                   const material = materials.find((m) => m.id === materialKey);
                   const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
                   const required = input.quantity * item.quantity;
@@ -475,6 +497,7 @@ export default function BuildQueueGroup({
                     ? (draftBandIndices[requirementId] ?? savedBandIndex)
                     : savedBandIndex;
                   const selectedQuality = getBandEffectiveQuality(qualityBands, draftBandIndex);
+                  const requirementSelectedQuality = input.selectedQuality;
                   const selectedQualityRarity = qualityToRarity(selectedQuality, material?.isQuantanium);
 
                   const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
@@ -484,27 +507,51 @@ export default function BuildQueueGroup({
                       ? `${formatProperty(input.modifierName)} ${formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })}`
                       : undefined;
 
-                  const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory);
-                  const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue);
-                  const ownAllocations = item.reservedAllocations?.filter((a) => a.materialId === materialKey) ?? [];
+                  const allowLowerQuality = Boolean(item.allowLowerQuality);
+                  const requirementIdentity = {
+                    requirementId,
+                    selectedQuality: requirementSelectedQuality,
+                    unitType: input.unitType,
+                  };
+                  const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
+                  const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, effectiveRequirementIdentity);
+                  const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, effectiveRequirementIdentity);
+                  const ownAllocations = item.reservedAllocations?.filter((a) => allocationMatchesRequirement(a, materialKey, effectiveRequirementIdentity)) ?? [];
                   const ownReservedByStack = new Map(ownAllocations.map((a) => [a.inventoryEntryId, a.quantityReserved]));
                   const remainingRequired = Math.max(0, required - coverage.reservedQuantity);
-                  const stacks = sortStacks(
+                  const allMaterialStacks = sortStacks(
                     getInventoryStacks(
                       inventory.filter((e) => e.materialId === materialKey && e.quantity > 0),
                       materials,
                       locations,
                     ),
                     strategy,
-                  ).filter((stack) => getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id));
+                  );
+                  const eligibleStacks = allMaterialStacks.filter((stack) =>
+                    isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality) &&
+                    (getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id))
+                  );
+                  const ineligibleStacks = allMaterialStacks.filter((stack) =>
+                    !isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality)
+                  );
                   const staleAllocations = coverage.validations.filter((v) => v.isStale);
                   const coverageClass =
                     coverage.coverageState === 'covered' ? 'logi-badge--complete'
                     : coverage.coverageState === 'missing' ? 'logi-badge--shortage'
                     : 'logi-badge--paused';
+                  const sourceCardStateClass =
+                    coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved'
+                      ? 'logi-source-card--covered'
+                      : coverage.coverageState === 'partial'
+                        ? 'logi-source-card--partial'
+                        : coverage.coverageState === 'missing'
+                          ? 'logi-source-card--missing'
+                          : 'logi-source-card--needed';
+
+                  const lowerQualityExpanded = expandedLowerQuality[requirementCardKey] ?? false;
 
                   return (
-                    <div key={requirementId} className={`logi-source-card${coverage.coverageState === 'missing' ? ' logi-source-card--missing' : ''}${isEditingThisItem ? ' logi-source-card--quality-edit' : ''}`}>
+                    <div key={requirementCardKey} className={`logi-source-card ${sourceCardStateClass}${isEditingThisItem ? ' logi-source-card--quality-edit' : ''}`}>
 
                       {isEditingThisItem ? (
                         /* Flip to quality slider when this item is being edited */
@@ -578,12 +625,15 @@ export default function BuildQueueGroup({
                           {/* Reserve stacks */}
                           <div className="logi-reserve-section">
                             <span className="logi-reserve-label">Reserve from inventory</span>
-                            {stacks.length > 0 ? (
-                              stacks.map((stack) => {
+                            {eligibleStacks.length > 0 ? (
+                              eligibleStacks.map((stack) => {
+                                const allocationId = getAllocationId(item.id, requirementId, materialKey, requirementSelectedQuality, input.unitType, stack);
                                 const reservedQuantity = ownReservedByStack.get(stack.id) ?? 0;
+                                const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
+                                  .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.id !== allocationId)
+                                  .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
                                 const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
-                                const availableAfterThisReservation = Math.max(0, availableQuantity - reservedQuantity);
-                                const maxReservedQuantity = availableAfterThisReservation + reservedQuantity;
+                                const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
                                 const checked = reservedQuantity > 0;
                                 const nextQuantity = Math.min(remainingRequired, availableAfterThisReservation);
                                 const disabled = !checked && nextQuantity <= 0;
@@ -596,33 +646,72 @@ export default function BuildQueueGroup({
                                       onChange={() => {
                                         const quantityReserved = checked ? reservedQuantity : nextQuantity;
                                         if (quantityReserved <= 0) return;
-                                        onToggleAllocation(item.id, createAllocation(stack, material?.name, quantityReserved));
+                                        onToggleAllocation(item.id, createAllocation(item.id, requirementId, requirementSelectedQuality, input.unitType, stack, material?.name, quantityReserved));
                                       }}
                                     />
                                     <span className="logi-source-loc">{stack.location?.name ?? stack.locationId}</span>
                                     <span className="logi-source-container">{stack.container ?? '—'}</span>
                                     <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
                                     <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
-                                    {checked ? (
-                                      <span className="logi-source-qty-cell">
-                                        Reserved
-                                        <AllocationQtyInput
-                                          value={reservedQuantity}
-                                          max={maxReservedQuantity}
-                                          onCommit={(val) => onUpdateAllocationQuantity(item.id, stack.id, val)}
-                                        />
-                                      </span>
-                                    ) : (
-                                      <span className={materialTypeClass(material)}>
-                                        {formatQuantity(reservedQuantity, material)} / {formatQuantity(stack.quantity, material)}
-                                      </span>
-                                    )}
+                                    <span className={materialTypeClass(material)}>
+                                      <QuantityText value={formatQuantity(reservedQuantity, material)} /> / <QuantityText value={formatQuantity(stack.quantity, material)} />
+                                    </span>
                                     <span className={materialTypeClass(material)}>{formatQuantity(availableAfterThisReservation, material)} avail</span>
                                   </label>
                                 );
                               })
                             ) : (
                               <div className="logi-source-empty">No stored stack available</div>
+                            )}
+                            {ineligibleStacks.length > 0 && (
+                              <div className="logi-lower-quality-section">
+                                <button
+                                  type="button"
+                                  className="logi-lower-quality-toggle"
+                                  aria-expanded={lowerQualityExpanded}
+                                  onClick={() => setExpandedLowerQuality((prev) => ({ ...prev, [requirementCardKey]: !lowerQualityExpanded }))}
+                                >
+                                  <span className="logi-lower-quality-chevron" aria-hidden="true">{lowerQualityExpanded ? '▾' : '▸'}</span>
+                                  <span>Lower quality / ineligible</span>
+                                  <span className="logi-lower-quality-count">
+                                    {ineligibleStacks.length} {ineligibleStacks.length === 1 ? 'stack' : 'stacks'}
+                                  </span>
+                                </button>
+                                {lowerQualityExpanded && ineligibleStacks.map((stack) => {
+                                  const allocationId = getAllocationId(item.id, requirementId, materialKey, requirementSelectedQuality, input.unitType, stack);
+                                  const reservedQuantity = ownReservedByStack.get(stack.id) ?? 0;
+                                  const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
+                                    .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.id !== allocationId)
+                                    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+                                  const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
+                                  const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
+                                  const checked = reservedQuantity > 0;
+                                  const nextQuantity = Math.min(remainingRequired, availableAfterThisReservation);
+                                  const disabled = !allowLowerQuality || (!checked && nextQuantity <= 0);
+                                  return (
+                                    <label key={`ineligible:${stack.id}`} className={`logi-source-option logi-source-option--lower${disabled ? ' logi-source-option--disabled' : ''}${checked ? ' logi-source-option--override-selected' : ''}`}>
+                                      <input
+                                        type="checkbox"
+                                        checked={checked}
+                                        disabled={disabled}
+                                        onChange={() => {
+                                          const quantityReserved = checked ? reservedQuantity : nextQuantity;
+                                          if (quantityReserved <= 0) return;
+                                          onToggleAllocation(item.id, createAllocation(item.id, requirementId, requirementSelectedQuality, input.unitType, stack, material?.name, quantityReserved, true));
+                                        }}
+                                      />
+                                      <span className="logi-source-loc">{stack.location?.name ?? stack.locationId}</span>
+                                      <span className="logi-source-quality-rarity">
+                                        {stack.quality !== undefined && <span className={rarityClass(stack.rarity)}>{stack.quality}</span>}
+                                        <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
+                                      </span>
+                                      <span className={materialTypeClass(material)}>
+                                        <QuantityText value={formatQuantity(reservedQuantity, material)} /> / <QuantityText value={formatQuantity(stack.quantity, material)} />
+                                      </span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
                             )}
                           </div>
                         </>

@@ -1,18 +1,39 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
+import { qualityToRarity } from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
 import { formatQuantity } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
+import type { Shortage } from '../../lib/logistics/shortages';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 import { getBuildQueueRequirements } from '../../features/buildQueue/buildQueueRequirementsApi';
+import QuantityText from '../../components/logistics/QuantityText';
 
+
+type ShortageGroup = {
+  materialId: string;
+  have: number;
+  needed: number;
+  shortfall: number;
+  rows: Shortage[];
+};
+
+function formatCompactShortageQuantity(quantity: number): string {
+  const roundedQuantity = Math.round(Math.abs(quantity) * 100) / 100;
+  const displayQuantity = Number.isInteger(roundedQuantity)
+    ? String(roundedQuantity)
+    : roundedQuantity.toFixed(2).replace(/\.?0+$/, '');
+
+  return `${quantity < 0 ? '-' : ''}${displayQuantity}`;
+}
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
   const [serverRequirementWarningCount, setServerRequirementWarningCount] = useState(0);
+  const [expandedShortageGroups, setExpandedShortageGroups] = useState<Set<string>>(new Set());
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const locations = useLogisticsStore((state) => state.locations);
@@ -20,14 +41,31 @@ export default function BuildQueuePage() {
   const recipes = useLogisticsStore((state) => state.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
   const updateBuildQueueItemQuantity = useLogisticsStore((state) => state.updateBuildQueueItemQuantity);
+  const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((state) => state.updateBuildQueueItemAllowLowerQuality);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((state) => state.updateBuildQueueMaterialRequirement);
   const removeBuildQueueItem = useLogisticsStore((state) => state.removeBuildQueueItem);
   const toggleBuildQueueAllocation = useLogisticsStore((state) => state.toggleBuildQueueAllocation);
-  const updateBuildQueueAllocationQuantity = useLogisticsStore((state) => state.updateBuildQueueAllocationQuantity);
-  const clearBuildQueueItemAllocations = useLogisticsStore((state) => state.clearBuildQueueItemAllocations);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((state) => state.clearStaleBuildQueueItemAllocations);
   const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipes, recipeInputsByRecipeId);
   const shortages = shortageSummary.shortages;
+  const groupedShortages = shortages.reduce<ShortageGroup[]>((groups, shortage) => {
+    let group = groups.find((entry) => entry.materialId === shortage.materialId);
+    if (!group) {
+      group = {
+        materialId: shortage.materialId,
+        have: 0,
+        needed: 0,
+        shortfall: 0,
+        rows: [],
+      };
+      groups.push(group);
+    }
+    group.have += shortage.have;
+    group.needed += shortage.needed;
+    group.shortfall += shortage.shortfall;
+    group.rows.push(shortage);
+    return groups;
+  }, []);
   const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
     const recipe = recipes.find((entry) => entry.id === item.recipeId);
     const category = recipe?.category ?? 'other';
@@ -39,6 +77,18 @@ export default function BuildQueuePage() {
     items?.sort((a, b) => Number(b.priorityActive ?? false) - Number(a.priorityActive ?? false) || (a.priority ?? 0) - (b.priority ?? 0));
   }
   const categories = Object.keys(grouped);
+
+  function toggleShortageGroup(groupKey: string) {
+    setExpandedShortageGroups((current) => {
+      const next = new Set(current);
+      if (next.has(groupKey)) {
+        next.delete(groupKey);
+      } else {
+        next.add(groupKey);
+      }
+      return next;
+    });
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -77,7 +127,7 @@ export default function BuildQueuePage() {
       <div className="logi-shortage-section">
         <div className="logi-shortage-header">
           <span className="logi-shortage-title">Material Shortages</span>
-          {shortages.length > 0 && <span className="logi-shortage-alert-count">{shortages.length} materials</span>}
+          {groupedShortages.length > 0 && <span className="logi-shortage-alert-count">{groupedShortages.length} materials</span>}
         </div>
         {shortages.length === 0 ? (
           <div className="logi-shortage-no-items">
@@ -97,15 +147,63 @@ export default function BuildQueuePage() {
               </tr>
             </thead>
             <tbody>
-              {shortages.map((shortage) => {
-                const material = materials.find((item) => item.id === shortage.materialId);
+              {groupedShortages.map((group) => {
+                const material = materials.find((item) => item.id === group.materialId);
+                const groupKey = group.materialId;
+                const isExpanded = expandedShortageGroups.has(groupKey);
                 return (
-                  <tr key={shortage.materialId}>
-                    <td>{material?.name ?? shortage.materialId}</td>
-                    <td>{formatQuantity(shortage.have, material)}</td>
-                    <td>{formatQuantity(shortage.needed, material)}</td>
-                    <td><span className="logi-badge logi-badge--shortage">-{formatQuantity(shortage.shortfall, material)}</span></td>
-                  </tr>
+                  <Fragment key={`shortage-group:${groupKey}`}>
+                    <tr
+                      className="logi-shortage-parent-row"
+                      role="button"
+                      tabIndex={0}
+                      aria-expanded={isExpanded}
+                      onClick={() => toggleShortageGroup(groupKey)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault();
+                          toggleShortageGroup(groupKey);
+                        }
+                      }}
+                    >
+                      <td>
+                        <span className="logi-shortage-parent-material">
+                          <button
+                            type="button"
+                            className="logi-shortage-toggle"
+                            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${material?.name ?? group.materialId}`}
+                            aria-expanded={isExpanded}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              toggleShortageGroup(groupKey);
+                            }}
+                          >
+                            <span className="logi-shortage-caret" aria-hidden="true" />
+                          </button>
+                          <span>{material?.name ?? group.materialId}</span>
+                        </span>
+                      </td>
+                      <td><QuantityText value={formatQuantity(group.have, material)} /></td>
+                      <td><QuantityText value={formatQuantity(group.needed, material)} /></td>
+                      <td><span className="logi-badge logi-badge--shortage"><QuantityText value={formatQuantity(-group.shortfall, material)} /></span></td>
+                    </tr>
+                    {isExpanded && group.rows.map((shortage, index) => {
+                      const rarityClassName = shortage.selectedQuality === undefined
+                        ? ''
+                        : ` logi-rarity--${qualityToRarity(shortage.selectedQuality, material?.isQuantanium)}`;
+                      return (
+                        <tr
+                          key={`shortage:${shortage.materialKey}:${shortage.selectedQuality ?? 'any'}:${shortage.unitType ?? 'unit'}:${index}`}
+                          className={`logi-shortage-child-row${rarityClassName}`}
+                        >
+                          <td>{shortage.selectedQuality ?? 'Any'}</td>
+                          <td>{formatCompactShortageQuantity(shortage.have)}</td>
+                          <td>{formatCompactShortageQuantity(shortage.needed)}</td>
+                          <td>{formatCompactShortageQuantity(-shortage.shortfall)}</td>
+                        </tr>
+                      );
+                    })}
+                  </Fragment>
                 );
               })}
             </tbody>
@@ -128,11 +226,10 @@ export default function BuildQueuePage() {
             locations={locations}
             strategy={sourceStrategy}
             onQuantityChange={updateBuildQueueItemQuantity}
+            onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
             onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
             onRemove={removeBuildQueueItem}
             onToggleAllocation={toggleBuildQueueAllocation}
-            onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
-            onClearAllocations={clearBuildQueueItemAllocations}
             onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
           />
         ))}

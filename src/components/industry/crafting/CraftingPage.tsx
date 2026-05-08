@@ -68,7 +68,7 @@ export default function CraftingModule() {
       });
       if (!resolved) return [];
       const material = resolved.material;
-      const qualitySnapshot = selectedQualities[getMaterialQualityKey(recipe, mat)];
+      const qualitySnapshot = selectedQualities[getMaterialQualityKey(recipe, mat, rowIndex)];
       const selectedQuality = clampQuality(qualitySnapshot?.quality ?? 500);
       const modifier = getModifiersAtQuality(mat.qualityModifiers ?? [], selectedQuality)[0];
       const displayName = String(mat.material_name ?? resolved.displayName);

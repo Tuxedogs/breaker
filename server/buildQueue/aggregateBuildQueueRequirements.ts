@@ -8,14 +8,20 @@ import type {
 } from "./buildQueue.types";
 
 function contextKey(input: {
+  itemId: string;
+  requirementId: string;
   materialId: string;
   selectedQuality?: number;
+  slot?: string;
   modifierName?: string;
   modifierType?: string;
   modifierValue?: number;
   unitType?: string;
 }) {
   return [
+    input.itemId,
+    input.requirementId,
+    input.slot ?? "",
     input.materialId,
     input.selectedQuality ?? "",
     input.modifierName ?? "",
@@ -25,27 +31,46 @@ function contextKey(input: {
   ].join("|");
 }
 
+function requirementAvailabilityKey(input: { materialId: string; selectedQuality?: number; allowLowerQuality?: boolean; unitType?: string }) {
+  return [
+    input.materialId,
+    input.allowLowerQuality ? "lower-ok" : input.selectedQuality ?? "any",
+    input.unitType ?? "",
+  ].join("|");
+}
+
+function inventoryEntryIsEligible(
+  entry: { materialId?: string; quantity: number; quality?: number },
+  materialId: string,
+  selectedQuality?: number,
+  allowLowerQuality = false,
+) {
+  if (entry.materialId !== materialId) return false;
+  if (entry.quantity <= 0) return false;
+  if (allowLowerQuality) return true;
+  if (selectedQuality === undefined) return true;
+  return entry.quality !== undefined && entry.quality >= selectedQuality;
+}
+
 export async function aggregateBuildQueueRequirements(
   request: BuildQueueRequirementsRequest,
   warnings: BuildQueueWarning[],
 ): Promise<NormalizedRequirement[]> {
   const resolve = await createApiMaterialResolver(warnings);
   const byRequirement = new Map<string, NormalizedRequirement>();
-  const inventoryByMaterial = new Map<string, number>();
-  const reservedByMaterial = new Map<string, number>();
-
-  for (const entry of request.inventoryEntries ?? []) {
-    if (!entry.materialId) continue;
-    inventoryByMaterial.set(entry.materialId, (inventoryByMaterial.get(entry.materialId) ?? 0) + entry.quantity);
-  }
+  const reservedByRequirement = new Map<string, number>();
 
   for (const item of request.buildQueue ?? []) {
     if (item.status === "complete") continue;
     for (const allocation of item.reservedAllocations ?? []) {
-      reservedByMaterial.set(
-        allocation.materialId,
-        (reservedByMaterial.get(allocation.materialId) ?? 0) + allocation.quantityReserved,
-      );
+      if (allocation.allowLowerQualityOverride) continue;
+      const key = requirementAvailabilityKey({
+        materialId: allocation.materialId,
+        selectedQuality: allocation.selectedQuality,
+        allowLowerQuality: false,
+        unitType: allocation.unitType,
+      });
+      reservedByRequirement.set(key, (reservedByRequirement.get(key) ?? 0) + allocation.quantityReserved);
     }
   }
 
@@ -68,19 +93,24 @@ export async function aggregateBuildQueueRequirements(
       if (!materialId || !materialName) continue;
 
       const selectedQuality = input.selectedQuality;
+      const allowLowerQuality = false;
       const unitType = input.unitType ?? resolved?.unitType;
       const originalRequired = input.quantity * item.quantity;
+      const slot = input.displayName ?? input.materialName ?? materialName;
+      const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialId}:${slot}:${input.modifierName ?? input.modifierType ?? "material"}`;
       const key = contextKey({
+        itemId: item.id,
+        requirementId,
         materialId,
         selectedQuality,
+        slot,
         modifierName: input.modifierName,
         modifierType: input.modifierType,
         modifierValue: input.modifierValue,
         unitType,
       });
-      const slot = input.displayName ?? input.materialName ?? materialName;
       const usedBy = {
-        requirementId: input.requirementId ?? `${item.id}:${inputIndex}:${materialId}:${input.modifierName ?? input.modifierType ?? "material"}`,
+        requirementId,
         blueprintGuid: item.itemId ?? item.recipeId,
         displayName: item.itemName ?? item.recipeId,
         componentType: "",
@@ -89,6 +119,7 @@ export async function aggregateBuildQueueRequirements(
         slot,
         materialQuantity: originalRequired,
         selectedQuality,
+        allowLowerQuality,
         unitType,
       };
 
@@ -117,22 +148,31 @@ export async function aggregateBuildQueueRequirements(
     }
   }
 
-  const remainingByMaterial = new Map<string, number>();
+  const remainingByRequirement = new Map<string, number>();
   for (const requirement of byRequirement.values()) {
-    if (!remainingByMaterial.has(requirement.materialId)) {
+    const allowLowerQuality = requirement.usedBy.some((usage) => usage.allowLowerQuality === true);
+    const remainingKey = requirementAvailabilityKey({ ...requirement, allowLowerQuality });
+    if (!remainingByRequirement.has(remainingKey)) {
       const totalForMaterial = Array.from(byRequirement.values())
-        .filter((entry) => entry.materialId === requirement.materialId)
+        .filter((entry) => requirementAvailabilityKey({ ...entry, allowLowerQuality: entry.usedBy.some((usage) => usage.allowLowerQuality === true) }) === remainingKey)
         .reduce((sum, entry) => sum + entry.originalRequiredQuantity, 0);
-      remainingByMaterial.set(
-        requirement.materialId,
-        Math.max(0, totalForMaterial - (reservedByMaterial.get(requirement.materialId) ?? 0) - (inventoryByMaterial.get(requirement.materialId) ?? 0)),
+      const eligibleInventory = (request.inventoryEntries ?? [])
+        .filter((entry) => inventoryEntryIsEligible(entry, requirement.materialId, requirement.selectedQuality, allowLowerQuality))
+        .reduce((sum, entry) => sum + entry.quantity, 0);
+      remainingByRequirement.set(
+        remainingKey,
+        Math.max(0, totalForMaterial - (reservedByRequirement.get(remainingKey) ?? 0) - eligibleInventory),
       );
     }
   }
 
-  for (const materialId of new Set(Array.from(byRequirement.values()).map((entry) => entry.materialId))) {
-    let remaining = remainingByMaterial.get(materialId) ?? 0;
-    for (const requirement of Array.from(byRequirement.values()).filter((entry) => entry.materialId === materialId)) {
+  for (const remainingKey of new Set(Array.from(byRequirement.values()).map((entry) =>
+    requirementAvailabilityKey({ ...entry, allowLowerQuality: entry.usedBy.some((usage) => usage.allowLowerQuality === true) }),
+  ))) {
+    let remaining = remainingByRequirement.get(remainingKey) ?? 0;
+    for (const requirement of Array.from(byRequirement.values()).filter((entry) =>
+      requirementAvailabilityKey({ ...entry, allowLowerQuality: entry.usedBy.some((usage) => usage.allowLowerQuality === true) }) === remainingKey
+    )) {
       const quantity = Math.min(requirement.originalRequiredQuantity, remaining);
       requirement.requiredQuantity = quantity;
       requirement.displayQuantity = formatRequirementQuantity(quantity, requirement.unitType);

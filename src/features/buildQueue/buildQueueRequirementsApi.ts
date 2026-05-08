@@ -32,6 +32,7 @@ export interface ServerBuildQueueRequirement {
     slot: string;
     materialQuantity: number;
     selectedQuality?: number;
+    allowLowerQuality?: boolean;
     unitType?: "unit" | "SCU" | "scu" | "cscu";
   }>;
 }

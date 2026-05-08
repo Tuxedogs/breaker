@@ -59,11 +59,12 @@ interface LogisticsStoreState {
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
   toggleBuildQueueItemPriority: (id: string) => void;
   updateBuildQueueItemQuantity: (id: string, quantity: number) => void;
+  updateBuildQueueItemAllowLowerQuality: (id: string, allowLowerQuality: boolean) => void;
   updateBuildQueueMaterialRequirement: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   removeBuildQueueItem: (id: string) => void;
   setBuildQueueItemAllocations: (buildQueueItemId: string, allocations: ReservedMaterialAllocation[]) => void;
   toggleBuildQueueAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
-  updateBuildQueueAllocationQuantity: (buildQueueItemId: string, inventoryEntryId: string, quantity: number) => void;
+  updateBuildQueueAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   clearBuildQueueItemAllocations: (buildQueueItemId: string) => void;
   clearStaleBuildQueueItemAllocations: (buildQueueItemId: string) => void;
   resetLogisticsState: () => void;
@@ -184,6 +185,10 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
     materialId: value.materialId,
     inventoryEntryId: value.inventoryEntryId,
     quantityReserved: Math.max(0, value.quantityReserved),
+    requirementId: isString(value.requirementId) ? value.requirementId : undefined,
+    selectedQuality: isNumber(value.selectedQuality) ? value.selectedQuality : undefined,
+    allowLowerQualityOverride: value.allowLowerQualityOverride === true,
+    unitType: isString(value.unitType) ? value.unitType as ReservedMaterialAllocation["unitType"] : undefined,
     materialName: isString(value.materialName) ? value.materialName : undefined,
     quality: isNumber(value.quality) ? value.quality : undefined,
     rarity: rarityCatalog[value.rarity.tier],
@@ -320,6 +325,7 @@ function coercePersistedBuildQueueItem(value: unknown, materials: MaterialTempla
     itemId: isString(value.itemId) ? value.itemId : undefined,
     itemName: isString(value.itemName) ? value.itemName : undefined,
     quantity: value.quantity,
+    allowLowerQuality: value.allowLowerQuality === true,
     priority: isNumber(value.priority) ? value.priority : undefined,
     priorityActive: typeof value.priorityActive === "boolean" ? value.priorityActive : undefined,
     status: isBuildStatus(value.status) ? value.status : undefined,
@@ -368,11 +374,23 @@ function createValidatedAllocation(
   quantityReserved: number,
 ): ReservedMaterialAllocation {
   const materialId = inventoryEntry.materialId ?? allocation.materialId;
+  const allocationId = allocation.id || [
+    allocation.requirementId,
+    materialId,
+    allocation.selectedQuality ?? "any",
+    allocation.unitType ?? "unit",
+    inventoryEntry.id,
+    inventoryEntry.locationId ?? "unassigned",
+  ].join(":");
   return {
-    id: allocation.id || `${inventoryEntry.id}-${materialId}`,
+    id: allocationId,
     inventoryEntryId: inventoryEntry.id,
     materialId,
     quantityReserved,
+    requirementId: allocation.requirementId,
+    selectedQuality: allocation.selectedQuality,
+    allowLowerQualityOverride: allocation.allowLowerQualityOverride,
+    unitType: allocation.unitType,
     materialName: inventoryEntry.itemName ?? inventoryEntry.materialName ?? allocation.materialName,
     quality: inventoryEntry.quality,
     rarity: normalizeRarity(inventoryEntry.rarity, rarityCatalog.common),
@@ -395,6 +413,11 @@ function sanitizeReservedAllocationsForItem(
     if (!allocation.inventoryEntryId || allocation.quantityReserved <= 0) continue;
     const inventoryEntry = state.inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
     if (!inventoryEntry?.materialId || inventoryEntry.materialId !== allocation.materialId) continue;
+    if (
+      !allocation.allowLowerQualityOverride &&
+      allocation.selectedQuality !== undefined &&
+      (inventoryEntry.quality === undefined || inventoryEntry.quality < allocation.selectedQuality)
+    ) continue;
 
     const reservedByOthers = getReservedQuantityForStack(
       state.buildQueue,
@@ -544,6 +567,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             itemId: snapshot?.itemId,
             itemName: snapshot?.itemName,
             quantity,
+            allowLowerQuality: false,
             status: "queued",
             priority: nextPriority,
             priorityActive: false,
@@ -578,6 +602,21 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         set((state) => ({
           buildQueue: state.buildQueue.map((item) =>
             item.id === id ? { ...item, quantity: Math.max(1, Math.trunc(quantity)) } : item,
+          ),
+        }));
+      },
+      updateBuildQueueItemAllowLowerQuality: (id, allowLowerQuality) => {
+        set((state) => ({
+          buildQueue: state.buildQueue.map((item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  allowLowerQuality,
+                  reservedAllocations: allowLowerQuality
+                    ? item.reservedAllocations
+                    : (item.reservedAllocations ?? []).filter((allocation) => !allocation.allowLowerQualityOverride),
+                }
+              : item,
           ),
         }));
       },
@@ -624,36 +663,47 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           buildQueue: state.buildQueue.map((item) => {
             if (item.id !== buildQueueItemId) return item;
             const allocations = item.reservedAllocations ?? [];
-            const exists = allocations.some((current) => current.inventoryEntryId === allocation.inventoryEntryId);
+            const exists = allocations.some((current) => current.id === allocation.id);
             const nextAllocations = exists
-              ? allocations.filter((current) => current.inventoryEntryId !== allocation.inventoryEntryId)
-              : sanitizeReservedAllocationsForItem(buildQueueItemId, [allocation], state);
+              ? allocations.filter((current) => current.id !== allocation.id)
+              : sanitizeReservedAllocationsForItem(buildQueueItemId, [...allocations, allocation], state);
             return {
               ...item,
-              reservedAllocations: exists ? nextAllocations : [...allocations, ...nextAllocations],
+              reservedAllocations: nextAllocations,
             };
           }),
         }));
       },
-      updateBuildQueueAllocationQuantity: (buildQueueItemId, inventoryEntryId, quantity) => {
+      updateBuildQueueAllocationQuantity: (buildQueueItemId, allocationId, quantity) => {
         set((state) => ({
           buildQueue: state.buildQueue.map((item) => {
             if (item.id !== buildQueueItemId) return item;
-            const inventoryEntry = state.inventoryEntries.find((e) => e.id === inventoryEntryId);
-            if (!inventoryEntry) return item;
             const allocations = item.reservedAllocations ?? [];
-            const allocation = allocations.find((entry) => entry.inventoryEntryId === inventoryEntryId);
+            const allocation = allocations.find((entry) => entry.id === allocationId);
+            if (!allocation) return item;
+            const inventoryEntry = state.inventoryEntries.find((e) => e.id === allocation.inventoryEntryId);
+            if (!inventoryEntry) return item;
             if (!allocation || allocation.materialId !== inventoryEntry.materialId) return item;
-            const reservedByOthers = getReservedQuantityForStack(state.buildQueue, inventoryEntryId, buildQueueItemId);
-            const maxQuantity = Math.max(0, inventoryEntry.quantity - reservedByOthers);
+            if (
+              !allocation.allowLowerQualityOverride &&
+              allocation.selectedQuality !== undefined &&
+              (inventoryEntry.quality === undefined || inventoryEntry.quality < allocation.selectedQuality)
+            ) {
+              return { ...item, reservedAllocations: allocations.filter((a) => a.id !== allocationId) };
+            }
+            const reservedByOthers = getReservedQuantityForStack(state.buildQueue, inventoryEntry.id, buildQueueItemId);
+            const reservedByThisStackOtherSlots = allocations
+              .filter((entry) => entry.id !== allocationId && entry.inventoryEntryId === inventoryEntry.id)
+              .reduce((sum, entry) => sum + entry.quantityReserved, 0);
+            const maxQuantity = Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByThisStackOtherSlots);
             const clamped = Math.max(0, Math.min(quantity, maxQuantity));
             if (clamped <= 0) {
-              return { ...item, reservedAllocations: allocations.filter((a) => a.inventoryEntryId !== inventoryEntryId) };
+              return { ...item, reservedAllocations: allocations.filter((a) => a.id !== allocationId) };
             }
             return {
               ...item,
               reservedAllocations: allocations.map((a) =>
-                a.inventoryEntryId === inventoryEntryId ? createValidatedAllocation(a, inventoryEntry, clamped) : a,
+                a.id === allocationId ? createValidatedAllocation(a, inventoryEntry, clamped) : a,
               ),
             };
           }),

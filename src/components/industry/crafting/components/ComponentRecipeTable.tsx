@@ -574,11 +574,11 @@ function computeTotalModifiers(
 ): TotalModifierRow[] {
   const map = new Map<string, TotalModifierRow>();
 
-  for (const mat of recipe.materials) {
+  for (const [inputIndex, mat] of recipe.materials.entries()) {
     const modifiers = mat.qualityModifiers ?? [];
     if (modifiers.length === 0) continue;
 
-    const key = getMaterialQualityKey(recipe, mat);
+    const key = getMaterialQualityKey(recipe, mat, inputIndex);
     const quality = getBandEffectiveQuality(getMaterialName(mat), getBandIndex(key));
     const atQuality = getModifiersAtQuality(modifiers, quality);
 
@@ -761,8 +761,8 @@ function CraftedItemSummaryPanel({
         className="craft-summary-queue-btn"
         onClick={() => {
           const selectedQualities = Object.fromEntries(
-            recipe.materials.map((mat) => {
-              const key = getMaterialQualityKey(recipe, mat);
+            recipe.materials.map((mat, inputIndex) => {
+              const key = getMaterialQualityKey(recipe, mat, inputIndex);
               const materialName = getMaterialName(mat);
               return [key, {
                 quality: getBandEffectiveQuality(materialName, materialQualities[key] ?? DEFAULT_BAND_INDEX),
@@ -812,8 +812,8 @@ function RecipeDrawer({
     Record<string, number>
   >(() =>
     Object.fromEntries(
-      recipe.materials.map((mat) => [
-        getMaterialQualityKey(recipe, mat),
+      recipe.materials.map((mat, inputIndex) => [
+        getMaterialQualityKey(recipe, mat, inputIndex),
         DEFAULT_BAND_INDEX,
       ]),
     ),
@@ -829,7 +829,7 @@ function RecipeDrawer({
   const overallQualitySource = overallQualityMaterial
     ? getBandEffectiveQuality(
         getMaterialName(overallQualityMaterial),
-        getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial)),
+        getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial, 2)),
       )
     : undefined;
 
@@ -857,8 +857,8 @@ function RecipeDrawer({
           )}
 
           <div className="craft-material-list">
-            {recipe.materials.map((mat) => {
-              const key = getMaterialQualityKey(recipe, mat);
+            {recipe.materials.map((mat, inputIndex) => {
+              const key = getMaterialQualityKey(recipe, mat, inputIndex);
 
               return (
                 <MaterialQualityRow

@@ -26,15 +26,23 @@ export interface BuildQueueRequirementItem {
   itemId?: string;
   itemName?: string;
   quantity: number;
+  allowLowerQuality?: boolean;
   status?: string;
   materialRequirements?: BuildQueueMaterialRow[];
-  reservedAllocations?: Array<{ materialId: string; quantityReserved: number }>;
+  reservedAllocations?: Array<{
+    materialId: string;
+    quantityReserved: number;
+    requirementId?: string;
+    selectedQuality?: number;
+    allowLowerQualityOverride?: boolean;
+    unitType?: ApiUnitType;
+  }>;
 }
 
 export interface BuildQueueRequirementsRequest {
   buildQueue?: BuildQueueRequirementItem[];
   recipeInputTemplates?: Record<string, BuildQueueMaterialRow[]>;
-  inventoryEntries?: Array<{ materialId?: string; quantity: number }>;
+  inventoryEntries?: Array<{ materialId?: string; quantity: number; quality?: number }>;
 }
 
 export interface NormalizedRequirement {
@@ -60,6 +68,7 @@ export interface NormalizedRequirement {
     slot: string;
     materialQuantity: number;
     selectedQuality?: number;
+    allowLowerQuality?: boolean;
     unitType?: ApiUnitType;
   }>;
 }
