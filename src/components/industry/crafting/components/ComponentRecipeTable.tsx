@@ -689,7 +689,11 @@ function MaterialQualityRow({
                 onClick={() => onBandChange(marker.index)}
                 aria-label={`Use mapped quality ${marker.mappedValue}`}
               >
-                <span className="craft-matq-dot" />
+                {marker.index === safeBandIndex ? (
+                  <span className="craft-matq-dot" />
+                ) : (
+                  marker.mappedValue > quality && <span className="craft-matq-threshold-dot" />
+                )}
                 <span className={`craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
               </button>
               );
