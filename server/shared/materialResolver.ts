@@ -17,18 +17,51 @@ export interface MaterialIdentityInput {
 }
 
 export interface ResolvedApiMaterial {
+  materialKey: string;
   materialId: string;
   materialName: string;
+  displayName: string;
+  normalizedName: string;
+  slug: string;
   unitType?: "unit" | "SCU" | "scu" | "cscu";
 }
 
 const GUID_ALIASES: Record<string, string> = {
   "d7a21cac-3c2b-4695-95b7-2042d8f5755e": "feynmaline",
+  "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4": "stileron",
   "f9f3251a-8e48-408a-b957-f1e3d5d3e213": "rawice",
 };
 
 function normalizeToken(value: string | null | undefined): string {
   return (value ?? "").trim().toLowerCase().replace(/^entityclassdefinition\./, "").replace(/[^a-z0-9]/g, "");
+}
+
+function slugify(value: string | null | undefined): string {
+  return (value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/^entityclassdefinition\./, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function resolvedMaterial(input: {
+  materialId?: string;
+  materialName?: string;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
+}): ResolvedApiMaterial {
+  const materialId = input.materialId ?? input.materialName ?? "";
+  const displayName = input.materialName ?? input.materialId ?? "";
+  const normalizedName = normalizeToken(displayName);
+  return {
+    materialKey: materialId,
+    materialId,
+    materialName: displayName,
+    displayName,
+    normalizedName,
+    slug: slugify(displayName || materialId),
+    unitType: input.unitType,
+  };
 }
 
 async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
@@ -47,13 +80,15 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
     for (const material of enriched) {
       if (!material.materialName && !material.materialId) continue;
       const hasOnlyShipSources = (material.sources ?? []).some((source) => source.spawnType?.toLowerCase().includes("ship"));
-      const resolved = {
+      const resolved = resolvedMaterial({
         materialId: material.materialId ?? material.materialName ?? "",
         materialName: material.materialName ?? material.materialId ?? "",
         unitType: hasOnlyShipSources ? "SCU" as const : undefined,
-      };
+      });
       add(resolved.materialId, resolved);
       add(resolved.materialName, resolved);
+      add(resolved.displayName, resolved);
+      add(resolved.slug, resolved);
     }
   } catch (error) {
     addWarning(warnings, {
@@ -69,12 +104,14 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
     };
     for (const material of scores.materials ?? []) {
       if (!material.materialName && !material.materialId) continue;
-      const resolved = {
+      const resolved = resolvedMaterial({
         materialId: material.materialId ?? material.materialName ?? "",
         materialName: material.materialName ?? material.materialId ?? "",
-      };
+      });
       add(resolved.materialId, resolved);
       add(resolved.materialName, resolved);
+      add(resolved.displayName, resolved);
+      add(resolved.slug, resolved);
     }
   } catch (error) {
     addWarning(warnings, {

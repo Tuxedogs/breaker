@@ -294,8 +294,8 @@ export default function DashboardSidebar() {
             <div className="dash-user-avatar" aria-hidden />
             {!collapsed && (
               <div className="dash-user-info">
-                <span className="dash-user-name">Pilot</span>
-                <span className="dash-user-level">ALPHA</span>
+                <span className="dash-user-name"></span>
+                <span className="dash-user-level"></span>
               </div>
             )}
           </button>

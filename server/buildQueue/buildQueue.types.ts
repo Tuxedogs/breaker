@@ -47,8 +47,13 @@ export interface BuildQueueRequirementsRequest {
 
 export interface NormalizedRequirement {
   requirementKey: string;
+  materialKey: string;
   materialId: string;
   materialName: string;
+  displayName: string;
+  normalizedName: string;
+  slug: string;
+  quantity: number;
   requiredQuantity: number;
   originalRequiredQuantity: number;
   selectedQuality?: number;

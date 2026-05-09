@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense, useCallback } from "react";
+import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
 import "./crafting.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
@@ -52,7 +52,7 @@ export default function CraftingModule() {
     return () => { cancelled = true; };
   }, []);
 
-  const handleAddToQueue = useCallback((recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands?: { start: string | number; end: string | number; mappedValue: string | number }[] }>) => {
+  const handleAddToQueue = useCallback((recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber?: number; bands?: { start: string | number; end: string | number; mappedValue: string | number }[] }>) => {
     const recipeId = `craft-${recipe.blueprint_id}`;
     const category = recipe.component_type ?? recipe.item_kind ?? "component";
     const resolveMaterial = createMaterialResolver(materialTemplates);
@@ -88,6 +88,7 @@ export default function CraftingModule() {
         unitType: getInventoryUnitLabel(material),
         selectedQuality,
         mappedQuality: selectedQuality,
+        qualityBand: qualitySnapshot?.bandNumber,
         modifierName: modifier?.property,
         modifierType: modifier?.modifierMode,
         modifierValue: modifier?.value,
@@ -108,41 +109,16 @@ export default function CraftingModule() {
     inventoryEntries, buildQueue, recipeTemplates, recipeInputsByRecipeId,
   );
   const activeQueue = buildQueue.filter((item) => item.status !== "complete");
+  const queuedRecipeIds = useMemo(
+    () => new Set(activeQueue.map((item) => item.recipeId)),
+    [activeQueue],
+  );
   const queueBadge = activeQueue.length > 0 ? activeQueue.length : null;
   const missingCount = shortages.length;
 
   return (
     <div className="craft-page">
-      <div className="craft-page-header">
-        <div>
-          <div className="craft-breadcrumb">
-            <span className="craft-breadcrumb-root">Industry</span>
-            <span className="craft-breadcrumb-sep">/</span>
-            <span className="craft-breadcrumb-active">Crafting</span>
-          </div>
-          <h1 className="craft-page-title">Component Crafting</h1>
-          <p className="craft-page-subtitle">
-            {recipes.length} blueprints · vehicle gear components · live game data
-          </p>
-        </div>
-
-        <div className="craft-stats-strip">
-          <div className="craft-stat">
-            <div className="craft-stat-label">Blueprints</div>
-            <div className="craft-stat-value">{recipes.length}</div>
-          </div>
-          <div className="craft-stat">
-            <div className="craft-stat-label">Queued</div>
-            <div className="craft-stat-value">{activeQueue.reduce((s, i) => s + i.quantity, 0)}</div>
-          </div>
-          <div className={`craft-stat${missingCount > 0 ? " craft-stat--alert" : ""}`}>
-            <div className="craft-stat-label">Shortages</div>
-            <div className={`craft-stat-value${missingCount > 0 ? " craft-stat-value--alert" : ""}`}>
-              {missingCount}
-            </div>
-          </div>
-        </div>
-      </div>
+      
 
       <CraftTabBar
         activeTab={tab as "recipes" | "queue" | "analytics" | "quality" | "sources"}
@@ -161,7 +137,13 @@ export default function CraftingModule() {
         )}
 
         {tab === "recipes" && (
-          <ComponentRecipeTable recipes={recipes} onAddToQueue={handleAddToQueue} />
+          <ComponentRecipeTable
+            recipes={recipes}
+            inventoryEntries={inventoryEntries}
+            materialTemplates={materialTemplates}
+            onAddToQueue={handleAddToQueue}
+            isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+          />
         )}
 
         {tab === "analytics" && (

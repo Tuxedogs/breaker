@@ -2,6 +2,7 @@ export interface ApiWarning {
   code: string;
   message: string;
   path?: string;
+  sourceField?: string;
   materialId?: string;
   materialName?: string;
 }

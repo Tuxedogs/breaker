@@ -28,6 +28,7 @@ export interface RecipeInputTemplate {
   unitType?: "unit" | "SCU" | "scu" | "cscu";
   selectedQuality?: number;
   mappedQuality?: number;
+  qualityBand?: number;
   modifierName?: string;
   modifierType?: string;
   modifierValue?: number;

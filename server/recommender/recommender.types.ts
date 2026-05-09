@@ -3,8 +3,12 @@ import type { ApiWarning } from "../shared/warnings";
 export type MaterialUnitType = "unit" | "SCU" | "scu" | "cscu";
 
 export interface RequirementInput {
+  materialKey?: string;
   materialId?: string;
   materialName?: string;
+  displayName?: string;
+  normalizedName?: string;
+  slug?: string;
   requiredQuantity: number;
   selectedQuality?: number;
   unitType?: MaterialUnitType;
@@ -24,8 +28,12 @@ export interface RecommendRequest {
 }
 
 export interface AggregatedRequirement {
+  materialKey: string;
   materialId: string;
   materialName: string;
+  displayName: string;
+  normalizedName: string;
+  slug: string;
   requiredQuantity: number;
   selectedQuality?: number;
   unitType?: MaterialUnitType;
@@ -44,6 +52,9 @@ export interface ApiSource {
   providerGuid?: string;
   groupName?: string;
   probability?: number;
+  relativeProbability?: number;
+  materialProbability?: number;
+  groupProbability?: number;
   composition?: {
     minPercentage?: number;
     maxPercentage?: number;
@@ -51,13 +62,63 @@ export interface ApiSource {
     qualityScale?: number;
   };
   quality?: {
+    min?: number | null;
+    max?: number | null;
     mean?: number | null;
     qualityTier?: string;
+    distributionName?: string;
+    distributionPath?: string;
     thresholdChances?: Record<string, number>;
   };
+  estimatedHighQualityPotential?: number;
   scoreInputs?: { qualityScore?: number };
   overallScore?: number;
   reason?: string;
+}
+
+export type RouteTargetabilityLabel = "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
+
+export interface MaterialRouteScore {
+  materialKey: string;
+  materialId: string;
+  materialName: string;
+  displayName: string;
+  selectedQuality?: number;
+  qualityRouteScore: number;
+  yieldRouteScore: number;
+  demandMatchScore: number;
+  overallTargetabilityScore: number;
+  label: RouteTargetabilityLabel;
+  comparison?: string;
+  reasons: string[];
+  specialSignals?: Array<{
+    label: string;
+    reason?: string;
+  }>;
+  signals: {
+    qualityFit: number;
+    yieldPotential: number;
+    sourceWeight: number;
+    routeTargetability: number;
+    competingSources?: number;
+  };
+}
+
+export interface MaterialCoverageDiagnostic {
+  materialKey: string;
+  materialId: string;
+  displayName: string;
+  miningType?: string;
+  unitType?: MaterialUnitType;
+  sourceCount: number;
+  candidateLocations: Array<{
+    locationKey: string;
+    locationName: string;
+    systemName: string;
+    spawnType: string;
+    miningType: string;
+  }>;
+  matchingResourceKeys: string[];
 }
 
 export interface MaterialSourceGroup {
@@ -86,9 +147,15 @@ export interface ScoredLocation {
   spawnType: string;
   nearbyStations: string[];
   materials: string[];
+  indexedResources: Array<{
+    materialId?: string;
+    materialName: string;
+    miningType: string;
+  }>;
   score: number;
   coveredRequirements: AggregatedRequirement[];
   bestSources: ApiSource[];
+  routeScores?: MaterialRouteScore[];
 }
 
 export interface Recommendation {
@@ -99,11 +166,23 @@ export interface Recommendation {
   spawnType: string;
   nearbyStations: string[];
   materials: string[];
+  indexedResources: Array<{
+    materialId?: string;
+    materialName: string;
+    miningType: string;
+  }>;
   score: number;
+  routeTargetabilityScore?: number;
+  routeTargetabilityLabel?: RouteTargetabilityLabel;
+  routeScores?: MaterialRouteScore[];
   reason: string;
   requiredMaterials: Array<{
     materialId: string;
     materialName: string;
+    displayName: string;
+    materialKey: string;
+    normalizedName: string;
+    slug: string;
     requiredQuantity: number;
     selectedQuality?: number;
     unitType?: MaterialUnitType;
@@ -114,4 +193,7 @@ export interface Recommendation {
 export interface RecommendResponse {
   recommendations: Recommendation[];
   warnings: RecommenderWarning[];
+  diagnostics?: {
+    materialCoverage: MaterialCoverageDiagnostic[];
+  };
 }

@@ -17,6 +17,24 @@ export interface RecommenderWarning {
 export interface RecommendationResponse {
   recommendations: PublicLocationEntry[];
   warnings: RecommenderWarning[];
+  diagnostics?: {
+    materialCoverage: Array<{
+      materialKey: string;
+      materialId: string;
+      displayName: string;
+      miningType?: string;
+      unitType?: "unit" | "SCU" | "scu" | "cscu";
+      sourceCount: number;
+      candidateLocations: Array<{
+        locationKey: string;
+        locationName: string;
+        systemName: string;
+        spawnType: string;
+        miningType: string;
+      }>;
+      matchingResourceKeys: string[];
+    }>;
+  };
 }
 
 type RecommenderApiRequest = Omit<MiningRecommendationRequest, "requiredMaterials"> & {
@@ -28,8 +46,12 @@ function toRecommenderApiRequest(request: MiningRecommendationRequest): Recommen
   return {
     ...rest,
     materialRequirements: requiredMaterials.map((material) => ({
+      materialKey: material.materialKey,
       materialId: material.materialId,
       materialName: material.materialName,
+      displayName: material.displayName,
+      normalizedName: material.normalizedName,
+      slug: material.slug,
       requiredQuantity: material.requiredQuantity,
       selectedQuality: material.selectedQuality,
       unitType: material.unitType,
@@ -38,6 +60,17 @@ function toRecommenderApiRequest(request: MiningRecommendationRequest): Recommen
       modifierValue: material.modifierValue,
     })),
   };
+}
+
+export interface AllLocationsResponse {
+  locations: PublicLocationEntry[];
+  warnings: RecommenderWarning[];
+}
+
+export async function getAllIndexedLocations(): Promise<AllLocationsResponse> {
+  const response = await fetch("/api/recommender/locations");
+  if (!response.ok) throw new Error(`Locations API failed with ${response.status}`);
+  return response.json() as Promise<AllLocationsResponse>;
 }
 
 export async function getMiningRecommendations(

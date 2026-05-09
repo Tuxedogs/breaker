@@ -29,8 +29,13 @@ export interface UsedByBlueprint {
 }
 
 export interface RequiredMaterial {
+  materialKey?: string;
   materialId: string;
   materialName: string;
+  displayName?: string;
+  normalizedName?: string;
+  slug?: string;
+  quantity?: number;
   originalRequiredQuantity?: number;
   requiredQuantity: number;
   selectedQuality?: number;
@@ -168,13 +173,57 @@ export interface MiningPlannerIntentPayload {
  * absent — advanced intelligence requires Discord auth (future phase).
  */
 export interface PublicLocationEntry {
-  locationKey: string; // deduplication key: `${systemName}|${locationName}|${spawnType}`
+  locationKey: string; // deduplication key: normalized system + canonical location
   locationName: string;
   systemName: string;
   locationKind: string;
   spawnType: string;
   nearbyStations: string[];
   materials: string[]; // materialNames present at this location
+  indexedResources?: Array<{
+    materialId?: string;
+    materialName: string;
+    miningType: string;
+  }>;
+  routeTargetabilityScore?: number;
+  routeTargetabilityLabel?: "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
+  routeScores?: Array<{
+    materialKey: string;
+    materialId: string;
+    materialName: string;
+    displayName: string;
+    selectedQuality?: number;
+    qualityRouteScore: number;
+    yieldRouteScore: number;
+    demandMatchScore: number;
+    overallTargetabilityScore: number;
+    label: "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
+    comparison?: string;
+    reasons: string[];
+    specialSignals?: Array<{
+      label: string;
+      reason?: string;
+    }>;
+    signals: {
+      qualityFit: number;
+      yieldPotential: number;
+      sourceWeight: number;
+      routeTargetability: number;
+      competingSources?: number;
+    };
+  }>;
+  requiredMaterials?: Array<{
+    materialKey?: string;
+    materialId: string;
+    materialName: string;
+    displayName?: string;
+    normalizedName?: string;
+    slug?: string;
+    requiredQuantity: number;
+    selectedQuality?: number;
+    unitType?: "unit" | "SCU" | "scu" | "cscu";
+    displayQuantity: string;
+  }>;
 }
 
 export interface MaterialExplorerExportRequest {
@@ -203,8 +252,12 @@ export interface MiningRecommendationRequest {
   generatedAt: string;
   /** Derived from the active build queue fixture — populated when data is loaded. */
   requiredMaterials: Array<{
+    materialKey?: string;
     materialId: string;
     materialName: string;
+    displayName?: string;
+    normalizedName?: string;
+    slug?: string;
     requiredQuantity: number;
     selectedQuality?: number;
     unitType?: "unit" | "SCU" | "scu" | "cscu";

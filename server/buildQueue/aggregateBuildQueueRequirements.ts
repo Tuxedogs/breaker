@@ -79,19 +79,24 @@ export async function aggregateBuildQueueRequirements(
     const inputs = item.materialRequirements ?? request.recipeInputTemplates?.[item.recipeId] ?? [];
     for (const [inputIndex, input] of inputs.entries()) {
       const resolved = resolve(input);
-      const materialId = resolved?.materialId ?? input.materialKey ?? input.materialId ?? input.materialName ?? input.displayName;
+      const materialKey = resolved?.materialKey ?? input.materialKey ?? input.materialId ?? input.materialName ?? input.displayName;
+      const materialId = resolved?.materialId ?? materialKey;
       const materialName = resolved?.materialName ?? input.displayName ?? input.materialName ?? input.rawName ?? materialId;
+      if (!materialKey || !materialId || !materialName) continue;
+      const displayName = resolved?.displayName ?? materialName;
+      const normalizedName = resolved?.normalizedName ?? materialName.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+      const slug = resolved?.slug ?? materialName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
+      const sourceField = input.materialKey ? "materialKey" : input.materialId ? "materialId" : input.materialGuid ? "materialGuid" : input.costId ? "costId" : input.materialName ? "materialName" : input.displayName ? "displayName" : "unknown source";
       if (!resolved) {
         addWarning(warnings, {
           code: "build_queue_material_unresolved",
-          message: `Could not resolve build queue material ${materialName ?? "unknown material"}.`,
+          message: `Could not resolve build queue material from ${sourceField}: ${materialName ?? "unknown material"}.`,
+          sourceField,
           materialId,
           materialName,
         });
       }
-      if (!materialId || !materialName) continue;
-
       const selectedQuality = input.selectedQuality;
       const allowLowerQuality = false;
       const unitType = input.unitType ?? resolved?.unitType;
@@ -131,8 +136,13 @@ export async function aggregateBuildQueueRequirements(
       } else {
         byRequirement.set(key, {
           requirementKey: key,
+          materialKey,
           materialId,
           materialName,
+          displayName,
+          normalizedName,
+          slug,
+          quantity: originalRequired,
           requiredQuantity: originalRequired,
           originalRequiredQuantity: originalRequired,
           selectedQuality,
@@ -175,6 +185,7 @@ export async function aggregateBuildQueueRequirements(
     )) {
       const quantity = Math.min(requirement.originalRequiredQuantity, remaining);
       requirement.requiredQuantity = quantity;
+      requirement.quantity = quantity;
       requirement.displayQuantity = formatRequirementQuantity(quantity, requirement.unitType);
       remaining -= quantity;
     }

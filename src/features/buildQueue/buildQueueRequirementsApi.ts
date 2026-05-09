@@ -5,14 +5,20 @@ export interface BuildQueueRequirementWarning {
   code: string;
   message: string;
   path?: string;
+  sourceField?: string;
   materialId?: string;
   materialName?: string;
 }
 
 export interface ServerBuildQueueRequirement {
   requirementKey: string;
+  materialKey: string;
   materialId: string;
   materialName: string;
+  displayName: string;
+  normalizedName: string;
+  slug: string;
+  quantity: number;
   requiredQuantity: number;
   originalRequiredQuantity: number;
   selectedQuality?: number;
