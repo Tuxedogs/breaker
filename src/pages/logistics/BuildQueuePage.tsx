@@ -139,14 +139,36 @@ export default function BuildQueuePage() {
     items?.sort((a, b) => Number(b.priorityActive ?? false) - Number(a.priorityActive ?? false) || (a.priority ?? 0) - (b.priority ?? 0));
   }
   const categories = Object.keys(grouped);
+  const activeQueueCount = shortageSummary.activeQueueItems.length;
+  const totalQueueQuantity = buildQueue.reduce((sum, item) => sum + item.quantity, 0);
+  const totalShortfall = shortageSummary.totalShortfallQuantity;
+  const totalRequirementLines = buildQueue.reduce((sum, item) => {
+    if (item.status === 'complete') return sum;
+    return sum + getBuildQueueItemInputs(item, recipeInputsByRecipeId).length;
+  }, 0);
 
   return (
-    <div className="logi-page">
+    <div className="logi-page logi-build-queue-page">
 
       <CraftTabBar activeTab="queue" missingCount={shortages.length} queueBadge={buildQueue.length > 0 ? buildQueue.length : null} />
 
-      <div className="logi-shortage-section">
-        <div className="logi-shortage-header">
+      <section className="queue-detail">
+        <div className="build-overview">
+          <div className="build-overview-copy">
+            <span className="build-overview-kicker">Operational Hub</span>
+            <h1 className="build-overview-title">Build Queue</h1>
+            <p className="build-overview-text">Resolve shortages, tune material quality, and reserve inventory before moving sourcing decisions to mining.</p>
+          </div>
+          <div className="build-overview-stats" aria-label="Build queue overview">
+            <span><em>Active Items</em><strong>{activeQueueCount}</strong></span>
+            <span><em>Total Qty</em><strong>{totalQueueQuantity}</strong></span>
+            <span><em>Material Lines</em><strong>{totalRequirementLines}</strong></span>
+            <span className={totalShortfall > 0 ? 'is-missing' : ''}><em>Shortfall</em><strong><QuantityText value={formatRequirementQuantity(totalShortfall, 'unit', undefined)} /></strong></span>
+          </div>
+        </div>
+
+      <div className="build-shortage-panel logi-shortage-section">
+        <div className="build-shortage-header logi-shortage-header">
           <span className="logi-shortage-title">Material Shortages</span>
           {groupedShortages.length > 0 && <span className="logi-shortage-alert-count">{groupedShortages.length} materials</span>}
         </div>
@@ -167,7 +189,7 @@ export default function BuildQueuePage() {
               <span>Used By</span>
             </div>
             {sortedShortageGroups.map((group) => (
-              <article className="logi-shortage-compact-row" key={`shortage-group:${group.key}`}>
+              <article className="build-shortage-row logi-shortage-compact-row" key={`shortage-group:${group.key}`}>
                 <div className="logi-shortage-compact-name">{group.displayName}</div>
                 <div className="logi-shortage-ledger-cell">
                   {group.unitGroups.map((unitGroup) => {
@@ -215,7 +237,7 @@ export default function BuildQueuePage() {
         )}
       </div>
 
-      <div className="logi-bq-section">
+      <div className="build-category-list logi-bq-section">
         <div className="logi-section-label">Queue by Category</div>
         {categories.map((category) => (
           <BuildQueueGroup
@@ -238,6 +260,7 @@ export default function BuildQueuePage() {
           />
         ))}
       </div>
+      </section>
     </div>
   );
 }

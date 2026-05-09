@@ -67,20 +67,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: 'Other',
 };
 
-const STATUS_CLASS: Record<NonNullable<BuildQueueItem['status']>, string> = {
-  queued: 'logi-badge--queued',
-  active: 'logi-badge--in-progress',
-  paused: 'logi-badge--paused',
-  complete: 'logi-badge--complete',
-};
-
-const STATUS_LABELS: Record<NonNullable<BuildQueueItem['status']>, string> = {
-  queued: 'Queued',
-  active: 'In Progress',
-  paused: 'Paused',
-  complete: 'Complete',
-};
-
 const COVERAGE_LABELS = {
   covered: 'Covered',
   partial: 'Partial',
@@ -177,12 +163,6 @@ function getItemFulfillmentState(
   return 'missing';
 }
 
-const FULFILLMENT_SUMMARY_CLASS: Record<'complete' | 'partial' | 'missing', string> = {
-  complete: 'logi-bq-summary-card--complete',
-  partial: 'logi-bq-summary-card--partial',
-  missing: 'logi-bq-summary-card--missing',
-};
-
 const FULFILLMENT_BADGE_CLASS: Record<'complete' | 'partial' | 'missing', string> = {
   complete: 'logi-badge--complete',
   partial: 'logi-badge--paused',
@@ -190,7 +170,7 @@ const FULFILLMENT_BADGE_CLASS: Record<'complete' | 'partial' | 'missing', string
 };
 
 const FULFILLMENT_LABELS: Record<'complete' | 'partial' | 'missing', string> = {
-  complete: 'Complete',
+  complete: 'Covered',
   partial: 'Partial',
   missing: 'Missing',
 };
@@ -218,7 +198,7 @@ function MaterialQualitySlider({
 }) {
   const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
   const safeBandIndex = Math.max(0, Math.min(draftBandIndex, qualityBands.length - 1));
-  const qualityRarityClass = rarityClassFromBandIndex(safeBandIndex + 1);
+  const selectedQualityTierClass = rarityClassFromBandIndex(safeBandIndex + 1);
   const quality = getBandEffectiveQuality(qualityBands, safeBandIndex);
 
   const atQuality = useMemo(() => {
@@ -240,16 +220,19 @@ function MaterialQualitySlider({
       }),
     [qualityBands],
   );
+  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
+  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
+  const fillPct = Math.max(0, selectedPct - bandOnePct);
 
   return (
-    <div className="craft-matq-card">
+    <div className="craft-matq-card" data-band={safeBandIndex}>
       <div className="craft-matq-header">
         <div className="craft-matq-identity">
           <span className="craft-matq-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
         </div>
         <div className="craft-matq-quality-header">
           <span className="craft-matq-quality-label">Band {safeBandIndex + 1}</span>
-          <span className={`craft-matq-quality-value ${qualityRarityClass}`}>{quality}</span>
+          <span className={`craft-matq-quality-value ${selectedQualityTierClass}`}>{quality}</span>
         </div>
       </div>
 
@@ -268,30 +251,35 @@ function MaterialQualitySlider({
             className="craft-matq-slider"
             aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
           />
-          <div className="craft-matq-rail">
+          <div
+            className={`craft-matq-rail ${selectedQualityTierClass}`}
+            style={{ '--band-one-pct': `${bandOnePct}%` } as any}
+          >
             <div
-              className="craft-matq-rail-fill"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              style={{ '--selected-pct': `${Math.max(0, Math.min(100, (quality / 1000) * 100))}%` } as any}
+              className={`craft-matq-rail-fill ${selectedQualityTierClass}`}
+              style={{ '--band-one-pct': `${bandOnePct}%`, '--fill-pct': `${fillPct}%` } as any}
             />
-            {railMarkers.map((marker) => (
-              <button
-                type="button"
-                key={`${marker.index}-${marker.mappedValue}`}
-                className={`craft-matq-band-marker${marker.index === safeBandIndex ? ' is-active' : ''}`}
-                style={{ left: `${marker.left}%` }}
-                data-edge={marker.edge}
-                onClick={() => onBandChange(marker.index)}
-                aria-label={`Use mapped quality ${marker.mappedValue}`}
-              >
-                {marker.index === safeBandIndex ? (
-                  <span className="craft-matq-dot" />
-                ) : (
-                  marker.mappedValue > quality && <span className="craft-matq-threshold-dot" />
-                )}
-                <span className="craft-matq-marker-value">{marker.mappedValue}</span>
-              </button>
-            ))}
+            {railMarkers.map((marker) => {
+              const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
+              return (
+                <button
+                  type="button"
+                  key={`${marker.index}-${marker.mappedValue}`}
+                  className={`craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? ' is-active' : ''}`}
+                  style={{ left: `${marker.left}%` }}
+                  data-edge={marker.edge}
+                  onClick={() => onBandChange(marker.index)}
+                  aria-label={`Use mapped quality ${marker.mappedValue}`}
+                >
+                  {marker.index === safeBandIndex ? (
+                    <span className="craft-matq-dot" />
+                  ) : (
+                    marker.mappedValue > quality && <span className="craft-matq-threshold-dot" />
+                  )}
+                  <span className={`craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -305,7 +293,7 @@ function MaterialQualitySlider({
               <div key={i} className="craft-matq-mod-card">
                 <div className="craft-matq-mod-top">
                   <span className="craft-matq-mod-prop">{formatProperty(m.property)}</span>
-                  <span className={`craft-matq-mod-val ${getImpactClass(impact)} ${qualityRarityClass}`}>
+                  <span className={`craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}>
                     {formatModifierAtQuality(m)}{getImpactWord(impact) ? ` ${getImpactWord(impact)}` : ''}
                   </span>
                   {directionLabel && <span className="craft-matq-mod-hint">{directionLabel}</span>}
@@ -377,15 +365,14 @@ export default function BuildQueueGroup({
   }
 
   return (
-    <div className="logi-bq-group">
-      <div className="logi-bq-group-header">
+    <div className="build-category-section logi-bq-group">
+      <div className="build-category-header logi-bq-group-header">
         <span className="logi-bq-group-label">{CATEGORY_LABELS[category] ?? category}</span>
         <span className="logi-bq-group-count">{items.length}</span>
       </div>
       {items.map((item) => {
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
-        const status = item.status ?? 'queued';
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
         const isEditingThisItem = editingItemId === item.id;
 
@@ -453,34 +440,22 @@ export default function BuildQueueGroup({
         const worstShortageNames = summaryMetrics.shortageNames.slice(0, 3);
 
         return (
-          <section key={item.id} className={`logi-bq-item-row logi-bq-item-row--${fulfillment}`}>
+          <section key={item.id} className={`bq-card bq-card--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
 
             {/* ── Summary card ── */}
-            <div className={`logi-bq-summary-card ${FULFILLMENT_SUMMARY_CLASS[fulfillment]}`}>
-              <div className="logi-bq-summary-left">
-                <div className="logi-bq-summary-identity">
-                  <div className="logi-bq-summary-name">{itemName}</div>
-                  <div className="logi-bq-summary-badges">
-                    <span className="logi-bq-summary-type">{CATEGORY_LABELS[category] ?? category}</span>
-                    <span className={`logi-bq-status-chip ${FULFILLMENT_BADGE_CLASS[fulfillment]}`}>{FULFILLMENT_LABELS[fulfillment]}</span>
-                    <span className={`logi-quality-pill logi-rarity--${itemRarity}`}>Q {itemQuality}</span>
-                    <span className={`logi-badge ${STATUS_CLASS[status]}`}>{STATUS_LABELS[status]}</span>
-                    <span className="logi-badge">x{item.quantity}</span>
-                  </div>
+            <div className="bq-card-header">
+              <div className="bq-card-title-block">
+                <div className="bq-card-title">{itemName}</div>
+                <div className="bq-card-badges">
+                  <span className={`bq-category-badge logi-rarity--${itemRarity}`}>{CATEGORY_LABELS[category] ?? category}</span>
+                  <span className={`bq-status-badge ${FULFILLMENT_BADGE_CLASS[fulfillment]}`}>{FULFILLMENT_LABELS[fulfillment]}</span>
+                  <span className={`logi-quality-pill logi-rarity--${itemRarity}`} title={`Selected quality ${itemQuality}`}>Q{itemQuality}</span>
                 </div>
               </div>
 
-              <div className="logi-bq-summary-middle" aria-label={`${itemName} material totals`}>
-                <span><em>Materials</em><strong>{summaryMetrics.coveredCount}/{inputs.length}</strong></span>
-                <span><em>Required</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalRequired, undefined)} /></strong></span>
-                <span><em>Owned / Avail</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalOwned, undefined)} /> / <QuantityText value={formatQuantity(summaryMetrics.totalAvailable, undefined)} /></strong></span>
-                <span className={summaryMetrics.totalShortfall > 0 ? 'logi-bq-summary-shortfall' : ''}>
-                  <em>Shortfall</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalShortfall, undefined)} /></strong>
-                </span>
-              </div>
-              <div className="logi-bq-summary-controls">
+              <div className="bq-card-controls">
                 {inputs.length > 0 && (
-                  <label className="logi-bq-lower-quality-toggle">
+                  <label className={`logi-bq-lower-quality-toggle${item.allowLowerQuality ? ' is-enabled' : ''}`}>
                     <input
                       type="checkbox"
                       checked={Boolean(item.allowLowerQuality)}
@@ -490,8 +465,8 @@ export default function BuildQueueGroup({
                   </label>
                 )}
                 <div className="logi-bq-qty-control">
-                  <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>−</QtyStepBtn>
-                  <span className="logi-bq-qty-value">{item.quantity}×</span>
+                  <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>-</QtyStepBtn>
+                  <span className="logi-bq-qty-value">{item.quantity}x</span>
                   <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity + 1)}>+</QtyStepBtn>
                 </div>
 
@@ -537,8 +512,8 @@ export default function BuildQueueGroup({
             </div>
 
             {/* ── Material cards ── */}
-            <div className="logi-bq-detail-panel">
-              <div className="logi-bq-coverage-strip">
+            <div className="bq-summary-strip">
+              <div className="bq-coverage-block">
                 <div className="logi-bq-coverage-copy">
                   <span className="logi-bq-coverage-num">{coveragePercent}%</span>
                   <span className="logi-bq-coverage-label">material coverage</span>
@@ -549,9 +524,17 @@ export default function BuildQueueGroup({
                     style={{ width: `${coveragePercent}%` }}
                   />
                 </div>
+                <div className="build-coverage-metrics" aria-label={`${itemName} material totals`}>
+                  <span><em>Materials</em><strong>{summaryMetrics.coveredCount}/{inputs.length}</strong></span>
+                  <span><em>Required</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalRequired, undefined)} /></strong></span>
+                  <span><em>Owned / Avail</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalOwned, undefined)} /> / <QuantityText value={formatQuantity(summaryMetrics.totalAvailable, undefined)} /></strong></span>
+                  <span className={summaryMetrics.totalShortfall > 0 ? 'logi-bq-summary-shortfall' : ''}>
+                    <em>Shortfall</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalShortfall, undefined)} /></strong>
+                  </span>
+                </div>
               </div>
 
-              <div className="logi-bq-intel-card">
+              <div className="bq-intel-note">
                 <div className="logi-bq-intel-title">Build Intelligence</div>
                 <div className="logi-bq-intel-copy">
                   {fulfillment === 'complete'
@@ -570,20 +553,37 @@ export default function BuildQueueGroup({
               </div>
             </div>
 
+            {isEditingThisItem && inputs.length > 0 && (
+              <div className="bq-quality-drawer" aria-label={`Quality adjustment for ${itemName}`}>
+                {inputs.map((input, inputIndex) => {
+                  const materialKey = input.materialKey ?? input.materialId;
+                  const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
+                  const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+                  const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+                  const draftBandIndex = draftBandIndices[requirementId] ?? savedBandIndex;
+
+                  return (
+                    <MaterialQualitySlider
+                      key={`quality:${item.id}:${requirementId}:${inputIndex}`}
+                      input={input}
+                      draftBandIndex={draftBandIndex}
+                      onBandChange={(bandIndex) =>
+                        setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))
+                      }
+                    />
+                  );
+                })}
+              </div>
+            )}
+
             {recipe ? (
-              <div className="logi-bq-material-panel">
-                <div className="logi-bq-material-subheader" aria-label={`${inputs.length} material requirement${inputs.length === 1 ? '' : 's'}`}>
-                  <span>Materials</span>
-                  <span>Status</span>
-                  <span>Quality</span>
-                  <span>Modifier</span>
-                  <span>Reserved</span>
-                  <span>Required</span>
-                  <span>Owned</span>
-                  <span>Available</span>
-                  <span>Need</span>
+              <div className="bq-requirements">
+                <div className="bq-requirements-head" aria-label={`${inputs.length} material requirement${inputs.length === 1 ? '' : 's'}`}>
+                  <span>Material</span>
+                  <span>Quality / Modifier</span>
+                  <span>Inventory</span>
                 </div>
-                <div className="logi-source-grid logi-bq-material-grid">
+                <div className="bq-requirements-list">
                   {inputs.map((input, inputIndex) => {
                   const materialKey = input.materialKey ?? input.materialId;
                   const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
@@ -638,60 +638,49 @@ export default function BuildQueueGroup({
                   );
                   const staleAllocations = coverage.validations.filter((v) => v.isStale);
                   const coverageClass =
-                    coverage.coverageState === 'covered' ? 'logi-badge--complete'
+                    coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved' ? 'logi-badge--complete'
                     : coverage.coverageState === 'missing' ? 'logi-badge--shortage'
                     : 'logi-badge--paused';
-                  const sourceCardStateClass =
-                    coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved'
-                      ? 'logi-source-card--covered'
-                      : coverage.coverageState === 'partial'
-                        ? 'logi-source-card--partial'
-                        : coverage.coverageState === 'missing'
-                          ? 'logi-source-card--missing'
-                          : 'logi-source-card--needed';
-
                   const lowerQualityExpanded = expandedLowerQuality[requirementCardKey] ?? false;
+                  const reserveNote = staleAllocations.length > 0
+                    ? `${staleAllocations.length} stale reservation${staleAllocations.length === 1 ? '' : 's'}`
+                    : allMaterialStacks.length === 0
+                      ? 'No stored stock'
+                      : eligibleStacks.length === 0
+                        ? 'No eligible stock'
+                        : `${eligibleStacks.length} reservable stack${eligibleStacks.length === 1 ? '' : 's'}`;
 
                   return (
-                    <div key={requirementCardKey} className={`logi-source-card ${sourceCardStateClass}${isEditingThisItem ? ' logi-source-card--quality-edit' : ''}`}>
-
-                      {isEditingThisItem ? (
-                        /* Flip to quality slider when this item is being edited */
-                        <MaterialQualitySlider
-                          input={input}
-                          draftBandIndex={draftBandIndex}
-                          onBandChange={(bandIndex) =>
-                            setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))
-                          }
-                        />
-                      ) : (
-                        <>
+                    <div key={requirementCardKey} className={`bq-requirement-row bq-requirement-row--${coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved' ? 'covered' : coverage.coverageState === 'partial' ? 'partial' : 'missing'}`}>
+                      <>
                           {/* Material name + coverage badge */}
-                          <div className="logi-bq-material-row-main">
-                            <span className="logi-mat-name">{displayName}</span>
-                            <span className={`logi-badge ${coverageClass}`}>{COVERAGE_LABELS[coverage.coverageState]}</span>
-                            <span className={`logi-quality-pill logi-rarity--${selectedQualityRarity}`}>{selectedQuality}</span>
-                            <span className={`logi-mat-modifier logi-rarity--${selectedQualityRarity}`}>{modifierPreview ?? '-'}</span>
+                          <div className="bq-requirement-main">
+                            <div className="bq-requirement-material">
+                              <div className="bq-requirement-title-row">
+                                <span className="logi-mat-name">{displayName}</span>
+                                <span className={`logi-badge ${coverageClass}`}>{COVERAGE_LABELS[coverage.coverageState]}</span>
+                              </div>
+                              <span className={`bq-requirement-note${eligibleStacks.length === 0 ? ' bq-requirement-note--empty' : ''}`}>{reserveNote}</span>
+                            </div>
+                            <div className="bq-requirement-quality">
+                              <span className={`logi-quality-pill logi-rarity--${selectedQualityRarity}`}>{selectedQuality}</span>
+                              <span className={`logi-mat-modifier logi-rarity--${selectedQualityRarity}`}>{modifierPreview ?? '-'}</span>
+                            </div>
 
                           {/* Reserved / Required summary */}
-                          <div className="logi-mat-amounts">
-                            <div className="logi-mat-amount-group">
+                          <div className="bq-requirement-numbers">
+                            <span className="logi-mat-amount-group">
                               <span className="logi-mat-amount-label">Reserved</span>
                               <span className={`logi-mat-amount-value ${materialTypeClass(material)}`}>
                                 {formatQuantity(coverage.reservedQuantity, material)}
                               </span>
-                            </div>
-                            <span className="logi-mat-amount-sep">/</span>
-                            <div className="logi-mat-amount-group">
+                            </span>
+                            <span className="logi-mat-amount-group">
                               <span className="logi-mat-amount-label">Required</span>
                               <span className={`logi-mat-amount-value ${materialTypeClass(material)}`}>
                                 {formatRequirementQuantity(required, input.unitType, material)}
                               </span>
-                            </div>
-                          </div>
-
-                          {/* Owned / Available / Still needed */}
-                          <div className="logi-mat-inventory-row">
+                            </span>
                             <span className="logi-mat-inv-item">
                               <span className="logi-mat-amount-label">Owned</span>
                               <span className={materialTypeClass(material)}>{formatQuantity(needSummary.ownedQuantity, material)}</span>
@@ -813,8 +802,7 @@ export default function BuildQueueGroup({
                               </div>
                             )}
                           </div>
-                        </>
-                      )}
+                      </>
                     </div>
                   );
                   })}

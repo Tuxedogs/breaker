@@ -182,6 +182,163 @@ function formatSize(size: string | null | undefined): string | null {
   return `S${size}`;
 }
 
+function getRecipeDisplayName(recipe: ComponentRecipe): string {
+  return recipe.item_kind === "vehicle"
+    ? recipe.component_name
+    : getComponentDisplayName(recipe.component_name);
+}
+
+type RecipeVariantIdentity = {
+  baseName: string;
+  variantLabel: string;
+  groupKey: string;
+};
+
+function normalizeDisplayText(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+const KNOWN_VARIANT_SUFFIXES = [
+  "Alpine Sunset",
+  "Firestarter",
+  "Sunchaser",
+  "Aftershock",
+  "Snowdrift",
+  "Terracotta",
+  "Brimstone",
+  "Hailstorm",
+  "Tactical",
+  "Modified",
+  "Charcoal",
+  "Desert",
+  "Roger",
+  "Rager",
+  "Thule",
+  "Fate",
+];
+
+function buildRecipeGroupKey(recipe: ComponentRecipe, baseName: string): string {
+  return [
+    recipe.item_kind ?? "vehicle",
+    recipe.component_type ?? "",
+    recipe.category ?? "",
+    recipe.wiki_type ?? "",
+    baseName.toLowerCase(),
+  ].join("::");
+}
+
+function makeRecipeVariantIdentity(
+  recipe: ComponentRecipe,
+  baseName: string,
+  variantLabel: string,
+): RecipeVariantIdentity {
+  const normalizedBaseName = normalizeDisplayText(baseName);
+  const normalizedVariantLabel = normalizeDisplayText(variantLabel) || "Standard variant";
+
+  return {
+    baseName: normalizedBaseName,
+    variantLabel: normalizedVariantLabel,
+    groupKey: buildRecipeGroupKey(recipe, normalizedBaseName),
+  };
+}
+
+function deriveRecipeVariantIdentity(recipe: ComponentRecipe): RecipeVariantIdentity {
+  const displayName = getRecipeDisplayName(recipe);
+  const quotedVariantMatch = displayName.match(/^(.+?)\s+"([^"]+)"\s+(.+)$/);
+
+  if (quotedVariantMatch) {
+    const [, prefix, quotedText, suffix] = quotedVariantMatch;
+    return makeRecipeVariantIdentity(recipe, `${prefix} ${suffix}`, quotedText);
+  }
+
+  const parentheticalVariantMatch = displayName.match(/^(.+?)\s+\(([^)]+)\)$/);
+
+  if (parentheticalVariantMatch) {
+    const [, baseName, parentheticalText] = parentheticalVariantMatch;
+    return makeRecipeVariantIdentity(recipe, baseName, parentheticalText);
+  }
+
+  const normalizedDisplayName = normalizeDisplayText(displayName);
+  const suffix = KNOWN_VARIANT_SUFFIXES.find((label) => {
+    const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`\\s+${escapedLabel}$`, "i").test(normalizedDisplayName);
+  });
+
+  if (suffix) {
+    return makeRecipeVariantIdentity(
+      recipe,
+      normalizedDisplayName.replace(new RegExp(`\\s+${suffix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i"), ""),
+      suffix,
+    );
+  }
+
+  const fallback = normalizeDisplayText(recipe.fallback_name ?? "");
+  const baseName = normalizedDisplayName;
+
+  return makeRecipeVariantIdentity(
+    recipe,
+    baseName,
+    fallback && fallback.toLowerCase() !== "default" && fallback.toLowerCase() !== baseName.toLowerCase()
+      ? fallback
+      : "Standard variant",
+  );
+}
+
+function getVariantLabel(recipe: ComponentRecipe, baseName: string): string {
+  const identity = deriveRecipeVariantIdentity(recipe);
+  const raw = identity.variantLabel;
+
+  if (!raw || raw.toLowerCase() === "default" || raw.toLowerCase() === baseName.toLowerCase()) {
+    return "Standard variant";
+  }
+
+  return raw;
+}
+
+function getInlineMeta(recipe: ComponentRecipe): string[] {
+  return [formatSize(recipe.size), recipe.grade, recipe.class].filter(
+    (value): value is string => Boolean(value),
+  );
+}
+
+function getSharedValue(
+  recipes: ComponentRecipe[],
+  getValue: (recipe: ComponentRecipe) => string | null,
+): string | null {
+  const values = new Set(recipes.map(getValue).filter(Boolean));
+  return values.size === 1 ? [...values][0] : null;
+}
+
+function dedupeRecipeVariants(recipes: ComponentRecipe[], baseName: string): ComponentRecipe[] {
+  const seen = new Set<string>();
+  const seenExactRecipes = new Set<string>();
+  const deduped: ComponentRecipe[] = [];
+
+  for (const recipe of recipes) {
+    const exactRecipeKey = [
+      recipe.blueprint_id,
+      recipe.output_entityClass,
+      getRecipeDisplayName(recipe),
+    ].join("::");
+
+    if (seenExactRecipes.has(exactRecipeKey)) continue;
+    seenExactRecipes.add(exactRecipeKey);
+
+    const variantLabel = getVariantLabel(recipe, baseName).toLowerCase();
+    const key =
+      variantLabel === "standard variant"
+        ? variantLabel
+        : `${variantLabel}::${recipe.blueprint_id}`;
+
+    if (seen.has(key)) continue;
+
+    seen.add(key);
+    deduped.push(recipe);
+  }
+
+  return deduped;
+}
+
 function getImpactClass(impact: "good" | "bad" | "neutral"): string {
   if (impact === "good") return "craft-ok";
   if (impact === "bad") return "craft-shortage";
@@ -1015,20 +1172,24 @@ function CraftedItemSummaryPanel({
 
 function RecipeDrawer({
   recipe,
+  groupRecipes = [recipe],
+  baseDisplayName,
   inventoryEntries,
   materialTemplates,
   onAddToQueue,
-  isQueued,
-  isBookmarked,
+  isRecipeQueued,
+  isRecipeBookmarked,
   onToggleBookmark,
 }: {
   recipe: ComponentRecipe;
+  groupRecipes?: ComponentRecipe[];
+  baseDisplayName: string;
   inventoryEntries?: InventoryEntry[];
   materialTemplates?: MaterialTemplate[];
   onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
-  isQueued: boolean;
-  isBookmarked: boolean;
-  onToggleBookmark: () => void;
+  isRecipeQueued: (recipe: ComponentRecipe) => boolean;
+  isRecipeBookmarked: (recipe: ComponentRecipe) => boolean;
+  onToggleBookmark: (recipeId: string) => void;
 }) {
   const {
     loading: quantizationLoading,
@@ -1036,6 +1197,13 @@ function RecipeDrawer({
     getBandEffectiveQuality,
     getBandLabel,
   } = useQualityQuantization();
+
+  const [selectedRecipeId, setSelectedRecipeId] = useState(recipe.blueprint_id);
+  const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
+
+  useEffect(() => {
+    setSelectedRecipeId(recipe.blueprint_id);
+  }, [recipe.blueprint_id]);
 
   const [materialQualities, setMaterialQualities] = useState<
     Record<string, number>
@@ -1048,51 +1216,93 @@ function RecipeDrawer({
     ),
   );
 
+  useEffect(() => {
+    setMaterialQualities(
+      Object.fromEntries(
+        selectedRecipe.materials.map((mat, inputIndex) => [
+          getMaterialQualityKey(selectedRecipe, mat, inputIndex),
+          DEFAULT_BAND_INDEX,
+        ]),
+      ),
+    );
+  }, [selectedRecipe]);
+
   function getBandIndex(key: string): number {
     return materialQualities[key] ?? DEFAULT_BAND_INDEX;
   }
 
-  const overallModifiers = recipe.overallQualityModifiers ?? [];
-  const overallQualityMaterial = recipe.materials[2];
+  const overallModifiers = selectedRecipe.overallQualityModifiers ?? [];
+  const overallQualityMaterial = selectedRecipe.materials[2];
 
   const overallQualitySource = overallQualityMaterial
     ? getBandEffectiveQuality(
         getMaterialName(overallQualityMaterial),
-        getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial, 2)),
+        getBandIndex(getMaterialQualityKey(selectedRecipe, overallQualityMaterial, 2)),
       )
     : undefined;
   const componentBandIndex = overallQualityMaterial
-    ? getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial, 2))
+    ? getBandIndex(getMaterialQualityKey(selectedRecipe, overallQualityMaterial, 2))
     : Math.max(DEFAULT_BAND_INDEX, ...Object.values(materialQualities));
   const componentRarityClass = rarityClassFromBandIndex(componentBandIndex + 1);
 
-  const rewardPools = (recipe.rewardPools ?? []) as { displayName: string }[];
+  const rewardPools = (selectedRecipe.rewardPools ?? []) as { displayName: string }[];
 
-  const displayName =
-    recipe.item_kind === "vehicle"
-      ? recipe.component_name
-      : getComponentDisplayName(recipe.component_name);
+  const displayName = getRecipeDisplayName(selectedRecipe);
 
   const totalModifiers = useMemo(
-    () => computeTotalModifiers(recipe, getBandEffectiveQuality, getBandIndex),
+    () => computeTotalModifiers(selectedRecipe, getBandEffectiveQuality, getBandIndex),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [recipe, getBandEffectiveQuality, materialQualities],
+    [selectedRecipe, getBandEffectiveQuality, materialQualities],
   );
 
   const inventorySummaryByKey = useMemo(() => {
     const map = new Map<string, RequirementInventorySummary | undefined>();
-    recipe.materials.forEach((mat, inputIndex) => {
+    selectedRecipe.materials.forEach((mat, inputIndex) => {
       map.set(
-        getMaterialQualityKey(recipe, mat, inputIndex),
+        getMaterialQualityKey(selectedRecipe, mat, inputIndex),
         getRequirementInventorySummary(mat, inventoryEntries, materialTemplates),
       );
     });
     return map;
-  }, [inventoryEntries, materialTemplates, recipe]);
+  }, [inventoryEntries, materialTemplates, selectedRecipe]);
+
+  const showVariantSelector = groupRecipes.length > 1;
+  const selectedIsQueued = isRecipeQueued(selectedRecipe);
+  const selectedIsBookmarked = isRecipeBookmarked(selectedRecipe);
 
   return (
     <div className="craft-expanded-content">
       <div className="craft-expanded-main">
+        {showVariantSelector && (
+          <div className="craft-variant-selector" aria-label="Select variant">
+            <div className="craft-variant-selector-label">Select variant</div>
+            <div className="craft-variant-list">
+              {groupRecipes.map((variant) => {
+                const isSelected = variant.blueprint_id === selectedRecipe.blueprint_id;
+                const variantLabel = getVariantLabel(variant, baseDisplayName);
+                const meta = getInlineMeta(variant);
+
+                return (
+                  <button
+                    key={variant.blueprint_id}
+                    type="button"
+                    className={`craft-variant-row${isSelected ? " is-selected" : ""}`}
+                    aria-pressed={isSelected}
+                    onClick={() => setSelectedRecipeId(variant.blueprint_id)}
+                  >
+                    <span className="craft-variant-name">{variantLabel}</span>
+                    {meta.length > 0 && (
+                      <span className="craft-variant-meta">
+                        {meta.join(" / ")}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div className="craft-detail-section">
           {quantizationLoading && (
             <div className="craft-empty-card">
@@ -1101,8 +1311,8 @@ function RecipeDrawer({
           )}
 
           <div className="craft-material-list">
-            {recipe.materials.map((mat, inputIndex) => {
-              const key = getMaterialQualityKey(recipe, mat, inputIndex);
+            {selectedRecipe.materials.map((mat, inputIndex) => {
+              const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
 
               return (
                 <MaterialQualityRow
@@ -1128,7 +1338,7 @@ function RecipeDrawer({
 
       <div className="craft-expanded-sidebar">
         <CraftedItemSummaryPanel
-          recipe={recipe}
+          recipe={selectedRecipe}
           displayName={displayName}
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
@@ -1136,9 +1346,9 @@ function RecipeDrawer({
           componentRarityClass={componentRarityClass}
           rewardPools={rewardPools}
           onAddToQueue={onAddToQueue}
-          isQueued={isQueued}
-          isBookmarked={isBookmarked}
-          onToggleBookmark={onToggleBookmark}
+          isQueued={selectedIsQueued}
+          isBookmarked={selectedIsBookmarked}
+          onToggleBookmark={() => onToggleBookmark(selectedRecipe.blueprint_id)}
           getBandEffectiveQuality={getBandEffectiveQuality}
           getBandsForMaterial={getBandsForMaterial}
           materialQualities={materialQualities}
@@ -1329,15 +1539,8 @@ export default function ComponentRecipeTable({
         return true;
       })
       .sort((a, b) => {
-        const aName =
-          a.item_kind === "vehicle"
-            ? a.component_name
-            : getComponentDisplayName(a.component_name);
-
-        const bName =
-          b.item_kind === "vehicle"
-            ? b.component_name
-            : getComponentDisplayName(b.component_name);
+        const aName = getRecipeDisplayName(a);
+        const bName = getRecipeDisplayName(b);
 
         const nd = aName.localeCompare(bName);
 
@@ -1355,12 +1558,37 @@ export default function ComponentRecipeTable({
     recipeSearchTexts,
   ]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const groupedRecipes = useMemo(() => {
+    const map = new Map<string, { id: string; displayName: string; recipes: ComponentRecipe[] }>();
+
+    for (const recipe of filtered) {
+      const identity = deriveRecipeVariantIdentity(recipe);
+      const id = identity.groupKey;
+      const group = map.get(id);
+
+      if (group) {
+        group.recipes.push(recipe);
+      } else {
+        map.set(id, {
+          id,
+          displayName: identity.baseName,
+          recipes: [recipe],
+        });
+      }
+    }
+
+    return Array.from(map.values()).map((group) => ({
+      ...group,
+      recipes: dedupeRecipeVariants(group.recipes, group.displayName),
+    }));
+  }, [filtered]);
+
+  const totalPages = Math.max(1, Math.ceil(groupedRecipes.length / pageSize));
   const currentPage = Math.min(page, totalPages - 1);
   const startIdx = currentPage * pageSize;
-  const endIdx = Math.min(startIdx + pageSize, filtered.length);
-  const paginated = filtered.slice(startIdx, endIdx);
-  const startItem = filtered.length === 0 ? 0 : startIdx + 1;
+  const endIdx = Math.min(startIdx + pageSize, groupedRecipes.length);
+  const paginated = groupedRecipes.slice(startIdx, endIdx);
+  const startItem = groupedRecipes.length === 0 ? 0 : startIdx + 1;
 
   return (
     <div className="craft-recipe-browser-layout">
@@ -1478,28 +1706,25 @@ export default function ComponentRecipeTable({
           </thead>
 
           <tbody>
-            {paginated.map((recipe) => {
-              const isOpen = expanded === recipe.blueprint_id;
-              const isQueued = isRecipeQueued(recipe);
-              const isBookmarked = bookmarkedRecipeIds.has(recipe.blueprint_id);
-
-              const displayName =
-                recipe.item_kind === "vehicle"
-                  ? recipe.component_name
-                  : getComponentDisplayName(recipe.component_name);
+            {paginated.map((group) => {
+              const recipe = group.recipes[0];
+              const isOpen = expanded === group.id;
+              const variantCount = group.recipes.length;
+              const hasVariants = variantCount > 1;
+              const displayName = group.displayName;
 
               const subtitle = getSubtitle(recipe);
               const typeBadges = getTypeBadges(recipe);
-              const sizeLabel = formatSize(recipe.size);
-              const grade = recipe.grade ?? null;
-              const cls = recipe.class ?? null;
+              const sizeLabel = getSharedValue(group.recipes, (item) => formatSize(item.size));
+              const grade = getSharedValue(group.recipes, (item) => item.grade ?? null);
+              const cls = getSharedValue(group.recipes, (item) => item.class ?? null);
 
               return (
-                <Fragment key={recipe.blueprint_id}>
+                <Fragment key={group.id}>
                   <tr
                     ref={isOpen ? expandedRowRef : undefined}
                     className={`craft-table-row${isOpen ? " craft-table-row--open" : ""}`}
-                    onClick={() => setExpanded(isOpen ? null : recipe.blueprint_id)}
+                    onClick={() => setExpanded(isOpen ? null : group.id)}
                     style={{ cursor: "pointer" }}
                   >
                     <td className="craft-cell-name">
@@ -1527,9 +1752,14 @@ export default function ComponentRecipeTable({
                             {displayName}
                           </span>
 
-                          {subtitle && (
-                            <span className="craft-name-sub">{subtitle}</span>
-                          )}
+                          <span className="craft-name-sub">
+                            {subtitle}
+                            {hasVariants && (
+                              <span className="craft-variant-count">
+                                {variantCount} variants
+                              </span>
+                            )}
+                          </span>
                         </div>
                       </div>
                     </td>
@@ -1607,12 +1837,14 @@ export default function ComponentRecipeTable({
                       <td colSpan={6}>
                         <RecipeDrawer
                           recipe={recipe}
+                          groupRecipes={group.recipes}
+                          baseDisplayName={displayName}
                           inventoryEntries={inventoryEntries}
                           materialTemplates={materialTemplates}
                           onAddToQueue={onAddToQueue}
-                          isQueued={isQueued}
-                          isBookmarked={isBookmarked}
-                          onToggleBookmark={() => toggleBookmark(recipe.blueprint_id)}
+                          isRecipeQueued={isRecipeQueued}
+                          isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
+                          onToggleBookmark={toggleBookmark}
                         />
                       </td>
                     </tr>
@@ -1634,8 +1866,8 @@ export default function ComponentRecipeTable({
 
       <div className="craft-pagination">
         <div className="craft-pagination-info">
-          {filtered.length > 0
-            ? `Showing ${startItem}–${endIdx} of ${filtered.length}`
+          {groupedRecipes.length > 0
+            ? `Showing ${startItem}–${endIdx} of ${groupedRecipes.length}`
             : "No results"}
         </div>
 
