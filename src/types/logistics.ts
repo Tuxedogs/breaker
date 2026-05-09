@@ -79,6 +79,7 @@ export interface InventoryEntry {
   category?: string;
   unitType?: InventoryUnitType;
   quality?: number;
+  qualityBand?: number;
   quantity: number;
   locationId?: string;
   container?: string;
@@ -131,6 +132,7 @@ export interface ReservedMaterialAllocation {
   unitType?: RecipeInputTemplate["unitType"];
   materialName?: string;
   quality?: number;
+  qualityBand?: number;
   rarity: RarityInfo;
   locationId?: string;
   container?: string;

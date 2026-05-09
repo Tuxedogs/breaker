@@ -1,3 +1,5 @@
+import type { RarityTier } from "../../../../types/logistics";
+
 export type QualityBand = {
   start: string | number;
   end: string | number;
@@ -31,6 +33,20 @@ export function clampBandIndex(value: number, bands: QualityBand[]): number {
 export function getBandEffectiveQuality(bands: QualityBand[], bandIndex: number): number {
   const safeIndex = clampBandIndex(bandIndex, bands);
   return clampQuality(Number(bands[safeIndex]?.mappedValue ?? 500));
+}
+
+export function rarityFromBandIndex(bandNumber: number | null | undefined): Extract<RarityTier, "common" | "rare" | "epic" | "legendary"> {
+  if (!Number.isFinite(bandNumber)) return "common";
+  const band = Math.trunc(Number(bandNumber));
+  if (band >= 7 && band <= 8) return "legendary";
+  if (band >= 5 && band <= 6) return "epic";
+  if (band >= 3 && band <= 4) return "rare";
+  if (band >= 1 && band <= 2) return "common";
+  return "common";
+}
+
+export function rarityClassFromBandIndex(bandNumber: number | null | undefined): string {
+  return `craft-value-tier--${rarityFromBandIndex(bandNumber)}`;
 }
 
 export function findNearestBandForQuality(bands: QualityBand[], value: number): number {

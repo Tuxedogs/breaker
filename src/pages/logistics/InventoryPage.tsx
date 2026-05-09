@@ -165,7 +165,7 @@ export default function InventoryPage() {
         </select>
 
         <div className="logi-search-wrap" style={{ maxWidth: 120, minWidth: 90, gap: '0.35rem' }}>
-          <span style={{ fontSize: '0.7rem', color: 'rgba(160,180,220,0.4)', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.06em', flexShrink: 0 }}>Q≥</span>
+          <span style={{ fontSize: '0.7rem', color: 'rgba(160,180,220,0.4)', fontFamily: 'var(--font-primary)', letterSpacing: '0.06em', flexShrink: 0 }}>Q≥</span>
           <input
             type="number"
             className="logi-search-input"

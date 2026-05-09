@@ -37,6 +37,7 @@ export interface ParsedRefineryRow {
   qualityObserved?: number;
   /** Material-specific quantized mappedValue from qualityQuantizationRecords. */
   qualityMapped?: number;
+  qualityBand?: number;
   qualityBandStart?: number;
   qualityBandEnd?: number;
   qualityQuantized?: boolean;
@@ -76,6 +77,7 @@ export interface ParsedInputRow {
   qualityObserved?: number;
   /** Material-specific quantized mappedValue from qualityQuantizationRecords. */
   qualityMapped?: number;
+  qualityBand?: number;
   qualityBandStart?: number;
   qualityBandEnd?: number;
   qualityQuantized?: boolean;
@@ -294,6 +296,7 @@ interface ResolvedQualityQuantization {
   quality: number;
   qualityObserved: number;
   qualityMapped?: number;
+  qualityBand?: number;
   qualityBandStart?: number;
   qualityBandEnd?: number;
   qualityQuantized: boolean;
@@ -471,6 +474,7 @@ function resolveQualityQuantization(
       quality: exactMappedBand.mappedValue,
       qualityObserved: observedQuality,
       qualityMapped: exactMappedBand.mappedValue,
+      qualityBand: record.bands.indexOf(exactMappedBand) + 1,
       qualityBandStart: exactMappedBand.start,
       qualityBandEnd: exactMappedBand.end,
       qualityQuantized: true,
@@ -492,6 +496,7 @@ function resolveQualityQuantization(
       quality: nearestMappedBand.mappedValue,
       qualityObserved: observedQuality,
       qualityMapped: nearestMappedBand.mappedValue,
+      qualityBand: record.bands.indexOf(nearestMappedBand) + 1,
       qualityBandStart: nearestMappedBand.start,
       qualityBandEnd: nearestMappedBand.end,
       qualityQuantized: true,
@@ -516,7 +521,7 @@ function isRejectedRefineryRow(row: Pick<ParsedRefineryRow, "rawName" | "materia
 
 function applyQualityQuantizationToRow<T extends { rawName: string; materialId: string | null; quality: number; needsReview?: boolean }>(
   row: T,
-): T & Pick<ParsedRefineryRow, "qualityObserved" | "qualityMapped" | "qualityBandStart" | "qualityBandEnd" | "qualityQuantized" | "qualityNeedsReview"> {
+): T & Pick<ParsedRefineryRow, "qualityObserved" | "qualityMapped" | "qualityBand" | "qualityBandStart" | "qualityBandEnd" | "qualityQuantized" | "qualityNeedsReview"> {
   const resolved = resolveQualityQuantization(row.materialId, row.rawName, row.quality);
 
   return {
@@ -524,6 +529,7 @@ function applyQualityQuantizationToRow<T extends { rawName: string; materialId: 
     quality: resolved.quality,
     qualityObserved: resolved.qualityObserved,
     qualityMapped: resolved.qualityMapped,
+    qualityBand: resolved.qualityBand,
     qualityBandStart: resolved.qualityBandStart,
     qualityBandEnd: resolved.qualityBandEnd,
     qualityQuantized: resolved.qualityQuantized,

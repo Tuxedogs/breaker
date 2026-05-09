@@ -105,7 +105,7 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
                     <span className="logi-mat-dot" aria-hidden />
                     {materialName}
                     {isBest && (
-                      <span title="Highest quality stack for this material" style={{ marginLeft: 4, fontSize: '0.6rem', color: 'rgba(167,139,250,0.55)', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.05em' }}>
+                      <span title="Highest quality stack for this material" style={{ marginLeft: 4, fontSize: '0.6rem', color: 'rgba(167,139,250,0.55)', fontFamily: 'var(--font-primary)', letterSpacing: '0.05em' }}>
                         BEST
                       </span>
                     )}

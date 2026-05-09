@@ -12,6 +12,7 @@ import {
   type RecipeInputTemplate,
 } from "../data/logistics/seed";
 import { normalizeRecipeInputTemplate } from "../lib/logistics/materialResolver";
+import { rarityFromBandIndex } from "../components/industry/crafting/utils/qualityBands";
 import {
   getLegacyMaterialItemKind,
   resolveInventoryItemName,
@@ -191,20 +192,15 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
     unitType: isString(value.unitType) ? value.unitType as ReservedMaterialAllocation["unitType"] : undefined,
     materialName: isString(value.materialName) ? value.materialName : undefined,
     quality: isNumber(value.quality) ? value.quality : undefined,
+    qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
     rarity: rarityCatalog[value.rarity.tier],
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : undefined,
   };
 }
 
-export function getRarityForQuality(quality?: number, material?: MaterialTemplate): RarityInfo {
-  if (quality === undefined) return rarityCatalog.common;
-  if (material?.isQuantanium) return rarityCatalog.quantanium;
-  if (quality >= 900) return rarityCatalog.legendary;
-  if (quality >= 800) return rarityCatalog.epic;
-  if (quality >= 750) return rarityCatalog.rare;
-  if (quality >= 650) return rarityCatalog.uncommon;
-  return rarityCatalog.common;
+export function getRarityForBand(qualityBand?: number): RarityInfo {
+  return rarityCatalog[rarityFromBandIndex(qualityBand)];
 }
 
 function normalizeRarity(rarity: RarityInfo | undefined, fallback: RarityInfo): RarityInfo {
@@ -218,11 +214,10 @@ function normalizeInventoryEntry(
 ): InventoryEntry {
   const material = getMaterialTemplate(entry.materialId, materials);
   const quality = isNumber(entry.quality) ? Math.max(0, Math.min(1000, entry.quality)) : undefined;
-  const rarity = material?.isQuantanium
-    ? rarityCatalog.quantanium
-    : quality !== undefined
-      ? getRarityForQuality(quality, material)
-      : normalizeRarity(entry.rarity, rarityCatalog.common);
+  const qualityBand = isNumber(entry.qualityBand) ? Math.trunc(entry.qualityBand) : undefined;
+  const rarity = quality !== undefined
+    ? getRarityForBand(qualityBand)
+    : normalizeRarity(entry.rarity, rarityCatalog.common);
   const itemName = resolveInventoryItemName(entry, material);
   const itemKind = entry.itemKind ?? getLegacyMaterialItemKind(material);
   const unitType = entry.unitType ?? resolveInventoryUnitType(entry, material);
@@ -236,6 +231,7 @@ function normalizeInventoryEntry(
     itemKind,
     unitType,
     quality,
+    qualityBand,
     accentTier: quality !== undefined ? rarity.tier : entry.accentTier,
     rarity,
     createdAt: entry.createdAt ?? fallbackCreatedAt ?? new Date().toISOString(),
@@ -295,6 +291,7 @@ function coercePersistedInventoryEntry(value: unknown, materials: MaterialTempla
     category: isString(value.category) ? value.category : undefined,
     unitType: isInventoryUnitType(value.unitType) ? value.unitType : undefined,
     quality: isNumber(value.quality) ? value.quality : undefined,
+    qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
     quantity: value.quantity,
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : isString(value.containerName) ? value.containerName : undefined,
@@ -393,6 +390,7 @@ function createValidatedAllocation(
     unitType: allocation.unitType,
     materialName: inventoryEntry.itemName ?? inventoryEntry.materialName ?? allocation.materialName,
     quality: inventoryEntry.quality,
+    qualityBand: inventoryEntry.qualityBand,
     rarity: normalizeRarity(inventoryEntry.rarity, rarityCatalog.common),
     locationId: inventoryEntry.locationId,
     container: inventoryEntry.container,
@@ -813,7 +811,8 @@ export function createInventoryEntryDraft(
   const material = getMaterialTemplate(input.materialId, get().materialTemplates);
   const timestamp = new Date().toISOString();
   const quality = input.quality === undefined ? undefined : Math.max(0, Math.min(1000, input.quality));
-  const rarity = quality !== undefined ? getRarityForQuality(quality, material) : rarityCatalog.common;
+  const qualityBand = input.qualityBand === undefined ? undefined : Math.trunc(input.qualityBand);
+  const rarity = quality !== undefined ? getRarityForBand(qualityBand) : rarityCatalog.common;
   return normalizeInventoryEntry({
     id: input.id,
     materialId: input.materialId,
@@ -826,6 +825,7 @@ export function createInventoryEntryDraft(
     category: input.category,
     unitType: input.unitType,
     quality,
+    qualityBand,
     quantity: input.quantity,
     locationId: input.locationId,
     container: input.container,

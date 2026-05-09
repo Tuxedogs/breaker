@@ -1,5 +1,6 @@
 import type { ApiSource, RecommenderApiData, RecommenderWarning } from "./recommender.types";
 import { addWarning } from "./recommenderWarnings";
+import { normalizeMiningLocationName, normalizedMiningSystemName } from "./locationNormalization";
 
 export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, warnings: RecommenderWarning[]) {
   const metadataKey = source.system && source.providerName ? `${source.system}:${source.providerName}` : "";
@@ -15,9 +16,12 @@ export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, 
     });
   }
 
+  const systemName = normalizedMiningSystemName(metadata?.systemName ?? source.system ?? "Unknown");
+  const rawLocationName = metadata?.locationName ?? source.location ?? source.providerName ?? "Unknown";
+
   return {
-    systemName: metadata?.systemName ?? source.system ?? "Unknown",
-    locationName: metadata?.locationName ?? source.location ?? source.providerName ?? "Unknown",
+    systemName,
+    locationName: normalizeMiningLocationName(systemName, rawLocationName),
     locationKind: metadata?.locationKind ?? source.locationType ?? "unknown",
     spawnType: source.spawnType ?? "unknown",
     nearbyStations: metadata?.nearbyStations ?? [],

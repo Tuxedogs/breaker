@@ -1,39 +1,48 @@
-import { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
-import { qualityToRarity } from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
-import { formatQuantity } from '../../lib/logistics/inventory';
+import { formatRequirementQuantity, getBuildQueueItemInputs } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import type { Shortage } from '../../lib/logistics/shortages';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
-import { getBuildQueueRequirements } from '../../features/buildQueue/buildQueueRequirementsApi';
 import QuantityText from '../../components/logistics/QuantityText';
 
 
 type ShortageGroup = {
-  materialId: string;
+  key: string;
+  displayName: string;
+  unitGroups: ShortageUnitGroup[];
+  badges: ShortageRequirementBadge[];
+};
+
+type ShortageUnitGroup = {
+  unitKey: string;
   have: number;
   needed: number;
   shortfall: number;
-  rows: Shortage[];
+  materialId: string;
 };
 
-function formatCompactShortageQuantity(quantity: number): string {
-  const roundedQuantity = Math.round(Math.abs(quantity) * 100) / 100;
-  const displayQuantity = Number.isInteger(roundedQuantity)
-    ? String(roundedQuantity)
-    : roundedQuantity.toFixed(2).replace(/\.?0+$/, '');
+type ShortageRequirementBadge = {
+  key: string;
+  label: string;
+  quantity: number;
+  unitType: Shortage['unitType'];
+  count: number;
+  materialId: string;
+};
 
-  return `${quantity < 0 ? '-' : ''}${displayQuantity}`;
+function normalizeMaterialDisplayName(name: string): string {
+  return name.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+}
+
+function getShortageUnitKey(unitType: Shortage['unitType']): string {
+  return unitType === 'SCU' || unitType === 'scu' || unitType === 'cscu' ? 'scu' : 'unit';
 }
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
-  const [serverRequirementWarningCount, setServerRequirementWarningCount] = useState(0);
-  const [expandedShortageGroups, setExpandedShortageGroups] = useState<Set<string>>(new Set());
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const locations = useLogisticsStore((state) => state.locations);
@@ -48,24 +57,77 @@ export default function BuildQueuePage() {
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((state) => state.clearStaleBuildQueueItemAllocations);
   const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipes, recipeInputsByRecipeId);
   const shortages = shortageSummary.shortages;
+  const requirementBadgesByMaterial = buildQueue.reduce<Record<string, ShortageRequirementBadge[]>>((acc, item) => {
+    if (item.status === 'complete') return acc;
+    const recipe = recipes.find((entry) => entry.id === item.recipeId);
+    const label = recipe?.name ?? item.recipeId;
+    const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
+
+    for (const input of inputs) {
+      const materialId = input.materialKey ?? input.materialId;
+      const material = materials.find((entry) => entry.id === materialId);
+      const displayName = material?.name ?? input.displayName ?? input.materialName ?? materialId;
+      const groupKey = normalizeMaterialDisplayName(displayName);
+      const unitKey = getShortageUnitKey(input.unitType);
+      const badgeKey = `${label}:${unitKey}:${input.selectedQuality ?? 'any'}`;
+      const quantity = input.quantity * item.quantity;
+      const badges = acc[groupKey] ?? [];
+      const existing = badges.find((badge) => badge.key === badgeKey);
+
+      if (existing) {
+        existing.quantity += quantity;
+        existing.count += 1;
+      } else {
+        badges.push({
+          key: badgeKey,
+          label,
+          quantity,
+          unitType: input.unitType,
+          count: 1,
+          materialId,
+        });
+      }
+      acc[groupKey] = badges;
+    }
+
+    return acc;
+  }, {});
   const groupedShortages = shortages.reduce<ShortageGroup[]>((groups, shortage) => {
-    let group = groups.find((entry) => entry.materialId === shortage.materialId);
+    const material = materials.find((item) => item.id === shortage.materialId);
+    const displayName = material?.name ?? shortage.materialId;
+    const groupKey = normalizeMaterialDisplayName(displayName);
+    const unitKey = getShortageUnitKey(shortage.unitType);
+    let group = groups.find((entry) => entry.key === groupKey);
     if (!group) {
       group = {
-        materialId: shortage.materialId,
-        have: 0,
-        needed: 0,
-        shortfall: 0,
-        rows: [],
+        key: groupKey,
+        displayName,
+        unitGroups: [],
+        badges: requirementBadgesByMaterial[groupKey] ?? [],
       };
       groups.push(group);
     }
-    group.have += shortage.have;
-    group.needed += shortage.needed;
-    group.shortfall += shortage.shortfall;
-    group.rows.push(shortage);
+    let unitGroup = group.unitGroups.find((entry) => entry.unitKey === unitKey);
+    if (!unitGroup) {
+      unitGroup = {
+        unitKey,
+        have: 0,
+        needed: 0,
+        shortfall: 0,
+        materialId: shortage.materialId,
+      };
+      group.unitGroups.push(unitGroup);
+    }
+    unitGroup.have += shortage.have;
+    unitGroup.needed += shortage.needed;
+    unitGroup.shortfall += shortage.shortfall;
     return groups;
   }, []);
+  const sortedShortageGroups = [...groupedShortages].sort((a, b) => {
+    const aShortfall = a.unitGroups.reduce((sum, group) => sum + group.shortfall, 0);
+    const bShortfall = b.unitGroups.reduce((sum, group) => sum + group.shortfall, 0);
+    return bShortfall - aShortfall || a.displayName.localeCompare(b.displayName);
+  });
   const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
     const recipe = recipes.find((entry) => entry.id === item.recipeId);
     const category = recipe?.category ?? 'other';
@@ -78,49 +140,8 @@ export default function BuildQueuePage() {
   }
   const categories = Object.keys(grouped);
 
-  function toggleShortageGroup(groupKey: string) {
-    setExpandedShortageGroups((current) => {
-      const next = new Set(current);
-      if (next.has(groupKey)) {
-        next.delete(groupKey);
-      } else {
-        next.add(groupKey);
-      }
-      return next;
-    });
-  }
-
-  useEffect(() => {
-    let cancelled = false;
-    getBuildQueueRequirements({ buildQueue, recipeInputTemplates: recipeInputsByRecipeId, inventoryEntries })
-      .then((response) => {
-        if (!cancelled) setServerRequirementWarningCount(response.warnings.length);
-      })
-      .catch(() => {
-        if (!cancelled) setServerRequirementWarningCount(1);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [buildQueue, inventoryEntries, recipeInputsByRecipeId]);
-
   return (
     <div className="logi-page">
-      <div className="logi-page-header">
-        <div>
-          <div className="logi-breadcrumb">
-            <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>
-            <span className="logi-breadcrumb-sep">/</span>
-            <span className="logi-breadcrumb-active">Build Queue</span>
-          </div>
-          <h1 className="logi-page-title">Build Queue</h1>
-          <p className="logi-page-subtitle">
-            {buildQueue.length} items / {shortages.length} material {shortages.length === 1 ? 'shortage' : 'shortages'}
-            {serverRequirementWarningCount > 0 ? ` / ${serverRequirementWarningCount} requirement warning${serverRequirementWarningCount === 1 ? '' : 's'}` : ''}
-          </p>
-        </div>
-        <ScreenshotImportButton source="build-queue" />
-      </div>
 
       <CraftTabBar activeTab="queue" missingCount={shortages.length} queueBadge={buildQueue.length > 0 ? buildQueue.length : null} />
 
@@ -137,77 +158,60 @@ export default function BuildQueuePage() {
             All materials covered for active builds.
           </div>
         ) : (
-          <table className="logi-shortage-table">
-            <thead>
-              <tr>
-                <th>Material</th>
-                <th>Owned</th>
-                <th>Needed</th>
-                <th>Shortfall</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groupedShortages.map((group) => {
-                const material = materials.find((item) => item.id === group.materialId);
-                const groupKey = group.materialId;
-                const isExpanded = expandedShortageGroups.has(groupKey);
-                return (
-                  <Fragment key={`shortage-group:${groupKey}`}>
-                    <tr
-                      className="logi-shortage-parent-row"
-                      role="button"
-                      tabIndex={0}
-                      aria-expanded={isExpanded}
-                      onClick={() => toggleShortageGroup(groupKey)}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                          event.preventDefault();
-                          toggleShortageGroup(groupKey);
-                        }
-                      }}
-                    >
-                      <td>
-                        <span className="logi-shortage-parent-material">
-                          <button
-                            type="button"
-                            className="logi-shortage-toggle"
-                            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${material?.name ?? group.materialId}`}
-                            aria-expanded={isExpanded}
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              toggleShortageGroup(groupKey);
-                            }}
-                          >
-                            <span className="logi-shortage-caret" aria-hidden="true" />
-                          </button>
-                          <span>{material?.name ?? group.materialId}</span>
+          <div className="logi-shortage-compact-list">
+            <div className="logi-shortage-ledger-head" aria-hidden="true">
+              <span>Material</span>
+              <span>Owned</span>
+              <span>Needed</span>
+              <span>Short</span>
+              <span>Used By</span>
+            </div>
+            {sortedShortageGroups.map((group) => (
+              <article className="logi-shortage-compact-row" key={`shortage-group:${group.key}`}>
+                <div className="logi-shortage-compact-name">{group.displayName}</div>
+                <div className="logi-shortage-ledger-cell">
+                  {group.unitGroups.map((unitGroup) => {
+                    const material = materials.find((item) => item.id === unitGroup.materialId);
+                    const unitType = unitGroup.unitKey === 'scu' ? 'scu' : 'unit';
+                    return (
+                      <span key={`${group.key}:${unitGroup.unitKey}:owned`}><QuantityText value={formatRequirementQuantity(unitGroup.have, unitType, material)} /></span>
+                    );
+                  })}
+                </div>
+                <div className="logi-shortage-ledger-cell">
+                  {group.unitGroups.map((unitGroup) => {
+                    const material = materials.find((item) => item.id === unitGroup.materialId);
+                    const unitType = unitGroup.unitKey === 'scu' ? 'scu' : 'unit';
+                    return (
+                      <span key={`${group.key}:${unitGroup.unitKey}:needed`}><QuantityText value={formatRequirementQuantity(unitGroup.needed, unitType, material)} /></span>
+                    );
+                  })}
+                </div>
+                <div className="logi-shortage-ledger-cell logi-shortage-compact-missing">
+                  {group.unitGroups.map((unitGroup) => {
+                    const material = materials.find((item) => item.id === unitGroup.materialId);
+                    const unitType = unitGroup.unitKey === 'scu' ? 'scu' : 'unit';
+                    return (
+                      <span key={`${group.key}:${unitGroup.unitKey}:short`}><QuantityText value={formatRequirementQuantity(unitGroup.shortfall, unitType, material)} /></span>
+                    );
+                  })}
+                </div>
+                <div className="logi-shortage-compact-refs" aria-label={`${group.displayName} requirement entries`}>
+                  {group.badges.map((badge) => {
+                    const material = materials.find((item) => item.id === badge.materialId);
+                    return (
+                      <span className="logi-shortage-ref-badge" key={badge.key}>
+                        <span className="logi-shortage-ref-name">
+                          {badge.label}{badge.count > 1 ? ` x${badge.count}` : ''}:
                         </span>
-                      </td>
-                      <td><QuantityText value={formatQuantity(group.have, material)} /></td>
-                      <td><QuantityText value={formatQuantity(group.needed, material)} /></td>
-                      <td><span className="logi-badge logi-badge--shortage"><QuantityText value={formatQuantity(-group.shortfall, material)} /></span></td>
-                    </tr>
-                    {isExpanded && group.rows.map((shortage, index) => {
-                      const rarityClassName = shortage.selectedQuality === undefined
-                        ? ''
-                        : ` logi-rarity--${qualityToRarity(shortage.selectedQuality, material?.isQuantanium)}`;
-                      return (
-                        <tr
-                          key={`shortage:${shortage.materialKey}:${shortage.selectedQuality ?? 'any'}:${shortage.unitType ?? 'unit'}:${index}`}
-                          className={`logi-shortage-child-row${rarityClassName}`}
-                        >
-                          <td>{shortage.selectedQuality ?? 'Any'}</td>
-                          <td>{formatCompactShortageQuantity(shortage.have)}</td>
-                          <td>{formatCompactShortageQuantity(shortage.needed)}</td>
-                          <td>{formatCompactShortageQuantity(-shortage.shortfall)}</td>
-                        </tr>
-                      );
-                    })}
-                  </Fragment>
-                );
-              })}
-            </tbody>
-          </table>
+                        <QuantityText value={formatRequirementQuantity(badge.quantity, badge.unitType, material)} />
+                      </span>
+                    );
+                  })}
+                </div>
+              </article>
+            ))}
+          </div>
         )}
       </div>
 

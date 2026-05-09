@@ -25,12 +25,71 @@ import {
   clampBandIndex,
   findNearestBandForQuality,
   getBandEffectiveQuality as getEffectiveQualityFromBands,
+  rarityClassFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
+import { MsbChip, MsbSection, MsbSidebar, ResourcesSection } from "../../shared/MsbSidebar";
+import { buildResourceGroups } from "../../shared/msbResourceGroups";
+import type { InventoryEntry, MaterialTemplate } from "../../../../types/logistics";
 
-const PAGE_SIZES = [25, 50, 100] as const;
+
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
+const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
+const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
+
+type RecipeSidebarState = {
+  search: string;
+  fps: string[];
+  vehicles: string[];
+  sizes: string[];
+  grades: string[];
+  classes: string[];
+  resources: string[];
+};
+
+const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
+  search: "",
+  fps: [],
+  vehicles: [],
+  sizes: [],
+  grades: [],
+  classes: [],
+  resources: [],
+};
+
+function readStoredSidebarState<T>(key: string, fallback: T): T {
+  if (typeof window === "undefined" || !window.localStorage) return fallback;
+
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? { ...fallback, ...JSON.parse(raw) } : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeStoredSidebarState<T>(key: string, state: T) {
+  if (typeof window === "undefined" || !window.localStorage) return;
+  window.localStorage.setItem(key, JSON.stringify(state));
+}
+
+function readStoredStringSet(key: string): Set<string> {
+  if (typeof window === "undefined" || !window.localStorage) return new Set();
+
+  try {
+    const raw = window.localStorage.getItem(key);
+    const values = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(values) ? values.filter((value): value is string => typeof value === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function writeStoredStringSet(key: string, values: Set<string>) {
+  if (typeof window === "undefined" || !window.localStorage) return;
+  window.localStorage.setItem(key, JSON.stringify(Array.from(values)));
+}
 
 const QUERY_ALIAS_MAP: Record<string, string> = {
   mil: "military",
@@ -193,6 +252,82 @@ function getMaterialName(mat: ComponentRecipe["materials"][number]): string {
   return String(mat.material_name ?? "");
 }
 
+type RequirementInventorySummary = {
+  ownedQuantity: number;
+  shortfall: number;
+  qualities: number[];
+  unitLabel: string;
+};
+
+function getRequirementUnitLabel(
+  mat: ComponentRecipe["materials"][number],
+  material?: MaterialTemplate,
+  entries: InventoryEntry[] = [],
+): string {
+  if (entries.some((entry) => entry.unitType === "scu")) return "SCU";
+  if (entries.some((entry) => entry.unitType === "unit")) return "units";
+  if (material?.materialType === "ore" || material?.materialType === "refined") return "SCU";
+  return mat.cost_type?.toLowerCase().includes("scu") ? "SCU" : "units";
+}
+
+function getRequirementInventorySummary(
+  mat: ComponentRecipe["materials"][number],
+  inventoryEntries: InventoryEntry[] = [],
+  materialTemplates: MaterialTemplate[] = [],
+): RequirementInventorySummary | undefined {
+  if (!inventoryEntries.length) return undefined;
+
+  const materialName = getMaterialName(mat);
+  const nameKey = normalizeMaterialLookup(materialName);
+  const costIdKey = normalizeMaterialLookup(mat.cost_id);
+  const material = materialTemplates.find((item) => {
+    return (
+      normalizeMaterialLookup(item.id) === costIdKey ||
+      normalizeMaterialLookup(item.name) === nameKey
+    );
+  });
+  const materialIdKey = normalizeMaterialLookup(material?.id);
+  const materialTemplateNameKey = normalizeMaterialLookup(material?.name);
+
+  const matchingEntries = inventoryEntries.filter((entry) => {
+    const entryMaterialId = normalizeMaterialLookup(entry.materialId);
+    const entryCatalogId = normalizeMaterialLookup(entry.catalogItemId);
+    const entryMaterialName = normalizeMaterialLookup(entry.materialName);
+    const entryItemName = normalizeMaterialLookup(entry.itemName);
+
+    return (
+      (!!costIdKey && (entryMaterialId === costIdKey || entryCatalogId === costIdKey)) ||
+      (!!materialIdKey && (entryMaterialId === materialIdKey || entryCatalogId === materialIdKey)) ||
+      (!!nameKey && (entryMaterialName === nameKey || entryItemName === nameKey)) ||
+      (!!materialTemplateNameKey &&
+        (entryMaterialName === materialTemplateNameKey || entryItemName === materialTemplateNameKey))
+    );
+  });
+
+  if (!matchingEntries.length) {
+    return {
+      ownedQuantity: 0,
+      shortfall: Math.max(0, mat.quantity),
+      qualities: [],
+      unitLabel: getRequirementUnitLabel(mat, material),
+    };
+  }
+
+  const ownedQuantity = matchingEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
+  const qualities = [...new Set(
+    matchingEntries
+      .map((entry) => entry.quality)
+      .filter((quality): quality is number => typeof quality === "number"),
+  )].sort((a, b) => b - a);
+
+  return {
+    ownedQuantity,
+    shortfall: Math.max(0, mat.quantity - ownedQuantity),
+    qualities,
+    unitLabel: getRequirementUnitLabel(mat, material, matchingEntries),
+  };
+}
+
 function useQualityQuantization() {
   const [data, setData] = useState<MaterialQuantization[]>([]);
   const [loading, setLoading] = useState(true);
@@ -341,9 +476,11 @@ export function UnmatchedModifierGroups({
 function OverallModifierGroup({
   modifiers,
   quality,
+  rarityClass,
 }: {
   modifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   quality?: number;
+  rarityClass: string;
 }) {
   if (modifiers.length === 0) return null;
 
@@ -398,7 +535,7 @@ function OverallModifierGroup({
                 </span>
 
                 <span
-                  className={`craft-drawer-modifier-val ${getImpactClass(impact)}`}
+                  className={`craft-drawer-modifier-val ${getImpactClass(impact)} ${rarityClass}`}
                 >
                   {formatModifierAtQuality(m)}
                   {impactWord ? ` ${impactWord}` : ""}
@@ -415,12 +552,14 @@ function OverallModifierGroup({
 function MaterialQualityRow({
   mat,
   bandIndex,
+  inventorySummary,
   onBandChange,
   getBandsForMaterial,
   getBandEffectiveQuality,
 }: {
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
+  inventorySummary?: RequirementInventorySummary;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
@@ -430,7 +569,9 @@ function MaterialQualityRow({
   const materialName = getMaterialName(mat);
   const bands = getBandsForMaterial(materialName);
   const safeBandIndex = clampBandIndex(bandIndex, bands);
+  const bandNumber = safeBandIndex + 1;
   const quality = getBandEffectiveQuality(materialName, safeBandIndex);
+  const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
 
   const atQuality = useMemo(() => {
     const mods = getModifiersAtQuality(modifiers, quality);
@@ -466,23 +607,39 @@ function MaterialQualityRow({
     [bands],
   );
 
+  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
+  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
+  const fillPct = Math.max(0, selectedPct - bandOnePct);
+
   return (
     <div className="craft-matq-card" data-band={safeBandIndex}>
       <div className="craft-matq-header">
         <div className="craft-matq-identity">
           <span className="craft-matq-slot">{mat.slot}</span>
           <span className="craft-matq-name">{mat.material_name}</span>
-          <span className="craft-matq-qty">
-            Required <strong>x{mat.quantity.toFixed(2)}</strong>
-          </span>
         </div>
 
         <div className="craft-matq-quality-header">
           <span className="craft-matq-quality-label">
             Band {safeBandIndex + 1}
           </span>
-          <span className="craft-matq-quality-value">{quality}</span>
+          <span className={`craft-matq-quality-value ${selectedQualityTierClass}`}>{quality}</span>
         </div>
+
+        {inventorySummary && inventorySummary.qualities.length > 1 && (
+          <div className="craft-quality-badges" aria-label={`Owned qualities for ${mat.material_name}`}>
+            {inventorySummary.qualities.slice(0, 5).map((ownedQuality) => (
+              <span key={ownedQuality} className="craft-quality-badge">
+                Q{ownedQuality}
+              </span>
+            ))}
+            {inventorySummary.qualities.length > 5 && (
+              <span className="craft-quality-badge craft-quality-badge--more">
+                +{inventorySummary.qualities.length - 5}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="craft-matq-slider-wrap">
@@ -501,27 +658,42 @@ function MaterialQualityRow({
             aria-label={`Quality band for ${mat.material_name}`}
           />
 
-          <div className="craft-matq-rail">
-            <div
-              className="craft-matq-rail-fill"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              style={{ '--selected-pct': `${Math.max(0, Math.min(100, (quality / 1000) * 100))}%` } as any}
-            />
+<div
+  className={`craft-matq-rail ${selectedQualityTierClass}`}
+  style={
+    {
+      "--band-one-pct": `${bandOnePct}%`,
+    } as React.CSSProperties
+  }
+>
+  <div
+    className={`craft-matq-rail-fill ${selectedQualityTierClass}`}
+    style={
+      {
+        "--band-one-pct": `${bandOnePct}%`,
+        "--fill-pct": `${fillPct}%`,
+      } as React.CSSProperties
+    }
+  />
 
-            {railMarkers.map((marker) => (
+            {railMarkers.map((marker) => {
+              const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
+
+              return (
               <button
                 type="button"
                 key={`${marker.index}-${marker.mappedValue}`}
-                className={`craft-matq-band-marker${marker.index === safeBandIndex ? " is-active" : ""}`}
+                className={`craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? " is-active" : ""}`}
                 style={{ left: `${marker.left}%` }}
                 data-edge={marker.edge}
                 onClick={() => onBandChange(marker.index)}
                 aria-label={`Use mapped quality ${marker.mappedValue}`}
               >
                 <span className="craft-matq-dot" />
-                <span className="craft-matq-marker-value">{marker.mappedValue}</span>
+                <span className={`craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
               </button>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
@@ -541,16 +713,16 @@ function MaterialQualityRow({
                   </span>
 
                   <span
-                    className={`craft-matq-mod-val ${getImpactClass(impact)}`}
+                    className={`craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}
                   >
                     {formatModifierAtQuality(m)}
                     {impactWord ? ` ${impactWord}` : ""}
                   </span>
-                </div>
 
-                {directionLabel && (
-                  <div className="craft-matq-mod-hint">{directionLabel}</div>
-                )}
+                  {directionLabel && (
+                    <span className="craft-matq-mod-hint">{directionLabel}</span>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -630,8 +802,12 @@ function CraftedItemSummaryPanel({
   totalModifiers,
   overallModifiers,
   overallQualitySource,
+  componentRarityClass,
   rewardPools,
   onAddToQueue,
+  isQueued,
+  isBookmarked,
+  onToggleBookmark,
   getBandEffectiveQuality,
   getBandsForMaterial,
   materialQualities,
@@ -641,8 +817,12 @@ function CraftedItemSummaryPanel({
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
+  componentRarityClass: string;
   rewardPools: { displayName: string }[];
-  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
+  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  isQueued: boolean;
+  isBookmarked: boolean;
+  onToggleBookmark: () => void;
   getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   materialQualities: Record<string, number>;
@@ -700,7 +880,7 @@ function CraftedItemSummaryPanel({
                       <span className="craft-summary-mod-prop">
                         {formatProperty(row.property)}
                       </span>
-                      <span className={`craft-summary-mod-val ${impactClass}`}>
+                      <span className={`craft-summary-mod-val ${impactClass} ${componentRarityClass}`}>
                         {formatTotalModifierValue(row)}
                         {impactWord ? ` ${impactWord}` : ""}
                       </span>
@@ -728,6 +908,7 @@ function CraftedItemSummaryPanel({
               <OverallModifierGroup
                 modifiers={overallModifiers}
                 quality={overallQualitySource}
+                rarityClass={componentRarityClass}
               />
             </div>
           )}
@@ -755,51 +936,95 @@ function CraftedItemSummaryPanel({
         )}
       </div>
 
-      {/* Add to Build Queue */}
-      <button
-        type="button"
-        className="craft-summary-queue-btn"
-        onClick={() => {
-          const selectedQualities = Object.fromEntries(
-            recipe.materials.map((mat, inputIndex) => {
-              const key = getMaterialQualityKey(recipe, mat, inputIndex);
-              const materialName = getMaterialName(mat);
-              return [key, {
-                quality: getBandEffectiveQuality(materialName, materialQualities[key] ?? DEFAULT_BAND_INDEX),
-                bands: getBandsForMaterial(materialName),
-              }];
-            }),
-          );
-          onAddToQueue(recipe, selectedQualities);
-        }}
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
+      <div className="craft-summary-action-row">
+        <button
+          type="button"
+          className={`craft-summary-action-btn craft-summary-queue-btn${isQueued ? " is-active" : ""}`}
+          aria-pressed={isQueued}
+          aria-label={isQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
+          onClick={() => {
+            const selectedQualities = Object.fromEntries(
+              recipe.materials.map((mat, inputIndex) => {
+                const key = getMaterialQualityKey(recipe, mat, inputIndex);
+                const materialName = getMaterialName(mat);
+                const bandIndex = materialQualities[key] ?? DEFAULT_BAND_INDEX;
+                return [key, {
+                  quality: getBandEffectiveQuality(materialName, bandIndex),
+                  bandNumber: bandIndex + 1,
+                  bands: getBandsForMaterial(materialName),
+                }];
+              }),
+            );
+            onAddToQueue(recipe, selectedQualities);
+          }}
         >
-          <circle cx="9" cy="21" r="1" />
-          <circle cx="20" cy="21" r="1" />
-          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-        </svg>
-        Add to Build Queue
-      </button>
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            {isQueued ? (
+              <path d="M20 6 9 17l-5-5" />
+            ) : (
+              <>
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </>
+            )}
+          </svg>
+          {isQueued ? "In Build Queue" : "Add to Build Queue"}
+        </button>
+
+        <button
+          type="button"
+          className={`craft-summary-action-btn craft-summary-bookmark-btn${isBookmarked ? " is-active" : ""}`}
+          aria-pressed={isBookmarked}
+          aria-label={isBookmarked ? `Remove ${displayName} bookmark` : `Bookmark ${displayName}`}
+          onClick={onToggleBookmark}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill={isBookmarked ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+          </svg>
+          {isBookmarked ? "Bookmarked" : "Bookmark"}
+        </button>
+      </div>
     </div>
   );
 }
 
 function RecipeDrawer({
   recipe,
+  inventoryEntries,
+  materialTemplates,
   onAddToQueue,
+  isQueued,
+  isBookmarked,
+  onToggleBookmark,
 }: {
   recipe: ComponentRecipe;
-  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
+  inventoryEntries?: InventoryEntry[];
+  materialTemplates?: MaterialTemplate[];
+  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  isQueued: boolean;
+  isBookmarked: boolean;
+  onToggleBookmark: () => void;
 }) {
   const {
     loading: quantizationLoading,
@@ -832,6 +1057,10 @@ function RecipeDrawer({
         getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial, 2)),
       )
     : undefined;
+  const componentBandIndex = overallQualityMaterial
+    ? getBandIndex(getMaterialQualityKey(recipe, overallQualityMaterial, 2))
+    : Math.max(DEFAULT_BAND_INDEX, ...Object.values(materialQualities));
+  const componentRarityClass = rarityClassFromBandIndex(componentBandIndex + 1);
 
   const rewardPools = (recipe.rewardPools ?? []) as { displayName: string }[];
 
@@ -845,6 +1074,17 @@ function RecipeDrawer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [recipe, getBandEffectiveQuality, materialQualities],
   );
+
+  const inventorySummaryByKey = useMemo(() => {
+    const map = new Map<string, RequirementInventorySummary | undefined>();
+    recipe.materials.forEach((mat, inputIndex) => {
+      map.set(
+        getMaterialQualityKey(recipe, mat, inputIndex),
+        getRequirementInventorySummary(mat, inventoryEntries, materialTemplates),
+      );
+    });
+    return map;
+  }, [inventoryEntries, materialTemplates, recipe]);
 
   return (
     <div className="craft-expanded-content">
@@ -865,6 +1105,7 @@ function RecipeDrawer({
                   key={`${mat.slot}:${key}`}
                   mat={mat}
                   bandIndex={getBandIndex(key)}
+                  inventorySummary={inventorySummaryByKey.get(key)}
                   onBandChange={(bandIndex) =>
                     setMaterialQualities((prev) => ({
                       ...prev,
@@ -888,8 +1129,12 @@ function RecipeDrawer({
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
+          componentRarityClass={componentRarityClass}
           rewardPools={rewardPools}
           onAddToQueue={onAddToQueue}
+          isQueued={isQueued}
+          isBookmarked={isBookmarked}
+          onToggleBookmark={onToggleBookmark}
           getBandEffectiveQuality={getBandEffectiveQuality}
           getBandsForMaterial={getBandsForMaterial}
           materialQualities={materialQualities}
@@ -897,147 +1142,39 @@ function RecipeDrawer({
       </div>
     </div>
   );
-}
-
-interface FilterPopoverProps {
-  label: string;
-  options: { value: string; label: string }[];
-  selected: Set<string>;
-  onChange: (next: Set<string>) => void;
-  onReset: () => void;
-}
-
-function FilterPopover({
-  label,
-  options,
-  selected,
-  onChange,
-  onReset,
-}: FilterPopoverProps) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    function handler(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
-
-  const buttonLabel = useMemo(() => {
-    if (selected.size === 0) return label;
-
-    const vals = Array.from(selected);
-
-    if (selected.size <= 2 && vals.every((v) => v.length <= 8)) {
-      return vals.join(", ");
-    }
-
-    return `${selected.size} ${label}`;
-  }, [selected, label]);
-
-  function toggle(value: string) {
-    const next = new Set(selected);
-
-    if (next.has(value)) next.delete(value);
-    else next.add(value);
-
-    onChange(next);
-  }
-
-  return (
-    <div className="craft-filter-popover-wrap" ref={ref}>
-      <button
-        type="button"
-        className={`craft-filter-btn${selected.size > 0 ? " craft-filter-btn--active" : ""}`}
-        onClick={() => setOpen((v) => !v)}
-      >
-        <span className="craft-filter-btn-icon" aria-hidden>
-          {selected.size > 0 ? (
-            <svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor">
-              <circle cx="6" cy="6" r="4" />
-            </svg>
-          ) : (
-            <svg
-              viewBox="0 0 12 12"
-              width="10"
-              height="10"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            >
-              <path d="M1 3h10M3 6h6M5 9h2" strokeLinecap="round" />
-            </svg>
-          )}
-        </span>
-
-        {buttonLabel}
-
-        <svg
-          viewBox="0 0 10 6"
-          width="8"
-          height="6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="craft-filter-chevron"
-        >
-          <path d="M1 1l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="craft-filter-dropdown">
-          {options.map(({ value, label: optLabel }) => (
-            <label key={value} className="craft-filter-option">
-              <input
-                type="checkbox"
-                checked={selected.has(value)}
-                onChange={() => toggle(value)}
-                className="craft-filter-checkbox"
-              />
-              <span>{optLabel}</span>
-            </label>
-          ))}
-
-          {selected.size > 0 && (
-            <button
-              type="button"
-              className="craft-filter-clear"
-              onClick={() => {
-                onReset();
-                setOpen(false);
-              }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
+};
 
 interface Props {
   recipes: ComponentRecipe[];
-  onAddToQueue: (recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bands: QualityBand[] }>) => void;
+  inventoryEntries?: InventoryEntry[];
+  materialTemplates?: MaterialTemplate[];
+  onAddToQueue: (recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  isRecipeQueued?: (recipe: ComponentRecipe) => boolean;
 }
 
-export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
-  const [search, setSearch] = useState("");
-  const [kindFilters, setKindFilters] = useState<Set<string>>(new Set());
-  const [typeFilters, setTypeFilters] = useState<Set<string>>(new Set());
-  const [sizeFilters, setSizeFilters] = useState<Set<string>>(new Set());
-  const [gradeFilters, setGradeFilters] = useState<Set<string>>(new Set());
-  const [classFilters, setClassFilters] = useState<Set<string>>(new Set());
+export default function ComponentRecipeTable({
+  recipes,
+  inventoryEntries = [],
+  materialTemplates = [],
+  onAddToQueue,
+  isRecipeQueued = () => false,
+}: Props) {
+  const initialSidebarState = useMemo(
+    () => readStoredSidebarState(RECIPE_FILTER_STORAGE_KEY, EMPTY_RECIPE_SIDEBAR_STATE),
+    [],
+  );
+  const [search, setSearch] = useState(initialSidebarState.search);
+  const [fpsFilters, setFpsFilters] = useState<Set<string>>(() => new Set(initialSidebarState.fps));
+  const [vehicleFilters, setVehicleFilters] = useState<Set<string>>(() => new Set(initialSidebarState.vehicles));
+  const [sizeFilters, setSizeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.sizes));
+  const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
+  const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
+  const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [pageSize, setPageSize] = useState<number>(50);
+  const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
+    () => readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY),
+  );
+  const [pageSize] = useState<number>(14);
   const [page, setPage] = useState(0);
   const expandedRowRef = useRef<HTMLTableRowElement>(null);
 
@@ -1052,35 +1189,63 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
 
   const resetPage = useCallback(() => setPage(0), []);
 
+  const toggleBookmark = useCallback((recipeId: string) => {
+    setBookmarkedRecipeIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(recipeId)) {
+        next.delete(recipeId);
+      } else {
+        next.add(recipeId);
+      }
+      writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+      return next;
+    });
+  }, []);
+
   function resetAll() {
     setSearch("");
-    setKindFilters(new Set());
-    setTypeFilters(new Set());
+    setFpsFilters(new Set());
+    setVehicleFilters(new Set());
     setSizeFilters(new Set());
     setGradeFilters(new Set());
     setClassFilters(new Set());
+    setResourceFilters(new Set());
     resetPage();
   }
 
   const hasActiveFilters =
     search ||
-    kindFilters.size ||
-    typeFilters.size ||
+    fpsFilters.size ||
+    vehicleFilters.size ||
     sizeFilters.size ||
     gradeFilters.size ||
-    classFilters.size;
+    classFilters.size ||
+    resourceFilters.size;
 
-  const kindOptions = useMemo(
-    () => [
-      { value: "vehicle", label: "Vehicle" },
-      { value: "fps", label: "FPS" },
-    ],
-    [],
+  useEffect(() => {
+    writeStoredSidebarState<RecipeSidebarState>(RECIPE_FILTER_STORAGE_KEY, {
+      search,
+      fps: [...fpsFilters],
+      vehicles: [...vehicleFilters],
+      sizes: [...sizeFilters],
+      grades: [...gradeFilters],
+      classes: [...classFilters],
+      resources: [...resourceFilters],
+    });
+  }, [classFilters, fpsFilters, gradeFilters, resourceFilters, search, sizeFilters, vehicleFilters]);
+
+  const fpsOptions = useMemo(
+    () =>
+      Array.from(new Set(recipes.filter((r) => r.item_kind === "fps").map((r) => r.component_type).filter(Boolean)))
+        .sort()
+        .map((t) => ({ value: t!, label: t! })),
+    [recipes],
   );
 
-  const typeOptions = useMemo(
+  const vehicleOptions = useMemo(
     () =>
-      Array.from(new Set(recipes.map((r) => r.component_type).filter(Boolean)))
+      Array.from(new Set(recipes.filter((r) => r.item_kind !== "fps").map((r) => r.component_type).filter(Boolean)))
+        .filter((t) => t !== "salvage" && t !== "tractorbeam")
         .sort()
         .map((t) => ({ value: t!, label: t! })),
     [recipes],
@@ -1090,24 +1255,6 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
     const vals = Array.from(new Set(recipes.map((r) => r.size).filter(Boolean)))
       .sort((a, b) => Number(a) - Number(b))
       .map((s) => ({ value: s!, label: `S${s}` }));
-
-    const hasUnsized = recipes.some((r) => !r.size);
-
-    if (hasUnsized) vals.push({ value: NO_VALUE, label: "No Size" });
-
-    return vals;
-  }, [recipes]);
-
-  const gradeOptions = useMemo(() => {
-    const vals = Array.from(
-      new Set(recipes.map((r) => r.grade).filter(Boolean)),
-    )
-      .sort()
-      .map((g) => ({ value: g!, label: g! }));
-
-    const hasNone = recipes.some((r) => !r.grade);
-
-    if (hasNone) vals.push({ value: NO_VALUE, label: "No Grade" });
 
     return vals;
   }, [recipes]);
@@ -1119,6 +1266,17 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
         .map((c) => ({ value: c!, label: c! })),
     [recipes],
   );
+
+  const resourceGroups = useMemo(() => {
+    const resources = recipes.flatMap((recipe) =>
+      (recipe.materials ?? []).map((material) => ({
+        id: material.cost_id || material.material_name,
+        label: material.material_name,
+        miningType: material.cost_type,
+      })),
+    ).filter((r) => r.label !== "Insulative Liner Material");
+    return buildResourceGroups(resources);
+  }, [recipes]);
 
   const recipeSearchTexts = useMemo(
     () =>
@@ -1136,10 +1294,8 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           return false;
         }
 
-        if (kindFilters.size && !kindFilters.has(r.item_kind ?? ""))
-          return false;
-        if (typeFilters.size && !typeFilters.has(r.component_type ?? ""))
-          return false;
+        if (fpsFilters.size && (r.item_kind !== "fps" || !fpsFilters.has(r.component_type ?? ""))) return false;
+        if (vehicleFilters.size && (r.item_kind === "fps" || !vehicleFilters.has(r.component_type ?? ""))) return false;
 
         if (sizeFilters.size) {
           const sv = r.size ? r.size : NO_VALUE;
@@ -1152,6 +1308,19 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
         }
 
         if (classFilters.size && !classFilters.has(r.class ?? "")) return false;
+
+        if (resourceFilters.size) {
+          const recipeName = r.component_name.trim().toLowerCase();
+          const usesSelectedInput = (r.materials ?? []).some((material) =>
+            resourceFilters.has(material.cost_id || material.material_name) ||
+            resourceFilters.has(material.material_name)
+          );
+          const isSelectedResourceItself = (r.materials ?? []).some((material) =>
+            resourceFilters.has(material.cost_id || material.material_name) &&
+            material.material_name.trim().toLowerCase() === recipeName
+          );
+          if (!usesSelectedInput || isSelectedResourceItself) return false;
+        }
 
         return true;
       })
@@ -1173,11 +1342,12 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
   }, [
     recipes,
     search,
-    kindFilters,
-    typeFilters,
+    fpsFilters,
+    vehicleFilters,
     sizeFilters,
     gradeFilters,
     classFilters,
+    resourceFilters,
     recipeSearchTexts,
   ]);
 
@@ -1189,142 +1359,106 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
   const startItem = filtered.length === 0 ? 0 : startIdx + 1;
 
   return (
-    <div className="craft-section">
-      <div className="craft-recipe-header">
-        <div className="craft-recipe-header-left">
-          <h2 className="craft-recipe-title">Component Recipes</h2>
-          <p className="craft-recipe-subtitle">
-            Browse craftable gear, components, and blueprint sources.
-          </p>
-        </div>
-
-        <span className="craft-count craft-recipe-count">
-          {filtered.length} / {recipes.length} shown
-        </span>
-      </div>
-
-      <div className="craft-filter-bar">
-        <div className="craft-search-wrap">
-          <svg
-            aria-hidden
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="craft-search-icon"
-            width="14"
-            height="14"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-
+    <div className="craft-recipe-browser-layout">
+      <MsbSidebar title="Recipe Filters" onClear={resetAll}>
+        <MsbSection label="Search" onClear={hasActiveFilters ? resetAll : undefined} raw>
           <input
             type="search"
-            className="craft-search-input"
-            placeholder="Search name, type, blueprint ID..."
+            className="msb-search-input"
+            placeholder="Search recipes..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               resetPage();
             }}
           />
-        </div>
+        </MsbSection>
 
-        <FilterPopover
-          label="All Gear"
-          options={kindOptions}
-          selected={kindFilters}
-          onChange={(s) => {
-            setKindFilters(s);
-            resetPage();
-          }}
-          onReset={() => {
-            setKindFilters(new Set());
+        <MsbSection label="FPS">
+          {fpsOptions.map((filter) => (
+            <MsbChip
+              key={filter.value}
+              label={filter.label}
+              active={fpsFilters.has(filter.value)}
+              onClick={() => {
+                setFpsFilters((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(filter.value)) next.delete(filter.value);
+                  else next.add(filter.value);
+                  return next;
+                });
+                resetPage();
+              }}
+            />
+          ))}
+        </MsbSection>
+
+        <MsbSection label="Vehicles">
+          {vehicleOptions.map((filter) => (
+            <MsbChip
+              key={filter.value}
+              label={filter.label}
+              active={vehicleFilters.has(filter.value)}
+              onClick={() => {
+                setVehicleFilters((prev) => {
+                  const next = new Set(prev);
+                  if (next.has(filter.value)) next.delete(filter.value);
+                  else next.add(filter.value);
+                  return next;
+                });
+                resetPage();
+              }}
+            />
+          ))}
+        </MsbSection>
+
+        <MsbSection label="Size">
+          {sizeOptions.map((filter) => (
+            <MsbChip key={filter.value} label={filter.label} active={sizeFilters.has(filter.value)} onClick={() => {
+              setSizeFilters((prev) => {
+                const next = new Set(prev);
+                if (next.has(filter.value)) next.delete(filter.value);
+                else next.add(filter.value);
+                return next;
+              });
+              resetPage();
+            }} />
+          ))}
+        </MsbSection>
+
+        <MsbSection label="Class">
+          {classOptions.map((filter) => (
+            <MsbChip key={filter.value} label={filter.label} active={classFilters.has(filter.value)} onClick={() => {
+              setClassFilters((prev) => {
+                const next = new Set(prev);
+                if (next.has(filter.value)) next.delete(filter.value);
+                else next.add(filter.value);
+                return next;
+              });
+              resetPage();
+            }} />
+          ))}
+        </MsbSection>
+
+        <ResourcesSection
+          groups={resourceGroups}
+          selectedIds={resourceFilters}
+          onToggle={(id) => {
+            setResourceFilters((prev) => {
+              const next = new Set(prev);
+              if (next.has(id)) next.delete(id);
+              else next.add(id);
+              return next;
+            });
             resetPage();
           }}
         />
+      </MsbSidebar>
 
-        <FilterPopover
-          label="All Types"
-          options={typeOptions}
-          selected={typeFilters}
-          onChange={(s) => {
-            setTypeFilters(s);
-            resetPage();
-          }}
-          onReset={() => {
-            setTypeFilters(new Set());
-            resetPage();
-          }}
-        />
+      <div className="craft-section craft-recipe-results">
 
-        <FilterPopover
-          label="All Sizes"
-          options={sizeOptions}
-          selected={sizeFilters}
-          onChange={(s) => {
-            setSizeFilters(s);
-            resetPage();
-          }}
-          onReset={() => {
-            setSizeFilters(new Set());
-            resetPage();
-          }}
-        />
 
-        <FilterPopover
-          label="All Grades"
-          options={gradeOptions}
-          selected={gradeFilters}
-          onChange={(s) => {
-            setGradeFilters(s);
-            resetPage();
-          }}
-          onReset={() => {
-            setGradeFilters(new Set());
-            resetPage();
-          }}
-        />
-
-        <FilterPopover
-          label="All Classes"
-          options={classOptions}
-          selected={classFilters}
-          onChange={(s) => {
-            setClassFilters(s);
-            resetPage();
-          }}
-          onReset={() => {
-            setClassFilters(new Set());
-            resetPage();
-          }}
-        />
-
-        {hasActiveFilters && (
-          <button
-            type="button"
-            className="craft-filter-reset"
-            onClick={resetAll}
-          >
-            <svg
-              viewBox="0 0 14 14"
-              width="11"
-              height="11"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-            >
-              <path d="M2 7a5 5 0 1 0 1-3" />
-              <path d="M2 4V2h2" />
-            </svg>
-            Reset
-          </button>
-        )}
-      </div>
+      {hasActiveFilters && <div className="craft-recipe-filter-note"></div>}
 
       <div className="craft-table-wrap">
         <table className="craft-table">
@@ -1342,6 +1476,8 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           <tbody>
             {paginated.map((recipe) => {
               const isOpen = expanded === recipe.blueprint_id;
+              const isQueued = isRecipeQueued(recipe);
+              const isBookmarked = bookmarkedRecipeIds.has(recipe.blueprint_id);
 
               const displayName =
                 recipe.item_kind === "vehicle"
@@ -1467,7 +1603,12 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
                       <td colSpan={6}>
                         <RecipeDrawer
                           recipe={recipe}
+                          inventoryEntries={inventoryEntries}
+                          materialTemplates={materialTemplates}
                           onAddToQueue={onAddToQueue}
+                          isQueued={isQueued}
+                          isBookmarked={isBookmarked}
+                          onToggleBookmark={() => toggleBookmark(recipe.blueprint_id)}
                         />
                       </td>
                     </tr>
@@ -1518,27 +1659,9 @@ export default function ComponentRecipeTable({ recipes, onAddToQueue }: Props) {
           </button>
         </div>
 
-        <div className="craft-pagination-size">
-          <span className="craft-muted craft-pagination-size-label">
-            Per page:
-          </span>
-
-          <select
-            className="craft-select craft-select--compact"
-            value={pageSize}
-            onChange={(e) => {
-              setPageSize(Number(e.target.value));
-              resetPage();
-            }}
-          >
-            {PAGE_SIZES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </div>
+        
       </div>
+    </div>
     </div>
   );
 }

@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.58rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -46,7 +46,7 @@
 }
 
 .mine-page-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -55,7 +55,7 @@
 }
 
 .mine-page-subtitle {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.78rem;
   color: rgba(160, 180, 220, 0.45);
   margin-top: 0.18rem;
@@ -65,7 +65,7 @@
 
 .mloc-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 290px minmax(0, 1fr);
   gap: 1.1rem;
   align-items: start;
 }
@@ -96,7 +96,7 @@
 }
 
 .mloc-filter-badge {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   color: rgba(167, 139, 250, 0.75);
   background: rgba(167, 139, 250, 0.08);
@@ -114,7 +114,7 @@
 }
 
 .mloc-clear-filters-btn {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.58rem;
   letter-spacing: 0.04em;
   background: none;
@@ -147,7 +147,7 @@
 }
 
 .mloc-strip-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -155,7 +155,7 @@
 }
 
 .mloc-strip-count {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.72rem;
   color: rgba(160, 180, 220, 0.22);
 }
@@ -191,7 +191,7 @@
   cursor: pointer;
   text-align: left;
   transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
-  min-height: 160px;
+  min-height: 148px;
   position: relative;
 }
 
@@ -217,7 +217,7 @@
 }
 
 .mloc-panel-system {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -230,7 +230,7 @@
 }
 
 .mloc-panel-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 1.05rem;
   font-weight: 700;
   color: #e7edff;
@@ -272,13 +272,26 @@
 }
 
 .mloc-cov-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.52rem;
   letter-spacing: 0.05em;
   color: rgba(160, 180, 220, 0.38);
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+.mloc-cov-badge {
+  font-family: var(--font-display);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(167, 139, 250, 0.7);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mloc-cov-badge--partial { color: rgba(245, 158, 11, 0.75); }
+.mloc-cov-badge--full    { color: rgba(74, 222, 128, 0.85); }
 
 .mloc-panel-chips {
   display: flex;
@@ -287,7 +300,7 @@
 }
 
 .mloc-view-all-btn {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.57rem;
   letter-spacing: 0.06em;
   color: rgba(160, 180, 220, 0.3);
@@ -301,6 +314,87 @@
 
 .mloc-view-all-btn:hover {
   color: rgba(160, 180, 220, 0.65);
+}
+
+/* ── Location panel other-resources toggle ────── */
+
+.mloc-other {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.45rem;
+}
+
+.mloc-other-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: opacity 0.12s;
+}
+
+.mloc-other-toggle:hover { opacity: 0.85; }
+
+.mloc-other-toggle-label {
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+  flex: 1;
+}
+
+.mloc-other-count {
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  color: rgba(160, 180, 220, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  padding: 0.03rem 0.25rem;
+}
+
+.mloc-other-arrow {
+  font-size: 0.44rem;
+  color: rgba(160, 180, 220, 0.2);
+  flex-shrink: 0;
+}
+
+.mloc-other-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+}
+
+.mloc-other-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mloc-other-label {
+  font-family: var(--font-primary);
+  font-size: 0.48rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.22);
+}
+
+.mloc-other-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.mloc-other-empty {
+  font-family: var(--font-primary);
+  font-size: 0.72rem;
+  color: rgba(160, 180, 220, 0.25);
 }
 
 /* ── Location detail panel ────────────────────── */
@@ -331,7 +425,7 @@
 }
 
 .mloc-detail-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 1.3rem;
   font-weight: 700;
   color: #e7edff;
@@ -347,7 +441,7 @@
 }
 
 .mloc-detail-system {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -355,7 +449,7 @@
 }
 
 .mloc-detail-kind {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.57rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -370,44 +464,166 @@
   flex-shrink: 0;
 }
 
-.mloc-detail-reason {
-  font-family: "Barlow", sans-serif;
-  font-size: 0.82rem;
-  color: rgba(160, 180, 220, 0.55);
-  line-height: 1.5;
-  padding: 0.55rem 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-left: 2px solid rgba(167, 139, 250, 0.2);
-  border-radius: 0 4px 4px 0;
-}
+/* Coverage summary strip inside detail */
 
-.mloc-detail-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 720px) {
-  .mloc-detail-split {
-    grid-template-columns: 1fr;
-  }
-}
-
-.mloc-detail-col {
+.mloc-detail-coverage-strip {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.65rem 0.85rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.04) 0%, rgba(0, 0, 0, 0) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.1);
+  border-radius: 6px;
+}
+
+.mloc-detail-cov-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mloc-detail-cov-fill {
+  height: 100%;
+  background: rgba(167, 139, 250, 0.55);
+  border-radius: 2px;
+  transition: width 0.25s;
+}
+
+.mloc-detail-cov-fill--full { background: rgba(74, 222, 128, 0.6); }
+
+.mloc-detail-cov-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.mloc-detail-cov-num {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(167, 139, 250, 0.85);
+  line-height: 1;
+}
+
+.mloc-detail-cov-num--full { color: rgba(74, 222, 128, 0.9); }
+
+.mloc-detail-cov-label {
+  font-family: var(--font-primary);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  color: rgba(160, 180, 220, 0.38);
+}
+
+.mloc-detail-cov-other {
+  font-family: var(--font-primary);
+  font-size: 0.54rem;
+  color: rgba(160, 180, 220, 0.22);
+  margin-left: auto;
+}
+
+/* Sections (matched / missing) */
+
+.mloc-detail-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mloc-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.mloc-detail-section-header {
+  display: flex;
+  align-items: center;
   gap: 0.45rem;
 }
 
-.mloc-detail-col-label {
-  font-family: "Share Tech Mono", monospace;
+.mloc-detail-section-label {
+  font-family: var(--font-primary);
   font-size: 0.52rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.mloc-detail-col-label--covered { color: rgba(74, 222, 128, 0.6); }
-.mloc-detail-col-label--missing  { color: rgba(248, 113, 113, 0.5); }
+.mloc-detail-section-label--covered { color: rgba(74, 222, 128, 0.6); }
+.mloc-detail-section-label--missing  { color: rgba(248, 113, 113, 0.45); }
+
+.mloc-detail-section-count {
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.04rem 0.3rem;
+  border-radius: 3px;
+}
+
+.mloc-detail-section-count--covered {
+  color: rgba(74, 222, 128, 0.8);
+  background: rgba(74, 222, 128, 0.07);
+  border: 1px solid rgba(74, 222, 128, 0.14);
+}
+
+.mloc-detail-section-count--missing {
+  color: rgba(248, 113, 113, 0.6);
+  background: rgba(248, 113, 113, 0.04);
+  border: 1px solid rgba(248, 113, 113, 0.1);
+}
+
+/* Other resources toggle inside detail */
+
+.mloc-detail-other-wrap {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.5rem;
+}
+
+.mloc-detail-other-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  text-align: left;
+  transition: opacity 0.12s;
+}
+
+.mloc-detail-other-toggle:hover { opacity: 0.8; }
+
+.mloc-detail-other-label {
+  font-family: var(--font-primary);
+  font-size: 0.53rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.3);
+  flex: 1;
+}
+
+.mloc-detail-other-count {
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  color: rgba(160, 180, 220, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  padding: 0.03rem 0.28rem;
+}
+
+.mloc-detail-other-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
 
 .mloc-detail-mat-list {
   display: flex;
@@ -436,7 +652,7 @@
 }
 
 .mloc-detail-mat-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.88rem;
   font-weight: 600;
   color: #c8d8f8;
@@ -445,7 +661,7 @@
 }
 
 .mloc-detail-mat-qty {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   color: rgba(160, 180, 220, 0.45);
   flex-shrink: 0;
@@ -460,7 +676,7 @@
 }
 
 .mloc-detail-none {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.75rem;
   color: rgba(160, 180, 220, 0.25);
   margin: 0;
@@ -475,7 +691,7 @@
 }
 
 .mloc-detail-all-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -500,7 +716,7 @@
 }
 
 .mres-title {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -508,7 +724,7 @@
 }
 
 .mres-meta {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.72rem;
   color: rgba(160, 180, 220, 0.28);
 }
@@ -558,7 +774,7 @@
 .mdem-dot--missing  { background: rgba(255, 255, 255, 0.15); }
 
 .mdem-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.9rem;
   font-weight: 600;
   color: #c8d8f8;
@@ -570,7 +786,7 @@
 }
 
 .mdem-qty {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   color: rgba(160, 180, 220, 0.5);
   flex-shrink: 0;
@@ -578,7 +794,7 @@
 }
 
 .mdem-tag {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.48rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -594,7 +810,7 @@
 }
 
 .mdem-ore-hint {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   color: rgba(160, 180, 220, 0.3);
   flex-shrink: 0;
@@ -610,7 +826,7 @@
 }
 
 .mdem-status {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -632,7 +848,7 @@
 }
 
 .mdem-expand-btn {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   letter-spacing: 0.04em;
   color: rgba(160, 180, 220, 0.3);
@@ -670,7 +886,7 @@
 }
 
 .mdem-exp-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.48rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -698,7 +914,7 @@
 
 .mloc-badge {
   display: inline-block;
-  font-family: "Rajdhani", sans-serif;
+  font-family: "Orbitron", var(--font-primary);
   font-size: 0.67rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -707,7 +923,7 @@
   white-space: nowrap;
 }
 
-.mloc-badge--ship    { background: rgba(56, 189, 248, 0.08); color: rgba(56, 189, 248, 0.7); border: 1px solid rgba(56, 189, 248, 0.15); }
+.mloc-badge--ship    { background: rgba(156, 163, 175, 0.08); color: rgba(203, 213, 225, 0.74); border: 1px solid rgba(203, 213, 225, 0.18); }
 .mloc-badge--surface { background: rgba(74, 222, 128, 0.08); color: rgba(74, 222, 128, 0.7); border: 1px solid rgba(74, 222, 128, 0.15); }
 .mloc-badge--hand    { background: rgba(245, 158, 11, 0.08); color: rgba(245, 158, 11, 0.7); border: 1px solid rgba(245, 158, 11, 0.15); }
 .mloc-badge--mixed   { background: rgba(167, 139, 250, 0.08); color: rgba(167, 139, 250, 0.7); border: 1px solid rgba(167, 139, 250, 0.15); }
@@ -759,7 +975,7 @@
 }
 
 .mloc-metric-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -767,7 +983,7 @@
 }
 
 .mloc-metric-val {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
   color: #e7edff;
@@ -782,7 +998,7 @@
 }
 
 .mloc-mat-chip {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.57rem;
   letter-spacing: 0.04em;
   padding: 0.1rem 0.38rem;
@@ -804,14 +1020,21 @@
   color: rgba(74, 222, 128, 0.7);
 }
 
+.mloc-mat-chip--more {
+  color: rgba(160, 180, 220, 0.38);
+  border-color: rgba(255, 255, 255, 0.06);
+  background: none;
+  font-style: italic;
+}
+
 .mloc-empty-chips {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.74rem;
   color: rgba(160, 180, 220, 0.28);
 }
 
 .mloc-chip-more {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.55rem;
   color: rgba(160, 180, 220, 0.35);
   background: none;
@@ -837,7 +1060,7 @@
 }
 
 .mloc-stations-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -845,7 +1068,7 @@
 }
 
 .mloc-station-chip {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.54rem;
   padding: 0.06rem 0.28rem;
   border-radius: 3px;
@@ -867,7 +1090,7 @@
 }
 
 .mloc-footer-view {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.59rem;
   letter-spacing: 0.09em;
   color: rgba(160, 180, 220, 0.35);
@@ -887,42 +1110,45 @@
 .msb-sidebar {
   display: flex;
   flex-direction: column;
+  position: static;
+  max-height: none;
+  overflow: visible;
+  background: rgba(7, 10, 18, 0.88);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   position: sticky;
   top: 1rem;
-  max-height: calc(100vh - 8rem);
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.07) transparent;
 }
-
-.msb-sidebar::-webkit-scrollbar { width: 4px; }
-.msb-sidebar::-webkit-scrollbar-track { background: transparent; }
-.msb-sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.07); border-radius: 2px; }
 
 /* ── Sidebar section ──────────────────────────── */
 
 .msb-section {
-  padding: 0.75rem 0.85rem 0.6rem;
+  padding: 0.62rem 0.72rem 0.52rem;
+  padding: 0.62rem 0.72rem 0.52rem;
+  padding: 0.62rem 0.72rem 0.52rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .msb-section-label {
   display: block;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.52rem;
-  letter-spacing: 0.15em;
+  font-family: var(--font-primary);
+  font-size: 0.48rem;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.5);
+  margin-bottom: 0.24rem;
   color: rgba(160, 180, 220, 0.3);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.36rem;
 }
 
 .msb-section-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.22rem;
 }
 
 .msb-section-label-row .msb-section-label {
@@ -934,7 +1160,7 @@
 .msb-chip-rail {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.28rem;
+  gap: 0.16rem;
 }
 
 /* ── Sidebar chips ────────────────────────────── */
@@ -943,25 +1169,25 @@
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
-  font-family: "Share Tech Mono", monospace;
-  font-size: 0.58rem;
+  font-family: var(--font-primary);
+  font-size: 0.54rem;
   letter-spacing: 0.03em;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 14, 22, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 3px;
-  color: rgba(160, 180, 220, 0.5);
-  padding: 0.18rem 0.45rem;
+  color: rgba(203, 213, 225, 0.7);
+  padding: 0.1rem 0.3rem;
   cursor: pointer;
   transition: all 0.12s;
   white-space: nowrap;
-  height: 26px;
+  height: 21px;
   box-sizing: border-box;
 }
 
 .msb-chip:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(160, 180, 220, 0.85);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(148, 163, 184, 0.24);
+  color: rgba(226, 232, 240, 0.9);
+  background: rgba(15, 20, 30, 0.86);
 }
 
 /* Selected state: violet accent, same as logistics/crafting */
@@ -1039,7 +1265,7 @@
 }
 
 .msb-count-pill {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.52rem;
   color: rgba(160, 180, 220, 0.4);
   background: rgba(255, 255, 255, 0.04);
@@ -1089,7 +1315,7 @@
 }
 
 .msb-priority-rank {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.55rem;
   font-weight: 700;
   color: rgba(160, 180, 220, 0.35);
@@ -1098,7 +1324,7 @@
 }
 
 .msb-priority-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.8rem;
   font-weight: 600;
   color: #c8d8f8;
@@ -1157,7 +1383,7 @@
 }
 
 .msb-demand-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.8rem;
   font-weight: 600;
   color: #c8d8f8;
@@ -1169,7 +1395,7 @@
 }
 
 .msb-demand-qty {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.62rem;
   color: rgba(160, 180, 220, 0.5);
   flex-shrink: 0;
@@ -1195,7 +1421,7 @@
 }
 
 .msb-toggle-json-btn {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.57rem;
   letter-spacing: 0.04em;
   background: rgba(255, 255, 255, 0.03);
@@ -1222,7 +1448,7 @@
 }
 
 .mine-empty-text {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.8rem;
   color: rgba(160, 180, 220, 0.3);
   text-align: center;
@@ -1245,7 +1471,7 @@
 }
 
 .mine-status-text {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.8rem;
   color: rgba(160, 180, 220, 0.4);
 }
@@ -1263,7 +1489,7 @@
 .mine-filter-btn,
 .mine-add-btn,
 .mine-btn-export {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   background: none;
   border: 1px solid transparent;
   cursor: pointer;
@@ -1325,7 +1551,7 @@
 }
 
 .mine-filter-btn {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.58rem;
   letter-spacing: 0.04em;
   color: rgba(160, 180, 220, 0.4);
@@ -1376,7 +1602,7 @@
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 4px;
   color: rgba(160, 180, 220, 0.45);
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.57rem;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -1392,7 +1618,7 @@
 
 .mine-input,
 .mine-select {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.8rem;
   font-weight: 600;
   background: rgba(255, 255, 255, 0.04);
@@ -1426,7 +1652,7 @@
 }
 
 .mine-form-error {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.7rem;
   color: rgba(248, 113, 113, 0.7);
   padding: 0.1rem 0;
@@ -1435,7 +1661,7 @@
 /* ── JSON preview ─────────────────────────────── */
 
 .mine-json-preview {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   color: rgba(160, 180, 220, 0.45);
   line-height: 1.55;
@@ -1471,7 +1697,7 @@
 }
 
 .mbq-section-title {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.6rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1479,13 +1705,13 @@
 }
 
 .mbq-section-meta {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.72rem;
   color: rgba(160, 180, 220, 0.28);
 }
 
 .mbq-empty {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.78rem;
   color: rgba(160, 180, 220, 0.28);
   margin: 0;
@@ -1526,7 +1752,7 @@
 }
 
 .mbq-comp-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 1rem;
   font-weight: 700;
   color: #e7edff;
@@ -1537,7 +1763,7 @@
 }
 
 .mbq-comp-type {
-  font-family: "Share Tech Mono", monospace;
+  font-family: "Orbitron", var(--font-primary);
   font-size: 0.54rem;
   letter-spacing: 0.08em;
   color: rgba(160, 180, 220, 0.35);
@@ -1557,7 +1783,7 @@
 }
 
 .mbq-stat-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.47rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1565,7 +1791,7 @@
 }
 
 .mbq-stat-val {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 700;
   color: #e7edff;
@@ -1604,7 +1830,7 @@
 }
 
 .mbq-mat-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.85rem;
   font-weight: 600;
   color: #c8d8f8;
@@ -1616,14 +1842,14 @@
 }
 
 .mbq-mat-qty {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.58rem;
   color: rgba(160, 180, 220, 0.45);
   flex-shrink: 0;
 }
 
 .mbq-mat-status {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1678,7 +1904,7 @@
 }
 
 .mbq-demand-name {
-  font-family: "Rajdhani", sans-serif;
+  font-family: var(--font-primary);
   font-size: 1rem;
   font-weight: 700;
   color: #e7edff;
@@ -1688,7 +1914,7 @@
 }
 
 .mbq-demand-badge {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1721,7 +1947,7 @@
 }
 
 .mbq-used-chip {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.54rem;
   padding: 0.1rem 0.35rem;
   border-radius: 3px;
@@ -1740,7 +1966,7 @@
 }
 
 .mbq-locations-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.48rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1748,7 +1974,7 @@
 }
 
 .mbq-location-chip {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.54rem;
   padding: 0.08rem 0.3rem;
   border-radius: 3px;
@@ -1776,7 +2002,7 @@
 }
 
 .mine-score-label {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.5rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -1784,7 +2010,7 @@
 }
 
 .mine-score-val {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.65rem;
   color: rgba(160, 180, 220, 0.65);
 }
@@ -1792,7 +2018,7 @@
 /* ── Misc ─────────────────────────────────────── */
 
 .mex-fixture-note {
-  font-family: "Share Tech Mono", monospace;
+  font-family: var(--font-primary);
   font-size: 0.53rem;
   letter-spacing: 0.05em;
   color: rgba(160, 180, 220, 0.2);
@@ -1801,9 +2027,701 @@
 }
 
 .msb-empty {
-  font-family: "Barlow", sans-serif;
+  font-family: var(--font-primary);
   font-size: 0.73rem;
   color: rgba(160, 180, 220, 0.28);
   margin: 0;
   line-height: 1.5;
+}
+
+/* Mining operations dashboard refinements */
+
+.mine-page {
+  padding: 0.9rem 1.1rem;
+  gap: 0.85rem;
+}
+
+.mloc-layout {
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 0.85rem;
+}
+
+.mloc-main {
+  gap: 0.65rem;
+}
+
+.mloc-strip-section,
+.mloc-detail {
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.045), rgba(167, 139, 250, 0.025) 42%, rgba(2, 6, 23, 0.18)),
+    rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.mloc-strip-section {
+  padding: 0.65rem;
+}
+
+.mloc-strip-header {
+  padding: 0 0.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mloc-strip-title-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.mloc-rank-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+  padding: 0.16rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.mloc-rank-btn {
+  min-height: 22px;
+  padding: 0.12rem 0.42rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.58);
+  font-family: var(--font-primary);
+  font-size: 0.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mloc-rank-btn:hover {
+  color: rgba(226, 232, 240, 0.86);
+  border-color: rgba(148, 163, 184, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.mloc-rank-btn.is-active {
+  color: rgba(221, 214, 254, 0.96);
+  border-color: rgba(167, 139, 250, 0.36);
+  background: rgba(167, 139, 250, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(167, 139, 250, 0.08);
+}
+
+.mloc-strip {
+  gap: 0.55rem;
+}
+
+.mloc-panel {
+  min-height: 132px;
+  gap: 0.46rem;
+  padding: 0.64rem 0.68rem;
+  background: rgba(7, 10, 18, 0.72);
+  border-color: rgba(148, 163, 184, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.mloc-panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.mloc-panel--selected {
+  border-color: rgba(167, 139, 250, 0.44);
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.14), 0 10px 24px rgba(0, 0, 0, 0.24);
+}
+
+.mloc-panel-name {
+  font-size: 0.98rem;
+}
+
+.mloc-special-signal {
+  display: flex;
+  align-items: center;
+  gap: 0.32rem;
+  min-width: 0;
+  padding: 0.18rem 0.36rem;
+  border: 1px solid rgba(251, 191, 36, 0.18);
+  border-radius: 5px;
+  background: rgba(251, 191, 36, 0.055);
+  color: rgba(253, 230, 138, 0.82);
+}
+
+.mloc-special-signal span {
+  flex-shrink: 0;
+  font-family: var(--font-primary);
+  font-size: 0.48rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mloc-special-signal em {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-primary);
+  font-size: 0.45rem;
+  font-style: normal;
+  color: rgba(253, 230, 138, 0.48);
+}
+
+.mloc-panel-coverage {
+  order: 3;
+}
+
+.mloc-cov-bar {
+  height: 5px;
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.mloc-cov-fill {
+  background: linear-gradient(90deg, rgba(167, 139, 250, 0.66), rgba(74, 222, 128, 0.58));
+}
+
+.mloc-panel-chips--dense,
+.mloc-panel-chips {
+  gap: 0.18rem;
+}
+
+.mloc-mat-chip {
+  font-size: 0.5rem;
+  padding: 0.08rem 0.28rem;
+  border-color: rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.mloc-mat-chip--bq {
+  color: rgba(74, 222, 128, 0.82);
+  border-color: rgba(74, 222, 128, 0.16);
+  background: rgba(74, 222, 128, 0.055);
+}
+
+.mloc-mat-chip--missing {
+  color: rgba(248, 113, 113, 0.72);
+  border-color: rgba(248, 113, 113, 0.14);
+  background: rgba(248, 113, 113, 0.045);
+}
+
+.mloc-star-btn {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 5px;
+  display: inline-grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mloc-route-score {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.34rem 0.42rem;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 5px;
+  background: rgba(2, 6, 23, 0.24);
+}
+
+.mloc-route-score-label,
+.mloc-route-score-tier,
+.mloc-route-lanes-note,
+.mloc-route-lane span {
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.mloc-route-score-label {
+  font-size: 0.5rem;
+  color: rgba(203, 213, 225, 0.58);
+}
+
+.mloc-route-score-value {
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.mloc-route-score-tier {
+  font-size: 0.48rem;
+  color: rgba(74, 222, 128, 0.76);
+}
+
+.mloc-result-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.28rem;
+}
+
+.mloc-result-metric {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+  padding: 0.28rem 0.34rem;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 5px;
+  background: rgba(2, 6, 23, 0.24);
+  box-shadow: inset 2px 0 0 rgba(148, 163, 184, 0.18);
+}
+
+.mloc-result-metric span {
+  font-family: var(--font-primary);
+  font-size: 0.45rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.42);
+}
+
+.mloc-result-metric strong {
+  font-family: var(--font-primary);
+  font-size: 0.74rem;
+  line-height: 1;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.mloc-result-metric em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-primary);
+  font-size: 0.44rem;
+  font-style: normal;
+  line-height: 1;
+  color: rgba(203, 213, 225, 0.32);
+}
+
+.mloc-result-metric--emphasis {
+  border-color: rgba(221, 214, 254, 0.22);
+  background: rgba(167, 139, 250, 0.055);
+}
+
+.mloc-result-metric--emphasis strong {
+  color: rgba(237, 233, 254, 0.96);
+}
+
+.mloc-score--best { box-shadow: inset 2px 0 0 rgba(74, 222, 128, 0.52); }
+.mloc-score--good { box-shadow: inset 2px 0 0 rgba(167, 139, 250, 0.5); }
+.mloc-score--okay { box-shadow: inset 2px 0 0 rgba(245, 158, 11, 0.48); }
+.mloc-score--poor { box-shadow: inset 2px 0 0 rgba(248, 113, 113, 0.46); }
+
+.mloc-resource-row {
+  display: grid;
+  grid-template-columns: 3.8rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.38rem;
+}
+
+.mloc-resource-row-label {
+  padding-top: 0.1rem;
+  font-family: var(--font-primary);
+  font-size: 0.47rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.38);
+}
+
+.mloc-resource-row--quiet .mloc-mat-chip,
+.mloc-other .mloc-mat-chip {
+  color: rgba(203, 213, 225, 0.48);
+  background: rgba(255, 255, 255, 0.018);
+  border-color: rgba(148, 163, 184, 0.09);
+}
+
+.mloc-detail {
+  padding: 0.8rem;
+  gap: 0.65rem;
+}
+
+.mloc-detail-header {
+  align-items: center;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+}
+
+.mloc-detail-name {
+  font-size: 1.18rem;
+}
+
+.mloc-detail-coverage-strip {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.75fr) 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem;
+  background: rgba(15, 23, 42, 0.35);
+  border-color: rgba(34, 211, 238, 0.14);
+}
+
+.mloc-detail-cov-bar {
+  height: 9px;
+  background: rgba(2, 6, 23, 0.72);
+}
+
+.mloc-detail-cov-fill {
+  background: linear-gradient(90deg, rgba(34, 211, 238, 0.78), rgba(74, 222, 128, 0.66));
+}
+
+.mloc-detail-cov-stats {
+  gap: 0.35rem;
+}
+
+.mloc-detail-cov-num {
+  font-size: 1.42rem;
+  min-width: 4.2rem;
+}
+
+.mloc-detail-cov-label {
+  margin-right: 0.2rem;
+}
+
+.mloc-detail-cov-other {
+  display: none;
+}
+
+.mloc-detail-cov-chip {
+  font-family: var(--font-primary);
+  font-size: 0.54rem;
+  color: rgba(199, 210, 254, 0.64);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 4px;
+  padding: 0.12rem 0.34rem;
+}
+
+.mloc-route-lanes {
+  display: grid;
+  gap: 0.62rem;
+  padding: 0.68rem;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.55), rgba(2, 6, 23, 0.3)),
+    rgba(2, 6, 23, 0.28);
+}
+
+.mloc-route-lanes-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.mloc-route-lanes-title-wrap {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.mloc-route-lanes-title {
+  font-family: var(--font-primary);
+  font-size: 0.98rem;
+  line-height: 1;
+  font-weight: 700;
+  color: rgba(241, 245, 249, 0.94);
+}
+
+.mloc-route-lanes-location {
+  font-family: var(--font-primary);
+  font-size: 0.54rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.42);
+}
+
+.mloc-route-lanes-note {
+  flex-shrink: 0;
+  margin-top: 0.04rem;
+  font-size: 0.5rem;
+  color: rgba(203, 213, 225, 0.58);
+}
+
+.mloc-route-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 0.52rem;
+  align-items: stretch;
+}
+
+.mloc-route-card {
+  --route-accent: rgba(168, 85, 247, 0.5);
+  --route-accent-soft: rgba(168, 85, 247, 0.075);
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.52rem;
+  min-height: 188px;
+  padding: 0.68rem;
+  border: 1px solid color-mix(in srgb, var(--route-accent) 34%, rgba(148, 163, 184, 0.13));
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, var(--route-accent-soft), rgba(15, 23, 42, 0.18)),
+    rgba(15, 23, 42, 0.58);
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--route-accent) 62%, transparent);
+}
+
+.mloc-route-card--excellent {
+  --route-accent: rgba(45, 212, 191, 0.72);
+  --route-accent-soft: rgba(45, 212, 191, 0.09);
+}
+
+.mloc-route-card--strong {
+  --route-accent: rgba(192, 132, 252, 0.68);
+  --route-accent-soft: rgba(34, 211, 238, 0.07);
+}
+
+.mloc-route-card--good {
+  --route-accent: rgba(168, 85, 247, 0.54);
+  --route-accent-soft: rgba(168, 85, 247, 0.07);
+}
+
+.mloc-route-card--weak,
+.mloc-route-card--poor {
+  --route-accent: rgba(251, 146, 60, 0.58);
+  --route-accent-soft: rgba(248, 113, 113, 0.055);
+}
+
+.mloc-route-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.mloc-route-card-material {
+  min-width: 0;
+  font-weight: 700;
+  line-height: 1.05;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.mloc-route-card-tier {
+  font-family: var(--font-primary);
+  font-size: 0.56rem;
+  color: color-mix(in srgb, var(--route-accent) 82%, white);
+  background: var(--route-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--route-accent) 36%, transparent);
+  border-radius: 999px;
+  padding: 0.12rem 0.36rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mloc-route-card-hero {
+  display: grid;
+  gap: 0.04rem;
+}
+
+.mloc-route-card-hero-label,
+.mloc-route-chip span {
+  font-family: var(--font-primary);
+  font-size: 0.48rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(203, 213, 225, 0.56);
+}
+
+.mloc-route-card-hero strong {
+  font-family: var(--font-primary);
+  font-size: clamp(2.05rem, 4vw, 2.65rem);
+  line-height: 0.9;
+  color: color-mix(in srgb, var(--route-accent) 78%, white);
+}
+
+.mloc-route-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.34rem;
+  align-self: start;
+}
+
+.mloc-route-chip {
+  display: grid;
+  align-content: center;
+  gap: 0.1rem;
+  min-height: 48px;
+  padding: 0.38rem 0.42rem;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 5px;
+  background: rgba(2, 6, 23, 0.28);
+}
+
+.mloc-route-chip strong {
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  line-height: 1;
+  color: rgba(226, 232, 240, 0.84);
+}
+
+.mloc-route-card-copy {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin: 0;
+  color: rgba(203, 213, 225, 0.66);
+  font-size: 0.74rem;
+  line-height: 1.32;
+}
+
+.mloc-route-card-copy strong {
+  color: rgba(241, 245, 249, 0.86);
+  font-weight: 700;
+}
+
+.mloc-detail-sections {
+  gap: 0.65rem;
+}
+
+.mloc-detail-section {
+  padding: 0.62rem;
+  background: rgba(2, 6, 23, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.09);
+  border-radius: 7px;
+}
+
+.mloc-detail-section-header {
+  min-height: 1.3rem;
+}
+
+.mloc-detail-section-action {
+  margin-left: auto;
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  color: rgba(248, 113, 113, 0.64);
+  background: rgba(248, 113, 113, 0.045);
+  border: 1px solid rgba(248, 113, 113, 0.12);
+  border-radius: 4px;
+  padding: 0.12rem 0.38rem;
+  cursor: pointer;
+}
+
+.mloc-detail-mat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.42rem;
+}
+
+.mloc-detail-mat-grid--missing {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.mloc-detail-mat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  padding: 0.5rem 0.58rem;
+  min-width: 0;
+}
+
+.mloc-detail-mat-row--covered {
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.07), rgba(34, 211, 238, 0.035));
+}
+
+.mloc-detail-mat-row--missing {
+  background: rgba(248, 113, 113, 0.035);
+}
+
+.mloc-detail-mat-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.mloc-detail-mat-name {
+  font-size: 0.84rem;
+  line-height: 1.1;
+}
+
+.mloc-detail-mat-qty {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.mloc-detail-mat-usedby {
+  width: auto;
+}
+
+.mloc-detail-other-wrap {
+  padding-top: 0;
+}
+
+.mloc-detail-other-body {
+  max-height: 12rem;
+  overflow: auto;
+}
+
+.msb-sidebar--compact {
+  position: static;
+  max-height: none;
+  overflow: visible;
+  padding: 0.42rem;
+  background: rgba(7, 10, 18, 0.88);
+  border-color: rgba(148, 163, 184, 0.12);
+}
+
+.msb-section {
+  gap: 0.28rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.msb-section:last-child {
+  border-bottom: 0;
+}
+
+.msb-chip-grid {
+  gap: 0.16rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.msb-chip {
+  min-height: 1.28rem;
+  padding: 0.08rem 0.28rem;
+  border-radius: 4px;
+}
+
+.msb-chip-text {
+  font-size: 0.6rem;
+  line-height: 1.05;
+}
+
+.msb-chip--full {
+  grid-column: 1 / -1;
+}
+
+.msb-chip-rail {
+  max-height: none;
+  overflow: visible;
+  padding-right: 0.1rem;
+}
+
+.msb-group-divider {
+  margin: 0.24rem 0 0.16rem;
+}
+
+@media (max-width: 1380px) {
+  .mloc-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 960px) {
+  .mloc-detail-coverage-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .msb-sidebar--compact {
+    position: static;
+    top: auto;
+    max-height: none;
+  }
 }

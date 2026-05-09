@@ -10,9 +10,14 @@ export function findMaterialGroup(
   groups: MaterialSourceGroup[],
   warnings: RecommenderWarning[],
 ): MaterialSourceGroup | null {
+  const byKey = groups.find((group) => group.materialId === requirement.materialKey);
+  if (byKey) return byKey;
   const byId = groups.find((group) => group.materialId === requirement.materialId);
   if (byId) return byId;
-  const byName = groups.find((group) => normalize(group.materialName) === normalize(requirement.materialName));
+  const byName = groups.find((group) =>
+    normalize(group.materialName) === normalize(requirement.displayName) ||
+    normalize(group.materialName) === normalize(requirement.materialName)
+  );
   if (byName) return byName;
 
   addWarning(warnings, {

@@ -98,7 +98,7 @@ export default function LocationCard({ location, inventory, materials, onEdit, o
       <div className="logi-location-card-footer">
         <Link
           to={`/logistics/locations/${location.id}`}
-          style={{ fontSize: '0.68rem', color: 'rgba(160,180,220,0.35)', textDecoration: 'none', fontFamily: '"Share Tech Mono", monospace', letterSpacing: '0.08em' }}
+          style={{ fontSize: '0.68rem', color: 'rgba(160,180,220,0.35)', textDecoration: 'none', fontFamily: 'var(--font-primary)', letterSpacing: '0.08em' }}
         >
           VIEW →
         </Link>

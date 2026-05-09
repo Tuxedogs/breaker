@@ -9,7 +9,7 @@ import {
   getMaterialReservationCoverage,
   isInventoryEntryEligibleForRequirement,
 } from '../../lib/logistics/selectors';
-import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality } from '../industry/crafting/utils/qualityBands';
+import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { getDirectionLabel, getModifierImpact } from '../../lib/gameplay/propertyUtils';
 import QuantityText from './QuantityText';
@@ -32,6 +32,12 @@ function getImpactWord(impact: 'good' | 'bad' | 'neutral'): string {
   if (impact === 'good') return '▲';
   if (impact === 'bad') return '▼';
   return '';
+}
+
+function getSavedBandIndex(input: RecipeInputTemplate, qualityBands: QualityBand[]): number | null {
+  const bandNumber = input.qualityBand;
+  if (!Number.isFinite(bandNumber)) return null;
+  return Math.max(0, Math.min(Math.trunc(bandNumber as number) - 1, qualityBands.length - 1));
 }
 
 interface Props {
@@ -136,21 +142,13 @@ function createAllocation(
     materialName,
     selectedQuality,
     quality: stack.quality,
+    qualityBand: stack.qualityBand,
     rarity: stack.rarity,
     locationId: stack.locationId,
     container: stack.container,
     unitType,
     allowLowerQualityOverride,
   };
-}
-
-export function qualityToRarity(quality: number, isQuantanium?: boolean): string {
-  if (isQuantanium) return 'quantanium';
-  if (quality >= 900) return 'legendary';
-  if (quality >= 800) return 'epic';
-  if (quality >= 750) return 'rare';
-  if (quality >= 650) return 'uncommon';
-  return 'common';
 }
 
 function getItemFulfillmentState(
@@ -197,6 +195,17 @@ const FULFILLMENT_LABELS: Record<'complete' | 'partial' | 'missing', string> = {
   missing: 'Missing',
 };
 
+type BuildQueueSummaryMetrics = {
+  coveredCount: number;
+  totalRequired: number;
+  totalOwned: number;
+  totalAvailable: number;
+  totalShortfall: number;
+  missingRequirementCount: number;
+  unavailableCount: number;
+  shortageNames: string[];
+};
+
 /** Quality slider panel mirroring the craft-matq-* slider from ComponentRecipeTable */
 function MaterialQualitySlider({
   input,
@@ -209,6 +218,7 @@ function MaterialQualitySlider({
 }) {
   const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
   const safeBandIndex = Math.max(0, Math.min(draftBandIndex, qualityBands.length - 1));
+  const qualityRarityClass = rarityClassFromBandIndex(safeBandIndex + 1);
   const quality = getBandEffectiveQuality(qualityBands, safeBandIndex);
 
   const atQuality = useMemo(() => {
@@ -239,7 +249,7 @@ function MaterialQualitySlider({
         </div>
         <div className="craft-matq-quality-header">
           <span className="craft-matq-quality-label">Band {safeBandIndex + 1}</span>
-          <span className="craft-matq-quality-value">{quality}</span>
+          <span className={`craft-matq-quality-value ${qualityRarityClass}`}>{quality}</span>
         </div>
       </div>
 
@@ -291,11 +301,11 @@ function MaterialQualitySlider({
               <div key={i} className="craft-matq-mod-card">
                 <div className="craft-matq-mod-top">
                   <span className="craft-matq-mod-prop">{formatProperty(m.property)}</span>
-                  <span className={`craft-matq-mod-val ${getImpactClass(impact)}`}>
+                  <span className={`craft-matq-mod-val ${getImpactClass(impact)} ${qualityRarityClass}`}>
                     {formatModifierAtQuality(m)}{getImpactWord(impact) ? ` ${getImpactWord(impact)}` : ''}
                   </span>
+                  {directionLabel && <span className="craft-matq-mod-hint">{directionLabel}</span>}
                 </div>
-                {directionLabel && <div className="craft-matq-mod-hint">{directionLabel}</div>}
               </div>
             );
           })}
@@ -335,7 +345,7 @@ export default function BuildQueueGroup({
       const materialKey = input.materialKey ?? input.materialId;
       const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
       const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-      initial[requirementId] = findNearestBandForQuality(bands, input.selectedQuality ?? 500);
+      initial[requirementId] = getSavedBandIndex(input, bands) ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
     });
     setDraftBandIndices(initial);
     setEditingItemId(item.id);
@@ -353,6 +363,7 @@ export default function BuildQueueGroup({
         ...input,
         requirementId,
         selectedQuality: draftQuality,
+        qualityBand: bandIndex + 1,
         modifierName: draftModifier?.property ?? input.modifierName,
         modifierType: draftModifier?.modifierMode ?? input.modifierType,
         modifierValue: draftModifier?.value ?? input.modifierValue,
@@ -376,8 +387,8 @@ export default function BuildQueueGroup({
 
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
 
-        // Rarity from highest effective quality across inputs (using draft when editing)
-        const maxQuality = inputs.reduce((max, input, inputIndex) => {
+        // Rarity comes from the selected input bands; quality remains display-only.
+        const itemQuality = inputs.reduce((max, input, inputIndex) => {
           const materialKey = input.materialKey ?? input.materialId;
           const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
           const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
@@ -387,55 +398,98 @@ export default function BuildQueueGroup({
           const q = getBandEffectiveQuality(bands, bandIndex);
           return q > max ? q : max;
         }, 0);
-        const firstMaterialKey = inputs[0]?.materialKey ?? inputs[0]?.materialId;
-        const firstMaterial = firstMaterialKey ? materials.find((m) => m.id === firstMaterialKey) : undefined;
-        const itemRarity = qualityToRarity(maxQuality, firstMaterial?.isQuantanium);
-
-        const coveredCount = inputs.filter((input) => {
+        const itemBandNumber = inputs.reduce((max, input, inputIndex) => {
           const materialKey = input.materialKey ?? input.materialId;
+          const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
+          const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+          const bandIndex = isEditingThisItem
+            ? (draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500))
+            : getSavedBandIndex(input, bands) ?? -1;
+          return Math.max(max, bandIndex + 1);
+        }, 1);
+        const itemRarity = rarityFromBandIndex(itemBandNumber);
+
+        const summaryMetrics = inputs.reduce<BuildQueueSummaryMetrics>((metrics, input) => {
+          const materialKey = input.materialKey ?? input.materialId;
+          const material = materials.find((m) => m.id === materialKey);
+          const displayName = input.displayName ?? input.materialName ?? material?.name ?? materialKey;
           const required = input.quantity * item.quantity;
-          const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory);
-          return coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved';
-        }).length;
+          const requirementIdentity = {
+            requirementId: input.requirementId,
+            selectedQuality: input.selectedQuality,
+            unitType: input.unitType,
+            allowLowerQuality: Boolean(item.allowLowerQuality),
+          };
+          const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, requirementIdentity);
+          const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, requirementIdentity);
+          const isCovered = coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved';
+          const hasShortfall = needSummary.stillNeeded > 0;
+
+          return {
+            coveredCount: metrics.coveredCount + (isCovered ? 1 : 0),
+            totalRequired: metrics.totalRequired + required,
+            totalOwned: metrics.totalOwned + needSummary.ownedQuantity,
+            totalAvailable: metrics.totalAvailable + needSummary.availableQuantity,
+            totalShortfall: metrics.totalShortfall + needSummary.stillNeeded,
+            missingRequirementCount: metrics.missingRequirementCount + (!isCovered ? 1 : 0),
+            unavailableCount: metrics.unavailableCount + (hasShortfall && needSummary.availableQuantity <= 0 ? 1 : 0),
+            shortageNames: hasShortfall ? [...metrics.shortageNames, displayName] : metrics.shortageNames,
+          };
+        }, {
+          coveredCount: 0,
+          totalRequired: 0,
+          totalOwned: 0,
+          totalAvailable: 0,
+          totalShortfall: 0,
+          missingRequirementCount: 0,
+          unavailableCount: 0,
+          shortageNames: [],
+        });
+        const coveragePercent = inputs.length > 0 ? Math.round((summaryMetrics.coveredCount / inputs.length) * 100) : 0;
+        const worstShortageNames = summaryMetrics.shortageNames.slice(0, 3);
 
         return (
-          <div key={item.id} className="logi-bq-item-row">
+          <section key={item.id} className={`logi-bq-item-row logi-bq-item-row--${fulfillment}`}>
 
             {/* ── Summary card ── */}
             <div className={`logi-bq-summary-card ${FULFILLMENT_SUMMARY_CLASS[fulfillment]}`}>
-              <div className="logi-bq-summary-name">{itemName}</div>
-
-              <div className="logi-bq-summary-badges">
-                <span className={`logi-quality-pill logi-rarity--${itemRarity}`}>{maxQuality}</span>
+              <div className="logi-bq-summary-left">
+                <div className="logi-bq-summary-identity">
+                  <div className="logi-bq-summary-name">{itemName}</div>
+                  <div className="logi-bq-summary-badges">
+                    <span className="logi-bq-summary-type">{CATEGORY_LABELS[category] ?? category}</span>
+                    <span className={`logi-bq-status-chip ${FULFILLMENT_BADGE_CLASS[fulfillment]}`}>{FULFILLMENT_LABELS[fulfillment]}</span>
+                    <span className={`logi-quality-pill logi-rarity--${itemRarity}`}>Q {itemQuality}</span>
+                    <span className={`logi-badge ${STATUS_CLASS[status]}`}>{STATUS_LABELS[status]}</span>
+                    <span className="logi-badge">x{item.quantity}</span>
+                  </div>
+                </div>
               </div>
 
-              <div className="logi-bq-summary-status-row">
-                <span className={`logi-badge ${FULFILLMENT_BADGE_CLASS[fulfillment]}`}>{FULFILLMENT_LABELS[fulfillment]}</span>
-                <span className={`logi-badge ${STATUS_CLASS[status]}`}>{STATUS_LABELS[status]}</span>
+              <div className="logi-bq-summary-middle" aria-label={`${itemName} material totals`}>
+                <span><em>Materials</em><strong>{summaryMetrics.coveredCount}/{inputs.length}</strong></span>
+                <span><em>Required</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalRequired, undefined)} /></strong></span>
+                <span><em>Owned / Avail</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalOwned, undefined)} /> / <QuantityText value={formatQuantity(summaryMetrics.totalAvailable, undefined)} /></strong></span>
+                <span className={summaryMetrics.totalShortfall > 0 ? 'logi-bq-summary-shortfall' : ''}>
+                  <em>Shortfall</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalShortfall, undefined)} /></strong>
+                </span>
               </div>
-
-              <div className="logi-bq-summary-totals">
-                <span className="logi-mat-amount-label">Materials</span>
-                <span className="logi-bq-summary-total-val">{coveredCount}/{inputs.length}</span>
-              </div>
-              {inputs.length > 0 && (
-                <label className="logi-bq-lower-quality-toggle">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(item.allowLowerQuality)}
-                    onChange={(event) => onAllowLowerQualityChange(item.id, event.target.checked)}
-                  />
-                  <span>Allow lower quality</span>
-                </label>
-              )}
-
               <div className="logi-bq-summary-controls">
+                {inputs.length > 0 && (
+                  <label className="logi-bq-lower-quality-toggle">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(item.allowLowerQuality)}
+                      onChange={(event) => onAllowLowerQualityChange(item.id, event.target.checked)}
+                    />
+                    <span>Lower quality</span>
+                  </label>
+                )}
                 <div className="logi-bq-qty-control">
                   <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>−</QtyStepBtn>
                   <span className="logi-bq-qty-value">{item.quantity}×</span>
                   <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity + 1)}>+</QtyStepBtn>
                 </div>
-              </div>
 
               {/* Edit Quality toggle on summary card only */}
               {inputs.length > 0 && (
@@ -465,7 +519,6 @@ export default function BuildQueueGroup({
 
               
 
-              <div className="logi-bq-summary-actions">
                 <button
                   type="button"
                   className="logi-action-btn logi-action-btn--delete"
@@ -480,9 +533,54 @@ export default function BuildQueueGroup({
             </div>
 
             {/* ── Material cards ── */}
+            <div className="logi-bq-detail-panel">
+              <div className="logi-bq-coverage-strip">
+                <div className="logi-bq-coverage-copy">
+                  <span className="logi-bq-coverage-num">{coveragePercent}%</span>
+                  <span className="logi-bq-coverage-label">material coverage</span>
+                </div>
+                <div className="logi-bq-coverage-bar" aria-hidden="true">
+                  <span
+                    className={`logi-bq-coverage-fill ${fulfillment === 'complete' ? 'logi-bq-coverage-fill--complete' : fulfillment === 'partial' ? 'logi-bq-coverage-fill--partial' : 'logi-bq-coverage-fill--missing'}`}
+                    style={{ width: `${coveragePercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="logi-bq-intel-card">
+                <div className="logi-bq-intel-title">Build Intelligence</div>
+                <div className="logi-bq-intel-copy">
+                  {fulfillment === 'complete'
+                    ? 'All material requirements are covered by current reservations.'
+                    : fulfillment === 'partial'
+                      ? `${summaryMetrics.missingRequirementCount} material requirement${summaryMetrics.missingRequirementCount === 1 ? '' : 's'} still need coverage.`
+                      : 'No material requirement is fully covered yet.'}
+                  {worstShortageNames.length > 0 && (
+                    <span> Worst shortages: {worstShortageNames.join(', ')}{summaryMetrics.shortageNames.length > worstShortageNames.length ? ` +${summaryMetrics.shortageNames.length - worstShortageNames.length}` : ''}.</span>
+                  )}
+                  {summaryMetrics.unavailableCount > 0 && (
+                    <span> {summaryMetrics.unavailableCount} shortage{summaryMetrics.unavailableCount === 1 ? ' has' : 's have'} no available stored stack.</span>
+                  )}
+                  <span> Lower-quality sourcing is {item.allowLowerQuality ? 'allowed' : 'locked to selected quality'}.</span>
+                </div>
+              </div>
+            </div>
+
             {recipe ? (
-              <div className="logi-source-grid logi-bq-material-grid">
-                {inputs.map((input, inputIndex) => {
+              <div className="logi-bq-material-panel">
+                <div className="logi-bq-material-subheader" aria-label={`${inputs.length} material requirement${inputs.length === 1 ? '' : 's'}`}>
+                  <span>Materials</span>
+                  <span>Status</span>
+                  <span>Quality</span>
+                  <span>Modifier</span>
+                  <span>Reserved</span>
+                  <span>Required</span>
+                  <span>Owned</span>
+                  <span>Available</span>
+                  <span>Need</span>
+                </div>
+                <div className="logi-source-grid logi-bq-material-grid">
+                  {inputs.map((input, inputIndex) => {
                   const materialKey = input.materialKey ?? input.materialId;
                   const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
                   const requirementCardKey = `${item.id}:${requirementId}:${materialKey}:${input.selectedQuality ?? 'any'}:${input.unitType ?? 'unit'}:${inputIndex}`;
@@ -492,13 +590,13 @@ export default function BuildQueueGroup({
                   const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
 
                   // When editing, use draft; otherwise use saved
-                  const savedBandIndex = findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+                  const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
                   const draftBandIndex = isEditingThisItem
                     ? (draftBandIndices[requirementId] ?? savedBandIndex)
                     : savedBandIndex;
                   const selectedQuality = getBandEffectiveQuality(qualityBands, draftBandIndex);
                   const requirementSelectedQuality = input.selectedQuality;
-                  const selectedQualityRarity = qualityToRarity(selectedQuality, material?.isQuantanium);
+                  const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
 
                   const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
                   const modifierPreview = modifierAtQuality
@@ -565,15 +663,11 @@ export default function BuildQueueGroup({
                       ) : (
                         <>
                           {/* Material name + coverage badge */}
-                          <div className="logi-mat-head">
+                          <div className="logi-bq-material-row-main">
                             <span className="logi-mat-name">{displayName}</span>
                             <span className={`logi-badge ${coverageClass}`}>{COVERAGE_LABELS[coverage.coverageState]}</span>
-                          </div>
-
-                          <div className="logi-mat-quality-row">
                             <span className={`logi-quality-pill logi-rarity--${selectedQualityRarity}`}>{selectedQuality}</span>
-                            {modifierPreview && <span className="logi-mat-modifier">{modifierPreview}</span>}
-                          </div>
+                            <span className={`logi-mat-modifier logi-rarity--${selectedQualityRarity}`}>{modifierPreview ?? '-'}</span>
 
                           {/* Reserved / Required summary */}
                           <div className="logi-mat-amounts">
@@ -610,6 +704,7 @@ export default function BuildQueueGroup({
                                 {formatQuantity(needSummary.stillNeeded, material)}
                               </span>
                             </span>
+                          </div>
                           </div>
 
                           {/* Stale allocation warnings */}
@@ -718,12 +813,13 @@ export default function BuildQueueGroup({
                       )}
                     </div>
                   );
-                })}
+                  })}
+                </div>
               </div>
             ) : (
               <div className="logi-source-empty">No recipe mapped for source selection.</div>
             )}
-          </div>
+          </section>
         );
       })}
     </div>

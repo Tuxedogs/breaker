@@ -8,28 +8,36 @@ export function aggregateRequirements(
   const byMaterial = new Map<string, AggregatedRequirement>();
 
   for (const requirement of requirements) {
-    const materialId = requirement.materialId?.trim() || requirement.materialName?.trim();
-    const materialName = requirement.materialName?.trim() || materialId;
-    if (!materialId || !materialName) {
+    const materialKey = requirement.materialKey?.trim() || requirement.materialId?.trim() || requirement.slug?.trim() || requirement.materialName?.trim();
+    const materialId = requirement.materialId?.trim() || materialKey;
+    const displayName = requirement.displayName?.trim() || requirement.materialName?.trim() || materialId;
+    const materialName = requirement.materialName?.trim() || displayName;
+    if (!materialKey || !materialId || !materialName || !displayName) {
       addWarning(warnings, {
         code: "requirement_missing_material",
         message: "Requirement is missing materialId/materialName and was skipped.",
       });
       continue;
     }
+    const normalizedName = requirement.normalizedName?.trim() || displayName.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const slug = requirement.slug?.trim() || displayName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 
     const selectedQuality = requirement.selectedQuality ?? requirement.usedBy?.find((entry) => entry.selectedQuality !== undefined)?.selectedQuality;
     const unitType = requirement.unitType ?? requirement.usedBy?.find((entry) => entry.unitType)?.unitType;
-    const existing = byMaterial.get(materialId);
+    const existing = byMaterial.get(materialKey);
     if (existing) {
       existing.requiredQuantity += requirement.requiredQuantity;
       if (selectedQuality !== undefined) existing.selectedQuality = selectedQuality;
       if (unitType) existing.unitType = unitType;
       continue;
     }
-    byMaterial.set(materialId, {
+    byMaterial.set(materialKey, {
+      materialKey,
       materialId,
       materialName,
+      displayName,
+      normalizedName,
+      slug,
       requiredQuantity: requirement.requiredQuantity,
       selectedQuality,
       unitType,
