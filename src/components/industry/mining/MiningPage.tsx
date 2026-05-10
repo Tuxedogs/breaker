@@ -115,10 +115,6 @@ function miningTypeFromSpawn(spawnType: string): string {
   return "Mixed";
 }
 
-function formatMiningQuantity(quantity: number, unitType?: "unit" | "SCU" | "scu" | "cscu"): string {
-  return unitType === "unit" ? `x${quantity}` : `${quantity.toFixed(2)} SCU`;
-}
-
 function isRefinableMaterial(material: unknown): boolean {
   return typeof material === "object" && material !== null && "isRefinable" in material
     ? Boolean((material as { isRefinable?: boolean }).isRefinable)
@@ -131,80 +127,6 @@ function materialKeyOf(material: Pick<RequiredMaterial, "materialKey" | "materia
 
 function materialDisplayName(material: Pick<RequiredMaterial, "displayName" | "materialName" | "materialId">): string {
   return material.displayName ?? material.materialName ?? material.materialId;
-}
-
-type GroupedMiningMaterial = {
-  key: string;
-  displayName: string;
-  totals: Array<{ unitType?: RequiredMaterial["unitType"]; quantity: number }>;
-  sourceBadges: Array<{ label: string; count: number }>;
-  miningTypeBadges: string[];
-};
-
-function normalizeMaterialDisplayName(name: string): string {
-  return name.trim().toLowerCase();
-}
-
-function miningMaterialUnitKey(unitType?: RequiredMaterial["unitType"]): string {
-  return unitType ?? "unit";
-}
-
-function formatRequirementSourceLabels(material: RequiredMaterial): string[] {
-  if (material.usedBy.length > 0) {
-    return material.usedBy.map((entry) => entry.displayName);
-  }
-  return [material.selectedQuality !== undefined ? `Q ${material.selectedQuality}` : "Any quality"];
-}
-
-function groupMiningMaterialsForDisplay(
-  materials: RequiredMaterial[],
-  indexedResources: PublicLocationEntry["indexedResources"] = [],
-): GroupedMiningMaterial[] {
-  const groups = new Map<string, {
-    key: string;
-    displayName: string;
-    totals: Map<string, { unitType?: RequiredMaterial["unitType"]; quantity: number }>;
-    sourceBadges: Map<string, number>;
-    miningTypeBadges: Set<string>;
-  }>();
-  const miningTypesByName = new Map<string, Set<string>>();
-
-  for (const resource of indexedResources) {
-    const nameKey = normalizeMaterialDisplayName(resource.materialName);
-    const list = miningTypesByName.get(nameKey) ?? new Set<string>();
-    if (resource.miningType) list.add(normalizeOtherMiningType(resource.miningType));
-    miningTypesByName.set(nameKey, list);
-  }
-
-  for (const material of materials) {
-    const displayName = materialDisplayName(material);
-    const key = normalizeMaterialDisplayName(displayName);
-    const group = groups.get(key) ?? {
-      key,
-      displayName,
-      totals: new Map<string, { unitType?: RequiredMaterial["unitType"]; quantity: number }>(),
-      sourceBadges: new Map<string, number>(),
-      miningTypeBadges: new Set<string>(),
-    };
-    const unitKey = miningMaterialUnitKey(material.unitType);
-    const total = group.totals.get(unitKey) ?? { unitType: material.unitType, quantity: 0 };
-    total.quantity += Number.isFinite(material.requiredQuantity) ? material.requiredQuantity : 0;
-    group.totals.set(unitKey, total);
-
-    for (const sourceLabel of formatRequirementSourceLabels(material)) {
-      group.sourceBadges.set(sourceLabel, (group.sourceBadges.get(sourceLabel) ?? 0) + 1);
-    }
-    for (const miningType of miningTypesByName.get(key) ?? []) group.miningTypeBadges.add(miningType);
-    groups.set(key, group);
-  }
-
-  return [...groups.values()].map((group) => ({
-    key: group.key,
-    displayName: group.displayName,
-    totals: [...group.totals.values()],
-    sourceBadges: [...group.sourceBadges.entries()].map(([label, count]) => ({ label, count })),
-    miningTypeBadges: [...group.miningTypeBadges],
-  }));
 }
 
 const miningTypeOrder = ["Ship", "Ground Vehicle", "Hand", "Mixed", "Harvestable", "Other/Unknown"];
@@ -735,20 +657,14 @@ function LocationPanel({
 function LocationDetail({
   entry,
   buildQueueMaterialKeys,
-  displayNameByKey,
   locationMaterialKeys,
   selectedMaterials,
-  requiredMaterials,
 }: {
   entry: PublicLocationEntry;
   buildQueueMaterialKeys: Set<string>;
-  displayNameByKey: Map<string, string>;
   locationMaterialKeys: string[];
   selectedMaterials: Set<string>;
-  requiredMaterials: RequiredMaterial[];
 }) {
-  const [showOther, setShowOther] = useState(false);
-  const [showMissing, setShowMissing] = useState(false);
 
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
@@ -759,54 +675,23 @@ function LocationDetail({
     [locationMaterialKeys, buildQueueMaterialKeys]
   );
 
-  const coveredRequirements = useMemo(
-    () => requiredMaterials.filter((mat) => coveredBQ.includes(materialKeyOf(mat))),
-    [requiredMaterials, coveredBQ]
-  );
-  const missingRequirements = useMemo(
-    () => requiredMaterials.filter((mat) => missingBQ.includes(materialKeyOf(mat))),
-    [requiredMaterials, missingBQ]
-  );
-  const groupedCoveredRequirements = useMemo(
-    () => groupMiningMaterialsForDisplay(coveredRequirements, entry.indexedResources),
-    [coveredRequirements, entry.indexedResources],
-  );
-  const groupedMissingRequirements = useMemo(
-    () => groupMiningMaterialsForDisplay(missingRequirements, entry.indexedResources),
-    [missingRequirements, entry.indexedResources],
-  );
-
   const total = coveredBQ.length + missingBQ.length;
   const coveragePct = total > 0 ? Math.round((coveredBQ.length / total) * 100) : 0;
 
-  const otherResourceGroups = useMemo(() => {
+  const totalOther = useMemo(() => {
     const matchedSet = new Set(coveredBQ);
     const seen = new Set<string>();
-    const groups = new Map<string, Array<{ name: string; key: string }>>();
+    let count = 0;
     for (const resource of entry.indexedResources ?? []) {
       const key = resource.materialId ?? resource.materialName;
       if (matchedSet.has(key) || matchedSet.has(resource.materialName)) continue;
       const dedupeKey = `${key}|${resource.materialName}`.toLowerCase();
       if (seen.has(dedupeKey)) continue;
       seen.add(dedupeKey);
-      const miningType = normalizeOtherMiningType(resource.miningType);
-      const list = groups.get(miningType) ?? [];
-      list.push({ name: resource.materialName, key });
-      groups.set(miningType, list);
+      count += 1;
     }
-    return miningTypeOrder
-      .map((miningType) => ({
-        miningType,
-        resources: (groups.get(miningType) ?? []).sort((a, b) => a.name.localeCompare(b.name)),
-      }))
-      .filter((g) => g.resources.length > 0);
+    return count;
   }, [coveredBQ, entry.indexedResources]);
-
-  const totalOther = otherResourceGroups.reduce((sum, g) => sum + g.resources.length, 0);
-  const shownMissingRequirements = groupedMissingRequirements.length > 4 && !showMissing
-    ? groupedMissingRequirements.slice(0, 4)
-    : groupedMissingRequirements;
-  const shownMissingKeys = missingBQ.length > 4 && !showMissing ? missingBQ.slice(0, 4) : missingBQ;
   const focusedMaterialKey = selectedMaterials.size === 1
     ? [...selectedMaterials][0]
     : coveredBQ.length === 1
@@ -942,144 +827,6 @@ function LocationDetail({
         </div>
       )}
 
-      {/* Matched demand section */}
-      {buildQueueMaterialKeys.size > 0 && (
-        <div className="mloc-detail-sections">
-          <div className="mloc-detail-section">
-            <div className="mloc-detail-section-header">
-              <span className="mloc-detail-section-label mloc-detail-section-label--covered">Matched demand</span>
-              <span className="mloc-detail-section-count mloc-detail-section-count--covered">{groupedCoveredRequirements.length}</span>
-            </div>
-            {coveredRequirements.length > 0 ? (
-              <div className="mloc-detail-mat-grid">
-                {groupedCoveredRequirements.map((mat) => (
-                  <div
-                    key={`${entry.locationKey}:covered:${mat.key}`}
-                    className="mloc-detail-mat-row mloc-detail-mat-row--covered"
-                  >
-                    <div className="mloc-detail-mat-main">
-                      <span className="mloc-detail-mat-name">{mat.displayName}</span>
-                      <span className="mloc-detail-mat-qty">
-                        {mat.totals.map((total) => formatMiningQuantity(total.quantity, total.unitType)).join(" / ")}
-                      </span>
-                    </div>
-                    <div className="mloc-detail-mat-usedby">
-                      {mat.sourceBadges.map((badge) => (
-                        <span
-                          key={`${entry.locationKey}:covered:${mat.key}:source:${badge.label}`}
-                          className="mbq-used-chip"
-                        >
-                          {badge.label}{badge.count > 1 ? ` x${badge.count}` : ""}
-                        </span>
-                      ))}
-                      {mat.miningTypeBadges.map((badge) => (
-                        <span key={`${entry.locationKey}:covered:${mat.key}:type:${badge}`} className="mbq-location-chip">
-                          {badge}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : coveredBQ.length > 0 ? (
-              <div className="mloc-panel-chips mloc-panel-chips--dense">
-                {coveredBQ.map((key, index) => (
-                  <span key={`${entry.locationKey}:covered-chip:${key}:${index}`} className="mloc-mat-chip mloc-mat-chip--bq">
-                    {displayNameByKey.get(key) ?? key}
-                  </span>
-                ))}
-              </div>
-            ) : (
-              <p className="mloc-detail-none">None at this location</p>
-            )}
-          </div>
-
-          {missingBQ.length > 0 && (
-            <div className="mloc-detail-section">
-              <div className="mloc-detail-section-header">
-                <span className="mloc-detail-section-label mloc-detail-section-label--missing">Not found here</span>
-                <span className="mloc-detail-section-count mloc-detail-section-count--missing">{groupedMissingRequirements.length}</span>
-                {groupedMissingRequirements.length > 4 && (
-                  <button className="mloc-detail-section-action" onClick={() => setShowMissing((p) => !p)}>
-                    {showMissing ? "Collapse" : `Show ${groupedMissingRequirements.length - 4} more`}
-                  </button>
-                )}
-              </div>
-              {missingRequirements.length > 0 ? (
-                <div className="mloc-detail-mat-grid mloc-detail-mat-grid--missing">
-                  {shownMissingRequirements.map((mat) => (
-                    <div
-                      key={`${entry.locationKey}:missing:${mat.key}`}
-                      className="mloc-detail-mat-row mloc-detail-mat-row--missing"
-                    >
-                      <div className="mloc-detail-mat-main">
-                        <span className="mloc-detail-mat-name">{mat.displayName}</span>
-                        <span className="mloc-detail-mat-qty">
-                          {mat.totals.map((total) => formatMiningQuantity(total.quantity, total.unitType)).join(" / ")}
-                        </span>
-                      </div>
-                      <div className="mloc-detail-mat-usedby">
-                        {mat.sourceBadges.map((badge) => (
-                          <span
-                            key={`${entry.locationKey}:missing:${mat.key}:source:${badge.label}`}
-                            className="mbq-used-chip mbq-used-chip--missing"
-                          >
-                            {badge.label}{badge.count > 1 ? ` x${badge.count}` : ""}
-                          </span>
-                        ))}
-                        {mat.miningTypeBadges.map((badge) => (
-                          <span key={`${entry.locationKey}:missing:${mat.key}:type:${badge}`} className="mbq-location-chip">
-                            {badge}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="mloc-panel-chips mloc-panel-chips--dense">
-                  {shownMissingKeys.map((key, index) => (
-                    <span key={`${entry.locationKey}:missing-chip:${key}:${index}`} className="mloc-mat-chip mloc-mat-chip--missing">
-                      {displayNameByKey.get(key) ?? key}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Other resources section */}
-      {otherResourceGroups.length > 0 && (
-        <div className="mloc-detail-other-wrap">
-          <button
-            className="mloc-detail-other-toggle"
-            onClick={() => setShowOther((p) => !p)}
-            aria-expanded={showOther}
-          >
-            <span className="mloc-detail-other-label">Other resources by mining type</span>
-            <span className="mloc-detail-other-count">{totalOther}</span>
-            <span className="mloc-other-arrow">{showOther ? "▲" : "▼"}</span>
-          </button>
-          {showOther && (
-            <div className="mloc-detail-other-body">
-              {otherResourceGroups.map((group) => (
-                <div key={`${entry.locationKey}:detail-other:${group.miningType}`} className="mloc-other-group">
-                  <span className="mloc-other-label">{group.miningType}</span>
-                  <div className="mloc-other-chips">
-                    {group.resources.map((resource) => (
-                      <span key={`${entry.locationKey}:detail-other:${group.miningType}:${resource.key}`} className="mloc-mat-chip">
-                        {resource.name}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -1166,153 +913,6 @@ function ManualDemandCompact({
           <button className="mine-clear-btn msb-demand-clear" onClick={onClear}>Clear all</button>
         </div>
       )}
-    </div>
-  );
-}
-
-// ── Material demand row ───────────────────────────────────────────────────────
-
-function MaterialDemandRow({
-  materialName,
-  totalQty,
-  unitType,
-  selectedQuality,
-  estimatedRawOreNeeded,
-  usedByItems,
-  covered,
-  statusLabel,
-  sourceLocationNames,
-}: {
-  materialName: string;
-  totalQty: number;
-  unitType?: "unit" | "SCU" | "scu" | "cscu";
-  selectedQuality?: number;
-  estimatedRawOreNeeded?: number;
-  usedByItems: string[];
-  covered: boolean;
-  statusLabel: string;
-  sourceLocationNames: string[];
-}) {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div className={`mdem-row${covered ? " mdem-row--covered" : " mdem-row--missing"}`}>
-      <div className="mdem-main">
-        <span className={`mdem-dot${covered ? " mdem-dot--covered" : " mdem-dot--missing"}`} />
-        <span className="mdem-name">{materialName}</span>
-        <span className="mdem-qty">{formatMiningQuantity(totalQty, unitType)}</span>
-        {totalQty <= 0 && <span className="mdem-tag mdem-tag--ok">In inventory</span>}
-        {estimatedRawOreNeeded !== undefined && estimatedRawOreNeeded > 0 && (
-          <span className="mdem-ore-hint">≈ {formatMiningQuantity(estimatedRawOreNeeded, "SCU")} raw</span>
-        )}
-        <div className="mdem-right">
-          <span className={`mdem-status${covered ? " mdem-status--covered" : " mdem-status--missing"}`}>
-            {statusLabel}
-          </span>
-          <button
-            className="mdem-expand-btn"
-            onClick={() => setExpanded((p) => !p)}
-            title="Show queue items"
-          >
-            {usedByItems.length} item{usedByItems.length !== 1 ? "s" : ""}
-            <span className="mdem-expand-arrow">{expanded ? " ▲" : " ▼"}</span>
-          </button>
-        </div>
-      </div>
-
-      {expanded && (
-        <div className="mdem-expanded">
-          <div className="mdem-expanded-row">
-            <span className="mdem-exp-label">Used by</span>
-            <div className="mdem-chip-group">
-              {usedByItems.map((n, index) => (
-                <span key={`used-by:${n}:${index}`} className="mbq-used-chip">{n}</span>
-              ))}
-            </div>
-          </div>
-          {covered && sourceLocationNames.length > 0 && (
-            <div className="mdem-expanded-row">
-              <span className="mdem-exp-label">Found at</span>
-              <div className="mdem-chip-group">
-                {sourceLocationNames.map((loc, index) => (
-                  <span key={`source-location:${loc}:${index}`} className="mbq-location-chip">{loc}</span>
-                ))}
-              </div>
-            </div>
-          )}
-          {selectedQuality !== undefined && (
-            <div className="mdem-expanded-row">
-              <span className="mdem-exp-label">Selected quality</span>
-              <span className="mbq-location-chip">Q {selectedQuality}</span>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Resource demand panel ─────────────────────────────────────────────────────
-
-function ResourceDemandPanel({
-  requiredMaterials,
-  visibleMaterialKeys,
-  filteredLocationKeys,
-  visibleLocationNames,
-  diagnosticsByMaterialKey,
-}: {
-  requiredMaterials: RequiredMaterial[];
-  visibleMaterialKeys: Set<string>;
-  filteredLocationKeys: Set<string>;
-  visibleLocationNames: string[];
-  diagnosticsByMaterialKey: Map<string, NonNullable<RecommendationResponse["diagnostics"]>["materialCoverage"][number]>;
-}) {
-  const coveredCount = requiredMaterials.filter((m) => visibleMaterialKeys.has(materialKeyOf(m))).length;
-
-  function demandStatus(material: RequiredMaterial): { covered: boolean; label: string } {
-    const key = materialKeyOf(material);
-    if (visibleMaterialKeys.has(key)) return { covered: true, label: "Covered" };
-
-    const diagnostic = diagnosticsByMaterialKey.get(key);
-    if (!diagnostic || diagnostic.sourceCount === 0) {
-      return { covered: false, label: "Not in extracted mining dataset" };
-    }
-
-    const hasFilteredCandidate = diagnostic.candidateLocations.some((location) =>
-      filteredLocationKeys.has(location.locationKey)
-    );
-    if (!hasFilteredCandidate) return { covered: false, label: "Filtered out by system/type" };
-
-    return { covered: false, label: "Not in current results" };
-  }
-
-  return (
-    <div className="mres-panel">
-      <div className="mres-header">
-        <span className="mres-title">RESOURCE DEMAND</span>
-        <span className="mres-meta">
-          {coveredCount}/{requiredMaterials.length} covered by visible locations
-        </span>
-      </div>
-      <div className="mres-list">
-        {requiredMaterials.map((mat, index) => {
-          const status = demandStatus(mat);
-          return (
-            <MaterialDemandRow
-              key={`demand:${materialKeyOf(mat)}:${mat.selectedQuality ?? "any"}:${mat.unitType ?? "unit"}:${index}`}
-              materialName={materialDisplayName(mat)}
-              totalQty={mat.requiredQuantity}
-              unitType={mat.unitType}
-              selectedQuality={mat.selectedQuality}
-              estimatedRawOreNeeded={mat.estimatedRawOreNeeded}
-              usedByItems={mat.usedBy.map((ub) => ub.displayName)}
-              covered={status.covered}
-              statusLabel={status.label}
-              sourceLocationNames={status.covered ? visibleLocationNames : []}
-            />
-          );
-        })}
-      </div>
     </div>
   );
 }
@@ -1742,14 +1342,6 @@ export default function MiningModule() {
       matchedDemand: getMatchedDemandCount(entry),
     })));
   }, [visibleCards]);
-  const visibleMaterialKeys = useMemo(
-    () => new Set(visibleCards.flatMap((c) => locationMaterialKeysByLocationKey.get(c.locationKey) ?? [])),
-    [locationMaterialKeysByLocationKey, visibleCards],
-  );
-  const visibleLocationNames = useMemo(
-    () => visibleCards.map((c) => c.locationName),
-    [visibleCards],
-  );
   const filteredLocationKeys = useMemo(
     () => new Set(filteredLocations.map((location) => location.locationKey)),
     [filteredLocations],
@@ -2008,24 +1600,11 @@ export default function MiningModule() {
                   <LocationDetail
                     entry={selectedEntry}
                     buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
-                    displayNameByKey={displayNameByKey}
                     locationMaterialKeys={locationMaterialKeysByLocationKey.get(selectedEntry.locationKey) ?? []}
                     selectedMaterials={selectedMaterials}
-                    requiredMaterials={miningRequiredMaterials}
                   />
                 )}
               </>
-            )}
-
-            {/* ── Resource demand ────────────────────────────────── */}
-            {buildQueueSelectionActive && miningRequiredMaterials.length > 0 && (
-              <ResourceDemandPanel
-                requiredMaterials={miningRequiredMaterials}
-                visibleMaterialKeys={visibleMaterialKeys}
-                filteredLocationKeys={filteredLocationKeys}
-                visibleLocationNames={visibleLocationNames}
-                diagnosticsByMaterialKey={diagnosticsByMaterialKey}
-              />
             )}
 
             {showAdvancedScores && (
