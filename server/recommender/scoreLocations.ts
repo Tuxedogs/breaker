@@ -61,6 +61,11 @@ function mergeSpawnType(current: string, next: string): string {
   return "mixed";
 }
 
+function mergeMatchedLocationCodes(current: string[] | undefined, next: string[] | undefined): string[] | undefined {
+  const merged = Array.from(new Set([...(current ?? []), ...(next ?? [])])).sort();
+  return merged.length > 0 ? merged : undefined;
+}
+
 function addIndexedResource(
   resourcesByLocation: Map<string, ScoredLocation["indexedResources"]>,
   locationKey: string,
@@ -129,6 +134,7 @@ export function buildIndexedBrowseLocations(
       const existing = locations.get(locationKey);
       if (existing) {
         existing.spawnType = mergeSpawnType(existing.spawnType, location.spawnType);
+        existing.matchedLocationCodes = mergeMatchedLocationCodes(existing.matchedLocationCodes, location.matchedLocationCodes);
       } else {
         locations.set(locationKey, {
           locationKey,
@@ -282,6 +288,7 @@ export function scoreLocations(
       if (existing) {
         existing.score += score;
         existing.spawnType = mergeSpawnType(existing.spawnType, location.spawnType);
+        existing.matchedLocationCodes = mergeMatchedLocationCodes(existing.matchedLocationCodes, location.matchedLocationCodes);
         if (!existing.materials.includes(requirement.displayName)) existing.materials.push(requirement.displayName);
         if (!existing.coveredRequirements.some((entry) => entry.materialKey === requirement.materialKey)) {
           existing.coveredRequirements.push(requirement);

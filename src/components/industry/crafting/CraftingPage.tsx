@@ -1,12 +1,12 @@
 import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
-import "./crafting.css";
+import "./recipe-browser.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getBuildQueueShortageSummary } from "../../../lib/logistics/selectors";
 import { getCraftingItems } from "../../../lib/craftingData";
 
-import ComponentRecipeTable from "./components/ComponentRecipeTable";
+import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import MaterialSourcePlaceholder from "./components/MaterialSourcePlaceholder";
 import CraftTabBar from "./CraftTabBar";
@@ -21,8 +21,33 @@ const QualityModifierViewer = lazy(() => import("./components/QualityModifierVie
 
 type Tab = "recipes" | "analytics" | "quality" | "sources";
 
+type RecipeRewardPool = {
+  poolName?: string;
+  poolGuid?: string;
+  sourceFolder?: string;
+  displayName?: string;
+  weight?: number;
+};
+
 function getRecipeItemId(recipe: ComponentRecipe): string {
   return recipe.internal_name ?? recipe.blueprint_id;
+}
+
+function isRecipeRewardPool(value: unknown): value is RecipeRewardPool {
+  return typeof value === "object" && value !== null;
+}
+
+function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
+  return (recipe.rewardPools ?? [])
+    .filter(isRecipeRewardPool)
+    .map((pool) => ({
+      poolName: pool.poolName,
+      poolGuid: pool.poolGuid,
+      sourceFolder: pool.sourceFolder,
+      displayName: pool.displayName ?? "Unknown blueprint source",
+      weight: typeof pool.weight === "number" ? pool.weight : undefined,
+    }))
+    .filter((pool) => pool.displayName.trim().length > 0);
 }
 
 export default function CraftingModule() {
@@ -52,7 +77,11 @@ export default function CraftingModule() {
     return () => { cancelled = true; };
   }, []);
 
-  const handleAddToQueue = useCallback((recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber?: number; bands?: { start: string | number; end: string | number; mappedValue: string | number }[] }>) => {
+  const handleAddToQueue = useCallback((
+    recipe: ComponentRecipe,
+    selectedQualities: Record<string, { quality: number; bandNumber?: number; bands?: { start: string | number; end: string | number; mappedValue: string | number }[] }>,
+    finalProductQuality: FinalProductQuality,
+  ) => {
     const recipeId = `craft-${recipe.blueprint_id}`;
     const category = recipe.component_type ?? recipe.item_kind ?? "component";
     const resolveMaterial = createMaterialResolver(materialTemplates);
@@ -99,8 +128,13 @@ export default function CraftingModule() {
 
     registerCraftingRecipe({ recipeId, name: recipe.component_name, category, inputs });
     addBuildQueueItem(recipeId, 1, {
+      blueprint_id: recipe.blueprint_id,
       itemId: getRecipeItemId(recipe),
       itemName: recipe.component_name,
+      finalProductQualityBand: finalProductQuality.band,
+      finalProductQualityAverage: finalProductQuality.averageBand,
+      finalProductRarity: finalProductQuality.rarity,
+      blueprintSources: getBlueprintSourcesForQueue(recipe),
       materialRequirements: inputs,
     });
   }, [materialTemplates, registerCraftingRecipe, addBuildQueueItem]);

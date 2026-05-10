@@ -1,6 +1,6 @@
 import path from "node:path";
 
-export const publicApiRoot = path.resolve(process.cwd(), "public", "api");
+export const publicApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
 
 export const apiPaths = {
   materialSourceScores: path.join(publicApiRoot, "recommendations", "material_source_scores.json"),

@@ -2,6 +2,16 @@ import type { ApiSource, RecommenderApiData, RecommenderWarning } from "./recomm
 import { addWarning } from "./recommenderWarnings";
 import { normalizeMiningLocationName, normalizedMiningSystemName } from "./locationNormalization";
 
+function normalizeLocationCode(value: string): string {
+  return value.trim().toUpperCase().replace(/\s+/g, "");
+}
+
+function extractStantonLocationCodes(value: string | undefined): string[] {
+  if (!value) return [];
+  const matches = value.match(/\b(?:ARC|CRU|HUR|MIC)-L[1-5]\b/gi) ?? [];
+  return matches.map(normalizeLocationCode);
+}
+
 export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, warnings: RecommenderWarning[]) {
   const metadataKey = source.system && source.providerName ? `${source.system}:${source.providerName}` : "";
   const metadata = metadataKey ? apiData.locationMetadata[metadataKey] : undefined;
@@ -18,11 +28,19 @@ export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, 
 
   const systemName = normalizedMiningSystemName(metadata?.systemName ?? source.system ?? "Unknown");
   const rawLocationName = metadata?.locationName ?? source.location ?? source.providerName ?? "Unknown";
+  const extractedLocationCodes = Array.from(new Set([
+    ...extractStantonLocationCodes(metadata?.locationName),
+    ...extractStantonLocationCodes(source.location),
+    ...extractStantonLocationCodes(source.providerName),
+    ...extractStantonLocationCodes(source.groupName),
+  ])).sort();
+  const matchedLocationCodes = extractedLocationCodes.length > 0 ? extractedLocationCodes : undefined;
 
   return {
     systemName,
     locationName: normalizeMiningLocationName(systemName, rawLocationName),
     locationKind: metadata?.locationKind ?? source.locationType ?? "unknown",
+    matchedLocationCodes,
     spawnType: source.spawnType ?? "unknown",
     nearbyStations: metadata?.nearbyStations ?? [],
   };

@@ -138,11 +138,23 @@ export interface ReservedMaterialAllocation {
   container?: string;
 }
 
+export interface BlueprintSourceSnapshot {
+  poolName?: string;
+  poolGuid?: string;
+  sourceFolder?: string;
+  displayName: string;
+  weight?: number;
+}
+
 export interface BuildQueueItem {
   id: string;
   recipeId: string;
+  blueprint_id?: string;
   itemId?: string;
   itemName?: string;
+  finalProductQualityBand?: number;
+  finalProductQualityAverage?: number;
+  finalProductRarity?: string;
   quantity: number;
   allowLowerQuality?: boolean;
   priority?: number;
@@ -150,4 +162,5 @@ export interface BuildQueueItem {
   status?: "queued" | "active" | "paused" | "complete";
   reservedAllocations?: ReservedMaterialAllocation[];
   materialRequirements?: RecipeInputTemplate[];
+  blueprintSources?: BlueprintSourceSnapshot[];
 }

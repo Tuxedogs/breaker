@@ -8,6 +8,10 @@ import {
 } from "../../../features/mining/recommenderAdapter";
 import { getBuildQueueRequirements } from "../../../features/buildQueue/buildQueueRequirementsApi";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
+import {
+  loadStantonLagrangeChildrenData,
+  resolveRecommenderStantonLagrangeChildren,
+} from "../../../features/locations/stantonLagrangeChildren";
 import type {
   ManualMiningDemandItem,
   PublicLocationEntry,
@@ -232,19 +236,19 @@ function getPrimaryRouteScore(entry: PublicLocationEntry, selectedMaterials: Set
   return entry.routeScores?.[0] ?? null;
 }
 
-function getRankingScore(entry: PublicLocationEntry, selectedMaterials: Set<string>, mode: MiningRankingMode): number {
-  const routeScore = getPrimaryRouteScore(entry, selectedMaterials);
-  if (!routeScore) return entry.routeTargetabilityScore ?? 0;
+function getPrimaryRecommendationScore(entry: PublicLocationEntry): number {
+  if (Number.isFinite(entry.score)) return entry.score;
+  return entry.routeTargetabilityScore ?? 0;
+}
 
-  if (mode === "quality") return routeScore.qualityRouteScore;
-  if (mode === "quantity") return routeScore.yieldRouteScore;
+function getMatchedDemandCount(entry: PublicLocationEntry): number {
+  return entry.requiredMaterials?.length ?? 0;
+}
 
-  return Math.round(
-    routeScore.qualityRouteScore * 0.35 +
-    routeScore.yieldRouteScore * 0.35 +
-    routeScore.demandMatchScore * 0.15 +
-    routeScore.overallTargetabilityScore * 0.15
-  );
+function compareLocationsByRecommendationScore(left: PublicLocationEntry, right: PublicLocationEntry): number {
+  return getPrimaryRecommendationScore(right) - getPrimaryRecommendationScore(left) ||
+    getMatchedDemandCount(right) - getMatchedDemandCount(left) ||
+    left.locationName.localeCompare(right.locationName);
 }
 
 function formatRouteWhy(entry: PublicLocationEntry, routeScore: NonNullable<PublicLocationEntry["routeScores"]>[number]): string {
@@ -448,7 +452,46 @@ type LoadState =
 
 // ── Location strip panel ──────────────────────────────────────────────────────
 
+function StantonLagrangeChildrenSummary({
+  entry,
+  compact = false,
+}: {
+  entry: PublicLocationEntry;
+  compact?: boolean;
+}) {
+  if (entry.systemName.toLowerCase() !== "stanton") return null;
+
+  const resolved = resolveRecommenderStantonLagrangeChildren(
+    entry.locationName,
+    entry.matchedLocationCodes,
+  );
+
+  if (resolved.points.length === 0) return null;
+
+  return (
+    <div className={`mloc-lagrange-children${compact ? " mloc-lagrange-children--compact" : ""}`}>
+      {resolved.points.map((point) => (
+        <div key={`${entry.locationKey}:lagrange:${point.code}`} className="mloc-lagrange-point">
+          <div className="mloc-lagrange-point-head">
+            <span>{point.code}</span>
+            <span>{point.bodyName}</span>
+            <span>{point.pointKey}</span>
+          </div>
+          <div className="mloc-lagrange-child-list">
+            {point.children.map((child) => (
+              <span key={`${entry.locationKey}:lagrange:${point.code}:${child.id}`}>
+                {child.recordName}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function LocationPanel({
+  rank,
   entry,
   selectedMaterials,
   buildQueueMaterialKeys,
@@ -462,6 +505,7 @@ function LocationPanel({
   onSelect,
   onToggleStar,
 }: {
+  rank: number;
   entry: PublicLocationEntry;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
@@ -560,6 +604,7 @@ function LocationPanel({
       tabIndex={0}
     >
       <div className="mloc-panel-topbar">
+        <span className="mloc-rank-pill">#{rank}</span>
         <span className="mloc-panel-system">
           {entry.systemName}{entry.locationKind ? ` / ${entry.locationKind.replace(/_/g, " ")}` : ""}
         </span>
@@ -577,6 +622,7 @@ function LocationPanel({
       </div>
 
       <div className="mloc-panel-name">{entry.locationName}</div>
+      <StantonLagrangeChildrenSummary entry={entry} compact />
 
       {specialSignal && (
         <div className="mloc-special-signal" title={specialSignal.reason}>
@@ -794,6 +840,8 @@ function LocationDetail({
           </div>
         )}
       </div>
+
+      <StantonLagrangeChildrenSummary entry={entry} />
 
       {/* Coverage summary strip */}
       {total > 0 && (
@@ -1273,6 +1321,7 @@ function ResourceDemandPanel({
 
 export default function MiningModule() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
+  const [, setLagrangeChildrenDataVersion] = useState(0);
   const planner = useMiningPlannerState();
   const [rankingMode, setRankingMode] = useState<MiningRankingMode>(() => readStoredRankingMode());
   const buildQueue = useLogisticsStore((store) => store.buildQueue);
@@ -1309,6 +1358,20 @@ export default function MiningModule() {
 
   useEffect(() => {
     getAllIndexedLocations().then((result) => setAllLocations(result.locations)).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadStantonLagrangeChildrenData()
+      .then(() => {
+        if (!cancelled) setLagrangeChildrenDataVersion((version) => version + 1);
+      })
+      .catch((error) => {
+        if (debugMiningIdentity) console.warn("[mining] failed to load Stanton Lagrange children", error);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const [requirementState, setRequirementState] = useState<
@@ -1479,6 +1542,8 @@ export default function MiningModule() {
           console.debug("raw API recommendation count", data.recommendations.length);
           console.debug("raw API cards", data.recommendations.map((entry) => ({
             locationName: entry.locationName,
+            score: entry.score,
+            matchedDemand: entry.requiredMaterials?.length ?? 0,
             requiredMaterials: entry.requiredMaterials,
             indexedResources: entry.indexedResources,
           })));
@@ -1508,7 +1573,9 @@ export default function MiningModule() {
   }, [recommenderRequiredMaterials, planner.favorites, planner.filters, planner.manualDemand, planner.priorityStack]);
 
   const locations = useMemo(
-    () => state.status === "ok" ? state.data.recommendations : [],
+    () => state.status === "ok"
+      ? [...state.data.recommendations].sort(compareLocationsByRecommendationScore)
+      : [],
     [state],
   );
 
@@ -1577,7 +1644,7 @@ export default function MiningModule() {
         planner.isFavorite({ system: l.systemName, location: l.locationName, spawnType: l.spawnType })
       );
     }
-    return result;
+    return [...result].sort(compareLocationsByRecommendationScore);
   }, [locations, selectedSystems, selectedMiningTypes, selectedMaterials, indexedMaterialKeysByLocationKey, planner.filters.showOnlyStarred, planner.isFavorite]);
 
   const activeDiversityMaterialKeys = selectedMaterials.size > 0 ? selectedMaterials : activeBuildQueueMaterialKeys;
@@ -1586,12 +1653,8 @@ export default function MiningModule() {
       ? [...filteredLocations]
       : diversifyLocationsByMaterials(filteredLocations, activeDiversityMaterialKeys, indexedMaterialKeysByLocationKey);
 
-    return ranked.sort((left, right) => {
-      const leftScore = getRankingScore(left, selectedMaterials, rankingMode);
-      const rightScore = getRankingScore(right, selectedMaterials, rankingMode);
-      return rightScore - leftScore || left.locationName.localeCompare(right.locationName);
-    });
-  }, [activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, rankingMode, selectedMaterials]);
+    return ranked.sort(compareLocationsByRecommendationScore);
+  }, [activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, selectedMaterials]);
 
   const diagnosticsByMaterialKey = useMemo(() => {
     const map = new Map<string, NonNullable<RecommendationResponse["diagnostics"]>["materialCoverage"][number]>();
@@ -1670,6 +1733,15 @@ export default function MiningModule() {
   );
 
   const visibleCards = useMemo(() => rankedFilteredLocations.slice(0, 4), [rankedFilteredLocations]);
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    console.debug("[mining] location card render order", visibleCards.map((entry, index) => ({
+      rank: index + 1,
+      displayName: `${entry.locationName} (${entry.systemName})`,
+      score: getPrimaryRecommendationScore(entry),
+      matchedDemand: getMatchedDemandCount(entry),
+    })));
+  }, [visibleCards]);
   const visibleMaterialKeys = useMemo(
     () => new Set(visibleCards.flatMap((c) => locationMaterialKeysByLocationKey.get(c.locationKey) ?? [])),
     [locationMaterialKeysByLocationKey, visibleCards],
@@ -1892,6 +1964,7 @@ export default function MiningModule() {
                     {stripLocations.map((entry) => (
                       <LocationPanel
                         key={entry.locationKey}
+                        rank={filteredLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
                         entry={entry}
                         selectedMaterials={selectedMaterials}
                         buildQueueMaterialKeys={activeBuildQueueMaterialKeys}

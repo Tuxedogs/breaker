@@ -144,6 +144,7 @@ export interface ScoredLocation {
   locationName: string;
   locationKind: string;
   systemName: string;
+  matchedLocationCodes?: string[];
   spawnType: string;
   nearbyStations: string[];
   materials: string[];
@@ -163,6 +164,7 @@ export interface Recommendation {
   locationName: string;
   locationKind: string;
   systemName: string;
+  matchedLocationCodes?: string[];
   spawnType: string;
   nearbyStations: string[];
   materials: string[];

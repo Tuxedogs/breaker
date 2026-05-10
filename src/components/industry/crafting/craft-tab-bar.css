@@ -1,0 +1,59 @@
+/* Shared industry navigation used by recipe browser, build queue, and mining pages. */
+
+.craft-tab-bar {
+  --craft-accent: #8bd6cc;
+  --craft-accent-soft: rgba(45, 212, 191, 0.095);
+  --craft-accent-muted: rgba(139, 214, 204, 0.72);
+  display: flex;
+  gap: 0.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding-bottom: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.craft-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.75rem;
+  font-family: var(--font-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(190, 204, 232, 0.62);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.12s, border-color 0.12s;
+  margin-bottom: 0;
+}
+
+.craft-tab:hover { color: var(--craft-accent-muted); }
+
+.craft-tab--active {
+  color: #d9ccff;
+  border-color: rgba(167, 139, 250, 0.5);
+  background: rgba(167, 139, 250, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(167, 139, 250, 0.2);
+}
+
+.craft-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--craft-accent-soft);
+  font-family: var(--font-primary);
+  font-size: 0.6rem;
+  color: var(--craft-accent);
+}
+
+.craft-tab-badge--alert {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}

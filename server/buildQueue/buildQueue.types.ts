@@ -25,6 +25,9 @@ export interface BuildQueueRequirementItem {
   recipeId: string;
   itemId?: string;
   itemName?: string;
+  finalProductQualityBand?: number;
+  finalProductQualityAverage?: number;
+  finalProductRarity?: string;
   quantity: number;
   allowLowerQuality?: boolean;
   status?: string;
