@@ -355,6 +355,17 @@ function formatCompactNumber(value: number, options: { sign?: boolean } = {}): s
   return options.sign && normalized > 0 ? `+${formatted}` : formatted;
 }
 
+function formatModifierPercent(value: number): string {
+  if (!Number.isFinite(value)) return "-";
+  const rounded = Math.round(value * 10) / 10;
+  const normalized = Object.is(rounded, -0) ? 0 : rounded;
+  const formatted = normalized.toLocaleString("en-US", {
+    minimumFractionDigits: Number.isInteger(normalized) ? 0 : 1,
+    maximumFractionDigits: Number.isInteger(normalized) ? 0 : 1,
+  });
+  return `${normalized > 0 ? "+" : ""}${formatted}%`;
+}
+
 function formatQuantity(value: number): string {
   return formatCompactNumber(value);
 }
@@ -432,7 +443,7 @@ function formatModifiedStat(
 
   const modifiedValue = applyModifierToBase(baseValue, modifierValue, modifierMode);
   const delta = modifiedValue - baseValue;
-  return `${formatCompactNumber(delta, { sign: true })} (${formatCompactNumber(modifiedValue)})`;
+  return formatModifierPercent((delta / baseValue) * 100);
 }
 
 type MaterialQuantization = {
