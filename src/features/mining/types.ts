@@ -176,6 +176,7 @@ export interface PublicLocationEntry {
   locationKey: string; // deduplication key: normalized system + canonical location
   locationName: string;
   systemName: string;
+  matchedLocationCodes?: string[];
   locationKind: string;
   spawnType: string;
   nearbyStations: string[];
@@ -185,6 +186,7 @@ export interface PublicLocationEntry {
     materialName: string;
     miningType: string;
   }>;
+  score: number;
   routeTargetabilityScore?: number;
   routeTargetabilityLabel?: "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
   routeScores?: Array<{

@@ -18,6 +18,7 @@ export interface ComponentRecipe {
   size: string;
   craft_time_seconds: number;
   output_entityClass: string;
+  baseStats?: Record<string, unknown>;
   materials: ComponentMaterial[];
   item_kind?: CraftingItemKind;
   internal_name?: string | null;

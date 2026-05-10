@@ -1,12 +1,27 @@
 import { defineConfig } from "vite";
+import type { Connect, PreviewServer, ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
 import svgr from "vite-plugin-svgr";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
+import { createReadStream } from "node:fs";
+import { stat } from "node:fs/promises";
 import path from "node:path";
 import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
+
+const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
+const dynamicApiPaths = new Set([
+  "/api/recommender/locations",
+  "/api/recommender/recommendations",
+  "/api/build-queue/requirements",
+]);
+
+const contentTypes: Record<string, string> = {
+  ".csv": "text/csv; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+};
 
 async function readRequestBody(request: import("node:http").IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
@@ -15,29 +30,69 @@ async function readRequestBody(request: import("node:http").IncomingMessage): Pr
   return raw ? JSON.parse(raw) : {};
 }
 
+async function tryServeScintelApiFile(
+  request: import("node:http").IncomingMessage,
+  response: import("node:http").ServerResponse,
+): Promise<boolean> {
+  if (request.method !== "GET" && request.method !== "HEAD") return false;
+
+  const url = request.url?.split("?")[0] ?? "";
+  if (!url.startsWith("/api/") || dynamicApiPaths.has(url)) return false;
+
+  const relativePath = decodeURIComponent(url.slice("/api/".length));
+  const filePath = path.resolve(scintelApiRoot, relativePath);
+  const relativeToRoot = path.relative(scintelApiRoot, filePath);
+  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) return false;
+
+  try {
+    const fileStat = await stat(filePath);
+    if (!fileStat.isFile()) return false;
+  } catch {
+    return false;
+  }
+
+  response.statusCode = 200;
+  response.setHeader("content-type", contentTypes[path.extname(filePath).toLowerCase()] ?? "application/octet-stream");
+  if (request.method === "HEAD") {
+    response.end();
+    return true;
+  }
+  createReadStream(filePath).pipe(response);
+  return true;
+}
+
+function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer, "middlewares">) {
+  const middleware: Connect.NextHandleFunction = async (request, response, next) => {
+    const url = request.url?.split("?")[0] ?? "";
+    if (!dynamicApiPaths.has(url)) {
+      if (await tryServeScintelApiFile(request, response)) return;
+      next();
+      return;
+    }
+    const body = await readRequestBody(request);
+    const route =
+      await handleRecommenderRoute(request.method ?? "GET", url, body) ??
+      await handleBuildQueueRoute(request.method ?? "GET", url, body);
+    if (!route) {
+      next();
+      return;
+    }
+    response.statusCode = route.status;
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify(route.body));
+  };
+  server.middlewares.use(middleware);
+}
+
 export default defineConfig({
   plugins: [
     {
       name: "scintel-recommender-api",
       configureServer(server) {
-        server.middlewares.use(async (request, response, next) => {
-          const url = request.url?.split("?")[0] ?? "";
-          if (url !== "/api/recommender/recommendations" && url !== "/api/build-queue/requirements") {
-            next();
-            return;
-          }
-          const body = await readRequestBody(request);
-          const route =
-            await handleRecommenderRoute(request.method ?? "GET", url, body) ??
-            await handleBuildQueueRoute(request.method ?? "GET", url, body);
-          if (!route) {
-            next();
-            return;
-          }
-          response.statusCode = route.status;
-          response.setHeader("content-type", "application/json");
-          response.end(JSON.stringify(route.body));
-        });
+        installScintelApiMiddleware(server);
+      },
+      configurePreviewServer(server) {
+        installScintelApiMiddleware(server);
       },
     },
     react(),

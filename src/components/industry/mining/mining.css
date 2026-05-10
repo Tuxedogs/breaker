@@ -6,6 +6,38 @@
 
 /* ── Page shell ───────────────────────────────── */
 
+:root {
+  --sc-bg-0: #050912;
+  --sc-bg-1: #07101b;
+  --sc-bg-2: #0a1624;
+  --sc-bg-3: #0d1b2b;
+
+  --sc-border: rgba(148, 163, 184, 0.14);
+  --sc-border-strong: rgba(148, 163, 184, 0.22);
+
+  --sc-text: #dbeafe;
+  --sc-text-muted: rgba(203, 213, 225, 0.62);
+  --sc-text-faint: rgba(148, 163, 184, 0.42);
+
+  --sc-teal: #5eead4;
+  --sc-teal-soft: rgba(45, 212, 191, 0.16);
+  --sc-teal-border: rgba(45, 212, 191, 0.34);
+
+  --sc-purple: #a78bfa;
+  --sc-purple-soft: rgba(124, 58, 237, 0.16);
+  --sc-purple-border: rgba(167, 139, 250, 0.36);
+
+  --sc-green: #34d399;
+  --sc-green-soft: rgba(16, 185, 129, 0.14);
+  --sc-green-border: rgba(52, 211, 153, 0.28);
+
+  --sc-amber: #fbbf24;
+  --sc-amber-soft: rgba(251, 191, 36, 0.13);
+  --sc-amber-border: rgba(251, 191, 36, 0.32);
+
+  --sc-red: #fb7185;
+}
+
 .mine-page {
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -191,6 +223,8 @@
   text-align: left;
   min-height: 148px;
   position: relative;
+background: radial-gradient(circle at 50% 50%, rgba(56, 162, 189, 0.363), transparent 38%);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .mloc-panel:hover {
@@ -199,9 +233,13 @@
 }
 
 .mloc-panel--selected {
-  background: rgba(167, 139, 250, 0.07);
-  border-color: rgba(167, 139, 250, 0.32);
-  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.12);
+    background:
+    radial-gradient(circle at 100% 0%, var(--sc-purple-soft), transparent 38%),
+    linear-gradient(180deg, rgba(19, 20, 38, 0.96), rgba(10, 15, 28, 0.96));
+  border-color: var(--sc-purple-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 1px rgba(167, 139, 250, 0.08);
 }
 
 .mloc-panel--starred {
@@ -2118,15 +2156,6 @@
   gap: 0.55rem;
 }
 
-.mloc-panel {
-  min-height: 132px;
-  gap: 0.46rem;
-  padding: 0.64rem 0.68rem;
-  background: rgba(7, 10, 18, 0.72);
-  border-color: rgba(148, 163, 184, 0.14);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
-}
-
 .mloc-panel:hover {
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
@@ -2139,6 +2168,63 @@
 
 .mloc-panel-name {
   font-size: 0.98rem;
+}
+
+.mloc-lagrange-children {
+  display: flex;
+  flex-direction: column;
+  gap: 0.38rem;
+  padding: 0.5rem 0.58rem;
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  border-radius: 6px;
+  background: rgba(2, 6, 23, 0.2);
+}
+
+.mloc-lagrange-children--compact {
+  gap: 0.28rem;
+  padding: 0.36rem 0.42rem;
+  border-color: rgba(148, 163, 184, 0.1);
+  background: rgba(2, 6, 23, 0.16);
+}
+
+.mloc-lagrange-point {
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+  min-width: 0;
+}
+
+.mloc-lagrange-point-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem 0.32rem;
+  font-family: var(--font-primary);
+  font-size: 0.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(125, 211, 252, 0.7);
+}
+
+.mloc-lagrange-child-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.16rem;
+}
+
+.mloc-lagrange-child-list span {
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  line-height: 1.2;
+  color: rgba(203, 213, 225, 0.56);
+  background: rgba(15, 23, 42, 0.34);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 4px;
+  padding: 0.08rem 0.26rem;
+}
+
+.mloc-lagrange-children--compact .mloc-lagrange-point-head,
+.mloc-lagrange-children--compact .mloc-lagrange-child-list span {
+  font-size: 0.46rem;
 }
 
 .mloc-special-signal {
@@ -2722,4 +2808,42 @@
     top: auto;
     max-height: none;
   }
+}
+
+/* Phase 1 visual cleanup */
+.msb-sidebar {
+  position: sticky;
+  top: 0.75rem;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+.msb-section {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.msb-subsection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.msb-chip--muted {
+  opacity: 0.45;
+}
+
+.msb-chip:disabled {
+  cursor: not-allowed;
+}
+
+.mloc-rank-pill {
+  font-family: "Share Tech Mono", monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: rgba(160, 180, 220, 0.7);
+  border: 1px solid rgba(160,180,220,0.22);
+  border-radius: 3px;
+  padding: 0.05rem 0.25rem;
 }

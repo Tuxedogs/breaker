@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "./crafting.css";
+import "./craft-tab-bar.css";
 
 type Tab = "recipes" | "queue" | "analytics" | "quality" | "sources" | "mining";
 

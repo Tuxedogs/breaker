@@ -55,7 +55,7 @@ interface LogisticsStoreState {
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
   registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
-  addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "itemId" | "itemName" | "materialRequirements">>) => void;
+  addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
   toggleBuildQueueItemPriority: (id: string) => void;
@@ -199,6 +199,20 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
   };
 }
 
+function coercePersistedBlueprintSource(value: unknown): NonNullable<BuildQueueItem["blueprintSources"]>[number] | null {
+  if (!isRecord(value)) return null;
+  const displayName = isString(value.displayName) ? value.displayName : undefined;
+  if (!displayName) return null;
+
+  return {
+    poolName: isString(value.poolName) ? value.poolName : undefined,
+    poolGuid: isString(value.poolGuid) ? value.poolGuid : undefined,
+    sourceFolder: isString(value.sourceFolder) ? value.sourceFolder : undefined,
+    displayName,
+    weight: isNumber(value.weight) ? value.weight : undefined,
+  };
+}
+
 export function getRarityForBand(qualityBand?: number): RarityInfo {
   return rarityCatalog[rarityFromBandIndex(qualityBand)];
 }
@@ -319,8 +333,12 @@ function coercePersistedBuildQueueItem(value: unknown, materials: MaterialTempla
   return {
     id: value.id,
     recipeId: value.recipeId,
+    blueprint_id: isString(value.blueprint_id) ? value.blueprint_id : undefined,
     itemId: isString(value.itemId) ? value.itemId : undefined,
     itemName: isString(value.itemName) ? value.itemName : undefined,
+    finalProductQualityBand: isNumber(value.finalProductQualityBand) ? value.finalProductQualityBand : undefined,
+    finalProductQualityAverage: isNumber(value.finalProductQualityAverage) ? value.finalProductQualityAverage : undefined,
+    finalProductRarity: isString(value.finalProductRarity) ? value.finalProductRarity : undefined,
     quantity: value.quantity,
     allowLowerQuality: value.allowLowerQuality === true,
     priority: isNumber(value.priority) ? value.priority : undefined,
@@ -335,6 +353,11 @@ function coercePersistedBuildQueueItem(value: unknown, materials: MaterialTempla
       ? value.materialRequirements
           .map((input) => coercePersistedRecipeInput(input, materials))
           .filter((input): input is RecipeInputTemplate => input !== null)
+      : undefined,
+    blueprintSources: Array.isArray(value.blueprintSources)
+      ? value.blueprintSources
+          .map(coercePersistedBlueprintSource)
+          .filter((source): source is NonNullable<BuildQueueItem["blueprintSources"]>[number] => source !== null)
       : undefined,
   };
 }
@@ -554,7 +577,13 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           if (existing) {
             return {
               buildQueue: state.buildQueue.map((item) =>
-                item.id === existing.id ? { ...item, quantity: item.quantity + quantity } : item,
+                item.id === existing.id
+                  ? {
+                      ...item,
+                      quantity: item.quantity + quantity,
+                      blueprintSources: item.blueprintSources?.length ? item.blueprintSources : snapshot?.blueprintSources,
+                    }
+                  : item,
               ),
             };
           }
@@ -562,13 +591,18 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           const newItem: BuildQueueItem = {
             id: `bq-craft-${recipeId}-${Date.now()}`,
             recipeId,
+            blueprint_id: snapshot?.blueprint_id,
             itemId: snapshot?.itemId,
             itemName: snapshot?.itemName,
+            finalProductQualityBand: snapshot?.finalProductQualityBand,
+            finalProductQualityAverage: snapshot?.finalProductQualityAverage,
+            finalProductRarity: snapshot?.finalProductRarity,
             quantity,
             allowLowerQuality: false,
             status: "queued",
             priority: nextPriority,
             priorityActive: false,
+            blueprintSources: snapshot?.blueprintSources,
             materialRequirements: snapshot?.materialRequirements?.map((input, index) => ({
               ...input,
               requirementId: input.requirementId ?? `${recipeId}:${index}:${input.materialKey ?? input.materialId}:${input.modifierName ?? input.modifierType ?? "material"}`,

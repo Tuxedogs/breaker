@@ -58,6 +58,7 @@ export interface BlueprintRecord {
   blueprintPath?: string | null;
   entityClass?: string | null;
   craftTimeSeconds?: string | number | null;
+  baseStats?: Record<string, unknown> | null;
   materials?: ApiMaterialRecord[] | null;
   qualityModifiers?: ApiQualityModifierRecord[] | null;
   overallQualityModifiers?: ApiQualityModifierRecord[] | null;
@@ -287,6 +288,7 @@ function normalizeBlueprint(item: BlueprintRecord): ComponentRecipe {
     size: toStringOrFallback(item.size, ""),
     craft_time_seconds: toNumber(item.craftTimeSeconds),
     output_entityClass: toStringOrFallback(item.entityClass, ""),
+    baseStats: item.baseStats ?? undefined,
     materials: (item.materials ?? []).map((material) => normalizeMaterial(material, item)),
     item_kind: "vehicle",
 

@@ -6,9 +6,9 @@ export function getModifierImpact(
   property: string,
   value: number
 ): ModifierImpact {
-  const direction = PROPERTY_DIRECTION[property] ?? "higher";
+  const direction = PROPERTY_DIRECTION[property];
 
-  if (value === 0) return "neutral";
+  if (!direction || value === 0) return "neutral";
 
   if (direction === "higher") {
     return value > 0 ? "good" : "bad";

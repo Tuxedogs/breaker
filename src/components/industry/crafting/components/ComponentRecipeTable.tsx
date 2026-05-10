@@ -12,7 +12,6 @@ import {
   getModifiersAtQuality,
   summariseUnmatchedModifiers,
   formatProperty,
-  formatModifierAtQuality,
 } from "../utils/qualityModifiers";
 import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
@@ -26,6 +25,7 @@ import {
   findNearestBandForQuality,
   getBandEffectiveQuality as getEffectiveQualityFromBands,
   rarityClassFromBandIndex,
+  rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
 import { MsbChip, MsbSection, MsbSidebar, ResourcesSection } from "../../shared/MsbSidebar";
@@ -345,10 +345,94 @@ function getImpactClass(impact: "good" | "bad" | "neutral"): string {
   return "";
 }
 
-function getImpactWord(impact: "good" | "bad" | "neutral"): string {
-  if (impact === "good") return "better";
-  if (impact === "bad") return "worse";
-  return "";
+function formatCompactNumber(value: number, options: { sign?: boolean } = {}): string {
+  if (!Number.isFinite(value)) return "-";
+  const rounded = Math.round(value * 100) / 100;
+  const normalized = Object.is(rounded, -0) ? 0 : rounded;
+  const formatted = normalized.toLocaleString("en-US", {
+    maximumFractionDigits: 2,
+  });
+  return options.sign && normalized > 0 ? `+${formatted}` : formatted;
+}
+
+function formatQuantity(value: number): string {
+  return formatCompactNumber(value);
+}
+
+function formatQuantityWithUnit(value: number, unitLabel: string): string {
+  return `${formatQuantity(value)} ${unitLabel}`;
+}
+
+function readNumericPath(source: unknown, path: string[]): number | undefined {
+  let current = source;
+  for (const key of path) {
+    if (!current || typeof current !== "object" || !(key in current)) return undefined;
+    current = (current as Record<string, unknown>)[key];
+  }
+  return typeof current === "number" && Number.isFinite(current) ? current : undefined;
+}
+
+function getBaseStatValue(
+  recipe: ComponentRecipe,
+  property: string,
+): number | undefined {
+  const baseStats = recipe.baseStats;
+  if (!baseStats) return undefined;
+
+  const statPaths: Record<string, string[]> = {
+    GPP_Health_MaxHealth: ["health"],
+    GPP_Shield_MaxHealth: ["resources", "generation", "Shield"],
+    GPP_ItemResource_PowerGeneration: ["resources", "generation", "Power"],
+    GPP_ItemResource_CoolantGeneration: ["resources", "generation", "Coolant"],
+    GPP_Quantum_FuelRequirement: ["resources", "consumption", "QuantumFuel"],
+  };
+
+  const directPath = statPaths[property];
+  if (directPath) return readNumericPath(baseStats, directPath);
+
+  if (property === "GPP_Weapon_Damage") {
+    return (
+      readNumericPath(baseStats, ["weapon", "damage"]) ??
+      readNumericPath(baseStats, ["damage"])
+    );
+  }
+
+  if (property === "GPP_Weapon_FireRate") {
+    return (
+      readNumericPath(baseStats, ["weapon", "fireRate"]) ??
+      readNumericPath(baseStats, ["fireRate"])
+    );
+  }
+
+  if (property === "GPP_Weapon_ReloadSpeed") {
+    return (
+      readNumericPath(baseStats, ["weapon", "reloadSpeed"]) ??
+      readNumericPath(baseStats, ["reloadSpeed"])
+    );
+  }
+
+  return undefined;
+}
+
+function applyModifierToBase(baseValue: number, modifierValue: number, modifierMode?: string): number {
+  if (modifierMode === "integerAdditive") return baseValue + modifierValue;
+  return baseValue * (1 + modifierValue / 100);
+}
+
+function formatModifiedStat(
+  baseValue: number | undefined,
+  modifierValue: number,
+  modifierMode?: string,
+): string {
+  if (baseValue === undefined) {
+    return modifierMode === "integerAdditive"
+      ? formatCompactNumber(modifierValue, { sign: true })
+      : `${formatCompactNumber(modifierValue, { sign: true })}%`;
+  }
+
+  const modifiedValue = applyModifierToBase(baseValue, modifierValue, modifierMode);
+  const delta = modifiedValue - baseValue;
+  return `${formatCompactNumber(delta, { sign: true })} (${formatCompactNumber(modifiedValue)})`;
 }
 
 type MaterialQuantization = {
@@ -631,10 +715,12 @@ export function UnmatchedModifierGroups({
 }
 
 function OverallModifierGroup({
+  recipe,
   modifiers,
   quality,
   rarityClass,
 }: {
+  recipe: ComponentRecipe;
   modifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   quality?: number;
   rarityClass: string;
@@ -678,8 +764,7 @@ function OverallModifierGroup({
       ) : (
         <div className="craft-drawer-modifier-list">
           {getModifiersAtQuality(modifiers, quality).map((m, i) => {
-            const impact = getModifierImpact(m.property, m.value);
-            const impactWord = getImpactWord(impact);
+            const baseValue = getBaseStatValue(recipe, m.property);
 
             return (
               <div key={i} className="craft-drawer-modifier-row">
@@ -692,10 +777,9 @@ function OverallModifierGroup({
                 </span>
 
                 <span
-                  className={`craft-drawer-modifier-val ${getImpactClass(impact)} ${rarityClass}`}
+                  className={`craft-drawer-modifier-val ${rarityClass}`}
                 >
-                  {formatModifierAtQuality(m)}
-                  {impactWord ? ` ${impactWord}` : ""}
+                  {formatModifiedStat(baseValue, m.value, m.modifierMode)}
                 </span>
               </div>
             );
@@ -707,6 +791,7 @@ function OverallModifierGroup({
 }
 
 function MaterialQualityRow({
+  recipe,
   mat,
   bandIndex,
   inventorySummary,
@@ -714,6 +799,7 @@ function MaterialQualityRow({
   getBandsForMaterial,
   getBandEffectiveQuality,
 }: {
+  recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   inventorySummary?: RequirementInventorySummary;
@@ -729,6 +815,10 @@ function MaterialQualityRow({
   const bandNumber = safeBandIndex + 1;
   const quality = getBandEffectiveQuality(materialName, safeBandIndex);
   const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
+  const requiredQuantity = mat.quantity;
+  const ownedQuantity = inventorySummary?.ownedQuantity ?? 0;
+  const shortfall = Math.max(requiredQuantity - ownedQuantity, 0);
+  const unitLabel = inventorySummary?.unitLabel ?? getRequirementUnitLabel(mat);
 
   const atQuality = useMemo(() => {
     const mods = getModifiersAtQuality(modifiers, quality);
@@ -799,6 +889,21 @@ function MaterialQualityRow({
         )}
       </div>
 
+      <div className="craft-matq-metric-strip" aria-label={`${mat.material_name} requirement summary`}>
+        <div className="craft-matq-metric">
+          <span className="craft-matq-metric-label">Required</span>
+          <span className="craft-matq-metric-value">{formatQuantityWithUnit(requiredQuantity, unitLabel)}</span>
+        </div>
+        <div className="craft-matq-metric">
+          <span className="craft-matq-metric-label">Owned</span>
+          <span className="craft-matq-metric-value">{formatQuantityWithUnit(ownedQuantity, unitLabel)}</span>
+        </div>
+        <div className={`craft-matq-metric${shortfall > 0 ? " is-short" : ""}`}>
+          <span className="craft-matq-metric-label">Shortfall</span>
+          <span className="craft-matq-metric-value">{formatQuantityWithUnit(shortfall, unitLabel)}</span>
+        </div>
+      </div>
+
       <div className="craft-matq-slider-wrap">
         <div className="craft-matq-rail-wrap">
           <input
@@ -863,8 +968,8 @@ function MaterialQualityRow({
         <div className="craft-matq-mods">
           {atQuality.map((m, i) => {
             const impact = getModifierImpact(m.property, m.value);
-            const impactWord = getImpactWord(impact);
             const directionLabel = getDirectionLabel(m.property);
+            const baseValue = getBaseStatValue(recipe, m.property);
 
             return (
               <div key={i} className="craft-matq-mod-card">
@@ -876,8 +981,7 @@ function MaterialQualityRow({
                   <span
                     className={`craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}
                   >
-                    {formatModifierAtQuality(m)}
-                    {impactWord ? ` ${impactWord}` : ""}
+                    {formatModifiedStat(baseValue, m.value, m.modifierMode)}
                   </span>
 
                   {directionLabel && (
@@ -899,6 +1003,13 @@ interface TotalModifierRow {
   modifierMode?: string;
   contributions: { materialName: string; value: number }[];
 }
+
+export type FinalProductQuality = {
+  band: number;
+  averageBand: number;
+  rarity: string;
+  source: "selectedMaterialBands";
+};
 
 function computeTotalModifiers(
   recipe: ComponentRecipe,
@@ -937,16 +1048,29 @@ function computeTotalModifiers(
   return Array.from(map.values());
 }
 
-function formatTotalModifierValue(row: TotalModifierRow): string {
-  if (row.modifierMode === "integerAdditive") {
-    const v = Math.round(row.totalValue);
-    const suffix =
-      row.property === "GPP_ItemResource_PowerGeneration"
-        ? ` ${Math.abs(v) === 1 ? "power pip" : "power pips"}`
-        : "";
-    return `${v >= 0 ? "+" : ""}${v}${suffix}`;
+function deriveFinalProductQuality(
+  recipe: ComponentRecipe,
+  getBandIndex: (key: string) => number,
+): FinalProductQuality {
+  let weightedBandTotal = 0;
+  let weightTotal = 0;
+
+  for (const [inputIndex, mat] of recipe.materials.entries()) {
+    const band = getBandIndex(getMaterialQualityKey(recipe, mat, inputIndex)) + 1;
+    const weight = Number.isFinite(mat.quantity) && mat.quantity > 0 ? mat.quantity : 1;
+    weightedBandTotal += band * weight;
+    weightTotal += weight;
   }
-  return `${row.totalValue >= 0 ? "+" : ""}${row.totalValue.toFixed(1)}%`;
+
+  const averageBand = weightTotal > 0 ? weightedBandTotal / weightTotal : DEFAULT_BAND_INDEX + 1;
+  const band = Math.max(1, Math.min(8, Math.round(averageBand)));
+
+  return {
+    band,
+    averageBand,
+    rarity: rarityFromBandIndex(band),
+    source: "selectedMaterialBands",
+  };
 }
 
 function formatContributionValue(value: number, modifierMode?: string): string {
@@ -963,7 +1087,7 @@ function CraftedItemSummaryPanel({
   totalModifiers,
   overallModifiers,
   overallQualitySource,
-  componentRarityClass,
+  finalProductQuality,
   rewardPools,
   onAddToQueue,
   isQueued,
@@ -978,9 +1102,13 @@ function CraftedItemSummaryPanel({
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
-  componentRarityClass: string;
+  finalProductQuality: FinalProductQuality;
   rewardPools: { displayName: string }[];
-  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  onAddToQueue: (
+    r: ComponentRecipe,
+    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
+    finalProductQuality: FinalProductQuality,
+  ) => void;
   isQueued: boolean;
   isBookmarked: boolean;
   onToggleBookmark: () => void;
@@ -993,6 +1121,9 @@ function CraftedItemSummaryPanel({
   const hasMaterialModifiers = totalModifiers.length > 0;
   const hasOverallModifiers = overallModifiers.length > 0;
   const hasAnyModifiers = hasMaterialModifiers || hasOverallModifiers;
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const displayFinalProductQuality =
+    finalProductQuality.averageBand ?? finalProductQuality.band;
 
   return (
     <div className="craft-summary-panel">
@@ -1022,6 +1153,19 @@ function CraftedItemSummaryPanel({
         </div>
       </div>
 
+      <div className="craft-summary-section">
+        <div className="craft-summary-section-label">Final Product Quality</div>
+        <div className="craft-summary-mod-list">
+          <div className="craft-summary-mod-row">
+            <div className="craft-summary-mod-top">
+              <span className={`craft-summary-mod-prop ${componentRarityClass}`}>
+                Band {formatCompactNumber(displayFinalProductQuality)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Modifiers total */}
       {hasAnyModifiers && (
         <div className="craft-summary-section">
@@ -1030,10 +1174,8 @@ function CraftedItemSummaryPanel({
           {hasMaterialModifiers && (
             <div className="craft-summary-mod-list">
               {totalModifiers.map((row) => {
-                const impact = getModifierImpact(row.property, row.totalValue);
-                const impactWord = getImpactWord(impact);
-                const impactClass = getImpactClass(impact);
                 const hasBreakdown = row.contributions.length > 1;
+                const baseValue = getBaseStatValue(recipe, row.property);
 
                 return (
                   <div key={row.property} className="craft-summary-mod-row">
@@ -1041,9 +1183,8 @@ function CraftedItemSummaryPanel({
                       <span className="craft-summary-mod-prop">
                         {formatProperty(row.property)}
                       </span>
-                      <span className={`craft-summary-mod-val ${impactClass} ${componentRarityClass}`}>
-                        {formatTotalModifierValue(row)}
-                        {impactWord ? ` ${impactWord}` : ""}
+                      <span className={`craft-summary-mod-val ${componentRarityClass}`}>
+                        {formatModifiedStat(baseValue, row.totalValue, row.modifierMode)}
                       </span>
                     </div>
                     {hasBreakdown && (
@@ -1067,6 +1208,7 @@ function CraftedItemSummaryPanel({
           {hasOverallModifiers && (
             <div className="craft-summary-overall-mods">
               <OverallModifierGroup
+                recipe={recipe}
                 modifiers={overallModifiers}
                 quality={overallQualitySource}
                 rarityClass={componentRarityClass}
@@ -1116,7 +1258,7 @@ function CraftedItemSummaryPanel({
                 }];
               }),
             );
-            onAddToQueue(recipe, selectedQualities);
+            onAddToQueue(recipe, selectedQualities, finalProductQuality);
           }}
         >
           <svg
@@ -1186,7 +1328,11 @@ function RecipeDrawer({
   baseDisplayName: string;
   inventoryEntries?: InventoryEntry[];
   materialTemplates?: MaterialTemplate[];
-  onAddToQueue: (r: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  onAddToQueue: (
+    r: ComponentRecipe,
+    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
+    finalProductQuality: FinalProductQuality,
+  ) => void;
   isRecipeQueued: (recipe: ComponentRecipe) => boolean;
   isRecipeBookmarked: (recipe: ComponentRecipe) => boolean;
   onToggleBookmark: (recipeId: string) => void;
@@ -1232,18 +1378,8 @@ function RecipeDrawer({
   }
 
   const overallModifiers = selectedRecipe.overallQualityModifiers ?? [];
-  const overallQualityMaterial = selectedRecipe.materials[2];
-
-  const overallQualitySource = overallQualityMaterial
-    ? getBandEffectiveQuality(
-        getMaterialName(overallQualityMaterial),
-        getBandIndex(getMaterialQualityKey(selectedRecipe, overallQualityMaterial, 2)),
-      )
-    : undefined;
-  const componentBandIndex = overallQualityMaterial
-    ? getBandIndex(getMaterialQualityKey(selectedRecipe, overallQualityMaterial, 2))
-    : Math.max(DEFAULT_BAND_INDEX, ...Object.values(materialQualities));
-  const componentRarityClass = rarityClassFromBandIndex(componentBandIndex + 1);
+  const finalProductQuality = deriveFinalProductQuality(selectedRecipe, getBandIndex);
+  const overallQualitySource = getEffectiveQualityFromBands(FALLBACK_QUALITY_BANDS, finalProductQuality.band - 1);
 
   const rewardPools = (selectedRecipe.rewardPools ?? []) as { displayName: string }[];
 
@@ -1317,6 +1453,7 @@ function RecipeDrawer({
               return (
                 <MaterialQualityRow
                   key={`${mat.slot}:${key}`}
+                  recipe={selectedRecipe}
                   mat={mat}
                   bandIndex={getBandIndex(key)}
                   inventorySummary={inventorySummaryByKey.get(key)}
@@ -1343,7 +1480,7 @@ function RecipeDrawer({
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
-          componentRarityClass={componentRarityClass}
+          finalProductQuality={finalProductQuality}
           rewardPools={rewardPools}
           onAddToQueue={onAddToQueue}
           isQueued={selectedIsQueued}
@@ -1362,7 +1499,11 @@ interface Props {
   recipes: ComponentRecipe[];
   inventoryEntries?: InventoryEntry[];
   materialTemplates?: MaterialTemplate[];
-  onAddToQueue: (recipe: ComponentRecipe, selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>) => void;
+  onAddToQueue: (
+    recipe: ComponentRecipe,
+    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
+    finalProductQuality: FinalProductQuality,
+  ) => void;
   isRecipeQueued?: (recipe: ComponentRecipe) => boolean;
 }
 

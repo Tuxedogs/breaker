@@ -231,13 +231,25 @@ function addComparisons(locations: ScoredLocation[], routeScoresByLocation: Map<
   }
 }
 
+function compareRouteScores(left: MaterialRouteScore, right: MaterialRouteScore): number {
+  return right.overallTargetabilityScore - left.overallTargetabilityScore ||
+    right.demandMatchScore - left.demandMatchScore ||
+    left.displayName.localeCompare(right.displayName);
+}
+
+function compareRecommendationLocations(left: ScoredLocation, right: ScoredLocation): number {
+  return right.score - left.score ||
+    right.coveredRequirements.length - left.coveredRequirements.length ||
+    left.locationName.localeCompare(right.locationName);
+}
+
 export function formatRecommendations(locations: ScoredLocation[]): Recommendation[] {
   const routeScoresByLocation = buildMaterialRouteScores(locations);
   addComparisons(locations, routeScoresByLocation);
 
-  return locations.map((location) => {
+  return [...locations].sort(compareRecommendationLocations).map((location) => {
     const names = location.coveredRequirements.map((requirement) => requirement.displayName);
-    const routeScores = routeScoresByLocation.get(location.locationKey) ?? [];
+    const routeScores = [...(routeScoresByLocation.get(location.locationKey) ?? [])].sort(compareRouteScores);
     const routeTargetabilityScore = routeScores.length > 0
       ? roundScore(routeScores.reduce((sum, score) => sum + score.overallTargetabilityScore, 0) / routeScores.length)
       : undefined;
@@ -249,6 +261,7 @@ export function formatRecommendations(locations: ScoredLocation[]): Recommendati
       locationName: location.locationName,
       locationKind: location.locationKind,
       systemName: location.systemName,
+      matchedLocationCodes: location.matchedLocationCodes,
       spawnType: location.spawnType,
       nearbyStations: location.nearbyStations,
       materials: location.materials,

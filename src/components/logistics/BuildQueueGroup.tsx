@@ -1,10 +1,20 @@
 import { useMemo, useState } from 'react';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
-import { formatQuantity, formatRequirementQuantity, getBuildQueueItemInputs, getInventoryStacks, getRecipeForQueueItem, materialTypeClass, rarityClass, type InventoryStack, type SourceStrategy } from '../../lib/logistics/inventory';
 import {
-  getAvailableQuantityForInventoryEntry,
+  formatQuantity,
+  formatRequirementQuantity,
+  getBuildQueueItemInputs,
+  getInventoryStacks,
+  getRecipeForQueueItem,
+  materialTypeClass,
+  rarityClass,
+  type InventoryStack,
+  type SourceStrategy,
+} from '../../lib/logistics/inventory';
+import {
   allocationMatchesRequirement,
+  getAvailableQuantityForInventoryEntry,
   getBuildQueueMaterialNeedSummary,
   getMaterialReservationCoverage,
   isInventoryEntryEligibleForRequirement,
@@ -14,23 +24,17 @@ import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '
 import { getDirectionLabel, getModifierImpact } from '../../lib/gameplay/propertyUtils';
 import QuantityText from './QuantityText';
 
-function QtyStepBtn({ children, onClick, disabled }: { children: React.ReactNode; onClick: () => void; disabled?: boolean }) {
-  return (
-    <button type="button" className="logi-bq-qty-step" onClick={onClick} disabled={disabled} aria-label={String(children)}>
-      {children}
-    </button>
-  );
-}
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function getImpactClass(impact: 'good' | 'bad' | 'neutral'): string {
-  if (impact === 'good') return 'craft-matq-mod-val--good';
-  if (impact === 'bad') return 'craft-matq-mod-val--bad';
-  return 'craft-matq-mod-val--neutral';
+  if (impact === 'good') return 'bq-mod--good';
+  if (impact === 'bad') return 'bq-mod--bad';
+  return '';
 }
 
 function getImpactWord(impact: 'good' | 'bad' | 'neutral'): string {
-  if (impact === 'good') return '▲';
-  if (impact === 'bad') return '▼';
+  if (impact === 'good') return '^';
+  if (impact === 'bad') return 'v';
   return '';
 }
 
@@ -40,47 +44,10 @@ function getSavedBandIndex(input: RecipeInputTemplate, qualityBands: QualityBand
   return Math.max(0, Math.min(Math.trunc(bandNumber as number) - 1, qualityBands.length - 1));
 }
 
-interface Props {
-  category: string;
-  items: BuildQueueItem[];
-  recipes: RecipeTemplate[];
-  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>;
-  buildQueue: BuildQueueItem[];
-  inventory: InventoryEntry[];
-  materials: MaterialTemplate[];
-  locations: InventoryLocation[];
-  strategy: SourceStrategy;
-  onQuantityChange: (id: string, quantity: number) => void;
-  onAllowLowerQualityChange: (id: string, allowLowerQuality: boolean) => void;
-  onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
-  onRemove: (id: string) => void;
-  onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
-  onClearStaleAllocations: (buildQueueItemId: string) => void;
+function getRequirementId(item: BuildQueueItem, input: RecipeInputTemplate, inputIndex: number): string {
+  const materialKey = input.materialKey ?? input.materialId;
+  return input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
 }
-
-const CATEGORY_LABELS: Record<string, string> = {
-  component: 'Component',
-  weapon: 'Weapon',
-  armor: 'Armor',
-  consumable: 'Consumable',
-  ship_part: 'Ship Part',
-  other: 'Other',
-};
-
-const COVERAGE_LABELS = {
-  covered: 'Covered',
-  partial: 'Partial',
-  missing: 'Missing',
-  overReserved: 'Over-reserved',
-  stale: 'Stale',
-};
-
-const STALE_REASON_LABELS: Record<string, string> = {
-  missingStack: 'missing stack',
-  mismatchedMaterial: 'material changed',
-  nonPositiveQuantity: 'empty reservation',
-  exceedsStackQuantity: 'exceeds current stack',
-};
 
 function sortStacks(stacks: InventoryStack[], strategy: SourceStrategy): InventoryStack[] {
   return stacks.slice().sort((a, b) => {
@@ -91,32 +58,17 @@ function sortStacks(stacks: InventoryStack[], strategy: SourceStrategy): Invento
 }
 
 function getAllocationId(
-  itemId: string,
-  requirementId: string,
-  materialId: string,
-  selectedQuality: number | undefined,
-  unitType: RecipeInputTemplate['unitType'] | undefined,
+  itemId: string, requirementId: string, materialId: string,
+  selectedQuality: number | undefined, unitType: RecipeInputTemplate['unitType'] | undefined,
   stack: InventoryStack,
 ): string {
-  return [
-    itemId,
-    requirementId,
-    materialId,
-    selectedQuality ?? 'any',
-    unitType ?? 'unit',
-    stack.id,
-  ].join(':');
+  return [itemId, requirementId, materialId, selectedQuality ?? 'any', unitType ?? 'unit', stack.id].join(':');
 }
 
 function createAllocation(
-  itemId: string,
-  requirementId: string,
-  selectedQuality: number | undefined,
-  unitType: RecipeInputTemplate['unitType'] | undefined,
-  stack: InventoryStack,
-  materialName: string | undefined,
-  quantityReserved: number,
-  allowLowerQualityOverride = false,
+  itemId: string, requirementId: string, selectedQuality: number | undefined,
+  unitType: RecipeInputTemplate['unitType'] | undefined, stack: InventoryStack,
+  materialName: string | undefined, quantityReserved: number, allowLowerQualityOverride = false,
 ): ReservedMaterialAllocation {
   if (!stack.materialId) throw new Error('Cannot allocate inventory stack without a materialId');
   return {
@@ -137,60 +89,112 @@ function createAllocation(
   };
 }
 
-function getItemFulfillmentState(
-  item: BuildQueueItem,
-  inputs: RecipeInputTemplate[],
-  inventory: InventoryEntry[],
-): 'complete' | 'partial' | 'missing' {
+function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTemplate[], inventory: InventoryEntry[]): 'complete' | 'partial' | 'missing' {
   if (inputs.length === 0) return 'missing';
-  let anyMissing = false;
-  let anyCovered = false;
+  let covered = 0;
+  let missing = 0;
   for (const input of inputs) {
     const materialKey = input.materialKey ?? input.materialId;
-    const required = input.quantity * item.quantity;
-    const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory);
-    if (coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved') {
-      anyCovered = true;
-    } else if (coverage.coverageState === 'missing') {
-      anyMissing = true;
-    } else {
-      anyMissing = true;
-      anyCovered = true;
-    }
+    const coverage = getMaterialReservationCoverage(item, materialKey, input.quantity * item.quantity, inventory);
+    if (coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved') covered += 1;
+    else missing += 1;
   }
-  if (anyCovered && anyMissing) return 'partial';
-  if (anyCovered) return 'complete';
+  if (covered > 0 && missing > 0) return 'partial';
+  if (covered > 0) return 'complete';
   return 'missing';
 }
 
-const FULFILLMENT_BADGE_CLASS: Record<'complete' | 'partial' | 'missing', string> = {
-  complete: 'logi-badge--complete',
-  partial: 'logi-badge--paused',
-  missing: 'logi-badge--shortage',
+function getCoverageLabel(state: string): string {
+  if (state === 'covered') return 'Covered';
+  if (state === 'partial') return 'Partial';
+  if (state === 'overReserved') return 'Over';
+  if (state === 'stale') return 'Stale';
+  return 'Missing';
+}
+
+function getGroupedCoverageState(states: string[]): 'covered' | 'partial' | 'missing' {
+  const isCovered = (s: string) => s === 'covered' || s === 'overReserved';
+  if (states.length > 0 && states.every(isCovered)) return 'covered';
+  if (states.length === 0 || states.every((s) => s === 'missing')) return 'missing';
+  return 'partial';
+}
+
+function formatDecimal(value: number): string {
+  if (!Number.isFinite(value)) return '0';
+  return value.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+}
+
+function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate[], draftBandIndices: Record<string, number>, isEditing: boolean) {
+  const snapshot = item as any;
+  const finalProductQuality = snapshot.finalProductQuality;
+  const snapshotAverage = Number(snapshot.finalProductQualityAverage ?? finalProductQuality?.averageBand ?? finalProductQuality?.average ?? finalProductQuality?.quality);
+  const snapshotBand = Number(snapshot.finalProductQualityBand ?? finalProductQuality?.band);
+
+  if (Number.isFinite(snapshotAverage)) {
+    const bandForRarity = Number.isFinite(snapshotBand) ? snapshotBand : Math.max(1, Math.min(8, Math.floor(snapshotAverage)));
+    return {
+      label: `Band ${formatDecimal(snapshotAverage)}`,
+      rarity: rarityFromBandIndex(bandForRarity),
+      title: `Final product quality ${formatDecimal(snapshotAverage)}`,
+    };
+  }
+
+  const bands = inputs.map((input, inputIndex) => {
+    const requirementId = getRequirementId(item, input, inputIndex);
+    const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+    const bandIndex = isEditing
+      ? (draftBandIndices[requirementId] ?? getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500))
+      : (getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500));
+    return bandIndex + 1;
+  });
+  const average = bands.length ? bands.reduce((s, b) => s + b, 0) / bands.length : 1;
+  return {
+    label: `Band ${formatDecimal(average)}`,
+    rarity: rarityFromBandIndex(Math.max(1, Math.min(8, Math.floor(average)))),
+    title: `Average selected material band ${formatDecimal(average)}`,
+  };
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  component: 'Component',
+  weapon: 'Weapon',
+  armor: 'Armor',
+  consumable: 'Consumable',
+  ship_part: 'Ship Part',
+  other: 'Other',
 };
 
-const FULFILLMENT_LABELS: Record<'complete' | 'partial' | 'missing', string> = {
-  complete: 'Covered',
-  partial: 'Partial',
-  missing: 'Missing',
+const STALE_REASON_LABELS: Record<string, string> = {
+  missingStack: 'missing stack',
+  mismatchedMaterial: 'material changed',
+  nonPositiveQuantity: 'empty reservation',
+  exceedsStackQuantity: 'exceeds current stack',
 };
 
-type BuildQueueSummaryMetrics = {
-  coveredCount: number;
-  totalRequired: number;
-  totalOwned: number;
-  totalAvailable: number;
-  totalShortfall: number;
-  missingRequirementCount: number;
-  unavailableCount: number;
-  shortageNames: string[];
-};
+type BuildQueueSummaryMetrics = { coveredCount: number; totalShortfall: number };
 
-/** Quality slider panel mirroring the craft-matq-* slider from ComponentRecipeTable */
+interface Props {
+  category: string;
+  items: BuildQueueItem[];
+  recipes: RecipeTemplate[];
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>;
+  buildQueue: BuildQueueItem[];
+  inventory: InventoryEntry[];
+  materials: MaterialTemplate[];
+  locations: InventoryLocation[];
+  strategy: SourceStrategy;
+  onQuantityChange: (id: string, quantity: number) => void;
+  onAllowLowerQualityChange: (id: string, allowLowerQuality: boolean) => void;
+  onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
+  onRemove: (id: string) => void;
+  onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
+  onClearStaleAllocations: (buildQueueItemId: string) => void;
+}
+
+// ─── Quality Slider ──────────────────────────────────────────────────────────
+
 function MaterialQualitySlider({
-  input,
-  draftBandIndex,
-  onBandChange,
+  input, draftBandIndex, onBandChange,
 }: {
   input: RecipeInputTemplate;
   draftBandIndex: number;
@@ -204,101 +208,36 @@ function MaterialQualitySlider({
   const atQuality = useMemo(() => {
     const mods = getModifiersAtQuality(input.qualityModifiers ?? [], quality);
     return [...mods].sort((a, b) => {
-      const order = (p: string) =>
-        p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2;
+      const order = (p: string) => (p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2);
       return order(a.property) - order(b.property);
     });
   }, [input.qualityModifiers, quality]);
 
-  const railMarkers = useMemo(
-    () =>
-      qualityBands.map((band, i) => {
-        const mappedValue = Number(band.mappedValue ?? 0);
-        const left = Math.max(0, Math.min(100, (mappedValue / 1000) * 100));
-        const edge = left < 4 ? 'start' : left > 96 ? 'end' : 'middle';
-        return { index: i, mappedValue, left, edge };
-      }),
-    [qualityBands],
-  );
-  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
-  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
-  const fillPct = Math.max(0, selectedPct - bandOnePct);
-
   return (
-    <div className="craft-matq-card" data-band={safeBandIndex}>
-      <div className="craft-matq-header">
-        <div className="craft-matq-identity">
-          <span className="craft-matq-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
-        </div>
-        <div className="craft-matq-quality-header">
-          <span className="craft-matq-quality-label">Band {safeBandIndex + 1}</span>
-          <span className={`craft-matq-quality-value ${selectedQualityTierClass}`}>{quality}</span>
-        </div>
+    <div className="bq-quality-panel">
+      <div className="bq-quality-panel-head">
+        <span className="bq-quality-panel-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
+        <span className={`bq-quality-panel-val ${selectedQualityTierClass}`}>Band {safeBandIndex + 1} / {quality}</span>
       </div>
-
-      <div className="craft-matq-slider-wrap">
-        <div className="craft-matq-rail-wrap">
-          <input
-            type="range"
-            min={0}
-            max={1000}
-            step={1}
-            value={quality}
-            onChange={(e) => {
-              const nearest = findNearestBandForQuality(qualityBands, Number(e.target.value));
-              onBandChange(nearest);
-            }}
-            className="craft-matq-slider"
-            aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
-          />
-          <div
-            className={`craft-matq-rail ${selectedQualityTierClass}`}
-            style={{ '--band-one-pct': `${bandOnePct}%` } as any}
-          >
-            <div
-              className={`craft-matq-rail-fill ${selectedQualityTierClass}`}
-              style={{ '--band-one-pct': `${bandOnePct}%`, '--fill-pct': `${fillPct}%` } as any}
-            />
-            {railMarkers.map((marker) => {
-              const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
-              return (
-                <button
-                  type="button"
-                  key={`${marker.index}-${marker.mappedValue}`}
-                  className={`craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? ' is-active' : ''}`}
-                  style={{ left: `${marker.left}%` }}
-                  data-edge={marker.edge}
-                  onClick={() => onBandChange(marker.index)}
-                  aria-label={`Use mapped quality ${marker.mappedValue}`}
-                >
-                  {marker.index === safeBandIndex ? (
-                    <span className="craft-matq-dot" />
-                  ) : (
-                    marker.mappedValue > quality && <span className="craft-matq-threshold-dot" />
-                  )}
-                  <span className={`craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
+      <input
+        type="range"
+        min={0} max={1000} step={1}
+        value={quality}
+        onChange={(e) => onBandChange(findNearestBandForQuality(qualityBands, Number(e.target.value)))}
+        className="bq-quality-range"
+        aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
+      />
       {atQuality.length > 0 && (
-        <div className="craft-matq-mods">
-          {atQuality.map((m, i) => {
-            const impact = getModifierImpact(m.property, m.value);
-            const directionLabel = getDirectionLabel(m.property);
+        <div className="bq-quality-mods">
+          {atQuality.map((modifier, index) => {
+            const impact = getModifierImpact(modifier.property, modifier.value);
+            const directionLabel = getDirectionLabel(modifier.property);
             return (
-              <div key={i} className="craft-matq-mod-card">
-                <div className="craft-matq-mod-top">
-                  <span className="craft-matq-mod-prop">{formatProperty(m.property)}</span>
-                  <span className={`craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}>
-                    {formatModifierAtQuality(m)}{getImpactWord(impact) ? ` ${getImpactWord(impact)}` : ''}
-                  </span>
-                  {directionLabel && <span className="craft-matq-mod-hint">{directionLabel}</span>}
-                </div>
-              </div>
+              <span className="bq-quality-mod" key={index}>
+                {formatProperty(modifier.property)}
+                <b className={getImpactClass(impact)}>{formatModifierAtQuality(modifier)}{getImpactWord(impact) ? ` ${getImpactWord(impact)}` : ''}</b>
+                {directionLabel && <em>{directionLabel}</em>}
+              </span>
             );
           })}
         </div>
@@ -307,35 +246,22 @@ function MaterialQualitySlider({
   );
 }
 
+// ─── Group ───────────────────────────────────────────────────────────────────
+
 export default function BuildQueueGroup({
-  category,
-  items,
-  recipes,
-  recipeInputsByRecipeId,
-  buildQueue,
-  inventory,
-  materials,
-  locations,
-  strategy,
-  onQuantityChange,
-  onAllowLowerQualityChange,
-  onMaterialRequirementChange,
-  onRemove,
-  onToggleAllocation,
-  onClearStaleAllocations,
+  category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
+  materials, locations, strategy, onQuantityChange, onAllowLowerQualityChange,
+  onMaterialRequirementChange, onRemove, onToggleAllocation, onClearStaleAllocations,
 }: Props) {
-  // editingItemId: which queue item has quality editing open
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
-  // draft band indices: itemId:requirementId -> bandIndex
   const [draftBandIndices, setDraftBandIndices] = useState<Record<string, number>>({});
+  const [expandedReserveRows, setExpandedReserveRows] = useState<Record<string, boolean>>({});
   const [expandedLowerQuality, setExpandedLowerQuality] = useState<Record<string, boolean>>({});
 
   function openEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
-    // Initialise draft indices from current selected qualities
     const initial: Record<string, number> = {};
     inputs.forEach((input, inputIndex) => {
-      const materialKey = input.materialKey ?? input.materialId;
-      const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
+      const requirementId = getRequirementId(item, input, inputIndex);
       const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
       initial[requirementId] = getSavedBandIndex(input, bands) ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
     });
@@ -345,8 +271,7 @@ export default function BuildQueueGroup({
 
   function commitEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
     inputs.forEach((input, inputIndex) => {
-      const materialKey = input.materialKey ?? input.materialId;
-      const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
+      const requirementId = getRequirementId(item, input, inputIndex);
       const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
       const bandIndex = draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
       const draftQuality = getBandEffectiveQuality(bands, bandIndex);
@@ -365,45 +290,18 @@ export default function BuildQueueGroup({
   }
 
   return (
-    <div className="build-category-section logi-bq-group">
-      <div className="build-category-header logi-bq-group-header">
-        <span className="logi-bq-group-label">{CATEGORY_LABELS[category] ?? category}</span>
-        <span className="logi-bq-group-count">{items.length}</span>
-      </div>
+    <div className="bq-category">
       {items.map((item) => {
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
         const isEditingThisItem = editingItemId === item.id;
-
+        const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
-
-        // Rarity comes from the selected input bands; quality remains display-only.
-        const itemQuality = inputs.reduce((max, input, inputIndex) => {
-          const materialKey = input.materialKey ?? input.materialId;
-          const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
-          const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-          const bandIndex = isEditingThisItem
-            ? (draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500))
-            : findNearestBandForQuality(bands, input.selectedQuality ?? 500);
-          const q = getBandEffectiveQuality(bands, bandIndex);
-          return q > max ? q : max;
-        }, 0);
-        const itemBandNumber = inputs.reduce((max, input, inputIndex) => {
-          const materialKey = input.materialKey ?? input.materialId;
-          const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
-          const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-          const bandIndex = isEditingThisItem
-            ? (draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500))
-            : getSavedBandIndex(input, bands) ?? -1;
-          return Math.max(max, bandIndex + 1);
-        }, 1);
-        const itemRarity = rarityFromBandIndex(itemBandNumber);
+        const qualitySummary = getItemQualitySummary(item, inputs, draftBandIndices, isEditingThisItem);
 
         const summaryMetrics = inputs.reduce<BuildQueueSummaryMetrics>((metrics, input) => {
           const materialKey = input.materialKey ?? input.materialId;
-          const material = materials.find((m) => m.id === materialKey);
-          const displayName = input.displayName ?? input.materialName ?? material?.name ?? materialKey;
           const required = input.quantity * item.quantity;
           const requirementIdentity = {
             requirementId: input.requirementId,
@@ -414,404 +312,338 @@ export default function BuildQueueGroup({
           const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, requirementIdentity);
           const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, requirementIdentity);
           const isCovered = coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved';
-          const hasShortfall = needSummary.stillNeeded > 0;
-
           return {
             coveredCount: metrics.coveredCount + (isCovered ? 1 : 0),
-            totalRequired: metrics.totalRequired + required,
-            totalOwned: metrics.totalOwned + needSummary.ownedQuantity,
-            totalAvailable: metrics.totalAvailable + needSummary.availableQuantity,
             totalShortfall: metrics.totalShortfall + needSummary.stillNeeded,
-            missingRequirementCount: metrics.missingRequirementCount + (!isCovered ? 1 : 0),
-            unavailableCount: metrics.unavailableCount + (hasShortfall && needSummary.availableQuantity <= 0 ? 1 : 0),
-            shortageNames: hasShortfall ? [...metrics.shortageNames, displayName] : metrics.shortageNames,
           };
-        }, {
-          coveredCount: 0,
-          totalRequired: 0,
-          totalOwned: 0,
-          totalAvailable: 0,
-          totalShortfall: 0,
-          missingRequirementCount: 0,
-          unavailableCount: 0,
-          shortageNames: [],
-        });
+        }, { coveredCount: 0, totalShortfall: 0 });
+
         const coveragePercent = inputs.length > 0 ? Math.round((summaryMetrics.coveredCount / inputs.length) * 100) : 0;
-        const worstShortageNames = summaryMetrics.shortageNames.slice(0, 3);
+
+        const materialRequirementRows = inputs.map((input, inputIndex) => {
+          const materialKey = input.materialKey ?? input.materialId;
+          const requirementId = getRequirementId(item, input, inputIndex);
+          const groupKey = `${item.id}:${materialKey}:${input.selectedQuality ?? 'any'}:${input.unitType ?? 'unit'}`;
+          const requirementCardKey = `${groupKey}:${requirementId}:${inputIndex}`;
+          const material = materials.find((e) => e.id === materialKey);
+          const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
+          const required = input.quantity * item.quantity;
+          const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+          const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+          const draftBandIndex = isEditingThisItem ? (draftBandIndices[requirementId] ?? savedBandIndex) : savedBandIndex;
+          const selectedQuality = getBandEffectiveQuality(qualityBands, draftBandIndex);
+          const requirementSelectedQuality = input.selectedQuality;
+          const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
+          const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
+          const modifierPreview = modifierAtQuality
+            ? `${formatProperty(modifierAtQuality.property)} ${formatModifierAtQuality(modifierAtQuality)}`
+            : input.modifierName && input.modifierValue !== undefined
+              ? `${formatProperty(input.modifierName)} ${formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })}`
+              : '-';
+          const allowLowerQuality = Boolean(item.allowLowerQuality);
+          const requirementIdentity = { requirementId, selectedQuality: requirementSelectedQuality, unitType: input.unitType };
+          const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
+          const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, effectiveRequirementIdentity);
+          const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, effectiveRequirementIdentity);
+          const ownAllocations = item.reservedAllocations?.filter((a) => allocationMatchesRequirement(a, materialKey, effectiveRequirementIdentity)) ?? [];
+          const ownReservedByStack = new Map(ownAllocations.map((a) => [a.inventoryEntryId, a.quantityReserved]));
+          const allMaterialStacks = sortStacks(
+            getInventoryStacks(inventory.filter((e) => e.materialId === materialKey && e.quantity > 0), materials, locations),
+            strategy,
+          );
+          const eligibleStacks = allMaterialStacks.filter((stack) =>
+            isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality) &&
+            (getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id)),
+          );
+          const ineligibleStacks = allMaterialStacks.filter((stack) => !isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality));
+
+          return {
+            input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName,
+            required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview,
+            allowLowerQuality, coverage, needSummary, ownReservedByStack,
+            remainingRequired: Math.max(0, required - coverage.reservedQuantity),
+            allMaterialStacks, eligibleStacks, ineligibleStacks,
+            staleAllocations: coverage.validations.filter((v) => v.isStale),
+          };
+        });
+
+        const materialGroups = Array.from(
+          materialRequirementRows.reduce((groups, row) => {
+            const existing = groups.get(row.groupKey);
+            if (existing) existing.requirements.push(row);
+            else groups.set(row.groupKey, { groupKey: row.groupKey, requirements: [row] });
+            return groups;
+          }, new Map<string, { groupKey: string; requirements: typeof materialRequirementRows }>()),
+        ).map(([, group]) => {
+          const first = group.requirements[0];
+          return {
+            ...group,
+            displayName: first.displayName,
+            material: first.material,
+            selectedQuality: first.selectedQuality,
+            selectedQualityRarity: first.selectedQualityRarity,
+            rowTone: getGroupedCoverageState(group.requirements.map((r) => r.coverage.coverageState)),
+            requiredTotal: group.requirements.reduce((s, r) => s + r.required, 0),
+            reservedTotal: group.requirements.reduce((s, r) => s + r.coverage.reservedQuantity, 0),
+            ownedQuantity: Math.max(0, ...group.requirements.map((r) => r.needSummary.ownedQuantity)),
+            availableQuantity: Math.max(0, ...group.requirements.map((r) => r.needSummary.availableQuantity)),
+            needTotal: group.requirements.reduce((s, r) => s + r.needSummary.stillNeeded, 0),
+            hasStock: group.requirements.some((r) => r.allMaterialStacks.length > 0),
+          };
+        });
 
         return (
-          <section key={item.id} className={`bq-card bq-card--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
+          <article key={item.id} className={`bq-item bq-item--${fulfillment}`}>
 
-            {/* ── Summary card ── */}
-            <div className="bq-card-header">
-              <div className="bq-card-title-block">
-                <div className="bq-card-title">{itemName}</div>
-                <div className="bq-card-badges">
-                  <span className={`bq-category-badge logi-rarity--${itemRarity}`}>{CATEGORY_LABELS[category] ?? category}</span>
-                  <span className={`bq-status-badge ${FULFILLMENT_BADGE_CLASS[fulfillment]}`}>{FULFILLMENT_LABELS[fulfillment]}</span>
-                  <span className={`logi-quality-pill logi-rarity--${itemRarity}`} title={`Selected quality ${itemQuality}`}>Q{itemQuality}</span>
+            {/* ── Left sidebar: name + controls ── */}
+            <div className="bq-item-sidebar">
+              <div className="bq-item-name-block">
+                <div className="bq-item-name-top">
+                  <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
+                  <span className="bq-item-blueprint">
+                    {blueprintSources.length === 0
+                      ? 'Unknown blueprint'
+                      : blueprintSources.map((s) => s.displayName).join(', ')}
+                  </span>
                 </div>
+                <h2 className="bq-item-name">{itemName}</h2>
               </div>
 
-              <div className="bq-card-controls">
+              <div className="bq-item-badges">
+                <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
+                  {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
+                </span>
+                <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
+                  {qualitySummary.label}
+                </span>
+              </div>
+
+              <div className="bq-item-controls">
+                <div className="bq-qty">
+                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1} aria-label="Decrease quantity">−</button>
+                  <span className="bq-qty-val">{item.quantity}×</span>
+                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} aria-label="Increase quantity">+</button>
+                </div>
                 {inputs.length > 0 && (
-                  <label className={`logi-bq-lower-quality-toggle${item.allowLowerQuality ? ' is-enabled' : ''}`}>
+                  <label className={`bq-toggle${item.allowLowerQuality ? ' is-on' : ''}`}>
                     <input
                       type="checkbox"
                       checked={Boolean(item.allowLowerQuality)}
-                      onChange={(event) => onAllowLowerQualityChange(item.id, event.target.checked)}
+                      onChange={(e) => onAllowLowerQualityChange(item.id, e.target.checked)}
                     />
                     <span>Lower quality</span>
                   </label>
                 )}
-                <div className="logi-bq-qty-control">
-                  <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>-</QtyStepBtn>
-                  <span className="logi-bq-qty-value">{item.quantity}x</span>
-                  <QtyStepBtn onClick={() => onQuantityChange(item.id, item.quantity + 1)}>+</QtyStepBtn>
+                <div className="bq-btn-row">
+                  {inputs.length > 0 && (
+                    isEditingThisItem ? (
+                      <>
+                        <button type="button" className="bq-btn" onClick={() => setEditingItemId(null)}>Cancel</button>
+                        <button type="button" className="bq-btn bq-btn--confirm" onClick={() => commitEdit(item, inputs)}>Done</button>
+                      </>
+                    ) : (
+                      <button type="button" className="bq-btn" onClick={() => openEdit(item, inputs)}>Quality</button>
+                    )
+                  )}
+                  <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
                 </div>
+              </div>
+            </div>
 
-              {/* Edit Quality toggle on summary card only */}
-              {inputs.length > 0 && (
-                isEditingThisItem ? (
-                  <div className="logi-bq-summary-edit-actions">
-                    <button type="button" className="logi-btn-ghost" onClick={() => setEditingItemId(null)}>
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="logi-btn-ghost logi-mat-quality-done-btn"
-                      onClick={() => commitEdit(item, inputs)}
-                    >
-                      Done
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="logi-btn-ghost logi-bq-summary-edit-quality-btn"
-                    onClick={() => openEdit(item, inputs)}
-                  >
-                    Adjust Quality
-                  </button>
-                )
+            {/* ── Right body ── */}
+            <div className="bq-item-body">
+              {/* Coverage bar */}
+              <div className="bq-coverage" aria-label={`${itemName} material coverage`}>
+                <span>{summaryMetrics.coveredCount}/{inputs.length} covered</span>
+                <div className="bq-coverage-track">
+                  <div className="bq-coverage-fill" style={{ width: `${coveragePercent}%` }} />
+                </div>
+                {summaryMetrics.totalShortfall > 0 && (
+                  <span className="bq-coverage-short">{formatQuantity(summaryMetrics.totalShortfall, undefined)} short</span>
+                )}
+              </div>
+
+              {/* Quality edit grid */}
+              {isEditingThisItem && inputs.length > 0 && (
+                <div className="bq-quality-grid" aria-label={`Quality adjustment for ${itemName}`}>
+                  {inputs.map((input, inputIndex) => {
+                    const requirementId = getRequirementId(item, input, inputIndex);
+                    const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+                    const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+                    const draftBandIndex = draftBandIndices[requirementId] ?? savedBandIndex;
+                    return (
+                      <MaterialQualitySlider
+                        key={`quality:${item.id}:${requirementId}:${inputIndex}`}
+                        input={input}
+                        draftBandIndex={draftBandIndex}
+                        onBandChange={(bandIndex) => setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))}
+                      />
+                    );
+                  })}
+                </div>
               )}
 
-              
-
-                <button
-                  type="button"
-                  className="logi-action-btn logi-action-btn--delete"
-                  onClick={() => onRemove(item.id)}
-                  aria-label={`Remove ${itemName}`}
-                >
-                  <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-                    <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* ── Material cards ── */}
-            <div className="bq-summary-strip">
-              <div className="bq-coverage-block">
-                <div className="logi-bq-coverage-copy">
-                  <span className="logi-bq-coverage-num">{coveragePercent}%</span>
-                  <span className="logi-bq-coverage-label">material coverage</span>
-                </div>
-                <div className="logi-bq-coverage-bar" aria-hidden="true">
-                  <span
-                    className={`logi-bq-coverage-fill ${fulfillment === 'complete' ? 'logi-bq-coverage-fill--complete' : fulfillment === 'partial' ? 'logi-bq-coverage-fill--partial' : 'logi-bq-coverage-fill--missing'}`}
-                    style={{ width: `${coveragePercent}%` }}
-                  />
-                </div>
-                <div className="build-coverage-metrics" aria-label={`${itemName} material totals`}>
-                  <span><em>Materials</em><strong>{summaryMetrics.coveredCount}/{inputs.length}</strong></span>
-                  <span><em>Required</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalRequired, undefined)} /></strong></span>
-                  <span><em>Owned / Avail</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalOwned, undefined)} /> / <QuantityText value={formatQuantity(summaryMetrics.totalAvailable, undefined)} /></strong></span>
-                  <span className={summaryMetrics.totalShortfall > 0 ? 'logi-bq-summary-shortfall' : ''}>
-                    <em>Shortfall</em><strong><QuantityText value={formatQuantity(summaryMetrics.totalShortfall, undefined)} /></strong>
-                  </span>
-                </div>
-              </div>
-
-              <div className="bq-intel-note">
-                <div className="logi-bq-intel-title">Build Intelligence</div>
-                <div className="logi-bq-intel-copy">
-                  {fulfillment === 'complete'
-                    ? 'All material requirements are covered by current reservations.'
-                    : fulfillment === 'partial'
-                      ? `${summaryMetrics.missingRequirementCount} material requirement${summaryMetrics.missingRequirementCount === 1 ? '' : 's'} still need coverage.`
-                      : 'No material requirement is fully covered yet.'}
-                  {worstShortageNames.length > 0 && (
-                    <span> Worst shortages: {worstShortageNames.join(', ')}{summaryMetrics.shortageNames.length > worstShortageNames.length ? ` +${summaryMetrics.shortageNames.length - worstShortageNames.length}` : ''}.</span>
-                  )}
-                  {summaryMetrics.unavailableCount > 0 && (
-                    <span> {summaryMetrics.unavailableCount} shortage{summaryMetrics.unavailableCount === 1 ? ' has' : 's have'} no available stored stack.</span>
-                  )}
-                  <span> Lower-quality sourcing is {item.allowLowerQuality ? 'allowed' : 'locked to selected quality'}.</span>
-                </div>
-              </div>
-            </div>
-
-            {isEditingThisItem && inputs.length > 0 && (
-              <div className="bq-quality-drawer" aria-label={`Quality adjustment for ${itemName}`}>
-                {inputs.map((input, inputIndex) => {
-                  const materialKey = input.materialKey ?? input.materialId;
-                  const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
-                  const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-                  const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
-                  const draftBandIndex = draftBandIndices[requirementId] ?? savedBandIndex;
-
-                  return (
-                    <MaterialQualitySlider
-                      key={`quality:${item.id}:${requirementId}:${inputIndex}`}
-                      input={input}
-                      draftBandIndex={draftBandIndex}
-                      onBandChange={(bandIndex) =>
-                        setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))
-                      }
-                    />
-                  );
-                })}
-              </div>
-            )}
-
-            {recipe ? (
-              <div className="bq-requirements">
-                <div className="bq-requirements-head" aria-label={`${inputs.length} material requirement${inputs.length === 1 ? '' : 's'}`}>
+              {/* Material table */}
+              {recipe ? (
+              <div className="bq-mat-table">
+                <div className="bq-mat-head" aria-hidden="true">
                   <span>Material</span>
-                  <span>Quality / Modifier</span>
-                  <span>Inventory</span>
+                  <span>Status</span>
+                  <span>Quality</span>
+                  <span>Modifier</span>
+                  <span>Available</span>
+                  <span>Need</span>
+                  <span>Reserve</span>
                 </div>
-                <div className="bq-requirements-list">
-                  {inputs.map((input, inputIndex) => {
-                  const materialKey = input.materialKey ?? input.materialId;
-                  const requirementId = input.requirementId ?? `${item.id}:${inputIndex}:${materialKey}:${input.modifierName ?? input.modifierType ?? 'material'}`;
-                  const requirementCardKey = `${item.id}:${requirementId}:${materialKey}:${input.selectedQuality ?? 'any'}:${input.unitType ?? 'unit'}:${inputIndex}`;
-                  const material = materials.find((m) => m.id === materialKey);
-                  const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
-                  const required = input.quantity * item.quantity;
-                  const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
 
-                  // When editing, use draft; otherwise use saved
-                  const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
-                  const draftBandIndex = isEditingThisItem
-                    ? (draftBandIndices[requirementId] ?? savedBandIndex)
-                    : savedBandIndex;
-                  const selectedQuality = getBandEffectiveQuality(qualityBands, draftBandIndex);
-                  const requirementSelectedQuality = input.selectedQuality;
-                  const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
-
-                  const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
-                  const modifierPreview = modifierAtQuality
-                    ? `${formatProperty(modifierAtQuality.property)} ${formatModifierAtQuality(modifierAtQuality)}`
-                    : input.modifierName && input.modifierValue !== undefined
-                      ? `${formatProperty(input.modifierName)} ${formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })}`
-                      : undefined;
-
-                  const allowLowerQuality = Boolean(item.allowLowerQuality);
-                  const requirementIdentity = {
-                    requirementId,
-                    selectedQuality: requirementSelectedQuality,
-                    unitType: input.unitType,
-                  };
-                  const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
-                  const coverage = getMaterialReservationCoverage(item, materialKey, required, inventory, effectiveRequirementIdentity);
-                  const needSummary = getBuildQueueMaterialNeedSummary(item, materialKey, required, inventory, buildQueue, effectiveRequirementIdentity);
-                  const ownAllocations = item.reservedAllocations?.filter((a) => allocationMatchesRequirement(a, materialKey, effectiveRequirementIdentity)) ?? [];
-                  const ownReservedByStack = new Map(ownAllocations.map((a) => [a.inventoryEntryId, a.quantityReserved]));
-                  const remainingRequired = Math.max(0, required - coverage.reservedQuantity);
-                  const allMaterialStacks = sortStacks(
-                    getInventoryStacks(
-                      inventory.filter((e) => e.materialId === materialKey && e.quantity > 0),
-                      materials,
-                      locations,
-                    ),
-                    strategy,
-                  );
-                  const eligibleStacks = allMaterialStacks.filter((stack) =>
-                    isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality) &&
-                    (getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id))
-                  );
-                  const ineligibleStacks = allMaterialStacks.filter((stack) =>
-                    !isInventoryEntryEligibleForRequirement(stack, materialKey, requirementSelectedQuality)
-                  );
-                  const staleAllocations = coverage.validations.filter((v) => v.isStale);
-                  const coverageClass =
-                    coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved' ? 'logi-badge--complete'
-                    : coverage.coverageState === 'missing' ? 'logi-badge--shortage'
-                    : 'logi-badge--paused';
-                  const lowerQualityExpanded = expandedLowerQuality[requirementCardKey] ?? false;
-                  const reserveNote = staleAllocations.length > 0
-                    ? `${staleAllocations.length} stale reservation${staleAllocations.length === 1 ? '' : 's'}`
-                    : allMaterialStacks.length === 0
-                      ? 'No stored stock'
-                      : eligibleStacks.length === 0
-                        ? 'No eligible stock'
-                        : `${eligibleStacks.length} reservable stack${eligibleStacks.length === 1 ? '' : 's'}`;
-
+                {materialGroups.map((group) => {
+                  const reserveExpanded = expandedReserveRows[group.groupKey] ?? false;
                   return (
-                    <div key={requirementCardKey} className={`bq-requirement-row bq-requirement-row--${coverage.coverageState === 'covered' || coverage.coverageState === 'overReserved' ? 'covered' : coverage.coverageState === 'partial' ? 'partial' : 'missing'}`}>
-                      <>
-                          {/* Material name + coverage badge */}
-                          <div className="bq-requirement-main">
-                            <div className="bq-requirement-material">
-                              <div className="bq-requirement-title-row">
-                                <span className="logi-mat-name">{displayName}</span>
-                                <span className={`logi-badge ${coverageClass}`}>{COVERAGE_LABELS[coverage.coverageState]}</span>
-                              </div>
-                              <span className={`bq-requirement-note${eligibleStacks.length === 0 ? ' bq-requirement-note--empty' : ''}`}>{reserveNote}</span>
-                            </div>
-                            <div className="bq-requirement-quality">
-                              <span className={`logi-quality-pill logi-rarity--${selectedQualityRarity}`}>{selectedQuality}</span>
-                              <span className={`logi-mat-modifier logi-rarity--${selectedQualityRarity}`}>{modifierPreview ?? '-'}</span>
-                            </div>
-
-                          {/* Reserved / Required summary */}
-                          <div className="bq-requirement-numbers">
-                            <span className="logi-mat-amount-group">
-                              <span className="logi-mat-amount-label">Reserved</span>
-                              <span className={`logi-mat-amount-value ${materialTypeClass(material)}`}>
-                                {formatQuantity(coverage.reservedQuantity, material)}
-                              </span>
-                            </span>
-                            <span className="logi-mat-amount-group">
-                              <span className="logi-mat-amount-label">Required</span>
-                              <span className={`logi-mat-amount-value ${materialTypeClass(material)}`}>
-                                {formatRequirementQuantity(required, input.unitType, material)}
-                              </span>
-                            </span>
-                            <span className="logi-mat-inv-item">
-                              <span className="logi-mat-amount-label">Owned</span>
-                              <span className={materialTypeClass(material)}>{formatQuantity(needSummary.ownedQuantity, material)}</span>
-                            </span>
-                            <span className="logi-mat-inv-sep">·</span>
-                            <span className="logi-mat-inv-item">
-                              <span className="logi-mat-amount-label">Avail</span>
-                              <span className={materialTypeClass(material)}>{formatQuantity(needSummary.availableQuantity, material)}</span>
-                            </span>
-                            <span className="logi-mat-inv-sep">·</span>
-                            <span className="logi-mat-inv-item">
-                              <span className="logi-mat-amount-label">Need</span>
-                              <span className={`${materialTypeClass(material)} ${needSummary.stillNeeded > 0 ? 'logi-mat-still-needed' : ''}`}>
-                                {formatQuantity(needSummary.stillNeeded, material)}
-                              </span>
-                            </span>
-                          </div>
-                          </div>
-
-                          {/* Stale allocation warnings */}
-                          {staleAllocations.map(({ allocation, staleReason }) => (
-                            <div key={allocation.id} className="logi-source-empty logi-source-stale">
-                              <span>Stale: {allocation.materialName ?? allocation.materialId} ({STALE_REASON_LABELS[staleReason ?? ''] ?? 'invalid'})</span>
-                              <button type="button" className="logi-btn-ghost" onClick={() => onClearStaleAllocations(item.id)}>
-                                Remove
-                              </button>
-                            </div>
+                    <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
+                      <div className="bq-mat-row">
+                        <div className="bq-mat-name">
+                          <strong>{group.displayName}</strong>
+                          {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
+                        </div>
+                        <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{getCoverageLabel(group.rowTone)}</span>
+                        <span className={`bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}>{group.selectedQuality}</span>
+                        <div className="bq-mat-modifier">
+                          {group.requirements.map((req) => (
+                            <span key={`${req.requirementCardKey}:mod`}>{req.modifierPreview}</span>
                           ))}
+                        </div>
+                        <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.availableQuantity, group.material)}</span>
+                        <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
+                        <button
+                          type="button"
+                          className="bq-reserve-btn"
+                          aria-expanded={reserveExpanded}
+                          disabled={!group.hasStock && !reserveExpanded}
+                          onClick={() => setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: !reserveExpanded }))}
+                        >
+                          {reserveExpanded ? 'Hide' : group.hasStock ? 'Reserve' : 'No stock'}
+                        </button>
+                      </div>
 
-                          {/* Reserve stacks */}
-                          <div className="logi-reserve-section">
-                            <span className="logi-reserve-label">Reserve from inventory</span>
-                            {eligibleStacks.length > 0 ? (
-                              eligibleStacks.map((stack) => {
-                                const allocationId = getAllocationId(item.id, requirementId, materialKey, requirementSelectedQuality, input.unitType, stack);
-                                const reservedQuantity = ownReservedByStack.get(stack.id) ?? 0;
-                                const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
-                                  .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.id !== allocationId)
-                                  .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
-                                const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
-                                const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
-                                const checked = reservedQuantity > 0;
-                                const nextQuantity = Math.min(remainingRequired, availableAfterThisReservation);
-                                const disabled = !checked && nextQuantity <= 0;
-                                return (
-                                  <label key={stack.id} className="logi-source-option">
-                                    <input
-                                      type="checkbox"
-                                      checked={checked}
-                                      disabled={disabled}
-                                      onChange={() => {
-                                        const quantityReserved = checked ? reservedQuantity : nextQuantity;
-                                        if (quantityReserved <= 0) return;
-                                        onToggleAllocation(item.id, createAllocation(item.id, requirementId, requirementSelectedQuality, input.unitType, stack, material?.name, quantityReserved));
-                                      }}
-                                    />
-                                    <span className="logi-source-loc">{stack.location?.name ?? stack.locationId}</span>
-                                    <span className="logi-source-container">{stack.container ?? '—'}</span>
-                                    <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
-                                    <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
-                                    <span className={materialTypeClass(material)}>
-                                      <QuantityText value={formatQuantity(reservedQuantity, material)} /> / <QuantityText value={formatQuantity(stack.quantity, material)} />
-                                    </span>
-                                    <span className={materialTypeClass(material)}>{formatQuantity(availableAfterThisReservation, material)} avail</span>
-                                  </label>
-                                );
-                              })
-                            ) : (
-                              <div className="logi-source-empty">No stored stack available</div>
-                            )}
-                            {ineligibleStacks.length > 0 && (
-                              <div className="logi-lower-quality-section">
-                                <button
-                                  type="button"
-                                  className="logi-lower-quality-toggle"
-                                  aria-expanded={lowerQualityExpanded}
-                                  onClick={() => setExpandedLowerQuality((prev) => ({ ...prev, [requirementCardKey]: !lowerQualityExpanded }))}
-                                >
-                                  <span className="logi-lower-quality-chevron" aria-hidden="true">{lowerQualityExpanded ? '▾' : '▸'}</span>
-                                  <span>Lower quality / ineligible</span>
-                                  <span className="logi-lower-quality-count">
-                                    {ineligibleStacks.length} {ineligibleStacks.length === 1 ? 'stack' : 'stacks'}
-                                  </span>
-                                </button>
-                                {lowerQualityExpanded && ineligibleStacks.map((stack) => {
-                                  const allocationId = getAllocationId(item.id, requirementId, materialKey, requirementSelectedQuality, input.unitType, stack);
-                                  const reservedQuantity = ownReservedByStack.get(stack.id) ?? 0;
+                      {group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
+                        <div key={allocation.id} className="bq-stale-line">
+                          <span>Stale: {allocation.materialName ?? allocation.materialId} ({STALE_REASON_LABELS[staleReason ?? ''] ?? 'invalid'})</span>
+                          <button type="button" className="bq-btn" onClick={() => onClearStaleAllocations(item.id)}>Remove stale</button>
+                        </div>
+                      ))}
+
+                      {reserveExpanded && (
+                        <div className="bq-reserve-panel">
+                          <div className="bq-reserve-panel-label">Reserve from inventory</div>
+                          {group.requirements.map((req) => {
+                            const lowerQualityExpanded = expandedLowerQuality[req.requirementCardKey] ?? false;
+                            return (
+                              <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
+                                {group.requirements.length > 1 && (
+                                  <div className="bq-reserve-req-head">
+                                    <b>{req.modifierPreview}</b>
+                                    <span>{formatRequirementQuantity(req.required, req.input.unitType, req.material)}</span>
+                                  </div>
+                                )}
+
+                                {req.eligibleStacks.length > 0 ? req.eligibleStacks.map((stack) => {
+                                  const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
+                                  const reservedQuantity = req.ownReservedByStack.get(stack.id) ?? 0;
                                   const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
-                                    .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.id !== allocationId)
-                                    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+                                    .filter((a) => a.inventoryEntryId === stack.id && a.id !== allocationId)
+                                    .reduce((s, a) => s + a.quantityReserved, 0);
                                   const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
                                   const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
                                   const checked = reservedQuantity > 0;
-                                  const nextQuantity = Math.min(remainingRequired, availableAfterThisReservation);
-                                  const disabled = !allowLowerQuality || (!checked && nextQuantity <= 0);
+                                  const nextQuantity = Math.min(req.remainingRequired, availableAfterThisReservation);
+                                  const disabled = !checked && nextQuantity <= 0;
                                   return (
-                                    <label key={`ineligible:${stack.id}`} className={`logi-source-option logi-source-option--lower${disabled ? ' logi-source-option--disabled' : ''}${checked ? ' logi-source-option--override-selected' : ''}`}>
+                                    <label key={stack.id} className="bq-stack-line">
                                       <input
                                         type="checkbox"
+                                        className="bq-stack-cb"
                                         checked={checked}
                                         disabled={disabled}
                                         onChange={() => {
                                           const quantityReserved = checked ? reservedQuantity : nextQuantity;
                                           if (quantityReserved <= 0) return;
-                                          onToggleAllocation(item.id, createAllocation(item.id, requirementId, requirementSelectedQuality, input.unitType, stack, material?.name, quantityReserved, true));
+                                          onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved));
                                         }}
                                       />
-                                      <span className="logi-source-loc">{stack.location?.name ?? stack.locationId}</span>
-                                      <span className="logi-source-quality-rarity">
-                                        {stack.quality !== undefined && <span className={rarityClass(stack.rarity)}>{stack.quality}</span>}
-                                        <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
-                                      </span>
-                                      <span className={materialTypeClass(material)}>
-                                        <QuantityText value={formatQuantity(reservedQuantity, material)} /> / <QuantityText value={formatQuantity(stack.quantity, material)} />
-                                      </span>
+                                      <span>{stack.location?.name ?? stack.locationId}</span>
+                                      <span>{stack.container ?? '—'}</span>
+                                      <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
+                                      <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
+                                      <span className={materialTypeClass(req.material)}><QuantityText value={formatQuantity(reservedQuantity, req.material)} /> / <QuantityText value={formatQuantity(stack.quantity, req.material)} /></span>
+                                      <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
                                     </label>
                                   );
-                                })}
+                                }) : (
+                                  <div className="bq-empty-inline">No eligible stored stack available.</div>
+                                )}
+
+                                {req.ineligibleStacks.length > 0 && (
+                                  <div className="bq-lower-quality">
+                                    <button
+                                      type="button"
+                                      className="bq-lower-toggle"
+                                      aria-expanded={lowerQualityExpanded}
+                                      onClick={() => setExpandedLowerQuality((prev) => ({ ...prev, [req.requirementCardKey]: !lowerQualityExpanded }))}
+                                    >
+                                      <span>{lowerQualityExpanded ? '▾' : '▸'}</span>
+                                      <b>Lower quality / ineligible</b>
+                                      <em>{req.ineligibleStacks.length} {req.ineligibleStacks.length === 1 ? 'stack' : 'stacks'}</em>
+                                    </button>
+
+                                    {lowerQualityExpanded && req.ineligibleStacks.map((stack) => {
+                                      const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
+                                      const reservedQuantity = req.ownReservedByStack.get(stack.id) ?? 0;
+                                      const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
+                                        .filter((a) => a.inventoryEntryId === stack.id && a.id !== allocationId)
+                                        .reduce((s, a) => s + a.quantityReserved, 0);
+                                      const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
+                                      const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
+                                      const checked = reservedQuantity > 0;
+                                      const nextQuantity = Math.min(req.remainingRequired, availableAfterThisReservation);
+                                      const disabled = !req.allowLowerQuality || (!checked && nextQuantity <= 0);
+                                      return (
+                                        <label key={`ineligible:${stack.id}`} className={`bq-stack-line bq-stack-line--lower${disabled ? ' is-disabled' : ''}${checked ? ' is-selected' : ''}`}>
+                                          <input
+                                            type="checkbox"
+                                            className="bq-stack-cb"
+                                            checked={checked}
+                                            disabled={disabled}
+                                            onChange={() => {
+                                              const quantityReserved = checked ? reservedQuantity : nextQuantity;
+                                              if (quantityReserved <= 0) return;
+                                              onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, true));
+                                            }}
+                                          />
+                                          <span>{stack.location?.name ?? stack.locationId}</span>
+                                          <span>{stack.container ?? '—'}</span>
+                                          <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
+                                          <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
+                                          <span className={materialTypeClass(req.material)}><QuantityText value={formatQuantity(reservedQuantity, req.material)} /> / <QuantityText value={formatQuantity(stack.quantity, req.material)} /></span>
+                                          <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
+                                        </label>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                      </>
-                    </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </section>
                   );
-                  })}
-                </div>
+                })}
               </div>
             ) : (
-              <div className="logi-source-empty">No recipe mapped for source selection.</div>
+              <div className="bq-empty-inline">No recipe mapped for source selection.</div>
             )}
-          </section>
+            </div>{/* bq-item-body */}
+          </article>
         );
       })}
     </div>
