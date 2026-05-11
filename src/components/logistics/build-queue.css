@@ -1,24 +1,31 @@
 /* ─── Build Queue — Ground-Up v3 ──────────────────────────────────────────── */
 
 .bq-page {
-  --bq-bg:         #0f1317;
-  --bq-surface:    rgba(24,29,33,0.96);
-  --bq-edge:       rgba(255,255,255,0.08);
-  --bq-edge-soft:  rgba(255,255,255,0.05);
-  --bq-text:       #f4f1ea;
-  --bq-sub:        rgba(244,241,234,0.62);
-  --bq-dim:        rgba(244,241,234,0.38);
-  --bq-cyan:       #38f5d0;
-  --bq-green:      #38f5d0;
-  --bq-amber:      #ff8a00;
-  --bq-red:        #ff4242;
+  --bq-bg:         #050708;
+  --bq-bg-soft:    #070b0d;
+  --bq-surface:    rgba(16,20,23,0.96);
+  --bq-panel:      linear-gradient(180deg, rgba(21,27,30,0.98), rgba(10,14,16,0.98));
+  --bq-panel-strong: linear-gradient(180deg, #171d21 0%, #0d1114 100%);
+  --bq-edge:       rgba(255,255,255,0.085);
+  --bq-edge-soft:  rgba(255,255,255,0.055);
+  --bq-accent-edge: rgba(255,153,0,0.58);
+  --bq-accent-edge-soft: rgba(255,153,0,0.24);
+  --bq-text:       #f4f1e8;
+  --bq-sub:        rgba(143,154,156,0.78);
+  --bq-dim:        rgba(89,101,105,0.88);
+  --bq-cyan:       #28ffd2;
+  --bq-green:      #28ffd2;
+  --bq-amber:      #ff9d00;
+  --bq-red:        #ff3e48;
   --bq-violet:     #a78bfa;
-  --bq-orange:     #ff8a00;
+  --bq-orange:     #ff9d00;
 
   padding: 0.75rem 1rem;
   font-family: var(--font-primary);
   color: var(--bq-text);
-  background: var(--bq-bg);
+  background:
+    radial-gradient(circle at 6% 0%, rgba(255,153,0,0.07), transparent 22rem),
+    linear-gradient(180deg, var(--bq-bg-soft) 0%, var(--bq-bg) 48%, #020303 100%);
   min-height: 100%;
 }
 
@@ -36,14 +43,14 @@
   width: 100%;
   min-width: 0;
   padding: 0.7rem;
-  border: 1px solid rgba(255,138,0,0.52);
+  border: 1px solid var(--bq-accent-edge);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(255,138,0,0.12), transparent 18rem),
-    linear-gradient(180deg, rgba(16,20,23,0.98), rgba(7,10,12,0.99));
+    radial-gradient(circle at 0% 0%, rgba(255,153,0,0.10), transparent 18rem),
+    linear-gradient(180deg, #101417 0%, #070a0c 100%);
   box-shadow:
     0 24px 56px rgba(0,0,0,0.58),
-    0 8px 18px rgba(0,0,0,0.38),
+    0 0 42px rgba(255,153,0,0.08),
     inset 0 1px 0 rgba(255,255,255,0.045);
 }
 
@@ -62,7 +69,7 @@
   padding: 0.58rem 0.62rem;
   border: 1px solid var(--bq-edge);
   border-radius: 7px;
-  background: linear-gradient(180deg, rgba(21,27,30,0.94), rgba(10,14,16,0.96));
+  background: var(--bq-panel);
   box-shadow:
     0 12px 24px rgba(0,0,0,0.28),
     inset 0 1px 0 rgba(255,255,255,0.035);
@@ -220,13 +227,12 @@
 
 .bq-shortage-panel {
   margin-bottom: 0.8rem;
-  border: 1px solid rgba(255,138,0,0.22);
+  border: 1px solid var(--bq-edge);
   border-radius: 8px;
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--bq-panel-strong);
   box-shadow:
-    0 22px 46px rgba(0,0,0,0.52),
-    0 8px 18px rgba(0,0,0,0.38),
-    inset 0 1px 0 rgba(255,255,255,0.045);
+    0 14px 28px rgba(0,0,0,0.34),
+    inset 0 1px 0 rgba(255,255,255,0.035);
   overflow: hidden;
   max-width: 1444px;
 }
@@ -237,7 +243,7 @@
   justify-content: space-between;
   gap: 0.65rem;
   padding: 0.42rem 0.72rem;
-  border-bottom: 1px solid rgba(255,138,0,0.12);
+  border-bottom: 1px solid var(--bq-edge-soft);
   min-height: 34px;
 }
 
@@ -251,7 +257,7 @@
   font-size: 0.58rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: white;
+  color: var(--bq-text);
 }
 
 .bq-shortage-count {
@@ -259,9 +265,9 @@
   font-weight: 700;
   padding: 0.08rem 0.36rem;
   border-radius: 3px;
-  background: rgba(255,138,0,0.12);
-  border: 1px solid rgba(255,138,0,0.24);
-  color: rgba(255,138,0,0.9);
+  background: rgba(255,153,0,0.12);
+  border: 1px solid var(--bq-accent-edge-soft);
+  color: var(--bq-amber);
   letter-spacing: 0.04em;
 }
 
@@ -355,9 +361,9 @@
 }
 
 .bq-btn-ghost:hover {
-  border-color: rgba(34,211,238,0.24);
-  background: rgba(34,211,238,0.06);
-  color: rgba(226,232,240,0.9);
+  border-color: var(--bq-edge);
+  background: rgba(255,255,255,0.052);
+  color: var(--bq-text);
 }
 
 .bq-ledger {
@@ -660,9 +666,9 @@
 }
 
 .bq-btn:hover:not(:disabled) {
-  border-color: rgba(34,211,238,0.24);
-  background: rgba(34,211,238,0.07);
-  color: rgba(226,232,240,0.9);
+  border-color: var(--bq-edge);
+  background: rgba(255,255,255,0.052);
+  color: var(--bq-text);
 }
 
 .bq-btn:disabled { opacity: 0.38; cursor: default; }
