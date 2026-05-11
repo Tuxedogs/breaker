@@ -778,14 +778,15 @@ function MaterialQualityRow({
   return (
     <div className="craft-material-card craft-matq-card" data-band={safeBandIndex}>
       <div className="craft-material-card-head craft-matq-header">
-        <div className="craft-material-identity craft-matq-identity">
-          <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
-          <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
-          <span className={`craft-quality-readout craft-matq-band-pill ${selectedQualityTierClass}`}>
-            Band {safeBandIndex + 1} <span aria-hidden="true">·</span> {quality}
-          </span>
-        </div>
-      </div>
+  <div className="craft-material-identity craft-matq-identity">
+    <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
+    <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
+  </div>
+
+  <span className={`craft-quality-readout craft-matq-band-pill ${selectedQualityTierClass}`}>
+    Band {safeBandIndex + 1} <span aria-hidden="true">·</span> {quality}
+  </span>
+</div>
 
       <div className="craft-quality-control craft-matq-slider-wrap">
         <div className="craft-quality-rail-wrap craft-matq-rail-wrap">
@@ -847,7 +848,7 @@ function MaterialQualityRow({
         <div className="craft-modifier-list craft-matq-mods">
           {atQuality.map((m, i) => {
             const impact = getModifierImpact(m.property, m.value);
-            const directionLabel = getDirectionLabel(m.property);
+        
 
             return (
               <div key={i} className="craft-modifier-row craft-matq-mod-chip">
@@ -863,9 +864,7 @@ function MaterialQualityRow({
                   </span>
                 </div>
 
-                {directionLabel && (
-                  <span className="craft-modifier-hint craft-matq-mod-hint">{directionLabel}</span>
-                )}
+                
               </div>
             );
           })}
@@ -1096,7 +1095,6 @@ function CraftedItemSummaryPanel({
                 key={`${pool.displayName}-${i}`}
                 className="craft-blueprint-source"
               >
-                <div className="craft-blueprint-source-tag">Blueprint Source</div>
                 <div className="craft-blueprint-source-name">{pool.displayName}</div>
               </div>
             ))}

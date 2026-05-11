@@ -1323,15 +1323,7 @@ export default function MiningModule() {
     setSelectedMiningTypes(new Set());
   }
 
-  const activeQueue = buildQueue.filter((item) => item.status !== "complete");
-  const queueBadge = activeQueue.length > 0 ? activeQueue.length : null;
-  const { shortages } = getBuildQueueShortageSummary(
-    inventoryEntries,
-    buildQueue,
-    recipes,
-    recipeInputsByRecipeId,
-  );
-
+ 
   const visibleCards = useMemo(() => rankedFilteredLocations.slice(0, 4), [rankedFilteredLocations]);
   useEffect(() => {
     if (!import.meta.env.DEV) return;
@@ -1418,8 +1410,6 @@ export default function MiningModule() {
 
   return (
     <div className="mine-page">
-
-      <CraftTabBar activeTab="mining" queueBadge={queueBadge} missingCount={shortages.length} />
 
       {state.status === "loading" && (
         <div className="mine-status-state">

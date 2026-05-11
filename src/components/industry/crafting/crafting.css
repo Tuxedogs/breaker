@@ -1752,17 +1752,18 @@
 }
 
 .craft-matq-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: 12px;
-  align-items: center;
+  width: 100%;
 }
 
 .craft-matq-identity {
   display: flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -1779,13 +1780,15 @@
   border: 1px solid rgba(202, 216, 226, 0.78);
   border-radius: 999px;
   background: var(--craft-accent-soft);
+   width: fit-content;
 }
 
 .craft-matq-name {
-  display: inline-block;
-  min-width: 0;
-  font-family: var(--font-primary);
-  line-height: 1.1;
+ min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-weight: 700;
   font-size: 14px;
   color: #e2e8ff;
@@ -1808,6 +1811,9 @@
   letter-spacing: 0.04em;
   text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
   white-space: nowrap;
+  justify-self: end;
+  align-self: start;
+
 }
 
 .craft-matq-quality-label {
