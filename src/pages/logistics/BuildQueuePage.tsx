@@ -43,6 +43,11 @@ function getShortageUnitKey(unitType: Shortage['unitType']): string {
   return unitType === 'SCU' || unitType === 'scu' || unitType === 'cscu' ? 'scu' : 'unit';
 }
 
+function formatSummaryNumber(value: number): string {
+  if (!Number.isFinite(value)) return '0';
+  return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
   const [ledgerOpen, setLedgerOpen] = useState(false);
@@ -124,6 +129,8 @@ export default function BuildQueuePage() {
   }
 
   const categories = Object.keys(grouped);
+  const reservableShortages = shortages.filter((shortage) => shortage.have > 0).length;
+  const noStockShortages = shortages.filter((shortage) => shortage.have <= 0).length;
 
 
   return (
@@ -134,6 +141,29 @@ export default function BuildQueuePage() {
 
       <div className="bq-main">
         <div className="bq-shell">
+
+      <div className="bq-summary-grid" aria-label="Build queue summary metrics">
+        <div className="bq-summary-card">
+          <span>Queue Items</span>
+          <strong>{buildQueue.length}</strong>
+          <em>{shortageSummary.activeQueueItems.length} active</em>
+        </div>
+        <div className="bq-summary-card bq-summary-card--danger">
+          <span>Total Shortage</span>
+          <strong>{formatSummaryNumber(shortageSummary.totalShortfallQuantity)}</strong>
+          <em>{shortageSummary.totalShortageMaterials} shortage lines</em>
+        </div>
+        <div className="bq-summary-card bq-summary-card--success">
+          <span>Reservable</span>
+          <strong>{reservableShortages}</strong>
+          <em>Lines with stock</em>
+        </div>
+        <div className="bq-summary-card bq-summary-card--danger">
+          <span>No Stock</span>
+          <strong>{noStockShortages}</strong>
+          <em>Zero eligible stock</em>
+        </div>
+      </div>
 
       {/* Shortage Panel */}
       <div className="bq-shortage-panel">
