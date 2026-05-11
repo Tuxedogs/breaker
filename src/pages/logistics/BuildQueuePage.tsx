@@ -131,6 +131,7 @@ export default function BuildQueuePage() {
   const categories = Object.keys(grouped);
   const reservableShortages = shortages.filter((shortage) => shortage.have > 0).length;
   const noStockShortages = shortages.filter((shortage) => shortage.have <= 0).length;
+  const totalShortageDisplay = formatSummaryNumber(shortageSummary.totalShortfallQuantity);
 
 
   return (
@@ -150,7 +151,7 @@ export default function BuildQueuePage() {
         </div>
         <div className="bq-summary-card bq-summary-card--danger">
           <span>Total Shortage</span>
-          <strong>{formatSummaryNumber(shortageSummary.totalShortfallQuantity)}</strong>
+          <strong>{totalShortageDisplay}</strong>
           <em>{shortageSummary.totalShortageMaterials} shortage lines</em>
         </div>
         <div className="bq-summary-card bq-summary-card--success">
