@@ -307,81 +307,26 @@
   max-width: 92%;
 }
 
-/* Lift card content above bridge elements */
+/* Lift card content above bridge */
 .craft-result-card--selected > :not(.craft-result-bridge) {
   position: relative;
   z-index: 4;
 }
 
-/* Flat beam: gold top/bottom rails extending right from the card edge */
+/* Flat green bridge with straight gold top/bottom rails */
 .craft-result-bridge {
-  position: absolute;
+  position:absolute;
   top: -1px;
   bottom: -1px;
-  right: -26px;
-  width: 28px;
+  left: 99%;
+  width: 42px;
   z-index: 1;
   pointer-events: none;
   background: var(--craft-connected-bg-flat);
   border-top: 1px solid var(--craft-gold-border);
   border-bottom: 1px solid var(--craft-gold-border);
-  border-radius: 0;
 }
 
-/* Fill slab: solid green behind the cap arcs, covers the concave pocket */
-.craft-result-bridge-fill {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: -29px;
-  width: 18px;
-  transform: translateX(-12px);
-  background: var(--craft-connected-bg-flat);
-  pointer-events: none;
-  z-index: 1;
-    background: red !important;
-}
-
-/* Cap anchor: zero-width anchor at the beam's right edge */
-.craft-result-bridge-cap {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 1px;
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Top outward arc: bottom-left quadrant of circle — arc curves upward+right */
-.craft-result-bridge-cap::before {
-  content: "";
-  position: absolute;
-  top: -28.5px;
-  right: -14px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--craft-gold-border);
-  clip-path: inset(50% 0 0 50%);
-  z-index: 4;
-}
-
-/* Bottom outward arc: top-left quadrant of circle — arc curves downward+right */
-.craft-result-bridge-cap::after {
-  content: "";
-  position: absolute;
-  bottom: -28.5px;
-  right: -14px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--craft-gold-border);
-  clip-path: inset(0 0 50% 50%);
-  z-index: 4;
-}
 .craft-result-name {
   min-width: 0;
   overflow: hidden;
@@ -428,9 +373,23 @@
 }
 .craft-mini-chip--queue { border-color: rgba(255, 138, 31, 0.42); color: var(--craft-orange); }
 .craft-mini-chip--saved { border-color: rgba(66, 245, 189, 0.36); color: var(--craft-teal); }
-.craft-result-arrow { grid-column: 2; grid-row: 1; align-self: center; color: var(--craft-orange); font-size: 1rem; line-height: 1; }
-.craft-result-footer { flex: 0 0 auto; padding-top: 4px; color: var(--craft-text-dim); font-size: 0.64rem; font-weight: 800; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; }
 
+.craft-result-footer { flex: 0 0 auto; padding-top: 4px; color: var(--craft-text-dim); font-size: 0.64rem; font-weight: 800; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; }
+.craft-result-arrow {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  color: var(--craft-orange);
+  font-size: 1rem;
+  line-height: 1;
+
+  transform: scale(1.95);
+  transform-origin: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
 .craft-selected-bridge-column {
   grid-column: 2;
   position: relative;
@@ -457,29 +416,28 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--craft-summary-width);
-  gap: 14px;
+  gap: 24px;
 
   width: 100%;
   min-width: 0;
   height: fit-content;
   min-height: 0;
-
-  padding: 24px 29px;
-  overflow: hidden;
+  margin-top: 40px;
+  padding: 34px 39px;
+  overflow: show;
 
   background: var(--craft-connected-bg);
-  border-top: 1px solid var(--craft-orange-border);
-  border-right: 1px solid var(--craft-orange-border);
-  border-bottom: 1px solid var(--craft-orange-border);
-  border-left: 0;
-  border-radius: 0 7px 7px 0;
+  border: 1px solid var(--craft-orange-border);
+
+
+  border-radius: 9px;
   box-shadow: var(--craft-shadow);
 }
 
 
 .craft-detail-stage--empty { display: flex; align-items: center; justify-content: center; padding: 16px; }
 .craft-detail-main,
-.craft-summary-column { position: relative; z-index: 2; min-width: 0; min-height: 0; overflow: hidden; }
+.craft-summary-column { position: relative; z-index: 2; min-width: 0; min-height: 0; overflow: visible; }
 .craft-detail-main { display: flex; flex-direction: column; gap: 8px; }
 .craft-summary-column { height: 100%; }
 
@@ -504,19 +462,29 @@
 .craft-variant-meta { color: var(--craft-text-muted); }
 
 /* 7. Material Cards */
-.craft-material-column { min-width: 0; min-height: 0; overflow: hidden; }
-.craft-material-list { display: grid; gap: 10px; min-height: 0; overflow: hidden; }
+.craft-material-column { min-width: 0; min-height: 0; overflow: visible; }
+.craft-material-list { display: grid; gap: 24px; min-height: 0; overflow: visible; }
 .craft-material-card {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-height: 124px;
   padding: 12px 14px;
-  border: 1px solid var(--craft-border-soft);
-  border-radius: 6px;
-  background: var(--craft-card-bg);
-  box-shadow: var(--craft-inset-highlight), 0 6px 18px rgba(0, 0, 0, 0.3);
+
+  border: 1px solid rgba(232, 177, 82, 0.22);
+  border-radius: 8px;
+
+  background:
+    linear-gradient(180deg, rgb(22, 34, 24), rgb(18, 28, 20));
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.72),
+    0 8px 28px rgba(0, 0, 0, 0.52),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
+
+
 .craft-material-card-head { display: flex; align-items: center; gap: 8px; min-height: 26px; }
 .craft-material-identity { display: flex; align-items: center; gap: 7px; flex: 1; min-width: 0; }
 .craft-material-slot {
@@ -534,6 +502,8 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
+
+
 .craft-material-name { min-width: 0; overflow: hidden; font-size: 17px; font-weight: 900; line-height: 1; text-overflow: ellipsis; white-space: nowrap; }
 .craft-quality-readout { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; padding: 4px 7px; border: 1px solid var(--craft-orange-border); border-radius: 4px; color: var(--craft-orange); font-size: 10px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
@@ -561,6 +531,8 @@
 
 /* 10. Summary Panel */
 .craft-summary-panel {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -569,21 +541,24 @@
   padding: 14px 14px 12px;
   border: 1px solid var(--craft-border-soft);
   border-radius: 6px;
-  background: var(--craft-card-bg);
-  box-shadow: var(--craft-inset-highlight), 0 12px 28px rgba(0, 0, 0, 0.38);
+  background: linear-gradient(180deg, rgb(22, 31, 22), rgb(17, 26, 19));
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.72),
+    0 8px 28px rgba(0, 0, 0, 0.52),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 .craft-summary-head { flex: 0 0 auto; padding-bottom: 9px; border-bottom: 1px solid var(--craft-border-muted); }
 .craft-summary-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 9px; }
 .craft-summary-title { min-width: 0; font-size: 21px; font-weight: 900; line-height: 1.05; }
 .craft-summary-quality-pill { flex: 0 0 auto; border: 1px solid var(--craft-orange-border); border-radius: 4px; padding: 4px 7px; color: var(--craft-text-main); font-size: 12px; font-weight: 900; white-space: nowrap; }
 .craft-summary-chips { margin-top: 8px; flex-wrap: wrap; }
-.craft-summary-section { flex: 0 0 auto; padding: 9px 0; border-bottom: 1px solid var(--craft-border-muted); }
+.craft-summary-section { flex: 0 0 auto; margin: 5px 0px 5px 0px; padding: 9px 0; border-bottom: 1px solid var(--craft-border-muted); }
 .craft-summary-section--grow { flex: 1 1 auto; min-height: 0; overflow: hidden; }
-.craft-summary-mod-list { display: flex; flex-direction: column; gap: 8px; }
+.craft-summary-mod-list { display: flex; flex-direction: column; gap: 22px; }
 .craft-summary-mod-top { display: flex; align-items: baseline; justify-content: space-between; gap: 9px; }
-.craft-summary-mod-prop { min-width: 0; color: var(--craft-text-main); font-size: 13px; font-weight: 900; line-height: 1; }
+.craft-summary-mod-prop { min-width: 0; color: var(--craft-text-main); font-size: 15px; font-weight: 900; line-height: 1; }
 .craft-summary-mod-val { flex: 0 0 auto; color: var(--craft-tier, var(--craft-teal)); font-size: 15px; font-weight: 900; line-height: 1; }
-.craft-summary-mod-breakdown { margin-top: 4px; color: var(--craft-text-muted); font-size: 10px; line-height: 1.15; }
+.craft-summary-mod-breakdown { margin-top: 4px; color: var(--craft-text-muted); font-size: 12px; line-height: 1.15; }
 .craft-summary-mod-contrib + .craft-summary-mod-contrib::before { content: " "; }
 .craft-summary-section--grow::before { content: "Blueprint"; display: block; margin-bottom: 7px; color: var(--craft-text-dim); font-size: 9px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
 .craft-summary-empty { border: 1px solid var(--craft-border-muted); border-radius: 4px; padding: 10px; color: rgba(238, 242, 232, 0.6); font-size: 12px; font-style: italic; }
