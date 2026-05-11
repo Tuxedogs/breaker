@@ -1773,6 +1773,7 @@ export default function ComponentRecipeTable({
                 <span className="craft-result-arrow" aria-hidden>&rsaquo;</span>
                 {selected && (
                   <span className="craft-result-bridge" aria-hidden="true">
+                    <span className="craft-result-bridge-fill" aria-hidden="true" />
                     <span className="craft-result-bridge-cap" aria-hidden="true" />
                   </span>
                 )}

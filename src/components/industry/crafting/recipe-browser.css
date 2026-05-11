@@ -313,16 +313,11 @@
   z-index: 4;
 }
 
-/*
-  Flat connector: fills gap from card right-edge into the main panel.
-  Extends far enough to overlap the main panel's left border by ~2px (kills seam).
-  The cap circles sit at top-right and bottom-right to carve concave notches.
-*/
+/* Flat beam: gold top/bottom rails extending right from the card edge */
 .craft-result-bridge {
   position: absolute;
   top: -1px;
   bottom: -1px;
-  /* right: negative = how far past the card's right edge we reach */
   right: -26px;
   width: 28px;
   z-index: 1;
@@ -333,26 +328,32 @@
   border-radius: 0;
 }
 
-/*
-  Cap: positioned at the right end of the bridge.
-  Its ::before and ::after are filled circles the colour of the void/page bg.
-  Each circle is placed in a corner so its curved edge carves a concave arc
-  out of the bridge — this is what makes the curve bend OUTWARD away from
-  the bridge fill, not inward like a normal border-radius would.
-*/
+/* Fill slab: solid green behind the cap arcs, covers the concave pocket */
+.craft-result-bridge-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -29px;
+  width: 18px;
+  transform: translateX(-12px);
+  background: var(--craft-connected-bg-flat);
+  pointer-events: none;
+  z-index: 1;
+    background: red !important;
+}
+
+/* Cap anchor: zero-width anchor at the beam's right edge */
 .craft-result-bridge-cap {
   position: absolute;
-  /* sits just inside the bridge's right edge */
   top: 0;
   bottom: 0;
   right: 0;
   width: 1px;
   pointer-events: none;
-  z-index: 2;
-    
+  z-index: 3;
 }
 
-/* Top concave notch — circle fill punches out the top-right corner */
+/* Top outward arc: bottom-left quadrant of circle — arc curves upward+right */
 .craft-result-bridge-cap::before {
   content: "";
   position: absolute;
@@ -361,33 +362,25 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  background: transparent;
   box-shadow: inset 0 0 0 1px var(--craft-gold-border);
-
-  /* top notch: show bottom-right quadrant */
   clip-path: inset(50% 0 0 50%);
-   border-right: 1px solid var(--craft-gold-border);
-    /* fill the empty middle space */
-  background: var(--craft-connected-bg-flat);
+  z-index: 4;
 }
 
-/* notch covers bottom */
+/* Bottom outward arc: top-left quadrant of circle — arc curves downward+right */
 .craft-result-bridge-cap::after {
   content: "";
   position: absolute;
-  bottom: -28px;
+  bottom: -28.5px;
   right: -14px;
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  background: transparent;
   box-shadow: inset 0 0 0 1px var(--craft-gold-border);
-  
-
-  /* bottom notch: show top-right quadrant */
   clip-path: inset(0 0 50% 50%);
-    /* this becomes the right-side gold edge */
- 
-  
-
+  z-index: 4;
 }
 .craft-result-name {
   min-width: 0;
@@ -619,7 +612,7 @@
   .craft-result-card--selected { margin-right: 0; border-right: 1px solid var(--craft-gold-border); border-radius: 6px; }
   .craft-result-card--selected::after,
   .craft-result-card--selected::before { display: none; }
-  .craft-result-bridge, .craft-result-bridge-cap { display: none; }
+  .craft-result-bridge, .craft-result-bridge-fill, .craft-result-bridge-cap { display: none; }
   .craft-detail-stage { grid-column: 1; grid-template-columns: 1fr; border-left: 1px solid var(--craft-orange-border); border-radius: 0 0 7px 7px; }
   .craft-detail-stage::before { display: none; }
 }
