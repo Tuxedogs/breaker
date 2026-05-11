@@ -540,9 +540,7 @@ export default function BuildQueueGroup({
                             return (
                               <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
                                 {group.requirements.length > 1 && (
-                                  <div className="bq-reserve-req-head">
-                                    <b>{req.modifierPreview}</b>
-                                    <span>{formatRequirementQuantity(req.required, req.input.unitType, req.material)}</span>
+                                  <div className="bq-reserve-req-head">                       
                                   </div>
                                 )}
 
