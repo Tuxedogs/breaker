@@ -1,19 +1,19 @@
 /* ─── Build Queue — Ground-Up v3 ──────────────────────────────────────────── */
 
 .bq-page {
-  --bq-bg:         #060a12;
-  --bq-surface:    rgba(10,16,30,0.92);
-  --bq-edge:       rgba(148,163,184,0.10);
-  --bq-edge-soft:  rgba(148,163,184,0.065);
-  --bq-text:       rgba(226,232,240,0.93);
-  --bq-sub:        rgba(160,180,215,0.52);
-  --bq-dim:        rgba(148,163,184,0.34);
-  --bq-cyan:       #22d3ee;
-  --bq-green:      #4ade80;
-  --bq-amber:      #f59e0b;
-  --bq-red:        #f87171;
+  --bq-bg:         #0f1317;
+  --bq-surface:    rgba(24,29,33,0.96);
+  --bq-edge:       rgba(255,255,255,0.08);
+  --bq-edge-soft:  rgba(255,255,255,0.05);
+  --bq-text:       #f4f1ea;
+  --bq-sub:        rgba(244,241,234,0.62);
+  --bq-dim:        rgba(244,241,234,0.38);
+  --bq-cyan:       #38f5d0;
+  --bq-green:      #38f5d0;
+  --bq-amber:      #ff8a00;
+  --bq-red:        #ff4242;
   --bq-violet:     #a78bfa;
-  --bq-border:     rgba(255,138,0);
+  --bq-orange:     #ff8a00;
 
   padding: 0.75rem 1rem;
   font-family: var(--font-primary);
@@ -22,15 +22,14 @@
   min-height: 100%;
 }
 
-.bq-page{
-  background: #0f1317;
-  border: 1px solid var(--bq-border);
-  border-radius: 9px;
-  padding: 34px 39px;
-}
-
 .bq-page *, .bq-page *::before, .bq-page *::after {
   box-sizing: border-box;
+}
+
+.bq-main {
+  max-width: calc(100vw - 320px);
+  margin-left: 0;
+  margin-right: auto;
 }
 
 .logi-rarity--legendary {
@@ -86,7 +85,11 @@
   margin-bottom: 0.6rem;
   border: 1px solid var(--bq-edge);
   border-radius: 8px;
-  background: var(--bq-surface);
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  box-shadow:
+    0 18px 38px rgba(0,0,0,0.46),
+    0 6px 14px rgba(0,0,0,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .bq-stat-rail-title h1 {
@@ -146,9 +149,13 @@
 
 .bq-shortage-panel {
   margin-bottom: 0.8rem;
-  border: 1px solid rgba(231, 121, 19, 0.603);
+  border: 1px solid rgba(255,138,0,0.22);
   border-radius: 8px;
-  background: rgba(95, 55, 17, 0.07);
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  box-shadow:
+    0 22px 46px rgba(0,0,0,0.52),
+    0 8px 18px rgba(0,0,0,0.38),
+    inset 0 1px 0 rgba(255,255,255,0.045);
   overflow: hidden;
   max-width: 1444px;
 }
@@ -159,7 +166,7 @@
   justify-content: space-between;
   gap: 0.65rem;
   padding: 0.42rem 0.72rem;
-  border-bottom: 1px solid rgba(248,113,113,0.10);
+  border-bottom: 1px solid rgba(255,138,0,0.12);
   min-height: 34px;
 }
 
@@ -181,9 +188,9 @@
   font-weight: 700;
   padding: 0.08rem 0.36rem;
   border-radius: 3px;
-  background: rgba(248,113,113,0.12);
-  border: 1px solid rgba(248,113,113,0.2);
-  color: rgba(248,113,113,0.9);
+  background: rgba(255,138,0,0.12);
+  border: 1px solid rgba(255,138,0,0.24);
+  color: rgba(255,138,0,0.9);
   letter-spacing: 0.04em;
 }
 
@@ -203,8 +210,8 @@
 
 .bq-shortage-card {
   padding: 0.58rem 0.68rem;
-  background: rgba(12,4,4,0.55);
-  border-left: 2px solid rgba(248,113,113,0.38);
+  background: rgba(12,8,4,0.55);
+  border-left: 2px solid rgba(255,138,0,0.42);
   display: grid;
   gap: 0.38rem;
 }
@@ -402,7 +409,11 @@
   position: relative;
   border: 1px solid var(--bq-edge);
   border-radius: 7px;
-  background: var(--bq-surface);
+  background: linear-gradient(180deg, rgba(24,29,33,0.98) 0%, rgba(16,20,23,0.98) 100%);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.38),
+    0 3px 8px rgba(0,0,0,0.26),
+    inset 0 1px 0 rgba(255,255,255,0.032);
   overflow: hidden;
   max-width: 1444px;
   margin-bottom: 0.75rem;
@@ -861,7 +872,8 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 2px;
-  background: rgba(248,113,113,0.45);
+  background: var(--bq-red);
+  opacity: 0.55;
   border-radius: 0;
 }
 
@@ -1004,9 +1016,10 @@
 .bq-reserve-panel {
   margin: 0.1rem 0.7rem 0.4rem 0.9rem;
   padding: 0.44rem 0.5rem;
-  border: 1px solid rgba(148,163,184,0.09);
+  border: 1px solid var(--bq-edge);
   border-radius: 5px;
-  background: rgba(2,6,20,0.26);
+  background: rgba(2,6,20,0.32);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.025);
   min-width: 720px;
 }
 
