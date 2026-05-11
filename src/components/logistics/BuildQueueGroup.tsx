@@ -573,9 +573,9 @@ export default function BuildQueueGroup({
                                       <span>{stack.location?.name ?? stack.locationId}</span>
                                       <span>{stack.container ?? '—'}</span>
                                       <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
-                                      <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
+  <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
                                       <span className={materialTypeClass(req.material)}><QuantityText value={formatQuantity(reservedQuantity, req.material)} /> / <QuantityText value={formatQuantity(stack.quantity, req.material)} /></span>
-                                      <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
+                                    
                                     </label>
                                   );
                                 }) : (
