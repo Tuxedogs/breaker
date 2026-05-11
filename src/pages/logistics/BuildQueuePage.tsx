@@ -133,6 +133,7 @@ export default function BuildQueuePage() {
       
 
       <div className="bq-main">
+        <div className="bq-shell">
 
       {/* Shortage Panel */}
       <div className="bq-shortage-panel">
@@ -204,7 +205,7 @@ export default function BuildQueuePage() {
             )}
           </>
         )}
-      </div>
+        </div>
 
       <>
         {categories.length === 0 ? (
@@ -231,6 +232,7 @@ export default function BuildQueuePage() {
         ))}
       </>
 
+        </div>
       </div>
     </div>
   );
