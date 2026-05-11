@@ -139,29 +139,16 @@ export default function CraftingModule() {
     });
   }, [materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
 
-  const { shortages } = getBuildQueueShortageSummary(
-    inventoryEntries, buildQueue, recipeTemplates, recipeInputsByRecipeId,
-  );
+
   const activeQueue = buildQueue.filter((item) => item.status !== "complete");
   const queuedRecipeIds = useMemo(
     () => new Set(activeQueue.map((item) => item.recipeId)),
     [activeQueue],
   );
-  const queueBadge = activeQueue.length > 0 ? activeQueue.length : null;
-  const missingCount = shortages.length;
 
   return (
     <div className="craft-page">
       
-
-      <CraftTabBar
-        activeTab={tab as "recipes" | "queue" | "analytics" | "quality" | "sources"}
-        onTabChange={(t) => {
-          if (t !== "queue") setTab(t as Tab);
-        }}
-        queueBadge={queueBadge}
-        missingCount={missingCount}
-      />
 
       <div className="craft-tab-content">
         {loadError && (

@@ -1735,11 +1735,11 @@
 .craft-matq-card {
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  padding: 10px 17px;
-  border: 1px solid rgba(148, 163, 184, 0.13);
+  gap: 8px;
+  padding: 10px 12px 9px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.025);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.018));
   box-shadow: none;
 }
 
@@ -1752,9 +1752,9 @@
 }
 
 .craft-matq-header {
-  display: grid;
-  grid-template-columns: minmax(160px, 1fr) auto;
-  gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   align-items: center;
 }
 
@@ -1783,7 +1783,7 @@
 
 .craft-matq-name {
   display: inline-block;
-  min-width: 120px;
+  min-width: 0;
   font-family: var(--font-primary);
   line-height: 1.1;
   font-weight: 700;
@@ -1791,12 +1791,22 @@
   color: #e2e8ff;
 }
 
-.craft-matq-quality-header {
+.craft-matq-band-pill {
   display: inline-flex;
-  justify-self: end;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: center;
+  gap: 5px;
+  min-height: 20px;
+  padding: 0 8px;
+  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.16));
+  border-radius: 999px;
+  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.035));
+  color: var(--craft-value-tier-color, rgba(216, 226, 245, 0.8));
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
   white-space: nowrap;
 }
 
@@ -1822,7 +1832,7 @@
 }
 
 .craft-matq-metric-strip {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
   margin-top: 4px;
@@ -1899,11 +1909,12 @@
 .craft-matq-slider-wrap {
   --matq-rail-left: 0;
   --matq-rail-width: 100%;
+  padding: 0 3px;
 }
 
 .craft-matq-rail-wrap {
   position: relative;
-  height: 32px;
+  height: 30px;
 }
 
 /* Invisible native input captures drag interaction */
@@ -1913,7 +1924,7 @@
   top: 0;
   z-index: 10;
   width: var(--matq-rail-width);
-  height: 32px;
+  height: 30px;
   margin: 0;
   opacity: 0;
   cursor: pointer;
@@ -2038,31 +2049,25 @@
 /* ── Per-material modifier cards ─────────────── */
 
 .craft-matq-mods {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 0 10px;
-  align-items: stretch;
-  border-top: 1px solid rgba(148, 163, 184, 0.08);
-  padding-top: 6px;
-}
-
-.craft-matq-mod-card {
-  min-width: 0;
-  padding: 4px 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding-top: 1px;
 }
 
-.craft-matq-mod-top {
+.craft-matq-mod-chip {
+  min-width: 0;
   display: inline-flex;
   align-items: baseline;
-  gap: 5px 7px;
+  gap: 6px;
   flex-wrap: wrap;
-  width: auto;
   max-width: 100%;
+  min-height: 24px;
+  padding: 3px 8px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 999px;
+  background: rgba(3, 7, 14, 0.36);
 }
 
 .craft-matq-mod-prop {
@@ -2073,7 +2078,7 @@
   font-family: var(--font-primary);
   font-size: 11px;
   font-weight: 600;
-  color: rgba(200, 215, 255, 0.82);
+  color: rgba(210, 222, 240, 0.78);
 }
 
 .craft-matq-mod-val {
@@ -2087,15 +2092,15 @@
 .craft-matq-mod-hint {
   display: inline-flex;
   align-items: center;
-  min-height: 16px;
-  padding: 0 5px;
-  border: 1px solid rgba(148, 163, 184, 0.11);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.025);
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   font-family: var(--font-primary);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 600;
-  color: rgba(160, 176, 198, 0.52);
+  color: rgba(160, 176, 198, 0.42);
   line-height: 1;
   white-space: nowrap;
 }
@@ -2123,12 +2128,38 @@
   gap: 8px;
 }
 
+.craft-summary-title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 10px;
+}
+
 .craft-summary-title {
   font-family: var(--font-primary);
   font-size: 17px;
   line-height: 1.1;
   font-weight: 700;
   color: #e2e8ff;
+}
+
+.craft-summary-quality-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
+  padding: 0 10px;
+  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.18));
+  border-radius: 999px;
+  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.04));
+  color: var(--craft-value-tier-color, rgba(216, 226, 245, 0.84));
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 .craft-summary-chips {
@@ -2138,10 +2169,10 @@
 }
 
 .craft-summary-section {
-  padding: 10px 12px;
+  padding: 8px 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .craft-summary-section--grow {
@@ -2149,22 +2180,11 @@
 }
 
 .craft-summary-section-label {
-  font-family: var(--font-primary);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.45);
+  display: none;
 }
 
 .craft-summary-section--grow::before {
-  content: "WHERE TO FIND";
-  display: block;
-  font-family: var(--font-primary);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.45);
-  margin-bottom: 8px;
+  content: none;
 }
 
 .craft-summary-mod-list {
@@ -2176,8 +2196,8 @@
 .craft-summary-mod-row {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 8px 0;
+  gap: 6px;
+  padding: 7px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
@@ -2235,20 +2255,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  padding-left: 2px;
+  padding-left: 0;
 }
 
 .craft-summary-mod-contrib {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 0 7px;
+  border: 1px solid rgba(148, 163, 184, 0.11);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.026);
   font-family: var(--font-primary);
-  font-size: 12px;
-  color: rgba(178, 180, 186, 0.42);
+  font-size: 10px;
+  color: rgba(190, 202, 220, 0.58);
   font-weight: 600;
+  line-height: 1;
 }
 
 .craft-summary-mod-contrib + .craft-summary-mod-contrib::before {
-  content: "·";
-  margin-right: 5px;
-  color: rgba(160, 180, 220, 0.2);
+  content: none;
 }
 
 .craft-summary-overall-mods .craft-mod-group {
@@ -2279,9 +2305,9 @@
 }
 
 .craft-summary-panel .craft-drawer-source-tag {
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   font-family: var(--font-primary);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: rgba(140, 160, 200, 0.38);
