@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
-import { formatRequirementQuantity, getBuildQueueItemInputs } from '../../lib/logistics/inventory';
+import { getBuildQueueItemInputs } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import type { Shortage } from '../../lib/logistics/shortages';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import QuantityText from '../../components/logistics/QuantityText';
 
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/build-queue.css';
@@ -110,12 +109,6 @@ export default function BuildQueuePage() {
     return groups;
   }, []);
 
-  const sortedShortageGroups = [...groupedShortages].sort((a, b) => {
-    const aS = a.unitGroups.reduce((s, u) => s + u.shortfall, 0);
-    const bS = b.unitGroups.reduce((s, u) => s + u.shortfall, 0);
-    return bS - aS || a.displayName.localeCompare(b.displayName);
-  });
-
   const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
     const recipe = recipes.find((e) => e.id === item.recipeId);
     const category = recipe?.category ?? 'other';
@@ -131,6 +124,7 @@ export default function BuildQueuePage() {
   const reservableShortages = shortages.filter((shortage) => shortage.have > 0).length;
   const noStockShortages = shortages.filter((shortage) => shortage.have <= 0).length;
   const totalShortageDisplay = formatSummaryNumber(shortageSummary.totalShortfallQuantity);
+  const ledgerVisible = ledgerOpen && shortages.length > 0;
 
 
   return (
@@ -140,6 +134,7 @@ export default function BuildQueuePage() {
       
 
       <div className="bq-main">
+        <div className={`bq-workspace${ledgerVisible ? ' bq-workspace--with-ledger' : ''}`}>
         <div className="bq-shell">
 
       <div className="bq-summary-grid" aria-label="Build queue summary metrics">
@@ -181,59 +176,8 @@ export default function BuildQueuePage() {
           )}
         </div>
 
-        {shortages.length === 0 ? (
+        {shortages.length === 0 && (
           <div className="bq-shortage-all-clear">All materials covered for active builds.</div>
-        ) : (
-          <>
-            {ledgerOpen && (
-              <div className="bq-ledger">
-                <div className="bq-ledger-head" aria-hidden="true">
-                  <span>Material</span>
-                  <span>Owned</span>
-                  <span>Needed</span>
-                  <span>Short</span>
-                  <span>Used By</span>
-                </div>
-                {sortedShortageGroups.map((group) => (
-                  <div className="bq-ledger-row" key={`lr:${group.key}`}>
-                    <div className="bq-ledger-material">{group.displayName}</div>
-                    <div className="bq-ledger-cell">
-                      {group.unitGroups.map((ug) => {
-                        const mat = materials.find((m) => m.id === ug.materialId);
-                        const unitType = ug.unitKey === 'scu' ? 'scu' : 'unit';
-                        return <span key={`${group.key}:${ug.unitKey}:owned`}><QuantityText value={formatRequirementQuantity(ug.have, unitType, mat)} /></span>;
-                      })}
-                    </div>
-                    <div className="bq-ledger-cell">
-                      {group.unitGroups.map((ug) => {
-                        const mat = materials.find((m) => m.id === ug.materialId);
-                        const unitType = ug.unitKey === 'scu' ? 'scu' : 'unit';
-                        return <span key={`${group.key}:${ug.unitKey}:needed`}><QuantityText value={formatRequirementQuantity(ug.needed, unitType, mat)} /></span>;
-                      })}
-                    </div>
-                    <div className="bq-ledger-cell bq-ledger-cell--short">
-                      {group.unitGroups.map((ug) => {
-                        const mat = materials.find((m) => m.id === ug.materialId);
-                        const unitType = ug.unitKey === 'scu' ? 'scu' : 'unit';
-                        return <span key={`${group.key}:${ug.unitKey}:short`}><QuantityText value={formatRequirementQuantity(ug.shortfall, unitType, mat)} /></span>;
-                      })}
-                    </div>
-                    <div className="bq-ledger-chips">
-                      {group.badges.map((badge) => {
-                        const mat = materials.find((m) => m.id === badge.materialId);
-                        return (
-                          <span className="bq-ledger-chip" key={badge.key}>
-                            <span>{badge.label}{badge.count > 1 ? ` ×${badge.count}` : ''}</span>
-                            <QuantityText value={formatRequirementQuantity(badge.quantity, badge.unitType, mat)} />
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
         )}
         </div>
 
@@ -262,6 +206,28 @@ export default function BuildQueuePage() {
         ))}
       </>
 
+        </div>
+        {ledgerVisible && (
+          <aside className="bq-ledger-panel" aria-label="Queue Ledger">
+            <div className="bq-ledger-title">Queue Ledger</div>
+            <div className="bq-ledger-stat">
+              <span>Queue Items</span>
+              <strong>{buildQueue.length}</strong>
+            </div>
+            <div className="bq-ledger-stat bq-ledger-stat--danger">
+              <span>Total Shortage</span>
+              <strong>{totalShortageDisplay}</strong>
+            </div>
+            <div className="bq-ledger-stat bq-ledger-stat--success">
+              <span>Reservable</span>
+              <strong>{reservableShortages}</strong>
+            </div>
+            <div className="bq-ledger-stat bq-ledger-stat--danger">
+              <span>No Stock</span>
+              <strong>{noStockShortages}</strong>
+            </div>
+          </aside>
+        )}
         </div>
       </div>
     </div>
