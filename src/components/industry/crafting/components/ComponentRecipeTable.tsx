@@ -1,11 +1,9 @@
 import {
   useState,
   useMemo,
-  useLayoutEffect,
   useRef,
   useEffect,
   useCallback,
-  type CSSProperties,
 } from "react";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -1375,9 +1373,7 @@ export default function ComponentRecipeTable({
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-  const [bridgeMetrics, setBridgeMetrics] = useState<{ top: number; height: number } | null>(null);
   const shellRef = useRef<HTMLDivElement>(null);
-  const selectedCardRef = useRef<HTMLButtonElement | null>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
     () => readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY),
   );
@@ -1594,40 +1590,7 @@ export default function ComponentRecipeTable({
     classFilters.size +
     resourceFilters.size;
 
-  const updateBridgeMetrics = useCallback(() => {
-    const shell = shellRef.current;
-    const selectedCard = selectedCardRef.current;
 
-    if (!shell || !selectedCard || !selectedGroup) {
-      setBridgeMetrics(null);
-      return;
-    }
-
-    const shellRect = shell.getBoundingClientRect();
-    const cardRect = selectedCard.getBoundingClientRect();
-    const next = {
-      top: Math.round(cardRect.top - shellRect.top),
-      height: Math.round(cardRect.height),
-    };
-
-    setBridgeMetrics((previous) => {
-      if (previous && previous.top === next.top && previous.height === next.height) {
-        return previous;
-      }
-      return next;
-    });
-  }, [selectedGroup]);
-
-  useLayoutEffect(() => {
-    updateBridgeMetrics();
-    const frame = window.requestAnimationFrame(updateBridgeMetrics);
-    return () => window.cancelAnimationFrame(frame);
-  }, [filtersOpen, groupedRecipes, selectedGroupId, updateBridgeMetrics]);
-
-  useEffect(() => {
-    window.addEventListener("resize", updateBridgeMetrics);
-    return () => window.removeEventListener("resize", updateBridgeMetrics);
-  }, [updateBridgeMetrics]);
 
   return (
     <div className="craft-planner-shell" ref={shellRef}>
@@ -1788,7 +1751,6 @@ export default function ComponentRecipeTable({
             return (
               <button
                 key={group.id}
-                ref={selected ? selectedCardRef : undefined}
                 type="button"
                 className={`craft-result-card${selected ? " craft-result-card--selected" : ""}`}
                 onClick={() => setSelectedGroupId(group.id)}
@@ -1809,6 +1771,11 @@ export default function ComponentRecipeTable({
                   {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
                 </span>
                 <span className="craft-result-arrow" aria-hidden>&rsaquo;</span>
+                {selected && (
+                  <span className="craft-result-bridge" aria-hidden="true">
+                    <span className="craft-result-bridge-cap" aria-hidden="true" />
+                  </span>
+                )}
               </button>
             );
           })}
@@ -1828,19 +1795,7 @@ export default function ComponentRecipeTable({
         )}
       </aside>
 
-      <div className="craft-selected-bridge-column" aria-hidden>
-        {selectedGroup && bridgeMetrics && (
-          <span
-            className="craft-selected-bridge"
-            style={
-              {
-                "--craft-bridge-top": `${bridgeMetrics.top}px`,
-                "--craft-bridge-height": `${bridgeMetrics.height}px`,
-              } as CSSProperties
-            }
-          />
-        )}
-      </div>
+      <div className="craft-selected-bridge-column" aria-hidden />
 
       {selectedGroup ? (
         <RecipeDrawer
