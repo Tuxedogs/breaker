@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+import '../../components/logistics/logistics.css';
+import '../../components/logistics/refinery-import.css';
 import { Link } from "react-router-dom";
 import { useLogisticsStore, createInventoryEntryDraft } from "../../stores/logisticsStore";
 import { formatQuantity } from "../../lib/logistics/inventory";

@@ -8,6 +8,7 @@ import type { Shortage } from '../../lib/logistics/shortages';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import QuantityText from '../../components/logistics/QuantityText';
 
+import '../../components/logistics/logistics.css';
 import '../../components/logistics/build-queue.css';
 
 type ShortageGroup = {
@@ -123,43 +124,13 @@ export default function BuildQueuePage() {
   }
 
   const categories = Object.keys(grouped);
-  const activeQueueCount = shortageSummary.activeQueueItems.length;
-  const totalQueueQuantity = buildQueue.reduce((s, i) => s + i.quantity, 0);
-  const totalShortfall = shortageSummary.totalShortfallQuantity;
-  const totalRequirementLines = buildQueue.reduce((s, item) => {
-    if (item.status === 'complete') return s;
-    return s + getBuildQueueItemInputs(item, recipeInputsByRecipeId).length;
-  }, 0);
+
 
   return (
     <div className="bq-page">
-      <CraftTabBar activeTab="queue" missingCount={shortages.length} queueBadge={buildQueue.length > 0 ? buildQueue.length : null} />
 
       {/* Stat Rail */}
-      <div className="bq-stat-rail">
-        <div className="bq-stat-rail-title">
-          <h1>Build Queue</h1>
-          <p>Queued builds, material coverage, and blueprint source snapshots.</p>
-        </div>
-        <div className="bq-stats">
-          <div className="bq-stat">
-            <em>Active</em>
-            <strong>{activeQueueCount}</strong>
-          </div>
-          <div className="bq-stat">
-            <em>Total Qty</em>
-            <strong>{totalQueueQuantity}</strong>
-          </div>
-          <div className="bq-stat">
-            <em>Material Lines</em>
-            <strong>{totalRequirementLines}</strong>
-          </div>
-          <div className={`bq-stat${totalShortfall > 0 ? ' bq-stat--alert' : ''}`}>
-            <em>Shortfall</em>
-            <strong><QuantityText value={formatRequirementQuantity(totalShortfall, 'unit', undefined)} /></strong>
-          </div>
-        </div>
-      </div>
+      
 
       {/* Shortage Panel */}
       <div className="bq-shortage-panel">
