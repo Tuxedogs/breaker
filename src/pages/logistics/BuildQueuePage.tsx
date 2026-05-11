@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import CraftTabBar from '../../components/industry/crafting/CraftTabBar';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
 import { formatRequirementQuantity, getBuildQueueItemInputs } from '../../lib/logistics/inventory';

@@ -3,7 +3,6 @@ import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplat
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
   formatQuantity,
-  formatRequirementQuantity,
   getBuildQueueItemInputs,
   getInventoryStacks,
   getRecipeForQueueItem,
