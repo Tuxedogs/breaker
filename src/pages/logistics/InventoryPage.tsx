@@ -6,6 +6,8 @@ import InventoryTable, { type SortKey } from '../../components/logistics/Invento
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 import { resolveInventoryItemName } from '../../lib/logistics/inventory';
+import '../../components/logistics/logistics.css';
+import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 

@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import '../../components/logistics/logistics.css';
+import '../../components/logistics/locations.css';
 import LocationCard from '../../components/logistics/LocationCard';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
