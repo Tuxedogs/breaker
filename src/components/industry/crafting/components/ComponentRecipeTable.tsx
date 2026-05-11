@@ -1,10 +1,11 @@
 import {
   useState,
   useMemo,
-  Fragment,
+  useLayoutEffect,
   useRef,
   useEffect,
   useCallback,
+  type CSSProperties,
 } from "react";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -28,15 +29,15 @@ import {
   rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
-import { MsbChip, MsbSection, MsbSidebar, ResourcesSection } from "../../shared/MsbSidebar";
+import { MsbChip, MsbSection, ResourcesSection } from "../../shared/MsbSidebar";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
-import type { InventoryEntry, MaterialTemplate } from "../../../../types/logistics";
 
 
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
+const MAX_VISIBLE_RESULTS = 8;
 
 type RecipeSidebarState = {
   search: string;
@@ -366,14 +367,6 @@ function formatModifierPercent(value: number): string {
   return `${normalized > 0 ? "+" : ""}${formatted}%`;
 }
 
-function formatQuantity(value: number): string {
-  return formatCompactNumber(value);
-}
-
-function formatQuantityWithUnit(value: number, unitLabel: string): string {
-  return `${formatQuantity(value)} ${unitLabel}`;
-}
-
 function readNumericPath(source: unknown, path: string[]): number | undefined {
   let current = source;
   for (const key of path) {
@@ -502,82 +495,6 @@ function getQuantizationLookupKeys(item: MaterialQuantization): string[] {
 
 function getMaterialName(mat: ComponentRecipe["materials"][number]): string {
   return String(mat.material_name ?? "");
-}
-
-type RequirementInventorySummary = {
-  ownedQuantity: number;
-  shortfall: number;
-  qualities: number[];
-  unitLabel: string;
-};
-
-function getRequirementUnitLabel(
-  mat: ComponentRecipe["materials"][number],
-  material?: MaterialTemplate,
-  entries: InventoryEntry[] = [],
-): string {
-  if (entries.some((entry) => entry.unitType === "scu")) return "SCU";
-  if (entries.some((entry) => entry.unitType === "unit")) return "units";
-  if (material?.materialType === "ore" || material?.materialType === "refined") return "SCU";
-  return mat.cost_type?.toLowerCase().includes("scu") ? "SCU" : "units";
-}
-
-function getRequirementInventorySummary(
-  mat: ComponentRecipe["materials"][number],
-  inventoryEntries: InventoryEntry[] = [],
-  materialTemplates: MaterialTemplate[] = [],
-): RequirementInventorySummary | undefined {
-  if (!inventoryEntries.length) return undefined;
-
-  const materialName = getMaterialName(mat);
-  const nameKey = normalizeMaterialLookup(materialName);
-  const costIdKey = normalizeMaterialLookup(mat.cost_id);
-  const material = materialTemplates.find((item) => {
-    return (
-      normalizeMaterialLookup(item.id) === costIdKey ||
-      normalizeMaterialLookup(item.name) === nameKey
-    );
-  });
-  const materialIdKey = normalizeMaterialLookup(material?.id);
-  const materialTemplateNameKey = normalizeMaterialLookup(material?.name);
-
-  const matchingEntries = inventoryEntries.filter((entry) => {
-    const entryMaterialId = normalizeMaterialLookup(entry.materialId);
-    const entryCatalogId = normalizeMaterialLookup(entry.catalogItemId);
-    const entryMaterialName = normalizeMaterialLookup(entry.materialName);
-    const entryItemName = normalizeMaterialLookup(entry.itemName);
-
-    return (
-      (!!costIdKey && (entryMaterialId === costIdKey || entryCatalogId === costIdKey)) ||
-      (!!materialIdKey && (entryMaterialId === materialIdKey || entryCatalogId === materialIdKey)) ||
-      (!!nameKey && (entryMaterialName === nameKey || entryItemName === nameKey)) ||
-      (!!materialTemplateNameKey &&
-        (entryMaterialName === materialTemplateNameKey || entryItemName === materialTemplateNameKey))
-    );
-  });
-
-  if (!matchingEntries.length) {
-    return {
-      ownedQuantity: 0,
-      shortfall: Math.max(0, mat.quantity),
-      qualities: [],
-      unitLabel: getRequirementUnitLabel(mat, material),
-    };
-  }
-
-  const ownedQuantity = matchingEntries.reduce((sum, entry) => sum + Number(entry.quantity || 0), 0);
-  const qualities = [...new Set(
-    matchingEntries
-      .map((entry) => entry.quality)
-      .filter((quality): quality is number => typeof quality === "number"),
-  )].sort((a, b) => b - a);
-
-  return {
-    ownedQuantity,
-    shortfall: Math.max(0, mat.quantity - ownedQuantity),
-    qualities,
-    unitLabel: getRequirementUnitLabel(mat, material, matchingEntries),
-  };
 }
 
 function useQualityQuantization() {
@@ -802,44 +719,35 @@ function OverallModifierGroup({
 }
 
 function MaterialQualityRow({
-  recipe,
   mat,
   bandIndex,
-  inventorySummary,
   onBandChange,
   getBandsForMaterial,
   getBandEffectiveQuality,
 }: {
-  recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
-  inventorySummary?: RequirementInventorySummary;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
   getBandLabel: (materialName: string, bandIndex: number) => string;
 }) {
-  const modifiers = mat.qualityModifiers ?? [];
   const materialName = getMaterialName(mat);
   const bands = getBandsForMaterial(materialName);
   const safeBandIndex = clampBandIndex(bandIndex, bands);
   const bandNumber = safeBandIndex + 1;
   const quality = getBandEffectiveQuality(materialName, safeBandIndex);
   const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
-  const requiredQuantity = mat.quantity;
-  const ownedQuantity = inventorySummary?.ownedQuantity ?? 0;
-  const shortfall = Math.max(requiredQuantity - ownedQuantity, 0);
-  const unitLabel = inventorySummary?.unitLabel ?? getRequirementUnitLabel(mat);
 
   const atQuality = useMemo(() => {
-    const mods = getModifiersAtQuality(modifiers, quality);
+    const mods = getModifiersAtQuality(mat.qualityModifiers ?? [], quality);
     // Weapon Recoil Kick must appear directly above Weapon Recoil Smoothness
     return [...mods].sort((a, b) => {
       const order = (p: string) =>
         p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2;
       return order(a.property) - order(b.property);
     });
-  }, [modifiers, quality]);
+  }, [mat.qualityModifiers, quality]);
 
   const railMarkers = useMemo(
     () =>
@@ -870,53 +778,19 @@ function MaterialQualityRow({
   const fillPct = Math.max(0, selectedPct - bandOnePct);
 
   return (
-    <div className="craft-matq-card" data-band={safeBandIndex}>
-      <div className="craft-matq-header">
-        <div className="craft-matq-identity">
-          <span className="craft-matq-slot">{mat.slot}</span>
-          <span className="craft-matq-name">{mat.material_name}</span>
-        </div>
-
-        <div className="craft-matq-quality-header">
-          <span className="craft-matq-quality-label">
-            Band {safeBandIndex + 1}
+    <div className="craft-material-card craft-matq-card" data-band={safeBandIndex}>
+      <div className="craft-material-card-head craft-matq-header">
+        <div className="craft-material-identity craft-matq-identity">
+          <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
+          <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
+          <span className={`craft-quality-readout craft-matq-band-pill ${selectedQualityTierClass}`}>
+            Band {safeBandIndex + 1} <span aria-hidden="true">·</span> {quality}
           </span>
-          <span className={`craft-matq-quality-value ${selectedQualityTierClass}`}>{quality}</span>
-        </div>
-
-        {inventorySummary && inventorySummary.qualities.length > 1 && (
-          <div className="craft-quality-badges" aria-label={`Owned qualities for ${mat.material_name}`}>
-            {inventorySummary.qualities.slice(0, 5).map((ownedQuality) => (
-              <span key={ownedQuality} className="craft-quality-badge">
-                Q{ownedQuality}
-              </span>
-            ))}
-            {inventorySummary.qualities.length > 5 && (
-              <span className="craft-quality-badge craft-quality-badge--more">
-                +{inventorySummary.qualities.length - 5}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="craft-matq-metric-strip" aria-label={`${mat.material_name} requirement summary`}>
-        <div className="craft-matq-metric">
-          <span className="craft-matq-metric-label">Required</span>
-          <span className="craft-matq-metric-value">{formatQuantityWithUnit(requiredQuantity, unitLabel)}</span>
-        </div>
-        <div className="craft-matq-metric">
-          <span className="craft-matq-metric-label">Owned</span>
-          <span className="craft-matq-metric-value">{formatQuantityWithUnit(ownedQuantity, unitLabel)}</span>
-        </div>
-        <div className={`craft-matq-metric${shortfall > 0 ? " is-short" : ""}`}>
-          <span className="craft-matq-metric-label">Shortfall</span>
-          <span className="craft-matq-metric-value">{formatQuantityWithUnit(shortfall, unitLabel)}</span>
         </div>
       </div>
 
-      <div className="craft-matq-slider-wrap">
-        <div className="craft-matq-rail-wrap">
+      <div className="craft-quality-control craft-matq-slider-wrap">
+        <div className="craft-quality-rail-wrap craft-matq-rail-wrap">
           <input
             type="range"
             min={0}
@@ -927,12 +801,12 @@ function MaterialQualityRow({
               const rawValue = Number(e.target.value);
               onBandChange(findNearestBandForMappedValue(rawValue));
             }}
-            className="craft-matq-slider"
+            className="craft-quality-input craft-matq-slider"
             aria-label={`Quality band for ${mat.material_name}`}
           />
 
 <div
-  className={`craft-matq-rail ${selectedQualityTierClass}`}
+  className={`craft-quality-rail craft-matq-rail ${selectedQualityTierClass}`}
   style={
     {
       "--band-one-pct": `${bandOnePct}%`,
@@ -940,7 +814,7 @@ function MaterialQualityRow({
   }
 >
   <div
-    className={`craft-matq-rail-fill ${selectedQualityTierClass}`}
+    className={`craft-quality-rail-fill craft-matq-rail-fill ${selectedQualityTierClass}`}
     style={
       {
         "--band-one-pct": `${bandOnePct}%`,
@@ -956,18 +830,14 @@ function MaterialQualityRow({
               <button
                 type="button"
                 key={`${marker.index}-${marker.mappedValue}`}
-                className={`craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? " is-active" : ""}`}
+                className={`craft-quality-marker craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? " is-active" : ""}`}
                 style={{ left: `${marker.left}%` }}
                 data-edge={marker.edge}
                 onClick={() => onBandChange(marker.index)}
                 aria-label={`Use mapped quality ${marker.mappedValue}`}
               >
-                {marker.index === safeBandIndex ? (
-                  <span className="craft-matq-dot" />
-                ) : (
-                  marker.mappedValue > quality && <span className="craft-matq-threshold-dot" />
-                )}
-                <span className={`craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
+                <span className="craft-quality-marker-line craft-matq-dot" />
+                <span className={`craft-quality-marker-value craft-matq-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
               </button>
               );
             })}
@@ -976,29 +846,28 @@ function MaterialQualityRow({
       </div>
 
       {atQuality.length > 0 && (
-        <div className="craft-matq-mods">
+        <div className="craft-modifier-list craft-matq-mods">
           {atQuality.map((m, i) => {
             const impact = getModifierImpact(m.property, m.value);
             const directionLabel = getDirectionLabel(m.property);
-            const baseValue = getBaseStatValue(recipe, m.property);
 
             return (
-              <div key={i} className="craft-matq-mod-card">
-                <div className="craft-matq-mod-top">
-                  <span className="craft-matq-mod-prop">
+              <div key={i} className="craft-modifier-row craft-matq-mod-chip">
+                <div className="craft-modifier-main">
+                  <span className="craft-modifier-label craft-matq-mod-prop">
                     {formatProperty(m.property)}
                   </span>
 
                   <span
-                    className={`craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}
+                    className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}
                   >
-                    {formatModifiedStat(baseValue, m.value, m.modifierMode)}
+                    {formatContributionValue(m.value, m.modifierMode)}
                   </span>
-
-                  {directionLabel && (
-                    <span className="craft-matq-mod-hint">{directionLabel}</span>
-                  )}
                 </div>
+
+                {directionLabel && (
+                  <span className="craft-modifier-hint craft-matq-mod-hint">{directionLabel}</span>
+                )}
               </div>
             );
           })}
@@ -1140,7 +1009,12 @@ function CraftedItemSummaryPanel({
     <div className="craft-summary-panel">
       {/* Title + metadata chips */}
       <div className="craft-summary-head">
-        <div className="craft-summary-title">{displayName}</div>
+        <div className="craft-summary-title-row">
+          <div className="craft-summary-title">{displayName}</div>
+          <div className={`craft-summary-quality-pill ${componentRarityClass}`}>
+            {formatCompactNumber(displayFinalProductQuality)}
+          </div>
+        </div>
         <div className="craft-summary-chips">
           {typeBadges.map((b) => (
             <span
@@ -1164,28 +1038,13 @@ function CraftedItemSummaryPanel({
         </div>
       </div>
 
-      <div className="craft-summary-section">
-        <div className="craft-summary-section-label">Final Product Quality</div>
-        <div className="craft-summary-mod-list">
-          <div className="craft-summary-mod-row">
-            <div className="craft-summary-mod-top">
-              <span className={`craft-summary-mod-prop ${componentRarityClass}`}>
-                Band {formatCompactNumber(displayFinalProductQuality)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Modifiers total */}
       {hasAnyModifiers && (
         <div className="craft-summary-section">
-          <div className="craft-summary-section-label">Modifiers Total</div>
-
           {hasMaterialModifiers && (
             <div className="craft-summary-mod-list">
               {totalModifiers.map((row) => {
-                const hasBreakdown = row.contributions.length > 1;
+                const hasBreakdown = row.contributions.length > 0;
                 const baseValue = getBaseStatValue(recipe, row.property);
 
                 return (
@@ -1194,20 +1053,17 @@ function CraftedItemSummaryPanel({
                       <span className="craft-summary-mod-prop">
                         {formatProperty(row.property)}
                       </span>
-                      <span className={`craft-summary-mod-val ${componentRarityClass}`}>
+                      <span className={`craft-summary-mod-val`}>
                         {formatModifiedStat(baseValue, row.totalValue, row.modifierMode)}
                       </span>
                     </div>
                     {hasBreakdown && (
                       <div className="craft-summary-mod-breakdown">
-                        {"("}
                         {row.contributions.map((c, i) => (
                           <span key={i} className="craft-summary-mod-contrib">
-                            {i > 0 && " + "}
-                            {formatContributionValue(c.value, row.modifierMode)} from {c.materialName}
+                            {formatContributionValue(c.value, row.modifierMode)} {c.materialName}
                           </span>
                         ))}
-                        {")"}
                       </div>
                     )}
                   </div>
@@ -1236,14 +1092,14 @@ function CraftedItemSummaryPanel({
             Blueprint source not found in parsed reward data
           </div>
         ) : (
-          <div className="craft-drawer-sources">
+          <div className="craft-blueprint-source-list">
             {rewardPools.map((pool, i) => (
               <div
                 key={`${pool.displayName}-${i}`}
-                className="craft-drawer-source-item"
+                className="craft-blueprint-source"
               >
-                <div className="craft-drawer-source-tag">Blueprint Source</div>
-                <div className="craft-drawer-source-name">{pool.displayName}</div>
+                <div className="craft-blueprint-source-tag">Blueprint Source</div>
+                <div className="craft-blueprint-source-name">{pool.displayName}</div>
               </div>
             ))}
           </div>
@@ -1293,14 +1149,14 @@ function CraftedItemSummaryPanel({
               </>
             )}
           </svg>
-          {isQueued ? "In Build Queue" : "Add to Build Queue"}
+          {isQueued ? "Queued" : "Queue"}
         </button>
 
         <button
           type="button"
           className={`craft-summary-action-btn craft-summary-bookmark-btn${isBookmarked ? " is-active" : ""}`}
           aria-pressed={isBookmarked}
-          aria-label={isBookmarked ? `Remove ${displayName} bookmark` : `Bookmark ${displayName}`}
+          aria-label={isBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
           onClick={onToggleBookmark}
         >
           <svg
@@ -1316,7 +1172,7 @@ function CraftedItemSummaryPanel({
           >
             <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
           </svg>
-          {isBookmarked ? "Bookmarked" : "Bookmark"}
+          {isBookmarked ? "Saved" : "Save"}
         </button>
       </div>
     </div>
@@ -1327,8 +1183,6 @@ function RecipeDrawer({
   recipe,
   groupRecipes = [recipe],
   baseDisplayName,
-  inventoryEntries,
-  materialTemplates,
   onAddToQueue,
   isRecipeQueued,
   isRecipeBookmarked,
@@ -1337,8 +1191,6 @@ function RecipeDrawer({
   recipe: ComponentRecipe;
   groupRecipes?: ComponentRecipe[];
   baseDisplayName: string;
-  inventoryEntries?: InventoryEntry[];
-  materialTemplates?: MaterialTemplate[];
   onAddToQueue: (
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1402,24 +1254,13 @@ function RecipeDrawer({
     [selectedRecipe, getBandEffectiveQuality, materialQualities],
   );
 
-  const inventorySummaryByKey = useMemo(() => {
-    const map = new Map<string, RequirementInventorySummary | undefined>();
-    selectedRecipe.materials.forEach((mat, inputIndex) => {
-      map.set(
-        getMaterialQualityKey(selectedRecipe, mat, inputIndex),
-        getRequirementInventorySummary(mat, inventoryEntries, materialTemplates),
-      );
-    });
-    return map;
-  }, [inventoryEntries, materialTemplates, selectedRecipe]);
-
   const showVariantSelector = groupRecipes.length > 1;
   const selectedIsQueued = isRecipeQueued(selectedRecipe);
   const selectedIsBookmarked = isRecipeBookmarked(selectedRecipe);
 
   return (
-    <div className="craft-expanded-content">
-      <div className="craft-expanded-main">
+    <div className="craft-detail-stage">
+      <div className="craft-detail-main">
         {showVariantSelector && (
           <div className="craft-variant-selector" aria-label="Select variant">
             <div className="craft-variant-selector-label">Select variant</div>
@@ -1450,7 +1291,7 @@ function RecipeDrawer({
           </div>
         )}
 
-        <div className="craft-detail-section">
+        <div className="craft-material-column">
           {quantizationLoading && (
             <div className="craft-empty-card">
               Loading local quality quantization bands...
@@ -1464,10 +1305,8 @@ function RecipeDrawer({
               return (
                 <MaterialQualityRow
                   key={`${mat.slot}:${key}`}
-                  recipe={selectedRecipe}
                   mat={mat}
                   bandIndex={getBandIndex(key)}
-                  inventorySummary={inventorySummaryByKey.get(key)}
                   onBandChange={(bandIndex) =>
                     setMaterialQualities((prev) => ({
                       ...prev,
@@ -1484,7 +1323,7 @@ function RecipeDrawer({
         </div>
       </div>
 
-      <div className="craft-expanded-sidebar">
+      <div className="craft-summary-column">
         <CraftedItemSummaryPanel
           recipe={selectedRecipe}
           displayName={displayName}
@@ -1508,8 +1347,8 @@ function RecipeDrawer({
 
 interface Props {
   recipes: ComponentRecipe[];
-  inventoryEntries?: InventoryEntry[];
-  materialTemplates?: MaterialTemplate[];
+  inventoryEntries?: unknown[];
+  materialTemplates?: unknown[];
   onAddToQueue: (
     recipe: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1520,8 +1359,6 @@ interface Props {
 
 export default function ComponentRecipeTable({
   recipes,
-  inventoryEntries = [],
-  materialTemplates = [],
   onAddToQueue,
   isRecipeQueued = () => false,
 }: Props) {
@@ -1536,24 +1373,15 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
-  const [expanded, setExpanded] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+  const [bridgeMetrics, setBridgeMetrics] = useState<{ top: number; height: number } | null>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
+  const selectedCardRef = useRef<HTMLButtonElement | null>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
     () => readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY),
   );
-  const [pageSize] = useState<number>(14);
-  const [page, setPage] = useState(0);
-  const expandedRowRef = useRef<HTMLTableRowElement>(null);
-
-  useEffect(() => {
-    if (!expanded) return;
-    const el = expandedRowRef.current;
-    if (!el) return;
-    requestAnimationFrame(() => {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-  }, [expanded]);
-
-  const resetPage = useCallback(() => setPage(0), []);
+  const resetSelection = useCallback(() => setSelectedGroupId(null), []);
 
   const toggleBookmark = useCallback((recipeId: string) => {
     setBookmarkedRecipeIds((prev) => {
@@ -1576,7 +1404,7 @@ export default function ComponentRecipeTable({
     setGradeFilters(new Set());
     setClassFilters(new Set());
     setResourceFilters(new Set());
-    resetPage();
+    resetSelection();
   }
 
   const hasActiveFilters =
@@ -1624,6 +1452,14 @@ export default function ComponentRecipeTable({
 
     return vals;
   }, [recipes]);
+
+  const gradeOptions = useMemo(
+    () =>
+      Array.from(new Set(recipes.map((r) => r.grade).filter(Boolean)))
+        .sort()
+        .map((grade) => ({ value: grade!, label: grade! })),
+    [recipes],
+  );
 
   const classOptions = useMemo(
     () =>
@@ -1735,29 +1571,107 @@ export default function ComponentRecipeTable({
     }));
   }, [filtered]);
 
-  const totalPages = Math.max(1, Math.ceil(groupedRecipes.length / pageSize));
-  const currentPage = Math.min(page, totalPages - 1);
-  const startIdx = currentPage * pageSize;
-  const endIdx = Math.min(startIdx + pageSize, groupedRecipes.length);
-  const paginated = groupedRecipes.slice(startIdx, endIdx);
-  const startItem = groupedRecipes.length === 0 ? 0 : startIdx + 1;
+  useEffect(() => {
+    if (groupedRecipes.length === 0) {
+      if (selectedGroupId !== null) setSelectedGroupId(null);
+      return;
+    }
+
+    if (!selectedGroupId || !groupedRecipes.some((group) => group.id === selectedGroupId)) {
+      setSelectedGroupId(groupedRecipes[0].id);
+    }
+  }, [groupedRecipes, selectedGroupId]);
+
+  const selectedGroup = groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
+  const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
+  const hiddenRecipeCount = Math.max(0, groupedRecipes.length - visibleRecipeGroups.length);
+  const activeFilterCount =
+    (search.trim() ? 1 : 0) +
+    fpsFilters.size +
+    vehicleFilters.size +
+    sizeFilters.size +
+    gradeFilters.size +
+    classFilters.size +
+    resourceFilters.size;
+
+  const updateBridgeMetrics = useCallback(() => {
+    const shell = shellRef.current;
+    const selectedCard = selectedCardRef.current;
+
+    if (!shell || !selectedCard || !selectedGroup) {
+      setBridgeMetrics(null);
+      return;
+    }
+
+    const shellRect = shell.getBoundingClientRect();
+    const cardRect = selectedCard.getBoundingClientRect();
+    const next = {
+      top: Math.round(cardRect.top - shellRect.top),
+      height: Math.round(cardRect.height),
+    };
+
+    setBridgeMetrics((previous) => {
+      if (previous && previous.top === next.top && previous.height === next.height) {
+        return previous;
+      }
+      return next;
+    });
+  }, [selectedGroup]);
+
+  useLayoutEffect(() => {
+    updateBridgeMetrics();
+    const frame = window.requestAnimationFrame(updateBridgeMetrics);
+    return () => window.cancelAnimationFrame(frame);
+  }, [filtersOpen, groupedRecipes, selectedGroupId, updateBridgeMetrics]);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateBridgeMetrics);
+    return () => window.removeEventListener("resize", updateBridgeMetrics);
+  }, [updateBridgeMetrics]);
 
   return (
-    <div className="craft-recipe-browser-layout">
-      <MsbSidebar title="Recipe Filters" onClear={resetAll}>
-        <MsbSection label="Search" onClear={hasActiveFilters ? resetAll : undefined} raw>
+    <div className="craft-planner-shell" ref={shellRef}>
+      <aside className="craft-finder-sidebar">
+        <div className="craft-finder-header">
+          <span className="craft-finder-kicker">Component Finder</span>
+          <div className="craft-finder-title-row">
+            <h1 className="craft-finder-title">Crafting Planner</h1>
+            <button
+              type="button"
+              className={`craft-filter-toggle${filtersOpen ? " is-active" : ""}`}
+              aria-pressed={filtersOpen}
+              onClick={() => setFiltersOpen((value) => !value)}
+            >
+              Filter
+              {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
+            </button>
+          </div>
+        </div>
+
+        <label className="craft-search">
+          <span className="craft-search-icon" aria-hidden>/</span>
           <input
             type="search"
-            className="msb-search-input"
+            className="craft-search-input"
             placeholder="Search recipes..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              resetPage();
+              resetSelection();
             }}
           />
-        </MsbSection>
+        </label>
 
+        {filtersOpen && (
+          <div className="craft-filter-panel">
+            <div className="craft-filter-panel-head">
+              <span>Filters</span>
+              {hasActiveFilters && (
+                <button type="button" className="craft-clear-filters" onClick={resetAll}>
+                  Clear
+                </button>
+              )}
+            </div>
         <MsbSection label="FPS">
           {fpsOptions.map((filter) => (
             <MsbChip
@@ -1771,7 +1685,7 @@ export default function ComponentRecipeTable({
                   else next.add(filter.value);
                   return next;
                 });
-                resetPage();
+                resetSelection();
               }}
             />
           ))}
@@ -1790,7 +1704,7 @@ export default function ComponentRecipeTable({
                   else next.add(filter.value);
                   return next;
                 });
-                resetPage();
+                resetSelection();
               }}
             />
           ))}
@@ -1805,7 +1719,21 @@ export default function ComponentRecipeTable({
                 else next.add(filter.value);
                 return next;
               });
-              resetPage();
+              resetSelection();
+            }} />
+          ))}
+        </MsbSection>
+
+        <MsbSection label="Grade">
+          {gradeOptions.map((filter) => (
+            <MsbChip key={filter.value} label={filter.label} active={gradeFilters.has(filter.value)} onClick={() => {
+              setGradeFilters((prev) => {
+                const next = new Set(prev);
+                if (next.has(filter.value)) next.delete(filter.value);
+                else next.add(filter.value);
+                return next;
+              });
+              resetSelection();
             }} />
           ))}
         </MsbSection>
@@ -1819,7 +1747,7 @@ export default function ComponentRecipeTable({
                 else next.add(filter.value);
                 return next;
               });
-              resetPage();
+              resetSelection();
             }} />
           ))}
         </MsbSection>
@@ -1834,222 +1762,101 @@ export default function ComponentRecipeTable({
               else next.add(id);
               return next;
             });
-            resetPage();
+            resetSelection();
           }}
         />
-      </MsbSidebar>
+          </div>
+        )}
 
-      <div className="craft-section craft-recipe-results">
-
-
-      {hasActiveFilters && <div className="craft-recipe-filter-note"></div>}
-
-      <div className="craft-table-wrap">
-        <table className="craft-table">
-          <thead>
-            <tr>
-              <th className="craft-th-name">Name</th>
-              <th>Type</th>
-              <th>Size</th>
-              <th>Grade</th>
-              <th>Class</th>
-              <th className="craft-th-action"></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginated.map((group) => {
-              const recipe = group.recipes[0];
-              const isOpen = expanded === group.id;
-              const variantCount = group.recipes.length;
-              const hasVariants = variantCount > 1;
-              const displayName = group.displayName;
-
-              const subtitle = getSubtitle(recipe);
-              const typeBadges = getTypeBadges(recipe);
-              const sizeLabel = getSharedValue(group.recipes, (item) => formatSize(item.size));
-              const grade = getSharedValue(group.recipes, (item) => item.grade ?? null);
-              const cls = getSharedValue(group.recipes, (item) => item.class ?? null);
-
-              return (
-                <Fragment key={group.id}>
-                  <tr
-                    ref={isOpen ? expandedRowRef : undefined}
-                    className={`craft-table-row${isOpen ? " craft-table-row--open" : ""}`}
-                    onClick={() => setExpanded(isOpen ? null : group.id)}
-                    style={{ cursor: "pointer" }}
-                  >
-                    <td className="craft-cell-name">
-                      <div className="craft-name-wrap">
-                        <div className="craft-thumb" aria-hidden>
-                          <svg
-                            viewBox="0 0 28 28"
-                            width="20"
-                            height="20"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                            opacity="0.3"
-                          >
-                            <rect x="4" y="4" width="20" height="20" rx="2" />
-                            <path d="M9 14h10M14 9v10" strokeLinecap="round" />
-                          </svg>
-                        </div>
-
-                        <div className="craft-name-info">
-                          <span
-                            className="craft-name-primary"
-                            title={recipe.component_name}
-                          >
-                            {displayName}
-                          </span>
-
-                          <span className="craft-name-sub">
-                            {subtitle}
-                            {hasVariants && (
-                              <span className="craft-variant-count">
-                                {variantCount} variants
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td className="craft-cell-type">
-                      <div className="craft-badge-row">
-                        {typeBadges.map((b) => (
-                          <span
-                            key={b}
-                            className={`craft-badge craft-badge--type-chip${
-                              b === "FPS" ? " craft-badge--fps" : ""
-                            }`}
-                          >
-                            {b}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-
-                    <td className="craft-cell-size">
-                      {sizeLabel ? (
-                        <span className="craft-badge craft-badge--size-chip">
-                          {sizeLabel}
-                        </span>
-                      ) : (
-                        <span className="craft-dash">—</span>
-                      )}
-                    </td>
-
-                    <td className="craft-cell-grade">
-                      {grade ? (
-                        <span
-                          className={`craft-badge craft-badge--grade${
-                            grade === "A" ? " craft-badge--grade-a" : ""
-                          }`}
-                        >
-                          {grade}
-                        </span>
-                      ) : (
-                        <span className="craft-dash">—</span>
-                      )}
-                    </td>
-
-                    <td className="craft-cell-class">
-                      {cls ? (
-                        <span className="craft-cell-subdued">{cls}</span>
-                      ) : (
-                        <span className="craft-dash">—</span>
-                      )}
-                    </td>
-
-                    <td className="craft-cell-action">
-                      <span
-                        className={`craft-btn-chevron${isOpen ? " craft-btn-chevron--open" : ""}`}
-                        aria-hidden
-                      >
-                        <svg
-                          viewBox="0 0 10 6"
-                          width="10"
-                          height="6"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M1 1l4 4 4-4" />
-                        </svg>
-                      </span>
-                    </td>
-                  </tr>
-
-                  {isOpen && (
-                    <tr className="craft-detail-row">
-                      <td colSpan={6}>
-                        <RecipeDrawer
-                          recipe={recipe}
-                          groupRecipes={group.recipes}
-                          baseDisplayName={displayName}
-                          inventoryEntries={inventoryEntries}
-                          materialTemplates={materialTemplates}
-                          onAddToQueue={onAddToQueue}
-                          isRecipeQueued={isRecipeQueued}
-                          isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
-                          onToggleBookmark={toggleBookmark}
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </Fragment>
-              );
-            })}
-
-            {paginated.length === 0 && (
-              <tr>
-                <td colSpan={6} className="craft-empty">
-                  No recipes match filters.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="craft-pagination">
-        <div className="craft-pagination-info">
-          {groupedRecipes.length > 0
-            ? `Showing ${startItem}–${endIdx} of ${groupedRecipes.length}`
-            : "No results"}
+        <div className="craft-result-head">
+          <span>Results</span>
+          <strong>{groupedRecipes.length}</strong>
         </div>
 
-        <div className="craft-pagination-controls">
-          <button
-            type="button"
-            className="craft-page-btn"
-            disabled={currentPage === 0}
-            onClick={() => setPage(currentPage - 1)}
-          >
-            Prev
-          </button>
+        <div className="craft-result-list">
+          {visibleRecipeGroups.map((group) => {
+            const recipe = group.recipes[0];
+            const selected = selectedGroup?.id === group.id;
+            const variantCount = group.recipes.length;
+            const typeBadges = getTypeBadges(recipe);
+            const sizeLabel = getSharedValue(group.recipes, (item) => formatSize(item.size));
+            const grade = getSharedValue(group.recipes, (item) => item.grade ?? null);
+            const cls = getSharedValue(group.recipes, (item) => item.class ?? null);
+            const saved = group.recipes.some((item) => bookmarkedRecipeIds.has(item.blueprint_id));
+            const queued = group.recipes.some((item) => isRecipeQueued(item));
 
-          <span className="craft-page-indicator">
-            {currentPage + 1} / {totalPages}
-          </span>
+            return (
+              <button
+                key={group.id}
+                ref={selected ? selectedCardRef : undefined}
+                type="button"
+                className={`craft-result-card${selected ? " craft-result-card--selected" : ""}`}
+                onClick={() => setSelectedGroupId(group.id)}
+              >
+                <span className="craft-result-name">{group.displayName}</span>
+                <span className="craft-result-sub">
+                  {getSubtitle(recipe)}
+                  {variantCount > 1 && ` / ${variantCount} variants`}
+                </span>
+                <span className="craft-result-chips">
+                  {sizeLabel && <span className="craft-mini-chip">{sizeLabel}</span>}
+                  {typeBadges.map((badge) => (
+                    <span key={badge} className="craft-mini-chip">{badge}</span>
+                  ))}
+                  {grade && <span className="craft-mini-chip">{grade}</span>}
+                  {cls && <span className="craft-mini-chip">{cls}</span>}
+                  {queued && <span className="craft-mini-chip craft-mini-chip--queue">Queued</span>}
+                  {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
+                </span>
+                <span className="craft-result-arrow" aria-hidden>&rsaquo;</span>
+              </button>
+            );
+          })}
 
-          <button
-            type="button"
-            className="craft-page-btn"
-            disabled={currentPage >= totalPages - 1}
-            onClick={() => setPage(currentPage + 1)}
-          >
-            Next
-          </button>
+          {groupedRecipes.length === 0 && (
+            <div className="craft-empty-card">
+              No recipes match filters.
+            </div>
+          )}
+
         </div>
 
-        
+        {hiddenRecipeCount > 0 && (
+          <div className="craft-result-footer">
+            Showing {visibleRecipeGroups.length} of {groupedRecipes.length}. Refine search or filters.
+          </div>
+        )}
+      </aside>
+
+      <div className="craft-selected-bridge-column" aria-hidden>
+        {selectedGroup && bridgeMetrics && (
+          <span
+            className="craft-selected-bridge"
+            style={
+              {
+                "--craft-bridge-top": `${bridgeMetrics.top}px`,
+                "--craft-bridge-height": `${bridgeMetrics.height}px`,
+              } as CSSProperties
+            }
+          />
+        )}
       </div>
-    </div>
+
+      {selectedGroup ? (
+        <RecipeDrawer
+          recipe={selectedGroup.recipes[0]}
+          groupRecipes={selectedGroup.recipes}
+          baseDisplayName={selectedGroup.displayName}
+          onAddToQueue={onAddToQueue}
+          isRecipeQueued={isRecipeQueued}
+          isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
+          onToggleBookmark={toggleBookmark}
+        />
+      ) : (
+        <section className="craft-detail-stage craft-detail-stage--empty">
+          <div className="craft-empty-card">Select a recipe to inspect material quality.</div>
+        </section>
+      )}
     </div>
   );
 }
