@@ -1,67 +1,89 @@
 /* ==========================================================================
    Recipe Browser / Crafting Planner — Obsidian Dark-Orange Theme
    ========================================================================== */
-
 /* 1. Tokens */
 :where(.craft-page, .craft-planner-shell) {
-  --craft-bg:            #050607;
-  --craft-shell:         #0a0d0f;
-  --craft-panel:         #11161a;
-  --craft-panel-2:       #151a1e;
-  --craft-card:          linear-gradient(180deg, #171c20 0%, #101417 100%);
-  --craft-card-soft:     linear-gradient(180deg, #14191d 0%, #0d1114 100%);
+  /* core green/gold palette */
+  --craft-bg:            #030605;
+  --craft-shell:         #070908;
+  --craft-panel:         #0b100d;
+  --craft-panel-2:       #10261f;
 
-  --craft-border:        rgba(255, 255, 255, 0.08);
-  --craft-border-strong: rgba(255, 255, 255, 0.14);
+  --craft-green-plane:   #10261f;
+  --craft-green-plane-2: #132c23;
+  --craft-green-dark:    #091410;
+  --craft-green-soft:    #1d3b2f;
 
-  --craft-orange:        #ff8a00;
-  --craft-orange-soft:   rgba(255, 138, 0, 0.32);
-  --craft-orange-dim:    rgba(255, 138, 0, 0.14);
-  --craft-orange-border: rgba(255, 138, 0, 0.85);
+  --craft-card:          linear-gradient(180deg, rgba(28, 33, 26, 0.96), rgba(10, 13, 10, 0.98));
+  --craft-card-soft:     linear-gradient(180deg, rgba(20, 28, 22, 0.98), rgba(7, 10, 8, 0.99));
 
-  --craft-text:          #f4f1ea;
-  --craft-muted:         rgba(244, 241, 234, 0.62);
-  --craft-faint:         rgba(244, 241, 234, 0.38);
+  --craft-border:        rgba(220, 215, 185, 0.12);
+  --craft-border-strong: rgba(220, 215, 185, 0.22);
 
-  --craft-good:          #38f5d0;
-  --craft-bad:           #ff4242;
+  --craft-orange:        #f59e0b;
+  --craft-orange-soft:   rgba(255, 145, 32, 0.28);
+  --craft-orange-dim:    rgba(255, 145, 32, 0.14);
+  --craft-orange-border: rgba(255, 145, 32, 0.62);
+
+  --craft-text:          #f5f3e8;
+  --craft-muted:         #a8aa9c;
+  --craft-faint:         #6f756b;
+
+  --craft-good:          #43ffd0;
+  --craft-bad:           #ff4d4f;
 
   --craft-shadow-lg:
-    0 22px 46px rgba(0, 0, 0, 0.52),
+    0 24px 56px rgba(0, 0, 0, 0.58),
     0 8px 18px rgba(0, 0, 0, 0.38),
     inset 0 1px 0 rgba(255, 255, 255, 0.045);
 
   --craft-shadow-md:
-    0 14px 28px rgba(0, 0, 0, 0.44),
+    0 14px 28px rgba(0, 0, 0, 0.42),
     0 4px 12px rgba(0, 0, 0, 0.34),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 
   /* legacy compat aliases */
   --craft-page-bg:          var(--craft-bg);
-  --craft-void-bg:          #020304;
-  --craft-sidebar-bg:       linear-gradient(180deg, #101418, #080b0d);
-  --craft-connected-bg:     #0f1317;
-  --craft-connected-bg-flat:#0f1317;
+  --craft-void-bg:          #020302;
+
+  --craft-sidebar-bg:
+    linear-gradient(180deg, rgba(7, 9, 8, 0.98), rgba(3, 6, 5, 0.98));
+
+  --craft-connected-bg:
+    radial-gradient(circle at 22% 28%, rgba(38, 78, 61, 0.35), transparent 34%),
+    linear-gradient(135deg, #132c23 0%, #10261f 45%, #091410 100%);
+
+  --craft-connected-bg-flat: #10261f;
+
   --craft-card-bg:          var(--craft-card);
-  --craft-card-bg-hover:    linear-gradient(180deg, #1c2228, #111619);
+
+  --craft-card-bg-hover:
+    linear-gradient(180deg, rgba(34, 42, 32, 0.98), rgba(12, 17, 13, 0.98));
+
   --craft-border-muted:     var(--craft-border);
   --craft-border-soft:      var(--craft-border-strong);
-  --craft-orange-hot:       #ffaa33;
-  --craft-orange-glow:      rgba(255, 138, 0, 0.22);
-  --craft-teal:             #38f5d0;
-  --craft-teal-soft:        rgba(56, 245, 208, 0.28);
+
+  --craft-orange-hot:       #ff9f1c;
+  --craft-orange-glow:      rgba(255, 145, 32, 0.22);
+
+  --craft-teal:             var(--craft-good);
+  --craft-teal-soft:        rgba(67, 255, 208, 0.18);
+
   --craft-text-main:        var(--craft-text);
   --craft-text-muted:       var(--craft-muted);
   --craft-text-dim:         var(--craft-faint);
-  --craft-common:           #38f5d0;
+
+  --craft-common:           #43ffd0;
   --craft-rare:             #7dd3fc;
   --craft-epic:             #c8a3ff;
   --craft-legendary:        #ffd36a;
+
   --craft-shadow:           var(--craft-shadow-lg);
   --craft-shadow-card:      var(--craft-shadow-md);
   --craft-inset-highlight:  inset 0 1px 0 rgba(255, 255, 255, 0.045);
-  --craft-gold-border:      rgba(255, 138, 0, 0.85);
-  --craft-panel-border:     rgba(255, 138, 0, 0.85);
+
+  --craft-gold-border:      rgba(255, 145, 32, 0.62);
+  --craft-panel-border:     rgba(255, 145, 32, 0.62);
 
   --craft-sidebar-width:  247px;
   --craft-bridge-width:   8px;

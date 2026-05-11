@@ -13,6 +13,7 @@
   --bq-amber:      #f59e0b;
   --bq-red:        #f87171;
   --bq-violet:     #a78bfa;
+  --bq-border:     rgba(255,138,0);
 
   padding: 0.75rem 1rem;
   font-family: var(--font-primary);
@@ -23,6 +24,9 @@
 
 .bq-page{
   background: #0f1317;
+  border: 1px solid var(--bq-border);
+  border-radius: 9px;
+  padding: 34px 39px;
 }
 
 .bq-page *, .bq-page *::before, .bq-page *::after {
