@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import '../../components/logistics/logistics.css';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
