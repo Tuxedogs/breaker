@@ -132,6 +132,8 @@ export default function BuildQueuePage() {
       {/* Stat Rail */}
       
 
+      <div className="bq-main">
+
       {/* Shortage Panel */}
       <div className="bq-shortage-panel">
         <div className="bq-shortage-panel-head">
@@ -204,28 +206,32 @@ export default function BuildQueuePage() {
         )}
       </div>
 
-      {categories.length === 0 ? (
-        <div className="bq-empty-state">No builds queued yet.</div>
-      ) : categories.map((category) => (
-        <BuildQueueGroup
-          key={category}
-          category={category}
-          items={grouped[category] ?? []}
-          recipes={recipes}
-          recipeInputsByRecipeId={recipeInputsByRecipeId}
-          buildQueue={buildQueue}
-          inventory={inventoryEntries}
-          materials={materials}
-          locations={locations}
-          strategy={sourceStrategy}
-          onQuantityChange={updateBuildQueueItemQuantity}
-          onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
-          onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
-          onRemove={removeBuildQueueItem}
-          onToggleAllocation={toggleBuildQueueAllocation}
-          onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
-        />
-      ))}
+      <>
+        {categories.length === 0 ? (
+          <div className="bq-empty-state">No builds queued yet.</div>
+        ) : categories.map((category) => (
+          <BuildQueueGroup
+            key={category}
+            category={category}
+            items={grouped[category] ?? []}
+            recipes={recipes}
+            recipeInputsByRecipeId={recipeInputsByRecipeId}
+            buildQueue={buildQueue}
+            inventory={inventoryEntries}
+            materials={materials}
+            locations={locations}
+            strategy={sourceStrategy}
+            onQuantityChange={updateBuildQueueItemQuantity}
+            onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
+            onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
+            onRemove={removeBuildQueueItem}
+            onToggleAllocation={toggleBuildQueueAllocation}
+            onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
+          />
+        ))}
+      </>
+
+      </div>
     </div>
   );
 }
