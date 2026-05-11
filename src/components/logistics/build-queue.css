@@ -804,6 +804,7 @@
   display: grid;
   align-items: center;
   min-width: 0px;
+  
 }
 
 .bq-page .bq-mat-head > *,
@@ -812,10 +813,18 @@
   overflow: hidden;
 }
 
+/*row width is determined here*/
 .bq-page .bq-mat-head,
 .bq-page .bq-mat-row {
-  grid-template-columns: 5rem 4rem 3.5rem 7rem 4.5rem 4.5rem 4.5rem;
-  gap: 6.5rem;
+  grid-template-columns: 
+    5rem /* material name */
+    3.2rem /* stat */
+    3.5rem /* quality */
+    15rem /* modifier */
+    4.5rem /* available */
+    4.5rem /* needed */
+    4.5rem /* reserve */;
+  gap: 5.5rem;
 }
 
 .bq-mat-head {
@@ -850,7 +859,8 @@
   padding: 0.32rem 0.7rem 0.32rem 0.9rem;
   min-height: 44px;
   color: rgba(203,213,225,0.82);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
+  font-weight: 500;
 }
 
 .bq-mat-row > span {
