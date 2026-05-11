@@ -47,6 +47,62 @@
     inset 0 1px 0 rgba(255,255,255,0.045);
 }
 
+.bq-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.52rem;
+  margin-bottom: 0.7rem;
+}
+
+.bq-summary-card {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  min-height: 76px;
+  padding: 0.58rem 0.62rem;
+  border: 1px solid var(--bq-edge);
+  border-radius: 7px;
+  background: linear-gradient(180deg, rgba(21,27,30,0.94), rgba(10,14,16,0.96));
+  box-shadow:
+    0 12px 24px rgba(0,0,0,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.bq-summary-card span {
+  color: var(--bq-sub);
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-summary-card strong {
+  color: var(--bq-text);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bq-summary-card em {
+  color: var(--bq-dim);
+  font-size: 0.64rem;
+  font-style: normal;
+  line-height: 1.15;
+}
+
+.bq-summary-card--danger strong {
+  color: var(--bq-red);
+}
+
+.bq-summary-card--success strong {
+  color: var(--bq-cyan);
+}
+
 .logi-rarity--legendary {
   --logi-rarity-accent: var(--rarity-legendary);
   --logi-rarity-accent-border: rgba(var(--rarity-legendary-rgb), 0.36);
@@ -1147,6 +1203,9 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 860px) {
+  .bq-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .bq-item {
     grid-template-columns: 1fr;
   }
@@ -1164,6 +1223,7 @@
 
 @media (max-width: 640px) {
   .bq-page { padding: 0.5rem; }
+  .bq-summary-grid { grid-template-columns: 1fr; }
   .bq-stat-rail { grid-template-columns: 1fr; }
   .bq-stats { justify-content: flex-start; }
   .bq-coverage { grid-template-columns: auto 1fr; }
