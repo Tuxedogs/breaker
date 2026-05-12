@@ -5,6 +5,7 @@ import { getBuildQueueItemInputs } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 import type { Shortage } from '../../lib/logistics/shortages';
 import { useLogisticsStore } from '../../stores/logisticsStore';
+import MaterialIcon from '../../components/logistics/MaterialIcon';
 
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/build-queue.css';
@@ -229,7 +230,10 @@ export default function BuildQueuePage() {
           <div className="bq-ledger-title">Material Breakdown</div>
           {groupedShortages.map((group) => (
             <div className="bq-ledger-stat bq-ledger-stat--danger" key={`ledger:${group.key}`}>
-              <span>{group.displayName}</span>
+              <span className="bq-material-name-cell">
+                <MaterialIcon materialName={group.displayName} size={17} />
+                <span>{group.displayName}</span>
+              </span>
               <strong>{formatSummaryNumber(group.unitGroups.reduce((sum, unitGroup) => sum + unitGroup.shortfall, 0))}</strong>
             </div>
           ))}
