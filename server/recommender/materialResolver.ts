@@ -10,12 +10,24 @@ function compactMaterialKey(value: string | undefined): string {
 }
 
 const MATERIAL_ALIASES = new Map<string, string>([
+  ["93c8b7dfd6ac4b4fa115b0e3afc238b8", "beryl"],
+  ["f386a33cac9a400aa7b8fe1fc7c8d270", "iron"],
+  ["8cd317a3df9b43158ac30f1fca42dfd4", "stileron"],
+  ["6426f04e2f7d4c8ea61564aa582eaa31", "savrilium"],
   ["quantanium", "quantanium"],
   ["quantainium", "quantanium"],
+  ["savrilium", "savrilium"],
+  ["savrillium", "savrilium"],
+  ["savrilum", "savrilium"],
+  ["hephaestonite", "hephaestanite"],
+  ["hephaestanite", "hephaestanite"],
+  ["hephaestonice", "hephaestanite"],
 ]);
 
 const CANONICAL_DISPLAY_NAMES = new Map<string, string>([
   ["quantanium", "Quantanium"],
+  ["savrilium", "Savrilium"],
+  ["hephaestanite", "Hephaestonite"],
 ]);
 
 function materialAliasVariants(canonicalKey: string): string[] {

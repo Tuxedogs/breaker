@@ -2,6 +2,8 @@ import type { AggregatedRequirement, RequirementInput, RecommenderWarning } from
 import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver";
 import { addWarning } from "./recommenderWarnings";
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export function aggregateRequirements(
   requirements: RequirementInput[],
   warnings: RecommenderWarning[],
@@ -9,14 +11,28 @@ export function aggregateRequirements(
   const byMaterial = new Map<string, AggregatedRequirement>();
 
   for (const requirement of requirements) {
-    const materialKey = requirement.materialKey?.trim() || requirement.materialId?.trim() || requirement.slug?.trim() || requirement.materialName?.trim();
-    const materialId = requirement.materialId?.trim() || materialKey;
-    const inputDisplayName = requirement.displayName?.trim() || requirement.materialName?.trim() || materialId;
+    const rawMaterialKey = requirement.materialKey?.trim() || requirement.materialId?.trim() || requirement.slug?.trim() || requirement.materialName?.trim();
+    const inputDisplayName = requirement.displayName?.trim() || requirement.materialName?.trim() || requirement.materialId?.trim() || rawMaterialKey;
+    const rawMaterialKeyResolved = UUID_PATTERN.test(rawMaterialKey ?? "") && inputDisplayName && !UUID_PATTERN.test(inputDisplayName)
+      ? inputDisplayName
+      : rawMaterialKey;
+    const rawMaterialId = requirement.materialId?.trim();
+    const rawMaterialIdResolved = UUID_PATTERN.test(rawMaterialId ?? "") && inputDisplayName && !UUID_PATTERN.test(inputDisplayName)
+      ? inputDisplayName
+      : rawMaterialId || rawMaterialKeyResolved;
+    const materialKey = canonicalMaterialKey(rawMaterialKeyResolved);
+    const materialId = canonicalMaterialKey(rawMaterialIdResolved);
     const canonicalDisplayName = canonicalMaterialDisplayName(inputDisplayName);
-    const displayName = canonicalMaterialKey(inputDisplayName) === "quantanium" ? canonicalDisplayName : inputDisplayName;
-    const materialName = canonicalMaterialKey(requirement.materialName ?? displayName) === "quantanium"
-      ? canonicalDisplayName
-      : requirement.materialName?.trim() || displayName;
+    const displayName = canonicalDisplayName || inputDisplayName;
+    const materialName = canonicalMaterialDisplayName(requirement.materialName ?? displayName) || displayName;
+    if (UUID_PATTERN.test(rawMaterialKey ?? "") && materialKey === rawMaterialKey?.replace(/[^a-z0-9]/gi, "").toLowerCase()) {
+      addWarning(warnings, {
+        code: "requirement_material_uuid_unresolved",
+        message: `Mining requirement used an unresolved material UUID (${rawMaterialKey}); display may be incomplete.`,
+        materialId,
+        materialName: displayName,
+      });
+    }
     if (!materialKey || !materialId || !materialName || !displayName) {
       addWarning(warnings, {
         code: "requirement_missing_material",

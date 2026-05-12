@@ -195,7 +195,7 @@ export interface PublicLocationEntry {
     materialName: string;
     displayName: string;
     selectedQuality?: number;
-    qualityRouteScore: number;
+    qualityRouteScore: number | null;
     yieldRouteScore: number;
     demandMatchScore: number;
     overallTargetabilityScore: number;
@@ -207,11 +207,33 @@ export interface PublicLocationEntry {
       reason?: string;
     }>;
     signals: {
-      qualityFit: number;
+      qualityFit: number | null;
       yieldPotential: number;
       sourceWeight: number;
       routeTargetability: number;
       competingSources?: number;
+      materialName?: string;
+      canonicalMaterialName?: string;
+      locationName?: string;
+      qualityChance?: number | null;
+      qualityIgnored?: boolean;
+      compositionScore?: number | null;
+      encounterScore?: number | null;
+      proxyEncounterScore?: boolean;
+      recommendationScore?: number;
+      selectedQuality?: number;
+      thresholdChance?: number | null;
+      compositionAverage?: number | null;
+      compositionMax?: number | null;
+      probability?: number | null;
+      groupProbability?: number | null;
+      relativeProbability?: number | null;
+      materialProbability?: number | null;
+      sourceStrength?: number | null;
+      sourceRowCount?: number;
+      confidence?: number;
+      missingComponents?: string[];
+      sourceFieldsUsed?: string[];
     };
   }>;
   requiredMaterials?: Array<{

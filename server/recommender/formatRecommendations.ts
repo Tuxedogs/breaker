@@ -1,5 +1,6 @@
 import type { AggregatedRequirement, ApiSource, MaterialRouteScore, Recommendation, RouteTargetabilityLabel, ScoredLocation } from "./recommender.types";
 import { formatRequirementQuantity } from "../shared/quantityFormatter";
+import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver";
 
 function spawnTypeLabel(spawnType: string): string {
   const normalized = spawnType.toLowerCase();
@@ -19,12 +20,48 @@ function roundScore(value: number): number {
   return Math.round(clampScore(value));
 }
 
+function percentSignal(value: unknown): number | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
+  return clampScore(value <= 1 ? value * 100 : value);
+}
+
+function selectedQualityScore(source: ApiSource, selectedQuality: number | undefined): number | undefined {
+  if (selectedQuality === undefined) return undefined;
+  return percentSignal(source.quality?.thresholdChances?.[String(selectedQuality)]);
+}
+
+function sourceStrengthScore(source: ApiSource): number {
+  const overall = percentSignal(source.overallScore);
+  if (overall !== undefined) return overall;
+
+  const probability = percentSignal(source.probability) ?? 0;
+  const relativeProbability = percentSignal(source.relativeProbability) ?? 0;
+  const groupProbability = percentSignal(source.groupProbability) ?? 0;
+  const materialProbability = percentSignal(source.materialProbability) ?? 0;
+
+  return clampScore(
+    probability * 0.35 +
+      relativeProbability * 0.3 +
+      groupProbability * 0.2 +
+      materialProbability * 0.15,
+  );
+}
+
 function labelForScore(score: number): RouteTargetabilityLabel {
   if (score >= 85) return "Excellent";
   if (score >= 70) return "Strong";
   if (score >= 50) return "Good";
   if (score >= 30) return "Weak";
   return "Poor";
+}
+
+function qualityMatters(requirement: AggregatedRequirement, source: ApiSource): boolean {
+  return canonicalMaterialKey(
+    source.canonicalMaterialName ??
+      source.materialName ??
+      requirement.displayName ??
+      requirement.materialName,
+  ) !== "quantanium";
 }
 
 function compositionAverage(source: ApiSource): number | undefined {
@@ -51,45 +88,235 @@ function sourceBelongsToRequirement(source: ApiSource, requirement: AggregatedRe
   });
 }
 
-function rawQualityRouteScore(source: ApiSource, requirement: AggregatedRequirement): number {
-  const thresholdChance = requirement.selectedQuality !== undefined
-    ? source.quality?.thresholdChances?.[String(requirement.selectedQuality)]
-    : undefined;
-  const thresholdSignal = typeof thresholdChance === "number" ? thresholdChance * 100 : undefined;
-  const meanSignal = typeof source.quality?.mean === "number" ? source.quality.mean : undefined;
-  const maxSignal = typeof source.quality?.max === "number" ? source.quality.max : undefined;
-  const potentialSignal = typeof source.estimatedHighQualityPotential === "number"
-    ? source.estimatedHighQualityPotential
-    : undefined;
-  const tierSignal = source.quality?.qualityTier
-    ? ({ poor: 20, low: 35, common: 45, average: 50, good: 65, high: 78, excellent: 90, pristine: 96 }[source.quality.qualityTier.toLowerCase()] ?? 55)
-    : undefined;
-  const signals = [thresholdSignal, meanSignal, maxSignal, potentialSignal, tierSignal]
-    .filter((value): value is number => typeof value === "number" && Number.isFinite(value));
-  if (signals.length === 0) return 50;
-  return signals.reduce((sum, value) => sum + value, 0) / signals.length;
+type SignalScore = {
+  score: number | null;
+  fieldsUsed: string[];
+  missingComponents: string[];
+};
+
+type QualitySignal = SignalScore & {
+  ignored: boolean;
+  thresholdChance: number | null;
+};
+
+type EncounterSignal = SignalScore & {
+  proxy: boolean;
+};
+
+function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): QualitySignal {
+  if (!qualityMatters(requirement, source)) {
+    return {
+      score: null,
+      ignored: true,
+      thresholdChance: null,
+      fieldsUsed: [],
+      missingComponents: [],
+    };
+  }
+
+  const thresholdChance = selectedQualityScore(source, requirement.selectedQuality);
+  if (thresholdChance === undefined) {
+    return {
+      score: null,
+      ignored: false,
+      thresholdChance: null,
+      fieldsUsed: [],
+      missingComponents: ["quality.thresholdChances[selectedQuality]"],
+    };
+  }
+
+  return {
+    score: thresholdChance,
+    ignored: false,
+    thresholdChance,
+    fieldsUsed: ["quality.thresholdChances[selectedQuality]"],
+    missingComponents: [],
+  };
 }
 
-function rawYieldRouteScore(source: ApiSource): number {
-  const composition = compositionAverage(source) ?? 0;
-  const upside = source.composition?.maxPercentage ?? composition;
-  const probability = source.probability ?? 0;
-  const relativeProbability = source.relativeProbability ?? 0;
-  const materialProbability = source.materialProbability ?? 0;
-  const groupProbability = source.groupProbability ?? 0;
-  const sourceWeight = source.overallScore ?? probability + (relativeProbability / 100) + materialProbability + (groupProbability / 100);
-  return (sourceWeight * 35) + (composition * 0.4) + (upside * 0.15) + (relativeProbability * 0.25);
+function compositionSignal(source: ApiSource): SignalScore & { average: number | null; max: number | null } {
+  const average = percentSignal(compositionAverage(source));
+  const max = percentSignal(source.composition?.maxPercentage);
+  const fieldsUsed: string[] = [];
+  const missingComponents: string[] = [];
+
+  if (average !== undefined) fieldsUsed.push("composition.averagePercentage");
+  else missingComponents.push("composition.averagePercentage");
+  if (max !== undefined) fieldsUsed.push("composition.maxPercentage");
+  else missingComponents.push("composition.maxPercentage");
+
+  if (average === undefined && max === undefined) {
+    return { score: null, average: null, max: null, fieldsUsed, missingComponents };
+  }
+
+  return {
+    score: clampScore((average ?? 0) * 0.65 + (max ?? 0) * 0.35),
+    average: average ?? null,
+    max: max ?? null,
+    fieldsUsed,
+    missingComponents,
+  };
+}
+
+function sourceRowCountScore(sourceRowCount: number): number {
+  return clampScore((Math.min(sourceRowCount, 5) / 5) * 100);
+}
+
+function encounterSignal(source: ApiSource, sourceRowCount: number): EncounterSignal {
+  const weightedSignals: Array<{ value: number | undefined; weight: number; field: string }> = [
+    { value: percentSignal(source.probability), weight: 0.35, field: "probability" },
+    { value: percentSignal(source.relativeProbability), weight: 0.35, field: "relativeProbability" },
+    { value: percentSignal(source.groupProbability), weight: 0.2, field: "groupProbability" },
+    { value: sourceRowCountScore(sourceRowCount), weight: 0.1, field: "sourceRowCount" },
+  ];
+
+  let score = 0;
+  const fieldsUsed: string[] = [];
+  const missingComponents: string[] = [];
+  for (const signal of weightedSignals) {
+    if (signal.value === undefined) {
+      missingComponents.push(signal.field);
+      continue;
+    }
+    score += signal.value * signal.weight;
+    fieldsUsed.push(signal.field);
+  }
+
+  if (fieldsUsed.length === 0) {
+    return { score: null, proxy: true, fieldsUsed, missingComponents };
+  }
+
+  return {
+    score: clampScore(score),
+    proxy: true,
+    fieldsUsed,
+    missingComponents,
+  };
+}
+
+function confidenceScore(signals: Array<SignalScore | QualitySignal | EncounterSignal>): number {
+  const used = signals.reduce((total, signal) => total + signal.fieldsUsed.length, 0);
+  const missing = signals.reduce((total, signal) => total + signal.missingComponents.length, 0);
+  if (used + missing === 0) return 0;
+  return roundScore((used / (used + missing)) * 100);
+}
+
+function recommendationScore(
+  encounter: number | null,
+  quality: QualitySignal,
+  confidence: number,
+): number {
+  const encounterScore = encounter ?? 0;
+  if (quality.ignored) {
+    return clampScore(encounterScore * 0.85 + confidence * 0.15);
+  }
+
+  return clampScore(encounterScore * 0.6 + (quality.score ?? 0) * 0.25 + confidence * 0.15);
+}
+
+function buildRouteSignals(
+  source: ApiSource,
+  requirement: AggregatedRequirement,
+  sourceRowCount: number,
+): {
+  quality: QualitySignal;
+  composition: ReturnType<typeof compositionSignal>;
+  encounter: EncounterSignal;
+  confidence: number;
+  recommendation: number;
+  missingComponents: string[];
+  sourceFieldsUsed: string[];
+  sourceStrength: number;
+} {
+  const quality = qualitySignal(source, requirement);
+  const composition = compositionSignal(source);
+  const encounter = encounterSignal(source, sourceRowCount);
+  const sourceStrength = sourceStrengthScore(source);
+  const confidence = confidenceScore([quality, composition, encounter]);
+  const recommendation = recommendationScore(encounter.score, quality, confidence);
+  const sourceFieldsUsed = Array.from(new Set([
+    ...quality.fieldsUsed,
+    ...composition.fieldsUsed,
+    ...encounter.fieldsUsed,
+  ]));
+  const missingComponents = Array.from(new Set([
+    ...quality.missingComponents,
+    ...composition.missingComponents,
+    ...encounter.missingComponents,
+  ]));
+
+  return {
+    quality,
+    composition,
+    encounter,
+    confidence,
+    recommendation,
+    missingComponents,
+    sourceFieldsUsed,
+    sourceStrength,
+  };
+}
+
+function routeCanonicalMaterialName(source: ApiSource, requirement: AggregatedRequirement): string {
+  return canonicalMaterialDisplayName(source.canonicalMaterialName ?? source.materialName ?? requirement.displayName);
+}
+
+function routeSourceRowCount(location: ScoredLocation, requirement: AggregatedRequirement): number {
+  return Math.max(1, location.bestSources.filter((source) => sourceBelongsToRequirement(source, requirement)).length);
+}
+
+function routeSignalsPayload(args: {
+  source: ApiSource;
+  requirement: AggregatedRequirement;
+  locationName: string;
+  qualityRouteScore: number | null;
+  yieldRouteScore: number;
+  overallTargetabilityScore: number;
+  competingSources: number;
+  sourceRowCount: number;
+  built: ReturnType<typeof buildRouteSignals>;
+}): MaterialRouteScore["signals"] {
+  const { source, requirement, locationName, qualityRouteScore, yieldRouteScore, overallTargetabilityScore, competingSources, built } = args;
+  return {
+    qualityFit: qualityRouteScore,
+    yieldPotential: yieldRouteScore,
+    sourceWeight: roundScore(built.sourceStrength),
+    routeTargetability: overallTargetabilityScore,
+    competingSources,
+    materialName: requirement.displayName,
+    canonicalMaterialName: routeCanonicalMaterialName(source, requirement),
+    locationName,
+    qualityChance: built.quality.score,
+    qualityIgnored: built.quality.ignored,
+    compositionScore: built.composition.score,
+    encounterScore: built.encounter.score,
+    proxyEncounterScore: built.encounter.proxy,
+    recommendationScore: overallTargetabilityScore,
+    selectedQuality: requirement.selectedQuality,
+    thresholdChance: built.quality.thresholdChance,
+    compositionAverage: built.composition.average,
+    compositionMax: built.composition.max,
+    probability: percentSignal(source.probability) ?? null,
+    groupProbability: percentSignal(source.groupProbability) ?? null,
+    relativeProbability: percentSignal(source.relativeProbability) ?? null,
+    materialProbability: percentSignal(source.materialProbability) ?? null,
+    sourceStrength: roundScore(built.sourceStrength),
+    sourceRowCount: args.sourceRowCount,
+    confidence: built.confidence,
+    missingComponents: built.missingComponents,
+    sourceFieldsUsed: built.sourceFieldsUsed,
+  };
 }
 
 function makeReasons(route: {
-  qualityRouteScore: number;
+  qualityRouteScore: number | null;
   yieldRouteScore: number;
   demandMatchScore: number;
   competingSources: number;
 }): string[] {
   const reasons: string[] = [];
-  if (route.qualityRouteScore >= 70) reasons.push("higher quality fit");
-  if (route.yieldRouteScore >= 70) reasons.push("better source weighting");
+  if (route.qualityRouteScore !== null && route.qualityRouteScore >= 70) reasons.push("higher quality fit");
+  if (route.yieldRouteScore >= 70) reasons.push("better encounter opportunity");
   if (route.yieldRouteScore >= 55) reasons.push("stronger composition/yield signals");
   if (route.demandMatchScore >= 70) reasons.push("better demand coverage");
   if (route.competingSources <= 2) reasons.push("fewer competing sources");
@@ -132,12 +359,13 @@ function specialSignalsForSource(source: ApiSource): MaterialRouteScore["special
 function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, MaterialRouteScore[]> {
   type RawRoute = {
     locationKey: string;
+    locationName: string;
     requirement: AggregatedRequirement;
     source: ApiSource;
-    rawQuality: number;
-    rawYield: number;
+    signals: ReturnType<typeof buildRouteSignals>;
     rawDemand: number;
     competingSources: number;
+    sourceRowCount: number;
   };
 
   const rawRoutes: RawRoute[] = [];
@@ -152,34 +380,34 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
     for (const requirement of location.coveredRequirements) {
       const source = location.bestSources.find((entry) => sourceBelongsToRequirement(entry, requirement)) ?? location.bestSources[0];
       if (!source) continue;
+      const sourceRowCount = routeSourceRowCount(location, requirement);
+      const signals = buildRouteSignals(source, requirement, sourceRowCount);
       rawRoutes.push({
         locationKey: location.locationKey,
+        locationName: location.locationName,
         requirement,
         source,
-        rawQuality: rawQualityRouteScore(source, requirement),
-        rawYield: rawYieldRouteScore(source),
+        signals,
         rawDemand: Math.log10(requirement.requiredQuantity + 10) * 25,
         competingSources: sourceCounts.get(requirement.materialKey) ?? 1,
+        sourceRowCount,
       });
     }
   }
 
-  const maxByMaterial = new Map<string, { quality: number; yield: number; demand: number }>();
+  const maxDemandByMaterial = new Map<string, number>();
   for (const route of rawRoutes) {
-    const current = maxByMaterial.get(route.requirement.materialKey) ?? { quality: 0, yield: 0, demand: 0 };
-    current.quality = Math.max(current.quality, route.rawQuality);
-    current.yield = Math.max(current.yield, route.rawYield);
-    current.demand = Math.max(current.demand, route.rawDemand);
-    maxByMaterial.set(route.requirement.materialKey, current);
+    const currentDemand = maxDemandByMaterial.get(route.requirement.materialKey) ?? 0;
+    maxDemandByMaterial.set(route.requirement.materialKey, Math.max(currentDemand, route.rawDemand));
   }
 
   const byLocation = new Map<string, MaterialRouteScore[]>();
   for (const route of rawRoutes) {
-    const max = maxByMaterial.get(route.requirement.materialKey) ?? { quality: 100, yield: 100, demand: 100 };
-    const qualityRouteScore = roundScore(max.quality > 0 ? (route.rawQuality / max.quality) * 100 : 0);
-    const yieldRouteScore = roundScore(max.yield > 0 ? (route.rawYield / max.yield) * 100 : 0);
-    const demandMatchScore = roundScore(max.demand > 0 ? (route.rawDemand / max.demand) * 100 : 0);
-    const overallTargetabilityScore = roundScore((qualityRouteScore * 0.35) + (yieldRouteScore * 0.45) + (demandMatchScore * 0.2));
+    const maxDemand = maxDemandByMaterial.get(route.requirement.materialKey) ?? 0;
+    const qualityRouteScore = route.signals.quality.score === null ? null : roundScore(route.signals.quality.score);
+    const yieldRouteScore = roundScore(route.signals.composition.score ?? 0);
+    const demandMatchScore = roundScore(maxDemand > 0 ? (route.rawDemand / maxDemand) * 100 : 0);
+    const overallTargetabilityScore = roundScore(route.signals.recommendation);
     const score: MaterialRouteScore = {
       materialKey: route.requirement.materialKey,
       materialId: route.requirement.materialId,
@@ -193,13 +421,17 @@ function buildMaterialRouteScores(locations: ScoredLocation[]): Map<string, Mate
       label: labelForScore(overallTargetabilityScore),
       reasons: makeReasons({ qualityRouteScore, yieldRouteScore, demandMatchScore, competingSources: route.competingSources }),
       specialSignals: specialSignalsForSource(route.source),
-      signals: {
-        qualityFit: qualityRouteScore,
-        yieldPotential: yieldRouteScore,
-        sourceWeight: roundScore(route.source.overallScore ? route.source.overallScore * 100 : route.rawYield),
-        routeTargetability: overallTargetabilityScore,
+      signals: routeSignalsPayload({
+        source: route.source,
+        requirement: route.requirement,
+        locationName: route.locationName,
+        qualityRouteScore,
+        yieldRouteScore,
+        overallTargetabilityScore,
         competingSources: route.competingSources,
-      },
+        sourceRowCount: route.sourceRowCount,
+        built: route.signals,
+      }),
     };
     const list = byLocation.get(route.locationKey) ?? [];
     list.push(score);

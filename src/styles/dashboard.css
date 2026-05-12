@@ -518,6 +518,21 @@
   min-height: 0;
 }
 
+.dash-content-frame > .mine-page--v2 {
+  height: calc(100vh - var(--dash-topbar-h, 52px));
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+@media (max-width: 760px) {
+  .dash-content-frame > .mine-page--v2 {
+    height: auto;
+    overflow: visible;
+    min-height: 100%;
+  }
+}
+
 .dash-content-grid {
   display: grid;
   grid-template-columns: 1fr 280px;

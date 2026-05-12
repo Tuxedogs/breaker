@@ -14,6 +14,11 @@ import type {
   PublicLocationEntry,
   RequiredMaterial,
 } from "../../../features/mining/types";
+import {
+  canonicalMiningMaterial,
+  canonicalMiningMaterialKey,
+  canonicalMiningMaterialName,
+} from "../../../features/mining/materialIdentity";
 import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
@@ -117,20 +122,17 @@ function isRefinableMaterial(material: unknown): boolean {
 }
 
 function materialKeyOf(material: Pick<RequiredMaterial, "materialKey" | "materialId">): string {
-  return material.materialKey ?? material.materialId;
-}
-
-function materialDisplayName(material: Pick<RequiredMaterial, "displayName" | "materialName" | "materialId">): string {
-  return material.displayName ?? material.materialName ?? material.materialId;
+  return canonicalMiningMaterial({ materialKey: material.materialKey, materialId: material.materialId }).key;
 }
 
 function findRouteScoreForMaterial(entry: PublicLocationEntry, materialKey: string | null | undefined) {
   if (!materialKey) return null;
+  const selectedKey = canonicalMiningMaterialKey(materialKey);
   return (entry.routeScores ?? []).find((score) =>
-    score.materialKey === materialKey ||
-    score.materialId === materialKey ||
-    score.materialName === materialKey ||
-    score.displayName === materialKey
+    canonicalMiningMaterialKey(score.materialKey) === selectedKey ||
+    canonicalMiningMaterialKey(score.materialId) === selectedKey ||
+    canonicalMiningMaterialKey(score.materialName) === selectedKey ||
+    canonicalMiningMaterialKey(score.displayName) === selectedKey
   ) ?? null;
 }
 
@@ -156,13 +158,25 @@ function compareLocationsByRecommendationScore(left: PublicLocationEntry, right:
     left.locationName.localeCompare(right.locationName);
 }
 
-function scoreToneClass(label?: string, score?: number): string {
+function getLocationCardKey(entry: PublicLocationEntry): string {
+  return [
+    entry.locationKey,
+    (entry as { locationId?: string }).locationId,
+    (entry as { sourceLocationId?: string }).sourceLocationId,
+    (entry as { systemLocationId?: string }).systemLocationId,
+    entry.systemName,
+    entry.locationName,
+    entry.spawnType,
+  ].filter(Boolean).join(":");
+}
+
+function scoreToneClass(label?: string, score?: number | null): string {
   const normalized = label?.toLowerCase();
   if (normalized === "excellent" || normalized === "strong") return "mloc-score--best";
   if (normalized === "good") return "mloc-score--good";
   if (normalized === "weak") return "mloc-score--okay";
   if (normalized === "poor") return "mloc-score--poor";
-  if (score === undefined) return "";
+  if (score === undefined || score === null) return "";
   if (score >= 80) return "mloc-score--best";
   if (score >= 60) return "mloc-score--good";
   if (score >= 35) return "mloc-score--okay";
@@ -189,7 +203,7 @@ function locationMatchesMaterialKey(
   materialKey: string,
   indexedMaterialKeysByLocationKey: Map<string, string[]>,
 ): boolean {
-  return (indexedMaterialKeysByLocationKey.get(location.locationKey) ?? []).includes(materialKey);
+  return (indexedMaterialKeysByLocationKey.get(location.locationKey) ?? []).includes(canonicalMiningMaterialKey(materialKey));
 }
 
 function diversifyLocationsByMaterials(
@@ -223,8 +237,8 @@ function diversifyLocationsByMaterials(
 // ── Load state ────────────────────────────────────────────────────────────────
 
 type LoadState =
-  | { status: "loading" }
-  | { status: "error"; message: string }
+  | { status: "loading"; data?: RecommendationResponse }
+  | { status: "error"; message: string; data?: RecommendationResponse }
   | { status: "ok"; data: RecommendationResponse };
 
 // ── Lagrange children summary ─────────────────────────────────────────────────
@@ -315,7 +329,10 @@ function LocationListItem({
   };
 
   const demandBar = totalRelevant > 0 ? coveragePct : null;
-  const qualityVal = displayRouteScore?.qualityRouteScore ?? null;
+  const listQualityDisplay = buildQualityDisplay(
+    displayRouteScore?.signals,
+    displayRouteScore?.materialKey ?? displayRouteScore?.materialId ?? "",
+  );
   const yieldVal = displayRouteScore?.yieldRouteScore ?? null;
 
   return (
@@ -346,7 +363,7 @@ function LocationListItem({
         <div className="mlist-item-bars">
           {demandBar !== null && (
             <div className="mlist-bar-row">
-              <span className="mlist-bar-label">Demand</span>
+              <span className="mlist-bar-label">Coverage</span>
               <div className="mlist-bar-track">
                 <div
                   className={`mlist-bar-fill${demandBar >= 100 ? " mlist-bar-fill--full" : demandBar >= 60 ? " mlist-bar-fill--good" : ""}`}
@@ -356,16 +373,12 @@ function LocationListItem({
               <span className="mlist-bar-val">{demandBar}%</span>
             </div>
           )}
-          {qualityVal !== null && (
+          {listQualityDisplay.kind !== "none" && (
             <div className="mlist-bar-row">
               <span className="mlist-bar-label">Quality</span>
-              <div className="mlist-bar-track">
-                <div
-                  className={`mlist-bar-fill${qualityVal >= 75 ? " mlist-bar-fill--best" : qualityVal >= 55 ? " mlist-bar-fill--good" : ""}`}
-                  style={{ width: `${Math.min(100, qualityVal)}%` }}
-                />
-              </div>
-              <span className="mlist-bar-val">{qualityVal}</span>
+              <span className="mlist-bar-val mlist-bar-val--text">
+                {listQualityDisplay.kind === "ignored" ? "N/A" : listQualityDisplay.label}
+              </span>
             </div>
           )}
           {yieldVal !== null && (
@@ -403,12 +416,38 @@ function LocationListItem({
 
 // ── Selected location detail panel ───────────────────────────────────────────
 
+type QualityDisplay =
+  | { kind: "ignored" }               // qualityIgnored === true → "N/A"
+  | { kind: "chance"; label: string } // "900+: 27%" or "< threshold: 0%"
+  | { kind: "none" };                 // no data → "—"
+
+function isQuantaniumKey(key: string): boolean {
+  const k = canonicalMiningMaterialKey(key);
+  return k === "quantanium" || k === "quantainium";
+}
+
+function buildQualityDisplay(
+  signals: { qualityChance?: number | null; qualityIgnored?: boolean; thresholdChance?: number | null; selectedQuality?: number } | undefined,
+  materialKey: string,
+): QualityDisplay {
+  if (!signals) return { kind: "none" };
+  if (isQuantaniumKey(materialKey) || signals.qualityIgnored) return { kind: "ignored" };
+  const chance = signals.qualityChance ?? signals.thresholdChance;
+  if (chance === null || chance === undefined) return { kind: "none" };
+  const pct = Math.round(chance * 100);
+  const threshold = signals.selectedQuality;
+  const prefix = threshold != null ? `${threshold}+: ` : "";
+  return { kind: "chance", label: `${prefix}${pct}%` };
+}
+
+// yieldRank is candidate-relative (normalized within the recommendation response).
+// A future scoring pass should normalize against all known locations per material.
 type DemandRow = {
   name: string;
   key: string;
-  demand: string;
-  qualityFit: number | null;
-  yieldFit: number | null;
+  coverage: string;
+  qualityDisplay: QualityDisplay;
+  yieldRank: number | null;
   sourceStrength: string;
   sourceWeight: number | undefined;
   status: "strong" | "moderate" | "low" | "missing";
@@ -418,12 +457,18 @@ type ResourceRow = {
   name: string;
   key: string;
   miningType: string;
-  qualityFit: number | null;
-  yieldFit: number | null;
+  qualityDisplay: QualityDisplay;
+  yieldRank: number | null;
   sourceStrength: string;
   sourceWeight: number | undefined;
   status: "strong" | "moderate" | "low" | "none";
 };
+
+function InfoTip({ text }: { text: string }) {
+  return (
+    <span className="mdet-infotip" title={text} aria-label={text}>?</span>
+  );
+}
 
 function sourceStatus(sourceWeight: number | undefined): "strong" | "moderate" | "low" | "none" {
   if (sourceWeight === undefined) return "none";
@@ -493,11 +538,11 @@ function LocationDetail({
       const sw = routeScoreEntry?.signals.sourceWeight;
       const st = covered ? sourceStatus(sw) : "missing";
       rows.push({
-        name: routeScoreEntry?.displayName ?? key,
+        name: routeScoreEntry?.displayName ?? canonicalMiningMaterialName(key),
         key,
-        demand: "—",
-        qualityFit: routeScoreEntry?.qualityRouteScore ?? null,
-        yieldFit: routeScoreEntry?.yieldRouteScore ?? null,
+        coverage: "—",
+        qualityDisplay: buildQualityDisplay(routeScoreEntry?.signals, key),
+        yieldRank: routeScoreEntry?.yieldRouteScore ?? null,
         sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "MISSING",
         sourceWeight: sw,
         status: st as "strong" | "moderate" | "low" | "missing",
@@ -523,8 +568,8 @@ function LocationDetail({
         name: r.materialName,
         key,
         miningType: (r as { miningType?: string }).miningType ?? "",
-        qualityFit: routeScoreEntry?.qualityRouteScore ?? null,
-        yieldFit: routeScoreEntry?.yieldRouteScore ?? null,
+        qualityDisplay: buildQualityDisplay(routeScoreEntry?.signals, key),
+        yieldRank: routeScoreEntry?.yieldRouteScore ?? null,
         sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "—",
         sourceWeight: sw,
         status: st,
@@ -559,7 +604,10 @@ function LocationDetail({
       <div className="mdet-metric-row">
         {Number.isFinite(routeScore) && (
           <div className="mdet-metric-card">
-            <div className="mdet-metric-label">ROUTE SCORE</div>
+            <div className="mdet-metric-label">
+              ROUTE RANK
+              <InfoTip text="Overall location rank after coverage, quality, yield, and source strength are combined." />
+            </div>
             <div className={`mdet-metric-val ${scoreToneClass(primaryRouteScore?.label, routeScore)}`}>
               {Math.round(routeScore)}
             </div>
@@ -567,26 +615,41 @@ function LocationDetail({
         )}
         {total > 0 && (
           <div className="mdet-metric-card">
-            <div className="mdet-metric-label">DEMAND COVERAGE</div>
+            <div className="mdet-metric-label">
+              COVERAGE
+              <InfoTip text="How much of your selected or needed material list this location can satisfy." />
+            </div>
             <div className={`mdet-metric-val ${scoreToneClass(undefined, coveragePct)}`}>{coveragePct}%</div>
           </div>
         )}
-        {primaryRouteScore && (
-          <>
-            <div className="mdet-metric-card">
-              <div className="mdet-metric-label">QUALITY FIT</div>
-              <div className={`mdet-metric-val ${scoreToneClass(undefined, primaryRouteScore.qualityRouteScore)}`}>
-                {primaryRouteScore.qualityRouteScore}
+        {primaryRouteScore && (() => {
+          const primaryMaterialKey = primaryRouteScore.materialKey ?? primaryRouteScore.materialId ?? "";
+          const qd = buildQualityDisplay(primaryRouteScore.signals, primaryMaterialKey);
+          return (
+            <>
+              {qd.kind !== "none" && (
+                <div className="mdet-metric-card">
+                  <div className="mdet-metric-label">
+                    TARGET QUALITY CHANCE
+                    <InfoTip text="Chance that the source meets your selected quality threshold after you find it. This is not the chance to find the source." />
+                  </div>
+                  <div className="mdet-metric-val">
+                    {qd.kind === "ignored" ? "N/A" : qd.label}
+                  </div>
+                </div>
+              )}
+              <div className="mdet-metric-card">
+                <div className="mdet-metric-label">
+                  YIELD RANK
+                  <InfoTip text="Relative yield score for this material compared with other locations where the same material appears. This is not an encounter probability." />
+                </div>
+                <div className={`mdet-metric-val ${scoreToneClass(undefined, primaryRouteScore.yieldRouteScore)}`}>
+                  {primaryRouteScore.yieldRouteScore}
+                </div>
               </div>
-            </div>
-            <div className="mdet-metric-card">
-              <div className="mdet-metric-label">YIELD FIT</div>
-              <div className={`mdet-metric-val ${scoreToneClass(undefined, primaryRouteScore.yieldRouteScore)}`}>
-                {primaryRouteScore.yieldRouteScore}
-              </div>
-            </div>
-          </>
-        )}
+            </>
+          );
+        })()}
       </div>
 
       <StantonLagrangeChildrenSummary entry={entry} />
@@ -622,16 +685,16 @@ function LocationDetail({
       {demandRows.length > 0 && (
         <div className="mining-demand-breakdown">
           <div className="mdet-section-label">
-            DEMAND COVERAGE BREAKDOWN
+            SELECTED MATERIAL COVERAGE
             <span className="mdet-section-count">({demandRows.length} material{demandRows.length !== 1 ? "s" : ""})</span>
           </div>
           <table className="mining-resource-index-table">
             <thead>
               <tr>
                 <th>MATERIAL</th>
-                <th>DEMAND</th>
-                <th>QUALITY FIT</th>
-                <th>YIELD FIT</th>
+                <th>COVERAGE</th>
+                <th><span className="mdet-th-wrap">TARGET QUALITY CHANCE<InfoTip text="Chance that the source meets your selected quality threshold after you find it. This is not the chance to find the source." /></span></th>
+                <th><span className="mdet-th-wrap">YIELD RANK<InfoTip text="Relative yield score for this material compared with other locations where the same material appears. This is not an encounter probability." /></span></th>
                 <th>SOURCE</th>
               </tr>
             </thead>
@@ -639,12 +702,14 @@ function LocationDetail({
               {demandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">{row.name}</td>
-                  <td className="mdet-mat-demand">{row.demand}</td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.qualityFit ?? undefined)}`}>
-                    {row.qualityFit ?? "—"}
+                  <td className="mdet-mat-demand">{row.coverage}</td>
+                  <td className="mdet-mat-score">
+                    {row.qualityDisplay.kind === "ignored" ? "N/A"
+                      : row.qualityDisplay.kind === "chance" ? row.qualityDisplay.label
+                      : "—"}
                   </td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldFit ?? undefined)}`}>
-                    {row.yieldFit ?? "—"}
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldRank ?? undefined)}`}>
+                    {row.yieldRank ?? "—"}
                   </td>
                   <td>
                     <span className={`mining-source-badge mining-source-badge--${row.status}`}>
@@ -663,11 +728,14 @@ function LocationDetail({
         </div>
       )}
 
-      {/* Planet Resource Index */}
+      {/* Available Resources on Location */}
       {resourceRows.length > 0 && (
         <div className="mining-resource-index">
           <div className="mdet-section-label">
-            PLANET RESOURCE INDEX
+            <span className="mdet-th-wrap">
+              AVAILABLE RESOURCES ON LOCATION
+              <InfoTip text="Static list of resources known at this location, independent of your selected demand." />
+            </span>
             <span className="mdet-section-count">({resourceRows.length} resource{resourceRows.length !== 1 ? "s" : ""})</span>
           </div>
           <table className="mining-resource-index-table">
@@ -675,8 +743,8 @@ function LocationDetail({
               <tr>
                 <th>MATERIAL</th>
                 <th>TYPE</th>
-                <th>QUALITY FIT</th>
-                <th>YIELD FIT</th>
+                <th><span className="mdet-th-wrap">TARGET QUALITY CHANCE<InfoTip text="Chance that the source meets your selected quality threshold after you find it. This is not the chance to find the source." /></span></th>
+                <th><span className="mdet-th-wrap">YIELD RANK<InfoTip text="Relative yield score for this material compared with other locations where the same material appears. This is not an encounter probability." /></span></th>
                 <th>SOURCE</th>
               </tr>
             </thead>
@@ -685,11 +753,13 @@ function LocationDetail({
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">{row.name}</td>
                   <td className="mdet-mat-demand">{row.miningType || "—"}</td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.qualityFit ?? undefined)}`}>
-                    {row.qualityFit ?? "—"}
+                  <td className="mdet-mat-score">
+                    {row.qualityDisplay.kind === "ignored" ? "N/A"
+                      : row.qualityDisplay.kind === "chance" ? row.qualityDisplay.label
+                      : "—"}
                   </td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldFit ?? undefined)}`}>
-                    {row.yieldFit ?? "—"}
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldRank ?? undefined)}`}>
+                    {row.yieldRank ?? "—"}
                   </td>
                   <td>
                     <span className={`mining-source-badge mining-source-badge--${row.status}`}>
@@ -715,6 +785,7 @@ function LocationDetail({
 
 export default function MiningModule() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
+  const recommendationRequestSeqRef = useRef(0);
   const [, setLagrangeChildrenDataVersion] = useState(0);
   const planner = useMiningPlannerState();
   const [rankingMode, setRankingMode] = useState<MiningRankingMode>(() => readStoredRankingMode());
@@ -728,9 +799,11 @@ export default function MiningModule() {
     [],
   );
   const [selectedMaterials, setSelectedMaterials] = useState<Set<string>>(() => {
-    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const valid = initialSidebarState.resources.filter((r) => !uuidPattern.test(r));
-    return new Set(valid);
+    const canonical = initialSidebarState.resources
+      .map((resource) => canonicalMiningMaterial({ id: resource, label: resource }))
+      .filter((resource) => !resource.unresolvedUuid)
+      .map((resource) => resource.key);
+    return new Set(canonical);
   });
   const [selectedSystems, setSelectedSystems] = useState<Set<string>>(
     () => new Set(initialSidebarState.systems.filter((system) => MINING_SYSTEM_FILTERS.includes(system))),
@@ -781,11 +854,18 @@ export default function MiningModule() {
           status: "ok",
           data: data.requirements.map((requirement) => {
             const material = materials.find((entry) => entry.id === requirement.materialId);
+            const canonical = canonicalMiningMaterial({
+              materialKey: requirement.materialKey,
+              materialId: requirement.materialId,
+              displayName: requirement.displayName,
+              materialName: requirement.materialName ?? material?.name,
+            });
             const resolvedRequirement = {
               ...requirement,
-              materialKey: requirement.materialKey ?? requirement.materialId,
-              displayName: requirement.displayName ?? material?.name ?? requirement.materialName,
-              materialName: requirement.displayName ?? material?.name ?? requirement.materialName,
+              materialKey: canonical.key,
+              materialId: canonical.key,
+              displayName: canonical.label,
+              materialName: canonical.label,
               estimatedRawOreNeeded: isRefinableMaterial(material) ? Math.ceil(requirement.requiredQuantity * 2.5) : undefined,
             };
             if (debugMiningIdentity) console.debug("resolved requirement", resolvedRequirement);
@@ -825,6 +905,19 @@ export default function MiningModule() {
     [buildQueueMaterials, buildQueueSelectionActive],
   );
 
+  const recommendationData = "data" in state ? state.data : undefined;
+  const locations = useMemo(
+    () => recommendationData
+      ? [...recommendationData.recommendations].sort(compareLocationsByRecommendationScore)
+      : [],
+    [recommendationData],
+  );
+  const hasRecommendationData = recommendationData !== undefined;
+
+  // Built from the materials store + BQ requirements + manual demand only.
+  // Must NOT depend on `locations` — that would feed the API response back into
+  // the request pipeline and create a render loop (new locations → new request
+  // payload → new fetch → new locations → ...).
   const allMaterialResources = useMemo(() => {
     const byKey = new Map<string, { id: string; label: string; miningType?: string }>();
 
@@ -835,25 +928,32 @@ export default function MiningModule() {
       if (sourceGroups?.includes("vehicleMining")) miningType = "Ground Vehicle";
       else if (sourceGroups?.includes("fpsMining")) miningType = "Hand";
       else if (sourceGroups?.includes("ores")) miningType = "Ship";
-      byKey.set(mat.id, { id: mat.id, label: mat.name, miningType });
+      const canonical = canonicalMiningMaterial({ materialId: mat.id, displayName: mat.name, materialName: mat.name });
+      if (!canonical.key || canonical.unresolvedUuid) continue;
+      byKey.set(canonical.key, { id: canonical.key, label: canonical.label, miningType });
     }
 
     for (const req of miningRequiredMaterials) {
-      const key = materialKeyOf(req);
-      const label = materialDisplayName(req);
-      if (!byKey.has(key) && isIndexableMiningResource(label)) {
-        byKey.set(key, { id: key, label, miningType: undefined });
+      const canonical = canonicalMiningMaterial({
+        materialKey: req.materialKey,
+        materialId: req.materialId,
+        displayName: req.displayName,
+        materialName: req.materialName,
+      });
+      if (!canonical.unresolvedUuid && !byKey.has(canonical.key) && isIndexableMiningResource(canonical.label)) {
+        byKey.set(canonical.key, { id: canonical.key, label: canonical.label, miningType: undefined });
       }
     }
 
     for (const demand of planner.manualDemand) {
-      const key = (demand as { materialKey?: string; materialId?: string }).materialKey
-        ?? (demand as { materialKey?: string; materialId?: string }).materialId
-        ?? (demand as { materialName?: string }).materialName ?? "";
-      const label = (demand as { displayName?: string; materialName?: string }).displayName
-        ?? (demand as { materialName?: string }).materialName ?? key;
-      if (key && !byKey.has(key) && isIndexableMiningResource(label)) {
-        byKey.set(key, { id: key, label, miningType: undefined });
+      const canonical = canonicalMiningMaterial({
+        materialKey: (demand as { materialKey?: string }).materialKey,
+        materialId: (demand as { materialId?: string }).materialId,
+        displayName: (demand as { displayName?: string }).displayName,
+        materialName: demand.materialName,
+      });
+      if (!canonical.unresolvedUuid && canonical.key && !byKey.has(canonical.key) && isIndexableMiningResource(canonical.label)) {
+        byKey.set(canonical.key, { id: canonical.key, label: canonical.label, miningType: undefined });
       }
     }
 
@@ -875,8 +975,13 @@ export default function MiningModule() {
     if (migrationDoneRef.current || materialOptionByKey.size === 0) return;
     migrationDoneRef.current = true;
     setSelectedMaterials((prev) => {
-      const cleaned = new Set([...prev].filter((key) => materialOptionByKey.has(key)));
-      return cleaned.size === prev.size ? prev : cleaned;
+      const cleaned = new Set(
+        [...prev]
+          .map((key) => canonicalMiningMaterial({ id: key, label: key }))
+          .filter((material) => !material.unresolvedUuid && materialOptionByKey.has(material.key))
+          .map((material) => material.key),
+      );
+      return cleaned.size === prev.size && [...cleaned].every((key) => prev.has(key)) ? prev : cleaned;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materialOptionByKey]);
@@ -891,10 +996,15 @@ export default function MiningModule() {
     return [...selectedMaterials]
       .filter((key) => !bqKeys.has(key))
       .map((key) => {
-        const label = materialOptionByKey.get(key)?.label ?? key;
-        return {
-          materialId: key,
+        const canonical = canonicalMiningMaterial({
           materialKey: key,
+          displayName: materialOptionByKey.get(key)?.label,
+          materialName: materialOptionByKey.get(key)?.label,
+        });
+        const label = canonical.label;
+        return {
+          materialId: canonical.key,
+          materialKey: canonical.key,
           materialName: label,
           displayName: label,
           requiredQuantity: 1,
@@ -912,16 +1022,56 @@ export default function MiningModule() {
     [buildQueueSelectionActive, miningRequiredMaterials, sidebarOnlyMaterials],
   );
 
-  useEffect(() => {
-    const request = buildRecommendationRequest({
+  const favoriteLocationIds = useMemo(
+    () => planner.favorites.map((favorite) => favorite.key),
+    [planner.favorites],
+  );
+
+  // Serialize to a stable string key so the request object only changes when
+  // the actual payload content changes — not on every reference churn.
+  const recommendationRequestKey = useMemo(() => {
+    const payload = {
+      materials: recommenderRequiredMaterials.map((m) => ({ key: m.materialKey ?? m.materialId, qty: m.requiredQuantity })),
+      favorites: favoriteLocationIds,
+      filters: planner.filters,
+      priorityStack: planner.priorityStack.map((p) => p.id),
+      manualDemand: planner.manualDemand.map((d) => d.id),
+    };
+    return JSON.stringify(payload);
+  }, [recommenderRequiredMaterials, favoriteLocationIds, planner.filters, planner.priorityStack, planner.manualDemand]);
+
+  const recommendationRequestRef = useRef(
+    buildRecommendationRequest({
       priorityStack: planner.priorityStack,
       manualDemand: planner.manualDemand,
-      favoriteLocationIds: planner.favorites.map((favorite) => favorite.key),
+      favoriteLocationIds,
+      filters: planner.filters,
+    }, null, recommenderRequiredMaterials)
+  );
+  const recommendationRequestKeyRef = useRef<string | null>(null);
+  if (recommendationRequestKeyRef.current !== recommendationRequestKey) {
+    recommendationRequestKeyRef.current = recommendationRequestKey;
+    recommendationRequestRef.current = buildRecommendationRequest({
+      priorityStack: planner.priorityStack,
+      manualDemand: planner.manualDemand,
+      favoriteLocationIds,
       filters: planner.filters,
     }, null, recommenderRequiredMaterials);
-    setState((prev) => prev.status === "loading" ? prev : { status: "loading" });
-    getMiningRecommendations(request)
+  }
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const requestSeq = recommendationRequestSeqRef.current + 1;
+    recommendationRequestSeqRef.current = requestSeq;
+
+    setState((prev) => {
+      if (prev.status === "loading") return prev;
+      return { status: "loading", data: "data" in prev ? prev.data : undefined };
+    });
+
+    getMiningRecommendations(recommendationRequestRef.current, controller.signal)
       .then((data) => {
+        if (requestSeq !== recommendationRequestSeqRef.current) return;
         if (debugMiningIdentity) {
           console.groupCollapsed("[mining] recommender material coverage");
           console.debug("raw API recommendation count", data.recommendations.length);
@@ -930,25 +1080,36 @@ export default function MiningModule() {
         }
         setState({ status: "ok", data });
       })
-      .catch((err) => setState({ status: "error", message: String(err) }));
-  }, [recommenderRequiredMaterials, planner.favorites, planner.filters, planner.manualDemand, planner.priorityStack]);
+      .catch((err) => {
+        if (controller.signal.aborted || requestSeq !== recommendationRequestSeqRef.current) return;
+        setState((prev) => ({
+          status: "error",
+          message: String(err),
+          data: "data" in prev ? prev.data : undefined,
+        }));
+      });
 
-  const locations = useMemo(
-    () => state.status === "ok"
-      ? [...state.data.recommendations].sort(compareLocationsByRecommendationScore)
-      : [],
-    [state],
-  );
+    return () => controller.abort();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recommendationRequestKey]);
 
   const materialKeyByDisplayName = useMemo(() => {
     const resolve = createMaterialResolver(materials);
-    return new Map(allMaterials.map((name) => [name, resolve({ displayName: name, materialName: name })?.materialKey ?? name]));
+    return new Map(allMaterials.map((name) => [
+      name,
+      canonicalMiningMaterialKey(resolve({ displayName: name, materialName: name })?.materialKey ?? name),
+    ]));
   }, [allMaterials, materials]);
 
   const locationMaterialKeysByLocationKey = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const location of locations) {
-      const keys = (location.requiredMaterials ?? []).map((material) => material.materialKey ?? material.materialId);
+      const keys = (location.requiredMaterials ?? []).map((material) => canonicalMiningMaterial({
+        materialKey: material.materialKey,
+        materialId: material.materialId,
+        displayName: material.displayName,
+        materialName: material.materialName,
+      }).key);
       map.set(location.locationKey, Array.from(new Set(keys)));
     }
     return map;
@@ -958,12 +1119,13 @@ export default function MiningModule() {
     const map = new Map<string, string[]>();
     for (const location of locations) {
       const indexedKeys = (location.indexedResources ?? []).flatMap((resource) => {
-        const keys: string[] = [resource.materialName];
-        if (resource.materialId && resource.materialId !== resource.materialName) {
-          keys.push(resource.materialId);
-        }
+        const keys: string[] = [canonicalMiningMaterial({
+          materialId: resource.materialId,
+          materialName: resource.materialName,
+          displayName: resource.materialName,
+        }).key];
         const resolvedKey = materialKeyByDisplayName.get(resource.materialName);
-        if (resolvedKey && resolvedKey !== resource.materialName) {
+        if (resolvedKey) {
           keys.push(resolvedKey);
         }
         return keys;
@@ -997,23 +1159,38 @@ export default function MiningModule() {
     return ranked.sort(compareLocationsByRecommendationScore);
   }, [activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, selectedMaterials]);
 
-  const listLocations = showAllLocations ? rankedFilteredLocations : rankedFilteredLocations.slice(0, 12);
+  const previousRankedLocationsRef = useRef<PublicLocationEntry[]>([]);
+  useEffect(() => {
+    if (state.status !== "loading" && rankedFilteredLocations.length > 0) {
+      previousRankedLocationsRef.current = rankedFilteredLocations;
+    }
+  }, [rankedFilteredLocations, state.status]);
+
+  const displayRankedFilteredLocations =
+    state.status === "loading" &&
+    rankedFilteredLocations.length === 0 &&
+    previousRankedLocationsRef.current.length > 0
+      ? previousRankedLocationsRef.current
+      : rankedFilteredLocations;
+
+  const listLocations = showAllLocations ? displayRankedFilteredLocations : displayRankedFilteredLocations.slice(0, 12);
 
   const selectedEntry = useMemo(() => {
     if (selectedLocationKey) {
-      return rankedFilteredLocations.find((l) => l.locationKey === selectedLocationKey) ?? rankedFilteredLocations[0] ?? null;
+      return displayRankedFilteredLocations.find((l) => l.locationKey === selectedLocationKey) ?? displayRankedFilteredLocations[0] ?? null;
     }
-    return rankedFilteredLocations[0] ?? null;
-  }, [selectedLocationKey, rankedFilteredLocations]);
+    return displayRankedFilteredLocations[0] ?? null;
+  }, [selectedLocationKey, displayRankedFilteredLocations]);
 
   useEffect(() => {
     setSelectedLocationKey(null);
   }, [selectedMaterials, selectedSystems, selectedMiningTypes]);
 
   function toggleMaterial(mat: string) {
+    const materialKey = canonicalMiningMaterialKey(mat);
     setSelectedMaterials((prev) => {
       const next = new Set(prev);
-      if (next.has(mat)) next.delete(mat); else next.add(mat);
+      if (next.has(materialKey)) next.delete(materialKey); else next.add(materialKey);
       if (next.size === 0) setBuildQueueSelectionActive(false);
       return next;
     });
@@ -1044,17 +1221,50 @@ export default function MiningModule() {
 
   const hasActiveFilters = selectedSystems.size > 0 || selectedMaterials.size > 0 || selectedMiningTypes.size > 0 || buildQueueSelectionActive;
 
+  // Co-availability: build material → location set from the current response.
+  // This only affects chip UI (enabled/disabled); it never feeds back into the request.
+  const materialToLocations = useMemo((): Map<string, Set<string>> => {
+    const map = new Map<string, Set<string>>();
+    for (const [locationKey, matKeys] of indexedMaterialKeysByLocationKey) {
+      for (const matKey of matKeys) {
+        let set = map.get(matKey);
+        if (!set) { set = new Set(); map.set(matKey, set); }
+        set.add(locationKey);
+      }
+    }
+    return map;
+  }, [indexedMaterialKeysByLocationKey]);
 
-  const visibleCards = useMemo(() => rankedFilteredLocations.slice(0, 4), [rankedFilteredLocations]);
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-    console.debug("[mining] location card render order", visibleCards.map((entry, index) => ({
-      rank: index + 1,
-      displayName: `${entry.locationName} (${entry.systemName})`,
-      score: getPrimaryRecommendationScore(entry),
-      matchedDemand: getMatchedDemandCount(entry),
-    })));
-  }, [visibleCards]);
+  // Intersection of location sets for all currently selected materials.
+  const selectedLocationIntersection = useMemo((): Set<string> | null => {
+    if (selectedMaterials.size === 0) return null;
+    let intersection: Set<string> | null = null;
+    for (const key of selectedMaterials) {
+      const locs = materialToLocations.get(key);
+      if (!locs || locs.size === 0) return new Set(); // nothing co-available
+      if (intersection === null) {
+        intersection = new Set<string>(locs);
+      } else {
+        for (const loc of intersection) {
+          if (!locs.has(loc)) intersection.delete(loc);
+        }
+      }
+    }
+    return intersection;
+  }, [selectedMaterials, materialToLocations]);
+
+  function isChipEnabled(chipKey: string): boolean {
+    if (selectedMaterials.has(chipKey)) return true;       // already selected
+    if (selectedLocationIntersection === null) return true; // nothing selected yet
+    if (selectedLocationIntersection.size === 0) return false;
+    const chipLocs = materialToLocations.get(chipKey);
+    if (!chipLocs) return false;
+    for (const loc of selectedLocationIntersection) {
+      if (chipLocs.has(loc)) return true;
+    }
+    return false;
+  }
+
 
   return (
     <div className="mine-page mine-page--v2">
@@ -1070,7 +1280,7 @@ export default function MiningModule() {
         </div>
       )}
 
-      {state.status === "ok" && (
+      {hasRecommendationData && (
         <>
           {/* ── Top filter rail ──────────────────────────────────── */}
           <div className="mining-filter-rail">
@@ -1125,16 +1335,21 @@ export default function MiningModule() {
                 <div className="mining-filter-category">
                   <span className="mining-filter-label">Ship Mineables</span>
                   <div className="mining-chip-wrap">
-                    {resourceGroups.shipAndHarvestable.map((chip) => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
-                        onClick={() => toggleMaterial(chip.id)}
-                      >
-                        {chip.label}
-                      </button>
-                    ))}
+                    {resourceGroups.shipAndHarvestable.map((chip) => {
+                      const enabled = isChipEnabled(chip.id);
+                      return (
+                        <button
+                          key={chip.id}
+                          type="button"
+                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                          disabled={!enabled}
+                          title={!enabled ? "Not available with current selected materials" : undefined}
+                        >
+                          {chip.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1142,16 +1357,21 @@ export default function MiningModule() {
                 <div className="mining-filter-category">
                   <span className="mining-filter-label">Vehicle</span>
                   <div className="mining-chip-wrap">
-                    {resourceGroups.vehicle.map((chip) => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
-                        onClick={() => toggleMaterial(chip.id)}
-                      >
-                        {chip.label}
-                      </button>
-                    ))}
+                    {resourceGroups.vehicle.map((chip) => {
+                      const enabled = isChipEnabled(chip.id);
+                      return (
+                        <button
+                          key={chip.id}
+                          type="button"
+                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                          disabled={!enabled}
+                          title={!enabled ? "Not available with current selected materials" : undefined}
+                        >
+                          {chip.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1159,33 +1379,41 @@ export default function MiningModule() {
                 <div className="mining-filter-category">
                   <span className="mining-filter-label">Hand</span>
                   <div className="mining-chip-wrap">
-                    {resourceGroups.hand.map((chip) => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
-                        onClick={() => toggleMaterial(chip.id)}
-                      >
-                        {chip.label}
-                      </button>
-                    ))}
+                    {resourceGroups.hand.map((chip) => {
+                      const enabled = isChipEnabled(chip.id);
+                      return (
+                        <button
+                          key={chip.id}
+                          type="button"
+                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                          disabled={!enabled}
+                          title={!enabled ? "Not available with current selected materials" : undefined}
+                        >
+                          {chip.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
 
             {/* Right actions */}
-            {hasActiveFilters && (
-              <div className="mining-filter-actions">
-                <button type="button" className="mfr-clear-btn" onClick={clearAllFilters}>
-                  Clear all
-                </button>
-              </div>
-            )}
+            <div className="mining-filter-actions">
+              <button
+                type="button"
+                className="mfr-clear-btn"
+                onClick={clearAllFilters}
+                disabled={!hasActiveFilters}
+              >
+                Clear all
+              </button>
+            </div>
           </div>
 
           {/* ── Main 3-column console ───────────────────────────── */}
-          {filteredLocations.length === 0 ? (
+          {displayRankedFilteredLocations.length === 0 ? (
             <div className="mine-empty-state">
               <p className="mine-empty-text">
                 {planner.filters.showOnlyStarred
@@ -1200,7 +1428,7 @@ export default function MiningModule() {
               <div className="mlist-panel">
                 <div className="mlist-header">
                   <span className="mlist-header-label">RECOMMENDED LOCATIONS</span>
-                  <span className="mlist-header-count">{filteredLocations.length}</span>
+                  <span className="mlist-header-count">{displayRankedFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
                   <div className="mlist-rank-toggle" role="group" aria-label="Ranking mode">
@@ -1218,10 +1446,10 @@ export default function MiningModule() {
                   </div>
                 </div>
                 <div className="mlist-items">
-                  {listLocations.map((entry, idx) => (
+                  {listLocations.map((entry) => (
                     <LocationListItem
-                      key={entry.locationKey}
-                      rank={filteredLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
+                      key={getLocationCardKey(entry)}
+                      rank={displayRankedFilteredLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
                       entry={entry}
                       selectedMaterials={selectedMaterials}
                       buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
@@ -1243,14 +1471,14 @@ export default function MiningModule() {
                       }}
                     />
                   ))}
-                  {filteredLocations.length > 12 && (
+                  {displayRankedFilteredLocations.length > 12 && (
                     <button
                       className="mlist-view-all-btn"
                       onClick={() => setShowAllLocations((p) => !p)}
                     >
                       {showAllLocations
                         ? "Show top 12 ↑"
-                        : `View all ${filteredLocations.length} locations ↓`}
+                        : `View all ${displayRankedFilteredLocations.length} locations ↓`}
                     </button>
                   )}
                 </div>
