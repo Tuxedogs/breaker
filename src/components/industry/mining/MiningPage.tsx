@@ -156,12 +156,6 @@ function compareLocationsByRecommendationScore(left: PublicLocationEntry, right:
     left.locationName.localeCompare(right.locationName);
 }
 
-function formatRouteWhy(entry: PublicLocationEntry, routeScore: NonNullable<PublicLocationEntry["routeScores"]>[number]): string {
-  const reasons = routeScore.reasons.slice(0, 3).join(", ");
-  const comparison = routeScore.comparison ? `${routeScore.comparison}. ` : "";
-  return `${comparison}${entry.locationName} is a ${routeScore.label.toLowerCase()} ${routeScore.displayName} route because it has ${reasons}.`;
-}
-
 function scoreToneClass(label?: string, score?: number): string {
   const normalized = label?.toLowerCase();
   if (normalized === "excellent" || normalized === "strong") return "mloc-score--best";
@@ -409,6 +403,35 @@ function LocationListItem({
 
 // ── Selected location detail panel ───────────────────────────────────────────
 
+type DemandRow = {
+  name: string;
+  key: string;
+  demand: string;
+  qualityFit: number | null;
+  yieldFit: number | null;
+  sourceStrength: string;
+  sourceWeight: number | undefined;
+  status: "strong" | "moderate" | "low" | "missing";
+};
+
+type ResourceRow = {
+  name: string;
+  key: string;
+  miningType: string;
+  qualityFit: number | null;
+  yieldFit: number | null;
+  sourceStrength: string;
+  sourceWeight: number | undefined;
+  status: "strong" | "moderate" | "low" | "none";
+};
+
+function sourceStatus(sourceWeight: number | undefined): "strong" | "moderate" | "low" | "none" {
+  if (sourceWeight === undefined) return "none";
+  if (sourceWeight >= 60) return "strong";
+  if (sourceWeight >= 30) return "moderate";
+  return "low";
+}
+
 function LocationDetail({
   entry,
   buildQueueMaterialKeys,
@@ -431,18 +454,10 @@ function LocationDetail({
 
   const total = coveredBQ.length + missingBQ.length;
   const coveragePct = total > 0 ? Math.round((coveredBQ.length / total) * 100) : 0;
-
-  const focusedMaterialKey = selectedMaterials.size === 1
-    ? [...selectedMaterials][0]
-    : coveredBQ.length === 1
-      ? coveredBQ[0]
-      : null;
-  const focusedRouteScore = findRouteScoreForMaterial(entry, focusedMaterialKey);
-  const visibleRouteScores = focusedRouteScore ? [focusedRouteScore] : (entry.routeScores ?? []).slice(0, 3);
   const primaryRouteScore = entry.routeScores?.[0] ?? null;
   const routeScore = getPrimaryRecommendationScore(entry);
 
-  // Location insights derived from existing data
+  // Location insights
   const insights = useMemo(() => {
     const list: Array<{ type: "positive" | "warning" | "neutral"; text: string }> = [];
     if (total > 0 && coveragePct >= 80) {
@@ -450,13 +465,8 @@ function LocationDetail({
     } else if (total > 0) {
       list.push({ type: "neutral", text: `Covers ${coveredBQ.length} of ${total} active demand materials` });
     }
-    if (primaryRouteScore) {
-      if (primaryRouteScore.signals.sourceWeight >= 60) {
-        list.push({ type: "positive", text: "Strong source density with consistent respawn rates" });
-      }
-      if (primaryRouteScore.qualityRouteScore >= 70) {
-        list.push({ type: "positive", text: "Quality distribution matches demand quality bands well" });
-      }
+    if (primaryRouteScore?.signals.sourceWeight !== undefined && primaryRouteScore.signals.sourceWeight >= 60) {
+      list.push({ type: "positive", text: "Strong source density with consistent respawn rates" });
     }
     if (entry.nearbyStations.length > 0) {
       list.push({ type: "positive", text: `${entry.nearbyStations.length} nearby station${entry.nearbyStations.length > 1 ? "s" : ""} for refined ore delivery` });
@@ -467,54 +477,60 @@ function LocationDetail({
     return list;
   }, [total, coveragePct, coveredBQ, missingBQ, primaryRouteScore, entry.nearbyStations]);
 
-  // Material coverage breakdown rows
-  const materialRows = useMemo(() => {
-    const rows: Array<{
-      name: string;
-      key: string;
-      demand?: number;
-      coveragePct?: number;
-      qualityFit?: number;
-      yieldFit?: number;
-      sourceStrength?: string;
-      sourceWeight?: number;
-      status: "strong" | "moderate" | "low" | "missing";
-    }> = [];
+  // Demand Coverage Breakdown — user-relevant materials only
+  const demandRows = useMemo((): DemandRow[] => {
+    const activeKeys = selectedMaterials.size > 0
+      ? selectedMaterials
+      : buildQueueMaterialKeys;
+    if (activeKeys.size === 0) return [];
 
     const coveredSet = new Set(locationMaterialKeys);
+    const rows: DemandRow[] = [];
 
-    for (const routeScore of entry.routeScores ?? []) {
-      const covered = coveredSet.has(routeScore.materialKey) || coveredSet.has(routeScore.materialId);
-      let status: "strong" | "moderate" | "low" | "missing" = "missing";
-      if (!covered) {
-        status = "missing";
-      } else if (routeScore.signals.sourceWeight >= 60) {
-        status = "strong";
-      } else if (routeScore.signals.sourceWeight >= 30) {
-        status = "moderate";
-      } else {
-        status = "low";
-      }
+    for (const key of activeKeys) {
+      const routeScoreEntry = findRouteScoreForMaterial(entry, key);
+      const covered = coveredSet.has(key);
+      const sw = routeScoreEntry?.signals.sourceWeight;
+      const st = covered ? sourceStatus(sw) : "missing";
       rows.push({
-        name: routeScore.displayName,
-        key: routeScore.materialKey,
-        qualityFit: routeScore.qualityRouteScore,
-        yieldFit: routeScore.yieldRouteScore,
-        sourceStrength: status === "strong" ? "STRONG" : status === "moderate" ? "MODERATE" : status === "low" ? "LOW" : "MISSING",
-        sourceWeight: routeScore.signals.sourceWeight,
-        status,
+        name: routeScoreEntry?.displayName ?? key,
+        key,
+        demand: "—",
+        qualityFit: routeScoreEntry?.qualityRouteScore ?? null,
+        yieldFit: routeScoreEntry?.yieldRouteScore ?? null,
+        sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "MISSING",
+        sourceWeight: sw,
+        status: st as "strong" | "moderate" | "low" | "missing",
       });
     }
 
-    // Add demanded but unscored materials as missing
-    for (const key of buildQueueMaterialKeys) {
-      if (!rows.some((r) => r.key === key)) {
-        rows.push({ name: key, key, status: "missing", sourceStrength: "MISSING" });
-      }
-    }
+    return rows;
+  }, [entry, selectedMaterials, buildQueueMaterialKeys, locationMaterialKeys]);
 
-    return rows.slice(0, 8);
-  }, [entry.routeScores, locationMaterialKeys, buildQueueMaterialKeys]);
+  // Planet Resource Index — all indexed resources, scored where possible
+  const resourceRows = useMemo((): ResourceRow[] => {
+    const indexed = entry.indexedResources ?? [];
+    if (indexed.length === 0 && entry.materials.length === 0) return [];
+
+    const items = indexed.length > 0 ? indexed : entry.materials.map((m) => ({ materialName: m, materialId: undefined, miningType: "" }));
+
+    return items.map((r) => {
+      const key = r.materialId ?? r.materialName;
+      const routeScoreEntry = findRouteScoreForMaterial(entry, key) ?? findRouteScoreForMaterial(entry, r.materialName);
+      const sw = routeScoreEntry?.signals.sourceWeight;
+      const st = sourceStatus(sw);
+      return {
+        name: r.materialName,
+        key,
+        miningType: (r as { miningType?: string }).miningType ?? "",
+        qualityFit: routeScoreEntry?.qualityRouteScore ?? null,
+        yieldFit: routeScoreEntry?.yieldRouteScore ?? null,
+        sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "—",
+        sourceWeight: sw,
+        status: st,
+      };
+    });
+  }, [entry]);
 
   return (
     <div className="mdet-panel">
@@ -531,7 +547,6 @@ function LocationDetail({
           </div>
         </div>
         <div className="mdet-header-right">
-          {/* Placeholder gradient thumbnail if no real image */}
           <div className="mdet-thumb" aria-hidden="true">
             <div className="mdet-thumb-inner">
               <span className="mdet-thumb-name">{entry.locationName.slice(0, 2).toUpperCase()}</span>
@@ -559,21 +574,15 @@ function LocationDetail({
         {primaryRouteScore && (
           <>
             <div className="mdet-metric-card">
-              <div className="mdet-metric-label">QUALITY SCORE</div>
+              <div className="mdet-metric-label">QUALITY FIT</div>
               <div className={`mdet-metric-val ${scoreToneClass(undefined, primaryRouteScore.qualityRouteScore)}`}>
                 {primaryRouteScore.qualityRouteScore}
               </div>
             </div>
             <div className="mdet-metric-card">
-              <div className="mdet-metric-label">YIELD SCORE</div>
+              <div className="mdet-metric-label">YIELD FIT</div>
               <div className={`mdet-metric-val ${scoreToneClass(undefined, primaryRouteScore.yieldRouteScore)}`}>
                 {primaryRouteScore.yieldRouteScore}
-              </div>
-            </div>
-            <div className="mdet-metric-card">
-              <div className="mdet-metric-label">SOURCE STRENGTH</div>
-              <div className={`mdet-metric-val ${scoreToneClass(primaryRouteScore.label)}`}>
-                {primaryRouteScore.label.toUpperCase()}
               </div>
             </div>
           </>
@@ -609,45 +618,40 @@ function LocationDetail({
         </div>
       )}
 
-      {/* Material coverage breakdown */}
-      {materialRows.length > 0 && (
-        <div className="mdet-coverage">
+      {/* Demand Coverage Breakdown */}
+      {demandRows.length > 0 && (
+        <div className="mining-demand-breakdown">
           <div className="mdet-section-label">
-            MATERIAL COVERAGE BREAKDOWN
-            {entry.routeScores && entry.routeScores.length > 0 && (
-              <span className="mdet-section-count">({entry.routeScores.length} materials)</span>
-            )}
+            DEMAND COVERAGE BREAKDOWN
+            <span className="mdet-section-count">({demandRows.length} material{demandRows.length !== 1 ? "s" : ""})</span>
           </div>
-          <table className="mdet-mat-table">
+          <table className="mining-resource-index-table">
             <thead>
               <tr>
                 <th>MATERIAL</th>
-                {total > 0 && <th>DEMAND</th>}
+                <th>DEMAND</th>
                 <th>QUALITY FIT</th>
                 <th>YIELD FIT</th>
                 <th>SOURCE</th>
               </tr>
             </thead>
             <tbody>
-              {materialRows.map((row) => (
-                <tr key={row.key} className={`mdet-mat-row mdet-mat-row--${row.status}`}>
+              {demandRows.map((row) => (
+                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">{row.name}</td>
-                  {total > 0 && <td className="mdet-mat-demand">—</td>}
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.qualityFit)}`}>
+                  <td className="mdet-mat-demand">{row.demand}</td>
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.qualityFit ?? undefined)}`}>
                     {row.qualityFit ?? "—"}
                   </td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldFit)}`}>
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldFit ?? undefined)}`}>
                     {row.yieldFit ?? "—"}
                   </td>
                   <td>
-                    <span className={`mdet-source-badge mdet-source-badge--${row.status}`}>
+                    <span className={`mining-source-badge mining-source-badge--${row.status}`}>
                       {row.sourceStrength}
                       {row.sourceWeight !== undefined && (
                         <span className="mdet-source-bar-wrap">
-                          <span
-                            className="mdet-source-bar"
-                            style={{ width: `${Math.min(100, row.sourceWeight)}%` }}
-                          />
+                          <span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} />
                         </span>
                       )}
                     </span>
@@ -656,170 +660,51 @@ function LocationDetail({
               ))}
             </tbody>
           </table>
-          {entry.routeScores && entry.routeScores.length > materialRows.length && (
-            <button className="mdet-view-all-btn">
-              VIEW ALL {entry.routeScores.length} MATERIALS
-            </button>
-          )}
         </div>
       )}
 
-      {/* No queue context — show all indexed resources */}
-      {buildQueueMaterialKeys.size === 0 && selectedMaterials.size === 0 && materialRows.length === 0 && (
-        <div className="mdet-all-mats">
+      {/* Planet Resource Index */}
+      {resourceRows.length > 0 && (
+        <div className="mining-resource-index">
           <div className="mdet-section-label">
-            INDEXED RESOURCES ({(entry.indexedResources ?? []).length || entry.materials.length})
+            PLANET RESOURCE INDEX
+            <span className="mdet-section-count">({resourceRows.length} resource{resourceRows.length !== 1 ? "s" : ""})</span>
           </div>
-          <div className="mloc-panel-chips mloc-panel-chips--dense">
-            {(entry.indexedResources ?? []).length > 0
-              ? entry.indexedResources!.map((r, index) => (
-                  <span key={`${entry.locationKey}:all:${r.materialId ?? r.materialName}:${index}`} className="mloc-mat-chip">{r.materialName}</span>
-                ))
-              : entry.materials.map((m, index) => (
-                  <span key={`${entry.locationKey}:all:${m}:${index}`} className="mloc-mat-chip">{m}</span>
-                ))}
-          </div>
-        </div>
-      )}
-
-      {/* Route intelligence detail cards */}
-      {visibleRouteScores.length > 0 && (
-        <div className="mloc-route-lanes">
-          <div className="mloc-route-lanes-head">
-            <div className="mloc-route-lanes-title-wrap">
-              <span className="mloc-route-lanes-title">Route Intelligence</span>
-              <span className="mloc-route-lanes-location">{entry.locationName}</span>
-            </div>
-            <span className="mloc-route-lanes-note">Relative scores, not spawn chance %</span>
-          </div>
-          <div className="mloc-route-card-grid">
-            {visibleRouteScores.map((routeScore) => {
-              const routeWhy = formatRouteWhy(entry, routeScore);
-              const locationIndex = routeWhy.indexOf(entry.locationName);
-              const routeWhyBeforeLocation = locationIndex >= 0 ? routeWhy.slice(0, locationIndex) : "";
-              const routeWhyAfterLocation = locationIndex >= 0 ? routeWhy.slice(locationIndex + entry.locationName.length) : routeWhy;
-
-              return (
-                <div
-                  key={`${entry.locationKey}:route-score:${routeScore.materialKey}`}
-                  className={`mloc-route-card mloc-route-card--${routeScore.label.toLowerCase()}`}
-                >
-                  <div className="mloc-route-card-top">
-                    <span className="mloc-route-card-material">{routeScore.displayName}</span>
-                    <span className="mloc-route-card-tier">{routeScore.label}</span>
-                  </div>
-                  <div className="mloc-route-card-hero">
-                    <span className="mloc-route-card-hero-label">Route Targetability</span>
-                    <strong>{routeScore.overallTargetabilityScore}</strong>
-                  </div>
-                  <div className="mloc-route-chip-grid">
-                    <div className="mloc-route-chip">
-                      <span>Quality Fit</span>
-                      <strong>{routeScore.qualityRouteScore}</strong>
-                    </div>
-                    <div className="mloc-route-chip">
-                      <span>Yield Potential</span>
-                      <strong>{routeScore.yieldRouteScore}</strong>
-                    </div>
-                    <div className="mloc-route-chip">
-                      <span>Source Weight</span>
-                      <strong>{routeScore.signals.sourceWeight}</strong>
-                    </div>
-                  </div>
-                  <p className="mloc-route-card-copy">
-                    {routeWhyBeforeLocation}
-                    {locationIndex >= 0 && <strong>{entry.locationName}</strong>}
-                    {routeWhyAfterLocation}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Right intel panels ────────────────────────────────────────────────────────
-
-function RouteStrengthPanel({ entry }: { entry: PublicLocationEntry }) {
-  const primaryRouteScore = entry.routeScores?.[0] ?? null;
-  if (!primaryRouteScore) return null;
-
-  const factors: Array<{ label: string; value: string; tone: string }> = [
-    {
-      label: "Source Density",
-      value: primaryRouteScore.signals.sourceWeight >= 60 ? "High" : primaryRouteScore.signals.sourceWeight >= 30 ? "Moderate" : "Low",
-      tone: primaryRouteScore.signals.sourceWeight >= 60 ? "best" : primaryRouteScore.signals.sourceWeight >= 30 ? "okay" : "poor",
-    },
-    {
-      label: "Spawn Consistency",
-      value: primaryRouteScore.label,
-      tone: scoreToneClass(primaryRouteScore.label).replace("mloc-score--", ""),
-    },
-    {
-      label: "Competition",
-      value: (primaryRouteScore.signals.competingSources ?? 0) <= 2 ? "Low" : (primaryRouteScore.signals.competingSources ?? 0) <= 5 ? "Moderate" : "High",
-      tone: (primaryRouteScore.signals.competingSources ?? 0) <= 2 ? "best" : (primaryRouteScore.signals.competingSources ?? 0) <= 5 ? "okay" : "poor",
-    },
-  ];
-
-  if (entry.nearbyStations.length > 0) {
-    factors.push({ label: "Travel Distance", value: "Short", tone: "best" });
-  }
-
-  return (
-    <div className="mintel-panel">
-      <div className="mintel-panel-title">ROUTE STRENGTH FACTORS</div>
-      <div className="mintel-factor-list">
-        {factors.map((factor) => (
-          <div key={factor.label} className="mintel-factor-row">
-            <span className="mintel-factor-label">{factor.label}</span>
-            <span className={`mintel-factor-val mintel-val--${factor.tone}`}>{factor.value}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function DataQualityPanel({ entry }: { entry: PublicLocationEntry }) {
-  const totalRouteScores = entry.routeScores?.length ?? 0;
-  const totalIndexed = (entry.indexedResources ?? entry.materials).length;
-  const scoredCount = totalRouteScores;
-  const completePct = totalIndexed > 0 ? Math.round((scoredCount / Math.max(scoredCount, totalIndexed)) * 100) : 0;
-
-  const hasMissingThreshold = totalIndexed > scoredCount;
-
-  return (
-    <div className="mintel-panel">
-      <div className="mintel-panel-title">DATA QUALITY</div>
-      <div className="mintel-dq-body">
-        <div className="mintel-dq-ring">
-          <svg viewBox="0 0 42 42" className="mintel-dq-svg">
-            <circle cx="21" cy="21" r="16" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
-            <circle
-              cx="21" cy="21" r="16"
-              fill="none"
-              stroke={completePct >= 80 ? "rgba(52, 211, 153, 0.72)" : completePct >= 50 ? "rgba(251, 153, 0, 0.72)" : "rgba(248, 113, 113, 0.6)"}
-              strokeWidth="4"
-              strokeDasharray={`${completePct} ${100 - completePct}`}
-              strokeDashoffset="25"
-              strokeLinecap="round"
-            />
-          </svg>
-          <span className="mintel-dq-pct">{completePct}%</span>
-        </div>
-        <div className="mintel-dq-info">
-          <span className="mintel-dq-label">Threshold Data</span>
-          <span className="mintel-dq-val">{scoredCount} / {Math.max(scoredCount, totalIndexed)} materials</span>
-        </div>
-      </div>
-      {hasMissingThreshold && (
-        <div className="mintel-dq-warning">
-          <span className="mintel-dq-warn-icon">△</span>
-          <span>{totalIndexed - scoredCount} material{totalIndexed - scoredCount > 1 ? "s" : ""} missing threshold data</span>
+          <table className="mining-resource-index-table">
+            <thead>
+              <tr>
+                <th>MATERIAL</th>
+                <th>TYPE</th>
+                <th>QUALITY FIT</th>
+                <th>YIELD FIT</th>
+                <th>SOURCE</th>
+              </tr>
+            </thead>
+            <tbody>
+              {resourceRows.map((row) => (
+                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
+                  <td className="mdet-mat-name">{row.name}</td>
+                  <td className="mdet-mat-demand">{row.miningType || "—"}</td>
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.qualityFit ?? undefined)}`}>
+                    {row.qualityFit ?? "—"}
+                  </td>
+                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldFit ?? undefined)}`}>
+                    {row.yieldFit ?? "—"}
+                  </td>
+                  <td>
+                    <span className={`mining-source-badge mining-source-badge--${row.status}`}>
+                      {row.sourceStrength}
+                      {row.sourceWeight !== undefined && (
+                        <span className="mdet-source-bar-wrap">
+                          <span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} />
+                        </span>
+                      )}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
@@ -1159,13 +1044,6 @@ export default function MiningModule() {
 
   const hasActiveFilters = selectedSystems.size > 0 || selectedMaterials.size > 0 || selectedMiningTypes.size > 0 || buildQueueSelectionActive;
 
-  // Flat material list for the top rail (ship ores first, then others)
-  const materialChips = useMemo(() => {
-    const ship = resourceGroups.shipAndHarvestable;
-    const vehicle = resourceGroups.vehicle;
-    const hand = resourceGroups.hand;
-    return [...ship, ...vehicle, ...hand];
-  }, [resourceGroups]);
 
   const visibleCards = useMemo(() => rankedFilteredLocations.slice(0, 4), [rankedFilteredLocations]);
   useEffect(() => {
@@ -1195,11 +1073,12 @@ export default function MiningModule() {
       {state.status === "ok" && (
         <>
           {/* ── Top filter rail ──────────────────────────────────── */}
-          <div className="mfr-rail">
-            {/* System group */}
-            <div className="mfr-group">
-              <span className="mfr-group-label">SYSTEM</span>
-              <div className="mfr-chips">
+          <div className="mining-filter-rail">
+
+            {/* Left column: System + Mode */}
+            <div className="mining-filter-group mining-filter-group--left">
+              <span className="mining-filter-label">System</span>
+              <div className="mining-chip-row">
                 {MINING_SYSTEM_FILTERS.map((sys) => (
                   <button
                     key={sys}
@@ -1211,50 +1090,14 @@ export default function MiningModule() {
                   </button>
                 ))}
               </div>
-            </div>
-
-            <div className="mfr-divider" />
-
-            {/* Materials group — takes most space */}
-            {materialChips.length > 0 && (
-              <div className="mfr-group mfr-group--materials">
-                <span className="mfr-group-label">MATERIALS</span>
-                <div className="mfr-chips mfr-chips--wrap">
-                  {materialChips.map((chip) => (
-                    <button
-                      key={chip.id}
-                      type="button"
-                      className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
-                      onClick={() => toggleMaterial(chip.id)}
-                    >
-                      {chip.label}
-                    </button>
-                  ))}
-                  {selectedMaterials.size > 0 && (
-                    <button
-                      type="button"
-                      className="mfr-chip mfr-chip--clear"
-                      onClick={() => setSelectedMaterials(new Set())}
-                    >
-                      Clear all
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="mfr-divider" />
-
-            {/* Demand mode group */}
-            <div className="mfr-group">
-              <span className="mfr-group-label">MINING TYPE</span>
-              <div className="mfr-chips">
+              <span className="mining-filter-label">Mode</span>
+              <div className="mining-chip-row">
                 <button
                   type="button"
                   className={`mfr-chip${!buildQueueSelectionActive && selectedMaterials.size === 0 && !planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
                   onClick={clearAllFilters}
                 >
-                  All Mining
+                  All
                 </button>
                 <button
                   type="button"
@@ -1269,20 +1112,75 @@ export default function MiningModule() {
                 <button
                   type="button"
                   className={`mfr-chip${planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
-                  onClick={() => planner.setFilter("showOnlyStarred", !planner.filters.showOnlyStarred)}
+                  onClick={() => planner.toggleShowOnlyStarred()}
                 >
                   Starred
                 </button>
               </div>
             </div>
 
+            {/* Center column: categorized mineables — each category is a grid column */}
+            <div className="mining-filter-group--mineables">
+              {resourceGroups.shipAndHarvestable.length > 0 && (
+                <div className="mining-filter-category">
+                  <span className="mining-filter-label">Ship Mineables</span>
+                  <div className="mining-chip-wrap">
+                    {resourceGroups.shipAndHarvestable.map((chip) => (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
+                        onClick={() => toggleMaterial(chip.id)}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {resourceGroups.vehicle.length > 0 && (
+                <div className="mining-filter-category">
+                  <span className="mining-filter-label">Vehicle</span>
+                  <div className="mining-chip-wrap">
+                    {resourceGroups.vehicle.map((chip) => (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
+                        onClick={() => toggleMaterial(chip.id)}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {resourceGroups.hand.length > 0 && (
+                <div className="mining-filter-category">
+                  <span className="mining-filter-label">Hand</span>
+                  <div className="mining-chip-wrap">
+                    {resourceGroups.hand.map((chip) => (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}`}
+                        onClick={() => toggleMaterial(chip.id)}
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right actions */}
             {hasActiveFilters && (
-              <>
-                <div className="mfr-divider" />
+              <div className="mining-filter-actions">
                 <button type="button" className="mfr-clear-btn" onClick={clearAllFilters}>
-                  Clear all filters
+                  Clear all
                 </button>
-              </>
+              </div>
             )}
           </div>
 
@@ -1371,16 +1269,6 @@ export default function MiningModule() {
                   <div className="mdet-empty">
                     <span>Select a location to view details</span>
                   </div>
-                )}
-              </div>
-
-              {/* ── Right: intel panels ───────────────────────── */}
-              <div className="mintel-col">
-                {selectedEntry && (
-                  <>
-                    <RouteStrengthPanel entry={selectedEntry} />
-                    <DataQualityPanel entry={selectedEntry} />
-                  </>
                 )}
               </div>
 

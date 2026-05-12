@@ -5,20 +5,102 @@ function normalize(value: string | undefined): string {
   return (value ?? "").trim().toLowerCase();
 }
 
+function compactMaterialKey(value: string | undefined): string {
+  return normalize(value).replace(/[^a-z0-9]/g, "");
+}
+
+const MATERIAL_ALIASES = new Map<string, string>([
+  ["quantanium", "quantanium"],
+  ["quantainium", "quantanium"],
+]);
+
+const CANONICAL_DISPLAY_NAMES = new Map<string, string>([
+  ["quantanium", "Quantanium"],
+]);
+
+function materialAliasVariants(canonicalKey: string): string[] {
+  if (canonicalKey === "quantanium") return ["quantanium", "quantainium"];
+  return [canonicalKey];
+}
+
+export function canonicalMaterialKey(value: string | undefined): string {
+  const compact = compactMaterialKey(value);
+  return MATERIAL_ALIASES.get(compact) ?? compact;
+}
+
+export function canonicalMaterialDisplayName(value: string | undefined): string {
+  const key = canonicalMaterialKey(value);
+  return CANONICAL_DISPLAY_NAMES.get(key) ?? (value ?? "").trim();
+}
+
+function sourceContainsMaterialAlias(group: MaterialSourceGroup, aliasKey: string): boolean {
+  const sources = group.bestSources ?? group.sources ?? [];
+  const variants = materialAliasVariants(aliasKey);
+  return sources.some((source) => [
+    source.materialId,
+    source.materialName,
+    source.harvestableName,
+    source.mineableEntity,
+    source.compositionName,
+    source.entityClass,
+    source.providerName,
+    source.groupName,
+  ].some((value) => canonicalMaterialKey(value) === aliasKey || variants.some((variant) => compactMaterialKey(value).includes(variant))));
+}
+
 export function findMaterialGroup(
   requirement: AggregatedRequirement,
   groups: MaterialSourceGroup[],
   warnings: RecommenderWarning[],
 ): MaterialSourceGroup | null {
+  const requirementAliasKey = canonicalMaterialKey(requirement.materialKey || requirement.materialId || requirement.materialName || requirement.displayName);
   const byKey = groups.find((group) => group.materialId === requirement.materialKey);
   if (byKey) return byKey;
   const byId = groups.find((group) => group.materialId === requirement.materialId);
   if (byId) return byId;
   const byName = groups.find((group) =>
     normalize(group.materialName) === normalize(requirement.displayName) ||
-    normalize(group.materialName) === normalize(requirement.materialName)
+    normalize(group.materialName) === normalize(requirement.materialName) ||
+    canonicalMaterialKey(group.materialName) === requirementAliasKey
   );
   if (byName) return byName;
+
+  const aliasSources = groups.flatMap((group) => {
+    if (!sourceContainsMaterialAlias(group, requirementAliasKey)) return [];
+    const variants = materialAliasVariants(requirementAliasKey);
+    return (group.bestSources ?? group.sources ?? [])
+      .filter((source) => [
+        source.materialId,
+        source.materialName,
+        source.harvestableName,
+        source.mineableEntity,
+        source.compositionName,
+        source.entityClass,
+        source.providerName,
+        source.groupName,
+      ].some((value) =>
+        canonicalMaterialKey(value) === requirementAliasKey ||
+        variants.some((variant) => compactMaterialKey(value).includes(variant))
+      ))
+      .map((source) => ({
+        ...source,
+        originalMaterialName: group.materialName,
+        originalMaterialKey: group.materialId,
+        materialName: canonicalMaterialDisplayName(requirement.materialName),
+        materialId: requirement.materialId,
+        canonicalMaterialName: canonicalMaterialDisplayName(requirement.materialName),
+        canonicalMaterialKey: requirementAliasKey,
+        materialAliasApplied: true,
+      }));
+  });
+
+  if (aliasSources.length > 0) {
+    return {
+      materialId: requirement.materialId,
+      materialName: canonicalMaterialDisplayName(requirement.materialName),
+      sources: aliasSources,
+    };
+  }
 
   addWarning(warnings, {
     code: "material_sources_missing",

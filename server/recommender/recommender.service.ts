@@ -39,6 +39,7 @@ export async function getRecommendations(request: RecommendRequest): Promise<Rec
     warnings,
     diagnostics: {
       materialCoverage: scored.diagnostics,
+      scoreContributions: scored.scoreContributions,
     },
   };
 }

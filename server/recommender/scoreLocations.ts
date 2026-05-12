@@ -1,6 +1,13 @@
-import type { AggregatedRequirement, MaterialCoverageDiagnostic, RecommenderApiData, RecommenderWarning, ScoredLocation } from "./recommender.types";
+import type {
+  AggregatedRequirement,
+  MaterialCoverageDiagnostic,
+  RecommenderApiData,
+  RecommenderWarning,
+  ScoreContributionDiagnostic,
+  ScoredLocation,
+} from "./recommender.types";
 import { resolveLocation } from "./locationResolver";
-import { findMaterialGroup } from "./materialResolver";
+import { canonicalMaterialDisplayName, canonicalMaterialKey, findMaterialGroup } from "./materialResolver";
 import { resolveSources } from "./sourceResolver";
 import { addWarning } from "./recommenderWarnings";
 import { miningLocationMergeKey } from "./locationNormalization";
@@ -11,6 +18,13 @@ function qualityFit(requirement: AggregatedRequirement, sourceQuality?: Record<s
   const chance = chances?.[String(requirement.selectedQuality)];
   if (typeof chance === "number") return chance;
   return 0.5;
+}
+
+function thresholdChanceFor(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number | undefined {
+  if (requirement.selectedQuality === undefined) return undefined;
+  const chances = sourceQuality?.thresholdChances as Record<string, number> | undefined;
+  const chance = chances?.[String(requirement.selectedQuality)];
+  return typeof chance === "number" ? chance : undefined;
 }
 
 function fallbackSourceScore(source: Record<string, unknown>): number {
@@ -220,9 +234,10 @@ export function scoreLocations(
   requirements: AggregatedRequirement[],
   apiData: RecommenderApiData,
   warnings: RecommenderWarning[],
-): { locations: ScoredLocation[]; diagnostics: MaterialCoverageDiagnostic[] } {
+): { locations: ScoredLocation[]; diagnostics: MaterialCoverageDiagnostic[]; scoreContributions: ScoreContributionDiagnostic[] } {
   const locations = new Map<string, ScoredLocation>();
   const diagnostics: MaterialCoverageDiagnostic[] = [];
+  const scoreContributions: ScoreContributionDiagnostic[] = [];
   const indexedResourcesByLocation = buildIndexedResources(apiData, warnings);
 
   for (const requirement of requirements) {
@@ -263,8 +278,12 @@ export function scoreLocations(
         miningType: miningTypeFromSpawn(location.spawnType),
       });
       materialDiagnostics.miningType ??= miningTypeFromSpawn(location.spawnType);
-      const composition = source.composition?.averagePercentage ?? source.composition?.maxPercentage;
-      if (composition === undefined) {
+      const compositionAverageUsed = source.composition?.averagePercentage ?? source.composition?.maxPercentage;
+      const compositionMaxUsed = source.composition?.maxPercentage;
+      const compositionMissing = compositionAverageUsed === undefined;
+      const thresholdChanceUsed = thresholdChanceFor(requirement, source.quality);
+      const thresholdDataMissing = requirement.selectedQuality !== undefined && !source.quality?.thresholdChances;
+      if (compositionMissing) {
         addWarning(warnings, {
           code: "source_composition_missing",
           message: `Composition percentage is missing for ${requirement.materialName} at ${location.locationName}.`,
@@ -272,7 +291,7 @@ export function scoreLocations(
           materialName: requirement.materialName,
         });
       }
-      if (!source.quality?.thresholdChances && requirement.selectedQuality !== undefined) {
+      if (thresholdDataMissing) {
         addWarning(warnings, {
           code: "source_quality_thresholds_missing",
           message: `Quality threshold chances are missing for ${requirement.materialName}; selected quality was preserved but partially scored.`,
@@ -283,7 +302,40 @@ export function scoreLocations(
 
       const baseScore = source.overallScore ?? fallbackSourceScore(source as Record<string, unknown>);
       const requirementWeight = Math.log10(requirement.requiredQuantity + 10);
-      const score = (baseScore + (composition ?? 0) / 100) * qualityFit(requirement, source.quality) * requirementWeight;
+      const qualityFitResult = qualityFit(requirement, source.quality);
+      const score = (baseScore + (compositionAverageUsed ?? 0) / 100) * qualityFitResult * requirementWeight;
+      const scoreDiagnostic: ScoreContributionDiagnostic = {
+        materialKey: requirement.materialKey,
+        materialId: requirement.materialId,
+        materialName: requirement.materialName,
+        displayName: requirement.displayName,
+        locationKey: key,
+        locationName: location.locationName,
+        systemName: location.systemName,
+        baseScore,
+        overallScore: source.overallScore,
+        compositionAverageUsed,
+        compositionMaxUsed,
+        selectedQuality: requirement.selectedQuality,
+        thresholdChanceUsed,
+        qualityFit: qualityFitResult,
+        requirementWeight,
+        finalContribution: score,
+        compositionMissing,
+        thresholdDataMissing,
+        sourceResolverPath: source.sourceResolverPath,
+        perLocationOverrideApplied: source.perLocationOverrideApplied ?? false,
+        overrideFieldsApplied: source.overrideFieldsApplied ?? [],
+        sourceLocationRawName: source.sourceLocationRawName ?? source.location ?? source.providerName,
+        sourceLocationKey: source.sourceLocationKey,
+        materialKeyResolved: source.materialKeyResolved ?? canonicalMaterialKey(source.materialName ?? requirement.materialName),
+        materialAliasApplied: source.materialAliasApplied ?? canonicalMaterialKey(requirement.materialName) !== canonicalMaterialKey(source.originalMaterialName ?? source.materialName ?? requirement.materialName),
+        originalMaterialName: source.originalMaterialName ?? source.materialName,
+        originalMaterialKey: source.originalMaterialKey ?? source.materialId,
+        canonicalMaterialName: source.canonicalMaterialName ?? canonicalMaterialDisplayName(requirement.materialName),
+        canonicalMaterialKey: source.canonicalMaterialKey ?? canonicalMaterialKey(requirement.materialName),
+      };
+      scoreContributions.push(scoreDiagnostic);
       const existing = locations.get(key);
       if (existing) {
         existing.score += score;
@@ -294,6 +346,7 @@ export function scoreLocations(
           existing.coveredRequirements.push(requirement);
         }
         existing.bestSources.push(source);
+        existing.scoreDiagnostics = [...(existing.scoreDiagnostics ?? []), scoreDiagnostic];
       } else {
         locations.set(key, {
           locationKey: key,
@@ -307,6 +360,7 @@ export function scoreLocations(
           score,
           coveredRequirements: [requirement],
           bestSources: [source],
+          scoreDiagnostics: [scoreDiagnostic],
         });
       }
     }
@@ -315,5 +369,6 @@ export function scoreLocations(
   return {
     locations: pickCoverageAwareLocations(Array.from(locations.values()), requirements, 24),
     diagnostics,
+    scoreContributions,
   };
 }

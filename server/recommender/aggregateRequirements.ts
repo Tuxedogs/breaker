@@ -1,4 +1,5 @@
 import type { AggregatedRequirement, RequirementInput, RecommenderWarning } from "./recommender.types";
+import { canonicalMaterialDisplayName, canonicalMaterialKey } from "./materialResolver";
 import { addWarning } from "./recommenderWarnings";
 
 export function aggregateRequirements(
@@ -10,8 +11,12 @@ export function aggregateRequirements(
   for (const requirement of requirements) {
     const materialKey = requirement.materialKey?.trim() || requirement.materialId?.trim() || requirement.slug?.trim() || requirement.materialName?.trim();
     const materialId = requirement.materialId?.trim() || materialKey;
-    const displayName = requirement.displayName?.trim() || requirement.materialName?.trim() || materialId;
-    const materialName = requirement.materialName?.trim() || displayName;
+    const inputDisplayName = requirement.displayName?.trim() || requirement.materialName?.trim() || materialId;
+    const canonicalDisplayName = canonicalMaterialDisplayName(inputDisplayName);
+    const displayName = canonicalMaterialKey(inputDisplayName) === "quantanium" ? canonicalDisplayName : inputDisplayName;
+    const materialName = canonicalMaterialKey(requirement.materialName ?? displayName) === "quantanium"
+      ? canonicalDisplayName
+      : requirement.materialName?.trim() || displayName;
     if (!materialKey || !materialId || !materialName || !displayName) {
       addWarning(warnings, {
         code: "requirement_missing_material",
