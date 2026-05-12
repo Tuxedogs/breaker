@@ -1,6 +1,7 @@
 /* ─── Build Queue — Ground-Up v3 ──────────────────────────────────────────── */
 
 .bq-page {
+  --bq-large:      #0f1317;
   --bq-bg:         #050708;
   --bq-bg-soft:    #070b0d;
   --bq-surface:    rgba(16,20,23,0.96);
@@ -23,9 +24,6 @@
   padding: 0;
   font-family: var(--font-primary);
   color: var(--bq-text);
-  background:
-    radial-gradient(circle at 6% 0%, rgba(255,153,0,0.07), transparent 22rem),
-    linear-gradient(180deg, var(--bq-bg-soft) 0%, var(--bq-bg) 48%, #020303 100%);
   min-height: 100vh;
   width: 100%;
 }
@@ -58,8 +56,7 @@
   border: 1px solid var(--bq-accent-edge);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(255,153,0,0.10), transparent 18rem),
-    linear-gradient(180deg, #101417 0%, #070a0c 100%);
+    var(--bq-large);
   box-shadow:
     0 24px 56px rgba(0,0,0,0.58),
     0 0 42px rgba(255,153,0,0.08),
@@ -77,11 +74,8 @@
   padding: 0.76rem;
   border: 1px solid var(--bq-edge);
   border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(18,23,26,0.98), rgba(8,11,13,0.98));
-  box-shadow:
-    0 18px 34px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.035);
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
 }
 
 .bq-ledger-title {
@@ -116,8 +110,9 @@
   padding: 0.44rem 0.5rem;
   border: 1px solid var(--bq-edge-soft);
   border-radius: 5px;
-  background: rgba(10,14,16,0.66);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.026);
+  background: var(--bq-large);
+   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
+
 }
 
 .bq-ledger-stat span {
@@ -677,7 +672,7 @@
   min-width: 0;
   border: 1px solid var(--bq-edge);
   border-radius: 7px;
-  background: linear-gradient(180deg, rgba(24,29,33,0.98) 0%, rgba(16,20,23,0.98) 100%);
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
   box-shadow:
     0 10px 24px rgba(0,0,0,0.38),
     0 3px 8px rgba(0,0,0,0.26),
