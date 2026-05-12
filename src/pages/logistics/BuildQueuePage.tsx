@@ -172,20 +172,6 @@ export default function BuildQueuePage() {
       </div>
 
       {/* Shortage Panel */}
-      <div className="bq-shortage-panel">
-        <div className="bq-shortage-panel-head">
-          <div className="bq-shortage-panel-head-left">
-            <span>Material Shortages</span>
-            {groupedShortages.length > 0 && (
-              <span className="bq-shortage-count">{groupedShortages.length} materials</span>
-            )}
-          </div>
-        </div>
-
-        {shortages.length === 0 && (
-          <div className="bq-shortage-all-clear">All materials covered for active builds.</div>
-        )}
-        </div>
 
       <>
         {categories.length === 0 ? (
