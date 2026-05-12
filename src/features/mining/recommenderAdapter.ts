@@ -5,6 +5,7 @@ import type {
   MiningRecommendationRequest,
   PublicLocationEntry,
 } from "./types";
+import { canonicalMiningMaterial } from "./materialIdentity";
 
 export interface RecommenderWarning {
   code: string;
@@ -46,10 +47,10 @@ function toRecommenderApiRequest(request: MiningRecommendationRequest): Recommen
   return {
     ...rest,
     materialRequirements: requiredMaterials.map((material) => ({
-      materialKey: material.materialKey,
-      materialId: material.materialId,
-      materialName: material.materialName,
-      displayName: material.displayName,
+      materialKey: canonicalMiningMaterial(material).key,
+      materialId: canonicalMiningMaterial(material).key,
+      materialName: canonicalMiningMaterial(material).label,
+      displayName: canonicalMiningMaterial(material).label,
       normalizedName: material.normalizedName,
       slug: material.slug,
       requiredQuantity: material.requiredQuantity,
@@ -75,11 +76,13 @@ export async function getAllIndexedLocations(): Promise<AllLocationsResponse> {
 
 export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
+  signal?: AbortSignal,
 ): Promise<RecommendationResponse> {
   const response = await fetch("/api/recommender/recommendations", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(toRecommenderApiRequest(request)),
+    signal,
   });
 
   if (!response.ok) {
@@ -98,8 +101,10 @@ export function buildRecommendationRequest(
     version: "1.0",
     generatedAt: new Date().toISOString(),
     requiredMaterials: queuedRequirements ?? (fixture?.requiredMaterials ?? []).map((m) => ({
-      materialId: m.materialId,
-      materialName: m.materialName,
+      materialId: canonicalMiningMaterial(m).key,
+      materialKey: canonicalMiningMaterial(m).key,
+      materialName: canonicalMiningMaterial(m).label,
+      displayName: canonicalMiningMaterial(m).label,
       requiredQuantity: m.requiredQuantity,
       selectedQuality: m.selectedQuality,
       unitType: m.unitType,

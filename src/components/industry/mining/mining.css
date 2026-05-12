@@ -2400,8 +2400,13 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
    ═══════════════════════════════════════════════ */
 
 .mine-page--v2 {
-  padding: 0.75rem 1rem;
-  gap: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.55rem 0.85rem;
+  gap: 0.45rem;
+  overflow: hidden;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Top filter rail ──────────────────────────── */
@@ -2504,6 +2509,13 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   color: rgba(52, 211, 153, 0.95);
 }
 
+.mfr-chip--disabled,
+.mfr-chip:disabled {
+  opacity: 0.32;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .mfr-chip--clear {
   color: rgba(248, 113, 113, 0.58);
   border-color: rgba(248, 113, 113, 0.2);
@@ -2554,23 +2566,10 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   gap: 0.7rem;
   align-items: start;
   min-height: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
-@media (max-width: 1280px) {
-  .mconsole-layout {
-    grid-template-columns: 270px minmax(0, 1fr);
-    gap: 0.55rem;
-  }
-}
-
-@media (max-width: 720px) {
-  .mconsole-layout {
-    grid-template-columns: 1fr;
-  }
-  .mlist-panel {
-    max-height: 40vh;
-  }
-}
 
 /* ── Left: ranked location list panel ─────────── */
 
@@ -2581,9 +2580,8 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
-  position: sticky;
-  top: 0.75rem;
-  max-height: calc(100vh - 8rem);
+  height: 100%;
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -2843,6 +2841,10 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   text-align: right;
 }
 
+.mlist-bar-val--text {
+  margin-left: auto;
+}
+
 .mlist-item-strength {
   margin-top: 0.06rem;
 }
@@ -2881,7 +2883,17 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,153,0,0.15) transparent;
 }
+
+.mdet-col::-webkit-scrollbar { width: 4px; }
+.mdet-col::-webkit-scrollbar-track { background: transparent; }
+.mdet-col::-webkit-scrollbar-thumb { background: rgba(255,153,0,0.18); border-radius: 2px; }
 
 .mdet-empty {
   display: flex;
@@ -2896,11 +2908,11 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mdet-panel {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.5rem;
   background: linear-gradient(180deg, #181d21 0%, #101417 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  padding: 0.85rem;
+  padding: 0.65rem 0.85rem;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
   min-width: 0;
 }
@@ -2912,7 +2924,7 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.45rem;
   border-bottom: 1px solid rgba(255, 153, 0, 0.14);
 }
 
@@ -3008,8 +3020,8 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mdet-metric-card {
   display: flex;
   flex-direction: column;
-  gap: 0.12rem;
-  padding: 0.42rem 0.6rem;
+  gap: 0.1rem;
+  padding: 0.3rem 0.55rem;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 6px;
@@ -3055,6 +3067,40 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   color: rgba(160, 180, 220, 0.55);
 }
 
+/* InfoTip */
+
+.mdet-infotip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 180, 220, 0.3);
+  color: rgba(160, 180, 220, 0.45);
+  font-size: 0.58rem;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  line-height: 1;
+  cursor: help;
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-left: 0.2rem;
+  user-select: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.mdet-infotip:hover {
+  border-color: rgba(255, 153, 0, 0.45);
+  color: rgba(255, 153, 0, 0.7);
+}
+
+.mdet-th-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+}
+
 /* Section labels */
 
 .mdet-section-label {
@@ -3063,7 +3109,7 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: rgba(255, 153, 0, 0.78);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.25rem;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -3153,7 +3199,7 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mdet-mat-row:last-child { border-bottom: none; }
 
 .mdet-mat-row td {
-  padding: 0.44rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   font-size: 0.88rem;
   line-height: 1.35;
 }
@@ -3472,9 +3518,10 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   background: linear-gradient(180deg, #181c22 0%, #111519 100%);
   border: 1px solid rgba(255, 153, 0, 0.18);
   border-radius: 7px;
-  padding: 0.55rem 0.75rem;
+  padding: 0.38rem 0.7rem;
   box-shadow: 0 4px 14px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
   align-items: start;
+  flex-shrink: 0;
 }
 
 /* Left: System + Mode stacked */
@@ -3558,5 +3605,159 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   .mining-filter-actions {
     border-left: none;
     padding-left: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Mining page v2
+   ═══════════════════════════════════════════════ */
+
+/* ── clamp-based column widths (1101px–1599px and wide) ── */
+
+.mconsole-layout {
+  grid-template-columns: clamp(240px, 20vw, 320px) minmax(0, 1fr);
+}
+
+/* ── 4K / ultra-wide: max-width cap + centering ── */
+
+@media (min-width: 1800px) {
+  .mine-page--v2 {
+    max-width: 2000px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    padding-left: clamp(0.85rem, 2vw, 2rem);
+    padding-right: clamp(0.85rem, 2vw, 2rem);
+  }
+
+  .mconsole-layout {
+    grid-template-columns: clamp(280px, 16vw, 360px) minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .mining-filter-rail {
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* ── Tablet / small desktop (1101px–1280px) ── */
+
+@media (max-width: 1280px) {
+  .mconsole-layout {
+    grid-template-columns: clamp(220px, 22vw, 280px) minmax(0, 1fr);
+    gap: 0.55rem;
+  }
+}
+
+/* ── Mobile (<= 760px): release viewport lock, stack layout ── */
+
+@media (max-width: 760px) {
+  .mine-page--v2 {
+    height: auto;
+    overflow: visible;
+    padding: 0.55rem 0.55rem;
+    gap: 0.55rem;
+  }
+
+  /* Filter rail: single column, chip groups scroll horizontally */
+  .mining-filter-rail {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .mining-filter-group--left {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding-right: 0;
+    padding-bottom: 0.45rem;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, max-content);
+    align-items: start;
+    gap: 0.85rem;
+  }
+
+  .mining-chip-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .mining-chip-row::-webkit-scrollbar { display: none; }
+
+  .mining-filter-group--mineables {
+    padding-left: 0;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .mining-chip-wrap {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  .mining-chip-wrap::-webkit-scrollbar { display: none; }
+
+  .mining-filter-actions {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  /* Console layout: single column, natural document flow */
+  .mconsole-layout {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    overflow: visible;
+    height: auto;
+    flex: none;
+  }
+
+  /* List panel: natural height, internal scroll released */
+  .mlist-panel {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .mlist-items {
+    overflow-y: visible;
+    max-height: none;
+  }
+
+  /* Detail column: natural height, no internal scroll on mobile */
+  .mdet-col {
+    height: auto;
+    overflow-y: visible;
+    overflow-x: hidden;
+    min-height: 0;
+  }
+
+  /* Tables scroll horizontally inside their container */
+  .mining-demand-breakdown,
+  .mining-resource-index {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mining-resource-index-table {
+    min-width: 480px;
+  }
+
+  .mdet-mat-table {
+    min-width: 420px;
+  }
+
+  /* Metric card row: allow wrapping on mobile */
+  .mdet-metric-row {
+    flex-wrap: wrap;
+  }
+
+  .mdet-metric-card {
+    min-width: calc(50% - 0.3rem);
+    flex: 1 1 calc(50% - 0.3rem);
   }
 }
