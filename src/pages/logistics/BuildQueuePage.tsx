@@ -48,7 +48,6 @@ function formatSummaryNumber(value: number): string {
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
-  const [ledgerOpen, setLedgerOpen] = useState(false);
 
   const inventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const buildQueue = useLogisticsStore((s) => s.buildQueue);
@@ -123,8 +122,8 @@ export default function BuildQueuePage() {
   const categories = Object.keys(grouped);
   const reservableShortages = shortages.filter((shortage) => shortage.have > 0).length;
   const noStockShortages = shortages.filter((shortage) => shortage.have <= 0).length;
+  const materialsNeededCount = groupedShortages.length;
   const totalShortageDisplay = formatSummaryNumber(shortageSummary.totalShortfallQuantity);
-  const ledgerVisible = ledgerOpen && shortages.length > 0;
 
 
   return (
@@ -134,29 +133,40 @@ export default function BuildQueuePage() {
       
 
       <div className="bq-main">
-        <div className={`bq-workspace${ledgerVisible ? ' bq-workspace--with-ledger' : ''}`}>
+        <div className="bq-workspace">
         <div className="bq-shell">
+
+      <div className="bq-shell-header">
+        <div>
+          <div className="bq-shell-title-row">
+            <span className="bq-shell-kicker">BUILD QUEUE</span>
+            <span className="bq-shell-count">{groupedShortages.length} materials</span>
+          </div>
+          <h1>Material Shortages</h1>
+          <p>Active build demand, stock gaps, and reservation readiness.</p>
+        </div>
+      </div>
 
       <div className="bq-summary-grid" aria-label="Build queue summary metrics">
         <div className="bq-summary-card">
-          <span>Queue Items</span>
+          <span>Queued Builds</span>
           <strong>{buildQueue.length}</strong>
-          <em>{shortageSummary.activeQueueItems.length} active</em>
+          <em>Total build plans</em>
         </div>
         <div className="bq-summary-card bq-summary-card--danger">
-          <span>Total Shortage</span>
-          <strong>{totalShortageDisplay}</strong>
-          <em>{shortageSummary.totalShortageMaterials} shortage lines</em>
+          <span>Blocked Builds</span>
+          <strong>{shortageSummary.activeQueueItems.length}</strong>
+          <em>Active demand with gaps</em>
+        </div>
+        <div className="bq-summary-card">
+          <span>Materials Needed</span>
+          <strong>{materialsNeededCount}</strong>
+          <em>Unique shortage materials</em>
         </div>
         <div className="bq-summary-card bq-summary-card--success">
-          <span>Reservable</span>
+          <span>Ready to Reserve</span>
           <strong>{reservableShortages}</strong>
-          <em>Lines with stock</em>
-        </div>
-        <div className="bq-summary-card bq-summary-card--danger">
-          <span>No Stock</span>
-          <strong>{noStockShortages}</strong>
-          <em>Zero eligible stock</em>
+          <em>Shortage lines with stock</em>
         </div>
       </div>
 
@@ -169,11 +179,6 @@ export default function BuildQueuePage() {
               <span className="bq-shortage-count">{groupedShortages.length} materials</span>
             )}
           </div>
-          {shortages.length > 0 && (
-            <button type="button" className="bq-btn-ghost" onClick={() => setLedgerOpen((v) => !v)}>
-              {ledgerOpen ? 'Hide ledger' : 'Show ledger'}
-            </button>
-          )}
         </div>
 
         {shortages.length === 0 && (
@@ -207,27 +212,28 @@ export default function BuildQueuePage() {
       </>
 
         </div>
-        {ledgerVisible && (
-          <aside className="bq-ledger-panel" aria-label="Queue Ledger">
-            <div className="bq-ledger-title">Queue Ledger</div>
-            <div className="bq-ledger-stat">
-              <span>Queue Items</span>
-              <strong>{buildQueue.length}</strong>
+        <aside className="bq-ledger-panel" aria-label="Queue Ledger">
+          <div className="bq-ledger-title">Queue Ledger</div>
+          <div className="bq-ledger-stat bq-ledger-stat--danger">
+            <span>Total Shortfall</span>
+            <strong>{totalShortageDisplay}</strong>
+          </div>
+          <div className="bq-ledger-stat bq-ledger-stat--success">
+            <span>Reservable Lines</span>
+            <strong>{reservableShortages}</strong>
+          </div>
+          <div className="bq-ledger-stat bq-ledger-stat--danger">
+            <span>No Stock Lines</span>
+            <strong>{noStockShortages}</strong>
+          </div>
+          <div className="bq-ledger-title">Material Breakdown</div>
+          {groupedShortages.map((group) => (
+            <div className="bq-ledger-stat bq-ledger-stat--danger" key={`ledger:${group.key}`}>
+              <span>{group.displayName}</span>
+              <strong>{formatSummaryNumber(group.unitGroups.reduce((sum, unitGroup) => sum + unitGroup.shortfall, 0))}</strong>
             </div>
-            <div className="bq-ledger-stat bq-ledger-stat--danger">
-              <span>Total Shortage</span>
-              <strong>{totalShortageDisplay}</strong>
-            </div>
-            <div className="bq-ledger-stat bq-ledger-stat--success">
-              <span>Reservable</span>
-              <strong>{reservableShortages}</strong>
-            </div>
-            <div className="bq-ledger-stat bq-ledger-stat--danger">
-              <span>No Stock</span>
-              <strong>{noStockShortages}</strong>
-            </div>
-          </aside>
-        )}
+          ))}
+        </aside>
         </div>
       </div>
     </div>
