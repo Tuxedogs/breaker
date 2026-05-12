@@ -51,6 +51,14 @@ export interface ApiSource {
   providerName?: string;
   providerGuid?: string;
   groupName?: string;
+  harvestableGuid?: string;
+  harvestableName?: string;
+  clusteringGuid?: string;
+  clusteringName?: string;
+  entityClass?: string;
+  mineableEntity?: string;
+  compositionGuid?: string;
+  compositionName?: string;
   probability?: number;
   relativeProbability?: number;
   materialProbability?: number;
@@ -71,9 +79,25 @@ export interface ApiSource {
     thresholdChances?: Record<string, number>;
   };
   estimatedHighQualityPotential?: number;
-  scoreInputs?: { qualityScore?: number };
+  scoreInputs?: {
+    probabilityScore?: number;
+    compositionScore?: number;
+    qualityScore?: number;
+    spawnTypeWeight?: number;
+  };
   overallScore?: number;
   reason?: string;
+  sourceResolverPath?: string;
+  perLocationOverrideApplied?: boolean;
+  overrideFieldsApplied?: string[];
+  sourceLocationRawName?: string;
+  sourceLocationKey?: string;
+  materialKeyResolved?: string;
+  materialAliasApplied?: boolean;
+  originalMaterialName?: string;
+  originalMaterialKey?: string;
+  canonicalMaterialName?: string;
+  canonicalMaterialKey?: string;
 }
 
 export type RouteTargetabilityLabel = "Excellent" | "Strong" | "Good" | "Weak" | "Poor";
@@ -121,11 +145,47 @@ export interface MaterialCoverageDiagnostic {
   matchingResourceKeys: string[];
 }
 
+export interface ScoreContributionDiagnostic {
+  materialKey: string;
+  materialId: string;
+  materialName: string;
+  displayName: string;
+  locationKey: string;
+  locationName: string;
+  systemName: string;
+  baseScore: number;
+  overallScore?: number;
+  compositionAverageUsed?: number;
+  compositionMaxUsed?: number;
+  selectedQuality?: number;
+  thresholdChanceUsed?: number;
+  qualityFit: number;
+  requirementWeight: number;
+  finalContribution: number;
+  compositionMissing: boolean;
+  thresholdDataMissing: boolean;
+  sourceResolverPath?: string;
+  perLocationOverrideApplied: boolean;
+  overrideFieldsApplied: string[];
+  sourceLocationRawName?: string;
+  sourceLocationKey?: string;
+  materialKeyResolved: string;
+  materialAliasApplied: boolean;
+  originalMaterialName?: string;
+  originalMaterialKey?: string;
+  canonicalMaterialName: string;
+  canonicalMaterialKey: string;
+}
+
 export interface MaterialSourceGroup {
   materialId?: string;
   materialName?: string;
   bestSources?: ApiSource[];
   sources?: ApiSource[];
+  locationOverrides?: unknown[];
+  perLocationOverrides?: unknown[];
+  locations?: unknown[];
+  providers?: unknown[];
 }
 
 export interface RecommenderApiData {
@@ -156,6 +216,7 @@ export interface ScoredLocation {
   score: number;
   coveredRequirements: AggregatedRequirement[];
   bestSources: ApiSource[];
+  scoreDiagnostics?: ScoreContributionDiagnostic[];
   routeScores?: MaterialRouteScore[];
 }
 
@@ -197,5 +258,6 @@ export interface RecommendResponse {
   warnings: RecommenderWarning[];
   diagnostics?: {
     materialCoverage: MaterialCoverageDiagnostic[];
+    scoreContributions?: ScoreContributionDiagnostic[];
   };
 }
