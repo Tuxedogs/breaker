@@ -38,6 +38,52 @@ function getImpactWord(impact: 'good' | 'bad' | 'neutral'): string {
   return '';
 }
 
+function getModifierTrendClass(label: string, value: number | undefined): 'is-better' | 'is-worse' | 'is-neutral' {
+  const key = label.toLocaleLowerCase();
+  if (value === undefined || !Number.isFinite(value) || value === 0) return 'is-neutral';
+
+  const lowerIsBetter = [
+    'recoil',
+    'spread',
+    'sway',
+    'heat',
+    'cooldown',
+    'charge time',
+    'delay',
+    'fuel consumption',
+    'power draw',
+    'signature',
+    'emission',
+    'wear',
+    'degradation',
+    'instability',
+  ].some((term) => key.includes(term));
+
+  const higherIsBetter = [
+    'damage',
+    'health',
+    'hp',
+    'maxhealth',
+    'shield',
+    'regen',
+    'fire rate',
+    'firerate',
+    'speed',
+    'acceleration',
+    'durability',
+    'resistance',
+    'capacity',
+    'range',
+    'penetration',
+    'generation',
+    'power generation',
+  ].some((term) => key.includes(term));
+
+  if (lowerIsBetter) return value < 0 ? 'is-better' : 'is-worse';
+  if (higherIsBetter) return value > 0 ? 'is-better' : 'is-worse';
+  return value > 0 ? 'is-better' : 'is-worse';
+}
+
 function getSavedBandIndex(input: RecipeInputTemplate, qualityBands: QualityBand[]): number | null {
   const bandNumber = input.qualityBand;
   if (!Number.isFinite(bandNumber)) return null;
@@ -335,11 +381,15 @@ export default function BuildQueueGroup({
           const requirementSelectedQuality = input.selectedQuality;
           const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
           const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
-          const modifierPreview = modifierAtQuality
-            ? `${formatProperty(modifierAtQuality.property)} ${formatModifierAtQuality(modifierAtQuality)}`
+          const modifierLabel = modifierAtQuality?.property ?? input.modifierName;
+          const modifierValue = modifierAtQuality?.value ?? input.modifierValue;
+          const modifierDisplayLabel = modifierLabel ? formatProperty(modifierLabel) : '-';
+          const modifierDisplayValue = modifierAtQuality
+            ? formatModifierAtQuality(modifierAtQuality)
             : input.modifierName && input.modifierValue !== undefined
-              ? `${formatProperty(input.modifierName)} ${formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })}`
-              : '-';
+              ? formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })
+              : '';
+          const modifierPreview = modifierDisplayValue ? `${modifierDisplayLabel} ${modifierDisplayValue}` : modifierDisplayLabel;
           const allowLowerQuality = Boolean(item.allowLowerQuality);
           const requirementIdentity = { requirementId, selectedQuality: requirementSelectedQuality, unitType: input.unitType };
           const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
@@ -359,7 +409,7 @@ export default function BuildQueueGroup({
 
           return {
             input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName,
-            required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview,
+            required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview, modifierLabel, modifierValue, modifierDisplayLabel, modifierDisplayValue,
             allowLowerQuality, coverage, needSummary, ownReservedByStack,
             remainingRequired: Math.max(0, required - coverage.reservedQuantity),
             allMaterialStacks, eligibleStacks, ineligibleStacks,
@@ -512,7 +562,17 @@ export default function BuildQueueGroup({
                         <span className={`bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}>{group.selectedQuality}</span>
                         <div className="bq-mat-modifier">
                           {group.requirements.map((req) => (
-                            <span key={`${req.requirementCardKey}:mod`}>{req.modifierPreview}</span>
+                            <span
+                              className="bq-mat-modifier-entry"
+                              key={`${req.requirementCardKey}:mod`}
+                            >
+                              <span className="bq-mat-modifier-label">{req.modifierDisplayLabel}</span>
+                              {req.modifierDisplayValue && (
+                                <span className={`bq-mat-modifier-value ${getModifierTrendClass(req.modifierLabel ?? req.modifierPreview, req.modifierValue)}`}>
+                                  {req.modifierDisplayValue}
+                                </span>
+                              )}
+                            </span>
                           ))}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.availableQuantity, group.material)}</span>

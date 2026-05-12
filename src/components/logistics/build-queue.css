@@ -1110,6 +1110,7 @@
     4.5rem /* needed */
     4.5rem /* reserve */;
   gap: 5.5rem;
+  min-width: 1180px;
 }
 
 .bq-mat-head {
@@ -1184,11 +1185,35 @@
 
 .bq-mat-modifier span {
   font-size: 0.78rem;
-  color: rgba(203,213,225,0.65);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
+}
+
+.bq-mat-modifier-entry {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-width: 0;
+  color: rgba(203,213,225,0.65);
+}
+
+.bq-mat-modifier-label {
+  color: rgba(203,213,225,0.65);
+  min-width: 0;
+}
+
+.bq-mat-modifier-value.is-better {
+  color: var(--bq-success, var(--bq-cyan));
+}
+
+.bq-mat-modifier-value.is-worse {
+  color: var(--bq-danger, var(--bq-red));
+}
+
+.bq-mat-modifier-value.is-neutral {
+  color: var(--bq-muted, var(--bq-sub));
 }
 
 /* status pill inside table */
