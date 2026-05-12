@@ -22,6 +22,7 @@ import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQual
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { getDirectionLabel, getModifierImpact } from '../../lib/gameplay/propertyUtils';
 import QuantityText from './QuantityText';
+import MaterialIcon from './MaterialIcon';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -501,7 +502,10 @@ export default function BuildQueueGroup({
                     <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
                       <div className="bq-mat-row">
                         <div className="bq-mat-name">
-                          <strong>{group.displayName}</strong>
+                          <span className="bq-material-name-cell">
+                            <MaterialIcon materialName={group.displayName} />
+                            <strong>{group.displayName}</strong>
+                          </span>
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
                         <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{getCoverageLabel(group.rowTone)}</span>
