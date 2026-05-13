@@ -1827,15 +1827,7 @@ function InputTable({ rows, materials, startIdx, onUpdate, onDelete }: InputTabl
                 row.isDuplicate ? "logi-refimport-row--duplicate" : "",
               ].filter(Boolean).join(" ")}
             >
-              <td>
-                <input
-                  type="checkbox"
-                  className="logi-refimport-check"
-                  checked={row.include}
-                  onChange={(e) => onUpdate(globalIdx, { include: e.target.checked })}
-                  aria-label={`Include ${row.rawName}`}
-                />
-              </td>
+           
               <td>
                 {row.isDuplicate && (
                   <span className="logi-refimport-duplicate-tag" title="Duplicate quality stack already detected">DUPLICATE</span>

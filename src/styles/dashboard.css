@@ -89,7 +89,6 @@
 }
 
 .dash-sidebar-section {
-  padding: 0 0.6rem;
   margin-bottom: 0.1rem;
 }
 
@@ -122,7 +121,7 @@
   border-radius: 4px;
   font-size: 0.86rem;
   font-weight: 500;
-  color: rgba(199, 210, 230, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
   transition: background 0.12s, color 0.12s;
   cursor: pointer;
@@ -132,29 +131,32 @@
 /* Icon-only nav item when collapsed */
 .dash-sidebar-item--icon {
   justify-content: center;
-  padding: 0.42rem;
+  padding: 0.32rem;
   gap: 0;
 }
 
 .dash-sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(199, 210, 230, 0.85);
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .dash-sidebar-item:hover .dash-sidebar-icon {
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .dash-sidebar-item.active,
 .dash-sidebar-item[aria-current="page"] {
-  background: #5b21b6;
+  background: linear-gradient(180deg, #2b3135 0%, #171e24 100%);
   color: #ffffff;
+  border-left: 2px solid #ff9d00;
+  border-right: 2px solid #ff9d00;
+
 }
 
 .dash-sidebar-item.active .dash-sidebar-icon,
 .dash-sidebar-item[aria-current="page"] .dash-sidebar-icon {
   opacity: 1;
-  color: rgba(233, 216, 255, 0.9);
+  color: rgb(255, 255, 255);
 }
 
 .dash-sidebar-icon {
@@ -178,10 +180,9 @@
   position: fixed;
   transform: translateY(-50%);
   white-space: nowrap;
-  background: #13152a;
-  color: rgba(199, 210, 230, 0.92);
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  border-radius: 4px;
+  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  color: rgba(255, 255, 255, 0.92);
+  border-radius: 6px;
   padding: 0.28rem 0.65rem;
   font-family: var(--font-primary);
   font-size: 0.68rem;
@@ -1535,7 +1536,7 @@
   font-family: var(--font-primary);
   font-size: 0.73rem;
   font-weight: 700;
-  color: rgba(167, 139, 250, 0.65);
+  color: rgba(250, 230, 139, 0.65);
   text-decoration: none;
   display: inline-flex;
   align-items: center;

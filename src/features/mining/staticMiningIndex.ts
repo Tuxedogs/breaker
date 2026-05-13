@@ -176,7 +176,7 @@ function getParentheticalLocationParts(value: string | null | undefined): string
 
 function resolvePyroRomanLocation(value: string | null | undefined): string | null {
   const normalized = (value ?? "").trim();
-  const match = normalized.match(/^pyro\s+(i|ii|iii|iv|v|vi)\b/i);
+  const match = normalized.match(/^pyro\s+(iv|vi|iii|ii|i|v)(?:-([a-z]))?(?:\s|$|\()/i);
   if (!match) return null;
   const romanToNumber: Record<string, string> = {
     i: "1",
@@ -186,7 +186,10 @@ function resolvePyroRomanLocation(value: string | null | undefined): string | nu
     v: "5",
     vi: "6",
   };
-  return `Pyro${romanToNumber[match[1].toLowerCase()]}`;
+  const number = romanToNumber[match[1].toLowerCase()];
+  if (!number) return null;
+  const moonSuffix = match[2] ? match[2].toLowerCase() : "";
+  return `Pyro${number}${moonSuffix}`;
 }
 
 function getDisplayLookupValues(value: string | null | undefined, index: StaticMiningIndex | null | undefined): string[] {
