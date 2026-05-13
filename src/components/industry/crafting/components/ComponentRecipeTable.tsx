@@ -14,7 +14,6 @@ import {
 } from "../utils/qualityModifiers";
 import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
-  getDirectionLabel,
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
 import {
@@ -30,7 +29,7 @@ import {
 
 
 const NO_VALUE = "__none__";
-const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
+const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MAX_VISIBLE_RESULTS = 8;
@@ -440,10 +439,15 @@ type MaterialQuantization = {
   recordName?: string;
   recordType?: string;
   displayName?: string;
+  materialName?: string;
+  materialId?: string;
   materialKey?: string;
   guid?: string;
   path?: string;
-  bands: QualityBand[];
+  /** New format: discrete in-game quality values for this material. */
+  qualityOptions?: number[];
+  /** Legacy format: bands with start/end/mappedValue. Still accepted as fallback. */
+  bands?: QualityBand[];
 };
 
 function normalizeMaterialLookup(value: string | null | undefined): string {
@@ -471,6 +475,8 @@ function getQuantizationLookupKeys(item: MaterialQuantization): string[] {
   };
 
   add(item.materialKey);
+  add(item.materialName);
+  add(item.materialId);
   add(item.displayName);
   add(item.name);
   add(item.recordName);
@@ -556,9 +562,19 @@ function useQualityQuantization() {
 
   const getBandsForMaterial = useCallback(
     (materialName: string): QualityBand[] => {
-      return (
-        getMaterialQuantization(materialName)?.bands ?? FALLBACK_QUALITY_BANDS
-      );
+      const q = getMaterialQuantization(materialName);
+      if (!q) {
+        if (import.meta.env.DEV) console.warn(`[quality] no quantization data for material: "${materialName}" — quality selection unavailable`);
+        return [];
+      }
+      if (q.qualityOptions?.length) {
+        return q.qualityOptions.map((v) => ({ start: v, end: v, mappedValue: v }));
+      }
+      if (q.bands?.length) {
+        return q.bands;
+      }
+      if (import.meta.env.DEV) console.warn(`[quality] quantization entry for "${materialName}" has no qualityOptions or bands`);
+      return [];
     },
     [getMaterialQuantization],
   );
@@ -576,8 +592,7 @@ function useQualityQuantization() {
       const bands = getBandsForMaterial(materialName);
       const safeIndex = clampBandIndex(bandIndex, bands);
       const band = bands[safeIndex];
-
-      return band ? `${band.start}–${band.end}` : "Base 500";
+      return band ? `${Number(band.mappedValue)}` : "—";
     },
     [getBandsForMaterial],
   );
@@ -772,6 +787,20 @@ function MaterialQualityRow({
   const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
   const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
   const fillPct = Math.max(0, selectedPct - bandOnePct);
+
+  if (bands.length === 0) {
+    return (
+      <div className="craft-material-card craft-matq-card craft-matq-card--unavailable">
+        <div className="craft-material-card-head craft-matq-header">
+          <div className="craft-material-identity craft-matq-identity">
+            <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
+            <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
+          </div>
+          <span className="craft-quality-readout craft-matq-band-pill">Quality data unavailable</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="craft-material-card craft-matq-card" data-band={safeBandIndex}>
