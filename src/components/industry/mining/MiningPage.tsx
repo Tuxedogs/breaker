@@ -1285,10 +1285,10 @@ export default function MiningModule() {
           {/* ── Top filter rail ──────────────────────────────────── */}
           <div className="mining-filter-rail">
 
-            {/* Left column: System + Mode */}
-            <div className="mining-filter-group mining-filter-group--left">
+            {/* Left: System + Mode + Clear All */}
+            <div className="mining-filter-group--left">
               <span className="mining-filter-label">System</span>
-              <div className="mining-chip-row">
+              <div className="mining-frl-chips">
                 {MINING_SYSTEM_FILTERS.map((sys) => (
                   <button
                     key={sys}
@@ -1301,7 +1301,7 @@ export default function MiningModule() {
                 ))}
               </div>
               <span className="mining-filter-label">Mode</span>
-              <div className="mining-chip-row">
+              <div className="mining-frl-chips">
                 <button
                   type="button"
                   className={`mfr-chip${!buildQueueSelectionActive && selectedMaterials.size === 0 && !planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
@@ -1327,89 +1327,91 @@ export default function MiningModule() {
                   Starred
                 </button>
               </div>
-            </div>
-
-            {/* Center column: categorized mineables — each category is a grid column */}
-            <div className="mining-filter-group--mineables">
-              {resourceGroups.shipAndHarvestable.length > 0 && (
-                <div className="mining-filter-category">
-                  <span className="mining-filter-label">Ship Mineables</span>
-                  <div className="mining-chip-wrap">
-                    {resourceGroups.shipAndHarvestable.map((chip) => {
-                      const enabled = isChipEnabled(chip.id);
-                      return (
-                        <button
-                          key={chip.id}
-                          type="button"
-                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
-                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
-                          disabled={!enabled}
-                          title={!enabled ? "Not available with current selected materials" : undefined}
-                        >
-                          {chip.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {resourceGroups.vehicle.length > 0 && (
-                <div className="mining-filter-category">
-                  <span className="mining-filter-label">Vehicle</span>
-                  <div className="mining-chip-wrap">
-                    {resourceGroups.vehicle.map((chip) => {
-                      const enabled = isChipEnabled(chip.id);
-                      return (
-                        <button
-                          key={chip.id}
-                          type="button"
-                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
-                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
-                          disabled={!enabled}
-                          title={!enabled ? "Not available with current selected materials" : undefined}
-                        >
-                          {chip.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-              {resourceGroups.hand.length > 0 && (
-                <div className="mining-filter-category">
-                  <span className="mining-filter-label">Hand</span>
-                  <div className="mining-chip-wrap">
-                    {resourceGroups.hand.map((chip) => {
-                      const enabled = isChipEnabled(chip.id);
-                      return (
-                        <button
-                          key={chip.id}
-                          type="button"
-                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
-                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
-                          disabled={!enabled}
-                          title={!enabled ? "Not available with current selected materials" : undefined}
-                        >
-                          {chip.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Right actions */}
-            <div className="mining-filter-actions">
               <button
                 type="button"
                 className="mfr-clear-btn"
                 onClick={clearAllFilters}
                 disabled={!hasActiveFilters}
               >
-                Clear all
+                Clear All
               </button>
             </div>
+
+            {/* Ship Mineables */}
+            {resourceGroups.shipAndHarvestable.length > 0 && (
+              <div className="mining-filter-group--ship">
+                <span className="mining-filter-label">Ship Mineables</span>
+                <div className="mining-chip-wrap">
+                  {resourceGroups.shipAndHarvestable.map((chip) => {
+                    const enabled = isChipEnabled(chip.id);
+                    return (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                        onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                        disabled={!enabled}
+                        title={!enabled ? "Not available with current selected materials" : undefined}
+                      >
+                        {chip.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Vehicle */}
+            {resourceGroups.vehicle.length > 0 && (
+              <div className="mining-filter-group--vehicle">
+                <span className="mining-filter-label">Vehicle</span>
+                <div className="mining-chip-wrap">
+                  {resourceGroups.vehicle.map((chip) => {
+                    const enabled = isChipEnabled(chip.id);
+                    return (
+                      <button
+                        key={chip.id}
+                        type="button"
+                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                        onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                        disabled={!enabled}
+                        title={!enabled ? "Not available with current selected materials" : undefined}
+                      >
+                        {chip.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Hand */}
+            {resourceGroups.hand.length > 0 && (
+              <div className="mining-filter-group--hand">
+                <span className="mining-filter-label">Hand</span>
+                <div className="mining-chip-wrap">
+                  {resourceGroups.hand
+                    .filter((chip) => chip.label.trim().toLowerCase() !== "pure carinite")
+                    .map((chip) => {
+                      const enabled = isChipEnabled(chip.id);
+                      return (
+                        <button
+                          key={chip.id}
+                          type="button"
+                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
+                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
+                          disabled={!enabled}
+                          title={!enabled ? "Not available with current selected materials" : undefined}
+                        >
+                          {chip.label}
+                        </button>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
+
+
           </div>
 
           {/* ── Main 3-column console ───────────────────────────── */}
