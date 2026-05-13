@@ -36,6 +36,52 @@ export type StaticLocationMaterialRow = {
   }>;
 };
 
+export type StaticLocationDistributionRow = {
+  system?: string;
+  systemKey?: string;
+  systemDisplayName?: string;
+  location?: string;
+  locationKey?: string;
+  locationDisplayName?: string;
+  resolvedMineableClass?: string;
+  mineableClass?: string;
+  miningMethod?: string;
+  method?: string;
+  locationClassDistributionShare?: number;
+  distributionShare?: number;
+  share?: number;
+  methodShares?: Record<string, number>;
+  miningMix?: Record<string, number>;
+  classDistribution?: Record<string, number>;
+  distribution?: Record<string, number>;
+  probabilityTotals?: Record<string, number>;
+  edgeCounts?: Record<string, number>;
+};
+
+export type StaticMaterialQualityRow = {
+  materialId?: string;
+  materialKey?: string;
+  materialName?: string;
+  system?: string;
+  systemKey?: string;
+  location?: string;
+  locationKey?: string;
+  resolvedMineableClass?: string;
+  thresholdChances?: Record<string, number>;
+  qualityThresholdChancesWeighted?: Record<string, number>;
+  qualitySourceScope?: string;
+  qualitySourceFamily?: string;
+  qualityDistributionSourceName?: string;
+  qualityDistributionSourceNames?: string[];
+  qualityOverrideApplied?: boolean;
+};
+
+export type StaticLocationHierarchyIndex = {
+  lagrangeGroups?: unknown[];
+  locationParents?: Record<string, string[]>;
+  locationParentDisplayNames?: Record<string, string[]>;
+};
+
 export type StaticMaterialEncounterRankingRow = StaticLocationMaterialRow & {
   encounterRank: number;
   encounterRankOutOf: number;
@@ -55,10 +101,18 @@ export type StaticMiningIndex = {
   materialResources: StaticMiningMaterialResource[];
   rankingByRowKey: Map<string, StaticMaterialEncounterRankingRow>;
   encounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
+  distributionRows: StaticLocationDistributionRow[];
+  distributionByLocationJoinKey: Map<string, StaticLocationDistributionRow[]>;
+  qualityRows: StaticMaterialQualityRow[];
+  qualityByRowKey: Map<string, StaticMaterialQualityRow>;
+  locationHierarchy: StaticLocationHierarchyIndex | null;
 };
 
 const LOCATION_INDEX_URL = "/api/recommendations/location_material_index.json";
 const MATERIAL_RANKINGS_URL = "/api/recommendations/material_encounter_rankings.json";
+const MATERIAL_QUALITY_INDEX_URL = "/api/recommendations/material_quality_index.json";
+const LOCATION_DISTRIBUTION_INDEX_URL = "/api/recommendations/location_distribution_index.json";
+const LOCATION_HIERARCHY_INDEX_URL = "/api/recommendations/location_hierarchy_index.json";
 
 let loadPromise: Promise<StaticMiningIndex> | null = null;
 
@@ -82,7 +136,9 @@ function splitLocationCandidate(value: string | null | undefined): string | null
   const normalized = (value ?? "").trim();
   if (!normalized) return null;
   const parts = normalized.split("::");
-  return parts.length > 1 ? parts[parts.length - 1] : normalized;
+  const withoutNamespace = parts.length > 1 ? parts[parts.length - 1] : normalized;
+  const pipeParts = withoutNamespace.split("|");
+  return pipeParts.length > 1 ? pipeParts[pipeParts.length - 1] : withoutNamespace;
 }
 
 function unique(values: Array<string | null | undefined>): string[] {
@@ -115,9 +171,9 @@ export function getStaticMaterialKey(row: StaticLocationMaterialRow): string {
 export function displayMineableClass(value: string | null | undefined): string {
   switch (value) {
     case "Orbitborne":
-      return "Orbitborne";
+      return "Space / Asteroid";
     case "Shipborne":
-      return "Shipborne";
+      return "Surface Ship";
     case "Geoborne":
       return "Vehicle";
     case "Handborne":
@@ -131,6 +187,26 @@ export function displayMineableClass(value: string | null | undefined): string {
       return "Unclassified";
     default:
       return value;
+  }
+}
+
+export function displayMiningMethod(value: string | null | undefined): string {
+  switch (value) {
+    case "Ground Vehicle":
+    case "Vehicle":
+      return "Vehicle";
+    case "Ship":
+    case "Surface":
+    case "Surface Ship":
+      return "Surface Ship";
+    case "Space":
+    case "Asteroid":
+    case "Space / Asteroid":
+      return "Space / Asteroid";
+    case "Hand":
+      return "Hand";
+    default:
+      return displayMineableClass(value);
   }
 }
 
@@ -154,10 +230,21 @@ export function formatStaticQualityChance(row: StaticLocationMaterialRow, thresh
   return typeof chance === "number" && Number.isFinite(chance) ? `${Math.round(chance * 100)}%` : "Unknown";
 }
 
-export function formatStaticYield(row: StaticLocationMaterialRow): string {
-  const value = row.compositionAveragePercentage;
+export function formatStaticQualityChanceFromChances(chances: Record<string, number> | null | undefined, threshold = "800"): string {
+  const chance = chances?.[threshold];
+  return typeof chance === "number" && Number.isFinite(chance) ? `${Math.round(chance * 100)}%` : "Unknown";
+}
+
+export function formatStaticEncounterSignal(row: StaticLocationMaterialRow): string {
+  const value = Number.isFinite(row.encounterScore) ? row.encounterScore : row.sourceProbabilitySum;
   if (typeof value !== "number" || !Number.isFinite(value)) return "Unknown";
-  return `${Number(value.toFixed(2)).toString()}%`;
+  return value >= 0.01 ? Number(value.toFixed(3)).toString() : value.toExponential(2);
+}
+
+export function formatStaticMethodBias(row: StaticLocationMaterialRow): string {
+  const value = row.locationClassDistributionShare;
+  if (typeof value !== "number" || !Number.isFinite(value)) return "Unknown";
+  return `${Number((value * 100).toFixed(1)).toString()}%`;
 }
 
 export function sourceStrengthFromEncounterRank(rank: number | null | undefined, rankOutOf: number | null | undefined): "STRONG" | "MODERATE" | "LOW" | null {
@@ -191,14 +278,87 @@ export function getStaticRowRankingKey(row: Pick<StaticLocationMaterialRow, "mat
   ].join("::");
 }
 
+export function getStaticEncounterRankingRow(row: StaticLocationMaterialRow, index: StaticMiningIndex | null | undefined): StaticMaterialEncounterRankingRow | null {
+  if (!index) return null;
+  const sourceMaterialKey = row.sources?.find((source) => source.materialKey)?.materialKey;
+  const materialCandidates = unique([
+    row.materialId,
+    sourceMaterialKey,
+    row.materialName,
+  ]);
+  for (const materialId of materialCandidates) {
+    const match = index.rankingByRowKey.get(getStaticRowRankingKey({ ...row, materialId }));
+    if (match) return match;
+  }
+  return null;
+}
+
+function getStaticQualityRowKeys(row: StaticMaterialQualityRow): string[] {
+  const materialCandidates = unique([
+    row.materialId,
+    row.materialKey,
+    row.materialName,
+  ]).map(canonicalMiningMaterialKey).filter(Boolean);
+  const location = row.locationKey ?? row.location;
+  const keys: string[] = [];
+  for (const materialPart of materialCandidates) {
+    keys.push([
+      materialPart,
+      normalizeExact(row.materialName),
+      normalizeExact(row.systemKey ?? row.system),
+      normalizeExact(location),
+      normalizeExact(row.resolvedMineableClass),
+    ].join("::"));
+  }
+  return [...new Set(keys)];
+}
+
+export function getStaticMaterialQualityRow(row: StaticLocationMaterialRow, index: StaticMiningIndex | null | undefined): StaticMaterialQualityRow | null {
+  if (!index) return null;
+  const sourceMaterialKey = row.sources?.find((source) => source.materialKey)?.materialKey;
+  const candidates: StaticMaterialQualityRow[] = [
+    {
+      materialKey: sourceMaterialKey,
+      materialId: row.materialId,
+      materialName: row.materialName,
+      systemKey: row.systemKey,
+      locationKey: row.locationKey,
+      resolvedMineableClass: row.resolvedMineableClass,
+    },
+    {
+      materialId: row.materialId,
+      materialName: row.materialName,
+      systemKey: row.systemKey,
+      locationKey: row.locationKey,
+      resolvedMineableClass: row.resolvedMineableClass,
+    },
+  ];
+  for (const candidate of candidates) {
+    for (const key of getStaticQualityRowKeys(candidate)) {
+      const match = index.qualityByRowKey.get(key);
+      if (match) return match;
+    }
+  }
+  return null;
+}
+
 function addLocationAliases(map: Map<string, StaticLocationMaterialRow[]>, row: StaticLocationMaterialRow, rows: StaticLocationMaterialRow[]): void {
   for (const key of [
     compactJoinKey(row.systemKey, row.locationKey),
     compactJoinKey(row.system, row.location),
-    compactJoinKey(row.systemDisplayName, row.locationDisplayName),
     looseJoinKey(row.systemKey, row.locationKey),
     looseJoinKey(row.system, row.location),
-    looseJoinKey(row.systemDisplayName, row.locationDisplayName),
+  ]) {
+    if (key !== "::") map.set(key, rows);
+  }
+}
+
+function addDistributionAliases(map: Map<string, StaticLocationDistributionRow[]>, row: StaticLocationDistributionRow, rows: StaticLocationDistributionRow[]): void {
+  for (const key of [
+    compactJoinKey(row.systemKey, row.locationKey),
+    compactJoinKey(row.system, row.location),
+    looseJoinKey(row.systemKey, row.locationKey),
+    looseJoinKey(row.system, row.location),
   ]) {
     if (key !== "::") map.set(key, rows);
   }
@@ -214,7 +374,6 @@ function getEntryJoinKeys(entry: PublicLocationEntry): string[] {
     splitLocationCandidate(entry.locationKey),
     entry.locationKey,
     entry.locationName,
-    extended.locationDisplayName,
   ]);
   const exact = systems.flatMap((system) => locations.map((location) => compactJoinKey(system, location)));
   const loose = systems.flatMap((system) => locations.map((location) => looseJoinKey(system, location)));
@@ -243,17 +402,113 @@ export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry): 
   return getEntryJoinKeys(entry);
 }
 
+export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string {
+  const extended = entry as PublicLocationEntry & { locationDisplayName?: string };
+  if (index) {
+    const rows = getStaticResourcesForLocation(entry, index);
+    const displayName = rows.find((row) => row.locationDisplayName)?.locationDisplayName;
+    if (displayName) return displayName;
+
+    for (const key of getEntryJoinKeys(entry)) {
+      const distributionRows = index.distributionByLocationJoinKey.get(key);
+      const distributionDisplayName = distributionRows?.find((row) => row.locationDisplayName)?.locationDisplayName;
+      if (distributionDisplayName) return distributionDisplayName;
+    }
+  }
+  return extended.locationDisplayName || entry.locationName;
+}
+
+export type StaticMethodBiasItem = {
+  method: string;
+  share: number;
+};
+
+function addMethodBiasItem(items: StaticMethodBiasItem[], rawMethod: string | null | undefined, rawShare: number | null | undefined): void {
+  if (!rawMethod || rawShare === null || rawShare === undefined || !Number.isFinite(rawShare)) return;
+  const method = displayMiningMethod(rawMethod);
+  const share = rawShare > 1 ? rawShare / 100 : rawShare;
+  const existing = items.find((item) => item.method === method);
+  if (existing) {
+    existing.share += share;
+  } else {
+    items.push({ method, share });
+  }
+}
+
+function addMethodBiasRecord(items: StaticMethodBiasItem[], record: Record<string, number> | undefined): void {
+  if (!record) return;
+  for (const [method, share] of Object.entries(record)) addMethodBiasItem(items, method, share);
+}
+
+export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): StaticMethodBiasItem[] {
+  if (!index) return [];
+  const rows = getEntryJoinKeys(entry).flatMap((key) => index.distributionByLocationJoinKey.get(key) ?? []);
+  if (rows.length === 0) return [];
+
+  const items: StaticMethodBiasItem[] = [];
+  for (const row of rows) {
+    addMethodBiasRecord(items, row.methodShares);
+    addMethodBiasRecord(items, row.miningMix);
+    addMethodBiasRecord(items, row.classDistribution);
+    addMethodBiasRecord(items, row.distribution);
+    addMethodBiasItem(
+      items,
+      row.resolvedMineableClass ?? row.mineableClass ?? row.miningMethod ?? row.method,
+      row.locationClassDistributionShare ?? row.distributionShare ?? row.share,
+    );
+  }
+
+  return items
+    .filter((item) => item.share > 0)
+    .sort((left, right) => right.share - left.share);
+}
+
 async function fetchJsonArray<T>(path: string): Promise<T[]> {
   const url = apiUrl(path);
   const response = await fetch(url);
   if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
   const data = (await response.json()) as unknown;
-  return Array.isArray(data) ? data as T[] : [];
+  if (!Array.isArray(data)) throw new Error(`Expected ${path} to contain a JSON array`);
+  return data as T[];
+}
+
+async function fetchJsonObject<T>(path: string): Promise<T> {
+  const url = apiUrl(path);
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
+  return response.json() as Promise<T>;
+}
+
+function warnStaticIndexLoadFailure(path: string, error: unknown): void {
+  if (import.meta.env.DEV) {
+    console.warn(`[mining] required static mining index failed to load: ${path}`, error);
+  }
+}
+
+async function fetchRequiredJsonArray<T>(path: string): Promise<T[]> {
+  try {
+    return await fetchJsonArray<T>(path);
+  } catch (error) {
+    warnStaticIndexLoadFailure(path, error);
+    throw error;
+  }
+}
+
+async function fetchRequiredJsonObject<T>(path: string): Promise<T | null> {
+  try {
+    return await fetchJsonObject<T>(path);
+  } catch (error) {
+    warnStaticIndexLoadFailure(path, error);
+    throw error;
+  }
 }
 
 function buildStaticMiningIndex(
   rows: StaticLocationMaterialRow[],
   rankings: StaticMaterialEncounterRankingRow[],
+  qualityRows: StaticMaterialQualityRow[],
+  distributionRows: StaticLocationDistributionRow[],
+  locationHierarchy: StaticLocationHierarchyIndex | null,
 ): StaticMiningIndex {
   const primaryGroups = new Map<string, StaticLocationMaterialRow[]>();
   for (const row of rows) {
@@ -276,6 +531,26 @@ function buildStaticMiningIndex(
   const rankingByRowKey = new Map<string, StaticMaterialEncounterRankingRow>();
   for (const ranking of rankings) {
     rankingByRowKey.set(getStaticRowRankingKey(ranking), ranking);
+  }
+
+  const qualityByRowKey = new Map<string, StaticMaterialQualityRow>();
+  for (const qualityRow of qualityRows) {
+    for (const key of getStaticQualityRowKeys(qualityRow)) {
+      qualityByRowKey.set(key, qualityRow);
+    }
+  }
+
+  const distributionPrimaryGroups = new Map<string, StaticLocationDistributionRow[]>();
+  for (const row of distributionRows) {
+    const key = getStaticLocationJoinKey(row.systemKey ?? row.system ?? "", row.locationKey ?? row.location ?? "");
+    const group = distributionPrimaryGroups.get(key) ?? [];
+    group.push(row);
+    distributionPrimaryGroups.set(key, group);
+  }
+
+  const distributionByLocationJoinKey = new Map<string, StaticLocationDistributionRow[]>();
+  for (const group of distributionPrimaryGroups.values()) {
+    for (const row of group) addDistributionAliases(distributionByLocationJoinKey, row, group);
   }
 
   const encounterScoreRangeByMaterialKey = new Map<string, { min: number; max: number }>();
@@ -312,14 +587,24 @@ function buildStaticMiningIndex(
     materialResources: [...materialResources.values()].sort((left, right) => left.label.localeCompare(right.label)),
     rankingByRowKey,
     encounterScoreRangeByMaterialKey,
+    distributionRows,
+    distributionByLocationJoinKey,
+    qualityRows,
+    qualityByRowKey,
+    locationHierarchy,
   };
 }
 
 export async function loadStaticMiningIndex(): Promise<StaticMiningIndex> {
   loadPromise ??= Promise.all([
-    fetchJsonArray<StaticLocationMaterialRow>(LOCATION_INDEX_URL),
-    fetchJsonArray<StaticMaterialEncounterRankingRow>(MATERIAL_RANKINGS_URL).catch(() => []),
-  ]).then(([rows, rankings]) => buildStaticMiningIndex(rows, rankings)).finally(() => {
+    fetchRequiredJsonArray<StaticLocationMaterialRow>(LOCATION_INDEX_URL),
+    fetchRequiredJsonArray<StaticMaterialEncounterRankingRow>(MATERIAL_RANKINGS_URL),
+    fetchRequiredJsonArray<StaticMaterialQualityRow>(MATERIAL_QUALITY_INDEX_URL),
+    fetchRequiredJsonArray<StaticLocationDistributionRow>(LOCATION_DISTRIBUTION_INDEX_URL),
+    fetchRequiredJsonObject<StaticLocationHierarchyIndex>(LOCATION_HIERARCHY_INDEX_URL),
+  ]).then(([rows, rankings, qualityRows, distributionRows, locationHierarchy]) =>
+    buildStaticMiningIndex(rows, rankings, qualityRows, distributionRows, locationHierarchy)
+  ).finally(() => {
     loadPromise = null;
   });
   return loadPromise;
