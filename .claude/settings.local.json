@@ -37,7 +37,18 @@
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(xargs grep -l \"getMiningRecommendations\\\\|RecommendationResponse\\\\|PublicLocationEntry\")",
       "Bash(xargs grep -l \"mining\\\\|Mining\")",
-      "Bash(node -e \"const d = JSON.parse\\(require\\('fs'\\).readFileSync\\('./public/api/crafting/quality_quantization.json', 'utf8'\\)\\); const t = d.find\\(x => x.displayName.toLowerCase\\(\\).includes\\('torite'\\) || x.materialKey.toLowerCase\\(\\).includes\\('torite'\\)\\); console.log\\(JSON.stringify\\(t, null, 2\\)\\); console.log\\('Total entries:', d.length\\);\")"
+      "Bash(node -e \"const d = JSON.parse\\(require\\('fs'\\).readFileSync\\('./public/api/crafting/quality_quantization.json', 'utf8'\\)\\); const t = d.find\\(x => x.displayName.toLowerCase\\(\\).includes\\('torite'\\) || x.materialKey.toLowerCase\\(\\).includes\\('torite'\\)\\); console.log\\(JSON.stringify\\(t, null, 2\\)\\); console.log\\('Total entries:', d.length\\);\")",
+      "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\" -Directory)",
+      "Bash(xargs grep -l \"componentType\\\\|component_type\\\\|AttachDef\\\\|Cryo-Star\\\\|ArcticStorm\")",
+      "Bash(xargs grep -l \"component\\\\|Component\")",
+      "Bash(xargs grep -l \"Grade\\\\|grade\\\\|Class\\\\|class\")",
+      "Bash(xargs grep -i \"cryo\\\\|arctic\")",
+      "Bash(xargs grep -l \"blueprints\\\\|blueprint\")",
+      "Bash(xargs grep -l \"dist/api\\\\|public/api\\\\|blueprints.json\")",
+      "Bash(python -3 -c ' *)",
+      "PowerShell(python D:\\\\scintel\\\\scripts\\\\link\\\\build_blueprint_api.py --records-root D:\\\\scintel\\\\data\\\\libs\\\\foundry\\\\records --api-root D:\\\\scintel\\\\api --localization D:\\\\scintel\\\\data\\\\Data\\\\Localization\\\\english\\\\global.ini 2>&1)",
+      "PowerShell(Get-Content C:\\\\Users\\\\shane\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d--Moonbreaker\\\\0cf30e7e-b126-4e37-a3d6-2945a49e8deb\\\\tasks\\\\bgn2w84l6.output -Wait -Tail 20)",
+      "PowerShell(python D:\\\\scintel\\\\scripts\\\\link\\\\build_blueprint_api.py --records-root D:\\\\scintel\\\\data\\\\libs\\\\foundry\\\\records --api-root D:\\\\scintel\\\\api --localization D:\\\\scintel\\\\data\\\\Data\\\\Localization\\\\english\\\\global.ini)"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"
