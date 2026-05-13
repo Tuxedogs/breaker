@@ -562,16 +562,7 @@ export default function BuildQueueGroup({
                   <span className="bq-qty-val">{item.quantity}×</span>
                   <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} aria-label="Increase quantity">+</button>
                 </div>
-                {inputs.length > 0 && (
-                  <label className={`bq-toggle${item.allowLowerQuality ? ' is-on' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={Boolean(item.allowLowerQuality)}
-                      onChange={(e) => onAllowLowerQualityChange(item.id, e.target.checked)}
-                    />
-                    <span>Lower quality</span>
-                  </label>
-                )}
+          
                 <div className="bq-btn-row">
                   {inputs.length > 0 && (
                     isEditingThisItem ? (
