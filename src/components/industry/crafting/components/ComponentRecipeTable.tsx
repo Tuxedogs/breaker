@@ -616,6 +616,15 @@ function useQualityQuantization() {
       }
     }
 
+    if (import.meta.env.DEV) {
+      console.debug("[quality] quantization loaded", {
+        rows: data.length,
+        keys: [...map.keys()].slice(0, 20),
+        hasStileron: map.has("stileron"),
+        hasFeynmaline: map.has("feynmaline"),
+      });
+    }
+
     return map;
   }, [data]);
 
@@ -628,9 +637,17 @@ function useQualityQuantization() {
 
   const getBandsForMaterial = useCallback(
     (materialName: string): QualityBand[] => {
+      if (loading) return [];
       const q = getMaterialQuantization(materialName);
       if (!q) {
-        if (import.meta.env.DEV) console.warn(`[quality] no quantization data for material: "${materialName}" — quality selection unavailable`);
+        if (import.meta.env.DEV) console.warn("[quality] no quantization data for material", {
+          requested: materialName,
+          normalized: normalizeMaterialLookup(materialName),
+          loadedRows: data.length,
+          indexedKeys: [...byMaterial.keys()].slice(0, 20),
+          stileronKeys: [...byMaterial.keys()].filter((k) => k.includes("stileron")),
+          feynmalineKeys: [...byMaterial.keys()].filter((k) => k.includes("feynmaline")),
+        });
         return [];
       }
       if (q.qualityOptions?.length) {
@@ -642,7 +659,7 @@ function useQualityQuantization() {
       if (import.meta.env.DEV) console.warn(`[quality] quantization entry for "${materialName}" has no qualityOptions or bands`);
       return [];
     },
-    [getMaterialQuantization],
+    [loading, getMaterialQuantization, data, byMaterial],
   );
 
   const getBandEffectiveQuality = useCallback(
