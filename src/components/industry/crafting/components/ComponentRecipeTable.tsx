@@ -18,6 +18,7 @@ import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
+import { apiUrl } from "@/lib/apiUrl";
 import {
   DEFAULT_BAND_INDEX,
   FALLBACK_QUALITY_BANDS,
@@ -94,7 +95,7 @@ function useMineableResourceGroups(): ResourceGroups {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/mining/material_sources.json")
+    fetch(apiUrl("/api/mining/material_sources.json"))
       .then((r) => r.json())
       .then((data: MaterialSourceEntry[]) => {
         if (cancelled) return;
@@ -573,7 +574,7 @@ function useQualityQuantization() {
 
     async function load() {
       try {
-        const res = await fetch(QUALITY_QUANTIZATION_URL);
+        const res = await fetch(apiUrl(QUALITY_QUANTIZATION_URL));
 
         if (!res.ok) {
           throw new Error(

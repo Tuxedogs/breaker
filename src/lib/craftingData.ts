@@ -3,6 +3,7 @@ import type {
   ComponentRecipe,
   QualityModifier,
 } from "../components/industry/crafting/utils/craftingTypes";
+import { apiUrl } from "./apiUrl";
 
 const BLUEPRINTS_URL = "/api/crafting/blueprints.json";
 const FPS_BLUEPRINTS_URL = "/api/crafting/fps/fps_blueprints.json";
@@ -137,7 +138,7 @@ let qualityQuantizationPromise: Promise<QualityQuantizationRecord[]> | null = nu
 let craftingItemsPromise: Promise<ComponentRecipe[]> | null = null;
 
 async function fetchJsonArray<T>(url: string): Promise<T[]> {
-  const response = await fetch(url);
+  const response = await fetch(apiUrl(url));
 
   if (!response.ok) {
     throw new Error(`Failed to load ${url}: ${response.status}`);

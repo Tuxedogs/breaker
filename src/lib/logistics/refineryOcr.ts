@@ -1,5 +1,6 @@
 import { createWorker, PSM } from "tesseract.js";
 import type { MaterialTemplate } from "../../types/logistics";
+import { apiUrl } from "../apiUrl";
 
 interface QualityQuantizationBand {
   start: number;
@@ -355,7 +356,7 @@ async function ensureQualityQuantizationLoaded(): Promise<void> {
     qualityQuantizationLoadPromise = (async () => {
       for (const url of QUALITY_QUANTIZATION_URL_CANDIDATES) {
         try {
-          const response = await fetch(url, { cache: "force-cache" });
+          const response = await fetch(apiUrl(url), { cache: "force-cache" });
           if (!response.ok) continue;
 
           const records = (await response.json()) as QualityQuantizationRecord[];

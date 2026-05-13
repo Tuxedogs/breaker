@@ -19,6 +19,20 @@ import {
   canonicalMiningMaterialKey,
   canonicalMiningMaterialName,
 } from "../../../features/mining/materialIdentity";
+import {
+  displayMineableClass,
+  formatStaticQualityChance,
+  formatStaticYield,
+  getStaticLocationAttemptedJoinKeys,
+  getStaticLocationMaterialKeys,
+  getStaticMaterialKey,
+  getStaticResourcesForLocation,
+  getStaticRowRankingKey,
+  loadStaticMiningIndex,
+  sourceStrengthFromWeight,
+  sourceWeightFromEncounterRank,
+  type StaticMiningIndex,
+} from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
@@ -457,10 +471,11 @@ type ResourceRow = {
   name: string;
   key: string;
   miningType: string;
-  qualityDisplay: QualityDisplay;
-  yieldRank: number | null;
+  qualityLabel: string;
+  yieldLabel: string;
   sourceStrength: string;
   sourceWeight: number | undefined;
+  sourceTitle?: string;
   status: "strong" | "moderate" | "low" | "none";
 };
 
@@ -482,11 +497,13 @@ function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   selectedMaterials,
+  staticMiningIndex,
 }: {
   entry: PublicLocationEntry;
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   selectedMaterials: Set<string>;
+  staticMiningIndex: StaticMiningIndex | null;
 }) {
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
@@ -553,7 +570,78 @@ function LocationDetail({
   }, [entry, selectedMaterials, buildQueueMaterialKeys, locationMaterialKeys]);
 
   // Planet Resource Index — all indexed resources, scored where possible
+  const staticResourceRows = useMemo(
+    () => getStaticResourcesForLocation(entry, staticMiningIndex),
+    [entry, staticMiningIndex],
+  );
+
+  useEffect(() => {
+    if (!import.meta.env.DEV || !staticMiningIndex || staticResourceRows.length > 0) return;
+    const attemptedJoinKeys = getStaticLocationAttemptedJoinKeys(entry);
+    console.warn("[mining] no static resources matched selected location", {
+      systemName: entry.systemName,
+      locationName: entry.locationName,
+      locationKey: entry.locationKey,
+      attemptedJoinKeys,
+    });
+    if ((entry.indexedResources?.length ?? 0) > 0 || entry.materials.length > 0) {
+      console.warn("[mining] selected location has recommender data but no static index rows", {
+        systemName: entry.systemName,
+        locationName: entry.locationName,
+        locationKey: entry.locationKey,
+        indexedResources: entry.indexedResources?.length ?? 0,
+        materials: entry.materials.length,
+      });
+    }
+  }, [entry, staticMiningIndex, staticResourceRows.length]);
+
   const resourceRows = useMemo((): ResourceRow[] => {
+    if (staticResourceRows.length > 0 && staticMiningIndex) {
+      return staticResourceRows.map((row) => {
+        const canonical = canonicalMiningMaterial({
+          materialKey: row.sources?.[0]?.materialKey,
+          materialId: row.materialId,
+          materialName: row.materialName,
+          displayName: row.materialName,
+        });
+        const key = getStaticMaterialKey(row);
+        if (import.meta.env.DEV && (!key || canonical.unresolvedUuid)) {
+          console.warn("[mining] static resource material key resolution failed", {
+            materialId: row.materialId,
+            materialName: row.materialName,
+            sourceMaterialKey: row.sources?.[0]?.materialKey,
+          });
+        }
+
+        const ranking = staticMiningIndex.rankingByRowKey.get(getStaticRowRankingKey(row));
+        const rankWeight = sourceWeightFromEncounterRank(ranking?.encounterRank, ranking?.encounterRankOutOf);
+        const range = staticMiningIndex.encounterScoreRangeByMaterialKey.get(key);
+        const fallbackWeight = range && range.max > range.min
+          ? ((row.encounterScore - range.min) / (range.max - range.min)) * 100
+          : undefined;
+        const sourceWeight = rankWeight ?? fallbackWeight;
+        const sourceStrength = sourceStrengthFromWeight(sourceWeight);
+        const status = sourceStrength === "STRONG" ? "strong"
+          : sourceStrength === "MODERATE" ? "moderate"
+          : sourceStrength === "LOW" ? "low"
+          : "none";
+
+        return {
+          name: row.materialName || canonical.label || "Unknown Material",
+          key: key || `${row.systemKey}:${row.locationKey}:${row.materialId || row.materialName}`,
+          miningType: displayMineableClass(row.resolvedMineableClass),
+          qualityLabel: formatStaticQualityChance(row),
+          yieldLabel: formatStaticYield(row),
+          sourceStrength,
+          sourceWeight,
+          sourceTitle: ranking
+            ? `Rank ${ranking.encounterRank} of ${ranking.encounterRankOutOf}. Sources: ${row.sourceCount}. Probability sum: ${row.sourceProbabilitySum}.`
+            : `Sources: ${row.sourceCount}. Probability sum: ${row.sourceProbabilitySum}.`,
+          status,
+        };
+      });
+    }
+
     const indexed = entry.indexedResources ?? [];
     if (indexed.length === 0 && entry.materials.length === 0) return [];
 
@@ -564,18 +652,19 @@ function LocationDetail({
       const routeScoreEntry = findRouteScoreForMaterial(entry, key) ?? findRouteScoreForMaterial(entry, r.materialName);
       const sw = routeScoreEntry?.signals.sourceWeight;
       const st = sourceStatus(sw);
+      const qualityDisplay = buildQualityDisplay(routeScoreEntry?.signals, key);
       return {
         name: r.materialName,
         key,
         miningType: (r as { miningType?: string }).miningType ?? "",
-        qualityDisplay: buildQualityDisplay(routeScoreEntry?.signals, key),
-        yieldRank: routeScoreEntry?.yieldRouteScore ?? null,
+        qualityLabel: qualityDisplay.kind === "ignored" ? "N/A" : qualityDisplay.kind === "chance" ? qualityDisplay.label : "Unknown",
+        yieldLabel: routeScoreEntry?.yieldRouteScore != null ? String(routeScoreEntry.yieldRouteScore) : "Unknown",
         sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "—",
         sourceWeight: sw,
         status: st,
       };
     });
-  }, [entry]);
+  }, [entry, staticMiningIndex, staticResourceRows]);
 
   return (
     <div className="mdet-panel">
@@ -744,7 +833,7 @@ function LocationDetail({
                 <th>MATERIAL</th>
                 <th>TYPE</th>
                 <th><span className="mdet-th-wrap">TARGET QUALITY CHANCE<InfoTip text="Chance that the source meets your selected quality threshold after you find it. This is not the chance to find the source." /></span></th>
-                <th><span className="mdet-th-wrap">YIELD RANK<InfoTip text="Relative yield score for this material compared with other locations where the same material appears. This is not an encounter probability." /></span></th>
+                <th><span className="mdet-th-wrap">YIELD<InfoTip text="Average material composition at this location. This is not encounter chance or source probability." /></span></th>
                 <th>SOURCE</th>
               </tr>
             </thead>
@@ -752,17 +841,11 @@ function LocationDetail({
               {resourceRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">{row.name}</td>
-                  <td className="mdet-mat-demand">{row.miningType || "—"}</td>
-                  <td className="mdet-mat-score">
-                    {row.qualityDisplay.kind === "ignored" ? "N/A"
-                      : row.qualityDisplay.kind === "chance" ? row.qualityDisplay.label
-                      : "—"}
-                  </td>
-                  <td className={`mdet-mat-score ${scoreToneClass(undefined, row.yieldRank ?? undefined)}`}>
-                    {row.yieldRank ?? "—"}
-                  </td>
+                  <td className="mdet-mat-demand">{row.miningType || "Unclassified"}</td>
+                  <td className="mdet-mat-score">{row.qualityLabel}</td>
+                  <td className="mdet-mat-score">{row.yieldLabel}</td>
                   <td>
-                    <span className={`mining-source-badge mining-source-badge--${row.status}`}>
+                    <span className={`mining-source-badge mining-source-badge--${row.status}`} title={row.sourceTitle}>
                       {row.sourceStrength}
                       {row.sourceWeight !== undefined && (
                         <span className="mdet-source-bar-wrap">
@@ -785,6 +868,7 @@ function LocationDetail({
 
 export default function MiningModule() {
   const [state, setState] = useState<LoadState>({ status: "loading" });
+  const [staticMiningIndex, setStaticMiningIndex] = useState<StaticMiningIndex | null>(null);
   const recommendationRequestSeqRef = useRef(0);
   const [, setLagrangeChildrenDataVersion] = useState(0);
   const planner = useMiningPlannerState();
@@ -822,6 +906,13 @@ export default function MiningModule() {
 
   useEffect(() => {
     let cancelled = false;
+    loadStaticMiningIndex()
+      .then((index) => {
+        if (!cancelled) setStaticMiningIndex(index);
+      })
+      .catch((error) => {
+        if (import.meta.env.DEV) console.warn("[mining] static index failed to load", error);
+      });
     loadStantonLagrangeChildrenData()
       .then(() => {
         if (!cancelled) setLagrangeChildrenDataVersion((version) => version + 1);
@@ -957,8 +1048,13 @@ export default function MiningModule() {
       }
     }
 
+    for (const resource of staticMiningIndex?.materialResources ?? []) {
+      if (!resource.id || byKey.has(resource.id) || !isIndexableMiningResource(resource.label)) continue;
+      byKey.set(resource.id, resource);
+    }
+
     return [...byKey.values()].sort((left, right) => left.label.localeCompare(right.label));
-  }, [materials, miningRequiredMaterials, planner.manualDemand]);
+  }, [materials, miningRequiredMaterials, planner.manualDemand, staticMiningIndex]);
 
   const allMaterials = useMemo(
     () => allMaterialResources.map((resource) => resource.label),
@@ -1104,20 +1200,22 @@ export default function MiningModule() {
   const locationMaterialKeysByLocationKey = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const location of locations) {
-      const keys = (location.requiredMaterials ?? []).map((material) => canonicalMiningMaterial({
+      const staticKeys = getStaticLocationMaterialKeys(location, staticMiningIndex);
+      const demandKeys = (location.requiredMaterials ?? []).map((material) => canonicalMiningMaterial({
         materialKey: material.materialKey,
         materialId: material.materialId,
         displayName: material.displayName,
         materialName: material.materialName,
       }).key);
-      map.set(location.locationKey, Array.from(new Set(keys)));
+      map.set(location.locationKey, Array.from(new Set([...staticKeys, ...demandKeys])));
     }
     return map;
-  }, [locations]);
+  }, [locations, staticMiningIndex]);
 
   const indexedMaterialKeysByLocationKey = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const location of locations) {
+      const staticKeys = getStaticLocationMaterialKeys(location, staticMiningIndex);
       const indexedKeys = (location.indexedResources ?? []).flatMap((resource) => {
         const keys: string[] = [canonicalMiningMaterial({
           materialId: resource.materialId,
@@ -1131,10 +1229,10 @@ export default function MiningModule() {
         return keys;
       });
       const matchedKeys = locationMaterialKeysByLocationKey.get(location.locationKey) ?? [];
-      map.set(location.locationKey, Array.from(new Set([...matchedKeys, ...indexedKeys])));
+      map.set(location.locationKey, Array.from(new Set([...matchedKeys, ...staticKeys, ...indexedKeys])));
     }
     return map;
-  }, [locations, locationMaterialKeysByLocationKey, materialKeyByDisplayName]);
+  }, [locations, locationMaterialKeysByLocationKey, materialKeyByDisplayName, staticMiningIndex]);
 
   const filteredLocations = useMemo(() => {
     let result = locations;
@@ -1494,6 +1592,7 @@ export default function MiningModule() {
                     buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
                     locationMaterialKeys={locationMaterialKeysByLocationKey.get(selectedEntry.locationKey) ?? []}
                     selectedMaterials={selectedMaterials}
+                    staticMiningIndex={staticMiningIndex}
                   />
                 ) : (
                   <div className="mdet-empty">

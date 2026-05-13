@@ -6,6 +6,7 @@ import type {
   PublicLocationEntry,
 } from "./types";
 import { canonicalMiningMaterial } from "./materialIdentity";
+import { apiUrl } from "../../lib/apiUrl";
 
 export interface RecommenderWarning {
   code: string;
@@ -69,7 +70,7 @@ export interface AllLocationsResponse {
 }
 
 export async function getAllIndexedLocations(): Promise<AllLocationsResponse> {
-  const response = await fetch("/api/recommender/locations");
+  const response = await fetch(apiUrl("/api/recommender/locations"));
   if (!response.ok) throw new Error(`Locations API failed with ${response.status}`);
   return response.json() as Promise<AllLocationsResponse>;
 }
@@ -78,7 +79,7 @@ export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
   signal?: AbortSignal,
 ): Promise<RecommendationResponse> {
-  const response = await fetch("/api/recommender/recommendations", {
+  const response = await fetch(apiUrl("/api/recommender/recommendations"), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(toRecommenderApiRequest(request)),

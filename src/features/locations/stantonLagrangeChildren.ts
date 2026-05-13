@@ -1,3 +1,5 @@
+import { apiUrl } from "../../lib/apiUrl";
+
 export type StantonLagrangeChildRecord = {
   id: string;
   guid?: string;
@@ -119,11 +121,11 @@ export function configureStantonLagrangeChildrenData(
 export async function loadStantonLagrangeChildrenData(fetcher: typeof fetch = fetch): Promise<void> {
   if (generatedGroups && generatedChildren) return;
   loadPromise ??= Promise.all([
-    fetcher(LAGRANGE_GROUPS_URL).then((response) => {
+    fetcher(apiUrl(LAGRANGE_GROUPS_URL)).then((response) => {
       if (!response.ok) throw new Error(`Failed to load ${LAGRANGE_GROUPS_URL}: ${response.status}`);
       return response.json() as Promise<GeneratedLagrangeGroups>;
     }),
-    fetcher(LAGRANGE_CHILDREN_URL).then((response) => {
+    fetcher(apiUrl(LAGRANGE_CHILDREN_URL)).then((response) => {
       if (!response.ok) throw new Error(`Failed to load ${LAGRANGE_CHILDREN_URL}: ${response.status}`);
       return response.json() as Promise<GeneratedLagrangeChildren>;
     }),
