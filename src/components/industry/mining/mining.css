@@ -2751,12 +2751,26 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .mlist-item-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.22rem;
   font-family: var(--font-primary);
-  font-size: 0.95rem;
   font-weight: 700;
   line-height: 1;
   flex-shrink: 0;
   color: rgba(226, 232, 240, 0.85);
+  cursor: help;
+}
+
+.mlist-item-score-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.48);
+}
+
+.mlist-item-score-value {
+  font-size: 0.95rem;
 }
 
 .mlist-item-score.mloc-score--best { color: rgba(52, 211, 153, 0.95); }
@@ -3012,6 +3026,7 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
 .mdet-metric-row {
   display: flex;
+  margin: 0.5rem;;
   gap: 0.45rem;
   flex-wrap: wrap;
 }
@@ -3117,6 +3132,7 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mdet-section-count {
   color: rgba(160, 180, 220, 0.55);
   font-size: 0.68rem;
+  padding-left: 0.5rem;
   letter-spacing: 0.03em;
 }
 
@@ -3220,6 +3236,35 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.mining-material-name-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.mine-page .bq-material-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: rgba(226, 232, 240, 0.88);
+  filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.72));
+}
+
+.mine-page .bq-material-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mining-material-name-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mdet-mat-demand {
@@ -3485,8 +3530,9 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mining-resource-row:last-child { border-bottom: none; }
 
 .mining-resource-row td {
+  font-family: rajdhani, sans-serif;
   padding: 0.44rem 0.5rem;
-  font-size: 0.88rem;
+  font-size: 1.1rem;
   line-height: 1.35;
 }
 

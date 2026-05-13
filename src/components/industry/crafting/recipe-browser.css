@@ -586,7 +586,7 @@
   flex-direction: column;
   gap: 8px;
   min-height: 124px;
-  padding: 12px 14px;
+  padding: 2px 9px;
 
   background: linear-gradient(180deg, #181d21 0%, #101417 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -599,6 +599,7 @@
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.48),
     0 0 0 1px rgba(255, 153, 0, 0.07),
+
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
@@ -609,18 +610,20 @@
   align-items: center;
   flex: 0 0 auto;
   min-height: 20px;
-  padding: 0 7px;
-  border: 1px solid var(--craft-border-strong);
+
   border-radius: 4px;
   color: var(--craft-muted);
   font-size: 9px;
-  font-weight: 900;
+  font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.craft-material-name { min-width: 0; overflow: hidden; font-size: 1.5rem; font-weight: 600; line-height: 1; text-overflow: ellipsis; white-space: nowrap; color: var(--craft-text); }
+.craft-material-name { min-width: 0; overflow: hidden; 
+  font-size: 1.2rem; font-weight: 600; 
+  line-height: 1; text-overflow: ellipsis; 
+  white-space: nowrap; color: var(--craft-text); }
 .craft-quality-readout { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; padding: 4px 7px; border: 1px solid var(--craft-orange-border); border-radius: 4px; color: var(--craft-orange); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
 /* ==========================================================================
@@ -629,8 +632,8 @@
 
 .craft-quality-control { min-width: 0; margin: 2px 0 5px; }
 .craft-quality-rail-wrap { position: relative; height: 38px; }
-.craft-quality-input { position: absolute; inset: 0; z-index: 5; width: 100%; height: 30px; margin: 0; opacity: 0; cursor: pointer; }
-.craft-quality-rail { position: absolute; left: 0; right: 0; top: 15px; height: 3px; background: rgba(255, 255, 255, 0.1); }
+.craft-quality-input { position: absolute; inset: 0; z-index: 5; width: 86%; height: 30px; margin: 0; opacity: 0; cursor: pointer; }
+.craft-quality-rail { position: absolute; width: 86%; left: 0; right: 0; top: 15px; height: 3px; background: rgba(255, 255, 255, 0.1); }
 .craft-quality-rail-fill { position: absolute; left: var(--band-one-pct, 0%); top: 0; bottom: 0; width: var(--fill-pct, 0%); background: var(--craft-orange); box-shadow: 0 0 12px rgba(255, 138, 0, 0.3); }
 .craft-quality-marker { position: absolute; top: -8px; width: 24px; height: 28px; padding: 0; transform: translateX(-50%); border: 0; background: transparent; cursor: pointer; }
 .craft-quality-marker-line { position: absolute; left: 50%; top: 4px; width: 2px; height: 10px; transform: translateX(-50%); background: rgba(255, 255, 255, 0.28); }
@@ -675,7 +678,7 @@
 
 .craft-summary-head { flex: 0 0 auto; padding-bottom: 9px; border-bottom: 1px solid rgba(255, 153, 0, 0.14); }
 .craft-summary-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 9px; }
-.craft-summary-title { min-width: 0; font-size: 1.5rem; 
+.craft-summary-title { min-width: 0; font-size: 1.2rem; 
   margin-top: 8px;
   font-weight: 900; line-height: 1.05; color: var(--craft-text); }
 .craft-summary-quality-pill { flex: 0 0 auto; border: 1px solid var(--craft-orange-border); border-radius: 4px; padding: 4px 7px; color: var(--craft-text); font-size: 1rem; font-weight: 600; white-space: nowrap; }
