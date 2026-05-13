@@ -32,7 +32,7 @@ const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
-const MAX_VISIBLE_RESULTS = 8;
+const MAX_VISIBLE_RESULTS = 20;
 
 type RecipeSidebarState = {
   search: string;
