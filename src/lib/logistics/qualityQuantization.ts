@@ -1,3 +1,5 @@
+import { apiUrl } from "../apiUrl";
+
 export type QualityBand = {
   start: number;
   end: number;
@@ -17,7 +19,7 @@ let records: QualityQuantizationRecord[] = [];
 let loadPromise: Promise<QualityQuantizationRecord[]> | null = null;
 
 export async function loadQualityQuantizationRecords(): Promise<QualityQuantizationRecord[]> {
-  loadPromise ??= fetch(QUALITY_QUANTIZATION_URL)
+  loadPromise ??= fetch(apiUrl(QUALITY_QUANTIZATION_URL))
     .then((response) => {
       if (!response.ok) throw new Error(`Failed to load quality quantization: ${response.status}`);
       return response.json() as Promise<QualityQuantizationRecord[]>;

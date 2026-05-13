@@ -20,6 +20,7 @@ import {
 } from '../../lib/logistics/selectors';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
+import { apiUrl } from '../../lib/apiUrl';
 
 import QuantityText from './QuantityText';
 import MaterialIcon from './MaterialIcon';
@@ -101,7 +102,7 @@ function useBQQuantization() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(MATERIAL_QUANTIZATION_URL)
+    fetch(apiUrl(MATERIAL_QUANTIZATION_URL))
       .then((r) => {
         if (!r.ok) throw new Error(`${MATERIAL_QUANTIZATION_URL} ${r.status}`);
         return r.json() as Promise<BQMaterialQuantization[]>;

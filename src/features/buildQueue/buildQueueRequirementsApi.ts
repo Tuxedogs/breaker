@@ -1,5 +1,6 @@
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueueItem, InventoryEntry } from "../../types/logistics";
+import { apiUrl } from "../../lib/apiUrl";
 
 export interface BuildQueueRequirementWarning {
   code: string;
@@ -53,7 +54,7 @@ export async function getBuildQueueRequirements(input: {
   recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
   inventoryEntries: InventoryEntry[];
 }): Promise<BuildQueueRequirementsResponse> {
-  const response = await fetch("/api/build-queue/requirements", {
+  const response = await fetch(apiUrl("/api/build-queue/requirements"), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(input),
