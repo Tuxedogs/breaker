@@ -145,6 +145,9 @@ export interface MaterialRouteScore {
     groupProbability?: number | null;
     relativeProbability?: number | null;
     materialProbability?: number | null;
+    providerWeightedSignal?: number | null;
+    materialBiasSignal?: number | null;
+    normalizedWithinMethodSignal?: number | null;
     sourceStrength?: number | null;
     sourceRowCount?: number;
     confidence?: number;

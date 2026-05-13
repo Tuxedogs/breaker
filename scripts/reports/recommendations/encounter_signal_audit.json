@@ -1,0 +1,287 @@
+{
+  "encounterScoreFormula": "groupProbability * relativeProbability * materialProbability / 10000",
+  "providerWeightedSignal": "Existing encounterScore/probability signal; includes provider groupProbability.",
+  "materialBiasSignal": "relativeProbability * materialProbability; excludes provider groupProbability.",
+  "normalizedWithinMethodSignal": "Uses material_encounter_rankings.locationClassDistributionShare when present; null for source rows.",
+  "currentRanking": "material_encounter_rankings.encounterRank is still based on providerWeightedSignal/encounterScore.",
+  "rankingOptions": [
+    "provider-weighted global rank: keep current encounterRank semantics.",
+    "method-scoped rank: rank within resolvedMineableClass/provider method before comparing methods.",
+    "material-bias rank: rank by materialBiasSignal to avoid cross-provider groupProbability semantics."
+  ],
+  "stileron": [
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro Akirocluster",
+      "locationKey": "Pyro Akirocluster",
+      "locationDisplayName": "Pyro Akirocluster",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Orbitborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 2,
+      "encounterScore": 0.00002,
+      "sourceProbabilitySum": 0.00002,
+      "sourceProbabilityMax": 0.00002,
+      "compositionAveragePercentage": 12.7,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 1,
+      "groupProbability": 0.1,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.00002,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 1
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro Deepspaceasteroids",
+      "locationKey": "Pyro Deepspaceasteroids",
+      "locationDisplayName": "Pyro Deepspaceasteroids",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Orbitborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 2,
+      "encounterScore": 0.00002,
+      "sourceProbabilitySum": 0.00002,
+      "sourceProbabilityMax": 0.00002,
+      "compositionAveragePercentage": 12.7,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 1,
+      "groupProbability": 0.1,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.00002,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 1
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro1",
+      "locationKey": "Pyro1",
+      "locationDisplayName": "Pyro I",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Shipborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 5,
+      "encounterScore": 0.0015,
+      "sourceProbabilitySum": 0.0015,
+      "sourceProbabilityMax": 0.0015,
+      "compositionAveragePercentage": 12.700000000000001,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 0.3486099802256601,
+      "groupProbability": 7.5,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.0015,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 0.3486099802256601
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro2",
+      "locationKey": "Pyro2",
+      "locationDisplayName": "Monox",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Shipborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 5,
+      "encounterScore": 0.0015,
+      "sourceProbabilitySum": 0.0015,
+      "sourceProbabilityMax": 0.0015,
+      "compositionAveragePercentage": 12.700000000000001,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 0.32410511517248836,
+      "groupProbability": 7.5,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.0015,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 0.32410511517248836
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro3",
+      "locationKey": "Pyro3",
+      "locationDisplayName": "Bloom",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Shipborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 5,
+      "encounterScore": 0.0015,
+      "sourceProbabilitySum": 0.0015,
+      "sourceProbabilityMax": 0.0015,
+      "compositionAveragePercentage": 12.700000000000001,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 0.3243243243243243,
+      "groupProbability": 7.5,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.0015,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 0.3243243243243243
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro4",
+      "locationKey": "Pyro4",
+      "locationDisplayName": "Pyro IV",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Shipborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 5,
+      "encounterScore": 0.0015,
+      "sourceProbabilitySum": 0.0015,
+      "sourceProbabilityMax": 0.0015,
+      "compositionAveragePercentage": 12.700000000000001,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 0.3406843242014323,
+      "groupProbability": 7.5,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.0015,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 0.3406843242014323
+    },
+    {
+      "materialId": "9498a080-84c0-41f4-b88f-71942c60c43f",
+      "materialName": "Stileron",
+      "system": "Pyro",
+      "systemKey": "Pyro",
+      "systemDisplayName": "Pyro",
+      "location": "Pyro6",
+      "locationKey": "Pyro6",
+      "locationDisplayName": "Terminus",
+      "parents": [],
+      "parentDisplayNames": [],
+      "resolvedMineableClass": "Shipborne",
+      "encounterRank": 1,
+      "encounterRankOutOf": 5,
+      "encounterScore": 0.0015,
+      "sourceProbabilitySum": 0.0015,
+      "sourceProbabilityMax": 0.0015,
+      "compositionAveragePercentage": 12.700000000000001,
+      "qualityThresholdChancesWeighted": {
+        "500": 1,
+        "700": 0.359437,
+        "800": 0.161609,
+        "900": 0.050957
+      },
+      "qualityOverrideApplied": true,
+      "qualityOverrideRecordNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "qualityDistributionSourceNames": [
+        "LegendaryShipMineable_QualityOverride_Pyro"
+      ],
+      "locationClassDistributionShare": 0.32608695652173914,
+      "groupProbability": 7.5,
+      "relativeProbability": 2,
+      "materialProbability": 1,
+      "providerWeightedSignal": 0.0015,
+      "materialBiasSignal": 2,
+      "normalizedWithinMethodSignal": 0.32608695652173914
+    }
+  ]
+}
