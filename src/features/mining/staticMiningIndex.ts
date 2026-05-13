@@ -98,6 +98,7 @@ export type StaticMiningIndex = {
   rankings: StaticMaterialEncounterRankingRow[];
   resourcesByLocationJoinKey: Map<string, StaticLocationMaterialRow[]>;
   materialKeysByLocationJoinKey: Map<string, string[]>;
+  locationKeysByDisplayName: Map<string, string[]>;
   materialResources: StaticMiningMaterialResource[];
   rankingByRowKey: Map<string, StaticMaterialEncounterRankingRow>;
   encounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
@@ -143,6 +144,54 @@ function splitLocationCandidate(value: string | null | undefined): string | null
 
 function unique(values: Array<string | null | undefined>): string[] {
   return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => Boolean(value)))];
+}
+
+function pushLookupValue(map: Map<string, string[]>, source: string | null | undefined, value: string | null | undefined): void {
+  const key = normalizeExact(source);
+  const rawValue = value?.trim();
+  if (!key || !rawValue) return;
+  const values = map.get(key) ?? [];
+  if (!values.includes(rawValue)) values.push(rawValue);
+  map.set(key, values);
+}
+
+function buildLocationKeysByDisplayName(rows: StaticLocationMaterialRow[]): Map<string, string[]> {
+  const lookup = new Map<string, string[]>();
+  for (const row of rows) {
+    const rawLocationKey = row.locationKey || row.location;
+    pushLookupValue(lookup, row.locationDisplayName, rawLocationKey);
+    pushLookupValue(lookup, row.location, rawLocationKey);
+    pushLookupValue(lookup, row.locationKey, rawLocationKey);
+  }
+  return lookup;
+}
+
+function getParentheticalLocationParts(value: string | null | undefined): string[] {
+  const normalized = (value ?? "").trim();
+  if (!normalized) return [];
+  const match = normalized.match(/^(.*?)\s*\((.*?)\)\s*$/);
+  if (!match) return [];
+  return unique([match[1], match[2]]);
+}
+
+function resolvePyroRomanLocation(value: string | null | undefined): string | null {
+  const normalized = (value ?? "").trim();
+  const match = normalized.match(/^pyro\s+(i|ii|iii|iv|v|vi)\b/i);
+  if (!match) return null;
+  const romanToNumber: Record<string, string> = {
+    i: "1",
+    ii: "2",
+    iii: "3",
+    iv: "4",
+    v: "5",
+    vi: "6",
+  };
+  return `Pyro${romanToNumber[match[1].toLowerCase()]}`;
+}
+
+function getDisplayLookupValues(value: string | null | undefined, index: StaticMiningIndex | null | undefined): string[] {
+  if (!index) return [];
+  return index.locationKeysByDisplayName.get(normalizeExact(value)) ?? [];
 }
 
 export function getStaticLocationJoinKey(systemKey: string, locationKey: string): string {
@@ -364,42 +413,81 @@ function addDistributionAliases(map: Map<string, StaticLocationDistributionRow[]
   }
 }
 
-function getEntryJoinKeys(entry: PublicLocationEntry): string[] {
+function getEntryJoinKeys(entry: PublicLocationEntry, index?: StaticMiningIndex | null): string[] {
   const extended = entry as PublicLocationEntry & {
     systemKey?: string;
-    locationDisplayName?: string;
+    locationId?: string;
+    sourceLocationId?: string;
+    systemLocationId?: string;
   };
   const systems = unique([extended.systemKey, entry.systemName]);
-  const locations = unique([
-    splitLocationCandidate(entry.locationKey),
+  const rawLocations = unique([
     entry.locationKey,
     entry.locationName,
+    extended.locationId,
+    extended.sourceLocationId,
+    extended.systemLocationId,
+    ...(entry.matchedLocationCodes ?? []),
   ]);
-  const exact = systems.flatMap((system) => locations.map((location) => compactJoinKey(system, location)));
-  const loose = systems.flatMap((system) => locations.map((location) => looseJoinKey(system, location)));
+  const strippedLocations = unique(rawLocations.map(splitLocationCandidate));
+  const parentheticalLocations = unique(strippedLocations.flatMap(getParentheticalLocationParts));
+  const displayLookupLocations = unique([
+    ...strippedLocations.flatMap((location) => getDisplayLookupValues(location, index)),
+    ...parentheticalLocations.flatMap((location) => getDisplayLookupValues(location, index)),
+  ]);
+  const romanLocations = unique([
+    ...strippedLocations.map(resolvePyroRomanLocation),
+    ...parentheticalLocations.map(resolvePyroRomanLocation),
+  ]);
+  const exactLocations = unique([
+    ...rawLocations,
+    ...strippedLocations,
+    ...displayLookupLocations,
+    ...romanLocations,
+    ...parentheticalLocations,
+    ...parentheticalLocations.flatMap((location) => getDisplayLookupValues(location, index)),
+    ...parentheticalLocations.map(resolvePyroRomanLocation),
+  ]);
+  const exact = systems.flatMap((system) => exactLocations.map((location) => compactJoinKey(system, location)));
+  const loose = systems.flatMap((system) => exactLocations.map((location) => looseJoinKey(system, location)));
   return [...new Set([...exact, ...loose])].filter((key) => key !== "::");
+}
+
+function warnNoStaticLocationMatch(entry: PublicLocationEntry, attemptedJoinKeys: string[], index: StaticMiningIndex): void {
+  if (!import.meta.env.DEV) return;
+  console.warn("[mining] no static mining rows matched location", {
+    systemName: entry.systemName,
+    locationKey: entry.locationKey,
+    locationName: entry.locationName,
+    attemptedJoinKeys,
+    availableStaticKeysSample: [...index.resourcesByLocationJoinKey.keys()].slice(0, 20),
+  });
 }
 
 export function getStaticResourcesForLocation(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): StaticLocationMaterialRow[] {
   if (!index) return [];
-  for (const key of getEntryJoinKeys(entry)) {
+  const attemptedJoinKeys = getEntryJoinKeys(entry, index);
+  for (const key of attemptedJoinKeys) {
     const rows = index.resourcesByLocationJoinKey.get(key);
     if (rows?.length) return rows;
   }
+  warnNoStaticLocationMatch(entry, attemptedJoinKeys, index);
   return [];
 }
 
 export function getStaticLocationMaterialKeys(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string[] {
   if (!index) return [];
-  for (const key of getEntryJoinKeys(entry)) {
+  const attemptedJoinKeys = getEntryJoinKeys(entry, index);
+  for (const key of attemptedJoinKeys) {
     const keys = index.materialKeysByLocationJoinKey.get(key);
     if (keys?.length) return keys;
   }
+  warnNoStaticLocationMatch(entry, attemptedJoinKeys, index);
   return [];
 }
 
-export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry): string[] {
-  return getEntryJoinKeys(entry);
+export function getStaticLocationAttemptedJoinKeys(entry: PublicLocationEntry, index?: StaticMiningIndex | null): string[] {
+  return getEntryJoinKeys(entry, index);
 }
 
 export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): string {
@@ -409,7 +497,7 @@ export function getStaticLocationDisplayName(entry: PublicLocationEntry, index: 
     const displayName = rows.find((row) => row.locationDisplayName)?.locationDisplayName;
     if (displayName) return displayName;
 
-    for (const key of getEntryJoinKeys(entry)) {
+    for (const key of getEntryJoinKeys(entry, index)) {
       const distributionRows = index.distributionByLocationJoinKey.get(key);
       const distributionDisplayName = distributionRows?.find((row) => row.locationDisplayName)?.locationDisplayName;
       if (distributionDisplayName) return distributionDisplayName;
@@ -442,7 +530,7 @@ function addMethodBiasRecord(items: StaticMethodBiasItem[], record: Record<strin
 
 export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): StaticMethodBiasItem[] {
   if (!index) return [];
-  const rows = getEntryJoinKeys(entry).flatMap((key) => index.distributionByLocationJoinKey.get(key) ?? []);
+  const rows = getEntryJoinKeys(entry, index).flatMap((key) => index.distributionByLocationJoinKey.get(key) ?? []);
   if (rows.length === 0) return [];
 
   const items: StaticMethodBiasItem[] = [];
@@ -523,6 +611,8 @@ function buildStaticMiningIndex(
     for (const row of group) addLocationAliases(resourcesByLocationJoinKey, row, group);
   }
 
+  const locationKeysByDisplayName = buildLocationKeysByDisplayName(rows);
+
   const materialKeysByLocationJoinKey = new Map<string, string[]>();
   for (const [key, group] of resourcesByLocationJoinKey) {
     materialKeysByLocationJoinKey.set(key, [...new Set(group.map(getStaticMaterialKey).filter(Boolean))]);
@@ -584,6 +674,7 @@ function buildStaticMiningIndex(
     rankings,
     resourcesByLocationJoinKey,
     materialKeysByLocationJoinKey,
+    locationKeysByDisplayName,
     materialResources: [...materialResources.values()].sort((left, right) => left.label.localeCompare(right.label)),
     rankingByRowKey,
     encounterScoreRangeByMaterialKey,

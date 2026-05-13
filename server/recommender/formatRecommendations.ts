@@ -25,6 +25,41 @@ function percentSignal(value: unknown): number | undefined {
   return clampScore(value <= 1 ? value * 100 : value);
 }
 
+function providerWeightedSignal(source: ApiSource): number | null {
+  if (typeof source.probability === "number" && Number.isFinite(source.probability)) return source.probability;
+
+  const groupProbability = source.groupProbability;
+  const relativeProbability = source.relativeProbability;
+  const materialProbability = source.materialProbability;
+  if (
+    typeof groupProbability !== "number" ||
+    typeof relativeProbability !== "number" ||
+    typeof materialProbability !== "number" ||
+    !Number.isFinite(groupProbability) ||
+    !Number.isFinite(relativeProbability) ||
+    !Number.isFinite(materialProbability)
+  ) {
+    return null;
+  }
+
+  return (groupProbability * relativeProbability * materialProbability) / 10000;
+}
+
+function materialBiasSignal(source: ApiSource): number | null {
+  const relativeProbability = source.relativeProbability;
+  const materialProbability = source.materialProbability;
+  if (
+    typeof relativeProbability !== "number" ||
+    typeof materialProbability !== "number" ||
+    !Number.isFinite(relativeProbability) ||
+    !Number.isFinite(materialProbability)
+  ) {
+    return null;
+  }
+
+  return relativeProbability * materialProbability;
+}
+
 function selectedQualityScore(source: ApiSource, selectedQuality: number | undefined): number | undefined {
   if (selectedQuality === undefined) return undefined;
   return percentSignal(source.quality?.thresholdChances?.[String(selectedQuality)]);
@@ -300,6 +335,9 @@ function routeSignalsPayload(args: {
     groupProbability: percentSignal(source.groupProbability) ?? null,
     relativeProbability: percentSignal(source.relativeProbability) ?? null,
     materialProbability: percentSignal(source.materialProbability) ?? null,
+    providerWeightedSignal: providerWeightedSignal(source),
+    materialBiasSignal: materialBiasSignal(source),
+    normalizedWithinMethodSignal: null,
     sourceStrength: roundScore(built.sourceStrength),
     sourceRowCount: args.sourceRowCount,
     confidence: built.confidence,
