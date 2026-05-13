@@ -3,13 +3,11 @@ import "./recipe-browser.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
-import { getBuildQueueShortageSummary } from "../../../lib/logistics/selectors";
 import { getCraftingItems } from "../../../lib/craftingData";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import MaterialSourcePlaceholder from "./components/MaterialSourcePlaceholder";
-import CraftTabBar from "./CraftTabBar";
 import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
 import { clampQuality } from "./utils/qualityBands";
@@ -51,15 +49,13 @@ function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
 }
 
 export default function CraftingModule() {
-  const [tab, setTab] = useState<Tab>("recipes");
+  const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
   const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
-  const recipeTemplates = useLogisticsStore((state) => state.recipeTemplates);
-  const recipeInputsByRecipeId = useLogisticsStore((state) => state.recipeInputTemplates);
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
@@ -20,23 +20,15 @@ import {
 } from '../../lib/logistics/selectors';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
-import { getDirectionLabel, getModifierImpact } from '../../lib/gameplay/propertyUtils';
+
 import QuantityText from './QuantityText';
 import MaterialIcon from './MaterialIcon';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-function getImpactClass(impact: 'good' | 'bad' | 'neutral'): string {
-  if (impact === 'good') return 'bq-mod--good';
-  if (impact === 'bad') return 'bq-mod--bad';
-  return '';
-}
 
-function getImpactWord(impact: 'good' | 'bad' | 'neutral'): string {
-  if (impact === 'good') return '^';
-  if (impact === 'bad') return 'v';
-  return '';
-}
+
+
 
 function getModifierTrendClass(label: string, value: number | undefined): 'is-better' | 'is-worse' | 'is-neutral' {
   const key = label.toLocaleLowerCase();
@@ -82,6 +74,65 @@ function getModifierTrendClass(label: string, value: number | undefined): 'is-be
   if (lowerIsBetter) return value < 0 ? 'is-better' : 'is-worse';
   if (higherIsBetter) return value > 0 ? 'is-better' : 'is-worse';
   return value > 0 ? 'is-better' : 'is-worse';
+}
+
+// ─── Quantization ────────────────────────────────────────────────────────────
+
+const MATERIAL_QUANTIZATION_URL = '/api/crafting/material_quality_quantization.json';
+
+type BQMaterialQuantization = {
+  materialKey?: string;
+  materialName?: string;
+  materialId?: string;
+  qualityOptions?: number[];
+  bands?: QualityBand[];
+};
+
+function normalizeBQKey(value: string | null | undefined): string {
+  return String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function qualityOptionsToBands(options: number[]): QualityBand[] {
+  return options.map((v) => ({ start: v, end: v, mappedValue: v }));
+}
+
+function useBQQuantization() {
+  const [byKey, setByKey] = useState<Map<string, BQMaterialQuantization>>(new Map());
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(MATERIAL_QUANTIZATION_URL)
+      .then((r) => {
+        if (!r.ok) throw new Error(`${MATERIAL_QUANTIZATION_URL} ${r.status}`);
+        return r.json() as Promise<BQMaterialQuantization[]>;
+      })
+      .then((data) => {
+        if (cancelled) return;
+        const map = new Map<string, BQMaterialQuantization>();
+        for (const item of Array.isArray(data) ? data : []) {
+          for (const key of [item.materialKey, item.materialName, item.materialId]) {
+            const k = normalizeBQKey(key);
+            if (k) map.set(k, item);
+          }
+        }
+        setByKey(map);
+      })
+      .catch((err) => {
+        if (import.meta.env.DEV) console.warn('[quality] failed to load material_quality_quantization.json', err);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const getBandsForMaterial = useCallback((materialName: string | null | undefined): QualityBand[] | null => {
+    const key = normalizeBQKey(materialName);
+    const entry = byKey.get(key);
+    if (!entry) return null;
+    if (entry.qualityOptions?.length) return qualityOptionsToBands(entry.qualityOptions);
+    if (entry.bands?.length) return entry.bands;
+    return null;
+  }, [byKey]);
+
+  return { getBandsForMaterial };
 }
 
 function getSavedBandIndex(input: RecipeInputTemplate, qualityBands: QualityBand[]): number | null {
@@ -240,24 +291,44 @@ interface Props {
 // ─── Quality Slider ──────────────────────────────────────────────────────────
 
 function MaterialQualitySlider({
-  input, draftBandIndex, onBandChange,
+  input, draftBandIndex, onBandChange, quantizedBands,
 }: {
   input: RecipeInputTemplate;
   draftBandIndex: number;
   onBandChange: (bandIndex: number) => void;
+  quantizedBands: QualityBand[] | null;
 }) {
-  const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-  const safeBandIndex = Math.max(0, Math.min(draftBandIndex, qualityBands.length - 1));
-  const selectedQualityTierClass = rarityClassFromBandIndex(safeBandIndex + 1);
-  const quality = getBandEffectiveQuality(qualityBands, safeBandIndex);
+  // Prefer quantized bands from API; fall back to stored recipe bands; never use FALLBACK_QUALITY_BANDS arbitrary values
+  const qualityBands: QualityBand[] | null = quantizedBands ?? (input.qualityBands?.length ? input.qualityBands : null);
 
-  const atQuality = useMemo(() => {
-    const mods = getModifiersAtQuality(input.qualityModifiers ?? [], quality);
-    return [...mods].sort((a, b) => {
-      const order = (p: string) => (p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2);
-      return order(a.property) - order(b.property);
+  const safeBandIndex = qualityBands ? Math.max(0, Math.min(draftBandIndex, qualityBands.length - 1)) : 0;
+  const selectedQualityTierClass = rarityClassFromBandIndex(safeBandIndex + 1);
+  const quality = qualityBands ? getBandEffectiveQuality(qualityBands, safeBandIndex) : null;
+
+  const railMarkers = useMemo(() => {
+    if (!qualityBands) return [];
+    return qualityBands.map((band, i) => {
+      const val = Number(band.mappedValue ?? 0);
+      const left = Math.max(0, Math.min(100, (val / 1000) * 100));
+      return { index: i, mappedValue: val, left, edge: left < 4 ? 'start' : left > 96 ? 'end' : 'middle' };
     });
-  }, [input.qualityModifiers, quality]);
+  }, [qualityBands]);
+
+  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
+  const selectedPct = quality !== null ? Math.max(0, Math.min(100, (quality / 1000) * 100)) : 0;
+  const fillPct = Math.max(0, selectedPct - bandOnePct);
+
+  if (!qualityBands || quality === null) {
+    if (import.meta.env.DEV) console.warn(`[quality] no quantization data for "${input.displayName ?? input.materialName ?? input.materialId}"`);
+    return (
+      <div className="bq-quality-panel">
+        <div className="bq-quality-panel-head">
+          <span className="bq-quality-panel-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
+          <span className="bq-quality-panel-val">Quality data unavailable</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bq-quality-panel">
@@ -265,29 +336,40 @@ function MaterialQualitySlider({
         <span className="bq-quality-panel-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
         <span className={`bq-quality-panel-val ${selectedQualityTierClass}`}>Band {safeBandIndex + 1} / {quality}</span>
       </div>
-      <input
-        type="range"
-        min={0} max={1000} step={1}
-        value={quality}
-        onChange={(e) => onBandChange(findNearestBandForQuality(qualityBands, Number(e.target.value)))}
-        className="bq-quality-range"
-        aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
-      />
-      {atQuality.length > 0 && (
-        <div className="bq-quality-mods">
-          {atQuality.map((modifier, index) => {
-            const impact = getModifierImpact(modifier.property, modifier.value);
-            const directionLabel = getDirectionLabel(modifier.property);
+      <div className="bq-quality-rail-wrap">
+        <input
+          type="range"
+          min={0} max={1000} step={1}
+          value={quality}
+          onChange={(e) => onBandChange(findNearestBandForQuality(qualityBands, Number(e.target.value)))}
+          className="bq-quality-range"
+          aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
+        />
+        <div className={`bq-quality-rail ${selectedQualityTierClass}`} style={{ '--band-one-pct': `${bandOnePct}%` } as React.CSSProperties}>
+          <div
+            className={`bq-quality-rail-fill ${selectedQualityTierClass}`}
+            style={{ '--band-one-pct': `${bandOnePct}%`, '--fill-pct': `${fillPct}%` } as React.CSSProperties}
+          />
+          {railMarkers.map((marker) => {
+            const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
             return (
-              <span className="bq-quality-mod" key={index}>
-                {formatProperty(modifier.property)}
-                <b className={getImpactClass(impact)}>{formatModifierAtQuality(modifier)}{getImpactWord(impact) ? ` ${getImpactWord(impact)}` : ''}</b>
-                {directionLabel && <em>{directionLabel}</em>}
-              </span>
+              <button
+                type="button"
+                key={`${marker.index}-${marker.mappedValue}`}
+                className={`bq-quality-marker ${markerTierClass}${marker.index === safeBandIndex ? ' is-active' : ''}`}
+                style={{ left: `${marker.left}%` }}
+                data-edge={marker.edge}
+                onClick={() => onBandChange(marker.index)}
+                aria-label={`Quality ${marker.mappedValue}`}
+              >
+                <span className="bq-quality-marker-line" />
+          
+              </button>
             );
           })}
         </div>
-      )}
+      </div>
+     
     </div>
   );
 }
@@ -303,12 +385,14 @@ export default function BuildQueueGroup({
   const [draftBandIndices, setDraftBandIndices] = useState<Record<string, number>>({});
   const [expandedReserveRows, setExpandedReserveRows] = useState<Record<string, boolean>>({});
   const [expandedLowerQuality, setExpandedLowerQuality] = useState<Record<string, boolean>>({});
+  const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
   function openEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
     const initial: Record<string, number> = {};
     inputs.forEach((input, inputIndex) => {
       const requirementId = getRequirementId(item, input, inputIndex);
-      const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+      const bands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId) ?? (input.qualityBands?.length ? input.qualityBands : null);
+      if (!bands) { initial[requirementId] = 0; return; }
       initial[requirementId] = getSavedBandIndex(input, bands) ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
     });
     setDraftBandIndices(initial);
@@ -318,7 +402,8 @@ export default function BuildQueueGroup({
   function commitEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
     inputs.forEach((input, inputIndex) => {
       const requirementId = getRequirementId(item, input, inputIndex);
-      const bands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
+      const bands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId) ?? (input.qualityBands?.length ? input.qualityBands : null);
+      if (!bands) return;
       const bandIndex = draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
       const draftQuality = getBandEffectiveQuality(bands, bandIndex);
       const draftModifier = getModifiersAtQuality(input.qualityModifiers ?? [], draftQuality)[0];
@@ -374,10 +459,12 @@ export default function BuildQueueGroup({
           const material = materials.find((e) => e.id === materialKey);
           const displayName = input.displayName ?? input.materialName ?? material?.name ?? `Unresolved: ${input.rawName ?? materialKey}`;
           const required = input.quantity * item.quantity;
-          const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-          const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+          const qualityBands = getQuantizedBands(displayName) ?? (input.qualityBands?.length ? input.qualityBands : null);
+          const savedBandIndex = qualityBands
+            ? (getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500))
+            : 0;
           const draftBandIndex = isEditingThisItem ? (draftBandIndices[requirementId] ?? savedBandIndex) : savedBandIndex;
-          const selectedQuality = getBandEffectiveQuality(qualityBands, draftBandIndex);
+          const selectedQuality = qualityBands ? getBandEffectiveQuality(qualityBands, draftBandIndex) : (input.selectedQuality ?? 0);
           const requirementSelectedQuality = input.selectedQuality;
           const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
           const modifierAtQuality = getModifiersAtQuality(input.qualityModifiers ?? [], selectedQuality)[0];
@@ -518,14 +605,18 @@ export default function BuildQueueGroup({
                 <div className="bq-quality-grid" aria-label={`Quality adjustment for ${itemName}`}>
                   {inputs.map((input, inputIndex) => {
                     const requirementId = getRequirementId(item, input, inputIndex);
-                    const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-                    const savedBandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
+                    const quantizedBands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId);
+                    const effectiveBands = quantizedBands ?? (input.qualityBands?.length ? input.qualityBands : null);
+                    const savedBandIndex = effectiveBands
+                      ? (getSavedBandIndex(input, effectiveBands) ?? findNearestBandForQuality(effectiveBands, input.selectedQuality ?? 500))
+                      : 0;
                     const draftBandIndex = draftBandIndices[requirementId] ?? savedBandIndex;
                     return (
                       <MaterialQualitySlider
                         key={`quality:${item.id}:${requirementId}:${inputIndex}`}
                         input={input}
                         draftBandIndex={draftBandIndex}
+                        quantizedBands={quantizedBands}
                         onBandChange={(bandIndex) => setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))}
                       />
                     );

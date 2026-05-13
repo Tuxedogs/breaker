@@ -36,7 +36,8 @@
       "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\" -Recurse -Filter \"*mining*\" -ErrorAction SilentlyContinue)",
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(xargs grep -l \"getMiningRecommendations\\\\|RecommendationResponse\\\\|PublicLocationEntry\")",
-      "Bash(xargs grep -l \"mining\\\\|Mining\")"
+      "Bash(xargs grep -l \"mining\\\\|Mining\")",
+      "Bash(node -e \"const d = JSON.parse\\(require\\('fs'\\).readFileSync\\('./public/api/crafting/quality_quantization.json', 'utf8'\\)\\); const t = d.find\\(x => x.displayName.toLowerCase\\(\\).includes\\('torite'\\) || x.materialKey.toLowerCase\\(\\).includes\\('torite'\\)\\); console.log\\(JSON.stringify\\(t, null, 2\\)\\); console.log\\('Total entries:', d.length\\);\")"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"
