@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import type { Connect, PreviewServer, ViteDevServer } from "vite";
 import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
@@ -11,7 +11,6 @@ import path from "node:path";
 import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
 
-const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
 const dynamicApiPaths = new Set([
   "/api/recommender/locations",
   "/api/recommender/recommendations",
@@ -33,6 +32,7 @@ async function readRequestBody(request: import("node:http").IncomingMessage): Pr
 async function tryServeScintelApiFile(
   request: import("node:http").IncomingMessage,
   response: import("node:http").ServerResponse,
+  scintelApiRoot: string,
 ): Promise<boolean> {
   if (request.method !== "GET" && request.method !== "HEAD") return false;
 
@@ -61,11 +61,11 @@ async function tryServeScintelApiFile(
   return true;
 }
 
-function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer, "middlewares">) {
+function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer, "middlewares">, scintelApiRoot: string) {
   const middleware: Connect.NextHandleFunction = async (request, response, next) => {
     const url = request.url?.split("?")[0] ?? "";
     if (!dynamicApiPaths.has(url)) {
-      if (await tryServeScintelApiFile(request, response)) return;
+      if (await tryServeScintelApiFile(request, response, scintelApiRoot)) return;
       next();
       return;
     }
@@ -84,27 +84,32 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
   server.middlewares.use(middleware);
 }
 
-export default defineConfig({
-  plugins: [
-    {
-      name: "scintel-recommender-api",
-      configureServer(server) {
-        installScintelApiMiddleware(server);
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
+
+  return {
+    plugins: [
+      {
+        name: "scintel-recommender-api",
+        configureServer(server) {
+          installScintelApiMiddleware(server, scintelApiRoot);
+        },
+        configurePreviewServer(server) {
+          installScintelApiMiddleware(server, scintelApiRoot);
+        },
       },
-      configurePreviewServer(server) {
-        installScintelApiMiddleware(server);
+      react(),
+      svgr(),
+      mdx({
+        providerImportSource: "@mdx-js/react",
+        remarkPlugins: [remarkFrontmatter, remarkGfm],
+      }),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
       },
     },
-    react(),
-    svgr(),
-    mdx({
-      providerImportSource: "@mdx-js/react",
-      remarkPlugins: [remarkFrontmatter, remarkGfm],
-    }),
-  ],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+  };
 });
