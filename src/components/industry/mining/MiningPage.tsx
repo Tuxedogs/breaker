@@ -41,6 +41,7 @@ import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 import { buildResourceGroups } from "../shared/msbResourceGroups";
+import MaterialIcon from "../../logistics/MaterialIcon";
 
 function readStoredSidebarState<T>(key: string, fallback: T): T {
   try {
@@ -161,9 +162,14 @@ function getPrimaryRouteScore(entry: PublicLocationEntry, selectedMaterials: Set
   return entry.routeScores?.[0] ?? null;
 }
 
-function getPrimaryRecommendationScore(entry: PublicLocationEntry): number {
+function getDisplayMatchScore(entry: PublicLocationEntry): number | null {
+  return Number.isFinite(entry.routeTargetabilityScore) ? entry.routeTargetabilityScore ?? null : null;
+}
+
+function getLocationSortScore(entry: PublicLocationEntry): number {
+  if (Number.isFinite(entry.routeTargetabilityScore)) return entry.routeTargetabilityScore ?? 0;
   if (Number.isFinite(entry.score)) return entry.score;
-  return entry.routeTargetabilityScore ?? 0;
+  return 0;
 }
 
 function getMatchedDemandCount(entry: PublicLocationEntry): number {
@@ -171,7 +177,7 @@ function getMatchedDemandCount(entry: PublicLocationEntry): number {
 }
 
 function compareLocationsByRecommendationScore(left: PublicLocationEntry, right: PublicLocationEntry): number {
-  return getPrimaryRecommendationScore(right) - getPrimaryRecommendationScore(left) ||
+  return getLocationSortScore(right) - getLocationSortScore(left) ||
     getMatchedDemandCount(right) - getMatchedDemandCount(left) ||
     left.locationName.localeCompare(right.locationName);
 }
@@ -201,6 +207,14 @@ function scoreToneClass(label?: string, score?: number | null): string {
   return "mloc-score--poor";
 }
 
+function MaterialNameCell({ name, miningMethod, iconSize = 16 }: { name: string; miningMethod?: string; iconSize?: number }) {
+  return (
+    <span className="mining-material-name-cell">
+      <MaterialIcon materialName={name} miningMethod={miningMethod} size={iconSize} className="mining-material-icon" />
+      <span className="mining-material-name-text">{name}</span>
+    </span>
+  );
+}
 
 function isIndexableMiningResource(name: string): boolean {
   const lower = name.toLowerCase();
@@ -338,7 +352,7 @@ function LocationListItem({
   const coveragePct = totalRelevant > 0 ? Math.round((primaryCovered.length / totalRelevant) * 100) : 0;
   const primaryRouteScore = getPrimaryRouteScore(entry, selectedMaterials);
   const displayRouteScore = primaryRouteScore ?? entry.routeScores?.[0] ?? null;
-  const routeScore = getPrimaryRecommendationScore(entry);
+  const matchScore = getDisplayMatchScore(entry);
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
 
 
@@ -370,9 +384,16 @@ function LocationListItem({
           <span className="mlist-item-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
             {locationDisplayName}
           </span>
-          <span className={`mlist-item-score ${scoreToneClass(displayRouteScore?.label, routeScore)}`}>
-            {Math.round(routeScore)}
-          </span>
+          {matchScore !== null && (
+            <span
+              className={`mlist-item-score ${scoreToneClass(displayRouteScore?.label ?? entry.routeTargetabilityLabel, matchScore)}`}
+              title="Location match score. Higher is better on a normalized 0-100 route targetability scale."
+              aria-label={`Location match score ${Math.round(matchScore)} out of 100`}
+            >
+              <span className="mlist-item-score-label">Match</span>
+              <span className="mlist-item-score-value">{Math.round(matchScore)}</span>
+            </span>
+          )}
         </div>
         <div className="mlist-item-sub">
           <span className="mlist-item-system">{entry.systemName}</span>
@@ -631,7 +652,6 @@ function LocationDetail({
   const total = coveredBQ.length + missingBQ.length;
   const coveragePct = total > 0 ? Math.round((coveredBQ.length / total) * 100) : 0;
   const primaryRouteScore = entry.routeScores?.[0] ?? null;
-  const routeScore = getPrimaryRecommendationScore(entry);
   const debugJoinLogKeyRef = useRef<string | null>(null);
 
   // Location insights
@@ -904,7 +924,7 @@ function LocationDetail({
 
       {/* Metric cards row */}
       <div className="mdet-metric-row">
-        {Number.isFinite(routeScore) && (
+        {(hasEncounterRank || hasLocationRank) && (
           <div className="mdet-metric-card">
             <div className="mdet-metric-label">
               {rankLabel}
@@ -1004,7 +1024,9 @@ function LocationDetail({
             <tbody>
               {demandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name">{row.name}</td>
+                  <td className="mdet-mat-name">
+                    <MaterialNameCell name={row.name} />
+                  </td>
                   <td className="mdet-mat-demand">{row.coverage}</td>
                   <td className="mdet-mat-score">
                     {row.qualityDisplay.kind === "ignored" ? "N/A"
@@ -1031,18 +1053,16 @@ function LocationDetail({
       {/* Material Profile */}
       {resourceRows.length > 0 && (
         <div className="mining-resource-index">
-          <div className="mdet-section-label">
-            <span className="mdet-th-wrap">
-              MATERIAL PROFILE
-              <InfoTip text="Materials known to appear at this location from the static mining source index." />
-            </span>
-            <span className="mdet-section-count">({resourceRows.length} resource{resourceRows.length !== 1 ? "s" : ""})</span>
-          </div>
-          <div className="mdet-section-subtitle">Indexed materials available at this location.</div>
+          
+          
           <table className="mining-resource-index-table">
             <thead>
               <tr>
-                <th>MATERIAL</th>
+                <th><span className="mdet-th-wrap">
+              MATERIAL PROFILE
+              <InfoTip text="Materials known to appear at this location from the static mining source index." />
+            </span>
+            <span className="mdet-section-count">({resourceRows.length} resource{resourceRows.length !== 1 ? "s" : ""})</span></th>
                 <th><span className="mdet-th-wrap">METHOD<InfoTip text="Mining method required for this material source." /></span></th>
                 <th><span className="mdet-th-wrap">ENCOUNTER RANK<InfoTip text="This material's rank at this location compared to other known locations for the same material. Lower is better." /></span></th>
                 <th><span className="mdet-th-wrap">{qualityChanceHeader(false)}<InfoTip text={qualityChanceTooltip(false)} /></span></th>
@@ -1052,7 +1072,9 @@ function LocationDetail({
             <tbody>
               {resourceRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name">{row.name}</td>
+                  <td className="mdet-mat-name">
+                    <MaterialNameCell name={row.name} miningMethod={row.miningType} />
+                  </td>
                   <td className="mdet-mat-demand">{row.miningType || "Unclassified"}</td>
                   <td className={`mdet-mat-score ${row.encounterRankClass}`} title="This material's rank at this location compared to other known locations for the same material. Lower is better.">
                     {row.encounterRankLabel}
