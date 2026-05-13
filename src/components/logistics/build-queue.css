@@ -36,24 +36,23 @@
   width: 100%;
   min-height: 100vh;
   min-width: 0;
-  padding: 24px;
+  padding: clamp(0.5rem, 2vw, 0.1rem);
   box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+  gap: 18px;
+  align-items: start;
 }
 
 .bq-workspace {
-  width: min(100%, 1720px);
-  margin-inline: auto;
-  display: grid;
-  grid-template-columns: minmax(980px, 1fr) minmax(300px, 340px);
-  gap: 18px;
-  align-items: start;
+  min-width: 0;
 }
 
 .bq-shell {
   width: 100%;
   min-width: 0;
   padding: 0.7rem;
-  border: 1px solid var(--bq-accent-edge);
+  border: 1px solid rgba(255, 153, 0, 0.18);
   border-radius: 8px;
   background:
     var(--bq-large);
@@ -111,8 +110,7 @@
   border: 1px solid var(--bq-edge-soft);
   border-radius: 5px;
   background: var(--bq-large);
-   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
-
+  box-shadow: 0 2px 6px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.022);
 }
 
 .bq-ledger-stat span {
@@ -410,11 +408,12 @@
 
 .bq-shortage-panel {
   margin-bottom: 0.8rem;
-  border: 1px solid var(--bq-edge);
+  border: 1px solid var(--bq-accent-edge-soft);
   border-radius: 8px;
   background: var(--bq-panel-strong);
   box-shadow:
-    0 14px 28px rgba(0,0,0,0.34),
+    0 14px 28px rgba(0,0,0,0.38),
+    0 0 28px rgba(255,153,0,0.05),
     inset 0 1px 0 rgba(255,255,255,0.035);
   overflow-x: auto;
   overflow-y: hidden;
@@ -1421,7 +1420,7 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1500px) {
-  .bq-workspace {
+  .bq-main {
     grid-template-columns: 1fr;
   }
 

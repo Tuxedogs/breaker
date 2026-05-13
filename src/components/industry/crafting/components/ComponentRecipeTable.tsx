@@ -27,8 +27,6 @@ import {
   rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
-import { MsbChip, MsbSection, ResourcesSection } from "../../shared/MsbSidebar";
-import { buildResourceGroups } from "../../shared/msbResourceGroups";
 
 
 const NO_VALUE = "__none__";
@@ -1369,7 +1367,6 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
@@ -1462,17 +1459,6 @@ export default function ComponentRecipeTable({
         .map((c) => ({ value: c!, label: c! })),
     [recipes],
   );
-
-  const resourceGroups = useMemo(() => {
-    const resources = recipes.flatMap((recipe) =>
-      (recipe.materials ?? []).map((material) => ({
-        id: material.cost_id || material.material_name,
-        label: material.material_name,
-        miningType: material.cost_type,
-      })),
-    ).filter((r) => r.label !== "Insulative Liner Material");
-    return buildResourceGroups(resources);
-  }, [recipes]);
 
   const recipeSearchTexts = useMemo(
     () =>
@@ -1579,235 +1565,201 @@ export default function ComponentRecipeTable({
   const selectedGroup = groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
   const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
   const hiddenRecipeCount = Math.max(0, groupedRecipes.length - visibleRecipeGroups.length);
-  const activeFilterCount =
-    (search.trim() ? 1 : 0) +
-    fpsFilters.size +
-    vehicleFilters.size +
-    sizeFilters.size +
-    gradeFilters.size +
-    classFilters.size +
-    resourceFilters.size;
 
 
 
   return (
     <div className="craft-planner-shell" ref={shellRef}>
-      <aside className="craft-finder-sidebar">
-        <div className="craft-finder-header">
-          <span className="craft-finder-kicker">Component Finder</span>
-          <div className="craft-finder-title-row">
-            <h1 className="craft-finder-title">Crafting Planner</h1>
-            <button
-              type="button"
-              className={`craft-filter-toggle${filtersOpen ? " is-active" : ""}`}
-              aria-pressed={filtersOpen}
-              onClick={() => setFiltersOpen((value) => !value)}
-            >
-              Filter
-              {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
-            </button>
-          </div>
-        </div>
 
-        <label className="craft-search">
-          <span className="craft-search-icon" aria-hidden>/</span>
-          <input
-            type="search"
-            className="craft-search-input"
-            placeholder="Search recipes..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              resetSelection();
-            }}
-          />
-        </label>
+      {/* ── Filter rail ── */}
+      <div className="craft-filter-rail">
 
-        {filtersOpen && (
-          <div className="craft-filter-panel">
-            <div className="craft-filter-panel-head">
-              <span>Filters</span>
-              {hasActiveFilters && (
-                <button type="button" className="craft-clear-filters" onClick={resetAll}>
-                  Clear
-                </button>
-              )}
-            </div>
-        <MsbSection label="FPS">
-          {fpsOptions.map((filter) => (
-            <MsbChip
-              key={filter.value}
-              label={filter.label}
-              active={fpsFilters.has(filter.value)}
-              onClick={() => {
-                setFpsFilters((prev) => {
-                  const next = new Set(prev);
-                  if (next.has(filter.value)) next.delete(filter.value);
-                  else next.add(filter.value);
-                  return next;
-                });
-                resetSelection();
-              }}
-            />
-          ))}
-        </MsbSection>
-
-        <MsbSection label="Vehicles">
-          {vehicleOptions.map((filter) => (
-            <MsbChip
-              key={filter.value}
-              label={filter.label}
-              active={vehicleFilters.has(filter.value)}
-              onClick={() => {
-                setVehicleFilters((prev) => {
-                  const next = new Set(prev);
-                  if (next.has(filter.value)) next.delete(filter.value);
-                  else next.add(filter.value);
-                  return next;
-                });
-                resetSelection();
-              }}
-            />
-          ))}
-        </MsbSection>
-
-        <MsbSection label="Size">
-          {sizeOptions.map((filter) => (
-            <MsbChip key={filter.value} label={filter.label} active={sizeFilters.has(filter.value)} onClick={() => {
-              setSizeFilters((prev) => {
-                const next = new Set(prev);
-                if (next.has(filter.value)) next.delete(filter.value);
-                else next.add(filter.value);
-                return next;
-              });
-              resetSelection();
-            }} />
-          ))}
-        </MsbSection>
-
-        <MsbSection label="Grade">
-          {gradeOptions.map((filter) => (
-            <MsbChip key={filter.value} label={filter.label} active={gradeFilters.has(filter.value)} onClick={() => {
-              setGradeFilters((prev) => {
-                const next = new Set(prev);
-                if (next.has(filter.value)) next.delete(filter.value);
-                else next.add(filter.value);
-                return next;
-              });
-              resetSelection();
-            }} />
-          ))}
-        </MsbSection>
-
-        <MsbSection label="Class">
-          {classOptions.map((filter) => (
-            <MsbChip key={filter.value} label={filter.label} active={classFilters.has(filter.value)} onClick={() => {
-              setClassFilters((prev) => {
-                const next = new Set(prev);
-                if (next.has(filter.value)) next.delete(filter.value);
-                else next.add(filter.value);
-                return next;
-              });
-              resetSelection();
-            }} />
-          ))}
-        </MsbSection>
-
-        <ResourcesSection
-          groups={resourceGroups}
-          selectedIds={resourceFilters}
-          onToggle={(id) => {
-            setResourceFilters((prev) => {
-              const next = new Set(prev);
-              if (next.has(id)) next.delete(id);
-              else next.add(id);
-              return next;
-            });
-            resetSelection();
-          }}
-        />
-          </div>
-        )}
-
-        <div className="craft-result-head">
-          <span>Results</span>
-          <strong>{groupedRecipes.length}</strong>
-        </div>
-
-        <div className="craft-result-list">
-          {visibleRecipeGroups.map((group) => {
-            const recipe = group.recipes[0];
-            const selected = selectedGroup?.id === group.id;
-            const variantCount = group.recipes.length;
-            const typeBadges = getTypeBadges(recipe);
-            const sizeLabel = getSharedValue(group.recipes, (item) => formatSize(item.size));
-            const grade = getSharedValue(group.recipes, (item) => item.grade ?? null);
-            const cls = getSharedValue(group.recipes, (item) => item.class ?? null);
-            const saved = group.recipes.some((item) => bookmarkedRecipeIds.has(item.blueprint_id));
-            const queued = group.recipes.some((item) => isRecipeQueued(item));
-
-            return (
-              <button
-                key={group.id}
-                type="button"
-                className={`craft-result-card${selected ? " craft-result-card--selected" : ""}`}
-                onClick={() => setSelectedGroupId(group.id)}
-              >
-                <span className="craft-result-name">{group.displayName}</span>
-                <span className="craft-result-sub">
-                  {getSubtitle(recipe)}
-                  {variantCount > 1 && ` / ${variantCount} variants`}
-                </span>
-                <span className="craft-result-chips">
-                  {sizeLabel && <span className="craft-mini-chip">{sizeLabel}</span>}
-                  {typeBadges.map((badge) => (
-                    <span key={badge} className="craft-mini-chip">{badge}</span>
-                  ))}
-                  {grade && <span className="craft-mini-chip">{grade}</span>}
-                  {cls && <span className="craft-mini-chip">{cls}</span>}
-                  {queued && <span className="craft-mini-chip craft-mini-chip--queue">Queued</span>}
-                  {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
-                </span>
-                <span className="craft-result-arrow" aria-hidden>&rsaquo;</span>
-                {selected && (
-                  <span className="craft-result-bridge" aria-hidden="true" />
-                )}
-              </button>
-            );
-          })}
-
-          {groupedRecipes.length === 0 && (
-            <div className="craft-empty-card">
-              No recipes match filters.
+        {/* Left: FPS category */}
+        <div className="craft-frl-left">
+          {fpsOptions.length > 0 && (
+            <div className="craft-frl-category">
+              <span className="craft-frl-label">FPS</span>
+              <div className="craft-frl-chips">
+                {fpsOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`craft-frl-chip${fpsFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => { setFpsFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  >{opt.label}</button>
+                ))}
+              </div>
             </div>
           )}
-
         </div>
 
-        {hiddenRecipeCount > 0 && (
-          <div className="craft-result-footer">
-            Showing {visibleRecipeGroups.length} of {groupedRecipes.length}. Refine search or filters.
+        {/* Center: Type / Size / Grade / Class categories */}
+        <div className="craft-frl-center">
+          {vehicleOptions.length > 0 && (
+            <div className="craft-frl-category">
+              <span className="craft-frl-label">Type</span>
+              <div className="craft-frl-chips">
+                {vehicleOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`craft-frl-chip${vehicleFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => { setVehicleFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  >{opt.label}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          {sizeOptions.length > 0 && (
+            <div className="craft-frl-category">
+              <span className="craft-frl-label">Size</span>
+              <div className="craft-frl-chips">
+                {sizeOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  >{opt.label}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          {gradeOptions.length > 0 && (
+            <div className="craft-frl-category">
+              <span className="craft-frl-label">Grade</span>
+              <div className="craft-frl-chips">
+                {gradeOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  >{opt.label}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          {classOptions.length > 0 && (
+            <div className="craft-frl-category">
+              <span className="craft-frl-label">Class</span>
+              <div className="craft-frl-chips">
+                {classOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  >{opt.label}</button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Right: clear action */}
+        <div className="craft-frl-actions">
+          <button type="button" className="craft-frl-clear" onClick={resetAll} disabled={!hasActiveFilters}>
+            Clear
+          </button>
+        </div>
+
+      </div>
+
+      {/* ── Console layout ── */}
+      <div className="craft-console-layout">
+        <aside className="craft-finder-sidebar">
+          <div className="craft-finder-header">
+            <span className="craft-finder-kicker">Component Finder</span>
+            <h1 className="craft-finder-title">Crafting Planner</h1>
           </div>
+
+          <label className="craft-search">
+            <span className="craft-search-icon" aria-hidden>/</span>
+            <input
+              type="search"
+              className="craft-search-input"
+              placeholder="Search recipes..."
+              value={search}
+              onChange={(e) => { setSearch(e.target.value); resetSelection(); }}
+            />
+          </label>
+
+          <div className="craft-result-head">
+            <span>Results</span>
+            <strong>{groupedRecipes.length}</strong>
+          </div>
+
+          <div className="craft-result-list">
+            {visibleRecipeGroups.map((group) => {
+              const recipe = group.recipes[0];
+              const selected = selectedGroup?.id === group.id;
+              const variantCount = group.recipes.length;
+              const typeBadges = getTypeBadges(recipe);
+              const sizeLabel = getSharedValue(group.recipes, (item) => formatSize(item.size));
+              const grade = getSharedValue(group.recipes, (item) => item.grade ?? null);
+              const cls = getSharedValue(group.recipes, (item) => item.class ?? null);
+              const saved = group.recipes.some((item) => bookmarkedRecipeIds.has(item.blueprint_id));
+              const queued = group.recipes.some((item) => isRecipeQueued(item));
+
+              return (
+                <button
+                  key={group.id}
+                  type="button"
+                  className={`craft-result-card${selected ? " craft-result-card--selected" : ""}`}
+                  onClick={() => setSelectedGroupId(group.id)}
+                >
+                  <span className="craft-result-name">{group.displayName}</span>
+                  <span className="craft-result-sub">
+                    {getSubtitle(recipe)}
+                    {variantCount > 1 && ` / ${variantCount} variants`}
+                  </span>
+                  <span className="craft-result-chips">
+                    {sizeLabel && <span className="craft-mini-chip">{sizeLabel}</span>}
+                    {typeBadges.map((badge) => (
+                      <span key={badge} className="craft-mini-chip">{badge}</span>
+                    ))}
+                    {grade && <span className="craft-mini-chip">{grade}</span>}
+                    {cls && <span className="craft-mini-chip">{cls}</span>}
+                    {queued && <span className="craft-mini-chip craft-mini-chip--queue">Queued</span>}
+                    {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
+                  </span>
+                  <span className="craft-result-arrow" aria-hidden>&rsaquo;</span>
+                  {selected && <span className="craft-result-bridge" aria-hidden="true" />}
+                </button>
+              );
+            })}
+
+            {groupedRecipes.length === 0 && (
+              <div className="craft-empty-card">No recipes match filters.</div>
+            )}
+          </div>
+
+          {hiddenRecipeCount > 0 && (
+            <div className="craft-result-footer">
+              Showing {visibleRecipeGroups.length} of {groupedRecipes.length}. Refine search or filters.
+            </div>
+          )}
+        </aside>
+
+        <div className="craft-selected-bridge-column" aria-hidden />
+
+        {selectedGroup ? (
+          <RecipeDrawer
+            recipe={selectedGroup.recipes[0]}
+            groupRecipes={selectedGroup.recipes}
+            baseDisplayName={selectedGroup.displayName}
+            onAddToQueue={onAddToQueue}
+            isRecipeQueued={isRecipeQueued}
+            isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
+            onToggleBookmark={toggleBookmark}
+          />
+        ) : (
+          <section className="craft-detail-stage craft-detail-stage--empty">
+            <div className="craft-empty-card">Select a recipe to inspect material quality.</div>
+          </section>
         )}
-      </aside>
-
-      <div className="craft-selected-bridge-column" aria-hidden />
-
-      {selectedGroup ? (
-        <RecipeDrawer
-          recipe={selectedGroup.recipes[0]}
-          groupRecipes={selectedGroup.recipes}
-          baseDisplayName={selectedGroup.displayName}
-          onAddToQueue={onAddToQueue}
-          isRecipeQueued={isRecipeQueued}
-          isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
-          onToggleBookmark={toggleBookmark}
-        />
-      ) : (
-        <section className="craft-detail-stage craft-detail-stage--empty">
-          <div className="craft-empty-card">Select a recipe to inspect material quality.</div>
-        </section>
-      )}
+      </div>
     </div>
   );
 }
