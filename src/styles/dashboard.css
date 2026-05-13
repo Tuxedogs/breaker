@@ -18,7 +18,7 @@
 /* ── Left sidebar ─────────────────────────────── */
 
 .dash-sidebar {
-  width: 156px;
+  width: 220px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -118,7 +118,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.16rem 0.01rem;
+  padding: 0.36rem 0.6rem;
   border-radius: 4px;
   font-size: 0.86rem;
   font-weight: 500;
@@ -518,19 +518,27 @@
   min-height: 0;
 }
 
-.dash-content-frame > .mine-page--v2 {
-  height: calc(100vh - var(--dash-topbar-h, 52px));
+.dash-content-frame > .craft-page {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 0;
+}
+
+.dash-content:has(> .dash-content-frame > .craft-page),
+.dash-content:has(> .dash-content-frame > .mine-page) {
   overflow: hidden;
-  flex: 1 1 auto;
+}
+
+.dash-content:has(> .dash-content-frame > .craft-page) > .dash-content-frame,
+.dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame {
+  height: 100%;
   min-height: 0;
 }
 
-@media (max-width: 760px) {
-  .dash-content-frame > .mine-page--v2 {
-    height: auto;
-    overflow: visible;
-    min-height: 100%;
-  }
+.dash-content-frame > .mine-page {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 0;
 }
 
 .dash-content-grid {

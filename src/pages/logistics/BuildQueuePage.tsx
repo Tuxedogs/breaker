@@ -135,70 +135,70 @@ export default function BuildQueuePage() {
 
       <div className="bq-main">
         <div className="bq-workspace">
-        <div className="bq-shell">
+          <div className="bq-shell">
 
-      <div className="bq-shell-header">
-        <div>
-          <div className="bq-shell-title-row">
-            <span className="bq-shell-kicker">BUILD QUEUE</span>
-            <span className="bq-shell-count">{groupedShortages.length} materials</span>
+            <div className="bq-shell-header">
+              <div>
+                <div className="bq-shell-title-row">
+                  <span className="bq-shell-kicker">BUILD QUEUE</span>
+                  <span className="bq-shell-count">{groupedShortages.length} materials</span>
+                </div>
+                <h1>Material Shortages</h1>
+                <p>Active build demand, stock gaps, and reservation readiness.</p>
+              </div>
+            </div>
+
+            <div className="bq-summary-grid" aria-label="Build queue summary metrics">
+              <div className="bq-summary-card">
+                <span>Queued Builds</span>
+                <strong>{buildQueue.length}</strong>
+                <em>Total build plans</em>
+              </div>
+              <div className="bq-summary-card bq-summary-card--danger">
+                <span>Blocked Builds</span>
+                <strong>{shortageSummary.activeQueueItems.length}</strong>
+                <em>Active demand with gaps</em>
+              </div>
+              <div className="bq-summary-card">
+                <span>Materials Needed</span>
+                <strong>{materialsNeededCount}</strong>
+                <em>Unique shortage materials</em>
+              </div>
+              <div className="bq-summary-card bq-summary-card--success">
+                <span>Ready to Reserve</span>
+                <strong>{reservableShortages}</strong>
+                <em>Shortage lines with stock</em>
+              </div>
+            </div>
+
+            <>
+              {categories.length === 0 ? (
+                <div className="bq-empty-state">No builds queued yet.</div>
+              ) : categories.map((category) => (
+                <BuildQueueGroup
+                  key={category}
+                  category={category}
+                  items={grouped[category] ?? []}
+                  recipes={recipes}
+                  recipeInputsByRecipeId={recipeInputsByRecipeId}
+                  buildQueue={buildQueue}
+                  inventory={inventoryEntries}
+                  materials={materials}
+                  locations={locations}
+                  strategy={sourceStrategy}
+                  onQuantityChange={updateBuildQueueItemQuantity}
+                  onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
+                  onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
+                  onRemove={removeBuildQueueItem}
+                  onToggleAllocation={toggleBuildQueueAllocation}
+                  onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
+                />
+              ))}
+            </>
+
           </div>
-          <h1>Material Shortages</h1>
-          <p>Active build demand, stock gaps, and reservation readiness.</p>
         </div>
-      </div>
 
-      <div className="bq-summary-grid" aria-label="Build queue summary metrics">
-        <div className="bq-summary-card">
-          <span>Queued Builds</span>
-          <strong>{buildQueue.length}</strong>
-          <em>Total build plans</em>
-        </div>
-        <div className="bq-summary-card bq-summary-card--danger">
-          <span>Blocked Builds</span>
-          <strong>{shortageSummary.activeQueueItems.length}</strong>
-          <em>Active demand with gaps</em>
-        </div>
-        <div className="bq-summary-card">
-          <span>Materials Needed</span>
-          <strong>{materialsNeededCount}</strong>
-          <em>Unique shortage materials</em>
-        </div>
-        <div className="bq-summary-card bq-summary-card--success">
-          <span>Ready to Reserve</span>
-          <strong>{reservableShortages}</strong>
-          <em>Shortage lines with stock</em>
-        </div>
-      </div>
-
-      {/* Shortage Panel */}
-
-      <>
-        {categories.length === 0 ? (
-          <div className="bq-empty-state">No builds queued yet.</div>
-        ) : categories.map((category) => (
-          <BuildQueueGroup
-            key={category}
-            category={category}
-            items={grouped[category] ?? []}
-            recipes={recipes}
-            recipeInputsByRecipeId={recipeInputsByRecipeId}
-            buildQueue={buildQueue}
-            inventory={inventoryEntries}
-            materials={materials}
-            locations={locations}
-            strategy={sourceStrategy}
-            onQuantityChange={updateBuildQueueItemQuantity}
-            onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
-            onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
-            onRemove={removeBuildQueueItem}
-            onToggleAllocation={toggleBuildQueueAllocation}
-            onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
-          />
-        ))}
-      </>
-
-        </div>
         <aside className="bq-ledger-panel" aria-label="Queue Ledger">
           <div className="bq-ledger-title">Queue Ledger</div>
           <div className="bq-ledger-stat bq-ledger-stat--danger">
@@ -224,7 +224,6 @@ export default function BuildQueuePage() {
             </div>
           ))}
         </aside>
-        </div>
       </div>
     </div>
   );
