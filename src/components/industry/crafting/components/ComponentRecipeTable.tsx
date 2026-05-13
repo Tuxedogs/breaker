@@ -6,6 +6,8 @@ import {
   useCallback,
 } from "react";
 import type { ComponentRecipe } from "../utils/craftingTypes";
+import { buildResourceGroups } from "../../shared/msbResourceGroups";
+import type { ResourceGroups } from "../../shared/MsbSidebar";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
@@ -42,6 +44,7 @@ type RecipeSidebarState = {
   grades: string[];
   classes: string[];
   resources: string[];
+  miningCategories: string[];
 };
 
 const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
@@ -52,7 +55,69 @@ const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
   grades: [],
   classes: [],
   resources: [],
+  miningCategories: [],
 };
+
+// Label normalization for Type chips
+const VEHICLE_TYPE_LABEL_MAP: Record<string, string> = {
+  weaponGun: "Ship Guns",
+  cooler: "Cooler",
+  powerplant: "Powerplant",
+  quantumdrive: "Quantum Drive",
+  radar: "Radar",
+  shield: "Shield",
+  weaponMining: "Mining Laser",
+};
+
+// Types collapsed into the Utility chip
+const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
+
+function normalizeVehicleTypeLabel(value: string): string {
+  return VEHICLE_TYPE_LABEL_MAP[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+type MaterialSourceEntry = {
+  materialName: string;
+  materialId?: string;
+  sources?: { spawnType?: string }[];
+};
+
+function spawnTypeToMiningType(spawnType: string | undefined): string | undefined {
+  if (!spawnType) return undefined;
+  if (spawnType.includes("vehicle") || spawnType.includes("ground")) return "Ground Vehicle";
+  if (spawnType.includes("fps") || spawnType.includes("hand")) return "Hand";
+  return "Ship";
+}
+
+function useMineableResourceGroups(): ResourceGroups {
+  const [groups, setGroups] = useState<ResourceGroups>({ shipAndHarvestable: [], vehicle: [], hand: [] });
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/mining/material_sources.json")
+      .then((r) => r.json())
+      .then((data: MaterialSourceEntry[]) => {
+        if (cancelled) return;
+        const byName = new Map<string, { id: string; label: string; miningType?: string }>();
+        for (const entry of data) {
+          if (!entry.materialName) continue;
+          const key = entry.materialName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+          if (byName.has(key)) continue;
+          const spawnType = entry.sources?.[0]?.spawnType;
+          byName.set(key, {
+            id: entry.materialName,
+            label: entry.materialName,
+            miningType: spawnTypeToMiningType(spawnType),
+          });
+        }
+        setGroups(buildResourceGroups([...byName.values()]));
+      })
+      .catch(() => {/* silently ignore */});
+    return () => { cancelled = true; };
+  }, []);
+
+  return groups;
+}
 
 function readStoredSidebarState<T>(key: string, fallback: T): T {
   if (typeof window === "undefined" || !window.localStorage) return fallback;
@@ -1396,6 +1461,7 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
+  const mineableGroups = useMineableResourceGroups();
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
@@ -1445,32 +1511,45 @@ export default function ComponentRecipeTable({
       grades: [...gradeFilters],
       classes: [...classFilters],
       resources: [...resourceFilters],
+      miningCategories: [],
     });
   }, [classFilters, fpsFilters, gradeFilters, resourceFilters, search, sizeFilters, vehicleFilters]);
 
+  // FPS chips: ammo/armor/weapons — normalized labels
+  const FPS_LABEL_MAP: Record<string, string> = { ammo: "Ammo", armor: "Armor", weapons: "Weapons" };
   const fpsOptions = useMemo(
     () =>
       Array.from(new Set(recipes.filter((r) => r.item_kind === "fps").map((r) => r.component_type).filter(Boolean)))
         .sort()
-        .map((t) => ({ value: t!, label: t! })),
+        .map((t) => ({ value: t!, label: FPS_LABEL_MAP[t!.toLowerCase()] ?? (t!.charAt(0).toUpperCase() + t!.slice(1)) })),
     [recipes],
   );
 
-  const vehicleOptions = useMemo(
-    () =>
-      Array.from(new Set(recipes.filter((r) => r.item_kind !== "fps").map((r) => r.component_type).filter(Boolean)))
-        .filter((t) => t !== "salvage" && t !== "tractorbeam")
-        .sort()
-        .map((t) => ({ value: t!, label: t! })),
-    [recipes],
-  );
+  // Type chips: non-fps, collapse utility types into one chip, normalize labels
+  const vehicleOptions = useMemo(() => {
+    const EXCLUDED = new Set(["salvage", "tractorbeam"]);
+    const types = Array.from(
+      new Set(
+        recipes
+          .filter((r) => r.item_kind !== "fps")
+          .map((r) => r.component_type)
+          .filter((t): t is string => !!t && !EXCLUDED.has(t) && !UTILITY_TYPES.has(t)),
+      ),
+    ).sort();
+
+    const hasUtility = recipes.some(
+      (r) => r.item_kind !== "fps" && r.component_type && UTILITY_TYPES.has(r.component_type),
+    );
+
+    const chips = types.map((t) => ({ value: t, label: normalizeVehicleTypeLabel(t) }));
+    if (hasUtility) chips.push({ value: "__utility__", label: "Utility" });
+    return chips;
+  }, [recipes]);
 
   const sizeOptions = useMemo(() => {
-    const vals = Array.from(new Set(recipes.map((r) => r.size).filter(Boolean)))
+    return Array.from(new Set(recipes.map((r) => r.size).filter(Boolean)))
       .sort((a, b) => Number(a) - Number(b))
       .map((s) => ({ value: s!, label: `S${s}` }));
-
-    return vals;
   }, [recipes]);
 
   const gradeOptions = useMemo(
@@ -1481,11 +1560,14 @@ export default function ComponentRecipeTable({
     [recipes],
   );
 
+  const CLASS_LABEL_MAP: Record<string, string> = {
+    civilian: "Civilian", competition: "Competition", military: "Military", stealth: "Stealth",
+  };
   const classOptions = useMemo(
     () =>
       Array.from(new Set(recipes.map((r) => r.class).filter(Boolean)))
         .sort()
-        .map((c) => ({ value: c!, label: c! })),
+        .map((c) => ({ value: c!, label: CLASS_LABEL_MAP[c!.toLowerCase()] ?? (c!.charAt(0).toUpperCase() + c!.slice(1)) })),
     [recipes],
   );
 
@@ -1506,7 +1588,14 @@ export default function ComponentRecipeTable({
         }
 
         if (fpsFilters.size && (r.item_kind !== "fps" || !fpsFilters.has(r.component_type ?? ""))) return false;
-        if (vehicleFilters.size && (r.item_kind === "fps" || !vehicleFilters.has(r.component_type ?? ""))) return false;
+
+        if (vehicleFilters.size) {
+          if (r.item_kind === "fps") return false;
+          const ct = r.component_type ?? "";
+          const matchesUtility = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(ct);
+          const matchesDirect = vehicleFilters.has(ct);
+          if (!matchesUtility && !matchesDirect) return false;
+        }
 
         if (sizeFilters.size) {
           const sv = r.size ? r.size : NO_VALUE;
@@ -1603,95 +1692,147 @@ export default function ComponentRecipeTable({
       {/* ── Filter rail ── */}
       <div className="craft-filter-rail">
 
-        {/* Left: FPS category */}
-        <div className="craft-frl-left">
-          {fpsOptions.length > 0 && (
-            <div className="craft-frl-category">
-              <span className="craft-frl-label">FPS</span>
-              <div className="craft-frl-chips">
-                {fpsOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`craft-frl-chip${fpsFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => { setFpsFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                  >{opt.label}</button>
-                ))}
-              </div>
+        {/* FPS */}
+        {fpsOptions.length > 0 && (
+          <div className="craft-frl-left">
+            <span className="craft-frl-label">FPS</span>
+            <div className="craft-frl-chips">
+              {fpsOptions.map((opt) => (
+                <button key={opt.value} type="button"
+                  className={`craft-frl-chip${fpsFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setFpsFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                >{opt.label}</button>
+              ))}
             </div>
-          )}
-        </div>
+            <button type="button" className="craft-frl-clear" onClick={resetAll} disabled={!hasActiveFilters}>
+              Clear All
+            </button>
+          </div>
+        )}
 
-        {/* Center: Type / Size / Grade / Class categories */}
-        <div className="craft-frl-center">
-          {vehicleOptions.length > 0 && (
-            <div className="craft-frl-category">
-              <span className="craft-frl-label">Type</span>
-              <div className="craft-frl-chips">
-                {vehicleOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`craft-frl-chip${vehicleFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => { setVehicleFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                  >{opt.label}</button>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Type — explicit 2-per-row so 7 chips = 3 rows, last row gets remainder */}
+        {vehicleOptions.length > 0 && (
+          <div className="craft-fg craft-fg--type">
+            <span className="craft-frl-label">Type</span>
+            {[0, 2, 4].map((rowStart) => {
+              const rowChips = vehicleOptions.slice(rowStart, rowStart + 2);
+              if (rowChips.length === 0) return null;
+              return (
+                <div key={rowStart} className="craft-frl-chips">
+                  {rowChips.map((opt) => {
+                    const isActive = opt.value === "__utility__"
+                      ? [...UTILITY_TYPES].some((t) => vehicleFilters.has(t)) || vehicleFilters.has("__utility__")
+                      : vehicleFilters.has(opt.value);
+                    return (
+                      <button key={opt.value} type="button"
+                        className={`craft-frl-chip${isActive ? " craft-frl-chip--active" : ""}`}
+                        onClick={() => {
+                          setVehicleFilters((prev) => {
+                            const n = new Set(prev);
+                            if (opt.value === "__utility__") {
+                              const utilityActive = [...UTILITY_TYPES].some((t) => n.has(t)) || n.has("__utility__");
+                              if (utilityActive) { UTILITY_TYPES.forEach((t) => n.delete(t)); n.delete("__utility__"); }
+                              else { n.add("__utility__"); }
+                            } else { n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); }
+                            return n;
+                          });
+                          resetSelection();
+                        }}
+                      >{opt.label}</button>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Category */}
+        <div className="craft-fg craft-fg--category">
+          <span className="craft-frl-label">Category</span>
           {sizeOptions.length > 0 && (
-            <div className="craft-frl-category">
-              <span className="craft-frl-label">Size</span>
-              <div className="craft-frl-chips">
-                {sizeOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                  >{opt.label}</button>
-                ))}
-              </div>
+            <div className="craft-frl-chips">
+              {sizeOptions.map((opt) => (
+                <button key={opt.value} type="button"
+                  className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                >{opt.label}</button>
+              ))}
             </div>
           )}
           {gradeOptions.length > 0 && (
-            <div className="craft-frl-category">
-              <span className="craft-frl-label">Grade</span>
-              <div className="craft-frl-chips">
-                {gradeOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                  >{opt.label}</button>
-                ))}
-              </div>
+            <div className="craft-frl-chips">
+              {gradeOptions.map((opt) => (
+                <button key={opt.value} type="button"
+                  className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                >{opt.label}</button>
+              ))}
             </div>
           )}
           {classOptions.length > 0 && (
-            <div className="craft-frl-category">
-              <span className="craft-frl-label">Class</span>
-              <div className="craft-frl-chips">
-                {classOptions.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                  >{opt.label}</button>
-                ))}
-              </div>
+            <div className="craft-frl-chips">
+              {classOptions.map((opt) => (
+                <button key={opt.value} type="button"
+                  className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                >{opt.label}</button>
+              ))}
             </div>
           )}
         </div>
 
-        {/* Right: clear action */}
-        <div className="craft-frl-actions">
-          <button type="button" className="craft-frl-clear" onClick={resetAll} disabled={!hasActiveFilters}>
-            Clear
-          </button>
-        </div>
+        {/* Ship Mineables — explicit rows of 7 to guarantee max 3 rows */}
+        {mineableGroups.shipAndHarvestable.length > 0 && (
+          <div className="craft-fg craft-fg--ship">
+            <span className="craft-frl-label">Ship Mineables</span>
+            {[0, 7, 14].map((rowStart) => {
+              const rowChips = mineableGroups.shipAndHarvestable.slice(rowStart, rowStart + 7);
+              if (rowChips.length === 0) return null;
+              return (
+                <div key={rowStart} className="craft-frl-chips">
+                  {rowChips.map((chip) => (
+                    <button key={chip.id} type="button"
+                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                    >{chip.label}</button>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Vehicle */}
+        {mineableGroups.vehicle.length > 0 && (
+          <div className="craft-fg craft-fg--vehicle">
+            <span className="craft-frl-label">Vehicle</span>
+            <div className="craft-frl-chips">
+              {mineableGroups.vehicle.map((chip) => (
+                <button key={chip.id} type="button"
+                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                >{chip.label}</button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Hand */}
+        {mineableGroups.hand.length > 0 && (
+          <div className="craft-fg craft-fg--hand">
+            <span className="craft-frl-label">Hand</span>
+            <div className="craft-frl-chips">
+              {mineableGroups.hand.map((chip) => (
+                <button key={chip.id} type="button"
+                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                >{chip.label}</button>
+              ))}
+            </div>
+          </div>
+        )}
+
 
       </div>
 
