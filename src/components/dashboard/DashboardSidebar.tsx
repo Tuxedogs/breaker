@@ -12,6 +12,7 @@ import InventoryLocationsIcon from "@/assets/sidebar-icons/08-inventory-location
 import TransfersIcon from "@/assets/sidebar-icons/09-transfers.svg?react";
 import ArmorThresholdIcon from "@/assets/sidebar-icons/10-armor-threshold.svg?react";
 import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.svg?react";
+import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 
 // ── Inline icon primitives ─────────────────────────────────────────
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -284,21 +285,12 @@ export default function DashboardSidebar() {
         {/* Footer */}
         <div className="dash-sidebar-footer">
           {/* User button */}
-          <button
-            type="button"
+          <LoginWithDiscordButton
             className={["dash-sidebar-user-btn", collapsed ? "dash-sidebar-user-btn--icon" : ""].filter(Boolean).join(" ")}
-            aria-label="User menu"
             onMouseEnter={(e) => show(e, "User menu")}
             onMouseLeave={hide}
-          >
-            <div className="dash-user-avatar" aria-hidden />
-            {!collapsed && (
-              <div className="dash-user-info">
-                <span className="dash-user-name"></span>
-                <span className="dash-user-level"></span>
-              </div>
-            )}
-          </button>
+            collapsed={collapsed}
+          />
 
           {/* Bottom controls */}
           <div className="dash-sidebar-footer-controls">

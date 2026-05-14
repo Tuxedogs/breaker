@@ -4,7 +4,6 @@ import {
   getMiningRecommendations,
   type RecommendationResponse,
 } from "../../../features/mining/recommenderAdapter";
-import { getBuildQueueRequirements } from "../../../features/buildQueue/buildQueueRequirementsApi";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 import {
   loadStantonLagrangeChildrenData,
@@ -40,6 +39,7 @@ import {
 import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
+import { getQueueLedgerModel } from "../../../lib/logistics/queueLedger";
 import { buildResourceGroups } from "../shared/msbResourceGroups";
 import MaterialIcon from "../../logistics/MaterialIcon";
 
@@ -132,12 +132,6 @@ function miningTypeFromSpawn(spawnType: string): string {
   if (s.includes("surface")) return "Surface";
   if (s.includes("hand") || s.includes("fps")) return "Hand";
   return "Mixed";
-}
-
-function isRefinableMaterial(material: unknown): boolean {
-  return typeof material === "object" && material !== null && "isRefinable" in material
-    ? Boolean((material as { isRefinable?: boolean }).isRefinable)
-    : false;
 }
 
 function materialKeyOf(material: Pick<RequiredMaterial, "materialKey" | "materialId">): string {
@@ -509,6 +503,10 @@ type ResourceRow = {
   status: "strong" | "moderate" | "low" | "none";
 };
 
+function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string {
+  return canonicalMiningMaterialKey(row.key.includes(":") ? row.name : row.key);
+}
+
 type MethodBiasDisplay = {
   label: string;
   title: string;
@@ -676,9 +674,9 @@ function LocationDetail({
 
   // Demand Coverage Breakdown — user-relevant materials only
   const demandRows = useMemo((): DemandRow[] => {
-    const activeKeys = selectedMaterials.size > 0
-      ? selectedMaterials
-      : buildQueueMaterialKeys;
+    const activeKeys = buildQueueMaterialKeys.size > 0
+      ? buildQueueMaterialKeys
+      : selectedMaterials;
     if (activeKeys.size === 0) return [];
 
     const coveredSet = new Set(locationMaterialKeys);
@@ -878,6 +876,17 @@ function LocationDetail({
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const qualityHeader = qualityChanceHeader(hasBuildQueueTarget);
   const qualityTooltip = qualityChanceTooltip(hasBuildQueueTarget);
+  const demandedMaterialKeys = useMemo(
+    () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
+    [demandRows],
+  );
+  const otherLocationMaterialRows = useMemo(
+    () => hasBuildQueueTarget
+      ? resourceRows.filter((row) => !demandedMaterialKeys.has(resourceRowMaterialKey(row)))
+      : resourceRows,
+    [demandedMaterialKeys, hasBuildQueueTarget, resourceRows],
+  );
+  const materialProfileTitle = hasBuildQueueTarget ? "OTHER MATERIALS AT THIS LOCATION" : "MATERIAL PROFILE";
   const rankContextMaterialKeys = selectedMaterials.size > 0 ? selectedMaterials : buildQueueMaterialKeys;
   const primaryRankRow = rankContextMaterialKeys.size === 1
     ? resourceRows.find((row) => rankContextMaterialKeys.has(row.key))
@@ -1009,7 +1018,7 @@ function LocationDetail({
       {demandRows.length > 0 && (
         <div className="mining-demand-breakdown">
           <div className="mdet-section-label">
-            SELECTED MATERIAL COVERAGE
+            {hasBuildQueueTarget ? "BUILD QUEUE DEMAND COVERAGE" : "SELECTED MATERIAL COVERAGE"}
             <span className="mdet-section-count">({demandRows.length} material{demandRows.length !== 1 ? "s" : ""})</span>
           </div>
           <table className="mining-resource-index-table">
@@ -1051,7 +1060,7 @@ function LocationDetail({
       )}
 
       {/* Material Profile */}
-      {resourceRows.length > 0 && (
+      {otherLocationMaterialRows.length > 0 && (
         <div className="mining-resource-index">
           
           
@@ -1059,10 +1068,10 @@ function LocationDetail({
             <thead>
               <tr>
                 <th><span className="mdet-th-wrap">
-              MATERIAL PROFILE
+              {materialProfileTitle}
               <InfoTip text="Materials known to appear at this location from the static mining source index." />
             </span>
-            <span className="mdet-section-count">({resourceRows.length} resource{resourceRows.length !== 1 ? "s" : ""})</span></th>
+            <span className="mdet-section-count">({otherLocationMaterialRows.length} resource{otherLocationMaterialRows.length !== 1 ? "s" : ""})</span></th>
                 <th><span className="mdet-th-wrap">METHOD<InfoTip text="Mining method required for this material source." /></span></th>
                 <th><span className="mdet-th-wrap">ENCOUNTER RANK<InfoTip text="This material's rank at this location compared to other known locations for the same material. Lower is better." /></span></th>
                 <th><span className="mdet-th-wrap">{qualityChanceHeader(false)}<InfoTip text={qualityChanceTooltip(false)} /></span></th>
@@ -1070,7 +1079,7 @@ function LocationDetail({
               </tr>
             </thead>
             <tbody>
-              {resourceRows.map((row) => (
+              {otherLocationMaterialRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">
                     <MaterialNameCell name={row.name} miningMethod={row.miningType} />
@@ -1152,52 +1161,42 @@ export default function MiningModule() {
     };
   }, []);
 
-  const [requirementState, setRequirementState] = useState<
-    | { status: "loading" }
-    | { status: "error"; message: string }
-    | { status: "ok"; data: RequiredMaterial[] }
-  >({ status: "loading" });
-
-  useEffect(() => {
-    setRequirementState((prev) => prev.status === "loading" ? prev : { status: "loading" });
-    getBuildQueueRequirements({ buildQueue, recipeInputTemplates: recipeInputsByRecipeId, inventoryEntries })
-      .then((data) => {
-        if (debugMiningIdentity) {
-          console.groupCollapsed("[mining] build queue material resolution");
-          console.debug("raw build queue requirements", data.requirements);
-          console.debug("unmatched refs", data.warnings.filter((warning) => warning.code.includes("unresolved")));
-          console.groupEnd();
-        }
-        setRequirementState({
-          status: "ok",
-          data: data.requirements.map((requirement) => {
-            const material = materials.find((entry) => entry.id === requirement.materialId);
-            const canonical = canonicalMiningMaterial({
-              materialKey: requirement.materialKey,
-              materialId: requirement.materialId,
-              displayName: requirement.displayName,
-              materialName: requirement.materialName ?? material?.name,
-            });
-            const resolvedRequirement = {
-              ...requirement,
-              materialKey: canonical.key,
-              materialId: canonical.key,
-              displayName: canonical.label,
-              materialName: canonical.label,
-              estimatedRawOreNeeded: isRefinableMaterial(material) ? Math.ceil(requirement.requiredQuantity * 2.5) : undefined,
-            };
-            if (debugMiningIdentity) console.debug("resolved requirement", resolvedRequirement);
-            return resolvedRequirement;
-          }),
-        });
-      })
-      .catch((err) => setRequirementState({ status: "error", message: String(err) }));
-  }, [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId]);
-
-  const miningRequiredMaterials = useMemo(
-    () => requirementState.status === "ok" ? requirementState.data : [],
-    [requirementState],
+  const queueLedger = useMemo(
+    () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId }),
+    [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId],
   );
+
+  const miningRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
+    const requirements = queueLedger.refinedShortfallLines.map((line) => {
+      const miningTargetQuantity = line.isRefinable ? line.rawOreNeeded : line.netMissingRefined;
+      const canonical = canonicalMiningMaterial({
+        materialKey: line.materialKey,
+        materialId: line.materialId,
+        displayName: line.displayName,
+        materialName: line.displayName,
+      });
+      return {
+        materialKey: canonical.key,
+        materialId: canonical.key,
+        displayName: canonical.label,
+        materialName: canonical.label,
+        quantity: miningTargetQuantity,
+        originalRequiredQuantity: line.grossRequired,
+        requiredQuantity: miningTargetQuantity,
+        estimatedRawOreNeeded: line.isRefinable ? line.rawOreNeeded : undefined,
+        unitType: line.unitType,
+        usedBy: [],
+        slots: [],
+      };
+    }).filter((requirement) => requirement.requiredQuantity > 0);
+    if (debugMiningIdentity) {
+      console.groupCollapsed("[mining] build queue raw ore requirements");
+      console.debug("queue ledger", queueLedger);
+      console.debug("mining targets", requirements);
+      console.groupEnd();
+    }
+    return requirements;
+  }, [queueLedger]);
   const buildQueueMaterials = useMemo<Set<string>>(() => {
     return new Set(miningRequiredMaterials.map(materialKeyOf));
   }, [miningRequiredMaterials]);
