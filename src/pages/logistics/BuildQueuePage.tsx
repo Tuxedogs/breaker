@@ -1,46 +1,12 @@
 import { useState } from 'react';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
-import { getBuildQueueItemInputs } from '../../lib/logistics/inventory';
-import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
-import type { Shortage } from '../../lib/logistics/shortages';
+import { getQueueLedgerModel } from '../../lib/logistics/queueLedger';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import MaterialIcon from '../../components/logistics/MaterialIcon';
+import QueueLedger from '../../components/logistics/QueueLedger';
 
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/build-queue.css';
-
-type ShortageGroup = {
-  key: string;
-  displayName: string;
-  unitGroups: ShortageUnitGroup[];
-  badges: ShortageRequirementBadge[];
-};
-
-type ShortageUnitGroup = {
-  unitKey: string;
-  have: number;
-  needed: number;
-  shortfall: number;
-  materialId: string;
-};
-
-type ShortageRequirementBadge = {
-  key: string;
-  label: string;
-  quantity: number;
-  unitType: Shortage['unitType'];
-  count: number;
-  materialId: string;
-};
-
-function normalizeMaterialDisplayName(name: string): string {
-  return name.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
-}
-
-function getShortageUnitKey(unitType: Shortage['unitType']): string {
-  return unitType === 'SCU' || unitType === 'scu' || unitType === 'cscu' ? 'scu' : 'unit';
-}
 
 function formatSummaryNumber(value: number): string {
   if (!Number.isFinite(value)) return '0';
@@ -63,51 +29,7 @@ export default function BuildQueuePage() {
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
-  const shortageSummary = getBuildQueueShortageSummary(inventoryEntries, buildQueue, recipes, recipeInputsByRecipeId);
-  const shortages = shortageSummary.shortages;
-
-  const requirementBadgesByMaterial = buildQueue.reduce<Record<string, ShortageRequirementBadge[]>>((acc, item) => {
-    if (item.status === 'complete') return acc;
-    const recipe = recipes.find((e) => e.id === item.recipeId);
-    const label = recipe?.name ?? item.itemName ?? item.recipeId;
-    const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
-    for (const input of inputs) {
-      const materialId = input.materialKey ?? input.materialId;
-      const material = materials.find((e) => e.id === materialId);
-      const displayName = material?.name ?? input.displayName ?? input.materialName ?? materialId;
-      const groupKey = normalizeMaterialDisplayName(displayName);
-      const unitKey = getShortageUnitKey(input.unitType);
-      const badgeKey = `${label}:${unitKey}:${input.selectedQuality ?? 'any'}`;
-      const quantity = input.quantity * item.quantity;
-      const badges = acc[groupKey] ?? [];
-      const existing = badges.find((b) => b.key === badgeKey);
-      if (existing) { existing.quantity += quantity; existing.count += 1; }
-      else badges.push({ key: badgeKey, label, quantity, unitType: input.unitType, count: 1, materialId });
-      acc[groupKey] = badges;
-    }
-    return acc;
-  }, {});
-
-  const groupedShortages = shortages.reduce<ShortageGroup[]>((groups, shortage) => {
-    const material = materials.find((m) => m.id === shortage.materialId);
-    const displayName = material?.name ?? shortage.materialId;
-    const groupKey = normalizeMaterialDisplayName(displayName);
-    const unitKey = getShortageUnitKey(shortage.unitType);
-    let group = groups.find((g) => g.key === groupKey);
-    if (!group) {
-      group = { key: groupKey, displayName, unitGroups: [], badges: requirementBadgesByMaterial[groupKey] ?? [] };
-      groups.push(group);
-    }
-    let unitGroup = group.unitGroups.find((u) => u.unitKey === unitKey);
-    if (!unitGroup) {
-      unitGroup = { unitKey, have: 0, needed: 0, shortfall: 0, materialId: shortage.materialId };
-      group.unitGroups.push(unitGroup);
-    }
-    unitGroup.have += shortage.have;
-    unitGroup.needed += shortage.needed;
-    unitGroup.shortfall += shortage.shortfall;
-    return groups;
-  }, []);
+  const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
 
   const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
     const recipe = recipes.find((e) => e.id === item.recipeId);
@@ -121,10 +43,8 @@ export default function BuildQueuePage() {
   }
 
   const categories = Object.keys(grouped);
-  const reservableShortages = shortages.filter((shortage) => shortage.have > 0).length;
-  const noStockShortages = shortages.filter((shortage) => shortage.have <= 0).length;
-  const materialsNeededCount = groupedShortages.length;
-  const totalShortageDisplay = formatSummaryNumber(shortageSummary.totalShortfallQuantity);
+  const reservableShortages = queueLedger.summary.reservableLines;
+  const materialsNeededCount = queueLedger.refinedShortfallLines.length;
 
 
   return (
@@ -141,7 +61,7 @@ export default function BuildQueuePage() {
               <div>
                 <div className="bq-shell-title-row">
                   <span className="bq-shell-kicker">BUILD QUEUE</span>
-                  <span className="bq-shell-count">{groupedShortages.length} materials</span>
+                  <span className="bq-shell-count">{materialsNeededCount} materials</span>
                 </div>
                 <h1>Material Shortages</h1>
                 <p>Active build demand, stock gaps, and reservation readiness.</p>
@@ -156,7 +76,7 @@ export default function BuildQueuePage() {
               </div>
               <div className="bq-summary-card bq-summary-card--danger">
                 <span>Blocked Builds</span>
-                <strong>{shortageSummary.activeQueueItems.length}</strong>
+                <strong>{buildQueue.filter((item) => item.status !== 'complete').length}</strong>
                 <em>Active demand with gaps</em>
               </div>
               <div className="bq-summary-card">
@@ -199,31 +119,7 @@ export default function BuildQueuePage() {
           </div>
         </div>
 
-        <aside className="bq-ledger-panel" aria-label="Queue Ledger">
-          <div className="bq-ledger-title">Queue Ledger</div>
-          <div className="bq-ledger-stat bq-ledger-stat--danger">
-            <span>Total Shortfall</span>
-            <strong>{totalShortageDisplay}</strong>
-          </div>
-          <div className="bq-ledger-stat bq-ledger-stat--success">
-            <span>Reservable Lines</span>
-            <strong>{reservableShortages}</strong>
-          </div>
-          <div className="bq-ledger-stat bq-ledger-stat--danger">
-            <span>No Stock Lines</span>
-            <strong>{noStockShortages}</strong>
-          </div>
-          <div className="bq-ledger-title">Material Breakdown</div>
-          {groupedShortages.map((group) => (
-            <div className="bq-ledger-stat bq-ledger-stat--danger" key={`ledger:${group.key}`}>
-              <span className="bq-material-name-cell">
-                <MaterialIcon materialName={group.displayName} size={17} />
-                <span>{group.displayName}</span>
-              </span>
-              <strong>{formatSummaryNumber(group.unitGroups.reduce((sum, unitGroup) => sum + unitGroup.shortfall, 0))}</strong>
-            </div>
-          ))}
-        </aside>
+        <QueueLedger ledger={queueLedger} formatValue={formatSummaryNumber} />
       </div>
     </div>
   );

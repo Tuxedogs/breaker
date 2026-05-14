@@ -7,6 +7,7 @@ import DashboardPage from "./pages/DashboardPage";
 import DoctrineLibraryPage from "./pages/DoctrineLibraryPage";
 import DoctrineModulePage from "./pages/DoctrineModulePage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
+import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
@@ -75,6 +76,7 @@ export default function App() {
       <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
       <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
       <Route path="framework-legacy" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+      <Route path="auth/callback" element={<AuthCallbackPage />} />
       <Route
         path="systems/sub-targeting"
         element={<Navigate to="/dashboard/doctrine/module/sub-targeting" replace />}

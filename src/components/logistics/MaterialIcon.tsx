@@ -1,6 +1,7 @@
 type MaterialIconProps = {
   materialName: string;
   miningMethod?: string;
+  materialState?: 'raw' | 'refined';
   size?: number;
   className?: string;
 };
@@ -105,14 +106,30 @@ function getIconShape(materialName: string, miningMethod: string | undefined, va
   return 'roundOre';
 }
 
+function isGemMineable(materialName: string, miningMethod: string | undefined): boolean {
+  const method = (miningMethod ?? '').toLocaleLowerCase();
+  const key = normalizeMaterialKey(materialName);
+  return (
+    method.includes('ground') ||
+    method.includes('vehicle') ||
+    method.includes('geoborne') ||
+    method.includes('hand') ||
+    method.includes('fps') ||
+    method.includes('handborne') ||
+    GROUND_MINEABLE_KEYS.has(key) ||
+    HAND_MINEABLE_KEYS.has(key)
+  );
+}
+
 function getFallbackAccent(materialName: string): string {
   const accents = ['#8fa1a8', '#b08d57', '#4fa49a', '#7f8fc8', '#9c6f54'];
   return accents[hashName(materialName) % accents.length];
 }
 
-export default function MaterialIcon({ materialName, miningMethod, size = 20, className = '' }: MaterialIconProps) {
+export default function MaterialIcon({ materialName, miningMethod, materialState = 'raw', size = 20, className = '' }: MaterialIconProps) {
   const variant = getIconVariant(materialName);
   const shape = getIconShape(materialName, miningMethod, variant);
+  const isRefinedOre = materialState === 'refined' && !isGemMineable(materialName, miningMethod);
   const fallbackAccent = getFallbackAccent(materialName);
   const classes = ['bq-material-icon', className].filter(Boolean).join(' ');
 
@@ -148,7 +165,20 @@ export default function MaterialIcon({ materialName, miningMethod, size = 20, cl
   return (
     <span className={classes} aria-hidden="true" style={{ width: size, height: size }}>
       <svg viewBox="0 0 24 24" focusable="false">
-        {shape === 'crystal' ? (
+        {isRefinedOre ? (
+          <>
+            <polygon points="4,8 9.5,5 20,5.9 14.4,9.4" fill={colors.highlight} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+            <polygon points="4,8 14.4,9.4 14.4,13.5 4,12.2" fill={colors.base} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+            <polygon points="14.4,9.4 20,5.9 20,10.1 14.4,13.5" fill={colors.accent} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+
+            <polygon points="3,13.1 8.7,10.1 19.5,11 13.8,14.8" fill={colors.highlight} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+            <polygon points="3,13.1 13.8,14.8 13.8,19.1 3,17.5" fill={colors.base} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+            <polygon points="13.8,14.8 19.5,11 19.5,15.4 13.8,19.1" fill={colors.accent} stroke={outline} strokeWidth="0.8" strokeLinejoin="miter" />
+
+            <path d="M6.1 9.1 14.2 10.1M5.2 14.3 13.2 15.5" stroke={colors.dark} strokeWidth="0.75" strokeLinecap="square" opacity="0.72" />
+            <path d="M8.8 6.6 16.4 7.2M7.7 11.7 15.5 12.4" stroke="#ffffff" strokeWidth="0.55" strokeLinecap="square" opacity="0.22" />
+          </>
+        ) : shape === 'crystal' ? (
           <>
             <polygon points="3,20 7,10 11,2 15,10 21,20 12,23" fill={colors.dark} stroke={outline} strokeWidth="1.4" strokeLinejoin="miter" />
             <polygon points="8,19 10,7 12,3 14,8 13,21" fill={colors.base} stroke={outline} strokeWidth="0.65" strokeLinejoin="miter" />

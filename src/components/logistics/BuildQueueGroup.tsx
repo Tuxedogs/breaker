@@ -21,6 +21,7 @@ import {
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { apiUrl } from '../../lib/apiUrl';
+import { getModifierImpact } from '../../lib/gameplay/propertyUtils';
 
 import QuantityText from './QuantityText';
 import MaterialIcon from './MaterialIcon';
@@ -31,50 +32,13 @@ import MaterialIcon from './MaterialIcon';
 
 
 
-function getModifierTrendClass(label: string, value: number | undefined): 'is-better' | 'is-worse' | 'is-neutral' {
-  const key = label.toLocaleLowerCase();
+function getModifierTrendClass(property: string | undefined, value: number | undefined): 'is-better' | 'is-worse' | 'is-neutral' {
   if (value === undefined || !Number.isFinite(value) || value === 0) return 'is-neutral';
 
-  const lowerIsBetter = [
-    'recoil',
-    'spread',
-    'sway',
-    'heat',
-    'cooldown',
-    'charge time',
-    'delay',
-    'fuel consumption',
-    'power draw',
-    'signature',
-    'emission',
-    'wear',
-    'degradation',
-    'instability',
-  ].some((term) => key.includes(term));
-
-  const higherIsBetter = [
-    'damage',
-    'health',
-    'hp',
-    'maxhealth',
-    'shield',
-    'regen',
-    'fire rate',
-    'firerate',
-    'speed',
-    'acceleration',
-    'durability',
-    'resistance',
-    'capacity',
-    'range',
-    'penetration',
-    'generation',
-    'power generation',
-  ].some((term) => key.includes(term));
-
-  if (lowerIsBetter) return value < 0 ? 'is-better' : 'is-worse';
-  if (higherIsBetter) return value > 0 ? 'is-better' : 'is-worse';
-  return value > 0 ? 'is-better' : 'is-worse';
+  const impact = property ? getModifierImpact(property, value) : 'neutral';
+  if (impact === 'good') return 'is-better';
+  if (impact === 'bad') return 'is-worse';
+  return 'is-neutral';
 }
 
 // ─── Quantization ────────────────────────────────────────────────────────────
@@ -215,6 +179,19 @@ function getGroupedCoverageState(states: string[]): 'covered' | 'partial' | 'mis
   if (states.length > 0 && states.every(isCovered)) return 'covered';
   if (states.length === 0 || states.every((s) => s === 'missing')) return 'missing';
   return 'partial';
+}
+
+function isRefinableMaterial(material: MaterialTemplate | undefined): boolean {
+  const flagged = material as (MaterialTemplate & {
+    isRefinable?: boolean;
+    canComeFromRefinery?: boolean;
+    sourceGroups?: string[];
+  }) | undefined;
+  return Boolean(
+    flagged?.isRefinable === true ||
+    flagged?.canComeFromRefinery === true ||
+    flagged?.sourceGroups?.includes('ores'),
+  );
 }
 
 function formatDecimal(value: number): string {
@@ -379,7 +356,7 @@ function MaterialQualitySlider({
 
 export default function BuildQueueGroup({
   category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
-  materials, locations, strategy, onQuantityChange, onAllowLowerQualityChange,
+  materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onRemove, onToggleAllocation, onClearStaleAllocations,
 }: Props) {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
@@ -478,6 +455,7 @@ export default function BuildQueueGroup({
               ? formatModifierAtQuality({ slot: '', property: input.modifierName, value: input.modifierValue, modifierMode: input.modifierType })
               : '';
           const modifierPreview = modifierDisplayValue ? `${modifierDisplayLabel} ${modifierDisplayValue}` : modifierDisplayLabel;
+          const modifierTone = getModifierTrendClass(modifierLabel, modifierValue);
           const allowLowerQuality = Boolean(item.allowLowerQuality);
           const requirementIdentity = { requirementId, selectedQuality: requirementSelectedQuality, unitType: input.unitType };
           const effectiveRequirementIdentity = { ...requirementIdentity, allowLowerQuality };
@@ -497,7 +475,7 @@ export default function BuildQueueGroup({
 
           return {
             input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName,
-            required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview, modifierLabel, modifierValue, modifierDisplayLabel, modifierDisplayValue,
+            required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview, modifierLabel, modifierValue, modifierDisplayLabel, modifierDisplayValue, modifierTone,
             allowLowerQuality, coverage, needSummary, ownReservedByStack,
             remainingRequired: Math.max(0, required - coverage.reservedQuantity),
             allMaterialStacks, eligibleStacks, ineligibleStacks,
@@ -636,7 +614,7 @@ export default function BuildQueueGroup({
                       <div className="bq-mat-row">
                         <div className="bq-mat-name">
                           <span className="bq-material-name-cell">
-                            <MaterialIcon materialName={group.displayName} />
+                            <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} />
                             <strong>{group.displayName}</strong>
                           </span>
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
@@ -651,7 +629,7 @@ export default function BuildQueueGroup({
                             >
                               <span className="bq-mat-modifier-label">{req.modifierDisplayLabel}</span>
                               {req.modifierDisplayValue && (
-                                <span className={`bq-mat-modifier-value ${getModifierTrendClass(req.modifierLabel ?? req.modifierPreview, req.modifierValue)}`}>
+                                <span className={`bq-mat-modifier-value ${req.modifierTone}`}>
                                   {req.modifierDisplayValue}
                                 </span>
                               )}
