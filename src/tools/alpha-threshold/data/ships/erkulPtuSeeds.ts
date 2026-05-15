@@ -15,7 +15,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "97648869-5fa5-42da-b804-4d9314289539",
@@ -33,7 +33,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0079c5d5-1678-4f8c-85ba-18ca8f642af6",
@@ -51,7 +51,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d9bc09ce-4c74-4f72-892e-a833c094f4e6",
@@ -69,7 +69,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "9474f571-8467-4d83-b1fe-f64103d363f4",
@@ -87,7 +87,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 4,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c9b3ef78-9c47-4052-bf70-ecf32c55c001",
@@ -105,7 +105,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b6b59889-7226-458e-a6b0-1c9392128a3c",
@@ -123,7 +123,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b3d87a94-6858-4d3c-ba59-1ef29d727d1a",
@@ -141,7 +141,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d6cb3db3-b1e0-47a5-8c62-a64285dbb675",
@@ -159,7 +159,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d46f4de1-8dc1-473b-9739-88c9ba7e75a6",
@@ -177,7 +177,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 380,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "395f30ae-f930-4929-b881-d711fde7e70f",
@@ -195,7 +195,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 380,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f0caa993-4c6b-4402-8ef1-d91879060f3b",
@@ -213,115 +213,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 485,
     "pilotHardpointSize": 10,
     "turretHardpointSize": 4,
-    "patch": "4.7"
-  },
-  {
-    "id": "f05b74b2-06cf-44d0-8607-c09487359384",
-    "manufacturer": "AEGS",
-    "name": "Reclaimer",
-    "role": "Heavy Salvage",
-    "career": "Industrial",
-    "isGroundVehicle": false,
-    "sizeGroup": "capital",
-    "health": 123002,
-    "armor": 457,
-    "armorHp": 32912,
-    "vitalHp": 50000,
-    "ballisticThreshold": 495,
-    "energyThreshold": 418,
-    "pilotHardpointSize": 1,
-    "turretHardpointSize": 6,
-    "patch": "4.7"
-  },
-  {
-    "id": "9a25d006-5706-4c70-9ac6-df795688fe09",
-    "manufacturer": "AEGS",
-    "name": "Redeemer",
-    "role": "Gunship",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "medium",
-    "health": 66700,
-    "armor": 113,
-    "armorHp": 21120,
-    "vitalHp": 17000,
-    "ballisticThreshold": 116,
-    "energyThreshold": 110,
-    "pilotHardpointSize": 2,
-    "turretHardpointSize": 4,
-    "patch": "4.7"
-  },
-  {
-    "id": "93e1a434-f4fa-43ee-a40c-71bcae5073bc",
-    "manufacturer": "AEGS",
-    "name": "Retaliator",
-    "role": "Modular",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "medium",
-    "health": 138981,
-    "armor": 113,
-    "armorHp": 18480,
-    "vitalHp": 50000,
-    "ballisticThreshold": 116,
-    "energyThreshold": 110,
-    "pilotHardpointSize": 1,
-    "turretHardpointSize": 4,
-    "patch": "4.7"
-  },
-  {
-    "id": "17276ad3-7636-40b8-969a-877a2b439b37",
-    "manufacturer": "AEGS",
-    "name": "Sabre",
-    "role": "Stealth Fighter",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "small",
-    "health": 23013,
-    "armor": 18,
-    "armorHp": 2772,
-    "vitalHp": 4000,
-    "ballisticThreshold": 20,
-    "energyThreshold": 16,
-    "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "4.7"
-  },
-  {
-    "id": "9e4b2b2b-1b5a-4d53-84a2-fe6ed1e43172",
-    "manufacturer": "AEGS",
-    "name": "Sabre_Comet",
-    "role": "Stealth Fighter",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "small",
-    "health": 23013,
-    "armor": 18,
-    "armorHp": 2772,
-    "vitalHp": 4000,
-    "ballisticThreshold": 20,
-    "energyThreshold": 16,
-    "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "4.7"
-  },
-  {
-    "id": "b9bc6679-81ad-472b-8b98-866c72fe6a89",
-    "manufacturer": "AEGS",
-    "name": "Sabre_Firebird",
-    "role": "Stealth Fighter",
-    "career": "Combat",
-    "isGroundVehicle": false,
-    "sizeGroup": "small",
-    "health": 15510,
-    "armor": 18,
-    "armorHp": 4752,
-    "vitalHp": 2500,
-    "ballisticThreshold": 20,
-    "energyThreshold": 16,
-    "pilotHardpointSize": 3,
-    "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4b0585b0-b60b-4c52-a744-d812e5e9ad58",
@@ -339,7 +231,115 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 485,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "f05b74b2-06cf-44d0-8607-c09487359384",
+    "manufacturer": "AEGS",
+    "name": "Reclaimer",
+    "role": "Heavy Salvage",
+    "career": "Industrial",
+    "isGroundVehicle": false,
+    "sizeGroup": "capital",
+    "health": 123002,
+    "armor": 457,
+    "armorHp": 32912,
+    "vitalHp": 50000,
+    "ballisticThreshold": 495,
+    "energyThreshold": 418,
+    "pilotHardpointSize": 1,
+    "turretHardpointSize": 6,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "9a25d006-5706-4c70-9ac6-df795688fe09",
+    "manufacturer": "AEGS",
+    "name": "Redeemer",
+    "role": "Gunship",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "medium",
+    "health": 66700,
+    "armor": 113,
+    "armorHp": 21120,
+    "vitalHp": 17000,
+    "ballisticThreshold": 116,
+    "energyThreshold": 110,
+    "pilotHardpointSize": 2,
+    "turretHardpointSize": 4,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "93e1a434-f4fa-43ee-a40c-71bcae5073bc",
+    "manufacturer": "AEGS",
+    "name": "Retaliator",
+    "role": "Modular",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "medium",
+    "health": 138981,
+    "armor": 113,
+    "armorHp": 18480,
+    "vitalHp": 50000,
+    "ballisticThreshold": 116,
+    "energyThreshold": 110,
+    "pilotHardpointSize": 1,
+    "turretHardpointSize": 4,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "17276ad3-7636-40b8-969a-877a2b439b37",
+    "manufacturer": "AEGS",
+    "name": "Sabre",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "small",
+    "health": 23013,
+    "armor": 18,
+    "armorHp": 2772,
+    "vitalHp": 4000,
+    "ballisticThreshold": 20,
+    "energyThreshold": 16,
+    "pilotHardpointSize": 3,
+    "turretHardpointSize": null,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "9e4b2b2b-1b5a-4d53-84a2-fe6ed1e43172",
+    "manufacturer": "AEGS",
+    "name": "Sabre_Comet",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "small",
+    "health": 23013,
+    "armor": 18,
+    "armorHp": 2772,
+    "vitalHp": 4000,
+    "ballisticThreshold": 20,
+    "energyThreshold": 16,
+    "pilotHardpointSize": 3,
+    "turretHardpointSize": null,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "b9bc6679-81ad-472b-8b98-866c72fe6a89",
+    "manufacturer": "AEGS",
+    "name": "Sabre_Firebird",
+    "role": "Stealth Fighter",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "small",
+    "health": 15510,
+    "armor": 18,
+    "armorHp": 4752,
+    "vitalHp": 2500,
+    "ballisticThreshold": 20,
+    "energyThreshold": 16,
+    "pilotHardpointSize": 3,
+    "turretHardpointSize": null,
+    "patch": "2026-05-14"
   },
   {
     "id": "ac7ec306-b272-432e-8284-491da614419c",
@@ -357,7 +357,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 6,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "34615358-6b8e-4c27-b29e-f936e254e2a3",
@@ -375,7 +375,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "34295443-da9b-4e6c-9335-69d5f3b29a88",
@@ -393,7 +393,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 5,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f80d39f3-50fc-4fca-ada1-76de4c237e3f",
@@ -411,7 +411,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8aa6a16e-6c06-4db8-ac6d-165f97bf2565",
@@ -429,7 +429,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 4,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a8208d11-32d4-4a4a-82c4-fd7f498b2ae6",
@@ -447,7 +447,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 3,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "eaeb562d-d4ac-43bd-a843-e8a6d69fad82",
@@ -465,7 +465,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 6,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8ffde65b-ee9b-4a50-b386-3111175736b2",
@@ -483,7 +483,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 88,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 7,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "20d5f617-147a-4530-a753-a7afd1875fd1",
@@ -501,7 +501,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1bed9058-e284-4c0f-b561-6ba57ab4f99d",
@@ -519,7 +519,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "831fdcfc-337a-4350-967d-e693d19efeee",
@@ -537,7 +537,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f6d606c9-b324-4efa-814f-15a59047a6a5",
@@ -555,7 +555,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 240,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f1b224dd-273e-488f-9dee-fbf73f44f462",
@@ -573,7 +573,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 240,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8b7e0d33-21c1-4057-8e5b-bf391b5091b2",
@@ -591,7 +591,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6759360c-8b2f-4a89-b7c6-82e94b873c1b",
@@ -609,7 +609,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "933ca746-3c36-470f-8245-a247a3776455",
@@ -627,7 +627,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "fb231ba1-dba1-4c9f-823a-746c772ae92f",
@@ -645,7 +645,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0af2064a-c02d-4801-a434-09d802ba6573",
@@ -663,7 +663,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b140e32f-a96b-462f-8c7b-e7243577b2f4",
@@ -681,7 +681,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6f8bfcc3-2ade-4976-a8e9-fd07de5c3601",
@@ -699,7 +699,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4f83f89d-480b-4d1b-867a-13772742d828",
@@ -717,7 +717,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8c2eefb6-d880-47c9-8fd0-1f88865d5511",
@@ -735,7 +735,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "95b11c76-31ea-4bf3-9894-fb29caecb927",
@@ -753,7 +753,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3fbff8f5-90f0-4c97-93f2-62d180aa8736",
@@ -771,7 +771,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "63b90c8d-459c-4a27-8cf6-db706ffc49ae",
@@ -789,7 +789,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6fa37a02-3d65-448c-a989-02d42d9574dc",
@@ -807,7 +807,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1e837261-78d9-4d5b-b17c-90d312d6a3dd",
@@ -825,7 +825,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "663b6047-5b06-489c-a906-bc91fb7d6e63",
@@ -843,7 +843,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 3,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f3f7b2e8-1e11-4649-82c6-3106ec966655",
@@ -861,7 +861,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 13,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c0f1d217-388c-453a-b6c1-3cb5c2cfc4d8",
@@ -879,7 +879,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 6,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3a586d52-4829-4504-8e3a-4ee300bb40cc",
@@ -897,7 +897,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b617902a-6cab-457b-9eb8-494274f659b8",
@@ -915,7 +915,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 88,
     "pilotHardpointSize": null,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0920e187-515d-466a-9c6a-a7dde9d2b1bc",
@@ -933,7 +933,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 33,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "35f6ad71-01c6-4762-a18b-99c7fdde9760",
@@ -951,7 +951,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 33,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "881e3879-a186-44da-8b47-1d8f0a846438",
@@ -969,7 +969,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 88,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8f61dc58-74ca-4dc6-aa95-c3105f10bba4",
@@ -987,7 +987,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "daddeefa-fef0-4146-b630-a33d6e8904d3",
@@ -1005,7 +1005,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "204a6ce4-1634-4f87-9955-04c70e44c8af",
@@ -1023,7 +1023,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "9634b4d6-9f5a-4ad2-8574-431c15e3bc5d",
@@ -1041,7 +1041,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ecdfd0df-6c5f-4183-a24b-9e1546e00a4e",
@@ -1059,7 +1059,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "aaa12a00-a1e7-4dfc-8626-3bebb005209f",
@@ -1077,7 +1077,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e19fc6c3-f5fa-4623-9a17-b00a29b71500",
@@ -1095,7 +1095,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e17ccf62-f2d2-4c4e-a132-a3000d40fbde",
@@ -1113,7 +1113,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "674e0a52-4469-4b55-ba0d-6aecc44d1728",
@@ -1131,7 +1131,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "cf9aa91e-15bf-435c-a22d-f2cadc4485ce",
@@ -1149,7 +1149,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1810d1a7-61e3-4d95-bafb-0f11758c7683",
@@ -1167,7 +1167,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "081236f5-9549-4a60-9123-6ae21f0cd261",
@@ -1185,7 +1185,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "16ff4365-ac34-4b09-a132-d52d51f688d4",
@@ -1203,7 +1203,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a852bb00-e395-468f-9adc-78b3df9c82f6",
@@ -1221,7 +1221,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "973bc147-4422-48a6-99c8-6ff0ead25bdf",
@@ -1239,7 +1239,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f8c8fe5c-1aa3-41d7-86b0-6bb54b249541",
@@ -1257,7 +1257,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "968249b2-ca7c-4b41-8f58-730673fefc8c",
@@ -1275,7 +1275,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1164be4d-623e-4ef7-bc3d-4cdb45c22ec5",
@@ -1293,7 +1293,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "34506e83-b7b8-4804-a7bb-f31f11bb9214",
@@ -1311,7 +1311,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c0b86c69-55ac-4af3-a722-d46282813e91",
@@ -1329,7 +1329,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 36,
     "pilotHardpointSize": 5,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3bee9f2d-4494-4560-b9f8-463bc90695cb",
@@ -1347,7 +1347,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 300,
     "pilotHardpointSize": 10,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "04571d49-0680-4b84-bdb1-dbebeb22c898",
@@ -1365,7 +1365,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 36,
     "pilotHardpointSize": 7,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "30aab266-9131-4a07-808b-61c868cb404f",
@@ -1383,7 +1383,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 36,
     "pilotHardpointSize": 7,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "9611b8ed-cc96-4b5c-aa1e-baefe7d5bb1c",
@@ -1401,7 +1401,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 36,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "7533ff77-836c-4bd2-9171-487d9c63863c",
@@ -1419,7 +1419,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 300,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "16aa514f-12ac-43a4-b51d-44447252186e",
@@ -1437,7 +1437,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "5cf39b3b-41d8-45c1-8ef2-d4678c7a7b85",
@@ -1455,7 +1455,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 300,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c8e10f09-38a0-4730-9dd3-eb0a510c9e43",
@@ -1473,7 +1473,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "efec4d48-77ab-4cba-9add-a3d96c5be8d8",
@@ -1491,7 +1491,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "dc39ca6b-1d76-4db5-9346-356f49954978",
@@ -1509,7 +1509,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 300,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "565d8121-50a9-4920-af50-f176caef0431",
@@ -1527,7 +1527,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 300,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c03e7aef-6411-4e85-9c10-e89862884433",
@@ -1545,7 +1545,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e1afb014-fe71-4da9-89ae-c30fcf9c0782",
@@ -1563,7 +1563,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 100,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b58f7735-9454-4a0a-b724-2bc8d61961d7",
@@ -1581,7 +1581,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "13c3f610-7bbd-4464-bd36-d716de49a125",
@@ -1599,7 +1599,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "7780e93d-1cc3-43b4-9b32-9923af19775a",
@@ -1617,7 +1617,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "384d7e27-daec-4554-a8e9-6920a10a86c1",
@@ -1635,7 +1635,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 29,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3ea9bcd8-1ddd-4714-a537-7b2675e8c2d2",
@@ -1653,7 +1653,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "93b13680-9aa6-4c21-b998-e4f8880f7c12",
@@ -1671,7 +1671,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "887cd720-7337-44ae-9708-828ccf808649",
@@ -1689,7 +1689,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "37659ff0-a803-4a4f-97ff-ad59822061ed",
@@ -1707,7 +1707,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d868dfb9-5bcd-4f7b-a40a-3aa5bbf7d705",
@@ -1725,7 +1725,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "533b9b62-33eb-4b34-95eb-d43fe3e020ff",
@@ -1743,7 +1743,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b616b3ad-123c-40f2-80bd-b8f4109633aa",
@@ -1761,7 +1761,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ea2c22bc-c2f0-42dc-967d-3300f9232f91",
@@ -1779,7 +1779,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "36726a9f-7e14-4942-bc4f-1a398b5bef6a",
@@ -1797,7 +1797,43 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "c42bf65e-f3f2-4234-8c19-8276bfd5de3a",
+    "manufacturer": "DRAK",
+    "name": "Ironclad",
+    "role": "Heavy Freight",
+    "career": "Transporter",
+    "isGroundVehicle": false,
+    "sizeGroup": "large",
+    "health": 258000,
+    "armor": 308,
+    "armorHp": 26010,
+    "vitalHp": 120000,
+    "ballisticThreshold": 315,
+    "energyThreshold": 300,
+    "pilotHardpointSize": 1,
+    "turretHardpointSize": 3,
+    "patch": "2026-05-14"
+  },
+  {
+    "id": "4481572d-66c8-4f7a-90c3-0150052fde10",
+    "manufacturer": "DRAK",
+    "name": "Ironclad_Assault",
+    "role": "Heavy Dropship",
+    "career": "Combat",
+    "isGroundVehicle": false,
+    "sizeGroup": "large",
+    "health": 278000,
+    "armor": 323,
+    "armorHp": 20790,
+    "vitalHp": 140000,
+    "ballisticThreshold": 331,
+    "energyThreshold": 315,
+    "pilotHardpointSize": 1,
+    "turretHardpointSize": 3,
+    "patch": "2026-05-14"
   },
   {
     "id": "34077e67-5e2c-4903-a17c-2d0e163751c7",
@@ -1815,7 +1851,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 16,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0d4c5000-ffdb-41f5-9de1-d64252dfef21",
@@ -1833,7 +1869,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e379e38c-459a-4705-be7d-49a5f5d7a928",
@@ -1851,7 +1887,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 14,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "087b2253-2fc7-4fae-9f9d-97f64b7c43db",
@@ -1869,7 +1905,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 39,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "528fdddc-c97f-4ae8-a00e-11a59fc3662d",
@@ -1887,7 +1923,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 39,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f7b8addd-9253-495c-a278-bdaa236e6cbc",
@@ -1905,7 +1941,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 32,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "41a84db8-062b-4359-ad16-611ad540fbdb",
@@ -1923,7 +1959,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "2000c8d9-f151-4148-babe-6d9e413e2114",
@@ -1941,7 +1977,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "11ebc47d-4763-4faa-9020-171cf6c2651f",
@@ -1959,7 +1995,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3a7bfe4f-7a6c-4818-aba8-0f1019c3a647",
@@ -1977,7 +2013,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 23,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1b201ef2-b4dd-46c2-978e-47a13e0a7f81",
@@ -1995,7 +2031,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "df2166dd-70ba-4b10-90ee-bb2ae203b3e8",
@@ -2013,7 +2049,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a5a8e4e5-939c-4f7b-ab48-5f7db556d5a4",
@@ -2031,7 +2067,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "70580bce-2347-4e96-9260-dee6394f483d",
@@ -2049,7 +2085,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ebee8a7f-8e4a-4bed-9e5d-76822724c9f0",
@@ -2067,7 +2103,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "96b11061-68ce-4896-9424-fc8804a410ae",
@@ -2085,7 +2121,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "83a450d1-e6b1-437e-9aee-18316ed34c29",
@@ -2103,7 +2139,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "469d850e-b86b-47fc-9ee2-df81d775ccc8",
@@ -2121,7 +2157,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "30e0f7ac-26fc-4d31-a231-af625511e37e",
@@ -2139,7 +2175,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "aaa0cdcd-907c-4533-b3fc-181ede06076d",
@@ -2157,7 +2193,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e98521b6-ea2f-4c10-9050-abc29d89d0e8",
@@ -2175,7 +2211,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "48415834-ac12-4c28-ad01-7c210f30c2da",
@@ -2193,7 +2229,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d1f27f85-90db-4b5d-8ac2-09a9e9ee1315",
@@ -2211,7 +2247,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "cec2111b-4c71-4968-8035-634de6561cf3",
@@ -2229,7 +2265,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b17ef3ab-9518-40fd-803f-c2468175ccf6",
@@ -2247,7 +2283,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "203cb135-4f12-4a23-bd53-30910134bac8",
@@ -2265,7 +2301,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 5,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3d371fd4-50e2-4b5e-859f-1086e905c946",
@@ -2283,7 +2319,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b4791030-9d64-4f98-85cb-ca106f868c5e",
@@ -2301,7 +2337,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 43,
     "pilotHardpointSize": 5,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "34821163-e32e-42bf-99df-8f42ba66ef34",
@@ -2319,7 +2355,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 43,
     "pilotHardpointSize": 3,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6c6e9731-3d70-4f1b-84c2-9dbf3c1f97c7",
@@ -2337,7 +2373,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 43,
     "pilotHardpointSize": 3,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4b6700e5-38bd-4d8d-9281-ef82996b135f",
@@ -2355,7 +2391,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 43,
     "pilotHardpointSize": 5,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6ec72f64-2002-481c-b7c9-b132476ba6aa",
@@ -2373,7 +2409,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 19,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0d690d1a-9f57-4976-bff1-ec46bf039e75",
@@ -2391,7 +2427,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 43,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c4ceff45-d851-44b1-921b-bfef93a6cd6a",
@@ -2409,7 +2445,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 360,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f68ee841-88d1-46f3-a1e2-5dc71d9d5d97",
@@ -2427,7 +2463,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 19,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3c9af040-d919-4afc-b768-45821a5b913c",
@@ -2445,7 +2481,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c6cfa4d9-e794-4bb6-8da9-54cb779ea109",
@@ -2463,7 +2499,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 4,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e32d125f-a3f8-4bc7-b0e6-cb7edf22b7ac",
@@ -2481,7 +2517,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 4,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c2956880-b82a-42d0-962b-eb736dac1536",
@@ -2499,7 +2535,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 10,
     "pilotHardpointSize": 3,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "13a02a6d-7d67-4d22-8530-d4d2c8443f66",
@@ -2517,7 +2553,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 360,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c989caf2-84a5-4c01-b99e-5fc9f8d0ce8e",
@@ -2535,7 +2571,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 378,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ff873dda-2b79-4fa3-b3ce-535b8adff5e2",
@@ -2553,7 +2589,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 360,
     "pilotHardpointSize": 4,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "14b8caeb-d5e1-4816-9537-86ef19afada8",
@@ -2571,7 +2607,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 396,
     "pilotHardpointSize": 4,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6135a874-4cb1-4f49-9f29-5781e5991f2b",
@@ -2589,7 +2625,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e7eeba8d-b108-48a1-a332-d9edbab2b9c1",
@@ -2607,7 +2643,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "2f231daa-95e5-4cb2-a32e-4db8f29a30d6",
@@ -2625,7 +2661,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ce937681-caa2-4cfa-ab80-f5bf2a5b9a6c",
@@ -2643,7 +2679,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "dc537d66-2abb-43aa-9d37-4e963fc6e9e2",
@@ -2661,7 +2697,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "039a2768-1aff-4969-b2a4-ed8aeb21dae1",
@@ -2679,7 +2715,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "316c6601-b405-4a3a-abac-394c655718f8",
@@ -2697,7 +2733,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "718f4435-628b-4436-bb80-bf9cfef9a945",
@@ -2715,7 +2751,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 90,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f8ac4c26-8f4d-4cb3-9be2-7d867a95a877",
@@ -2733,7 +2769,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 270,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "38ae749f-d4fc-4dfd-907b-ed8db61f3d88",
@@ -2751,7 +2787,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 270,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "11b660a2-c77c-490b-9e85-ee70400c5cf8",
@@ -2769,7 +2805,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 270,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "9dc9c257-c413-416a-ab9b-06fbadf18d1e",
@@ -2787,7 +2823,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "50ddaf5e-a8e3-42fe-a1d3-7267f39b39b0",
@@ -2805,7 +2841,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 342,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "1b57cdac-693b-410b-8343-68fa194c94ae",
@@ -2823,7 +2859,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 7,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "829d0525-e67e-4e57-9f52-b4e572a4f73d",
@@ -2841,7 +2877,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b416dbbf-53f2-489e-a9dc-456286aa6c70",
@@ -2859,7 +2895,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "58e25524-8bd3-450f-8442-7b58fdfc8a50",
@@ -2877,7 +2913,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4559fbe2-55ab-a5a8-4e77-75106cb96ab7",
@@ -2895,7 +2931,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 116,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "478bfc10-9577-ac19-262a-d40a93c3fcb2",
@@ -2913,7 +2949,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "6fa21dc8-c838-4134-a74a-0cd8313bcad8",
@@ -2931,7 +2967,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "c984fac2-06c0-4776-8f93-07ebd2c26ad3",
@@ -2949,7 +2985,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d8987dc2-340d-4312-8d4f-aee7e7fac823",
@@ -2967,7 +3003,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d7828052-56fb-41a6-ae7d-bc29b0bdf68c",
@@ -2985,7 +3021,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a6e1bb18-8a11-4bbc-865e-45fd84e7b469",
@@ -3003,7 +3039,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8e27d568-f424-4dc9-a10f-ca4c34efab85",
@@ -3021,7 +3057,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ec956be2-8e3a-460d-b3a8-97df4cb12b78",
@@ -3039,7 +3075,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d95fb013-60d5-43ac-ab2d-daa082f45411",
@@ -3057,7 +3093,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e7b40f5c-4099-4aa6-b226-b5b08bd68413",
@@ -3075,7 +3111,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ecadf2b2-a404-4776-9289-04af91538d76",
@@ -3093,7 +3129,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "daf936a1-689f-4edb-980a-96947e2727c4",
@@ -3111,7 +3147,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d1c3fa10-b2d9-421e-8301-97dbf4d0c115",
@@ -3129,7 +3165,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4ed10b1c-df4f-4ab0-430e-b5b9f33b0f94",
@@ -3147,7 +3183,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 110,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "43f4f9c3-70ad-4549-8a10-0045afbbda10",
@@ -3165,7 +3201,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 18,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3155e6fd-e1c8-4c15-9bd1-f8e3c2c7174f",
@@ -3183,7 +3219,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 18,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "40a1f83b-3623-49e6-8168-ab8223998aa2",
@@ -3201,7 +3237,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 418,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a5a5b055-c5d7-4384-9951-f15d47b88789",
@@ -3219,7 +3255,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 418,
     "pilotHardpointSize": null,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "83318d44-b6c1-42d8-bcd1-284318718b42",
@@ -3237,7 +3273,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 9,
     "pilotHardpointSize": 2,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "edc1421b-59ee-4233-b292-abc2c3ea0a1a",
@@ -3255,7 +3291,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 3,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "2f88be37-7825-4fe1-afae-2ca9d2b01114",
@@ -3273,7 +3309,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 4,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "02fe3279-3598-4ce6-96dc-0bc5cb90dfdc",
@@ -3291,7 +3327,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e4770804-b43a-4c2d-a4e4-fedd410e50fb",
@@ -3309,7 +3345,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 40,
     "pilotHardpointSize": 2,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "28f22bb8-9f1c-4a46-9a39-20bcb1e5000e",
@@ -3327,7 +3363,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 14,
     "pilotHardpointSize": 5,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "a04a1503-ac5c-4520-bc22-4b1a1a198eff",
@@ -3345,7 +3381,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "50f551e3-3435-4cbe-9ecf-8712855a8e27",
@@ -3363,7 +3399,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "aaeb976b-7a79-4a9c-91ee-07ed05d4a399",
@@ -3381,7 +3417,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "27515ffd-04df-413f-8533-34612d906c7d",
@@ -3399,7 +3435,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "9c26b25a-9285-4074-94d1-163db2aa8cbb",
@@ -3417,7 +3453,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 3,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "e8efe30c-5a1e-4ca2-a956-424b352f80c2",
@@ -3435,7 +3471,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "fb484074-f33f-4977-a052-2937e8508acc",
@@ -3453,7 +3489,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "3e911bb5-1a94-4501-bd63-560557f1b492",
@@ -3471,7 +3507,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "91c9418e-6240-4fb1-a18a-1e22ebfb7747",
@@ -3489,7 +3525,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "41ff82e7-ce4e-4dbc-ad7c-7ef52fbe569c",
@@ -3507,7 +3543,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 0,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "62e33393-5d68-4191-aba5-3b81ce4f3bf9",
@@ -3525,7 +3561,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "14d6ba03-86ad-47f8-b940-e8a82d2d52b6",
@@ -3543,7 +3579,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "d4662193-10ab-4912-8ca4-d64ead0e6f3b",
@@ -3561,7 +3597,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "bfdf94df-32fc-497c-b9fa-c98f3fa4c83b",
@@ -3579,7 +3615,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": null,
     "turretHardpointSize": null,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "4c034eef-329c-4336-850e-49bfb1f06a15",
@@ -3597,7 +3633,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8c375d7e-0e44-42e8-b84b-c8d6b2e1256c",
@@ -3615,7 +3651,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "953f8277-43a5-4f88-b139-ee997ee5c482",
@@ -3633,7 +3669,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "ebf015be-7bf9-44e9-ad9c-b5c65f00c530",
@@ -3651,7 +3687,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8dbb42e4-e127-4153-9694-2845142c3e51",
@@ -3669,7 +3705,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "0194943d-1164-4b5f-a85e-79ebc0ebe621",
@@ -3687,7 +3723,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 2,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "bda93768-c01f-40b4-a92e-f31876cd33d0",
@@ -3705,7 +3741,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "064951d7-3dd0-49c2-8b88-d2d7f809633e",
@@ -3723,7 +3759,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b389839d-fdf9-4c41-850a-4e7461250304",
@@ -3741,7 +3777,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 6,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "f80914cf-643e-4b7e-b715-eaf9aa572954",
@@ -3759,7 +3795,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 4,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "b8a352bb-74a8-415b-9e08-77f684ac91b8",
@@ -3777,7 +3813,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 5,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "515269d2-fea4-473f-b416-5f6677a54b55",
@@ -3795,7 +3831,7 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 3,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   },
   {
     "id": "8bbcd2cd-1e4b-4b0b-a65c-385bb2a02c32",
@@ -3813,6 +3849,6 @@ export const erkulPtuShipSeeds = [
     "energyThreshold": 8,
     "pilotHardpointSize": 1,
     "turretHardpointSize": 1,
-    "patch": "4.7"
+    "patch": "2026-05-14"
   }
 ] as const

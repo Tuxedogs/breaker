@@ -97,14 +97,6 @@
    2. Page Shell
    ========================================================================== */
 
-.craft-tab-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
 .craft-page {
   display: flex;
   flex-direction: column;
@@ -112,7 +104,7 @@
   height: 100%;
   overflow: hidden;
   color: var(--craft-text);
-  background: var(--craft-bg);
+  background: transparent;
   font-family: var(--font-primary, Rajdhani, sans-serif);
 }
 
@@ -319,7 +311,7 @@
 
   overflow: visible;
 
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-right: 0;
   border-radius: 7px 0 0 7px;
@@ -492,14 +484,8 @@
 
 .craft-result-footer { flex: 0 0 auto; padding: 6px; color: var(--craft-faint); font-size: 0.64rem; font-weight: 800; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; }
 .craft-result-arrow { display: none; }
-.craft-selected-bridge-column {
-  grid-column: 2;
-  position: relative;
-  z-index: 2;
-  min-width: var(--craft-bridge-width);
-  overflow: visible;
-  
-}
+
+
 .craft-selected-bridge {
   position: absolute;
   top: var(--craft-bridge-top);
@@ -529,17 +515,16 @@
   padding: 0.65rem 0.85rem;
   overflow: auto;
 
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   border: 1px solid rgba(255, 153, 0, 0.18);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
 }
 
 .craft-detail-stage--empty { display: flex; align-items: center; justify-content: center; padding: 16px; }
-.craft-detail-main,
-.craft-summary-column { position: relative; z-index: 2; min-width: 0; min-height: 0; overflow: visible; }
+.craft-detail-main { position: relative; z-index: 2; min-width: 0; min-height: 0; overflow: visible; }
 .craft-detail-main { display: flex; flex-direction: column; gap: 8px; }
-.craft-summary-column { height: 100%; }
+.craft-summary-column { min-width: 0; min-height: 0; height: 100%; overflow: visible; }
 
 .craft-variant-selector { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; min-height: 26px; overflow: hidden; }
 .craft-variant-list { display: flex; flex-wrap: nowrap; gap: 6px; min-width: 0; overflow: hidden; }
@@ -588,7 +573,7 @@
   min-height: 124px;
   padding: 2px 9px;
 
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
@@ -670,7 +655,7 @@
   overflow: hidden;
   padding: 14px 14px 12px;
 
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
@@ -725,7 +710,6 @@
   .craft-fg--ship { flex: 0 0 auto; }
   .craft-console-layout { grid-template-columns: 1fr; overflow: visible; }
   .craft-finder-sidebar { border-right: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px 7px 0 0; }
-  .craft-selected-bridge-column { display: none; }
   .craft-result-bridge, .craft-result-bridge-fill, .craft-result-bridge-cap { display: none; }
   .craft-detail-stage { grid-column: 1; grid-template-columns: 1fr; border-left: 1px solid var(--craft-orange-border); border-radius: 0 0 7px 7px; }
   .craft-detail-stage::before { display: none; }

@@ -1,5 +1,58 @@
 export const erkulLiveShieldProfiles = [
   {
+    "shipName": "Unknown Ship",
+    "source": "live",
+    "shieldCount": 1,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "15ebdff2-2724-4fb3-abbf-db20e150da77"
+    ],
+    "installedShieldNames": [
+      "Palisade"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localReference\":\"15ebdff2-2724-4fb3-abbf-db20e150da77\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "Avenger Stalker",
     "source": "live",
     "shieldCount": 2,
@@ -20,8 +73,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -74,8 +127,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -128,8 +181,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -182,8 +235,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -236,8 +289,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.47,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -290,8 +343,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -344,8 +397,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -398,8 +451,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -429,338 +482,6 @@ export const erkulLiveShieldProfiles = [
     "rawShieldRecords": [
       "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_godi_s01_allstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_godi_s01_allstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
-    "shipName": "Redeemer",
-    "source": "live",
-    "shieldCount": 6,
-    "shieldSize": 2,
-    "installedShieldIds": [
-      "924e275a-d449-44f5-a8a8-6e0e93a9661e"
-    ],
-    "installedShieldNames": [
-      "FullStop"
-    ],
-    "installedShieldClass": [
-      "Military"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.18,
-        "max": -0.06
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_3\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_4\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_5\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_6\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}"
-    ]
-  },
-  {
-    "shipName": "Retaliator",
-    "source": "live",
-    "shieldCount": 6,
-    "shieldSize": 2,
-    "installedShieldIds": [
-      "924e275a-d449-44f5-a8a8-6e0e93a9661e"
-    ],
-    "installedShieldNames": [
-      "FullStop"
-    ],
-    "installedShieldClass": [
-      "Military"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.18,
-        "max": -0.06
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_right_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_right_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_left_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_left_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_middle_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shieldgenerator_middle_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
-    ]
-  },
-  {
-    "shipName": "Sabre",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "ecc8d200-548c-4de0-a60e-d1e316515170"
-    ],
-    "installedShieldNames": [
-      "Shimmer"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
-    "shipName": "Sabre Comet",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "ecc8d200-548c-4de0-a60e-d1e316515170"
-    ],
-    "installedShieldNames": [
-      "Shimmer"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
-    "shipName": "Sabre Firebird",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "ecc8d200-548c-4de0-a60e-d1e316515170"
-    ],
-    "installedShieldNames": [
-      "Shimmer"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
-    "shipName": "Sabre Peregrine",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "ecc8d200-548c-4de0-a60e-d1e316515170"
-    ],
-    "installedShieldNames": [
-      "Shimmer"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
     ]
   },
   {
@@ -818,7 +539,332 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Sabre Raven",
+    "shipName": "Hammerhead",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa"
+    ],
+    "installedShieldNames": [
+      "SureStop"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+    ]
+  },
+  {
+    "shipName": "Idris-M",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 4,
+    "installedShieldIds": [
+      "dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c"
+    ],
+    "installedShieldNames": [
+      "Holdstrong"
+    ],
+    "hasBespokeShield": true,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}"
+    ]
+  },
+  {
+    "shipName": "Idris-P",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 4,
+    "installedShieldIds": [
+      "dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c"
+    ],
+    "installedShieldNames": [
+      "Holdstrong"
+    ],
+    "hasBespokeShield": true,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}"
+    ]
+  },
+  {
+    "shipName": "Reclaimer",
+    "source": "live",
+    "shieldCount": 1,
+    "shieldSize": 4,
+    "installedShieldIds": [
+      "6ed772d7-ba17-4bf1-ae49-0a6ff82be1a9"
+    ],
+    "installedShieldNames": [
+      "RS-Barrier"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": true,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localName\":\"shld_aegs_s04_reclaimer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
+    ]
+  },
+  {
+    "shipName": "Redeemer",
+    "source": "live",
+    "shieldCount": 6,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "924e275a-d449-44f5-a8a8-6e0e93a9661e"
+    ],
+    "installedShieldNames": [
+      "FullStop"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_3\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_4\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_5\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_6\",\"localName\":\"shld_godi_s02_fullstop_scitem\"}"
+    ]
+  },
+  {
+    "shipName": "Retaliator",
+    "source": "live",
+    "shieldCount": 6,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "924e275a-d449-44f5-a8a8-6e0e93a9661e"
+    ],
+    "installedShieldNames": [
+      "FullStop"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_right_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_right_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_left_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_left_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_middle_bottom\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shieldgenerator_middle_top\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+    ]
+  },
+  {
+    "shipName": "Sabre",
     "source": "live",
     "shieldCount": 2,
     "shieldSize": 1,
@@ -838,8 +884,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -872,6 +918,276 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Sabre Comet",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "ecc8d200-548c-4de0-a60e-d1e316515170"
+    ],
+    "installedShieldNames": [
+      "Shimmer"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Sabre Firebird",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "ecc8d200-548c-4de0-a60e-d1e316515170"
+    ],
+    "installedShieldNames": [
+      "Shimmer"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Sabre Peregrine",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "ecc8d200-548c-4de0-a60e-d1e316515170"
+    ],
+    "installedShieldNames": [
+      "Shimmer"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Sabre Raven",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "ecc8d200-548c-4de0-a60e-d1e316515170"
+    ],
+    "installedShieldNames": [
+      "Shimmer"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Tiburon",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa"
+    ],
+    "installedShieldNames": [
+      "SureStop"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+    ]
+  },
+  {
     "shipName": "Vanguard Harbinger",
     "source": "live",
     "shieldCount": 2,
@@ -892,8 +1208,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -946,8 +1262,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -977,6 +1293,60 @@ export const erkulLiveShieldProfiles = [
     "rawShieldRecords": [
       "{\"itemPortName\":\"hardpoint_shield_generator_001\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
       "{\"itemPortName\":\"hardpoint_shield_generator_002\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+    ]
+  },
+  {
+    "shipName": "Vanguard Sentinel",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "d8c15fce-d188-4ce4-b303-196bc733b5d7"
+    ],
+    "installedShieldNames": [
+      "Sheut"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_001\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_002\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
     ]
   },
   {
@@ -1000,8 +1370,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1034,57 +1404,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Idris-P",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 4,
-    "installedShieldIds": [
-      "dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c"
-    ],
-    "installedShieldNames": [
-      "Holdstrong"
-    ],
-    "hasBespokeShield": true,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0.03,
-        "max": 0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}"
-    ]
-  },
-  {
     "shipName": "Arrow",
     "source": "live",
     "shieldCount": 1,
@@ -1105,8 +1424,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1138,59 +1457,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Reclaimer",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 4,
-    "installedShieldIds": [
-      "6ed772d7-ba17-4bf1-ae49-0a6ff82be1a9"
-    ],
-    "installedShieldNames": [
-      "RS-Barrier"
-    ],
-    "installedShieldClass": [
-      "Industrial"
-    ],
-    "hasBespokeShield": true,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0.03,
-        "max": 0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localName\":\"shld_aegs_s04_reclaimer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
-    ]
-  },
-  {
     "shipName": "Unknown Ship",
     "source": "live",
     "shieldCount": 4,
@@ -1211,8 +1477,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1267,8 +1533,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1320,8 +1586,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1373,8 +1639,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1534,8 +1800,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1588,8 +1854,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1642,8 +1908,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1696,8 +1962,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1730,57 +1996,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Idris-M",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 4,
-    "installedShieldIds": [
-      "dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c"
-    ],
-    "installedShieldNames": [
-      "Holdstrong"
-    ],
-    "hasBespokeShield": true,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0.03,
-        "max": 0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"dfe6794e-80e7-4d2b-9dbc-6c2f8eb0018c\"}"
-    ]
-  },
-  {
     "shipName": "F7C Wildfire Mk I",
     "source": "live",
     "shieldCount": 2,
@@ -1801,8 +2016,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1855,8 +2070,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.36,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1889,60 +2104,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Vanguard Sentinel",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 2,
-    "installedShieldIds": [
-      "d8c15fce-d188-4ce4-b303-196bc733b5d7"
-    ],
-    "installedShieldNames": [
-      "Sheut"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_001\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_002\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
-    ]
-  },
-  {
     "shipName": "F7C-M Hrtskr. Mk II",
     "source": "live",
     "shieldCount": 3,
@@ -1963,8 +2124,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2018,8 +2179,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2072,8 +2233,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2127,8 +2288,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2181,8 +2342,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2235,8 +2396,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2289,8 +2450,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2343,8 +2504,62 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+    ]
+  },
+  {
+    "shipName": "F8C Lightning",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "d8c15fce-d188-4ce4-b303-196bc733b5d7"
+    ],
+    "installedShieldNames": [
+      "Sheut"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2397,8 +2612,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2430,60 +2645,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "F8C Lightning",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 2,
-    "installedShieldIds": [
-      "d8c15fce-d188-4ce4-b303-196bc733b5d7"
-    ],
-    "installedShieldNames": [
-      "Sheut"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s02_sheut_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
-    ]
-  },
-  {
     "shipName": "Hawk",
     "source": "live",
     "shieldCount": 2,
@@ -2504,8 +2665,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2558,8 +2719,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2588,60 +2749,6 @@ export const erkulLiveShieldProfiles = [
     },
     "rawShieldRecords": [
       "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_godi_s02_fullstop_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
-    ]
-  },
-  {
-    "shipName": "Terrapin",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 2,
-    "installedShieldIds": [
-      "8c2b0c60-881b-4163-9d72-b6b74806735a"
-    ],
-    "installedShieldNames": [
-      "5MA 'Chimalli'"
-    ],
-    "installedShieldClass": [
-      "Civilian"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.2,
-        "max": -0.07
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
     ]
   },
   {
@@ -2698,6 +2805,114 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Terrapin",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "8c2b0c60-881b-4163-9d72-b6b74806735a"
+    ],
+    "installedShieldNames": [
+      "5MA 'Chimalli'"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
+    "shipName": "Terrapin Medic",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "8c2b0c60-881b-4163-9d72-b6b74806735a"
+    ],
+    "installedShieldNames": [
+      "5MA 'Chimalli'"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "Valkyrie",
     "source": "live",
     "shieldCount": 2,
@@ -2718,8 +2933,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2772,8 +2987,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.36,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2826,8 +3041,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2860,112 +3075,6 @@ export const erkulLiveShieldProfiles = [
   },
   {
     "shipName": "MOLE",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 3,
-    "installedShieldIds": [
-      "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6"
-    ],
-    "installedShieldNames": [
-      "5CA 'Akura'"
-    ],
-    "installedShieldClass": [
-      "Civilian"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_behr_s03_5ca_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
-    ]
-  },
-  {
-    "shipName": "MOLE Carbon",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 3,
-    "installedShieldIds": [
-      "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6"
-    ],
-    "installedShieldNames": [
-      "5CA 'Akura'"
-    ],
-    "installedShieldClass": [
-      "Civilian"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_behr_s03_5ca_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
-    ]
-  },
-  {
-    "shipName": "MOLE Talus",
     "source": "live",
     "shieldCount": 1,
     "shieldSize": 3,
@@ -3091,61 +3200,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
         "min": 0,
         "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_basl_s01_bulwark_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
-    "shipName": "MPUV Tractor",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "624e6c75-afd8-4606-a10e-45d12cb3c882"
-    ],
-    "installedShieldNames": [
-      "Bulwark"
-    ],
-    "installedShieldClass": [
-      "Industrial"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.46,
-        "max": -0.15
       },
       "distortion": {
         "min": 0.75,
@@ -3197,8 +3253,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3230,18 +3286,18 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Terrapin Medic",
+    "shipName": "MPUV Tractor",
     "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 2,
+    "shieldCount": 1,
+    "shieldSize": 1,
     "installedShieldIds": [
-      "8c2b0c60-881b-4163-9d72-b6b74806735a"
+      "624e6c75-afd8-4606-a10e-45d12cb3c882"
     ],
     "installedShieldNames": [
-      "5MA 'Chimalli'"
+      "Bulwark"
     ],
     "installedShieldClass": [
-      "Civilian"
+      "Industrial"
     ],
     "hasBespokeShield": false,
     "resistance": {
@@ -3250,8 +3306,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3279,8 +3335,7 @@ export const erkulLiveShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_basl_s01_bulwark_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
     ]
   },
   {
@@ -3304,8 +3359,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3359,8 +3414,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3412,8 +3467,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3465,8 +3520,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3519,8 +3574,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3573,8 +3628,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3627,8 +3682,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3681,8 +3736,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3735,8 +3790,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3764,7 +3819,7 @@ export const erkulLiveShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localReference\":\"6be9c02c-ff32-483f-a6f8-d984dcb97c40\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_02\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_03\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
     ]
@@ -3790,8 +3845,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3843,8 +3898,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3898,8 +3953,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3952,8 +4007,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4006,8 +4061,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4113,8 +4168,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4142,7 +4197,7 @@ export const erkulLiveShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s01_hex_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localReference\":\"2de33b34-afaf-40ec-ab30-0a5039946866\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
     ]
   },
   {
@@ -4166,8 +4221,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4273,8 +4328,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4436,8 +4491,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4543,8 +4598,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4596,8 +4651,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4649,8 +4704,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4702,8 +4757,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4755,8 +4810,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4808,8 +4863,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4861,8 +4916,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4914,8 +4969,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4967,8 +5022,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5020,8 +5075,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5054,6 +5109,171 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Ironclad",
+    "source": "live",
+    "shieldCount": 4,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+    ],
+    "installedShieldNames": [
+      "Stronghold"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
+    "shipName": "Ironclad Assault",
+    "source": "live",
+    "shieldCount": 4,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+    ],
+    "installedShieldNames": [
+      "Stronghold"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
+    "shipName": "Pitbull",
+    "source": "live",
+    "shieldCount": 1,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "6be9c02c-ff32-483f-a6f8-d984dcb97c40"
+    ],
+    "installedShieldNames": [
+      "WEB"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localReference\":\"6be9c02c-ff32-483f-a6f8-d984dcb97c40\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
     "shipName": "Vulture",
     "source": "live",
     "shieldCount": 3,
@@ -5074,8 +5294,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5129,8 +5349,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5183,8 +5403,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5237,8 +5457,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5293,8 +5513,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5329,60 +5549,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Talon",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "ecc8d200-548c-4de0-a60e-d1e316515170"
-    ],
-    "installedShieldNames": [
-      "Shimmer"
-    ],
-    "installedShieldClass": [
-      "Stealth"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_left\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_right\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
     "shipName": "Stinger",
     "source": "live",
     "shieldCount": 2,
@@ -5403,8 +5569,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5437,6 +5603,60 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Talon",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "ecc8d200-548c-4de0-a60e-d1e316515170"
+    ],
+    "installedShieldNames": [
+      "Shimmer"
+    ],
+    "installedShieldClass": [
+      "Stealth"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_left\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_right\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
     "shipName": "Talon Shrike",
     "source": "live",
     "shieldCount": 2,
@@ -5457,8 +5677,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5511,8 +5731,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5565,8 +5785,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5618,8 +5838,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5672,8 +5892,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5726,8 +5946,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5779,8 +5999,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5832,8 +6052,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5885,8 +6105,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5938,8 +6158,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5991,8 +6211,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6044,8 +6264,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6097,8 +6317,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6151,8 +6371,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6204,8 +6424,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6257,8 +6477,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6310,8 +6530,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6363,8 +6583,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6418,8 +6638,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6473,8 +6693,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6528,8 +6748,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6583,8 +6803,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6638,8 +6858,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6668,6 +6888,62 @@ export const erkulLiveShieldProfiles = [
     },
     "rawShieldRecords": [
       "{\"itemPortName\":\"hardpoint_shield_generator_1\",\"localName\":\"shld_basl_s02_armada_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+    ]
+  },
+  {
+    "shipName": "Hull B",
+    "source": "live",
+    "shieldCount": 4,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "a7dd60d3-10bf-473d-9de5-747071885573"
+    ],
+    "installedShieldNames": [
+      "Citadel"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_front_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_front_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_rear_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_rear_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
     ]
   },
   {
@@ -6746,8 +7022,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6801,8 +7077,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6855,8 +7131,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6909,8 +7185,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6963,8 +7239,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7214,6 +7490,60 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Starlite",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "624e6c75-afd8-4606-a10e-45d12cb3c882"
+    ],
+    "installedShieldNames": [
+      "Bulwark"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_gen_bottom\",\"localReference\":\"624e6c75-afd8-4606-a10e-45d12cb3c882\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_gen_top\",\"localReference\":\"624e6c75-afd8-4606-a10e-45d12cb3c882\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "100i",
     "source": "live",
     "shieldCount": 1,
@@ -7234,8 +7564,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7287,8 +7617,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7340,8 +7670,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7393,8 +7723,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7447,8 +7777,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7501,8 +7831,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7555,8 +7885,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7609,8 +7939,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7638,7 +7968,7 @@ export const erkulLiveShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\",\"subType\":\"$editable\"}],\"maxSize\":3,\"minSize\":3}"
     ]
   },
   {
@@ -7750,59 +8080,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "85X Limited",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "d0669062-2e64-41d4-beb2-d510588ca593"
-    ],
-    "installedShieldNames": [
-      "Targa"
-    ],
-    "installedShieldClass": [
-      "Competition"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
     "shipName": "600i Touring",
     "source": "live",
     "shieldCount": 2,
@@ -7857,18 +8134,18 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "890 Jump",
+    "shipName": "85X Limited",
     "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 4,
+    "shieldCount": 1,
+    "shieldSize": 1,
     "installedShieldIds": [
-      "6fc982c0-2747-42b7-a628-7c76ecedf732"
+      "d0669062-2e64-41d4-beb2-d510588ca593"
     ],
     "installedShieldNames": [
-      "Glacis"
+      "Targa"
     ],
     "installedShieldClass": [
-      "Industrial"
+      "Competition"
     ],
     "hasBespokeShield": false,
     "resistance": {
@@ -7877,8 +8154,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.04,
-        "max": 0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7906,8 +8183,168 @@ export const erkulLiveShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "890 Jump",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 4,
+    "installedShieldIds": [
+      "6fc982c0-2747-42b7-a628-7c76ecedf732"
+    ],
+    "installedShieldNames": [
+      "Glacis"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
+    ]
+  },
+  {
+    "shipName": "M50 Interceptor",
+    "source": "live",
+    "shieldCount": 1,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "d0669062-2e64-41d4-beb2-d510588ca593"
+    ],
+    "installedShieldNames": [
+      "Targa"
+    ],
+    "installedShieldClass": [
+      "Competition"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "M80",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "8c2b0c60-881b-4163-9d72-b6b74806735a"
+    ],
+    "installedShieldNames": [
+      "5MA 'Chimalli'"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"8c2b0c60-881b-4163-9d72-b6b74806735a\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
     ]
   },
   {
@@ -7955,59 +8392,6 @@ export const erkulLiveShieldProfiles = [
     "rawShieldRecords": []
   },
   {
-    "shipName": "M50 Interceptor",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "d0669062-2e64-41d4-beb2-d510588ca593"
-    ],
-    "installedShieldNames": [
-      "Targa"
-    ],
-    "installedShieldClass": [
-      "Competition"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
     "shipName": "X1 Force",
     "source": "live",
     "shieldCount": 1,
@@ -8028,8 +8412,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8125,8 +8509,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8181,8 +8565,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8217,6 +8601,60 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Aurora LX",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "d0669062-2e64-41d4-beb2-d510588ca593"
+    ],
+    "installedShieldNames": [
+      "Targa"
+    ],
+    "installedShieldClass": [
+      "Competition"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
     "shipName": "Aurora CL",
     "source": "live",
     "shieldCount": 2,
@@ -8237,8 +8675,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8291,8 +8729,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8345,8 +8783,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8379,60 +8817,6 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
-    "shipName": "Aurora LX",
-    "source": "live",
-    "shieldCount": 2,
-    "shieldSize": 1,
-    "installedShieldIds": [
-      "d0669062-2e64-41d4-beb2-d510588ca593"
-    ],
-    "installedShieldNames": [
-      "Targa"
-    ],
-    "installedShieldClass": [
-      "Competition"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
-        "min": 0,
-        "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_yorm_s01_targa_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-    ]
-  },
-  {
     "shipName": "Aurora MR",
     "source": "live",
     "shieldCount": 2,
@@ -8453,8 +8837,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8484,6 +8868,114 @@ export const erkulLiveShieldProfiles = [
     "rawShieldRecords": [
       "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_basl_s01_bulwark_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_basl_s01_bulwark_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Aurora Mk I SE",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "334e6cb2-5e77-4bc8-bd92-d756848f050b"
+    ],
+    "installedShieldNames": [
+      "SecureHyde"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Aurora Mk II",
+    "source": "live",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "9d309719-800c-4d42-946e-fa6c240bc2df"
+    ],
+    "installedShieldNames": [
+      "5SA 'Rhada'"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
     ]
   },
   {
@@ -8772,8 +9264,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8828,8 +9320,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8882,8 +9374,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8936,8 +9428,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8990,8 +9482,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.04,
-        "max": 0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9043,8 +9535,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9097,8 +9589,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9150,8 +9642,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9203,8 +9695,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9258,8 +9750,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9314,8 +9806,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9368,8 +9860,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9422,8 +9914,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9476,8 +9968,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9530,8 +10022,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.49,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9584,8 +10076,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.49,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9638,8 +10130,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9691,8 +10183,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9744,8 +10236,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9797,8 +10289,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9850,8 +10342,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9903,8 +10395,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9956,8 +10448,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10009,8 +10501,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10062,8 +10554,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10115,8 +10607,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10168,8 +10660,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10221,8 +10713,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10274,61 +10766,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
-        "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    },
-    "passThrough": {
-      "physical": {
-        "min": 1,
-        "max": 0.41250000000000003
-      },
-      "energy": {
         "min": 0,
         "max": 0
-      }
-    },
-    "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s00_pin_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":0,\"minSize\":0}"
-    ]
-  },
-  {
-    "shipName": "Storm",
-    "source": "live",
-    "shieldCount": 1,
-    "shieldSize": 0,
-    "installedShieldIds": [
-      "ffede9a8-3c50-4b9e-be0f-9d93e5a26f29"
-    ],
-    "installedShieldNames": [
-      "PIN"
-    ],
-    "installedShieldClass": [
-      "Civilian"
-    ],
-    "hasBespokeShield": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.48,
-        "max": -0.16
       },
       "distortion": {
         "min": 0.75,
@@ -10380,8 +10819,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10415,6 +10854,59 @@ export const erkulLiveShieldProfiles = [
     ]
   },
   {
+    "shipName": "Storm",
+    "source": "live",
+    "shieldCount": 1,
+    "shieldSize": 0,
+    "installedShieldIds": [
+      "ffede9a8-3c50-4b9e-be0f-9d93e5a26f29"
+    ],
+    "installedShieldNames": [
+      "PIN"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s00_pin_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":0,\"minSize\":0}"
+    ]
+  },
+  {
     "shipName": "Storm AA",
     "source": "live",
     "shieldCount": 1,
@@ -10435,8 +10927,8 @@ export const erkulLiveShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,

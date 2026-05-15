@@ -1,10 +1,92 @@
 export const erkulPtuShipDefenseProfiles = [
   {
+    "id": "drak_command_module",
+    "name": "Unknown Ship",
+    "source": "ptu",
+    "armor": {
+      "hp": 3366,
+      "physical": {
+        "damageMultiplier": 0.72,
+        "deflectionThreshold": 9
+      },
+      "energy": {
+        "damageMultiplier": 0.96,
+        "deflectionThreshold": 8
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 1,
+      "size": 1,
+      "installedShieldIds": [
+        "15ebdff2-2724-4fb3-abbf-db20e150da77"
+      ],
+      "installedShieldNames": [
+        "Palisade"
+      ],
+      "installedShieldClass": [
+        "Industrial"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator\",\"localReference\":\"15ebdff2-2724-4fb3-abbf-db20e150da77\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
     "id": "aegs_avenger_stalker",
     "name": "Avenger Stalker",
     "source": "ptu",
     "armor": {
-      "hp": 1540,
+      "hp": 1232,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 11
@@ -52,8 +134,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -87,7 +169,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Avenger Titan",
     "source": "ptu",
     "armor": {
-      "hp": 3300,
+      "hp": 2640,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -135,8 +217,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -170,7 +252,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Avenger Titan Rngd.",
     "source": "ptu",
     "armor": {
-      "hp": 3300,
+      "hp": 2640,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -218,8 +300,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -253,7 +335,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Avenger Warlock",
     "source": "ptu",
     "armor": {
-      "hp": 3300,
+      "hp": 2640,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -301,8 +383,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -336,7 +418,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Eclipse",
     "source": "ptu",
     "armor": {
-      "hp": 3080,
+      "hp": 2464,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 11
@@ -384,8 +466,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.74,
-          "max": -0.25
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -419,7 +501,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Gladius",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -467,8 +549,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -502,7 +584,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Gladius Pirate",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -550,8 +632,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.4,
-          "max": -0.13
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -585,7 +667,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Gladius Valiant",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -633,8 +715,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -668,14 +750,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hammerhead",
     "source": "ptu",
     "armor": {
-      "hp": 32175,
+      "hp": 25740,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 152
+        "deflectionThreshold": 531
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 101
+        "deflectionThreshold": 380
       }
     },
     "hull": {
@@ -716,8 +798,91 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "aegs_hammerhead_gs",
+    "name": "Hammerhead",
+    "source": "ptu",
+    "armor": {
+      "hp": 25740,
+      "physical": {
+        "damageMultiplier": 0.81,
+        "deflectionThreshold": 531
+      },
+      "energy": {
+        "damageMultiplier": 1.21,
+        "deflectionThreshold": 380
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 3,
+      "installedShieldIds": [
+        "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa"
+      ],
+      "installedShieldNames": [
+        "SureStop"
+      ],
+      "installedShieldClass": [
+        "Military"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -751,14 +916,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Idris-M",
     "source": "ptu",
     "armor": {
-      "hp": 109395,
+      "hp": 87516,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 173
+        "deflectionThreshold": 554
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 139
+        "deflectionThreshold": 485
       }
     },
     "hull": {
@@ -796,8 +961,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.31,
-          "max": -0.1
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -831,14 +996,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Idris-P",
     "source": "ptu",
     "armor": {
-      "hp": 109395,
+      "hp": 87516,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 173
+        "deflectionThreshold": 554
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 139
+        "deflectionThreshold": 485
       }
     },
     "hull": {
@@ -876,8 +1041,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.31,
-          "max": -0.1
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -911,14 +1076,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Reclaimer",
     "source": "ptu",
     "armor": {
-      "hp": 41140,
+      "hp": 32912,
       "physical": {
         "damageMultiplier": 0.76,
-        "deflectionThreshold": 132
+        "deflectionThreshold": 495
       },
       "energy": {
         "damageMultiplier": 1.14,
-        "deflectionThreshold": 106
+        "deflectionThreshold": 418
       }
     },
     "hull": {
@@ -958,8 +1123,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.68,
-          "max": -0.23
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -993,14 +1158,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Redeemer",
     "source": "ptu",
     "armor": {
-      "hp": 19800,
+      "hp": 21120,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -1045,8 +1210,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1080,14 +1245,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Retaliator",
     "source": "ptu",
     "armor": {
-      "hp": 17325,
+      "hp": 18480,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -1132,8 +1297,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1165,338 +1330,6 @@ export const erkulPtuShipDefenseProfiles = [
   {
     "id": "aegs_sabre",
     "name": "Sabre",
-    "source": "ptu",
-    "armor": {
-      "hp": 3465,
-      "physical": {
-        "damageMultiplier": 0.9,
-        "deflectionThreshold": 20
-      },
-      "energy": {
-        "damageMultiplier": 1.35,
-        "deflectionThreshold": 16
-      }
-    },
-    "hull": {
-      "hp": 1,
-      "physical": {
-        "damageMultiplier": 1
-      },
-      "energy": {
-        "damageMultiplier": 1
-      }
-    },
-    "shields": {
-      "count": 2,
-      "size": 1,
-      "installedShieldIds": [
-        "ecc8d200-548c-4de0-a60e-d1e316515170"
-      ],
-      "installedShieldNames": [
-        "Shimmer"
-      ],
-      "installedShieldClass": [
-        "Stealth"
-      ],
-      "hasBespokeShield": false,
-      "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-      ],
-      "physical": {
-        "resistance": {
-          "min": 0,
-          "max": 0.25
-        },
-        "absorption": {
-          "min": 0,
-          "max": 0.45
-        }
-      },
-      "energy": {
-        "resistance": {
-          "min": -0.77,
-          "max": -0.26
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "distortion": {
-        "resistance": {
-          "min": 0.75,
-          "max": 0.95
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "passThrough": {
-        "physical": {
-          "min": 1,
-          "max": 0.41250000000000003
-        },
-        "energy": {
-          "min": 0,
-          "max": 0
-        }
-      }
-    }
-  },
-  {
-    "id": "aegs_sabre_comet",
-    "name": "Sabre Comet",
-    "source": "ptu",
-    "armor": {
-      "hp": 3465,
-      "physical": {
-        "damageMultiplier": 0.9,
-        "deflectionThreshold": 20
-      },
-      "energy": {
-        "damageMultiplier": 1.35,
-        "deflectionThreshold": 16
-      }
-    },
-    "hull": {
-      "hp": 1,
-      "physical": {
-        "damageMultiplier": 1
-      },
-      "energy": {
-        "damageMultiplier": 1
-      }
-    },
-    "shields": {
-      "count": 2,
-      "size": 1,
-      "installedShieldIds": [
-        "ecc8d200-548c-4de0-a60e-d1e316515170"
-      ],
-      "installedShieldNames": [
-        "Shimmer"
-      ],
-      "installedShieldClass": [
-        "Stealth"
-      ],
-      "hasBespokeShield": false,
-      "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-      ],
-      "physical": {
-        "resistance": {
-          "min": 0,
-          "max": 0.25
-        },
-        "absorption": {
-          "min": 0,
-          "max": 0.45
-        }
-      },
-      "energy": {
-        "resistance": {
-          "min": -0.77,
-          "max": -0.26
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "distortion": {
-        "resistance": {
-          "min": 0.75,
-          "max": 0.95
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "passThrough": {
-        "physical": {
-          "min": 1,
-          "max": 0.41250000000000003
-        },
-        "energy": {
-          "min": 0,
-          "max": 0
-        }
-      }
-    }
-  },
-  {
-    "id": "aegs_sabre_firebird",
-    "name": "Sabre Firebird",
-    "source": "ptu",
-    "armor": {
-      "hp": 5940,
-      "physical": {
-        "damageMultiplier": 0.81,
-        "deflectionThreshold": 20
-      },
-      "energy": {
-        "damageMultiplier": 1.21,
-        "deflectionThreshold": 16
-      }
-    },
-    "hull": {
-      "hp": 1,
-      "physical": {
-        "damageMultiplier": 1
-      },
-      "energy": {
-        "damageMultiplier": 1
-      }
-    },
-    "shields": {
-      "count": 2,
-      "size": 1,
-      "installedShieldIds": [
-        "ecc8d200-548c-4de0-a60e-d1e316515170"
-      ],
-      "installedShieldNames": [
-        "Shimmer"
-      ],
-      "installedShieldClass": [
-        "Stealth"
-      ],
-      "hasBespokeShield": false,
-      "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-      ],
-      "physical": {
-        "resistance": {
-          "min": 0,
-          "max": 0.25
-        },
-        "absorption": {
-          "min": 0,
-          "max": 0.45
-        }
-      },
-      "energy": {
-        "resistance": {
-          "min": -0.77,
-          "max": -0.26
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "distortion": {
-        "resistance": {
-          "min": 0.75,
-          "max": 0.95
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "passThrough": {
-        "physical": {
-          "min": 1,
-          "max": 0.41250000000000003
-        },
-        "energy": {
-          "min": 0,
-          "max": 0
-        }
-      }
-    }
-  },
-  {
-    "id": "aegs_sabre_peregrine",
-    "name": "Sabre Peregrine",
-    "source": "ptu",
-    "armor": {
-      "hp": 1980,
-      "physical": {
-        "damageMultiplier": 0.95,
-        "deflectionThreshold": 20
-      },
-      "energy": {
-        "damageMultiplier": 1.43,
-        "deflectionThreshold": 16
-      }
-    },
-    "hull": {
-      "hp": 1,
-      "physical": {
-        "damageMultiplier": 1
-      },
-      "energy": {
-        "damageMultiplier": 1
-      }
-    },
-    "shields": {
-      "count": 2,
-      "size": 1,
-      "installedShieldIds": [
-        "ecc8d200-548c-4de0-a60e-d1e316515170"
-      ],
-      "installedShieldNames": [
-        "Shimmer"
-      ],
-      "installedShieldClass": [
-        "Stealth"
-      ],
-      "hasBespokeShield": false,
-      "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
-        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
-      ],
-      "physical": {
-        "resistance": {
-          "min": 0,
-          "max": 0.25
-        },
-        "absorption": {
-          "min": 0,
-          "max": 0.45
-        }
-      },
-      "energy": {
-        "resistance": {
-          "min": -0.77,
-          "max": -0.26
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "distortion": {
-        "resistance": {
-          "min": 0.75,
-          "max": 0.95
-        },
-        "absorption": {
-          "min": 1,
-          "max": 1
-        }
-      },
-      "passThrough": {
-        "physical": {
-          "min": 1,
-          "max": 0.41250000000000003
-        },
-        "energy": {
-          "min": 0,
-          "max": 0
-        }
-      }
-    }
-  },
-  {
-    "id": "aegs_sabre_raven",
-    "name": "Sabre Raven",
     "source": "ptu",
     "armor": {
       "hp": 2772,
@@ -1547,8 +1380,340 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "aegs_sabre_comet",
+    "name": "Sabre Comet",
+    "source": "ptu",
+    "armor": {
+      "hp": 2772,
+      "physical": {
+        "damageMultiplier": 0.9,
+        "deflectionThreshold": 20
+      },
+      "energy": {
+        "damageMultiplier": 1.35,
+        "deflectionThreshold": 16
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "ecc8d200-548c-4de0-a60e-d1e316515170"
+      ],
+      "installedShieldNames": [
+        "Shimmer"
+      ],
+      "installedShieldClass": [
+        "Stealth"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "aegs_sabre_firebird",
+    "name": "Sabre Firebird",
+    "source": "ptu",
+    "armor": {
+      "hp": 4752,
+      "physical": {
+        "damageMultiplier": 0.81,
+        "deflectionThreshold": 20
+      },
+      "energy": {
+        "damageMultiplier": 1.21,
+        "deflectionThreshold": 16
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "ecc8d200-548c-4de0-a60e-d1e316515170"
+      ],
+      "installedShieldNames": [
+        "Shimmer"
+      ],
+      "installedShieldClass": [
+        "Stealth"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "aegs_sabre_peregrine",
+    "name": "Sabre Peregrine",
+    "source": "ptu",
+    "armor": {
+      "hp": 1584,
+      "physical": {
+        "damageMultiplier": 0.95,
+        "deflectionThreshold": 20
+      },
+      "energy": {
+        "damageMultiplier": 1.43,
+        "deflectionThreshold": 16
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "ecc8d200-548c-4de0-a60e-d1e316515170"
+      ],
+      "installedShieldNames": [
+        "Shimmer"
+      ],
+      "installedShieldClass": [
+        "Stealth"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "aegs_sabre_raven",
+    "name": "Sabre Raven",
+    "source": "ptu",
+    "armor": {
+      "hp": 2218,
+      "physical": {
+        "damageMultiplier": 0.9,
+        "deflectionThreshold": 20
+      },
+      "energy": {
+        "damageMultiplier": 1.35,
+        "deflectionThreshold": 16
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "ecc8d200-548c-4de0-a60e-d1e316515170"
+      ],
+      "installedShieldNames": [
+        "Shimmer"
+      ],
+      "installedShieldClass": [
+        "Stealth"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localName\":\"shld_asas_s01_shimmer_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1582,14 +1747,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Vanguard Harbinger",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -1630,8 +1795,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.4,
-          "max": -0.13
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1665,14 +1830,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Vanguard Hoplite",
     "source": "ptu",
     "armor": {
-      "hp": 18563,
+      "hp": 14850,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -1713,8 +1878,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1748,14 +1913,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Vanguard Sentinel",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -1796,8 +1961,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.74,
-          "max": -0.25
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1831,14 +1996,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Vanguard Warden",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -1879,8 +2044,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1914,7 +2079,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Arrow",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 12
@@ -1961,8 +2126,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -1996,14 +2161,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Unknown Ship",
     "source": "ptu",
     "armor": {
-      "hp": 22275,
+      "hp": 23760,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 92
+        "deflectionThreshold": 139
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 49
+        "deflectionThreshold": 88
       }
     },
     "hull": {
@@ -2046,8 +2211,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2081,7 +2246,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "C8 Pisces",
     "source": "ptu",
     "armor": {
-      "hp": 3025,
+      "hp": 2420,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 12
@@ -2128,8 +2293,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2163,7 +2328,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "C8R Pisces Rescue",
     "source": "ptu",
     "armor": {
-      "hp": 3025,
+      "hp": 2420,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 12
@@ -2210,8 +2375,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2245,7 +2410,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "C8X Pisces Exp.",
     "source": "ptu",
     "armor": {
-      "hp": 3025,
+      "hp": 2420,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 12
@@ -2292,8 +2457,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2327,14 +2492,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Carrack",
     "source": "ptu",
     "armor": {
-      "hp": 23375,
+      "hp": 18700,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 120
+        "deflectionThreshold": 420
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 64
+        "deflectionThreshold": 240
       }
     },
     "hull": {
@@ -2375,8 +2540,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.63,
-          "max": -0.21
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2410,14 +2575,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Carrack Expedition",
     "source": "ptu",
     "armor": {
-      "hp": 23375,
+      "hp": 18700,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 120
+        "deflectionThreshold": 420
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 64
+        "deflectionThreshold": 240
       }
     },
     "hull": {
@@ -2458,8 +2623,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.63,
-          "max": -0.21
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2493,7 +2658,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7A Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2541,8 +2706,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2576,7 +2741,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7A Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2624,8 +2789,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2659,7 +2824,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2707,8 +2872,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2742,7 +2907,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2790,8 +2955,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2825,7 +2990,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C Wildfire Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2873,8 +3038,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2908,7 +3073,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-M Hrtskr. Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -2956,8 +3121,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.34,
-          "max": -0.11
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -2991,7 +3156,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-M Hrtskr. Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3040,8 +3205,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3075,7 +3240,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-M Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3123,8 +3288,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3158,7 +3323,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-M Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3207,8 +3372,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3242,7 +3407,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-R Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3290,8 +3455,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3325,7 +3490,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-R Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 3850,
+      "hp": 3080,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 24
@@ -3373,8 +3538,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3408,7 +3573,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-S Mk I",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3456,8 +3621,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3491,7 +3656,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F7C-S Mk II",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3539,8 +3704,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3574,14 +3739,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F8A Lightning",
     "source": "ptu",
     "armor": {
-      "hp": 13613,
+      "hp": 10890,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -3622,8 +3787,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.74,
-          "max": -0.25
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3657,14 +3822,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "F8C Lightning",
     "source": "ptu",
     "armor": {
-      "hp": 13613,
+      "hp": 10890,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -3705,8 +3870,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.74,
-          "max": -0.25
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3740,7 +3905,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Gladiator",
     "source": "ptu",
     "armor": {
-      "hp": 13200,
+      "hp": 10560,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 24
@@ -3787,8 +3952,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3822,7 +3987,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hawk",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 12
@@ -3870,8 +4035,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3905,14 +4070,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hurricane",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -3952,8 +4117,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -3987,14 +4152,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Paladin",
     "source": "ptu",
     "armor": {
-      "hp": 17325,
+      "hp": 18480,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 92
+        "deflectionThreshold": 139
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 49
+        "deflectionThreshold": 88
       }
     },
     "hull": {
@@ -4034,8 +4199,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4069,14 +4234,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Terrapin",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 97
+        "deflectionThreshold": 62
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 52
+        "deflectionThreshold": 33
       }
     },
     "hull": {
@@ -4117,8 +4282,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4152,14 +4317,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Terrapin Medic",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 97
+        "deflectionThreshold": 62
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 52
+        "deflectionThreshold": 33
       }
     },
     "hull": {
@@ -4200,8 +4365,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4235,14 +4400,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Valkyrie",
     "source": "ptu",
     "armor": {
-      "hp": 22275,
+      "hp": 23760,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 92
+        "deflectionThreshold": 139
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 49
+        "deflectionThreshold": 88
       }
     },
     "hull": {
@@ -4283,8 +4448,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4318,7 +4483,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Khartu-al",
     "source": "ptu",
     "armor": {
-      "hp": 3000,
+      "hp": 2400,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 10
@@ -4366,8 +4531,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.34,
-          "max": -0.11
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4401,7 +4566,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Nox",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 5
@@ -4474,7 +4639,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Nox Kue",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 5
@@ -4547,7 +4712,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "San'tok.yāi",
     "source": "ptu",
     "armor": {
-      "hp": 7500,
+      "hp": 6000,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 20
@@ -4594,8 +4759,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4629,14 +4794,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "MOLE",
     "source": "ptu",
     "armor": {
-      "hp": 14025,
+      "hp": 11220,
       "physical": {
         "damageMultiplier": 0.72,
-        "deflectionThreshold": 70
+        "deflectionThreshold": 45
       },
       "energy": {
         "damageMultiplier": 1.14,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -4676,8 +4841,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4711,14 +4876,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "MOTH",
     "source": "ptu",
     "armor": {
-      "hp": 14025,
+      "hp": 11220,
       "physical": {
         "damageMultiplier": 0.72,
-        "deflectionThreshold": 70
+        "deflectionThreshold": 45
       },
       "energy": {
         "damageMultiplier": 1.14,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -4758,8 +4923,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4793,7 +4958,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "MPUV Cargo",
     "source": "ptu",
     "armor": {
-      "hp": 1375,
+      "hp": 1100,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -4840,8 +5005,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4875,7 +5040,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "MPUV Personnel",
     "source": "ptu",
     "armor": {
-      "hp": 1375,
+      "hp": 1100,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -4922,8 +5087,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -4957,7 +5122,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "MPUV Tractor",
     "source": "ptu",
     "armor": {
-      "hp": 1375,
+      "hp": 1100,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -5004,8 +5169,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5039,14 +5204,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "RAFT",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 70
+        "deflectionThreshold": 45
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -5088,8 +5253,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5123,7 +5288,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "SRV",
     "source": "ptu",
     "armor": {
-      "hp": 4675,
+      "hp": 3740,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 10
@@ -5170,8 +5335,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5205,7 +5370,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Defender",
     "source": "ptu",
     "armor": {
-      "hp": 6750,
+      "hp": 5400,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 20
@@ -5252,8 +5417,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.66,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5287,7 +5452,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "HoverQuad",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -5360,7 +5525,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mustang Alpha",
     "source": "ptu",
     "armor": {
-      "hp": 2500,
+      "hp": 2000,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5408,8 +5573,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.9,
-          "max": -0.3
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5443,7 +5608,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mustang Beta",
     "source": "ptu",
     "armor": {
-      "hp": 2500,
+      "hp": 2000,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5491,8 +5656,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.9,
-          "max": -0.3
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5526,7 +5691,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mustang Delta",
     "source": "ptu",
     "armor": {
-      "hp": 2500,
+      "hp": 2000,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5574,8 +5739,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.4,
-          "max": -0.13
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5609,7 +5774,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mustang Gamma",
     "source": "ptu",
     "armor": {
-      "hp": 2500,
+      "hp": 2000,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5657,8 +5822,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -1,
-          "max": -0.33
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5692,7 +5857,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mustang Omega",
     "source": "ptu",
     "armor": {
-      "hp": 2500,
+      "hp": 2000,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5740,8 +5905,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -1,
-          "max": -0.33
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5775,7 +5940,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Nomad",
     "source": "ptu",
     "armor": {
-      "hp": 2750,
+      "hp": 2200,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 10
@@ -5808,7 +5973,7 @@ export const erkulPtuShipDefenseProfiles = [
       ],
       "hasBespokeShield": false,
       "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localReference\":\"6be9c02c-ff32-483f-a6f8-d984dcb97c40\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
         "{\"itemPortName\":\"hardpoint_shield_generator_02\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
         "{\"itemPortName\":\"hardpoint_shield_generator_03\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
       ],
@@ -5824,8 +5989,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5859,14 +6024,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "A1 Spirit",
     "source": "ptu",
     "armor": {
-      "hp": 12000,
+      "hp": 9600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 56
+        "deflectionThreshold": 36
       }
     },
     "hull": {
@@ -5906,8 +6071,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -5941,14 +6106,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "A2 Hercules",
     "source": "ptu",
     "armor": {
-      "hp": 31688,
+      "hp": 25350,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 110
+        "deflectionThreshold": 385
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 80
+        "deflectionThreshold": 300
       }
     },
     "hull": {
@@ -5990,8 +6155,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.34,
-          "max": -0.11
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6025,14 +6190,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ares Inferno",
     "source": "ptu",
     "armor": {
-      "hp": 18000,
+      "hp": 14400,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 56
+        "deflectionThreshold": 36
       }
     },
     "hull": {
@@ -6073,8 +6238,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6108,14 +6273,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ares Ion",
     "source": "ptu",
     "armor": {
-      "hp": 18000,
+      "hp": 14400,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 56
+        "deflectionThreshold": 36
       }
     },
     "hull": {
@@ -6156,8 +6321,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6191,14 +6356,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "C1 Spirit",
     "source": "ptu",
     "armor": {
-      "hp": 12000,
+      "hp": 9600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 56
+        "deflectionThreshold": 36
       }
     },
     "hull": {
@@ -6238,8 +6403,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6273,14 +6438,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "C2 Hercules",
     "source": "ptu",
     "armor": {
-      "hp": 16250,
+      "hp": 13000,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 110
+        "deflectionThreshold": 385
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 80
+        "deflectionThreshold": 300
       }
     },
     "hull": {
@@ -6321,8 +6486,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6356,7 +6521,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Intrepid",
     "source": "ptu",
     "armor": {
-      "hp": 4000,
+      "hp": 3200,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 11
@@ -6403,8 +6568,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6438,14 +6603,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "M2 Hercules",
     "source": "ptu",
     "armor": {
-      "hp": 29250,
+      "hp": 23400,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 110
+        "deflectionThreshold": 385
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 80
+        "deflectionThreshold": 300
       }
     },
     "hull": {
@@ -6486,8 +6651,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.34,
-          "max": -0.11
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6521,14 +6686,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mercury",
     "source": "ptu",
     "armor": {
-      "hp": 13650,
+      "hp": 14560,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 85
+        "deflectionThreshold": 127
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -6568,8 +6733,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6603,7 +6768,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Buccaneer",
     "source": "ptu",
     "armor": {
-      "hp": 2700,
+      "hp": 2160,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 9
@@ -6650,8 +6815,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6685,14 +6850,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Caterpillar",
     "source": "ptu",
     "armor": {
-      "hp": 21038,
+      "hp": 16830,
       "physical": {
         "damageMultiplier": 0.72,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 0.96,
-        "deflectionThreshold": 80
+        "deflectionThreshold": 300
       }
     },
     "hull": {
@@ -6734,8 +6899,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6769,14 +6934,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Caterpillar Pirate",
     "source": "ptu",
     "armor": {
-      "hp": 21038,
+      "hp": 16830,
       "physical": {
         "damageMultiplier": 0.72,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 0.96,
-        "deflectionThreshold": 80
+        "deflectionThreshold": 300
       }
     },
     "hull": {
@@ -6818,8 +6983,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6853,7 +7018,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Drake Clipper",
     "source": "ptu",
     "armor": {
-      "hp": 3600,
+      "hp": 2880,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -6901,8 +7066,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.9,
-          "max": -0.3
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -6936,14 +7101,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Corsair",
     "source": "ptu",
     "armor": {
-      "hp": 14175,
+      "hp": 15120,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 95
       },
       "energy": {
         "damageMultiplier": 1.02,
-        "deflectionThreshold": 56
+        "deflectionThreshold": 100
       }
     },
     "hull": {
@@ -6983,8 +7148,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7018,14 +7183,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutlass Black",
     "source": "ptu",
     "armor": {
-      "hp": 9113,
+      "hp": 7290,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.02,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -7065,8 +7230,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7100,14 +7265,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutlass Blue",
     "source": "ptu",
     "armor": {
-      "hp": 6075,
+      "hp": 4860,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -7147,8 +7312,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7182,14 +7347,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutlass Red",
     "source": "ptu",
     "armor": {
-      "hp": 6075,
+      "hp": 4860,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -7229,8 +7394,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7264,14 +7429,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutlass Steel",
     "source": "ptu",
     "armor": {
-      "hp": 13669,
+      "hp": 10935,
       "physical": {
         "damageMultiplier": 0.77,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.02,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       }
     },
     "hull": {
@@ -7311,8 +7476,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7346,7 +7511,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutter",
     "source": "ptu",
     "armor": {
-      "hp": 2475,
+      "hp": 1980,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -7393,8 +7558,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7428,7 +7593,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutter Rambler",
     "source": "ptu",
     "armor": {
-      "hp": 2475,
+      "hp": 1980,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -7475,8 +7640,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7510,7 +7675,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cutter Scout",
     "source": "ptu",
     "armor": {
-      "hp": 2475,
+      "hp": 1980,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -7557,8 +7722,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7592,7 +7757,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Dragonfly",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -7665,7 +7830,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Dragonfly StarKitten",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -7738,7 +7903,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Dragonfly Yellowjckt",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -7811,7 +7976,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Golem",
     "source": "ptu",
     "armor": {
-      "hp": 8415,
+      "hp": 6732,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 18
@@ -7858,8 +8023,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7893,7 +8058,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Drake Golem OX",
     "source": "ptu",
     "armor": {
-      "hp": 8415,
+      "hp": 6732,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 18
@@ -7940,8 +8105,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -7975,7 +8140,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Herald",
     "source": "ptu",
     "armor": {
-      "hp": 6120,
+      "hp": 4896,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 18
@@ -8023,8 +8188,178 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "drak_ironclad",
+    "name": "Ironclad",
+    "source": "ptu",
+    "armor": {
+      "hp": 26010,
+      "physical": {
+        "damageMultiplier": 0.72,
+        "deflectionThreshold": 315
+      },
+      "energy": {
+        "damageMultiplier": 0.96,
+        "deflectionThreshold": 300
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 4,
+      "size": 3,
+      "installedShieldIds": [
+        "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+      ],
+      "installedShieldNames": [
+        "Stronghold"
+      ],
+      "installedShieldClass": [
+        "Industrial"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "drak_ironclad_assault",
+    "name": "Ironclad Assault",
+    "source": "ptu",
+    "armor": {
+      "hp": 20790,
+      "physical": {
+        "damageMultiplier": 0.77,
+        "deflectionThreshold": 331
+      },
+      "energy": {
+        "damageMultiplier": 1.02,
+        "deflectionThreshold": 315
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 4,
+      "size": 3,
+      "installedShieldIds": [
+        "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+      ],
+      "installedShieldNames": [
+        "Stronghold"
+      ],
+      "installedShieldClass": [
+        "Industrial"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8058,7 +8393,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Vulture",
     "source": "ptu",
     "armor": {
-      "hp": 8415,
+      "hp": 6732,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 18
@@ -8107,8 +8442,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8142,7 +8477,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Blade",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 11
@@ -8190,8 +8525,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8225,7 +8560,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Glaive",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 22
@@ -8273,8 +8608,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8308,14 +8643,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Prowler",
     "source": "ptu",
     "armor": {
-      "hp": 15188,
+      "hp": 12150,
       "physical": {
         "damageMultiplier": 0.68,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 60
+        "deflectionThreshold": 39
       }
     },
     "hull": {
@@ -8358,8 +8693,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8393,14 +8728,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Prowler Utility",
     "source": "ptu",
     "armor": {
-      "hp": 15188,
+      "hp": 12150,
       "physical": {
         "damageMultiplier": 0.68,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 60
+        "deflectionThreshold": 39
       }
     },
     "hull": {
@@ -8443,8 +8778,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8478,14 +8813,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Stinger",
     "source": "ptu",
     "armor": {
-      "hp": 12375,
+      "hp": 9900,
       "physical": {
         "damageMultiplier": 0.72,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 32
       }
     },
     "hull": {
@@ -8526,8 +8861,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8561,7 +8896,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Talon",
     "source": "ptu",
     "armor": {
-      "hp": 3750,
+      "hp": 3000,
       "physical": {
         "damageMultiplier": 0.68,
         "deflectionThreshold": 8
@@ -8609,8 +8944,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8644,7 +8979,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Talon Shrike",
     "source": "ptu",
     "armor": {
-      "hp": 3750,
+      "hp": 3000,
       "physical": {
         "damageMultiplier": 0.68,
         "deflectionThreshold": 8
@@ -8692,8 +9027,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8727,7 +9062,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Syulen",
     "source": "ptu",
     "armor": {
-      "hp": 5440,
+      "hp": 4352,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 11
@@ -8775,8 +9110,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8810,14 +9145,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Shiv",
     "source": "ptu",
     "armor": {
-      "hp": 10125,
+      "hp": 8100,
       "physical": {
         "damageMultiplier": 0.68,
-        "deflectionThreshold": 45
+        "deflectionThreshold": 29
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 36
+        "deflectionThreshold": 23
       }
     },
     "hull": {
@@ -8857,8 +9192,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8892,7 +9227,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Wolf",
     "source": "ptu",
     "armor": {
-      "hp": 3375,
+      "hp": 2700,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 10
@@ -8940,8 +9275,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -8975,7 +9310,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Kruger L-22 Alpha Wolf",
     "source": "ptu",
     "armor": {
-      "hp": 3375,
+      "hp": 2700,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 10
@@ -9023,8 +9358,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.82,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9058,7 +9393,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "P-52",
     "source": "ptu",
     "armor": {
-      "hp": 450,
+      "hp": 360,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9105,8 +9440,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.4,
-          "max": -0.13
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9140,7 +9475,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "P-72",
     "source": "ptu",
     "armor": {
-      "hp": 450,
+      "hp": 360,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9187,8 +9522,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9222,7 +9557,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "P-72 Emerald",
     "source": "ptu",
     "armor": {
-      "hp": 450,
+      "hp": 360,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9269,8 +9604,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9304,7 +9639,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Fury",
     "source": "ptu",
     "armor": {
-      "hp": 2063,
+      "hp": 1650,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9351,8 +9686,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.8,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9386,7 +9721,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Fury LX",
     "source": "ptu",
     "armor": {
-      "hp": 688,
+      "hp": 550,
       "physical": {
         "damageMultiplier": 1,
         "deflectionThreshold": 5
@@ -9433,8 +9768,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -1,
-          "max": -0.33
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9468,7 +9803,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Fury MX",
     "source": "ptu",
     "armor": {
-      "hp": 2063,
+      "hp": 1650,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9515,8 +9850,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.8,
-          "max": -0.27
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9550,14 +9885,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Guardian",
     "source": "ptu",
     "armor": {
-      "hp": 11250,
+      "hp": 9000,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -9597,8 +9932,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9632,14 +9967,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Guardian MX",
     "source": "ptu",
     "armor": {
-      "hp": 13500,
+      "hp": 10800,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -9680,8 +10015,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9715,14 +10050,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Guardian QI",
     "source": "ptu",
     "armor": {
-      "hp": 11250,
+      "hp": 9000,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 84
+        "deflectionThreshold": 54
       },
       "energy": {
         "damageMultiplier": 1.21,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -9762,8 +10097,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -9797,7 +10132,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Pulse",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 6
@@ -9870,7 +10205,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Pulse LX",
     "source": "ptu",
     "armor": {
-      "hp": 813,
+      "hp": 650,
       "physical": {
         "damageMultiplier": 1,
         "deflectionThreshold": 6
@@ -9943,7 +10278,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Razor",
     "source": "ptu",
     "armor": {
-      "hp": 1650,
+      "hp": 1320,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -9990,8 +10325,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10025,7 +10360,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Razor EX",
     "source": "ptu",
     "armor": {
-      "hp": 1650,
+      "hp": 1320,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 5
@@ -10072,8 +10407,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10107,7 +10442,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Razor LX",
     "source": "ptu",
     "armor": {
-      "hp": 550,
+      "hp": 440,
       "physical": {
         "damageMultiplier": 1,
         "deflectionThreshold": 5
@@ -10154,8 +10489,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10189,7 +10524,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Fortune",
     "source": "ptu",
     "armor": {
-      "hp": 5143,
+      "hp": 4114,
       "physical": {
         "damageMultiplier": 0.8,
         "deflectionThreshold": 9
@@ -10238,8 +10573,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10273,14 +10608,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Freelancer",
     "source": "ptu",
     "armor": {
-      "hp": 13200,
+      "hp": 10560,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 41
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 67
+        "deflectionThreshold": 43
       }
     },
     "hull": {
@@ -10322,8 +10657,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10357,14 +10692,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Freelancer DUR",
     "source": "ptu",
     "armor": {
-      "hp": 13200,
+      "hp": 10560,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 41
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 67
+        "deflectionThreshold": 43
       }
     },
     "hull": {
@@ -10406,8 +10741,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10441,14 +10776,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Freelancer MAX",
     "source": "ptu",
     "armor": {
-      "hp": 13200,
+      "hp": 10560,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 41
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 67
+        "deflectionThreshold": 43
       }
     },
     "hull": {
@@ -10490,8 +10825,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10525,14 +10860,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Freelancer MIS",
     "source": "ptu",
     "armor": {
-      "hp": 19800,
+      "hp": 15840,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 41
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 67
+        "deflectionThreshold": 43
       }
     },
     "hull": {
@@ -10574,8 +10909,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10609,7 +10944,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hull A",
     "source": "ptu",
     "armor": {
-      "hp": 6050,
+      "hp": 4840,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 18
@@ -10656,8 +10991,93 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.7,
-          "max": -0.23
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "misc_hull_b",
+    "name": "Hull B",
+    "source": "ptu",
+    "armor": {
+      "hp": 7260,
+      "physical": {
+        "damageMultiplier": 0.9,
+        "deflectionThreshold": 41
+      },
+      "energy": {
+        "damageMultiplier": 1.22,
+        "deflectionThreshold": 43
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 4,
+      "size": 2,
+      "installedShieldIds": [
+        "a7dd60d3-10bf-473d-9de5-747071885573"
+      ],
+      "installedShieldNames": [
+        "Citadel"
+      ],
+      "installedShieldClass": [
+        "Industrial"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_front_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_front_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_rear_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_rear_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10691,14 +11111,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hull C",
     "source": "ptu",
     "armor": {
-      "hp": 15125,
+      "hp": 12100,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 96
+        "deflectionThreshold": 360
       }
     },
     "hull": {
@@ -10740,8 +11160,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10775,7 +11195,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Prospector",
     "source": "ptu",
     "armor": {
-      "hp": 10285,
+      "hp": 8228,
       "physical": {
         "damageMultiplier": 0.8,
         "deflectionThreshold": 18
@@ -10824,8 +11244,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10859,7 +11279,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Reliant Kore",
     "source": "ptu",
     "armor": {
-      "hp": 2750,
+      "hp": 2200,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 9
@@ -10907,8 +11327,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -10942,7 +11362,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Reliant Mako",
     "source": "ptu",
     "armor": {
-      "hp": 2750,
+      "hp": 2200,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 9
@@ -10990,8 +11410,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11025,7 +11445,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Reliant Sen",
     "source": "ptu",
     "armor": {
-      "hp": 2750,
+      "hp": 2200,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 9
@@ -11073,8 +11493,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11108,7 +11528,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Reliant Tana",
     "source": "ptu",
     "armor": {
-      "hp": 4125,
+      "hp": 3300,
       "physical": {
         "damageMultiplier": 0.85,
         "deflectionThreshold": 9
@@ -11156,8 +11576,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11191,14 +11611,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Starfarer",
     "source": "ptu",
     "armor": {
-      "hp": 15125,
+      "hp": 12100,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 96
+        "deflectionThreshold": 360
       }
     },
     "hull": {
@@ -11240,8 +11660,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11275,14 +11695,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Starfarer Gemini",
     "source": "ptu",
     "armor": {
-      "hp": 22688,
+      "hp": 18150,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 95
+        "deflectionThreshold": 331
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 101
+        "deflectionThreshold": 378
       }
     },
     "hull": {
@@ -11324,8 +11744,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11359,14 +11779,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Starlancer MAX",
     "source": "ptu",
     "armor": {
-      "hp": 15125,
+      "hp": 12100,
       "physical": {
         "damageMultiplier": 0.9,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.22,
-        "deflectionThreshold": 96
+        "deflectionThreshold": 360
       }
     },
     "hull": {
@@ -11406,8 +11826,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11441,14 +11861,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Starlancer TAC",
     "source": "ptu",
     "armor": {
-      "hp": 22688,
+      "hp": 18150,
       "physical": {
         "damageMultiplier": 0.85,
-        "deflectionThreshold": 99
+        "deflectionThreshold": 347
       },
       "energy": {
         "damageMultiplier": 1.15,
-        "deflectionThreshold": 106
+        "deflectionThreshold": 396
       }
     },
     "hull": {
@@ -11489,8 +11909,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11524,7 +11944,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "100i",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11571,8 +11991,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11606,7 +12026,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "125a",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11653,8 +12073,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11688,7 +12108,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "135c",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11735,8 +12155,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11770,7 +12190,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "300i",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11818,8 +12238,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11853,7 +12273,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "315p",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11901,8 +12321,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.77,
-          "max": -0.26
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -11936,7 +12356,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "325a",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -11984,8 +12404,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12019,7 +12439,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "350r",
     "source": "ptu",
     "armor": {
-      "hp": 2400,
+      "hp": 1920,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -12067,8 +12487,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12102,14 +12522,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "400i",
     "source": "ptu",
     "armor": {
-      "hp": 12600,
+      "hp": 13440,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 63
+        "deflectionThreshold": 95
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 50
+        "deflectionThreshold": 90
       }
     },
     "hull": {
@@ -12135,7 +12555,7 @@ export const erkulPtuShipDefenseProfiles = [
       ],
       "hasBespokeShield": false,
       "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+        "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\",\"subType\":\"$editable\"}],\"maxSize\":3,\"minSize\":3}"
       ],
       "physical": {
         "resistance": {
@@ -12149,8 +12569,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12184,14 +12604,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "600i",
     "source": "ptu",
     "armor": {
-      "hp": 19500,
+      "hp": 15600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 72
+        "deflectionThreshold": 270
       }
     },
     "hull": {
@@ -12232,8 +12652,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12267,14 +12687,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "600i Exec. Edition",
     "source": "ptu",
     "armor": {
-      "hp": 19500,
+      "hp": 15600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 72
+        "deflectionThreshold": 270
       }
     },
     "hull": {
@@ -12315,8 +12735,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12350,14 +12770,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "600i Touring",
     "source": "ptu",
     "armor": {
-      "hp": 19500,
+      "hp": 15600,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 90
+        "deflectionThreshold": 315
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 72
+        "deflectionThreshold": 270
       }
     },
     "hull": {
@@ -12398,8 +12818,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12433,7 +12853,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "85X Limited",
     "source": "ptu",
     "armor": {
-      "hp": 3000,
+      "hp": 2400,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -12480,8 +12900,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12515,14 +12935,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "890 Jump",
     "source": "ptu",
     "armor": {
-      "hp": 40800,
+      "hp": 32640,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 108
+        "deflectionThreshold": 405
       },
       "energy": {
         "damageMultiplier": 1.08,
-        "deflectionThreshold": 86
+        "deflectionThreshold": 342
       }
     },
     "hull": {
@@ -12548,8 +12968,8 @@ export const erkulPtuShipDefenseProfiles = [
       ],
       "hasBespokeShield": false,
       "rawShieldRecords": [
-        "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
-        "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
+        "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
       ],
       "physical": {
         "resistance": {
@@ -12563,8 +12983,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.6,
-          "max": -0.2
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12598,7 +13018,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "M50 Interceptor",
     "source": "ptu",
     "armor": {
-      "hp": 1200,
+      "hp": 960,
       "physical": {
         "damageMultiplier": 0.9,
         "deflectionThreshold": 9
@@ -12645,8 +13065,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12680,7 +13100,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "X1",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -12753,7 +13173,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "X1 Force",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -12800,8 +13220,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12835,7 +13255,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "X1 Velocity",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -12908,14 +13328,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Apollo Medivac",
     "source": "ptu",
     "armor": {
-      "hp": 16335,
+      "hp": 17424,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 81
+        "deflectionThreshold": 121
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 65
+        "deflectionThreshold": 116
       }
     },
     "hull": {
@@ -12958,8 +13378,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -12993,14 +13413,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Apollo Triage",
     "source": "ptu",
     "armor": {
-      "hp": 14850,
+      "hp": 15840,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13043,8 +13463,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13075,10 +13495,10 @@ export const erkulPtuShipDefenseProfiles = [
   },
   {
     "id": "rsi_aurora_gs_lx",
-    "name": "Aurora Mk I LX",
+    "name": "Aurora LX",
     "source": "ptu",
     "armor": {
-      "hp": 4800,
+      "hp": 3840,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 11
@@ -13126,8 +13546,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.97,
-          "max": -0.32
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13158,10 +13578,10 @@ export const erkulPtuShipDefenseProfiles = [
   },
   {
     "id": "rsi_aurora_gs_cl",
-    "name": "Aurora Mk I CL",
+    "name": "Aurora CL",
     "source": "ptu",
     "armor": {
-      "hp": 4800,
+      "hp": 3840,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 11
@@ -13209,8 +13629,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13241,10 +13661,10 @@ export const erkulPtuShipDefenseProfiles = [
   },
   {
     "id": "rsi_aurora_gs_es",
-    "name": "Aurora Mk I ES",
+    "name": "Aurora ES",
     "source": "ptu",
     "armor": {
-      "hp": 4800,
+      "hp": 3840,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 11
@@ -13292,8 +13712,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.9,
-          "max": -0.3
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13324,10 +13744,10 @@ export const erkulPtuShipDefenseProfiles = [
   },
   {
     "id": "rsi_aurora_gs_ln",
-    "name": "Aurora Mk I LN",
+    "name": "Aurora LN",
     "source": "ptu",
     "armor": {
-      "hp": 4800,
+      "hp": 3840,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 11
@@ -13375,8 +13795,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.4,
-          "max": -0.13
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13410,7 +13830,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Aurora MR",
     "source": "ptu",
     "armor": {
-      "hp": 4800,
+      "hp": 3840,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 11
@@ -13458,8 +13878,174 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "rsi_aurora_gs_ln",
+    "name": "Aurora Mk I SE",
+    "source": "ptu",
+    "armor": {
+      "hp": 3840,
+      "physical": {
+        "damageMultiplier": 0.86,
+        "deflectionThreshold": 11
+      },
+      "energy": {
+        "damageMultiplier": 1.35,
+        "deflectionThreshold": 9
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "334e6cb2-5e77-4bc8-bd92-d756848f050b"
+      ],
+      "installedShieldNames": [
+        "SecureHyde"
+      ],
+      "installedShieldClass": [
+        "Military"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0.75,
+          "max": 0.95
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 0.41250000000000003
+        },
+        "energy": {
+          "min": 0,
+          "max": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "ec956be2-8e3a-460d-b3a8-97df4cb12b78",
+    "name": "Aurora Mk II",
+    "source": "ptu",
+    "armor": {
+      "hp": 3840,
+      "physical": {
+        "damageMultiplier": 0.86,
+        "deflectionThreshold": 11
+      },
+      "energy": {
+        "damageMultiplier": 1.35,
+        "deflectionThreshold": 9
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 2,
+      "size": 1,
+      "installedShieldIds": [
+        "9d309719-800c-4d42-946e-fa6c240bc2df"
+      ],
+      "installedShieldNames": [
+        "5SA 'Rhada'"
+      ],
+      "installedShieldClass": [
+        "Civilian"
+      ],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [
+        "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+        "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+      ],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0.25
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0.45
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13493,14 +14079,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Constellation Andr.",
     "source": "ptu",
     "armor": {
-      "hp": 18900,
+      "hp": 20160,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13540,8 +14126,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13575,14 +14161,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Constellation Aqlla.",
     "source": "ptu",
     "armor": {
-      "hp": 18900,
+      "hp": 20160,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13622,8 +14208,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13657,14 +14243,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Constellation Phnx.",
     "source": "ptu",
     "armor": {
-      "hp": 12600,
+      "hp": 13440,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.35,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13704,8 +14290,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13739,14 +14325,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Constelltn. PhnxEmr.",
     "source": "ptu",
     "armor": {
-      "hp": 12600,
+      "hp": 13440,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.35,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13786,8 +14372,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13821,14 +14407,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Constellation Tau.",
     "source": "ptu",
     "armor": {
-      "hp": 12600,
+      "hp": 13440,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.35,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13868,8 +14454,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13903,14 +14489,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Hermes",
     "source": "ptu",
     "armor": {
-      "hp": 14850,
+      "hp": 15840,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 116
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 110
       }
     },
     "hull": {
@@ -13953,8 +14539,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -13988,7 +14574,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mantis",
     "source": "ptu",
     "armor": {
-      "hp": 7200,
+      "hp": 5760,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 22
@@ -14036,8 +14622,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14071,7 +14657,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Unknown Ship",
     "source": "ptu",
     "armor": {
-      "hp": 9000,
+      "hp": 7200,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 22
@@ -14119,8 +14705,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14154,14 +14740,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Perseus",
     "source": "ptu",
     "armor": {
-      "hp": 60840,
+      "hp": 48672,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 132
+        "deflectionThreshold": 495
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 106
+        "deflectionThreshold": 418
       }
     },
     "hull": {
@@ -14202,8 +14788,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14237,14 +14823,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Polaris",
     "source": "ptu",
     "armor": {
-      "hp": 61200,
+      "hp": 48960,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 132
+        "deflectionThreshold": 495
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 106
+        "deflectionThreshold": 418
       }
     },
     "hull": {
@@ -14284,8 +14870,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.68,
-          "max": -0.23
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14319,7 +14905,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Salvation",
     "source": "ptu",
     "armor": {
-      "hp": 5610,
+      "hp": 4488,
       "physical": {
         "damageMultiplier": 0.76,
         "deflectionThreshold": 11
@@ -14367,8 +14953,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14402,14 +14988,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Scorpius",
     "source": "ptu",
     "armor": {
-      "hp": 10800,
+      "hp": 8640,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -14449,8 +15035,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14484,14 +15070,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Scorpius",
     "source": "ptu",
     "armor": {
-      "hp": 10800,
+      "hp": 8640,
       "physical": {
         "damageMultiplier": 0.81,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.28,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -14531,8 +15117,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14566,14 +15152,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Zeus Mk II CL",
     "source": "ptu",
     "armor": {
-      "hp": 14400,
+      "hp": 11520,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.35,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -14615,8 +15201,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14650,14 +15236,14 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Zeus Mk II ES",
     "source": "ptu",
     "armor": {
-      "hp": 14400,
+      "hp": 11520,
       "physical": {
         "damageMultiplier": 0.86,
-        "deflectionThreshold": 77
+        "deflectionThreshold": 50
       },
       "energy": {
         "damageMultiplier": 1.35,
-        "deflectionThreshold": 62
+        "deflectionThreshold": 40
       }
     },
     "hull": {
@@ -14700,8 +15286,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.58,
-          "max": -0.19
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14735,7 +15321,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Scythe",
     "source": "ptu",
     "armor": {
-      "hp": 8250,
+      "hp": 6600,
       "physical": {
         "damageMultiplier": 0.72,
         "deflectionThreshold": 22
@@ -14783,8 +15369,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.37,
-          "max": -0.12
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14818,7 +15404,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ballista",
     "source": "ptu",
     "armor": {
-      "hp": 2681,
+      "hp": 2145,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 6
@@ -14866,8 +15452,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14901,7 +15487,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ballista Dunestalker",
     "source": "ptu",
     "armor": {
-      "hp": 2681,
+      "hp": 2145,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 6
@@ -14949,8 +15535,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -14984,7 +15570,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ballista Snowblind",
     "source": "ptu",
     "armor": {
-      "hp": 2681,
+      "hp": 2145,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 6
@@ -15032,8 +15618,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15067,7 +15653,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Centurion",
     "source": "ptu",
     "armor": {
-      "hp": 2681,
+      "hp": 2145,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 6
@@ -15115,8 +15701,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15150,7 +15736,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Spartan",
     "source": "ptu",
     "armor": {
-      "hp": 2681,
+      "hp": 2145,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 6
@@ -15198,8 +15784,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.67,
-          "max": -0.22
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15233,7 +15819,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "CSV-SM",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -15280,8 +15866,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15315,7 +15901,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Mule",
     "source": "ptu",
     "armor": {
-      "hp": 2925,
+      "hp": 2340,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 9
@@ -15388,7 +15974,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Unknown Ship",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 5
@@ -15435,8 +16021,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15470,7 +16056,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Unknown Ship",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 5
@@ -15517,8 +16103,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15625,7 +16211,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Greycat ROC",
     "source": "ptu",
     "armor": {
-      "hp": 2486,
+      "hp": 1989,
       "physical": {
         "damageMultiplier": 0.68,
         "deflectionThreshold": 5
@@ -15698,7 +16284,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Greycat ROC-DS",
     "source": "ptu",
     "armor": {
-      "hp": 2486,
+      "hp": 1989,
       "physical": {
         "damageMultiplier": 0.68,
         "deflectionThreshold": 5
@@ -15771,7 +16357,80 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Greycat STV",
     "source": "ptu",
     "armor": {
-      "hp": 1463,
+      "hp": 1170,
+      "physical": {
+        "damageMultiplier": 0.77,
+        "deflectionThreshold": 5
+      },
+      "energy": {
+        "damageMultiplier": 1.22,
+        "deflectionThreshold": 4
+      }
+    },
+    "hull": {
+      "hp": 1,
+      "physical": {
+        "damageMultiplier": 1
+      },
+      "energy": {
+        "damageMultiplier": 1
+      }
+    },
+    "shields": {
+      "count": 0,
+      "size": 0,
+      "installedShieldIds": [],
+      "installedShieldNames": [],
+      "hasBespokeShield": false,
+      "rawShieldRecords": [],
+      "physical": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0
+        }
+      },
+      "energy": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 0,
+          "max": 0
+        }
+      },
+      "distortion": {
+        "resistance": {
+          "min": 0,
+          "max": 0
+        },
+        "absorption": {
+          "min": 1,
+          "max": 1
+        }
+      },
+      "passThrough": {
+        "physical": {
+          "min": 1,
+          "max": 1
+        },
+        "energy": {
+          "min": 1,
+          "max": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "grin_utv",
+    "name": "UTV",
+    "source": "ptu",
+    "armor": {
+      "hp": 1170,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 5
@@ -15844,7 +16503,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Lynx",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 6
@@ -15891,8 +16550,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -15926,7 +16585,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ursa",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 6
@@ -15973,8 +16632,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16008,7 +16667,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ursa Fortuna",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 6
@@ -16055,8 +16714,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16090,7 +16749,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Ursa Medivac",
     "source": "ptu",
     "armor": {
-      "hp": 1950,
+      "hp": 1560,
       "physical": {
         "damageMultiplier": 0.86,
         "deflectionThreshold": 6
@@ -16137,8 +16796,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16172,7 +16831,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16219,8 +16878,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16254,7 +16913,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone AA",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16301,8 +16960,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16336,7 +16995,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone MT",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16383,8 +17042,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16418,7 +17077,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone RC",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16465,8 +17124,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16500,7 +17159,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone RN",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16547,8 +17206,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16582,7 +17241,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Cyclone",
     "source": "ptu",
     "armor": {
-      "hp": 1625,
+      "hp": 1300,
       "physical": {
         "damageMultiplier": 0.81,
         "deflectionThreshold": 5
@@ -16629,8 +17288,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16664,7 +17323,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Nova",
     "source": "ptu",
     "armor": {
-      "hp": 4875,
+      "hp": 3900,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 10
@@ -16713,8 +17372,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16748,7 +17407,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Storm",
     "source": "ptu",
     "armor": {
-      "hp": 4875,
+      "hp": 3900,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 10
@@ -16795,8 +17454,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,
@@ -16830,7 +17489,7 @@ export const erkulPtuShipDefenseProfiles = [
     "name": "Storm AA",
     "source": "ptu",
     "armor": {
-      "hp": 4875,
+      "hp": 3900,
       "physical": {
         "damageMultiplier": 0.77,
         "deflectionThreshold": 10
@@ -16877,8 +17536,8 @@ export const erkulPtuShipDefenseProfiles = [
       },
       "energy": {
         "resistance": {
-          "min": -0.86,
-          "max": -0.29
+          "min": 0,
+          "max": 0
         },
         "absorption": {
           "min": 1,

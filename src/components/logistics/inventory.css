@@ -333,6 +333,84 @@
   text-transform: uppercase;
 }
 
+.logi-location-more--btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.18rem 0.28rem;
+}
+
+.logi-location-more--btn:hover {
+  color: rgba(246,199,111,0.88);
+}
+
+.logi-location-stack-row--editing {
+  grid-template-columns: minmax(0, 1fr) auto;
+  height: auto;
+  min-height: 36px;
+  padding: 0.3rem 0.42rem;
+  border-color: rgba(251, 191, 36, 0.22);
+  background: rgba(251, 191, 36, 0.025);
+}
+
+.logi-stack-edit-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.72rem;
+  color: rgba(231,237,255,0.76);
+}
+
+.logi-stack-edit-fields {
+  display: flex;
+  gap: 0.28rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logi-stack-edit-input::-webkit-outer-spin-button,
+.logi-stack-edit-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.logi-stack-edit-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.logi-stack-edit-input {
+  height: 24px;
+  padding: 0 0.36rem;
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 6px;
+  background: rgba(2, 6, 23, 0.56);
+  color: #e7edff;
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  width: 52px;
+  text-align: right;
+}
+
+.logi-stack-edit-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.42);
+}
+
+.logi-stack-edit-input--wide {
+  width: 90px;
+  text-align: left;
+}
+
+.logi-card-save-btn {
+  color: var(--inv-green) !important;
+  border-color: rgba(52, 211, 153, 0.28) !important;
+}
+
 .logi-location-empty-state {
   flex: 1;
   display: grid;

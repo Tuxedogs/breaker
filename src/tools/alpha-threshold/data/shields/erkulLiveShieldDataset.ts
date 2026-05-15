@@ -13,8 +13,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.49,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -46,8 +46,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -79,8 +79,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.44,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -112,8 +112,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.44,
-        "max": -0.15
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -145,41 +145,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.44,
-        "max": -0.15
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "624e6c75-afd8-4606-a10e-45d12cb3c882",
-    "ref": "624e6c75-afd8-4606-a10e-45d12cb3c882",
-    "localName": "shld_basl_s01_bulwark_scitem",
-    "name": "Bulwark",
-    "size": 1,
-    "shieldClass": "Industrial",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -211,8 +178,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "624e6c75-afd8-4606-a10e-45d12cb3c882",
+    "ref": "624e6c75-afd8-4606-a10e-45d12cb3c882",
+    "localName": "shld_basl_s01_bulwark_scitem",
+    "name": "Bulwark",
+    "size": 1,
+    "shieldClass": "Industrial",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -244,8 +244,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -277,41 +277,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "0baaf20a-460e-4668-84f2-d09f9d31b492",
-    "ref": "0baaf20a-460e-4668-84f2-d09f9d31b492",
-    "localName": "shld_godi_s01_fr66_scitem",
-    "name": "FR-66",
-    "size": 1,
-    "shieldClass": "Military",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -343,8 +310,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.36,
-        "max": -0.12
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "0baaf20a-460e-4668-84f2-d09f9d31b492",
+    "ref": "0baaf20a-460e-4668-84f2-d09f9d31b492",
+    "localName": "shld_godi_s01_fr66_scitem",
+    "name": "FR-66",
+    "size": 1,
+    "shieldClass": "Military",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -376,41 +376,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "4323ef0d-778f-4e8f-89e8-bbe3d33f5f08",
-    "ref": "4323ef0d-778f-4e8f-89e8-bbe3d33f5f08",
-    "localName": "shld_seco_s01_ink_scitem",
-    "name": "INK",
-    "size": 1,
-    "shieldClass": "Civilian",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -442,8 +409,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "4323ef0d-778f-4e8f-89e8-bbe3d33f5f08",
+    "ref": "4323ef0d-778f-4e8f-89e8-bbe3d33f5f08",
+    "localName": "shld_seco_s01_ink_scitem",
+    "name": "INK",
+    "size": 1,
+    "shieldClass": "Civilian",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -475,41 +475,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.3,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "15ebdff2-2724-4fb3-abbf-db20e150da77",
-    "ref": "15ebdff2-2724-4fb3-abbf-db20e150da77",
-    "localName": "shld_basl_s01_palisade_scitem",
-    "name": "Palisade",
-    "size": 1,
-    "shieldClass": "Industrial",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -541,8 +508,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "15ebdff2-2724-4fb3-abbf-db20e150da77",
+    "ref": "15ebdff2-2724-4fb3-abbf-db20e150da77",
+    "localName": "shld_basl_s01_palisade_scitem",
+    "name": "Palisade",
+    "size": 1,
+    "shieldClass": "Industrial",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -574,8 +574,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -607,41 +607,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.48,
-        "max": -0.16
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "f8d44a06-9b5e-49c1-a578-8e45386c2539",
-    "ref": "f8d44a06-9b5e-49c1-a578-8e45386c2539",
-    "localName": "shld_banu_s01_placeholder_scitem",
-    "name": "Suldrath",
-    "size": 1,
-    "shieldClass": "Military",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.47,
-        "max": -0.16
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -673,8 +640,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.46,
-        "max": -0.15
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "f8d44a06-9b5e-49c1-a578-8e45386c2539",
+    "ref": "f8d44a06-9b5e-49c1-a578-8e45386c2539",
+    "localName": "shld_banu_s01_placeholder_scitem",
+    "name": "Suldrath",
+    "size": 1,
+    "shieldClass": "Military",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -706,41 +706,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "6be9c02c-ff32-483f-a6f8-d984dcb97c40",
-    "ref": "6be9c02c-ff32-483f-a6f8-d984dcb97c40",
-    "localName": "shld_seco_s01_web_scitem",
-    "name": "WEB",
-    "size": 1,
-    "shieldClass": "Civilian",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.3,
-        "max": -0.1
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -772,8 +739,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.47,
-        "max": -0.16
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "6be9c02c-ff32-483f-a6f8-d984dcb97c40",
+    "ref": "6be9c02c-ff32-483f-a6f8-d984dcb97c40",
+    "localName": "shld_seco_s01_web_scitem",
+    "name": "WEB",
+    "size": 1,
+    "shieldClass": "Civilian",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -805,41 +805,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "fb145cc4-2e30-44a0-865d-b9ea0e40fae1",
-    "ref": "fb145cc4-2e30-44a0-865d-b9ea0e40fae1",
-    "localName": "shld_behr_s02_7ma_scitem",
-    "name": "7MA 'Lorica'",
-    "size": 2,
-    "shieldClass": "Civilian",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.19,
-        "max": -0.06
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -871,8 +838,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "fb145cc4-2e30-44a0-865d-b9ea0e40fae1",
+    "ref": "fb145cc4-2e30-44a0-865d-b9ea0e40fae1",
+    "localName": "shld_behr_s02_7ma_scitem",
+    "name": "7MA 'Lorica'",
+    "size": 2,
+    "shieldClass": "Civilian",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -904,8 +904,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -937,41 +937,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "cd1ed528-ce0f-4aaa-8ae3-370c48f97d9f",
-    "ref": "cd1ed528-ce0f-4aaa-8ae3-370c48f97d9f",
-    "localName": "shld_seco_s02_bloc_scitem",
-    "name": "BLOC",
-    "size": 2,
-    "shieldClass": "Civilian",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1003,8 +970,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "cd1ed528-ce0f-4aaa-8ae3-370c48f97d9f",
+    "ref": "cd1ed528-ce0f-4aaa-8ae3-370c48f97d9f",
+    "localName": "shld_seco_s02_bloc_scitem",
+    "name": "BLOC",
+    "size": 2,
+    "shieldClass": "Civilian",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1036,8 +1036,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1069,8 +1069,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.19,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1102,8 +1102,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.19,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1135,8 +1135,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1168,41 +1168,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "a4ce7916-5eeb-4b40-af71-8558f246e5e5",
-    "ref": "a4ce7916-5eeb-4b40-af71-8558f246e5e5",
-    "localName": "shld_basl_s02_rampart_scitem",
-    "name": "Rampart",
-    "size": 2,
-    "shieldClass": "Industrial",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1234,8 +1201,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "a4ce7916-5eeb-4b40-af71-8558f246e5e5",
+    "ref": "a4ce7916-5eeb-4b40-af71-8558f246e5e5",
+    "localName": "shld_basl_s02_rampart_scitem",
+    "name": "Rampart",
+    "size": 2,
+    "shieldClass": "Industrial",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1267,8 +1267,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1300,41 +1300,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.18,
-        "max": -0.06
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "b097ed3e-ee5e-4f18-ae79-dcf49687e27d",
-    "ref": "b097ed3e-ee5e-4f18-ae79-dcf49687e27d",
-    "localName": "shld_asas_s02_shroud_scitem",
-    "name": "Shroud",
-    "size": 2,
-    "shieldClass": "Stealth",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1366,8 +1333,41 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.29,
-        "max": -0.1
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "b097ed3e-ee5e-4f18-ae79-dcf49687e27d",
+    "ref": "b097ed3e-ee5e-4f18-ae79-dcf49687e27d",
+    "localName": "shld_asas_s02_shroud_scitem",
+    "name": "Shroud",
+    "size": 2,
+    "shieldClass": "Stealth",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1399,8 +1399,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.17,
-        "max": -0.06
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1432,8 +1432,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1498,8 +1498,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.2,
-        "max": -0.07
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1518,10 +1518,10 @@ export const erkulLiveShieldDataset = [
     }
   },
   {
-    "id": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
-    "ref": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
-    "localName": "shld_behr_s03_6ca_scitem",
-    "name": "6CA 'Bila'",
+    "id": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
+    "ref": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
+    "localName": "shld_behr_s03_5ca_scitem",
+    "name": "5CA 'Akura'",
     "size": 3,
     "shieldClass": "Civilian",
     "isBespoke": false,
@@ -1551,10 +1551,10 @@ export const erkulLiveShieldDataset = [
     }
   },
   {
-    "id": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
-    "ref": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
-    "localName": "shld_behr_s03_5ca_scitem",
-    "name": "5CA 'Akura'",
+    "id": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
+    "ref": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
+    "localName": "shld_behr_s03_6ca_scitem",
+    "name": "6CA 'Bila'",
     "size": 3,
     "shieldClass": "Civilian",
     "isBespoke": false,
@@ -1630,8 +1630,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1696,8 +1696,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1729,8 +1729,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1762,8 +1762,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1795,41 +1795,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  {
-    "id": "2fefe4af-48ca-4044-bb89-11cbdab74bbb",
-    "ref": "2fefe4af-48ca-4044-bb89-11cbdab74bbb",
-    "localName": "shld_godi_s03_securescreen_scitem",
-    "name": "SecureScreen",
-    "size": 3,
-    "shieldClass": "Military",
-    "isBespoke": false,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1881,10 +1848,10 @@ export const erkulLiveShieldDataset = [
     }
   },
   {
-    "id": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
-    "ref": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
-    "localName": "shld_godi_s03_surestop_scitem",
-    "name": "SureStop",
+    "id": "2fefe4af-48ca-4044-bb89-11cbdab74bbb",
+    "ref": "2fefe4af-48ca-4044-bb89-11cbdab74bbb",
+    "localName": "shld_godi_s03_securescreen_scitem",
+    "name": "SecureScreen",
     "size": 3,
     "shieldClass": "Military",
     "isBespoke": false,
@@ -1894,8 +1861,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1920,6 +1887,39 @@ export const erkulLiveShieldDataset = [
     "name": "Stronghold",
     "size": 3,
     "shieldClass": "Industrial",
+    "isBespoke": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  {
+    "id": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
+    "ref": "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa",
+    "localName": "shld_godi_s03_surestop_scitem",
+    "name": "SureStop",
+    "size": 3,
+    "shieldClass": "Military",
     "isBespoke": false,
     "resistance": {
       "physical": {
@@ -1980,21 +1980,21 @@ export const erkulLiveShieldDataset = [
     }
   },
   {
-    "id": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
-    "ref": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
-    "localName": "shld_rsi_s04_polaris_scitem",
+    "id": "6fc982c0-2747-42b7-a628-7c76ecedf732",
+    "ref": "6fc982c0-2747-42b7-a628-7c76ecedf732",
+    "localName": "shld_orig_s04_890j_scitem",
     "name": "Glacis",
     "size": 4,
     "shieldClass": "Industrial",
-    "isBespoke": true,
+    "isBespoke": false,
     "resistance": {
       "physical": {
         "min": 0,
         "max": 0.25
       },
       "energy": {
-        "min": 0.04,
-        "max": 0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2013,21 +2013,21 @@ export const erkulLiveShieldDataset = [
     }
   },
   {
-    "id": "6fc982c0-2747-42b7-a628-7c76ecedf732",
-    "ref": "6fc982c0-2747-42b7-a628-7c76ecedf732",
-    "localName": "shld_orig_s04_890j_scitem",
+    "id": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
+    "ref": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
+    "localName": "shld_rsi_s04_polaris_scitem",
     "name": "Glacis",
     "size": 4,
     "shieldClass": "Industrial",
-    "isBespoke": false,
+    "isBespoke": true,
     "resistance": {
       "physical": {
         "min": 0,
         "max": 0.25
       },
       "energy": {
-        "min": 0.04,
-        "max": 0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2059,8 +2059,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2092,8 +2092,8 @@ export const erkulLiveShieldDataset = [
         "max": 0.25
       },
       "energy": {
-        "min": 0.03,
-        "max": 0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,

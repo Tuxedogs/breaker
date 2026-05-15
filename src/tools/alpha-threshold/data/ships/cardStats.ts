@@ -145,8 +145,8 @@ export const shipCardStats = {
   },
   "aegs::hammerhead": {
     "scmSpeed": 160,
-    "navSpeed": 950,
-    "boostSpeedForward": 320,
+    "navSpeed": 1000,
+    "boostSpeedForward": 340,
     "boostSpeedBackward": 170,
     "forwardGs": 5.22,
     "reverseGs": 2.09,
@@ -340,6 +340,24 @@ export const shipCardStats = {
     "boostRoll": 51.6,
     "noiseCount": 5,
     "decoyCount": 48
+  },
+  "aegs::tiburon": {
+    "scmSpeed": 150,
+    "navSpeed": 975,
+    "boostSpeedForward": 330,
+    "boostSpeedBackward": 160,
+    "forwardGs": 5.28,
+    "reverseGs": 2.11,
+    "boostForwardGs": 7.91,
+    "boostReverseGs": 2.53,
+    "pitch": 13,
+    "yaw": 20,
+    "roll": 13,
+    "boostPitch": 19.5,
+    "boostYaw": 40,
+    "boostRoll": 19.5,
+    "noiseCount": 24,
+    "decoyCount": 50
   },
   "aegs::vanguard_harbinger": {
     "scmSpeed": 212,
@@ -1498,10 +1516,10 @@ export const shipCardStats = {
     "navSpeed": 900,
     "boostSpeedForward": 300,
     "boostSpeedBackward": 120,
-    "forwardGs": 3.98,
+    "forwardGs": 4.22,
     "reverseGs": 1.7,
-    "boostForwardGs": 5.37,
-    "boostReverseGs": 2.39,
+    "boostForwardGs": 5.69,
+    "boostReverseGs": 2.38,
     "pitch": 16,
     "yaw": 25,
     "roll": 16,
@@ -1516,10 +1534,10 @@ export const shipCardStats = {
     "navSpeed": 900,
     "boostSpeedForward": 300,
     "boostSpeedBackward": 120,
-    "forwardGs": 3.98,
+    "forwardGs": 4.22,
     "reverseGs": 1.7,
-    "boostForwardGs": 5.37,
-    "boostReverseGs": 2.39,
+    "boostForwardGs": 5.69,
+    "boostReverseGs": 2.38,
     "pitch": 16,
     "yaw": 25,
     "roll": 16,
@@ -1528,6 +1546,24 @@ export const shipCardStats = {
     "boostRoll": 19.2,
     "noiseCount": 10,
     "decoyCount": 25
+  },
+  "drak::command_module": {
+    "scmSpeed": 200,
+    "navSpeed": 1100,
+    "boostSpeedForward": 350,
+    "boostSpeedBackward": 220,
+    "forwardGs": 5.36,
+    "reverseGs": 4.02,
+    "boostForwardGs": 7.5,
+    "boostReverseGs": 5.43,
+    "pitch": 25,
+    "yaw": 80,
+    "roll": 25,
+    "boostPitch": 30,
+    "boostYaw": 96,
+    "boostRoll": 30,
+    "noiseCount": 10,
+    "decoyCount": 96
   },
   "drak::corsair": {
     "scmSpeed": 190,
@@ -1799,6 +1835,60 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
+  "drak::ironclad": {
+    "scmSpeed": 110,
+    "navSpeed": 900,
+    "boostSpeedForward": 290,
+    "boostSpeedBackward": 130,
+    "forwardGs": 5.26,
+    "reverseGs": 6.54,
+    "boostForwardGs": 7.1,
+    "boostReverseGs": 9.16,
+    "pitch": 10,
+    "yaw": 17,
+    "roll": 10,
+    "boostPitch": 12,
+    "boostYaw": 20.4,
+    "boostRoll": 12,
+    "noiseCount": 30,
+    "decoyCount": 60
+  },
+  "drak::ironclad_assault": {
+    "scmSpeed": 130,
+    "navSpeed": 940,
+    "boostSpeedForward": 320,
+    "boostSpeedBackward": 150,
+    "forwardGs": 5.55,
+    "reverseGs": 2.42,
+    "boostForwardGs": 7.49,
+    "boostReverseGs": 3.39,
+    "pitch": 12,
+    "yaw": 17,
+    "roll": 9,
+    "boostPitch": 14.4,
+    "boostYaw": 20.4,
+    "boostRoll": 10.8,
+    "noiseCount": 30,
+    "decoyCount": 60
+  },
+  "drak::pitbull": {
+    "scmSpeed": 232,
+    "navSpeed": 1275,
+    "boostSpeedForward": 555,
+    "boostSpeedBackward": 270,
+    "forwardGs": 20.05,
+    "reverseGs": 5.86,
+    "boostForwardGs": 31.08,
+    "boostReverseGs": 8.2,
+    "pitch": 77,
+    "yaw": 220,
+    "roll": 62,
+    "boostPitch": 92.4,
+    "boostYaw": 264,
+    "boostRoll": 74.4,
+    "noiseCount": 8,
+    "decoyCount": 24
+  },
   "drak::vulture": {
     "scmSpeed": 200,
     "navSpeed": 1100,
@@ -2016,6 +2106,24 @@ export const shipCardStats = {
     "decoyCount": null
   },
   "grin::mtc": {
+    "scmSpeed": null,
+    "navSpeed": null,
+    "boostSpeedForward": null,
+    "boostSpeedBackward": null,
+    "forwardGs": null,
+    "reverseGs": null,
+    "boostForwardGs": null,
+    "boostReverseGs": null,
+    "pitch": null,
+    "yaw": null,
+    "roll": null,
+    "boostPitch": null,
+    "boostYaw": null,
+    "boostRoll": null,
+    "noiseCount": null,
+    "decoyCount": null
+  },
+  "grin::utv": {
     "scmSpeed": null,
     "navSpeed": null,
     "boostSpeedForward": null,
@@ -2285,6 +2393,24 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
+  "misc::hull_b": {
+    "scmSpeed": 145,
+    "navSpeed": 960,
+    "boostSpeedForward": 340,
+    "boostSpeedBackward": 180,
+    "forwardGs": 6.15,
+    "reverseGs": 3.77,
+    "boostForwardGs": 8.62,
+    "boostReverseGs": 5.28,
+    "pitch": 33,
+    "yaw": 90,
+    "roll": 33,
+    "boostPitch": 39.6,
+    "boostYaw": 108,
+    "boostRoll": 39.6,
+    "noiseCount": 5,
+    "decoyCount": 48
+  },
   "misc::hull_c": {
     "scmSpeed": 110,
     "navSpeed": 890,
@@ -2518,6 +2644,24 @@ export const shipCardStats = {
     "boostRoll": 32.4,
     "noiseCount": 60,
     "decoyCount": 100
+  },
+  "misc::starlite": {
+    "scmSpeed": 150,
+    "navSpeed": 970,
+    "boostSpeedForward": 340,
+    "boostSpeedBackward": 160,
+    "forwardGs": 4.3,
+    "reverseGs": 3.22,
+    "boostForwardGs": 6.01,
+    "boostReverseGs": 4.51,
+    "pitch": 35,
+    "yaw": 80,
+    "roll": 35,
+    "boostPitch": 42,
+    "boostYaw": 96,
+    "boostRoll": 42,
+    "noiseCount": 5,
+    "decoyCount": 48
   },
   "mrai::guardian": {
     "scmSpeed": 213,
@@ -2861,6 +3005,24 @@ export const shipCardStats = {
     "noiseCount": 2,
     "decoyCount": 24
   },
+  "orig::m80": {
+    "scmSpeed": 225,
+    "navSpeed": 1400,
+    "boostSpeedForward": 560,
+    "boostSpeedBackward": 250,
+    "forwardGs": 15.76,
+    "reverseGs": 3.88,
+    "boostForwardGs": 26.01,
+    "boostReverseGs": 5.05,
+    "pitch": 38,
+    "yaw": 150,
+    "roll": 30,
+    "boostPitch": 45.6,
+    "boostYaw": 180,
+    "boostRoll": 36,
+    "noiseCount": 5,
+    "decoyCount": 48
+  },
   "orig::x1": {
     "scmSpeed": 207,
     "navSpeed": 569,
@@ -2951,7 +3113,7 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
-  "rsi::aurora_mk_i_cl": {
+  "rsi::aurora_cl": {
     "scmSpeed": 220,
     "navSpeed": 1150,
     "boostSpeedForward": 440,
@@ -2969,7 +3131,7 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
-  "rsi::aurora_mk_i_es": {
+  "rsi::aurora_es": {
     "scmSpeed": 222,
     "navSpeed": 1180,
     "boostSpeedForward": 440,
@@ -2987,7 +3149,7 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
-  "rsi::aurora_mk_i_ln": {
+  "rsi::aurora_ln": {
     "scmSpeed": 225,
     "navSpeed": 1200,
     "boostSpeedForward": 450,
@@ -3005,7 +3167,7 @@ export const shipCardStats = {
     "noiseCount": 5,
     "decoyCount": 48
   },
-  "rsi::aurora_mk_i_lx": {
+  "rsi::aurora_lx": {
     "scmSpeed": 222,
     "navSpeed": 1250,
     "boostSpeedForward": 440,

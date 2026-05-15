@@ -13,8 +13,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -46,8 +46,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -79,8 +79,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -112,8 +112,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.55,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -145,8 +145,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.53,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -178,8 +178,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -211,8 +211,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -244,8 +244,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.8,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -277,8 +277,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -1,
-        "max": -0.33
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -310,8 +310,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -343,8 +343,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -376,8 +376,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.63,
-        "max": -0.21
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -409,8 +409,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -442,8 +442,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -475,8 +475,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.93,
-        "max": -0.31
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -508,8 +508,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.71,
-        "max": -0.24
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -541,8 +541,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.6,
-        "max": -0.2
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -574,8 +574,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -607,8 +607,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -640,8 +640,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.7,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -673,8 +673,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.66,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -706,8 +706,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -739,8 +739,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -772,8 +772,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -805,8 +805,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -838,8 +838,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.55,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -871,8 +871,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.53,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -904,8 +904,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.7,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -937,8 +937,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -970,8 +970,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -1,
-        "max": -0.33
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1003,8 +1003,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1036,8 +1036,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.63,
-        "max": -0.21
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1069,8 +1069,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1102,8 +1102,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1135,8 +1135,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1168,8 +1168,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.93,
-        "max": -0.31
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1201,8 +1201,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1234,8 +1234,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.6,
-        "max": -0.2
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1267,8 +1267,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1300,8 +1300,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1333,8 +1333,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1366,8 +1366,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.8,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1399,8 +1399,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1432,8 +1432,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.66,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1465,8 +1465,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1498,8 +1498,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.71,
-        "max": -0.24
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1531,8 +1531,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1564,8 +1564,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.55,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1597,8 +1597,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.53,
-        "max": -0.18
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1630,8 +1630,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1663,8 +1663,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.63,
-        "max": -0.21
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1696,8 +1696,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1729,8 +1729,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1762,8 +1762,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1795,8 +1795,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1828,8 +1828,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.6,
-        "max": -0.2
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1861,8 +1861,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1894,8 +1894,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1927,8 +1927,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1960,41 +1960,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.7,
-        "max": -0.23
-      },
-      "distortion": {
-        "min": 0.75,
-        "max": 0.95
-      }
-    },
-    "absorption": {
-      "physical": {
         "min": 0,
-        "max": 0.45
-      },
-      "energy": {
-        "min": 1,
-        "max": 1
-      }
-    }
-  },
-  "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce": {
-    "id": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
-    "ref": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
-    "localName": "shld_rsi_s04_polaris_scitem",
-    "name": "Glacis",
-    "size": 4,
-    "shieldClass": "Industrial",
-    "isBespoke": true,
-    "resistance": {
-      "physical": {
-        "min": 0,
-        "max": 0.25
-      },
-      "energy": {
-        "min": -0.68,
-        "max": -0.23
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2026,8 +1993,41 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.6,
-        "max": -0.2
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce": {
+    "id": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
+    "ref": "d9870a05-1a66-4a9a-bec6-30eb67e3a3ce",
+    "localName": "shld_rsi_s04_polaris_scitem",
+    "name": "Glacis",
+    "size": 4,
+    "shieldClass": "Industrial",
+    "isBespoke": true,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2059,8 +2059,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2092,8 +2092,8 @@ export const erkulPtuShieldLookupByRef = {
         "max": 0.25
       },
       "energy": {
-        "min": -0.68,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,

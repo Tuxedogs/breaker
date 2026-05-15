@@ -10,9 +10,21 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
-  background: #070b14;
+  background: #000;
+  border: 1px solid rgba(255, 130, 48, 0.14);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
   font-family: var(--font-primary);
   color: var(--text-main);
+}
+
+.panel {
+  background: linear-gradient(180deg, rgba(24, 29, 33, 0.92), rgba(13, 16, 18, 0.96));
+  border: 1px solid rgba(255, 130, 48, 0.14);
+  box-shadow:
+    0 22px 46px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
 /* ── Left sidebar ─────────────────────────────── */
@@ -22,7 +34,7 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  background: #08091280;
+  background: var(--cards-grey);
   border-right: 1px solid rgba(255, 255, 255, 0.06);
   overflow-y: auto;
   scrollbar-width: thin;
@@ -136,7 +148,7 @@
 }
 
 .dash-sidebar-item:hover {
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -180,7 +192,7 @@
   position: fixed;
   transform: translateY(-50%);
   white-space: nowrap;
-  background: linear-gradient(180deg, #181d21 0%, #101417 100%);
+  background: var(--cards-grey);
   color: rgba(255, 255, 255, 0.92);
   border-radius: 6px;
   padding: 0.28rem 0.65rem;
@@ -492,9 +504,8 @@
 
 .dash-content-frame {
   width: 100%;
-  max-width: 1865px;
   min-height: 100%;
-  margin: auto auto auto 0px;
+  margin: auto auto auto auto;
   /* Column flex so children with flex:1 fill the frame height */
   display: flex;
   flex-direction: column;
@@ -703,8 +714,11 @@
 }
 
 .dash-stat-card {
-  background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: #0b111cd6;
+  border: 1px solid rgba(113, 142, 255, 0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 12px 32px rgba(0, 0, 0, 0.38);
   border-radius: 6px;
   padding: 0.9rem 1rem;
   display: flex;
@@ -713,7 +727,9 @@
   gap: 0.5rem;
 }
 
-.dash-stat-main { flex: 1; min-width: 0; }
+
+
+.dash-stat-main { flex: 1; min-width: 0; ;}
 
 .dash-stat-label {
   font-family: var(--font-primary);
@@ -1500,8 +1516,17 @@
 /* ── Right column panels ──────────────────────── */
 
 .dash-panel {
-  background: #0d1117;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(28, 30, 31, 0.96) 0%,
+      rgba(18, 19, 20, 0.98) 48%,
+      rgba(10, 11, 12, 0.99) 100%
+    );
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 12px 32px rgba(0, 0, 0, 0.38);
   border-radius: 6px;
   overflow: hidden;
 }

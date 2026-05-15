@@ -1,5 +1,58 @@
 export const erkulPtuShieldProfiles = [
   {
+    "shipName": "Unknown Ship",
+    "source": "ptu",
+    "shieldCount": 1,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "15ebdff2-2724-4fb3-abbf-db20e150da77"
+    ],
+    "installedShieldNames": [
+      "Palisade"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localReference\":\"15ebdff2-2724-4fb3-abbf-db20e150da77\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "Avenger Stalker",
     "source": "ptu",
     "shieldCount": 2,
@@ -20,8 +73,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -74,8 +127,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -128,8 +181,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -182,8 +235,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -236,8 +289,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -290,8 +343,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -344,8 +397,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -398,8 +451,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -452,8 +505,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -486,6 +539,60 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
+    "shipName": "Hammerhead",
+    "source": "ptu",
+    "shieldCount": 2,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa"
+    ],
+    "installedShieldNames": [
+      "SureStop"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_l\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_r\",\"localReference\":\"925ec9df-cd0d-4c40-a5ad-6d22bdbfdeaa\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+    ]
+  },
+  {
     "shipName": "Idris-M",
     "source": "ptu",
     "shieldCount": 2,
@@ -503,8 +610,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -554,8 +661,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.31,
-        "max": -0.1
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -608,8 +715,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.68,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -661,8 +768,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -719,8 +826,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -777,8 +884,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -831,8 +938,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -885,8 +992,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -939,8 +1046,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -993,8 +1100,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1047,8 +1154,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1101,8 +1208,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1155,8 +1262,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1209,8 +1316,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1263,8 +1370,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1316,8 +1423,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1372,8 +1479,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1425,8 +1532,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1478,8 +1585,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1531,8 +1638,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.63,
-        "max": -0.21
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1585,8 +1692,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.63,
-        "max": -0.21
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1639,8 +1746,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1693,8 +1800,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1747,8 +1854,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1801,8 +1908,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1855,8 +1962,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1909,8 +2016,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -1963,8 +2070,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2018,8 +2125,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2072,8 +2179,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2127,8 +2234,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2181,8 +2288,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2235,8 +2342,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2289,8 +2396,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2343,8 +2450,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2397,8 +2504,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.74,
-        "max": -0.25
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2451,8 +2558,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2504,8 +2611,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2558,8 +2665,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2611,8 +2718,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2664,8 +2771,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2718,8 +2825,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2772,8 +2879,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2826,8 +2933,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2880,8 +2987,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2933,8 +3040,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -2986,8 +3093,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3039,8 +3146,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3092,8 +3199,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3145,8 +3252,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3198,8 +3305,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3253,8 +3360,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3306,8 +3413,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.66,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3359,8 +3466,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3413,8 +3520,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3467,8 +3574,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3521,8 +3628,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -1,
-        "max": -0.33
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3575,8 +3682,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -1,
-        "max": -0.33
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3629,8 +3736,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3658,7 +3765,7 @@ export const erkulPtuShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_01\",\"localReference\":\"6be9c02c-ff32-483f-a6f8-d984dcb97c40\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_02\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
       "{\"itemPortName\":\"hardpoint_shield_generator_03\",\"localName\":\"shld_seco_s01_web_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
     ]
@@ -3684,8 +3791,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3737,8 +3844,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3792,8 +3899,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3846,8 +3953,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3900,8 +4007,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -3953,8 +4060,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4007,8 +4114,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4060,8 +4167,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.34,
-        "max": -0.11
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4114,8 +4221,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4167,8 +4274,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4220,8 +4327,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4275,8 +4382,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4330,8 +4437,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4384,8 +4491,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4437,8 +4544,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4490,8 +4597,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4543,8 +4650,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4596,8 +4703,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4649,8 +4756,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4702,8 +4809,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4755,8 +4862,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4808,8 +4915,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4861,8 +4968,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4914,8 +5021,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -4948,6 +5055,118 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
+    "shipName": "Ironclad",
+    "source": "ptu",
+    "shieldCount": 4,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+    ],
+    "installedShieldNames": [
+      "Stronghold"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
+    "shipName": "Ironclad Assault",
+    "source": "ptu",
+    "shieldCount": 4,
+    "shieldSize": 3,
+    "installedShieldIds": [
+      "3a2e37f0-dc95-4082-b74d-fe968ed64eb3"
+    ],
+    "installedShieldNames": [
+      "Stronghold"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_a\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_b\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_c\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_d\",\"localReference\":\"3a2e37f0-dc95-4082-b74d-fe968ed64eb3\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "Vulture",
     "source": "ptu",
     "shieldCount": 3,
@@ -4968,8 +5187,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5023,8 +5242,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5077,8 +5296,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5131,8 +5350,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5187,8 +5406,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5243,8 +5462,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5297,8 +5516,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5351,8 +5570,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5405,8 +5624,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5459,8 +5678,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5512,8 +5731,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5566,8 +5785,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.82,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5620,8 +5839,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5673,8 +5892,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5726,8 +5945,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5779,8 +5998,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.8,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5832,8 +6051,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -1,
-        "max": -0.33
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5885,8 +6104,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.8,
-        "max": -0.27
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5938,8 +6157,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -5991,8 +6210,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6045,8 +6264,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6098,8 +6317,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6151,8 +6370,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6204,8 +6423,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6257,8 +6476,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6312,8 +6531,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6367,8 +6586,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6422,8 +6641,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6477,8 +6696,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6532,8 +6751,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.7,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6565,6 +6784,62 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
+    "shipName": "Hull B",
+    "source": "ptu",
+    "shieldCount": 4,
+    "shieldSize": 2,
+    "installedShieldIds": [
+      "a7dd60d3-10bf-473d-9de5-747071885573"
+    ],
+    "installedShieldNames": [
+      "Citadel"
+    ],
+    "installedShieldClass": [
+      "Industrial"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_front_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_front_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_rear_left\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_rear_right\",\"localReference\":\"a7dd60d3-10bf-473d-9de5-747071885573\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":2,\"minSize\":2}"
+    ]
+  },
+  {
     "shipName": "Hull C",
     "source": "ptu",
     "shieldCount": 3,
@@ -6585,8 +6860,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6640,8 +6915,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6695,8 +6970,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6749,8 +7024,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6803,8 +7078,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6857,8 +7132,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6911,8 +7186,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -6966,8 +7241,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7021,8 +7296,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7074,8 +7349,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7128,8 +7403,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7181,8 +7456,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7234,8 +7509,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7287,8 +7562,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7341,8 +7616,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.77,
-        "max": -0.26
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7395,8 +7670,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7449,8 +7724,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7503,8 +7778,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7532,7 +7807,7 @@ export const erkulPtuShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":3,\"minSize\":3}"
+      "{\"itemPortName\":\"hardpoint_shield_generator\",\"localName\":\"shld_seco_s03_guard_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\",\"subType\":\"$editable\"}],\"maxSize\":3,\"minSize\":3}"
     ]
   },
   {
@@ -7556,8 +7831,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7610,8 +7885,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7664,8 +7939,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7718,8 +7993,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7771,8 +8046,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.6,
-        "max": -0.2
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7800,8 +8075,8 @@ export const erkulPtuShieldProfiles = [
       }
     },
     "rawShieldRecords": [
-      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
-      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":false,\"editableChildren\":false,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_orig_s04_890j_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":4,\"minSize\":4}"
     ]
   },
   {
@@ -7825,8 +8100,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -7922,8 +8197,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8019,8 +8294,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8075,8 +8350,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8111,7 +8386,7 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
-    "shipName": "Aurora Mk I LX",
+    "shipName": "Aurora LX",
     "source": "ptu",
     "shieldCount": 2,
     "shieldSize": 1,
@@ -8131,8 +8406,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.97,
-        "max": -0.32
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8165,7 +8440,7 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
-    "shipName": "Aurora Mk I CL",
+    "shipName": "Aurora CL",
     "source": "ptu",
     "shieldCount": 2,
     "shieldSize": 1,
@@ -8185,8 +8460,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8219,7 +8494,7 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
-    "shipName": "Aurora Mk I ES",
+    "shipName": "Aurora ES",
     "source": "ptu",
     "shieldCount": 2,
     "shieldSize": 1,
@@ -8239,8 +8514,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.9,
-        "max": -0.3
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8273,7 +8548,7 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
-    "shipName": "Aurora Mk I LN",
+    "shipName": "Aurora LN",
     "source": "ptu",
     "shieldCount": 2,
     "shieldSize": 1,
@@ -8293,8 +8568,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.4,
-        "max": -0.13
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8347,8 +8622,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8381,6 +8656,114 @@ export const erkulPtuShieldProfiles = [
     ]
   },
   {
+    "shipName": "Aurora Mk I SE",
+    "source": "ptu",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "334e6cb2-5e77-4bc8-bd92-d756848f050b"
+    ],
+    "installedShieldNames": [
+      "SecureHyde"
+    ],
+    "installedShieldClass": [
+      "Military"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localName\":\"shld_godi_s01_securehyde_scitem\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}],\"maxSize\":1,\"minSize\":1}"
+    ]
+  },
+  {
+    "shipName": "Aurora Mk II",
+    "source": "ptu",
+    "shieldCount": 2,
+    "shieldSize": 1,
+    "installedShieldIds": [
+      "9d309719-800c-4d42-946e-fa6c240bc2df"
+    ],
+    "installedShieldNames": [
+      "5SA 'Rhada'"
+    ],
+    "installedShieldClass": [
+      "Civilian"
+    ],
+    "hasBespokeShield": false,
+    "resistance": {
+      "physical": {
+        "min": 0,
+        "max": 0.25
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      },
+      "distortion": {
+        "min": 0.75,
+        "max": 0.95
+      }
+    },
+    "absorption": {
+      "physical": {
+        "min": 0,
+        "max": 0.45
+      },
+      "energy": {
+        "min": 1,
+        "max": 1
+      }
+    },
+    "passThrough": {
+      "physical": {
+        "min": 1,
+        "max": 0.41250000000000003
+      },
+      "energy": {
+        "min": 0,
+        "max": 0
+      }
+    },
+    "rawShieldRecords": [
+      "{\"itemPortName\":\"hardpoint_shield_generator_left\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}",
+      "{\"itemPortName\":\"hardpoint_shield_generator_right\",\"localReference\":\"9d309719-800c-4d42-946e-fa6c240bc2df\",\"editable\":true,\"editableChildren\":true,\"itemTypes\":[{\"type\":\"Shield\"}]}"
+    ]
+  },
+  {
     "shipName": "Constellation Andr.",
     "source": "ptu",
     "shieldCount": 1,
@@ -8401,8 +8784,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8454,8 +8837,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8507,8 +8890,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8560,8 +8943,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8613,8 +8996,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8666,8 +9049,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8722,8 +9105,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8776,8 +9159,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8830,8 +9213,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8884,8 +9267,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.68,
-        "max": -0.23
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8937,8 +9320,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -8991,8 +9374,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9044,8 +9427,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9097,8 +9480,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9152,8 +9535,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.58,
-        "max": -0.19
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9208,8 +9591,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.37,
-        "max": -0.12
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9262,8 +9645,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9316,8 +9699,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9370,8 +9753,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9424,8 +9807,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9478,8 +9861,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.67,
-        "max": -0.22
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9532,8 +9915,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9585,8 +9968,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9638,8 +10021,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9691,8 +10074,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9744,8 +10127,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9797,8 +10180,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9850,8 +10233,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9903,8 +10286,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -9956,8 +10339,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10009,8 +10392,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10062,8 +10445,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10115,8 +10498,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10168,8 +10551,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10221,8 +10604,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10276,8 +10659,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
@@ -10329,8 +10712,8 @@ export const erkulPtuShieldProfiles = [
         "max": 0.25
       },
       "energy": {
-        "min": -0.86,
-        "max": -0.29
+        "min": 0,
+        "max": 0
       },
       "distortion": {
         "min": 0.75,
