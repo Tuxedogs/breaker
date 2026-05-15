@@ -124,10 +124,10 @@ export default function DashboardPage() {
               Parse screenshots<br />keep track of your loot.
             </h1>
             <p className="dash-hero-subtitle">
-              Upload refinery job quotes or completed<br />
-              jobs and have them logged to your account.
+              Track inventory, queue builds, and prioritize<br />
+              the materials that matter next.
             </p>
-            <Link to="/tools/alpha-threshold" className="dash-hero-cta">
+            <Link to="/dashboard/doctrine/armor-threshold" className="dash-hero-cta">
               Explore Tools
               <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="dash-hero-cta-arrow">
                 <path d="M5 12h14M12 5l7 7-7 7" />
@@ -304,7 +304,7 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="dash-card-footer">
-              <Link to="/dashboard" className="dash-card-footer-link">
+              <Link to="/logistics/inventory" className="dash-card-footer-link">
                 Go to Inventory <ArrowRight />
               </Link>
             </div>
@@ -391,7 +391,7 @@ export default function DashboardPage() {
               </ul>
             </div>
             <div className="dash-card-footer">
-              <Link to="/dashboard" className="dash-card-footer-link">
+              <Link to="/logistics/build-queue" className="dash-card-footer-link">
                 View Build Queue <ArrowRight />
               </Link>
             </div>
@@ -421,9 +421,6 @@ export default function DashboardPage() {
                 </li>
               ))}
             </ul>
-          </div>
-          <div className="dash-panel-footer">
-            <a href="#" className="dash-panel-link">View All Locations <ArrowRight size={10} /></a>
           </div>
         </div>
 
@@ -476,12 +473,6 @@ function QuickInventoryPanel() {
               <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
             </svg>
             View Inventory
-          </Link>
-          <Link to="/logistics/refinery-import?source=dashboard" className="dash-qinv-btn">
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
-            Import Screenshot
           </Link>
         </div>
       </div>

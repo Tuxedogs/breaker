@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./craft-tab-bar.css";
 
-type Tab = "recipes" | "queue" | "analytics" | "quality" | "sources" | "mining";
+type Tab = "recipes" | "queue" | "analytics" | "quality" | "mining";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "recipes", label: "Recipe Browser" },
@@ -9,7 +9,6 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "mining", label: "Mining" },
   { id: "analytics", label: "Demand Analytics" },
   { id: "quality", label: "Quality Modifiers" },
-  { id: "sources", label: "Material Sources" },
 ];
 
 interface Props {

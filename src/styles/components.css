@@ -6,12 +6,7 @@
 
 /* App background layer */
 .app-bg {
-  background-color: rgb(10, 12, 16);
-  background-image:
-    radial-gradient(80% 40% at 50% 0%, rgba(56, 189, 248, 0.05) 0%, transparent 70%),
-    radial-gradient(40% 20% at 50% 0%, rgba(255, 255, 255, 0.025) 0%, transparent 55%),
-    radial-gradient(circle, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: auto, auto, 28px 28px;
+  background: var(--bg-app);
 }
 
 @layer components {
@@ -20,9 +15,9 @@
   }
 
   .page-hero-shell {
-    border: 1px solid rgb(255 255 255 / 0.07);
+    border: var(--border-panel);
     border-radius: 4px;
-    background: #0d0f15;
+    background: var(--bg-panel);
     padding: 2rem 1.5rem;
   }
 
@@ -42,7 +37,7 @@
     position: relative;
     overflow: hidden;
     background: var(--card-blue);
-    border: 1px solid rgb(255 255 255 / 0.05);
+    border: var(--border-soft);
     border-radius: 4px;
   }
 
@@ -261,9 +256,9 @@
   .card-head-panel {
     position: relative;
     z-index: 1;
-    border: 1px solid rgb(255 255 255 / 0.06);
+    border: var(--border-soft);
     border-radius: 4px;
-    background: #0d0f15;
+    background: var(--bg-card-dark);
   }
 
   .card-head-sm {
@@ -279,7 +274,7 @@
   }
 
   .card-head-panel {
-    border-color: rgb(255 255 255 / 0.06);
+    border: var(--border-soft);
     background: var(--card-blue);
     padding: 1rem;
   }
@@ -287,9 +282,9 @@
   .card-head-ship {
     position: relative;
     z-index: 1;
-    border: 1px solid rgb(255 255 255 / 0.06);
+    border: var(--border-soft);
     border-radius: 4px;
-    background: #0d0f15;
+    background: var(--bg-card-dark);
     padding: 1.25rem;
   }
 
@@ -306,9 +301,9 @@
   .card-head-ship-lg {
     position: relative;
     z-index: 1;
-    border: 1px solid rgb(255 255 255 / 0.06);
+    border: var(--border-soft);
     border-radius: 4px;
-    background: #0d0f15;
+    background: var(--bg-card-dark);
     padding: 1.25rem;
   }
 

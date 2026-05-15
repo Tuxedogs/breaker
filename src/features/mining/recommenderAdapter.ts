@@ -1,6 +1,5 @@
 import type {
   BuildQueueRecommendationFixture,
-  MaterialExplorerExportRequest,
   MiningPlannerIntentPayload,
   MiningRecommendationRequest,
   PublicLocationEntry,
@@ -64,17 +63,6 @@ function toRecommenderApiRequest(request: MiningRecommendationRequest): Recommen
   };
 }
 
-export interface AllLocationsResponse {
-  locations: PublicLocationEntry[];
-  warnings: RecommenderWarning[];
-}
-
-export async function getAllIndexedLocations(): Promise<AllLocationsResponse> {
-  const response = await fetch(apiUrl("/api/recommender/locations"));
-  if (!response.ok) throw new Error(`Locations API failed with ${response.status}`);
-  return response.json() as Promise<AllLocationsResponse>;
-}
-
 export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
   signal?: AbortSignal,
@@ -123,40 +111,6 @@ export function buildRecommendationRequest(
         }
       : null,
   };
-}
-
-export function buildExplorerRequest(
-  locations: PublicLocationEntry[],
-  selectedMaterial: string | null,
-  totalMaterials: number,
-): MaterialExplorerExportRequest {
-  return {
-    mode: "material_explorer",
-    version: "1.0",
-    generatedAt: new Date().toISOString(),
-    accessMode: "public",
-    selectedMaterial,
-    totalMaterials,
-    totalLocations: locations.length,
-    visibleLocations: locations.map((location) => ({
-      locationName: location.locationName,
-      systemName: location.systemName,
-      locationKind: location.locationKind,
-      spawnType: location.spawnType,
-      nearbyStations: location.nearbyStations,
-      materials: location.materials,
-    })),
-  };
-}
-
-export function downloadExplorerRequest(request: MaterialExplorerExportRequest): void {
-  const blob = new Blob([JSON.stringify(request, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "mining_explorer_request.json";
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 export function downloadRecommendationRequest(request: MiningRecommendationRequest): void {

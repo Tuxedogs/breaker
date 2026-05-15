@@ -4,27 +4,27 @@
 /* 1. Tokens */
 :where(.craft-page, .craft-planner-shell) {
   /* core dark-charcoal palette — aligned with Mining/BuildQueue */
-  --craft-bg:            #050912;
-  --craft-shell:         #07101b;
-  --craft-panel:         #0a1422;
-  --craft-panel-2:       #0d1829;
+  --craft-bg:            var(--bg-app);
+  --craft-shell:         var(--bg-panel);
+  --craft-panel:         var(--bg-panel);
+  --craft-panel-2:       var(--bg-card-dark);
 
   --craft-green-plane:   #0d1829;
   --craft-green-plane-2: #0f1b2e;
   --craft-green-dark:    #07101b;
   --craft-green-soft:    #141e2e;
 
-  --craft-card:          linear-gradient(180deg, rgba(24, 29, 33, 0.96), rgba(10, 14, 16, 0.98));
-  --craft-card-soft:     linear-gradient(180deg, rgba(16, 21, 26, 0.98), rgba(7, 10, 13, 0.99));
+  --craft-card:          var(--bg-card);
+  --craft-card-soft:     var(--bg-card-dark);
 
   /* neutral borders — cool slate, matching mining palette */
-  --craft-border:        rgba(148, 163, 184, 0.12);
-  --craft-border-strong: rgba(148, 163, 184, 0.2);
+  --craft-border:        var(--border-soft-color);
+  --craft-border-strong: var(--border-panel-color);
 
   --craft-orange:        #f59e0b;
   --craft-orange-soft:   rgba(255, 145, 32, 0.28);
   --craft-orange-dim:    rgba(255, 145, 32, 0.14);
-  --craft-orange-border: rgba(255, 145, 32, 0.62);
+  --craft-orange-border: var(--border-active-color);
 
   --craft-text:          #f5f3e8;
   --craft-muted:         #a8aa9c;
@@ -33,33 +33,26 @@
   --craft-good:          #43ffd0;
   --craft-bad:           #ff4d4f;
 
-  --craft-shadow-lg:
-    0 24px 56px rgba(0, 0, 0, 0.58),
-    0 8px 18px rgba(0, 0, 0, 0.38),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  --craft-shadow-lg: var(--shadow-panel);
 
-  --craft-shadow-md:
-    0 14px 28px rgba(0, 0, 0, 0.42),
-    0 4px 12px rgba(0, 0, 0, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --craft-shadow-md: var(--shadow-card);
 
   /* legacy compat aliases */
   --craft-page-bg:          var(--craft-bg);
-  --craft-void-bg:          #020302;
+  --craft-void-bg:          var(--void-bg-deep);
 
   --craft-sidebar-bg:
-    linear-gradient(180deg, rgba(7, 9, 8, 0.98), rgba(3, 6, 5, 0.98));
+    var(--bg-panel);
 
   --craft-connected-bg:
-    radial-gradient(circle at 22% 28%, rgba(255, 138, 0, 0.06), transparent 34%),
-    linear-gradient(135deg, #0f1317 0%, #0a1422 45%, #07101b 100%);
+    var(--bg-panel);
 
-  --craft-connected-bg-flat: #0a1422;
+  --craft-connected-bg-flat: var(--void-bg-1);
 
   --craft-card-bg:          var(--craft-card);
 
   --craft-card-bg-hover:
-    linear-gradient(180deg, rgba(34, 42, 32, 0.98), rgba(12, 17, 13, 0.98));
+    var(--bg-card);
 
   --craft-border-muted:     var(--craft-border);
   --craft-border-soft:      var(--craft-border-strong);
@@ -83,8 +76,8 @@
   --craft-shadow-card:      var(--craft-shadow-md);
   --craft-inset-highlight:  inset 0 1px 0 rgba(255, 255, 255, 0.045);
 
-  --craft-gold-border:      rgba(255, 145, 32, 0.62);
-  --craft-panel-border:     rgba(255, 145, 32, 0.62);
+  --craft-gold-border:      var(--border-active-color);
+  --craft-panel-border:     var(--border-panel-color);
 
   --craft-sidebar-width:  247px;
   --craft-bridge-width:   8px;
@@ -104,7 +97,7 @@
   height: 100%;
   overflow: hidden;
   color: var(--craft-text);
-  background: transparent;
+  background: var(--bg-app);
   font-family: var(--font-primary, Rajdhani, sans-serif);
 }
 
@@ -136,8 +129,8 @@
   align-items: stretch;
   gap: 0;
   padding: 0.38rem 0.7rem;
-  background: linear-gradient(180deg, #181c22 0%, #111519 100%);
-  border: 1px solid rgba(255, 153, 0, 0.18);
+  background: var(--bg-panel);
+  border: var(--border-panel);
   border-radius: 7px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
 }
@@ -169,7 +162,7 @@
   gap: 0.28rem;
   flex: 0 0 auto;
   padding: 0 0.85rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid var(--border-soft-color);
   overflow: hidden;
 }
 
@@ -220,9 +213,9 @@
   gap: 0.24rem;
   height: 28px;
   padding: 0.2rem 0.56rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: var(--border-soft);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-card-dark);
   color: rgba(203, 213, 225, 0.82);
   font-family: var(--font-primary);
   font-size: 0.78rem;
@@ -234,20 +227,20 @@
 }
 
 .craft-frl-chip:hover {
-  border-color: rgba(255, 153, 0, 0.32);
+  border: var(--border-hover);
   color: rgba(255, 210, 120, 0.95);
-  background: rgba(255, 153, 0, 0.07);
+  background: var(--bg-card);
 }
 
 .craft-frl-chip--active {
-  background: rgba(255, 153, 0, 0.13);
-  border-color: rgba(255, 153, 0, 0.48);
+  background: var(--bg-card-active);
+  border: var(--border-active);
   color: rgba(255, 200, 90, 0.98);
 }
 
 .craft-frl-chip--active:hover {
-  background: rgba(255, 153, 0, 0.2);
-  border-color: rgba(255, 153, 0, 0.62);
+  background: var(--bg-card-active);
+  border: var(--border-active);
 }
 
 .craft-frl-clear {
@@ -311,8 +304,8 @@
 
   overflow: visible;
 
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-panel);
+  border: var(--border-panel);
   border-right: 0;
   border-radius: 7px 0 0 7px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
@@ -353,9 +346,9 @@
   min-height: 34px;
   padding: 0 10px;
   margin: 0px 14px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: var(--border-soft);
   border-radius: 4px;
-  background: rgba(10, 14, 22, 0.72);
+  background: var(--bg-card-dark);
 }
 
 .craft-search-icon { color: var(--craft-orange); font-size: 17px; }
@@ -402,7 +395,7 @@
   flex-direction: column;
   gap: 0.26rem;
   padding: 0.6rem 0.68rem 0.6rem 0.75rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-soft-color);
   color: var(--craft-text);
   text-align: left;
   cursor: pointer;
@@ -412,17 +405,17 @@
 .craft-result-card:last-child { border-bottom: none; }
 
 .craft-result-card:hover {
-  background: rgba(255, 153, 0, 0.045);
+  background: var(--bg-card);
 }
 
 .craft-result-card--selected {
-  background: rgba(255, 153, 0, 0.08);
+  background: var(--bg-card-active);
   border-left: 2px solid rgba(255, 153, 0, 0.6);
   padding-left: calc(0.75rem - 2px);
 }
 
 .craft-result-card--selected:hover {
-  background: rgba(255, 153, 0, 0.11);
+  background: var(--bg-card-active);
 }
 
 /* Bridge fill — matches the detail stage background exactly */
@@ -492,7 +485,7 @@
   left: 0;
   right: 0;
   height: var(--craft-bridge-height);
-  background: #0f1317;
+  background: var(--bg-panel);
   border-top: 1px solid var(--craft-orange-border);
   border-bottom: 1px solid var(--craft-orange-border);
   pointer-events: none;
@@ -515,8 +508,8 @@
   padding: 0.65rem 0.85rem;
   overflow: auto;
 
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 153, 0, 0.18);
+  background: var(--bg-panel);
+  border: var(--border-panel);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
 }
@@ -534,9 +527,9 @@
   gap: 7px;
   height: 28px;
   padding: 0 0.56rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: var(--border-soft);
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-card-dark);
   color: rgba(203, 213, 225, 0.82);
   font-family: var(--font-primary);
   font-size: 0.78rem;
@@ -545,13 +538,13 @@
   box-sizing: border-box;
 }
 .craft-variant-row:hover {
-  border-color: rgba(255, 153, 0, 0.32);
+  border: var(--border-hover);
   color: rgba(255, 210, 120, 0.95);
-  background: rgba(255, 153, 0, 0.07);
+  background: var(--bg-card);
 }
 .craft-variant-row.is-selected {
-  background: rgba(255, 153, 0, 0.13);
-  border-color: rgba(255, 153, 0, 0.48);
+  background: var(--bg-card-active);
+  border: var(--border-active);
   color: rgba(255, 200, 90, 0.98);
 }
 .craft-variant-name { font-weight: 900; }
@@ -573,18 +566,16 @@
   min-height: 124px;
   padding: 2px 9px;
 
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: var(--border-soft);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 .craft-material-card:hover {
-  border-color: rgba(255, 153, 0, 0.32);
+  border: var(--border-hover);
   box-shadow:
     0 14px 32px rgba(0, 0, 0, 0.48),
-    0 0 0 1px rgba(255, 153, 0, 0.07),
-
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
@@ -655,8 +646,8 @@
   overflow: hidden;
   padding: 14px 14px 12px;
 
-  background: var(--cards-grey);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
+  border: var(--border-soft);
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
 }
@@ -696,7 +687,7 @@
 
 .craft-empty-card,
 .craft-empty-state,
-.craft-empty { padding: 14px; border: 1px solid var(--craft-border); border-radius: 6px; background: rgba(0, 0, 0, 0.2); color: var(--craft-muted); }
+.craft-empty { padding: 14px; border: 1px solid var(--craft-border); border-radius: 6px; background: var(--bg-card-dark); color: var(--craft-muted); }
 
 /* ==========================================================================
    12. Responsive
@@ -709,7 +700,7 @@
   .craft-fg { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 0 0 0.5rem 0; flex: 0 0 auto; overflow: visible; }
   .craft-fg--ship { flex: 0 0 auto; }
   .craft-console-layout { grid-template-columns: 1fr; overflow: visible; }
-  .craft-finder-sidebar { border-right: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px 7px 0 0; }
+  .craft-finder-sidebar { border-right: 1px solid var(--border-soft-color); border-radius: 7px 7px 0 0; }
   .craft-result-bridge, .craft-result-bridge-fill, .craft-result-bridge-cap { display: none; }
   .craft-detail-stage { grid-column: 1; grid-template-columns: 1fr; border-left: 1px solid var(--craft-orange-border); border-radius: 0 0 7px 7px; }
   .craft-detail-stage::before { display: none; }

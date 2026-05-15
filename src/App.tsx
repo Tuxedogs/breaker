@@ -12,11 +12,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 /* Lazy loaded tools because shipping everything up front is a cry for help */
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
-const LocationsPage = lazy(() => import("./pages/logistics/LocationsPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
-const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
-
-const ShipMapsPage = lazy(() => import("./pages/ships/maps/ShipMapsPage"));
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -66,12 +62,12 @@ export default function App() {
   return (
     <Routes>
       <Route index element={<RedirectToDashboard />} />
+      <Route path="home" element={<RedirectToDashboard />} />
       <Route path="index" element={<RedirectToDashboard />} />
       <Route path="framework" element={<RedirectToDashboard />} />
       <Route path="modules" element={<ModuleIndexPage />} />
       <Route path="doctrine" element={<RedirectToDashboardDoctrine />} />
       <Route path="doctrine/library" element={<RedirectToDashboardDoctrineLibrary />} />
-      <Route path="doctrine/weapons-matrix" element={<Navigate to="/dashboard/doctrine/weapons-matrix" replace />} />
       <Route path="doctrine/armor-threshold" element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />} />
       <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
       <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
@@ -94,19 +90,12 @@ export default function App() {
         element={<Navigate to="/dashboard/doctrine/module/component-sniping" replace />}
       />
 
-      {/* Legacy redirects — preserve old standalone tool URLs */}
-      <Route path="maps" element={<Navigate to="/ships/maps" replace />} />
-
       {/* Dashboard shell — sidebar + topbar always visible */}
       <Route element={<DashboardShell />}>
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="dashboard/doctrine" element={<DoctrineLibraryPage />} />
         <Route path="dashboard/doctrine/library" element={<DoctrineLibraryPage />} />
         <Route path="dashboard/doctrine/module/:id" element={<DoctrineModulePage />} />
-        <Route
-          path="dashboard/doctrine/weapons-matrix"
-          element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}
-        />
         <Route
           path="dashboard/doctrine/armor-threshold"
           element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}
@@ -122,30 +111,14 @@ export default function App() {
           element={<Suspense fallback={<RouteFallback />}><InventoryPage /></Suspense>}
         />
         <Route
-          path="logistics/locations"
-          element={<Suspense fallback={<RouteFallback />}><LocationsPage /></Suspense>}
-        />
-        <Route
-          path="logistics/locations/:locationId"
-          element={<Suspense fallback={<RouteFallback />}><LocationsPage /></Suspense>}
-        />
-        <Route
           path="logistics/build-queue"
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
-        />
-        <Route
-          path="logistics/refinery-import"
-          element={<Suspense fallback={<RouteFallback />}><RefineryImportPage /></Suspense>}
         />
 
         {/* Combat tools */}
         <Route
           path="tools/alpha-threshold"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <AlphaThresholdToolPage />
-            </Suspense>
-          }
+          element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />}
         />
         <Route
           path="combat/component-mapping"
@@ -177,15 +150,6 @@ export default function App() {
           }
         />
 
-        {/* Ships */}
-        <Route
-          path="ships/maps"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <ShipMapsPage />
-            </Suspense>
-          }
-        />
       </Route>
 
       <Route path="*" element={<RedirectToDashboard />} />

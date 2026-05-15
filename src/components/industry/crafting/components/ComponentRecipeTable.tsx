@@ -7,7 +7,6 @@ import {
 } from "react";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
-import type { ResourceGroups } from "../../shared/MsbSidebar";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
@@ -77,47 +76,21 @@ function normalizeVehicleTypeLabel(value: string): string {
   return VEHICLE_TYPE_LABEL_MAP[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-type MaterialSourceEntry = {
-  materialName: string;
-  materialId?: string;
-  sources?: { spawnType?: string }[];
-};
+function buildMineableResourceList(recipes: ComponentRecipe[]) {
+  const byName = new Map<string, { id: string; label: string }>();
 
-function spawnTypeToMiningType(spawnType: string | undefined): string | undefined {
-  if (!spawnType) return undefined;
-  if (spawnType.includes("vehicle") || spawnType.includes("ground")) return "Ground Vehicle";
-  if (spawnType.includes("fps") || spawnType.includes("hand")) return "Hand";
-  return "Ship";
-}
+  for (const recipe of recipes) {
+    for (const material of recipe.materials ?? []) {
+      const label = String(material.material_name ?? "").trim();
+      if (!label) continue;
+      const id = material.cost_id || label;
+      const key = label.toLowerCase().replace(/[^a-z0-9]+/g, "");
+      if (!key || byName.has(key)) continue;
+      byName.set(key, { id, label });
+    }
+  }
 
-function useMineableResourceGroups(): ResourceGroups {
-  const [groups, setGroups] = useState<ResourceGroups>({ shipAndHarvestable: [], vehicle: [], hand: [] });
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch(apiUrl("/api/mining/material_sources.json"))
-      .then((r) => r.json())
-      .then((data: MaterialSourceEntry[]) => {
-        if (cancelled) return;
-        const byName = new Map<string, { id: string; label: string; miningType?: string }>();
-        for (const entry of data) {
-          if (!entry.materialName) continue;
-          const key = entry.materialName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
-          if (byName.has(key)) continue;
-          const spawnType = entry.sources?.[0]?.spawnType;
-          byName.set(key, {
-            id: entry.materialName,
-            label: entry.materialName,
-            miningType: spawnTypeToMiningType(spawnType),
-          });
-        }
-        setGroups(buildResourceGroups([...byName.values()]));
-      })
-      .catch(() => {/* silently ignore */});
-    return () => { cancelled = true; };
-  }, []);
-
-  return groups;
+  return [...byName.values()];
 }
 
 function readStoredSidebarState<T>(key: string, fallback: T): T {
@@ -1477,7 +1450,10 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
-  const mineableGroups = useMineableResourceGroups();
+  const mineableGroups = useMemo(
+    () => buildResourceGroups(buildMineableResourceList(recipes)),
+    [recipes],
+  );
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(

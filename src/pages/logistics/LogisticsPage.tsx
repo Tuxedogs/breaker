@@ -6,7 +6,6 @@ import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 
 export default function LogisticsPage() {
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
-  const locations = useLogisticsStore((state) => state.locations);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
   const recipeTemplates = useLogisticsStore((state) => state.recipeTemplates);
@@ -27,7 +26,7 @@ export default function LogisticsPage() {
             <span className="logi-breadcrumb-active">Logistics</span>
           </div>
           <h1 className="logi-page-title">Logistics Hub</h1>
-          <p className="logi-page-subtitle">Inventory, locations, and build operations.</p>
+          <p className="logi-page-subtitle">Inventory and build operations.</p>
         </div>
       </div>
 
@@ -43,10 +42,6 @@ export default function LogisticsPage() {
             {totalSCU.toFixed(2)}
             <span className="logi-stat-unit">SCU</span>
           </div>
-        </div>
-        <div className="logi-stat-card">
-          <div className="logi-stat-label">Active Locations</div>
-          <div className="logi-stat-value">{locations.length}</div>
         </div>
         <div className={`logi-stat-card${shortages.length > 0 ? ' logi-stat-card--alert' : ''}`}>
           <div className="logi-stat-label">Shortages</div>
@@ -68,16 +63,6 @@ export default function LogisticsPage() {
           <div className="logi-nav-card-count">{inventoryEntries.length} entries</div>
         </Link>
 
-        <Link to="/logistics/locations" className="logi-nav-card">
-          <div className="logi-nav-card-icon">
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z" />
-            </svg>
-          </div>
-          <div className="logi-nav-card-label">Locations</div>
-          <div className="logi-nav-card-count">{locations.length} active</div>
-        </Link>
-
         <Link to="/logistics/build-queue" className="logi-nav-card">
           <div className="logi-nav-card-icon">
             <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
@@ -88,15 +73,6 @@ export default function LogisticsPage() {
           <div className="logi-nav-card-count">{activeQueueCount} active</div>
         </Link>
 
-        <Link to="/logistics/refinery-import" className="logi-nav-card">
-          <div className="logi-nav-card-icon">
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-              <path d="M4 16l4-4 4 4 4-8 4 4M2 20h20" />
-            </svg>
-          </div>
-          <div className="logi-nav-card-label">Refinery Import</div>
-          <div className="logi-nav-card-count">Screenshot → inventory</div>
-        </Link>
       </div>
 
       {/* Shortages quick view */}
