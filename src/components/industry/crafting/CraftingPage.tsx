@@ -7,7 +7,6 @@ import { getCraftingItems } from "../../../lib/craftingData";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
-import MaterialSourcePlaceholder from "./components/MaterialSourcePlaceholder";
 import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
 import { clampQuality } from "./utils/qualityBands";
@@ -17,7 +16,7 @@ import { createMaterialResolver } from "../../../lib/logistics/materialResolver"
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
 const QualityModifierViewer = lazy(() => import("./components/QualityModifierViewer"));
 
-type Tab = "recipes" | "analytics" | "quality" | "sources";
+type Tab = "recipes" | "analytics" | "quality";
 
 type RecipeRewardPool = {
   poolName?: string;
@@ -170,9 +169,6 @@ export default function CraftingModule() {
         </Suspense>
       )}
 
-      {tab === "sources" && (
-        <MaterialSourcePlaceholder />
-      )}
     </>
   );
 }

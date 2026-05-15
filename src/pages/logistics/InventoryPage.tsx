@@ -4,7 +4,6 @@ import { useLogisticsStore } from '../../stores/logisticsStore';
 import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
-import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
 import { resolveInventoryItemName } from '../../lib/logistics/inventory';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
@@ -391,14 +390,12 @@ export default function InventoryPage() {
           <div className="logi-breadcrumb">
             <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>
             <span className="logi-breadcrumb-sep">/</span>
-            <span className="logi-breadcrumb-active">Inventory Locations</span>
+            <span className="logi-breadcrumb-active">Inventory</span>
           </div>
-          <h1 className="logi-page-title">Inventory Locations</h1>
-          <p className="logi-page-subtitle">Quality-aware stock visibility by location.</p>
+          <h1 className="logi-page-title">Inventory</h1>
+          <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
         </div>
         <div className="logi-inv-header-actions">
-          <ScreenshotImportButton source="inventory" />
-          <Link to="/logistics/locations" className="logi-btn-secondary">New Location</Link>
           <button
             type="button"
             className="logi-btn-primary"

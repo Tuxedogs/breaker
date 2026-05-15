@@ -6,9 +6,7 @@ import HomeDashboardIcon from "@/assets/sidebar-icons/01-home-dashboard.svg?reac
 import CraftingIcon from "@/assets/sidebar-icons/02-crafting.svg?react";
 import BuildQueueIcon from "@/assets/sidebar-icons/03-build-queue.svg?react";
 import MiningIcon from "@/assets/sidebar-icons/04-mining.svg?react";
-import MaterialSourcesIcon from "@/assets/sidebar-icons/05-material-sources.svg?react";
 import InventoryIcon from "@/assets/sidebar-icons/07-inventory.svg?react";
-import InventoryLocationsIcon from "@/assets/sidebar-icons/08-inventory-locations.svg?react";
 import TransfersIcon from "@/assets/sidebar-icons/09-transfers.svg?react";
 import ArmorThresholdIcon from "@/assets/sidebar-icons/10-armor-threshold.svg?react";
 import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.svg?react";
@@ -127,9 +125,7 @@ const SIDEBAR_SVG_ICONS = {
   crafting: CraftingIcon,
   buildQueue: BuildQueueIcon,
   mining: MiningIcon,
-  materialSources: MaterialSourcesIcon,
   inventory: InventoryIcon,
-  inventoryLocations: InventoryLocationsIcon,
   transfers: TransfersIcon,
   armorThreshold: ArmorThresholdIcon,
   componentMapping: ComponentMappingIcon,
@@ -140,7 +136,6 @@ const sections = [
   {
     label: "HOME",
     items: [
-      { label: "Home", to: "/dashboard", icon: "home", svgIcon: "homeDashboard", exact: true },
       { label: "Dashboard", to: "/dashboard", icon: "grid", svgIcon: "homeDashboard", exact: true },
     ],
   },
@@ -150,34 +145,21 @@ const sections = [
       { label: "Crafting", to: "/industry/crafting", icon: "hammer", svgIcon: "crafting" },
       { label: "Build Queue", to: "/logistics/build-queue", icon: "list", svgIcon: "buildQueue" },
       { label: "Mining", to: "/industry/mining", icon: "pickaxe", svgIcon: "mining" },
-      { label: "Refining", to: "/dashboard", icon: "flask", wip: true },
-      { label: "Material Sources", to: "/dashboard", icon: "box", svgIcon: "materialSources", wip: true },
     ],
   },
   {
     label: "LOGISTICS",
     items: [
       { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard", svgIcon: "inventory" },
-      { label: "Locations",   to: "/logistics/locations",   icon: "pin", svgIcon: "inventoryLocations" },
       { label: "Transfers",   to: "/dashboard",             icon: "arrows", svgIcon: "transfers", wip: true },
     ],
   },
   {
     label: "COMBAT",
     items: [
-      { label: "Weapons Matrix", to: "/dashboard/doctrine/weapons-matrix", icon: "crosshair" },
       { label: "Armor Threshold", to: "/dashboard/doctrine/armor-threshold", icon: "shield", svgIcon: "armorThreshold" },
       { label: "Component Mapping", to: "/combat/component-mapping", icon: "target", svgIcon: "componentMapping" },
       { label: "Doctrine Library", to: "/dashboard/doctrine/library", icon: "book", exact: true },
-    ],
-  },
-  {
-    label: "SHIPS",
-    items: [
-      { label: "Ship Maps", to: "/ships/maps", icon: "map" },
-      { label: "Components", to: "/dashboard", icon: "cpu", wip: true },
-      { label: "Hardpoints", to: "/dashboard", icon: "anchor", wip: true },
-      { label: "Ship Compare", to: "/dashboard", icon: "scale", wip: true },
     ],
   },
   {
@@ -250,9 +232,7 @@ export default function DashboardSidebar() {
               )}
               {collapsed && <div className="dash-sidebar-section-divider" aria-hidden />}
               {section.items.map((item) => {
-                const active = item.label === "Home"
-                  ? location.pathname === "/dashboard"
-                  : isActive(item.to, "exact" in item ? item.exact : false);
+                const active = isActive(item.to, "exact" in item ? item.exact : false);
 
                 return (
                   <NavLink

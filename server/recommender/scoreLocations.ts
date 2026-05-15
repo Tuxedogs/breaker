@@ -132,46 +132,6 @@ function buildIndexedResources(
   return resourcesByLocation;
 }
 
-export function buildIndexedBrowseLocations(
-  apiData: RecommenderApiData,
-  warnings: RecommenderWarning[],
-  limit = 48,
-): ScoredLocation[] {
-  const resourcesByLocation = buildIndexedResources(apiData, warnings);
-  const locations = new Map<string, ScoredLocation>();
-
-  for (const group of apiData.materialGroups) {
-    for (const source of resolveSources(group, warnings)) {
-      const location = resolveLocation(source, apiData, warnings);
-      const locationKey = physicalLocationKey(location);
-      const indexedResources = resourcesByLocation.get(physicalLocationKey(location)) ?? [];
-      const existing = locations.get(locationKey);
-      if (existing) {
-        existing.spawnType = mergeSpawnType(existing.spawnType, location.spawnType);
-        existing.matchedLocationCodes = mergeMatchedLocationCodes(existing.matchedLocationCodes, location.matchedLocationCodes);
-      } else {
-        locations.set(locationKey, {
-          locationKey,
-          ...location,
-          materials: indexedResources.map((resource) => resource.materialName),
-          indexedResources,
-          score: indexedResources.length,
-          coveredRequirements: [],
-          bestSources: [],
-        });
-      }
-    }
-  }
-
-  return Array.from(locations.values())
-    .sort((left, right) =>
-      right.indexedResources.length - left.indexedResources.length ||
-      left.systemName.localeCompare(right.systemName) ||
-      left.locationName.localeCompare(right.locationName)
-    )
-    .slice(0, limit);
-}
-
 function pickCoverageAwareLocations(locations: ScoredLocation[], requirements: AggregatedRequirement[], limit: number): ScoredLocation[] {
   const sourceCounts = new Map<string, number>();
   for (const requirement of requirements) {

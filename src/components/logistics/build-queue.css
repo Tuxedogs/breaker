@@ -1,16 +1,16 @@
 /* ─── Build Queue — Ground-Up v3 ──────────────────────────────────────────── */
 
 .bq-page {
-  --bq-large:      #0f1317;
-  --bq-bg:         #050708;
-  --bq-bg-soft:    #070b0d;
-  --bq-surface:    rgba(16,20,23,0.96);
-  --bq-panel:      linear-gradient(180deg, rgba(21,27,30,0.98), rgba(10,14,16,0.98));
-  --bq-panel-strong: linear-gradient(180deg, #171d21 0%, #0d1114 100%);
-  --bq-edge:       rgba(255,255,255,0.085);
-  --bq-edge-soft:  rgba(255,255,255,0.055);
-  --bq-accent-edge: rgba(255,153,0,0.58);
-  --bq-accent-edge-soft: rgba(255,153,0,0.24);
+  --bq-large:      var(--bg-card-dark);
+  --bq-bg:         var(--void-bg-0);
+  --bq-bg-soft:    var(--void-bg-1);
+  --bq-surface:    var(--bg-card);
+  --bq-panel:      var(--bg-panel);
+  --bq-panel-strong: var(--bg-card-dark);
+  --bq-edge:       var(--border-soft-color);
+  --bq-edge-soft:  var(--border-divider-color);
+  --bq-accent-edge: var(--border-active-color);
+  --bq-accent-edge-soft: rgba(245,158,11,0.24);
   --bq-text:       #f4f1e8;
   --bq-sub:        rgba(143,154,156,0.78);
   --bq-dim:        rgba(89,101,105,0.88);
@@ -26,6 +26,7 @@
   color: var(--bq-text);
   min-height: 100vh;
   width: 100%;
+  background: var(--bg-app);
 }
 
 .bq-page *, .bq-page *::before, .bq-page *::after {
@@ -52,14 +53,10 @@
   width: 100%;
   min-width: 0;
   padding: 0.7rem;
-  border: 1px solid rgba(255, 153, 0, 0.18);
+  border: var(--border-panel);
   border-radius: 8px;
-  background:
-    var(--bq-large);
-  box-shadow:
-    0 24px 56px rgba(0,0,0,0.58),
-    0 0 42px rgba(255,153,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.045);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-panel);
 }
 
 .bq-ledger-panel {
@@ -71,10 +68,10 @@
   max-height: calc(100vh - 32px);
   overflow: auto;
   padding: 0.76rem;
-  border: 1px solid var(--bq-edge);
+  border: var(--border-panel);
   border-radius: 8px;
-  background: var(--cards-grey);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-panel);
 }
 
 .bq-ledger-title {
@@ -109,7 +106,7 @@
   padding: 0.44rem 0.5rem;
   border: 1px solid var(--bq-edge-soft);
   border-radius: 5px;
-  background: var(--bq-large);
+  background: var(--bg-card-dark);
   box-shadow: 0 2px 6px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.022);
 }
 
@@ -290,10 +287,8 @@
   padding: 0.58rem 0.62rem;
   border: 1px solid var(--bq-edge);
   border-radius: 7px;
-  background: var(--bq-panel);
-  box-shadow:
-    0 12px 24px rgba(0,0,0,0.28),
-    inset 0 1px 0 rgba(255,255,255,0.035);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
 }
 
 .bq-summary-card span {
@@ -384,11 +379,8 @@
   margin-bottom: 0.6rem;
   border: 1px solid var(--bq-edge);
   border-radius: 8px;
-  background: var(--cards-grey);
-  box-shadow:
-    0 18px 38px rgba(0,0,0,0.46),
-    0 6px 14px rgba(0,0,0,0.32),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+  background: var(--bg-panel);
+  box-shadow: var(--shadow-panel);
 }
 
 .bq-stat-rail-title h1 {
@@ -448,13 +440,10 @@
 
 .bq-shortage-panel {
   margin-bottom: 0.8rem;
-  border: 1px solid var(--bq-accent-edge-soft);
+  border: var(--border-danger);
   border-radius: 8px;
-  background: var(--bq-panel-strong);
-  box-shadow:
-    0 14px 28px rgba(0,0,0,0.38),
-    0 0 28px rgba(255,153,0,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.035);
+  background: var(--bg-card-dark);
+  box-shadow: var(--shadow-card);
   overflow-x: auto;
   overflow-y: hidden;
   max-width: 1444px;
@@ -511,8 +500,8 @@
 
 .bq-shortage-card {
   padding: 0.58rem 0.68rem;
-  background: rgba(12,8,4,0.55);
-  border-left: 2px solid rgba(255,138,0,0.42);
+  background: var(--bg-card-dark);
+  border-left: 2px solid var(--border-danger-color);
   display: grid;
   gap: 0.38rem;
 }
@@ -671,7 +660,7 @@
   padding: 1.4rem 0.8rem;
   border: 1px solid var(--bq-edge);
   border-radius: 8px;
-  background: var(--bq-surface);
+  background: var(--bg-card);
   color: var(--bq-sub);
   font-size: 0.8rem;
   text-align: center;
@@ -711,11 +700,8 @@
   min-width: 0;
   border: 1px solid var(--bq-edge);
   border-radius: 7px;
-  background: var(--cards-grey);
-  box-shadow:
-    0 10px 24px rgba(0,0,0,0.38),
-    0 3px 8px rgba(0,0,0,0.26),
-    inset 0 1px 0 rgba(255,255,255,0.032);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
   max-width: 100%;
   margin-bottom: 0.75rem;
@@ -731,7 +717,7 @@
   gap: 0.55rem;
   padding: 0.7rem 0.75rem 0.75rem;
   border-right: 1px solid var(--bq-edge-soft);
-  background: rgba(2,6,20,0.18);
+  background: var(--bg-card-dark);
 }
 
 .bq-item-name-block {
@@ -892,7 +878,7 @@
 }
 
 .bq-btn:hover:not(:disabled) {
-  border-color: var(--bq-edge);
+  border: var(--border-hover);
   background: rgba(255,255,255,0.052);
   color: var(--bq-text);
 }
@@ -1047,16 +1033,16 @@
   gap: 0.42rem;
   padding: 0.56rem 0.7rem 0.6rem 0.9rem;
   border-bottom: 1px solid var(--bq-edge-soft);
-  background: rgba(2,6,20,0.24);
+  background: var(--bg-card-dark);
 }
 
 .bq-quality-panel {
   display: grid;
   gap: 0.38rem;
   padding: 0.75rem 0.5rem;
-  border: 1px solid rgba(148,163,184,0.1);
+  border: 1px solid var(--border-soft-color);
   border-radius: 6px;
-  background: rgba(2,6,20,0.22);
+  background: var(--bg-card);
 }
 
 .bq-quality-panel-head {
@@ -1357,7 +1343,7 @@
   padding: 0.44rem 0.5rem;
   border: 1px solid var(--bq-edge);
   border-radius: 5px;
-  background: rgba(2,6,20,0.32);
+  background: var(--bg-card-dark);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.025);
   min-width: 720px;
 }

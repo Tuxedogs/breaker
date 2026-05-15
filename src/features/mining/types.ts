@@ -250,24 +250,6 @@ export interface PublicLocationEntry {
   }>;
 }
 
-export interface MaterialExplorerExportRequest {
-  mode: "material_explorer";
-  version: "1.0";
-  generatedAt: string;
-  selectedMaterial: string | null;
-  visibleLocations: Array<{
-    locationName: string;
-    systemName: string;
-    locationKind: string;
-    spawnType: string;
-    nearbyStations: string[];
-    materials: string[];
-  }>;
-  totalLocations: number;
-  totalMaterials: number;
-  accessMode: "public";
-}
-
 // ── Recommender request contract (Phase 3) ───────────────────────────────────
 
 export interface MiningRecommendationRequest {

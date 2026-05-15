@@ -12,21 +12,22 @@
 .logi-row--best > td { background: rgba(167, 139, 250, 0.038); }
 .logi-row--best > td:first-child { border-left: 2px solid rgba(167, 139, 250, 0.35); }
 
-/* ── Inventory Locations primary view ───────────────────── */
+/* ── Inventory primary view ───────────────────── */
 
 .logi-inv-page {
-  --inv-bg-0: #050912;
-  --inv-bg-1: #07101b;
-  --inv-bg-2: #0a1624;
-  --inv-panel: rgba(8, 13, 22, 0.86);
-  --inv-panel-2: rgba(10, 16, 26, 0.94);
-  --inv-border: rgba(148, 163, 184, 0.13);
-  --inv-border-strong: rgba(148, 163, 184, 0.21);
+  --inv-bg-0: var(--void-bg-0);
+  --inv-bg-1: var(--void-bg-1);
+  --inv-bg-2: var(--void-bg-2);
+  --inv-panel: var(--bg-panel);
+  --inv-panel-2: var(--bg-card);
+  --inv-border: var(--border-soft-color);
+  --inv-border-strong: var(--border-panel-color);
   --inv-green: #34d399;
   --inv-teal: #5eead4;
   --inv-gold: #fbbf24;
   --inv-purple: #a78bfa;
   --inv-red: #fb7185;
+  background: var(--bg-app);
 }
 
 .logi-inv-header {
@@ -690,4 +691,61 @@
 .logi-location-card h2,
 .logi-inv-summary-card strong {
   text-shadow: none;
+}
+
+/* Void Navy color pass: Inventory cards, panels, rows, and controls only */
+.logi-inv-page .logi-inv-summary-card,
+.logi-inv-page .logi-location-card,
+.logi-inv-page .logi-inv-panel {
+  background: var(--bg-card);
+  background-image: var(--bg-card);
+  border-color: var(--border-soft-color);
+  box-shadow: var(--shadow-card);
+}
+
+.logi-inv-page .logi-inv-summary-card:hover,
+.logi-inv-page .logi-location-card:hover,
+.logi-inv-page .logi-inv-panel:hover {
+  border-color: var(--border-hover-color);
+}
+
+.logi-inv-page .logi-inv-filter-bar,
+.logi-inv-page .logi-filter-bar,
+.logi-inv-page .logi-location-card-head,
+.logi-inv-page .logi-inv-panel-head {
+  background: var(--bg-panel);
+  border-color: var(--border-soft-color);
+}
+
+.logi-inv-page .logi-inv-view-toggle,
+.logi-inv-page .logi-location-stat-grid div,
+.logi-inv-page .logi-location-stack-row,
+.logi-inv-page .logi-inv-mini-row,
+.logi-inv-page .logi-quality-pill,
+.logi-inv-page .logi-mat-glyph,
+.logi-inv-page .logi-stack-edit-input,
+.logi-inv-page .logi-location-card-actions button,
+.logi-inv-page .logi-location-card-actions a,
+.logi-inv-page .logi-location-empty-state button {
+  background: var(--bg-card-dark);
+  background-color: transparent;
+  border-color: var(--border-soft-color);
+}
+
+.logi-inv-page .logi-location-stack-row:hover,
+.logi-inv-page .logi-inv-mini-row:hover,
+.logi-inv-page .logi-location-card-actions button:hover,
+.logi-inv-page .logi-location-card-actions a:hover {
+  background: var(--bg-card);
+  background-color: transparent;
+  border-color: var(--border-hover-color);
+}
+
+.logi-inv-page .logi-location-card--premium,
+.logi-inv-page .logi-inv-summary-card--premium {
+  border-color: var(--border-active-color);
+}
+
+.logi-inv-page .logi-inv-summary-card--warn {
+  border-color: var(--border-danger-color);
 }

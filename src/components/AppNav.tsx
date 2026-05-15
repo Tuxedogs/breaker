@@ -5,7 +5,7 @@ import { getModuleIndexHref } from "../lib/moduleIndexNavigation";
 const navItems = [
   {
     to: "/dashboard",
-    label: "Home",
+    label: "Dashboard",
     desktopActiveClassName: "site-toolbar-link--home-active",
     mobileActiveClassName: "site-toolbar-mobile-link--home-active",
     isActive: (pathname: string) => pathname === "/dashboard",
@@ -26,18 +26,11 @@ const navItems = [
     isActive: (pathname: string) => pathname.startsWith("/tools/gunnery"),
   },
   {
-    to: "/tools/alpha-threshold",
-    label: "Weapons Analysis",
+    to: "/dashboard/doctrine/armor-threshold",
+    label: "Armor Threshold",
     desktopActiveClassName: "site-toolbar-link--alpha-active",
     mobileActiveClassName: "site-toolbar-mobile-link--alpha-active",
-    isActive: (pathname: string) => pathname.startsWith("/tools/alpha-threshold"),
-  },
-  {
-    to: "/maps",
-    label: "Maps",
-    desktopActiveClassName: "site-toolbar-link--maps-active",
-    mobileActiveClassName: "site-toolbar-mobile-link--maps-active",
-    isActive: (pathname: string) => pathname.startsWith("/maps"),
+    isActive: (pathname: string) => pathname.startsWith("/dashboard/doctrine/armor-threshold"),
   },
 ];
 
@@ -109,7 +102,7 @@ export default function AppNav() {
                 "site-toolbar-home",
                 homeItem.isActive(location.pathname) ? "site-toolbar-home-active" : "",
               ].join(" ")}
-              aria-label="Home"
+              aria-label="Dashboard"
             >
               <HomeIcon />
             </NavLink>
@@ -154,7 +147,7 @@ export default function AppNav() {
                 "site-toolbar-mobile-button",
                 homeItem.isActive(location.pathname) ? "site-toolbar-mobile-button--active" : "",
               ].join(" ")}
-              aria-label="Home"
+              aria-label="Dashboard"
             >
               <HomeIcon />
             </NavLink>
