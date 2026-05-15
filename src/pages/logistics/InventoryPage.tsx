@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import type { InventoryEntry } from '../../types/logistics';
+import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
@@ -12,6 +12,8 @@ import '../../components/logistics/inventory.css';
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
 type UnknownRecord = Record<string, unknown>;
+
+const MINABLE_KINDS = new Set<InventoryItemKind>(['ore', 'raw_mineable', 'ice', 'material']);
 
 type LocationGroup = {
   id: string;
@@ -144,6 +146,9 @@ export default function InventoryPage() {
   const [sortKey, setSortKey] = useState<SortKey>('quality');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
+  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
+  const [editingCard, setEditingCard] = useState<string | null>(null);
+  const [cardEdits, setCardEdits] = useState<Record<string, { quantity: string; quality: string; container: string; notes: string }>>({});
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -294,17 +299,72 @@ export default function InventoryPage() {
 
   const topQualityStacks = useMemo(() => {
     return [...entries]
-      .filter((entry) => entry.quality != null)
+      .filter((entry) => {
+        if (entry.quality == null || entry.quality < 800) return false;
+        const kind = entry.itemKind ?? (entry.materialId ? 'material' : undefined);
+        return kind == null || MINABLE_KINDS.has(kind);
+      })
       .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || b.quantity - a.quantity)
       .slice(0, 8);
   }, [entries]);
 
   const premiumStacks = useMemo(() => {
     return [...entries]
-      .filter((entry) => (entry.quality ?? 0) >= 900)
+      .filter((entry) => {
+        if ((entry.quality ?? 0) < 900) return false;
+        const kind = entry.itemKind ?? (entry.materialId ? 'material' : undefined);
+        return kind != null && !MINABLE_KINDS.has(kind);
+      })
       .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || b.quantity - a.quantity)
       .slice(0, 8);
   }, [entries]);
+
+  function toggleExpanded(cardId: string) {
+    setExpandedCards((prev) => {
+      const next = new Set(prev);
+      if (next.has(cardId)) next.delete(cardId);
+      else next.add(cardId);
+      return next;
+    });
+  }
+
+  function startCardEdit(group: LocationGroup) {
+    const edits: Record<string, { quantity: string; quality: string; container: string; notes: string }> = {};
+    for (const entry of group.entries) {
+      edits[entry.id] = {
+        quantity: String(entry.quantity),
+        quality: entry.quality != null ? String(entry.quality) : '',
+        container: entry.container ?? '',
+        notes: entry.notes ?? '',
+      };
+    }
+    setCardEdits(edits);
+    setEditingCard(group.id);
+  }
+
+  function cancelCardEdit() {
+    setEditingCard(null);
+    setCardEdits({});
+  }
+
+  function saveCardEdit(group: LocationGroup) {
+    for (const entry of group.entries) {
+      const edit = cardEdits[entry.id];
+      if (!edit) continue;
+      const qty = parseFloat(edit.quantity);
+      const qual = edit.quality.trim() ? parseInt(edit.quality) : undefined;
+      updateInventoryEntry({
+        ...entry,
+        quantity: Number.isFinite(qty) ? qty : entry.quantity,
+        quality: qual != null && Number.isFinite(qual) ? qual : entry.quality,
+        container: edit.container.trim() || undefined,
+        notes: edit.notes.trim() || undefined,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+    setEditingCard(null);
+    setCardEdits({});
+  }
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
@@ -468,36 +528,105 @@ export default function InventoryPage() {
                   <div><span>900+</span><strong>{group.premiumCount}</strong></div>
                 </div>
 
-                {group.topStacks.length > 0 ? (
-                  <div className="logi-location-stack-list">
-                    {group.topStacks.map((entry) => {
-                      const material = getMaterialForEntry(entry, materials);
-                      return (
-                        <div key={entry.id} className="logi-location-stack-row">
-                          <div className="logi-location-stack-main">
-                            <MaterialGlyph quality={entry.quality} />
-                            <span>{resolveInventoryItemName(entry, material)}</span>
+                {(() => {
+                  const isExpanded = expandedCards.has(group.id);
+                  const isEditing = editingCard === group.id;
+                  const visibleStacks = isExpanded ? group.entries : group.topStacks;
+                  return group.topStacks.length > 0 ? (
+                    <div
+                      className="logi-location-stack-list"
+                      onKeyDown={isEditing ? (e) => { if (e.key === 'Enter') { e.preventDefault(); saveCardEdit(group); } } : undefined}
+                    >
+                      {visibleStacks.map((entry) => {
+                        const material = getMaterialForEntry(entry, materials);
+                        if (isEditing) {
+                          const edit = cardEdits[entry.id] ?? { quantity: String(entry.quantity), quality: entry.quality != null ? String(entry.quality) : '', container: entry.container ?? '', notes: entry.notes ?? '' };
+                          return (
+                            <div key={entry.id} className="logi-location-stack-row logi-location-stack-row--editing">
+                              <div className="logi-location-stack-main">
+                                <MaterialGlyph quality={entry.quality} />
+                                <span className="logi-stack-edit-name">{resolveInventoryItemName(entry, material)}</span>
+                              </div>
+                              <div className="logi-stack-edit-fields">
+                                <input
+                                  type="number"
+                                  className="logi-stack-edit-input"
+                                  value={edit.quantity}
+                                  min={0}
+                                  step={0.01}
+                                  placeholder="SCU"
+                                  aria-label="Quantity"
+                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, quantity: e.target.value } }))}
+                                />
+                                <input
+                                  type="number"
+                                  className="logi-stack-edit-input"
+                                  value={edit.quality}
+                                  min={0}
+                                  max={1000}
+                                  placeholder="Q"
+                                  aria-label="Quality"
+                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, quality: e.target.value } }))}
+                                />
+                                <input
+                                  type="text"
+                                  className="logi-stack-edit-input logi-stack-edit-input--wide"
+                                  value={edit.container}
+                                  placeholder="Container"
+                                  aria-label="Container"
+                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, container: e.target.value } }))}
+                                />
+                              </div>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div key={entry.id} className="logi-location-stack-row">
+                            <div className="logi-location-stack-main">
+                              <MaterialGlyph quality={entry.quality} />
+                              <span>{resolveInventoryItemName(entry, material)}</span>
+                            </div>
+                            <QualityPill quality={entry.quality} />
+                            <span className="logi-location-stack-qty">{formatQuantity(entry.quantity)} SCU</span>
                           </div>
-                          <QualityPill quality={entry.quality} />
-                          <span className="logi-location-stack-qty">{formatQuantity(entry.quantity)} SCU</span>
-                        </div>
-                      );
-                    })}
-                    {group.entries.length > group.topStacks.length && (
-                      <div className="logi-location-more">+{group.entries.length - group.topStacks.length} more stacks</div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="logi-location-empty-state">
-                    <span>No inventory recorded</span>
-                    <button type="button" onClick={() => setPanel({ mode: 'new' })}>Add stock</button>
-                  </div>
-                )}
+                        );
+                      })}
+                      {!isExpanded && group.entries.length > group.topStacks.length && (
+                        <button type="button" className="logi-location-more logi-location-more--btn" onClick={() => toggleExpanded(group.id)}>
+                          +{group.entries.length - group.topStacks.length} more stacks
+                        </button>
+                      )}
+                      {isExpanded && group.entries.length > group.topStacks.length && (
+                        <button type="button" className="logi-location-more logi-location-more--btn" onClick={() => toggleExpanded(group.id)}>
+                          Show less
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="logi-location-empty-state">
+                      <span>No inventory recorded</span>
+                      <button type="button" onClick={() => setPanel({ mode: 'new' })}>Add stock</button>
+                    </div>
+                  );
+                })()}
 
                 <div className="logi-location-card-actions">
-                  <button type="button" onClick={() => setLocationFilter(group.id === '__unassigned__' ? '' : group.id)}>View</button>
-                  <Link to="/logistics/locations">Edit</Link>
-                  <button type="button" disabled={group.entries.length > 0} title={group.entries.length > 0 ? 'Delete location after moving stock' : 'Delete location'}>Delete</button>
+                  {editingCard === group.id ? (
+                    <>
+                      <button type="button" className="logi-card-save-btn" onClick={() => saveCardEdit(group)}>Save</button>
+                      <button type="button" onClick={cancelCardEdit}>Cancel</button>
+                    </>
+                  ) : (
+                    <>
+                      <button type="button" onClick={() => toggleExpanded(group.id)}>
+                        {expandedCards.has(group.id) ? 'Collapse' : 'View'}
+                      </button>
+                      {group.entries.length > 0 && (
+                        <button type="button" onClick={() => startCardEdit(group)}>Edit</button>
+                      )}
+                      <button type="button" disabled={group.entries.length > 0} title={group.entries.length > 0 ? 'Delete location after moving stock' : 'Delete location'}>Delete</button>
+                    </>
+                  )}
                 </div>
               </article>
             ))}

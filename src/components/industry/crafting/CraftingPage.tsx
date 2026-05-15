@@ -143,40 +143,36 @@ export default function CraftingModule() {
   );
 
   return (
-    <div className="craft-page">
-      
+    <>
+      {loadError && (
+        <div className="craft-empty-state">
+          <p>{loadError}</p>
+        </div>
+      )}
 
-      <div className="craft-tab-content">
-        {loadError && (
-          <div className="craft-empty-state">
-            <p>{loadError}</p>
-          </div>
-        )}
+      {tab === "recipes" && (
+        <ComponentRecipeTable
+          recipes={recipes}
+          inventoryEntries={inventoryEntries}
+          materialTemplates={materialTemplates}
+          onAddToQueue={handleAddToQueue}
+          isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+        />
+      )}
 
-        {tab === "recipes" && (
-          <ComponentRecipeTable
-            recipes={recipes}
-            inventoryEntries={inventoryEntries}
-            materialTemplates={materialTemplates}
-            onAddToQueue={handleAddToQueue}
-            isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
-          />
-        )}
+      {tab === "analytics" && (
+        <MaterialDemandAnalytics recipes={recipes} />
+      )}
 
-        {tab === "analytics" && (
-          <MaterialDemandAnalytics recipes={recipes} />
-        )}
+      {tab === "quality" && (
+        <Suspense fallback={<div className="craft-empty-state">Loading quality data…</div>}>
+          <QualityModifierViewer />
+        </Suspense>
+      )}
 
-        {tab === "quality" && (
-          <Suspense fallback={<div className="craft-empty-state">Loading quality data…</div>}>
-            <QualityModifierViewer />
-          </Suspense>
-        )}
-
-        {tab === "sources" && (
-          <MaterialSourcePlaceholder />
-        )}
-      </div>
-    </div>
+      {tab === "sources" && (
+        <MaterialSourcePlaceholder />
+      )}
+    </>
   );
 }

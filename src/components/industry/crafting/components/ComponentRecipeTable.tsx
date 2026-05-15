@@ -1113,7 +1113,7 @@ function CraftedItemSummaryPanel({
     finalProductQuality.averageBand ?? finalProductQuality.band;
 
   return (
-    <div className="craft-summary-panel">
+    <div className="craft-summary-panel craft-summary-column">
       {/* Title + metadata chips */}
       <div className="craft-summary-head">
         <div className="craft-summary-title-row">
@@ -1429,24 +1429,22 @@ function RecipeDrawer({
         </div>
       </div>
 
-      <div className="craft-summary-column">
-        <CraftedItemSummaryPanel
-          recipe={selectedRecipe}
-          displayName={displayName}
-          totalModifiers={totalModifiers}
-          overallModifiers={overallModifiers}
-          overallQualitySource={overallQualitySource}
-          finalProductQuality={finalProductQuality}
-          rewardPools={rewardPools}
-          onAddToQueue={onAddToQueue}
-          isQueued={selectedIsQueued}
-          isBookmarked={selectedIsBookmarked}
-          onToggleBookmark={() => onToggleBookmark(selectedRecipe.blueprint_id)}
-          getBandEffectiveQuality={getBandEffectiveQuality}
-          getBandsForMaterial={getBandsForMaterial}
-          materialQualities={materialQualities}
-        />
-      </div>
+      <CraftedItemSummaryPanel
+        recipe={selectedRecipe}
+        displayName={displayName}
+        totalModifiers={totalModifiers}
+        overallModifiers={overallModifiers}
+        overallQualitySource={overallQualitySource}
+        finalProductQuality={finalProductQuality}
+        rewardPools={rewardPools}
+        onAddToQueue={onAddToQueue}
+        isQueued={selectedIsQueued}
+        isBookmarked={selectedIsBookmarked}
+        onToggleBookmark={() => onToggleBookmark(selectedRecipe.blueprint_id)}
+        getBandEffectiveQuality={getBandEffectiveQuality}
+        getBandsForMaterial={getBandsForMaterial}
+        materialQualities={materialQualities}
+      />
     </div>
   );
 };
@@ -1705,7 +1703,7 @@ export default function ComponentRecipeTable({
 
 
   return (
-    <div className="craft-planner-shell" ref={shellRef}>
+    <div className="craft-page craft-planner-shell" ref={shellRef}>
 
       {/* ── Filter rail ── */}
       <div className="craft-filter-rail">
@@ -1821,33 +1819,35 @@ export default function ComponentRecipeTable({
           </div>
         )}
 
-        {/* Vehicle */}
-        {mineableGroups.vehicle.length > 0 && (
-          <div className="craft-fg craft-fg--vehicle">
-            <span className="craft-frl-label">Vehicle</span>
-            <div className="craft-frl-chips">
-              {mineableGroups.vehicle.map((chip) => (
-                <button key={chip.id} type="button"
-                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                >{chip.label}</button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Hand */}
-        {mineableGroups.hand.length > 0 && (
-          <div className="craft-fg craft-fg--hand">
-            <span className="craft-frl-label">Hand</span>
-            <div className="craft-frl-chips">
-              {mineableGroups.hand.map((chip) => (
-                <button key={chip.id} type="button"
-                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                >{chip.label}</button>
-              ))}
-            </div>
+        {/* Vehicle + Hand — stacked in one column */}
+        {(mineableGroups.vehicle.length > 0 || mineableGroups.hand.length > 0) && (
+          <div className="craft-fg craft-fg--vh">
+            {mineableGroups.vehicle.length > 0 && (
+              <>
+                <span className="craft-frl-label">Vehicle</span>
+                <div className="craft-frl-chips">
+                  {mineableGroups.vehicle.map((chip) => (
+                    <button key={chip.id} type="button"
+                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                    >{chip.label}</button>
+                  ))}
+                </div>
+              </>
+            )}
+            {mineableGroups.hand.length > 0 && (
+              <>
+                <span className="craft-frl-label">Hand</span>
+                <div className="craft-frl-chips">
+                  {mineableGroups.hand.map((chip) => (
+                    <button key={chip.id} type="button"
+                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                    >{chip.label}</button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -1929,8 +1929,6 @@ export default function ComponentRecipeTable({
             </div>
           )}
         </aside>
-
-        <div className="craft-selected-bridge-column" aria-hidden />
 
         {selectedGroup ? (
           <RecipeDrawer

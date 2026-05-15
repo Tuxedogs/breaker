@@ -23,12 +23,19 @@ export async function signInWithDiscord() {
   const supabase = getSupabaseClient();
   const path = `${window.location.pathname}${window.location.search}`;
   const nextPath = path.startsWith("/logistics/inventory") ? path : "/dashboard";
+  const redirectTo = `${window.location.origin}/auth/callback`;
   window.sessionStorage.setItem(postAuthRedirectKey, nextPath);
+
+  if (import.meta.env.DEV) {
+    console.info("[auth] Supabase URL", supabaseUrl);
+    console.info("[auth] Discord redirectTo", redirectTo);
+  }
 
   return supabase.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo,
+      scopes: "identify email",
     },
   });
 }

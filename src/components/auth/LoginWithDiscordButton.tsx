@@ -31,12 +31,19 @@ export default function LoginWithDiscordButton({
   const disabled = loading || busy;
 
   async function handleClick() {
+    if (import.meta.env.DEV) {
+      console.info("[auth] login button clicked");
+    }
+
     setBusy(true);
     try {
       if (signedIn) {
         await logout();
       } else {
-        await signInWithDiscord();
+        const { error } = await signInWithDiscord();
+        if (error) {
+          console.error("[auth] Discord sign-in failed", error);
+        }
       }
     } finally {
       setBusy(false);
