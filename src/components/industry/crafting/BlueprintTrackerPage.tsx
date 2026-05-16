@@ -18,6 +18,9 @@ import {
   type MissionSourceDetail,
 } from "./utils/blueprintTrackerStore";
 import { getCraftingItems } from "@/lib/craftingData";
+import { useAuthSession } from "@/lib/auth/useAuthSession";
+import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
+import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 
 // ── Utility ───────────────────────────────────────────────────────────────────
 
@@ -430,11 +433,12 @@ export default function BlueprintTrackerPage() {
   const [bookmarkedMissionIds, setBookmarkedMissionIds] = useState<Set<string>>(
     () => readStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY),
   );
+  const { session, loading: authLoading } = useAuthSession();
 
   // Listen for storage events from other tabs
   useEffect(() => {
     function onStorage(e: StorageEvent) {
-      if (e.key === RECIPE_BOOKMARK_STORAGE_KEY) {
+      if (!session?.access_token && e.key === RECIPE_BOOKMARK_STORAGE_KEY) {
         setBookmarkedRecipeIds(readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY));
       }
       if (e.key === MISSION_BOOKMARK_STORAGE_KEY) {
@@ -443,7 +447,27 @@ export default function BlueprintTrackerPage() {
     }
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
-  }, []);
+  }, [session?.access_token]);
+
+  useEffect(() => {
+    const accessToken = session?.access_token;
+    if (!accessToken) return;
+
+    let cancelled = false;
+    fetchSavedBlueprints(accessToken)
+      .then((savedBlueprints) => {
+        if (!cancelled) {
+          setBookmarkedRecipeIds(new Set(savedBlueprints.map((item) => item.blueprintId)));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setBookmarkedRecipeIds(new Set());
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.access_token]);
 
   useEffect(() => {
     let cancelled = false;
@@ -471,14 +495,51 @@ export default function BlueprintTrackerPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const toggleRecipe = useCallback((recipeId: string) => {
+  const toggleRecipe = useCallback(async (recipeId: string) => {
+    const accessToken = session?.access_token;
+
+    if (!accessToken) {
+      if (hasSupabaseConfig() && !authLoading) {
+        await signInWithDiscord();
+        return;
+      }
+
+      setBookmarkedRecipeIds((prev) => {
+        const next = new Set(prev);
+        next.has(recipeId) ? next.delete(recipeId) : next.add(recipeId);
+        writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+        return next;
+      });
+      return;
+    }
+
+    const wasSaved = bookmarkedRecipeIds.has(recipeId);
+    const recipe = recipes.find((item) => item.blueprint_id === recipeId);
     setBookmarkedRecipeIds((prev) => {
       const next = new Set(prev);
-      next.has(recipeId) ? next.delete(recipeId) : next.add(recipeId);
-      writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+      wasSaved ? next.delete(recipeId) : next.add(recipeId);
       return next;
     });
-  }, []);
+
+    try {
+      if (wasSaved) {
+        await deleteUserBlueprint(accessToken, recipeId);
+      } else {
+        await saveUserBlueprint(accessToken, {
+          blueprintId: recipeId,
+          faction: recipe?.manufacturer,
+          itemName: recipe?.component_name,
+          sourceType: "blueprint",
+        });
+      }
+    } catch {
+      setBookmarkedRecipeIds((prev) => {
+        const next = new Set(prev);
+        wasSaved ? next.add(recipeId) : next.delete(recipeId);
+        return next;
+      });
+    }
+  }, [authLoading, bookmarkedRecipeIds, recipes, session?.access_token]);
 
   const toggleMission = useCallback((missionId: string) => {
     setBookmarkedMissionIds((prev) => {

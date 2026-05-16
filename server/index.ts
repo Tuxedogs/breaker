@@ -2,6 +2,7 @@ import http from "node:http";
 import { fileURLToPath } from "node:url";
 import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
 import { handleRecommenderRoute } from "./routes/recommender.routes";
+import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
 
 async function readBody(request: http.IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
@@ -15,9 +16,10 @@ export function createServer() {
     try {
       const body = await readBody(request);
       const url = request.url?.split("?")[0] ?? "";
-      const route =
-        await handleRecommenderRoute(request.method ?? "GET", url, body) ??
-        await handleBuildQueueRoute(request.method ?? "GET", url, body);
+      const route = url === "/api/user/saved-blueprints"
+        ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
+        : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
+          await handleBuildQueueRoute(request.method ?? "GET", url, body);
       if (!route) {
         response.writeHead(404, { "content-type": "application/json" });
         response.end(JSON.stringify({ error: "Not found" }));
