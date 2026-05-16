@@ -669,7 +669,7 @@
 /* ── Category ────────────────────────────────────────────────────────────── */
 
 .bq-category {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .bq-category-label {
@@ -698,16 +698,34 @@
   grid-template-columns: 12rem 1fr;
   position: relative;
   min-width: 0;
-  border: 1px solid var(--bq-edge);
+  border: 1px solid rgba(148,163,184,0.18);
   border-radius: 7px;
   background: var(--bg-card);
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.38), 0 1px 3px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.028);
   overflow: hidden;
   max-width: 100%;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.1rem;
 }
 
-/* fulfillment accent — top border instead of left rail so it reads across the card */
+/* fulfillment status left rail */
+.bq-item::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 0;
+  background: transparent;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bq-item--missing::before {
+  background: linear-gradient(180deg, rgba(248,113,113,0.72) 0%, rgba(220,38,38,0.44) 100%);
+}
+
+.bq-item--partial::before {
+  background: linear-gradient(180deg, rgba(245,158,11,0.7) 0%, rgba(217,119,6,0.38) 100%);
+}
 
 /* ── Left sidebar ────────────────────────────────────────────────────────── */
 
@@ -715,9 +733,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
-  padding: 0.7rem 0.75rem 0.75rem;
-  border-right: 1px solid var(--bq-edge-soft);
-  background: var(--bg-card-dark);
+  padding: 0.7rem 0.75rem 0.75rem 1rem;
+  border-right: 1px solid rgba(148,163,184,0.12);
+  background: linear-gradient(180deg, #13181c 0%, #0f1317 100%);
 }
 
 .bq-item-name-block {
@@ -952,6 +970,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  background: #10151a;
 }
 
 /* blueprint source row */
@@ -1152,7 +1171,8 @@
 .bq-mat-head {
   padding: 0 0.7rem 0 0.9rem;
   min-height: 26px;
-  border-bottom: 1px solid var(--bq-edge-soft);
+  border-bottom: 1px solid rgba(148,163,184,0.12);
+  background: rgba(0,0,0,0.18);
   font-size: 0.42rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1161,11 +1181,12 @@
 
 .bq-mat-group {
   position: relative;
-  border-bottom: 1px solid rgba(148,163,184,0.055);
+  border-bottom: 1px solid rgba(148,163,184,0.08);
+  background: rgba(255,255,255,0.008);
 }
 
 .bq-mat-group:last-child { border-bottom: 0; }
-.bq-mat-group:hover { background: rgba(255,255,255,0.01); }
+.bq-mat-group:hover { background: rgba(255,255,255,0.022); }
 
 /* missing left rail on mat group */
 .bq-mat-group--missing::before {
@@ -1174,8 +1195,12 @@
   inset: 0 auto 0 0;
   width: 2px;
   background: var(--bq-red);
-  opacity: 0.55;
+  opacity: 0.72;
   border-radius: 0;
+}
+
+.bq-mat-group--missing {
+  background: rgba(248,113,113,0.025);
 }
 
 .bq-mat-row {
