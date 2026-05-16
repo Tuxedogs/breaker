@@ -11,12 +11,14 @@ import path from "node:path";
 import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
 import { handleSavedBlueprintsRoute } from "./src/server/user/savedBlueprintsRoute";
+import { handleUserBuildQueueRoute } from "./src/server/user/buildQueueRoute";
 
 const dynamicApiPaths = new Set([
   "/api/recommender/locations",
   "/api/recommender/recommendations",
   "/api/build-queue/requirements",
   "/api/user/saved-blueprints",
+  "/api/user/build-queue",
 ]);
 
 const contentTypes: Record<string, string> = {
@@ -74,8 +76,10 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
     const body = await readRequestBody(request);
     const route = url === "/api/user/saved-blueprints"
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
-      : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
-        await handleBuildQueueRoute(request.method ?? "GET", url, body);
+      : url === "/api/user/build-queue"
+        ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
+        : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
+          await handleBuildQueueRoute(request.method ?? "GET", url, body);
     if (!route) {
       next();
       return;

@@ -14,6 +14,12 @@ import {
 import { normalizeRecipeInputTemplate } from "../lib/logistics/materialResolver";
 import { rarityFromBandIndex } from "../components/industry/crafting/utils/qualityBands";
 import {
+  persistBuildQueueAdd,
+  persistBuildQueueClear,
+  persistBuildQueueDelete,
+  persistBuildQueueQuantity,
+} from "../lib/userBuildQueuePersistence";
+import {
   getLegacyMaterialItemKind,
   resolveInventoryItemName,
   resolveInventoryUnitType,
@@ -55,6 +61,13 @@ interface LogisticsStoreState {
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
   registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
+  replaceBuildQueueFromRemote: (
+    items: BuildQueueItem[],
+    registrations: {
+      recipeTemplates: RecipeTemplate[];
+      recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
+    },
+  ) => void;
   addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
@@ -63,6 +76,7 @@ interface LogisticsStoreState {
   updateBuildQueueItemAllowLowerQuality: (id: string, allowLowerQuality: boolean) => void;
   updateBuildQueueMaterialRequirement: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
   removeBuildQueueItem: (id: string) => void;
+  clearBuildQueue: () => void;
   setBuildQueueItemAllocations: (buildQueueItemId: string, allocations: ReservedMaterialAllocation[]) => void;
   toggleBuildQueueAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
   updateBuildQueueAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
@@ -473,6 +487,12 @@ function removeStaleReservedAllocations(
   });
 }
 
+function logBuildQueuePersistenceFailure(action: string, error: unknown) {
+  if (import.meta.env.DEV) {
+    console.warn(`[build-queue] failed to ${action}`, error);
+  }
+}
+
 migrateLegacyLogisticsStorage();
 
 export const useLogisticsStore = create<LogisticsStoreState>()(
@@ -568,24 +588,39 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           };
         });
       },
+      replaceBuildQueueFromRemote: (items, registrations) => {
+        set((state) => {
+          const seedRecipeIds = new Set(state.recipeTemplates.map((recipe) => recipe.id));
+          const extraRecipes = registrations.recipeTemplates.filter((recipe) => !seedRecipeIds.has(recipe.id));
+          return {
+            buildQueue: items,
+            recipeTemplates: [...state.recipeTemplates, ...extraRecipes],
+            recipeInputTemplates: {
+              ...state.recipeInputTemplates,
+              ...registrations.recipeInputTemplates,
+            },
+          };
+        });
+      },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {
-          const existing = state.buildQueue.find((item) =>
-            item.recipeId === recipeId &&
-            JSON.stringify(item.materialRequirements ?? null) === JSON.stringify(snapshot?.materialRequirements ?? null)
-          );
+          const existing = state.buildQueue.find((item) => item.recipeId === recipeId);
           if (existing) {
-            return {
-              buildQueue: state.buildQueue.map((item) =>
-                item.id === existing.id
-                  ? {
-                      ...item,
-                      quantity: item.quantity + quantity,
-                      blueprintSources: item.blueprintSources?.length ? item.blueprintSources : snapshot?.blueprintSources,
-                    }
-                  : item,
-              ),
-            };
+            const nextBuildQueue = state.buildQueue.map((item) =>
+              item.id === existing.id
+                ? {
+                    ...item,
+                    quantity: item.quantity + quantity,
+                    blueprintSources: item.blueprintSources?.length ? item.blueprintSources : snapshot?.blueprintSources,
+                  }
+                : item,
+            );
+            const request = persistBuildQueueAdd(recipeId, quantity);
+            request?.catch((error: unknown) => {
+              logBuildQueuePersistenceFailure("add item", error);
+              set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
+            });
+            return { buildQueue: nextBuildQueue };
           }
           const nextPriority = state.buildQueue.reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
           const newItem: BuildQueueItem = {
@@ -608,7 +643,13 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
               requirementId: input.requirementId ?? `${recipeId}:${index}:${input.materialKey ?? input.materialId}:${input.modifierName ?? input.modifierType ?? "material"}`,
             })),
           };
-          return { buildQueue: [...state.buildQueue, newItem] };
+          const nextBuildQueue = [...state.buildQueue, newItem];
+          const request = persistBuildQueueAdd(recipeId, quantity);
+          request?.catch((error: unknown) => {
+            logBuildQueuePersistenceFailure("add item", error);
+            set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
+          });
+          return { buildQueue: nextBuildQueue };
         });
       },
       updateBuildQueueItemStatus: (id, status) => {
@@ -631,11 +672,20 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         }));
       },
       updateBuildQueueItemQuantity: (id, quantity) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
-            item.id === id ? { ...item, quantity: Math.max(1, Math.trunc(quantity)) } : item,
-          ),
-        }));
+        set((state) => {
+          const item = state.buildQueue.find((entry) => entry.id === id);
+          if (!item) return {};
+          const nextQuantity = Math.max(1, Math.trunc(quantity));
+          const nextBuildQueue = state.buildQueue.map((entry) =>
+            entry.id === id ? { ...entry, quantity: nextQuantity } : entry,
+          );
+          const request = persistBuildQueueQuantity(item.recipeId, nextQuantity);
+          request?.catch((error: unknown) => {
+            logBuildQueuePersistenceFailure("update quantity", error);
+            set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
+          });
+          return { buildQueue: nextBuildQueue };
+        });
       },
       updateBuildQueueItemAllowLowerQuality: (id, allowLowerQuality) => {
         set((state) => ({
@@ -677,9 +727,31 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       removeBuildQueueItem: (id) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.filter((item) => item.id !== id),
-        }));
+        set((state) => {
+          const item = state.buildQueue.find((entry) => entry.id === id);
+          const nextBuildQueue = state.buildQueue.filter((entry) => entry.id !== id);
+          if (item) {
+            const request = persistBuildQueueDelete(item.recipeId);
+            request?.catch((error: unknown) => {
+              logBuildQueuePersistenceFailure("remove item", error);
+              set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
+            });
+          }
+          return {
+            buildQueue: nextBuildQueue,
+          };
+        });
+      },
+      clearBuildQueue: () => {
+        set((state) => {
+          const nextBuildQueue: BuildQueueItem[] = [];
+          const request = persistBuildQueueClear();
+          request?.catch((error: unknown) => {
+            logBuildQueuePersistenceFailure("clear queue", error);
+            set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
+          });
+          return { buildQueue: nextBuildQueue };
+        });
       },
       setBuildQueueItemAllocations: (buildQueueItemId, allocations) => {
         set((state) => ({
