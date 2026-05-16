@@ -26,6 +26,7 @@ export default function BuildQueuePage() {
   const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
   const removeBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
+  const clearBuildQueue = useLogisticsStore((s) => s.clearBuildQueue);
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
@@ -66,6 +67,11 @@ export default function BuildQueuePage() {
                 <h1>Material Shortages</h1>
                 <p>Active build demand, stock gaps, and reservation readiness.</p>
               </div>
+              {buildQueue.length > 0 && (
+                <button type="button" className="bq-btn bq-btn--danger" onClick={clearBuildQueue}>
+                  Clear queue
+                </button>
+              )}
             </div>
 
             <div className="bq-summary-grid" aria-label="Build queue summary metrics">

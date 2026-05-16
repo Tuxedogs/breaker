@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
+import BuildQueuePersistence from "./components/logistics/BuildQueuePersistence";
 
 import DashboardPage from "./pages/DashboardPage";
 import DoctrineLibraryPage from "./pages/DoctrineLibraryPage";
@@ -62,35 +63,37 @@ function RedirectLegacyDoctrineModule() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route index element={<RedirectToDashboard />} />
-      <Route path="home" element={<RedirectToDashboard />} />
-      <Route path="index" element={<RedirectToDashboard />} />
-      <Route path="framework" element={<RedirectToDashboard />} />
-      <Route path="modules" element={<ModuleIndexPage />} />
-      <Route path="doctrine" element={<RedirectToDashboardDoctrine />} />
-      <Route path="doctrine/library" element={<RedirectToDashboardDoctrineLibrary />} />
-      <Route path="doctrine/armor-threshold" element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />} />
-      <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
-      <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
-      <Route path="framework-legacy" element={<Navigate to="/dashboard/doctrine/library" replace />} />
-      <Route path="auth/callback" element={<AuthCallbackPage />} />
-      <Route
-        path="systems/sub-targeting"
-        element={<Navigate to="/dashboard/doctrine/module/sub-targeting" replace />}
-      />
-      <Route
-        path="systems/turret-keybinds"
-        element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
-      />
-      <Route
-        path="systems/turret-keybinds/additional"
-        element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
-      />
-      <Route
-        path="anti-cap/component-sniping"
-        element={<Navigate to="/dashboard/doctrine/module/component-sniping" replace />}
-      />
+    <>
+      <BuildQueuePersistence />
+      <Routes>
+        <Route index element={<RedirectToDashboard />} />
+        <Route path="home" element={<RedirectToDashboard />} />
+        <Route path="index" element={<RedirectToDashboard />} />
+        <Route path="framework" element={<RedirectToDashboard />} />
+        <Route path="modules" element={<ModuleIndexPage />} />
+        <Route path="doctrine" element={<RedirectToDashboardDoctrine />} />
+        <Route path="doctrine/library" element={<RedirectToDashboardDoctrineLibrary />} />
+        <Route path="doctrine/armor-threshold" element={<Navigate to="/dashboard/doctrine/armor-threshold" replace />} />
+        <Route path="module/:id" element={<RedirectLegacyDoctrineModule />} />
+        <Route path="refs/:type/:id" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+        <Route path="framework-legacy" element={<Navigate to="/dashboard/doctrine/library" replace />} />
+        <Route path="auth/callback" element={<AuthCallbackPage />} />
+        <Route
+          path="systems/sub-targeting"
+          element={<Navigate to="/dashboard/doctrine/module/sub-targeting" replace />}
+        />
+        <Route
+          path="systems/turret-keybinds"
+          element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+        />
+        <Route
+          path="systems/turret-keybinds/additional"
+          element={<Navigate to="/dashboard/doctrine/module/turret-keybind-baseline" replace />}
+        />
+        <Route
+          path="anti-cap/component-sniping"
+          element={<Navigate to="/dashboard/doctrine/module/component-sniping" replace />}
+        />
 
       {/* Dashboard shell — sidebar + topbar always visible */}
       <Route element={<DashboardShell />}>
@@ -170,8 +173,9 @@ export default function App() {
 
       </Route>
 
-      <Route path="*" element={<RedirectToDashboard />} />
+        <Route path="*" element={<RedirectToDashboard />} />
 
-    </Routes>
+      </Routes>
+    </>
   );
 }
