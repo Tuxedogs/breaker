@@ -175,6 +175,7 @@ const sections = [
 ] as const;
 
 const STORAGE_KEY = "scintel-sidebar-collapsed";
+const HIGH_CONTRAST_STORAGE_KEY = "scintel-high-contrast";
 
 // ── Component ──────────────────────────────────────────────────────
 export default function DashboardSidebar() {
@@ -187,6 +188,13 @@ export default function DashboardSidebar() {
       return true;
     }
   });
+  const [highContrast, setHighContrast] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(HIGH_CONTRAST_STORAGE_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     try {
@@ -195,6 +203,18 @@ export default function DashboardSidebar() {
       // ignore
     }
   }, [collapsed]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("sc-high-contrast", highContrast);
+    try {
+      localStorage.setItem(HIGH_CONTRAST_STORAGE_KEY, String(highContrast));
+    } catch {
+      // ignore
+    }
+    return () => {
+      document.documentElement.classList.remove("sc-high-contrast");
+    };
+  }, [highContrast]);
 
   const { tip, show, hide } = useNavTooltip(collapsed);
 
@@ -251,6 +271,7 @@ export default function DashboardSidebar() {
                       collapsed ? "dash-sidebar-item--icon" : "",
                     ].filter(Boolean).join(" ")}
                     aria-current={active ? "page" : undefined}
+                    aria-disabled={"wip" in item && item.wip ? true : undefined}
                   >
                     {"svgIcon" in item && item.svgIcon ? (
                       <SidebarSvgIcon component={SIDEBAR_SVG_ICONS[item.svgIcon]} />
@@ -281,9 +302,11 @@ export default function DashboardSidebar() {
             )}
             <button
               type="button"
-              className="dash-sidebar-footer-btn"
-              aria-label="Toggle theme"
-              title="Toggle theme"
+              className={["dash-sidebar-footer-btn", highContrast ? "dash-sidebar-footer-btn--active" : ""].filter(Boolean).join(" ")}
+              aria-label={highContrast ? "Disable high contrast mode" : "Enable high contrast mode"}
+              aria-pressed={highContrast}
+              title={highContrast ? "Disable high contrast mode" : "Enable high contrast mode"}
+              onClick={() => setHighContrast((value) => !value)}
             >
               <Icon d={ICONS.sun} size={13} />
             </button>
