@@ -2,17 +2,17 @@ import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/refinery-import.css';
 import { Link } from "react-router-dom";
-import { useLogisticsStore, createInventoryEntryDraft } from "../../../../stores/logisticsStore";
-import { formatQuantity } from "../../../../lib/logistics/inventory";
-import { parseRefineryScreenshot } from "../../../../lib/logistics/refineryOcr";
+import { useLogisticsStore, createInventoryEntryDraft } from "../../stores/logisticsStore";
+import { formatQuantity } from "../../lib/logistics/inventory";
+import { parseRefineryScreenshot } from "../../lib/logistics/refineryOcr";
 import type {
   ParsedRefineryRow,
   ParsedWorkOrder,
   ParsedInputRow,
   RefineryScreenType,
   PanelRegion,
-} from "../../../../lib/logistics/refineryOcr";
-import type { MaterialTemplate } from "../../../../types/logistics";
+} from "../../lib/logistics/refineryOcr";
+import type { MaterialTemplate } from "../../types/logistics";
 
 // ── Draft row types ───────────────────────────────────────────────────────────
 
@@ -754,6 +754,19 @@ export default function RefineryImportPage() {
 
   return (
     <div className="logi-page ri-page">
+      <div className="logi-page-header">
+        <div>
+          <div className="logi-breadcrumb">
+            <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>
+            <span className="logi-breadcrumb-sep">/</span>
+            <Link to="/logistics/inventory" className="logi-breadcrumb-link">Inventory</Link>
+            <span className="logi-breadcrumb-sep">/</span>
+            <span className="logi-breadcrumb-active">Refinery Import</span>
+          </div>
+          <h1 className="logi-page-title">Refinery Import</h1>
+          <p className="logi-page-subtitle">Parse refinery screenshots into inventory stacks.</p>
+        </div>
+      </div>
 
       <input
         ref={inputRef}

@@ -1,0 +1,667 @@
+/* ==========================================================================
+   Blueprint Tracker — Dark Graphite / Amber Command Interface
+   ========================================================================== */
+
+/* 1. Tokens */
+.bt-page {
+  --bt-bg:            var(--bg-app);
+  --bt-shell:         var(--bg-panel);
+
+  --bt-card:          linear-gradient(180deg, #181d21 0%, #101417 100%);
+  --bt-card-hover:    linear-gradient(180deg, #1c2227 0%, #131619 100%);
+  --bt-card-expanded: linear-gradient(180deg, #181d22 0%, #0e1215 100%);
+
+  --bt-orange:        #f59e0b;
+  --bt-orange-soft:   rgba(255, 145, 32, 0.22);
+  --bt-orange-dim:    rgba(255, 145, 32, 0.10);
+  --bt-orange-border: var(--border-active-color, rgba(255, 166, 38, 0.62));
+
+  --bt-text:          #f0ede0;
+  --bt-muted:         #9ca09a;
+  --bt-faint:         #686e68;
+
+  --bt-border:        rgba(180, 190, 210, 0.09);
+  --bt-border-panel:  rgba(180, 190, 210, 0.13);
+  --bt-border-hover:  rgba(255, 160, 48, 0.26);
+
+  --bt-teal:          #43ffd0;
+  --bt-teal-soft:     rgba(67, 255, 208, 0.15);
+
+  --bt-recipe-color:  #43ffd0;
+  --bt-mission-color: #f59e0b;
+
+  --bt-shadow-shell:
+    0 24px 56px rgba(0,0,0,0.52),
+    0 0 36px rgba(255,153,0,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  --bt-shadow-card:
+    0 6px 16px rgba(0,0,0,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.028);
+  --bt-shadow-popover:
+    0 16px 48px rgba(0,0,0,0.64),
+    0 4px 12px rgba(0,0,0,0.42),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ==========================================================================
+   2. Page & Shell
+   ========================================================================== */
+
+.bt-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--bt-bg);
+  color: var(--bt-text);
+  padding: 24px 24px 40px;
+  overflow-y: auto;
+  font-family: var(--font-primary, Rajdhani, sans-serif);
+}
+
+.bt-shell {
+  max-width: 840px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   3. Page Header
+   ========================================================================== */
+
+.bt-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--bt-border-panel);
+}
+
+.bt-page-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.bt-page-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bt-orange);
+  margin: 0;
+}
+
+.bt-page-count {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+  padding: 2px 8px;
+  background: rgba(255, 145, 32, 0.10);
+  border: 1px solid rgba(255, 145, 32, 0.22);
+  border-radius: 2px;
+}
+
+.bt-page-subtitle {
+  font-size: 13px;
+  color: var(--bt-muted);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   4. Loading / Empty
+   ========================================================================== */
+
+.bt-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--bt-muted);
+}
+
+.bt-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 260px;
+  text-align: center;
+  padding: 32px;
+  border: 1px solid var(--bt-border);
+  border-radius: 4px;
+  background: var(--bt-card);
+}
+
+.bt-empty-icon {
+  color: var(--bt-faint);
+  opacity: 0.7;
+}
+
+.bt-empty-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+}
+
+.bt-empty-body {
+  font-size: 13px;
+  color: var(--bt-faint);
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+.bt-empty-link {
+  color: var(--bt-orange);
+  text-decoration: none;
+}
+
+.bt-empty-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   5. Faction Groups
+   ========================================================================== */
+
+.bt-faction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bt-faction-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--bt-border-panel);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: var(--bt-shadow-shell);
+}
+
+.bt-faction-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  background: linear-gradient(180deg, #181c20 0%, #111417 100%);
+  border-bottom: 1px solid var(--bt-orange-border);
+  gap: 8px;
+}
+
+.bt-faction-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bt-orange);
+}
+
+.bt-faction-count {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--bt-muted);
+  padding: 1px 7px;
+  background: var(--bt-orange-dim);
+  border: 1px solid rgba(255, 145, 32, 0.18);
+  border-radius: 2px;
+}
+
+.bt-faction-items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   6. Item Cards
+   ========================================================================== */
+
+.bt-item-card {
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-item-card:last-child {
+  border-bottom: none;
+}
+
+.bt-item-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  padding: 10px 14px 10px;
+  background: var(--bt-card);
+  cursor: pointer;
+  text-align: left;
+  border: none;
+  color: inherit;
+  position: relative;
+  transition: background 0.12s;
+}
+
+.bt-item-card-head:hover {
+  background: var(--bt-card-hover);
+}
+
+.bt-item-card.is-expanded .bt-item-card-head {
+  background: var(--bt-card-expanded);
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-item-card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 24px;
+}
+
+.bt-item-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bt-text);
+  flex: 1;
+  min-width: 0;
+}
+
+.bt-item-source-badges {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.bt-item-card-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.bt-item-card-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--bt-faint);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   7. Badges & Chips
+   ========================================================================== */
+
+.bt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.bt-badge--recipe {
+  color: var(--bt-teal);
+  background: var(--bt-teal-soft);
+  border: 1px solid rgba(67, 255, 208, 0.22);
+}
+
+.bt-badge--mission {
+  color: var(--bt-orange);
+  background: var(--bt-orange-dim);
+  border: 1px solid rgba(255, 145, 32, 0.22);
+}
+
+.bt-badge--recipe-sm {
+  color: var(--bt-teal);
+  background: var(--bt-teal-soft);
+  border: 1px solid rgba(67, 255, 208, 0.18);
+  font-size: 9px;
+  padding: 1px 5px;
+}
+
+.bt-badge-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 2px;
+  background: rgba(255, 145, 32, 0.28);
+  padding: 0 3px;
+}
+
+.bt-chip {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--bt-muted);
+  background: rgba(180, 190, 210, 0.07);
+  border: 1px solid var(--bt-border);
+  border-radius: 2px;
+  padding: 1px 6px;
+}
+
+.bt-chip--fps {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.10);
+  border-color: rgba(251, 191, 36, 0.22);
+}
+
+.bt-chip--neutral {
+  color: var(--bt-faint);
+}
+
+/* ==========================================================================
+   8. Item Card Body / Sections
+   ========================================================================== */
+
+.bt-item-card-body {
+  background: linear-gradient(180deg, #0f1316 0%, #0b0e10 100%);
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bt-item-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bt-item-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bt-faint);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--bt-border);
+  margin-bottom: 2px;
+}
+
+.bt-item-empty {
+  font-size: 12px;
+  color: var(--bt-faint);
+  padding: 4px 0;
+}
+
+/* ==========================================================================
+   9. Recipe Rows
+   ========================================================================== */
+
+.bt-recipe-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  border-radius: 2px;
+  background: rgba(67, 255, 208, 0.04);
+  border: 1px solid rgba(67, 255, 208, 0.08);
+}
+
+.bt-recipe-bm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--bt-teal);
+  opacity: 0.8;
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: opacity 0.1s;
+}
+
+.bt-recipe-bm-btn:hover {
+  opacity: 1;
+}
+
+.bt-recipe-row-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.bt-recipe-row-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bt-text);
+}
+
+.bt-recipe-row-meta {
+  font-size: 11px;
+  color: var(--bt-faint);
+}
+
+/* ==========================================================================
+   10. Mission Rows
+   ========================================================================== */
+
+.bt-mission-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 2px;
+  background: rgba(255, 145, 32, 0.04);
+  border: 1px solid rgba(255, 145, 32, 0.09);
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.bt-mission-row:hover {
+  background: rgba(255, 145, 32, 0.08);
+  border-color: rgba(255, 145, 32, 0.18);
+}
+
+.bt-mission-row:focus-visible {
+  outline: 1px solid var(--bt-orange);
+  outline-offset: 1px;
+}
+
+.bt-mission-bm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--bt-faint);
+  border-radius: 2px;
+  flex-shrink: 0;
+  transition: color 0.1s;
+}
+
+.bt-mission-bm-btn:hover,
+.bt-mission-bm-btn.is-active {
+  color: var(--bt-orange);
+}
+
+.bt-mission-row-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.bt-mission-row-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bt-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-mission-row-meta {
+  font-size: 11px;
+  color: var(--bt-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-mission-row-source-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bt-orange);
+  background: var(--bt-orange-dim);
+  border: 1px solid rgba(255, 145, 32, 0.18);
+  border-radius: 2px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.bt-mission-row--pool .bt-mission-row-source-badge {
+  color: var(--bt-muted);
+  background: rgba(180, 190, 210, 0.06);
+  border-color: var(--bt-border);
+}
+
+.bt-mission-row-chevron {
+  color: var(--bt-faint);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   11. Mission Popover
+   ========================================================================== */
+
+.bt-mission-popover {
+  width: 300px;
+  background: linear-gradient(180deg, #1a1f25 0%, #111519 100%);
+  border: 1px solid var(--bt-border-panel);
+  border-top: 2px solid var(--bt-orange-border);
+  border-radius: 4px;
+  box-shadow: var(--bt-shadow-popover);
+  overflow: hidden;
+  font-family: var(--font-primary, Rajdhani, sans-serif);
+}
+
+.bt-mpop-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px 8px;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-mpop-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bt-text);
+  letter-spacing: 0.02em;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.bt-mpop-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--bt-faint);
+  flex-shrink: 0;
+  border-radius: 2px;
+  transition: color 0.1s;
+}
+
+.bt-mpop-close:hover {
+  color: var(--bt-text);
+}
+
+.bt-mpop-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px 0 4px;
+}
+
+.bt-mpop-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 12px;
+  border-bottom: 1px solid rgba(180, 190, 210, 0.05);
+}
+
+.bt-mpop-row:last-child {
+  border-bottom: none;
+}
+
+.bt-mpop-row--debug {
+  opacity: 0.55;
+}
+
+.bt-mpop-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bt-faint);
+  flex-shrink: 0;
+}
+
+.bt-mpop-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--bt-text);
+  text-align: right;
+}
+
+.bt-mpop-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--bt-orange);
+  background: var(--bt-orange-dim);
+  border: 1px solid rgba(255, 145, 32, 0.22);
+  border-radius: 2px;
+  padding: 1px 6px;
+}
+
+.bt-mpop-chance {
+  color: var(--bt-teal);
+  font-weight: 600;
+}
+
+.bt-mpop-mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--bt-faint);
+  word-break: break-all;
+}

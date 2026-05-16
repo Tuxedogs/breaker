@@ -396,6 +396,17 @@ export default function InventoryPage() {
           <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
         </div>
         <div className="logi-inv-header-actions">
+          <Link
+            to="/logistics/inventory/refinery-import"
+            className="logi-btn-secondary"
+          >
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <path d="M17 8 12 3 7 8" />
+              <path d="M12 3v12" />
+            </svg>
+            Import Screenshot
+          </Link>
           <button
             type="button"
             className="logi-btn-primary"

@@ -12,6 +12,7 @@ import AuthCallbackPage from "./pages/AuthCallbackPage";
 /* Lazy loaded tools because shipping everything up front is a cry for help */
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
+const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 
 const AlphaThresholdToolPage = lazy(() =>
@@ -29,6 +30,7 @@ const ComponentMappingPage = lazy(() =>
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
+const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 
 function RouteFallback() {
   return (
@@ -111,6 +113,14 @@ export default function App() {
           element={<Suspense fallback={<RouteFallback />}><InventoryPage /></Suspense>}
         />
         <Route
+          path="logistics/inventory/refinery-import"
+          element={<Suspense fallback={<RouteFallback />}><RefineryImportPage /></Suspense>}
+        />
+        <Route
+          path="logistics/refinery-import"
+          element={<Navigate to="/logistics/inventory/refinery-import" replace />}
+        />
+        <Route
           path="logistics/build-queue"
           element={<Suspense fallback={<RouteFallback />}><BuildQueuePage /></Suspense>}
         />
@@ -146,6 +156,14 @@ export default function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <IndustryMiningPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="industry/blueprint-tracker"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryBlueprintTrackerPage />
             </Suspense>
           }
         />

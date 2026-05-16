@@ -12,51 +12,90 @@
   font-family: var(--font-primary);
   --text-main: #e7edff;
   --glass-bg: rgba(10, 14, 20, 0.55);
-  --void-bg-0: #05080d;
-  --void-bg-1: #07101c;
-  --void-bg-2: #0b111c;
-  --void-bg-3: #0d1624;
-  --void-bg-deep: #03050a;
+
+  /* Void Navy theme color knobs
+     Change these first when iterating the app palette. */
+ /* Core app palette: dark graphite, low-gradient, amber action language */
+--void-bg-0: #030406;
+--void-bg-1: #06080c;
+--void-bg-2: #090c11;
+--void-bg-3: #0d1118;
+--void-bg-deep: #010203;
+
+/* Cool accent is now almost invisible, only for depth/system edges */
+--void-blue-soft: rgba(139, 116, 255, 0.055);
+--void-blue-panel: rgba(139, 116, 255, 0.035);
+--void-card-glow: rgba(255, 160, 48, 0.035);
+--void-card-dark-glow: rgba(255, 160, 48, 0.022);
+
+/* Cards: less gradient, more solid graphite */
+--void-card-top: rgba(14, 16, 20, 0.94);
+--void-card-mid: rgba(10, 12, 16, 0.95);
+--void-card-bottom: rgba(7, 8, 11, 0.96);
+
+--void-card-dark-top: rgba(10, 12, 15, 0.96);
+--void-card-dark-mid: rgba(7, 8, 11, 0.97);
+--void-card-dark-bottom: rgba(4, 5, 7, 0.98);
+
+/* Panels: flatter, heavier, less “blue glass” */
+--void-panel-top: rgba(12, 14, 18, 0.96);
+--void-panel-bottom: rgba(6, 7, 10, 0.98);
+
+/* Amber should be the action/focus color */
+--void-active-wash: rgba(255, 154, 32, 0.13);
+--void-active-fade: rgba(255, 154, 32, 0.04);
+
+/* Borders: graphite first, amber only when active */
+--void-border-soft: rgba(180, 190, 210, 0.09);
+--void-border-panel: rgba(180, 190, 210, 0.13);
+--void-border-hover: rgba(255, 160, 48, 0.26);
+--void-border-active: rgba(255, 166, 38, 0.62);
+--void-border-danger: rgba(255, 77, 77, 0.38);
+--void-border-divider: rgba(180, 190, 210, 0.07);
+
+/* Void Box Shadows semantic color tokens */
+
+  /* Void Navy semantic surface tokens */
   --bg-app:
-    radial-gradient(circle at 18% 0%, rgba(113, 142, 255, 0.10), transparent 34%),
-    radial-gradient(circle at 88% 100%, rgba(30, 58, 138, 0.10), transparent 36%),
+    radial-gradient(circle at 18% 0%, var(--void-blue-soft), transparent 34%),
+    radial-gradient(circle at 88% 100%, var(--void-blue-panel), transparent 36%),
     linear-gradient(180deg, var(--void-bg-0) 0%, var(--void-bg-1) 52%, var(--void-bg-deep) 100%);
   --bg-panel:
     linear-gradient(
       180deg,
-      rgba(13, 22, 36, 0.94) 0%,
-      rgba(8, 13, 24, 0.96) 100%
+      var(--void-panel-top) 0%,
+      var(--void-panel-bottom) 100%
     );
   --bg-card:
-    radial-gradient(circle at 50% 0%, rgba(113, 142, 255, 0.045), transparent 42%),
+    radial-gradient(circle at 50% 0%, var(--void-card-glow), transparent 42%),
     linear-gradient(
       180deg,
-      rgba(18, 28, 42, 0.86) 0%,
-      rgba(11, 17, 28, 0.86) 48%,
-      rgba(7, 10, 17, 0.92) 100%
+      var(--void-card-top) 0%,
+      var(--void-card-mid) 48%,
+      var(--void-card-bottom) 100%
     );
   --bg-card-dark:
-    radial-gradient(circle at 50% 0%, rgba(113, 142, 255, 0.035), transparent 42%),
+    radial-gradient(circle at 50% 0%, var(--void-card-dark-glow), transparent 42%),
     linear-gradient(
       180deg,
-      rgba(13, 20, 32, 0.88) 0%,
-      rgba(8, 13, 22, 0.90) 50%,
-      rgba(4, 7, 12, 0.94) 100%
+      var(--void-card-dark-top) 0%,
+      var(--void-card-dark-mid) 50%,
+      var(--void-card-dark-bottom) 100%
     );
   --bg-card-active:
     linear-gradient(
       90deg,
-      rgba(245, 158, 11, 0.12) 0%,
-      rgba(245, 158, 11, 0.035) 36%,
+      var(--void-active-wash) 0%,
+      var(--void-active-fade) 36%,
       transparent 72%
     ),
     var(--bg-card);
-  --border-soft-color: rgba(113, 142, 255, 0.15);
-  --border-panel-color: rgba(113, 142, 255, 0.22);
-  --border-hover-color: rgba(113, 142, 255, 0.34);
-  --border-active-color: rgba(245, 158, 11, 0.48);
-  --border-danger-color: rgba(255, 77, 77, 0.38);
-  --border-divider-color: rgba(113, 142, 255, 0.1);
+  --border-soft-color: var(--void-border-soft);
+  --border-panel-color: var(--void-border-panel);
+  --border-hover-color: var(--void-border-hover);
+  --border-active-color: var(--void-border-active);
+  --border-danger-color: var(--void-border-danger);
+  --border-divider-color: var(--void-border-divider);
   --border-soft: 1px solid var(--border-soft-color);
   --border-panel: 1px solid var(--border-panel-color);
   --border-hover: 1px solid var(--border-hover-color);

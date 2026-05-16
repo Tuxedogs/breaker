@@ -517,7 +517,13 @@
 .craft-detail-stage--empty { display: flex; align-items: center; justify-content: center; padding: 16px; }
 .craft-detail-main { position: relative; z-index: 2; min-width: 0; min-height: 0; overflow: visible; }
 .craft-detail-main { display: flex; flex-direction: column; gap: 8px; }
-.craft-summary-column { min-width: 0; min-height: 0; height: 100%; overflow: visible; }
+.craft-summary-column {
+  align-self: start;
+  min-width: 0;
+  min-height: 0;
+  height: fit-content;
+  overflow: visible;
+}
 
 .craft-variant-selector { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; min-height: 26px; overflow: hidden; }
 .craft-variant-list { display: flex; flex-wrap: nowrap; gap: 6px; min-width: 0; overflow: hidden; }
@@ -641,9 +647,10 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
+  align-self: start;
+  height: fit-content;
+  min-height: unset;
+  overflow: visible;
   padding: 14px 14px 12px;
 
   background: var(--bg-card);
@@ -660,7 +667,7 @@
 .craft-summary-quality-pill { flex: 0 0 auto; border: 1px solid var(--craft-orange-border); border-radius: 4px; padding: 4px 7px; color: var(--craft-text); font-size: 1rem; font-weight: 600; white-space: nowrap; }
 .craft-summary-chips { margin-top: 8px; flex-wrap: wrap; }
 .craft-summary-section { flex: 0 0 auto; margin: 5px 0; padding: 9px 0; border-bottom: 1px solid var(--craft-border); }
-.craft-summary-section--grow { flex: 1 1 auto; min-height: 0; overflow: hidden; }
+.craft-summary-section--grow { flex: 0 0 auto; min-height: 0; overflow: visible; }
 .craft-summary-mod-list { display: flex; flex-direction: column; gap: 22px; }
 .craft-summary-mod-top { display: flex; align-items: baseline; justify-content: space-between; gap: 9px; }
 .craft-summary-mod-prop { min-width: 0; color: var(--craft-text); font-size: 15px; font-weight: 900; line-height: 1; }
@@ -668,11 +675,70 @@
 .craft-summary-mod-breakdown { margin-top: 4px; color: var(--craft-muted); font-size: 12px; line-height: 1.15; }
 .craft-summary-mod-contrib + .craft-summary-mod-contrib::before { content: " "; }
 .craft-summary-section--grow::before { content: "Blueprint"; display: block; margin-bottom: 7px; color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
+.craft-summary-section-label { margin-bottom: 7px; color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
 .craft-summary-empty { border: 1px solid var(--craft-border); border-radius: 4px; padding: 10px; color: var(--craft-muted); font-size: 12px; font-style: italic; }
+.craft-summary-empty--compact { padding: 7px 8px; font-size: 11px; line-height: 1.2; }
 .craft-blueprint-source-list { display: flex; flex-direction: column; gap: 6px; }
 .craft-blueprint-source { border: 1px solid var(--craft-border); border-radius: 4px; padding: 8px 10px; }
 .craft-blueprint-source-tag { color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
 .craft-blueprint-source-name { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--craft-text); }
+.craft-summary-mission-section { padding-top: 8px; }
+.craft-mission-source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 188px;
+  overflow: auto;
+  padding-right: 2px;
+}
+.craft-mission-source {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 7px;
+  align-items: start;
+  border: 1px solid var(--craft-border);
+  border-radius: 4px;
+  padding: 7px 8px;
+  background: rgba(0, 0, 0, 0.14);
+}
+.craft-mission-bookmark-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--craft-border-strong);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--craft-muted);
+  cursor: pointer;
+}
+.craft-mission-bookmark-btn:hover,
+.craft-mission-bookmark-btn.is-active {
+  border-color: var(--craft-orange-border);
+  color: var(--craft-orange);
+}
+.craft-mission-source-copy { min-width: 0; }
+.craft-mission-source-name {
+  overflow: hidden;
+  color: var(--craft-text);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.craft-mission-source-meta {
+  margin-top: 3px;
+  overflow: hidden;
+  color: var(--craft-muted);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .craft-summary-action-row { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 7px; padding-top: 10px; }
 .craft-summary-action-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 42px; border-radius: 5px; font: inherit; font-size: 11px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; }
