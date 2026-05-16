@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import DonutChart from "../components/dashboard/DonutChart";
+import MaterialIcon from "../components/logistics/MaterialIcon";
 import {
   mockStats,
   mockInventory,
@@ -69,16 +70,6 @@ function StatTooltip({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Material hexagon placeholder icon ─────────────────────────────
-function MatIcon() {
-  return (
-    <span className="dash-mat-icon" aria-hidden>
-      <svg viewBox="0 0 12 12" width="10" height="10" fill="none">
-        <polygon points="6,1 11,3.5 11,8.5 6,11 1,8.5 1,3.5" stroke="rgba(167,139,250,0.6)" strokeWidth="1" />
-      </svg>
-    </span>
-  );
-}
 
 // ── Build queue thumbnail ──────────────────────────────────────────
 function BqThumb({ color }: { color: string }) {
@@ -330,7 +321,7 @@ export default function DashboardPage() {
                     <tr key={row.id}>
                       <td>
                         <div className="dash-mat-cell">
-                          <MatIcon />
+                          <MaterialIcon materialName={row.name} size={18} />
                           {row.name}
                         </div>
                       </td>

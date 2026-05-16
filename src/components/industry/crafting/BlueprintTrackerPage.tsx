@@ -17,9 +17,7 @@ import {
   type BlueprintTrackerEntry,
   type MissionSourceDetail,
 } from "./utils/blueprintTrackerStore";
-import { apiUrl } from "@/lib/apiUrl";
-
-const RECIPES_API_URL = "/api/crafting/component_recipes.json";
+import { getCraftingItems } from "@/lib/craftingData";
 
 // ── Utility ───────────────────────────────────────────────────────────────────
 
@@ -449,12 +447,9 @@ export default function BlueprintTrackerPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(apiUrl(RECIPES_API_URL))
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data: unknown) => {
-        if (!cancelled && Array.isArray(data)) {
-          setRecipes(data as ComponentRecipe[]);
-        }
+    getCraftingItems()
+      .then((data: ComponentRecipe[]) => {
+        if (!cancelled) setRecipes(data);
       })
       .catch(() => {})
       .finally(() => {

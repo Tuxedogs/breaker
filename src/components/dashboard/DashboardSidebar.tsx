@@ -269,7 +269,6 @@ export default function DashboardSidebar() {
         <div className="dash-sidebar-footer">
           {/* User button */}
           <LoginWithDiscordButton
-            className={["dash-sidebar-user-btn", collapsed ? "dash-sidebar-user-btn--icon" : ""].filter(Boolean).join(" ")}
             onMouseEnter={(e) => show(e, "User menu")}
             onMouseLeave={hide}
             collapsed={collapsed}

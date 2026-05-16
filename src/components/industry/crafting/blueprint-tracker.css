@@ -185,7 +185,7 @@
   border: 1px solid var(--bt-border-panel);
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: var(--bt-shadow-shell);
+  box-shadow: var(--bt-shadow-card);
 }
 
 .bt-faction-header {
@@ -193,7 +193,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 9px 14px;
-  background: linear-gradient(180deg, #181c20 0%, #111417 100%);
+  background: var(--bt-card);
   border-bottom: 1px solid var(--bt-orange-border);
   gap: 8px;
 }
@@ -371,7 +371,7 @@
    ========================================================================== */
 
 .bt-item-card-body {
-  background: linear-gradient(180deg, #0f1316 0%, #0b0e10 100%);
+  background: var(--bt-card-expanded);
   padding: 10px 14px 12px;
   display: flex;
   flex-direction: column;
@@ -555,7 +555,7 @@
 
 .bt-mission-popover {
   width: 300px;
-  background: linear-gradient(180deg, #1a1f25 0%, #111519 100%);
+  background: var(--bg-panel);
   border: 1px solid var(--bt-border-panel);
   border-top: 2px solid var(--bt-orange-border);
   border-radius: 4px;
