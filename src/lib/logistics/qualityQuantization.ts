@@ -1,4 +1,5 @@
 import { apiUrl } from "../apiUrl";
+import { parseJsonResponse } from "../safeJson";
 
 export type QualityBand = {
   start: number;
@@ -19,10 +20,15 @@ let records: QualityQuantizationRecord[] = [];
 let loadPromise: Promise<QualityQuantizationRecord[]> | null = null;
 
 export async function loadQualityQuantizationRecords(): Promise<QualityQuantizationRecord[]> {
-  loadPromise ??= fetch(apiUrl(QUALITY_QUANTIZATION_URL))
-    .then((response) => {
+  const url = apiUrl(QUALITY_QUANTIZATION_URL);
+  loadPromise ??= fetch(url)
+    .then(async (response) => {
+      const data = await parseJsonResponse<QualityQuantizationRecord[]>(response, {
+        label: "quality quantization",
+        url,
+      });
       if (!response.ok) throw new Error(`Failed to load quality quantization: ${response.status}`);
-      return response.json() as Promise<QualityQuantizationRecord[]>;
+      return data;
     })
     .then((loadedRecords) => {
       records = loadedRecords;

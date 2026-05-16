@@ -32,6 +32,10 @@ export async function handleUserBuildQueueRoute(
   body: unknown,
 ): Promise<RouteResult> {
   try {
+    if (!["GET", "POST", "PATCH", "DELETE"].includes(method)) {
+      return safeError(405, "Method not allowed.");
+    }
+
     const userId = await requireDiscordUserId(headers);
 
     if (method === "GET") {

@@ -73,7 +73,15 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
       next();
       return;
     }
-    const body = await readRequestBody(request);
+    let body: unknown;
+    try {
+      body = await readRequestBody(request);
+    } catch {
+      response.statusCode = 400;
+      response.setHeader("content-type", "application/json");
+      response.end(JSON.stringify({ error: "Invalid request body." }));
+      return;
+    }
     const route = url === "/api/user/saved-blueprints"
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
       : url === "/api/user/build-queue"

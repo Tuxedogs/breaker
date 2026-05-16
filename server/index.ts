@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
 import { handleRecommenderRoute } from "./routes/recommender.routes";
 import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
+import { handleUserBuildQueueRoute } from "../src/server/user/buildQueueRoute";
 
 async function readBody(request: http.IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
@@ -18,6 +19,8 @@ export function createServer() {
       const url = request.url?.split("?")[0] ?? "";
       const route = url === "/api/user/saved-blueprints"
         ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
+        : url === "/api/user/build-queue"
+          ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body);
       if (!route) {
@@ -28,8 +31,9 @@ export function createServer() {
       response.writeHead(route.status, { "content-type": "application/json" });
       response.end(JSON.stringify(route.body));
     } catch (error) {
-      response.writeHead(500, { "content-type": "application/json" });
-      response.end(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }));
+      const isSyntaxError = error instanceof SyntaxError;
+      response.writeHead(isSyntaxError ? 400 : 500, { "content-type": "application/json" });
+      response.end(JSON.stringify({ error: isSyntaxError ? "Invalid request body." : error instanceof Error ? error.message : String(error) }));
     }
   });
 }

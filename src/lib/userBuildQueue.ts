@@ -1,4 +1,5 @@
 import { apiUrl } from "./apiUrl";
+import { parseJsonResponse, type JsonParseOptions } from "./safeJson";
 
 const BUILD_QUEUE_URL = "/api/user/build-queue";
 
@@ -23,8 +24,8 @@ function authHeaders(accessToken: string) {
   };
 }
 
-async function parseJsonResponse<T>(response: Response): Promise<T> {
-  const data = await response.json().catch(() => ({}));
+async function parseUserJsonResponse<T>(response: Response, options: JsonParseOptions): Promise<T> {
+  const data = await parseJsonResponse<Record<string, unknown>>(response, options);
   if (!response.ok) {
     const message = typeof data?.error === "string" ? data.error : `Request failed: ${response.status}`;
     throw new Error(message);
@@ -33,10 +34,15 @@ async function parseJsonResponse<T>(response: Response): Promise<T> {
 }
 
 export async function fetchUserBuildQueue(accessToken: string): Promise<UserBuildQueueItem[]> {
-  const response = await fetch(apiUrl(BUILD_QUEUE_URL), {
+  const url = apiUrl(BUILD_QUEUE_URL);
+  const response = await fetch(url, {
     headers: authHeaders(accessToken),
   });
-  const data = await parseJsonResponse<{ items?: UserBuildQueueItem[] }>(response);
+  if (response.status === 401) return [];
+  const data = await parseUserJsonResponse<{ items?: UserBuildQueueItem[] }>(response, {
+    label: "build queue",
+    url,
+  });
   return Array.isArray(data.items) ? data.items : [];
 }
 
@@ -44,7 +50,8 @@ export async function addUserBuildQueueItem(
   accessToken: string,
   payload: BuildQueueItemRequest,
 ): Promise<UserBuildQueueItem | null> {
-  const response = await fetch(apiUrl(BUILD_QUEUE_URL), {
+  const url = apiUrl(BUILD_QUEUE_URL);
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       ...authHeaders(accessToken),
@@ -52,7 +59,10 @@ export async function addUserBuildQueueItem(
     },
     body: JSON.stringify(payload),
   });
-  const data = await parseJsonResponse<{ item?: UserBuildQueueItem; ok?: true }>(response);
+  const data = await parseUserJsonResponse<{ item?: UserBuildQueueItem; ok?: true }>(response, {
+    label: "add build queue item",
+    url,
+  });
   return data.item ?? null;
 }
 
@@ -60,7 +70,8 @@ export async function updateUserBuildQueueItem(
   accessToken: string,
   payload: Required<Pick<BuildQueueItemRequest, "recipeId" | "quantity">> & Pick<BuildQueueItemRequest, "variantId">,
 ): Promise<UserBuildQueueItem | null> {
-  const response = await fetch(apiUrl(BUILD_QUEUE_URL), {
+  const url = apiUrl(BUILD_QUEUE_URL);
+  const response = await fetch(url, {
     method: "PATCH",
     headers: {
       ...authHeaders(accessToken),
@@ -68,7 +79,10 @@ export async function updateUserBuildQueueItem(
     },
     body: JSON.stringify(payload),
   });
-  const data = await parseJsonResponse<{ item?: UserBuildQueueItem; ok?: true }>(response);
+  const data = await parseUserJsonResponse<{ item?: UserBuildQueueItem; ok?: true }>(response, {
+    label: "update build queue item",
+    url,
+  });
   return data.item ?? null;
 }
 
@@ -76,7 +90,8 @@ export async function deleteUserBuildQueueItem(
   accessToken: string,
   payload: Pick<BuildQueueItemRequest, "recipeId" | "variantId">,
 ): Promise<void> {
-  const response = await fetch(apiUrl(BUILD_QUEUE_URL), {
+  const url = apiUrl(BUILD_QUEUE_URL);
+  const response = await fetch(url, {
     method: "DELETE",
     headers: {
       ...authHeaders(accessToken),
@@ -84,11 +99,12 @@ export async function deleteUserBuildQueueItem(
     },
     body: JSON.stringify(payload),
   });
-  await parseJsonResponse<{ ok: true }>(response);
+  await parseUserJsonResponse<{ ok: true }>(response, { label: "delete build queue item", url });
 }
 
 export async function clearUserBuildQueue(accessToken: string): Promise<void> {
-  const response = await fetch(apiUrl(BUILD_QUEUE_URL), {
+  const url = apiUrl(BUILD_QUEUE_URL);
+  const response = await fetch(url, {
     method: "DELETE",
     headers: {
       ...authHeaders(accessToken),
@@ -96,5 +112,5 @@ export async function clearUserBuildQueue(accessToken: string): Promise<void> {
     },
     body: JSON.stringify({ clearAll: true }),
   });
-  await parseJsonResponse<{ ok: true }>(response);
+  await parseUserJsonResponse<{ ok: true }>(response, { label: "clear build queue", url });
 }

@@ -1,4 +1,5 @@
 import { apiUrl } from "../../lib/apiUrl";
+import { parseJsonResponse } from "../../lib/safeJson";
 
 export type StantonLagrangeChildRecord = {
   id: string;
@@ -120,14 +121,24 @@ export function configureStantonLagrangeChildrenData(
 
 export async function loadStantonLagrangeChildrenData(fetcher: typeof fetch = fetch): Promise<void> {
   if (generatedGroups && generatedChildren) return;
+  const groupsUrl = apiUrl(LAGRANGE_GROUPS_URL);
+  const childrenUrl = apiUrl(LAGRANGE_CHILDREN_URL);
   loadPromise ??= Promise.all([
-    fetcher(apiUrl(LAGRANGE_GROUPS_URL)).then((response) => {
+    fetcher(groupsUrl).then(async (response) => {
+      const data = await parseJsonResponse<GeneratedLagrangeGroups>(response, {
+        label: "lagrange groups",
+        url: groupsUrl,
+      });
       if (!response.ok) throw new Error(`Failed to load ${LAGRANGE_GROUPS_URL}: ${response.status}`);
-      return response.json() as Promise<GeneratedLagrangeGroups>;
+      return data;
     }),
-    fetcher(apiUrl(LAGRANGE_CHILDREN_URL)).then((response) => {
+    fetcher(childrenUrl).then(async (response) => {
+      const data = await parseJsonResponse<GeneratedLagrangeChildren>(response, {
+        label: "lagrange children",
+        url: childrenUrl,
+      });
       if (!response.ok) throw new Error(`Failed to load ${LAGRANGE_CHILDREN_URL}: ${response.status}`);
-      return response.json() as Promise<GeneratedLagrangeChildren>;
+      return data;
     }),
   ]).then(([groups, children]) => {
     configureStantonLagrangeChildrenData(groups, children);

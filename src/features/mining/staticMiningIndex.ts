@@ -1,4 +1,5 @@
 import { apiUrl } from "../../lib/apiUrl";
+import { parseJsonResponse } from "../../lib/safeJson";
 import type { PublicLocationEntry } from "./types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "./materialIdentity";
 
@@ -557,8 +558,11 @@ export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index
 async function fetchJsonArray<T>(path: string): Promise<T[]> {
   const url = apiUrl(path);
   const response = await fetch(url);
+  const data = await parseJsonResponse<unknown>(response, {
+    label: `static mining index ${path}`,
+    url,
+  });
   if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
-  const data = (await response.json()) as unknown;
   if (!Array.isArray(data)) throw new Error(`Expected ${path} to contain a JSON array`);
   return data as T[];
 }
@@ -566,8 +570,12 @@ async function fetchJsonArray<T>(path: string): Promise<T[]> {
 async function fetchJsonObject<T>(path: string): Promise<T> {
   const url = apiUrl(path);
   const response = await fetch(url);
+  const data = await parseJsonResponse<T>(response, {
+    label: `static mining index ${path}`,
+    url,
+  });
   if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
-  return response.json() as Promise<T>;
+  return data;
 }
 
 function warnStaticIndexLoadFailure(path: string, error: unknown): void {
