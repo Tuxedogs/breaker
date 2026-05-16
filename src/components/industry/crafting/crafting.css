@@ -175,10 +175,11 @@
 /* ── Section card ─────────────────────────────── */
 
 .craft-section {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.022);
 }
 
 .craft-section--wip { border-color: var(--craft-accent-border); }
@@ -188,8 +189,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.7rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.14);
 }
 
 .craft-section-title {
@@ -324,8 +325,14 @@
   box-shadow: inset 2px 0 0 var(--craft-accent-border-strong), inset 0 0 0 1px var(--craft-accent-glow);
   scroll-margin-top: 72px;
 }
-.craft-table-row--alert { background: rgba(248, 113, 113, 0.04); }
-.craft-table-row--alert:hover { background: rgba(248, 113, 113, 0.07); }
+.craft-table-row--alert { background: rgba(248, 113, 113, 0.05); }
+.craft-table-row--alert:hover { background: rgba(248, 113, 113, 0.09); }
+.craft-recipe-results .craft-table-row--alert td:first-child {
+  box-shadow: inset 3px 0 0 rgba(248, 113, 113, 0.62);
+}
+.craft-recipe-results .craft-table-row--alert:hover td:first-child {
+  box-shadow: inset 3px 0 0 rgba(248, 113, 113, 0.82);
+}
 
 .craft-cell-name {
   font-weight: 500;
@@ -826,8 +833,13 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.28rem 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 3px;
+}
+
+.craft-drawer-mat-row:hover {
+  background: rgba(255, 255, 255, 0.032);
 }
 
 .craft-drawer-mat-slot {
@@ -1593,11 +1605,12 @@
   grid-template-columns: minmax(0, 1.8fr) minmax(280px, 0.82fr);
   gap: 12px;
   align-items: start;
-  padding: 8px 14px 12px 18px;
-  background: #070b12;
+  padding: 10px 14px 14px 18px;
+  background: #060a10;
   border: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 0 0 6px 6px;
-  box-shadow: none;
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.32);
 }
 
 .craft-expanded-main,
@@ -1663,7 +1676,7 @@
 }
 
 .craft-variant-row:hover {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.048);
   color: rgba(237, 246, 247, 0.9);
 }
 
@@ -1671,6 +1684,7 @@
   border-left-color: var(--craft-accent-border-strong);
   background: var(--craft-accent-soft);
   color: #edf6f7;
+  box-shadow: inset 0 0 0 1px rgba(72, 187, 170, 0.08);
 }
 
 .craft-variant-name {
@@ -1698,11 +1712,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 5px 6px 4.5px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  padding: 6px 8px 6px;
+  border: 1px solid rgba(148, 163, 184, 0.17);
   border-radius: 6px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.018));
-  box-shadow: none;
+  background: linear-gradient(180deg, rgba(18, 24, 34, 0.92), rgba(10, 15, 24, 0.96));
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.028);
 }
 
 .craft-matq-card:first-child {
@@ -2074,19 +2088,21 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border: 1px solid rgba(148, 163, 184, 0.13);
+  border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.025);
-  box-shadow: none;
+  background: linear-gradient(180deg, #13181e 0%, #0d1117 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.03);
   overflow: visible;
 }
 
 .craft-summary-head {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   gap: 8px;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 6px 6px 0 0;
 }
 
 .craft-summary-title-row {
@@ -2159,7 +2175,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 7px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .craft-summary-mod-row:last-child {
@@ -2375,7 +2391,8 @@
 
 .craft-recipe-results {
   min-width: 0;
-  background: rgba(3, 7, 14, 0.56);
+  background: rgba(3, 7, 14, 0.72);
+  border-radius: 0 0 8px 8px;
 }
 
 .craft-recipe-results .craft-table-wrap {
@@ -2397,16 +2414,16 @@
 
 .craft-recipe-results .craft-table tbody td {
   padding: 0.42rem 0.78rem;
-  background: linear-gradient(180deg, rgba(10, 16, 26, 0.94), rgba(5, 10, 18, 0.96));
-  border-top: 1px solid rgba(202, 218, 232, 0.055);
-  border-bottom: 1px solid rgba(202, 218, 232, 0.045);
+  background: linear-gradient(180deg, rgba(14, 20, 30, 0.97), rgba(8, 13, 22, 0.98));
+  border-top: 1px solid rgba(202, 218, 232, 0.075);
+  border-bottom: 1px solid rgba(202, 218, 232, 0.06);
   color: rgba(202, 216, 226, 0.78);
 }
 
 .craft-recipe-results .craft-table-row td:first-child {
-  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 6px 0 0 6px;
-  box-shadow: inset 3px 0 0 rgba(148, 163, 184, 0.2);
+  box-shadow: inset 3px 0 0 rgba(148, 163, 184, 0.22);
 }
 
 .craft-recipe-results .craft-table-row td:last-child {
@@ -2420,8 +2437,8 @@
 }
 
 .craft-recipe-results .craft-table-row:hover td {
-  background: linear-gradient(180deg, rgba(13, 24, 34, 0.98), rgba(6, 13, 22, 0.99));
-  border-color: rgba(94, 140, 155, 0.18);
+  background: linear-gradient(180deg, rgba(18, 28, 40, 0.99), rgba(10, 18, 28, 0.99));
+  border-color: rgba(94, 140, 155, 0.22);
 }
 
 .craft-recipe-results .craft-table-row:hover td:first-child {

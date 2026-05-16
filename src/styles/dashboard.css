@@ -174,11 +174,21 @@
 }
 
 .dash-sidebar-item.wip {
-  opacity: 0.45;
+  color: rgba(148, 163, 184, 0.32);
+  opacity: 1;
+  filter: grayscale(1) saturate(0.2);
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .dash-sidebar-item.wip:hover {
-  opacity: 0.65;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.32);
+}
+
+.dash-sidebar-item.wip .dash-sidebar-icon {
+  color: rgba(148, 163, 184, 0.28);
+  opacity: 0.32;
 }
 
 /* ── Collapsed sidebar tooltip (portal, rendered into body) ───────── */
@@ -360,6 +370,81 @@
 .dash-sidebar-footer-btn:hover {
   color: rgba(160, 180, 220, 0.6);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.dash-sidebar-footer-btn--active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.11);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.sc-high-contrast .dash-page {
+  background: #000;
+  color: #fff;
+}
+
+.sc-high-contrast .dash-sidebar,
+.sc-high-contrast .dash-panel,
+.sc-high-contrast .panel,
+.sc-high-contrast .dash-doctrine-toolbar,
+.sc-high-contrast .dash-doctrine-rolebar,
+.sc-high-contrast .dash-doctrine-filters,
+.sc-high-contrast .dash-doctrine-card,
+.sc-high-contrast .dash-doctrine-empty,
+.sc-high-contrast .dash-doctrine-error,
+.sc-high-contrast .dash-stat-card {
+  background: #050505;
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: none;
+}
+
+.sc-high-contrast .dash-sidebar-item,
+.sc-high-contrast .dash-page,
+.sc-high-contrast .dash-page p,
+.sc-high-contrast .dash-page span,
+.sc-high-contrast .dash-page td,
+.sc-high-contrast .dash-page th {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sc-high-contrast .dash-sidebar-item.active,
+.sc-high-contrast .dash-sidebar-item[aria-current="page"] {
+  background: #111;
+  color: #fff;
+  border-left-color: #ffd166;
+  border-right-color: #ffd166;
+}
+
+.sc-high-contrast .dash-sidebar-icon,
+.sc-high-contrast .dash-sidebar-item.active .dash-sidebar-icon,
+.sc-high-contrast .dash-sidebar-item[aria-current="page"] .dash-sidebar-icon {
+  color: #fff;
+  opacity: 1;
+}
+
+.sc-high-contrast .dash-sidebar-item.wip,
+.sc-high-contrast .dash-sidebar-item.wip .dash-sidebar-icon {
+  color: rgba(190, 190, 190, 0.38);
+  opacity: 0.55;
+}
+
+.sc-high-contrast .dash-sidebar-section-label,
+.sc-high-contrast .dash-page .dash-stat-sublabel,
+.sc-high-contrast .dash-page .dash-panel-desc,
+.sc-high-contrast .dash-page .dash-update-desc,
+.sc-high-contrast .dash-page .dash-update-date,
+.sc-high-contrast .dash-page .dash-bq-qty,
+.sc-high-contrast .dash-page .dash-bq-queued {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.sc-high-contrast .dash-sidebar-footer-btn {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.sc-high-contrast .dash-sidebar-footer-btn--active {
+  color: #000;
+  background: #fff;
 }
 
 /* ── Body (right of sidebar) ──────────────────── */
