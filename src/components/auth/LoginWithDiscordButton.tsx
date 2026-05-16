@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { MouseEventHandler } from "react";
 import type { User } from "@supabase/supabase-js";
-import { logout, signInWithDiscord } from "../../lib/supabaseClient";
+import { hasSupabaseConfig, logout, signInWithDiscord } from "../../lib/supabaseClient";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 
 interface LoginWithDiscordButtonProps {
@@ -35,6 +35,7 @@ export default function LoginWithDiscordButton({
 }: LoginWithDiscordButtonProps) {
   const { user, loading } = useAuthSession();
   const [busy, setBusy] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const signedIn = Boolean(user);
   const disabled = loading || busy;
 
@@ -44,15 +45,27 @@ export default function LoginWithDiscordButton({
     }
 
     setBusy(true);
+    setAuthError(null);
     try {
+      if (!signedIn && !hasSupabaseConfig()) {
+        throw new Error("Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
+      }
       if (signedIn) {
         await logout();
       } else {
         const { error } = await signInWithDiscord();
         if (error) {
           console.error("[auth] Discord sign-in failed", error);
+          setAuthError(error.message);
         }
       }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error("[auth] Discord sign-in failed", {
+        message,
+        hasSupabaseConfig: hasSupabaseConfig(),
+      });
+      setAuthError(message);
     } finally {
       setBusy(false);
     }
@@ -68,6 +81,7 @@ export default function LoginWithDiscordButton({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
         disabled={disabled}
+        title={authError ?? undefined}
       >
         <DiscordLogo />
       </button>
@@ -83,10 +97,11 @@ export default function LoginWithDiscordButton({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       disabled={disabled}
+      title={authError ?? undefined}
     >
       <DiscordLogo />
       <span className="discord-btn-label">
-        {loading ? "Checking…" : signedIn ? getUserLabel(user) : "Sign in with Discord"}
+        {authError ? "Auth unavailable" : loading ? "Checking..." : signedIn ? getUserLabel(user) : "Sign in with Discord"}
       </span>
       {signedIn && <span className="discord-btn-status">connected</span>}
     </button>

@@ -22,6 +22,7 @@ import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQual
 import { formatModifierAtQuality, formatProperty, getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { apiUrl } from '../../lib/apiUrl';
 import { getModifierImpact } from '../../lib/gameplay/propertyUtils';
+import { parseJsonResponse } from '../../lib/safeJson';
 
 import QuantityText from './QuantityText';
 import MaterialIcon from './MaterialIcon';
@@ -66,10 +67,15 @@ function useBQQuantization() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(apiUrl(MATERIAL_QUANTIZATION_URL))
-      .then((r) => {
+    const url = apiUrl(MATERIAL_QUANTIZATION_URL);
+    fetch(url)
+      .then(async (r) => {
+        const data = await parseJsonResponse<BQMaterialQuantization[]>(r, {
+          label: 'build queue material quantization',
+          url,
+        });
         if (!r.ok) throw new Error(`${MATERIAL_QUANTIZATION_URL} ${r.status}`);
-        return r.json() as Promise<BQMaterialQuantization[]>;
+        return data;
       })
       .then((data) => {
         if (cancelled) return;

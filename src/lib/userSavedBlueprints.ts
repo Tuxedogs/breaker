@@ -1,4 +1,5 @@
 import { apiUrl } from "./apiUrl";
+import { parseJsonResponse, type JsonParseOptions } from "./safeJson";
 
 const SAVED_BLUEPRINTS_URL = "/api/user/saved-blueprints";
 
@@ -25,8 +26,8 @@ function authHeaders(accessToken: string) {
   };
 }
 
-async function parseJsonResponse<T>(response: Response): Promise<T> {
-  const data = await response.json().catch(() => ({}));
+async function parseUserJsonResponse<T>(response: Response, options: JsonParseOptions): Promise<T> {
+  const data = await parseJsonResponse<Record<string, unknown>>(response, options);
   if (!response.ok) {
     const message = typeof data?.error === "string" ? data.error : `Request failed: ${response.status}`;
     throw new Error(message);
@@ -35,15 +36,21 @@ async function parseJsonResponse<T>(response: Response): Promise<T> {
 }
 
 export async function fetchSavedBlueprints(accessToken: string): Promise<SavedBlueprint[]> {
-  const response = await fetch(apiUrl(SAVED_BLUEPRINTS_URL), {
+  const url = apiUrl(SAVED_BLUEPRINTS_URL);
+  const response = await fetch(url, {
     headers: authHeaders(accessToken),
   });
-  const data = await parseJsonResponse<{ savedBlueprints?: SavedBlueprint[] }>(response);
+  if (response.status === 401) return [];
+  const data = await parseUserJsonResponse<{ savedBlueprints?: SavedBlueprint[] }>(response, {
+    label: "saved blueprints",
+    url,
+  });
   return Array.isArray(data.savedBlueprints) ? data.savedBlueprints : [];
 }
 
 export async function saveUserBlueprint(accessToken: string, payload: SaveBlueprintRequest): Promise<void> {
-  const response = await fetch(apiUrl(SAVED_BLUEPRINTS_URL), {
+  const url = apiUrl(SAVED_BLUEPRINTS_URL);
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       ...authHeaders(accessToken),
@@ -51,11 +58,12 @@ export async function saveUserBlueprint(accessToken: string, payload: SaveBluepr
     },
     body: JSON.stringify(payload),
   });
-  await parseJsonResponse<{ ok: true }>(response);
+  await parseUserJsonResponse<{ ok: true }>(response, { label: "save blueprint", url });
 }
 
 export async function deleteUserBlueprint(accessToken: string, blueprintId: string): Promise<void> {
-  const response = await fetch(apiUrl(SAVED_BLUEPRINTS_URL), {
+  const url = apiUrl(SAVED_BLUEPRINTS_URL);
+  const response = await fetch(url, {
     method: "DELETE",
     headers: {
       ...authHeaders(accessToken),
@@ -63,5 +71,5 @@ export async function deleteUserBlueprint(accessToken: string, blueprintId: stri
     },
     body: JSON.stringify({ blueprintId }),
   });
-  await parseJsonResponse<{ ok: true }>(response);
+  await parseUserJsonResponse<{ ok: true }>(response, { label: "delete blueprint", url });
 }

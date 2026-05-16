@@ -4,6 +4,7 @@ import type {
   QualityModifier,
 } from "../components/industry/crafting/utils/craftingTypes";
 import { apiUrl } from "./apiUrl";
+import { parseJsonResponse } from "./safeJson";
 
 const BLUEPRINTS_URL = "/api/crafting/blueprints.json";
 const FPS_BLUEPRINTS_URL = "/api/crafting/fps/fps_blueprints.json";
@@ -138,14 +139,21 @@ let qualityQuantizationPromise: Promise<QualityQuantizationRecord[]> | null = nu
 let craftingItemsPromise: Promise<ComponentRecipe[]> | null = null;
 
 async function fetchJsonArray<T>(url: string): Promise<T[]> {
-  const response = await fetch(apiUrl(url));
+  const requestUrl = apiUrl(url);
+  const response = await fetch(requestUrl);
+  const data = await parseJsonResponse<unknown>(response, {
+    label: `crafting static JSON ${url}`,
+    url: requestUrl,
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load ${url}: ${response.status}`);
   }
 
-  const data = (await response.json()) as unknown;
-  return Array.isArray(data) ? (data as T[]) : [];
+  if (!Array.isArray(data)) {
+    throw new Error(`Expected ${url} to contain a JSON array`);
+  }
+  return data as T[];
 }
 
 function toStringOrFallback(value: unknown, fallback = "Unknown"): string {

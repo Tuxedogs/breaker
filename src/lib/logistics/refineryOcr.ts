@@ -1,6 +1,7 @@
 import { createWorker, PSM } from "tesseract.js";
 import type { MaterialTemplate } from "../../types/logistics";
 import { apiUrl } from "../apiUrl";
+import { parseJsonResponse } from "../safeJson";
 
 interface QualityQuantizationBand {
   start: number;
@@ -356,10 +357,14 @@ async function ensureQualityQuantizationLoaded(): Promise<void> {
     qualityQuantizationLoadPromise = (async () => {
       for (const url of QUALITY_QUANTIZATION_URL_CANDIDATES) {
         try {
-          const response = await fetch(apiUrl(url), { cache: "force-cache" });
+          const requestUrl = apiUrl(url);
+          const response = await fetch(requestUrl, { cache: "force-cache" });
+          const records = await parseJsonResponse<QualityQuantizationRecord[]>(response, {
+            label: "refinery OCR quality quantization",
+            url: requestUrl,
+          });
           if (!response.ok) continue;
 
-          const records = (await response.json()) as QualityQuantizationRecord[];
           if (!Array.isArray(records)) continue;
 
           QUALITY_QUANTIZATION_BY_KEY = buildQualityQuantizationMap(records);

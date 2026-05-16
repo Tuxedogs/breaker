@@ -3,6 +3,8 @@
 // This module provides read-only access to those stores for the tracker page.
 
 import type { ComponentRecipe } from "./craftingTypes";
+import { apiUrl } from "@/lib/apiUrl";
+import { parseJsonResponse } from "@/lib/safeJson";
 
 export const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 export const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -258,10 +260,15 @@ function normalizeMission(value: unknown): MissionSourceDetail | null {
 
 export async function loadMissionDetailMap(): Promise<Map<string, MissionSourceDetail[]>> {
   if (!missionMapCache) {
-    missionMapCache = fetch(MISSION_REWARD_SOURCES_URL)
-      .then((r) => {
+    const url = apiUrl(MISSION_REWARD_SOURCES_URL);
+    missionMapCache = fetch(url)
+      .then(async (r) => {
+        const data = await parseJsonResponse<unknown>(r, {
+          label: "blueprint reward sources",
+          url,
+        });
         if (!r.ok) throw new Error(`Mission sources unavailable: ${r.status}`);
-        return r.json() as Promise<unknown>;
+        return data;
       })
       .then((data) => {
         const map = new Map<string, MissionSourceDetail[]>();

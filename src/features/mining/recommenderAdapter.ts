@@ -7,6 +7,7 @@ import type {
 } from "./types";
 import { canonicalMiningMaterial } from "./materialIdentity";
 import { apiUrl } from "../../lib/apiUrl";
+import { JsonResponseError, parseJsonResponse } from "../../lib/safeJson";
 import {
   displayMiningMethod,
   getStaticEncounterRankingRow,
@@ -64,7 +65,7 @@ type RecommenderSource = "post" | "static-fallback";
 
 type FallbackReason =
   | { type: "status"; status: number }
-  | { type: "invalid-response"; status: number; contentType: string; detail: string };
+  | { type: "invalid-response"; status: number; contentType: string; detail: string; bodyPreview?: string };
 
 function unique<T>(values: T[]): T[] {
   return [...new Set(values)];
@@ -356,6 +357,7 @@ async function getFallbackMiningRecommendations(
     url,
     reason: formatFallbackReason(reason),
     status: reason.status,
+    bodyPreview: reason.type === "invalid-response" ? reason.bodyPreview : undefined,
   });
 
   const fallbackResponse = await getStaticMiningRecommendations(request);
@@ -365,37 +367,28 @@ async function getFallbackMiningRecommendations(
 
 async function parseRecommendationResponse(
   response: Response,
+  url: string,
 ): Promise<RecommendationResponse | FallbackReason> {
-  const contentType = response.headers.get("content-type") ?? "";
-
-  if (contentType.toLowerCase().includes("text/html")) {
-    return {
-      type: "invalid-response",
-      status: response.status,
-      contentType,
-      detail: "POST returned HTML",
-    };
-  }
-
-  const body = await response.text();
-  const trimmedBody = body.trim();
-  if (!trimmedBody) {
-    return {
-      type: "invalid-response",
-      status: response.status,
-      contentType,
-      detail: "POST returned an empty response",
-    };
-  }
-
   let parsed: unknown;
   try {
-    parsed = JSON.parse(trimmedBody);
-  } catch {
+    parsed = await parseJsonResponse<unknown>(response, {
+      label: "mining recommender POST",
+      url,
+    });
+  } catch (error) {
+    if (error instanceof JsonResponseError) {
+      return {
+        type: "invalid-response",
+        status: error.status,
+        contentType: error.contentType,
+        detail: error.message,
+        bodyPreview: error.bodyPreview,
+      };
+    }
     return {
       type: "invalid-response",
       status: response.status,
-      contentType,
+      contentType: response.headers.get("content-type") ?? "",
       detail: "POST returned invalid JSON",
     };
   }
@@ -404,7 +397,7 @@ async function parseRecommendationResponse(
     return {
       type: "invalid-response",
       status: response.status,
-      contentType,
+      contentType: response.headers.get("content-type") ?? "",
       detail: "POST returned an invalid RecommendationResponse",
     };
   }
@@ -424,6 +417,14 @@ export async function getMiningRecommendations(
     signal,
   });
 
+  const parsedResponse = await parseRecommendationResponse(response, url);
+  if ("type" in parsedResponse) {
+    if (response.status === 404 || response.status === 405 || parsedResponse.type === "invalid-response") {
+      return getFallbackMiningRecommendations(request, url, parsedResponse);
+    }
+    throw new Error(`Recommender API failed with ${response.status}`);
+  }
+
   if (!response.ok) {
     if (response.status === 404 || response.status === 405) {
       return getFallbackMiningRecommendations(request, url, {
@@ -432,11 +433,6 @@ export async function getMiningRecommendations(
       });
     }
     throw new Error(`Recommender API failed with ${response.status}`);
-  }
-
-  const parsedResponse = await parseRecommendationResponse(response);
-  if ("type" in parsedResponse) {
-    return getFallbackMiningRecommendations(request, url, parsedResponse);
   }
 
   logRecommendationDiagnostic("post", parsedResponse, request.requiredMaterials.length);

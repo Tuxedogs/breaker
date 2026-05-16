@@ -18,6 +18,7 @@ import {
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
 import { apiUrl } from "@/lib/apiUrl";
+import { parseJsonResponse } from "@/lib/safeJson";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import {
   DEFAULT_BAND_INDEX,
@@ -234,10 +235,15 @@ function normalizeMissionSourceRecord(value: unknown): { blueprintGuid: string; 
 }
 
 async function loadMissionRewardSourceMap(): Promise<Map<string, MissionRewardEntry[]>> {
-  missionRewardSourceMapPromise ??= fetch(apiUrl(MISSION_REWARD_SOURCES_URL))
-    .then((response) => {
+  const url = apiUrl(MISSION_REWARD_SOURCES_URL);
+  missionRewardSourceMapPromise ??= fetch(url)
+    .then(async (response) => {
+      const data = await parseJsonResponse<unknown>(response, {
+        label: "crafting blueprint reward sources",
+        url,
+      });
       if (!response.ok) throw new Error(`Mission reward sources unavailable: ${response.status}`);
-      return response.json() as Promise<unknown>;
+      return data;
     })
     .then((data) => {
       const map = new Map<string, MissionRewardEntry[]>();
@@ -725,14 +731,17 @@ function useQualityQuantization() {
     async function load() {
       try {
         const res = await fetch(apiUrl(QUALITY_QUANTIZATION_URL));
+        const url = apiUrl(QUALITY_QUANTIZATION_URL);
 
+        const json = await parseJsonResponse<MaterialQuantization[]>(res, {
+          label: "crafting material quantization",
+          url,
+        });
         if (!res.ok) {
           throw new Error(
             `Failed to load ${QUALITY_QUANTIZATION_URL}: ${res.status}`,
           );
         }
-
-        const json = (await res.json()) as MaterialQuantization[];
 
         if (!cancelled) {
           setData(Array.isArray(json) ? json : []);

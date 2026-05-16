@@ -241,7 +241,7 @@ export default function DashboardSidebar() {
           {!collapsed && (
             <div className="dash-sidebar-logo-text">
               <span className="dash-sidebar-logo-name">SCINTEL</span>
-              <span className="dash-sidebar-logo-tagline">KNOW. PLAN. BUILD.</span>
+              <span className="dash-sidebar-logo-tagline">PLAN. BUILD. BURN.</span>
             </div>
           )}
         </div>

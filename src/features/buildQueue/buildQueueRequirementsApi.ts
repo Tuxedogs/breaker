@@ -1,6 +1,7 @@
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import type { BuildQueueItem, InventoryEntry } from "../../types/logistics";
 import { apiUrl } from "../../lib/apiUrl";
+import { parseJsonResponse } from "../../lib/safeJson";
 
 export interface BuildQueueRequirementWarning {
   code: string;
@@ -54,15 +55,20 @@ export async function getBuildQueueRequirements(input: {
   recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
   inventoryEntries: InventoryEntry[];
 }): Promise<BuildQueueRequirementsResponse> {
-  const response = await fetch(apiUrl("/api/build-queue/requirements"), {
+  const url = apiUrl("/api/build-queue/requirements");
+  const response = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(input),
+  });
+  const data = await parseJsonResponse<BuildQueueRequirementsResponse>(response, {
+    label: "build queue requirements",
+    url,
   });
 
   if (!response.ok) {
     throw new Error(`Build queue requirements API failed with ${response.status}`);
   }
 
-  return response.json() as Promise<BuildQueueRequirementsResponse>;
+  return data;
 }
