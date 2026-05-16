@@ -10,6 +10,7 @@ import InventoryIcon from "@/assets/sidebar-icons/07-inventory.svg?react";
 import TransfersIcon from "@/assets/sidebar-icons/09-transfers.svg?react";
 import ArmorThresholdIcon from "@/assets/sidebar-icons/10-armor-threshold.svg?react";
 import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.svg?react";
+import BlueprintTrackerIcon from "@/assets/sidebar-icons/12-blueprint-tracker.svg?react";
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 
 // ── Inline icon primitives ─────────────────────────────────────────
@@ -129,6 +130,7 @@ const SIDEBAR_SVG_ICONS = {
   transfers: TransfersIcon,
   armorThreshold: ArmorThresholdIcon,
   componentMapping: ComponentMappingIcon,
+  blueprintTracker: BlueprintTrackerIcon,
 } as const;
 
 // ── Section data ───────────────────────────────────────────────────
@@ -145,6 +147,7 @@ const sections = [
       { label: "Crafting", to: "/industry/crafting", icon: "hammer", svgIcon: "crafting" },
       { label: "Build Queue", to: "/logistics/build-queue", icon: "list", svgIcon: "buildQueue" },
       { label: "Mining", to: "/industry/mining", icon: "pickaxe", svgIcon: "mining" },
+      { label: "Blueprint Tracker", to: "/industry/blueprint-tracker", icon: "clipboard", svgIcon: "blueprintTracker" },
     ],
   },
   {

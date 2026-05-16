@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../types/logistics';
+import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../../../types/logistics';
 import {
   formatEntryQuantity,
   formatQuantity,
   materialTypeClass,
   rarityClass,
   resolveInventoryItemName,
-} from '../../lib/logistics/inventory';
-import { getInventoryByMaterial, getLocationInventorySummary } from '../../lib/logistics/selectors';
+} from '../../../../lib/logistics/inventory';
+import { getInventoryByMaterial, getLocationInventorySummary } from '../../../../lib/logistics/selectors';
 
 interface Props {
   location: InventoryLocation;

@@ -5,7 +5,7 @@ type ImportSource = "inventory" | "locations" | "build-queue" | "dashboard";
 export default function ScreenshotImportButton({ source }: { source: ImportSource }) {
   return (
     <Link
-      to={`/logistics/refinery-import?source=${source}`}
+      to={`/logistics/inventory/refinery-import?source=${source}`}
       className="logi-btn-ghost"
       style={{ textDecoration: "none" }}
     >

@@ -3,17 +3,17 @@ import { Link, useParams } from 'react-router-dom';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/locations.css';
 import LocationCard from '../../components/logistics/LocationCard';
-import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
+import InventoryEntryPanel from '../../../../components/logistics/InventoryEntryPanel';
 import ScreenshotImportButton from '../../components/logistics/ScreenshotImportButton';
-import { useLogisticsStore } from '../../stores/logisticsStore';
-import { formatQuantity, getInventoryStacks, materialTypeClass, rarityClass } from '../../lib/logistics/inventory';
+import { useLogisticsStore } from '../../../../stores/logisticsStore';
+import { formatQuantity, getInventoryStacks, materialTypeClass, rarityClass } from '../../../../lib/logistics/inventory';
 import {
   getBestAvailableStacksForMaterial,
   getInventoryByMaterial,
   getInventoryQualitySummary,
   getLocationInventorySummary,
-} from '../../lib/logistics/selectors';
-import type { InventoryEntry, InventoryLocation } from '../../types/logistics';
+} from '../../../../lib/logistics/selectors';
+import type { InventoryEntry, InventoryLocation } from '../../../../types/logistics';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type LocationFormState = { mode: 'new' } | { mode: 'edit'; location: InventoryLocation };

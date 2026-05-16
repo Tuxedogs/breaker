@@ -32,8 +32,10 @@ import {
 
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
+const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
+const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
 const MAX_VISIBLE_RESULTS = 20;
 
 type RecipeSidebarState = {
@@ -46,6 +48,43 @@ type RecipeSidebarState = {
   resources: string[];
   miningCategories: string[];
 };
+
+type RecipeRewardPoolSummary = {
+  poolName?: string;
+  poolGuid?: string;
+  sourceFolder?: string;
+  displayName: string;
+  weight?: number;
+};
+
+type MissionRewardEntry = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  poolName?: string;
+  factionName?: string;
+  chance?: number;
+  source: "mission" | "pool";
+};
+
+type ApiBlueprintMissionSource = {
+  blueprintGuid?: unknown;
+  missions?: unknown;
+};
+
+type ApiBlueprintMission = {
+  contractId?: unknown;
+  contractTitle?: unknown;
+  contractDebugName?: unknown;
+  generatorName?: unknown;
+  factionName?: unknown;
+  poolGuid?: unknown;
+  poolName?: unknown;
+  poolChance?: unknown;
+  rewardChance?: unknown;
+};
+
+let missionRewardSourceMapPromise: Promise<Map<string, MissionRewardEntry[]>> | null = null;
 
 const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
   search: "",
@@ -124,6 +163,141 @@ function readStoredStringSet(key: string): Set<string> {
 function writeStoredStringSet(key: string, values: Set<string>) {
   if (typeof window === "undefined" || !window.localStorage) return;
   window.localStorage.setItem(key, JSON.stringify(Array.from(values)));
+}
+
+function asNonEmptyString(value: unknown): string | undefined {
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function asFiniteNumber(value: unknown): number | undefined {
+  const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
+  return Number.isFinite(number) ? number : undefined;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function formatMissionChance(value?: number): string | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  return `${Math.round(value * 100)}%`;
+}
+
+function normalizeMissionTitle(value: string): string {
+  return value.replace(/~mission\(([^)]+)\)/g, "$1");
+}
+
+function normalizeMissionRewardEntry(value: unknown): MissionRewardEntry | null {
+  if (!isRecord(value)) return null;
+
+  const mission = value as ApiBlueprintMission;
+  const contractId = asNonEmptyString(mission.contractId);
+  const poolGuid = asNonEmptyString(mission.poolGuid);
+  const contractTitle = asNonEmptyString(mission.contractTitle);
+  const contractDebugName = asNonEmptyString(mission.contractDebugName);
+  const generatorName = asNonEmptyString(mission.generatorName);
+  const poolName = asNonEmptyString(mission.poolName);
+  const factionName = asNonEmptyString(mission.factionName);
+  const poolChance = asFiniteNumber(mission.poolChance);
+  const rewardChance = asFiniteNumber(mission.rewardChance);
+  const id = [contractId, poolGuid].filter(Boolean).join(":");
+
+  if (!id) return null;
+
+  return {
+    id: `mission:${id}`,
+    title: normalizeMissionTitle(contractTitle ?? contractDebugName ?? "Unknown Blueprint Source"),
+    subtitle: generatorName,
+    poolName,
+    factionName,
+    chance: typeof poolChance === "number" && typeof rewardChance === "number" ? poolChance * rewardChance : poolChance ?? rewardChance,
+    source: "mission",
+  };
+}
+
+function normalizeMissionSourceRecord(value: unknown): { blueprintGuid: string; entries: MissionRewardEntry[] } | null {
+  if (!isRecord(value)) return null;
+
+  const record = value as ApiBlueprintMissionSource;
+  const blueprintGuid = asNonEmptyString(record.blueprintGuid);
+  if (!blueprintGuid || !Array.isArray(record.missions)) return null;
+
+  const entries = record.missions.flatMap((mission) => {
+    const entry = normalizeMissionRewardEntry(mission);
+    return entry ? [entry] : [];
+  });
+
+  return { blueprintGuid, entries };
+}
+
+async function loadMissionRewardSourceMap(): Promise<Map<string, MissionRewardEntry[]>> {
+  missionRewardSourceMapPromise ??= fetch(apiUrl(MISSION_REWARD_SOURCES_URL))
+    .then((response) => {
+      if (!response.ok) throw new Error(`Mission reward sources unavailable: ${response.status}`);
+      return response.json() as Promise<unknown>;
+    })
+    .then((data) => {
+      const map = new Map<string, MissionRewardEntry[]>();
+      if (!Array.isArray(data)) return map;
+
+      for (const value of data) {
+        const record = normalizeMissionSourceRecord(value);
+        if (record) map.set(record.blueprintGuid, record.entries);
+      }
+
+      return map;
+    });
+
+  return missionRewardSourceMapPromise;
+}
+
+function buildPoolMissionEntries(
+  recipe: ComponentRecipe,
+  rewardPools: RecipeRewardPoolSummary[],
+): MissionRewardEntry[] {
+  return rewardPools.flatMap((pool, index) => {
+    const stableKey = pool.poolGuid ?? pool.poolName ?? pool.sourceFolder ?? `${recipe.blueprint_id}:${index}`;
+    if (!stableKey) return [];
+
+    return [{
+      id: `pool:${recipe.blueprint_id}:${stableKey}`,
+      title: pool.displayName,
+      subtitle: pool.poolName,
+      poolName: pool.poolName,
+      chance: pool.weight,
+      source: "pool" as const,
+    }];
+  });
+}
+
+function useMissionRewardEntries(
+  recipe: ComponentRecipe,
+  rewardPools: RecipeRewardPoolSummary[],
+): MissionRewardEntry[] {
+  const fallbackEntries = useMemo(
+    () => buildPoolMissionEntries(recipe, rewardPools),
+    [recipe, rewardPools],
+  );
+  const [apiEntries, setApiEntries] = useState<MissionRewardEntry[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setApiEntries(null);
+
+    loadMissionRewardSourceMap()
+      .then((map) => {
+        if (!cancelled) setApiEntries(map.get(recipe.blueprint_id) ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setApiEntries([]);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [recipe.blueprint_id]);
+
+  return apiEntries && apiEntries.length > 0 ? apiEntries : fallbackEntries;
 }
 
 const QUERY_ALIAS_MAP: Record<string, string> = {
@@ -1053,6 +1227,8 @@ function CraftedItemSummaryPanel({
   isQueued,
   isBookmarked,
   onToggleBookmark,
+  isMissionBookmarked,
+  onToggleMissionBookmark,
   getBandEffectiveQuality,
   getBandsForMaterial,
   materialQualities,
@@ -1063,7 +1239,7 @@ function CraftedItemSummaryPanel({
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
-  rewardPools: { displayName: string }[];
+  rewardPools: RecipeRewardPoolSummary[];
   onAddToQueue: (
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1072,6 +1248,8 @@ function CraftedItemSummaryPanel({
   isQueued: boolean;
   isBookmarked: boolean;
   onToggleBookmark: () => void;
+  isMissionBookmarked: (missionId: string) => boolean;
+  onToggleMissionBookmark: (missionId: string) => void;
   getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   materialQualities: Record<string, number>;
@@ -1084,6 +1262,7 @@ function CraftedItemSummaryPanel({
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
   const displayFinalProductQuality =
     finalProductQuality.averageBand ?? finalProductQuality.band;
+  const missionEntries = useMissionRewardEntries(recipe, rewardPools);
 
   return (
     <div className="craft-summary-panel craft-summary-column">
@@ -1164,6 +1343,56 @@ function CraftedItemSummaryPanel({
           )}
         </div>
       )}
+
+      <div className="craft-summary-section craft-summary-mission-section">
+        <div className="craft-summary-section-label">Mission Data</div>
+        {missionEntries.length === 0 ? (
+          <div className="craft-summary-empty craft-summary-empty--compact">
+            No mission data for this blueprint
+          </div>
+        ) : (
+          <div className="craft-mission-source-list">
+            {missionEntries.map((entry) => {
+              const bookmarked = isMissionBookmarked(entry.id);
+              const chance = formatMissionChance(entry.chance);
+
+              return (
+                <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}`}>
+                  <button
+                    type="button"
+                    className={`craft-mission-bookmark-btn${bookmarked ? " is-active" : ""}`}
+                    aria-pressed={bookmarked}
+                    aria-label={bookmarked ? `Remove ${entry.title} mission save` : `Save ${entry.title} mission`}
+                    onClick={() => onToggleMissionBookmark(entry.id)}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill={bookmarked ? "currentColor" : "none"}
+                      stroke="currentColor"
+                      strokeWidth="1.9"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
+                      <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+                    </svg>
+                  </button>
+                  <div className="craft-mission-source-copy">
+                    <div className="craft-mission-source-name">{entry.title}</div>
+                    <div className="craft-mission-source-meta">
+                      {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
+                        .filter(Boolean)
+                        .join(" / ")}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Where to Find */}
       <div className="craft-summary-section craft-summary-section--grow">
@@ -1266,6 +1495,8 @@ function RecipeDrawer({
   isRecipeQueued,
   isRecipeBookmarked,
   onToggleBookmark,
+  isMissionBookmarked,
+  onToggleMissionBookmark,
 }: {
   recipe: ComponentRecipe;
   groupRecipes?: ComponentRecipe[];
@@ -1278,6 +1509,8 @@ function RecipeDrawer({
   isRecipeQueued: (recipe: ComponentRecipe) => boolean;
   isRecipeBookmarked: (recipe: ComponentRecipe) => boolean;
   onToggleBookmark: (recipeId: string) => void;
+  isMissionBookmarked: (missionId: string) => boolean;
+  onToggleMissionBookmark: (missionId: string) => void;
 }) {
   const {
     loading: quantizationLoading,
@@ -1323,7 +1556,16 @@ function RecipeDrawer({
   const finalProductQuality = deriveFinalProductQuality(selectedRecipe, getBandIndex);
   const overallQualitySource = getEffectiveQualityFromBands(FALLBACK_QUALITY_BANDS, finalProductQuality.band - 1);
 
-  const rewardPools = (selectedRecipe.rewardPools ?? []) as { displayName: string }[];
+  const rewardPools = (selectedRecipe.rewardPools ?? [])
+    .filter(isRecord)
+    .map((pool) => ({
+      poolName: asNonEmptyString(pool.poolName),
+      poolGuid: asNonEmptyString(pool.poolGuid),
+      sourceFolder: asNonEmptyString(pool.sourceFolder),
+      displayName: asNonEmptyString(pool.displayName) ?? "Unknown Blueprint Source",
+      weight: asFiniteNumber(pool.weight),
+    }))
+    .filter((pool) => pool.displayName.trim().length > 0);
 
   const displayName = getRecipeDisplayName(selectedRecipe);
 
@@ -1414,6 +1656,8 @@ function RecipeDrawer({
         isQueued={selectedIsQueued}
         isBookmarked={selectedIsBookmarked}
         onToggleBookmark={() => onToggleBookmark(selectedRecipe.blueprint_id)}
+        isMissionBookmarked={isMissionBookmarked}
+        onToggleMissionBookmark={onToggleMissionBookmark}
         getBandEffectiveQuality={getBandEffectiveQuality}
         getBandsForMaterial={getBandsForMaterial}
         materialQualities={materialQualities}
@@ -1459,6 +1703,9 @@ export default function ComponentRecipeTable({
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
     () => readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY),
   );
+  const [bookmarkedMissionIds, setBookmarkedMissionIds] = useState<Set<string>>(
+    () => readStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY),
+  );
   const resetSelection = useCallback(() => setSelectedGroupId(null), []);
 
   const toggleBookmark = useCallback((recipeId: string) => {
@@ -1470,6 +1717,19 @@ export default function ComponentRecipeTable({
         next.add(recipeId);
       }
       writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+      return next;
+    });
+  }, []);
+
+  const toggleMissionBookmark = useCallback((missionId: string) => {
+    setBookmarkedMissionIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(missionId)) {
+        next.delete(missionId);
+      } else {
+        next.add(missionId);
+      }
+      writeStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY, next);
       return next;
     });
   }, []);
@@ -1915,6 +2175,8 @@ export default function ComponentRecipeTable({
             isRecipeQueued={isRecipeQueued}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
             onToggleBookmark={toggleBookmark}
+            isMissionBookmarked={(missionId) => bookmarkedMissionIds.has(missionId)}
+            onToggleMissionBookmark={toggleMissionBookmark}
           />
         ) : (
           <section className="craft-detail-stage craft-detail-stage--empty">
