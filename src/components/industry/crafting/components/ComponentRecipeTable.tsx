@@ -18,6 +18,7 @@ import {
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
 import { apiUrl } from "@/lib/apiUrl";
+import { useAuthSession } from "@/lib/auth/useAuthSession";
 import {
   DEFAULT_BAND_INDEX,
   FALLBACK_QUALITY_BANDS,
@@ -28,6 +29,8 @@ import {
   rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
+import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
+import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 
 
 const NO_VALUE = "__none__";
@@ -1508,7 +1511,7 @@ function RecipeDrawer({
   ) => void;
   isRecipeQueued: (recipe: ComponentRecipe) => boolean;
   isRecipeBookmarked: (recipe: ComponentRecipe) => boolean;
-  onToggleBookmark: (recipeId: string) => void;
+  onToggleBookmark: (recipe: ComponentRecipe) => void;
   isMissionBookmarked: (missionId: string) => boolean;
   onToggleMissionBookmark: (missionId: string) => void;
 }) {
@@ -1655,7 +1658,7 @@ function RecipeDrawer({
         onAddToQueue={onAddToQueue}
         isQueued={selectedIsQueued}
         isBookmarked={selectedIsBookmarked}
-        onToggleBookmark={() => onToggleBookmark(selectedRecipe.blueprint_id)}
+        onToggleBookmark={() => onToggleBookmark(selectedRecipe)}
         isMissionBookmarked={isMissionBookmarked}
         onToggleMissionBookmark={onToggleMissionBookmark}
         getBandEffectiveQuality={getBandEffectiveQuality}
@@ -1706,20 +1709,78 @@ export default function ComponentRecipeTable({
   const [bookmarkedMissionIds, setBookmarkedMissionIds] = useState<Set<string>>(
     () => readStoredStringSet(MISSION_BOOKMARK_STORAGE_KEY),
   );
+  const { session, loading: authLoading } = useAuthSession();
   const resetSelection = useCallback(() => setSelectedGroupId(null), []);
 
-  const toggleBookmark = useCallback((recipeId: string) => {
+  useEffect(() => {
+    const accessToken = session?.access_token;
+    if (!accessToken) return;
+
+    let cancelled = false;
+    fetchSavedBlueprints(accessToken)
+      .then((savedBlueprints) => {
+        if (!cancelled) {
+          setBookmarkedRecipeIds(new Set(savedBlueprints.map((item) => item.blueprintId)));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setBookmarkedRecipeIds(new Set());
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.access_token]);
+
+  const toggleBookmark = useCallback(async (recipe: ComponentRecipe) => {
+    const recipeId = recipe.blueprint_id;
+    const accessToken = session?.access_token;
+
+    if (!accessToken) {
+      if (hasSupabaseConfig() && !authLoading) {
+        await signInWithDiscord();
+        return;
+      }
+
+      setBookmarkedRecipeIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(recipeId)) {
+          next.delete(recipeId);
+        } else {
+          next.add(recipeId);
+        }
+        writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+        return next;
+      });
+      return;
+    }
+
+    const wasSaved = bookmarkedRecipeIds.has(recipeId);
     setBookmarkedRecipeIds((prev) => {
       const next = new Set(prev);
-      if (next.has(recipeId)) {
-        next.delete(recipeId);
-      } else {
-        next.add(recipeId);
-      }
-      writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+      wasSaved ? next.delete(recipeId) : next.add(recipeId);
       return next;
     });
-  }, []);
+
+    try {
+      if (wasSaved) {
+        await deleteUserBlueprint(accessToken, recipeId);
+      } else {
+        await saveUserBlueprint(accessToken, {
+          blueprintId: recipeId,
+          faction: recipe.manufacturer,
+          itemName: getRecipeDisplayName(recipe),
+          sourceType: "blueprint",
+        });
+      }
+    } catch {
+      setBookmarkedRecipeIds((prev) => {
+        const next = new Set(prev);
+        wasSaved ? next.add(recipeId) : next.delete(recipeId);
+        return next;
+      });
+    }
+  }, [authLoading, bookmarkedRecipeIds, session?.access_token]);
 
   const toggleMissionBookmark = useCallback((missionId: string) => {
     setBookmarkedMissionIds((prev) => {
