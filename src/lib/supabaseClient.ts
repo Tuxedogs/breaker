@@ -1,21 +1,65 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 const postAuthRedirectKey = "scintel-post-auth-redirect";
 
 let client: SupabaseClient | null = null;
+let clientInitError: string | null = null;
+
+export interface SupabaseAuthDiagnostic {
+  available: boolean;
+  missingEnv: string[];
+  message: string | null;
+}
+
+function getMissingSupabaseEnv() {
+  return [
+    supabaseUrl ? null : "VITE_SUPABASE_URL",
+    supabaseAnonKey ? null : "VITE_SUPABASE_ANON_KEY",
+  ].filter((key): key is string => Boolean(key));
+}
+
+export function getSupabaseAuthDiagnostic(): SupabaseAuthDiagnostic {
+  const missingEnv = getMissingSupabaseEnv();
+  if (missingEnv.length > 0) {
+    return {
+      available: false,
+      missingEnv,
+      message: `Missing ${missingEnv.join(", ")}.`,
+    };
+  }
+
+  if (clientInitError) {
+    return {
+      available: false,
+      missingEnv: [],
+      message: `Supabase client failed to initialize: ${clientInitError}`,
+    };
+  }
+
+  return { available: true, missingEnv: [], message: null };
+}
 
 export function hasSupabaseConfig() {
-  return Boolean(supabaseUrl && supabaseAnonKey);
+  return getSupabaseAuthDiagnostic().available;
 }
 
 export function getSupabaseClient() {
-  if (!hasSupabaseConfig()) {
-    throw new Error("Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
+  const diagnostic = getSupabaseAuthDiagnostic();
+  if (!diagnostic.available) {
+    throw new Error(diagnostic.message ?? "Supabase auth is unavailable.");
   }
 
-  client ??= createClient(supabaseUrl, supabaseAnonKey);
+  if (!client) {
+    try {
+      client = createClient(supabaseUrl, supabaseAnonKey);
+      clientInitError = null;
+    } catch (error) {
+      clientInitError = error instanceof Error ? error.message : String(error);
+      throw new Error(`Supabase client failed to initialize: ${clientInitError}`);
+    }
+  }
   return client;
 }
 
