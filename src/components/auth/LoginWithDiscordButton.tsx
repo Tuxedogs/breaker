@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { MouseEventHandler } from "react";
 import type { User } from "@supabase/supabase-js";
 import { getSupabaseAuthDiagnostic, logout, signInWithDiscord } from "../../lib/supabaseClient";
@@ -21,9 +21,41 @@ function getUserLabel(user: User | null) {
   return typeof username === "string" && username.trim() ? username : "Signed in";
 }
 
+function getUserLabelSource(user: User | null) {
+  if (typeof user?.user_metadata?.preferred_username === "string" && user.user_metadata.preferred_username.trim()) {
+    return "preferred_username";
+  }
+  if (typeof user?.user_metadata?.user_name === "string" && user.user_metadata.user_name.trim()) {
+    return "user_name";
+  }
+  if (typeof user?.user_metadata?.full_name === "string" && user.user_metadata.full_name.trim()) {
+    return "full_name";
+  }
+  if (typeof user?.user_metadata?.name === "string" && user.user_metadata.name.trim()) {
+    return "name";
+  }
+  if (typeof user?.user_metadata?.provider_id === "string" && user.user_metadata.provider_id.trim()) {
+    return "provider_id";
+  }
+  if (typeof user?.email === "string" && user.email.trim()) {
+    return "email";
+  }
+  return null;
+}
+
 function getUserAvatarUrl(user: User | null) {
   const avatarUrl = user?.user_metadata?.avatar_url ?? user?.user_metadata?.picture;
   return typeof avatarUrl === "string" && avatarUrl.trim() ? avatarUrl : null;
+}
+
+function getUserAvatarSource(user: User | null) {
+  if (typeof user?.user_metadata?.avatar_url === "string" && user.user_metadata.avatar_url.trim()) {
+    return "avatar_url";
+  }
+  if (typeof user?.user_metadata?.picture === "string" && user.user_metadata.picture.trim()) {
+    return "picture";
+  }
+  return null;
 }
 
 function getUserInitials(user: User | null) {
@@ -71,6 +103,20 @@ export default function LoginWithDiscordButton({
   ) : (
     <DiscordLogo />
   );
+
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+
+    const metadata = user?.user_metadata;
+    console.info("[auth] login button state", {
+      loading,
+      signedIn,
+      userIdExists: Boolean(user?.id),
+      metadataKeys: metadata && typeof metadata === "object" ? Object.keys(metadata) : [],
+      labelSource: getUserLabelSource(user),
+      avatarSource: getUserAvatarSource(user),
+    });
+  }, [loading, signedIn, user]);
 
   async function handleClick() {
     if (import.meta.env.DEV) {
