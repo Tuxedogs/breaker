@@ -10,11 +10,10 @@ import { apiUrl } from "../../lib/apiUrl";
 import { JsonResponseError, parseJsonResponse } from "../../lib/safeJson";
 import {
   displayMiningMethod,
-  getStaticEncounterRankingRow,
+  getStaticDensityScore,
   getStaticMaterialKey,
   getStaticMaterialQualityRow,
   loadStaticMiningIndex,
-  sourceWeightFromEncounterRank,
   type StaticLocationMaterialRow,
   type StaticMiningIndex,
 } from "./staticMiningIndex";
@@ -62,6 +61,14 @@ type CanonicalDemand = RequiredMaterial & {
 };
 
 type RecommenderSource = "post" | "static-fallback";
+
+type MiningRankingMode = NonNullable<MiningRecommendationRequest["rankingMode"]>;
+
+const weightsByMode: Record<MiningRankingMode, { encounter: number; quality: number; composition: number; methodFit: number }> = {
+  quality: { encounter: 0.35, quality: 0.45, composition: 0.10, methodFit: 0.10 },
+  quantity: { encounter: 0.55, quality: 0.10, composition: 0.25, methodFit: 0.10 },
+  balanced: { encounter: 0.40, quality: 0.25, composition: 0.20, methodFit: 0.15 },
+};
 
 type FallbackReason =
   | { type: "status"; status: number }
@@ -181,18 +188,51 @@ function getRowQualityChance(
   return typeof chance === "number" && Number.isFinite(chance) ? chance : null;
 }
 
+function clampPct(value: number | null | undefined): number {
+  if (value === null || value === undefined || !Number.isFinite(value)) return 0;
+  return Math.max(0, Math.min(100, value));
+}
+
+function getCompositionPct(row: StaticLocationMaterialRow): number {
+  const value = row.compositionAveragePercentage;
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return clampPct(value > 1 ? value : value * 100);
+}
+
+function getMethodFitPct(row: StaticLocationMaterialRow): number {
+  const value = row.methodFit ?? row.locationClassDistributionShare;
+  if (typeof value !== "number" || !Number.isFinite(value)) return 0;
+  return clampPct(value > 1 ? value : value * 100);
+}
+
+function getRankingMode(request: MiningRecommendationRequest): MiningRankingMode {
+  return request.rankingMode === "quantity" || request.rankingMode === "balanced" ? request.rankingMode : "quality";
+}
+
 function buildStaticRouteScore(
   row: StaticLocationMaterialRow,
   demand: CanonicalDemand,
   index: StaticMiningIndex,
+  rankingMode: MiningRankingMode,
 ): NonNullable<PublicLocationEntry["routeScores"]>[number] {
-  const ranking = getStaticEncounterRankingRow(row, index);
-  const sourceWeight = sourceWeightFromEncounterRank(ranking?.encounterRank, ranking?.encounterRankOutOf) ?? 0;
   const threshold = demand.selectedQuality ?? 800;
   const qualityChance = getRowQualityChance(row, index, threshold);
-  const qualityFit = qualityChance == null ? null : Math.round(qualityChance * 100);
-  const yieldPotential = Math.round(sourceWeight);
-  const overallTargetabilityScore = Math.round((sourceWeight * 0.55) + ((qualityChance ?? 0) * 100 * 0.45));
+  const encounterPct = clampPct(getStaticDensityScore(row, index));
+  const qualityPct = qualityChance == null ? 0 : clampPct(qualityChance * 100);
+  const qualityFit = qualityChance == null ? null : Math.round(qualityPct);
+  const compositionPct = getCompositionPct(row);
+  const methodFitPct = getMethodFitPct(row);
+  const weights = weightsByMode[rankingMode];
+  // Coverage is a gate at the location level. Full coverage does not add points;
+  // per-material fit is weighted from real indexed density, quality, composition,
+  // and the selected material's mining-method share at this location.
+  const materialFitScore = (
+    encounterPct * weights.encounter +
+    qualityPct * weights.quality +
+    compositionPct * weights.composition +
+    methodFitPct * weights.methodFit
+  );
+  const overallTargetabilityScore = Math.round(materialFitScore);
 
   return {
     materialKey: demand.materialKey,
@@ -200,17 +240,23 @@ function buildStaticRouteScore(
     materialName: demand.materialName,
     displayName: demand.displayName,
     selectedQuality: threshold,
-    qualityRouteScore: qualityFit,
-    yieldRouteScore: yieldPotential,
+    qualityRouteScore: qualityChance == null ? null : Math.round(qualityPct),
+    yieldRouteScore: Math.round(encounterPct),
     demandMatchScore: Math.max(1, Number(demand.requiredQuantity) || 1),
     overallTargetabilityScore,
     label: targetabilityLabel(overallTargetabilityScore),
     reasons: ["Static recommendation index fallback"],
     signals: {
       qualityFit,
-      yieldPotential,
-      sourceWeight,
+      yieldPotential: Math.round(encounterPct),
+      sourceWeight: encounterPct,
       routeTargetability: overallTargetabilityScore,
+      encounterPct,
+      qualityPct: qualityChance == null ? null : qualityPct,
+      compositionPct,
+      methodFitPct,
+      selectedMethod: displayMiningMethod(row.resolvedMineableClass),
+      locationMethodShare: row.methodFit ?? row.locationClassDistributionShare,
       materialName: row.materialName,
       canonicalMaterialName: demand.displayName,
       locationName: row.locationDisplayName,
@@ -219,10 +265,15 @@ function buildStaticRouteScore(
       thresholdChance: qualityChance,
       compositionAverage: row.compositionAveragePercentage,
       probability: row.sourceProbabilitySum,
-      sourceStrength: sourceWeight,
+      encounterScore: row.materialEncounterScore ?? row.encounterScore,
+      compositionScore: compositionPct,
+      sourceStrength: encounterPct,
       sourceRowCount: row.sourceCount,
       sourceFieldsUsed: [
         "location_material_index.json",
+        "materialEncounterScore or encounterScore",
+        "compositionAveragePercentage",
+        "locationClassDistributionShare/methodFit",
         "material_quality_index.json",
         "material_encounter_rankings.json",
       ],
@@ -237,6 +288,7 @@ function buildStaticRecommendations(
   const demand = request.requiredMaterials.map(toCanonicalDemand);
   const demandByKey = new Map(demand.map((material) => [material.materialKey, material]));
   const hasDemand = demand.length > 0;
+  const rankingMode = getRankingMode(request);
 
   const groups = new Map<string, StaticLocationMaterialRow[]>();
   for (const row of index.rows) {
@@ -258,17 +310,19 @@ function buildStaticRecommendations(
     if (hasDemand && coveredDemand.length === 0) continue;
 
     const routeScores = coveredDemand
-      .map((material) => buildStaticRouteScore(rowByMaterialKey.get(material.materialKey)!, material, index))
+      .map((material) => buildStaticRouteScore(rowByMaterialKey.get(material.materialKey)!, material, index, rankingMode))
       .sort((left, right) => right.overallTargetabilityScore - left.overallTargetabilityScore);
 
-    const coverageRatio = hasDemand ? coveredDemand.length / demand.length : 1;
     const weightedDemandScore = routeScores.reduce((sum, score) => {
       const qty = demandByKey.get(score.materialKey)?.requiredQuantity ?? 1;
       return sum + score.overallTargetabilityScore * Math.max(1, Number(qty) || 1);
     }, 0);
     const demandWeight = coveredDemand.reduce((sum, material) => sum + Math.max(1, Number(material.requiredQuantity) || 1), 0);
-    const averageRouteScore = demandWeight > 0 ? weightedDemandScore / demandWeight : 0;
-    const routeTargetabilityScore = Math.round((coverageRatio * 70) + (averageRouteScore * 0.3));
+    const locationFitScore = demandWeight > 0 ? weightedDemandScore / demandWeight : 0;
+    // Fit describes how good the indexed covered material matches are.
+    // Coverage is exposed separately so impossible multi-material combinations
+    // do not make every valid single-material location look intrinsically worse.
+    const routeTargetabilityScore = Math.round(locationFitScore);
 
     recommendations.push({
       locationKey: first.locationKey,
@@ -443,6 +497,7 @@ export function buildRecommendationRequest(
   intentPayload: MiningPlannerIntentPayload,
   fixture: BuildQueueRecommendationFixture | null,
   queuedRequirements?: MiningRecommendationRequest["requiredMaterials"],
+  rankingMode: MiningRecommendationRequest["rankingMode"] = "quality",
 ): MiningRecommendationRequest {
   return {
     version: "1.0",
@@ -460,6 +515,7 @@ export function buildRecommendationRequest(
     manualDemand: intentPayload.manualDemand,
     favoriteLocationIds: intentPayload.favoriteLocationIds,
     filters: intentPayload.filters,
+    rankingMode,
     refineryContext: null,
     currentFixtureSummary: fixture
       ? {

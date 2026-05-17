@@ -153,8 +153,9 @@ const sections = [
   {
     label: "LOGISTICS",
     items: [
-      { label: "Inventory",   to: "/logistics/inventory",   icon: "clipboard", svgIcon: "inventory" },
-      { label: "Transfers",   to: "/dashboard",             icon: "arrows", svgIcon: "transfers", wip: true },
+      { label: "Inventory",          to: "/logistics/inventory",          icon: "clipboard", svgIcon: "inventory" },
+      { label: "Carrier Logistics",  to: "/logistics/carrier-logistics",  icon: "anchor" },
+      { label: "Transfers",          to: "/dashboard",                    icon: "arrows", svgIcon: "transfers", wip: true },
     ],
   },
   {
