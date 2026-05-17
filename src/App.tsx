@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
 import BuildQueuePersistence from "./components/logistics/BuildQueuePersistence";
+import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
 import DashboardPage from "./pages/DashboardPage";
 import DoctrineLibraryPage from "./pages/DoctrineLibraryPage";
@@ -63,7 +64,7 @@ function RedirectLegacyDoctrineModule() {
 
 export default function App() {
   return (
-    <>
+    <AuthSessionProvider>
       <BuildQueuePersistence />
       <Routes>
         <Route index element={<RedirectToDashboard />} />
@@ -176,6 +177,6 @@ export default function App() {
         <Route path="*" element={<RedirectToDashboard />} />
 
       </Routes>
-    </>
+    </AuthSessionProvider>
   );
 }
