@@ -3,6 +3,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 const postAuthRedirectKey = "scintel-post-auth-redirect";
+const defaultPostAuthRedirect = "/dashboard";
 
 let client: SupabaseClient | null = null;
 let clientInitError: string | null = null;
@@ -63,16 +64,32 @@ export function getSupabaseClient() {
   return client;
 }
 
+function getCurrentPostAuthRedirectPath() {
+  return `${window.location.pathname}${window.location.search}${window.location.hash}`;
+}
+
+function isAllowedPostAuthRedirectPath(path: string | null) {
+  return Boolean(
+    path === defaultPostAuthRedirect
+      || path?.startsWith("/industry/crafting")
+      || path?.startsWith("/industry/blueprint-tracker")
+      || path?.startsWith("/logistics/inventory")
+  );
+}
+
 export async function signInWithDiscord() {
   const supabase = getSupabaseClient();
-  const path = `${window.location.pathname}${window.location.search}`;
-  const nextPath = path.startsWith("/logistics/inventory") ? path : "/dashboard";
+  const path = getCurrentPostAuthRedirectPath();
+  const nextPath = isAllowedPostAuthRedirectPath(path) ? path : defaultPostAuthRedirect;
   const redirectTo = `${window.location.origin}/auth/callback`;
   window.sessionStorage.setItem(postAuthRedirectKey, nextPath);
 
   if (import.meta.env.DEV) {
     console.info("[auth] Supabase URL", supabaseUrl);
-    console.info("[auth] Discord redirectTo", redirectTo);
+    console.info("[auth] Discord redirect", {
+      redirectTo,
+      postAuthPath: nextPath,
+    });
   }
 
   return supabase.auth.signInWithOAuth({
@@ -92,8 +109,8 @@ export async function logout() {
 export function consumePostAuthRedirect() {
   const path = window.sessionStorage.getItem(postAuthRedirectKey);
   window.sessionStorage.removeItem(postAuthRedirectKey);
-  if (path === "/dashboard" || path?.startsWith("/logistics/inventory")) {
+  if (isAllowedPostAuthRedirectPath(path)) {
     return path;
   }
-  return "/dashboard";
+  return defaultPostAuthRedirect;
 }
