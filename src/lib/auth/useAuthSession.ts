@@ -1,7 +1,7 @@
 import { createContext, createElement, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
-import { getSupabaseClient, hasSupabaseConfig } from "../supabaseClient";
+import { getSupabaseClient, hasSupabaseAuthStorageKey, hasSupabaseConfig } from "../supabaseClient";
 
 interface AuthSessionState {
   session: Session | null;
@@ -17,6 +17,33 @@ const unauthenticatedState: AuthSessionState = {
 
 const AuthSessionContext = createContext<AuthSessionState | null>(null);
 export const authSessionRefreshEvent = "scintel:auth-session-refresh";
+const sessionRetryDelays = [0, 75, 200, 500];
+
+function wait(ms: number) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function hasAccessTokenHash() {
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  return hashParams.has("access_token");
+}
+
+async function getSessionWithRetry(shouldRetry: boolean) {
+  const supabase = getSupabaseClient();
+  let lastSession: Session | null = null;
+
+  for (const delay of shouldRetry ? sessionRetryDelays : [0]) {
+    if (delay > 0) {
+      await wait(delay);
+    }
+
+    const { data } = await supabase.auth.getSession();
+    lastSession = data.session;
+    if (lastSession) break;
+  }
+
+  return lastSession;
+}
 
 function logAuthStateSnapshot(source: string, session: Session | null) {
   if (!import.meta.env.DEV) return;
@@ -25,8 +52,11 @@ function logAuthStateSnapshot(source: string, session: Session | null) {
   const metadataKeys = metadata && typeof metadata === "object" ? Object.keys(metadata) : [];
   console.info("[auth] session snapshot", {
     source,
+    pathname: window.location.pathname,
+    hasAccessTokenHash: hasAccessTokenHash(),
     sessionExists: Boolean(session),
     userIdExists: Boolean(session?.user?.id),
+    hasSupabaseAuthKey: hasSupabaseAuthStorageKey(),
     metadataKeys,
   });
 }
@@ -48,12 +78,12 @@ function useAuthSessionState(): AuthSessionState {
     let mounted = true;
 
     function refreshSession(source: string) {
-      supabase.auth.getSession().then(({ data }) => {
+      getSessionWithRetry(hasAccessTokenHash()).then((session) => {
         if (!mounted) return;
-        logAuthStateSnapshot(source, data.session);
+        logAuthStateSnapshot(source, session);
         setState({
-          session: data.session,
-          user: data.session?.user ?? null,
+          session,
+          user: session?.user ?? null,
           loading: false,
         });
       }).catch((error: unknown) => {

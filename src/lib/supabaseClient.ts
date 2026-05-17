@@ -4,9 +4,20 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 const postAuthRedirectKey = "scintel-post-auth-redirect";
 const defaultPostAuthRedirect = "/dashboard";
+const supabaseProjectRef = getSupabaseProjectRef(supabaseUrl);
+const supabaseAuthStorageKey = supabaseProjectRef ? `sb-${supabaseProjectRef}-auth-token` : null;
 
 let client: SupabaseClient | null = null;
 let clientInitError: string | null = null;
+
+function getSupabaseProjectRef(url: string | undefined) {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname.split(".")[0] || null;
+  } catch {
+    return null;
+  }
+}
 
 export interface SupabaseAuthDiagnostic {
   available: boolean;
@@ -54,7 +65,14 @@ export function getSupabaseClient() {
 
   if (!client) {
     try {
-      client = createClient(supabaseUrl, supabaseAnonKey);
+      client = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          flowType: "pkce",
+        },
+      });
       clientInitError = null;
     } catch (error) {
       clientInitError = error instanceof Error ? error.message : String(error);
@@ -62,6 +80,15 @@ export function getSupabaseClient() {
     }
   }
   return client;
+}
+
+export function hasSupabaseAuthStorageKey() {
+  if (!supabaseAuthStorageKey) return false;
+  return window.localStorage.getItem(supabaseAuthStorageKey) !== null;
+}
+
+export function getSupabaseAuthStorageKey() {
+  return supabaseAuthStorageKey;
 }
 
 function getCurrentPostAuthRedirectPath() {
