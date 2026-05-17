@@ -16,6 +16,7 @@ const unauthenticatedState: AuthSessionState = {
 };
 
 const AuthSessionContext = createContext<AuthSessionState | null>(null);
+export const authSessionRefreshEvent = "scintel:auth-session-refresh";
 
 function logAuthStateSnapshot(source: string, session: Session | null) {
   if (!import.meta.env.DEV) return;
@@ -46,21 +47,25 @@ function useAuthSessionState(): AuthSessionState {
     const supabase = getSupabaseClient();
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      logAuthStateSnapshot("getSession", data.session);
-      setState({
-        session: data.session,
-        user: data.session?.user ?? null,
-        loading: false,
+    function refreshSession(source: string) {
+      supabase.auth.getSession().then(({ data }) => {
+        if (!mounted) return;
+        logAuthStateSnapshot(source, data.session);
+        setState({
+          session: data.session,
+          user: data.session?.user ?? null,
+          loading: false,
+        });
+      }).catch((error: unknown) => {
+        if (import.meta.env.DEV) {
+          console.warn("[auth] getSession failed", error instanceof Error ? error.message : String(error));
+        }
+        if (!mounted) return;
+        setState(unauthenticatedState);
       });
-    }).catch((error: unknown) => {
-      if (import.meta.env.DEV) {
-        console.warn("[auth] getSession failed", error instanceof Error ? error.message : String(error));
-      }
-      if (!mounted) return;
-      setState(unauthenticatedState);
-    });
+    }
+
+    refreshSession("getSession");
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted) return;
@@ -71,9 +76,12 @@ function useAuthSessionState(): AuthSessionState {
         loading: false,
       });
     });
+    const handleAuthSessionRefresh = () => refreshSession("callbackRefresh");
+    window.addEventListener(authSessionRefreshEvent, handleAuthSessionRefresh);
 
     return () => {
       mounted = false;
+      window.removeEventListener(authSessionRefreshEvent, handleAuthSessionRefresh);
       authListener.subscription.unsubscribe();
     };
   }, []);
