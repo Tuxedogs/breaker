@@ -73,6 +73,16 @@ export default function LogisticsPage() {
           <div className="logi-nav-card-count">{activeQueueCount} active</div>
         </Link>
 
+        <Link to="/logistics/carrier-logistics" className="logi-nav-card">
+          <div className="logi-nav-card-icon">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+              <path d="M12 2a3 3 0 100 6 3 3 0 000-6zm0 6v14M5 9a7 7 0 0014 0" />
+            </svg>
+          </div>
+          <div className="logi-nav-card-label">Carrier Logistics</div>
+          <div className="logi-nav-card-count">rearm planner</div>
+        </Link>
+
       </div>
 
       {/* Shortages quick view */}

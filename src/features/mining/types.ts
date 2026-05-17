@@ -211,6 +211,12 @@ export interface PublicLocationEntry {
       yieldPotential: number;
       sourceWeight: number;
       routeTargetability: number;
+      encounterPct?: number | null;
+      qualityPct?: number | null;
+      compositionPct?: number | null;
+      methodFitPct?: number | null;
+      selectedMethod?: string | null;
+      locationMethodShare?: number | null;
       competingSources?: number;
       materialName?: string;
       canonicalMaterialName?: string;
@@ -275,6 +281,7 @@ export interface MiningRecommendationRequest {
   manualDemand: ManualMiningDemandItem[];
   favoriteLocationIds: string[];
   filters: MiningPlannerFilters;
+  rankingMode?: "quality" | "quantity" | "balanced";
   /** Placeholder for future refinery context (active refinery, processing speed, etc.). */
   refineryContext: null;
   /** Snapshot of the fixture the request was built against — for traceability. */

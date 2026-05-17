@@ -16,6 +16,7 @@ const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
+const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -123,6 +124,10 @@ export default function App() {
         <Route
           path="logistics/refinery-import"
           element={<Navigate to="/logistics/inventory/refinery-import" replace />}
+        />
+        <Route
+          path="logistics/carrier-logistics"
+          element={<Suspense fallback={<RouteFallback />}><CarrierLogisticsPage /></Suspense>}
         />
         <Route
           path="logistics/build-queue"

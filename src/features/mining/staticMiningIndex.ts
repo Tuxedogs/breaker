@@ -25,6 +25,12 @@ export type StaticLocationMaterialRow = {
   qualityDistributionSourceNames: string[];
   locationClassDistributionShare: number;
   encounterScore: number;
+  materialEncounterScore?: number | null;
+  candidateMaterialEncounterRank?: number | null;
+  candidateMaterialEncounterRankOutOf?: number | null;
+  methodFit?: number | null;
+  materialBiasSignal?: number | null;
+  providerWeightedSignal?: number | null;
   sources?: Array<{
     materialKey?: string;
     materialId?: string;
@@ -103,6 +109,7 @@ export type StaticMiningIndex = {
   materialResources: StaticMiningMaterialResource[];
   rankingByRowKey: Map<string, StaticMaterialEncounterRankingRow>;
   encounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
+  materialEncounterScoreRangeByMaterialKey: Map<string, { min: number; max: number }>;
   distributionRows: StaticLocationDistributionRow[];
   distributionByLocationJoinKey: Map<string, StaticLocationDistributionRow[]>;
   qualityRows: StaticMaterialQualityRow[];
@@ -289,15 +296,30 @@ export function formatStaticQualityChanceFromChances(chances: Record<string, num
 }
 
 export function formatStaticEncounterSignal(row: StaticLocationMaterialRow): string {
-  const value = Number.isFinite(row.encounterScore) ? row.encounterScore : row.sourceProbabilitySum;
+  const value = Number.isFinite(row.materialEncounterScore) ? row.materialEncounterScore : Number.isFinite(row.encounterScore) ? row.encounterScore : row.sourceProbabilitySum;
   if (typeof value !== "number" || !Number.isFinite(value)) return "Unknown";
   return value >= 0.01 ? Number(value.toFixed(3)).toString() : value.toExponential(2);
 }
 
-export function formatStaticMethodBias(row: StaticLocationMaterialRow): string {
-  const value = row.locationClassDistributionShare;
+export function formatStaticMethodFit(row: StaticLocationMaterialRow): string {
+  const value = row.methodFit ?? row.locationClassDistributionShare;
   if (typeof value !== "number" || !Number.isFinite(value)) return "Unknown";
   return `${Number((value * 100).toFixed(1)).toString()}%`;
+}
+
+export function formatStaticMethodBias(row: StaticLocationMaterialRow): string {
+  return formatStaticMethodFit(row);
+}
+
+export function getStaticDensityScore(row: StaticLocationMaterialRow, index: StaticMiningIndex | null | undefined): number | null {
+  const key = getStaticMaterialKey(row);
+  const actualScore = row.materialEncounterScore ?? row.encounterScore;
+  if (!Number.isFinite(actualScore)) return null;
+  const range = index?.materialEncounterScoreRangeByMaterialKey.get(key)
+    ?? index?.encounterScoreRangeByMaterialKey.get(key);
+  if (!range || !Number.isFinite(range.min) || !Number.isFinite(range.max)) return null;
+  if (range.max <= range.min) return actualScore > 0 ? 100 : 0;
+  return Math.max(0, Math.min(100, ((actualScore - range.min) / (range.max - range.min)) * 100));
 }
 
 export function sourceStrengthFromEncounterRank(rank: number | null | undefined, rankOutOf: number | null | undefined): "STRONG" | "MODERATE" | "LOW" | null {
@@ -655,6 +677,7 @@ function buildStaticMiningIndex(
   }
 
   const encounterScoreRangeByMaterialKey = new Map<string, { min: number; max: number }>();
+  const materialEncounterScoreRangeByMaterialKey = new Map<string, { min: number; max: number }>();
   const materialResources = new Map<string, StaticMiningMaterialResource>();
   for (const row of rows) {
     const canonical = canonicalMiningMaterial({
@@ -678,6 +701,13 @@ function buildStaticMiningIndex(
         max: range ? Math.max(range.max, row.encounterScore) : row.encounterScore,
       });
     }
+    if (typeof row.materialEncounterScore === "number" && Number.isFinite(row.materialEncounterScore)) {
+      const range = materialEncounterScoreRangeByMaterialKey.get(canonical.key);
+      materialEncounterScoreRangeByMaterialKey.set(canonical.key, {
+        min: range ? Math.min(range.min, row.materialEncounterScore) : row.materialEncounterScore,
+        max: range ? Math.max(range.max, row.materialEncounterScore) : row.materialEncounterScore,
+      });
+    }
   }
 
   return {
@@ -689,6 +719,7 @@ function buildStaticMiningIndex(
     materialResources: [...materialResources.values()].sort((left, right) => left.label.localeCompare(right.label)),
     rankingByRowKey,
     encounterScoreRangeByMaterialKey,
+    materialEncounterScoreRangeByMaterialKey,
     distributionRows,
     distributionByLocationJoinKey,
     qualityRows,
