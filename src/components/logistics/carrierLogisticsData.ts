@@ -1,4 +1,4 @@
-export type CarrierId = "ironclad" | "polaris" | "idrisP";
+export type CarrierId = "ironclad" | "polaris" | "idrisP" | "kraken";
 export type CarrierMode = "mainOnly" | "all" | "cargoRoomsOnly";
 export type ServiceShipId = "gladius" | "hornet" | "f8c";
 export type CommodityKey = "ammoS2" | "ammoS3" | "ammoS4" | "noise" | "decoy" | "rmc";
@@ -68,9 +68,8 @@ export type CargoRoomPlan = {
 export const CARRIER_PRESETS: CarrierPreset[] = [
   {
     id: "ironclad",
-    label: "Drake Ironclad",
-    capacityScu: 2200,
-    mainOnlyScu: 2160,
+    label: "Drake Ironclad Assault",
+    capacityScu: 1440,
   },
   {
     id: "polaris",
@@ -82,6 +81,11 @@ export const CARRIER_PRESETS: CarrierPreset[] = [
     label: "AEGS Idris-P",
     capacityScu: 1374,
     cargoRoomOnlyScu: 302,
+  },
+  {
+    id: "kraken",
+    label: "Drake Kraken",
+    capacityScu: 3792,
   },
 ];
 
@@ -166,15 +170,10 @@ export const CARRIER_CARGO_LAYOUTS: CarrierCargoLayout[] = [
   {
     carrierId: "ironclad",
     rooms: [
-      { id: "ironclad-fl",  label: "Front Left Hold",       scu: 720, fillOrder: 1, mode: "mainOnly" },
-      { id: "ironclad-fr",  label: "Front Right Hold",      scu: 720, fillOrder: 2, mode: "mainOnly" },
-      { id: "ironclad-rl",  label: "Rear Left Hold",        scu: 360, fillOrder: 3, mode: "mainOnly" },
-      { id: "ironclad-rr",  label: "Rear Right Hold",       scu: 360, fillOrder: 4, mode: "mainOnly" },
-      { id: "ironclad-sfl", label: "Secure Front Left",     scu: 8,   fillOrder: 5, mode: "secure" },
-      { id: "ironclad-sfm", label: "Secure Front Middle",   scu: 8,   fillOrder: 6, mode: "secure" },
-      { id: "ironclad-sfr", label: "Secure Front Right",    scu: 8,   fillOrder: 7, mode: "secure" },
-      { id: "ironclad-srl", label: "Secure Rear Left",      scu: 8,   fillOrder: 8, mode: "secure" },
-      { id: "ironclad-srr", label: "Secure Rear Right",     scu: 8,   fillOrder: 9, mode: "secure" },
+      { id: "ironclad-fl", label: "Front Left Hold",  scu: 432, fillOrder: 1, mode: "all" },
+      { id: "ironclad-fr", label: "Front Right Hold", scu: 432, fillOrder: 2, mode: "all" },
+      { id: "ironclad-rl", label: "Rear Left Hold",   scu: 288, fillOrder: 3, mode: "all" },
+      { id: "ironclad-rr", label: "Rear Right Hold",  scu: 288, fillOrder: 4, mode: "all" },
     ],
   },
   {
@@ -197,6 +196,20 @@ export const CARRIER_CARGO_LAYOUTS: CarrierCargoLayout[] = [
       { id: "idris-add-fr",     label: "Additional Storage Front Right", scu: 12, fillOrder: 8,  mode: "additionalStorage" },
       { id: "idris-add-rl",     label: "Additional Storage Rear Left",   scu: 12, fillOrder: 9,  mode: "additionalStorage" },
       { id: "idris-add-rr",     label: "Additional Storage Rear Right",  scu: 12, fillOrder: 10, mode: "additionalStorage" },
+    ],
+  },
+  {
+    carrierId: "kraken",
+    rooms: [
+      { id: "kraken-main-fl",  label: "Main Hold Front Left",   scu: 576, fillOrder: 1, mode: "all" },
+      { id: "kraken-main-fr",  label: "Main Hold Front Right",  scu: 576, fillOrder: 2, mode: "all" },
+      { id: "kraken-main-ml",  label: "Main Hold Mid Left",     scu: 576, fillOrder: 3, mode: "all" },
+      { id: "kraken-main-mr",  label: "Main Hold Mid Right",    scu: 576, fillOrder: 4, mode: "all" },
+      { id: "kraken-main-rl",  label: "Main Hold Rear Left",    scu: 576, fillOrder: 5, mode: "all" },
+      { id: "kraken-main-rr",  label: "Main Hold Rear Right",   scu: 576, fillOrder: 6, mode: "all" },
+      { id: "kraken-aux-l",    label: "Auxiliary Hold Left",    scu: 144, fillOrder: 7, mode: "all" },
+      { id: "kraken-aux-r",    label: "Auxiliary Hold Right",   scu: 144, fillOrder: 8, mode: "all" },
+      { id: "kraken-secure",   label: "Secure Hold",            scu: 48,  fillOrder: 9, mode: "all" },
     ],
   },
 ];
