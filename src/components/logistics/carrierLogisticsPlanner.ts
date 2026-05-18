@@ -4,6 +4,7 @@ import type {
   CarrierPreset,
   CargoRoom,
   CommodityKey,
+  ServiceShipId,
   ResourceLoad,
   CargoRoomPlan,
   CargoRoomFillSegment,
@@ -160,4 +161,67 @@ export function buildCrateList(userLoads: Record<CommodityKey, number>): Record<
     result[key] = scu > 0 ? splitIntoCrates(scu, CRATE_SIZES) : [];
   }
   return result;
+}
+
+export type ShipServiceCapability = {
+  shipId: ServiceShipId;
+  label: string;
+  ammoReloads: number;
+  noiseReloads: number;
+  decoyReloads: number;
+  repairs: number;
+  fullRearms: number;
+  fullServices: number;
+};
+
+function floorDiv(loaded: number, req: number): number {
+  if (req <= 0) return 0;
+  return Math.floor(loaded / req);
+}
+
+export function calculateServiceCapability(
+  profiles: ShipServiceProfile[],
+  userLoads: Record<CommodityKey, number>
+): ShipServiceCapability[] {
+  return profiles.map((profile) => {
+    // Ammo: min across non-zero ammo requirements only
+    const ammoKeys: Exclude<CommodityKey, "rmc" | "noise" | "decoy">[] = ["ammoS2", "ammoS3", "ammoS4"];
+    const ammoLimits = ammoKeys
+      .filter((k) => profile.rearm[k] > 0)
+      .map((k) => (userLoads[k] ?? 0) / profile.rearm[k]);
+    const ammoReloads = ammoLimits.length > 0 ? Math.floor(Math.min(...ammoLimits)) : 0;
+
+    // Noise and Decoy individually
+    const noiseReloads = floorDiv(userLoads.noise ?? 0, profile.rearm.noise);
+    const decoyReloads = floorDiv(userLoads.decoy ?? 0, profile.rearm.decoy);
+
+    // Repairs via RMC
+    const repairs = floorDiv(userLoads.rmc ?? 0, profile.repair.fullRepairRmcScu);
+
+    // Full Rearm: all rearm categories that ship needs must be non-zero
+    // Collect limits only for categories the ship actually requires
+    const rearmLimits: number[] = [];
+    if (ammoLimits.length > 0) rearmLimits.push(...ammoLimits);
+    if (profile.rearm.noise > 0) rearmLimits.push((userLoads.noise ?? 0) / profile.rearm.noise);
+    if (profile.rearm.decoy > 0) rearmLimits.push((userLoads.decoy ?? 0) / profile.rearm.decoy);
+    const fullRearms = rearmLimits.length > 0 ? Math.floor(Math.min(...rearmLimits)) : 0;
+
+    // Full Service: rearm + repair
+    const serviceLimits = [...rearmLimits];
+    if (profile.repair.fullRepairRmcScu > 0) {
+      serviceLimits.push((userLoads.rmc ?? 0) / profile.repair.fullRepairRmcScu);
+    }
+    const fullServices = serviceLimits.length > 0 ? Math.floor(Math.min(...serviceLimits)) : 0;
+
+    return {
+      shipId: profile.id as ServiceShipId,
+      label: profile.label,
+      ammoReloads,
+      noiseReloads,
+      decoyReloads,
+      repairs,
+      fullRearms,
+      fullServices,
+    };
+  });
 }

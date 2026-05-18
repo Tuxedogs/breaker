@@ -5,6 +5,15 @@ interface CarrierCargoRoomsProps {
   overloadedScu: number;
 }
 
+const COMMODITY_FILL_COLOR: Record<CommodityKey, string> = {
+  ammoS2: "rgba(100,160,255,0.78)",
+  ammoS3: "rgba(80,200,220,0.78)",
+  ammoS4: "rgba(130,100,240,0.78)",
+  noise:  "rgba(255,200,60,0.78)",
+  decoy:  "rgba(255,140,40,0.78)",
+  rmc:    "rgba(80,210,140,0.78)",
+};
+
 const COMMODITY_CSS_KEY: Record<CommodityKey, string> = {
   ammoS2: "ammo-s2",
   ammoS3: "ammo-s3",
@@ -14,16 +23,8 @@ const COMMODITY_CSS_KEY: Record<CommodityKey, string> = {
   rmc:    "rmc",
 };
 
-const COMMODITY_FILL_COLOR: Record<CommodityKey, string> = {
-  ammoS2: "rgba(100,160,255,0.75)",
-  ammoS3: "rgba(80,200,220,0.75)",
-  ammoS4: "rgba(130,100,240,0.75)",
-  noise:  "rgba(255,200,60,0.75)",
-  decoy:  "rgba(255,140,40,0.75)",
-  rmc:    "rgba(80,210,140,0.75)",
-};
-
-const MINI_GRID_MAX_CELLS = 64;
+// Target: ~80 cells max for readability; scale for large rooms
+const MAX_GRID_CELLS = 80;
 
 interface RoomCardProps {
   plan: CargoRoomPlan;
@@ -31,28 +32,29 @@ interface RoomCardProps {
 
 function RoomCard({ plan }: RoomCardProps) {
   const isEmpty = plan.usedScu === 0;
-  const isFull = plan.remainingScu <= 0;
+  const isFull = plan.remainingScu <= 0.001;
 
-  // Mini grid: scale cells so we never exceed MINI_GRID_MAX_CELLS visual cells
-  const scaleFactor = plan.capacityScu > MINI_GRID_MAX_CELLS
-    ? Math.ceil(plan.capacityScu / MINI_GRID_MAX_CELLS)
+  // Scale so total cells <= MAX_GRID_CELLS
+  const scaleFactor = plan.capacityScu > MAX_GRID_CELLS
+    ? Math.ceil(plan.capacityScu / MAX_GRID_CELLS)
     : 1;
   const totalCells = Math.ceil(plan.capacityScu / scaleFactor);
-  const usedCells = Math.round((plan.usedScu / plan.capacityScu) * totalCells);
 
-  // Build per-cell commodity assignments
+  // Assign commodity to each cell proportionally
   const cellCommodity: (CommodityKey | null)[] = new Array(totalCells).fill(null);
-  let cellCursor = 0;
+  let cursor = 0;
   for (const seg of plan.segments) {
     const segCells = Math.round((seg.scu / plan.capacityScu) * totalCells);
-    for (let i = 0; i < segCells && cellCursor < totalCells; i++, cellCursor++) {
-      cellCommodity[cellCursor] = seg.commodity;
+    for (let i = 0; i < segCells && cursor < totalCells; i++, cursor++) {
+      cellCommodity[cursor] = seg.commodity;
     }
   }
-  // Clamp to actual used cells to avoid rounding drift
+  // Clamp trailing cells to empty (rounding drift fix)
+  const usedCells = Math.round((plan.usedScu / plan.capacityScu) * totalCells);
   for (let i = usedCells; i < totalCells; i++) cellCommodity[i] = null;
 
-  const cols = Math.min(totalCells, 16);
+  // Grid columns: up to 16 wide for large rooms, fewer for tiny rooms
+  const cols = totalCells <= 4 ? totalCells : totalCells <= 16 ? 8 : 16;
 
   return (
     <div className={`clog-room-card${isFull ? " clog-room-card--full" : ""}${isEmpty ? " clog-room-card--empty" : ""}`}>
@@ -61,37 +63,34 @@ function RoomCard({ plan }: RoomCardProps) {
         <span className="clog-room-capacity">{plan.capacityScu} SCU</span>
       </div>
 
+      {/* Segmented fill bar */}
+      <div className="clog-room-bar-wrap" title={`${plan.usedScu.toFixed(2)} / ${plan.capacityScu} SCU`}>
+        {plan.segments.map((seg, i) => (
+          <div key={i} className="clog-room-bar-seg"
+            style={{
+              width: `${Math.min(seg.percentOfRoom, 100)}%`,
+              background: COMMODITY_FILL_COLOR[seg.commodity],
+            }}
+            title={`${COMMODITY_CSS_KEY[seg.commodity]}: ${seg.scu.toFixed(2)} SCU`}
+          />
+        ))}
+      </div>
+
       {/* Mini grid */}
       <div
         className="clog-room-grid"
         style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        title={`${plan.usedScu.toFixed(1)} / ${plan.capacityScu} SCU used`}
       >
         {cellCommodity.map((commodity, i) => (
           <div
             key={i}
-            className={`clog-room-cell${commodity ? ` clog-room-cell--${COMMODITY_CSS_KEY[commodity]}` : ""}`}
+            className="clog-room-cell"
             style={commodity ? { background: COMMODITY_FILL_COLOR[commodity] } : undefined}
           />
         ))}
       </div>
 
-      {/* Fill bar */}
-      <div className="clog-room-bar-wrap">
-        {plan.segments.map((seg, i) => (
-          <div
-            key={i}
-            className="clog-room-bar-seg"
-            style={{
-              width: `${Math.min(seg.percentOfRoom, 100)}%`,
-              background: COMMODITY_FILL_COLOR[seg.commodity],
-            }}
-            title={`${seg.scu.toFixed(2)} SCU`}
-          />
-        ))}
-      </div>
-
-      {/* Stats row */}
+      {/* Stats */}
       <div className="clog-room-stats">
         <span className="clog-room-stat">
           <span className="clog-room-stat-label">Used</span>
@@ -99,13 +98,13 @@ function RoomCard({ plan }: RoomCardProps) {
         </span>
         <span className="clog-room-stat">
           <span className="clog-room-stat-label">Free</span>
-          <span className={`clog-room-stat-value${plan.remainingScu <= 0 ? " clog-room-stat-value--full" : " clog-room-stat-value--ok"}`}>
-            {plan.remainingScu.toFixed(1)}
+          <span className={`clog-room-stat-value${isFull ? " clog-room-stat-value--full" : plan.usedScu > 0 ? " clog-room-stat-value--ok" : ""}`}>
+            {Math.max(0, plan.remainingScu).toFixed(1)}
           </span>
         </span>
         <span className="clog-room-stat">
           <span className="clog-room-stat-label">Fill</span>
-          <span className={`clog-room-stat-value${plan.fillPercent >= 100 ? " clog-room-stat-value--full" : plan.fillPercent > 0 ? " clog-room-stat-value--warn" : ""}`}>
+          <span className={`clog-room-stat-value${isFull ? " clog-room-stat-value--full" : plan.fillPercent > 0 ? " clog-room-stat-value--loaded" : ""}`}>
             {plan.fillPercent.toFixed(0)}%
           </span>
         </span>
@@ -122,13 +121,10 @@ export default function CarrierCargoRooms({ roomPlans, overloadedScu }: CarrierC
           <RoomCard key={plan.roomId} plan={plan} />
         ))}
       </div>
-
-      {overloadedScu > 0 && (
+      {overloadedScu > 0.01 && (
         <div className="clog-overflow-strip">
-          <span className="clog-overflow-icon">⚠</span>
-          <span>
-            Over capacity by <strong>{overloadedScu.toFixed(1)} SCU</strong> — reduce loaded resources or enable a larger cargo mode.
-          </span>
+          <span>⚠</span>
+          <span>Over capacity by <strong>{overloadedScu.toFixed(1)} SCU</strong> — reduce a resource or adjust carrier mode.</span>
         </div>
       )}
     </div>

@@ -10,13 +10,11 @@ import {
   getCarrierPreset,
   getCarrierCapacity,
   getActiveRooms,
-  calculateCommodityTotals,
-  buildRecommendedLoadPlan,
   getTotalUserLoadedScu,
   getRemainingCapacity,
-  getOverloadedScu,
   allocateUserLoadsToRooms,
   buildCrateList,
+  calculateServiceCapability,
 } from "./carrierLogisticsPlanner";
 import CarrierCargoRooms from "./CarrierCargoRooms";
 
@@ -26,13 +24,8 @@ const EMPTY_LOADS: Record<CommodityKey, number> = {
 };
 
 function getDefaultMode(carrierId: CarrierId): CarrierMode {
-  if (carrierId === "ironclad") return "mainOnly";
   if (carrierId === "idrisP") return "cargoRoomsOnly";
   return "all";
-}
-
-function fmt(n: number, decimals = 2): string {
-  return n.toFixed(decimals);
 }
 
 function commodityCssKey(key: CommodityKey): string {
@@ -46,14 +39,6 @@ export default function CarrierLogisticsPanel() {
   const [manualOverride, setManualOverride] = useState(false);
   const [manualCapacity, setManualCapacity] = useState(2160);
 
-  // ── Ship service state ─────────────────────────
-  const [shipCounts, setShipCounts] = useState<Record<string, number>>({
-    gladius: 0, hornet: 0, f8c: 0,
-  });
-  const [repairPercents, setRepairPercents] = useState<Record<string, number>>({
-    gladius: 0, hornet: 0, f8c: 0,
-  });
-
   // ── User resource loadout ──────────────────────
   const [userLoads, setUserLoads] = useState<Record<CommodityKey, number>>({ ...EMPTY_LOADS });
 
@@ -62,35 +47,26 @@ export default function CarrierLogisticsPanel() {
   const capacity = getCarrierCapacity(preset, carrierMode, manualOverride ? manualCapacity : null);
   const activeRooms = useMemo(() => getActiveRooms(carrierId, carrierMode), [carrierId, carrierMode]);
 
-  // ── Derived: service requirements ─────────────
-  const shipStates = useMemo(
-    () => SHIP_PROFILES.map((p) => ({
-      profile: p,
-      count: shipCounts[p.id] ?? 0,
-      repairPercent: repairPercents[p.id] ?? 0,
-    })),
-    [shipCounts, repairPercents]
-  );
-  const totals = useMemo(() => calculateCommodityTotals(shipStates), [shipStates]);
-  const resourceLoads = useMemo(
-    () => buildRecommendedLoadPlan(totals, userLoads),
-    [totals, userLoads]
-  );
-
-  // ── Derived: user loadout summary ─────────────
+  // ── Derived: totals ────────────────────────────
   const totalUserLoaded = useMemo(() => getTotalUserLoadedScu(userLoads), [userLoads]);
   const remainingScu = useMemo(() => getRemainingCapacity(capacity, totalUserLoaded), [capacity, totalUserLoaded]);
-  const overloadedScu = useMemo(() => getOverloadedScu(capacity, totalUserLoaded), [capacity, totalUserLoaded]);
-  const isOverCapacity = overloadedScu > 0;
+  const fillPct = capacity > 0 ? Math.min(100, (totalUserLoaded / capacity) * 100) : 0;
+  const isOverCapacity = remainingScu < 0;
 
-  // ── Derived: cargo rooms fill ──────────────────
+  // ── Derived: room plans ────────────────────────
   const roomPlans = useMemo(
     () => allocateUserLoadsToRooms(userLoads, activeRooms),
     [userLoads, activeRooms]
   );
 
-  // ── Derived: crate breakdown ───────────────────
+  // ── Derived: crate list ────────────────────────
   const crateList = useMemo(() => buildCrateList(userLoads), [userLoads]);
+
+  // ── Derived: service capability ────────────────
+  const serviceCapability = useMemo(
+    () => calculateServiceCapability(SHIP_PROFILES, userLoads),
+    [userLoads]
+  );
 
   // ── Handlers ──────────────────────────────────
   function handleCarrierChange(id: CarrierId) {
@@ -98,27 +74,36 @@ export default function CarrierLogisticsPanel() {
     const newMode = getDefaultMode(id);
     setCarrierMode(newMode);
     const p = getCarrierPreset(id);
-    setManualCapacity(getCarrierCapacity(p, newMode, null));
+    const newCap = getCarrierCapacity(p, newMode, null);
+    setManualCapacity(newCap);
+    // Clamp all loads to new capacity
+    const total = getTotalUserLoadedScu(userLoads);
+    if (total > newCap) setUserLoads({ ...EMPTY_LOADS });
   }
 
   function handleModeChange(mode: CarrierMode) {
     setCarrierMode(mode);
-    setManualCapacity(getCarrierCapacity(preset, mode, null));
+    const newCap = getCarrierCapacity(preset, mode, null);
+    setManualCapacity(newCap);
+    const total = getTotalUserLoadedScu(userLoads);
+    if (total > newCap) setUserLoads({ ...EMPTY_LOADS });
   }
 
-  function setUserLoad(key: CommodityKey, value: number) {
-    setUserLoads((prev) => ({ ...prev, [key]: Math.max(0, value) }));
-  }
-
-  function setToRecommended(key: CommodityKey, recommended: number) {
-    setUserLoads((prev) => ({ ...prev, [key]: recommended }));
+  // Clamped setter: ensures total never exceeds capacity
+  function setUserLoad(key: CommodityKey, rawValue: number) {
+    const others = COMMODITY_ORDER
+      .filter((k) => k !== key)
+      .reduce((s, k) => s + (userLoads[k] ?? 0), 0);
+    const max = Math.max(0, capacity - others);
+    const clamped = Math.max(0, Math.min(rawValue, max));
+    setUserLoads((prev) => ({ ...prev, [key]: clamped }));
   }
 
   function fillRemaining(key: CommodityKey) {
-    const currentOthers = COMMODITY_ORDER
+    const others = COMMODITY_ORDER
       .filter((k) => k !== key)
       .reduce((s, k) => s + (userLoads[k] ?? 0), 0);
-    const available = Math.max(0, capacity - currentOthers);
+    const available = Math.max(0, capacity - others);
     setUserLoads((prev) => ({ ...prev, [key]: available }));
   }
 
@@ -126,386 +111,234 @@ export default function CarrierLogisticsPanel() {
     setUserLoads((prev) => ({ ...prev, [key]: 0 }));
   }
 
+  function getSliderMax(key: CommodityKey): number {
+    const others = COMMODITY_ORDER
+      .filter((k) => k !== key)
+      .reduce((s, k) => s + (userLoads[k] ?? 0), 0);
+    return Math.max(0, capacity - others);
+  }
+
   // ── Render ─────────────────────────────────────
   return (
     <div className="clog-layout">
 
-      {/* ── Left column: carrier + ships ── */}
-      <aside className="clog-col-left">
+      {/* ══ TOP ROW: carrier controls + cargo rooms + summary ══ */}
+      <div className="clog-top-row">
 
-        {/* Carrier selector */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">Carrier</div>
+        {/* Left: carrier selector strip */}
+        <div className="clog-carrier-strip">
+          <div className="clog-panel clog-panel--carrier">
+            <div className="clog-panel-title">Carrier</div>
 
-          <div className="clog-field">
-            <label className="clog-field-label">Platform</label>
-            <select
-              className="clog-select"
-              value={carrierId}
-              onChange={(e) => handleCarrierChange(e.target.value as CarrierId)}
-            >
-              {CARRIER_PRESETS.map((p) => (
-                <option key={p.id} value={p.id}>{p.label}</option>
-              ))}
-            </select>
-          </div>
-
-          {carrierId === "ironclad" && (
             <div className="clog-field">
-              <label className="clog-field-label">Cargo Mode</label>
-              <div className="clog-toggle-row">
-                <button type="button"
-                  className={`clog-toggle-btn${carrierMode === "mainOnly" ? " clog-toggle-btn--active" : ""}`}
-                  onClick={() => handleModeChange("mainOnly")}>
-                  Main Only
-                </button>
-                <button type="button"
-                  className={`clog-toggle-btn${carrierMode === "all" ? " clog-toggle-btn--active" : ""}`}
-                  onClick={() => handleModeChange("all")}>
-                  + Secure
-                </button>
-              </div>
+              <label className="clog-field-label">Platform</label>
+              <select
+                className="clog-select"
+                value={carrierId}
+                onChange={(e) => handleCarrierChange(e.target.value as CarrierId)}
+              >
+                {CARRIER_PRESETS.map((p) => (
+                  <option key={p.id} value={p.id}>{p.label}</option>
+                ))}
+              </select>
             </div>
-          )}
 
-          {carrierId === "idrisP" && (
+            {carrierId === "idrisP" && (
+              <div className="clog-field">
+                <label className="clog-field-label">Cargo Mode</label>
+                <div className="clog-toggle-row">
+                  <button type="button"
+                    className={`clog-toggle-btn${carrierMode === "cargoRoomsOnly" ? " clog-toggle-btn--active" : ""}`}
+                    onClick={() => handleModeChange("cargoRoomsOnly")}>
+                    Cargo Rooms
+                  </button>
+                  <button type="button"
+                    className={`clog-toggle-btn${carrierMode === "all" ? " clog-toggle-btn--active" : ""}`}
+                    onClick={() => handleModeChange("all")}>
+                    All Grids
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="clog-field">
-              <label className="clog-field-label">Cargo Mode</label>
-              <div className="clog-toggle-row">
-                <button type="button"
-                  className={`clog-toggle-btn${carrierMode === "cargoRoomsOnly" ? " clog-toggle-btn--active" : ""}`}
-                  onClick={() => handleModeChange("cargoRoomsOnly")}>
-                  Cargo Rooms
-                </button>
-                <button type="button"
-                  className={`clog-toggle-btn${carrierMode === "all" ? " clog-toggle-btn--active" : ""}`}
-                  onClick={() => handleModeChange("all")}>
-                  All Grids
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="clog-field">
-            <div className="clog-override-row">
-              <input
-                id="clog-override-check"
-                type="checkbox"
-                className="clog-override-check"
-                checked={manualOverride}
-                onChange={(e) => setManualOverride(e.target.checked)}
-              />
-              <label htmlFor="clog-override-check" className="clog-override-label">
-                Manual Capacity
-              </label>
-              {manualOverride && (
+              <div className="clog-override-row">
                 <input
-                  type="number"
-                  className="clog-number-input clog-number-input--wide"
-                  value={manualCapacity}
-                  min={0}
-                  max={99999}
-                  onChange={(e) => setManualCapacity(Number(e.target.value))}
+                  id="clog-override-check"
+                  type="checkbox"
+                  className="clog-override-check"
+                  checked={manualOverride}
+                  onChange={(e) => setManualOverride(e.target.checked)}
                 />
-              )}
+                <label htmlFor="clog-override-check" className="clog-override-label">
+                  Manual Cap
+                </label>
+                {manualOverride && (
+                  <input
+                    type="number"
+                    className="clog-number-input clog-number-input--wide"
+                    value={manualCapacity}
+                    min={0}
+                    max={99999}
+                    onChange={(e) => setManualCapacity(Number(e.target.value))}
+                  />
+                )}
+              </div>
             </div>
+
+            {/* Capacity bar */}
+            <div className="clog-cap-bar-wrap">
+              <div className="clog-cap-bar-track">
+                <div
+                  className={`clog-cap-bar-fill${isOverCapacity ? " clog-cap-bar-fill--over" : fillPct > 85 ? " clog-cap-bar-fill--high" : ""}`}
+                  style={{ width: `${Math.min(fillPct, 100)}%` }}
+                />
+              </div>
+              <div className="clog-cap-bar-labels">
+                <span className="clog-cap-bar-loaded">{totalUserLoaded} SCU loaded</span>
+                <span className="clog-cap-bar-total">{capacity} SCU</span>
+              </div>
+            </div>
+
+            {/* Summary cards inline */}
+            <div className="clog-inline-summary">
+              <div className="clog-inline-card">
+                <div className="clog-inline-card-label">Remaining</div>
+                <div className={`clog-inline-card-value${isOverCapacity ? " clog-inline-card-value--danger" : remainingScu === 0 ? " clog-inline-card-value--warn" : " clog-inline-card-value--ok"}`}>
+                  {Math.max(0, remainingScu)} <span className="clog-inline-card-unit">SCU</span>
+                </div>
+              </div>
+              <div className="clog-inline-card">
+                <div className="clog-inline-card-label">Fill</div>
+                <div className={`clog-inline-card-value${fillPct >= 100 ? " clog-inline-card-value--warn" : ""}`}>
+                  {fillPct.toFixed(0)}<span className="clog-inline-card-unit">%</span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        {/* Service requirement calculator */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">Service Requirement</div>
-          {SHIP_PROFILES.map((profile) => (
-            <div key={profile.id} className="clog-ship-block">
-              <div className="clog-ship-name">{profile.label}</div>
-              <div className="clog-field">
-                <label className="clog-field-label">Count</label>
-                <div className="clog-slider-row">
-                  <input type="range" className="clog-slider"
-                    min={0} max={24} step={1}
-                    value={shipCounts[profile.id] ?? 0}
-                    onChange={(e) => setShipCounts((p) => ({ ...p, [profile.id]: Number(e.target.value) }))}
-                  />
-                  <input type="number" className="clog-number-input"
-                    min={0} max={24}
-                    value={shipCounts[profile.id] ?? 0}
-                    onChange={(e) => setShipCounts((p) => ({ ...p, [profile.id]: Number(e.target.value) }))}
-                  />
-                </div>
-              </div>
-              <div className="clog-field">
-                <label className="clog-field-label">Repair %</label>
-                <div className="clog-slider-row">
-                  <input type="range" className="clog-slider"
-                    min={0} max={100} step={5}
-                    value={repairPercents[profile.id] ?? 0}
-                    onChange={(e) => setRepairPercents((p) => ({ ...p, [profile.id]: Number(e.target.value) }))}
-                  />
-                  <input type="number" className="clog-number-input"
-                    min={0} max={100}
-                    value={repairPercents[profile.id] ?? 0}
-                    onChange={(e) => setRepairPercents((p) => ({ ...p, [profile.id]: Number(e.target.value) }))}
-                  />
-                </div>
+        {/* Center: cargo rooms — primary visual */}
+        <div className="clog-rooms-main">
+          <div className="clog-panel clog-panel--rooms">
+            <div className="clog-cargo-rooms-header">
+              <div className="clog-panel-title">{preset.label} — Cargo Rooms</div>
+              <div className="clog-resource-legend clog-resource-legend--inline">
+                {COMMODITY_ORDER.map((key) => (
+                  <div key={key} className="clog-legend-item">
+                    <span className={`clog-legend-swatch clog-legend-swatch--${commodityCssKey(key)}`} />
+                    {COMMODITY_LABELS[key]}
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+            <CarrierCargoRooms roomPlans={roomPlans} overloadedScu={isOverCapacity ? Math.abs(remainingScu) : 0} />
+          </div>
         </div>
-      </aside>
 
-      {/* ── Center: resource loadout + cargo rooms ── */}
-      <section className="clog-col-center">
+      </div>
 
-        {/* Resource loadout controls */}
-        <div className="clog-panel">
+      {/* ══ BOTTOM ROW: resource loadout + service capability ══ */}
+      <div className="clog-bottom-row">
+
+        {/* Resource loadout */}
+        <div className="clog-panel clog-panel--loadout">
           <div className="clog-panel-title">Resource Loadout</div>
           <div className="clog-loadout-grid">
-            {resourceLoads.map((rl) => (
-              <div key={rl.commodity} className="clog-loadout-row">
-                <div className="clog-loadout-name">
-                  <span className={`clog-loadout-swatch clog-loadout-swatch--${commodityCssKey(rl.commodity)}`} />
-                  {rl.label}
-                </div>
-
-                <div className="clog-loadout-meta">
-                  <span className="clog-loadout-meta-item" title="Exact consumed SCU from service requirements">
-                    <span className="clog-loadout-meta-label">Consumed</span>
-                    <span className="clog-loadout-meta-value">{rl.exactConsumedScu > 0 ? fmt(rl.exactConsumedScu) : "—"}</span>
-                  </span>
-                  <span className="clog-loadout-meta-item" title="Recommended crate-rounded loaded SCU">
-                    <span className="clog-loadout-meta-label">Recommended</span>
-                    <span className="clog-loadout-meta-value clog-loadout-meta-value--rec">
-                      {rl.recommendedLoadedScu > 0 ? `${rl.recommendedLoadedScu}` : "—"}
-                    </span>
-                  </span>
-                  <span className="clog-loadout-meta-item" title="Reserve = loaded minus consumed">
-                    <span className="clog-loadout-meta-label">Reserve</span>
-                    <span className={`clog-loadout-meta-value${rl.userLoadedScu > 0 ? " clog-loadout-meta-value--reserve" : ""}`}>
-                      {rl.userLoadedScu > 0 ? fmt(Math.max(0, rl.reserveScu)) : "—"}
-                    </span>
-                  </span>
-                </div>
-
-                <div className="clog-loadout-control">
-                  <input type="range" className="clog-slider"
-                    min={0} max={capacity} step={1}
-                    value={userLoads[rl.commodity] ?? 0}
-                    onChange={(e) => setUserLoad(rl.commodity, Number(e.target.value))}
-                  />
-                  <input type="number" className="clog-number-input clog-number-input--wide"
-                    min={0} max={capacity * 2}
-                    value={userLoads[rl.commodity] ?? 0}
-                    onChange={(e) => setUserLoad(rl.commodity, Number(e.target.value))}
-                  />
-                </div>
-
-                <div className="clog-loadout-actions">
-                  <button type="button" className="clog-quick-btn"
-                    title="Set to recommended crate amount"
-                    onClick={() => setToRecommended(rl.commodity, rl.recommendedLoadedScu)}
-                    disabled={rl.recommendedLoadedScu === 0}>
-                    Rec
-                  </button>
-                  <button type="button" className="clog-quick-btn"
-                    title="Fill remaining carrier capacity with this resource"
-                    onClick={() => fillRemaining(rl.commodity)}>
-                    Fill
-                  </button>
-                  <button type="button" className="clog-quick-btn clog-quick-btn--clear"
-                    title="Clear this resource"
-                    onClick={() => clearLoad(rl.commodity)}
-                    disabled={userLoads[rl.commodity] === 0}>
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Cargo rooms visualization */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">{preset.label} — Cargo Rooms</div>
-          <CarrierCargoRooms roomPlans={roomPlans} overloadedScu={overloadedScu} />
-        </div>
-
-      </section>
-
-      {/* ── Right column: summary + tables ── */}
-      <aside className="clog-col-right">
-
-        {/* Summary cards */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">Summary</div>
-          <div className="clog-summary-cards">
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">Carrier Capacity</div>
-              <div className="clog-summary-card-value">
-                {capacity}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">User Loaded SCU</div>
-              <div className={`clog-summary-card-value${isOverCapacity ? " clog-summary-card-value--danger" : ""}`}>
-                {fmt(totalUserLoaded, 0)}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">Exact Consumed SCU</div>
-              <div className="clog-summary-card-value">
-                {fmt(resourceLoads.reduce((s, r) => s + r.exactConsumedScu, 0))}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">Recommended Loaded</div>
-              <div className="clog-summary-card-value clog-summary-card-value--rec">
-                {resourceLoads.reduce((s, r) => s + r.recommendedLoadedScu, 0)}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">Reserve SCU</div>
-              <div className="clog-summary-card-value clog-summary-card-value--warn">
-                {fmt(Math.max(0, totalUserLoaded - resourceLoads.reduce((s, r) => s + r.exactConsumedScu, 0)))}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-            <div className="clog-summary-card">
-              <div className="clog-summary-card-label">Remaining Capacity</div>
-              <div className={`clog-summary-card-value${isOverCapacity ? " clog-summary-card-value--danger" : " clog-summary-card-value--ok"}`}>
-                {fmt(remainingScu, 0)}<span className="clog-summary-card-unit">SCU</span>
-              </div>
-            </div>
-
-            {isOverCapacity ? (
-              <div className="clog-over-capacity-badge">⚠ Over Capacity +{fmt(overloadedScu, 0)} SCU</div>
-            ) : (
-              <div className="clog-ok-badge">✓ Within Capacity</div>
-            )}
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">Legend</div>
-          <div className="clog-legend">
-            {COMMODITY_ORDER.map((key) => (
-              <div key={key} className="clog-legend-item">
-                <span className={`clog-legend-swatch clog-legend-swatch--${commodityCssKey(key)}`} />
-                {COMMODITY_LABELS[key]}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Crate breakdown */}
-        <div className="clog-panel">
-          <div className="clog-panel-title">Crate Breakdown</div>
-          <div className="clog-crate-list">
             {COMMODITY_ORDER.map((key) => {
+              const loaded = userLoads[key] ?? 0;
+              const sliderMax = getSliderMax(key);
+              const pctOfCap = capacity > 0 ? (loaded / capacity) * 100 : 0;
               const crates = crateList[key];
-              if (crates.length === 0) return null;
               return (
-                <div key={key} className="clog-crate-row">
-                  <span className={`clog-loadout-swatch clog-loadout-swatch--${commodityCssKey(key)}`} />
-                  <span className="clog-crate-row-label">{COMMODITY_LABELS[key]}</span>
-                  <div className="clog-crate-chips">
-                    {crates.map((scu, i) => (
-                      <span key={i} className={`clog-crate-chip clog-crate-chip--${commodityCssKey(key)}`}>{scu}</span>
+                <div key={key} className="clog-loadout-row">
+                  <div className="clog-loadout-name">
+                    <span className={`clog-loadout-swatch clog-loadout-swatch--${commodityCssKey(key)}`} />
+                    <span className="clog-loadout-label">{COMMODITY_LABELS[key]}</span>
+                  </div>
+
+                  <div className="clog-loadout-control-group">
+                    <input type="range" className="clog-slider"
+                      min={0} max={sliderMax} step={1}
+                      value={loaded}
+                      onChange={(e) => setUserLoad(key, Number(e.target.value))}
+                    />
+                    <input type="number" className="clog-number-input clog-number-input--wide"
+                      min={0}
+                      value={loaded}
+                      onChange={(e) => setUserLoad(key, Number(e.target.value))}
+                    />
+                    <span className="clog-loadout-pct">{pctOfCap.toFixed(0)}%</span>
+                  </div>
+
+                  <div className="clog-loadout-actions">
+                    <button type="button" className="clog-quick-btn"
+                      title="Fill all remaining carrier capacity with this resource"
+                      onClick={() => fillRemaining(key)}
+                      disabled={sliderMax === 0 && loaded === 0}>
+                      Fill
+                    </button>
+                    <button type="button" className="clog-quick-btn clog-quick-btn--clear"
+                      title="Clear this resource"
+                      onClick={() => clearLoad(key)}
+                      disabled={loaded === 0}>
+                      ×
+                    </button>
+                  </div>
+
+                  {crates.length > 0 && (
+                    <div className="clog-loadout-crates">
+                      {crates.map((scu, i) => (
+                        <span key={i} className={`clog-crate-chip clog-crate-chip--${commodityCssKey(key)}`}>{scu}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Service capability */}
+        <div className="clog-panel clog-panel--capability">
+          <div className="clog-panel-title">Service Capability</div>
+          <p className="clog-capability-desc">
+            Values show how many full empty-to-full reloads or repairs the current loaded SCU can support.
+            Countermeasure numbers may be very high because their per-ship SCU cost is extremely small.
+          </p>
+          <div className="clog-capability-grid">
+            {serviceCapability.map((cap) => {
+              const profile = SHIP_PROFILES.find((p) => p.id === cap.shipId)!;
+              const ammoCostScu = profile.rearm.ammoS2 + profile.rearm.ammoS3 + profile.rearm.ammoS4;
+              const rows: { label: string; value: number; sublabel: string; combined?: boolean }[] = [
+                { label: "Ammo Reloads",  value: cap.ammoReloads,   sublabel: `${ammoCostScu.toFixed(3)} SCU per reload` },
+                { label: "Noise Refills", value: cap.noiseReloads,  sublabel: `${profile.rearm.noise.toFixed(4)} SCU per refill` },
+                { label: "Decoy Refills", value: cap.decoyReloads,  sublabel: `${profile.rearm.decoy.toFixed(4)} SCU per refill` },
+                { label: "Full Repairs",  value: cap.repairs,       sublabel: `${profile.repair.fullRepairRmcScu.toFixed(3)} SCU per repair` },
+                { label: "Full Rearms",   value: cap.fullRearms,    sublabel: "ammo + noise + decoy combined", combined: true },
+                { label: "Full Service",  value: cap.fullServices,  sublabel: "rearm + repair combined",       combined: true },
+              ];
+              return (
+                <div key={cap.shipId} className="clog-capability-card">
+                  <div className="clog-capability-ship">{cap.label}</div>
+                  <div className="clog-capability-rows">
+                    {rows.map((row) => (
+                      <div key={row.label} className={`clog-cap-row${row.combined ? " clog-cap-row--combined" : ""}`}>
+                        <span className="clog-cap-row-label">{row.label}</span>
+                        <div className="clog-cap-row-right">
+                          <span className={`clog-cap-row-value${row.value > 0 ? " clog-cap-row-value--ok" : " clog-cap-row-value--zero"}`}>
+                            {row.value}
+                          </span>
+                          <span className="clog-cap-row-sublabel">{row.sublabel}</span>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
               );
             })}
-            {COMMODITY_ORDER.every((k) => crateList[k].length === 0) && (
-              <span className="clog-dim-text">No resources loaded.</span>
-            )}
           </div>
-        </div>
-
-      </aside>
-
-      {/* ── Full-width: tables ── */}
-      <div className="clog-col-tables">
-
-        {/* Commodity breakdown table */}
-        <div className="clog-panel clog-table-section">
-          <div className="clog-panel-title">Commodity Breakdown</div>
-          <table className="clog-table">
-            <thead>
-              <tr>
-                <th>Commodity</th>
-                <th className="clog-th--right">Exact Consumed</th>
-                <th className="clog-th--right">Recommended</th>
-                <th className="clog-th--right">User Loaded</th>
-                <th className="clog-th--right">Reserve</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resourceLoads.map((rl) => (
-                <tr key={rl.commodity}>
-                  <td>
-                    <span className="clog-td-swatch-wrap">
-                      <span className={`clog-loadout-swatch clog-loadout-swatch--${commodityCssKey(rl.commodity)}`} />
-                      {rl.label}
-                    </span>
-                  </td>
-                  <td className={rl.exactConsumedScu > 0 ? "clog-td--num" : "clog-td--num clog-td--dim"}>
-                    {rl.exactConsumedScu > 0 ? fmt(rl.exactConsumedScu) : "—"}
-                  </td>
-                  <td className={rl.recommendedLoadedScu > 0 ? "clog-td--num" : "clog-td--num clog-td--dim"}>
-                    {rl.recommendedLoadedScu > 0 ? `${rl.recommendedLoadedScu}` : "—"}
-                  </td>
-                  <td className={rl.userLoadedScu > 0 ? "clog-td--num clog-td--loaded" : "clog-td--num clog-td--dim"}>
-                    {rl.userLoadedScu > 0 ? `${rl.userLoadedScu}` : "—"}
-                  </td>
-                  <td className={rl.userLoadedScu > 0 ? "clog-td--num clog-td--warn" : "clog-td--num clog-td--dim"}>
-                    {rl.userLoadedScu > 0 ? fmt(Math.max(0, rl.reserveScu)) : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Ship service breakdown table */}
-        <div className="clog-panel clog-table-section">
-          <div className="clog-panel-title">Serviced Ship Breakdown</div>
-          <table className="clog-table">
-            <thead>
-              <tr>
-                <th>Ship</th>
-                <th className="clog-th--right">Count</th>
-                <th className="clog-th--right">Reload Consumed</th>
-                <th className="clog-th--right">Repair %</th>
-                <th className="clog-th--right">Repair Consumed</th>
-                <th className="clog-th--right">Total Consumed</th>
-              </tr>
-            </thead>
-            <tbody>
-              {SHIP_PROFILES.map((profile) => {
-                const count = shipCounts[profile.id] ?? 0;
-                const repair = repairPercents[profile.id] ?? 0;
-                const reloadConsumed = (["ammoS2", "ammoS3", "ammoS4", "noise", "decoy"] as const)
-                  .reduce((sum, k) => sum + profile.rearm[k] * count, 0);
-                const repairConsumed = count * profile.repair.fullRepairRmcScu * (repair / 100);
-                const totalConsumed = reloadConsumed + repairConsumed;
-                const active = count > 0;
-                return (
-                  <tr key={profile.id}>
-                    <td>{profile.label}</td>
-                    <td className={active ? "clog-td--num" : "clog-td--num clog-td--dim"}>{count}</td>
-                    <td className={active ? "clog-td--num" : "clog-td--num clog-td--dim"}>{active ? fmt(reloadConsumed) : "—"}</td>
-                    <td className={active ? "clog-td--num" : "clog-td--num clog-td--dim"}>{active ? `${repair}%` : "—"}</td>
-                    <td className={active ? "clog-td--num" : "clog-td--num clog-td--dim"}>
-                      {active && repair > 0 ? fmt(repairConsumed) : "—"}
-                    </td>
-                    <td className={active ? "clog-td--num clog-td--ok" : "clog-td--num clog-td--dim"}>
-                      {active ? fmt(totalConsumed) : "—"}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
         </div>
 
       </div>
