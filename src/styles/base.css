@@ -15,4 +15,15 @@
 
 .app-main {
   background: transparent;
+  padding-left: clamp(0.75rem, 3vw, 3rem);
+  padding-right: clamp(0.75rem, 3vw, 3rem);
+  min-width: 0;
+  overflow-x: clip;
+}
+
+@media (max-width: 480px) {
+  .app-main {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
 }

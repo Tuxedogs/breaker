@@ -11,7 +11,7 @@ export default function AppShell() {
     : isAlphaThresholdRoute
       ? "flex min-h-screen w-full flex-col pt-12"
       : [
-            "relative z-20 mx-auto min-h-screen w-full pb-8 text-slate-100 px-12",
+          "relative z-20 mx-auto min-h-screen w-full pb-8 text-slate-100",
           "max-w-7xl pt-12 app-main",
         ].join(" ");
 

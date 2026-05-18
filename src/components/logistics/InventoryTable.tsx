@@ -44,11 +44,14 @@ function SortTh({
   label, sortK, active, dir, onSort,
 }: { label: string; sortK: SortKey; active: boolean; dir: 'asc' | 'desc'; onSort: (k: SortKey) => void }) {
   return (
-    <th
-      className={`logi-th-sort${active ? ' logi-th-sort--active' : ''}`}
-      onClick={() => onSort(sortK)}
-    >
-      {label}<SortChevron active={active} dir={dir} />
+    <th aria-sort={active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+      <button
+        type="button"
+        className={`logi-th-sort${active ? ' logi-th-sort--active' : ''}`}
+        onClick={() => onSort(sortK)}
+      >
+        {label}<SortChevron active={active} dir={dir} />
+      </button>
     </th>
   );
 }

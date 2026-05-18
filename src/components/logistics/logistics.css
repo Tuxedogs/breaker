@@ -433,8 +433,8 @@
 }
 
 .logi-action-btn {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -456,6 +456,113 @@
   background: rgba(248, 113, 113, 0.08);
   color: #f87171;
   border-color: rgba(248, 113, 113, 0.18);
+}
+
+@media (max-width: 760px) {
+  .logi-filter-bar {
+    align-items: stretch;
+    gap: 0.45rem;
+    padding: 0.55rem;
+  }
+
+  .logi-search-wrap,
+  .logi-select,
+  .logi-filter-count {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .logi-search-wrap,
+  .logi-select {
+    min-height: 42px;
+  }
+
+  .logi-drawer {
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: min(88dvh, 720px);
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateY(100%);
+  }
+
+  .logi-drawer--open {
+    transform: translateY(0);
+  }
+
+  .logi-table-wrap {
+    overflow-x: visible;
+  }
+
+  .logi-table,
+  .logi-table thead,
+  .logi-table tbody,
+  .logi-table tr,
+  .logi-table th,
+  .logi-table td {
+    display: block;
+  }
+
+  .logi-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .logi-table tbody {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .logi-table tr {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.018);
+    overflow: hidden;
+  }
+
+  .logi-table td {
+    display: grid;
+    grid-template-columns: 7.2rem minmax(0, 1fr);
+    gap: 0.55rem;
+    align-items: center;
+    min-height: 36px;
+    padding: 0.4rem 0.6rem;
+    border-bottom-color: rgba(255, 255, 255, 0.045);
+    font-size: 0.92rem;
+  }
+
+  .logi-table td::before {
+    color: rgba(160, 180, 220, 0.46);
+    content: attr(data-label);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .logi-table td:nth-child(1)::before { content: "Item"; }
+  .logi-table td:nth-child(2)::before { content: "Type"; }
+  .logi-table td:nth-child(3)::before { content: "Quality"; }
+  .logi-table td:nth-child(4)::before { content: "Qty"; }
+  .logi-table td:nth-child(5)::before { content: "Location"; }
+  .logi-table td:nth-child(6)::before { content: "Container"; }
+  .logi-table td:nth-child(7)::before { content: "Updated"; }
+  .logi-table td:nth-child(8)::before { content: "Actions"; }
+
+  .logi-table-actions {
+    justify-content: flex-start;
+  }
+
+  .logi-action-btn {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* ── Empty state ──────────────────────────────── */

@@ -22,6 +22,20 @@
   color: var(--bt-text);
   padding: 22px 24px 40px;
   font-family: var(--font-primary, Rajdhani, sans-serif);
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.bt-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .bt-shell {
@@ -97,6 +111,7 @@
   font-weight: 700;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+  min-height: 34px;
 }
 
 .bt-tab:hover,
@@ -177,6 +192,7 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
+  min-height: 44px;
 }
 
 .bt-faction-header:hover,
@@ -286,6 +302,9 @@
   width: 22px;
   height: 22px;
   cursor: pointer;
+  position: relative;
+  flex: 0 0 auto;
+  touch-action: manipulation;
 }
 
 .bt-pin-btn {
@@ -330,6 +349,11 @@
 .bt-check input:checked + span {
   background: var(--bt-green);
   border-color: var(--bt-green);
+}
+
+.bt-check input:focus-visible + span {
+  outline: 2px solid rgba(245, 158, 11, 0.76);
+  outline-offset: 3px;
 }
 
 .bt-check input:checked + span::after {
@@ -447,6 +471,7 @@
   font-weight: 700;
   position: relative;
   transition: border-color 0.12s, color 0.12s, background 0.12s, box-shadow 0.12s;
+  touch-action: manipulation;
 }
 
 .bt-icon-btn svg {
@@ -530,7 +555,7 @@
 
 .bt-detail-panel {
   width: 100%;
-  max-height: calc(100vh - 190px);
+  max-height: none;
   overflow: auto;
   background: #11171b;
   border: 1px solid var(--bt-border);
@@ -550,6 +575,29 @@
   gap: 12px;
   padding: 11px 12px;
   border-bottom: 1px solid var(--bt-border-soft);
+}
+
+.bt-detail-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(184, 194, 204, 0.14);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--bt-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.bt-detail-close:hover {
+  border-color: var(--bt-orange-border);
+  color: var(--bt-orange);
 }
 
 .bt-detail-kicker,
@@ -635,11 +683,14 @@
 
 .bt-sidebar {
   position: sticky;
-  top: 16px;
+  top: 12px;
+  align-self: start;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
 }
 
 .bt-sidebar-panel {
@@ -709,6 +760,20 @@
   text-align: left;
 }
 
+.bt-pinned-select {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-align: left;
+}
+
 .bt-pinned-row:hover,
 .bt-pinned-row.is-active {
   border-color: rgba(245, 158, 11, 0.26);
@@ -742,7 +807,17 @@
   grid-row: 1 / span 2;
   align-self: center;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: 2px;
+  background: rgba(245, 158, 11, 0.05);
   color: var(--bt-orange);
+  cursor: pointer;
+  font: inherit;
   font-weight: 900;
 }
 
@@ -839,7 +914,33 @@
 
 @media (max-width: 760px) {
   .bt-page {
-    padding: 16px 12px 28px;
+    padding: 12px 0 28px;
+  }
+
+  .bt-shell {
+    gap: 12px;
+  }
+
+  .bt-page-title {
+    font-size: 20px;
+  }
+
+  .bt-page-subtitle {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .bt-tabs {
+    display: flex;
+    width: 100%;
+    align-self: stretch;
+  }
+
+  .bt-tab {
+    flex: 1 1 0;
+    min-height: 42px;
+    padding: 8px 7px;
+    font-size: 11px;
   }
 
   .bt-tracker-layout {
@@ -849,28 +950,160 @@
   .bt-sidebar {
     position: static;
     order: -1;
+    max-height: none;
+    overflow: visible;
   }
 
   .bt-mission-main {
-    grid-template-columns: 24px 28px minmax(0, 1fr) 28px 28px;
+    grid-template-columns: 38px minmax(0, 1fr) 40px 40px;
+    gap: 8px;
+    min-height: 70px;
+    padding: 10px 8px;
+  }
+
+  .bt-pin-btn {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .bt-check--mission {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .bt-mission-nameblock {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bt-icon-btn--info {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
+  .bt-icon-btn--expand {
+    grid-column: 4;
+    grid-row: 2;
+  }
+
+  .bt-pin-btn,
+  .bt-icon-btn,
+  .bt-check {
+    width: 38px;
+    height: 38px;
+  }
+
+  .bt-check span {
+    width: 22px;
+    height: 22px;
+  }
+
+  .bt-check--small {
+    width: 34px;
+    height: 34px;
+  }
+
+  .bt-check--small span {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bt-mission-title-line {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .bt-mission-title,
+  .bt-library-name,
+  .bt-reward-name,
+  .bt-mission-meta,
+  .bt-library-meta,
+  .bt-reward-meta,
+  .bt-library-source-meta {
+    white-space: normal;
+  }
+
+  .bt-mission-title,
+  .bt-library-name,
+  .bt-reward-name {
+    font-size: 15px;
+    line-height: 1.15;
   }
 
   .bt-mission-count {
-    grid-column: 3 / -1;
+    grid-column: 2 / 4;
     grid-row: 2;
     align-items: flex-start;
   }
 
+  .bt-faction-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .bt-faction-name {
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
   .bt-reward-list {
-    padding-left: 10px;
+    padding: 6px 8px 8px;
   }
 
   .bt-reward-row {
-    grid-template-columns: 24px minmax(0, 1fr);
+    grid-template-columns: 34px minmax(0, 1fr);
+    min-height: 48px;
+    padding: 7px 4px;
   }
 
   .bt-reward-state {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .bt-detail-panel {
+    max-height: min(72vh, 680px);
+    border-top-width: 3px;
+  }
+
+  .bt-detail-panel:not(.bt-detail-panel--empty) {
+    position: sticky;
+    top: 54px;
+    z-index: 5;
+  }
+
+  .bt-detail-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+    font-size: 13px;
+  }
+
+  .bt-detail-row strong {
+    text-align: left;
+  }
+
+  .bt-pinned-row {
+    grid-template-columns: minmax(0, 1fr) 34px;
+    min-height: 44px;
+  }
+
+  .bt-pinned-unpin {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (max-width: 420px) {
+  .bt-page-count,
+  .bt-faction-count,
+  .bt-status,
+  .bt-reward-state {
+    letter-spacing: 0.04em;
+  }
+
+  .bt-page-title-row {
+    gap: 7px;
   }
 }
