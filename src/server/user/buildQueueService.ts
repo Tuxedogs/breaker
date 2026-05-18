@@ -1,7 +1,7 @@
-import { and, eq, isNull, or, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 
 import { getDb } from "../../db/client";
-import { userBuildQueueItems } from "../../db/schema";
+import { buildQueueItems } from "../../db/schema";
 
 export type BuildQueuePayload = {
   recipeId: string;
@@ -32,20 +32,14 @@ function toDbVariantId(value: unknown): string {
   return normalizeVariantId(value) ?? "";
 }
 
-function variantWhere(variantId: string) {
-  return variantId
-    ? eq(userBuildQueueItems.variantId, variantId)
-    : or(eq(userBuildQueueItems.variantId, ""), isNull(userBuildQueueItems.variantId));
-}
-
 function selectBuildQueueFields() {
   return {
-    id: userBuildQueueItems.id,
-    recipeId: userBuildQueueItems.recipeId,
-    variantId: userBuildQueueItems.variantId,
-    quantity: userBuildQueueItems.quantity,
-    createdAt: userBuildQueueItems.createdAt,
-    updatedAt: userBuildQueueItems.updatedAt,
+    id: buildQueueItems.id,
+    recipeId: buildQueueItems.recipeId,
+    variantId: buildQueueItems.blueprintId,
+    quantity: buildQueueItems.quantity,
+    createdAt: buildQueueItems.createdAt,
+    updatedAt: buildQueueItems.updatedAt,
   };
 }
 
@@ -59,9 +53,9 @@ function mapBuildQueueItem<T extends { variantId: string | null }>(item: T): T {
 export async function listBuildQueueItems(userId: string) {
   const rows = await getDb()
     .select(selectBuildQueueFields())
-    .from(userBuildQueueItems)
-    .where(eq(userBuildQueueItems.userId, userId))
-    .orderBy(userBuildQueueItems.createdAt);
+    .from(buildQueueItems)
+    .where(eq(buildQueueItems.userId, userId))
+    .orderBy(buildQueueItems.createdAt);
 
   return rows.map(mapBuildQueueItem);
 }
@@ -73,16 +67,16 @@ export async function addBuildQueueItem(userId: string, payload: BuildQueuePaylo
   const quantity = normalizeQuantity(payload.quantity, 1);
   const variantId = toDbVariantId(payload.variantId);
   const existingRows = await getDb()
-    .update(userBuildQueueItems)
+    .update(buildQueueItems)
     .set({
-      quantity: sql`${userBuildQueueItems.quantity} + ${quantity}`,
+      quantity: sql`${buildQueueItems.quantity} + ${quantity}`,
       updatedAt: sql`now()`,
     })
     .where(
       and(
-        eq(userBuildQueueItems.userId, userId),
-        eq(userBuildQueueItems.recipeId, recipeId),
-        variantWhere(variantId),
+        eq(buildQueueItems.userId, userId),
+        eq(buildQueueItems.recipeId, recipeId),
+        eq(buildQueueItems.blueprintId, variantId),
       ),
     )
     .returning(selectBuildQueueFields());
@@ -90,24 +84,13 @@ export async function addBuildQueueItem(userId: string, payload: BuildQueuePaylo
   if (existingRows[0]) return mapBuildQueueItem(existingRows[0]);
 
   const rows = await getDb()
-    .insert(userBuildQueueItems)
+    .insert(buildQueueItems)
     .values({
       userId,
       recipeId,
-      variantId,
+      blueprintId: variantId,
       quantity,
       updatedAt: sql`now()`,
-    })
-    .onConflictDoUpdate({
-      target: [
-        userBuildQueueItems.userId,
-        userBuildQueueItems.recipeId,
-        userBuildQueueItems.variantId,
-      ],
-      set: {
-        quantity: sql`${userBuildQueueItems.quantity} + ${quantity}`,
-        updatedAt: sql`now()`,
-      },
     })
     .returning(selectBuildQueueFields());
 
@@ -124,13 +107,13 @@ export async function updateBuildQueueItem(userId: string, payload: BuildQueuePa
   const variantId = toDbVariantId(payload.variantId);
   const quantity = Math.trunc(payload.quantity);
   const rows = await getDb()
-    .update(userBuildQueueItems)
+    .update(buildQueueItems)
     .set({ quantity, updatedAt: sql`now()` })
     .where(
       and(
-        eq(userBuildQueueItems.userId, userId),
-        eq(userBuildQueueItems.recipeId, recipeId),
-        variantWhere(variantId),
+        eq(buildQueueItems.userId, userId),
+        eq(buildQueueItems.recipeId, recipeId),
+        eq(buildQueueItems.blueprintId, variantId),
       ),
     )
     .returning(selectBuildQueueFields());
@@ -143,18 +126,18 @@ export async function deleteBuildQueueItem(userId: string, payload: DeleteBuildQ
   if (!recipeId) throw new TypeError("recipeId is required.");
 
   await getDb()
-    .delete(userBuildQueueItems)
+    .delete(buildQueueItems)
     .where(
       and(
-        eq(userBuildQueueItems.userId, userId),
-        eq(userBuildQueueItems.recipeId, recipeId),
-        variantWhere(toDbVariantId(payload.variantId)),
+        eq(buildQueueItems.userId, userId),
+        eq(buildQueueItems.recipeId, recipeId),
+        eq(buildQueueItems.blueprintId, toDbVariantId(payload.variantId)),
       ),
     );
 }
 
 export async function clearBuildQueue(userId: string) {
   await getDb()
-    .delete(userBuildQueueItems)
-    .where(eq(userBuildQueueItems.userId, userId));
+    .delete(buildQueueItems)
+    .where(eq(buildQueueItems.userId, userId));
 }

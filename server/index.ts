@@ -4,6 +4,8 @@ import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
 import { handleRecommenderRoute } from "./routes/recommender.routes";
 import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "../src/server/user/buildQueueRoute";
+import { handleUserInventoryRoute } from "../src/server/user/inventoryRoute";
+import { handleBlueprintTrackerRoute } from "../src/server/user/blueprintTrackerRoute";
 
 async function readBody(request: http.IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
@@ -17,12 +19,15 @@ export function createServer() {
     try {
       const body = await readBody(request);
       const url = request.url?.split("?")[0] ?? "";
-      const route = url === "/api/user/saved-blueprints"
+      const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
+        ?? (url === "/api/user/saved-blueprints"
         ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
+        : url === "/api/user/blueprint-tracker"
+          ? await handleBlueprintTrackerRoute(request.method ?? "GET", request.headers, body)
         : url === "/api/user/build-queue"
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
-          await handleBuildQueueRoute(request.method ?? "GET", url, body);
+          await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {
         response.writeHead(404, { "content-type": "application/json" });
         response.end(JSON.stringify({ error: "Not found" }));

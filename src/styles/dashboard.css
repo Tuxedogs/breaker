@@ -359,6 +359,161 @@
   width: 100%;
 }
 
+.discord-account-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(3, 5, 9, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.discord-account-modal {
+  width: min(520px, 100%);
+  border: 1px solid rgba(126, 105, 171, 0.32);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(16, 19, 28, 0.98), rgba(8, 10, 16, 0.98));
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.48);
+  color: rgba(240, 244, 255, 0.92);
+}
+
+.discord-account-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.discord-account-avatar {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(126, 105, 171, 0.42);
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(126, 105, 171, 0.18);
+  color: rgba(235, 229, 255, 0.94);
+  font-family: var(--font-primary);
+  font-weight: 700;
+}
+
+.discord-account-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.discord-account-kicker {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: rgba(126, 211, 160, 0.78);
+  font-family: var(--font-primary);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.discord-account-head h2 {
+  margin: 0;
+  color: rgba(248, 250, 255, 0.96);
+  font-family: var(--font-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.discord-account-head p {
+  margin: 0.22rem 0 0;
+  color: rgba(190, 199, 219, 0.72);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.discord-account-close {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(220, 226, 240, 0.78);
+}
+
+.discord-account-close svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.discord-account-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  padding: 1rem;
+}
+
+.discord-account-grid div {
+  min-width: 0;
+  padding: 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.discord-account-grid span {
+  display: block;
+  margin-bottom: 0.24rem;
+  color: rgba(159, 171, 197, 0.74);
+  font-family: var(--font-primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.discord-account-grid strong {
+  display: block;
+  overflow-wrap: anywhere;
+  color: rgba(235, 240, 252, 0.9);
+  font-family: var(--font-primary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.discord-account-warning {
+  margin: 0 1rem 1rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(226, 178, 91, 0.34);
+  border-radius: 6px;
+  background: rgba(226, 178, 91, 0.08);
+  color: rgba(246, 209, 147, 0.92);
+  font-size: 0.8rem;
+}
+
+.discord-account-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem;
+}
+
+.discord-account-signout {
+  border: 1px solid rgba(204, 94, 104, 0.38);
+  border-radius: 6px;
+  background: rgba(204, 94, 104, 0.1);
+  color: rgba(255, 190, 196, 0.92);
+  padding: 0.5rem 0.8rem;
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .dash-sidebar-footer-controls {
   display: flex;
   align-items: center;

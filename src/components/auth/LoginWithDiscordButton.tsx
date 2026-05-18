@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import type { MouseEventHandler } from "react";
+import { createPortal } from "react-dom";
 import type { User } from "@supabase/supabase-js";
 import { getSupabaseAuthDiagnostic, logout, signInWithDiscord } from "../../lib/supabaseClient";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
+import { getOnlineSyncStatus, onlineSyncStatusEvent, type OnlineSyncStatus } from "../../lib/onlineSyncStatus";
 
 interface LoginWithDiscordButtonProps {
   className?: string;
@@ -58,6 +60,22 @@ function getUserAvatarSource(user: User | null) {
   return null;
 }
 
+function getDiscordId(user: User | null) {
+  const identity = user?.identities?.find((entry) => entry.provider === "discord");
+  const identityRecord = identity as unknown as Record<string, unknown> | undefined;
+  const identityData = identity?.identity_data as Record<string, unknown> | undefined;
+  const metadata = user?.user_metadata as Record<string, unknown> | undefined;
+  const candidates = [
+    identityRecord?.provider_id,
+    identityData?.provider_id,
+    identityData?.sub,
+    identityData?.id,
+    metadata?.provider_id,
+    metadata?.sub,
+  ];
+  return candidates.find((value): value is string => typeof value === "string" && value.trim().length > 0) ?? null;
+}
+
 function getUserInitials(user: User | null) {
   const label = getUserLabel(user);
   const parts = label
@@ -82,6 +100,125 @@ function getSafeAuthErrorMessage(error: unknown) {
   return String(error);
 }
 
+function formatDateTime(value: string | null) {
+  if (!value) return "Not synced yet";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function useOnlineSyncStatus(): OnlineSyncStatus {
+  const [status, setStatus] = useState<OnlineSyncStatus>(() => getOnlineSyncStatus());
+
+  useEffect(() => {
+    const refresh = () => setStatus(getOnlineSyncStatus());
+    window.addEventListener(onlineSyncStatusEvent, refresh);
+    window.addEventListener("storage", refresh);
+    return () => {
+      window.removeEventListener(onlineSyncStatusEvent, refresh);
+      window.removeEventListener("storage", refresh);
+    };
+  }, []);
+
+  return status;
+}
+
+function DiscordAccountModal({
+  user,
+  onClose,
+  onSignOut,
+}: {
+  user: User;
+  onClose: () => void;
+  onSignOut: () => void;
+}) {
+  const syncStatus = useOnlineSyncStatus();
+  const userLabel = getUserLabel(user);
+  const avatarUrl = getUserAvatarUrl(user);
+  const discordId = getDiscordId(user);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return createPortal(
+    <div className="discord-account-modal-backdrop" role="presentation" onMouseDown={onClose}>
+      <section
+        className="discord-account-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="discord-account-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <div className="discord-account-head">
+          <span className="discord-account-avatar" aria-hidden>
+            {avatarUrl ? <img src={avatarUrl} alt="" referrerPolicy="no-referrer" /> : getUserInitials(user)}
+          </span>
+          <div>
+            <span className="discord-account-kicker">DISCORD CONNECTED</span>
+            <h2 id="discord-account-title">{userLabel}</h2>
+            <p>Inventory and build queue sync are linked to this Discord login.</p>
+          </div>
+          <button type="button" className="discord-account-close" onClick={onClose} aria-label="Close account details">
+            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="discord-account-grid">
+          <div>
+            <span>Discord ID</span>
+            <strong>{discordId ?? "Unavailable"}</strong>
+          </div>
+          <div>
+            <span>Account ID</span>
+            <strong>{user.id}</strong>
+          </div>
+          <div>
+            <span>Email</span>
+            <strong>{user.email ?? "Not shared"}</strong>
+          </div>
+          <div>
+            <span>Remote Status</span>
+            <strong>{syncStatus.lastError ? "Sync warning" : syncStatus.remoteConnected ? "Connected" : "Awaiting sync"}</strong>
+          </div>
+          <div>
+            <span>Last Sync</span>
+            <strong>{formatDateTime(syncStatus.lastSyncedAt)}</strong>
+          </div>
+          <div>
+            <span>Migration</span>
+            <strong>{formatDateTime(syncStatus.migratedAt)}</strong>
+          </div>
+        </div>
+
+        {syncStatus.lastError && (
+          <div className="discord-account-warning">
+            {syncStatus.lastError}
+          </div>
+        )}
+
+        <div className="discord-account-actions">
+          <button type="button" className="discord-account-signout" onClick={onSignOut}>
+            Sign out
+          </button>
+        </div>
+      </section>
+    </div>,
+    document.body,
+  );
+}
+
 export default function LoginWithDiscordButton({
   className,
   collapsed = false,
@@ -91,11 +228,12 @@ export default function LoginWithDiscordButton({
   const { user, loading } = useAuthSession();
   const [busy, setBusy] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [accountOpen, setAccountOpen] = useState(false);
   const signedIn = Boolean(user);
   const disabled = loading || busy;
   const userLabel = getUserLabel(user);
   const avatarUrl = getUserAvatarUrl(user);
-  const title = authError ?? (signedIn ? `${userLabel} - click to sign out` : undefined);
+  const title = authError ?? (signedIn ? `${userLabel} - account details` : undefined);
   const avatar = signedIn ? (
     <span className="discord-btn-avatar" aria-hidden>
       {avatarUrl ? <img src={avatarUrl} alt="" referrerPolicy="no-referrer" /> : getUserInitials(user)}
@@ -133,7 +271,7 @@ export default function LoginWithDiscordButton({
         }
       }
       if (signedIn) {
-        await logout();
+        setAccountOpen(true);
       } else {
         const { error } = await signInWithDiscord();
         if (error) {
@@ -155,8 +293,30 @@ export default function LoginWithDiscordButton({
     }
   }
 
+  async function handleSignOutFromModal() {
+    setBusy(true);
+    setAuthError(null);
+    try {
+      await logout();
+      setAccountOpen(false);
+    } catch (error) {
+      setAuthError(getSafeAuthErrorMessage(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const accountModal = signedIn && user && accountOpen ? (
+    <DiscordAccountModal
+      user={user}
+      onClose={() => setAccountOpen(false)}
+      onSignOut={handleSignOutFromModal}
+    />
+  ) : null;
+
   if (collapsed) {
     return (
+      <>
       <button
         type="button"
         className={["discord-btn discord-btn--icon", className].filter(Boolean).join(" ")}
@@ -169,10 +329,13 @@ export default function LoginWithDiscordButton({
       >
         {avatar}
       </button>
+      {accountModal}
+      </>
     );
   }
 
   return (
+    <>
     <button
       type="button"
       className={["discord-btn", signedIn ? "discord-btn--signed-in" : "", className].filter(Boolean).join(" ")}
@@ -189,5 +352,7 @@ export default function LoginWithDiscordButton({
       </span>
       {signedIn && <span className="discord-btn-status">connected</span>}
     </button>
+    {accountModal}
+    </>
   );
 }

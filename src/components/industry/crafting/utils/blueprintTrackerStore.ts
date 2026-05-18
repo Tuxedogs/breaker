@@ -1,6 +1,4 @@
-// Blueprint Tracker — shared localStorage keys and data helpers.
-// All bookmark state for recipes and missions lives in ComponentRecipeTable.
-// This module provides read-only access to those stores for the tracker page.
+// Blueprint Tracker shared localStorage keys and data helpers.
 
 import type { ComponentRecipe } from "./craftingTypes";
 import { apiUrl } from "@/lib/apiUrl";
@@ -8,7 +6,11 @@ import { parseJsonResponse } from "@/lib/safeJson";
 
 export const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 export const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
+export const COMPLETED_MISSIONS_STORAGE_KEY = "scintel:blueprint-tracker:completed-missions:v1";
+export const ACQUIRED_BLUEPRINTS_STORAGE_KEY = "scintel:blueprint-tracker:acquired-blueprints:v1";
+export const PINNED_MISSIONS_STORAGE_KEY = "scintel:blueprint-tracker:pinned-missions:v1";
 export const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
+export const MISSION_BLUEPRINT_REWARDS_URL = "/api/missions/mission_blueprint_rewards.json";
 
 export function readStoredStringSet(key: string): Set<string> {
   if (typeof window === "undefined" || !window.localStorage) return new Set();
@@ -26,8 +28,6 @@ export function writeStoredStringSet(key: string, values: Set<string>) {
   window.localStorage.setItem(key, JSON.stringify(Array.from(values)));
 }
 
-// ── Mission source types ──────────────────────────────────────────────────────
-
 export type MissionSourceDetail = {
   id: string;
   title: string;
@@ -38,8 +38,6 @@ export type MissionSourceDetail = {
   source: "mission" | "pool";
   blueprintGuid?: string;
 };
-
-// ── Tracker entry ─────────────────────────────────────────────────────────────
 
 export type BlueprintTrackerEntry = {
   itemKey: string;
@@ -60,22 +58,332 @@ export type BlueprintTrackerEntry = {
   updatedAt: string;
 };
 
-// ── Normalization helpers ─────────────────────────────────────────────────────
+export type BlueprintRewardItem = {
+  rewardKey: string;
+  blueprintGuid?: string;
+  displayName: string;
+  componentType?: string;
+  size?: string;
+  grade?: string;
+  itemClass?: string;
+  blueprintName?: string;
+  poolGuid?: string;
+  poolName?: string;
+  poolChance?: number;
+  rewardChance?: number;
+  chance?: number;
+  weight?: number;
+};
 
-function normalizeFactionKey(name: string | null | undefined): string {
-  if (!name?.trim()) return "unknown";
-  return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-");
+export type MissionBlueprintReward = {
+  missionId: string;
+  title: string;
+  description?: string;
+  factionName: string;
+  missionType?: string;
+  category?: string;
+  location?: string;
+  system?: string;
+  planet?: string;
+  station?: string;
+  missionGiver?: string;
+  xp?: number | string;
+  payment?: number | string;
+  minStanding?: string;
+  maxStanding?: string;
+  prerequisites: string[];
+  rewardPools: string[];
+  rewards: BlueprintRewardItem[];
+  reputationRewards: string[];
+  creditRewards: string[];
+  debugName?: string;
+  generatorName?: string;
+  generatorPath?: string;
+};
+
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return typeof value === "object" && value !== null ? value as Record<string, unknown> : null;
 }
 
-function normalizeItemKey(recipe: ComponentRecipe): string {
-  return recipe.blueprint_id;
+function asNonEmptyString(value: unknown): string | undefined {
+  if (typeof value === "string" && value.trim()) return value.trim().replace(/\\n/g, "\n");
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  return undefined;
+}
+
+function asFiniteNumber(value: unknown): number | undefined {
+  const n = typeof value === "number" ? value : typeof value === "string" ? Number(value) : NaN;
+  return Number.isFinite(n) ? n : undefined;
+}
+
+function normalizeKey(value: string | undefined, fallback = "unknown"): string {
+  return (value ?? fallback).trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || fallback;
+}
+
+function normalizeMissionTitle(title: string): string {
+  return title.replace(/~mission\(([^)]+)\)/g, "$1");
+}
+
+function formatRecordName(value: unknown): string | undefined {
+  const raw = asNonEmptyString(value);
+  if (!raw) return undefined;
+  const local = raw.split(".").at(-1) ?? raw;
+  return local
+    .replace(/^(BP_REWARDS_|BP_REWARD_|BP_MISSIONREWARD_|ContractGenerator\.)/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z0-9])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function describeStanding(value: unknown): string | undefined {
+  const standing = asRecord(value);
+  if (!standing) return undefined;
+  const name = asNonEmptyString(standing.displayName) ?? asNonEmptyString(standing.name);
+  const minRep = asFiniteNumber(standing.minReputation);
+  return [name, minRep !== undefined ? `${minRep} rep` : null].filter(Boolean).join(" / ") || undefined;
+}
+
+function describePrerequisite(value: unknown): string | null {
+  const prereq = asRecord(value);
+  if (!prereq) return null;
+  const type = formatRecordName(prereq.type) ?? "Prerequisite";
+  const resolved = Array.isArray(prereq.resolved)
+    ? prereq.resolved
+        .map((item) => {
+          const record = asRecord(item);
+          return record ? asNonEmptyString(record.displayName) ?? asNonEmptyString(record.name) : undefined;
+        })
+        .filter(Boolean)
+        .join(", ")
+    : "";
+  const attrs = asRecord(prereq.attributes);
+  const attrText = attrs
+    ? Object.entries(attrs)
+        .map(([key, val]) => `${key}: ${asNonEmptyString(val) ?? "Unknown"}`)
+        .join(", ")
+    : "";
+  return [type, resolved || attrText].filter(Boolean).join(" - ");
+}
+
+function describeReputationReward(value: unknown): string | null {
+  const reward = asRecord(value);
+  if (!reward) return null;
+  const amount = asFiniteNumber(reward.reputationAmount);
+  const nested = asRecord(reward.reward);
+  const nestedAmount = nested ? asFiniteNumber(nested.reputationAmount) : undefined;
+  const finalAmount = amount ?? nestedAmount;
+  if (finalAmount === undefined) return formatRecordName(reward.type) ?? null;
+  return `${finalAmount > 0 ? "+" : ""}${finalAmount} reputation`;
+}
+
+function describeCreditReward(value: unknown): string | null {
+  const reward = asRecord(value);
+  if (!reward) return null;
+  const attrs = asRecord(reward.attributes);
+  const amount = attrs
+    ? asFiniteNumber(attrs.amount) ?? asFiniteNumber(attrs.reward) ?? asFiniteNumber(attrs.value)
+    : undefined;
+  if (amount !== undefined) return `${amount.toLocaleString()} UEC`;
+  return formatRecordName(reward.type) ?? null;
+}
+
+function firstParamText(params: unknown, names: string[]): string | undefined {
+  const record = asRecord(params);
+  if (!record) return undefined;
+  for (const name of names) {
+    const param = asRecord(record[name]);
+    const text = param ? asNonEmptyString(param.text) ?? asNonEmptyString(param.raw) : undefined;
+    if (text) return text;
+  }
+  return undefined;
+}
+
+function extractLocation(mission: Record<string, unknown>): string | undefined {
+  return firstParamText(mission.stringParams, [
+    "Location",
+    "LocationName",
+    "Destination",
+    "DestinationName",
+    "PickupLocation",
+    "DropOffLocation",
+  ]);
+}
+
+function normalizeReward(raw: unknown, pool: Record<string, unknown>, missionReward: Record<string, unknown>): BlueprintRewardItem | null {
+  const reward = asRecord(raw);
+  if (!reward) return null;
+  const blueprintGuid = asNonEmptyString(reward.blueprintGuid);
+  const displayName =
+    asNonEmptyString(reward.displayName) ??
+    formatRecordName(reward.blueprintName) ??
+    blueprintGuid ??
+    "Unknown Blueprint Source";
+  const poolGuid = asNonEmptyString(pool.poolGuid) ?? asNonEmptyString(missionReward.blueprintPoolGuid);
+  const poolChance = asFiniteNumber(reward.poolChance);
+  const rewardChance = asFiniteNumber(missionReward.chance);
+  const chance =
+    poolChance !== undefined && rewardChance !== undefined
+      ? poolChance * rewardChance
+      : poolChance ?? rewardChance;
+
+  return {
+    rewardKey: blueprintGuid ?? `${poolGuid ?? "pool"}::${normalizeKey(displayName)}`,
+    blueprintGuid,
+    displayName,
+    componentType: asNonEmptyString(reward.componentType),
+    size: asNonEmptyString(reward.size),
+    grade: asNonEmptyString(reward.grade),
+    itemClass: asNonEmptyString(reward.class),
+    blueprintName: asNonEmptyString(reward.blueprintName),
+    poolGuid,
+    poolName: asNonEmptyString(pool.displayName) ?? formatRecordName(pool.poolName),
+    poolChance,
+    rewardChance,
+    chance,
+    weight: asFiniteNumber(reward.weight),
+  };
+}
+
+function normalizeMission(raw: unknown): MissionBlueprintReward | null {
+  const mission = asRecord(raw);
+  if (!mission) return null;
+  const missionId = asNonEmptyString(mission.contractId);
+  if (!missionId) return null;
+
+  const title = normalizeMissionTitle(
+    asNonEmptyString(mission.title) ?? asNonEmptyString(mission.debugName) ?? "Unknown Mission"
+  );
+  const rewardMap = new Map<string, BlueprintRewardItem>();
+  const rewardPools = new Set<string>();
+
+  for (const item of Array.isArray(mission.blueprintRewards) ? mission.blueprintRewards : []) {
+    const missionReward = asRecord(item);
+    const pool = missionReward ? asRecord(missionReward.pool) : null;
+    if (!missionReward || !pool) continue;
+    const poolName = asNonEmptyString(pool.displayName) ?? formatRecordName(pool.poolName);
+    if (poolName) rewardPools.add(poolName);
+    for (const rawReward of Array.isArray(pool.rewards) ? pool.rewards : []) {
+      const reward = normalizeReward(rawReward, pool, missionReward);
+      if (!reward) continue;
+      const key = reward.blueprintGuid ?? normalizeKey(reward.displayName);
+      if (!rewardMap.has(key)) rewardMap.set(key, reward);
+    }
+  }
+
+  if (rewardMap.size === 0) return null;
+
+  return {
+    missionId,
+    title,
+    description: asNonEmptyString(mission.description),
+    factionName: asNonEmptyString(mission.factionName) ?? "Unknown Faction",
+    missionType: asNonEmptyString(mission.missionType) ?? formatRecordName(mission.handlerType),
+    category: asNonEmptyString(mission.contractType),
+    location: extractLocation(mission),
+    system: firstParamText(mission.stringParams, ["System", "SystemName"]),
+    planet: firstParamText(mission.stringParams, ["Planet", "PlanetName"]),
+    station: firstParamText(mission.stringParams, ["Station", "StationName"]),
+    missionGiver: firstParamText(mission.stringParams, ["Contractor", "MissionGiver", "Giver"]),
+    xp: asFiniteNumber(mission.xpReward) ?? asNonEmptyString(mission.xpReward),
+    payment: asFiniteNumber(mission.uecReward) ?? asNonEmptyString(mission.payment),
+    minStanding: describeStanding(mission.minStanding),
+    maxStanding: describeStanding(mission.maxStanding),
+    prerequisites: (Array.isArray(mission.prerequisites) ? mission.prerequisites : [])
+      .map(describePrerequisite)
+      .filter((v): v is string => Boolean(v)),
+    rewardPools: Array.from(rewardPools),
+    rewards: Array.from(rewardMap.values()).sort((a, b) => a.displayName.localeCompare(b.displayName)),
+    reputationRewards: (Array.isArray(mission.reputationRewards) ? mission.reputationRewards : [])
+      .map(describeReputationReward)
+      .filter((v): v is string => Boolean(v)),
+    creditRewards: (Array.isArray(mission.creditRewardTypes) ? mission.creditRewardTypes : [])
+      .map(describeCreditReward)
+      .filter((v): v is string => Boolean(v)),
+    debugName: asNonEmptyString(mission.debugName),
+    generatorName: asNonEmptyString(mission.generatorName),
+    generatorPath: asNonEmptyString(mission.generatorPath),
+  };
+}
+
+let missionRewardsCache: Promise<MissionBlueprintReward[]> | null = null;
+
+export async function loadMissionBlueprintRewards(): Promise<MissionBlueprintReward[]> {
+  if (!missionRewardsCache) {
+    const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
+    missionRewardsCache = fetch(url)
+      .then(async (r) => {
+        const data = await parseJsonResponse<unknown>(r, {
+          label: "mission blueprint rewards",
+          url,
+        });
+        if (!r.ok) throw new Error(`Mission blueprint rewards unavailable: ${r.status}`);
+        return data;
+      })
+      .then((data) => Array.isArray(data) ? data.map(normalizeMission).filter((v): v is MissionBlueprintReward => Boolean(v)) : [])
+      .catch(() => []);
+  }
+  return missionRewardsCache;
 }
 
 function getFactionName(recipe: ComponentRecipe): string {
   return recipe.manufacturer?.trim() || "Unknown Faction";
 }
 
-// ── Builder ───────────────────────────────────────────────────────────────────
+function getOrCreateEntry(map: Map<string, BlueprintTrackerEntry>, recipe: ComponentRecipe): BlueprintTrackerEntry {
+  const factionName = getFactionName(recipe);
+  const factionKey = normalizeKey(factionName);
+  const itemKey = recipe.blueprint_id;
+  const mapKey = `${factionKey}::${itemKey}`;
+  let entry = map.get(mapKey);
+  if (!entry) {
+    entry = {
+      itemKey,
+      itemName: recipe.component_name,
+      factionKey,
+      factionName,
+      category: recipe.category ?? undefined,
+      itemKind: recipe.item_kind ?? undefined,
+      componentType: recipe.component_type ?? undefined,
+      size: recipe.size ?? undefined,
+      grade: recipe.grade ?? undefined,
+      itemClass: recipe.class ?? undefined,
+      sourceTypes: new Set(),
+      recipeIds: [],
+      missionIds: [],
+      missions: [],
+      recipes: [],
+      updatedAt: new Date().toISOString(),
+    };
+    map.set(mapKey, entry);
+  }
+  return entry;
+}
+
+function normalizeReverseMission(value: unknown): MissionSourceDetail | null {
+  const mission = asRecord(value);
+  if (!mission) return null;
+  const contractId = asNonEmptyString(mission.contractId);
+  const poolGuid = asNonEmptyString(mission.poolGuid);
+  const id = [contractId, poolGuid].filter(Boolean).join(":");
+  if (!id) return null;
+  const poolChance = asFiniteNumber(mission.poolChance);
+  const rewardChance = asFiniteNumber(mission.rewardChance);
+  return {
+    id: `mission:${id}`,
+    title: normalizeMissionTitle(
+      asNonEmptyString(mission.contractTitle) ?? asNonEmptyString(mission.contractDebugName) ?? "Unknown Blueprint Source"
+    ),
+    subtitle: asNonEmptyString(mission.generatorName),
+    poolName: asNonEmptyString(mission.poolName),
+    factionName: asNonEmptyString(mission.factionName),
+    chance:
+      poolChance !== undefined && rewardChance !== undefined
+        ? poolChance * rewardChance
+        : poolChance ?? rewardChance,
+    source: "mission",
+  };
+}
 
 export function buildTrackerEntries(
   recipes: ComponentRecipe[],
@@ -84,179 +392,51 @@ export function buildTrackerEntries(
   missionMap: Map<string, MissionSourceDetail[]>,
 ): BlueprintTrackerEntry[] {
   const entryMap = new Map<string, BlueprintTrackerEntry>();
+  const recipeByBlueprintId = new Map(recipes.map((recipe) => [recipe.blueprint_id, recipe]));
+  const missionIdToBlueprintIds = new Map<string, string[]>();
 
-  function getOrCreate(recipe: ComponentRecipe): BlueprintTrackerEntry {
-    const itemKey = normalizeItemKey(recipe);
-    const factionName = getFactionName(recipe);
-    const factionKey = normalizeFactionKey(factionName);
-    const mapKey = `${factionKey}::${itemKey}`;
-
-    let entry = entryMap.get(mapKey);
-    if (!entry) {
-      entry = {
-        itemKey,
-        itemName: recipe.component_name,
-        factionKey,
-        factionName,
-        category: recipe.category ?? undefined,
-        itemKind: recipe.item_kind ?? undefined,
-        componentType: recipe.component_type ?? undefined,
-        size: recipe.size ?? undefined,
-        grade: recipe.grade ?? undefined,
-        itemClass: recipe.class ?? undefined,
-        sourceTypes: new Set(),
-        recipeIds: [],
-        missionIds: [],
-        missions: [],
-        recipes: [],
-        updatedAt: new Date().toISOString(),
-      };
-      entryMap.set(mapKey, entry);
-    }
-    return entry;
-  }
-
-  // 1. Collect bookmarked recipes
   for (const recipe of recipes) {
     if (!bookmarkedRecipeIds.has(recipe.blueprint_id)) continue;
-    const entry = getOrCreate(recipe);
-    if (!entry.recipeIds.includes(recipe.blueprint_id)) {
-      entry.recipeIds.push(recipe.blueprint_id);
-      entry.recipes.push(recipe);
-      entry.sourceTypes.add("recipe");
+    const entry = getOrCreateEntry(entryMap, recipe);
+    entry.recipeIds.push(recipe.blueprint_id);
+    entry.recipes.push(recipe);
+    entry.sourceTypes.add("recipe");
+  }
+
+  for (const [blueprintId, missions] of missionMap.entries()) {
+    for (const mission of missions) {
+      const list = missionIdToBlueprintIds.get(mission.id) ?? [];
+      list.push(blueprintId);
+      missionIdToBlueprintIds.set(mission.id, list);
     }
   }
 
-  // Build reverse map: missionId → blueprintId from pool-type IDs (pool:blueprintId:stableKey)
-  const poolMissionToBlueprintId = new Map<string, string>();
   for (const missionId of bookmarkedMissionIds) {
-    if (missionId.startsWith("pool:")) {
-      const parts = missionId.split(":");
-      // pool:<blueprintId>:<stableKey> — blueprintId is parts[1]
-      if (parts.length >= 3) {
-        poolMissionToBlueprintId.set(missionId, parts[1]);
-      }
-    }
-  }
-
-  // Build reverse map: missionId → blueprintId from mission-type IDs via missionMap
-  const missionIdToBlueprintIds = new Map<string, string[]>();
-  for (const [blueprintId, entries] of missionMap.entries()) {
-    for (const entry of entries) {
-      if (!missionIdToBlueprintIds.has(entry.id)) {
-        missionIdToBlueprintIds.set(entry.id, []);
-      }
-      missionIdToBlueprintIds.get(entry.id)!.push(blueprintId);
-    }
-  }
-
-  // Build recipe lookup by blueprint_id
-  const recipeByBlueprintId = new Map<string, ComponentRecipe>();
-  for (const recipe of recipes) {
-    recipeByBlueprintId.set(recipe.blueprint_id, recipe);
-  }
-
-  // 2. Collect bookmarked missions
-  for (const missionId of bookmarkedMissionIds) {
-    let resolvedBlueprintIds: string[] = [];
-
-    if (missionId.startsWith("pool:")) {
-      const bpId = poolMissionToBlueprintId.get(missionId);
-      if (bpId) resolvedBlueprintIds = [bpId];
-    } else {
-      resolvedBlueprintIds = missionIdToBlueprintIds.get(missionId) ?? [];
-    }
-
-    if (resolvedBlueprintIds.length === 0) {
-      // Can't resolve to a recipe — create a placeholder under Unknown Faction
-      const placeholderKey = `unknown::${missionId}`;
-      if (!entryMap.has(placeholderKey)) {
-        entryMap.set(placeholderKey, {
-          itemKey: missionId,
-          itemName: "Unknown Blueprint Source",
-          factionKey: "unknown",
-          factionName: "Unknown Faction",
-          sourceTypes: new Set(["mission"]),
-          recipeIds: [],
-          missionIds: [missionId],
-          missions: [],
-          recipes: [],
-          updatedAt: new Date().toISOString(),
-        });
-      }
-      continue;
-    }
-
-    for (const blueprintId of resolvedBlueprintIds) {
+    const blueprintIds = missionId.startsWith("pool:")
+      ? [missionId.split(":")[1]].filter(Boolean)
+      : missionIdToBlueprintIds.get(missionId) ?? [];
+    for (const blueprintId of blueprintIds) {
       const recipe = recipeByBlueprintId.get(blueprintId);
       if (!recipe) continue;
-
-      const entry = getOrCreate(recipe);
+      const entry = getOrCreateEntry(entryMap, recipe);
       if (!entry.missionIds.includes(missionId)) {
         entry.missionIds.push(missionId);
         entry.sourceTypes.add("mission");
-
-        const missionDetail = (missionMap.get(blueprintId) ?? []).find((m) => m.id === missionId);
-        if (missionDetail && !entry.missions.find((m) => m.id === missionId)) {
-          entry.missions.push({ ...missionDetail, blueprintGuid: blueprintId });
-        }
+      }
+      const detail = (missionMap.get(blueprintId) ?? []).find((m) => m.id === missionId);
+      if (detail && !entry.missions.some((m) => m.id === detail.id)) {
+        entry.missions.push({ ...detail, blueprintGuid: blueprintId });
       }
     }
   }
 
-  // 3. Sort: by faction name then item name
   return Array.from(entryMap.values()).sort((a, b) => {
     const fc = a.factionName.localeCompare(b.factionName);
     return fc !== 0 ? fc : a.itemName.localeCompare(b.itemName);
   });
 }
 
-// ── Mission API loading ───────────────────────────────────────────────────────
-
 let missionMapCache: Promise<Map<string, MissionSourceDetail[]>> | null = null;
-
-function asNonEmptyString(value: unknown): string | undefined {
-  return typeof value === "string" && value.trim() ? value.trim() : undefined;
-}
-
-function asFiniteNumber(value: unknown): number | undefined {
-  const n = typeof value === "number" ? value : typeof value === "string" ? Number(value) : NaN;
-  return Number.isFinite(n) ? n : undefined;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function normalizeMissionTitle(title: string): string {
-  return title.replace(/~mission\(([^)]+)\)/g, "$1");
-}
-
-function normalizeMission(value: unknown): MissionSourceDetail | null {
-  if (!isRecord(value)) return null;
-  const contractId = asNonEmptyString(value.contractId);
-  const poolGuid = asNonEmptyString(value.poolGuid);
-  const id = [contractId, poolGuid].filter(Boolean).join(":");
-  if (!id) return null;
-
-  const poolChance = asFiniteNumber(value.poolChance);
-  const rewardChance = asFiniteNumber(value.rewardChance);
-
-  return {
-    id: `mission:${id}`,
-    title: normalizeMissionTitle(
-      asNonEmptyString(value.contractTitle) ?? asNonEmptyString(value.contractDebugName) ?? "Unknown Blueprint Source"
-    ),
-    subtitle: asNonEmptyString(value.generatorName),
-    poolName: asNonEmptyString(value.poolName),
-    factionName: asNonEmptyString(value.factionName),
-    chance:
-      typeof poolChance === "number" && typeof rewardChance === "number"
-        ? poolChance * rewardChance
-        : poolChance ?? rewardChance,
-    source: "mission",
-  };
-}
 
 export async function loadMissionDetailMap(): Promise<Map<string, MissionSourceDetail[]>> {
   if (!missionMapCache) {
@@ -274,14 +454,11 @@ export async function loadMissionDetailMap(): Promise<Map<string, MissionSourceD
         const map = new Map<string, MissionSourceDetail[]>();
         if (!Array.isArray(data)) return map;
         for (const item of data) {
-          if (!isRecord(item)) continue;
-          const blueprintGuid = asNonEmptyString(item.blueprintGuid);
-          if (!blueprintGuid || !Array.isArray(item.missions)) continue;
-          const entries = (item.missions as unknown[]).flatMap((m) => {
-            const e = normalizeMission(m);
-            return e ? [e] : [];
-          });
-          map.set(blueprintGuid, entries);
+          const record = asRecord(item);
+          const blueprintGuid = record ? asNonEmptyString(record.blueprintGuid) : undefined;
+          const missions = record && Array.isArray(record.missions) ? record.missions : [];
+          if (!blueprintGuid) continue;
+          map.set(blueprintGuid, missions.map(normalizeReverseMission).filter((v): v is MissionSourceDetail => Boolean(v)));
         }
         return map;
       })

@@ -12,14 +12,22 @@ import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
 import { handleSavedBlueprintsRoute } from "./src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "./src/server/user/buildQueueRoute";
+import { handleUserInventoryRoute } from "./src/server/user/inventoryRoute";
 
-const dynamicApiPaths = new Set([
+const dynamicApiPaths = [
   "/api/recommender/locations",
   "/api/recommender/recommendations",
   "/api/build-queue/requirements",
   "/api/user/saved-blueprints",
   "/api/user/build-queue",
-]);
+  "/api/user/inventory",
+  "/api/user/inventory/sync",
+  "/api/user/inventory/stacks",
+];
+
+function isDynamicApiPath(pathname: string) {
+  return dynamicApiPaths.includes(pathname) || pathname.startsWith("/api/user/inventory/stacks/");
+}
 
 const contentTypes: Record<string, string> = {
   ".csv": "text/csv; charset=utf-8",
@@ -41,7 +49,7 @@ async function tryServeScintelApiFile(
   if (request.method !== "GET" && request.method !== "HEAD") return false;
 
   const url = request.url?.split("?")[0] ?? "";
-  if (!url.startsWith("/api/") || dynamicApiPaths.has(url)) return false;
+  if (!url.startsWith("/api/") || isDynamicApiPath(url)) return false;
 
   const relativePath = decodeURIComponent(url.slice("/api/".length));
   const filePath = path.resolve(scintelApiRoot, relativePath);
@@ -68,7 +76,7 @@ async function tryServeScintelApiFile(
 function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer, "middlewares">, scintelApiRoot: string) {
   const middleware: Connect.NextHandleFunction = async (request, response, next) => {
     const url = request.url?.split("?")[0] ?? "";
-    if (!dynamicApiPaths.has(url)) {
+    if (!isDynamicApiPath(url)) {
       if (await tryServeScintelApiFile(request, response, scintelApiRoot)) return;
       next();
       return;
@@ -82,12 +90,13 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
       response.end(JSON.stringify({ error: "Invalid request body." }));
       return;
     }
-    const route = url === "/api/user/saved-blueprints"
+    const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
+      ?? (url === "/api/user/saved-blueprints"
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
       : url === "/api/user/build-queue"
         ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
-          await handleBuildQueueRoute(request.method ?? "GET", url, body);
+          await handleBuildQueueRoute(request.method ?? "GET", url, body));
     if (!route) {
       next();
       return;

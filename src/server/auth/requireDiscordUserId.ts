@@ -1,4 +1,8 @@
 import { createClient, type User } from "@supabase/supabase-js";
+import { sql } from "drizzle-orm";
+
+import { getDb } from "../../db/client";
+import { profiles } from "../../db/schema";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;
@@ -10,6 +14,12 @@ export class AuthError extends Error {
     super(message);
     this.name = "AuthError";
   }
+}
+
+export interface AuthenticatedUserContext {
+  userId: string;
+  discordId: string | null;
+  user: User;
 }
 
 function getHeader(headers: HeaderBag, name: string): string | undefined {
@@ -55,7 +65,56 @@ function getDiscordUserId(user: User): string | null {
   );
 }
 
-export async function requireDiscordUserId(headers: HeaderBag): Promise<string> {
+function getMetadataString(user: User, keys: string[]): string | null {
+  const userMetadata = asRecord(user.user_metadata);
+  const appMetadata = asRecord(user.app_metadata);
+  const discordIdentity = user.identities?.find((identity) => identity.provider === "discord");
+  const identityData = asRecord(discordIdentity?.identity_data);
+
+  for (const key of keys) {
+    const value = asString(userMetadata[key]) ?? asString(identityData[key]) ?? asString(appMetadata[key]);
+    if (value) return value;
+  }
+
+  return null;
+}
+
+async function upsertProfile(context: AuthenticatedUserContext) {
+  const displayName = getMetadataString(context.user, ["full_name", "name", "preferred_username", "user_name"]);
+  const discordUsername = getMetadataString(context.user, ["preferred_username", "user_name", "name"]);
+  const avatarUrl = getMetadataString(context.user, ["avatar_url", "picture"]);
+
+  await getDb()
+    .insert(profiles)
+    .values({
+      id: context.userId,
+      discordId: context.discordId,
+      discordUsername,
+      displayName,
+      avatarUrl,
+      metadata: {
+        email: context.user.email ?? null,
+        provider: "discord",
+      },
+      updatedAt: sql`now()`,
+    })
+    .onConflictDoUpdate({
+      target: profiles.id,
+      set: {
+        discordId: context.discordId,
+        discordUsername,
+        displayName,
+        avatarUrl,
+        metadata: {
+          email: context.user.email ?? null,
+          provider: "discord",
+        },
+        updatedAt: sql`now()`,
+      },
+    });
+}
+
+export async function requireAuthenticatedUser(headers: HeaderBag): Promise<AuthenticatedUserContext> {
   const token = getBearerToken(headers);
   if (!token) throw new AuthError();
 
@@ -78,5 +137,17 @@ export async function requireDiscordUserId(headers: HeaderBag): Promise<string> 
   const discordUserId = getDiscordUserId(data.user);
   if (!discordUserId) throw new AuthError("Discord identity is required.");
 
-  return discordUserId;
+  const context = {
+    userId: data.user.id,
+    discordId: discordUserId,
+    user: data.user,
+  };
+  await upsertProfile(context);
+  return context;
+}
+
+export async function requireDiscordUserId(headers: HeaderBag): Promise<string> {
+  const context = await requireAuthenticatedUser(headers);
+  if (!context.discordId) throw new AuthError("Discord identity is required.");
+  return context.discordId;
 }

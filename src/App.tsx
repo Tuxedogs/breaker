@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
-import BuildQueuePersistence from "./components/logistics/BuildQueuePersistence";
+import OnlinePersistenceCoordinator from "./components/logistics/OnlinePersistenceCoordinator";
 import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
 import DashboardPage from "./pages/DashboardPage";
@@ -66,7 +66,7 @@ function RedirectLegacyDoctrineModule() {
 export default function App() {
   return (
     <AuthSessionProvider>
-      <BuildQueuePersistence />
+      <OnlinePersistenceCoordinator />
       <Routes>
         <Route index element={<RedirectToDashboard />} />
         <Route path="home" element={<RedirectToDashboard />} />
