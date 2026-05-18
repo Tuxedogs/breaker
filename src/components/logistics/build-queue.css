@@ -25,6 +25,7 @@
   font-family: var(--font-primary);
   color: var(--bq-text);
   min-height: 100vh;
+  min-height: 100dvh;
   width: 100%;
   background: var(--bg-app);
 }
@@ -36,6 +37,7 @@
 .bq-main {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   min-width: 0;
   padding: clamp(0.5rem, 2vw, 0.1rem);
   box-sizing: border-box;
@@ -65,7 +67,7 @@
   display: grid;
   align-content: start;
   gap: 0.5rem;
-  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
   overflow: auto;
   padding: 0.76rem;
   border: var(--border-panel);
@@ -889,7 +891,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  min-height: 28px;
+  min-height: 32px;
   padding: 0 0.5rem;
   cursor: pointer;
   white-space: nowrap;
@@ -930,7 +932,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.32rem;
-  min-height: 28px;
+  min-height: 34px;
   padding: 0 0.42rem;
   border: 1px solid var(--bq-edge);
   border-radius: 4px;
@@ -1431,6 +1433,11 @@
   flex-shrink: 0;
 }
 
+.bq-page :where(button, input, label):focus-visible {
+  outline: 2px solid rgba(255, 157, 0, 0.72);
+  outline-offset: 2px;
+}
+
 .bq-stack-cb::before {
   content: '';
   width: 6px; height: 6px;
@@ -1518,6 +1525,85 @@
   .bq-stats { justify-content: flex-start; }
   .bq-coverage { grid-template-columns: auto 1fr; }
   .bq-coverage-short { grid-column: 1 / -1; }
+
+  .bq-main {
+    padding: 0;
+  }
+
+  .bq-shell {
+    padding: 0.55rem;
+  }
+
+  .bq-shell-header {
+    flex-direction: column;
+  }
+
+  .bq-item-sidebar {
+    padding-right: 0.75rem;
+  }
+
+  .bq-item-controls {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .bq-btn-row,
+  .bq-source-chips,
+  .bq-quality-mods {
+    gap: 0.35rem;
+  }
+
+  .bq-btn,
+  .bq-qty-btn,
+  .bq-reserve-btn,
+  .bq-lower-toggle {
+    min-height: 40px;
+  }
+
+  .bq-mat-table {
+    overflow-x: visible;
+  }
+
+  .bq-mat-head {
+    display: none;
+  }
+
+  .bq-page .bq-mat-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.35rem 0.6rem;
+    min-width: 0;
+    padding: 0.6rem 0.65rem;
+  }
+
+  .bq-mat-modifier,
+  .bq-reserve-btn {
+    grid-column: 1 / -1;
+  }
+
+  .bq-reserve-btn {
+    justify-self: stretch;
+  }
+
+  .bq-stale-line,
+  .bq-reserve-panel {
+    min-width: 0;
+    margin-inline: 0.65rem;
+  }
+
+  .bq-stack-line {
+    grid-template-columns: 22px minmax(0, 1fr) minmax(4.5rem, auto);
+    gap: 0.35rem;
+    min-height: 44px;
+  }
+
+  .bq-stack-line > span:nth-of-type(n + 4) {
+    grid-column: 2 / -1;
+  }
+
+  .bq-stack-cb {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 

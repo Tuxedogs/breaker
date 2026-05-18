@@ -2907,3 +2907,111 @@
   }
 }
 
+@media (max-width: 760px) {
+  .craft-page {
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .craft-filter-rail {
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    padding: 0.55rem;
+    overflow: visible;
+  }
+
+  .craft-frl-left,
+  .craft-fg {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 0 0 0.45rem;
+    border-left: 0;
+    border-bottom: 1px solid var(--border-soft-color);
+  }
+
+  .craft-frl-chips,
+  .msb-chip-grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .craft-frl-chips::-webkit-scrollbar,
+  .msb-chip-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .craft-frl-chip,
+  .msb-chip,
+  .craft-btn-add,
+  .craft-btn-chevron,
+  .craft-btn-ghost,
+  .craft-filter-btn {
+    min-height: 40px;
+  }
+
+  .craft-frl-chip,
+  .msb-chip {
+    padding-inline: 0.62rem;
+    font-size: 0.74rem;
+  }
+
+  .craft-console-layout,
+  .craft-recipe-browser-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .craft-finder-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .craft-result-card {
+    min-height: 54px;
+  }
+
+  .craft-detail-stage,
+  .craft-detail,
+  .craft-summary-panel {
+    min-width: 0;
+  }
+
+  .craft-table-wrap,
+  .craft-recipe-results .craft-table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .craft-recipe-results .craft-table {
+    min-width: 620px;
+  }
+
+  .craft-expanded-content {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 8px;
+  }
+
+  .craft-summary-action-row {
+    flex-direction: column;
+    margin-inline: 8px;
+  }
+
+  .craft-summary-action-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .craft-filter-dropdown {
+    position: fixed;
+    inset: auto 0 0;
+    max-height: min(72dvh, 520px);
+    width: auto;
+    overflow: auto;
+    border-radius: 8px 8px 0 0;
+  }
+}
+

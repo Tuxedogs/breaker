@@ -69,8 +69,10 @@ function RewardMeta({ reward }: { reward: BlueprintRewardItem }) {
 
 function MissionDetailPanel({
   mission,
+  onClose,
 }: {
   mission: MissionBlueprintReward | null;
+  onClose?: () => void;
 }) {
   if (!mission) {
     return (
@@ -86,23 +88,31 @@ function MissionDetailPanel({
 
   const rows = [
     ["Faction", mission.factionName],
-    ["Mission Giver", mission.missionGiver],
     ["Type", mission.missionType ?? mission.category],
     ["Location", mission.location ?? mission.station ?? mission.planet ?? mission.system],
     ["XP", formatValue(mission.xp)],
-    ["UEC / Payment", formatValue(mission.payment) ?? mission.creditRewards.join(", ")],
+    ["Prerequisite Reputation", mission.minStanding],
     ["Reputation Reward", mission.reputationRewards.join(", ")],
-    ["Required Standing", mission.minStanding],
     ["Max Standing", mission.maxStanding],
   ].filter(([, value]) => Boolean(value));
 
   return (
-    <div className="bt-detail-panel" aria-label={`Mission details: ${mission.title}`}>
+    <div className="bt-detail-panel" role="region" aria-label={`Mission details: ${mission.title}`}>
       <div className="bt-detail-head">
         <div>
           <div className="bt-detail-kicker">Mission Details</div>
           <div className="bt-detail-title">{mission.title}</div>
         </div>
+        {onClose && (
+          <button
+            type="button"
+            className="bt-detail-close"
+            aria-label="Close mission details"
+            onClick={onClose}
+          >
+            <span aria-hidden="true">x</span>
+          </button>
+        )}
       </div>
 
       {mission.description && <p className="bt-detail-description">{mission.description}</p>}
@@ -113,20 +123,6 @@ function MissionDetailPanel({
             <span>{label}</span>
             <strong>{value}</strong>
           </div>
-        ))}
-      </div>
-
-      {mission.prerequisites.length > 0 && (
-        <div className="bt-detail-section">
-          <div className="bt-detail-section-title">Prerequisites</div>
-          {mission.prerequisites.slice(0, 6).map((item) => <span key={item} className="bt-detail-pill">{item}</span>)}
-        </div>
-      )}
-
-      <div className="bt-detail-section">
-        <div className="bt-detail-section-title">Reward Pools</div>
-        {(mission.rewardPools.length > 0 ? mission.rewardPools : ["Unknown"]).map((pool) => (
-          <span key={pool} className="bt-detail-pill bt-detail-pill--pool">{pool}</span>
         ))}
       </div>
 
@@ -184,7 +180,7 @@ function MissionRow({
         >
           <span aria-hidden>*</span>
         </button>
-        <label className="bt-check" aria-label={`Mark ${mission.title} completed`}>
+        <label className="bt-check bt-check--mission" aria-label={`Mark ${mission.title} completed`}>
           <input
             type="checkbox"
             checked={completed}
@@ -192,6 +188,7 @@ function MissionRow({
             onChange={() => onToggleCompleted(mission.missionId)}
           />
           <span aria-hidden />
+          <span className="bt-sr-only">Mission completed</span>
         </label>
 
         <div className="bt-mission-nameblock">
@@ -256,6 +253,7 @@ function MissionRow({
                     onChange={() => onToggleAcquired(key)}
                   />
                   <span aria-hidden />
+                  <span className="bt-sr-only">Blueprint acquired</span>
                 </label>
                 <div className="bt-reward-copy">
                   <div className="bt-reward-name">{reward.displayName}</div>
@@ -374,6 +372,7 @@ function MissionTrackerSidebar({
   onSearchChange,
   onSelectMission,
   onTogglePinned,
+  onClearSelectedMission,
 }: {
   selectedMission: MissionBlueprintReward | null;
   pinnedMissions: MissionBlueprintReward[];
@@ -381,6 +380,7 @@ function MissionTrackerSidebar({
   onSearchChange: (query: string) => void;
   onSelectMission: (mission: MissionBlueprintReward) => void;
   onTogglePinned: (id: string) => void;
+  onClearSelectedMission: () => void;
 }) {
   return (
     <aside className="bt-sidebar" aria-label="Mission tracker sidebar">
@@ -406,40 +406,33 @@ function MissionTrackerSidebar({
         ) : (
           <div className="bt-pinned-list">
             {pinnedMissions.map((mission) => (
-              <button
+              <div
                 key={mission.missionId}
-                type="button"
                 className={`bt-pinned-row${selectedMission?.missionId === mission.missionId ? " is-active" : ""}`}
-                onClick={() => onSelectMission(mission)}
               >
-                <span className="bt-pinned-title">{mission.title}</span>
-                <span className="bt-pinned-meta">{mission.factionName} / {mission.rewards.length} rewards</span>
-                <span
-                  role="button"
-                  tabIndex={0}
+                <button
+                  type="button"
+                  className="bt-pinned-select"
+                  onClick={() => onSelectMission(mission)}
+                >
+                  <span className="bt-pinned-title">{mission.title}</span>
+                  <span className="bt-pinned-meta">{mission.factionName} / {mission.rewards.length} rewards</span>
+                </button>
+                <button
+                  type="button"
                   className="bt-pinned-unpin"
                   aria-label={`Unpin ${mission.title}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onTogglePinned(mission.missionId);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onTogglePinned(mission.missionId);
-                    }
-                  }}
+                  onClick={() => onTogglePinned(mission.missionId)}
                 >
-                  *
-                </span>
-              </button>
+                  <span aria-hidden="true">*</span>
+                </button>
+              </div>
             ))}
           </div>
         )}
       </div>
 
-      <MissionDetailPanel mission={selectedMission} />
+      <MissionDetailPanel mission={selectedMission} onClose={selectedMission ? onClearSelectedMission : undefined} />
     </aside>
   );
 }
@@ -765,6 +758,19 @@ export default function BlueprintTrackerPage() {
     setSelectedMissionId(mission.missionId);
   }, []);
 
+  const clearSelectedMission = useCallback(() => {
+    setSelectedMissionId(null);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedMissionId) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setSelectedMissionId(null);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [selectedMissionId]);
+
   const toggleRecipe = useCallback(async (recipeId: string) => {
     const accessToken = session?.access_token;
     if (!accessToken) {
@@ -943,6 +949,7 @@ export default function BlueprintTrackerPage() {
               onSearchChange={setMissionSearchQuery}
               onSelectMission={selectMission}
               onTogglePinned={togglePinnedMission}
+              onClearSelectedMission={clearSelectedMission}
             />
           </div>
         )}

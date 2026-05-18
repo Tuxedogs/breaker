@@ -362,6 +362,11 @@ function StantonLagrangeChildrenSummary({
             <span>{point.code}</span>
             <span>{point.bodyName}</span>
             <span>{point.pointKey}</span>
+            {point.children.length > 0 && (
+              <span className="mdet-kind">
+                {point.children.length} {point.children.length === 1 ? "child" : "children"}
+              </span>
+            )}
           </div>
           <div className="mloc-lagrange-child-list">
             {point.children.map((child) => (
@@ -482,6 +487,8 @@ function LocationListItem({
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
+      aria-pressed={selected}
+      aria-label={`Select ${locationDisplayName} mining location`}
     >
       <div className="mlist-item-rank">{rank}</div>
       <div className="mlist-item-body">
@@ -559,6 +566,7 @@ function LocationListItem({
         </div>
       </div>
       <button
+        type="button"
         className={`mloc-star-btn${starred ? " mloc-star-btn--on" : ""}`}
         onClick={onToggleStar}
         title={starred ? "Unstar" : "Star"}
@@ -697,7 +705,7 @@ function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string 
 
 function InfoTip({ text }: { text: string }) {
   return (
-    <span className="mdet-infotip" title={text} aria-label={text}>?</span>
+    <button type="button" className="mdet-infotip" title={text} aria-label={text}>?</button>
   );
 }
 
@@ -2058,6 +2066,7 @@ export default function MiningModule() {
                   ))}
                   {displayRankedFilteredLocations.length > 12 && (
                     <button
+                      type="button"
                       className="mlist-view-all-btn"
                       onClick={() => setShowAllLocations((p) => !p)}
                     >
