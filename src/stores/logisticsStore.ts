@@ -68,6 +68,11 @@ interface LogisticsStoreState {
       recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
     },
   ) => void;
+  replaceOnlineState: (state: {
+    locations: InventoryLocation[];
+    inventoryEntries: InventoryEntry[];
+    buildQueue: BuildQueueItem[];
+  }) => void;
   addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
@@ -601,6 +606,18 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             },
           };
         });
+      },
+      replaceOnlineState: (onlineState) => {
+        set((state) => ({
+          locations: onlineState.locations.length ? onlineState.locations : state.locations,
+          inventoryEntries: onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+          buildQueue: onlineState.buildQueue.map((item) => ({
+            ...item,
+            quantity: Math.max(1, Math.trunc(item.quantity)),
+            allowLowerQuality: item.allowLowerQuality === true,
+            status: item.status ?? "queued",
+          })),
+        }));
       },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {

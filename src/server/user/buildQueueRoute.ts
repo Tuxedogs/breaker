@@ -1,4 +1,4 @@
-import { AuthError, requireDiscordUserId } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
 import {
   addBuildQueueItem,
   clearBuildQueue,
@@ -36,7 +36,7 @@ export async function handleUserBuildQueueRoute(
       return safeError(405, "Method not allowed.");
     }
 
-    const userId = await requireDiscordUserId(headers);
+    const { userId } = await requireAuthenticatedUser(headers);
 
     if (method === "GET") {
       return { status: 200, body: { items: await listBuildQueueItems(userId) } };

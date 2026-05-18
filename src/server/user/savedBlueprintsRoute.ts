@@ -1,4 +1,4 @@
-import { AuthError, requireDiscordUserId } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
 import {
   deleteSavedBlueprint,
   listSavedBlueprints,
@@ -32,7 +32,7 @@ export async function handleSavedBlueprintsRoute(
       return safeError(405, "Method not allowed.");
     }
 
-    const userId = await requireDiscordUserId(headers);
+    const { userId } = await requireAuthenticatedUser(headers);
 
     if (method === "GET") {
       return { status: 200, body: { savedBlueprints: await listSavedBlueprints(userId) } };
