@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
+import { Link } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -1352,6 +1353,7 @@ function CraftedItemSummaryPanel({
   getBandsForMaterial: (materialName: string) => QualityBand[];
   materialQualities: Record<string, number>;
 }) {
+  const [queueFeedback, setQueueFeedback] = useState(false);
   const typeBadges = getTypeBadges(recipe);
   const sizeLabel = formatSize(recipe.size);
   const hasMaterialModifiers = totalModifiers.length > 0;
@@ -1361,6 +1363,10 @@ function CraftedItemSummaryPanel({
   const displayFinalProductQuality =
     finalProductQuality.averageBand ?? finalProductQuality.band;
   const missionEntries = useMissionRewardEntries(recipe, rewardPools);
+
+  useEffect(() => {
+    setQueueFeedback(false);
+  }, [recipe.blueprint_id]);
 
   return (
     <div className="craft-summary-panel craft-summary-column">
@@ -1532,6 +1538,7 @@ function CraftedItemSummaryPanel({
               }),
             );
             onAddToQueue(recipe, selectedQualities, finalProductQuality);
+            setQueueFeedback(true);
           }}
         >
           <svg
@@ -1581,6 +1588,14 @@ function CraftedItemSummaryPanel({
           {isBookmarked ? "Saved" : "Save"}
         </button>
       </div>
+      {(queueFeedback || isQueued) && (
+        <div className="craft-summary-queue-feedback" role="status" aria-live="polite">
+          <span>{queueFeedback ? "Added to build queue" : "Already in build queue"}</span>
+          <Link className="craft-summary-queue-link" to="/logistics/build-queue">
+            View queue
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
