@@ -93,7 +93,6 @@ async function upsertProfile(context: AuthenticatedUserContext) {
       displayName,
       avatarUrl,
       metadata: {
-        email: context.user.email ?? null,
         provider: "discord",
       },
       updatedAt: sql`now()`,
@@ -106,7 +105,6 @@ async function upsertProfile(context: AuthenticatedUserContext) {
         displayName,
         avatarUrl,
         metadata: {
-          email: context.user.email ?? null,
           provider: "discord",
         },
         updatedAt: sql`now()`,

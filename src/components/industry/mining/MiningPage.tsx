@@ -1,9 +1,15 @@
-import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import {
   buildRecommendationRequest,
   getMiningRecommendations,
   type RecommendationResponse,
 } from "../../../features/mining/recommenderAdapter";
+import {
+  buildCoveragePlan,
+  type CoveragePlan,
+  type CoveragePlanLocation,
+  type MiningCoverageMode,
+} from "../../../features/mining/coveragePlan";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 import {
   loadStantonLagrangeChildrenData,
@@ -38,7 +44,7 @@ import {
 import "./mining.css";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
-import { getQueueLedgerModel } from "../../../lib/logistics/queueLedger";
+import { getQueueLedgerModel, type QueueLedgerLine } from "../../../lib/logistics/queueLedger";
 import { buildResourceGroups } from "../shared/msbResourceGroups";
 import MaterialIcon from "../../logistics/MaterialIcon";
 
@@ -70,13 +76,24 @@ const debugMiningIdentity = Boolean(
 );
 const MINING_FILTER_STORAGE_KEY = "scintel:mining:msb-sidebar:v1";
 const MINING_RANKING_MODE_STORAGE_KEY = "scintel:mining:ranking-mode:v1";
+const MINING_COVERAGE_MODE_STORAGE_KEY = "scintel:mining:coverage-mode:v1";
+const MINING_QUEUE_SCOPE_STORAGE_KEY = "scintel:mining:queue-scope:v1";
+const MINING_QUEUE_FOCUS_STORAGE_KEY = "scintel:mining:queue-focus:v1";
 
 type MiningRankingMode = "quality" | "quantity" | "balanced";
+type MiningQueueScope = "all-shortfalls" | "critical-missing" | "refinable-only" | "partial-stock";
 
-const MINING_RANKING_MODES: Array<{ value: MiningRankingMode; label: string }> = [
-  { value: "quality", label: "Quality" },
-  { value: "quantity", label: "Quantity" },
-  { value: "balanced", label: "Balanced" },
+const MINING_COVERAGE_MODES: Array<{ value: MiningCoverageMode; label: string }> = [
+  { value: "complete-set", label: "Complete Set" },
+  { value: "best-single", label: "Best Single" },
+  { value: "rare-first", label: "Rare First" },
+  { value: "quality-hunt", label: "Quality Hunt" },
+];
+const MINING_QUEUE_SCOPES: Array<{ value: MiningQueueScope; label: string }> = [
+  { value: "all-shortfalls", label: "All Shortfalls" },
+  { value: "critical-missing", label: "No Stock" },
+  { value: "refinable-only", label: "Refinable" },
+  { value: "partial-stock", label: "Partial Stock" },
 ];
 const MINING_SYSTEM_FILTERS = ["Stanton", "Nyx", "Pyro"];
 
@@ -100,6 +117,36 @@ function readStoredRankingMode(): MiningRankingMode {
     return raw === "quantity" || raw === "balanced" || raw === "quality" ? raw : "quality";
   } catch {
     return "quality";
+  }
+}
+
+function readStoredCoverageMode(): MiningCoverageMode {
+  try {
+    const raw = localStorage.getItem(MINING_COVERAGE_MODE_STORAGE_KEY);
+    return raw === "best-single" || raw === "rare-first" || raw === "quality-hunt" || raw === "complete-set"
+      ? raw
+      : "complete-set";
+  } catch {
+    return "complete-set";
+  }
+}
+
+function readStoredQueueScope(): MiningQueueScope {
+  try {
+    const raw = localStorage.getItem(MINING_QUEUE_SCOPE_STORAGE_KEY);
+    return raw === "critical-missing" || raw === "refinable-only" || raw === "partial-stock" || raw === "all-shortfalls"
+      ? raw
+      : "all-shortfalls";
+  } catch {
+    return "all-shortfalls";
+  }
+}
+
+function readStoredQueueFocus(): string {
+  try {
+    return localStorage.getItem(MINING_QUEUE_FOCUS_STORAGE_KEY) ?? "";
+  } catch {
+    return "";
   }
 }
 
@@ -386,6 +433,7 @@ function StantonLagrangeChildrenSummary({
 function LocationListItem({
   rank,
   entry,
+  coveragePlanLocation,
   selectedMaterials,
   activeDemandMaterials,
   buildQueueMaterialKeys,
@@ -398,6 +446,7 @@ function LocationListItem({
 }: {
   rank: number;
   entry: PublicLocationEntry;
+  coveragePlanLocation?: CoveragePlanLocation;
   selectedMaterials: Set<string>;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
@@ -474,6 +523,9 @@ function LocationListItem({
   };
 
   const demandBar = totalRelevant > 0 ? coveragePct : null;
+  const hasCoveragePlan = buildQueueMaterialKeys.size > 0 && coveragePlanLocation !== undefined;
+  const addedCount = coveragePlanLocation?.newCoverage.length ?? 0;
+  const duplicateCount = coveragePlanLocation?.duplicateCoverage.length ?? 0;
   const listQualityDisplay = buildQualityDisplay(
     displayRouteScore?.signals,
     displayRouteScore?.materialKey ?? displayRouteScore?.materialId ?? "",
@@ -496,6 +548,11 @@ function LocationListItem({
           <span className="mlist-item-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
             {locationDisplayName}
           </span>
+          {coveragePlanLocation && (
+            <span className={`mlist-role-badge${coveragePlanLocation.role === "Optional Overlap" ? " mlist-role-badge--muted" : ""}`}>
+              {coveragePlanLocation.role}
+            </span>
+          )}
         </div>
         <div className="mlist-item-sub">
           <span className="mlist-item-system">{entry.systemName}</span>
@@ -517,6 +574,17 @@ function LocationListItem({
                 />
               </div>
               <span className="mlist-bar-val">{primaryCovered.length} / {totalRelevant}</span>
+            </div>
+          )}
+          {hasCoveragePlan && (
+            <div className="mlist-bar-row">
+              <span className="mlist-bar-label">Plan</span>
+              <span
+                className="mlist-bar-val mlist-bar-val--text"
+                title={`Adds ${addedCount} new, duplicates ${duplicateCount}, cumulative ${coveragePlanLocation.cumulativeCovered} / ${totalRelevant}`}
+              >
+                +{addedCount} new / {coveragePlanLocation.cumulativeCovered} total
+              </span>
             </div>
           )}
           {demandedSummary?.topCovered && (
@@ -726,6 +794,40 @@ function qualityChanceTooltip(hasBuildQueueTarget: boolean): string {
     : "Chance that an encountered source meets the default high-quality threshold. This is not the chance to find the material.";
 }
 
+function queueScopeMatches(line: QueueLedgerLine, scope: MiningQueueScope): boolean {
+  switch (scope) {
+    case "critical-missing":
+      return line.totalAvailableEquivalent <= 0;
+    case "refinable-only":
+      return line.isRefinable && line.rawOreNeeded > 0;
+    case "partial-stock":
+      return line.totalAvailableEquivalent > 0 && line.netMissingRefined > 0;
+    case "all-shortfalls":
+    default:
+      return true;
+  }
+}
+
+function queueScopeDescription(scope: MiningQueueScope, count: number, total: number): string {
+  const prefix = `${count} / ${total}`;
+  switch (scope) {
+    case "critical-missing":
+      return `${prefix} shortfall materials have no usable stock.`;
+    case "refinable-only":
+      return `${prefix} shortfall materials can be mined as raw ore.`;
+    case "partial-stock":
+      return `${prefix} shortfall materials already have partial coverage.`;
+    case "all-shortfalls":
+    default:
+      return `${prefix} active shortfall materials are in scope.`;
+  }
+}
+
+function buildQueueFocusLabel(item: { itemName?: string; recipeId: string; quantity: number }): string {
+  const name = item.itemName?.trim() || item.recipeId;
+  return item.quantity > 1 ? `${name} x${item.quantity}` : name;
+}
+
 function formatPercent(value: number): string {
   return `${Number((value * 100).toFixed(1)).toString()}%`;
 }
@@ -872,11 +974,6 @@ function LocationDetail({
   // Location insights
   const insights = useMemo(() => {
     const list: Array<{ type: "positive" | "warning" | "neutral"; text: string }> = [];
-    if (total > 0 && coveragePct >= 80) {
-      list.push({ type: "positive", text: `High coverage for ${coveredBQ.length} of ${total} active demand materials` });
-    } else if (total > 0) {
-      list.push({ type: "neutral", text: `Covers ${coveredBQ.length} of ${total} active demand materials` });
-    }
     const encounterWeights = demandedStaticRowsForInsights
       .map((row) => getStaticDensityScore(row, staticMiningIndex))
       .filter((weight): weight is number => typeof weight === "number" && Number.isFinite(weight));
@@ -885,7 +982,10 @@ function LocationDetail({
       : undefined;
     const encounterSignal = encounterSignalFromWeight(averageEncounterWeight);
     if (encounterSignal !== "Unknown") {
-      list.push({ type: averageEncounterWeight !== undefined && averageEncounterWeight >= 60 ? "positive" : "neutral", text: `${encounterSignal} average encounter tier for covered demand materials` });
+      list.push({
+        type: averageEncounterWeight !== undefined && averageEncounterWeight < 60 ? "warning" : "positive",
+        text: `${encounterSignal} average encounter tier for covered demand materials`,
+      });
     }
     if (entry.nearbyStations.length > 0) {
       list.push({ type: "positive", text: `${entry.nearbyStations.length} nearby station${entry.nearbyStations.length > 1 ? "s" : ""} for refined ore delivery` });
@@ -894,7 +994,7 @@ function LocationDetail({
       list.push({ type: "warning", text: `${missingBQ.length} demanded material${missingBQ.length > 1 ? "s" : ""} not covered at this location` });
     }
     return list;
-  }, [total, coveragePct, coveredBQ, missingBQ, demandedStaticRowsForInsights, staticMiningIndex, entry.nearbyStations]);
+  }, [missingBQ, demandedStaticRowsForInsights, staticMiningIndex, entry.nearbyStations]);
 
   // Demand Coverage Breakdown: user-relevant materials only
   const demandRows = useMemo((): DemandRow[] => {
@@ -953,6 +1053,15 @@ function LocationDetail({
 
     return rows;
   }, [buildQueueMaterialKeys, demandMaterialByKey, entry, locationMaterialKeys, staticMiningIndex, staticResourceRows]);
+  const [showMissingDemandRows, setShowMissingDemandRows] = useState(false);
+  const coveredDemandRows = useMemo(
+    () => demandRows.filter((row) => row.status !== "missing"),
+    [demandRows],
+  );
+  const missingDemandRows = useMemo(
+    () => demandRows.filter((row) => row.status === "missing"),
+    [demandRows],
+  );
 
   // Planet Resource Index: all indexed resources, scored where possible
   useEffect(() => {
@@ -1262,6 +1371,13 @@ function LocationDetail({
             <span className="mdet-section-count">({demandRows.length} material{demandRows.length !== 1 ? "s" : ""})</span>
           </div>
           <table className="mining-resource-index-table">
+            <colgroup>
+              <col className="mining-resource-col--material" />
+              <col className="mining-resource-col--method" />
+              <col className="mining-resource-col--encounter" />
+              <col className="mining-resource-col--quality" />
+              <col className="mining-resource-col--yield" />
+            </colgroup>
             <thead>
               <tr>
                 <th>Material</th>
@@ -1272,7 +1388,44 @@ function LocationDetail({
               </tr>
             </thead>
             <tbody>
-              {demandRows.map((row) => (
+              {coveredDemandRows.map((row) => (
+                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
+                  <td className="mdet-mat-name">
+                    <MaterialNameCell name={row.name} miningMethod={row.miningType} />
+                  </td>
+                  <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
+                  <td>
+                    <span className={`mining-source-badge mining-source-badge--${row.status}`}>
+                      {row.densityLabel}
+                      {row.sourceWeight !== undefined && (
+                        <span className="mdet-source-bar-wrap">
+                          <span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} />
+                        </span>
+                      )}
+                    </span>
+                  </td>
+                  <td className="mdet-mat-score">
+                    {row.targetQualityChanceLabel}
+                  </td>
+                  <td className="mdet-mat-score">{row.compositionLabel}</td>
+                </tr>
+              ))}
+              {missingDemandRows.length > 0 && (
+                <tr className="mining-resource-row mining-resource-row--missing-toggle">
+                  <td colSpan={5}>
+                    <button
+                      type="button"
+                      className="mining-missing-material-toggle"
+                      onClick={() => setShowMissingDemandRows((open) => !open)}
+                      aria-expanded={showMissingDemandRows}
+                    >
+                      <span>{showMissingDemandRows ? "Hide" : "Show"} Missing Material</span>
+                      <strong>{missingDemandRows.length}</strong>
+                    </button>
+                  </td>
+                </tr>
+              )}
+              {showMissingDemandRows && missingDemandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name">
                     <MaterialNameCell name={row.name} miningMethod={row.miningType} />
@@ -1304,19 +1457,16 @@ function LocationDetail({
         <div className="mining-resource-index">
           <div className="mdet-section-label">
             {materialProfileTitle}
-            <InfoTip text="Materials known to appear at this location from the static mining source index." />
             <span className="mdet-section-count">({otherLocationMaterialRows.length} resource{otherLocationMaterialRows.length !== 1 ? "s" : ""})</span>
           </div>
-          <table className="mining-resource-index-table">
-            <thead>
-              <tr>
-                <th>Material</th>
-                <th><span className="mdet-th-wrap">Method<InfoTip text="Mining method required for this material source." /></span></th>
-                <th><span className="mdet-th-wrap">Encounter Tier<InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High." /></span></th>
-                <th><span className="mdet-th-wrap">{qualityChanceHeader(false)}<InfoTip text={qualityChanceTooltip(false)} /></span></th>
-                <th><span className="mdet-th-wrap">Composition / Yield<InfoTip text="Average material composition inside an encountered source. This is not encounter chance." /></span></th>
-              </tr>
-            </thead>
+          <table className="mining-resource-index-table mining-resource-index-table--continuation">
+            <colgroup>
+              <col className="mining-resource-col--material" />
+              <col className="mining-resource-col--method" />
+              <col className="mining-resource-col--encounter" />
+              <col className="mining-resource-col--quality" />
+              <col className="mining-resource-col--yield" />
+            </colgroup>
             <tbody>
               {otherLocationMaterialRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
@@ -1346,6 +1496,89 @@ function LocationDetail({
   );
 }
 
+function CoveragePlanSummaryPanel({ plan, unfilteredPlan }: { plan: CoveragePlan | null; unfilteredPlan: CoveragePlan | null }) {
+  if (!plan || plan.totalMaterials === 0) return null;
+  const missingCount = plan.totalMaterials - plan.coveredCount;
+  const filteredOutCount = unfilteredPlan ? Math.max(0, unfilteredPlan.coveredCount - plan.coveredCount) : 0;
+  const rareMissing = plan.materialRows
+    .filter((row) => row.status === "missing" && row.candidateCount <= 2)
+    .slice(0, 3)
+    .map((row) => row.displayName);
+  const matrixRows = [...plan.materialRows]
+    .filter((row) => row.status !== "covered")
+    .sort((left, right) =>
+      Number(left.status === "covered") - Number(right.status === "covered") ||
+      left.candidateCount - right.candidateCount ||
+      left.displayName.localeCompare(right.displayName)
+    )
+    .slice(0, 12);
+
+  return (
+    <div className="mcoverage-summary" aria-label="Build queue coverage summary">
+      <div className="mcoverage-summary-main">
+        <div className="mcoverage-summary-label">Route Coverage</div>
+        <div className="mcoverage-summary-title">{plan.summary.headline}</div>
+      </div>
+      <details className="mcoverage-details">
+        <summary>Details</summary>
+        <div className="mcoverage-summary-detail">{plan.summary.detail}</div>
+        {rareMissing.length > 0 && (
+          <div className="mcoverage-warning">
+            Scarce missing materials: {rareMissing.join(", ")}
+          </div>
+        )}
+        {filteredOutCount > 0 && (
+          <div className="mcoverage-warning">
+            Current filters hide coverage for {filteredOutCount} material{filteredOutCount === 1 ? "" : "s"}.
+          </div>
+        )}
+        <div className="mcoverage-matrix" aria-label="Material coverage matrix">
+          <div className="mcoverage-metric">
+            <span>Coverage</span>
+            <strong className={plan.coveredPct >= 100 ? "mloc-score--best" : plan.coveredPct > 0 ? "mloc-score--okay" : "mloc-score--poor"}>
+              {plan.coveredPct}%
+            </strong>
+          </div>
+          {plan.summary.completionText && (
+            <div className="mcoverage-metric">
+              <span>Stop</span>
+              <strong>{plan.summary.completionText}</strong>
+            </div>
+          )}
+          {plan.summary.noSingleLocationText && (
+            <div className="mcoverage-metric">
+              <span>Why Multiple</span>
+              <strong>{plan.summary.noSingleLocationText}</strong>
+            </div>
+          )}
+          {missingCount > 0 && (
+            <div className="mcoverage-metric mcoverage-metric--warn">
+              <span>Remaining</span>
+              <strong>{missingCount}</strong>
+            </div>
+          )}
+          {matrixRows.map((row) => (
+            <div
+              key={row.materialKey}
+              className={`mcoverage-cell${row.status === "covered" ? " is-covered" : " is-missing"}`}
+              title={`${row.displayName}: ${row.status === "covered" ? "covered" : "missing"} / ${row.candidateCount} candidate locations`}
+            >
+              <span>{row.displayName}</span>
+              <strong>{row.status === "covered" ? "Covered" : "Missing"} / {row.candidateCount}</strong>
+            </div>
+          ))}
+          {plan.materialRows.length > matrixRows.length && (
+            <div className="mcoverage-cell mcoverage-cell--more">
+              <span>More materials</span>
+              <strong>+{plan.materialRows.length - matrixRows.length}</strong>
+            </div>
+          )}
+        </div>
+      </details>
+    </div>
+  );
+}
+
 // Main component
 
 export default function MiningModule() {
@@ -1354,7 +1587,10 @@ export default function MiningModule() {
   const recommendationRequestSeqRef = useRef(0);
   const [, setLagrangeChildrenDataVersion] = useState(0);
   const planner = useMiningPlannerState();
-  const [rankingMode, setRankingMode] = useState<MiningRankingMode>(() => readStoredRankingMode());
+  const [rankingMode] = useState<MiningRankingMode>(() => readStoredRankingMode());
+  const [coverageMode, setCoverageMode] = useState<MiningCoverageMode>(() => readStoredCoverageMode());
+  const [queueScope, setQueueScope] = useState<MiningQueueScope>(() => readStoredQueueScope());
+  const [queueFocusItemId, setQueueFocusItemId] = useState<string>(() => readStoredQueueFocus());
   const buildQueue = useLogisticsStore((store) => store.buildQueue);
   const recipeInputsByRecipeId = useLogisticsStore((store) => store.recipeInputTemplates);
   const inventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
@@ -1385,6 +1621,28 @@ export default function MiningModule() {
       // ignore
     }
   }, [rankingMode]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(MINING_COVERAGE_MODE_STORAGE_KEY, coverageMode);
+    } catch {
+      // ignore
+    }
+  }, [coverageMode]);
+  useEffect(() => {
+    try {
+      localStorage.setItem(MINING_QUEUE_SCOPE_STORAGE_KEY, queueScope);
+    } catch {
+      // ignore
+    }
+  }, [queueScope]);
+  useEffect(() => {
+    try {
+      if (queueFocusItemId) localStorage.setItem(MINING_QUEUE_FOCUS_STORAGE_KEY, queueFocusItemId);
+      else localStorage.removeItem(MINING_QUEUE_FOCUS_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+  }, [queueFocusItemId]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1407,13 +1665,46 @@ export default function MiningModule() {
     };
   }, []);
 
+  const queueFocusOptions = useMemo(
+    () => buildQueue.filter((item) => item.status !== "complete"),
+    [buildQueue],
+  );
+  useEffect(() => {
+    if (!queueFocusItemId) return;
+    if (!queueFocusOptions.some((item) => item.id === queueFocusItemId)) setQueueFocusItemId("");
+  }, [queueFocusItemId, queueFocusOptions]);
+
+  const focusedBuildQueue = useMemo(
+    () => buildQueueSelectionActive && queueFocusItemId
+      ? buildQueue.filter((item) => item.id === queueFocusItemId)
+      : buildQueue,
+    [buildQueue, buildQueueSelectionActive, queueFocusItemId],
+  );
+
   const queueLedger = useMemo(
-    () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId }),
-    [buildQueue, inventoryEntries, materials, recipeInputsByRecipeId],
+    () => getQueueLedgerModel({ buildQueue: focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId }),
+    [focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId],
+  );
+
+  const scopedShortfallLines = useMemo(
+    () => queueLedger.refinedShortfallLines.filter((line) => queueScopeMatches(line, queueScope)),
+    [queueLedger.refinedShortfallLines, queueScope],
+  );
+  const queueScopeCounts = useMemo(
+    () => new Map(MINING_QUEUE_SCOPES.map((scope) => [
+      scope.value,
+      queueLedger.refinedShortfallLines.filter((line) => queueScopeMatches(line, scope.value)).length,
+    ])),
+    [queueLedger.refinedShortfallLines],
+  );
+  const queueScopeText = queueScopeDescription(
+    queueScope,
+    scopedShortfallLines.length,
+    queueLedger.refinedShortfallLines.length,
   );
 
   const miningRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
-    const requirements = queueLedger.refinedShortfallLines.map((line) => {
+    const requirements = scopedShortfallLines.map((line) => {
       const miningTargetQuantity = line.isRefinable ? line.rawOreNeeded : line.netMissingRefined;
       const canonical = canonicalMiningMaterial({
         materialKey: line.materialKey,
@@ -1442,7 +1733,7 @@ export default function MiningModule() {
       console.groupEnd();
     }
     return requirements;
-  }, [queueLedger]);
+  }, [queueLedger, scopedShortfallLines]);
   const buildQueueMaterials = useMemo<Set<string>>(() => {
     return new Set(miningRequiredMaterials.map(materialKeyOf));
   }, [miningRequiredMaterials]);
@@ -1561,6 +1852,16 @@ export default function MiningModule() {
     () => buildResourceGroups(allMaterialResources),
     [allMaterialResources],
   );
+  const visibleResourceGroups = useMemo(() => {
+    if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return resourceGroups;
+    const keepQueueMaterials = <T extends { id: string }>(chips: T[]) =>
+      chips.filter((chip) => buildQueueMaterials.has(chip.id));
+    return {
+      shipAndHarvestable: keepQueueMaterials(resourceGroups.shipAndHarvestable),
+      vehicle: keepQueueMaterials(resourceGroups.vehicle),
+      hand: keepQueueMaterials(resourceGroups.hand),
+    };
+  }, [buildQueueMaterials, buildQueueSelectionActive, resourceGroups]);
 
   const sidebarOnlyMaterials = useMemo<RequiredMaterial[]>(() => {
     const bqKeys = new Set(miningRequiredMaterials.map(materialKeyOf));
@@ -1731,7 +2032,7 @@ export default function MiningModule() {
     : selectedMaterials.size > 0
       ? selectedMaterials
       : activeBuildQueueMaterialKeys;
-  const rankedFilteredLocations = useMemo(() => {
+  const baseRankedFilteredLocations = useMemo(() => {
     const ranked = activeDiversityMaterialKeys.size === 1
       ? [...filteredLocations]
       : diversifyLocationsByMaterials(filteredLocations, activeDiversityMaterialKeys, indexedMaterialKeysByLocationKey);
@@ -1747,6 +2048,40 @@ export default function MiningModule() {
     }
     return ranked.sort(compareLocationsByRecommendationScore);
   }, [activeBuildQueueDemandMaterials, activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, locationMaterialKeysByLocationKey, rankingMode, sidebarOnlyMaterials, staticMiningIndex]);
+
+  const coveragePlan = useMemo(
+    () => buildQueueSelectionActive && activeBuildQueueDemandMaterials.length > 0
+      ? buildCoveragePlan({
+          mode: coverageMode,
+          demandMaterials: activeBuildQueueDemandMaterials,
+          locations: baseRankedFilteredLocations,
+          locationMaterialKeysByLocationKey,
+        })
+      : null,
+    [activeBuildQueueDemandMaterials, baseRankedFilteredLocations, buildQueueSelectionActive, coverageMode, locationMaterialKeysByLocationKey],
+  );
+
+  const unfilteredCoveragePlan = useMemo(
+    () => buildQueueSelectionActive && activeBuildQueueDemandMaterials.length > 0
+      ? buildCoveragePlan({
+          mode: coverageMode,
+          demandMaterials: activeBuildQueueDemandMaterials,
+          locations,
+          locationMaterialKeysByLocationKey,
+        })
+      : null,
+    [activeBuildQueueDemandMaterials, buildQueueSelectionActive, coverageMode, locations, locationMaterialKeysByLocationKey],
+  );
+
+  const coveragePlanLocationByKey = useMemo(
+    () => new Map((coveragePlan?.locations ?? []).map((location) => [location.entry.locationKey, location])),
+    [coveragePlan],
+  );
+
+  const rankedFilteredLocations = useMemo(
+    () => coveragePlan ? coveragePlan.locations.map((location) => location.entry) : baseRankedFilteredLocations,
+    [baseRankedFilteredLocations, coveragePlan],
+  );
 
   const previousRankedLocationsRef = useRef<PublicLocationEntry[]>([]);
   useEffect(() => {
@@ -1796,6 +2131,7 @@ export default function MiningModule() {
   function selectBuildQueueMaterials() {
     setBuildQueueSelectionActive((active) => {
       if (active) return false;
+      if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
       setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials]));
       return true;
     });
@@ -1803,6 +2139,7 @@ export default function MiningModule() {
 
   function clearAllFilters() {
     setBuildQueueSelectionActive(false);
+    if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setSelectedMaterials(new Set());
     setSelectedSystems(new Set());
     setSelectedMiningTypes(new Set());
@@ -1861,7 +2198,7 @@ export default function MiningModule() {
       {hasRecommendationData && (
         <>
           {/* Top filter rail */}
-          <div className="mining-filter-rail">
+          <div className={`mining-filter-rail${buildQueueSelectionActive ? " mining-filter-rail--queue" : ""}`}>
 
             {/* Left: System + Mode + Clear All */}
             <div className="mining-filter-group--left">
@@ -1913,14 +2250,38 @@ export default function MiningModule() {
               >
                 Clear All
               </button>
+              {buildQueueSelectionActive && !planner.filters.showOnlyStarred && queueLedger.refinedShortfallLines.length > 0 && (
+                <div className="mining-queue-scope" aria-label="Build queue mining scope">
+                  <span className="mining-filter-label">Queue Scope</span>
+                  <div className="mining-frl-chips">
+                    {MINING_QUEUE_SCOPES.map((scope) => {
+                      const count = queueScopeCounts.get(scope.value) ?? 0;
+                      return (
+                        <button
+                          key={scope.value}
+                          type="button"
+                          className={`mfr-chip${queueScope === scope.value ? " mfr-chip--active" : ""}${count === 0 ? " mfr-chip--disabled" : ""}`}
+                          onClick={() => setQueueScope(scope.value)}
+                          disabled={count === 0}
+                          title={queueScopeDescription(scope.value, count, queueLedger.refinedShortfallLines.length)}
+                        >
+                          {scope.label}
+                          <span className="mfr-chip-count">{count}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mining-queue-scope-note">{queueScopeText}</div>
+                </div>
+              )}
             </div>
 
             {/* Ship Mineables */}
-            {resourceGroups.shipAndHarvestable.length > 0 && (
+            {visibleResourceGroups.shipAndHarvestable.length > 0 && (
               <div className="mining-filter-group--ship">
                 <span className="mining-filter-label">Ship Mineables</span>
                 <div className="mining-chip-wrap">
-                  {resourceGroups.shipAndHarvestable.map((chip) => {
+                  {visibleResourceGroups.shipAndHarvestable.map((chip) => {
                     const enabled = isChipEnabled(chip.id);
                     return (
                       <button
@@ -1940,11 +2301,11 @@ export default function MiningModule() {
             )}
 
             {/* Vehicle */}
-            {resourceGroups.vehicle.length > 0 && (
+            {visibleResourceGroups.vehicle.length > 0 && (
               <div className="mining-filter-group--vehicle">
                 <span className="mining-filter-label">Vehicle</span>
                 <div className="mining-chip-wrap">
-                  {resourceGroups.vehicle.map((chip) => {
+                  {visibleResourceGroups.vehicle.map((chip) => {
                     const enabled = isChipEnabled(chip.id);
                     return (
                       <button
@@ -1964,11 +2325,11 @@ export default function MiningModule() {
             )}
 
             {/* Hand */}
-            {resourceGroups.hand.length > 0 && (
+            {visibleResourceGroups.hand.length > 0 && (
               <div className="mining-filter-group--hand">
                 <span className="mining-filter-label">Hand</span>
                 <div className="mining-chip-wrap">
-                  {resourceGroups.hand
+                  {visibleResourceGroups.hand
                     .filter((chip) => chip.label.trim().toLowerCase() !== "pure carinite")
                     .map((chip) => {
                       const enabled = isChipEnabled(chip.id);
@@ -1992,6 +2353,8 @@ export default function MiningModule() {
 
           </div>
 
+          <CoveragePlanSummaryPanel plan={coveragePlan} unfilteredPlan={unfilteredCoveragePlan} />
+
           {/* Main 3-column console */}
           {displayRankedFilteredLocations.length === 0 ? (
             <div className="mine-empty-state">
@@ -2011,48 +2374,74 @@ export default function MiningModule() {
                   <span className="mlist-header-count">{displayRankedFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
-                  <div className="mlist-rank-toggle" role="group" aria-label="Ranking mode">
-                    {MINING_RANKING_MODES.map((mode) => (
-                      <button
-                        key={mode.value}
-                        type="button"
-                        className={`mlist-rank-btn${rankingMode === mode.value ? " is-active" : ""}`}
-                        aria-pressed={rankingMode === mode.value}
-                        onClick={() => setRankingMode(mode.value)}
+                  {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
+                    <label className="mlist-focus-control">
+                      <span>Priority Focus</span>
+                      <select
+                        value={queueFocusItemId}
+                        onChange={(event) => setQueueFocusItemId(event.target.value)}
                       >
-                        {mode.label}
-                      </button>
-                    ))}
-                  </div>
+                        <option value="">All queue items</option>
+                        {queueFocusOptions.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {buildQueueFocusLabel(item)}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  )}
+                  {buildQueueSelectionActive && (
+                    <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
+                      {MINING_COVERAGE_MODES.map((mode) => (
+                        <button
+                          key={mode.value}
+                          type="button"
+                          className={`mlist-rank-btn${coverageMode === mode.value ? " is-active" : ""}`}
+                          aria-pressed={coverageMode === mode.value}
+                          onClick={() => setCoverageMode(mode.value)}
+                        >
+                          {mode.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="mlist-items">
-                  {listLocations.map((entry) => (
-                    <LocationListItem
-                      key={getLocationCardKey(entry)}
-                      rank={displayRankedFilteredLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
-                      entry={entry}
-                      selectedMaterials={materialFilterKeys}
-                      activeDemandMaterials={activeBuildQueueDemandMaterials}
-                      buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
-                      locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                      staticMiningIndex={staticMiningIndex}
-                      starred={planner.isFavorite({
-                        system: entry.systemName,
-                        location: entry.locationName,
-                        spawnType: entry.spawnType,
-                      })}
-                      selected={selectedEntry?.locationKey === entry.locationKey}
-                      onSelect={() => setSelectedLocationKey(entry.locationKey)}
-                      onToggleStar={(e) => {
-                        e.stopPropagation();
-                        planner.toggleFavorite({
-                          system: entry.systemName,
-                          location: entry.locationName,
-                          spawnType: entry.spawnType,
-                        });
-                      }}
-                    />
-                  ))}
+                  {listLocations.map((entry) => {
+                    const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
+                    return (
+                      <Fragment key={getLocationCardKey(entry)}>
+                        <LocationListItem
+                          rank={displayRankedFilteredLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
+                          entry={entry}
+                          coveragePlanLocation={plannedLocation}
+                          selectedMaterials={materialFilterKeys}
+                          activeDemandMaterials={activeBuildQueueDemandMaterials}
+                          buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
+                          locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                          staticMiningIndex={staticMiningIndex}
+                          starred={planner.isFavorite({
+                            system: entry.systemName,
+                            location: entry.locationName,
+                            spawnType: entry.spawnType,
+                          })}
+                          selected={selectedEntry?.locationKey === entry.locationKey}
+                          onSelect={() => setSelectedLocationKey(entry.locationKey)}
+                          onToggleStar={(e) => {
+                            e.stopPropagation();
+                            planner.toggleFavorite({
+                              system: entry.systemName,
+                              location: entry.locationName,
+                              spawnType: entry.spawnType,
+                            });
+                          }}
+                        />
+                        {plannedLocation?.isCompletionLocation && (
+                          <div className="mlist-stop-marker">Coverage complete above this line</div>
+                        )}
+                      </Fragment>
+                    );
+                  })}
                   {displayRankedFilteredLocations.length > 12 && (
                     <button
                       type="button"
