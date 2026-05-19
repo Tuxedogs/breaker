@@ -858,6 +858,34 @@
 .craft-summary-queue-btn.is-active { background: rgba(255, 138, 0, 0.16); color: var(--craft-orange); }
 .craft-summary-bookmark-btn { border: 1px solid var(--craft-border-strong); background: rgba(0, 0, 0, 0.24); color: var(--craft-text); }
 .craft-summary-bookmark-btn.is-active { border-color: var(--craft-orange-border); color: var(--craft-orange); }
+.craft-summary-queue-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin: 8px 14px 0;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 5px;
+  background: rgba(52, 211, 153, 0.055);
+  color: rgba(187, 247, 208, 0.88);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.craft-summary-queue-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 0.58rem;
+  border: 1px solid rgba(52, 211, 153, 0.24);
+  border-radius: 4px;
+  color: rgba(224, 255, 246, 0.92);
+  text-decoration: none;
+  white-space: nowrap;
+}
 
 /* ==========================================================================
    11. Empty / Loading / Error States
@@ -882,6 +910,247 @@
   .craft-result-bridge, .craft-result-bridge-fill, .craft-result-bridge-cap { display: none; }
   .craft-detail-stage { grid-column: 1; grid-template-columns: 1fr; border-left: 1px solid var(--craft-orange-border); border-radius: 0 0 7px 7px; }
   .craft-detail-stage::before { display: none; }
+}
+
+@media (min-width: 900px) and (max-width: 1180px) {
+  .craft-console-layout {
+    grid-template-columns: minmax(260px, 30vw) minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .craft-finder-sidebar {
+    grid-column: 1;
+    width: 100%;
+    min-width: 0;
+    border-radius: 7px 0 0 7px;
+  }
+
+  .craft-detail-stage {
+    grid-column: 2;
+    border-left: 0;
+    border-radius: 0 7px 7px 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 899px) {
+  .craft-finder-sidebar {
+    width: 100%;
+    min-width: 0;
+    border-radius: 7px 7px 0 0;
+  }
+
+  .craft-detail-stage {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .craft-page {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  .craft-planner-shell {
+    padding: 0.5rem;
+    gap: 0.55rem;
+    overflow: visible;
+  }
+
+  .craft-filter-rail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+    padding: 0.55rem 0.6rem;
+    overflow: hidden;
+  }
+
+  .craft-frl-left,
+  .craft-fg {
+    min-width: 0;
+    width: 100%;
+    padding: 0 0 0.5rem;
+    border-left: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .craft-frl-chips,
+  .craft-frl-left .craft-frl-chips,
+  .craft-fg .craft-frl-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .craft-frl-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .craft-frl-chip,
+  .craft-frl-clear {
+    min-height: 44px;
+  }
+
+  .craft-frl-chip {
+    max-width: 72vw;
+    white-space: nowrap;
+  }
+
+  .craft-console-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    overflow: visible;
+  }
+
+  .craft-finder-sidebar {
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    max-height: none;
+    overflow: hidden;
+    border-radius: 7px;
+  }
+
+  .craft-finder-header {
+    padding: 8px 12px 6px;
+  }
+
+  .craft-search {
+    min-height: 44px;
+    margin-inline: 12px;
+  }
+
+  .craft-result-list {
+    max-height: min(42dvh, 360px);
+    overflow-y: auto;
+  }
+
+  .craft-result-card {
+    min-height: 64px;
+    padding: 0.7rem 0.75rem;
+  }
+
+  .craft-result-name,
+  .craft-result-sub {
+    white-space: normal;
+  }
+
+  .craft-result-chips {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .craft-detail-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 0.6rem;
+    overflow: visible;
+    border-radius: 7px;
+  }
+
+  .craft-variant-selector {
+    display: grid;
+    gap: 0.34rem;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .craft-variant-list {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .craft-variant-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .craft-variant-row {
+    min-height: 44px;
+    max-width: 78vw;
+    flex: 0 0 auto;
+  }
+
+  .craft-variant-name,
+  .craft-variant-meta,
+  .craft-material-name,
+  .craft-summary-title,
+  .craft-mission-source-name,
+  .craft-mission-source-meta {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .craft-material-list {
+    gap: 0.65rem;
+  }
+
+  .craft-material-card {
+    min-height: 0;
+    padding-inline: 0.6rem;
+  }
+
+  .craft-material-card-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-inline: -0.6rem;
+    padding-inline: 0.6rem;
+  }
+
+  .craft-quality-readout {
+    white-space: normal;
+  }
+
+  .craft-modifier-list {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-summary-panel {
+    width: 100%;
+    overflow: visible;
+  }
+
+  .craft-summary-title-row,
+  .craft-summary-mod-top {
+    flex-wrap: wrap;
+  }
+
+  .craft-summary-action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .craft-summary-action-btn,
+  .craft-mission-bookmark-btn,
+  .craft-summary-queue-link {
+    min-height: 44px;
+  }
+
+  .craft-summary-queue-feedback {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 420px) {
+  .craft-planner-shell {
+    padding-inline: 0.3rem;
+  }
+
+  .craft-detail-stage {
+    padding-inline: 0.45rem;
+  }
+
+  .craft-summary-head,
+  .craft-summary-section,
+  .craft-summary-action-row {
+    padding-inline: 10px;
+  }
 }
 
 

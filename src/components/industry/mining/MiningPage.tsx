@@ -789,7 +789,10 @@ function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string 
 
 function InfoTip({ text }: { text: string }) {
   return (
-    <button type="button" className="mdet-infotip" title={text} aria-label={text}>?</button>
+    <details className="mdet-infotip-wrap">
+      <summary className="mdet-infotip" aria-label={text}>?</summary>
+      <div className="mdet-infotip-popover">{text}</div>
+    </details>
   );
 }
 
