@@ -154,6 +154,7 @@ function readStoredQueueFocus(): string {
 
 function spawnTypeLabel(spawnType: string): string {
   const s = spawnType.toLowerCase();
+  if (s.includes("asteroid")) return "Asteroid";
   if (s.includes("ground")) return "Ground Vehicle";
   if (s.includes("ship") || s === "mineable") return "Ship";
   if (s.includes("surface")) return "Surface";
@@ -164,11 +165,20 @@ function spawnTypeLabel(spawnType: string): string {
 
 function spawnTypeBadgeClass(spawnType: string): string {
   const s = spawnType.toLowerCase();
+  if (s.includes("asteroid")) return "mloc-badge--asteroid";
   if (s.includes("ground")) return "mloc-badge--surface";
   if (s.includes("ship") || s === "mineable") return "mloc-badge--ship";
   if (s.includes("surface")) return "mloc-badge--surface";
   if (s.includes("hand") || s.includes("fps")) return "mloc-badge--hand";
   return "mloc-badge--mixed";
+}
+
+function systemBadgeClass(systemName: string): string {
+  const s = systemName.trim().toLowerCase();
+  if (s === "stanton") return "mloc-system-badge--stanton";
+  if (s === "nyx") return "mloc-system-badge--nyx";
+  if (s === "pyro") return "mloc-system-badge--pyro";
+  return "mloc-system-badge--neutral";
 }
 
 function miningTypeFromSpawn(spawnType: string): string {
@@ -304,6 +314,14 @@ function getLocationCardKey(entry: PublicLocationEntry): string {
   ].filter(Boolean).join(":");
 }
 
+function targetabilityLabel(score: number): NonNullable<PublicLocationEntry["routeTargetabilityLabel"]> {
+  if (score >= 80) return "Excellent";
+  if (score >= 60) return "Strong";
+  if (score >= 40) return "Good";
+  if (score >= 20) return "Weak";
+  return "Poor";
+}
+
 function scoreToneClass(label?: string, score?: number | null): string {
   const normalized = label?.toLowerCase();
   if (normalized === "excellent" || normalized === "strong") return "mloc-score--best";
@@ -410,7 +428,7 @@ function StantonLagrangeChildrenSummary({
             <span>{point.bodyName}</span>
             <span>{point.pointKey}</span>
             {point.children.length > 0 && (
-              <span className="mdet-kind">
+              <span className="mloc-lagrange-count">
                 {point.children.length} {point.children.length === 1 ? "child" : "children"}
               </span>
             )}
@@ -555,14 +573,12 @@ function LocationListItem({
           )}
         </div>
         <div className="mlist-item-sub">
-          <span className="mlist-item-system">{entry.systemName}</span>
-          {entry.locationKind && (
-            <span className="mlist-item-kind">{entry.locationKind.replace(/_/g, " ")}</span>
-          )}
+          <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)} mlist-item-badge`}>
             {spawnTypeLabel(entry.spawnType)}
           </span>
         </div>
+        <StantonLagrangeChildrenSummary entry={entry} compact />
         <div className="mlist-item-bars">
           {demandBar !== null && (
             <div className="mlist-bar-row">
@@ -708,7 +724,7 @@ function displayMiningMethodLabel(value: string | null | undefined): string {
     case "Space":
     case "Asteroid":
     case "Space / Asteroid":
-      return "Space / Asteroid";
+      return "Asteroid";
     case "Ship":
       return "Ship";
     case "Geoborne":
@@ -1263,10 +1279,7 @@ function LocationDetail({
             {locationDisplayName}
           </div>
           <div className="mdet-meta">
-            <span className="mdet-system">{entry.systemName}</span>
-            {entry.locationKind && (
-              <span className="mdet-kind">{entry.locationKind.replace(/_/g, " ")}</span>
-            )}
+            <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           </div>
         </div>
         <div className="mdet-header-right">
@@ -1591,6 +1604,7 @@ export default function MiningModule() {
   const [coverageMode, setCoverageMode] = useState<MiningCoverageMode>(() => readStoredCoverageMode());
   const [queueScope, setQueueScope] = useState<MiningQueueScope>(() => readStoredQueueScope());
   const [queueFocusItemId, setQueueFocusItemId] = useState<string>(() => readStoredQueueFocus());
+  const previousQueueFocusItemIdRef = useRef(queueFocusItemId);
   const buildQueue = useLogisticsStore((store) => store.buildQueue);
   const recipeInputsByRecipeId = useLogisticsStore((store) => store.recipeInputTemplates);
   const inventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
@@ -1673,6 +1687,12 @@ export default function MiningModule() {
     if (!queueFocusItemId) return;
     if (!queueFocusOptions.some((item) => item.id === queueFocusItemId)) setQueueFocusItemId("");
   }, [queueFocusItemId, queueFocusOptions]);
+  useEffect(() => {
+    if (!buildQueueSelectionActive) return;
+    if (previousQueueFocusItemIdRef.current === queueFocusItemId) return;
+    previousQueueFocusItemIdRef.current = queueFocusItemId;
+    setQueueScope("all-shortfalls");
+  }, [buildQueueSelectionActive, queueFocusItemId]);
 
   const focusedBuildQueue = useMemo(
     () => buildQueueSelectionActive && queueFocusItemId
@@ -2049,16 +2069,38 @@ export default function MiningModule() {
     return ranked.sort(compareLocationsByRecommendationScore);
   }, [activeBuildQueueDemandMaterials, activeDiversityMaterialKeys, filteredLocations, indexedMaterialKeysByLocationKey, locationMaterialKeysByLocationKey, rankingMode, sidebarOnlyMaterials, staticMiningIndex]);
 
+  const coverageRankedFilteredLocations = useMemo(() => {
+    if (activeBuildQueueDemandMaterials.length === 0) return baseRankedFilteredLocations;
+
+    return baseRankedFilteredLocations.map((entry) => {
+      const demandScore = demandWeightedLocationScore(
+        entry,
+        activeBuildQueueDemandMaterials,
+        locationMaterialKeysByLocationKey,
+        staticMiningIndex,
+        rankingMode,
+      );
+      const routeScore = Math.round(demandScore.score);
+
+      return {
+        ...entry,
+        score: routeScore,
+        routeTargetabilityScore: routeScore,
+        routeTargetabilityLabel: targetabilityLabel(routeScore),
+      };
+    });
+  }, [activeBuildQueueDemandMaterials, baseRankedFilteredLocations, locationMaterialKeysByLocationKey, rankingMode, staticMiningIndex]);
+
   const coveragePlan = useMemo(
     () => buildQueueSelectionActive && activeBuildQueueDemandMaterials.length > 0
       ? buildCoveragePlan({
           mode: coverageMode,
           demandMaterials: activeBuildQueueDemandMaterials,
-          locations: baseRankedFilteredLocations,
+          locations: coverageRankedFilteredLocations,
           locationMaterialKeysByLocationKey,
         })
       : null,
-    [activeBuildQueueDemandMaterials, baseRankedFilteredLocations, buildQueueSelectionActive, coverageMode, locationMaterialKeysByLocationKey],
+    [activeBuildQueueDemandMaterials, buildQueueSelectionActive, coverageMode, coverageRankedFilteredLocations, locationMaterialKeysByLocationKey],
   );
 
   const unfilteredCoveragePlan = useMemo(
@@ -2132,6 +2174,7 @@ export default function MiningModule() {
     setBuildQueueSelectionActive((active) => {
       if (active) return false;
       if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
+      setQueueScope("all-shortfalls");
       setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials]));
       return true;
     });
