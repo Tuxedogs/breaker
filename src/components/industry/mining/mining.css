@@ -2619,6 +2619,9 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mlist-header-rank {
   padding: 0.32rem 0.75rem;
   border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .mlist-rank-toggle {
@@ -2629,6 +2632,42 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.025);
+}
+
+.mlist-focus-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.mlist-focus-control span {
+  color: rgba(160, 180, 220, 0.58);
+  font-family: var(--font-primary);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mlist-focus-control select {
+  min-width: 0;
+  min-height: 26px;
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: 3px;
+  background: rgba(8, 12, 18, 0.42);
+  color: rgba(226, 232, 240, 0.86);
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  padding: 0.12rem 0.42rem;
+  outline: none;
+}
+
+.mlist-focus-control select:focus {
+  border-color: rgba(167, 139, 250, 0.46);
+  box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.1);
 }
 
 .mlist-rank-btn {
@@ -2738,6 +2777,30 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   align-items: baseline;
   justify-content: space-between;
   gap: 0.3rem;
+}
+
+.mlist-role-badge {
+  flex: 0 0 auto;
+  max-width: 112px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: 3px;
+  padding: 0.08rem 0.32rem;
+  background: rgba(167, 139, 250, 0.08);
+  color: rgba(196, 181, 253, 0.78);
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mlist-role-badge--muted {
+  border-color: rgba(160, 180, 220, 0.12);
+  background: rgba(160, 180, 220, 0.04);
+  color: rgba(160, 180, 220, 0.44);
 }
 
 .mlist-item-name {
@@ -2896,6 +2959,21 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
 .mlist-view-all-btn:hover { color: rgba(255, 153, 0, 0.65); }
+
+.mlist-stop-marker {
+  margin: 0.2rem 0.7rem;
+  border: 1px solid rgba(52, 211, 153, 0.18);
+  border-radius: 3px;
+  padding: 0.32rem 0.5rem;
+  background: rgba(52, 211, 153, 0.06);
+  color: rgba(52, 211, 153, 0.76);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
 
 /* ── Center: detail panel ─────────────────────── */
 
@@ -3521,6 +3599,17 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   width: 100%;
   border-collapse: collapse;
   font-family: var(--font-primary);
+  table-layout: fixed;
+}
+
+.mining-resource-col--material { width: 30%; }
+.mining-resource-col--method { width: 18%; }
+.mining-resource-col--encounter { width: 18%; }
+.mining-resource-col--quality { width: 17%; }
+.mining-resource-col--yield { width: 17%; }
+
+.mining-resource-index-table--continuation {
+  margin-top: 0;
 }
 
 .mining-resource-index-table thead tr {
@@ -3560,6 +3649,35 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   color: rgba(160, 180, 220, 0.42);
 }
 
+.mining-resource-row--missing-toggle td {
+  padding: 0.24rem 0.25rem;
+  background: rgba(8, 12, 18, 0.32);
+}
+
+.mining-missing-material-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  border: 1px solid rgba(248, 113, 113, 0.14);
+  border-radius: 3px;
+  padding: 0.24rem 0.42rem;
+  color: rgba(248, 113, 113, 0.78);
+  background: rgba(248, 113, 113, 0.045);
+  font-family: var(--font-primary);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mining-missing-material-toggle strong {
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.72rem;
+}
+
 .mining-source-badge {
   display: inline-flex;
   align-items: center;
@@ -3586,43 +3704,61 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  align-items: flex-start;
   flex-wrap: nowrap;
-  gap: 0;
-  padding: 0.38rem 0.7rem;
+  gap: 0.45rem;
+  padding: 0.28rem 0.55rem;
   background: var(--bg-panel);
   border: var(--border-panel);
-  border-radius: 7px;
+  border-radius: 6px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
-  overflow: hidden;
+  overflow: clip;
 }
 
 /* Left group — mirrors .craft-frl-left exactly */
 .mining-filter-group--left {
   display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
   flex: 0 0 auto;
   padding-left: 0;
-  padding-right: 0.85rem;
+  padding-right: 0.45rem;
   overflow: hidden;
+  max-width: 360px;
 }
 
 /* Clear All at bottom of left group — mirrors .craft-frl-left .craft-frl-clear */
 .mining-filter-group--left .mfr-clear-btn {
-  margin-top: auto;
+  margin-top: 0;
   align-self: flex-start;
+}
+
+.mining-queue-scope {
+  display: flex;
+  align-items: center;
+  gap: 0.24rem;
+  flex-wrap: nowrap;
+  min-width: 0;
+  flex: 1 1 100%;
+  padding-top: 0;
+}
+
+.mining-queue-scope-note {
+  display: none;
 }
 
 /* Material groups — mirrors .craft-fg exactly */
 .mining-filter-group--ship,
 .mining-filter-group--vehicle,
 .mining-filter-group--hand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.28rem;
+  display: grid;
+  grid-template-rows: 24px minmax(0, auto);
+  align-items: start;
+  gap: 0.08rem;
   flex: 0 0 auto;
-  padding: 0 0.85rem;
+  padding: 0 0.55rem;
   border-left: 1px solid var(--border-soft-color);
   overflow: hidden;
 }
@@ -3633,22 +3769,30 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
   min-width: 0;
 }
 
+.mining-filter-rail--queue .mining-filter-group--ship,
+.mining-filter-rail--queue .mining-filter-group--vehicle,
+.mining-filter-rail--queue .mining-filter-group--hand {
+  flex: 0 1 auto;
+}
+
 /* Labels — identical to .craft-frl-label */
 .mining-filter-label {
-  display: block;
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: 0.56rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: rgba(255, 153, 0, 0.65);
   white-space: nowrap;
+  min-height: 24px;
 }
 
 /* Chip row — mirrors .craft-frl-chips */
 .mining-frl-chips {
   display: flex;
   align-items: center;
-  gap: 0.24rem;
+  gap: 0.18rem;
   flex-wrap: wrap;
   align-content: flex-start;
 }
@@ -3657,9 +3801,26 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 .mining-chip-wrap {
   display: flex;
   align-items: center;
-  gap: 0.24rem;
+  gap: 0.18rem;
   flex-wrap: wrap;
   align-content: flex-start;
+  max-height: 58px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 153, 0, 0.16) transparent;
+}
+
+.mining-filter-rail .mfr-chip {
+  gap: 0.2rem;
+  min-height: 26px;
+  padding: 0.12rem 0.46rem;
+  font-size: 0.72rem;
+  border-radius: 3px;
+}
+
+.mining-filter-rail .mfr-chip-count {
+  padding: 0 0.24rem;
+  font-size: 0.58rem;
 }
 
 /* ── Responsive: below 1180px mirror Crafting's wrap behaviour ── */
@@ -3696,6 +3857,174 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
    ═══════════════════════════════════════════════ */
 
 /* ── clamp-based column widths (1101px–1599px and wide) ── */
+
+.mcoverage-summary {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) auto;
+  gap: 0.32rem;
+  align-items: center;
+  border: 1px solid rgba(52, 211, 153, 0.16);
+  border-radius: 5px;
+  padding: 0.24rem 0.48rem;
+  background:
+    linear-gradient(90deg, rgba(52, 211, 153, 0.08), rgba(12, 18, 28, 0.22)),
+    rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.mcoverage-summary-main {
+  min-width: 0;
+}
+
+.mcoverage-summary-label {
+  color: rgba(52, 211, 153, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mcoverage-summary-title {
+  margin-top: 0.04rem;
+  color: rgba(226, 232, 240, 0.92);
+  font-family: var(--font-primary);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.mcoverage-details {
+  min-width: 0;
+}
+
+.mcoverage-details summary {
+  display: flex;
+  justify-content: flex-end;
+  color: rgba(52, 211, 153, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+}
+
+.mcoverage-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.mcoverage-details[open] {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 0.24rem;
+}
+
+.mcoverage-summary-detail {
+  margin-top: 0.04rem;
+  color: rgba(160, 180, 220, 0.64);
+  font-family: var(--font-primary);
+  font-size: 0.66rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mcoverage-metric {
+  border: 1px solid rgba(160, 180, 220, 0.11);
+  border-radius: 3px;
+  padding: 0.22rem 0.36rem;
+  background: rgba(8, 12, 18, 0.26);
+}
+
+.mcoverage-metric--warn {
+  border-color: rgba(251, 146, 60, 0.22);
+}
+
+.mcoverage-metric span {
+  display: block;
+  color: rgba(160, 180, 220, 0.52);
+  font-family: var(--font-primary);
+  font-size: 0.48rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.mcoverage-metric strong {
+  display: block;
+  margin-top: 0.03rem;
+  color: rgba(226, 232, 240, 0.86);
+  font-family: var(--font-primary);
+  font-size: 0.64rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mcoverage-warning {
+  grid-column: 1 / -1;
+  color: rgba(251, 146, 60, 0.82);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+}
+
+.mcoverage-matrix {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 0.18rem;
+  max-height: 44px;
+  overflow: hidden;
+}
+
+.mcoverage-cell {
+  min-width: 0;
+  border: 1px solid rgba(160, 180, 220, 0.1);
+  border-radius: 3px;
+  padding: 0.18rem 0.3rem;
+  background: rgba(8, 12, 18, 0.22);
+}
+
+.mcoverage-cell.is-covered {
+  border-color: rgba(52, 211, 153, 0.16);
+  background: rgba(52, 211, 153, 0.045);
+}
+
+.mcoverage-cell.is-missing {
+  border-color: rgba(248, 113, 113, 0.16);
+  background: rgba(248, 113, 113, 0.045);
+}
+
+.mcoverage-cell--more {
+  border-color: rgba(167, 139, 250, 0.16);
+  background: rgba(167, 139, 250, 0.045);
+}
+
+.mcoverage-cell span,
+.mcoverage-cell strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-primary);
+}
+
+.mcoverage-cell span {
+  color: rgba(226, 232, 240, 0.82);
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+.mcoverage-cell strong {
+  margin-top: 0.02rem;
+  color: rgba(160, 180, 220, 0.56);
+  font-size: 0.48rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
 
 .mconsole-layout {
   grid-template-columns: clamp(320px, 23vw, 340px) minmax(0, 1fr);
@@ -3795,6 +4124,16 @@ box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
 
   .mining-frl-chips::-webkit-scrollbar {
     display: none;
+  }
+
+  .mcoverage-summary {
+    grid-template-columns: 1fr;
+    gap: 0.24rem;
+    padding: 0.32rem 0.55rem;
+  }
+
+  .mcoverage-details summary {
+    justify-content: flex-start;
   }
 
   /* Console layout: single column, natural document flow */

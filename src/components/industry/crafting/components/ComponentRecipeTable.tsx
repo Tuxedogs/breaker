@@ -584,6 +584,28 @@ function formatModifierPercent(value: number): string {
   return `${normalized > 0 ? "+" : ""}${formatted}%`;
 }
 
+function formatModifierStatName(property: string): string {
+  const labels: Record<string, string> = {
+    GPP_Health_MaxHealth: "HP",
+    GPP_Shield_MaxHealth: "Shield HP",
+    GPP_ItemResource_PowerGeneration: "Power",
+    GPP_ItemResource_CoolantGeneration: "Coolant",
+    GPP_Quantum_FuelRequirement: "Quantum Fuel",
+    GPP_Quantum_Speed: "Quantum Speed",
+    GPP_Radar_MaxAimAssistDistance: "Radar Max",
+    GPP_Radar_MinAimAssistDistance: "Radar Min",
+    GPP_Weapon_Damage: "Damage",
+    GPP_Weapon_FireRate: "Fire Rate",
+    GPP_Weapon_ReloadSpeed: "Reload",
+    GPP_Weapon_Spread: "Spread",
+    GPP_Weapon_Recoil_Kick: "Recoil Kick",
+    GPP_Weapon_Recoil_Handling: "Recoil Handling",
+    GPP_Weapon_Recoil_Smoothness: "Recoil Smoothness",
+  };
+
+  return labels[property] ?? formatProperty(property);
+}
+
 function readNumericPath(source: unknown, path: string[]): number | undefined {
   let current = source;
   for (const key of path) {
@@ -638,6 +660,44 @@ function getBaseStatValue(
 function applyModifierToBase(baseValue: number, modifierValue: number, modifierMode?: string): number {
   if (modifierMode === "integerAdditive") return baseValue + modifierValue;
   return baseValue * (1 + modifierValue / 100);
+}
+
+function formatModifiedNumber(value: number, property: string): string {
+  if (!Number.isFinite(value)) return "-";
+
+  const rounded =
+    property === "GPP_ItemResource_PowerGeneration"
+      ? Math.round(value)
+      : Math.round(value * 100) / 100;
+  const normalized = Object.is(rounded, -0) ? 0 : rounded;
+  const formatted = normalized.toLocaleString("en-US", {
+    maximumFractionDigits: Number.isInteger(normalized) ? 0 : 2,
+  });
+
+  if (property === "GPP_ItemResource_PowerGeneration") {
+    return `${formatted} ${Math.abs(normalized) === 1 ? "pip" : "pips"}`;
+  }
+
+  return formatted;
+}
+
+function formatMaterialModifierDisplay(
+  property: string,
+  baseValue: number | undefined,
+  modifierValue: number,
+  modifierMode?: string,
+): { delta: string; modified?: string } {
+  const delta = formatContributionValue(modifierValue, modifierMode);
+
+  if (baseValue === undefined) return { delta };
+
+  return {
+    delta,
+    modified: formatModifiedNumber(
+      applyModifierToBase(baseValue, modifierValue, modifierMode),
+      property,
+    ),
+  };
 }
 
 function formatModifiedStat(
@@ -972,12 +1032,14 @@ function OverallModifierGroup({
 }
 
 function MaterialQualityRow({
+  recipe,
   mat,
   bandIndex,
   onBandChange,
   getBandsForMaterial,
   getBandEffectiveQuality,
 }: {
+  recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   onBandChange: (bandIndex: number) => void;
@@ -1093,12 +1155,18 @@ function MaterialQualityRow({
 
             {railMarkers.map((marker) => {
               const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
+              const markerState =
+                marker.index < safeBandIndex
+                  ? " is-before-active"
+                  : marker.index === safeBandIndex
+                    ? " is-active"
+                    : "";
 
               return (
               <button
                 type="button"
                 key={`${marker.index}-${marker.mappedValue}`}
-                className={`craft-quality-marker craft-matq-band-marker ${markerTierClass}${marker.index === safeBandIndex ? " is-active" : ""}`}
+                className={`craft-quality-marker craft-matq-band-marker ${markerTierClass}${markerState}`}
                 style={{ left: `${marker.left}%` }}
                 data-edge={marker.edge}
                 onClick={() => onBandChange(marker.index)}
@@ -1123,13 +1191,31 @@ function MaterialQualityRow({
               <div key={i} className="craft-modifier-row craft-matq-mod-chip">
                 <div className="craft-modifier-main">
                   <span className="craft-modifier-label craft-matq-mod-prop">
-                    {formatProperty(m.property)}
+                    {formatModifierStatName(m.property)}
                   </span>
 
                   <span
-                    className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)} ${selectedQualityTierClass}`}
+                    className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)}`}
                   >
-                    {formatContributionValue(m.value, m.modifierMode)}
+                    {(() => {
+                      const display = formatMaterialModifierDisplay(
+                        m.property,
+                        getBaseStatValue(recipe, m.property),
+                        m.value,
+                        m.modifierMode,
+                      );
+
+                      return (
+                        <>
+                          {display.delta}
+                          {display.modified && (
+                            <span className="craft-matq-mod-true">
+                              ({display.modified})
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
                   </span>
                 </div>
 
@@ -1638,6 +1724,7 @@ function RecipeDrawer({
               return (
                 <MaterialQualityRow
                   key={`${mat.slot}:${key}`}
+                  recipe={selectedRecipe}
                   mat={mat}
                   bandIndex={getBandIndex(key)}
                   onBandChange={(bandIndex) =>

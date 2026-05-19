@@ -18,8 +18,7 @@ function getUserLabel(user: User | null) {
     ?? user?.user_metadata?.user_name
     ?? user?.user_metadata?.full_name
     ?? user?.user_metadata?.name
-    ?? user?.user_metadata?.provider_id
-    ?? user?.email;
+    ?? user?.user_metadata?.provider_id;
   return typeof username === "string" && username.trim() ? username : "Signed in";
 }
 
@@ -38,9 +37,6 @@ function getUserLabelSource(user: User | null) {
   }
   if (typeof user?.user_metadata?.provider_id === "string" && user.user_metadata.provider_id.trim()) {
     return "provider_id";
-  }
-  if (typeof user?.email === "string" && user.email.trim()) {
-    return "email";
   }
   return null;
 }

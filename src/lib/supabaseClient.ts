@@ -123,7 +123,7 @@ export async function signInWithDiscord() {
     provider: "discord",
     options: {
       redirectTo,
-      scopes: "identify email",
+      scopes: "identify",
     },
   });
 }

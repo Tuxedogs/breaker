@@ -643,6 +643,64 @@
 .craft-quality-marker[data-edge="start"] .craft-quality-marker-value { left: 0; transform: none; }
 .craft-quality-marker[data-edge="end"] .craft-quality-marker-value { left: auto; right: 0; transform: none; }
 
+.craft-matq-slider-wrap {
+  padding: 3px 0 0;
+}
+
+.craft-matq-rail-wrap {
+  height: 42px;
+}
+
+.craft-matq-slider {
+  inset: 0 6% auto;
+  width: 88%;
+  height: 36px;
+}
+
+.craft-matq-rail {
+  left: 6%;
+  right: auto;
+  width: 88%;
+  top: 12px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.craft-matq-band-marker {
+  top: 14px;
+  width: 36px;
+  height: 36px;
+}
+
+.craft-matq-band-marker .craft-matq-dot {
+  top: -14px;
+  width: 3px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.craft-matq-band-marker.is-active .craft-matq-dot {
+  top: -18px;
+  width: 3px;
+  height: 18px;
+}
+
+.craft-matq-band-marker.is-before-active .craft-matq-dot {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.craft-matq-marker-value {
+  top: 28px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.craft-matq-band-marker.is-active .craft-matq-marker-value {
+  font-size: 13px;
+  font-weight: 900;
+}
+
 /* ==========================================================================
    9. Modifier Rows
    ========================================================================== */
@@ -655,6 +713,37 @@
 .craft-modifier-label { min-width: 0; overflow: hidden; color: var(--craft-text); font-size: 13px; font-weight: 600; line-height: 1; text-overflow: ellipsis; white-space: nowrap; }
 .craft-modifier-value { flex: 0 0 auto; color: var(--craft-tier, var(--craft-good)); font-size: 14px; font-weight: 900; line-height: 1; }
 .craft-modifier-hint { display: block; margin-top: 2px; color: var(--craft-muted); font-size: 10px; font-weight: 600; line-height: 1; }
+
+.craft-matq-mod-chip {
+  display: flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.craft-matq-mod-chip .craft-modifier-main {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 1fr) auto;
+  align-items: baseline;
+  gap: 8px;
+  width: 100%;
+}
+
+.craft-matq-mod-prop {
+  font-size: 11px;
+}
+
+.craft-matq-mod-val {
+  font-size: 12px;
+}
+
+.craft-matq-mod-true {
+  margin-left: 4px;
+  color: rgba(190, 204, 222, 0.62);
+  font-size: 11px;
+  font-weight: 700;
+}
 
 /* ==========================================================================
    10. Summary Panel
