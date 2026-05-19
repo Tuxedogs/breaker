@@ -1858,17 +1858,6 @@ export default function MiningModule() {
   return (
     <div className="mine-page mine-page--v2">
 
-      {state.status === "loading" && (
-        <div className="mine-status-state">
-          <span className="mine-status-text">Loading recommendations…</span>
-        </div>
-      )}
-      {state.status === "error" && (
-        <div className="mine-status-state mine-status-state--error">
-          <span className="mine-status-text">Failed to load: {state.message}</span>
-        </div>
-      )}
-
       {hasRecommendationData && (
         <>
           {/* Top filter rail */}
@@ -2102,6 +2091,17 @@ export default function MiningModule() {
             <div className="mex-fixture-note">Advanced scoring active · fixture data</div>
           )}
         </>
+      )}
+
+      {state.status === "loading" && (
+        <div className="mine-status-state">
+          <span className="mine-status-text">Loading recommendations…</span>
+        </div>
+      )}
+      {state.status === "error" && (
+        <div className="mine-status-state mine-status-state--error">
+          <span className="mine-status-text">Failed to load: {state.message}</span>
+        </div>
       )}
     </div>
   );

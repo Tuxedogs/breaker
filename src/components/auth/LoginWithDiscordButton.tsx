@@ -181,32 +181,10 @@ function DiscordAccountModal({
             <strong>{discordId ?? "Unavailable"}</strong>
           </div>
           <div>
-            <span>Account ID</span>
-            <strong>{user.id}</strong>
-          </div>
-          <div>
-            <span>Email</span>
-            <strong>{user.email ?? "Not shared"}</strong>
-          </div>
-          <div>
-            <span>Remote Status</span>
-            <strong>{syncStatus.lastError ? "Sync warning" : syncStatus.remoteConnected ? "Connected" : "Awaiting sync"}</strong>
-          </div>
-          <div>
             <span>Last Sync</span>
             <strong>{formatDateTime(syncStatus.lastSyncedAt)}</strong>
           </div>
-          <div>
-            <span>Migration</span>
-            <strong>{formatDateTime(syncStatus.migratedAt)}</strong>
-          </div>
         </div>
-
-        {syncStatus.lastError && (
-          <div className="discord-account-warning">
-            {syncStatus.lastError}
-          </div>
-        )}
 
         <div className="discord-account-actions">
           <button type="button" className="discord-account-signout" onClick={onSignOut}>
