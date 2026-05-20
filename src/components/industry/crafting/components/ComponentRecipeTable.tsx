@@ -38,6 +38,7 @@ import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
 const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
+const MISSION_BLUEPRINT_REWARDS_URL = "/api/missions/mission_blueprint_rewards.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -69,6 +70,7 @@ type MissionRewardEntry = {
   poolName?: string;
   factionName?: string;
   chance?: number;
+  isDisabled?: boolean;
   source: "mission" | "pool";
 };
 
@@ -81,15 +83,20 @@ type ApiBlueprintMission = {
   contractId?: unknown;
   contractTitle?: unknown;
   contractDebugName?: unknown;
+  debugName?: unknown;
+  title?: unknown;
   generatorName?: unknown;
   factionName?: unknown;
   poolGuid?: unknown;
   poolName?: unknown;
   poolChance?: unknown;
   rewardChance?: unknown;
+  notForRelease?: unknown;
+  workInProgress?: unknown;
 };
 
 let missionRewardSourceMapPromise: Promise<Map<string, MissionRewardEntry[]>> | null = null;
+let missionReleaseStateMapPromise: Promise<Map<string, boolean>> | null = null;
 
 const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
   search: "",
@@ -192,7 +199,43 @@ function normalizeMissionTitle(value: string): string {
   return value.replace(/~mission\(([^)]+)\)/g, "$1");
 }
 
-function normalizeMissionRewardEntry(value: unknown): MissionRewardEntry | null {
+function isTruthyFlag(value: unknown): boolean {
+  return value === true || value === 1 || value === "1" || value === "true";
+}
+
+function isMissionDisabledRecord(mission: ApiBlueprintMission): boolean {
+  const debugName = asNonEmptyString(mission.debugName) ?? asNonEmptyString(mission.contractDebugName);
+  const title = asNonEmptyString(mission.title) ?? asNonEmptyString(mission.contractTitle);
+  return isTruthyFlag(mission.notForRelease) || /\bdisabled\b/i.test([debugName, title].filter(Boolean).join(" "));
+}
+
+async function loadMissionReleaseStateMap(): Promise<Map<string, boolean>> {
+  const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
+  missionReleaseStateMapPromise ??= fetch(url)
+    .then(async (response) => {
+      const data = await parseJsonResponse<unknown>(response, {
+        label: "mission blueprint rewards release state",
+        url,
+      });
+      if (!response.ok) throw new Error(`Mission blueprint rewards unavailable: ${response.status}`);
+      return data;
+    })
+    .then((data) => {
+      const map = new Map<string, boolean>();
+      if (!Array.isArray(data)) return map;
+      for (const value of data) {
+        if (!isRecord(value)) continue;
+        const mission = value as ApiBlueprintMission;
+        const contractId = asNonEmptyString(mission.contractId);
+        if (contractId) map.set(contractId, isMissionDisabledRecord(mission));
+      }
+      return map;
+    })
+    .catch(() => new Map());
+  return missionReleaseStateMapPromise;
+}
+
+function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string, boolean>): MissionRewardEntry | null {
   if (!isRecord(value)) return null;
 
   const mission = value as ApiBlueprintMission;
@@ -209,18 +252,22 @@ function normalizeMissionRewardEntry(value: unknown): MissionRewardEntry | null 
 
   if (!id) return null;
 
+  const isDisabled = contractId ? releaseStateMap.get(contractId) ?? isMissionDisabledRecord(mission) : isMissionDisabledRecord(mission);
+  const title = normalizeMissionTitle(contractTitle ?? contractDebugName ?? "Unknown Blueprint Source");
+
   return {
     id: `mission:${id}`,
-    title: normalizeMissionTitle(contractTitle ?? contractDebugName ?? "Unknown Blueprint Source"),
+    title,
     subtitle: generatorName,
     poolName,
     factionName,
     chance: typeof poolChance === "number" && typeof rewardChance === "number" ? poolChance * rewardChance : poolChance ?? rewardChance,
+    isDisabled,
     source: "mission",
   };
 }
 
-function normalizeMissionSourceRecord(value: unknown): { blueprintGuid: string; entries: MissionRewardEntry[] } | null {
+function normalizeMissionSourceRecord(value: unknown, releaseStateMap: Map<string, boolean>): { blueprintGuid: string; entries: MissionRewardEntry[] } | null {
   if (!isRecord(value)) return null;
 
   const record = value as ApiBlueprintMissionSource;
@@ -228,7 +275,7 @@ function normalizeMissionSourceRecord(value: unknown): { blueprintGuid: string; 
   if (!blueprintGuid || !Array.isArray(record.missions)) return null;
 
   const entries = record.missions.flatMap((mission) => {
-    const entry = normalizeMissionRewardEntry(mission);
+    const entry = normalizeMissionRewardEntry(mission, releaseStateMap);
     return entry ? [entry] : [];
   });
 
@@ -246,12 +293,13 @@ async function loadMissionRewardSourceMap(): Promise<Map<string, MissionRewardEn
       if (!response.ok) throw new Error(`Mission reward sources unavailable: ${response.status}`);
       return data;
     })
-    .then((data) => {
+    .then(async (data) => {
       const map = new Map<string, MissionRewardEntry[]>();
       if (!Array.isArray(data)) return map;
+      const releaseStateMap = await loadMissionReleaseStateMap();
 
       for (const value of data) {
-        const record = normalizeMissionSourceRecord(value);
+        const record = normalizeMissionSourceRecord(value, releaseStateMap);
         if (record) map.set(record.blueprintGuid, record.entries);
       }
 
@@ -1461,7 +1509,7 @@ function CraftedItemSummaryPanel({
               const chance = formatMissionChance(entry.chance);
 
               return (
-                <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}`}>
+                <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
                   <button
                     type="button"
                     className={`craft-mission-bookmark-btn${bookmarked ? " is-active" : ""}`}
@@ -1484,7 +1532,10 @@ function CraftedItemSummaryPanel({
                     </svg>
                   </button>
                   <div className="craft-mission-source-copy">
-                    <div className="craft-mission-source-name">{entry.title}</div>
+                    <div className="craft-mission-source-name">
+                      {entry.isDisabled && <span className="craft-disabled-badge">[DISABLED]</span>}
+                      <span>{entry.title}</span>
+                    </div>
                     <div className="craft-mission-source-meta">
                       {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
                         .filter(Boolean)

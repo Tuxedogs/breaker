@@ -35,6 +35,7 @@ export type MissionSourceDetail = {
   poolName?: string;
   factionName?: string;
   chance?: number;
+  isDisabled?: boolean;
   source: "mission" | "pool";
   blueprintGuid?: string;
 };
@@ -96,6 +97,8 @@ export type MissionBlueprintReward = {
   rewards: BlueprintRewardItem[];
   reputationRewards: string[];
   creditRewards: string[];
+  isDisabled?: boolean;
+  isWorkInProgress?: boolean;
   debugName?: string;
   generatorName?: string;
   generatorPath?: string;
@@ -122,6 +125,16 @@ function normalizeKey(value: string | undefined, fallback = "unknown"): string {
 
 function normalizeMissionTitle(title: string): string {
   return title.replace(/~mission\(([^)]+)\)/g, "$1");
+}
+
+function isTruthyFlag(value: unknown): boolean {
+  return value === true || value === 1 || value === "1" || value === "true";
+}
+
+function isMissionDisabledRecord(mission: Record<string, unknown>): boolean {
+  const debugName = asNonEmptyString(mission.debugName) ?? asNonEmptyString(mission.contractDebugName);
+  const title = asNonEmptyString(mission.title) ?? asNonEmptyString(mission.contractTitle);
+  return isTruthyFlag(mission.notForRelease) || /\bdisabled\b/i.test([debugName, title].filter(Boolean).join(" "));
 }
 
 function formatRecordName(value: unknown): string | undefined {
@@ -300,6 +313,8 @@ function normalizeMission(raw: unknown): MissionBlueprintReward | null {
     creditRewards: (Array.isArray(mission.creditRewardTypes) ? mission.creditRewardTypes : [])
       .map(describeCreditReward)
       .filter((v): v is string => Boolean(v)),
+    isDisabled: isMissionDisabledRecord(mission),
+    isWorkInProgress: isTruthyFlag(mission.workInProgress),
     debugName: asNonEmptyString(mission.debugName),
     generatorName: asNonEmptyString(mission.generatorName),
     generatorPath: asNonEmptyString(mission.generatorPath),
@@ -307,6 +322,34 @@ function normalizeMission(raw: unknown): MissionBlueprintReward | null {
 }
 
 let missionRewardsCache: Promise<MissionBlueprintReward[]> | null = null;
+let missionReleaseStateMapCache: Promise<Map<string, boolean>> | null = null;
+
+async function loadMissionReleaseStateMap(): Promise<Map<string, boolean>> {
+  if (!missionReleaseStateMapCache) {
+    const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
+    missionReleaseStateMapCache = fetch(url)
+      .then(async (r) => {
+        const data = await parseJsonResponse<unknown>(r, {
+          label: "mission blueprint rewards release state",
+          url,
+        });
+        if (!r.ok) throw new Error(`Mission blueprint rewards unavailable: ${r.status}`);
+        return data;
+      })
+      .then((data) => {
+        const map = new Map<string, boolean>();
+        if (!Array.isArray(data)) return map;
+        for (const item of data) {
+          const mission = asRecord(item);
+          const contractId = mission ? asNonEmptyString(mission.contractId) : undefined;
+          if (mission && contractId) map.set(contractId, isMissionDisabledRecord(mission));
+        }
+        return map;
+      })
+      .catch(() => new Map());
+  }
+  return missionReleaseStateMapCache;
+}
 
 export async function loadMissionBlueprintRewards(): Promise<MissionBlueprintReward[]> {
   if (!missionRewardsCache) {
@@ -360,7 +403,7 @@ function getOrCreateEntry(map: Map<string, BlueprintTrackerEntry>, recipe: Compo
   return entry;
 }
 
-function normalizeReverseMission(value: unknown): MissionSourceDetail | null {
+function normalizeReverseMission(value: unknown, releaseStateMap: Map<string, boolean>): MissionSourceDetail | null {
   const mission = asRecord(value);
   if (!mission) return null;
   const contractId = asNonEmptyString(mission.contractId);
@@ -381,6 +424,7 @@ function normalizeReverseMission(value: unknown): MissionSourceDetail | null {
       poolChance !== undefined && rewardChance !== undefined
         ? poolChance * rewardChance
         : poolChance ?? rewardChance,
+    isDisabled: contractId ? releaseStateMap.get(contractId) ?? isMissionDisabledRecord(mission) : isMissionDisabledRecord(mission),
     source: "mission",
   };
 }
@@ -450,15 +494,16 @@ export async function loadMissionDetailMap(): Promise<Map<string, MissionSourceD
         if (!r.ok) throw new Error(`Mission sources unavailable: ${r.status}`);
         return data;
       })
-      .then((data) => {
+      .then(async (data) => {
         const map = new Map<string, MissionSourceDetail[]>();
         if (!Array.isArray(data)) return map;
+        const releaseStateMap = await loadMissionReleaseStateMap();
         for (const item of data) {
           const record = asRecord(item);
           const blueprintGuid = record ? asNonEmptyString(record.blueprintGuid) : undefined;
           const missions = record && Array.isArray(record.missions) ? record.missions : [];
           if (!blueprintGuid) continue;
-          map.set(blueprintGuid, missions.map(normalizeReverseMission).filter((v): v is MissionSourceDetail => Boolean(v)));
+          map.set(blueprintGuid, missions.map((mission) => normalizeReverseMission(mission, releaseStateMap)).filter((v): v is MissionSourceDetail => Boolean(v)));
         }
         return map;
       })

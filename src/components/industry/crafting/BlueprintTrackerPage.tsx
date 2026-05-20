@@ -53,6 +53,10 @@ function setToList(values: Set<string>): string[] {
   return Array.from(values);
 }
 
+function DisabledBadge() {
+  return <span className="bt-disabled-badge">[DISABLED]</span>;
+}
+
 function RewardMeta({ reward }: { reward: BlueprintRewardItem }) {
   const chance = formatChance(reward.chance);
   const meta = [
@@ -101,7 +105,10 @@ function MissionDetailPanel({
       <div className="bt-detail-head">
         <div>
           <div className="bt-detail-kicker">Mission Details</div>
-          <div className="bt-detail-title">{mission.title}</div>
+          <div className="bt-detail-title">
+            {mission.isDisabled && <DisabledBadge />}
+            <span>{mission.title}</span>
+          </div>
         </div>
         {onClose && (
           <button
@@ -169,7 +176,7 @@ function MissionRow({
   const location = mission.location ?? mission.station ?? mission.planet ?? mission.system ?? "Unknown";
 
   return (
-    <div className={`bt-mission-entry${completed ? " is-completed" : ""}${expanded ? " is-expanded" : ""}${pinned ? " is-pinned" : ""}`}>
+    <div className={`bt-mission-entry${completed ? " is-completed" : ""}${expanded ? " is-expanded" : ""}${pinned ? " is-pinned" : ""}${mission.isDisabled ? " is-disabled" : ""}`}>
       <div className="bt-mission-main">
         <button
           type="button"
@@ -193,6 +200,7 @@ function MissionRow({
 
         <div className="bt-mission-nameblock">
           <div className="bt-mission-title-line">
+            {mission.isDisabled && <DisabledBadge />}
             <span className="bt-mission-title">{mission.title}</span>
             <span className={`bt-status ${completed ? "bt-status--done" : "bt-status--open"}`}>
               {completed ? "Completed" : "Open"}
@@ -353,6 +361,7 @@ function missionMatchesQuery(mission: MissionBlueprintReward, query: string): bo
     mission.planet,
     mission.station,
     mission.missionGiver,
+    mission.isDisabled ? "disabled" : null,
     ...mission.rewardPools,
     ...mission.rewards.map((reward) => [
       reward.displayName,
@@ -415,7 +424,10 @@ function MissionTrackerSidebar({
                   className="bt-pinned-select"
                   onClick={() => onSelectMission(mission)}
                 >
-                  <span className="bt-pinned-title">{mission.title}</span>
+                  <span className="bt-pinned-title">
+                    {mission.isDisabled && <DisabledBadge />}
+                    <span>{mission.title}</span>
+                  </span>
                   <span className="bt-pinned-meta">{mission.factionName} / {mission.rewards.length} rewards</span>
                 </button>
                 <button
@@ -459,7 +471,10 @@ function ReverseMissionRow({
         <span aria-hidden>*</span>
       </button>
       <div>
-        <div className="bt-library-source-title">{mission.title}</div>
+        <div className="bt-library-source-title">
+          {mission.isDisabled && <DisabledBadge />}
+          <span>{mission.title}</span>
+        </div>
         <div className="bt-library-source-meta">
           {[mission.factionName, mission.poolName ?? mission.subtitle, chance ? `${chance} chance` : null].filter(Boolean).join(" / ")}
         </div>
