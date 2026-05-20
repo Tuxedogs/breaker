@@ -47,6 +47,7 @@ export type WeaponPresetDefinition = {
   category?: string
   metadata?: PresetMetadata
   sizePresetIds?: string[]
+  priorityEntries?: WeaponPresetEntry[]
   entries?: WeaponPresetEntry[]
   filter?: WeaponPresetFilter
 }
@@ -200,6 +201,10 @@ export const WEAPON_PRESETS: WeaponPresetDefinition[] = [
       source: 'moonbreaker',
       version: '2.0',
     },
+    priorityEntries: [
+      { name: 'Omnisky IX', size: 3, damageType: 'energy' },
+      { name: 'Omnisky XII', size: 4, damageType: 'energy' },
+    ],
     filter: {
       damageType: 'energy',
       weaponClass: 'laser cannon',
