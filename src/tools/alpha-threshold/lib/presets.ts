@@ -80,7 +80,7 @@ function weaponSort(left: WeaponRecord, right: WeaponRecord) {
 }
 
 function devWarn(message: string) {
-  if (!import.meta.env.DEV) return
+  if (!import.meta.env?.DEV) return
   console.warn(`[alpha-threshold presets] ${message}`)
 }
 
@@ -137,6 +137,25 @@ function resolveExplicitWeaponEntries(
   return resolved
 }
 
+function promotePriorityWeaponEntries(
+  preset: WeaponPresetDefinition,
+  resolved: WeaponRecord[],
+  weapons: WeaponRecord[]
+) {
+  if (!preset.priorityEntries?.length) return resolved
+
+  const resolvedByKey = new Map(resolved.map((weapon) => [getWeaponKey(weapon), weapon]))
+  const priorityKeys = preset.priorityEntries
+    .map((entry) => resolveWeaponEntry(entry, weapons))
+    .filter((key): key is string => key != null && resolvedByKey.has(key))
+  const priorityKeySet = new Set(priorityKeys)
+
+  return [
+    ...priorityKeys.map((key) => resolvedByKey.get(key)).filter((weapon): weapon is WeaponRecord => Boolean(weapon)),
+    ...resolved.filter((weapon) => !priorityKeySet.has(getWeaponKey(weapon))),
+  ]
+}
+
 export function resolveWeaponPresetSelection(
   preset: WeaponPresetDefinition | null | undefined,
   weapons: WeaponRecord[],
@@ -169,11 +188,13 @@ export function resolveWeaponPresetSelection(
     devWarn(`Weapon preset "${preset.id}" resolved no weapons${sizeLabel}.`)
   }
 
-  if (resolved.length > slotLimit) {
+  const prioritized = promotePriorityWeaponEntries(preset, resolved, weapons)
+
+  if (prioritized.length > slotLimit) {
     devWarn(
-      `Weapon preset "${preset.id}" resolved ${resolved.length} weapons but only ${slotLimit} slots exist.`
+      `Weapon preset "${preset.id}" resolved ${prioritized.length} weapons but only ${slotLimit} slots exist.`
     )
   }
 
-  return resolved.slice(0, slotLimit).map((weapon) => getWeaponKey(weapon))
+  return prioritized.slice(0, slotLimit).map((weapon) => getWeaponKey(weapon))
 }

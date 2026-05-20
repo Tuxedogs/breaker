@@ -28,12 +28,7 @@ const THRESHOLD_POOL_EXCLUDED_EXACT_NAMES = new Set([
   'wrath',
 ])
 
-const THRESHOLD_POOL_EXCLUDED_NAME_PATTERNS = [
-  {
-    pattern: 'omnisky',
-    reason: 'Currently treated as universal E100 overmatch and omitted from per-target threshold comparisons.',
-  },
-]
+const THRESHOLD_POOL_EXCLUDED_NAME_PATTERNS: Array<{ pattern: string; reason: string }> = []
 
 export function getThresholdWeaponPoolExclusionReason(weapon: WeaponRecord): string | null {
   const normalizedName = normalizeWeaponName(weapon.name)
