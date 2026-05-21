@@ -17,11 +17,11 @@
    Change these first when iterating the app palette. */
 
 /* Core app palette: graphite-black with low amber instrument light */
---void-bg-0: #06101a;
---void-bg-1: #08111a;
---void-bg-2: #0e1820;
---void-bg-3: #111a22;
---void-bg-deep: #03090c;
+--void-bg-0: #03070a;  /* main page */
+--void-bg-1: #061016;  /* subtle raised sections */
+--void-bg-2: #09131a;  /* panels / depth */
+--void-bg-3: #0d1820;  /* lighter graphite */
+--void-bg-deep: #010304; /* deepest shadow */
 
 /* Cool accent: nearly invisible, used only for depth/system edges */
 --void-blue-soft: rgba(78, 224, 189, 0.035);
@@ -30,9 +30,12 @@
 --void-card-dark-glow: rgba(120, 140, 150, 0.035);
 
 /* Cards: cold carbon console, slightly lifted */
---void-card-top: rgba(17, 25, 32, 0.98);
---void-card-mid: rgba(11, 17, 23, 0.98);
---void-card-bottom: rgba(6, 10, 15, 0.99);
+--void-card-top: rgba(15, 27, 35, 0.96);
+--void-card-mid: rgba(10, 18, 24, 0.95);
+--void-card-bottom: rgba(5, 9, 13, 0.97);
+
+--void-stat-slab: rgba(13, 24, 31, 0.86);
+--void-stat-slab-bottom: rgba(8, 14, 19, 0.88);
 
 --void-card-dark-top: rgba(12, 18, 24, 0.99);
 --void-card-dark-mid: rgba(9, 14, 19, 0.98);
@@ -47,17 +50,17 @@
 --void-active-fade: rgba(255, 153, 0, 0.045);
 
 /* Borders: graphite first, amber only for active/hover */
---void-border-soft: rgba(125, 145, 155, 0.14);
---void-border-panel: rgba(125, 145, 155, 0.2);
---void-border-hover: rgba(255, 153, 0, 0.32);
---void-border-active: rgba(255, 153, 0, 0.72);
+--void-border-soft: rgba(130, 150, 160, 0.12);
+--void-border-panel: rgba(130, 150, 160, 0.16);
+--void-border-hover: rgba(255, 178, 26, 0.32);
+--void-border-active: rgba(255, 178, 26, 0.68);
 --void-border-danger: rgba(255, 77, 77, 0.38);
 --void-border-divider: rgba(130, 150, 160, 0.08);
 
 /* Add these if you do not already have stat/accent vars */
---void-accent-amber: #ff9900;
---void-accent-amber-soft: rgba(255, 153, 0, 0.16);
---void-accent-amber-glow: rgba(255, 153, 0, 0.34);
+--void-accent-amber: #ffb21a;
+--void-accent-amber-soft: rgba(255, 178, 26, 0.16);
+--void-accent-amber-glow: rgba(255, 178, 26, 0.34);
 
 --void-accent-teal: #4ee0bd;
 --void-accent-teal-soft: rgba(78, 224, 189, 0.14);
