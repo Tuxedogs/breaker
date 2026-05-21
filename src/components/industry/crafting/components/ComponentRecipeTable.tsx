@@ -730,22 +730,44 @@ function formatModifiedNumber(value: number, property: string): string {
   return formatted;
 }
 
+function formatSignedModifiedNumber(value: number, property: string): string {
+  const formatted = formatModifiedNumber(value, property);
+  if (!Number.isFinite(value) || value <= 0 || formatted === "-") return formatted;
+  return `+${formatted}`;
+}
+
 function formatMaterialModifierDisplay(
   property: string,
   baseValue: number | undefined,
   modifierValue: number,
   modifierMode?: string,
-): { delta: string; modified?: string } {
+): {
+  base?: string;
+  modifier: string;
+  modifierPercent?: string;
+  total?: string;
+  totalPercent?: string;
+} {
   const delta = formatContributionValue(modifierValue, modifierMode);
 
-  if (baseValue === undefined) return { delta };
+  if (baseValue === undefined) {
+    return {
+      modifier: delta,
+      modifierPercent: modifierMode === "integerAdditive" ? undefined : delta,
+    };
+  }
+
+  const modifiedValue = applyModifierToBase(baseValue, modifierValue, modifierMode);
+  const modifierDelta = modifiedValue - baseValue;
+  const deltaPercent =
+    baseValue !== 0 ? formatModifierPercent((modifierDelta / baseValue) * 100) : undefined;
 
   return {
-    delta,
-    modified: formatModifiedNumber(
-      applyModifierToBase(baseValue, modifierValue, modifierMode),
-      property,
-    ),
+    base: formatModifiedNumber(baseValue, property),
+    modifier: formatSignedModifiedNumber(modifierDelta, property),
+    modifierPercent: modifierMode === "integerAdditive" ? deltaPercent : delta,
+    total: formatModifiedNumber(modifiedValue, property),
+    totalPercent: deltaPercent,
   };
 }
 
@@ -1234,10 +1256,19 @@ function MaterialQualityRow({
         <div className="craft-modifier-list craft-matq-mods">
           {atQuality.map((m, i) => {
             const impact = getModifierImpact(m.property, m.value);
-        
+            const display = formatMaterialModifierDisplay(
+              m.property,
+              getBaseStatValue(recipe, m.property),
+              m.value,
+              m.modifierMode,
+            );
+            const isModifierOnly = !display.base || !display.total;
 
             return (
-              <div key={i} className="craft-modifier-row craft-matq-mod-chip">
+              <div
+                key={i}
+                className={`craft-modifier-row craft-matq-mod-chip${isModifierOnly ? " craft-modifier-row--modifier-only" : ""}`}
+              >
                 <div className="craft-modifier-main">
                   <span className="craft-modifier-label craft-matq-mod-prop">
                     {formatModifierStatName(m.property)}
@@ -1247,22 +1278,56 @@ function MaterialQualityRow({
                     className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)}`}
                   >
                     {(() => {
-                      const display = formatMaterialModifierDisplay(
-                        m.property,
-                        getBaseStatValue(recipe, m.property),
-                        m.value,
-                        m.modifierMode,
-                      );
+                      if (isModifierOnly) {
+                        return (
+                          <span className="craft-matq-stat-stack craft-matq-stat-stack--modifier-only">
+                            <span className="craft-matq-stat-part craft-stat-modifier">
+                              <span className="craft-matq-stat-label">Modifier</span>
+                              <span className="craft-matq-stat-number">
+                                {display.modifier}
+                                {display.modifierPercent && display.modifierPercent !== display.modifier && (
+                                  <span className="craft-matq-stat-percent">
+                                    ({display.modifierPercent})
+                                  </span>
+                                )}
+                              </span>
+                            </span>
+                          </span>
+                        );
+                      }
 
                       return (
-                        <>
-                          {display.delta}
-                          {display.modified && (
-                            <span className="craft-matq-mod-true">
-                              ({display.modified})
+                        <span
+                          className="craft-matq-stat-stack"
+                          aria-label={`${formatModifierStatName(m.property)} modifier breakdown`}
+                        >
+                          <span className="craft-matq-stat-part craft-stat-base">
+                            <span className="craft-matq-stat-label">Base</span>
+                            <span className="craft-matq-stat-number">{display.base}</span>
+                          </span>
+                          <span className="craft-matq-stat-part craft-stat-modifier">
+                            <span className="craft-matq-stat-label">Modifier</span>
+                            <span className="craft-matq-stat-number">
+                              {display.modifier}
+                              {display.modifierPercent && (
+                                <span className="craft-matq-stat-percent">
+                                  ({display.modifierPercent})
+                                </span>
+                              )}
                             </span>
-                          )}
-                        </>
+                          </span>
+                          <span className="craft-matq-stat-part craft-stat-total">
+                            <span className="craft-matq-stat-label">Total</span>
+                            <span className="craft-matq-stat-number">
+                              {display.total}
+                              {display.totalPercent && (
+                                <span className="craft-matq-stat-percent">
+                                  ({display.totalPercent})
+                                </span>
+                              )}
+                            </span>
+                          </span>
+                        </span>
                       );
                     })()}
                   </span>
@@ -1457,6 +1522,12 @@ function CraftedItemSummaryPanel({
               {totalModifiers.map((row) => {
                 const hasBreakdown = row.contributions.length > 0;
                 const baseValue = getBaseStatValue(recipe, row.property);
+                const display = formatMaterialModifierDisplay(
+                  row.property,
+                  baseValue,
+                  row.totalValue,
+                  row.modifierMode,
+                );
 
                 return (
                   <div key={row.property} className="craft-summary-mod-row">
@@ -1464,15 +1535,51 @@ function CraftedItemSummaryPanel({
                       <span className="craft-summary-mod-prop">
                         {formatProperty(row.property)}
                       </span>
-                      <span className={`craft-summary-mod-val`}>
-                        {formatModifiedStat(baseValue, row.totalValue, row.modifierMode)}
-                      </span>
                     </div>
+                    {display.base && display.total ? (
+                      <div className="craft-summary-stat-stack">
+                        <span className="craft-summary-stat-part craft-stat-base">
+                          <span className="craft-summary-stat-label">Base</span>
+                          <span className="craft-summary-stat-number">{display.base}</span>
+                        </span>
+                        <span className="craft-summary-stat-part craft-stat-modifier">
+                          <span className="craft-summary-stat-label">Modifier</span>
+                          <span className="craft-summary-stat-number">
+                            {display.modifier}
+                            {display.modifierPercent && (
+                              <span className="craft-summary-stat-percent">
+                                ({display.modifierPercent})
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                        <span className="craft-summary-stat-part craft-stat-total">
+                          <span className="craft-summary-stat-label">Total</span>
+                          <span className="craft-summary-stat-number">
+                            {display.total}
+                            {display.totalPercent && (
+                              <span className="craft-summary-stat-percent">
+                                ({display.totalPercent})
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="craft-summary-total-modifier">
+                        <span>Total Modifier</span>
+                        <strong>{formatContributionValue(row.totalValue, row.modifierMode)}</strong>
+                      </div>
+                    )}
                     {hasBreakdown && (
                       <div className="craft-summary-mod-breakdown">
+                        <span className="craft-summary-mod-breakdown-label">Sources</span>
                         {row.contributions.map((c, i) => (
                           <span key={i} className="craft-summary-mod-contrib">
-                            {formatContributionValue(c.value, row.modifierMode)} {c.materialName}
+                            <span className="craft-summary-mod-source-name">{c.materialName}</span>
+                            <span className="craft-summary-mod-source-value">
+                              {formatContributionValue(c.value, row.modifierMode)}
+                            </span>
                           </span>
                         ))}
                       </div>
@@ -2317,8 +2424,7 @@ export default function ComponentRecipeTable({
       <div className="craft-console-layout">
         <aside className="craft-finder-sidebar">
           <div className="craft-finder-header">
-            <span className="craft-finder-kicker">Component Finder</span>
-            <h1 className="craft-finder-title">Crafting Planner</h1>
+            <span className="mlist-header-label">Component Finder</span>
           </div>
 
           <label className="craft-search">
