@@ -435,13 +435,47 @@ function getTypeBadges(recipe: ComponentRecipe): string[] {
   return ct ? [ct.toUpperCase()] : [];
 }
 
+function titleCaseWeaponToken(value: string): string {
+  if (!value) return "";
+  if (value.toLowerCase() === "massdriver") return "Mass Driver";
+  if (value.toLowerCase() === "scatter") return "Scatter Gun";
+
+  return value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/gun$/i, " Gun")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function getWeaponItemType(recipe: ComponentRecipe): string | null {
+  if (recipe.item_kind !== "vehicle" || recipe.component_type !== "weaponGun") {
+    return null;
+  }
+
+  const sourcePath = recipe.source_file ?? "";
+  const pathMatch = sourcePath.match(/\/weapons\/([^/]+)\/([^/]+)\//i);
+  if (pathMatch && pathMatch[1] !== "$templates") {
+    return [pathMatch[1], pathMatch[2]]
+      .map(titleCaseWeaponToken)
+      .filter(Boolean)
+      .join(" ");
+  }
+
+  const internalName = recipe.internal_name ?? recipe.raw_name ?? "";
+  const nameMatch = internalName.match(/^BP(?:_CRAFT)?_[^_]+_(.+?)(?:_VNG)?_S\d+/i);
+  if (!nameMatch) return null;
+
+  return titleCaseWeaponToken(nameMatch[1].replace(/_/g, " "));
+}
+
 function getSubtitle(recipe: ComponentRecipe): string {
   if (recipe.item_kind === "fps") {
     const parts = [recipe.category, recipe.wiki_type].filter(Boolean);
     return parts.join(" · ");
   }
 
-  return recipe.component_type ?? "";
+  return getWeaponItemType(recipe) ?? recipe.component_type ?? "";
 }
 
 function formatSize(size: string | null | undefined): string | null {
@@ -743,32 +777,93 @@ function formatMaterialModifierDisplay(
   modifierMode?: string,
 ): {
   base?: string;
-  modifier: string;
-  modifierPercent?: string;
+  basePercent?: string;    // raw modifier % from data, shown next to base
+  modifier: string;        // actual delta applied to base
+  modifierPercent?: string; // delta as % of base
   total?: string;
-  totalPercent?: string;
+  totalPercent?: string;   // base% + modifier delta%
 } {
-  const delta = formatContributionValue(modifierValue, modifierMode);
+  const rawPercent = modifierMode === "integerAdditive" ? undefined : formatContributionValue(modifierValue, modifierMode);
 
   if (baseValue === undefined) {
     return {
-      modifier: delta,
-      modifierPercent: modifierMode === "integerAdditive" ? undefined : delta,
+      modifier: formatContributionValue(modifierValue, modifierMode),
+      modifierPercent: rawPercent,
     };
   }
 
   const modifiedValue = applyModifierToBase(baseValue, modifierValue, modifierMode);
   const modifierDelta = modifiedValue - baseValue;
   const deltaPercent =
-    baseValue !== 0 ? formatModifierPercent((modifierDelta / baseValue) * 100) : undefined;
+    baseValue !== 0 ? (modifierDelta / baseValue) * 100 : undefined;
+
+  // totalPercent = raw data modifier % + delta-as-%-of-base
+  // e.g. 18.0% (base modifier) + 3.2% (how much delta is of base) = 21.2%
+  const totalPercentNum =
+    modifierMode !== "integerAdditive" && typeof deltaPercent === "number"
+      ? modifierValue + deltaPercent
+      : deltaPercent;
 
   return {
     base: formatModifiedNumber(baseValue, property),
+    basePercent: rawPercent,
     modifier: formatSignedModifiedNumber(modifierDelta, property),
-    modifierPercent: modifierMode === "integerAdditive" ? deltaPercent : delta,
+    modifierPercent: deltaPercent !== undefined ? formatModifierPercent(deltaPercent) : undefined,
     total: formatModifiedNumber(modifiedValue, property),
-    totalPercent: deltaPercent,
+    totalPercent: totalPercentNum !== undefined ? formatModifierPercent(totalPercentNum) : undefined,
   };
+}
+
+function MaterialStatIcon({ property }: { property: string }) {
+  const label = formatModifierStatName(property);
+
+  type IconKey = "shield" | "heart" | "pulse" | "zap" | "droplet" | "radar" | "recoil" | "reload" | "spread" | "damage";
+
+  const icon: IconKey = (() => {
+    if (property.includes("Shield") || property.includes("Resistance")) return "shield";
+    if (property === "GPP_Health_MaxHealth") return "heart";
+    if (property.includes("Frequency") || property.includes("FireRate")) return "pulse";
+    if (property.includes("Power")) return "zap";
+    if (property.includes("Coolant")) return "droplet";
+    if (property.includes("Radar")) return "radar";
+    if (property.includes("Recoil")) return "recoil";
+    if (property.includes("Reload")) return "reload";
+    if (property.includes("Spread")) return "spread";
+    if (property.includes("Damage")) return "damage";
+    return "heart";
+  })();
+
+  const paths: Record<IconKey, React.ReactNode> = {
+    shield: <path d="M12 3.5 5.5 6.4v5.1c0 4.4 2.7 8 6.5 9 3.8-1 6.5-4.6 6.5-9V6.4L12 3.5Z" />,
+    heart: <path d="M12 20.3s-6.9-4.1-8.2-8.4C2.9 8.8 4.5 6 7.3 6c1.7 0 3.1.9 4.7 2.6C13.6 6.9 15 6 16.7 6c2.8 0 4.4 2.8 3.5 5.9-1.3 4.3-8.2 8.4-8.2 8.4Z" />,
+    pulse: <path d="M3.5 12h3.3l1.7-4.3 3 8.6 2-5.2h2.2l1.1-2.5 1.6 3.4h2.1" />,
+    zap: <path d="M13 2 4.5 13.5H12L11 22l8.5-11.5H12L13 2Z" />,
+    droplet: <path d="M12 3c0 0-6 6.3-6 10a6 6 0 0 0 12 0c0-3.7-6-10-6-10Z" />,
+    radar: <><circle cx="12" cy="12" r="2" /><path d="M12 2a10 10 0 0 1 0 20M12 6a6 6 0 0 1 0 12" /></>,
+    recoil: <path d="M4 12h10M10 8l4 4-4 4M18 7v10" />,
+    reload: <path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M20 7v4h-4M4 17v-4h4" />,
+    spread: <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0-2 0M6 6l3.5 3.5M18 6l-3.5 3.5M6 18l3.5-3.5M18 18l-3.5-3.5" />,
+    damage: <path d="M12 2 9 9H2l5.5 4-2 7L12 16l6.5 4-2-7L22 9h-7L12 2Z" />,
+  };
+
+  return (
+    <span className="craft-matq-stat-icon" aria-hidden="true" data-icon={icon}>
+      <svg viewBox="0 0 24 24" focusable="false">
+        {paths[icon]}
+      </svg>
+      <span className="sr-only">{label}</span>
+    </span>
+  );
+}
+
+function ChevronIcon({ expanded }: { expanded: boolean }) {
+  return (
+    <span className="craft-matq-chevron" aria-hidden="true" data-expanded={expanded ? "true" : "false"}>
+      <svg viewBox="0 0 20 20" focusable="false">
+        <path d="m5 8 5 5 5-5" />
+      </svg>
+    </span>
+  );
 }
 
 function formatModifiedStat(
@@ -1134,6 +1229,24 @@ function MaterialQualityRow({
       return order(a.property) - order(b.property);
     });
   }, [mat.qualityModifiers, quality]);
+  const [expandedModifierRows, setExpandedModifierRows] = useState<Set<string>>(() => new Set());
+  const [hasTouchedModifierRows, setHasTouchedModifierRows] = useState(false);
+  const defaultExpandedRowKey = useMemo(() => {
+    const firstExpandable = atQuality.find((m) => getBaseStatValue(recipe, m.property) !== undefined);
+    return firstExpandable ? `${firstExpandable.slot}||${firstExpandable.property}` : null;
+  }, [atQuality, recipe]);
+  const toggleModifierRow = useCallback((rowKey: string) => {
+    setHasTouchedModifierRows(true);
+    setExpandedModifierRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(rowKey)) {
+        next.delete(rowKey);
+      } else {
+        next.add(rowKey);
+      }
+      return next;
+    });
+  }, []);
 
   const railMarkers = useMemo(
     () =>
@@ -1263,77 +1376,118 @@ function MaterialQualityRow({
               m.modifierMode,
             );
             const isModifierOnly = !display.base || !display.total;
+            const rowKey = `${m.slot}||${m.property}`;
+            const expanded = !isModifierOnly && (
+              hasTouchedModifierRows
+                ? expandedModifierRows.has(rowKey)
+                : rowKey === defaultExpandedRowKey
+            );
 
             return (
               <div
                 key={i}
-                className={`craft-modifier-row craft-matq-mod-chip${isModifierOnly ? " craft-modifier-row--modifier-only" : ""}`}
+                className={`craft-modifier-row craft-matq-mod-chip${expanded ? " craft-matq-mod-chip--expanded" : ""}`}
               >
                 <div className="craft-modifier-main">
                   <span className="craft-modifier-label craft-matq-mod-prop">
-                    {formatModifierStatName(m.property)}
+                    <MaterialStatIcon property={m.property} />
+                    <span className="craft-matq-mod-name">{formatModifierStatName(m.property)}</span>
                   </span>
 
                   <span
                     className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)}`}
                   >
-                    {(() => {
-                      if (isModifierOnly) {
-                        return (
-                          <span className="craft-matq-stat-stack craft-matq-stat-stack--modifier-only">
-                            <span className="craft-matq-stat-part craft-stat-modifier">
-                              <span className="craft-matq-stat-label">Modifier</span>
-                              <span className="craft-matq-stat-number">
-                                {display.modifier}
-                                {display.modifierPercent && display.modifierPercent !== display.modifier && (
-                                  <span className="craft-matq-stat-percent">
-                                    ({display.modifierPercent})
-                                  </span>
-                                )}
+                    <span
+                      className="craft-matq-stat-stack"
+                      aria-label={`${formatModifierStatName(m.property)} modifier breakdown`}
+                    >
+                      {display.base && (
+                        <span className="craft-matq-stat-part craft-stat-base">
+                          <span className="craft-matq-stat-label">Base</span>
+                          <span className="craft-matq-stat-number">
+                            {display.base}
+                            {display.basePercent && (
+                              <span className="craft-matq-stat-percent craft-stat-base">
+                                ({display.basePercent})
                               </span>
-                            </span>
-                          </span>
-                        );
-                      }
-
-                      return (
-                        <span
-                          className="craft-matq-stat-stack"
-                          aria-label={`${formatModifierStatName(m.property)} modifier breakdown`}
-                        >
-                          <span className="craft-matq-stat-part craft-stat-base">
-                            <span className="craft-matq-stat-label">Base</span>
-                            <span className="craft-matq-stat-number">{display.base}</span>
-                          </span>
-                          <span className="craft-matq-stat-part craft-stat-modifier">
-                            <span className="craft-matq-stat-label">Modifier</span>
-                            <span className="craft-matq-stat-number">
-                              {display.modifier}
-                              {display.modifierPercent && (
-                                <span className="craft-matq-stat-percent">
-                                  ({display.modifierPercent})
-                                </span>
-                              )}
-                            </span>
-                          </span>
-                          <span className="craft-matq-stat-part craft-stat-total">
-                            <span className="craft-matq-stat-label">Total</span>
-                            <span className="craft-matq-stat-number">
-                              {display.total}
-                              {display.totalPercent && (
-                                <span className="craft-matq-stat-percent">
-                                  ({display.totalPercent})
-                                </span>
-                              )}
-                            </span>
+                            )}
                           </span>
                         </span>
-                      );
-                    })()}
+                      )}
+                      <span className="craft-matq-stat-part craft-stat-modifier">
+                        <span className="craft-matq-stat-label">Modifier</span>
+                        <span className="craft-matq-stat-number">
+                          {display.modifier}
+                          {display.modifierPercent && (
+                            <span className="craft-matq-stat-percent">
+                              ({display.modifierPercent})
+                            </span>
+                          )}
+                        </span>
+                      </span>
+                      {display.total && (
+                        <span className="craft-matq-stat-part craft-stat-total">
+                          <span className="craft-matq-stat-label">Total</span>
+                          <span className="craft-matq-stat-number">
+                            {display.total}
+                            {display.totalPercent && (
+                              <span className="craft-matq-stat-percent">
+                                ({display.totalPercent})
+                              </span>
+                            )}
+                          </span>
+                        </span>
+                      )}
+                    </span>
                   </span>
+                  {!isModifierOnly && (
+                    <button
+                      type="button"
+                      className="craft-matq-row-toggle"
+                      aria-label={`${expanded ? "Collapse" : "Expand"} ${formatModifierStatName(m.property)} modifier breakdown`}
+                      aria-expanded={expanded}
+                      onClick={() => toggleModifierRow(rowKey)}
+                    >
+                      <ChevronIcon expanded={expanded} />
+                    </button>
+                  )}
                 </div>
 
-                
+                {expanded && (
+                  <div className="craft-matq-breakdown">
+                    <div className="craft-matq-breakdown-table">
+                      <div className="craft-matq-breakdown-title">Modifier Breakdown</div>
+                      <div className="craft-matq-breakdown-row">
+                        <span>Band Bonus ({bandNumber})</span>
+                        <strong className={getImpactClass(impact)}>{display.modifier}</strong>
+                        <strong className={getImpactClass(impact)}>
+                          {display.modifierPercent ? `(${display.modifierPercent})` : "--"}
+                        </strong>
+                      </div>
+                      <div className="craft-matq-breakdown-row">
+                        <span>Grade Bonus ({quality})</span>
+                        <strong>--</strong>
+                        <strong>--</strong>
+                      </div>
+                      <div className="craft-matq-breakdown-row">
+                        <span>Specialization ({formatModifierStatName(m.property)})</span>
+                        <strong>--</strong>
+                        <strong>--</strong>
+                      </div>
+                      <div className="craft-matq-breakdown-row craft-matq-breakdown-row--total">
+                        <span>Total Modifier</span>
+                        <strong className={getImpactClass(impact)}>{display.modifier}</strong>
+                        <strong className={getImpactClass(impact)}>
+                          {display.modifierPercent ? `(${display.modifierPercent})` : "--"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="craft-matq-breakdown-note">
+                      <span className="craft-matq-note-icon" aria-hidden="true">i</span>
+                      <span>Percentages are based on component base values.</span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -1657,24 +1811,7 @@ function CraftedItemSummaryPanel({
       </div>
 
       {/* Where to Find */}
-      <div className="craft-summary-section craft-summary-section--grow">
-        {rewardPools.length === 0 ? (
-          <div className="craft-summary-empty">
-            Blueprint source not found in parsed reward data
-          </div>
-        ) : (
-          <div className="craft-blueprint-source-list">
-            {rewardPools.map((pool, i) => (
-              <div
-                key={`${pool.displayName}-${i}`}
-                className="craft-blueprint-source"
-              >
-                <div className="craft-blueprint-source-name">{pool.displayName}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+
 
       <div className="craft-summary-action-row">
         <button
