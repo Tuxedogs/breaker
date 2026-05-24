@@ -8,8 +8,6 @@ import {
 import { Link } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
-import { canonicalMiningMaterial } from "../../../../features/mining/materialIdentity";
-import { loadStaticMiningIndex, type StaticMiningMaterialResource } from "../../../../features/mining/staticMiningIndex";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
@@ -124,44 +122,25 @@ const VEHICLE_TYPE_LABEL_MAP: Record<string, string> = {
 
 // Types collapsed into the Utility chip
 const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
-const MANUFACTURED_MINEABLE_ALIASES: Record<string, string> = {
-  fde0cd6588274b23804dcc8845dfa7ac: "aslarite",
-  insulativelinermaterial: "aslarite",
-};
-
 function normalizeVehicleTypeLabel(value: string): string {
   return VEHICLE_TYPE_LABEL_MAP[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function buildMineableResourceList(
-  recipes: ComponentRecipe[],
-  staticResources: StaticMiningMaterialResource[] | null,
-) {
-  const byKey = new Map<string, { id: string; label: string; miningType?: string }>();
-  const staticResourceKeys = staticResources ? new Set(staticResources.map((resource) => resource.id)) : null;
-
-  for (const resource of staticResources ?? []) {
-    if (!resource.id || byKey.has(resource.id)) continue;
-    byKey.set(resource.id, resource);
-  }
+function buildMineableResourceList(recipes: ComponentRecipe[]) {
+  const byName = new Map<string, { id: string; label: string }>();
 
   for (const recipe of recipes) {
     for (const material of recipe.materials ?? []) {
       const label = String(material.material_name ?? "").trim();
       if (!label) continue;
-      const canonical = canonicalMiningMaterial({
-        id: material.cost_id,
-        displayName: label,
-        materialName: label,
-      });
-      const key = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
-      if (!key || canonical.unresolvedUuid || byKey.has(key)) continue;
-      if (staticResourceKeys && !staticResourceKeys.has(key)) continue;
-      byKey.set(key, { id: key, label: canonical.label });
+      const id = material.cost_id || label;
+      const key = label.toLowerCase().replace(/[^a-z0-9]+/g, "");
+      if (!key || byName.has(key)) continue;
+      byName.set(key, { id, label });
     }
   }
 
-  return [...byKey.values()].sort((left, right) => left.label.localeCompare(right.label));
+  return [...byName.values()];
 }
 
 function readStoredSidebarState<T>(key: string, fallback: T): T {
@@ -2081,10 +2060,9 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
-  const [staticMiningResources, setStaticMiningResources] = useState<StaticMiningMaterialResource[] | null>(null);
   const mineableGroups = useMemo(
-    () => buildResourceGroups(buildMineableResourceList(recipes, staticMiningResources)),
-    [recipes, staticMiningResources],
+    () => buildResourceGroups(buildMineableResourceList(recipes)),
+    [recipes],
   );
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [cfDrawerOpen, setCfDrawerOpen] = useState(false);
@@ -2099,21 +2077,6 @@ export default function ComponentRecipeTable({
   );
   const { session, loading: authLoading } = useAuthSession();
   const resetSelection = useCallback(() => setSelectedGroupId(null), []);
-
-  useEffect(() => {
-    let cancelled = false;
-    loadStaticMiningIndex()
-      .then((index) => {
-        if (!cancelled) setStaticMiningResources(index.materialResources);
-      })
-      .catch((error) => {
-        if (import.meta.env.DEV) console.warn("[crafting] static mining resources failed to load", error);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   useEffect(() => {
     const accessToken = session?.access_token;
@@ -2327,29 +2290,14 @@ export default function ComponentRecipeTable({
 
         if (resourceFilters.size) {
           const recipeName = r.component_name.trim().toLowerCase();
-          const usesSelectedInput = (r.materials ?? []).some((material) => {
-            const materialName = String(material.material_name ?? "").trim();
-            const canonical = canonicalMiningMaterial({
-              id: material.cost_id,
-              displayName: materialName,
-              materialName,
-            });
-            const resourceKey = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
-            return resourceFilters.has(resourceKey) ||
-              resourceFilters.has(material.cost_id || material.material_name) ||
-              resourceFilters.has(material.material_name);
-          });
-          const isSelectedResourceItself = (r.materials ?? []).some((material) => {
-            const materialName = String(material.material_name ?? "").trim();
-            const canonical = canonicalMiningMaterial({
-              id: material.cost_id,
-              displayName: materialName,
-              materialName,
-            });
-            const resourceKey = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
-            return resourceFilters.has(resourceKey) &&
-              materialName.trim().toLowerCase() === recipeName;
-          });
+          const usesSelectedInput = (r.materials ?? []).some((material) =>
+            resourceFilters.has(material.cost_id || material.material_name) ||
+            resourceFilters.has(material.material_name)
+          );
+          const isSelectedResourceItself = (r.materials ?? []).some((material) =>
+            resourceFilters.has(material.cost_id || material.material_name) &&
+            material.material_name.trim().toLowerCase() === recipeName
+          );
           if (!usesSelectedInput || isSelectedResourceItself) return false;
         }
 
