@@ -107,15 +107,10 @@
 
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-
   flex: 1 1 0;
   min-height: 0;
   box-sizing: border-box;
-  padding-top: 0.55rem;
   overflow: hidden;
-	padding-left: clamp(0.5rem, 2vw, 0.1rem);
-	padding-right: 0.5rem;
 
 }
 
@@ -207,11 +202,22 @@
   flex-wrap: wrap;
 }
 
+.craft-fg--ship .craft-frl-chips--ship {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  flex-wrap: initial;
+}
+
 .craft-frl-chip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.24rem;
   height: 28px;
+  min-width: 0;
   padding: 0.2rem 0.56rem;
   border: var(--border-soft);
   border-radius: 4px;
@@ -224,6 +230,18 @@
   cursor: pointer;
   transition: all 0.12s;
   box-sizing: border-box;
+}
+
+.craft-fg--ship .craft-frl-chip {
+  width: 100%;
+  overflow: hidden;
+}
+
+.craft-frl-chip-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .craft-frl-chip:hover {
@@ -757,6 +775,9 @@
 }
 
 .craft-matq-stat-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 0;
   color: var(--void-text-dim);
   font-size: 0.62rem;
@@ -765,6 +786,23 @@
   line-height: 1;
   text-transform: uppercase;
   opacity: 1;
+}
+
+.craft-col-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  fill: currentColor;
+  stroke: none;
+  vertical-align: middle;
+  opacity: 0.72;
+}
+
+.craft-stat-modifier .craft-col-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2px;
 }
 
 .craft-matq-stat-number {
@@ -1376,8 +1414,8 @@
   overflow: hidden;
   padding: 0;
   gap: 0;
-  background: #080f14;
-  border: 1px solid rgba(148, 163, 184, 0.10);
+  background: var(--void-bg-3);
+  border: 1px solid var(--void-border-soft);
   border-radius: 7px;
   box-shadow:
     0 8px 28px rgba(0, 0, 0, 0.48),
@@ -1392,8 +1430,8 @@
   min-height: 58px;
   margin: 0;
   padding: 10px 14px 10px;
-  background: #0c161d;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+  background: var(--void-bg-2);
+  border-bottom: 0;
   border-radius: 0;
 }
 
@@ -1409,7 +1447,7 @@
 
 .craft-page .craft-material-card.craft-matq-card .craft-material-name,
 .craft-page .craft-material-card.craft-matq-card .craft-matq-name {
-  color: #dde8e4;
+  color: var(--void-text-main);
   font-size: 1.22rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -1417,7 +1455,7 @@
 
 .craft-page .craft-material-card.craft-matq-card .craft-material-slot,
 .craft-page .craft-material-card.craft-matq-card .craft-matq-slot {
-  color: rgba(148, 163, 184, 0.52);
+  color: var(--void-text-dim);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1428,9 +1466,9 @@
 .craft-page .craft-material-card.craft-matq-card .craft-matq-band-pill {
   margin-top: 0;
   padding: 4px 9px;
-  color: #ffb21a;
-  background: rgba(255, 178, 26, 0.06);
-  border: 1px solid rgba(255, 178, 26, 0.42);
+  color: var(--void-accent-amber);
+  background: var(--void-active-fade);
+  border: 1px solid var(--void-border-hover);
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 800;
@@ -1440,12 +1478,12 @@
 
 .craft-page .craft-material-card.craft-matq-card .craft-quality-control.craft-matq-slider-wrap {
   min-height: 62px;
-  margin: 0;
-  padding: 14px 16px 10px;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.07);
-  border-radius: 0;
+  margin: 0.9rem 0.5rem;
+  padding: 0.9rem 0.3rem 0.7rem;
+  background: var(--void-bg-deep);
+  border: 1px solid var(--void-border-divider);
+  border-radius: 5px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.32), inset 0 1px 2px rgba(0, 0, 0, 0.22);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-quality-rail-wrap,
@@ -1458,12 +1496,13 @@
   display: grid;
   grid-template-columns: 1fr;
   width: 100%;
-  background: transparent;
+  background: var(--void-bg-2);
   border: 0;
   box-shadow: none;
   gap: 0;
   margin: 0;
-  padding: 0;
+  padding: 0 0 8px;
+  border-radius: 0 0 7px 7px;
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-modifier-list.craft-matq-mods > .craft-modifier-row.craft-matq-mod-chip,
@@ -1475,9 +1514,9 @@
   padding: 0;
   background: transparent;
   border: 0;
-  border-top: 1px solid rgba(148, 163, 184, 0.07);
+  border-top: 1px solid var(--void-border-divider);
   border-radius: 0;
-  color: #d8e4e0;
+  color: var(--void-text-main);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-modifier-list.craft-matq-mods > .craft-modifier-row.craft-matq-mod-chip:first-child {
@@ -1488,13 +1527,8 @@
   margin: 12px;
   width: calc(100% - 24px);
   min-height: 0;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(14, 27, 34, 0.78),
-      rgba(8, 17, 22, 0.86)
-    );
-  border: 1px solid rgba(132, 153, 163, 0.18);
+  background: var(--bg-card-dark);
+  border: 1px solid var(--void-border-panel);
   border-radius: 5px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.026),
@@ -1511,9 +1545,9 @@
   padding: 0 18px;
 }
 
-.craft-page .craft-material-card.craft-matq-card .craft-modifier-row.craft-matq-mod-chip .craft-matq-mod-val,
-.craft-page .craft-material-card.craft-matq-card .craft-modifier-row.craft-matq-mod-chip .craft-matq-stat-stack {
-  display: contents;
+.craft-page .craft-material-card.craft-matq-card .craft-matq-stat-empty {
+  color: var(--void-text-dim);
+  opacity: 0.45;
 }
 
 
@@ -1521,7 +1555,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #c8d8d4;
+  color: var(--void-text-muted);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -1535,7 +1569,7 @@
   width: 16px;
   height: 16px;
   flex: 0 0 16px;
-  color: rgba(148, 163, 184, 0.55);
+  color: var(--void-text-dim);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-stat-icon svg {
@@ -1563,7 +1597,7 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  color: rgba(232, 239, 238, 0.9);
+  color: var(--void-text-muted);
   background: transparent;
   border: 0;
   border-radius: 3px;
@@ -1571,8 +1605,8 @@
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-row-toggle:hover {
-  color: #ffb21a;
-  background: rgba(255, 178, 26, 0.06);
+  color: var(--void-accent-amber);
+  background: var(--void-active-fade);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-chevron,
@@ -1603,7 +1637,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(220px, 0.36fr);
   gap: 20px;
   padding: 0 18px 18px;
-  border-top: 1px solid rgba(132, 153, 163, 0.14);
+  border-top: 1px solid var(--void-border-soft);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-table {
@@ -1614,7 +1648,7 @@
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-title {
   margin-bottom: 10px;
-  color: rgba(180, 190, 190, 0.72);
+  color: var(--void-text-dim);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.13em;
@@ -1628,31 +1662,31 @@
   align-items: center;
   gap: 28px;
   min-height: 28px;
-  color: rgba(202, 211, 209, 0.72);
+  color: var(--void-text-muted);
   font-size: 0.82rem;
   font-weight: 600;
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-row strong {
-  color: rgba(202, 211, 209, 0.54);
+  color: var(--void-text-dim);
   font-size: 0.86rem;
   font-weight: 800;
   text-align: right;
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-row strong.craft-ok {
-  color: #4ee0bd;
+  color: var(--void-accent-teal);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-row strong.craft-shortage {
-  color: #ff5d66;
+  color: var(--craft-bad);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown-row--total {
   margin-top: 6px;
   padding-top: 12px;
-  border-top: 1px solid rgba(132, 153, 163, 0.16);
-  color: #f2f5f2;
+  border-top: 1px solid var(--void-border-panel);
+  color: var(--void-text-main);
   font-weight: 800;
 }
 
@@ -1664,14 +1698,9 @@
   min-height: 104px;
   align-self: end;
   padding: 18px 20px;
-  color: rgba(202, 211, 209, 0.68);
-  background:
-    linear-gradient(
-      180deg,
-      rgba(4, 10, 14, 0.82),
-      rgba(4, 9, 13, 0.96)
-    );
-  border: 1px solid rgba(132, 153, 163, 0.10);
+  color: var(--void-text-muted);
+  background: var(--bg-card-dark);
+  border: 1px solid var(--void-border-soft);
   border-radius: 4px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
   font-size: 0.86rem;
@@ -1684,8 +1713,8 @@
   justify-content: center;
   width: 17px;
   height: 17px;
-  color: rgba(232, 239, 238, 0.78);
-  border: 1px solid rgba(232, 239, 238, 0.58);
+  color: var(--void-text-muted);
+  border: 1px solid var(--void-border-panel);
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 800;
@@ -1694,7 +1723,7 @@
 .craft-page .craft-material-card.craft-matq-card .craft-quality-rail,
 .craft-page .craft-material-card.craft-matq-card .craft-matq-rail {
   height: 5px;
-  background: rgba(150, 160, 165, 0.18);
+  background: var(--void-border-panel);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-quality-rail::before,
@@ -1706,16 +1735,16 @@
   bottom: 0;
   width: var(--fill-pct, 0%);
   border-radius: inherit;
-  background: linear-gradient(90deg, #c87900, #ffb21a);
-  box-shadow: 0 0 8px rgba(255, 178, 26, 0.20);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--void-accent-amber) 55%, #000), var(--void-accent-amber));
+  box-shadow: 0 0 8px var(--void-accent-amber-glow);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-quality-rail-fill,
 .craft-page .craft-material-card.craft-matq-card .craft-matq-rail-fill {
-  background: linear-gradient(90deg, #c87900, #ffb21a);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--void-accent-amber) 55%, #000), var(--void-accent-amber));
   box-shadow:
-    0 0 8px rgba(255, 178, 26, 0.24),
-    0 0 2px rgba(255, 178, 26, 0.9);
+    0 0 8px var(--void-accent-amber-glow),
+    0 0 2px var(--void-accent-amber);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-quality-input,
@@ -1730,24 +1759,23 @@
 
 
 
-
-
-
 .craft-page .craft-material-card.craft-matq-card .craft-stat-base {
-  color: #8ea09c;
+  color: var(--void-text-muted);
 }
 
-.craft-page .craft-material-card.craft-matq-card .craft-stat-modifier,
-.craft-page .craft-material-card.craft-matq-card .craft-matq-mod-val {
-  color: #3ecfac;
+.craft-page .craft-material-card.craft-matq-card .craft-stat-modifier {
+  color: var(--void-accent-teal);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-stat-total {
-  color: #ffb21a;
+  color: var(--void-accent-amber);
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-stat-label {
-  color: rgba(148, 163, 184, 0.45);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--void-text-dim);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.10em;
@@ -1773,18 +1801,16 @@
     max-width: 100%;
   }
 
+  .craft-page .craft-material-card.craft-matq-card .craft-quality-control.craft-matq-slider-wrap {
+    margin: 0 8px 6px;
+    padding: 10px 10px 8px;
+  }
+
   .craft-page .craft-material-card.craft-matq-card .craft-modifier-row.craft-matq-mod-chip .craft-modifier-main {
     grid-template-columns: 1fr;
     gap: 8px;
     align-items: start;
     padding: 10px 14px;
-  }
-
-  .craft-page .craft-material-card.craft-matq-card .craft-modifier-row.craft-matq-mod-chip .craft-matq-mod-val,
-  .craft-page .craft-material-card.craft-matq-card .craft-modifier-row.craft-matq-mod-chip .craft-matq-stat-stack {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
   }
 
   .craft-page .craft-material-card.craft-matq-card .craft-matq-breakdown {

@@ -1394,49 +1394,41 @@ function MaterialQualityRow({
                     <span className="craft-matq-mod-name">{formatModifierStatName(m.property)}</span>
                   </span>
 
-                  <span
-                    className={`craft-modifier-value craft-matq-mod-val ${getImpactClass(impact)}`}
-                  >
-                    <span
-                      className="craft-matq-stat-stack"
-                      aria-label={`${formatModifierStatName(m.property)} modifier breakdown`}
-                    >
-                      {display.base && (
-                        <span className="craft-matq-stat-part craft-stat-base">
-                          <span className="craft-matq-stat-label">Base</span>
-                          <span className="craft-matq-stat-number">
-                            {display.base}
-                            {display.basePercent && (
-                              <span className="craft-matq-stat-percent craft-stat-base">
-                                ({display.basePercent})
-                              </span>
-                            )}
-                          </span>
-                        </span>
+                  <span className="craft-matq-stat-part craft-stat-base">
+                    <span className="craft-matq-stat-label">
+                      <svg className="craft-col-icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="4" rx="1.5" /><rect x="2" y="7" width="12" height="4" rx="1.5" opacity="0.55" /><rect x="2" y="12" width="12" height="2" rx="1" opacity="0.3" /></svg>
+                      Base
+                    </span>
+                    <span className="craft-matq-stat-number">
+                      {display.base ?? <span className="craft-matq-stat-empty">—</span>}
+                      {display.base && display.basePercent && (
+                        <span className="craft-matq-stat-percent craft-stat-base">({display.basePercent})</span>
                       )}
-                      <span className="craft-matq-stat-part craft-stat-modifier">
-                        <span className="craft-matq-stat-label">Modifier</span>
-                        <span className="craft-matq-stat-number">
-                          {display.modifier}
-                          {display.modifierPercent && (
-                            <span className="craft-matq-stat-percent">
-                              ({display.modifierPercent})
-                            </span>
-                          )}
-                        </span>
-                      </span>
-                      {display.total && (
-                        <span className="craft-matq-stat-part craft-stat-total">
-                          <span className="craft-matq-stat-label">Total</span>
-                          <span className="craft-matq-stat-number">
-                            {display.total}
-                            {display.totalPercent && (
-                              <span className="craft-matq-stat-percent">
-                                ({display.totalPercent})
-                              </span>
-                            )}
-                          </span>
-                        </span>
+                    </span>
+                  </span>
+
+                  <span className="craft-matq-stat-part craft-stat-modifier">
+                    <span className="craft-matq-stat-label">
+                      <svg className="craft-col-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v12M2 8h12" strokeWidth="2.2" strokeLinecap="round" /></svg>
+                      Modifier
+                    </span>
+                    <span className={`craft-matq-stat-number ${getImpactClass(impact)}`}>
+                      {display.modifier}
+                      {display.modifierPercent && (
+                        <span className="craft-matq-stat-percent">({display.modifierPercent})</span>
+                      )}
+                    </span>
+                  </span>
+
+                  <span className="craft-matq-stat-part craft-stat-total">
+                    <span className="craft-matq-stat-label">
+                      <svg className="craft-col-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3h10L7.5 8.5 13 13H3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                      Total
+                    </span>
+                    <span className="craft-matq-stat-number craft-stat-total">
+                      {display.total ?? <span className="craft-matq-stat-empty">—</span>}
+                      {display.total && display.totalPercent && (
+                        <span className="craft-matq-stat-percent">({display.totalPercent})</span>
                       )}
                     </span>
                   </span>
@@ -1453,41 +1445,7 @@ function MaterialQualityRow({
                   )}
                 </div>
 
-                {expanded && (
-                  <div className="craft-matq-breakdown">
-                    <div className="craft-matq-breakdown-table">
-                      <div className="craft-matq-breakdown-title">Modifier Breakdown</div>
-                      <div className="craft-matq-breakdown-row">
-                        <span>Band Bonus ({bandNumber})</span>
-                        <strong className={getImpactClass(impact)}>{display.modifier}</strong>
-                        <strong className={getImpactClass(impact)}>
-                          {display.modifierPercent ? `(${display.modifierPercent})` : "--"}
-                        </strong>
-                      </div>
-                      <div className="craft-matq-breakdown-row">
-                        <span>Grade Bonus ({quality})</span>
-                        <strong>--</strong>
-                        <strong>--</strong>
-                      </div>
-                      <div className="craft-matq-breakdown-row">
-                        <span>Specialization ({formatModifierStatName(m.property)})</span>
-                        <strong>--</strong>
-                        <strong>--</strong>
-                      </div>
-                      <div className="craft-matq-breakdown-row craft-matq-breakdown-row--total">
-                        <span>Total Modifier</span>
-                        <strong className={getImpactClass(impact)}>{display.modifier}</strong>
-                        <strong className={getImpactClass(impact)}>
-                          {display.modifierPercent ? `(${display.modifierPercent})` : "--"}
-                        </strong>
-                      </div>
-                    </div>
-                    <div className="craft-matq-breakdown-note">
-                      <span className="craft-matq-note-icon" aria-hidden="true">i</span>
-                      <span>Percentages are based on component base values.</span>
-                    </div>
-                  </div>
-                )}
+         
               </div>
             );
           })}
@@ -2501,20 +2459,21 @@ export default function ComponentRecipeTable({
           )}
         </div>
 
-        {/* Ship Mineables — explicit rows of 7 to guarantee max 3 rows */}
+        {/* Ship Mineables — explicit rows of 12 to guarantee max 3 rows */}
         {mineableGroups.shipAndHarvestable.length > 0 && (
           <div className="craft-fg craft-fg--ship">
             <span className="craft-frl-label">Ship Mineables</span>
-            {[0, 7, 14].map((rowStart) => {
-              const rowChips = mineableGroups.shipAndHarvestable.slice(rowStart, rowStart + 7);
+            {[0, 12, 24].map((rowStart) => {
+              const rowChips = mineableGroups.shipAndHarvestable.slice(rowStart, rowStart + 12);
               if (rowChips.length === 0) return null;
               return (
-                <div key={rowStart} className="craft-frl-chips">
+                <div key={rowStart} className="craft-frl-chips craft-frl-chips--ship">
                   {rowChips.map((chip) => (
                     <button key={chip.id} type="button"
+                      title={chip.label}
                       className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
                       onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                    >{chip.label}</button>
+                    ><span className="craft-frl-chip-label">{chip.label}</span></button>
                   ))}
                 </div>
               );
