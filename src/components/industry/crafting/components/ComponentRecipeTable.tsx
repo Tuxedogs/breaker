@@ -8,6 +8,8 @@ import {
 import { Link } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
+import { canonicalMiningMaterial } from "../../../../features/mining/materialIdentity";
+import { loadStaticMiningIndex, type StaticMiningMaterialResource } from "../../../../features/mining/staticMiningIndex";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
 import {
   getModifiersAtQuality,
@@ -122,26 +124,44 @@ const VEHICLE_TYPE_LABEL_MAP: Record<string, string> = {
 
 // Types collapsed into the Utility chip
 const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
+const MANUFACTURED_MINEABLE_ALIASES: Record<string, string> = {
+  fde0cd6588274b23804dcc8845dfa7ac: "aslarite",
+  insulativelinermaterial: "aslarite",
+};
 
 function normalizeVehicleTypeLabel(value: string): string {
   return VEHICLE_TYPE_LABEL_MAP[value] ?? value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function buildMineableResourceList(recipes: ComponentRecipe[]) {
-  const byName = new Map<string, { id: string; label: string }>();
+function buildMineableResourceList(
+  recipes: ComponentRecipe[],
+  staticResources: StaticMiningMaterialResource[] | null,
+) {
+  const byKey = new Map<string, { id: string; label: string; miningType?: string }>();
+  const staticResourceKeys = staticResources ? new Set(staticResources.map((resource) => resource.id)) : null;
+
+  for (const resource of staticResources ?? []) {
+    if (!resource.id || byKey.has(resource.id)) continue;
+    byKey.set(resource.id, resource);
+  }
 
   for (const recipe of recipes) {
     for (const material of recipe.materials ?? []) {
       const label = String(material.material_name ?? "").trim();
       if (!label) continue;
-      const id = material.cost_id || label;
-      const key = label.toLowerCase().replace(/[^a-z0-9]+/g, "");
-      if (!key || byName.has(key)) continue;
-      byName.set(key, { id, label });
+      const canonical = canonicalMiningMaterial({
+        id: material.cost_id,
+        displayName: label,
+        materialName: label,
+      });
+      const key = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
+      if (!key || canonical.unresolvedUuid || byKey.has(key)) continue;
+      if (staticResourceKeys && !staticResourceKeys.has(key)) continue;
+      byKey.set(key, { id: key, label: canonical.label });
     }
   }
 
-  return [...byName.values()];
+  return [...byKey.values()].sort((left, right) => left.label.localeCompare(right.label));
 }
 
 function readStoredSidebarState<T>(key: string, fallback: T): T {
@@ -2061,11 +2081,15 @@ export default function ComponentRecipeTable({
   const [gradeFilters, setGradeFilters] = useState<Set<string>>(() => new Set(initialSidebarState.grades));
   const [classFilters, setClassFilters] = useState<Set<string>>(() => new Set(initialSidebarState.classes));
   const [resourceFilters, setResourceFilters] = useState<Set<string>>(() => new Set(initialSidebarState.resources));
+  const [staticMiningResources, setStaticMiningResources] = useState<StaticMiningMaterialResource[] | null>(null);
   const mineableGroups = useMemo(
-    () => buildResourceGroups(buildMineableResourceList(recipes)),
-    [recipes],
+    () => buildResourceGroups(buildMineableResourceList(recipes, staticMiningResources)),
+    [recipes, staticMiningResources],
   );
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
+  const [cfDrawerOpen, setCfDrawerOpen] = useState(false);
+  const [cfDrawerGroup, setCfDrawerGroup] = useState<"type" | "category" | "ship" | "vehicle" | "hand">("type");
+  const [cfSearch, setCfSearch] = useState("");
   const shellRef = useRef<HTMLDivElement>(null);
   const [bookmarkedRecipeIds, setBookmarkedRecipeIds] = useState<Set<string>>(
     () => readStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY),
@@ -2075,6 +2099,21 @@ export default function ComponentRecipeTable({
   );
   const { session, loading: authLoading } = useAuthSession();
   const resetSelection = useCallback(() => setSelectedGroupId(null), []);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadStaticMiningIndex()
+      .then((index) => {
+        if (!cancelled) setStaticMiningResources(index.materialResources);
+      })
+      .catch((error) => {
+        if (import.meta.env.DEV) console.warn("[crafting] static mining resources failed to load", error);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const accessToken = session?.access_token;
@@ -2288,14 +2327,29 @@ export default function ComponentRecipeTable({
 
         if (resourceFilters.size) {
           const recipeName = r.component_name.trim().toLowerCase();
-          const usesSelectedInput = (r.materials ?? []).some((material) =>
-            resourceFilters.has(material.cost_id || material.material_name) ||
-            resourceFilters.has(material.material_name)
-          );
-          const isSelectedResourceItself = (r.materials ?? []).some((material) =>
-            resourceFilters.has(material.cost_id || material.material_name) &&
-            material.material_name.trim().toLowerCase() === recipeName
-          );
+          const usesSelectedInput = (r.materials ?? []).some((material) => {
+            const materialName = String(material.material_name ?? "").trim();
+            const canonical = canonicalMiningMaterial({
+              id: material.cost_id,
+              displayName: materialName,
+              materialName,
+            });
+            const resourceKey = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
+            return resourceFilters.has(resourceKey) ||
+              resourceFilters.has(material.cost_id || material.material_name) ||
+              resourceFilters.has(material.material_name);
+          });
+          const isSelectedResourceItself = (r.materials ?? []).some((material) => {
+            const materialName = String(material.material_name ?? "").trim();
+            const canonical = canonicalMiningMaterial({
+              id: material.cost_id,
+              displayName: materialName,
+              materialName,
+            });
+            const resourceKey = MANUFACTURED_MINEABLE_ALIASES[canonical.key] ?? canonical.key;
+            return resourceFilters.has(resourceKey) &&
+              materialName.trim().toLowerCase() === recipeName;
+          });
           if (!usesSelectedInput || isSelectedResourceItself) return false;
         }
 
@@ -2366,14 +2420,14 @@ export default function ComponentRecipeTable({
   return (
     <div className="craft-page craft-planner-shell" ref={shellRef}>
 
-      {/* ── Filter rail ── */}
-      <div className="craft-filter-rail">
+      {/* ── Compact filter bar ── */}
+      <div className={`cfb-bar${cfDrawerOpen ? " cfb-bar--open" : ""}`}>
 
-        {/* FPS */}
+        {/* FPS chips — always visible (small set) */}
         {fpsOptions.length > 0 && (
-          <div className="craft-frl-left">
+          <>
             <span className="craft-frl-label">FPS</span>
-            <div className="craft-frl-chips">
+            <div className="cfb-chips">
               {fpsOptions.map((opt) => (
                 <button key={opt.value} type="button"
                   className={`craft-frl-chip${fpsFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
@@ -2381,140 +2435,285 @@ export default function ComponentRecipeTable({
                 >{opt.label}</button>
               ))}
             </div>
-            <button type="button" className="craft-frl-clear" onClick={resetAll} disabled={!hasActiveFilters}>
-              Clear All
+            <div className="cfb-divider" />
+          </>
+        )}
+
+        {/* Summary group chips */}
+        {([
+          {
+            key: "type" as const,
+            label: "Type",
+            count: vehicleFilters.size,
+            total: vehicleOptions.length,
+            visible: vehicleOptions.length > 0,
+          },
+          {
+            key: "category" as const,
+            label: "Category",
+            count: sizeFilters.size + gradeFilters.size + classFilters.size,
+            total: sizeOptions.length + gradeOptions.length + classOptions.length,
+            visible: sizeOptions.length + gradeOptions.length + classOptions.length > 0,
+          },
+          {
+            key: "ship" as const,
+            label: "Ship",
+            count: mineableGroups.shipAndHarvestable.filter((c) => resourceFilters.has(c.id)).length,
+            total: mineableGroups.shipAndHarvestable.length,
+            visible: mineableGroups.shipAndHarvestable.length > 0,
+          },
+          {
+            key: "vehicle" as const,
+            label: "Vehicle",
+            count: mineableGroups.vehicle.filter((c) => resourceFilters.has(c.id)).length,
+            total: mineableGroups.vehicle.length,
+            visible: mineableGroups.vehicle.length > 0,
+          },
+          {
+            key: "hand" as const,
+            label: "Hand",
+            count: mineableGroups.hand.filter((c) => resourceFilters.has(c.id)).length,
+            total: mineableGroups.hand.length,
+            visible: mineableGroups.hand.length > 0,
+          },
+        ] as const).map((group) => {
+          if (!group.visible) return null;
+          return (
+            <button
+              key={group.key}
+              type="button"
+              className={`craft-frl-chip cfb-group-chip${group.count > 0 ? " craft-frl-chip--active" : ""}${cfDrawerOpen && cfDrawerGroup === group.key ? " cfb-group-chip--open" : ""}`}
+              onClick={() => {
+                if (cfDrawerOpen && cfDrawerGroup === group.key) {
+                  setCfDrawerOpen(false);
+                } else {
+                  setCfDrawerGroup(group.key);
+                  setCfDrawerOpen(true);
+                  setCfSearch("");
+                }
+              }}
+            >
+              {group.label}
+              {group.count > 0
+                ? <span className="mfr-chip-count">{group.count}</span>
+                : <span className="cfb-group-total">{group.total}</span>
+              }
+              <span className="cfb-chevron">{cfDrawerOpen && cfDrawerGroup === group.key ? "▲" : "▼"}</span>
             </button>
-          </div>
-        )}
+          );
+        })}
 
-        {/* Type — explicit 2-per-row so 7 chips = 3 rows, last row gets remainder */}
-        {vehicleOptions.length > 0 && (
-          <div className="craft-fg craft-fg--type">
-            <span className="craft-frl-label">Type</span>
-            {[0, 2, 4].map((rowStart) => {
-              const rowChips = vehicleOptions.slice(rowStart, rowStart + 2);
-              if (rowChips.length === 0) return null;
-              return (
-                <div key={rowStart} className="craft-frl-chips">
-                  {rowChips.map((opt) => {
-                    const isActive = opt.value === "__utility__"
-                      ? [...UTILITY_TYPES].some((t) => vehicleFilters.has(t)) || vehicleFilters.has("__utility__")
-                      : vehicleFilters.has(opt.value);
-                    return (
-                      <button key={opt.value} type="button"
-                        className={`craft-frl-chip${isActive ? " craft-frl-chip--active" : ""}`}
-                        onClick={() => {
-                          setVehicleFilters((prev) => {
-                            const n = new Set(prev);
-                            if (opt.value === "__utility__") {
-                              const utilityActive = [...UTILITY_TYPES].some((t) => n.has(t)) || n.has("__utility__");
-                              if (utilityActive) { UTILITY_TYPES.forEach((t) => n.delete(t)); n.delete("__utility__"); }
-                              else { n.add("__utility__"); }
-                            } else { n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); }
-                            return n;
-                          });
-                          resetSelection();
-                        }}
-                      >{opt.label}</button>
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Category */}
-        <div className="craft-fg craft-fg--category">
-          <span className="craft-frl-label">Category</span>
-          {sizeOptions.length > 0 && (
-            <div className="craft-frl-chips">
-              {sizeOptions.map((opt) => (
-                <button key={opt.value} type="button"
-                  className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                >{opt.label}</button>
-              ))}
-            </div>
-          )}
-          {gradeOptions.length > 0 && (
-            <div className="craft-frl-chips">
-              {gradeOptions.map((opt) => (
-                <button key={opt.value} type="button"
-                  className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                >{opt.label}</button>
-              ))}
-            </div>
-          )}
-          {classOptions.length > 0 && (
-            <div className="craft-frl-chips">
-              {classOptions.map((opt) => (
-                <button key={opt.value} type="button"
-                  className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
-                >{opt.label}</button>
-              ))}
-            </div>
-          )}
+        {/* Search */}
+        <div className="cfb-search-wrap">
+          <input
+            type="text"
+            className="cfb-search"
+            placeholder="Filter chips…"
+            value={cfSearch}
+            onChange={(e) => {
+              setCfSearch(e.target.value);
+              if (e.target.value.trim() && !cfDrawerOpen) {
+                setCfDrawerOpen(true);
+              }
+            }}
+          />
         </div>
 
-        {/* Ship Mineables — explicit rows of 12 to guarantee max 3 rows */}
-        {mineableGroups.shipAndHarvestable.length > 0 && (
-          <div className="craft-fg craft-fg--ship">
-            <span className="craft-frl-label">Ship Mineables</span>
-            {[0, 12, 24].map((rowStart) => {
-              const rowChips = mineableGroups.shipAndHarvestable.slice(rowStart, rowStart + 12);
-              if (rowChips.length === 0) return null;
+        <div className="cfb-spacer" />
+
+        <button type="button" className="craft-frl-clear" onClick={resetAll} disabled={!hasActiveFilters}>
+          Clear
+        </button>
+
+      </div>
+
+      {/* ── Tactical drawer ── */}
+      {cfDrawerOpen && (
+        <div className="cfb-drawer">
+
+          {/* Left rail */}
+          <div className="cfb-drawer-rail">
+            <span className="craft-frl-label" style={{ paddingLeft: "0.5rem" }}>Filter Group</span>
+            {([
+              { key: "type" as const, label: "Type", visible: vehicleOptions.length > 0 },
+              { key: "category" as const, label: "Category", visible: sizeOptions.length + gradeOptions.length + classOptions.length > 0 },
+              { key: "ship" as const, label: "Ship Mineables", visible: mineableGroups.shipAndHarvestable.length > 0 },
+              { key: "vehicle" as const, label: "Vehicle", visible: mineableGroups.vehicle.length > 0 },
+              { key: "hand" as const, label: "Hand", visible: mineableGroups.hand.length > 0 },
+            ] as const).map((group) => {
+              if (!group.visible) return null;
+              const count = group.key === "type" ? vehicleFilters.size
+                : group.key === "category" ? sizeFilters.size + gradeFilters.size + classFilters.size
+                : group.key === "ship" ? mineableGroups.shipAndHarvestable.filter((c) => resourceFilters.has(c.id)).length
+                : group.key === "vehicle" ? mineableGroups.vehicle.filter((c) => resourceFilters.has(c.id)).length
+                : mineableGroups.hand.filter((c) => resourceFilters.has(c.id)).length;
               return (
-                <div key={rowStart} className="craft-frl-chips craft-frl-chips--ship">
-                  {rowChips.map((chip) => (
-                    <button key={chip.id} type="button"
-                      title={chip.label}
-                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                    ><span className="craft-frl-chip-label">{chip.label}</span></button>
-                  ))}
-                </div>
+                <button key={group.key} type="button"
+                  className={`cfb-rail-btn${cfDrawerGroup === group.key ? " cfb-rail-btn--active" : ""}`}
+                  onClick={() => { setCfDrawerGroup(group.key); setCfSearch(""); }}
+                >
+                  {group.label}
+                  {count > 0 && <span className="mfr-chip-count">{count}</span>}
+                </button>
               );
             })}
           </div>
-        )}
 
-        {/* Vehicle + Hand — stacked in one column */}
-        {(mineableGroups.vehicle.length > 0 || mineableGroups.hand.length > 0) && (
-          <div className="craft-fg craft-fg--vh">
-            {mineableGroups.vehicle.length > 0 && (
+          {/* Center chip grid */}
+          <div className="cfb-drawer-chips">
+            {cfDrawerGroup === "type" && vehicleOptions
+              .filter((opt) => !cfSearch.trim() || opt.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+              .map((opt) => {
+                const isActive = opt.value === "__utility__"
+                  ? [...UTILITY_TYPES].some((t) => vehicleFilters.has(t)) || vehicleFilters.has("__utility__")
+                  : vehicleFilters.has(opt.value);
+                return (
+                  <button key={opt.value} type="button"
+                    className={`craft-frl-chip${isActive ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => {
+                      setVehicleFilters((prev) => {
+                        const n = new Set(prev);
+                        if (opt.value === "__utility__") {
+                          const utilityActive = [...UTILITY_TYPES].some((t) => n.has(t)) || n.has("__utility__");
+                          if (utilityActive) { UTILITY_TYPES.forEach((t) => n.delete(t)); n.delete("__utility__"); }
+                          else { n.add("__utility__"); }
+                        } else { n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); }
+                        return n;
+                      });
+                      resetSelection();
+                    }}
+                  >{opt.label}</button>
+                );
+              })
+            }
+            {cfDrawerGroup === "category" && (
               <>
-                <span className="craft-frl-label">Vehicle</span>
-                <div className="craft-frl-chips">
-                  {mineableGroups.vehicle.map((chip) => (
-                    <button key={chip.id} type="button"
-                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                    >{chip.label}</button>
-                  ))}
-                </div>
+                {sizeOptions.length > 0 && (
+                  <>
+                    <span className="cfb-sublabel">Size</span>
+                    {sizeOptions
+                      .filter((opt) => !cfSearch.trim() || opt.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+                      .map((opt) => (
+                        <button key={opt.value} type="button"
+                          className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                          onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                        >{opt.label}</button>
+                      ))}
+                  </>
+                )}
+                {gradeOptions.length > 0 && (
+                  <>
+                    <span className="cfb-sublabel">Grade</span>
+                    {gradeOptions
+                      .filter((opt) => !cfSearch.trim() || opt.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+                      .map((opt) => (
+                        <button key={opt.value} type="button"
+                          className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                          onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                        >{opt.label}</button>
+                      ))}
+                  </>
+                )}
+                {classOptions.length > 0 && (
+                  <>
+                    <span className="cfb-sublabel">Class</span>
+                    {classOptions
+                      .filter((opt) => !cfSearch.trim() || opt.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+                      .map((opt) => (
+                        <button key={opt.value} type="button"
+                          className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
+                          onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                        >{opt.label}</button>
+                      ))}
+                  </>
+                )}
               </>
             )}
-            {mineableGroups.hand.length > 0 && (
-              <>
-                <span className="craft-frl-label">Hand</span>
-                <div className="craft-frl-chips">
-                  {mineableGroups.hand.map((chip) => (
-                    <button key={chip.id} type="button"
-                      className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                      onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
-                    >{chip.label}</button>
-                  ))}
-                </div>
-              </>
-            )}
+            {cfDrawerGroup === "ship" && mineableGroups.shipAndHarvestable
+              .filter((chip) => !cfSearch.trim() || chip.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+              .map((chip) => (
+                <button key={chip.id} type="button"
+                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                >{chip.label}</button>
+              ))
+            }
+            {cfDrawerGroup === "vehicle" && mineableGroups.vehicle
+              .filter((chip) => !cfSearch.trim() || chip.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+              .map((chip) => (
+                <button key={chip.id} type="button"
+                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                >{chip.label}</button>
+              ))
+            }
+            {cfDrawerGroup === "hand" && mineableGroups.hand
+              .filter((chip) => !cfSearch.trim() || chip.label.toLowerCase().includes(cfSearch.trim().toLowerCase()))
+              .map((chip) => (
+                <button key={chip.id} type="button"
+                  className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                >{chip.label}</button>
+              ))
+            }
           </div>
-        )}
 
+          {/* Right summary */}
+          <div className="cfb-drawer-summary">
+            {(() => {
+              const isResource = cfDrawerGroup === "ship" || cfDrawerGroup === "vehicle" || cfDrawerGroup === "hand";
+              const groupChips = cfDrawerGroup === "ship" ? mineableGroups.shipAndHarvestable
+                : cfDrawerGroup === "vehicle" ? mineableGroups.vehicle
+                : cfDrawerGroup === "hand" ? mineableGroups.hand
+                : null;
+              const selectedCount = cfDrawerGroup === "type" ? vehicleFilters.size
+                : cfDrawerGroup === "category" ? sizeFilters.size + gradeFilters.size + classFilters.size
+                : (groupChips?.filter((c) => resourceFilters.has(c.id)).length ?? 0);
+              const totalCount = cfDrawerGroup === "type" ? vehicleOptions.length
+                : cfDrawerGroup === "category" ? sizeOptions.length + gradeOptions.length + classOptions.length
+                : (groupChips?.length ?? 0);
+              const groupLabel = cfDrawerGroup === "type" ? "Type"
+                : cfDrawerGroup === "category" ? "Category"
+                : cfDrawerGroup === "ship" ? "Ship Mineables"
+                : cfDrawerGroup === "vehicle" ? "Vehicle"
+                : "Hand";
+              return (
+                <>
+                  <div className="cfb-summary-count">
+                    <span className="cfb-summary-num">{selectedCount}</span>
+                    <span className="cfb-summary-of">/ {totalCount}</span>
+                  </div>
+                  <div className="cfb-summary-label">{groupLabel} selected</div>
+                  {isResource && groupChips && selectedCount > 0 && (
+                    <button type="button" className="cfb-summary-action"
+                      onClick={() => {
+                        setResourceFilters((prev) => {
+                          const n = new Set(prev);
+                          groupChips.forEach((c) => n.delete(c.id));
+                          return n;
+                        });
+                        resetSelection();
+                      }}
+                    >Clear group</button>
+                  )}
+                  {isResource && groupChips && selectedCount < groupChips.length && (
+                    <button type="button" className="cfb-summary-action cfb-summary-action--all"
+                      onClick={() => {
+                        setResourceFilters((prev) => new Set([...prev, ...groupChips.map((c) => c.id)]));
+                        resetSelection();
+                      }}
+                    >Select all</button>
+                  )}
+                  {groupedRecipes.length === 0 && !!hasActiveFilters && (
+                    <div className="cfb-summary-warn">No recipes match</div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
 
-      </div>
+        </div>
+      )}
 
       {/* ── Console layout ── */}
       <div className="craft-console-layout">
