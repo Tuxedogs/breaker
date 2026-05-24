@@ -1631,6 +1631,9 @@ export default function MiningModule() {
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [buildQueueSelectionActive, setBuildQueueSelectionActive] = useState(initialSidebarState.buildQueueActive);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerGroup, setDrawerGroup] = useState<"system" | "ship" | "vehicle" | "hand">("ship");
+  const [filterSearch, setFilterSearch] = useState("");
   useEffect(() => {
     try {
       localStorage.setItem(MINING_RANKING_MODE_STORAGE_KEY, rankingMode);
@@ -1720,11 +1723,7 @@ export default function MiningModule() {
     ])),
     [queueLedger.refinedShortfallLines],
   );
-  const queueScopeText = queueScopeDescription(
-    queueScope,
-    scopedShortfallLines.length,
-    queueLedger.refinedShortfallLines.length,
-  );
+
 
   const miningRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
     const requirements = scopedShortfallLines.map((line) => {
@@ -2243,70 +2242,138 @@ export default function MiningModule() {
 
       {hasRecommendationData && (
         <>
-          {/* Top filter rail */}
-          <div className={`mining-filter-rail${buildQueueSelectionActive ? " mining-filter-rail--queue" : ""}`}>
+          {/* Compact filter bar */}
+          <div className={`mfb-bar${buildQueueSelectionActive ? " mfb-bar--queue" : ""}${drawerOpen ? " mfb-bar--open" : ""}`}>
 
-            {/* Left: System + Mode + Clear All */}
-            <div className="mining-filter-group--left">
-              <span className="mining-filter-label">System</span>
-              <div className="mining-frl-chips">
-                {MINING_SYSTEM_FILTERS.map((sys) => (
-                  <button
-                    key={sys}
-                    type="button"
-                    className={`mfr-chip${selectedSystems.has(sys) ? " mfr-chip--active" : ""}`}
-                    onClick={() => toggleSystem(sys)}
-                  >
-                    {sys}
-                  </button>
-                ))}
-              </div>
-              <span className="mining-filter-label">Mode</span>
-              <div className="mining-frl-chips">
+            {/* Left: System chips */}
+            <span className="mining-filter-label">System</span>
+            <div className="mfb-chips">
+              {MINING_SYSTEM_FILTERS.map((sys) => (
                 <button
+                  key={sys}
                   type="button"
-                  className={`mfr-chip${!buildQueueSelectionActive && selectedMaterials.size === 0 && !planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
-                  onClick={clearAllFilters}
+                  className={`mfr-chip${selectedSystems.has(sys) ? " mfr-chip--active" : ""}`}
+                  onClick={() => toggleSystem(sys)}
                 >
-                  All
+                  {sys}
                 </button>
-                <button
-                  type="button"
-                  className={`mfr-chip${buildQueueSelectionActive ? " mfr-chip--active mfr-chip--bq" : ""}`}
-                  onClick={selectBuildQueueMaterials}
-                >
-                  Build Queue
-                  {buildQueueMaterials.size > 0 && (
-                    <span className="mfr-chip-count">{buildQueueMaterials.size}</span>
-                  )}
-                </button>
-                <button
-                  type="button"
-                  className={`mfr-chip${planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
-                  onClick={() => planner.toggleShowOnlyStarred()}
-                >
-                  Starred
-                </button>
-              </div>
+              ))}
+            </div>
+
+            <div className="mfb-divider" />
+
+            {/* Mode: All / Queue / Starred */}
+            <div className="mfb-chips">
               <button
                 type="button"
-                className="mfr-clear-btn"
+                className={`mfr-chip${!buildQueueSelectionActive && selectedMaterials.size === 0 && !planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
                 onClick={clearAllFilters}
-                disabled={!hasActiveFilters}
               >
-                Clear All
+                All
               </button>
-              {buildQueueSelectionActive && !planner.filters.showOnlyStarred && queueLedger.refinedShortfallLines.length > 0 && (
-                <div className="mining-queue-scope" aria-label="Build queue mining scope">
-                  <span className="mining-filter-label">Queue Scope</span>
-                  <div className="mining-frl-chips">
+              <button
+                type="button"
+                className={`mfr-chip${buildQueueSelectionActive ? " mfr-chip--active mfr-chip--bq" : ""}`}
+                onClick={selectBuildQueueMaterials}
+              >
+                Queue
+                {buildQueueMaterials.size > 0 && (
+                  <span className="mfr-chip-count">{buildQueueMaterials.size}</span>
+                )}
+              </button>
+              <button
+                type="button"
+                className={`mfr-chip${planner.filters.showOnlyStarred ? " mfr-chip--active" : ""}`}
+                onClick={() => planner.toggleShowOnlyStarred()}
+              >
+                Starred
+              </button>
+            </div>
+
+            <div className="mfb-divider" />
+
+            {/* Summary group chips — open drawer on click */}
+            {(["ship", "vehicle", "hand"] as const).map((group) => {
+              const groupChips = group === "ship"
+                ? visibleResourceGroups.shipAndHarvestable
+                : group === "vehicle"
+                  ? visibleResourceGroups.vehicle
+                  : visibleResourceGroups.hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
+              const selectedCount = groupChips.filter((c) => selectedMaterials.has(c.id)).length;
+              const label = group === "ship" ? "Ship" : group === "vehicle" ? "Vehicle" : "Hand";
+              if (groupChips.length === 0) return null;
+              return (
+                <button
+                  key={group}
+                  type="button"
+                  className={`mfr-chip mfb-group-chip${selectedCount > 0 ? " mfr-chip--active" : ""}${drawerOpen && drawerGroup === group ? " mfb-group-chip--open" : ""}`}
+                  onClick={() => {
+                    if (drawerOpen && drawerGroup === group) {
+                      setDrawerOpen(false);
+                    } else {
+                      setDrawerGroup(group);
+                      setDrawerOpen(true);
+                      setFilterSearch("");
+                    }
+                  }}
+                >
+                  {label}
+                  {selectedCount > 0 ? (
+                    <span className="mfr-chip-count">{selectedCount}</span>
+                  ) : (
+                    <span className="mfb-group-total">{groupChips.length}</span>
+                  )}
+                  <span className="mfb-chevron">{drawerOpen && drawerGroup === group ? "▲" : "▼"}</span>
+                </button>
+              );
+            })}
+
+            {/* Search */}
+            <div className="mfb-search-wrap">
+              <input
+                type="text"
+                className="mfb-search"
+                placeholder="Search materials…"
+                value={filterSearch}
+                onChange={(e) => {
+                  setFilterSearch(e.target.value);
+                  if (e.target.value.trim() && !drawerOpen) {
+                    setDrawerOpen(true);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="mfb-spacer" />
+
+            {/* Clear All */}
+            <button
+              type="button"
+              className="mfr-clear-btn"
+              onClick={clearAllFilters}
+              disabled={!hasActiveFilters}
+            >
+              Clear
+            </button>
+
+          </div>
+
+          {/* Tactical drawer */}
+          {drawerOpen && (
+            <div className="mfb-drawer">
+
+              {/* Left rail: group selector */}
+              <div className="mfb-drawer-rail">
+                {buildQueueSelectionActive && !planner.filters.showOnlyStarred && queueLedger.refinedShortfallLines.length > 0 && (
+                  <>
+                    <span className="mining-filter-label" style={{ paddingLeft: "0.5rem" }}>Queue Scope</span>
                     {MINING_QUEUE_SCOPES.map((scope) => {
                       const count = queueScopeCounts.get(scope.value) ?? 0;
                       return (
                         <button
                           key={scope.value}
                           type="button"
-                          className={`mfr-chip${queueScope === scope.value ? " mfr-chip--active" : ""}${count === 0 ? " mfr-chip--disabled" : ""}`}
+                          className={`mfb-rail-btn${queueScope === scope.value ? " mfb-rail-btn--active" : ""}${count === 0 ? " mfb-rail-btn--disabled" : ""}`}
                           onClick={() => setQueueScope(scope.value)}
                           disabled={count === 0}
                           title={queueScopeDescription(scope.value, count, queueLedger.refinedShortfallLines.length)}
@@ -2316,18 +2383,45 @@ export default function MiningModule() {
                         </button>
                       );
                     })}
-                  </div>
-                  <div className="mining-queue-scope-note">{queueScopeText}</div>
-                </div>
-              )}
-            </div>
+                    <div className="mfb-drawer-rail-sep" />
+                  </>
+                )}
+                <span className="mining-filter-label" style={{ paddingLeft: "0.5rem" }}>Filter Group</span>
+                {(["ship", "vehicle", "hand"] as const).map((group) => {
+                  const groupChips = group === "ship"
+                    ? visibleResourceGroups.shipAndHarvestable
+                    : group === "vehicle"
+                      ? visibleResourceGroups.vehicle
+                      : visibleResourceGroups.hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
+                  const selectedCount = groupChips.filter((c) => selectedMaterials.has(c.id)).length;
+                  const label = group === "ship" ? "Ship Mineables" : group === "vehicle" ? "Vehicle" : "Hand";
+                  if (groupChips.length === 0) return null;
+                  return (
+                    <button
+                      key={group}
+                      type="button"
+                      className={`mfb-rail-btn${drawerGroup === group ? " mfb-rail-btn--active" : ""}`}
+                      onClick={() => { setDrawerGroup(group); setFilterSearch(""); }}
+                    >
+                      {label}
+                      {selectedCount > 0 && <span className="mfr-chip-count">{selectedCount}</span>}
+                    </button>
+                  );
+                })}
+              </div>
 
-            {/* Ship Mineables */}
-            {visibleResourceGroups.shipAndHarvestable.length > 0 && (
-              <div className="mining-filter-group--ship">
-                <span className="mining-filter-label">Ship Mineables</span>
-                <div className="mining-chip-wrap">
-                  {visibleResourceGroups.shipAndHarvestable.map((chip) => {
+              {/* Center: chip grid */}
+              <div className="mfb-drawer-chips">
+                {(() => {
+                  const groupChips = drawerGroup === "ship"
+                    ? visibleResourceGroups.shipAndHarvestable
+                    : drawerGroup === "vehicle"
+                      ? visibleResourceGroups.vehicle
+                      : visibleResourceGroups.hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
+                  const filtered = filterSearch.trim()
+                    ? groupChips.filter((c) => c.label.toLowerCase().includes(filterSearch.trim().toLowerCase()))
+                    : groupChips;
+                  return filtered.map((chip) => {
                     const enabled = isChipEnabled(chip.id);
                     return (
                       <button
@@ -2341,63 +2435,64 @@ export default function MiningModule() {
                         {chip.label}
                       </button>
                     );
-                  })}
-                </div>
+                  });
+                })()}
               </div>
-            )}
 
-            {/* Vehicle */}
-            {visibleResourceGroups.vehicle.length > 0 && (
-              <div className="mining-filter-group--vehicle">
-                <span className="mining-filter-label">Vehicle</span>
-                <div className="mining-chip-wrap">
-                  {visibleResourceGroups.vehicle.map((chip) => {
-                    const enabled = isChipEnabled(chip.id);
-                    return (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
-                        onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
-                        disabled={!enabled}
-                        title={!enabled ? "Not available with current selected materials" : undefined}
-                      >
-                        {chip.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Hand */}
-            {visibleResourceGroups.hand.length > 0 && (
-              <div className="mining-filter-group--hand">
-                <span className="mining-filter-label">Hand</span>
-                <div className="mining-chip-wrap">
-                  {visibleResourceGroups.hand
-                    .filter((chip) => chip.label.trim().toLowerCase() !== "pure carinite")
-                    .map((chip) => {
-                      const enabled = isChipEnabled(chip.id);
-                      return (
+              {/* Right: summary panel */}
+              <div className="mfb-drawer-summary">
+                {(() => {
+                  const groupChips = drawerGroup === "ship"
+                    ? visibleResourceGroups.shipAndHarvestable
+                    : drawerGroup === "vehicle"
+                      ? visibleResourceGroups.vehicle
+                      : visibleResourceGroups.hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
+                  const selectedCount = groupChips.filter((c) => selectedMaterials.has(c.id)).length;
+                  const groupLabel = drawerGroup === "ship" ? "Ship Mineables" : drawerGroup === "vehicle" ? "Vehicle" : "Hand";
+                  return (
+                    <>
+                      <div className="mfb-summary-count">
+                        <span className="mfb-summary-num">{selectedCount}</span>
+                        <span className="mfb-summary-of">/ {groupChips.length}</span>
+                      </div>
+                      <div className="mfb-summary-label">{groupLabel} selected</div>
+                      {selectedCount > 0 && (
                         <button
-                          key={chip.id}
                           type="button"
-                          className={`mfr-chip${selectedMaterials.has(chip.id) ? " mfr-chip--active" : ""}${!enabled ? " mfr-chip--disabled" : ""}`}
-                          onClick={enabled ? () => toggleMaterial(chip.id) : undefined}
-                          disabled={!enabled}
-                          title={!enabled ? "Not available with current selected materials" : undefined}
+                          className="mfb-summary-action"
+                          onClick={() => {
+                            setSelectedMaterials((prev) => {
+                              const next = new Set(prev);
+                              groupChips.forEach((c) => next.delete(c.id));
+                              if (next.size === 0) setBuildQueueSelectionActive(false);
+                              return next;
+                            });
+                          }}
                         >
-                          {chip.label}
+                          Clear group
                         </button>
-                      );
-                    })}
-                </div>
+                      )}
+                      {selectedCount < groupChips.length && (
+                        <button
+                          type="button"
+                          className="mfb-summary-action mfb-summary-action--all"
+                          onClick={() => {
+                            setSelectedMaterials((prev) => new Set([...prev, ...groupChips.map((c) => c.id)]));
+                          }}
+                        >
+                          Select all
+                        </button>
+                      )}
+                      {displayRankedFilteredLocations.length === 0 && hasActiveFilters && (
+                        <div className="mfb-summary-warn">No locations match</div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
-            )}
 
-
-          </div>
+            </div>
+          )}
 
           <CoveragePlanSummaryPanel plan={coveragePlan} unfilteredPlan={unfilteredCoveragePlan} />
 

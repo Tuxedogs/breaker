@@ -21,6 +21,7 @@ const TEXT_ALIASES: Record<string, string> = {
   hephaestonice: "hephaestanite",
   carinitepure: "carinite-pure",
   purecarinite: "carinite-pure",
+  saldyniumore: "saldynium",
 };
 
 const DISPLAY_NAMES: Record<string, string> = {

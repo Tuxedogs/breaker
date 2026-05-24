@@ -61,7 +61,11 @@
       "PowerShell(head -50)",
       "Bash(grep -E \"\\\\.\\(json|ts|tsx\\)$\")",
       "Bash(ls -la \"d:\\\\Moonbreaker\\\\\" | grep -E \"^d\" | grep -v \"^\\\\.\")",
-      "Read(//d//**)"
+      "Read(//d//**)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\" -Directory)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\\\\components\\\\industry\\\\mining\" -File)",
+      "Bash(xargs grep -l \"type ComponentRecipe\\\\|interface ComponentRecipe\")",
+      "Bash(xargs grep -l \"Aluminum\\\\|Aslarite\")"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"
