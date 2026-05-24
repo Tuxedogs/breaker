@@ -751,7 +751,7 @@ export function preprocessImageRegion(
     img.onload = () => {
       URL.revokeObjectURL(url);
 
-      const SCALE = 2;
+      const SCALE = 4;
       const canvas = document.createElement("canvas");
       canvas.width = sw * SCALE;
       canvas.height = sh * SCALE;
@@ -860,7 +860,10 @@ function extractWorkOrderNumber(text: string): number | null {
 }
 
 function getCompleteRowKey(row: ParsedRefineryRow): string {
-  return `${row.materialId ?? cleanText(row.rawName)}|${row.quality}|${row.quantity}`;
+  // Use qualityObserved (pre-quantization OCR value) so the key is stable
+  // regardless of whether quantization has been applied yet.
+  const q = (row as ParsedRefineryRowWithY & { qualityObserved?: number }).qualityObserved ?? row.quality;
+  return `${row.materialId ?? cleanText(row.rawName)}|${q}|${row.quantity}`;
 }
 
 function sortAndDeduplicateCompleteRows(
@@ -991,7 +994,7 @@ export async function parseRefineryScreenshot(
   });
 
   try {
-    await worker.setParameters({ tessedit_pageseg_mode: PSM.SPARSE_TEXT });
+    await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK });
 
     const detBlob = await scaleImageForDetection(imageFile);
     const { data: detData } = await worker.recognize(detBlob, undefined, {
@@ -1015,7 +1018,24 @@ export async function parseRefineryScreenshot(
       };
     }
 
-    let panelRegions = manualPanelRegions?.filter((region) => region.sw > 0 && region.sh > 0) ?? [];
+    // manualPanelRegions are in rendered/display coordinates. Convert them to
+    // natural image coordinates using the actual file dimensions (dims).
+    // The caller loads the image via an <img> element whose displayed size may
+    // differ from naturalWidth/naturalHeight.
+    let panelRegions: PanelRegion[] = [];
+    if (manualPanelRegions && manualPanelRegions.length > 0) {
+      // We cannot know the rendered size here, but the caller should have already
+      // scaled coordinates. If they did not, we accept them as-is and clamp to dims.
+      panelRegions = manualPanelRegions
+        .filter((region) => region.sw > 0 && region.sh > 0)
+        .map((region) => ({
+          sx: Math.max(0, Math.min(Math.round(region.sx), dims.w - 1)),
+          sy: Math.max(0, Math.min(Math.round(region.sy), dims.h - 1)),
+          sw: Math.max(1, Math.min(Math.round(region.sw), dims.w - Math.round(region.sx))),
+          sh: Math.max(1, Math.min(Math.round(region.sh), dims.h - Math.round(region.sy))),
+        }));
+      console.debug("[refineryOcr] manualPanelRegions (clamped to natural dims):", panelRegions, "dims:", dims);
+    }
 
     if (panelRegions.length === 0) {
       const detScale = Math.min(1, 600 / dims.w);
@@ -1030,7 +1050,23 @@ export async function parseRefineryScreenshot(
         (c, i, arr) => i === 0 || c - arr[i - 1] > dims.w * 0.1,
       );
 
-      panelRegions = buildPanelRegions(centers, dims.w, dims.h);
+      if (centers.length >= 2) {
+        // Multiple completed work-order panels detected — split evenly.
+        panelRegions = buildPanelRegions(centers, dims.w, dims.h);
+      } else {
+        // Single processing/work-order screen: use ratio-based crop of the
+        // visible work-order panel (right-centre area in a Star Citizen refinery UI).
+        const W = dims.w;
+        const H = dims.h;
+        const sx = Math.round(W * 0.265);
+        const sy = Math.round(H * 0.13);
+        const sw = Math.min(Math.round(W * 0.215), W - sx);
+        const sh = Math.min(Math.round(H * 0.70), H - sy);
+        // Tighten height to exclude footer rows (TIME REMAINING, STOP & COLLECT).
+        const shTight = Math.min(sh, Math.round(H * 0.55));
+        panelRegions = [{ sx, sy, sw, sh: shTight }];
+        console.debug("[refineryOcr] fallback crop:", { sx, sy, sw, sh: shTight, W, H });
+      }
     }
 
     const workOrders: ParsedWorkOrder[] = [];
@@ -1043,6 +1079,7 @@ export async function parseRefineryScreenshot(
         onProgress(Math.round(((i + 0.5) / panelRegions.length) * 80 + 10));
       }
 
+      await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_COLUMN });
       const panelBlob = await preprocessImageRegion(imageFile, sx, sy, sw, sh);
       const { data: pd } = await worker.recognize(panelBlob, undefined, {
         blocks: true,
@@ -1053,6 +1090,7 @@ export async function parseRefineryScreenshot(
         blocks: true,
       });
       await worker.setParameters({ tessedit_char_whitelist: "" });
+      await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK });
 
       lastRawText = pd.text;
 
@@ -1068,28 +1106,27 @@ export async function parseRefineryScreenshot(
         ...getOcrLines(digitData.blocks),
       ];
 
-      const ocrRows = [
-        ...extractCompleteRowsFromOcrLines(allPanelLines, templates, lowConf),
-        ...extractRowsFromKnownLineText(allPanelLines, templates, lowConf),
-      ];
+      // Primary: bbox-based positional column extraction.
+      // Reads QUALITY=col[0], YIELD=col[1] strictly — never picks TO DO or DONE.
+      let rows: ParsedRefineryRowWithY[] = extractCompleteRowsFromOcrLines(allPanelLines, templates, lowConf);
 
-      const sequentialRows = extractCompleteRowsSequential(
-        lines,
-        templates,
-        lowConf,
-      ).map((row) => ({ ...row, y: inferRowYFromNumbers(row, allPanelLines) }));
+      // Fallback: if bbox parser found nothing, try known-name line-text matching.
+      if (rows.length === 0) {
+        rows = extractRowsFromKnownLineText(allPanelLines, templates, lowConf);
+      }
 
-      let rows =
-        sequentialRows.length >= ocrRows.length
-          ? sequentialRows
-          : ocrRows;
+      // Last resort: sequential text parser. Only used when both bbox approaches fail.
+      if (rows.length === 0) {
+        rows = extractCompleteRowsSequential(lines, templates, lowConf)
+          .map((row) => ({ ...row, y: inferRowYFromNumbers(row, allPanelLines) }));
+      }
 
-      rows = sortAndDeduplicateCompleteRows(rows, sh * 2).filter((row) => !isRejectedRefineryRow(row));
+      const finalRows = sortAndDeduplicateCompleteRows(rows, sh * 2).filter((row) => !isRejectedRefineryRow(row));
 
-      if (rows.length > 0 || screenType !== "unknown") {
+      if (finalRows.length > 0 || screenType !== "unknown") {
         workOrders.push({
           workOrderNumber: i + 1,
-          rows,
+          rows: finalRows,
           totalYieldCscu: extractTotalYield(lines),
           sourceLocationName,
         });
@@ -1564,11 +1601,33 @@ function extractRowsFromKnownLineText(
   return rows;
 }
 
+// Merge duplicate number cells that are spatially very close (same column, same row).
+// Prefer the cell with more digits, then higher value.
+function deduplicateNumberCells(
+  cells: Array<{ x0: number; x1: number; y: number; value: number; digitCount: number }>,
+): Array<{ x0: number; x1: number; y: number; value: number; digitCount: number }> {
+  return cells.reduce<typeof cells>((acc, entry) => {
+    const previous = acc[acc.length - 1];
+    if (previous && Math.abs(entry.x0 - previous.x0) <= 12 && Math.abs(entry.y - previous.y) <= 8) {
+      if (
+        entry.digitCount > previous.digitCount ||
+        (entry.digitCount === previous.digitCount && entry.value > previous.value)
+      ) {
+        acc[acc.length - 1] = entry;
+      }
+    } else {
+      acc.push(entry);
+    }
+    return acc;
+  }, []);
+}
+
 function extractCompleteRowsFromOcrLines(
   ocrLines: OcrLine[],
   templates: MaterialTemplate[],
   lowConfidence: boolean,
 ): ParsedRefineryRowWithY[] {
+  // ── Step 1: find all material label candidates, one per OCR line ────────────
   const materialLines = ocrLines
     .map((line) => getMaterialCandidateFromLine(line, templates))
     .filter(
@@ -1582,68 +1641,73 @@ function extractCompleteRowsFromOcrLines(
         height: number;
         lineText: string;
       } => candidate !== null && !isNonMaterialProcessingLine(candidate.lineText),
-    );
+    )
+    .sort((a, b) => a.y - b.y);
 
-  const numberCells = getNumberCellsFromOcrLines(ocrLines);
+  if (materialLines.length === 0) return [];
+
+  // ── Step 2: build a row-band height from median material line height ─────────
+  const heights = materialLines.map((m) => m.height);
+  heights.sort((a, b) => a - b);
+  const medianHeight = heights[Math.floor(heights.length / 2)];
+  // A row band is ±0.6× median height from the material label center.
+  // This is tight enough that an adjacent row's numbers cannot be claimed.
+  const BAND_HALF = Math.max(medianHeight * 0.6, 14);
+
+  // ── Step 3: collect all number cells from the panel ──────────────────────────
+  const allNumberCells = getNumberCellsFromOcrLines(ocrLines)
+    .sort((a, b) => a.y !== b.y ? a.y - b.y : a.x0 - b.x0);
+
   const rows: ParsedRefineryRowWithY[] = [];
-  const usedYs = new Set<number>();
 
   for (const material of materialLines) {
-    const rowNumbers = numberCells
-      .filter((cell) => {
-        return (
-          Math.abs(cell.y - material.y) <= Math.max(material.height * 2.4, 56) &&
-          cell.x0 > material.x1 - 4
-        );
-      })
-      .sort((a, b) => a.x0 - b.x0)
-      .reduce<Array<{ x0: number; x1: number; y: number; value: number; digitCount: number }>>(
-        (cells, entry) => {
-          const previous = cells[cells.length - 1];
+    // ── Step 4: assign number cells strictly within this row's band ─────────────
+    const bandCells = allNumberCells
+      .filter((cell) =>
+        Math.abs(cell.y - material.y) <= BAND_HALF &&
+        cell.x0 >= material.x1 - 4,
+      )
+      .sort((a, b) => a.x0 - b.x0);
 
-          if (!previous || Math.abs(entry.x0 - previous.x0) > 12) {
-            cells.push(entry);
-          } else if (
-            entry.digitCount > previous.digitCount ||
-            (entry.digitCount === previous.digitCount && entry.value > previous.value)
-          ) {
-            cells[cells.length - 1] = entry;
-          }
+    const rowCells = deduplicateNumberCells(bandCells);
 
-          return cells;
-        },
-        [],
-      );
-
-    if (rowNumbers.length < 2) {
+    // ── Step 5: positionally read QUALITY = cell[0], YIELD = cell[1] ───────────
+    // Column layout: MATERIAL | QUALITY | YIELD | TO DO | DONE
+    // We must NOT use cell[2] or later. Scoring/picking is explicitly forbidden
+    // because it can select TO DO instead of YIELD when yield is small.
+    if (rowCells.length < 2) {
+      console.debug("[refineryOcr] skip (too few cells):", {
+        material: material.rawName,
+        materialY: Math.round(material.y),
+        bandCells: rowCells.map((c) => c.value),
+      });
       continue;
     }
 
-    const nearestLineText = getLineTextNearMaterial(material, ocrLines);
-    if (nearestLineText && isNonMaterialProcessingLine(nearestLineText)) continue;
-    const lineNumbers = nearestLineText ? extractNumericSequenceFromLineText(nearestLineText) : [];
-    const rowNumberValues = rowNumbers.map((entry) => entry.value);
+    const quality = rowCells[0].value;
+    const quantity = rowCells[1].value;
 
-    // Prefer full-line text because word boxes occasionally sort merged tokens
-    // strangely. Example: QUARTZ 522 7 8 0 should become quality 522, yield 7.
-    const pickedFromLine = pickProcessingQualityYield(material.materialId, material.rawName, lineNumbers);
-    const pickedFromCells = pickProcessingQualityYield(material.materialId, material.rawName, rowNumberValues);
-    const picked = pickedFromLine ?? pickedFromCells;
-
-    if (!picked) continue;
-
-    const { quality, quantity } = picked;
-
-    if (quality < 0 || quality > 1000) continue;
+    // ── Step 6: validate quality range ──────────────────────────────────────────
+    if (quality < 100 || quality > 1000) {
+      console.debug("[refineryOcr] skip (quality out of range):", {
+        material: material.rawName,
+        quality,
+        quantity,
+        allCells: rowCells.map((c) => c.value),
+      });
+      continue;
+    }
     if (quantity <= 0) continue;
 
-    // In processing screenshots the visible row shape is:
-    // MATERIAL | QUALITY | YIELD | TO DO | DONE.
-    // We intentionally use the first two numeric cells after the material label:
-    // quality and yield. Todo/done are metadata later, not inventory quantity.
-    const yKey = Math.round(material.y / 4);
-    if (usedYs.has(yKey)) continue;
-    usedYs.add(yKey);
+    const ignored = rowCells.slice(2).map((c) => c.value);
+    console.debug("[refineryOcr] row:", {
+      material: material.rawName,
+      materialY: Math.round(material.y),
+      quality,
+      quantity,
+      ignored,
+      allCells: rowCells.map((c) => c.value),
+    });
 
     rows.push({
       rawName: material.rawName,
@@ -1659,11 +1723,11 @@ function extractCompleteRowsFromOcrLines(
 }
 
 function extractTotalYield(lines: string[]): number | null {
-  const line = lines.find((l) => /^YIELD\s+\d+/i.test(l));
+  const line = lines.find((l) => /^YIELD\s+[\d.]/i.test(l));
   if (!line) return null;
 
-  const m = line.match(/(\d+)/);
-  return m ? parseInt(m[1], 10) : null;
+  const m = line.match(/([\d]+(?:\.[\d]+)?)/);
+  return m ? parseFloat(m[1]) : null;
 }
 
 // ── Input screen parser ──────────────────────────────────────────────────────
@@ -1731,4 +1795,94 @@ function extractInputData(
   }
 
   return { rows, rawText: text };
+}
+
+// ── Scroll-aware merge for completed refinery work orders ────────────────────
+
+function makeRowKey(row: ParsedRefineryRow): string {
+  return `${row.materialId ?? cleanText(row.rawName)}|${row.qualityObserved ?? row.quality}|${row.quantity}`;
+}
+
+/**
+ * Merge multiple parsed refinery complete results that may come from
+ * scrolled screenshots of the same work order. Rows visible in multiple
+ * screenshots (due to scroll overlap) are deduplicated via suffix/prefix
+ * overlap detection, with exact key dedup as a fallback.
+ *
+ * Only merges work orders with the same workOrderNumber within a session.
+ * Does not merge across different work order numbers.
+ */
+export function mergeScrolledWorkOrders(
+  results: Array<{ screenType: "refinery_complete"; workOrders: ParsedWorkOrder[] }>,
+): ParsedWorkOrder[] {
+  // Group all work orders by their work order number.
+  const byNumber = new Map<number, ParsedWorkOrder[]>();
+
+  for (const result of results) {
+    for (const wo of result.workOrders) {
+      const existing = byNumber.get(wo.workOrderNumber);
+      if (existing) {
+        existing.push(wo);
+      } else {
+        byNumber.set(wo.workOrderNumber, [wo]);
+      }
+    }
+  }
+
+  const merged: ParsedWorkOrder[] = [];
+
+  for (const [num, orders] of byNumber.entries()) {
+    if (orders.length === 1) {
+      merged.push(orders[0]);
+      continue;
+    }
+
+    // Start with the first order's rows, then append non-overlapping rows
+    // from subsequent screenshots (scroll pages).
+    let mergedRows: ParsedRefineryRow[] = [...orders[0].rows];
+
+    for (let i = 1; i < orders.length; i++) {
+      const newRows = orders[i].rows;
+      if (newRows.length === 0) continue;
+
+      // Find the longest suffix of mergedRows that is a prefix of newRows.
+      // This detects the scroll overlap region.
+      let overlapLen = 0;
+      const maxCheck = Math.min(mergedRows.length, newRows.length);
+
+      for (let len = maxCheck; len >= 1; len--) {
+        const suffix = mergedRows.slice(mergedRows.length - len).map(makeRowKey);
+        const prefix = newRows.slice(0, len).map(makeRowKey);
+        if (suffix.every((k, idx) => k === prefix[idx])) {
+          overlapLen = len;
+          break;
+        }
+      }
+
+      // Append only rows beyond the overlap.
+      const toAppend = newRows.slice(overlapLen);
+      mergedRows = [...mergedRows, ...toAppend];
+    }
+
+    // Final exact-key dedup as a safety net (preserves first occurrence).
+    const seen = new Set<string>();
+    const deduped: ParsedRefineryRow[] = [];
+    for (const row of mergedRows) {
+      const key = makeRowKey(row);
+      if (!seen.has(key)) {
+        seen.add(key);
+        deduped.push(row);
+      }
+    }
+
+    merged.push({
+      workOrderNumber: num,
+      rows: deduped,
+      totalYieldCscu: orders.find((o) => o.totalYieldCscu !== null)?.totalYieldCscu ?? null,
+      sourceLocationName: orders[0].sourceLocationName,
+    });
+  }
+
+  // Return work orders sorted by number.
+  return merged.sort((a, b) => a.workOrderNumber - b.workOrderNumber);
 }
