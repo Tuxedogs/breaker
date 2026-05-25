@@ -2101,74 +2101,389 @@
   overflow: auto;
 }
 
+/* ── Toolbar shell ── */
 .component-browser-toolbar {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 153, 0, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #131820 0%, #0b0f13 100%);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.5),
+    0 0 32px rgba(255, 153, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: visible;
+}
+
+/* ── Generic row band ── */
+.crb-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 0 14px;
+  min-height: 38px;
+}
+
+.crb-row + .crb-row {
+  border-top: 1px solid rgba(148, 163, 184, 0.09);
+}
+
+/* ── Section labels (FPS, VEHICLE COMPONENTS, MATERIALS, ACTIVE FILTERS) ── */
+.crb-section-label {
+  font-family: var(--font-primary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 153, 0, 0.7);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.crb-section-label--vehicle {
+  color: rgba(255, 160, 30, 0.85);
+}
+
+/* ── Vertical divider between sections ── */
+.crb-section-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(148, 163, 184, 0.18);
+  flex-shrink: 0;
+  margin: 0 2px;
+}
+
+/* ── Chip group wrapper ── */
+.crb-chip-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Row 1: Search ── */
+.crb-row--search {
+  min-height: 50px;
   gap: 10px;
-  align-items: start;
-  padding: 10px;
-  border: var(--border-panel);
-  border-radius: 7px;
-  background: var(--bg-panel);
-  box-shadow: var(--shadow-card);
+  padding: 0 14px;
+  border-radius: 8px 8px 0 0;
 }
 
 .component-browser-search {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
   align-items: center;
-  gap: 9px;
-  min-height: 36px;
-  padding: 0 10px;
-  border: var(--border-soft);
-  border-radius: 4px;
-  background: var(--bg-card-dark);
+  gap: 10px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 5px;
+  background: rgba(8, 12, 18, 0.7);
+  transition: border-color 0.14s, box-shadow 0.14s;
+}
+
+.component-browser-search:focus-within {
+  border-color: rgba(255, 153, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(255, 153, 0, 0.1), inset 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.component-browser-search .craft-search-icon {
+  color: rgba(255, 153, 0, 0.55);
+  font-size: 1rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .component-browser-search input {
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
   border: 0;
   outline: 0;
   background: transparent;
   color: var(--craft-text);
   font: inherit;
   font-size: 0.92rem;
-  font-weight: 650;
+  font-weight: 500;
 }
 
 .component-browser-search input::placeholder {
-  color: rgba(148, 163, 184, 0.42);
+  color: rgba(148, 163, 184, 0.32);
 }
 
-.component-browser-filter-row {
-  display: flex;
-  flex-wrap: wrap;
+.crb-search-slash {
+  font-family: var(--font-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: rgba(148, 163, 184, 0.28);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+/* Blueprint Bookmarks button */
+.crb-bookmarks-btn {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  min-width: 0;
-}
-
-.component-browser-filter-row--materials {
-  grid-column: 1 / -1;
-  max-height: 72px;
-  overflow: hidden;
-}
-
-.component-browser-summary {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.component-browser-count {
-  color: var(--craft-muted);
-  font-size: 0.74rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 153, 0, 0.3);
+  border-radius: 5px;
+  background: rgba(255, 153, 0, 0.05);
+  color: rgba(255, 200, 90, 0.75);
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.crb-bookmarks-btn:hover {
+  border-color: rgba(255, 153, 0, 0.55);
+  background: rgba(255, 153, 0, 0.1);
+  color: rgba(255, 215, 100, 0.95);
+}
+
+.crb-bookmarks-btn--active {
+  border-color: rgba(255, 153, 0, 0.7);
+  background: rgba(255, 120, 0, 0.16);
+  color: rgba(255, 220, 80, 1);
+  box-shadow: 0 0 8px rgba(255, 153, 0, 0.18);
+}
+
+.crb-bookmarks-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Result count */
+.component-browser-count {
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: var(--font-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 200, 90, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.component-browser-count strong {
+  color: rgba(255, 215, 80, 1);
+  font-weight: 900;
+}
+
+/* ── Row 2: Categories — chip groups scroll horizontally if needed ── */
+.crb-row--categories {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  min-height: 42px;
+}
+
+.crb-row--categories::-webkit-scrollbar { display: none; }
+
+/* ── Row 3: Materials ── */
+.crb-row--materials {
+  flex-wrap: wrap;
+  min-height: 38px;
+  gap: 6px;
+}
+
+.crb-active-label {
+  font-family: var(--font-primary);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: rgba(148, 163, 184, 0.55);
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Choose Materials trigger */
+.crb-material-picker {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.crb-material-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(203, 213, 225, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.crb-material-trigger:hover,
+.crb-material-trigger--open {
+  border-color: rgba(255, 153, 0, 0.4);
+  color: rgba(255, 200, 90, 0.9);
+  background: rgba(255, 153, 0, 0.06);
+}
+
+.crb-material-chevron {
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+
+/* Material dropdown */
+.crb-material-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 120;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 10px;
+  width: 360px;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #0e1319;
+  border: 1px solid rgba(255, 153, 0, 0.22);
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 153, 0, 0.06);
+}
+
+.crb-material-option {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(203, 213, 225, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.74rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.crb-material-option:hover {
+  border-color: rgba(55, 210, 175, 0.4);
+  color: rgba(100, 240, 205, 0.9);
+  background: rgba(55, 210, 175, 0.07);
+}
+
+.crb-material-option--active {
+  border-color: rgba(55, 210, 175, 0.55);
+  background: rgba(20, 110, 90, 0.2);
+  color: rgba(100, 240, 205, 0.97);
+}
+
+/* ── Removable tokens (active material + active type) ── */
+.crb-token {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 4px;
+  font-family: var(--font-primary);
+  font-size: 0.76rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+
+.crb-token--material {
+  border: 1px solid rgba(55, 210, 175, 0.45);
+  background: rgba(20, 100, 82, 0.22);
+  color: rgba(90, 235, 195, 0.92);
+}
+
+.crb-token--material:hover {
+  border-color: rgba(55, 210, 175, 0.7);
+  background: rgba(20, 100, 82, 0.36);
+  color: rgba(120, 245, 210, 1);
+}
+
+.crb-token--type {
+  border: 1px solid rgba(255, 153, 0, 0.45);
+  background: rgba(255, 100, 0, 0.14);
+  color: rgba(255, 210, 80, 0.92);
+}
+
+.crb-token--type:hover {
+  border-color: rgba(255, 153, 0, 0.7);
+  background: rgba(255, 100, 0, 0.22);
+  color: rgba(255, 220, 100, 1);
+}
+
+.crb-token-x {
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+/* Clear All button */
+.crb-clear-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 4px;
+  background: none;
+  color: rgba(248, 113, 113, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: all 0.12s;
+}
+
+.crb-clear-all:hover {
+  border-color: rgba(248, 113, 113, 0.58);
+  color: rgba(248, 113, 113, 0.95);
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.crb-clear-all-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+/* ── Row 4: Active Filters ── */
+.crb-row--active-filters {
+  flex-wrap: wrap;
+  min-height: 36px;
+  gap: 5px;
+  border-radius: 0 0 8px 8px;
+  background: rgba(0, 0, 0, 0.15);
 }
 
 .component-results-grid {
@@ -2412,17 +2727,9 @@
 }
 
 @media (max-width: 980px) {
-  .component-browser-toolbar {
-    grid-template-columns: 1fr;
-  }
-
-  .component-browser-filter-row--materials {
-    grid-column: auto;
-  }
-
-  .component-browser-summary {
-    justify-content: flex-start;
+  .crb-row--categories {
     flex-wrap: wrap;
+    overflow-x: visible;
   }
 
   .component-browser-pager {
