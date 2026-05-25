@@ -1521,19 +1521,6 @@ function extractNumericSequenceFromLineText(text: string): number[] {
     .filter((value) => Number.isFinite(value));
 }
 
-function getLineTextNearMaterial(material: { y: number; height: number }, ocrLines: OcrLine[]): string | null {
-  const maxDelta = Math.max(material.height * 2.4, 56);
-  const nearest = ocrLines
-    .map((line) => ({
-      line,
-      y: (line.bbox.y0 + line.bbox.y1) / 2,
-    }))
-    .filter((entry) => Math.abs(entry.y - material.y) <= maxDelta)
-    .sort((a, b) => Math.abs(a.y - material.y) - Math.abs(b.y - material.y))[0];
-
-  return nearest?.line.text ?? null;
-}
-
 function getKnownMaterialNames(templates: MaterialTemplate[]): string[] {
   const names = new Set<string>();
 
