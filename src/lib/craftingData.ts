@@ -106,8 +106,13 @@ export interface FpsBlueprintRecord {
   sourceBranch?: string | null;
   sourceRelativePath?: string | null;
   familyDisplayName?: string | null;
+  familyKey?: string | null;
   baseName?: string | null;
   variantName?: string | null;
+  weaponClass?: string | null;
+  armorSlot?: string | null;
+  armorWeight?: string | null;
+  armorFamily?: string | null;
   ammoClass?: string | null;
 }
 
@@ -388,6 +393,14 @@ function normalizeFpsBlueprint(item: FpsBlueprintRecord): ComponentRecipe {
     name_source: null,
     wiki_type: toOptionalString(item.ammoClass ?? category),
     wiki_version: null,
+    weaponClass: toOptionalString(item.weaponClass),
+    familyKey: toOptionalString(item.familyKey),
+    familyDisplayName: toOptionalString(item.familyDisplayName),
+    baseName: toOptionalString(item.baseName),
+    variantName: toOptionalString(item.variantName),
+    armorSlot: toOptionalString(item.armorSlot),
+    armorWeight: toOptionalString(item.armorWeight),
+    armorFamily: toOptionalString(item.armorFamily),
 
     qualityModifiers: recipeModifiers.map((modifier) =>
       normalizeQualityModifier(modifier, item)

@@ -1881,6 +1881,7 @@ function RecipeDrawer({
   recipe,
   groupRecipes = [recipe],
   baseDisplayName,
+  initialRecipeId,
   onAddToQueue,
   isRecipeQueued,
   isRecipeBookmarked,
@@ -1891,6 +1892,7 @@ function RecipeDrawer({
   recipe: ComponentRecipe;
   groupRecipes?: ComponentRecipe[];
   baseDisplayName: string;
+  initialRecipeId?: string;
   onAddToQueue: (
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1909,12 +1911,15 @@ function RecipeDrawer({
     getBandLabel,
   } = useQualityQuantization();
 
-  const [selectedRecipeId, setSelectedRecipeId] = useState(recipe.blueprint_id);
+  const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
+    ? initialRecipeId
+    : recipe.blueprint_id;
+  const [selectedRecipeId, setSelectedRecipeId] = useState(initialSelectedRecipeId);
   const selectedRecipe = groupRecipes.find((item) => item.blueprint_id === selectedRecipeId) ?? recipe;
 
   useEffect(() => {
-    setSelectedRecipeId(recipe.blueprint_id);
-  }, [recipe.blueprint_id]);
+    setSelectedRecipeId(initialSelectedRecipeId);
+  }, [initialSelectedRecipeId]);
 
   const [materialQualities, setMaterialQualities] = useState<
     Record<string, number>
@@ -2062,6 +2067,7 @@ interface Props {
   recipes: ComponentRecipe[];
   inventoryEntries?: unknown[];
   materialTemplates?: unknown[];
+  initialBlueprintId?: string;
   onAddToQueue: (
     recipe: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -2072,12 +2078,15 @@ interface Props {
 
 export default function ComponentRecipeTable({
   recipes,
+  initialBlueprintId,
   onAddToQueue,
   isRecipeQueued = () => false,
 }: Props) {
   const initialSidebarState = useMemo(
-    () => readStoredSidebarState(RECIPE_FILTER_STORAGE_KEY, EMPTY_RECIPE_SIDEBAR_STATE),
-    [],
+    () => initialBlueprintId
+      ? EMPTY_RECIPE_SIDEBAR_STATE
+      : readStoredSidebarState(RECIPE_FILTER_STORAGE_KEY, EMPTY_RECIPE_SIDEBAR_STATE),
+    [initialBlueprintId],
   );
   const [search, setSearch] = useState(initialSidebarState.search);
   const [fpsFilters, setFpsFilters] = useState<Set<string>>(() => new Set(initialSidebarState.fps));
@@ -2380,10 +2389,19 @@ export default function ComponentRecipeTable({
       return;
     }
 
+    const initialGroup = initialBlueprintId
+      ? groupedRecipes.find((group) => group.recipes.some((recipe) => recipe.blueprint_id === initialBlueprintId))
+      : null;
+
+    if (initialGroup && selectedGroupId !== initialGroup.id) {
+      setSelectedGroupId(initialGroup.id);
+      return;
+    }
+
     if (!selectedGroupId || !groupedRecipes.some((group) => group.id === selectedGroupId)) {
       setSelectedGroupId(groupedRecipes[0].id);
     }
-  }, [groupedRecipes, selectedGroupId]);
+  }, [groupedRecipes, initialBlueprintId, selectedGroupId]);
 
   const selectedGroup = groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
   const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
@@ -2769,6 +2787,7 @@ export default function ComponentRecipeTable({
             recipe={selectedGroup.recipes[0]}
             groupRecipes={selectedGroup.recipes}
             baseDisplayName={selectedGroup.displayName}
+            initialRecipeId={initialBlueprintId}
             onAddToQueue={onAddToQueue}
             isRecipeQueued={isRecipeQueued}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}

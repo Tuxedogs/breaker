@@ -36,6 +36,14 @@ export interface ComponentRecipe {
   wiki_class_name?: string | null;
   wiki_type?: string | null;
   wiki_version?: string | null;
+  weaponClass?: string | null;
+  familyKey?: string | null;
+  familyDisplayName?: string | null;
+  baseName?: string | null;
+  variantName?: string | null;
+  armorSlot?: string | null;
+  armorWeight?: string | null;
+  armorFamily?: string | null;
   qualityModifiers?: QualityModifier[];
   overallQualityModifiers?: QualityModifier[];
   rewardPools?: unknown[];

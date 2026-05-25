@@ -161,6 +161,14 @@ export default function App() {
           }
         />
         <Route
+          path="industry/crafting/:blueprintId"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryCraftingPage />
+            </Suspense>
+          }
+        />
+        <Route
           path="industry/mining"
           element={
             <Suspense fallback={<RouteFallback />}>

@@ -1,4 +1,5 @@
 import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import "./recipe-browser.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
@@ -6,6 +7,7 @@ import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItems } from "../../../lib/craftingData";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
+import ComponentResultsBrowser from "./components/ComponentResultsBrowser";
 import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
@@ -48,8 +50,10 @@ function getBlueprintSourcesForQueue(recipe: ComponentRecipe) {
 }
 
 export default function CraftingModule() {
+  const { blueprintId } = useParams<{ blueprintId?: string }>();
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
+  const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
@@ -68,6 +72,9 @@ export default function CraftingModule() {
         if (!cancelled) {
           setLoadError(error instanceof Error ? error.message : "Failed to load crafting data");
         }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
   }, []);
@@ -143,17 +150,27 @@ export default function CraftingModule() {
 
   return (
     <>
-      {loadError && (
+      {loadError && blueprintId && (
         <div className="craft-empty-state">
           <p>{loadError}</p>
         </div>
       )}
 
-      {tab === "recipes" && (
+      {tab === "recipes" && !blueprintId && (
+        <ComponentResultsBrowser
+          recipes={recipes}
+          loading={loading}
+          error={loadError}
+          isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+        />
+      )}
+
+      {tab === "recipes" && blueprintId && (
         <ComponentRecipeTable
           recipes={recipes}
           inventoryEntries={inventoryEntries}
           materialTemplates={materialTemplates}
+          initialBlueprintId={blueprintId}
           onAddToQueue={handleAddToQueue}
           isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
         />
