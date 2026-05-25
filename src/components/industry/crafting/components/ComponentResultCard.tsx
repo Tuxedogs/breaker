@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
-import { buildComponentCardSchema } from "../utils/componentCardSchema";
+import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../utils/componentCardSchema";
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -30,16 +31,20 @@ function MaterialsPreview({ schema }: { schema: ComponentCardSchema }) {
 
 export default function ComponentResultCard({
   recipe,
+  record,
   queued,
   saved,
   familyVariantCounts,
 }: {
-  recipe: ComponentRecipe;
+  recipe?: ComponentRecipe;
+  record?: ComponentCardIndexRecord;
   queued: boolean;
   saved: boolean;
-  familyVariantCounts: Map<string, number>;
+  familyVariantCounts?: Map<string, number>;
 }) {
-  const schema = buildComponentCardSchema(recipe, familyVariantCounts);
+  const schema = record
+    ? buildComponentCardSchemaFromIndex(record)
+    : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
   const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
 
   return (
@@ -54,8 +59,9 @@ export default function ComponentResultCard({
 
         <div className="component-result-card__subline">
           <span>{schema.kindLabel}</span>
-          {recipe.component_type && <span>{recipe.component_type}</span>}
-          {schema.categoryLabel && schema.categoryLabel !== recipe.component_type && <span>{schema.categoryLabel}</span>}
+          {record?.type && <span>{record.type}</span>}
+          {recipe?.component_type && <span>{recipe.component_type}</span>}
+          {schema.categoryLabel && schema.categoryLabel !== (record?.type ?? recipe?.component_type) && <span>{schema.categoryLabel}</span>}
         </div>
 
         {schema.meta.length > 0 && (

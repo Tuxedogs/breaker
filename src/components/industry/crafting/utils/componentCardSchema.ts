@@ -1,10 +1,18 @@
-import type { ComponentMaterial, ComponentRecipe } from "./craftingTypes";
+import type { ComponentRecipe } from "./craftingTypes";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentDisplayName } from "./componentDisplayNames";
 import { formatProperty } from "./qualityModifiers";
 
 export type ComponentCardMetric = {
   label: string;
   value: string;
+};
+
+export type ComponentCardMaterialPreview = {
+  slot: string;
+  cost_id: string;
+  material_name: string;
+  quantity: number | string;
 };
 
 export type ComponentCardSchema = {
@@ -17,7 +25,7 @@ export type ComponentCardSchema = {
   genericStats: ComponentCardMetric[];
   familyStats: ComponentCardMetric[];
   modifierLabels: string[];
-  materialsPreview: ComponentMaterial[];
+  materialsPreview: ComponentCardMaterialPreview[];
 };
 
 const VEHICLE_TYPE_LABELS: Record<string, string> = {
@@ -198,4 +206,26 @@ export function buildFamilyVariantCounts(recipes: ComponentRecipe[]): Map<string
     byFamily.set(recipe.familyKey, values);
   }
   return new Map([...byFamily.entries()].map(([key, values]) => [key, values.size]));
+}
+
+export function buildComponentCardSchemaFromIndex(
+  record: ComponentCardIndexRecord,
+): ComponentCardSchema {
+  return {
+    id: record.id,
+    displayName: record.name,
+    typeLabel: record.typeLabel,
+    kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
+    categoryLabel: record.category === record.kind ? undefined : record.category,
+    meta: record.card.primary,
+    genericStats: record.card.secondary,
+    familyStats: [],
+    modifierLabels: record.card.badges,
+    materialsPreview: record.card.materialsPreview.map((material, index) => ({
+      slot: `${index}`,
+      cost_id: `${record.id}:${index}:${material.name}`,
+      material_name: material.name,
+      quantity: material.unit ? `${material.quantity} ${material.unit}` : material.quantity,
+    })),
+  };
 }
