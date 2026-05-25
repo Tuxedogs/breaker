@@ -1,11 +1,10 @@
-import type { PublicLocationEntry } from "../../../features/mining/types";
-import { canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
+import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
+import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import {
   getStaticDensityScore,
   getStaticMaterialQualityRow,
   getStaticMaterialKey,
   getStaticResourcesForLocation,
-  sourceStrengthFromWeight,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import type { MiningRankingMode } from "./miningTypes";
