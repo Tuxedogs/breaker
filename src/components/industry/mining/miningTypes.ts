@@ -54,11 +54,12 @@ export type DemandRow = {
   key: string;
   miningType: string;
   coverage: string;
-  sourceStrength: string;
-  sourceWeight: number | null | undefined;
-  qualityLabel: string;
+  targetQualityChanceLabel: string;
+  densityLabel: string;
   compositionLabel: string;
-  status: string;
+  sourceStrength: string;
+  sourceWeight: number | undefined;
+  status: "strong" | "moderate" | "low" | "missing";
 };
 
 export type ResourceRow = {
@@ -69,15 +70,16 @@ export type ResourceRow = {
   densityLabel: string;
   compositionLabel: string;
   sourceStrength: string;
-  sourceWeight: number | null | undefined;
-  status: string;
+  sourceWeight: number | undefined;
+  sourceTitle?: string;
+  status: "strong" | "moderate" | "low" | "none";
 };
 
 export function queueScopeMatches(line: QueueLedgerLine, scope: MiningQueueScope): boolean {
   if (scope === "all-shortfalls") return true;
-  if (scope === "critical-missing") return line.netShortfall > 0 && line.stockQty === 0;
-  if (scope === "refinable-only") return line.netShortfall > 0 && line.isRefinable === true;
-  if (scope === "partial-stock") return line.netShortfall > 0 && line.stockQty > 0;
+  if (scope === "critical-missing") return line.totalAvailableEquivalent <= 0;
+  if (scope === "refinable-only") return line.isRefinable && line.rawOreNeeded > 0;
+  if (scope === "partial-stock") return line.totalAvailableEquivalent > 0 && line.netMissingRefined > 0;
   return true;
 }
 

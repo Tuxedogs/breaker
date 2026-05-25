@@ -4,7 +4,6 @@ import {
   formatStaticMethodFit,
   formatStaticQualityChanceFromChances,
   getStaticDensityScore,
-  getStaticLocationDisplayName,
   getStaticMaterialQualityRow,
   getStaticMaterialKey,
   getStaticResourcesForLocation,
@@ -13,7 +12,6 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import type { RequiredMaterial } from "../../../features/mining/types";
-import type { QueueLedgerLine } from "../../../lib/logistics/queueLedger";
 import type { MiningQueueScope, QualityDisplay, DemandRow, ResourceRow } from "./miningTypes";
 import { findRouteScoreForMaterial } from "./miningScoring";
 
@@ -171,35 +169,8 @@ export function displayMiningMethodLabel(value: string | null | undefined): stri
 export function demandMaterialLabel(material: RequiredMaterial | undefined, fallbackKey: string): string {
   return material?.displayName
     ?? material?.materialName
-    ?? canonicalMiningMaterialName(fallbackKey);
+    ?? fallbackKey;
 }
-
-// Demand rows surface encounter strength already normalized by the recommender.
-export type DemandRow = {
-  name: string;
-  key: string;
-  miningType: string;
-  coverage: string;
-  targetQualityChanceLabel: string;
-  densityLabel: string;
-  compositionLabel: string;
-  sourceStrength: string;
-  sourceWeight: number | undefined;
-  status: "strong" | "moderate" | "low" | "missing";
-};
-
-export type ResourceRow = {
-  name: string;
-  key: string;
-  miningType: string;
-  qualityLabel: string;
-  densityLabel: string;
-  compositionLabel: string;
-  sourceStrength: string;
-  sourceWeight: number | undefined;
-  sourceTitle?: string;
-  status: "strong" | "moderate" | "low" | "none";
-};
 
 export function resourceRowMaterialKey(row: Pick<ResourceRow, "key" | "name">): string {
   return canonicalMiningMaterial({
@@ -226,20 +197,6 @@ export function qualityChanceTooltip(hasBuildQueueTarget: boolean): string {
   return hasBuildQueueTarget
     ? "Chance that an encountered source meets the selected build queue quality requirement. This is not the chance to find the material."
     : "Chance that an encountered source meets the default high-quality threshold. This is not the chance to find the material.";
-}
-
-export function queueScopeMatches(line: QueueLedgerLine, scope: MiningQueueScope): boolean {
-  switch (scope) {
-    case "critical-missing":
-      return line.totalAvailableEquivalent <= 0;
-    case "refinable-only":
-      return line.isRefinable && line.rawOreNeeded > 0;
-    case "partial-stock":
-      return line.totalAvailableEquivalent > 0 && line.netMissingRefined > 0;
-    case "all-shortfalls":
-    default:
-      return true;
-  }
 }
 
 export function queueScopeDescription(scope: MiningQueueScope, count: number, total: number): string {

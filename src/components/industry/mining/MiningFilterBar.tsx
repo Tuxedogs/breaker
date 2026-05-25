@@ -1,6 +1,5 @@
 import { MINING_QUEUE_SCOPES, MINING_SYSTEM_FILTERS, type MiningQueueScope } from "./miningTypes";
-import { queueScopeDescription, buildQueueFocusLabel } from "./miningFormatters";
-import type { QueueLedgerLine } from "../../../lib/logistics/queueLedger";
+import { queueScopeDescription } from "./miningFormatters";
 
 interface ResourceGroup {
   id: string;
@@ -30,7 +29,6 @@ export function MiningFilterBar({
   onToggleStarred,
   onOpenDrawer,
   onCloseDrawer,
-  onSetDrawerGroup,
   onSetFilterSearch,
 }: {
   selectedSystems: Set<string>;
@@ -49,7 +47,6 @@ export function MiningFilterBar({
   onToggleStarred: () => void;
   onOpenDrawer: (group: "ship" | "vehicle" | "hand") => void;
   onCloseDrawer: () => void;
-  onSetDrawerGroup: (group: "ship" | "vehicle" | "hand") => void;
   onSetFilterSearch: (v: string) => void;
 }) {
   return (
@@ -131,16 +128,6 @@ export function MiningDrawer({
   onSetSelectedMaterials: (fn: (prev: Set<string>) => Set<string>) => void;
   onSetBuildQueueSelectionActive: (fn: (prev: boolean) => boolean) => void;
 }) {
-  function isChipEnabled(chipKey: string, materialToLocations: Map<string, Set<string>>, selectedLocationIntersection: Set<string> | null): boolean {
-    if (selectedMaterials.has(chipKey)) return true;
-    if (selectedLocationIntersection === null) return true;
-    if (selectedLocationIntersection.size === 0) return false;
-    const chipLocs = materialToLocations.get(chipKey);
-    if (!chipLocs) return false;
-    for (const loc of selectedLocationIntersection) { if (chipLocs.has(loc)) return true; }
-    return false;
-  }
-
   const activeGroup = drawerGroup === "ship" || drawerGroup === "vehicle" || drawerGroup === "hand" ? drawerGroup : "ship";
   const groupChips = activeGroup === "ship" ? visibleResourceGroups.shipAndHarvestable : activeGroup === "vehicle" ? visibleResourceGroups.vehicle : visibleResourceGroups.hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
   const filteredChips = filterSearch.trim() ? groupChips.filter((c) => c.label.toLowerCase().includes(filterSearch.trim().toLowerCase())) : groupChips;

@@ -4,11 +4,13 @@ import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mi
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { getStaticLocationMaterialKeys, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
-import type { MaterialTemplate } from "../../../stores/logisticsStore";
-import { compareLocationsByRecommendationScore, demandWeightedLocationScore, diversifyLocationsByMaterials, locationMatchesMaterialKey } from "./miningScoring";
+import type { MaterialTemplate } from "../../../types/logistics";
+import { compareLocationsByRecommendationScore, demandWeightedLocationScore, diversifyLocationsByMaterials } from "./miningScoring";
 import { miningTypeFromSpawn, targetabilityLabel } from "./miningFormatters";
 import type { MiningRankingMode } from "./miningTypes";
-import type { UseMiningPlannerStateReturn } from "../../../features/mining/useMiningPlannerState";
+import type { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
+
+type UseMiningPlannerStateReturn = ReturnType<typeof useMiningPlannerState>;
 
 export interface MiningLocationsResult {
   locationMaterialKeysByLocationKey: Map<string, string[]>;

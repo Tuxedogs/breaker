@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { buildRecommendationRequest, getMiningRecommendations, type RecommendationResponse } from "../../../features/mining/recommenderAdapter";
+import { buildRecommendationRequest, getMiningRecommendations } from "../../../features/mining/recommenderAdapter";
 import { type MiningCoverageMode } from "../../../features/mining/coveragePlan";
 import { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 import { loadStantonLagrangeChildrenData } from "../../../features/locations/stantonLagrangeChildren";
-import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
+import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
@@ -208,7 +208,7 @@ export default function MiningModule() {
     const requestSeq = ++recommendationRequestSeqRef.current;
     setState((prev) => prev.status === "loading" ? prev : { status: "loading", data: "data" in prev ? prev.data : undefined });
     getMiningRecommendations(recommendationRequestRef.current, controller.signal)
-      .then((data) => { if (requestSeq !== recommendationRequestSeqRef.current) return; setState({ status: "ok", data }); })
+      .then((data) => { if (requestSeq !== recommendationRequestSeqRef.current) return; setState({ status: "loaded", data }); })
       .catch((err) => { if (controller.signal.aborted || requestSeq !== recommendationRequestSeqRef.current) return; setState((prev) => ({ status: "error", message: String(err), data: "data" in prev ? prev.data : undefined })); });
     return () => controller.abort();
   }, [recommendationRequestKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -220,7 +220,7 @@ export default function MiningModule() {
   const materialFilterKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : selectedMaterials, [buildQueueMaterials, buildQueueSelectionActive, selectedMaterials]);
 
   // All location filtering/ranking in one hook
-  const { locationMaterialKeysByLocationKey, indexedMaterialKeysByLocationKey, displayRankedFilteredLocations, coveragePlan, unfilteredCoveragePlan, coveragePlanLocationByKey, selectedEntry } = useMiningLocations({
+  const { locationMaterialKeysByLocationKey, displayRankedFilteredLocations, coveragePlan, unfilteredCoveragePlan, coveragePlanLocationByKey, selectedEntry } = useMiningLocations({
     locations,
     loadingState: state.status,
     selectedSystems,
@@ -284,7 +284,6 @@ export default function MiningModule() {
             onToggleStarred={() => planner.toggleShowOnlyStarred()}
             onOpenDrawer={(group) => { setDrawerGroup(group); setDrawerOpen(true); setFilterSearch(""); }}
             onCloseDrawer={() => setDrawerOpen(false)}
-            onSetDrawerGroup={(g) => setDrawerGroup(g)}
             onSetFilterSearch={setFilterSearch}
           />
 

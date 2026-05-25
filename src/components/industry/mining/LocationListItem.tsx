@@ -21,10 +21,8 @@ import {
   encounterSignalFromWeight,
   demandMaterialLabel,
   pickWeightedQualityChances,
-  formatEncounterTier,
 } from "./miningFormatters";
 import { getPrimaryRouteScore } from "./miningScoring";
-import type { MiningQueueScope } from "./miningTypes";
 
 export function StantonLagrangeChildrenSummary({
   entry,
