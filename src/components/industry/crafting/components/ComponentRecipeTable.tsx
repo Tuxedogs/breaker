@@ -780,7 +780,7 @@ function formatMaterialModifierDisplay(
   modifier: string;        // actual delta applied to base
   modifierPercent?: string; // delta as % of base
   total?: string;
-  totalPercent?: string;   // base% + modifier delta%
+  totalPercent?: string;
 } {
   const rawPercent = modifierMode === "integerAdditive" ? undefined : formatContributionValue(modifierValue, modifierMode);
 
@@ -796,12 +796,8 @@ function formatMaterialModifierDisplay(
   const deltaPercent =
     baseValue !== 0 ? (modifierDelta / baseValue) * 100 : undefined;
 
-  // totalPercent = raw data modifier % + delta-as-%-of-base
-  // e.g. 18.0% (base modifier) + 3.2% (how much delta is of base) = 21.2%
   const totalPercentNum =
-    modifierMode !== "integerAdditive" && typeof deltaPercent === "number"
-      ? modifierValue + deltaPercent
-      : deltaPercent;
+    typeof deltaPercent === "number" ? deltaPercent : undefined;
 
   return {
     base: formatModifiedNumber(baseValue, property),
@@ -811,6 +807,10 @@ function formatMaterialModifierDisplay(
     total: formatModifiedNumber(modifiedValue, property),
     totalPercent: totalPercentNum !== undefined ? formatModifierPercent(totalPercentNum) : undefined,
   };
+}
+
+function getTotalModifierKey(property: string, modifierMode?: string): string {
+  return `${property}||${modifierMode ?? ""}`;
 }
 
 function MaterialStatIcon({ property }: { property: string }) {
@@ -1203,6 +1203,7 @@ function MaterialQualityRow({
   onBandChange,
   getBandsForMaterial,
   getBandEffectiveQuality,
+  totalModifiers,
 }: {
   recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
@@ -1211,6 +1212,7 @@ function MaterialQualityRow({
   getBandsForMaterial: (materialName: string) => QualityBand[];
   getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
   getBandLabel: (materialName: string, bandIndex: number) => string;
+  totalModifiers: TotalModifierRow[];
 }) {
   const materialName = getMaterialName(mat);
   const bands = getBandsForMaterial(materialName);
@@ -1228,6 +1230,16 @@ function MaterialQualityRow({
       return order(a.property) - order(b.property);
     });
   }, [mat.qualityModifiers, quality]);
+  const totalModifierByStat = useMemo(
+    () =>
+      new Map(
+        totalModifiers.map((row) => [
+          getTotalModifierKey(row.property, row.modifierMode),
+          row,
+        ]),
+      ),
+    [totalModifiers],
+  );
   const [expandedModifierRows, setExpandedModifierRows] = useState<Set<string>>(() => new Set());
   const [hasTouchedModifierRows, setHasTouchedModifierRows] = useState(false);
   const defaultExpandedRowKey = useMemo(() => {
@@ -1374,6 +1386,19 @@ function MaterialQualityRow({
               m.value,
               m.modifierMode,
             );
+            const totalRow = totalModifierByStat.get(getTotalModifierKey(m.property, m.modifierMode));
+            const totalDisplay = totalRow
+              ? formatMaterialModifierDisplay(
+                  totalRow.property,
+                  getBaseStatValue(recipe, totalRow.property),
+                  totalRow.totalValue,
+                  totalRow.modifierMode,
+                )
+              : display;
+            const totalValue = totalDisplay.total ?? (
+              totalRow ? formatContributionValue(totalRow.totalValue, totalRow.modifierMode) : undefined
+            );
+            const totalPercent = totalDisplay.total ? totalDisplay.totalPercent : undefined;
             const isModifierOnly = !display.base || !display.total;
             const rowKey = `${m.slot}||${m.property}`;
             const expanded = !isModifierOnly && (
@@ -1425,9 +1450,9 @@ function MaterialQualityRow({
                       Total
                     </span>
                     <span className="craft-matq-stat-number craft-stat-total">
-                      {display.total ?? <span className="craft-matq-stat-empty">—</span>}
-                      {display.total && display.totalPercent && (
-                        <span className="craft-matq-stat-percent">({display.totalPercent})</span>
+                      {totalValue ?? <span className="craft-matq-stat-empty">—</span>}
+                      {totalPercent && (
+                        <span className="craft-matq-stat-percent">({totalPercent})</span>
                       )}
                     </span>
                   </span>
@@ -1485,7 +1510,7 @@ function computeTotalModifiers(
 
     for (const m of atQuality) {
       // Group by property + modifierMode so same stat from different slots combine
-      const rowKey = `${m.property}||${m.modifierMode ?? ""}`;
+      const rowKey = getTotalModifierKey(m.property, m.modifierMode);
       const existing = map.get(rowKey);
 
       if (!existing) {
@@ -2003,6 +2028,7 @@ function RecipeDrawer({
                   getBandsForMaterial={getBandsForMaterial}
                   getBandEffectiveQuality={getBandEffectiveQuality}
                   getBandLabel={getBandLabel}
+                  totalModifiers={totalModifiers}
                 />
               );
             })}
