@@ -5,6 +5,7 @@ import "./recipe-browser.css";
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItems } from "../../../lib/craftingData";
+import { getComponentCardIndex, type ComponentCardIndexRecord } from "../../../lib/componentCardIndex";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import ComponentResultsBrowser from "./components/ComponentResultsBrowser";
@@ -53,6 +54,7 @@ export default function CraftingModule() {
   const { blueprintId } = useParams<{ blueprintId?: string }>();
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
+  const [componentCards, setComponentCards] = useState<ComponentCardIndexRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -64,9 +66,23 @@ export default function CraftingModule() {
 
   useEffect(() => {
     let cancelled = false;
-    getCraftingItems()
-      .then((items) => {
-        if (!cancelled) setRecipes(items);
+    setLoading(true);
+    setLoadError(null);
+    const request = blueprintId
+      ? getCraftingItems().then((items) => {
+        if (cancelled) return;
+        setRecipes(items);
+        setComponentCards([]);
+      })
+      : getComponentCardIndex().then((index) => {
+        if (cancelled) return;
+        setComponentCards(index.records);
+        setRecipes([]);
+      });
+
+    request
+      .then(() => {
+        // State is set in the selected loader branch so detail data stays separate from card data.
       })
       .catch((error: unknown) => {
         if (!cancelled) {
@@ -77,7 +93,7 @@ export default function CraftingModule() {
         if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
-  }, []);
+  }, [blueprintId]);
 
   const handleAddToQueue = useCallback((
     recipe: ComponentRecipe,
@@ -158,10 +174,10 @@ export default function CraftingModule() {
 
       {tab === "recipes" && !blueprintId && (
         <ComponentResultsBrowser
-          recipes={recipes}
+          records={componentCards}
           loading={loading}
           error={loadError}
-          isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}
+          isRecipeQueued={(record) => queuedRecipeIds.has(`craft-${record.id}`)}
         />
       )}
 

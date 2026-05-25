@@ -1,14 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { ComponentRecipe } from "../utils/craftingTypes";
 import ComponentResultCard from "./ComponentResultCard";
-import {
-  buildFamilyVariantCounts,
-  getCardDisplayName,
-  getCardTypeLabel,
-} from "../utils/componentCardSchema";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
 // ── Inline SVG icons for component type filter chips ──────────────────────────
 const TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -46,42 +41,13 @@ function readStoredStringSet(key: string): Set<string> {
   }
 }
 
-function normalizeSearch(value: unknown): string {
-  return String(value ?? "").toLowerCase();
+function buildSearchTokens(query: string): string[] {
+  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
 
-function matchesSearch(recipe: ComponentRecipe, query: string): boolean {
-  const trimmed = query.trim().toLowerCase();
-  if (!trimmed) return true;
-  const haystack = [
-    getCardDisplayName(recipe),
-    recipe.component_name,
-    recipe.component_type,
-    recipe.category,
-    recipe.grade,
-    recipe.class,
-    recipe.weaponClass,
-    recipe.familyDisplayName,
-    recipe.variantName,
-    recipe.armorSlot,
-    recipe.armorWeight,
-    recipe.blueprint_id,
-    recipe.output_entityClass,
-  ].map(normalizeSearch).join(" ");
-  return trimmed.split(/\s+/).every((token) => haystack.includes(token));
-}
-
-function labelOption(value: string): string {
-  return getCardTypeLabel({
-    blueprint_id: "",
-    component_type: value,
-    component_name: "",
-    size: "",
-    craft_time_seconds: 0,
-    output_entityClass: "",
-    materials: [],
-    item_kind: value === "weapons" || value === "armor" || value === "ammo" ? "fps" : "vehicle",
-  });
+function matchesSearch(record: ComponentCardIndexRecord, queryTokens: string[]): boolean {
+  if (queryTokens.length === 0) return true;
+  return queryTokens.every((token) => record.searchText.includes(token));
 }
 
 function toggleSetValue(prev: Set<string>, value: string): Set<string> {
@@ -94,14 +60,15 @@ function toggleSetValue(prev: Set<string>, value: string): Set<string> {
   return next;
 }
 
-function buildMaterialOptions(recipes: ComponentRecipe[]): FilterOption[] {
+function buildMaterialOptions(records: ComponentCardIndexRecord[]): FilterOption[] {
   const byName = new Map<string, FilterOption>();
-  for (const recipe of recipes) {
-    for (const material of recipe.materials ?? []) {
-      const label = material.material_name?.trim();
+  for (const record of records) {
+    for (const material of record.materials ?? []) {
+      const label = material.name?.trim();
       if (!label) continue;
-      const key = (material.cost_id || label).toLowerCase();
-      if (!byName.has(key)) byName.set(key, { value: material.cost_id || label, label });
+      const value = material.costId ?? material.materialId ?? label;
+      const key = value.toLowerCase();
+      if (!byName.has(key)) byName.set(key, { value, label });
     }
   }
   const groups = buildResourceGroups([...byName.values()].map((option) => ({
@@ -125,15 +92,15 @@ function ComponentBrowserState({ title, body }: { title: string; body: string })
 }
 
 export default function ComponentResultsBrowser({
-  recipes,
+  records,
   loading,
   error,
   isRecipeQueued,
 }: {
-  recipes: ComponentRecipe[];
+  records: ComponentCardIndexRecord[];
   loading: boolean;
   error: string | null;
-  isRecipeQueued: (recipe: ComponentRecipe) => boolean;
+  isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
 }) {
   const [search, setSearch] = useState("");
   const [vehicleFilters, setVehicleFilters] = useState<Set<string>>(new Set());
@@ -177,66 +144,69 @@ export default function ComponentResultsBrowser({
   }, [materialPickerOpen]);
 
   const vehicleOptions = useMemo<FilterOption[]>(() => {
-    const values = new Set<string>();
+    const values = new Map<string, string>();
     let hasUtility = false;
-    for (const recipe of recipes) {
-      if (recipe.item_kind === "fps") continue;
-      const type = recipe.component_type;
+    for (const record of records) {
+      if (record.kind === "fps") continue;
+      const type = record.type;
       if (!type) continue;
       if (UTILITY_TYPES.has(type)) {
         hasUtility = true;
       } else {
-        values.add(type);
+        values.set(type, record.typeLabel);
       }
     }
-    const options = [...values].sort().map((value) => ({ value, label: labelOption(value) }));
+    const options = [...values.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([value, label]) => ({ value, label }));
     if (hasUtility) options.push({ value: "__utility__", label: "Utility" });
     return options;
-  }, [recipes]);
+  }, [records]);
 
   const fpsOptions = useMemo<FilterOption[]>(() => {
-    const values = new Set(
-      recipes
-        .filter((recipe) => recipe.item_kind === "fps")
-        .map((recipe) => recipe.component_type)
-        .filter((value): value is string => Boolean(value)),
+    const values = new Map(
+      records
+        .filter((record) => record.kind === "fps")
+        .map((record) => [record.type, record.typeLabel] as const)
+        .filter(([value]) => Boolean(value)),
     );
-    return [...values].sort().map((value) => ({ value, label: labelOption(value) }));
-  }, [recipes]);
+    return [...values.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([value, label]) => ({ value, label }));
+  }, [records]);
 
-  const materialOptions = useMemo(() => buildMaterialOptions(recipes), [recipes]);
-  const familyVariantCounts = useMemo(() => buildFamilyVariantCounts(recipes), [recipes]);
+  const materialOptions = useMemo(() => buildMaterialOptions(records), [records]);
+  const searchTokens = useMemo(() => buildSearchTokens(search), [search]);
 
-  const filteredRecipes = useMemo(() => {
-    return recipes
-      .filter((recipe) => {
-        if (!matchesSearch(recipe, search)) return false;
-        if (savedOnly && !savedBlueprintIds.has(recipe.blueprint_id)) return false;
-        if (fpsFilters.size && (recipe.item_kind !== "fps" || !fpsFilters.has(recipe.component_type))) return false;
+  const filteredRecords = useMemo(() => {
+    return records
+      .filter((record) => {
+        if (savedOnly && !savedBlueprintIds.has(record.id)) return false;
+        if (fpsFilters.size && (record.facets.kind !== "fps" || !fpsFilters.has(record.facets.type))) return false;
         if (vehicleFilters.size) {
-          if (recipe.item_kind === "fps") return false;
-          const type = recipe.component_type;
+          if (record.facets.kind === "fps") return false;
+          const type = record.facets.type;
           const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);
           if (!vehicleFilters.has(type) && !utilityMatch) return false;
         }
         if (materialFilters.size) {
-          const usesMaterial = recipe.materials.some((material) =>
-            materialFilters.has(material.cost_id) || materialFilters.has(material.material_name),
-          );
+          const usesMaterial =
+            record.facets.materials.some((materialId) => materialFilters.has(materialId)) ||
+            record.facets.materialNames.some((materialName) => materialFilters.has(materialName));
           if (!usesMaterial) return false;
         }
+        if (!matchesSearch(record, searchTokens)) return false;
         return true;
       })
       .sort((a, b) => {
-        const type = getCardTypeLabel(a).localeCompare(getCardTypeLabel(b));
-        return type || getCardDisplayName(a).localeCompare(getCardDisplayName(b));
+        const type = a.sort.type.localeCompare(b.sort.type);
+        return type || a.sort.name.localeCompare(b.sort.name);
       });
-  }, [fpsFilters, materialFilters, recipes, savedBlueprintIds, savedOnly, search, vehicleFilters]);
+  }, [fpsFilters, materialFilters, records, savedBlueprintIds, savedOnly, searchTokens, vehicleFilters]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredRecipes.length / RESULTS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(filteredRecords.length / RESULTS_PER_PAGE));
   const visiblePage = Math.min(page, totalPages);
   const pageStart = (visiblePage - 1) * RESULTS_PER_PAGE;
-  const pageRecipes = filteredRecipes.slice(pageStart, pageStart + RESULTS_PER_PAGE);
+  const pageRecords = useMemo(
+    () => filteredRecords.slice(pageStart, pageStart + RESULTS_PER_PAGE),
+    [filteredRecords, pageStart],
+  );
   const hasFilters = Boolean(search || vehicleFilters.size || fpsFilters.size || materialFilters.size || savedOnly);
 
   const activeMaterialOptions = useMemo(
@@ -313,7 +283,7 @@ export default function ComponentResultsBrowser({
             Blueprint Bookmarks
           </button>
           <span className="component-browser-count">
-            <strong>{filteredRecipes.length.toLocaleString()}</strong> components found
+            <strong>{filteredRecords.length.toLocaleString()}</strong> components found
           </span>
         </div>
 
@@ -448,25 +418,24 @@ export default function ComponentResultsBrowser({
         )}
       </div>
 
-      {filteredRecipes.length === 0 ? (
+      {filteredRecords.length === 0 ? (
         <ComponentBrowserState title="No Results" body="No craftable components match the current browser filters." />
       ) : (
         <>
           <section className="component-results-grid" aria-label="Component results">
-            {pageRecipes.map((recipe) => (
+            {pageRecords.map((record) => (
               <ComponentResultCard
-                key={recipe.blueprint_id}
-                recipe={recipe}
-                queued={isRecipeQueued(recipe)}
-                saved={savedBlueprintIds.has(recipe.blueprint_id)}
-                familyVariantCounts={familyVariantCounts}
+                key={record.id}
+                record={record}
+                queued={isRecipeQueued(record)}
+                saved={savedBlueprintIds.has(record.id)}
               />
             ))}
           </section>
 
           <footer className="component-browser-pager" aria-label="Component results pages">
             <span className="component-browser-page-readout">
-              Showing {pageStart + 1}-{Math.min(pageStart + pageRecipes.length, filteredRecipes.length)} of {filteredRecipes.length}
+              Showing {pageStart + 1}-{Math.min(pageStart + pageRecords.length, filteredRecords.length)} of {filteredRecords.length}
             </span>
             <div className="component-browser-page-actions">
               <button
