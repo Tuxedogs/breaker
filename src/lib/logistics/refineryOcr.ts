@@ -46,6 +46,9 @@ export interface ParsedRefineryRow {
   qualityNeedsReview?: boolean;
   /** Vertical center of the OCR row inside the cropped panel, 0..1. Used only for review UI alignment. */
   rowYRatio?: number;
+  /** Natural-image crop of the parsed table row, used for visual review. */
+  rowPreviewRegion?: PanelRegion;
+  reviewReasons?: string[];
   quantity: number;
   needsReview: boolean;
 }
@@ -789,6 +792,12 @@ export interface PanelRegion {
   sy: number;
   sw: number;
   sh: number;
+  pct?: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  };
 }
 
 interface OcrWord {
@@ -898,6 +907,49 @@ function sortAndDeduplicateCompleteRows(
     });
 }
 
+function sortAndDeduplicateManualTableRows(
+  rows: ParsedRefineryRowWithY[],
+  processedPanelHeight?: number,
+): ParsedRefineryRow[] {
+  const seen = new Set<string>();
+
+  return rows
+    .map((row) => applyQualityQuantizationToRow(row))
+    .map((row) => {
+      const reviewReasons = new Set(row.reviewReasons ?? []);
+      if (row.materialId === null) reviewReasons.add("Unknown material");
+      if (row.qualityNeedsReview || !row.qualityQuantized) reviewReasons.add("Quality needs review");
+      if (!Number.isFinite(row.quantity) || row.quantity <= 0) reviewReasons.add("Missing or zero yield");
+      return {
+        ...row,
+        reviewReasons: Array.from(reviewReasons),
+        needsReview: Boolean(row.needsReview || reviewReasons.size > 0),
+      };
+    })
+    .filter((row) => row.quality >= 0 && row.quality <= 1000)
+    .filter((row) => {
+      const key = getCompleteRowKey(row);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => {
+      const ay = typeof a.y === "number" ? a.y : Number.POSITIVE_INFINITY;
+      const by = typeof b.y === "number" ? b.y : Number.POSITIVE_INFINITY;
+      if (ay !== by) return ay - by;
+      return a.quality - b.quality;
+    })
+    .map(({ y, ...row }) => {
+      if (typeof y === "number" && processedPanelHeight && processedPanelHeight > 0) {
+        return {
+          ...row,
+          rowYRatio: Math.max(0, Math.min(1, y / processedPanelHeight)),
+        };
+      }
+      return row;
+    });
+}
+
 function inferRowYFromNumbers(
   row: ParsedRefineryRow,
   ocrLines: OcrLine[],
@@ -976,11 +1028,146 @@ async function extractSourceLocationName(
 
 // ── Main export ──────────────────────────────────────────────────────────────
 
+function clampPanelRegion(region: PanelRegion, dims: { w: number; h: number }): PanelRegion {
+  const sx = Math.max(0, Math.min(Math.round(region.sx), dims.w - 1));
+  const sy = Math.max(0, Math.min(Math.round(region.sy), dims.h - 1));
+  return {
+    ...region,
+    sx,
+    sy,
+    sw: Math.max(1, Math.min(Math.round(region.sw), dims.w - sx)),
+    sh: Math.max(1, Math.min(Math.round(region.sh), dims.h - sy)),
+  };
+}
+
+function subRegion(parent: PanelRegion, leftRatio: number, rightRatio: number): PanelRegion {
+  const sx = parent.sx + Math.round(parent.sw * leftRatio);
+  const ex = parent.sx + Math.round(parent.sw * rightRatio);
+  return {
+    sx,
+    sy: parent.sy,
+    sw: Math.max(1, ex - sx),
+    sh: parent.sh,
+  };
+}
+
+async function recognizeDigitsInRegion(
+  worker: Awaited<ReturnType<typeof createWorker>>,
+  imageFile: File,
+  region: PanelRegion,
+): Promise<{ value: number | null; confidence: number; text: string }> {
+  await worker.setParameters({
+    tessedit_pageseg_mode: PSM.SINGLE_LINE,
+    tessedit_char_whitelist: "0123456789",
+  });
+  const blob = await preprocessImageRegion(imageFile, region.sx, region.sy, region.sw, region.sh);
+  const { data } = await worker.recognize(blob);
+  await worker.setParameters({ tessedit_char_whitelist: "" });
+  return {
+    value: parseOcrInteger(data.text ?? ""),
+    confidence: typeof data.confidence === "number" ? data.confidence : 0,
+    text: data.text ?? "",
+  };
+}
+
+async function parseManualTableRegion(
+  worker: Awaited<ReturnType<typeof createWorker>>,
+  imageFile: File,
+  region: PanelRegion,
+  templates: MaterialTemplate[],
+): Promise<ParsedRefineryRowWithY[]> {
+  const materialZone = subRegion(region, 0, 0.58);
+  const qualityZone = subRegion(region, 0.58, 0.75);
+  const yieldZone = subRegion(region, 0.75, 1);
+
+  await worker.setParameters({
+    tessedit_pageseg_mode: PSM.SINGLE_COLUMN,
+    tessedit_char_whitelist: "",
+  });
+  const materialBlob = await preprocessImageRegion(
+    imageFile,
+    materialZone.sx,
+    materialZone.sy,
+    materialZone.sw,
+    materialZone.sh,
+  );
+  const { data: materialData } = await worker.recognize(materialBlob, undefined, {
+    blocks: true,
+  });
+  const materialLines = getOcrLines(materialData.blocks)
+    .map((line) => {
+      const rawName = stripMaterialNoise((line.text ?? "").replace(/[^A-Za-z\s-]/g, " "));
+      const cleanName = cleanText(rawName);
+      const lineHeight = Math.max(8, (line.bbox.y1 - line.bbox.y0) / 2);
+      const y = ((line.bbox.y0 + line.bbox.y1) / 2) / 2;
+      return { rawName, cleanName, lineHeight, y };
+    })
+    .filter(({ rawName, cleanName }) => {
+      if (cleanName.length < 3) return false;
+      if (JUNK_NAMES.has(cleanName.toUpperCase())) return false;
+      if (SKIP_LINES.has(cleanName)) return false;
+      return /[A-Za-z]/.test(rawName);
+    })
+    .sort((a, b) => a.y - b.y);
+
+  const rows: ParsedRefineryRowWithY[] = [];
+
+  for (const materialLine of materialLines) {
+    const rowHeight = Math.max(24, Math.round(materialLine.lineHeight * 2.4));
+    const rowTopInTable = Math.max(0, Math.round(materialLine.y - rowHeight / 2));
+    const rowBottomInTable = Math.min(region.sh, rowTopInTable + rowHeight);
+    const cellHeight = Math.max(1, rowBottomInTable - rowTopInTable);
+
+    const qualityCell: PanelRegion = {
+      sx: qualityZone.sx,
+      sy: region.sy + rowTopInTable,
+      sw: qualityZone.sw,
+      sh: cellHeight,
+    };
+    const yieldCell: PanelRegion = {
+      sx: yieldZone.sx,
+      sy: region.sy + rowTopInTable,
+      sw: yieldZone.sw,
+      sh: cellHeight,
+    };
+    const rowPreviewRegion: PanelRegion = {
+      sx: region.sx,
+      sy: region.sy + rowTopInTable,
+      sw: region.sw,
+      sh: cellHeight,
+    };
+
+    const qualityOcr = await recognizeDigitsInRegion(worker, imageFile, qualityCell);
+    const yieldOcr = await recognizeDigitsInRegion(worker, imageFile, yieldCell);
+
+    const reviewReasons: string[] = [];
+    const materialId = normalizeMaterialName(materialLine.rawName, templates);
+    if (materialId === null) reviewReasons.push("Unknown material");
+    if (qualityOcr.value === null) reviewReasons.push("Missing quality");
+    if (yieldOcr.value === null || yieldOcr.value <= 0) reviewReasons.push("Missing or zero yield");
+    if (qualityOcr.confidence < 55 || yieldOcr.confidence < 55) reviewReasons.push("Bad column alignment");
+
+    rows.push({
+      rawName: materialLine.rawName,
+      materialId,
+      quality: qualityOcr.value ?? 0,
+      quantity: yieldOcr.value ?? 0,
+      needsReview: reviewReasons.length > 0,
+      reviewReasons,
+      y: materialLine.y,
+      rowPreviewRegion,
+    });
+  }
+
+  return rows;
+}
+
 export async function parseRefineryScreenshot(
   imageFile: File,
   templates: MaterialTemplate[],
   onProgress?: (pct: number) => void,
   manualPanelRegions?: PanelRegion[],
+  manualTableRegions?: PanelRegion[],
 ): Promise<RefineryParseResult> {
   const dims = await getImageDimensions(imageFile);
   await ensureQualityQuantizationLoaded();
@@ -995,6 +1182,37 @@ export async function parseRefineryScreenshot(
 
   try {
     await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK });
+
+    if (manualTableRegions && manualTableRegions.length > 0) {
+      const tableRegions = manualTableRegions
+        .filter((region) => region.sw > 0 && region.sh > 0)
+        .map((region) => clampPanelRegion(region, dims));
+
+      const workOrders: ParsedWorkOrder[] = [];
+
+      for (let i = 0; i < tableRegions.length; i++) {
+        const region = tableRegions[i];
+        if (onProgress) {
+          onProgress(Math.round(((i + 0.5) / tableRegions.length) * 90));
+        }
+
+        const rows = sortAndDeduplicateManualTableRows(
+          (await parseManualTableRegion(worker, imageFile, region, templates))
+            .filter((row) => !isRejectedRefineryRow(row)),
+          region.sh,
+        );
+
+        workOrders.push({
+          workOrderNumber: i + 1,
+          rows,
+          totalYieldCscu: null,
+          sourceLocationName: null,
+        });
+      }
+
+      if (onProgress) onProgress(100);
+      return { screenType: "refinery_complete", workOrders };
+    }
 
     const detBlob = await scaleImageForDetection(imageFile);
     const { data: detData } = await worker.recognize(detBlob, undefined, {
