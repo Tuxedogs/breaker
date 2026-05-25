@@ -41,12 +41,18 @@ interface InputDraftRow extends ParsedInputRow {
 }
 
 function toDraftRow(row: ParsedRefineryRow): DraftRow {
+  const passesValidation =
+    row.materialId !== null &&
+    !row.needsReview &&
+    !row.qualityNeedsReview &&
+    row.quantity > 0;
+
   return {
     ...row,
     selectedMaterialId: row.materialId ?? "",
     editedQuality: row.quality,
     editedQuantity: row.quantity,
-    include: true,
+    include: passesValidation,
   };
 }
 
@@ -214,10 +220,19 @@ interface PanelCropBound {
   right: number;
 }
 
+interface TableCropPercent {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 interface ManualAlignment {
   panelCount: 1 | 2 | 3 | 4;
   dividers: number[];
   cropBounds: PanelCropBound[];
+  tableRegion?: PanelRegion;
+  tableRegionPct?: TableCropPercent;
   naturalWidth: number;
   naturalHeight: number;
 }
@@ -301,6 +316,43 @@ function buildManualRegions(
       sh: naturalHeight,
     };
   });
+}
+
+function buildManualTableRegions(
+  alignment: ManualAlignment | undefined,
+  screenshot?: QueuedScreenshot,
+): PanelRegion[] | undefined {
+  if (!alignment) return undefined;
+
+  const naturalWidth = alignment.naturalWidth || screenshot?.naturalWidth || 0;
+  const naturalHeight = alignment.naturalHeight || screenshot?.naturalHeight || 0;
+  if (!naturalWidth || !naturalHeight) return undefined;
+
+  const region = alignment.tableRegion ?? (alignment.tableRegionPct
+    ? {
+        sx: Math.round(alignment.tableRegionPct.x * naturalWidth),
+        sy: Math.round(alignment.tableRegionPct.y * naturalHeight),
+        sw: Math.round(alignment.tableRegionPct.w * naturalWidth),
+        sh: Math.round(alignment.tableRegionPct.h * naturalHeight),
+        pct: alignment.tableRegionPct,
+      }
+    : undefined);
+
+  if (!region || region.sw < 24 || region.sh < 24) return undefined;
+
+  return [{
+    ...region,
+    sx: Math.max(0, Math.min(naturalWidth - 1, Math.round(region.sx))),
+    sy: Math.max(0, Math.min(naturalHeight - 1, Math.round(region.sy))),
+    sw: Math.max(1, Math.min(naturalWidth - Math.round(region.sx), Math.round(region.sw))),
+    sh: Math.max(1, Math.min(naturalHeight - Math.round(region.sy), Math.round(region.sh))),
+    pct: region.pct ?? {
+      x: region.sx / naturalWidth,
+      y: region.sy / naturalHeight,
+      w: region.sw / naturalWidth,
+      h: region.sh / naturalHeight,
+    },
+  }];
 }
 
 const SCREEN_LABEL: Record<RefineryScreenType, string> = {
@@ -422,7 +474,7 @@ export default function RefineryImportPage() {
         },
       };
     });
-    if (patch.panelCount !== undefined) {
+    if (patch.panelCount !== undefined || patch.tableRegion !== undefined || patch.tableRegionPct !== undefined) {
       setAlignmentConfirmed((prev) => ({ ...prev, [id]: false }));
     }
   }
@@ -439,13 +491,15 @@ export default function RefineryImportPage() {
       for (let i = 0; i < screenshots.length; i++) {
         const screenshot = screenshots[i];
         const manualPanelRegions = alignmentMode === "manual" ? buildManualRegions(manualAlignments[screenshot.id], screenshot) : undefined;
+        const manualTableRegions = alignmentMode === "manual" ? buildManualTableRegions(manualAlignments[screenshot.id], screenshot) : undefined;
         const ocrResult = await parseRefineryScreenshot(
           screenshot.file,
           reviewMaterials,
           (pct) => {
             setParseProgress(Math.round(((i + pct / 100) / screenshots.length) * 100));
           },
-          manualPanelRegions,
+          manualTableRegions ? undefined : manualPanelRegions,
+          manualTableRegions,
         );
 
         if (ocrResult.screenType === "refinery_complete") {
@@ -455,7 +509,7 @@ export default function RefineryImportPage() {
           const existingWorkOrders: DraftWorkOrder[] = nextState?.type === "refinery_complete" ? nextState.workOrders : [];
           nextState = {
             type: "refinery_complete",
-            workOrders: [...existingWorkOrders, ...ocrResult.workOrders.map((wo, woIdx) => toDraftWorkOrder(wo, screenshot.id, manualPanelRegions?.[woIdx]))],
+            workOrders: [...existingWorkOrders, ...ocrResult.workOrders.map((wo, woIdx) => toDraftWorkOrder(wo, screenshot.id, manualTableRegions?.[woIdx] ?? manualPanelRegions?.[woIdx]))],
           };
         } else if (ocrResult.screenType === "refinery_input") {
           if (nextState?.type === "refinery_complete") {
@@ -888,6 +942,7 @@ export default function RefineryImportPage() {
                   const alignment = manualAlignments[ss.id];
                   const confirmed = alignmentConfirmed[ss.id] ?? false;
                   const panelCount = alignment?.panelCount ?? 2;
+                  const hasTableRegion = Boolean(buildManualTableRegions(alignment, ss)?.length);
                   const canParseFromThisCard = confirmed && allManualAlignmentsConfirmed && !parsing;
                   return (
                     <div key={ss.id} className={`ri-ss-align-card${confirmed ? " ri-ss-align-card--confirmed" : ""}`}>
@@ -918,9 +973,9 @@ export default function RefineryImportPage() {
                           <div className="ri-align-side-step">
                             <span className="ri-align-side-num">01</span>
                             <div className="ri-align-side-copy">
-                              <strong>Select panel count</strong>
-                              <span>Choose how many work-order panels are visible.</span>
-                              <div className="ri-panel-count" aria-label="Panel count">
+                              <strong>Crop yielded materials</strong>
+                              <span>Drag one box around only the Material, Quality, and Yield rows.</span>
+                              <div className="ri-panel-count" aria-label="Panel count" hidden>
                                 {([1, 2, 3, 4] as (1 | 2 | 3 | 4)[]).map((count) => (
                                   <button
                                     key={count}
@@ -939,8 +994,8 @@ export default function RefineryImportPage() {
                           <div className="ri-align-side-step">
                             <span className="ri-align-side-num">02</span>
                             <div className="ri-align-side-copy">
-                              <strong>Fit each panel</strong>
-                              <span>Drag the vertical edges until each box hugs one work-order panel. Use the top handle to move the whole group.</span>
+                              <strong>Exclude panel chrome</strong>
+                              <span>Leave out TO DO, DONE, totals, timers, storage controls, and footer UI.</span>
                             </div>
                           </div>
 
@@ -953,10 +1008,15 @@ export default function RefineryImportPage() {
                                 return;
                               }
                               if (!confirmed) {
+                                if (!hasTableRegion) {
+                                  setParseError("Drag a crop around the MATERIALS YIELDED table rows before confirming.");
+                                  return;
+                                }
+                                setParseError(null);
                                 setAlignmentConfirmed((prev) => ({ ...prev, [ss.id]: true }));
                               }
                             }}
-                            disabled={parsing || (confirmed && !allManualAlignmentsConfirmed)}
+                            disabled={parsing || !hasTableRegion || (confirmed && !allManualAlignmentsConfirmed)}
                             title={confirmed && !allManualAlignmentsConfirmed ? "Confirm every queued screenshot before parsing." : undefined}
                           >
                             {parsing ? (
@@ -1199,53 +1259,81 @@ interface ManualAlignmentPreviewProps {
 
 function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: ManualAlignmentPreviewProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const panelCount = alignment?.panelCount ?? 2;
-  const cropBounds = sanitizeCropBounds(panelCount, alignment?.cropBounds);
-  const edges = boundsToConnectedEdges(panelCount, cropBounds);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+  const pct = alignment?.tableRegionPct;
 
-  const SNAP_PX = 8;
-  const MIN_PANEL_WIDTH = 0.025;
+  function getNaturalPoint(event: React.PointerEvent): { x: number; y: number } | null {
+    const img = imgRef.current;
+    const imageRect = img?.getBoundingClientRect();
+    if (!img || !imageRect || imageRect.width <= 0 || imageRect.height <= 0) return null;
 
-  function snapToUsefulEdges(value: number, rectWidth: number) {
-    const snapFrac = SNAP_PX / rectWidth;
-    const usefulEdges = [0, 0.25, 1 / 3, 0.4, 0.5, 0.6, 2 / 3, 0.75, 1];
-    const hit = usefulEdges.find((edge) => Math.abs(value - edge) < snapFrac);
-    return hit ?? value;
+    const displayX = Math.max(imageRect.left, Math.min(imageRect.right, event.clientX));
+    const displayY = Math.max(imageRect.top, Math.min(imageRect.bottom, event.clientY));
+
+    return {
+      x: (displayX - imageRect.left) * img.naturalWidth / imageRect.width,
+      y: (displayY - imageRect.top) * img.naturalHeight / imageRect.height,
+    };
   }
 
-  function applyEdges(nextEdges: number[]) {
-    onChange({ cropBounds: edgesToCropBounds(nextEdges) });
+  function applyCrop(start: { x: number; y: number }, end: { x: number; y: number }) {
+    const naturalWidth = screenshot.naturalWidth || alignment?.naturalWidth || imgRef.current?.naturalWidth || 0;
+    const naturalHeight = screenshot.naturalHeight || alignment?.naturalHeight || imgRef.current?.naturalHeight || 0;
+    if (!naturalWidth || !naturalHeight) return;
+
+    const sx = Math.round(Math.min(start.x, end.x));
+    const sy = Math.round(Math.min(start.y, end.y));
+    const ex = Math.round(Math.max(start.x, end.x));
+    const ey = Math.round(Math.max(start.y, end.y));
+    const sw = Math.max(1, ex - sx);
+    const sh = Math.max(1, ey - sy);
+    const tableRegionPct = {
+      x: sx / naturalWidth,
+      y: sy / naturalHeight,
+      w: sw / naturalWidth,
+      h: sh / naturalHeight,
+    };
+
+    onChange({
+      naturalWidth,
+      naturalHeight,
+      tableRegion: { sx, sy, sw, sh, pct: tableRegionPct },
+      tableRegionPct,
+    });
   }
-
-  function moveEdge(edgeIdx: number, clientX: number) {
-    const rect = wrapRef.current?.getBoundingClientRect();
-    if (!rect || rect.width <= 0) return;
-
-    const pointerValue = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const nextValue = snapToUsefulEdges(pointerValue, rect.width);
-    const nextEdges = [...edges];
-    const min = edgeIdx === 0 ? 0 : nextEdges[edgeIdx - 1] + MIN_PANEL_WIDTH;
-    const max = edgeIdx === nextEdges.length - 1 ? 1 : nextEdges[edgeIdx + 1] - MIN_PANEL_WIDTH;
-    nextEdges[edgeIdx] = Math.max(min, Math.min(max, nextValue));
-    applyEdges(nextEdges);
-  }
-
-  function movePanelGroup(clientX: number, dragStartClientX: number, startEdges: number[]) {
-    const rect = wrapRef.current?.getBoundingClientRect();
-    if (!rect || rect.width <= 0) return;
-
-    const delta = (clientX - dragStartClientX) / rect.width;
-    const minDelta = -startEdges[0];
-    const maxDelta = 1 - startEdges[startEdges.length - 1];
-    const safeDelta = Math.max(minDelta, Math.min(maxDelta, delta));
-    applyEdges(startEdges.map((edge) => edge + safeDelta));
-  }
-
-  const groupCenter = (edges[0] + edges[edges.length - 1]) / 2;
 
   return (
-    <div className="ri-align-image-wrap" ref={wrapRef} style={{ position: "relative", overflow: "hidden" }}>
+    <div
+      className="ri-align-image-wrap ri-align-image-wrap--table"
+      ref={wrapRef}
+      style={{ position: "relative", overflow: "hidden" }}
+      onPointerDown={(event) => {
+        if (disabled) return;
+        const point = getNaturalPoint(event);
+        if (!point) return;
+        dragStartRef.current = point;
+        event.currentTarget.setPointerCapture(event.pointerId);
+        event.currentTarget.dataset.dragging = "true";
+        applyCrop(point, point);
+      }}
+      onPointerMove={(event) => {
+        if (disabled || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
+        const start = dragStartRef.current;
+        const point = getNaturalPoint(event);
+        if (!start || !point) return;
+        applyCrop(start, point);
+      }}
+      onPointerUp={(event) => {
+        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+        delete event.currentTarget.dataset.dragging;
+        dragStartRef.current = null;
+      }}
+    >
         <img
+          ref={imgRef}
           src={screenshot.preview}
           alt="Refinery screenshot alignment preview"
           className="ri-align-image"
@@ -1255,83 +1343,19 @@ function ManualAlignmentPreview({ screenshot, alignment, onChange, disabled }: M
           }}
           draggable={false}
         />
-        <button
-          type="button"
-          className="ri-align-group-handle"
-          style={{ left: `${groupCenter * 100}%` }}
-          onPointerDown={(event) => {
-            if (disabled) return;
-            const startClientX = event.clientX;
-            const startEdges = [...edges];
-            event.currentTarget.setPointerCapture(event.pointerId);
-            event.currentTarget.dataset.dragging = "true";
-            if (wrapRef.current) wrapRef.current.dataset.dragging = "true";
-            event.currentTarget.dataset.startClientX = String(startClientX);
-            event.currentTarget.dataset.startEdges = JSON.stringify(startEdges);
-            movePanelGroup(event.clientX, startClientX, startEdges);
-          }}
-          onPointerMove={(event) => {
-            if (disabled || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
-            const startClientX = Number(event.currentTarget.dataset.startClientX ?? event.clientX);
-            const startEdges = JSON.parse(event.currentTarget.dataset.startEdges ?? "[]") as number[];
-            if (startEdges.length) movePanelGroup(event.clientX, startClientX, startEdges);
-          }}
-          onPointerUp={(event) => {
-            if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-              event.currentTarget.releasePointerCapture(event.pointerId);
-              delete event.currentTarget.dataset.dragging;
-              delete event.currentTarget.dataset.startClientX;
-              delete event.currentTarget.dataset.startEdges;
-              if (wrapRef.current) delete wrapRef.current.dataset.dragging;
-            }
-          }}
-          aria-label="Move all panel edges together"
-          disabled={disabled}
-        >
-          Move Panels
-        </button>
-        {cropBounds.map((bound, panelIdx) => (
+        {pct && (
           <div
-            key={panelIdx}
-            className="ri-align-panel-tint"
+            className="ri-align-panel-tint ri-align-panel-tint--table"
             style={{
-              left: `${bound.left * 100}%`,
-              width: `${(bound.right - bound.left) * 100}%`,
+              left: `${pct.x * 100}%`,
+              top: `${pct.y * 100}%`,
+              width: `${pct.w * 100}%`,
+              height: `${pct.h * 100}%`,
             }}
           >
-            <span className="ri-align-panel-label">Panel {panelIdx + 1}</span>
+            <span className="ri-align-panel-label">Materials table</span>
           </div>
-        ))}
-        {edges.map((value, edgeIdx) => (
-          <button
-            key={`edge-${edgeIdx}`}
-            type="button"
-            className="ri-align-divider ri-align-divider--edge"
-            style={{
-              left: `${value * 100}%`,
-            }}
-            onPointerDown={(event) => {
-              if (disabled) return;
-              event.currentTarget.setPointerCapture(event.pointerId);
-              event.currentTarget.dataset.dragging = "true";
-              if (wrapRef.current) wrapRef.current.dataset.dragging = "true";
-              moveEdge(edgeIdx, event.clientX);
-            }}
-            onPointerMove={(event) => {
-              if (disabled || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
-              moveEdge(edgeIdx, event.clientX);
-            }}
-            onPointerUp={(event) => {
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                event.currentTarget.releasePointerCapture(event.pointerId);
-                delete event.currentTarget.dataset.dragging;
-                if (wrapRef.current) delete wrapRef.current.dataset.dragging;
-              }
-            }}
-            aria-label={edgeIdx === 0 ? "Move left outer panel edge" : edgeIdx === edges.length - 1 ? "Move right outer panel edge" : `Move shared edge between panel ${edgeIdx} and panel ${edgeIdx + 1}`}
-            disabled={disabled}
-          />
-        ))}
+        )}
     </div>
   );
 }
@@ -1591,6 +1615,7 @@ function WorkOrderReviewCard({
               <thead>
                 <tr>
                   <th style={{ width: 28 }} />
+                  <th>Crop</th>
                   <th>Material</th>
                   <th>Quality</th>
                   <th>Yield (cSCU)</th>
@@ -1614,8 +1639,22 @@ function WorkOrderReviewCard({
                       />
                     </td>
                     <td>
+                      {row.rowPreviewRegion ? (
+                        <CroppedPanelImage
+                          src={screenshot.preview}
+                          region={row.rowPreviewRegion}
+                          totalPanelsInScreenshot={totalPanelsInScreenshot}
+                          panelIdxInScreenshot={panelIdxInScreenshot}
+                          className="ri-row-preview-img"
+                          alt={`Parsed row preview for ${row.rawName}`}
+                        />
+                      ) : (
+                        <span className="ri-row-preview-empty">--</span>
+                      )}
+                    </td>
+                    <td>
                       {row.needsReview && row.materialId !== null && (
-                        <span className="logi-refimport-review-tag" title="Low OCR confidence — please verify">REVIEW</span>
+                        <span className="logi-refimport-review-tag" title={(row.reviewReasons ?? ["Please verify"]).join(", ")}>REVIEW</span>
                       )}
                       {row.materialId === null && (
                         <span className="logi-refimport-unmatched-tag">{row.rawName}</span>
@@ -1633,6 +1672,11 @@ function WorkOrderReviewCard({
                       </select>
                     </td>
                     <td>
+                      {row.qualityObserved != null && row.qualityBand != null && (
+                        <div className="ri-quality-observed">
+                          Observed {row.qualityObserved} -&gt; Band {row.qualityBand}
+                        </div>
+                      )}
                       <input
                         type="number"
                         className="logi-refimport-num"
