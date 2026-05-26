@@ -63,6 +63,13 @@ function asDisplay(value: unknown): string | null {
   return null;
 }
 
+function getStatsObject(record: ComponentCardIndexRecord, key: string): Record<string, unknown> | null {
+  const stats = record.stats as unknown;
+  if (!isRecord(stats)) return null;
+  const value = stats[key];
+  return isRecord(value) ? value : null;
+}
+
 function titleCase(value: string): string {
   return value
     .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -76,6 +83,67 @@ function formatNumber(value: number): string {
   return new Intl.NumberFormat("en-US", {
     maximumFractionDigits: value >= 100 ? 0 : 2,
   }).format(value);
+}
+
+function formatCompactNumber(value: unknown, suffix = ""): string | null {
+  const number = asNumber(value);
+  if (number === null) return null;
+  return `${formatNumber(number)}${suffix}`;
+}
+
+function formatToken(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+  return titleCase(value);
+}
+
+function formatRange(value: unknown, suffix = ""): string | null {
+  if (!isRecord(value)) return null;
+  const min = asNumber(value.min);
+  const max = asNumber(value.max);
+  if (min === null || max === null) return null;
+  return min === max ? `${formatNumber(min)}${suffix}` : `${formatNumber(min)}-${formatNumber(max)}${suffix}`;
+}
+
+function formatPair(minValue: unknown, maxValue: unknown, suffix = ""): string | null {
+  const min = asNumber(minValue);
+  const max = asNumber(maxValue);
+  if (min === null && max === null) return null;
+  if (min !== null && max !== null && min !== max) return `${formatNumber(min)}-${formatNumber(max)}${suffix}`;
+  return `${formatNumber(max ?? min ?? 0)}${suffix}`;
+}
+
+function formatDamageDrop(stats: Record<string, unknown>): string | null {
+  const minDistance = asNumber(stats.damageDropMinDistance);
+  const perMeter = asNumber(stats.damageDropPerMeter);
+  const minDamage = asNumber(stats.damageDropMinDamage);
+  const parts: string[] = [];
+  if (minDistance !== null) parts.push(`after ${formatNumber(minDistance)}m`);
+  if (perMeter !== null) parts.push(`${formatNumber(perMeter)}/m`);
+  if (minDamage !== null) parts.push(`floor ${formatNumber(minDamage)}`);
+  return parts.length ? parts.join(" / ") : null;
+}
+
+function formatAttachmentSummary(value: unknown): string | null {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  const labels = value
+    .map((item) => {
+      if (!isRecord(item)) return null;
+      if (Array.isArray(item.subTypes) && typeof item.subTypes[0] === "string") return titleCase(item.subTypes[0]);
+      return asDisplay(item.type);
+    })
+    .filter((label): label is string => Boolean(label));
+  if (labels.length === 0) return null;
+  return [...new Set(labels)].slice(0, 4).join(", ");
+}
+
+function formatConsumables(value: unknown): string | null {
+  if (!Array.isArray(value) || value.length === 0) return null;
+  const count = value.length;
+  return count === 1 ? "1 port" : `${count} ports`;
+}
+
+function pushMetric(metrics: ComponentCardMetric[], label: string, value: string | null): void {
+  if (value) metrics.push({ label, value });
 }
 
 export function formatCraftTime(seconds: number): string {
@@ -170,6 +238,182 @@ function getModifierLabels(recipe: ComponentRecipe): string[] {
   return labels.slice(0, 3);
 }
 
+function getIndexGenericStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const generic = getStatsObject(record, "generic");
+  if (!generic) return [];
+
+  const stats: ComponentCardMetric[] = [];
+  pushMetric(stats, "Component HP", formatCompactNumber(generic.health));
+  pushMetric(stats, "Mass", formatCompactNumber(generic.mass));
+  return stats;
+}
+
+function getIndexMeta(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const meta: ComponentCardMetric[] = [];
+  const craftTime = formatCraftTime(record.craftTimeSeconds);
+
+  if (record.size !== null) meta.push({ label: "Size", value: `S${record.size}` });
+  if (record.grade) meta.push({ label: "Grade", value: record.grade });
+  if (record.class) meta.push({ label: "Class", value: titleCase(record.class) });
+  if (craftTime) meta.push({ label: "Craft", value: craftTime });
+  if (record.entityClass) meta.push({ label: "Entity", value: record.entityClass.slice(0, 8) });
+
+  return meta;
+}
+
+function getFallbackIndexStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const stats: ComponentCardMetric[] = [];
+  pushMetric(stats, "Type", record.typeLabel);
+  if (record.size !== null) pushMetric(stats, "Size", `S${record.size}`);
+  pushMetric(stats, "Grade", record.grade);
+  pushMetric(stats, "Class", record.class ? titleCase(record.class) : null);
+  pushMetric(stats, "Craft", formatCraftTime(record.craftTimeSeconds));
+  if (record.materials.length > 0) pushMetric(stats, "Materials", String(record.materials.length));
+  return stats;
+}
+
+function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const type = record.type;
+  const stats: ComponentCardMetric[] = [];
+
+  if (type === "shield") {
+    const shield = getStatsObject(record, "shield");
+    if (!shield) return stats;
+    pushMetric(stats, "Shield HP", formatCompactNumber(shield.maxShieldHealth));
+    pushMetric(stats, "Regen", formatCompactNumber(shield.regenRate, "/s"));
+    pushMetric(stats, "Regen Delay", formatCompactNumber(shield.damageRegenDelay, "s"));
+    pushMetric(stats, "Down Delay", formatCompactNumber(shield.downedRegenDelay, "s"));
+    pushMetric(stats, "Absorption", formatRange(shield.physicalAbsorption));
+    pushMetric(stats, "Resistance", formatRange(shield.physicalResistance));
+    pushMetric(stats, "Power", formatPair(shield.powerUsageMin, shield.powerUsageMax));
+    pushMetric(stats, "Coolant", formatPair(shield.coolantUsageMin, shield.coolantUsageMax));
+    return stats;
+  }
+
+  if (type === "quantumdrive") {
+    const drive = getStatsObject(record, "quantumDrive");
+    if (!drive) return stats;
+    pushMetric(stats, "Normal Speed", formatCompactNumber(drive.normalJumpSpeed, " m/s"));
+    pushMetric(stats, "Spool", formatCompactNumber(drive.spoolTime, "s"));
+    pushMetric(stats, "Cooldown", formatCompactNumber(drive.cooldown, "s"));
+    pushMetric(stats, "Fuel Requirement", formatCompactNumber(drive.quantumFuelRequirement));
+    pushMetric(stats, "Fuel Consumption", formatCompactNumber(drive.quantumFuelConsumptionRate, "/s"));
+    pushMetric(stats, "Calibration", formatPair(drive.calibrationRequirementMin, drive.calibrationRequirementMax));
+    pushMetric(stats, "Power", formatPair(drive.powerUsageMin, drive.powerUsageMax));
+    pushMetric(stats, "Coolant", formatPair(drive.coolantUsageMin, drive.coolantUsageMax));
+    return stats;
+  }
+
+  if (type === "cooler") {
+    const cooler = getStatsObject(record, "cooler");
+    if (!cooler) return stats;
+    pushMetric(stats, "Coolant Generation", formatCompactNumber(cooler.coolantGeneration));
+    pushMetric(stats, "Power Usage", formatPair(cooler.powerUsageMin, cooler.powerUsageMax));
+    pushMetric(stats, "Self Repair Time", formatCompactNumber(cooler.selfRepairTime, "s"));
+    pushMetric(stats, "Online EM", formatCompactNumber(cooler.onlineEmSignature));
+    pushMetric(stats, "Online IR", formatCompactNumber(cooler.onlineIrSignature));
+    return stats;
+  }
+
+  if (type === "powerplant") {
+    const plant = getStatsObject(record, "powerPlant");
+    if (!plant) return stats;
+    pushMetric(stats, "Power Generation", formatCompactNumber(plant.powerGeneration));
+    pushMetric(stats, "Heat Generation", formatCompactNumber(plant.heatGeneration));
+    pushMetric(stats, "Coolant Usage", formatPair(plant.coolantUsageMin, plant.coolantUsageMax));
+    pushMetric(stats, "Self Repair Time", formatCompactNumber(plant.selfRepairTime, "s"));
+    pushMetric(stats, "Online EM", formatCompactNumber(plant.onlineEmSignature));
+    pushMetric(stats, "Online IR", formatCompactNumber(plant.onlineIrSignature));
+    return stats;
+  }
+
+  if (type === "weaponGun") {
+    const weapon = getStatsObject(record, "shipWeapon");
+    if (!weapon) return stats;
+    pushMetric(stats, "Damage Type", formatToken(weapon.damageType));
+    pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
+    pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
+    pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
+    pushMetric(stats, "Projectile Range", formatCompactNumber(weapon.calculatedRange, "m"));
+    pushMetric(stats, "Projectile Speed", formatCompactNumber(weapon.projectileSpeed, " m/s"));
+    pushMetric(stats, "Charge Time", formatCompactNumber(weapon.chargeTime, "s"));
+    pushMetric(stats, "Cooling Rate", formatCompactNumber(weapon.coolingRate));
+    return stats;
+  }
+
+  if (type === "weapons") {
+    const weapon = getStatsObject(record, "fpsWeapon");
+    if (!weapon) return stats;
+    pushMetric(stats, "Weapon Class", formatToken(weapon.weaponClass));
+    pushMetric(stats, "Fire Mode", formatToken(weapon.fireMode));
+    pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
+    pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
+    pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
+    pushMetric(stats, "DPS", formatCompactNumber(weapon.dps));
+    pushMetric(stats, "Projectile Range", formatCompactNumber(weapon.calculatedRange, "m"));
+    pushMetric(stats, "Falloff", asDisplay(weapon.falloffGraphStatus) ?? formatDamageDrop(weapon));
+    pushMetric(stats, "Attachments", formatAttachmentSummary(weapon.attachments));
+    return stats;
+  }
+
+  if (type === "armor") {
+    const armor = getStatsObject(record, "fpsArmor");
+    if (!armor) return stats;
+    pushMetric(stats, "Armor Slot", formatToken(armor.armorSlot));
+    pushMetric(stats, "Armor Weight", formatToken(armor.armorWeight));
+    pushMetric(stats, "Physical Res", formatCompactNumber(armor.physicalResistance));
+    pushMetric(stats, "Energy Res", formatCompactNumber(armor.energyResistance));
+    pushMetric(stats, "Temp Range", formatPair(armor.temperatureMin, armor.temperatureMax, "C"));
+    pushMetric(stats, "Storage", formatCompactNumber(armor.storageCapacity, " microSCU"));
+    pushMetric(stats, "Mass", formatCompactNumber(armor.mass));
+    return stats;
+  }
+
+  if (type === "ammo") {
+    const ammo = getStatsObject(record, "fpsAmmo");
+    if (!ammo) return stats;
+    pushMetric(stats, "Ammo Class", formatToken(ammo.ammoClass));
+    pushMetric(stats, "Weapon Class", formatToken(ammo.compatibleWeaponClass));
+    pushMetric(stats, "Magazine Capacity", formatCompactNumber(ammo.magazineCapacity));
+    pushMetric(stats, "Alpha Damage", formatCompactNumber(ammo.alphaDamageTotal));
+    pushMetric(stats, "Projectile Range", formatCompactNumber(ammo.calculatedRange, "m"));
+    pushMetric(stats, "Damage Drop", formatDamageDrop(ammo));
+    pushMetric(stats, "Penetration", formatCompactNumber(ammo.penetrationBaseDistance, "m"));
+    return stats;
+  }
+
+  if (type === "radar") {
+    const radar = getStatsObject(record, "radar");
+    if (!radar) return stats;
+    pushMetric(stats, "Ping Cooldown", formatCompactNumber(radar.pingCooldown, "s"));
+    pushMetric(stats, "Aim Assist", formatPair(radar.aimAssistRangeMin, radar.aimAssistRangeMax, "m"));
+    pushMetric(stats, "Power", formatPair(radar.powerUsageMin, radar.powerUsageMax));
+    pushMetric(stats, "Coolant", formatPair(radar.coolantUsageMin, radar.coolantUsageMax));
+    pushMetric(stats, "Online EM", formatCompactNumber(radar.onlineEmSignature));
+    pushMetric(stats, "Online IR", formatCompactNumber(radar.onlineIrSignature));
+    return stats;
+  }
+
+  if (type === "weaponMining" || type === "miningLaser") {
+    const mining = getStatsObject(record, "miningLaser") ?? getStatsObject(record, "weaponMining");
+    if (!mining) return stats;
+    pushMetric(stats, "Mining Power", formatCompactNumber(mining.miningPower));
+    pushMetric(stats, "Extraction Power", formatCompactNumber(mining.extractionPower));
+    pushMetric(stats, "Instability Mod", formatCompactNumber(mining.instabilityModifier));
+    pushMetric(stats, "Resistance Mod", formatCompactNumber(mining.resistanceModifier));
+    pushMetric(stats, "Fracture Window", formatCompactNumber(mining.fractureWindowSize));
+    pushMetric(stats, "Laser Range", formatCompactNumber(mining.laserRange, "m"));
+    pushMetric(stats, "Beam Range", formatCompactNumber(mining.beamRange, "m"));
+    pushMetric(stats, "Consumables", formatConsumables(mining.compatibleConsumables));
+    pushMetric(stats, "Power", formatPair(mining.powerUsageMin, mining.powerUsageMax));
+    pushMetric(stats, "Heat", formatCompactNumber(mining.heatGeneration));
+    pushMetric(stats, "Wear", formatCompactNumber(mining.wearRate));
+    return stats;
+  }
+
+  return getFallbackIndexStats(record);
+}
+
 export function buildComponentCardSchema(
   recipe: ComponentRecipe,
   familyVariantCounts: Map<string, number> = new Map(),
@@ -217,9 +461,9 @@ export function buildComponentCardSchemaFromIndex(
     typeLabel: record.typeLabel,
     kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: record.category === record.kind ? undefined : record.category,
-    meta: record.card.primary,
-    genericStats: record.card.secondary,
-    familyStats: [],
+    meta: getIndexMeta(record),
+    genericStats: getIndexGenericStats(record),
+    familyStats: getIndexFamilyStats(record),
     modifierLabels: record.card.badges,
     materialsPreview: record.card.materialsPreview.map((material, index) => ({
       slot: `${index}`,
