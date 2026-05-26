@@ -1,7 +1,5 @@
-import { apiUrl } from "./apiUrl";
-import { parseJsonResponse } from "./safeJson";
-
 const COMPONENT_CARD_INDEX_URL = "/api/crafting/component_card_index.json";
+const RESPONSE_PREVIEW_LENGTH = 200;
 
 export type ComponentCardIndexMetric = {
   label: string;
@@ -145,18 +143,69 @@ export type ComponentCardIndex = {
 
 let componentCardIndexPromise: Promise<ComponentCardIndex> | null = null;
 
+function getResponseTextPreview(text: string): string {
+  return text.replace(/\s+/g, " ").trim().slice(0, RESPONSE_PREVIEW_LENGTH);
+}
+
+function logComponentCardIndexLoadFailure(details: {
+  requestedUrl: string;
+  status?: number;
+  responseTextPreview?: string;
+  recordsArrayExists?: boolean;
+  recordCount?: number;
+  error?: unknown;
+}): void {
+  console.error("Component card index load failed", {
+    requestedUrl: details.requestedUrl,
+    status: details.status,
+    responseTextPreview: details.responseTextPreview,
+    recordsArrayExists: details.recordsArrayExists,
+    recordCount: details.recordCount,
+    error: details.error,
+  });
+}
+
 export async function getComponentCardIndex(): Promise<ComponentCardIndex> {
-  componentCardIndexPromise ??= fetch(apiUrl(COMPONENT_CARD_INDEX_URL)).then(async (response) => {
-    const data = await parseJsonResponse<unknown>(response, {
-      label: "component card index",
-      url: COMPONENT_CARD_INDEX_URL,
-    });
+  componentCardIndexPromise ??= fetch(COMPONENT_CARD_INDEX_URL).then(async (response) => {
+    const requestedUrl = COMPONENT_CARD_INDEX_URL;
+    const text = await response.text();
+    const responseTextPreview = getResponseTextPreview(text);
 
     if (!response.ok) {
+      logComponentCardIndexLoadFailure({
+        requestedUrl,
+        status: response.status,
+        responseTextPreview,
+        recordsArrayExists: false,
+      });
       throw new Error(`Failed to load component card index: ${response.status}`);
     }
 
-    if (!data || typeof data !== "object" || !Array.isArray((data as ComponentCardIndex).records)) {
+    let data: unknown;
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      logComponentCardIndexLoadFailure({
+        requestedUrl,
+        status: response.status,
+        responseTextPreview,
+        recordsArrayExists: false,
+        error,
+      });
+      throw new Error("Component card index returned invalid JSON");
+    }
+
+    const records = data && typeof data === "object" ? (data as Partial<ComponentCardIndex>).records : undefined;
+    const recordsArrayExists = Array.isArray(records);
+    const recordCount = recordsArrayExists ? records.length : undefined;
+
+    if (!recordsArrayExists) {
+      logComponentCardIndexLoadFailure({
+        requestedUrl,
+        status: response.status,
+        recordsArrayExists,
+        recordCount,
+      });
       throw new Error("Component card index payload is invalid");
     }
 
