@@ -459,11 +459,18 @@ async function parseRecommendationResponse(
   return parsed;
 }
 
+let recommenderUnavailable = false;
+
 export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
   signal?: AbortSignal,
 ): Promise<RecommendationResponse> {
   const url = apiUrl("/api/recommender/recommendations");
+
+  if (recommenderUnavailable) {
+    return getStaticMiningRecommendations(request);
+  }
+
   const response = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -474,6 +481,7 @@ export async function getMiningRecommendations(
   const parsedResponse = await parseRecommendationResponse(response, url);
   if ("type" in parsedResponse) {
     if (response.status === 404 || response.status === 405 || parsedResponse.type === "invalid-response") {
+      recommenderUnavailable = response.status === 404 || response.status === 405;
       return getFallbackMiningRecommendations(request, url, parsedResponse);
     }
     throw new Error(`Recommender API failed with ${response.status}`);
@@ -481,6 +489,7 @@ export async function getMiningRecommendations(
 
   if (!response.ok) {
     if (response.status === 404 || response.status === 405) {
+      recommenderUnavailable = true;
       return getFallbackMiningRecommendations(request, url, {
         type: "status",
         status: response.status,
