@@ -2486,9 +2486,13 @@
   background: rgba(0, 0, 0, 0.15);
 }
 
+.crb-row--active-filters .crb-clear-all {
+  margin-left: 0;
+}
+
 .component-results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(278px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   align-items: stretch;
 }
@@ -2732,9 +2736,25 @@
     overflow-x: visible;
   }
 
+  .component-results-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .component-browser-pager {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (min-width: 981px) and (max-width: 1420px) {
+  .component-results-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 561px) and (max-width: 760px) {
+  .component-results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
