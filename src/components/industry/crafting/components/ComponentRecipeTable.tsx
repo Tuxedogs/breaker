@@ -651,6 +651,18 @@ function getImpactClass(impact: "good" | "bad" | "neutral"): string {
   return "";
 }
 
+const STAT_HEADER_LINE_RE = /^(Manufacturer|Item Type|Class|Size|Grade|Magazine Size|Rate Of Fire|Effective Range|Ammo Type|Damage Type|Fire Mode)\s*:/i;
+
+function trimItemDescription(raw: string): string {
+  const lines = raw.replace(/\\n/g, "\n").split("\n");
+  const kept: string[] = [];
+  for (const line of lines) {
+    if (STAT_HEADER_LINE_RE.test(line.trim())) continue;
+    kept.push(line);
+  }
+  return kept.join("\n").trim();
+}
+
 function formatCompactNumber(value: number, options: { sign?: boolean } = {}): string {
   if (!Number.isFinite(value)) return "-";
   const rounded = Math.round(value * 100) / 100;
@@ -2500,21 +2512,27 @@ function ItemSummaryPanel({
 
           <div className="craft-detail-identity-panel">
             <div className="craft-summary-section-label">Item Overview</div>
-            <div className="craft-summary-chips">
-              {typeBadges.map((badge) => (
-                <span
-                  key={badge}
-                  className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
-                >
-                  {badge}
-                </span>
-              ))}
-              {meta.map((value) => (
-                <span key={value} className="craft-badge craft-badge--neutral">
-                  {value}
-                </span>
-              ))}
-            </div>
+            {componentCardRecord?.description ? (
+              <p className="craft-item-description">
+                {trimItemDescription(componentCardRecord.description)}
+              </p>
+            ) : (
+              <div className="craft-summary-chips">
+                {typeBadges.map((badge) => (
+                  <span
+                    key={badge}
+                    className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
+                  >
+                    {badge}
+                  </span>
+                ))}
+                {meta.map((value) => (
+                  <span key={value} className="craft-badge craft-badge--neutral">
+                    {value}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

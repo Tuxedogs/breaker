@@ -3,6 +3,7 @@ import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../utils/componentCardSchema";
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -46,13 +47,23 @@ export default function ComponentResultCard({
     ? buildComponentCardSchemaFromIndex(record)
     : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
   const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
+  const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
 
   return (
     <article className="component-result-card">
       <Link className="component-result-card__hit" to={`/industry/crafting/${schema.id}`}>
         <span className="component-result-card__topline">
           <span className="component-result-card__kind">{schema.typeLabel}</span>
-          <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
+          {iconUrl ? (
+            <img
+              src={iconUrl}
+              alt=""
+              aria-hidden="true"
+              className="component-result-card__cat-icon"
+            />
+          ) : (
+            <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
+          )}
         </span>
 
         <h3 className="component-result-card__title">{schema.displayName}</h3>

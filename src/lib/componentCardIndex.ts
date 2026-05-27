@@ -60,6 +60,8 @@ export type ComponentCardIndexRecord = {
   entityClass: string | null;
   craftTimeSeconds: number;
   materials: ComponentCardIndexMaterial[];
+  description: string | null;
+  descriptionSourceKey: string | null;
   searchText: string;
   searchTokens: string[];
   facets: {
