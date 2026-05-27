@@ -26,6 +26,7 @@ import {
   DEFAULT_BAND_INDEX,
   FALLBACK_QUALITY_BANDS,
   clampBandIndex,
+  clampQuality,
   findNearestBandForQuality,
   getBandEffectiveQuality as getEffectiveQualityFromBands,
   rarityClassFromBandIndex,
@@ -1201,22 +1202,41 @@ function OverallModifierGroup({
   );
 }
 
+function hasMaterialQualityModifiers(mat: ComponentRecipe["materials"][number]): boolean {
+  return (mat.qualityModifiers?.length ?? 0) > 0;
+}
+
+function getQualityBandsForMaterial(
+  mat: ComponentRecipe["materials"][number],
+  getBandsForMaterial: (materialName: string) => QualityBand[],
+): QualityBand[] {
+  const bands = getBandsForMaterial(getMaterialName(mat));
+  if (bands.length > 0) return bands;
+  return hasMaterialQualityModifiers(mat) ? FALLBACK_QUALITY_BANDS : bands;
+}
+
+function getMaterialEffectiveQuality(
+  mat: ComponentRecipe["materials"][number],
+  bandIndex: number,
+  getBandsForMaterial: (materialName: string) => QualityBand[],
+): number {
+  return getEffectiveQualityFromBands(getQualityBandsForMaterial(mat, getBandsForMaterial), bandIndex);
+}
+
 function useMaterialQualityModel({
   mat,
   bandIndex,
   getBandsForMaterial,
-  getBandEffectiveQuality,
 }: {
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   getBandsForMaterial: (materialName: string) => QualityBand[];
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
 }) {
   const materialName = getMaterialName(mat);
-  const bands = getBandsForMaterial(materialName);
+  const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
   const safeBandIndex = clampBandIndex(bandIndex, bands);
   const bandNumber = safeBandIndex + 1;
-  const quality = getBandEffectiveQuality(materialName, safeBandIndex);
+  const quality = getEffectiveQualityFromBands(bands, safeBandIndex);
   const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
   const atQuality = useMemo(() => {
     const mods = getModifiersAtQuality(mat.qualityModifiers ?? [], quality);
@@ -1227,10 +1247,15 @@ function useMaterialQualityModel({
     });
   }, [mat.qualityModifiers, quality]);
   const railMarkers = useMemo(
-    () =>
-      bands.map((band, i) => {
-        const mappedValue = Number(band.mappedValue ?? 0);
-        const left = Math.max(0, Math.min(100, (mappedValue / 1000) * 100));
+    () => {
+      const mappedValues = bands.map((band) => clampQuality(Number(band.mappedValue ?? 0)));
+      const minMappedValue = mappedValues[0] ?? 0;
+      const maxMappedValue = mappedValues[mappedValues.length - 1] ?? 1000;
+      const range = Math.max(1, maxMappedValue - minMappedValue);
+
+      return bands.map((band, i) => {
+        const mappedValue = clampQuality(Number(band.mappedValue ?? 0));
+        const left = Math.max(0, Math.min(100, ((mappedValue - minMappedValue) / range) * 100));
         const edge = left < 4 ? "start" : left > 96 ? "end" : "middle";
 
         return {
@@ -1239,7 +1264,8 @@ function useMaterialQualityModel({
           left,
           edge,
         };
-      }),
+      });
+    },
     [bands],
   );
   const findNearestBandForMappedValue = useCallback(
@@ -1247,7 +1273,10 @@ function useMaterialQualityModel({
     [bands],
   );
   const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
-  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
+  const minQuality = clampQuality(Number(bands[0]?.mappedValue ?? 0));
+  const maxQuality = clampQuality(Number(bands[bands.length - 1]?.mappedValue ?? 1000));
+  const qualityRange = Math.max(1, maxQuality - minQuality);
+  const selectedPct = Math.max(0, Math.min(100, ((quality - minQuality) / qualityRange) * 100));
   const fillPct = Math.max(0, selectedPct - bandOnePct);
 
   return {
@@ -1262,6 +1291,8 @@ function useMaterialQualityModel({
     findNearestBandForMappedValue,
     bandOnePct,
     fillPct,
+    minQuality,
+    maxQuality,
   };
 }
 
@@ -1271,7 +1302,6 @@ export function MaterialQualityRow({
   bandIndex,
   onBandChange,
   getBandsForMaterial,
-  getBandEffectiveQuality,
   totalModifiers,
 }: {
   recipe: ComponentRecipe;
@@ -1279,8 +1309,6 @@ export function MaterialQualityRow({
   bandIndex: number;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
-  getBandLabel: (materialName: string, bandIndex: number) => string;
   totalModifiers: TotalModifierRow[];
 }) {
   const {
@@ -1293,11 +1321,12 @@ export function MaterialQualityRow({
     findNearestBandForMappedValue,
     bandOnePct,
     fillPct,
+    minQuality,
+    maxQuality,
   } = useMaterialQualityModel({
     mat,
     bandIndex,
     getBandsForMaterial,
-    getBandEffectiveQuality,
   });
   const totalModifierByStat = useMemo(
     () =>
@@ -1362,8 +1391,8 @@ export function MaterialQualityRow({
         <div className="craft-quality-rail-wrap craft-matq-rail-wrap">
           <input
             type="range"
-            min={0}
-            max={1000}
+            min={minQuality}
+            max={maxQuality}
             step={1}
             value={quality}
             onChange={(e) => {
@@ -1528,14 +1557,12 @@ function DetailMaterialQualityRow({
   bandIndex,
   onBandChange,
   getBandsForMaterial,
-  getBandEffectiveQuality,
 }: {
   recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
 }) {
   const {
     materialName,
@@ -1548,11 +1575,12 @@ function DetailMaterialQualityRow({
     findNearestBandForMappedValue,
     bandOnePct,
     fillPct,
+    minQuality,
+    maxQuality,
   } = useMaterialQualityModel({
     mat,
     bandIndex,
     getBandsForMaterial,
-    getBandEffectiveQuality,
   });
   const requiredAmount = Number.isFinite(mat.quantity) ? formatCompactNumber(mat.quantity) : null;
 
@@ -1578,15 +1606,15 @@ function DetailMaterialQualityRow({
       <div className="craft-detail-material-required">{requiredAmount}</div>
       <div className="craft-detail-material-quality">
         <span className={`craft-detail-band-pill ${selectedQualityTierClass}`}>
-          Band {safeBandIndex + 1}
+          {safeBandIndex + 1}
         </span>
         <span className="craft-detail-quality-value">{quality}</span>
       </div>
       <div className="craft-detail-material-slider">
         <input
           type="range"
-          min={0}
-          max={1000}
+          min={minQuality}
+          max={maxQuality}
           step={1}
           value={quality}
           onChange={(e) => {
@@ -1676,7 +1704,7 @@ export type FinalProductQuality = {
 
 function computeTotalModifiers(
   recipe: ComponentRecipe,
-  getBandEffectiveQuality: (name: string, idx: number) => number,
+  getBandsForMaterial: (materialName: string) => QualityBand[],
   getBandIndex: (key: string) => number,
 ): TotalModifierRow[] {
   const map = new Map<string, TotalModifierRow>();
@@ -1686,7 +1714,7 @@ function computeTotalModifiers(
     if (modifiers.length === 0) continue;
 
     const key = getMaterialQualityKey(recipe, mat, inputIndex);
-    const quality = getBandEffectiveQuality(getMaterialName(mat), getBandIndex(key));
+    const quality = getMaterialEffectiveQuality(mat, getBandIndex(key), getBandsForMaterial);
     const atQuality = getModifiersAtQuality(modifiers, quality);
 
     for (const m of atQuality) {
@@ -1738,18 +1766,17 @@ function deriveFinalProductQuality(
 function buildSelectedQualitySnapshot(
   recipe: ComponentRecipe,
   materialQualities: Record<string, number>,
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number,
   getBandsForMaterial: (materialName: string) => QualityBand[],
 ): Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }> {
   return Object.fromEntries(
     recipe.materials.map((mat, inputIndex) => {
       const key = getMaterialQualityKey(recipe, mat, inputIndex);
-      const materialName = getMaterialName(mat);
       const bandIndex = materialQualities[key] ?? DEFAULT_BAND_INDEX;
+      const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
       return [key, {
-        quality: getBandEffectiveQuality(materialName, bandIndex),
+        quality: getEffectiveQualityFromBands(bands, bandIndex),
         bandNumber: bandIndex + 1,
-        bands: getBandsForMaterial(materialName),
+        bands,
       }];
     }),
   );
@@ -1812,7 +1839,8 @@ function buildDetailStatRows(record: ComponentCardIndexRecord | undefined): Comp
     push("Compatible Weapon Family", formatIndexToken(ammo.compatibleWeaponFamily));
     push("Magazine Capacity", formatIndexNumber(ammo.magazineCapacity, " Cap"));
     push("Alpha Damage", formatIndexNumber(ammo.alphaDamageTotal));
-    push("Projectile Range / Max Travel", formatIndexNumber(ammo.calculatedRange, "m"));
+    const range = getRangeBoundary(ammo);
+    push(range.label, range.value !== undefined ? formatIndexNumber(range.value, "m") : null);
     push("Projectile Speed", formatIndexNumber(ammo.projectileSpeed, " m/s"));
     push("Damage Drop", formatIndexDamageDrop(ammo));
     push("Penetration", formatIndexNumber(ammo.penetrationBaseDistance, "m"));
@@ -1822,16 +1850,612 @@ function buildDetailStatRows(record: ComponentCardIndexRecord | undefined): Comp
   return buildComponentCardSchemaFromIndex(record).familyStats;
 }
 
+type DetailStatModifier = {
+  value: string;
+  impactClass: string;
+};
+
+type DetailStatRow = ComponentCardMetric & {
+  modifier?: DetailStatModifier;
+};
+
+type ModifierStatBinding = {
+  label: string;
+  statKeys: string[];
+};
+
+const MODIFIER_STAT_BINDINGS: Record<string, ModifierStatBinding> = {
+  GPP_Weapon_Damage: { label: "Alpha Damage", statKeys: ["alphaDamageTotal"] },
+  GPP_Weapon_FireRate: { label: "Fire Rate", statKeys: ["fireRateRpm"] },
+  GPP_Weapon_Spread: { label: "Spread", statKeys: ["adsSpread", "hipFireSpreadMin"] },
+};
+
+function normalizeDetailStatLabel(label: string): string {
+  return label.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function getModifierStatBinding(property: string): ModifierStatBinding {
+  return MODIFIER_STAT_BINDINGS[property] ?? {
+    label: formatModifierStatName(property),
+    statKeys: [],
+  };
+}
+
+function getIndexedModifierBaseValue(
+  record: ComponentCardIndexRecord | undefined,
+  property: string,
+): number | undefined {
+  const binding = getModifierStatBinding(property);
+  if (binding.statKeys.length === 0) return undefined;
+
+  const statGroups = [
+    getIndexStatsObject(record, "fpsWeapon"),
+    getIndexStatsObject(record, "fpsAmmo"),
+    getIndexStatsObject(record, "shipWeapon"),
+  ];
+
+  for (const stats of statGroups) {
+    if (!stats) continue;
+    for (const key of binding.statKeys) {
+      const value = readIndexNumber(stats, key);
+      if (value !== undefined) return value;
+    }
+  }
+
+  return undefined;
+}
+
+function buildDpsModifierDisplay(
+  record: ComponentCardIndexRecord | undefined,
+  totalModifiers: TotalModifierRow[],
+): DetailStatModifier | undefined {
+  const weapon =
+    getIndexStatsObject(record, "fpsWeapon") ??
+    getIndexStatsObject(record, "shipWeapon");
+  if (!weapon) return undefined;
+
+  const baseDps = readIndexNumber(weapon, "dps");
+  if (baseDps === undefined || baseDps <= 0) return undefined;
+
+  const baseDamage = readIndexNumber(weapon, "alphaDamageTotal");
+  const baseFireRate = readIndexNumber(weapon, "fireRateRpm");
+  let scale = 1;
+
+  const damageModifier = getTotalModifierForProperty(totalModifiers, "GPP_Weapon_Damage");
+  if (damageModifier && baseDamage !== undefined && baseDamage > 0) {
+    const modifiedDamage = applyModifierToBase(
+      baseDamage,
+      damageModifier.totalValue,
+      damageModifier.modifierMode,
+    );
+    scale *= modifiedDamage / baseDamage;
+  }
+
+  const fireRateModifier = getTotalModifierForProperty(totalModifiers, "GPP_Weapon_FireRate");
+  if (fireRateModifier && baseFireRate !== undefined && baseFireRate > 0) {
+    const modifiedFireRate = applyModifierToBase(
+      baseFireRate,
+      fireRateModifier.totalValue,
+      fireRateModifier.modifierMode,
+    );
+    scale *= modifiedFireRate / baseFireRate;
+  }
+
+  if (scale === 1) return undefined;
+
+  const delta = baseDps * scale - baseDps;
+  if (!Number.isFinite(delta) || Math.abs(delta) < 0.005) return undefined;
+
+  return {
+    value: formatCompactNumber(delta, { sign: true }),
+    impactClass: getImpactClass(delta > 0 ? "good" : "bad"),
+  };
+}
+
+function buildModifiedDetailStatRows(
+  recipe: ComponentRecipe,
+  record: ComponentCardIndexRecord | undefined,
+  stats: ComponentCardMetric[],
+  totalModifiers: TotalModifierRow[],
+): DetailStatRow[] {
+  const rows: DetailStatRow[] = stats.map((stat) => ({ ...stat }));
+  const rowIndexByLabel = new Map(
+    rows.map((row, index) => [normalizeDetailStatLabel(row.label), index]),
+  );
+
+  for (const modifier of totalModifiers) {
+    const binding = getModifierStatBinding(modifier.property);
+    const baseValue =
+      getIndexedModifierBaseValue(record, modifier.property) ??
+      getBaseStatValue(recipe, modifier.property);
+    const display = formatMaterialModifierDisplay(
+      modifier.property,
+      baseValue,
+      modifier.totalValue,
+      modifier.modifierMode,
+    );
+    const impact = getModifierImpact(modifier.property, modifier.totalValue);
+    const modifierDisplay: DetailStatModifier = {
+      value: baseValue !== undefined ? display.modifier : display.modifierPercent ?? display.modifier,
+      impactClass: getImpactClass(impact),
+    };
+    const existingIndex = rowIndexByLabel.get(normalizeDetailStatLabel(binding.label));
+
+    if (existingIndex !== undefined && baseValue !== undefined) {
+      rows[existingIndex] = {
+        ...rows[existingIndex],
+        modifier: modifierDisplay,
+      };
+      continue;
+    }
+
+    const value = baseValue !== undefined
+      ? display.base ?? rows[existingIndex ?? -1]?.value ?? ""
+      : display.modifierPercent ?? display.modifier;
+
+    if (!value) continue;
+
+    const nextRow: DetailStatRow = {
+      label: binding.label,
+      value,
+      modifier: baseValue !== undefined ? modifierDisplay : undefined,
+    };
+
+    rows.push(nextRow);
+    rowIndexByLabel.set(normalizeDetailStatLabel(nextRow.label), rows.length - 1);
+  }
+
+  const dpsIndex = rowIndexByLabel.get(normalizeDetailStatLabel("DPS"));
+  const dpsModifier = dpsIndex !== undefined ? buildDpsModifierDisplay(record, totalModifiers) : undefined;
+  if (dpsIndex !== undefined && dpsModifier) {
+    rows[dpsIndex] = {
+      ...rows[dpsIndex],
+      modifier: dpsModifier,
+    };
+  }
+
+  return rows;
+}
+
+type DetailGraphPoint = {
+  x: number;
+  base: number;
+  modified?: number;
+};
+
+type DetailGraphMarker = {
+  label: string;
+  x: number;
+};
+
+type DetailGraphTick = {
+  label: string;
+  position: number;
+};
+
+type DetailGraphData = {
+  title: string;
+  subtitle: string;
+  points: DetailGraphPoint[];
+  markers: DetailGraphMarker[];
+  xTicks: DetailGraphTick[];
+  yTicks: DetailGraphTick[];
+  range: number;
+  minValue: number;
+  maxValue: number;
+  metrics: ComponentCardMetric[];
+  bars: ComponentCardMetric[];
+  hasModifiedCurve: boolean;
+};
+
+type P6LRReference = {
+  record?: ComponentCardIndexRecord;
+  totalModifiers: TotalModifierRow[];
+};
+
+function readIndexNumber(source: Record<string, unknown>, key: string): number | undefined {
+  const value = source[key];
+  const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
+  return Number.isFinite(number) ? number : undefined;
+}
+
+function getRangeBoundary(stats: Record<string, unknown>): { value: number | undefined; label: string } {
+  const hardRange = readIndexNumber(stats, "hardRange");
+  if (hardRange !== undefined) return { value: hardRange, label: "Hard Range" };
+
+  const projectileLifetimeTravel =
+    readIndexNumber(stats, "projectileLifetimeTravel") ??
+    readIndexNumber(stats, "calculatedRange");
+  return { value: projectileLifetimeTravel, label: "Projectile Travel" };
+}
+
+function getTotalModifierForProperty(
+  totalModifiers: TotalModifierRow[],
+  property: string,
+): TotalModifierRow | undefined {
+  return totalModifiers.find((row) => row.property === property);
+}
+
+function getAmmoPerformanceStats(componentCardRecord: ComponentCardIndexRecord | undefined): Record<string, unknown> | null {
+  return (
+    getIndexStatsObject(componentCardRecord, "fpsAmmo") ??
+    getIndexStatsObject(componentCardRecord, "fpsWeapon") ??
+    null
+  );
+}
+
+function findP6LRWeaponRecord(componentCards: ComponentCardIndexRecord[]): ComponentCardIndexRecord | undefined {
+  return (
+    componentCards.find((record) => record.type === "weapons" && /P6-LR\s+"Blacklist"/i.test(record.name)) ??
+    componentCards.find((record) => record.type === "weapons" && /^P6-LR\b/i.test(record.name)) ??
+    componentCards.find((record) => record.type === "weapons" && /P6-LR/i.test(record.name))
+  );
+}
+
+function findP6LRRecipe(recipes: ComponentRecipe[]): ComponentRecipe | undefined {
+  const isP6LRWeapon = (recipe: ComponentRecipe) =>
+    recipe.item_kind === "fps" &&
+    recipe.component_type === "weapons" &&
+    /P6-LR/i.test(getRecipeDisplayName(recipe));
+
+  return (
+    recipes.find((recipe) => isP6LRWeapon(recipe) && /P6-LR\s+"Blacklist"/i.test(getRecipeDisplayName(recipe))) ??
+    recipes.find((recipe) => isP6LRWeapon(recipe) && /^P6-LR\b/i.test(getRecipeDisplayName(recipe))) ??
+    recipes.find(isP6LRWeapon)
+  );
+}
+
+function getArmorResistanceForDamageType(armor: Record<string, unknown>, damageType: string | undefined): number | undefined {
+  const normalized = String(damageType ?? "physical").toLowerCase();
+  const resistanceKey =
+    normalized === "energy" ? "energyResistance" :
+    normalized === "distortion" ? "distortionResistance" :
+    normalized === "thermal" ? "thermalResistance" :
+    normalized === "biochemical" ? "biochemicalResistance" :
+    normalized === "stun" ? "stunResistance" :
+    "physicalResistance";
+
+  return readIndexNumber(armor, resistanceKey) ?? readIndexNumber(armor, "physicalResistance");
+}
+
+function buildArmorDamageTakenGraph(
+  componentCardRecord: ComponentCardIndexRecord | undefined,
+  p6lrReference: P6LRReference | undefined,
+): DetailGraphData | null {
+  if (componentCardRecord?.type !== "armor") return null;
+
+  const armor = getIndexStatsObject(componentCardRecord, "fpsArmor");
+  const p6Stats = getAmmoPerformanceStats(p6lrReference?.record);
+  if (!armor || !p6Stats) return null;
+
+  const alphaDamage = readIndexNumber(p6Stats, "alphaDamageTotal");
+  const rangeBoundary = getRangeBoundary(p6Stats);
+  const range = rangeBoundary.value;
+  if (!alphaDamage || !range || alphaDamage <= 0 || range <= 0) return null;
+
+  const resistance = getArmorResistanceForDamageType(
+    armor,
+    typeof p6Stats.damageType === "string" ? p6Stats.damageType : undefined,
+  );
+  if (resistance === undefined || resistance < 0) return null;
+
+  const dropStart = readIndexNumber(p6Stats, "damageDropMinDistance") ?? 0;
+  const dropPerMeter = readIndexNumber(p6Stats, "damageDropPerMeter") ?? 0;
+  const floorDamage = readIndexNumber(p6Stats, "damageDropMinDamage") ?? 0;
+  const damageModifier = getTotalModifierForProperty(p6lrReference?.totalModifiers ?? [], "GPP_Weapon_Damage");
+  const maxQualityAlpha =
+    damageModifier
+      ? applyModifierToBase(alphaDamage, damageModifier.totalValue, damageModifier.modifierMode)
+      : alphaDamage;
+  const damageScale = maxQualityAlpha / alphaDamage;
+  const sampleDistances = [0, range * 0.25, range * 0.5, range * 0.75, range];
+  const p6DamageAt = (distance: number) => {
+    if (dropPerMeter <= 0 || distance <= dropStart) return alphaDamage;
+    const dropped = alphaDamage - (distance - dropStart) * dropPerMeter;
+    return Math.max(floorDamage, dropped);
+  };
+  const points = sampleDistances.map((distance) => ({
+    x: distance,
+    base: p6DamageAt(distance) * damageScale * resistance,
+  }));
+  const values = points.map((point) => point.base);
+  const minValue = Math.min(...values);
+  const maxValue = Math.max(...values);
+  const valueRange = Math.max(1, maxValue - minValue);
+  const yTicks: DetailGraphTick[] = [maxValue, minValue + valueRange / 2, minValue].map((value) => ({
+    label: formatCompactNumber(value),
+    position: 88 - ((value - minValue) / valueRange) * 76,
+  }));
+  const p6Label = p6lrReference?.record?.name?.replace(/\s+Sniper Rifle$/i, "") ?? "P6-LR";
+  const metrics: ComponentCardMetric[] = [
+    { label: "P6-LR Alpha", value: formatCompactNumber(maxQualityAlpha) },
+    { label: "Damage Taken", value: formatCompactNumber(maxQualityAlpha * resistance) },
+  ];
+
+  if (dropPerMeter > 0) {
+    metrics.push({ label: "Falloff Start", value: `${formatCompactNumber(dropStart)}m` });
+    metrics.push({ label: "Minimum Taken", value: formatCompactNumber(floorDamage * damageScale * resistance) });
+  }
+
+  const markers: DetailGraphMarker[] = [
+    { label: "P6-LR Falloff", x: dropStart },
+  ].filter((marker) => marker.x > 0 && marker.x < range);
+  const xTicks: DetailGraphTick[] = [0, 0.25, 0.5, 0.75, 1].map((ratio) => ({
+    label: `${formatCompactNumber(range * ratio)}m`,
+    position: ratio * 100,
+  }));
+
+  return {
+    title: "Armor Damage Taken",
+    subtitle: `${p6Label} at max quality through ${formatCompactNumber(resistance * 100)}% ${String(p6Stats.damageType ?? "physical")} taken`,
+    points,
+    markers,
+    xTicks,
+    yTicks,
+    range,
+    minValue,
+    maxValue,
+    metrics,
+    bars: [
+      { label: "Resistance Multiplier", value: formatCompactNumber(resistance) },
+      { label: rangeBoundary.label, value: `${formatCompactNumber(range)}m` },
+    ],
+    hasModifiedCurve: false,
+  };
+}
+
+function buildAmmoPerformanceGraph(
+  componentCardRecord: ComponentCardIndexRecord | undefined,
+  totalModifiers: TotalModifierRow[],
+): DetailGraphData | null {
+  const ammo = getAmmoPerformanceStats(componentCardRecord);
+  if (!ammo) return null;
+
+  const alphaDamage = readIndexNumber(ammo, "alphaDamageTotal");
+  const rangeBoundary = getRangeBoundary(ammo);
+  const range = rangeBoundary.value;
+  if (!alphaDamage || !range || alphaDamage <= 0 || range <= 0) return null;
+
+  const dropStart = readIndexNumber(ammo, "damageDropMinDistance") ?? 0;
+  const dropPerMeter = readIndexNumber(ammo, "damageDropPerMeter") ?? 0;
+  const floorDamage = readIndexNumber(ammo, "damageDropMinDamage") ?? 0;
+  const damageModifier = getTotalModifierForProperty(totalModifiers, "GPP_Weapon_Damage");
+  const modifiedAlpha =
+    damageModifier
+      ? applyModifierToBase(alphaDamage, damageModifier.totalValue, damageModifier.modifierMode)
+      : undefined;
+  const damageScale = modifiedAlpha !== undefined ? modifiedAlpha / alphaDamage : 1;
+  const sampleDistances = [0, range * 0.25, range * 0.5, range * 0.75, range];
+  const damageAt = (distance: number) => {
+    if (dropPerMeter <= 0 || distance <= dropStart) return alphaDamage;
+    const dropped = alphaDamage - (distance - dropStart) * dropPerMeter;
+    return Math.max(floorDamage, dropped);
+  };
+  const points = sampleDistances.map((distance) => {
+    const base = damageAt(distance);
+    return {
+      x: distance,
+      base,
+      modified: modifiedAlpha !== undefined ? base * damageScale : undefined,
+    };
+  });
+  const graphValues = points.flatMap((point) =>
+    point.modified !== undefined ? [point.base, point.modified] : [point.base],
+  );
+  const minValue = Math.min(...graphValues);
+  const maxValue = Math.max(alphaDamage, modifiedAlpha ?? alphaDamage, ...graphValues);
+  const metrics: ComponentCardMetric[] = [
+    { label: "Alpha", value: formatCompactNumber(alphaDamage) },
+    { label: rangeBoundary.label, value: `${formatCompactNumber(range)}m` },
+  ];
+
+  if (dropPerMeter > 0) {
+    metrics.push({ label: "Damage Loss", value: `${formatCompactNumber(dropPerMeter)}/m` });
+    metrics.push({ label: "Falloff Start", value: `${formatCompactNumber(dropStart)}m` });
+    if (modifiedAlpha === undefined) {
+      metrics.push({ label: "Minimum Damage", value: formatCompactNumber(floorDamage) });
+    }
+  }
+
+  if (modifiedAlpha !== undefined) {
+    metrics.push({ label: "Crafted", value: formatCompactNumber(floorDamage * damageScale) });
+  }
+
+  const projectileSpeed = readIndexNumber(ammo, "projectileSpeed");
+  const projectileLifetime = readIndexNumber(ammo, "projectileLifetime");
+  const impulseStart = readIndexNumber(ammo, "bulletImpulseFalloffMinDistance");
+  const impulseDrop = readIndexNumber(ammo, "bulletImpulseDropFalloff");
+  const impulseMax = readIndexNumber(ammo, "bulletImpulseMaxFalloff");
+  const penetrationDistance = readIndexNumber(ammo, "penetrationBaseDistance");
+  const penetrationNearRadius = readIndexNumber(ammo, "penetrationNearRadius");
+  const penetrationFarRadius = readIndexNumber(ammo, "penetrationFarRadius");
+  const bars: ComponentCardMetric[] = [];
+
+  if (projectileSpeed !== undefined) {
+    bars.push({ label: "Projectile Speed", value: `${formatCompactNumber(projectileSpeed)} m/s` });
+  }
+  if (projectileLifetime !== undefined) {
+    bars.push({ label: "Travel Time", value: `${formatCompactNumber(projectileLifetime)}s` });
+  }
+  if (impulseStart !== undefined) {
+    bars.push({ label: "Impact Falloff Starts", value: `${formatCompactNumber(impulseStart)}m` });
+  }
+  if (impulseDrop !== undefined) {
+    bars.push({ label: "Impact Force Loss", value: formatCompactNumber(impulseDrop) });
+  }
+  if (impulseMax !== undefined) {
+    bars.push({ label: "Max Impact Loss", value: formatCompactNumber(impulseMax) });
+  }
+  if (penetrationDistance !== undefined) {
+    bars.push({ label: "Penetration Reach", value: `${formatCompactNumber(penetrationDistance)}m` });
+  }
+  if (penetrationNearRadius !== undefined) {
+    bars.push({ label: "Close Radius", value: `${formatCompactNumber(penetrationNearRadius)}m` });
+  }
+  if (penetrationFarRadius !== undefined) {
+    bars.push({ label: "Far Radius", value: `${formatCompactNumber(penetrationFarRadius)}m` });
+  }
+  const markers: DetailGraphMarker[] = [
+    { label: "Damage Falloff", x: dropStart },
+    impulseStart !== undefined ? { label: "Impact Falloff", x: impulseStart } : null,
+    penetrationDistance !== undefined ? { label: "Penetration Limit", x: penetrationDistance } : null,
+  ].filter((marker): marker is DetailGraphMarker => marker !== null && marker.x > 0 && marker.x < range);
+  const xTicks: DetailGraphTick[] = [0, 0.25, 0.5, 0.75, 1].map((ratio) => ({
+    label: `${formatCompactNumber(range * ratio)}m`,
+    position: ratio * 100,
+  }));
+  const valueRange = Math.max(1, maxValue - minValue);
+  const yTicks: DetailGraphTick[] = [maxValue, minValue + valueRange / 2, minValue].map((value) => ({
+    label: formatCompactNumber(value),
+    position: 88 - ((value - minValue) / valueRange) * 76,
+  }));
+
+  return {
+    title: "Ammo Performance",
+    subtitle: modifiedAlpha !== undefined ? "Damage falloff with selected materials" : "Damage falloff, travel, impulse, penetration",
+    points,
+    markers,
+    xTicks,
+    yTicks,
+    range,
+    minValue,
+    maxValue,
+    metrics,
+    bars,
+    hasModifiedCurve: modifiedAlpha !== undefined,
+  };
+}
+
+function buildSvgPolyline(
+  points: DetailGraphPoint[],
+  key: "base" | "modified",
+  range: number,
+  minValue: number,
+  maxValue: number,
+): string {
+  const valueRange = Math.max(1, maxValue - minValue);
+  return points
+    .map((point) => {
+      const value = key === "base" ? point.base : point.modified;
+      if (value === undefined) return null;
+      const x = range > 0 ? (point.x / range) * 100 : 0;
+      const y = 88 - ((value - minValue) / valueRange) * 76;
+      return `${Math.max(0, Math.min(100, x)).toFixed(2)},${Math.max(0, Math.min(100, y)).toFixed(2)}`;
+    })
+    .filter((value): value is string => Boolean(value))
+    .join(" ");
+}
+
+function DetailGraphPanel({ data }: { data: DetailGraphData }) {
+  const baseLine = buildSvgPolyline(data.points, "base", data.range, data.minValue, data.maxValue);
+  const modifiedLine = data.hasModifiedCurve
+    ? buildSvgPolyline(data.points, "modified", data.range, data.minValue, data.maxValue)
+    : "";
+
+  return (
+    <div className="craft-summary-section craft-detail-secondary-panel craft-detail-graph-panel">
+      <div className="craft-detail-graph-head">
+        <div>
+          <div className="craft-summary-section-label">{data.title}</div>
+          <span>{data.subtitle}</span>
+        </div>
+      </div>
+      <div className="craft-detail-graph-plot" aria-hidden="true">
+        <div className="craft-detail-graph-legend">
+          <span className="craft-detail-graph-legend-base">Base</span>
+          {data.hasModifiedCurve && (
+            <>
+              <span aria-hidden="true">|</span>
+              <span className="craft-detail-graph-legend-crafted">Crafted</span>
+            </>
+          )}
+        </div>
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+          <path className="craft-detail-graph-grid" d="M0 25H100M0 50H100M0 75H100M25 0V100M50 0V100M75 0V100" />
+          {data.xTicks.map((tick) => (
+            <line
+              key={`x:${tick.label}`}
+              className="craft-detail-graph-notch"
+              x1={tick.position}
+              y1="92"
+              x2={tick.position}
+              y2="100"
+            />
+          ))}
+          {data.yTicks.map((tick) => (
+            <line
+              key={`y:${tick.label}`}
+              className="craft-detail-graph-notch"
+              x1="0"
+              y1={tick.position}
+              x2="4"
+              y2={tick.position}
+            />
+          ))}
+          {data.markers.map((marker) => {
+            const x = data.range > 0 ? Math.max(0, Math.min(100, (marker.x / data.range) * 100)) : 0;
+            return (
+              <g key={`${marker.label}:${marker.x}`} className="craft-detail-graph-marker">
+                <line x1={x} y1="0" x2={x} y2="100" />
+              </g>
+            );
+          })}
+          <polyline className="craft-detail-graph-line craft-detail-graph-line--base" points={baseLine} />
+          {modifiedLine && (
+            <polyline className="craft-detail-graph-line craft-detail-graph-line--modified" points={modifiedLine} />
+          )}
+        </svg>
+        <div className="craft-detail-graph-x-axis">
+          {data.xTicks.map((tick) => (
+            <span key={tick.label} style={{ left: `${tick.position}%` }}>
+              {tick.label}
+            </span>
+          ))}
+        </div>
+        <div className="craft-detail-graph-y-axis">
+          {data.yTicks.map((tick) => (
+            <span key={tick.label} style={{ top: `${tick.position}%` }}>
+              {tick.label}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="craft-detail-graph-metrics">
+        {data.metrics.map((metric) => (
+          <span key={`${metric.label}:${metric.value}`}>
+            <span>{metric.label}</span>
+            <strong>{metric.value}</strong>
+          </span>
+        ))}
+      </div>
+      {data.bars.length > 0 && (
+        <div className="craft-detail-graph-readouts">
+          {data.bars.map((metric) => (
+            <span key={`${metric.label}:${metric.value}`}>
+              <span>{metric.label}</span>
+              <strong>{metric.value}</strong>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ItemSummaryPanel({
   recipe,
   displayName,
   finalProductQuality,
   componentCardRecord,
+  totalModifiers,
+  p6lrReference,
 }: {
   recipe: ComponentRecipe;
   displayName: string;
   finalProductQuality: FinalProductQuality;
   componentCardRecord?: ComponentCardIndexRecord;
+  totalModifiers: TotalModifierRow[];
+  p6lrReference?: P6LRReference;
 }) {
   const schema = componentCardRecord
     ? buildComponentCardSchemaFromIndex(componentCardRecord)
@@ -1853,17 +2477,14 @@ function ItemSummaryPanel({
     componentCardRecord?.variantName,
   ].filter((value): value is string => Boolean(value));
   const stats = buildDetailStatRows(componentCardRecord);
+  const modifiedStats = buildModifiedDetailStatRows(recipe, componentCardRecord, stats, totalModifiers);
   const secondaryStats = componentCardRecord
     ? buildComponentCardSchemaFromIndex(componentCardRecord).genericStats
     : [];
+  const graphData =
+    buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
+    buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
-  const detailRows: ComponentCardMetric[] = [
-    { label: "Manufacturer", value: componentCardRecord?.manufacturer ?? recipe.manufacturer ?? "" },
-    { label: "Size", value: componentCardRecord?.size !== null && componentCardRecord?.size !== undefined ? String(componentCardRecord.size) : formatSize(recipe.size) ?? "" },
-    { label: "Grade", value: componentCardRecord?.grade ?? recipe.grade ?? "" },
-    { label: "Class", value: componentCardRecord?.class ?? recipe.class ?? "" },
-    { label: "Entity", value: componentCardRecord?.entityClass ?? recipe.output_entityClass ?? "" },
-  ].filter((row) => Boolean(row.value));
 
   return (
     <section className="craft-detail-cockpit" aria-label="Selected item summary">
@@ -1873,13 +2494,12 @@ function ItemSummaryPanel({
             <span className="craft-detail-visual-kind">{componentCardRecord?.typeLabel ?? schema.typeLabel}</span>
             <strong>{displayName}</strong>
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-              Band {formatCompactNumber(finalProductQuality.averageBand)}
+              {formatCompactNumber(finalProductQuality.averageBand)}
             </span>
           </div>
 
           <div className="craft-detail-identity-panel">
             <div className="craft-summary-section-label">Item Overview</div>
-            <h2>{displayName}</h2>
             <div className="craft-summary-chips">
               {typeBadges.map((badge) => (
                 <span
@@ -1895,34 +2515,33 @@ function ItemSummaryPanel({
                 </span>
               ))}
             </div>
-            {detailRows.length > 0 && (
-              <div className="craft-detail-meta-list">
-                {detailRows.map((row) => (
-                  <span key={`${row.label}:${row.value}`}>
-                    <span>{row.label}</span>
-                    <strong>{row.value}</strong>
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
-        {stats.length > 0 && (
+        {modifiedStats.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
             <div className="craft-summary-section-label">{componentCardRecord?.typeLabel ?? schema.typeLabel} Stats</div>
             <div className="craft-detail-stat-list">
-              {stats.map((stat) => (
+              {modifiedStats.map((stat) => (
                 <span key={`${stat.label}:${stat.value}`} className="craft-detail-stat-row">
                   <span>{stat.label}</span>
-                  <strong>{stat.value}</strong>
+                  <strong>
+                    <span className="craft-detail-stat-value">{stat.value}</span>
+                    {stat.modifier && (
+                      <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
+                        ({stat.modifier.value})
+                      </span>
+                    )}
+                  </strong>
                 </span>
               ))}
             </div>
           </div>
         )}
 
-        {(identityRows.length > 0 || secondaryStats.length > 0) && (
+        {graphData ? (
+          <DetailGraphPanel data={graphData} />
+        ) : (identityRows.length > 0 || secondaryStats.length > 0) && (
         <div className="craft-summary-section craft-detail-secondary-panel">
           <div className="craft-summary-section-label">Details</div>
           <div className="craft-detail-meta-list craft-detail-meta-list--dense">
@@ -1952,18 +2571,20 @@ function MissionSourcePanel({
   onToggleMissionBookmark: (missionId: string) => void;
 }) {
   const missionEntries = useMissionRewardEntries(recipe, rewardPools);
+  const hasSourceValue = (value: unknown) => Boolean(value) && !/^unknown|n\/a$/i.test(String(value));
   const blueprintRows: ComponentCardMetric[] = [
     { label: "Blueprint ID", value: recipe.blueprint_id },
     { label: "Entity ID", value: recipe.output_entityClass },
     { label: "Item Type", value: recipe.wiki_type ?? recipe.component_type },
     { label: "Size", value: formatSize(recipe.size) ?? "" },
     { label: "Grade", value: recipe.grade ?? "" },
-  ].filter((row) => Boolean(row.value));
+  ].filter((row) => hasSourceValue(row.value));
   const sourceRows: ComponentCardMetric[] = [
-    { label: "Source", value: recipe.source_file ?? "" },
+    { label: "Source Path", value: recipe.source_file ?? "" },
     { label: "Name Source", value: recipe.name_source ?? "" },
     { label: "Raw Name", value: recipe.raw_name ?? "" },
-  ].filter((row) => Boolean(row.value) && !/^unknown|n\/a$/i.test(String(row.value)));
+  ].filter((row) => hasSourceValue(row.value));
+  const hasAdvancedSourceData = blueprintRows.length > 0 || sourceRows.length > 0;
 
   return (
     <div className="craft-detail-lower-grid">
@@ -2021,33 +2642,38 @@ function MissionSourcePanel({
           )}
         </div>
       </section>
-      <section className="craft-summary-panel craft-detail-lower-panel">
-        <div className="craft-summary-section">
-          <div className="craft-summary-section-label">Blueprint Details</div>
-          <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-            {blueprintRows.map((row) => (
-              <span key={`${row.label}:${row.value}`}>
-                <span>{row.label}</span>
-                <strong className="component-result-card__id">{row.value}</strong>
-              </span>
-            ))}
+      {hasAdvancedSourceData && (
+        <details className="craft-detail-source-advanced">
+          <summary>Advanced Source Data</summary>
+          <div className="craft-detail-source-advanced-body">
+            {blueprintRows.length > 0 && (
+              <div className="craft-summary-section">
+                <div className="craft-summary-section-label">Blueprint Details</div>
+                <div className="craft-detail-meta-list craft-detail-meta-list--dense">
+                  {blueprintRows.map((row) => (
+                    <span key={`${row.label}:${row.value}`}>
+                      <span>{row.label}</span>
+                      <strong className="component-result-card__id">{row.value}</strong>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {sourceRows.length > 0 && (
+              <div className="craft-summary-section">
+                <div className="craft-summary-section-label">Additional / Source Metadata</div>
+                <div className="craft-detail-meta-list craft-detail-meta-list--dense">
+                  {sourceRows.map((row) => (
+                    <span key={`${row.label}:${row.value}`}>
+                      <span>{row.label}</span>
+                      <strong className="component-result-card__id">{row.value}</strong>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      </section>
-      {sourceRows.length > 0 && (
-        <section className="craft-summary-panel craft-detail-lower-panel">
-          <div className="craft-summary-section">
-            <div className="craft-summary-section-label">Additional / Source Metadata</div>
-            <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-              {sourceRows.map((row) => (
-                <span key={`${row.label}:${row.value}`}>
-                  <span>{row.label}</span>
-                  <strong className="component-result-card__id">{row.value}</strong>
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
+        </details>
       )}
     </div>
   );
@@ -2074,7 +2700,9 @@ function CraftingOverviewPanel({
       )}
       <span>
         <span>Resulting Quality</span>
-        <strong className={componentRarityClass}>Band {formatCompactNumber(displayFinalProductQuality)}</strong>
+        <strong className={`craft-detail-band-pill ${componentRarityClass}`}>
+          {formatCompactNumber(displayFinalProductQuality)}
+        </strong>
       </span>
       <span>
         <span>Materials</span>
@@ -2132,12 +2760,13 @@ function EstimatedEffectsPanel({
               row.totalValue,
               row.modifierMode,
             );
+            const impactClass = getImpactClass(getModifierImpact(row.property, row.totalValue));
 
             return (
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
                 <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
-                <strong>{display.total ?? formatContributionValue(row.totalValue, row.modifierMode)}</strong>
-                <span className="craft-detail-effect-delta">{display.modifier}</span>
+                <strong className={impactClass}>{display.total ?? formatContributionValue(row.totalValue, row.modifierMode)}</strong>
+                <span className={`craft-detail-effect-delta ${impactClass}`}>{display.modifier}</span>
                 {row.contributions.length > 0 && (
                   <span className="craft-detail-effect-sources">
                     {row.contributions.map((c) => `${c.materialName} ${formatContributionValue(c.value, row.modifierMode)}`).join(" / ")}
@@ -2162,115 +2791,19 @@ function EstimatedEffectsPanel({
   );
 }
 
-function CraftingActionsRow({
-  recipe,
-  displayName,
-  finalProductQuality,
-  materialQualities,
-  getBandEffectiveQuality,
-  getBandsForMaterial,
-  onAddToQueue,
-  isQueued,
-  isBookmarked,
-  onToggleBookmark,
-}: {
-  recipe: ComponentRecipe;
-  displayName: string;
-  finalProductQuality: FinalProductQuality;
-  materialQualities: Record<string, number>;
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
-  getBandsForMaterial: (materialName: string) => QualityBand[];
-  onAddToQueue: (
-    r: ComponentRecipe,
-    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
-    finalProductQuality: FinalProductQuality,
-  ) => void;
-  isQueued: boolean;
-  isBookmarked: boolean;
-  onToggleBookmark: () => void;
-}) {
-  const [queueFeedback, setQueueFeedback] = useState(false);
-
-  useEffect(() => {
-    setQueueFeedback(false);
-  }, [recipe.blueprint_id]);
-
-  return (
-    <>
-      <div className="craft-detail-actions-row">
-        <button
-          type="button"
-          className={`craft-summary-action-btn craft-summary-bookmark-btn${isBookmarked ? " is-active" : ""}`}
-          aria-pressed={isBookmarked}
-          aria-label={isBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
-          onClick={onToggleBookmark}
-        >
-          {isBookmarked ? "Saved" : "Save Blueprint"}
-        </button>
-        <button
-          type="button"
-          className={`craft-summary-action-btn craft-summary-queue-btn${isQueued ? " is-active" : ""}`}
-          aria-pressed={isQueued}
-          aria-label={isQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
-          onClick={() => {
-            const selectedQualities = buildSelectedQualitySnapshot(
-              recipe,
-              materialQualities,
-              getBandEffectiveQuality,
-              getBandsForMaterial,
-            );
-            onAddToQueue(recipe, selectedQualities, finalProductQuality);
-            setQueueFeedback(true);
-          }}
-        >
-          {isQueued ? "Queued" : "Add to Queue"}
-        </button>
-      </div>
-      {(queueFeedback || isQueued) && (
-        <div className="craft-summary-queue-feedback" role="status" aria-live="polite">
-          <span>{queueFeedback ? "Added to build queue" : "Already in build queue"}</span>
-          <Link className="craft-summary-queue-link" to="/logistics/build-queue">
-            View queue
-          </Link>
-        </div>
-      )}
-    </>
-  );
-}
-
 function RightCraftingPanel({
   recipe,
-  displayName,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
   finalProductQuality,
-  onAddToQueue,
-  isQueued,
-  isBookmarked,
-  onToggleBookmark,
-  getBandEffectiveQuality,
-  getBandsForMaterial,
-  materialQualities,
   children,
 }: {
   recipe: ComponentRecipe;
-  displayName: string;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
-  onAddToQueue: (
-    r: ComponentRecipe,
-    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
-    finalProductQuality: FinalProductQuality,
-  ) => void;
-  isQueued: boolean;
-  isBookmarked: boolean;
-  onToggleBookmark: () => void;
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
-  getBandsForMaterial: (materialName: string) => QualityBand[];
-  materialQualities: Record<string, number>;
   children: ReactNode;
 }) {
   return (
@@ -2278,7 +2811,6 @@ function RightCraftingPanel({
       <div className="craft-detail-panel-head">
         <div>
           <div className="craft-summary-section-label">Crafting Overview</div>
-          <h2>Crafting &amp; Materials</h2>
         </div>
       </div>
       <CraftingOverviewPanel recipe={recipe} finalProductQuality={finalProductQuality} />
@@ -2293,18 +2825,6 @@ function RightCraftingPanel({
         overallQualitySource={overallQualitySource}
         finalProductQuality={finalProductQuality}
       />
-      <CraftingActionsRow
-        recipe={recipe}
-        displayName={displayName}
-        finalProductQuality={finalProductQuality}
-        materialQualities={materialQualities}
-        getBandEffectiveQuality={getBandEffectiveQuality}
-        getBandsForMaterial={getBandsForMaterial}
-        onAddToQueue={onAddToQueue}
-        isQueued={isQueued}
-        isBookmarked={isBookmarked}
-        onToggleBookmark={onToggleBookmark}
-      />
     </section>
   );
 }
@@ -2312,6 +2832,7 @@ function RightCraftingPanel({
 function RecipeDrawer({
   recipe,
   groupRecipes = [recipe],
+  allRecipes = groupRecipes,
   baseDisplayName,
   initialRecipeId,
   componentCards = [],
@@ -2324,6 +2845,7 @@ function RecipeDrawer({
 }: {
   recipe: ComponentRecipe;
   groupRecipes?: ComponentRecipe[];
+  allRecipes?: ComponentRecipe[];
   baseDisplayName: string;
   initialRecipeId?: string;
   componentCards?: ComponentCardIndexRecord[];
@@ -2341,7 +2863,6 @@ function RecipeDrawer({
   const {
     loading: quantizationLoading,
     getBandsForMaterial,
-    getBandEffectiveQuality,
   } = useQualityQuantization();
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
@@ -2399,26 +2920,47 @@ function RecipeDrawer({
   const selectedComponentCard = componentCards.find((record) => record.id === selectedRecipe.blueprint_id);
 
   const totalModifiers = useMemo(
-    () => computeTotalModifiers(selectedRecipe, getBandEffectiveQuality, getBandIndex),
+    () => computeTotalModifiers(selectedRecipe, getBandsForMaterial, getBandIndex),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedRecipe, getBandEffectiveQuality, materialQualities],
+    [selectedRecipe, getBandsForMaterial, materialQualities],
   );
+  const p6lrReference = useMemo<P6LRReference | undefined>(() => {
+    const p6lrRecord = findP6LRWeaponRecord(componentCards);
+    if (!p6lrRecord) return undefined;
+
+    const p6lrRecipe = findP6LRRecipe(allRecipes);
+    if (!p6lrRecipe) return { record: p6lrRecord, totalModifiers: [] };
+
+    const maxBandByKey = new Map(
+      p6lrRecipe.materials.map((mat, inputIndex) => {
+        const key = getMaterialQualityKey(p6lrRecipe, mat, inputIndex);
+        const maxBandIndex = Math.max(0, getQualityBandsForMaterial(mat, getBandsForMaterial).length - 1);
+        return [key, maxBandIndex] as const;
+      }),
+    );
+
+    return {
+      record: p6lrRecord,
+      totalModifiers: computeTotalModifiers(
+        p6lrRecipe,
+        getBandsForMaterial,
+        (key) => maxBandByKey.get(key) ?? DEFAULT_BAND_INDEX,
+      ),
+    };
+  }, [allRecipes, componentCards, getBandsForMaterial]);
 
   const showVariantSelector = groupRecipes.length > 1;
   const selectedIsQueued = isRecipeQueued(selectedRecipe);
   const selectedIsBookmarked = isRecipeBookmarked(selectedRecipe);
-  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
   const categoryLine = [
     selectedComponentCard?.category ?? selectedRecipe.category,
     selectedComponentCard?.typeLabel ?? selectedRecipe.wiki_type,
     selectedComponentCard?.type ?? selectedRecipe.component_type,
-  ].filter((value): value is string => Boolean(value)).join(" / ");
-  const headerMeta = [
-    selectedComponentCard?.size !== null && selectedComponentCard?.size !== undefined ? `S${selectedComponentCard.size}` : formatSize(selectedRecipe.size),
-    selectedComponentCard?.grade ?? selectedRecipe.grade,
-    selectedComponentCard?.class ?? selectedRecipe.class,
-    selectedComponentCard?.family ?? selectedRecipe.familyDisplayName ?? selectedRecipe.armorFamily ?? selectedRecipe.baseName,
-  ].filter((value): value is string => Boolean(value));
+  ]
+    .filter((value): value is string => Boolean(value))
+    .filter((value) => value.trim().toLowerCase() !== "fps")
+    .filter((value, index, values) => values.findIndex((item) => item.trim().toLowerCase() === value.trim().toLowerCase()) === index)
+    .join(" / ");
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
@@ -2427,22 +2969,6 @@ function RecipeDrawer({
           Back to Results
         </Link>
         <div className="craft-detail-title-block">
-          <div className="craft-summary-chips craft-detail-title-badges">
-            {getTypeBadges(selectedRecipe).map((badge) => (
-              <span
-                key={badge}
-                className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
-              >
-                {badge}
-              </span>
-            ))}
-            {headerMeta.map((value) => (
-              <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
-            ))}
-            <span className={`craft-summary-quality-pill ${componentRarityClass}`}>
-              Band {formatCompactNumber(finalProductQuality.averageBand)}
-            </span>
-          </div>
           <h1 className="craft-detail-title">{displayName}</h1>
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
         </div>
@@ -2466,7 +2992,6 @@ function RecipeDrawer({
               buildSelectedQualitySnapshot(
                 selectedRecipe,
                 materialQualities,
-                getBandEffectiveQuality,
                 getBandsForMaterial,
               ),
               finalProductQuality,
@@ -2483,6 +3008,8 @@ function RecipeDrawer({
           displayName={displayName}
           finalProductQuality={finalProductQuality}
           componentCardRecord={selectedComponentCard}
+          totalModifiers={totalModifiers}
+          p6lrReference={p6lrReference}
         />
 
         <aside className="craft-detail-crafting" aria-label="Crafting materials">
@@ -2518,18 +3045,10 @@ function RecipeDrawer({
 
         <RightCraftingPanel
           recipe={selectedRecipe}
-          displayName={displayName}
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
           finalProductQuality={finalProductQuality}
-          onAddToQueue={onAddToQueue}
-          isQueued={selectedIsQueued}
-          isBookmarked={selectedIsBookmarked}
-          onToggleBookmark={() => onToggleBookmark(selectedRecipe)}
-          getBandEffectiveQuality={getBandEffectiveQuality}
-          getBandsForMaterial={getBandsForMaterial}
-          materialQualities={materialQualities}
         >
           {quantizationLoading && (
             <div className="craft-empty-card">
@@ -2552,7 +3071,6 @@ function RecipeDrawer({
                   }))
                 }
                 getBandsForMaterial={getBandsForMaterial}
-                getBandEffectiveQuality={getBandEffectiveQuality}
               />
             );
           })}
@@ -2924,6 +3442,7 @@ export default function ComponentRecipeTable({
           <RecipeDrawer
             recipe={selectedGroup.recipes[0]}
             groupRecipes={selectedGroup.recipes}
+            allRecipes={recipes}
             baseDisplayName={selectedGroup.displayName}
             initialRecipeId={initialBlueprintId}
             componentCards={componentCards}
@@ -3318,12 +3837,13 @@ export default function ComponentRecipeTable({
         </aside>
 
         {selectedGroup ? (
-          <RecipeDrawer
-            recipe={selectedGroup.recipes[0]}
-            groupRecipes={selectedGroup.recipes}
-            baseDisplayName={selectedGroup.displayName}
-            initialRecipeId={initialBlueprintId}
-            componentCards={componentCards}
+            <RecipeDrawer
+              recipe={selectedGroup.recipes[0]}
+              groupRecipes={selectedGroup.recipes}
+              allRecipes={recipes}
+              baseDisplayName={selectedGroup.displayName}
+              initialRecipeId={initialBlueprintId}
+              componentCards={componentCards}
             onAddToQueue={onAddToQueue}
             isRecipeQueued={isRecipeQueued}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
