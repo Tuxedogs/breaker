@@ -146,6 +146,12 @@ function pushMetric(metrics: ComponentCardMetric[], label: string, value: string
   if (value) metrics.push({ label, value });
 }
 
+function formatUsableOrTravelRange(stats: Record<string, unknown>): { label: string; value: string | null } {
+  const hardRange = formatCompactNumber(stats.hardRange, "m");
+  if (hardRange) return { label: "Hard Range", value: hardRange };
+  return { label: "Projectile Travel", value: formatCompactNumber(stats.projectileLifetimeTravel ?? stats.calculatedRange, "m") };
+}
+
 export function formatCraftTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds <= 0) return "";
   if (seconds < 60) return `${Math.round(seconds)}s`;
@@ -350,7 +356,8 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
     pushMetric(stats, "DPS", formatCompactNumber(weapon.dps));
-    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(weapon.calculatedRange, "m"));
+    const range = formatUsableOrTravelRange(weapon);
+    pushMetric(stats, range.label, range.value);
     pushMetric(stats, "Falloff", asDisplay(weapon.falloffGraphStatus) ?? formatDamageDrop(weapon));
     pushMetric(stats, "Attachments", formatAttachmentSummary(weapon.attachments));
     return stats;
@@ -376,7 +383,8 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     pushMetric(stats, "Compatible Weapon Class", formatToken(ammo.compatibleWeaponClass));
     pushMetric(stats, "Magazine Capacity", formatCompactNumber(ammo.magazineCapacity));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(ammo.alphaDamageTotal));
-    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(ammo.calculatedRange, "m"));
+    const range = formatUsableOrTravelRange(ammo);
+    pushMetric(stats, range.label, range.value);
     pushMetric(stats, "Projectile Speed", formatCompactNumber(ammo.projectileSpeed, " m/s"));
     pushMetric(stats, "Damage Drop", formatDamageDrop(ammo));
     pushMetric(stats, "Penetration", formatCompactNumber(ammo.penetrationBaseDistance, "m"));
