@@ -69,10 +69,10 @@ export default function CraftingModule() {
     setLoading(true);
     setLoadError(null);
     const request = blueprintId
-      ? getCraftingItems().then((items) => {
+      ? Promise.all([getCraftingItems(), getComponentCardIndex()]).then(([items, index]) => {
         if (cancelled) return;
         setRecipes(items);
-        setComponentCards([]);
+        setComponentCards(index.records);
       })
       : getComponentCardIndex().then((index) => {
         if (cancelled) return;
@@ -186,6 +186,7 @@ export default function CraftingModule() {
           recipes={recipes}
           inventoryEntries={inventoryEntries}
           materialTemplates={materialTemplates}
+          componentCards={componentCards}
           initialBlueprintId={blueprintId}
           onAddToQueue={handleAddToQueue}
           isRecipeQueued={(recipe) => queuedRecipeIds.has(`craft-${recipe.blueprint_id}`)}

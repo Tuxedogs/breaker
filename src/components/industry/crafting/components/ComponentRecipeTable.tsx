@@ -4,6 +4,7 @@ import {
   useRef,
   useEffect,
   useCallback,
+  type ReactNode,
 } from "react";
 import { Link } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
@@ -31,6 +32,8 @@ import {
   rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { buildComponentCardSchema, buildComponentCardSchemaFromIndex, formatCraftTime, type ComponentCardMetric } from "../utils/componentCardSchema";
 import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 
@@ -252,7 +255,9 @@ function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string
   if (!id) return null;
 
   const isDisabled = contractId ? releaseStateMap.get(contractId) ?? isMissionDisabledRecord(mission) : isMissionDisabledRecord(mission);
-  const title = normalizeMissionTitle(contractTitle ?? contractDebugName ?? "Unknown Blueprint Source");
+  const sourceTitle = contractTitle ?? contractDebugName;
+  if (!sourceTitle) return null;
+  const title = normalizeMissionTitle(sourceTitle);
 
   return {
     id: `mission:${id}`,
@@ -1196,7 +1201,71 @@ function OverallModifierGroup({
   );
 }
 
-function MaterialQualityRow({
+function useMaterialQualityModel({
+  mat,
+  bandIndex,
+  getBandsForMaterial,
+  getBandEffectiveQuality,
+}: {
+  mat: ComponentRecipe["materials"][number];
+  bandIndex: number;
+  getBandsForMaterial: (materialName: string) => QualityBand[];
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
+}) {
+  const materialName = getMaterialName(mat);
+  const bands = getBandsForMaterial(materialName);
+  const safeBandIndex = clampBandIndex(bandIndex, bands);
+  const bandNumber = safeBandIndex + 1;
+  const quality = getBandEffectiveQuality(materialName, safeBandIndex);
+  const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
+  const atQuality = useMemo(() => {
+    const mods = getModifiersAtQuality(mat.qualityModifiers ?? [], quality);
+    return [...mods].sort((a, b) => {
+      const order = (p: string) =>
+        p === "WeaponRecoilKick" ? 0 : p === "WeaponRecoilSmoothness" ? 1 : 2;
+      return order(a.property) - order(b.property);
+    });
+  }, [mat.qualityModifiers, quality]);
+  const railMarkers = useMemo(
+    () =>
+      bands.map((band, i) => {
+        const mappedValue = Number(band.mappedValue ?? 0);
+        const left = Math.max(0, Math.min(100, (mappedValue / 1000) * 100));
+        const edge = left < 4 ? "start" : left > 96 ? "end" : "middle";
+
+        return {
+          index: i,
+          mappedValue,
+          left,
+          edge,
+        };
+      }),
+    [bands],
+  );
+  const findNearestBandForMappedValue = useCallback(
+    (value: number) => findNearestBandForQuality(bands, value),
+    [bands],
+  );
+  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
+  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
+  const fillPct = Math.max(0, selectedPct - bandOnePct);
+
+  return {
+    materialName,
+    bands,
+    safeBandIndex,
+    bandNumber,
+    quality,
+    selectedQualityTierClass,
+    atQuality,
+    railMarkers,
+    findNearestBandForMappedValue,
+    bandOnePct,
+    fillPct,
+  };
+}
+
+export function MaterialQualityRow({
   recipe,
   mat,
   bandIndex,
@@ -1214,22 +1283,22 @@ function MaterialQualityRow({
   getBandLabel: (materialName: string, bandIndex: number) => string;
   totalModifiers: TotalModifierRow[];
 }) {
-  const materialName = getMaterialName(mat);
-  const bands = getBandsForMaterial(materialName);
-  const safeBandIndex = clampBandIndex(bandIndex, bands);
-  const bandNumber = safeBandIndex + 1;
-  const quality = getBandEffectiveQuality(materialName, safeBandIndex);
-  const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
-
-  const atQuality = useMemo(() => {
-    const mods = getModifiersAtQuality(mat.qualityModifiers ?? [], quality);
-    // Weapon Recoil Kick must appear directly above Weapon Recoil Smoothness
-    return [...mods].sort((a, b) => {
-      const order = (p: string) =>
-        p === 'WeaponRecoilKick' ? 0 : p === 'WeaponRecoilSmoothness' ? 1 : 2;
-      return order(a.property) - order(b.property);
-    });
-  }, [mat.qualityModifiers, quality]);
+  const {
+    bands,
+    safeBandIndex,
+    quality,
+    selectedQualityTierClass,
+    atQuality,
+    railMarkers,
+    findNearestBandForMappedValue,
+    bandOnePct,
+    fillPct,
+  } = useMaterialQualityModel({
+    mat,
+    bandIndex,
+    getBandsForMaterial,
+    getBandEffectiveQuality,
+  });
   const totalModifierByStat = useMemo(
     () =>
       new Map(
@@ -1258,42 +1327,13 @@ function MaterialQualityRow({
       return next;
     });
   }, []);
-
-  const railMarkers = useMemo(
-    () =>
-      bands.map((band, i) => {
-        const mappedValue = Number(band.mappedValue ?? 0);
-        const left = Math.max(0, Math.min(100, (mappedValue / 1000) * 100));
-        const edge = left < 4 ? "start" : left > 96 ? "end" : "middle";
-
-        return {
-          index: i,
-          mappedValue,
-          left,
-          edge,
-        };
-      }),
-    [bands],
-  );
-
-  const findNearestBandForMappedValue = useCallback(
-    (value: number) => {
-      return findNearestBandForQuality(bands, value);
-    },
-    [bands],
-  );
-
-  const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
-  const selectedPct = Math.max(0, Math.min(100, (quality / 1000) * 100));
-  const fillPct = Math.max(0, selectedPct - bandOnePct);
-
   if (bands.length === 0) {
     return (
       <div className="craft-material-card craft-matq-card craft-matq-card--unavailable">
         <div className="craft-material-card-head craft-matq-header">
           <div className="craft-material-identity craft-matq-identity">
             <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
-            <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
+            <span className="craft-material-name craft-matq-name">{getMaterialName(mat)}</span>
           </div>
           <span className="craft-quality-readout craft-matq-band-pill">Quality data unavailable</span>
         </div>
@@ -1305,7 +1345,11 @@ function MaterialQualityRow({
     <div className="craft-material-card craft-matq-card" data-band={safeBandIndex}>
       <div className="craft-material-card-head craft-matq-header">
   <div className="craft-material-identity craft-matq-identity">
-    <span className="craft-material-slot craft-matq-slot">{mat.slot}</span>
+    <span className="craft-material-slot craft-matq-slot">
+      {[mat.slot, Number.isFinite(mat.quantity) ? `Required ${mat.quantity}` : null]
+        .filter(Boolean)
+        .join(" / ")}
+    </span>
     <span className="craft-material-name craft-matq-name">{mat.material_name}</span>
   </div>
 
@@ -1406,7 +1450,6 @@ function MaterialQualityRow({
                 ? expandedModifierRows.has(rowKey)
                 : rowKey === defaultExpandedRowKey
             );
-
             return (
               <div
                 key={i}
@@ -1479,6 +1522,144 @@ function MaterialQualityRow({
   );
 }
 
+function DetailMaterialQualityRow({
+  recipe,
+  mat,
+  bandIndex,
+  onBandChange,
+  getBandsForMaterial,
+  getBandEffectiveQuality,
+}: {
+  recipe: ComponentRecipe;
+  mat: ComponentRecipe["materials"][number];
+  bandIndex: number;
+  onBandChange: (bandIndex: number) => void;
+  getBandsForMaterial: (materialName: string) => QualityBand[];
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
+}) {
+  const {
+    materialName,
+    bands,
+    safeBandIndex,
+    quality,
+    selectedQualityTierClass,
+    atQuality,
+    railMarkers,
+    findNearestBandForMappedValue,
+    bandOnePct,
+    fillPct,
+  } = useMaterialQualityModel({
+    mat,
+    bandIndex,
+    getBandsForMaterial,
+    getBandEffectiveQuality,
+  });
+  const requiredAmount = Number.isFinite(mat.quantity) ? formatCompactNumber(mat.quantity) : null;
+
+  if (bands.length === 0) {
+    return (
+      <div className="craft-detail-material-row craft-detail-material-row--unavailable">
+        <div className="craft-detail-material-id">
+          <span className="craft-detail-material-slot">{mat.slot}</span>
+          <strong>{materialName}</strong>
+        </div>
+        <div className="craft-detail-material-required">{requiredAmount}</div>
+        <div className="craft-detail-material-quality">Quality data unavailable</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="craft-detail-material-row">
+      <div className="craft-detail-material-id">
+        <span className="craft-detail-material-slot">{mat.slot}</span>
+        <strong>{materialName}</strong>
+      </div>
+      <div className="craft-detail-material-required">{requiredAmount}</div>
+      <div className="craft-detail-material-quality">
+        <span className={`craft-detail-band-pill ${selectedQualityTierClass}`}>
+          Band {safeBandIndex + 1}
+        </span>
+        <span className="craft-detail-quality-value">{quality}</span>
+      </div>
+      <div className="craft-detail-material-slider">
+        <input
+          type="range"
+          min={0}
+          max={1000}
+          step={1}
+          value={quality}
+          onChange={(e) => {
+            const rawValue = Number(e.target.value);
+            onBandChange(findNearestBandForMappedValue(rawValue));
+          }}
+          className="craft-quality-input craft-detail-quality-input"
+          aria-label={`Quality band for ${materialName}`}
+        />
+        <div
+          className={`craft-quality-rail craft-detail-quality-rail ${selectedQualityTierClass}`}
+          style={
+            {
+              "--band-one-pct": `${bandOnePct}%`,
+            } as React.CSSProperties
+          }
+        >
+          <div
+            className={`craft-quality-rail-fill craft-detail-quality-fill ${selectedQualityTierClass}`}
+            style={
+              {
+                "--band-one-pct": `${bandOnePct}%`,
+                "--fill-pct": `${fillPct}%`,
+              } as React.CSSProperties
+            }
+          />
+          {railMarkers.map((marker) => {
+            const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
+            const markerState =
+              marker.index < safeBandIndex
+                ? " is-before-active"
+                : marker.index === safeBandIndex
+                  ? " is-active"
+                  : "";
+
+            return (
+              <button
+                type="button"
+                key={`${marker.index}-${marker.mappedValue}`}
+                className={`craft-quality-marker craft-detail-band-marker ${markerTierClass}${markerState}`}
+                style={{ left: `${marker.left}%` }}
+                data-edge={marker.edge}
+                onClick={() => onBandChange(marker.index)}
+                aria-label={`Use mapped quality ${marker.mappedValue}`}
+              >
+                <span className="craft-quality-marker-line craft-detail-band-dot" />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="craft-detail-material-effects">
+        {atQuality.map((m, i) => {
+          const impact = getModifierImpact(m.property, m.value);
+          const display = formatMaterialModifierDisplay(
+            m.property,
+            getBaseStatValue(recipe, m.property),
+            m.value,
+            m.modifierMode,
+          );
+
+          return (
+            <span key={`${m.slot}:${m.property}:${i}`} className="craft-detail-effect-chip">
+              <span>{formatModifierStatName(m.property)}</span>
+              <strong className={getImpactClass(impact)}>{display.modifier}</strong>
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 interface TotalModifierRow {
   property: string;
   totalValue: number;
@@ -1534,17 +1715,16 @@ function deriveFinalProductQuality(
   recipe: ComponentRecipe,
   getBandIndex: (key: string) => number,
 ): FinalProductQuality {
-  let weightedBandTotal = 0;
-  let weightTotal = 0;
+  let bandTotal = 0;
+  let materialCount = 0;
 
   for (const [inputIndex, mat] of recipe.materials.entries()) {
     const band = getBandIndex(getMaterialQualityKey(recipe, mat, inputIndex)) + 1;
-    const weight = Number.isFinite(mat.quantity) && mat.quantity > 0 ? mat.quantity : 1;
-    weightedBandTotal += band * weight;
-    weightTotal += weight;
+    bandTotal += band;
+    materialCount += 1;
   }
 
-  const averageBand = weightTotal > 0 ? weightedBandTotal / weightTotal : DEFAULT_BAND_INDEX + 1;
+  const averageBand = materialCount > 0 ? bandTotal / materialCount : DEFAULT_BAND_INDEX + 1;
   const band = Math.max(1, Math.min(8, Math.round(averageBand)));
 
   return {
@@ -1555,6 +1735,26 @@ function deriveFinalProductQuality(
   };
 }
 
+function buildSelectedQualitySnapshot(
+  recipe: ComponentRecipe,
+  materialQualities: Record<string, number>,
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number,
+  getBandsForMaterial: (materialName: string) => QualityBand[],
+): Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }> {
+  return Object.fromEntries(
+    recipe.materials.map((mat, inputIndex) => {
+      const key = getMaterialQualityKey(recipe, mat, inputIndex);
+      const materialName = getMaterialName(mat);
+      const bandIndex = materialQualities[key] ?? DEFAULT_BAND_INDEX;
+      return [key, {
+        quality: getBandEffectiveQuality(materialName, bandIndex),
+        bandNumber: bandIndex + 1,
+        bands: getBandsForMaterial(materialName),
+      }];
+    }),
+  );
+}
+
 function formatContributionValue(value: number, modifierMode?: string): string {
   if (modifierMode === "integerAdditive") {
     const v = Math.round(value);
@@ -1563,31 +1763,423 @@ function formatContributionValue(value: number, modifierMode?: string): string {
   return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
 
-function CraftedItemSummaryPanel({
+function formatIndexNumber(value: unknown, suffix = ""): string | null {
+  const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
+  if (!Number.isFinite(number)) return null;
+  return `${number.toLocaleString("en-US", { maximumFractionDigits: number >= 100 ? 0 : 2 })}${suffix}`;
+}
+
+function formatIndexToken(value: unknown): string | null {
+  if (typeof value !== "string" || !value.trim()) return null;
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function formatIndexDamageDrop(stats: Record<string, unknown>): string | null {
+  const minDistance = formatIndexNumber(stats.damageDropMinDistance, "m");
+  const perMeter = formatIndexNumber(stats.damageDropPerMeter, "/m");
+  const minDamage = formatIndexNumber(stats.damageDropMinDamage);
+  const parts = [
+    minDistance ? `after ${minDistance}` : null,
+    perMeter,
+    minDamage ? `floor ${minDamage}` : null,
+  ].filter((value): value is string => Boolean(value));
+  return parts.length > 0 ? parts.join(" / ") : null;
+}
+
+function getIndexStatsObject(record: ComponentCardIndexRecord | undefined, key: string): Record<string, unknown> | null {
+  const stats = record?.stats as unknown;
+  if (!isRecord(stats)) return null;
+  const value = stats[key];
+  return isRecord(value) ? value : null;
+}
+
+function buildDetailStatRows(record: ComponentCardIndexRecord | undefined): ComponentCardMetric[] {
+  if (!record) return [];
+
+  if (record.type === "ammo") {
+    const ammo = getIndexStatsObject(record, "fpsAmmo");
+    if (!ammo) return [];
+    const rows: ComponentCardMetric[] = [];
+    const push = (label: string, value: string | null) => {
+      if (value) rows.push({ label, value });
+    };
+    push("Ammo Class", formatIndexToken(ammo.ammoClass));
+    push("Compatible Weapon Class", formatIndexToken(ammo.compatibleWeaponClass));
+    push("Compatible Weapon Family", formatIndexToken(ammo.compatibleWeaponFamily));
+    push("Magazine Capacity", formatIndexNumber(ammo.magazineCapacity, " Cap"));
+    push("Alpha Damage", formatIndexNumber(ammo.alphaDamageTotal));
+    push("Projectile Range / Max Travel", formatIndexNumber(ammo.calculatedRange, "m"));
+    push("Projectile Speed", formatIndexNumber(ammo.projectileSpeed, " m/s"));
+    push("Damage Drop", formatIndexDamageDrop(ammo));
+    push("Penetration", formatIndexNumber(ammo.penetrationBaseDistance, "m"));
+    return rows;
+  }
+
+  return buildComponentCardSchemaFromIndex(record).familyStats;
+}
+
+function ItemSummaryPanel({
   recipe,
   displayName,
+  finalProductQuality,
+  componentCardRecord,
+}: {
+  recipe: ComponentRecipe;
+  displayName: string;
+  finalProductQuality: FinalProductQuality;
+  componentCardRecord?: ComponentCardIndexRecord;
+}) {
+  const schema = componentCardRecord
+    ? buildComponentCardSchemaFromIndex(componentCardRecord)
+    : buildComponentCardSchema(recipe);
+  const typeBadges = getTypeBadges(recipe);
+  const identityRows: ComponentCardMetric[] = componentCardRecord
+    ? [
+        { label: "Type", value: componentCardRecord.typeLabel },
+        { label: "Category", value: componentCardRecord.category },
+        { label: "Family", value: componentCardRecord.family ?? "" },
+        { label: "Variant", value: componentCardRecord.variantName ?? "" },
+        { label: "Craft Time", value: formatCraftTime(componentCardRecord.craftTimeSeconds) },
+      ].filter((row) => Boolean(row.value))
+    : [];
+  const meta = [
+    componentCardRecord?.kind === "fps" ? "FPS" : schema.kindLabel,
+    componentCardRecord?.typeLabel ?? schema.typeLabel,
+    componentCardRecord?.family,
+    componentCardRecord?.variantName,
+  ].filter((value): value is string => Boolean(value));
+  const stats = buildDetailStatRows(componentCardRecord);
+  const secondaryStats = componentCardRecord
+    ? buildComponentCardSchemaFromIndex(componentCardRecord).genericStats
+    : [];
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const detailRows: ComponentCardMetric[] = [
+    { label: "Manufacturer", value: componentCardRecord?.manufacturer ?? recipe.manufacturer ?? "" },
+    { label: "Size", value: componentCardRecord?.size !== null && componentCardRecord?.size !== undefined ? String(componentCardRecord.size) : formatSize(recipe.size) ?? "" },
+    { label: "Grade", value: componentCardRecord?.grade ?? recipe.grade ?? "" },
+    { label: "Class", value: componentCardRecord?.class ?? recipe.class ?? "" },
+    { label: "Entity", value: componentCardRecord?.entityClass ?? recipe.output_entityClass ?? "" },
+  ].filter((row) => Boolean(row.value));
+
+  return (
+    <section className="craft-detail-cockpit" aria-label="Selected item summary">
+      <div className="craft-summary-panel craft-detail-cockpit-panel">
+        <div className="craft-detail-cockpit-grid">
+          <div className="craft-detail-visual-panel">
+            <span className="craft-detail-visual-kind">{componentCardRecord?.typeLabel ?? schema.typeLabel}</span>
+            <strong>{displayName}</strong>
+            <span className={`craft-detail-band-pill ${componentRarityClass}`}>
+              Band {formatCompactNumber(finalProductQuality.averageBand)}
+            </span>
+          </div>
+
+          <div className="craft-detail-identity-panel">
+            <div className="craft-summary-section-label">Item Overview</div>
+            <h2>{displayName}</h2>
+            <div className="craft-summary-chips">
+              {typeBadges.map((badge) => (
+                <span
+                  key={badge}
+                  className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
+                >
+                  {badge}
+                </span>
+              ))}
+              {meta.map((value) => (
+                <span key={value} className="craft-badge craft-badge--neutral">
+                  {value}
+                </span>
+              ))}
+            </div>
+            {detailRows.length > 0 && (
+              <div className="craft-detail-meta-list">
+                {detailRows.map((row) => (
+                  <span key={`${row.label}:${row.value}`}>
+                    <span>{row.label}</span>
+                    <strong>{row.value}</strong>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {stats.length > 0 && (
+          <div className="craft-summary-section craft-detail-stat-panel">
+            <div className="craft-summary-section-label">{componentCardRecord?.typeLabel ?? schema.typeLabel} Stats</div>
+            <div className="craft-detail-stat-list">
+              {stats.map((stat) => (
+                <span key={`${stat.label}:${stat.value}`} className="craft-detail-stat-row">
+                  <span>{stat.label}</span>
+                  <strong>{stat.value}</strong>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(identityRows.length > 0 || secondaryStats.length > 0) && (
+        <div className="craft-summary-section craft-detail-secondary-panel">
+          <div className="craft-summary-section-label">Details</div>
+          <div className="craft-detail-meta-list craft-detail-meta-list--dense">
+            {[...identityRows, ...secondaryStats].map((stat) => (
+              <span key={`${stat.label}:${stat.value}`}>
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </span>
+            ))}
+          </div>
+        </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function MissionSourcePanel({
+  recipe,
+  rewardPools,
+  isMissionBookmarked,
+  onToggleMissionBookmark,
+}: {
+  recipe: ComponentRecipe;
+  rewardPools: RecipeRewardPoolSummary[];
+  isMissionBookmarked: (missionId: string) => boolean;
+  onToggleMissionBookmark: (missionId: string) => void;
+}) {
+  const missionEntries = useMissionRewardEntries(recipe, rewardPools);
+  const blueprintRows: ComponentCardMetric[] = [
+    { label: "Blueprint ID", value: recipe.blueprint_id },
+    { label: "Entity ID", value: recipe.output_entityClass },
+    { label: "Item Type", value: recipe.wiki_type ?? recipe.component_type },
+    { label: "Size", value: formatSize(recipe.size) ?? "" },
+    { label: "Grade", value: recipe.grade ?? "" },
+  ].filter((row) => Boolean(row.value));
+  const sourceRows: ComponentCardMetric[] = [
+    { label: "Source", value: recipe.source_file ?? "" },
+    { label: "Name Source", value: recipe.name_source ?? "" },
+    { label: "Raw Name", value: recipe.raw_name ?? "" },
+  ].filter((row) => Boolean(row.value) && !/^unknown|n\/a$/i.test(String(row.value)));
+
+  return (
+    <div className="craft-detail-lower-grid">
+      <section className="craft-summary-panel craft-detail-lower-panel">
+        <div className="craft-summary-section craft-summary-mission-section">
+          <div className="craft-summary-section-label">Blueprint Sources</div>
+          {missionEntries.length === 0 ? (
+            <div className="craft-summary-empty craft-summary-empty--compact">
+              No mission data for this blueprint
+            </div>
+          ) : (
+            <div className="craft-mission-source-list">
+              {missionEntries.map((entry) => {
+                const bookmarked = isMissionBookmarked(entry.id);
+                const chance = formatMissionChance(entry.chance);
+
+                return (
+                  <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
+                    <button
+                      type="button"
+                      className={`craft-mission-bookmark-btn${bookmarked ? " is-active" : ""}`}
+                      aria-pressed={bookmarked}
+                      aria-label={bookmarked ? `Remove ${entry.title} mission save` : `Save ${entry.title} mission`}
+                      onClick={() => onToggleMissionBookmark(entry.id)}
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="14"
+                        height="14"
+                        fill={bookmarked ? "currentColor" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="1.9"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden
+                      >
+                        <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
+                      </svg>
+                    </button>
+                    <div className="craft-mission-source-copy">
+                      <div className="craft-mission-source-name">
+                        {entry.isDisabled && <span className="craft-disabled-badge">[DISABLED]</span>}
+                        <span>{entry.title}</span>
+                      </div>
+                      <div className="craft-mission-source-meta">
+                        {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
+                          .filter(Boolean)
+                          .join(" / ")}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+      <section className="craft-summary-panel craft-detail-lower-panel">
+        <div className="craft-summary-section">
+          <div className="craft-summary-section-label">Blueprint Details</div>
+          <div className="craft-detail-meta-list craft-detail-meta-list--dense">
+            {blueprintRows.map((row) => (
+              <span key={`${row.label}:${row.value}`}>
+                <span>{row.label}</span>
+                <strong className="component-result-card__id">{row.value}</strong>
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+      {sourceRows.length > 0 && (
+        <section className="craft-summary-panel craft-detail-lower-panel">
+          <div className="craft-summary-section">
+            <div className="craft-summary-section-label">Additional / Source Metadata</div>
+            <div className="craft-detail-meta-list craft-detail-meta-list--dense">
+              {sourceRows.map((row) => (
+                <span key={`${row.label}:${row.value}`}>
+                  <span>{row.label}</span>
+                  <strong className="component-result-card__id">{row.value}</strong>
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function CraftingOverviewPanel({
+  recipe,
+  finalProductQuality,
+}: {
+  recipe: ComponentRecipe;
+  finalProductQuality: FinalProductQuality;
+}) {
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const displayFinalProductQuality =
+    finalProductQuality.averageBand ?? finalProductQuality.band;
+
+  return (
+    <div className="craft-detail-overview-strip">
+      {formatCraftTime(recipe.craft_time_seconds) && (
+        <span>
+          <span>Craft Time</span>
+          <strong>{formatCraftTime(recipe.craft_time_seconds)}</strong>
+        </span>
+      )}
+      <span>
+        <span>Resulting Quality</span>
+        <strong className={componentRarityClass}>Band {formatCompactNumber(displayFinalProductQuality)}</strong>
+      </span>
+      <span>
+        <span>Materials</span>
+        <strong>{recipe.materials.length} required</strong>
+      </span>
+    </div>
+  );
+}
+
+function MaterialRequirementsTable({ children }: { children: ReactNode }) {
+  return (
+    <div className="craft-detail-material-table">
+      <div className="craft-detail-material-table-head" aria-hidden="true">
+        <span>Material</span>
+        <span>Required</span>
+        <span>Quality</span>
+        <span>Input</span>
+        <span>Effect</span>
+      </div>
+      <div className="craft-detail-material-table-body">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function EstimatedEffectsPanel({
+  recipe,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
   finalProductQuality,
-  rewardPools,
-  onAddToQueue,
-  isQueued,
-  isBookmarked,
-  onToggleBookmark,
-  isMissionBookmarked,
-  onToggleMissionBookmark,
-  getBandEffectiveQuality,
-  getBandsForMaterial,
-  materialQualities,
 }: {
   recipe: ComponentRecipe;
-  displayName: string;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
-  rewardPools: RecipeRewardPoolSummary[];
+}) {
+  const hasMaterialModifiers = totalModifiers.length > 0;
+  const hasOverallModifiers = overallModifiers.length > 0;
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  if (!hasMaterialModifiers && !hasOverallModifiers) return null;
+
+  return (
+    <section className="craft-detail-effects-panel">
+      <div className="craft-summary-section-label">Estimated Effects</div>
+      {hasMaterialModifiers && (
+        <div className="craft-detail-effects-list">
+          {totalModifiers.map((row) => {
+            const baseValue = getBaseStatValue(recipe, row.property);
+            const display = formatMaterialModifierDisplay(
+              row.property,
+              baseValue,
+              row.totalValue,
+              row.modifierMode,
+            );
+
+            return (
+              <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
+                <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
+                <strong>{display.total ?? formatContributionValue(row.totalValue, row.modifierMode)}</strong>
+                <span className="craft-detail-effect-delta">{display.modifier}</span>
+                {row.contributions.length > 0 && (
+                  <span className="craft-detail-effect-sources">
+                    {row.contributions.map((c) => `${c.materialName} ${formatContributionValue(c.value, row.modifierMode)}`).join(" / ")}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {hasOverallModifiers && (
+        <div className="craft-summary-overall-mods">
+          <OverallModifierGroup
+            recipe={recipe}
+            modifiers={overallModifiers}
+            quality={overallQualitySource}
+            rarityClass={componentRarityClass}
+          />
+        </div>
+      )}
+    </section>
+  );
+}
+
+function CraftingActionsRow({
+  recipe,
+  displayName,
+  finalProductQuality,
+  materialQualities,
+  getBandEffectiveQuality,
+  getBandsForMaterial,
+  onAddToQueue,
+  isQueued,
+  isBookmarked,
+  onToggleBookmark,
+}: {
+  recipe: ComponentRecipe;
+  displayName: string;
+  finalProductQuality: FinalProductQuality;
+  materialQualities: Record<string, number>;
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
+  getBandsForMaterial: (materialName: string) => QualityBand[];
   onAddToQueue: (
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1596,252 +2188,16 @@ function CraftedItemSummaryPanel({
   isQueued: boolean;
   isBookmarked: boolean;
   onToggleBookmark: () => void;
-  isMissionBookmarked: (missionId: string) => boolean;
-  onToggleMissionBookmark: (missionId: string) => void;
-  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
-  getBandsForMaterial: (materialName: string) => QualityBand[];
-  materialQualities: Record<string, number>;
 }) {
   const [queueFeedback, setQueueFeedback] = useState(false);
-  const typeBadges = getTypeBadges(recipe);
-  const sizeLabel = formatSize(recipe.size);
-  const hasMaterialModifiers = totalModifiers.length > 0;
-  const hasOverallModifiers = overallModifiers.length > 0;
-  const hasAnyModifiers = hasMaterialModifiers || hasOverallModifiers;
-  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
-  const displayFinalProductQuality =
-    finalProductQuality.averageBand ?? finalProductQuality.band;
-  const missionEntries = useMissionRewardEntries(recipe, rewardPools);
 
   useEffect(() => {
     setQueueFeedback(false);
   }, [recipe.blueprint_id]);
 
   return (
-    <div className="craft-summary-panel craft-summary-column">
-      {/* Title + metadata chips */}
-      <div className="craft-summary-head">
-        <div className="craft-summary-title-row">
-          <div className="craft-summary-title">{displayName}</div>
-          <div className={`craft-summary-quality-pill ${componentRarityClass}`}>
-            {formatCompactNumber(displayFinalProductQuality)}
-          </div>
-        </div>
-        <div className="craft-summary-chips">
-          {typeBadges.map((b) => (
-            <span
-              key={b}
-              className={`craft-badge craft-badge--type-chip${b === "FPS" ? " craft-badge--fps" : ""}`}
-            >
-              {b}
-            </span>
-          ))}
-          {sizeLabel && (
-            <span className="craft-badge craft-badge--size-chip">{sizeLabel}</span>
-          )}
-          {recipe.grade && (
-            <span className={`craft-badge craft-badge--grade${recipe.grade === "A" ? " craft-badge--grade-a" : ""}`}>
-              {recipe.grade}
-            </span>
-          )}
-          {recipe.class && (
-            <span className="craft-badge craft-badge--neutral">{recipe.class}</span>
-          )}
-        </div>
-      </div>
-
-      {/* Modifiers total */}
-      {hasAnyModifiers && (
-        <div className="craft-summary-section">
-          {hasMaterialModifiers && (
-            <div className="craft-summary-mod-list">
-              {totalModifiers.map((row) => {
-                const hasBreakdown = row.contributions.length > 0;
-                const baseValue = getBaseStatValue(recipe, row.property);
-                const display = formatMaterialModifierDisplay(
-                  row.property,
-                  baseValue,
-                  row.totalValue,
-                  row.modifierMode,
-                );
-
-                return (
-                  <div key={row.property} className="craft-summary-mod-row">
-                    <div className="craft-summary-mod-top">
-                      <span className="craft-summary-mod-prop">
-                        {formatProperty(row.property)}
-                      </span>
-                    </div>
-                    {display.base && display.total ? (
-                      <div className="craft-summary-stat-stack">
-                        <span className="craft-summary-stat-part craft-stat-base">
-                          <span className="craft-summary-stat-label">Base</span>
-                          <span className="craft-summary-stat-number">{display.base}</span>
-                        </span>
-                        <span className="craft-summary-stat-part craft-stat-modifier">
-                          <span className="craft-summary-stat-label">Modifier</span>
-                          <span className="craft-summary-stat-number">
-                            {display.modifier}
-                            {display.modifierPercent && (
-                              <span className="craft-summary-stat-percent">
-                                ({display.modifierPercent})
-                              </span>
-                            )}
-                          </span>
-                        </span>
-                        <span className="craft-summary-stat-part craft-stat-total">
-                          <span className="craft-summary-stat-label">Total</span>
-                          <span className="craft-summary-stat-number">
-                            {display.total}
-                            {display.totalPercent && (
-                              <span className="craft-summary-stat-percent">
-                                ({display.totalPercent})
-                              </span>
-                            )}
-                          </span>
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="craft-summary-total-modifier">
-                        <span>Total Modifier</span>
-                        <strong>{formatContributionValue(row.totalValue, row.modifierMode)}</strong>
-                      </div>
-                    )}
-                    {hasBreakdown && (
-                      <div className="craft-summary-mod-breakdown">
-                        <span className="craft-summary-mod-breakdown-label">Sources</span>
-                        {row.contributions.map((c, i) => (
-                          <span key={i} className="craft-summary-mod-contrib">
-                            <span className="craft-summary-mod-source-name">{c.materialName}</span>
-                            <span className="craft-summary-mod-source-value">
-                              {formatContributionValue(c.value, row.modifierMode)}
-                            </span>
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {hasOverallModifiers && (
-            <div className="craft-summary-overall-mods">
-              <OverallModifierGroup
-                recipe={recipe}
-                modifiers={overallModifiers}
-                quality={overallQualitySource}
-                rarityClass={componentRarityClass}
-              />
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className="craft-summary-section craft-summary-mission-section">
-        <div className="craft-summary-section-label">Mission Data</div>
-        {missionEntries.length === 0 ? (
-          <div className="craft-summary-empty craft-summary-empty--compact">
-            No mission data for this blueprint
-          </div>
-        ) : (
-          <div className="craft-mission-source-list">
-            {missionEntries.map((entry) => {
-              const bookmarked = isMissionBookmarked(entry.id);
-              const chance = formatMissionChance(entry.chance);
-
-              return (
-                <div key={entry.id} className={`craft-mission-source craft-mission-source--${entry.source}${entry.isDisabled ? " is-disabled" : ""}`}>
-                  <button
-                    type="button"
-                    className={`craft-mission-bookmark-btn${bookmarked ? " is-active" : ""}`}
-                    aria-pressed={bookmarked}
-                    aria-label={bookmarked ? `Remove ${entry.title} mission save` : `Save ${entry.title} mission`}
-                    onClick={() => onToggleMissionBookmark(entry.id)}
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="14"
-                      height="14"
-                      fill={bookmarked ? "currentColor" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="1.9"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
-                    >
-                      <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
-                    </svg>
-                  </button>
-                  <div className="craft-mission-source-copy">
-                    <div className="craft-mission-source-name">
-                      {entry.isDisabled && <span className="craft-disabled-badge">[DISABLED]</span>}
-                      <span>{entry.title}</span>
-                    </div>
-                    <div className="craft-mission-source-meta">
-                      {[entry.factionName, entry.poolName ?? entry.subtitle, chance ? `${chance} chance` : null]
-                        .filter(Boolean)
-                        .join(" / ")}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* Where to Find */}
-
-
-      <div className="craft-summary-action-row">
-        <button
-          type="button"
-          className={`craft-summary-action-btn craft-summary-queue-btn${isQueued ? " is-active" : ""}`}
-          aria-pressed={isQueued}
-          aria-label={isQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
-          onClick={() => {
-            const selectedQualities = Object.fromEntries(
-              recipe.materials.map((mat, inputIndex) => {
-                const key = getMaterialQualityKey(recipe, mat, inputIndex);
-                const materialName = getMaterialName(mat);
-                const bandIndex = materialQualities[key] ?? DEFAULT_BAND_INDEX;
-                return [key, {
-                  quality: getBandEffectiveQuality(materialName, bandIndex),
-                  bandNumber: bandIndex + 1,
-                  bands: getBandsForMaterial(materialName),
-                }];
-              }),
-            );
-            onAddToQueue(recipe, selectedQualities, finalProductQuality);
-            setQueueFeedback(true);
-          }}
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            {isQueued ? (
-              <path d="M20 6 9 17l-5-5" />
-            ) : (
-              <>
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </>
-            )}
-          </svg>
-          {isQueued ? "Queued" : "Queue"}
-        </button>
-
+    <>
+      <div className="craft-detail-actions-row">
         <button
           type="button"
           className={`craft-summary-action-btn craft-summary-bookmark-btn${isBookmarked ? " is-active" : ""}`}
@@ -1849,20 +2205,25 @@ function CraftedItemSummaryPanel({
           aria-label={isBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
           onClick={onToggleBookmark}
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill={isBookmarked ? "currentColor" : "none"}
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2Z" />
-          </svg>
-          {isBookmarked ? "Saved" : "Save"}
+          {isBookmarked ? "Saved" : "Save Blueprint"}
+        </button>
+        <button
+          type="button"
+          className={`craft-summary-action-btn craft-summary-queue-btn${isQueued ? " is-active" : ""}`}
+          aria-pressed={isQueued}
+          aria-label={isQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
+          onClick={() => {
+            const selectedQualities = buildSelectedQualitySnapshot(
+              recipe,
+              materialQualities,
+              getBandEffectiveQuality,
+              getBandsForMaterial,
+            );
+            onAddToQueue(recipe, selectedQualities, finalProductQuality);
+            setQueueFeedback(true);
+          }}
+        >
+          {isQueued ? "Queued" : "Add to Queue"}
         </button>
       </div>
       {(queueFeedback || isQueued) && (
@@ -1873,7 +2234,78 @@ function CraftedItemSummaryPanel({
           </Link>
         </div>
       )}
-    </div>
+    </>
+  );
+}
+
+function RightCraftingPanel({
+  recipe,
+  displayName,
+  totalModifiers,
+  overallModifiers,
+  overallQualitySource,
+  finalProductQuality,
+  onAddToQueue,
+  isQueued,
+  isBookmarked,
+  onToggleBookmark,
+  getBandEffectiveQuality,
+  getBandsForMaterial,
+  materialQualities,
+  children,
+}: {
+  recipe: ComponentRecipe;
+  displayName: string;
+  totalModifiers: TotalModifierRow[];
+  overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
+  overallQualitySource: number | undefined;
+  finalProductQuality: FinalProductQuality;
+  onAddToQueue: (
+    r: ComponentRecipe,
+    selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
+    finalProductQuality: FinalProductQuality,
+  ) => void;
+  isQueued: boolean;
+  isBookmarked: boolean;
+  onToggleBookmark: () => void;
+  getBandEffectiveQuality: (materialName: string, bandIndex: number) => number;
+  getBandsForMaterial: (materialName: string) => QualityBand[];
+  materialQualities: Record<string, number>;
+  children: ReactNode;
+}) {
+  return (
+    <section className="craft-detail-right-panel" aria-label="Crafting and materials">
+      <div className="craft-detail-panel-head">
+        <div>
+          <div className="craft-summary-section-label">Crafting Overview</div>
+          <h2>Crafting &amp; Materials</h2>
+        </div>
+      </div>
+      <CraftingOverviewPanel recipe={recipe} finalProductQuality={finalProductQuality} />
+      <section className="craft-detail-material-section">
+        <div className="craft-summary-section-label">Material Requirements</div>
+        <MaterialRequirementsTable>{children}</MaterialRequirementsTable>
+      </section>
+      <EstimatedEffectsPanel
+        recipe={recipe}
+        totalModifiers={totalModifiers}
+        overallModifiers={overallModifiers}
+        overallQualitySource={overallQualitySource}
+        finalProductQuality={finalProductQuality}
+      />
+      <CraftingActionsRow
+        recipe={recipe}
+        displayName={displayName}
+        finalProductQuality={finalProductQuality}
+        materialQualities={materialQualities}
+        getBandEffectiveQuality={getBandEffectiveQuality}
+        getBandsForMaterial={getBandsForMaterial}
+        onAddToQueue={onAddToQueue}
+        isQueued={isQueued}
+        isBookmarked={isBookmarked}
+        onToggleBookmark={onToggleBookmark}
+      />
+    </section>
   );
 }
 
@@ -1882,6 +2314,7 @@ function RecipeDrawer({
   groupRecipes = [recipe],
   baseDisplayName,
   initialRecipeId,
+  componentCards = [],
   onAddToQueue,
   isRecipeQueued,
   isRecipeBookmarked,
@@ -1893,6 +2326,7 @@ function RecipeDrawer({
   groupRecipes?: ComponentRecipe[];
   baseDisplayName: string;
   initialRecipeId?: string;
+  componentCards?: ComponentCardIndexRecord[];
   onAddToQueue: (
     r: ComponentRecipe,
     selectedQualities: Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }>,
@@ -1908,7 +2342,6 @@ function RecipeDrawer({
     loading: quantizationLoading,
     getBandsForMaterial,
     getBandEffectiveQuality,
-    getBandLabel,
   } = useQualityQuantization();
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
@@ -1957,12 +2390,13 @@ function RecipeDrawer({
       poolName: asNonEmptyString(pool.poolName),
       poolGuid: asNonEmptyString(pool.poolGuid),
       sourceFolder: asNonEmptyString(pool.sourceFolder),
-      displayName: asNonEmptyString(pool.displayName) ?? "Unknown Blueprint Source",
+      displayName: asNonEmptyString(pool.displayName) ?? "",
       weight: asFiniteNumber(pool.weight),
     }))
-    .filter((pool) => pool.displayName.trim().length > 0);
+    .filter((pool) => pool.displayName.trim().length > 0 && !/^unknown|n\/a$/i.test(pool.displayName.trim()));
 
   const displayName = getRecipeDisplayName(selectedRecipe);
+  const selectedComponentCard = componentCards.find((record) => record.id === selectedRecipe.blueprint_id);
 
   const totalModifiers = useMemo(
     () => computeTotalModifiers(selectedRecipe, getBandEffectiveQuality, getBandIndex),
@@ -1973,10 +2407,85 @@ function RecipeDrawer({
   const showVariantSelector = groupRecipes.length > 1;
   const selectedIsQueued = isRecipeQueued(selectedRecipe);
   const selectedIsBookmarked = isRecipeBookmarked(selectedRecipe);
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const categoryLine = [
+    selectedComponentCard?.category ?? selectedRecipe.category,
+    selectedComponentCard?.typeLabel ?? selectedRecipe.wiki_type,
+    selectedComponentCard?.type ?? selectedRecipe.component_type,
+  ].filter((value): value is string => Boolean(value)).join(" / ");
+  const headerMeta = [
+    selectedComponentCard?.size !== null && selectedComponentCard?.size !== undefined ? `S${selectedComponentCard.size}` : formatSize(selectedRecipe.size),
+    selectedComponentCard?.grade ?? selectedRecipe.grade,
+    selectedComponentCard?.class ?? selectedRecipe.class,
+    selectedComponentCard?.family ?? selectedRecipe.familyDisplayName ?? selectedRecipe.armorFamily ?? selectedRecipe.baseName,
+  ].filter((value): value is string => Boolean(value));
 
   return (
-    <div className="craft-detail-stage">
-      <div className="craft-detail-main">
+    <div className="craft-detail-stage craft-detail-shell">
+      <header className="craft-detail-header">
+        <Link className="craft-summary-queue-link craft-detail-back-link" to="/industry/crafting">
+          Back to Results
+        </Link>
+        <div className="craft-detail-title-block">
+          <div className="craft-summary-chips craft-detail-title-badges">
+            {getTypeBadges(selectedRecipe).map((badge) => (
+              <span
+                key={badge}
+                className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
+              >
+                {badge}
+              </span>
+            ))}
+            {headerMeta.map((value) => (
+              <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
+            ))}
+            <span className={`craft-summary-quality-pill ${componentRarityClass}`}>
+              Band {formatCompactNumber(finalProductQuality.averageBand)}
+            </span>
+          </div>
+          <h1 className="craft-detail-title">{displayName}</h1>
+          {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
+        </div>
+        <div className="craft-summary-action-row craft-detail-actions">
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
+            aria-pressed={selectedIsBookmarked}
+            aria-label={selectedIsBookmarked ? `Remove ${displayName} save` : `Save ${displayName}`}
+            onClick={() => onToggleBookmark(selectedRecipe)}
+          >
+            {selectedIsBookmarked ? "Saved" : "Save Blueprint"}
+          </button>
+          <button
+            type="button"
+            className={`craft-summary-action-btn craft-summary-queue-btn${selectedIsQueued ? " is-active" : ""}`}
+            aria-pressed={selectedIsQueued}
+            aria-label={selectedIsQueued ? `${displayName} is in build queue` : `Add ${displayName} to build queue`}
+            onClick={() => onAddToQueue(
+              selectedRecipe,
+              buildSelectedQualitySnapshot(
+                selectedRecipe,
+                materialQualities,
+                getBandEffectiveQuality,
+                getBandsForMaterial,
+              ),
+              finalProductQuality,
+            )}
+          >
+            {selectedIsQueued ? "Queued" : "Add to Queue"}
+          </button>
+        </div>
+      </header>
+
+      <div className="craft-detail-workspace">
+        <ItemSummaryPanel
+          recipe={selectedRecipe}
+          displayName={displayName}
+          finalProductQuality={finalProductQuality}
+          componentCardRecord={selectedComponentCard}
+        />
+
+        <aside className="craft-detail-crafting" aria-label="Crafting materials">
         {showVariantSelector && (
           <div className="craft-variant-selector" aria-label="Select variant">
             <div className="craft-variant-selector-label">Select variant</div>
@@ -2007,57 +2516,55 @@ function RecipeDrawer({
           </div>
         )}
 
-        <div className="craft-material-column">
+        <RightCraftingPanel
+          recipe={selectedRecipe}
+          displayName={displayName}
+          totalModifiers={totalModifiers}
+          overallModifiers={overallModifiers}
+          overallQualitySource={overallQualitySource}
+          finalProductQuality={finalProductQuality}
+          onAddToQueue={onAddToQueue}
+          isQueued={selectedIsQueued}
+          isBookmarked={selectedIsBookmarked}
+          onToggleBookmark={() => onToggleBookmark(selectedRecipe)}
+          getBandEffectiveQuality={getBandEffectiveQuality}
+          getBandsForMaterial={getBandsForMaterial}
+          materialQualities={materialQualities}
+        >
           {quantizationLoading && (
             <div className="craft-empty-card">
               Loading local quality quantization bands...
             </div>
           )}
+          {selectedRecipe.materials.map((mat, inputIndex) => {
+            const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
 
-          <div className="craft-material-list">
-            {selectedRecipe.materials.map((mat, inputIndex) => {
-              const key = getMaterialQualityKey(selectedRecipe, mat, inputIndex);
-
-              return (
-                <MaterialQualityRow
-                  key={`${mat.slot}:${key}`}
-                  recipe={selectedRecipe}
-                  mat={mat}
-                  bandIndex={getBandIndex(key)}
-                  onBandChange={(bandIndex) =>
-                    setMaterialQualities((prev) => ({
-                      ...prev,
-                      [key]: bandIndex,
-                    }))
-                  }
-                  getBandsForMaterial={getBandsForMaterial}
-                  getBandEffectiveQuality={getBandEffectiveQuality}
-                  getBandLabel={getBandLabel}
-                  totalModifiers={totalModifiers}
-                />
-              );
-            })}
-          </div>
-        </div>
+            return (
+              <DetailMaterialQualityRow
+                key={`${mat.slot}:${key}`}
+                recipe={selectedRecipe}
+                mat={mat}
+                bandIndex={getBandIndex(key)}
+                onBandChange={(bandIndex) =>
+                  setMaterialQualities((prev) => ({
+                    ...prev,
+                    [key]: bandIndex,
+                  }))
+                }
+                getBandsForMaterial={getBandsForMaterial}
+                getBandEffectiveQuality={getBandEffectiveQuality}
+              />
+            );
+          })}
+        </RightCraftingPanel>
+        </aside>
       </div>
 
-      <CraftedItemSummaryPanel
+      <MissionSourcePanel
         recipe={selectedRecipe}
-        displayName={displayName}
-        totalModifiers={totalModifiers}
-        overallModifiers={overallModifiers}
-        overallQualitySource={overallQualitySource}
-        finalProductQuality={finalProductQuality}
         rewardPools={rewardPools}
-        onAddToQueue={onAddToQueue}
-        isQueued={selectedIsQueued}
-        isBookmarked={selectedIsBookmarked}
-        onToggleBookmark={() => onToggleBookmark(selectedRecipe)}
         isMissionBookmarked={isMissionBookmarked}
         onToggleMissionBookmark={onToggleMissionBookmark}
-        getBandEffectiveQuality={getBandEffectiveQuality}
-        getBandsForMaterial={getBandsForMaterial}
-        materialQualities={materialQualities}
       />
     </div>
   );
@@ -2067,6 +2574,7 @@ interface Props {
   recipes: ComponentRecipe[];
   inventoryEntries?: unknown[];
   materialTemplates?: unknown[];
+  componentCards?: ComponentCardIndexRecord[];
   initialBlueprintId?: string;
   onAddToQueue: (
     recipe: ComponentRecipe,
@@ -2078,6 +2586,7 @@ interface Props {
 
 export default function ComponentRecipeTable({
   recipes,
+  componentCards = [],
   initialBlueprintId,
   onAddToQueue,
   isRecipeQueued = () => false,
@@ -2407,6 +2916,32 @@ export default function ComponentRecipeTable({
   const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
   const hiddenRecipeCount = Math.max(0, groupedRecipes.length - visibleRecipeGroups.length);
 
+
+  if (initialBlueprintId) {
+    return (
+      <div className="craft-page craft-planner-shell craft-detail-page" ref={shellRef}>
+        {selectedGroup ? (
+          <RecipeDrawer
+            recipe={selectedGroup.recipes[0]}
+            groupRecipes={selectedGroup.recipes}
+            baseDisplayName={selectedGroup.displayName}
+            initialRecipeId={initialBlueprintId}
+            componentCards={componentCards}
+            onAddToQueue={onAddToQueue}
+            isRecipeQueued={isRecipeQueued}
+            isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}
+            onToggleBookmark={toggleBookmark}
+            isMissionBookmarked={(missionId) => bookmarkedMissionIds.has(missionId)}
+            onToggleMissionBookmark={toggleMissionBookmark}
+          />
+        ) : (
+          <section className="craft-detail-stage craft-detail-stage--empty">
+            <div className="craft-empty-card">Recipe not found.</div>
+          </section>
+        )}
+      </div>
+    );
+  }
 
 
   return (
@@ -2788,6 +3323,7 @@ export default function ComponentRecipeTable({
             groupRecipes={selectedGroup.recipes}
             baseDisplayName={selectedGroup.displayName}
             initialRecipeId={initialBlueprintId}
+            componentCards={componentCards}
             onAddToQueue={onAddToQueue}
             isRecipeQueued={isRecipeQueued}
             isRecipeBookmarked={(item) => bookmarkedRecipeIds.has(item.blueprint_id)}

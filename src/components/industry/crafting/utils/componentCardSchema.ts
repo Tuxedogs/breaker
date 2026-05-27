@@ -172,8 +172,8 @@ function getGenericBaseStats(baseStats: ComponentRecipe["baseStats"]): Component
   const stats: ComponentCardMetric[] = [];
   const mass = asNumber(baseStats.mass);
   const health = asNumber(baseStats.health);
-  if (mass !== null) stats.push({ label: "Generic mass", value: formatNumber(mass) });
-  if (health !== null) stats.push({ label: "Generic health", value: formatNumber(health) });
+  if (health !== null) stats.push({ label: "Component HP", value: formatNumber(health) });
+  if (mass !== null) stats.push({ label: "Mass", value: formatNumber(mass) });
 
   const emSignature = isRecord(baseStats.emSignature)
     ? asNumber(baseStats.emSignature.nominalSignature)
@@ -334,7 +334,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
     pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
     pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
-    pushMetric(stats, "Projectile Range", formatCompactNumber(weapon.calculatedRange, "m"));
+    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(weapon.calculatedRange, "m"));
     pushMetric(stats, "Projectile Speed", formatCompactNumber(weapon.projectileSpeed, " m/s"));
     pushMetric(stats, "Charge Time", formatCompactNumber(weapon.chargeTime, "s"));
     pushMetric(stats, "Cooling Rate", formatCompactNumber(weapon.coolingRate));
@@ -350,7 +350,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
     pushMetric(stats, "DPS", formatCompactNumber(weapon.dps));
-    pushMetric(stats, "Projectile Range", formatCompactNumber(weapon.calculatedRange, "m"));
+    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(weapon.calculatedRange, "m"));
     pushMetric(stats, "Falloff", asDisplay(weapon.falloffGraphStatus) ?? formatDamageDrop(weapon));
     pushMetric(stats, "Attachments", formatAttachmentSummary(weapon.attachments));
     return stats;
@@ -373,10 +373,11 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     const ammo = getStatsObject(record, "fpsAmmo");
     if (!ammo) return stats;
     pushMetric(stats, "Ammo Class", formatToken(ammo.ammoClass));
-    pushMetric(stats, "Weapon Class", formatToken(ammo.compatibleWeaponClass));
+    pushMetric(stats, "Compatible Weapon Class", formatToken(ammo.compatibleWeaponClass));
     pushMetric(stats, "Magazine Capacity", formatCompactNumber(ammo.magazineCapacity));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(ammo.alphaDamageTotal));
-    pushMetric(stats, "Projectile Range", formatCompactNumber(ammo.calculatedRange, "m"));
+    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(ammo.calculatedRange, "m"));
+    pushMetric(stats, "Projectile Speed", formatCompactNumber(ammo.projectileSpeed, " m/s"));
     pushMetric(stats, "Damage Drop", formatDamageDrop(ammo));
     pushMetric(stats, "Penetration", formatCompactNumber(ammo.penetrationBaseDistance, "m"));
     return stats;
@@ -386,7 +387,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     const radar = getStatsObject(record, "radar");
     if (!radar) return stats;
     pushMetric(stats, "Ping Cooldown", formatCompactNumber(radar.pingCooldown, "s"));
-    pushMetric(stats, "Aim Assist", formatPair(radar.aimAssistRangeMin, radar.aimAssistRangeMax, "m"));
+    pushMetric(stats, "Aim Assist Range", formatPair(radar.aimAssistRangeMin, radar.aimAssistRangeMax, "m"));
     pushMetric(stats, "Power", formatPair(radar.powerUsageMin, radar.powerUsageMax));
     pushMetric(stats, "Coolant", formatPair(radar.coolantUsageMin, radar.coolantUsageMax));
     pushMetric(stats, "Online EM", formatCompactNumber(radar.onlineEmSignature));
@@ -399,8 +400,8 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     if (!mining) return stats;
     pushMetric(stats, "Mining Power", formatCompactNumber(mining.miningPower));
     pushMetric(stats, "Extraction Power", formatCompactNumber(mining.extractionPower));
-    pushMetric(stats, "Instability Mod", formatCompactNumber(mining.instabilityModifier));
-    pushMetric(stats, "Resistance Mod", formatCompactNumber(mining.resistanceModifier));
+    pushMetric(stats, "Instability Modifier", formatCompactNumber(mining.instabilityModifier));
+    pushMetric(stats, "Resistance Modifier", formatCompactNumber(mining.resistanceModifier));
     pushMetric(stats, "Fracture Window", formatCompactNumber(mining.fractureWindowSize));
     pushMetric(stats, "Laser Range", formatCompactNumber(mining.laserRange, "m"));
     pushMetric(stats, "Beam Range", formatCompactNumber(mining.beamRange, "m"));
