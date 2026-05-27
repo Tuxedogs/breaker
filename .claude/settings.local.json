@@ -72,7 +72,24 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(x['id'], '->', x['label']\\) for x in d]\")",
       "Bash(vercel --prod)",
       "Bash(npx vercel *)",
-      "Bash(npx drizzle-kit *)"
+      "Bash(npx drizzle-kit *)",
+      "Bash(find \"D:\\\\scintel\\\\data\" -maxdepth 1 -type d 2>/dev/null | head -20)",
+      "Read(//d/scintel/data/**)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('public/api/crafting/component_card_index.json','utf8'\\)\\); const items=data.slice\\(0,3\\); console.log\\(JSON.stringify\\(items,null,2\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('public/api/crafting/component_card_index.json','utf8'\\)\\); const keys=Object.keys\\(data\\); console.log\\('top-level keys:', keys.slice\\(0,5\\)\\); const first=data[keys[0]]; console.log\\('first record:', JSON.stringify\\(first,null,2\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=data.records; const keys=Object.keys\\(recs\\); console.log\\('record count:', keys.length\\); const r=recs[keys[0]]; console.log\\('first key:', keys[0]\\); console.log\\('first record:', JSON.stringify\\(r,null,2\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=data.records; const vals=Object.values\\(recs\\); const p4ar=vals.find\\(r=>r.name&&r.name.toLowerCase\\(\\).includes\\('p4-ar'\\)||r.name&&r.name.toLowerCase\\(\\).includes\\('p4 ar'\\)\\); const fs9=vals.find\\(r=>r.name&&r.name.toLowerCase\\(\\).includes\\('fs-9'\\)\\); console.log\\('P4-AR:', JSON.stringify\\(p4ar,null,2\\).slice\\(0,500\\)\\); console.log\\('FS-9:', JSON.stringify\\(fs9,null,2\\).slice\\(0,500\\)\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=Object.values\\(data.records\\); const weapons=recs.filter\\(r=>r.type==='weapon'||r.type==='fpsWeapon'||r.typeLabel==='FPS Weapon'\\).slice\\(0,5\\); console.log\\(JSON.stringify\\(weapons.map\\(r=>\\({name:r.name,type:r.type,typeLabel:r.typeLabel,entityClass:r.entityClass}\\)\\),null,2\\)\\);\")",
+      "Bash(ls \"D:\\\\scintel-icon-workbench\" 2>&1)",
+      "Read(//d/scintel-icon-workbench/**)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=Object.values\\(data.records\\); const byType={}; for\\(const r of recs\\){const t=r.typeLabel||r.type; byType[t]=\\(byType[t]||0\\)+1;} console.log\\(JSON.stringify\\(byType,null,2\\)\\); console.log\\('total:', recs.length\\);\")",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=Object.values\\(data.records\\); const armor=recs.filter\\(r=>r.typeLabel==='FPS Armor'\\).slice\\(0,3\\); console.log\\(JSON.stringify\\(armor.map\\(r=>\\({name:r.name,entityClass:r.entityClass}\\)\\),null,2\\)\\);\")",
+      "Bash(node generate-icons.mjs)",
+      "Bash(Measure-Object -Line)",
+      "Bash(dir /b)",
+      "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=Object.values\\(data.records\\); const r=recs.find\\(r=>r.name==='P4-AR Rifle'\\); console.log\\(JSON.stringify\\(r.description\\)\\);\")",
+      "Bash(node scripts/test-desc-trim.mjs)",
+      "Bash(del \"D:\\\\Moonbreaker\\\\scripts\\\\test-desc-trim.mjs\")"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"

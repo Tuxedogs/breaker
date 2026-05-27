@@ -1132,6 +1132,7 @@
   font-weight: 900; line-height: 1.05; color: var(--craft-text); }
 .craft-summary-quality-pill { flex: 0 0 auto; border: 1px solid var(--craft-orange-border); border-radius: 4px; padding: 4px 7px; color: var(--void-accent-amber); background: rgba(255, 153, 0, 0.055); font-size: 1rem; font-weight: 600; white-space: nowrap; }
 .craft-summary-chips { margin-top: 8px; flex-wrap: wrap; }
+.craft-item-description { margin: 6px 0 0; padding: 0; font-size: 11px; line-height: 1.55; color: var(--craft-text-muted, rgba(200,210,220,0.72)); white-space: pre-line; }
 .craft-summary-section { flex: 0 0 auto; margin: 0; padding: 9px 14px; border-bottom: 1px solid var(--border-divider-color); }
 .craft-summary-section--grow { flex: 0 0 auto; min-height: 0; overflow: visible; }
 .craft-summary-mod-list { display: flex; flex-direction: column; gap: 8px; }
@@ -3667,6 +3668,15 @@
   background: var(--void-bg-3);
   box-shadow: var(--shadow-card);
   overflow: hidden;
+}
+
+.component-result-card__cat-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  opacity: 0.9;
+  pointer-events: none;
+  user-select: none;
 }
 
 .component-result-card__hit {
