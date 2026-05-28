@@ -481,21 +481,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.24rem;
-  height: var(--cd-chip-h, 28px);
+  gap: 0.22rem;
+  height: 28px;
   min-width: 0;
-  padding: 0.2rem 0.56rem;
-  border: var(--border-soft);
-  border-radius: 4px;
-  background: var(--bg-card-dark);
-  color: rgba(203, 213, 225, 0.82);
+  padding: 0 0.52rem;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(148, 163, 184, 0.58);
   font-family: var(--font-primary);
-  font-size: var(--cd-font-md, 0.78rem);
+  font-size: 0.75rem;
   letter-spacing: 0.01em;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.12s;
+  transition: color 0.1s, border-color 0.1s, background 0.1s;
   box-sizing: border-box;
+  position: relative;
+  z-index: 0;
 }
 
 .craft-fg--ship .craft-frl-chip {
@@ -511,27 +513,30 @@
 }
 
 .craft-frl-chip:hover {
-  border: var(--border-hover);
-  color: rgba(255, 210, 120, 0.95);
-  background: var(--bg-card);
+  border-color: rgba(148, 163, 184, 0.28);
+  color: rgba(220, 228, 238, 0.88);
+  background: rgba(255, 255, 255, 0.04);
+  z-index: 1;
 }
 
 .craft-frl-chip--active {
-  background: var(--bg-card-active);
-  border: var(--border-active);
-  color: rgba(255, 200, 90, 0.98);
+  border-color: rgba(255, 153, 0, 0.52);
+  background: rgba(255, 120, 0, 0.1);
+  color: rgba(255, 210, 80, 0.97);
+  z-index: 2;
 }
 
 .craft-frl-chip--active:hover {
-  background: var(--bg-card-active);
-  border: var(--border-active);
+  border-color: rgba(255, 153, 0, 0.7);
+  background: rgba(255, 120, 0, 0.16);
+  color: rgba(255, 220, 90, 1);
 }
 
-/* Compact size chip for facets row (size/grade/class) */
+/* Compact facet chips (size / grade / class row) */
 .craft-frl-chip--sm {
-  height: clamp(22px, 21px + 0.2vw, 26px);
-  padding: 0 0.42rem;
-  font-size: var(--cd-font-xs, 0.68rem);
+  height: 24px;
+  padding: 0 0.38rem;
+  font-size: 0.68rem;
 }
 
 .craft-frl-clear {
@@ -3295,13 +3300,13 @@
   flex-direction: column;
   gap: 0;
   padding: 0;
-  border: 1px solid rgba(255, 153, 0, 0.22);
-  border-radius: 8px;
-  background: linear-gradient(180deg, #131820 0%, #0b0f13 100%);
+  border: 1px solid rgba(255, 153, 0, 0.18);
+  border-radius: 7px;
+  background: linear-gradient(180deg, #10151a 0%, #090c10 100%);
   box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.5),
-    0 0 32px rgba(255, 153, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 4px 20px rgba(0, 0, 0, 0.55),
+    0 0 28px rgba(255, 153, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
   overflow: visible;
 }
 
@@ -3310,81 +3315,104 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  gap: 6px;
-  padding: 0 14px;
-  min-height: 38px;
+  gap: 5px;
+  padding: 0 12px;
+  min-height: 34px;
 }
 
 .crb-row + .crb-row {
-  border-top: 1px solid rgba(148, 163, 184, 0.09);
+  border-top: 1px solid rgba(148, 163, 184, 0.07);
 }
 
-/* ── Section labels (FPS, VEHICLE COMPONENTS, MATERIALS, ACTIVE FILTERS) ── */
+/* ── Section labels — inline group identifiers ── */
 .crb-section-label {
   font-family: var(--font-primary);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
-  color: rgba(255, 153, 0, 0.7);
+  color: rgba(148, 163, 184, 0.45);
   white-space: nowrap;
   flex-shrink: 0;
 }
 
+/* Vehicle label keeps a faint amber tint */
 .crb-section-label--vehicle {
-  color: rgba(255, 160, 30, 0.85);
+  color: rgba(255, 178, 60, 0.65);
 }
 
+/* FPS label uses cyan identity */
 .crb-section-label--fps {
-  color: rgba(78, 224, 189, 0.75);
+  color: rgba(56, 210, 180, 0.6);
 }
 
 .crb-section-label--muted {
-  color: rgba(148, 163, 184, 0.55);
+  color: rgba(148, 163, 184, 0.38);
 }
 
-/* ── Vertical divider between chip groups within a row ── */
+/* ── Thin vertical divider within a row ── */
 .crb-section-divider {
   width: 1px;
-  height: 18px;
-  background: rgba(148, 163, 184, 0.14);
+  height: 14px;
+  background: rgba(148, 163, 184, 0.1);
   flex-shrink: 0;
-  margin: 0 4px;
+  margin: 0 3px;
 }
 
-/* ── Heavier divider between the two category groups (vehicle vs FPS) ── */
+/* ── Column divider between Vehicle and FPS groups ── */
 .crb-group-divider {
   width: 1px;
   align-self: stretch;
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(148, 163, 184, 0.12);
   flex-shrink: 0;
-  margin: 6px 6px;
+  margin: 5px 8px;
 }
 
-/* ── Category group: label on top, chips below ── */
+/* ── Category group: label above chip row ── */
 .crb-category-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   flex-shrink: 0;
-  padding: 6px 0;
+  padding: 5px 0;
 }
 
-/* ── Chip group wrapper ── */
+/* ── Chip group — segmented look via adjacent sibling gap elimination ── */
 .crb-chip-group {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 0;
   flex-shrink: 0;
+}
+
+/* Adjacent chips in a group share their border — segmented-control illusion */
+.crb-chip-group .craft-frl-chip + .craft-frl-chip {
+  margin-left: -1px;
+}
+
+.crb-chip-group .craft-frl-chip:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+.crb-chip-group .craft-frl-chip:first-child:not(:only-child) {
+  border-radius: 3px 0 0 3px;
+}
+
+.crb-chip-group .craft-frl-chip:last-child:not(:only-child) {
+  border-radius: 0 3px 3px 0;
+}
+
+.crb-chip-group .craft-frl-chip:only-child {
+  border-radius: 3px;
 }
 
 /* ── Row 1: Search ── */
 .crb-row--search {
-  min-height: 50px;
-  gap: 10px;
-  padding: 0 14px;
-  border-radius: 8px 8px 0 0;
+  min-height: 40px;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 7px 7px 0 0;
 }
 
 .component-browser-search {
@@ -3392,23 +3420,23 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  height: 38px;
-  padding: 0 12px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 5px;
-  background: rgba(8, 12, 18, 0.7);
+  gap: 8px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  border-radius: 4px;
+  background: rgba(6, 9, 14, 0.65);
   transition: border-color 0.14s, box-shadow 0.14s;
 }
 
 .component-browser-search:focus-within {
-  border-color: rgba(255, 153, 0, 0.4);
-  box-shadow: 0 0 0 1px rgba(255, 153, 0, 0.1), inset 0 1px 4px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 153, 0, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 153, 0, 0.08), inset 0 1px 3px rgba(0, 0, 0, 0.28);
 }
 
 .component-browser-search .craft-search-icon {
-  color: rgba(255, 153, 0, 0.55);
-  font-size: 1rem;
+  color: rgba(148, 163, 184, 0.35);
+  font-size: 0.92rem;
   font-weight: 900;
   flex-shrink: 0;
   line-height: 1;
@@ -3422,41 +3450,41 @@
   background: transparent;
   color: var(--craft-text);
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
 }
 
 .component-browser-search input::placeholder {
-  color: rgba(148, 163, 184, 0.32);
+  color: rgba(148, 163, 184, 0.28);
 }
 
 .crb-search-slash {
   font-family: var(--font-primary);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  color: rgba(148, 163, 184, 0.28);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 3px;
-  padding: 1px 5px;
+  color: rgba(148, 163, 184, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 2px;
+  padding: 1px 4px;
   flex-shrink: 0;
   line-height: 1.4;
 }
 
-/* Blueprint Bookmarks button */
+/* Blueprint Bookmarks — muted ghost button, amber when active */
 .crb-bookmarks-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 34px;
-  padding: 0 14px;
-  border: 1px solid rgba(255, 153, 0, 0.3);
-  border-radius: 5px;
-  background: rgba(255, 153, 0, 0.05);
-  color: rgba(255, 200, 90, 0.75);
+  gap: 5px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(148, 163, 184, 0.55);
   font-family: var(--font-primary);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   white-space: nowrap;
   cursor: pointer;
@@ -3465,48 +3493,49 @@
 }
 
 .crb-bookmarks-btn:hover {
-  border-color: rgba(255, 153, 0, 0.55);
-  background: rgba(255, 153, 0, 0.1);
-  color: rgba(255, 215, 100, 0.95);
+  border-color: rgba(255, 153, 0, 0.3);
+  background: rgba(255, 153, 0, 0.06);
+  color: rgba(255, 200, 90, 0.85);
 }
 
 .crb-bookmarks-btn--active {
-  border-color: rgba(255, 153, 0, 0.7);
-  background: rgba(255, 120, 0, 0.16);
-  color: rgba(255, 220, 80, 1);
-  box-shadow: 0 0 8px rgba(255, 153, 0, 0.18);
+  border-color: rgba(255, 153, 0, 0.55);
+  background: rgba(255, 120, 0, 0.12);
+  color: rgba(255, 215, 80, 0.97);
+  box-shadow: 0 0 6px rgba(255, 153, 0, 0.12);
 }
 
 .crb-bookmarks-icon {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   line-height: 1;
 }
 
-/* Result count */
+/* Result count — quiet status text */
 .component-browser-count {
   white-space: nowrap;
   flex-shrink: 0;
   font-family: var(--font-primary);
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(255, 200, 90, 0.85);
-  letter-spacing: 0.02em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(148, 163, 184, 0.45);
+  letter-spacing: 0.03em;
 }
 
 .component-browser-count strong {
-  color: rgba(255, 215, 80, 1);
-  font-weight: 900;
+  color: rgba(255, 210, 80, 0.82);
+  font-weight: 800;
+  font-size: 0.8rem;
 }
 
-/* ── Row 2: Category groups (vehicle | FPS) — horizontal scroll if needed ── */
+/* ── Row 2: Category groups — Vehicle | FPS on one horizontal strip ── */
 .crb-row--categories {
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
-  align-items: stretch;
-  min-height: 54px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  align-items: center;
+  min-height: 42px;
+  padding-top: 0;
+  padding-bottom: 0;
   gap: 0;
 }
 
@@ -3517,8 +3546,8 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;
-  min-height: 38px;
-  gap: 6px;
+  min-height: 34px;
+  gap: 4px;
   align-items: center;
 }
 
@@ -3526,16 +3555,16 @@
 
 .crb-active-label {
   font-family: var(--font-primary);
-  font-size: 0.64rem;
+  font-size: 0.58rem;
   font-weight: 600;
-  letter-spacing: 0.07em;
-  color: rgba(148, 163, 184, 0.55);
+  letter-spacing: 0.08em;
+  color: rgba(148, 163, 184, 0.45);
   text-transform: uppercase;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Choose Materials trigger */
+/* Materials dropdown trigger — same height as facet chips */
 .crb-material-picker {
   position: relative;
   flex-shrink: 0;
@@ -3544,15 +3573,15 @@
 .crb-material-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 28px;
-  padding: 0 10px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(203, 213, 225, 0.72);
+  gap: 4px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(148, 163, 184, 0.58);
   font-family: var(--font-primary);
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.01em;
   white-space: nowrap;
@@ -3562,14 +3591,14 @@
 
 .crb-material-trigger:hover,
 .crb-material-trigger--open {
-  border-color: rgba(255, 153, 0, 0.4);
-  color: rgba(255, 200, 90, 0.9);
-  background: rgba(255, 153, 0, 0.06);
+  border-color: rgba(255, 153, 0, 0.32);
+  color: rgba(255, 200, 90, 0.85);
+  background: rgba(255, 153, 0, 0.05);
 }
 
 .crb-material-chevron {
-  font-size: 0.7rem;
-  opacity: 0.7;
+  font-size: 0.65rem;
+  opacity: 0.6;
 }
 
 /* Material dropdown */
@@ -3585,23 +3614,23 @@
   width: 360px;
   max-height: 260px;
   overflow-y: auto;
-  background: #0e1319;
-  border: 1px solid rgba(255, 153, 0, 0.22);
-  border-radius: 6px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(255, 153, 0, 0.06);
+  background: #0a0e13;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 5px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 12px rgba(0, 0, 0, 0.3);
 }
 
 .crb-material-option {
   display: inline-flex;
   align-items: center;
-  height: 26px;
-  padding: 0 10px;
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid rgba(148, 163, 184, 0.13);
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.02);
-  color: rgba(203, 213, 225, 0.72);
+  color: rgba(148, 163, 184, 0.65);
   font-family: var(--font-primary);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 500;
   white-space: nowrap;
   cursor: pointer;
@@ -3609,27 +3638,27 @@
 }
 
 .crb-material-option:hover {
-  border-color: rgba(55, 210, 175, 0.4);
-  color: rgba(100, 240, 205, 0.9);
-  background: rgba(55, 210, 175, 0.07);
+  border-color: rgba(56, 210, 180, 0.35);
+  color: rgba(90, 235, 200, 0.9);
+  background: rgba(56, 210, 180, 0.06);
 }
 
 .crb-material-option--active {
-  border-color: rgba(55, 210, 175, 0.55);
-  background: rgba(20, 110, 90, 0.2);
-  color: rgba(100, 240, 205, 0.97);
+  border-color: rgba(56, 210, 180, 0.5);
+  background: rgba(20, 110, 90, 0.18);
+  color: rgba(100, 240, 205, 0.95);
 }
 
-/* ── Removable tokens (active material + active type) ── */
+/* ── Removable active-filter tokens ── */
 .crb-token {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  height: 26px;
-  padding: 0 8px;
-  border-radius: 4px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: 3px;
   font-family: var(--font-primary);
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
@@ -3638,48 +3667,48 @@
 }
 
 .crb-token--material {
-  border: 1px solid rgba(55, 210, 175, 0.45);
-  background: rgba(20, 100, 82, 0.22);
-  color: rgba(90, 235, 195, 0.92);
+  border: 1px solid rgba(56, 210, 180, 0.38);
+  background: rgba(20, 100, 82, 0.18);
+  color: rgba(90, 235, 195, 0.88);
 }
 
 .crb-token--material:hover {
-  border-color: rgba(55, 210, 175, 0.7);
-  background: rgba(20, 100, 82, 0.36);
+  border-color: rgba(56, 210, 180, 0.62);
+  background: rgba(20, 100, 82, 0.3);
   color: rgba(120, 245, 210, 1);
 }
 
 .crb-token--type {
-  border: 1px solid rgba(255, 153, 0, 0.45);
-  background: rgba(255, 100, 0, 0.14);
-  color: rgba(255, 210, 80, 0.92);
+  border: 1px solid rgba(255, 153, 0, 0.38);
+  background: rgba(255, 100, 0, 0.1);
+  color: rgba(255, 205, 75, 0.88);
 }
 
 .crb-token--type:hover {
-  border-color: rgba(255, 153, 0, 0.7);
-  background: rgba(255, 100, 0, 0.22);
+  border-color: rgba(255, 153, 0, 0.62);
+  background: rgba(255, 100, 0, 0.18);
   color: rgba(255, 220, 100, 1);
 }
 
 .crb-token-x {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1;
-  opacity: 0.7;
+  opacity: 0.55;
 }
 
-/* Clear All button */
+/* Clear All — quiet red ghost */
 .crb-clear-all {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 26px;
-  padding: 0 10px;
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  border-radius: 4px;
+  gap: 4px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  border-radius: 3px;
   background: none;
-  color: rgba(248, 113, 113, 0.72);
+  color: rgba(248, 113, 113, 0.58);
   font-family: var(--font-primary);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   white-space: nowrap;
@@ -3690,23 +3719,23 @@
 }
 
 .crb-clear-all:hover {
-  border-color: rgba(248, 113, 113, 0.58);
-  color: rgba(248, 113, 113, 0.95);
-  background: rgba(248, 113, 113, 0.06);
+  border-color: rgba(248, 113, 113, 0.5);
+  color: rgba(248, 113, 113, 0.9);
+  background: rgba(248, 113, 113, 0.05);
 }
 
 .crb-clear-all-icon {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1;
 }
 
-/* ── Row 4: Active Filters ── */
+/* ── Row 4: Active Filters strip ── */
 .crb-row--active-filters {
   flex-wrap: wrap;
-  min-height: 36px;
-  gap: 5px;
-  border-radius: 0 0 8px 8px;
-  background: rgba(0, 0, 0, 0.15);
+  min-height: 32px;
+  gap: 4px;
+  border-radius: 0 0 7px 7px;
+  background: rgba(0, 0, 0, 0.12);
 }
 
 .crb-row--active-filters .crb-clear-all {

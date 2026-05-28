@@ -1162,11 +1162,87 @@ async function parseManualTableRegion(
   return rows;
 }
 
+async function parsePanelRegionColumnAware(
+  worker: Awaited<ReturnType<typeof createWorker>>,
+  imageFile: File,
+  region: PanelRegion,
+  templates: MaterialTemplate[],
+): Promise<ParsedRefineryRowWithY[]> {
+  const fullBlob = await preprocessImageRegion(imageFile, region.sx, region.sy, region.sw, region.sh);
+
+  await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK, tessedit_char_whitelist: "" });
+  const { data: fullData } = await worker.recognize(fullBlob, undefined, { blocks: true });
+  const ocrLines = getOcrLines(fullData.blocks);
+
+  const materialLines = ocrLines
+    .map((line) => getMaterialCandidateFromLine(line, templates))
+    .filter((c): c is NonNullable<typeof c> =>
+      c !== null && !isNonMaterialProcessingLine(c.lineText),
+    )
+    .sort((a, b) => a.y - b.y);
+
+  if (materialLines.length === 0) return [];
+
+  const rows: ParsedRefineryRowWithY[] = [];
+
+  for (const mat of materialLines) {
+    const rowHeight = Math.max(28, mat.height * 1.8);
+    const rowSy = Math.max(region.sy, Math.floor(region.sy + mat.y - rowHeight * 0.6));
+    const rowSh = Math.min(
+      region.sy + region.sh - rowSy,
+      Math.ceil(rowHeight * 1.4),
+    );
+
+    const qualityRegion: PanelRegion = {
+      sx: region.sx + Math.round(region.sw * 0.48),
+      sy: rowSy,
+      sw: Math.round(region.sw * 0.20),
+      sh: rowSh,
+    };
+    const yieldRegion: PanelRegion = {
+      sx: region.sx + Math.round(region.sw * 0.70),
+      sy: rowSy,
+      sw: Math.round(region.sw * 0.25),
+      sh: rowSh,
+    };
+
+    const qualityOcr = await recognizeDigitsInRegion(worker, imageFile, qualityRegion);
+    const yieldOcr = await recognizeDigitsInRegion(worker, imageFile, yieldRegion);
+
+    const materialId = normalizeMaterialName(mat.rawName, templates);
+
+    const reviewReasons: string[] = [];
+    if (!materialId) reviewReasons.push("Unknown material");
+    if (qualityOcr.value === null) reviewReasons.push("Failed to read quality");
+    if (yieldOcr.value === null || yieldOcr.value <= 0) reviewReasons.push("Failed to read yield");
+    if (qualityOcr.confidence < 60) reviewReasons.push("Low quality confidence");
+    if (yieldOcr.confidence < 60) reviewReasons.push("Low yield confidence");
+
+    rows.push({
+      rawName: mat.rawName,
+      materialId,
+      quality: qualityOcr.value ?? 0,
+      quantity: yieldOcr.value ?? 0,
+      needsReview: reviewReasons.length > 0,
+      reviewReasons,
+      y: mat.y,
+      rowPreviewRegion: {
+        sx: region.sx,
+        sy: rowSy - region.sy,
+        sw: region.sw,
+        sh: rowSh,
+      },
+    });
+  }
+
+  return rows;
+}
+
 export async function parseRefineryScreenshot(
   imageFile: File,
   templates: MaterialTemplate[],
   onProgress?: (pct: number) => void,
-  manualPanelRegions?: PanelRegion[],
+  manualPanelRegions: PanelRegion[] = [],
   manualTableRegions?: PanelRegion[],
 ): Promise<RefineryParseResult> {
   const dims = await getImageDimensions(imageFile);
@@ -1289,6 +1365,7 @@ export async function parseRefineryScreenshot(
 
     const workOrders: ParsedWorkOrder[] = [];
     let lastRawText = detText;
+    const usingManualRegions = panelRegions.length > 0 && manualPanelRegions.length > 0;
 
     for (let i = 0; i < panelRegions.length; i++) {
       const { sx, sy, sw, sh } = panelRegions[i];
@@ -1297,58 +1374,50 @@ export async function parseRefineryScreenshot(
         onProgress(Math.round(((i + 0.5) / panelRegions.length) * 80 + 10));
       }
 
-      await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_COLUMN });
-      const panelBlob = await preprocessImageRegion(imageFile, sx, sy, sw, sh);
-      const { data: pd } = await worker.recognize(panelBlob, undefined, {
-        blocks: true,
+      let finalRows: ParsedRefineryRow[];
+      let totalYieldCscu: number | null = null;
+
+      if (usingManualRegions) {
+        // Column-aware per-row OCR: dedicated digit passes per quality/yield cell.
+        const rawRows = await parsePanelRegionColumnAware(worker, imageFile, panelRegions[i], templates);
+        finalRows = sortAndDeduplicateCompleteRows(rawRows, sh)
+          .filter((row) => !isRejectedRefineryRow(row));
+      } else {
+        await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_COLUMN });
+        const panelBlob = await preprocessImageRegion(imageFile, sx, sy, sw, sh);
+        const { data: pd } = await worker.recognize(panelBlob, undefined, { blocks: true });
+
+        await worker.setParameters({ tessedit_char_whitelist: "0123456789" });
+        const { data: digitData } = await worker.recognize(panelBlob, undefined, { blocks: true });
+        await worker.setParameters({ tessedit_char_whitelist: "" });
+        await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK });
+
+        lastRawText = pd.text;
+
+        const screenType = detectScreenType(pd.text);
+        const lowConf = (pd.confidence as number) < 70;
+        const lines = pd.text.split("\n").map((l) => l.trim()).filter(Boolean);
+        const allPanelLines = [...getOcrLines(pd.blocks), ...getOcrLines(digitData.blocks)];
+
+        let rows: ParsedRefineryRowWithY[] = extractCompleteRowsFromOcrLines(allPanelLines, templates, lowConf);
+        if (rows.length === 0) rows = extractRowsFromKnownLineText(allPanelLines, templates, lowConf);
+        if (rows.length === 0) {
+          rows = extractCompleteRowsSequential(lines, templates, lowConf)
+            .map((row) => ({ ...row, y: inferRowYFromNumbers(row, allPanelLines) }));
+        }
+
+        finalRows = sortAndDeduplicateCompleteRows(rows, sh * 2).filter((row) => !isRejectedRefineryRow(row));
+        totalYieldCscu = extractTotalYield(lines);
+
+        if (finalRows.length === 0 && screenType === "unknown") continue;
+      }
+
+      workOrders.push({
+        workOrderNumber: i + 1,
+        rows: finalRows,
+        totalYieldCscu,
+        sourceLocationName,
       });
-
-      await worker.setParameters({ tessedit_char_whitelist: "0123456789" });
-      const { data: digitData } = await worker.recognize(panelBlob, undefined, {
-        blocks: true,
-      });
-      await worker.setParameters({ tessedit_char_whitelist: "" });
-      await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK });
-
-      lastRawText = pd.text;
-
-      const screenType = detectScreenType(pd.text);
-      const lowConf = (pd.confidence as number) < 70;
-      const lines = pd.text
-        .split("\n")
-        .map((l) => l.trim())
-        .filter(Boolean);
-
-      const allPanelLines = [
-        ...getOcrLines(pd.blocks),
-        ...getOcrLines(digitData.blocks),
-      ];
-
-      // Primary: bbox-based positional column extraction.
-      // Reads QUALITY=col[0], YIELD=col[1] strictly — never picks TO DO or DONE.
-      let rows: ParsedRefineryRowWithY[] = extractCompleteRowsFromOcrLines(allPanelLines, templates, lowConf);
-
-      // Fallback: if bbox parser found nothing, try known-name line-text matching.
-      if (rows.length === 0) {
-        rows = extractRowsFromKnownLineText(allPanelLines, templates, lowConf);
-      }
-
-      // Last resort: sequential text parser. Only used when both bbox approaches fail.
-      if (rows.length === 0) {
-        rows = extractCompleteRowsSequential(lines, templates, lowConf)
-          .map((row) => ({ ...row, y: inferRowYFromNumbers(row, allPanelLines) }));
-      }
-
-      const finalRows = sortAndDeduplicateCompleteRows(rows, sh * 2).filter((row) => !isRejectedRefineryRow(row));
-
-      if (finalRows.length > 0 || screenType !== "unknown") {
-        workOrders.push({
-          workOrderNumber: i + 1,
-          rows: finalRows,
-          totalYieldCscu: extractTotalYield(lines),
-          sourceLocationName,
-        });
-      }
     }
 
     if (onProgress) onProgress(100);

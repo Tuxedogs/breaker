@@ -323,6 +323,18 @@ export default function MiningModule() {
                   <span className="mlist-header-count">{displayRankedFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
+                  {!buildQueueSelectionActive && (
+                    <div className="mlist-mode-hint">
+                      <span className="mlist-mode-hint-label">
+                        {selectedMaterials.size > 0
+                          ? `Ranked by match across ${selectedMaterials.size} selected material${selectedMaterials.size === 1 ? "" : "s"}`
+                          : "All locations — select materials above to rank by coverage"}
+                      </span>
+                      {selectedMaterials.size === 0 && (
+                        <span className="mlist-mode-hint-tip">Use Ship / Vehicle / Hand filters to find where specific ores spawn</span>
+                      )}
+                    </div>
+                  )}
                   {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
                     <label className="mlist-focus-control">
                       <span>Priority Focus</span>
