@@ -490,16 +490,17 @@ export default function RefineryImportPage() {
 
       for (let i = 0; i < screenshots.length; i++) {
         const screenshot = screenshots[i];
-        const manualPanelRegions = alignmentMode === "manual" ? buildManualRegions(manualAlignments[screenshot.id], screenshot) : undefined;
-        const manualTableRegions = alignmentMode === "manual" ? buildManualTableRegions(manualAlignments[screenshot.id], screenshot) : undefined;
+        // User-drawn table region → column-aware path (manualPanelRegions).
+        // Legacy panel-divider regions → original path (manualTableRegions suppresses it).
+        const drawnTableRegions = alignmentMode === "manual" ? buildManualTableRegions(manualAlignments[screenshot.id], screenshot) : undefined;
+        const panelDividerRegions = alignmentMode === "manual" ? buildManualRegions(manualAlignments[screenshot.id], screenshot) : undefined;
         const ocrResult = await parseRefineryScreenshot(
           screenshot.file,
           reviewMaterials,
           (pct) => {
             setParseProgress(Math.round(((i + pct / 100) / screenshots.length) * 100));
           },
-          manualTableRegions ? undefined : manualPanelRegions,
-          manualTableRegions,
+          drawnTableRegions ?? panelDividerRegions ?? [],
         );
 
         if (ocrResult.screenType === "refinery_complete") {
@@ -509,7 +510,7 @@ export default function RefineryImportPage() {
           const existingWorkOrders: DraftWorkOrder[] = nextState?.type === "refinery_complete" ? nextState.workOrders : [];
           nextState = {
             type: "refinery_complete",
-            workOrders: [...existingWorkOrders, ...ocrResult.workOrders.map((wo, woIdx) => toDraftWorkOrder(wo, screenshot.id, manualTableRegions?.[woIdx] ?? manualPanelRegions?.[woIdx]))],
+            workOrders: [...existingWorkOrders, ...ocrResult.workOrders.map((wo, woIdx) => toDraftWorkOrder(wo, screenshot.id, drawnTableRegions?.[woIdx] ?? panelDividerRegions?.[woIdx]))],
           };
         } else if (ocrResult.screenType === "refinery_input") {
           if (nextState?.type === "refinery_complete") {
