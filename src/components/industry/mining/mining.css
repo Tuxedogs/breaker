@@ -917,6 +917,81 @@
   flex-wrap: wrap;
 }
 
+/* Lagrange children — badge layout */
+
+.mloc-lagrange-children {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.3rem 0 0.1rem;
+}
+
+.mloc-lagrange-children--compact {
+  gap: 0.2rem;
+  margin: 0.2rem 0 0;
+}
+
+.mloc-lagrange-point {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.mloc-lagrange-point-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+.mloc-lagrange-point-head > span {
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  background: rgba(255, 153, 0, 0.1);
+  border: 1px solid rgba(255, 153, 0, 0.25);
+  color: rgba(255, 200, 100, 0.9);
+  line-height: 1.5;
+}
+
+.mloc-lagrange-count {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.mloc-lagrange-child-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem;
+  padding-left: 0.25rem;
+}
+
+.mloc-lagrange-child-list > span {
+  font-family: var(--font-primary);
+  font-size: 0.63rem;
+  letter-spacing: 0.04em;
+  padding: 0.1em 0.42em;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(200, 210, 230, 0.7);
+  line-height: 1.5;
+}
+
+.mloc-lagrange-children--compact .mloc-lagrange-point-head > span {
+  font-size: 0.61rem;
+  padding: 0.1em 0.38em;
+}
+
+.mloc-lagrange-children--compact .mloc-lagrange-child-list {
+  display: none;
+}
+
 /* Thumbnail */
 
 .mdet-header-right {

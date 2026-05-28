@@ -87,7 +87,7 @@ function formatNumber(value: number): string {
 
 function formatCompactNumber(value: unknown, suffix = ""): string | null {
   const number = asNumber(value);
-  if (number === null) return null;
+  if (number === null || number === 0) return null;
   return `${formatNumber(number)}${suffix}`;
 }
 
@@ -262,7 +262,6 @@ function getIndexMeta(record: ComponentCardIndexRecord): ComponentCardMetric[] {
   if (record.grade) meta.push({ label: "Grade", value: record.grade });
   if (record.class) meta.push({ label: "Class", value: titleCase(record.class) });
   if (craftTime) meta.push({ label: "Craft", value: craftTime });
-  if (record.entityClass) meta.push({ label: "Entity", value: record.entityClass.slice(0, 8) });
 
   return meta;
 }
@@ -354,6 +353,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     pushMetric(stats, "Fire Mode", formatToken(weapon.fireMode));
     pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
     pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
+    pushMetric(stats, "Charge Time", formatCompactNumber(weapon.chargeTime, "s"));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
     pushMetric(stats, "DPS", formatCompactNumber(weapon.dps));
     const range = formatUsableOrTravelRange(weapon);
@@ -434,7 +434,6 @@ export function buildComponentCardSchema(
   if (recipe.grade) meta.push({ label: "Grade", value: recipe.grade });
   if (recipe.class) meta.push({ label: "Class", value: titleCase(recipe.class) });
   if (craftTime) meta.push({ label: "Craft", value: craftTime });
-  if (recipe.output_entityClass) meta.push({ label: "Entity", value: recipe.output_entityClass.slice(0, 8) });
 
   return {
     id: recipe.blueprint_id,

@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../utils/componentCardSchema";
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
+import { useCompareStore } from "@/stores/compareStore";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -36,22 +37,40 @@ export default function ComponentResultCard({
   queued,
   saved,
   familyVariantCounts,
+  variantCount,
 }: {
   recipe?: ComponentRecipe;
   record?: ComponentCardIndexRecord;
   queued: boolean;
   saved: boolean;
   familyVariantCounts?: Map<string, number>;
+  variantCount?: number;
 }) {
   const schema = record
     ? buildComponentCardSchemaFromIndex(record)
     : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
   const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
+  const location = useLocation();
+  const { slots, setSlot } = useCompareStore();
+
+  function handleCompare(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!record) return;
+    const emptySlot = slots[0] === null ? 0 : slots[1] === null ? 1 : 1;
+    setSlot(emptySlot, record);
+  }
+
+  const isInCompare = record && (slots[0]?.id === record.id || slots[1]?.id === record.id);
 
   return (
     <article className="component-result-card">
-      <Link className="component-result-card__hit" to={`/industry/crafting/${schema.id}`}>
+      <Link
+        className="component-result-card__hit"
+        to={`/industry/crafting/${schema.id}`}
+        state={{ from: location.pathname + location.search }}
+      >
         <span className="component-result-card__topline">
           <span className="component-result-card__kind">{schema.typeLabel}</span>
           {iconUrl ? (
@@ -105,8 +124,23 @@ export default function ComponentResultCard({
           <span className="component-card-state">
             {queued && <span className="craft-mini-chip craft-mini-chip--queue">Queued</span>}
             {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
-            {!queued && !saved && <span className="component-card-state__empty" aria-hidden="true" />}
+            {variantCount && variantCount > 1 && (
+              <span className="craft-mini-chip craft-mini-chip--variants">{variantCount} variants</span>
+            )}
+            {!queued && !saved && !(variantCount && variantCount > 1) && (
+              <span className="component-card-state__empty" aria-hidden="true" />
+            )}
           </span>
+          {record && (
+            <button
+              type="button"
+              className={`cmp-card-btn${isInCompare ? " cmp-card-btn--active" : ""}`}
+              onClick={handleCompare}
+              aria-label={isInCompare ? "In compare" : "Add to compare"}
+            >
+              {isInCompare ? "✓ Compare" : "+ Compare"}
+            </button>
+          )}
           <span className="component-card-action">Craft</span>
         </span>
       </Link>

@@ -32,6 +32,7 @@ const ComponentMappingPage = lazy(() =>
 
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
+const IndustryComparePage = lazy(() => import("./pages/industry/ComparePage"));
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 
@@ -157,6 +158,14 @@ export default function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <IndustryCraftingPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="industry/crafting/compare"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryComparePage />
             </Suspense>
           }
         />
