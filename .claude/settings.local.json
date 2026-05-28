@@ -89,7 +89,11 @@
       "Bash(dir /b)",
       "Bash(node -e \"const fs=require\\('fs'\\); const data=JSON.parse\\(fs.readFileSync\\('D:/Moonbreaker/public/api/crafting/component_card_index.json','utf8'\\)\\); const recs=Object.values\\(data.records\\); const r=recs.find\\(r=>r.name==='P4-AR Rifle'\\); console.log\\(JSON.stringify\\(r.description\\)\\);\")",
       "Bash(node scripts/test-desc-trim.mjs)",
-      "Bash(del \"D:\\\\Moonbreaker\\\\scripts\\\\test-desc-trim.mjs\")"
+      "Bash(del \"D:\\\\Moonbreaker\\\\scripts\\\\test-desc-trim.mjs\")",
+      "Bash(node --import tsx -e ' *)",
+      "Bash(node -e \"const data=require\\('./public/api/crafting/component_card_index.json'\\);const records=data.records;const fps=records.filter\\(r=>r.kind==='fps'&&r.type==='weapons'\\).slice\\(0,8\\);fps.forEach\\(r=>console.log\\(JSON.stringify\\({id:r.id.slice\\(0,12\\),name:r.name,family:r.family,familyKey:r.familyKey,variantName:r.variantName,variants:r.variants.length,fpsFamily:r.stats.fpsWeapon&&r.stats.fpsWeapon.family}\\)\\)\\);console.log\\('---veh---'\\);const veh=records.filter\\(r=>r.kind==='vehicle'&&r.type==='weaponGun'\\).slice\\(0,5\\);veh.forEach\\(r=>console.log\\(JSON.stringify\\({id:r.id.slice\\(0,12\\),name:r.name,family:r.family,familyKey:r.familyKey,variantName:r.variantName,variants:r.variants.length}\\)\\)\\);\")",
+      "Bash(node -e \"const d = require\\('./public/api/crafting/component_card_index.json'\\); const w = d.find\\(r => r.stats && r.stats.shipWeapon\\); console.log\\(JSON.stringify\\(w.stats.shipWeapon, null, 2\\)\\)\")",
+      "Bash(Get-ChildItem -Path \"D:\\\\Moonbreaker\\\\src\\\\stores\" -ErrorAction SilentlyContinue)"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"

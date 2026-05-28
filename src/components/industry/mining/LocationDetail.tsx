@@ -201,6 +201,7 @@ export function LocationDetail({
           <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
             {locationDisplayName}
           </div>
+          <StantonLagrangeChildrenSummary entry={entry} />
           <div className="mdet-meta">
             <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           </div>
@@ -247,8 +248,6 @@ export function LocationDetail({
           </div>
         ))}
       </div>
-
-      <StantonLagrangeChildrenSummary entry={entry} />
 
       {entry.nearbyStations.length > 0 && (
         <div className="mdet-stations">

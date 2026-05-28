@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import ComponentResultCard from "./ComponentResultCard";
+import CompareTray from "./CompareTray";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
@@ -70,6 +71,26 @@ function readStoredStringSet(key: string): Set<string> {
   } catch {
     return new Set();
   }
+}
+
+// Strip a quoted nickname from a component name to get the base family name.
+// "A03 \"Lodestone\" Sniper Rifle" → "A03 Sniper Rifle"
+// Only applies to FPS items where this pattern is used.
+function getVariantGroupKey(record: ComponentCardIndexRecord): string | null {
+  if (record.kind !== "fps") return null;
+  const stripped = record.name.replace(/\s*"[^"]+"\s*/g, " ").replace(/\s+/g, " ").trim();
+  // Only group if the stripping actually changed the name (i.e. it had a nickname).
+  if (stripped === record.name.trim()) return null;
+  // Group key: base name + type + kind to prevent cross-category merging.
+  return `${stripped}::${record.type}::${record.kind}`;
+}
+
+// Given a group of variant records, pick the best representative to show in the browser.
+// Prefer the "base" variant (no nickname in name), then alphabetical.
+function pickGroupRepresentative(group: ComponentCardIndexRecord[]): ComponentCardIndexRecord {
+  if (group.length === 1) return group[0];
+  const base = group.find((r) => !/"\w/.test(r.name));
+  return base ?? group.slice().sort((a, b) => a.name.localeCompare(b.name))[0];
 }
 
 function buildSearchTokens(query: string): string[] {
@@ -194,7 +215,6 @@ function SingleComponentResultWorkspace({
           {record.entityClass && (
             <div className="craft-summary-section">
               <div className="craft-summary-total-modifier">
-                <span>Entity</span>
                 <span className="component-result-card__id">{record.entityClass}</span>
               </div>
             </div>
@@ -256,16 +276,108 @@ export default function ComponentResultsBrowser({
   error: string | null;
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
 }) {
-  const [search, setSearch] = useState("");
-  const [vehicleFilters, setVehicleFilters] = useState<Set<string>>(new Set());
-  const [fpsFilters, setFpsFilters] = useState<Set<string>>(new Set());
-  const [sizeFilters, setSizeFilters] = useState<Set<string>>(new Set());
-  const [gradeFilters, setGradeFilters] = useState<Set<string>>(new Set());
-  const [classFilters, setClassFilters] = useState<Set<string>>(new Set());
-  const [materialFilters, setMaterialFilters] = useState<Set<string>>(new Set());
-  const [savedOnly, setSavedOnly] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // ── Derive all filter state from URL params ──────────────────────────────────
+  // When "v" param is absent, we are in the "default state": vehicle weapons
+  // are shown as the starting view. This is NOT a real filter — no chip is
+  // added to Active Filters and hasFilters stays false. The chip appears
+  // highlighted to orient the user, but clicking any other filter or typing
+  // in search immediately moves them away from the default.
+  const DEFAULT_VEHICLE_TYPE = "weaponGun";
+  const isDefaultState = searchParams.get("v") === null &&
+    !searchParams.get("q") && !searchParams.get("f") &&
+    !searchParams.get("sz") && !searchParams.get("gr") &&
+    !searchParams.get("cl") && !searchParams.get("mt") &&
+    searchParams.get("bk") !== "1";
+
+  const search = searchParams.get("q") ?? "";
+  const vehicleFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("v");
+    if (raw === null) return new Set(); // default state: no filter applied, just visual scoping
+    if (raw === "") return new Set();
+    return new Set(raw.split(",").filter(Boolean));
+  }, [searchParams]);
+  const fpsFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("f");
+    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
+  }, [searchParams]);
+  const sizeFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("sz");
+    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
+  }, [searchParams]);
+  const gradeFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("gr");
+    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
+  }, [searchParams]);
+  const classFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("cl");
+    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
+  }, [searchParams]);
+  const materialFilters = useMemo<Set<string>>(() => {
+    const raw = searchParams.get("mt");
+    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
+  }, [searchParams]);
+  const savedOnly = searchParams.get("bk") === "1";
+  const page = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
+
+  // ── URL param setters ────────────────────────────────────────────────────────
+  const setParam = useCallback((key: string, value: string | null) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (value === null) {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+      // Reset page on filter change (not when changing page itself)
+      if (key !== "pg") next.delete("pg");
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  const setSearch = useCallback((value: string) => setParam("q", value || null), [setParam]);
+  const setPage = useCallback((value: number | ((prev: number) => number)) => {
+    const next = typeof value === "function" ? value(page) : value;
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      if (next <= 1) { p.delete("pg"); } else { p.set("pg", String(next)); }
+      return p;
+    }, { replace: true });
+  }, [page, setSearchParams]);
+
+  const setVehicleFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(vehicleFilters);
+    // Always write "v" explicitly once the user interacts, so the default
+    // state doesn't silently re-apply. Empty string = no vehicle filter.
+    setParam("v", next.size ? [...next].join(",") : "");
+  }, [vehicleFilters, setParam]);
+  const setFpsFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(fpsFilters);
+    setParam("f", next.size ? [...next].join(",") : null);
+  }, [fpsFilters, setParam]);
+  const setSizeFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(sizeFilters);
+    setParam("sz", next.size ? [...next].join(",") : null);
+  }, [sizeFilters, setParam]);
+  const setGradeFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(gradeFilters);
+    setParam("gr", next.size ? [...next].join(",") : null);
+  }, [gradeFilters, setParam]);
+  const setClassFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(classFilters);
+    setParam("cl", next.size ? [...next].join(",") : null);
+  }, [classFilters, setParam]);
+  const setMaterialFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
+    const next = updater(materialFilters);
+    setParam("mt", next.size ? [...next].join(",") : null);
+  }, [materialFilters, setParam]);
+  const setSavedOnly = useCallback((value: boolean | ((prev: boolean) => boolean)) => {
+    const next = typeof value === "function" ? value(savedOnly) : value;
+    setParam("bk", next ? "1" : null);
+  }, [savedOnly, setParam]);
+
   const [materialPickerOpen, setMaterialPickerOpen] = useState(false);
-  const [page, setPage] = useState(1);
   const [savedBlueprintIds, setSavedBlueprintIds] = useState<Set<string>>(
     () => readStoredStringSet(SAVED_BLUEPRINT_STORAGE_KEY),
   );
@@ -373,16 +485,28 @@ export default function ComponentResultsBrowser({
   const materialOptions = useMemo(() => buildMaterialOptions(records), [records]);
   const searchTokens = useMemo(() => buildSearchTokens(search), [search]);
 
+  // Size/Grade/Class are only meaningful for vehicle components.
+  // Show them when: no kind filter is set (mixed view) OR at least one vehicle filter is active.
+  // Hide them when only FPS filters are active.
+  const showVehicleFacets = fpsFilters.size === 0 || vehicleFilters.size > 0;
+
   const filteredRecords = useMemo(() => {
     return records
       .filter((record) => {
         if (savedOnly && !savedBlueprintIds.has(record.id)) return false;
-        if (fpsFilters.size && (record.kind !== "fps" || !fpsFilters.has(record.type))) return false;
-        if (vehicleFilters.size) {
-          if (record.kind === "fps") return false;
-          const type = record.type;
-          const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);
-          if (!vehicleFilters.has(type) && !utilityMatch) return false;
+        // FPS items are never shown unless an FPS filter is explicitly active.
+        if (record.kind === "fps") {
+          if (fpsFilters.size === 0 || !fpsFilters.has(record.type)) return false;
+        } else {
+          // Vehicle: apply vehicle type filter, or default-scope to weaponGun.
+          if (fpsFilters.size > 0) return false; // FPS-only filter mode hides vehicle items
+          if (vehicleFilters.size) {
+            const type = record.type;
+            const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);
+            if (!vehicleFilters.has(type) && !utilityMatch) return false;
+          } else if (isDefaultState) {
+            if (record.type !== DEFAULT_VEHICLE_TYPE) return false;
+          }
         }
         if (sizeFilters.size && !sizeFilters.has(record.size !== null ? String(record.size) : "")) return false;
         if (gradeFilters.size && !gradeFilters.has(record.grade ?? "")) return false;
@@ -402,14 +526,54 @@ export default function ComponentResultsBrowser({
       });
   }, [classFilters, fpsFilters, gradeFilters, materialFilters, records, savedBlueprintIds, savedOnly, searchTokens, sizeFilters, vehicleFilters]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredRecords.length / DEFAULT_RESULTS_PER_PAGE));
+  // ── Variant grouping ─────────────────────────────────────────────────────────
+  // Collapse FPS items that share a base name (differ only by quoted nickname)
+  // into one representative card with a variant count badge.
+  const { groupedRecords, variantCountMap } = useMemo(() => {
+    const groups = new Map<string, ComponentCardIndexRecord[]>();
+    const ungrouped: ComponentCardIndexRecord[] = [];
+
+    for (const record of filteredRecords) {
+      const key = getVariantGroupKey(record);
+      if (key) {
+        const existing = groups.get(key);
+        if (existing) {
+          existing.push(record);
+        } else {
+          groups.set(key, [record]);
+        }
+      } else {
+        ungrouped.push(record);
+      }
+    }
+
+    const grouped: ComponentCardIndexRecord[] = [...ungrouped];
+    const counts = new Map<string, number>();
+
+    for (const [, members] of groups) {
+      const rep = pickGroupRepresentative(members);
+      grouped.push(rep);
+      if (members.length > 1) counts.set(rep.id, members.length);
+    }
+
+    // Re-sort after merging (groups and ungrouped were individually sorted).
+    grouped.sort((a, b) => {
+      const type = a.sort.type.localeCompare(b.sort.type);
+      return type || a.sort.name.localeCompare(b.sort.name);
+    });
+
+    return { groupedRecords: grouped, variantCountMap: counts };
+  }, [filteredRecords]);
+
+  const totalPages = Math.max(1, Math.ceil(groupedRecords.length / DEFAULT_RESULTS_PER_PAGE));
   const visiblePage = Math.min(page, totalPages);
   const pageStart = (visiblePage - 1) * DEFAULT_RESULTS_PER_PAGE;
   const pageRecords = useMemo(
-    () => filteredRecords.slice(pageStart, pageStart + DEFAULT_RESULTS_PER_PAGE),
-    [filteredRecords, pageStart],
+    () => groupedRecords.slice(pageStart, pageStart + DEFAULT_RESULTS_PER_PAGE),
+    [groupedRecords, pageStart],
   );
-  const hasFilters = Boolean(search || vehicleFilters.size || fpsFilters.size || sizeFilters.size || gradeFilters.size || classFilters.size || materialFilters.size || savedOnly);
+  // In default state, vehicleFilters contains the default type but is NOT a user-applied filter.
+  const hasFilters = !isDefaultState && Boolean(search || vehicleFilters.size || fpsFilters.size || sizeFilters.size || gradeFilters.size || classFilters.size || materialFilters.size || savedOnly);
 
   const activeMaterialOptions = useMemo(
     () => materialOptions.filter((opt) => materialFilters.has(opt.value)),
@@ -422,9 +586,12 @@ export default function ComponentResultsBrowser({
       const opt = fpsOptions.find((o) => o.value === v);
       if (opt) tokens.push({ value: v, label: opt.label, kind: "fps" });
     }
-    for (const v of vehicleFilters) {
-      const opt = vehicleOptions.find((o) => o.value === v);
-      if (opt) tokens.push({ value: v, label: opt.label, kind: "vehicle" });
+    // Skip vehicle tokens when in default state — the default is not a user filter.
+    if (!isDefaultState) {
+      for (const v of vehicleFilters) {
+        const opt = vehicleOptions.find((o) => o.value === v);
+        if (opt) tokens.push({ value: v, label: opt.label, kind: "vehicle" });
+      }
     }
     for (const v of sizeFilters) {
       const opt = sizeOptions.find((o) => o.value === v);
@@ -443,22 +610,10 @@ export default function ComponentResultsBrowser({
     }
     if (savedOnly) tokens.push({ value: "saved", label: "Blueprint Bookmarks", kind: "saved" });
     return tokens;
-  }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [classFilters, fpsFilters, gradeFilters, materialFilters, savedOnly, search, sizeFilters, vehicleFilters]);
+  }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, isDefaultState, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
 
   function clearFilters() {
-    setSearch("");
-    setVehicleFilters(new Set());
-    setFpsFilters(new Set());
-    setSizeFilters(new Set());
-    setGradeFilters(new Set());
-    setClassFilters(new Set());
-    setMaterialFilters(new Set());
-    setSavedOnly(false);
-    setPage(1);
+    setSearchParams({}, { replace: true });
   }
 
   function removeActiveFilter(token: ActiveFilterToken) {
@@ -513,137 +668,138 @@ export default function ComponentResultsBrowser({
             Blueprint Bookmarks
           </button>
           <span className="component-browser-count">
-            <strong>{filteredRecords.length.toLocaleString()}</strong> components found
+            <strong>{groupedRecords.length.toLocaleString()}</strong> components found
           </span>
         </div>
 
-        {/* ── Row 2: FPS | Vehicle Components ── */}
+        {/* ── Row 2: Category groups — Vehicle | FPS ── */}
         <div className="crb-row crb-row--categories">
-          <span className="crb-section-label crb-section-label--vehicle">Vehicle Components</span>
-          <span className="crb-section-divider" aria-hidden="true" />
-          <div className="crb-chip-group" role="group" aria-label="Vehicle component filters">
-            {vehicleOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={`craft-frl-chip${vehicleFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
-                onClick={() => setVehicleFilters((prev) => toggleSetValue(prev, option.value))}
-              >
-                {TYPE_ICONS[option.value]}
-                {option.label}
-              </button>
-            ))}
+          <div className="crb-category-group crb-category-group--vehicle">
+            <span className="crb-section-label crb-section-label--vehicle">Vehicle</span>
+            <div className="crb-chip-group" role="group" aria-label="Vehicle component filters">
+              {vehicleOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`craft-frl-chip${vehicleFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => setVehicleFilters((prev) => toggleSetValue(prev, option.value))}
+                >
+                  {TYPE_ICONS[option.value]}
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <span className="crb-section-divider" aria-hidden="true" />
-          <span className="crb-section-label">FPS</span>
-          <span className="crb-section-divider" aria-hidden="true" />
-          <div className="crb-chip-group" role="group" aria-label="FPS filters">
-            {fpsOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className={`craft-frl-chip${fpsFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
-                onClick={() => setFpsFilters((prev) => toggleSetValue(prev, option.value))}
-              >
-                {TYPE_ICONS[option.value]}
-                {option.label}
-              </button>
-            ))}
+
+          <span className="crb-group-divider" aria-hidden="true" />
+
+          <div className="crb-category-group crb-category-group--fps">
+            <span className="crb-section-label crb-section-label--fps">FPS</span>
+            <div className="crb-chip-group" role="group" aria-label="FPS filters">
+              {fpsOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`craft-frl-chip${fpsFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                  onClick={() => setFpsFilters((prev) => toggleSetValue(prev, option.value))}
+                >
+                  {TYPE_ICONS[option.value]}
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* ── Row 3: Materials ── */}
-        <div className="crb-row crb-row--categories">
-          {sizeOptions.length > 0 && (
-            <>
-              <span className="crb-section-label">Size</span>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <div className="crb-chip-group" role="group" aria-label="Size filters">
-                {sizeOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    className={`craft-frl-chip${sizeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => setSizeFilters((prev) => toggleSetValue(prev, option.value))}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-          {gradeOptions.length > 0 && (
-            <>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <span className="crb-section-label">Grade</span>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <div className="crb-chip-group" role="group" aria-label="Grade filters">
-                {gradeOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    className={`craft-frl-chip${gradeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => setGradeFilters((prev) => toggleSetValue(prev, option.value))}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-          {classOptions.length > 0 && (
-            <>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <span className="crb-section-label">Class</span>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <div className="crb-chip-group" role="group" aria-label="Class filters">
-                {classOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    className={`craft-frl-chip${classFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => setClassFilters((prev) => toggleSetValue(prev, option.value))}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="crb-row crb-row--materials">
-          <span className="crb-section-label">Materials</span>
-          <span className="crb-section-divider" aria-hidden="true" />
-
-          {/* Choose Materials dropdown */}
-          <div className="crb-material-picker" ref={materialPickerRef}>
-            <button
-              type="button"
-              className={`crb-material-trigger${materialPickerOpen ? " crb-material-trigger--open" : ""}`}
-              onClick={() => setMaterialPickerOpen((v) => !v)}
-              aria-expanded={materialPickerOpen}
-            >
-              Choose Materials
-              <span className="crb-material-chevron" aria-hidden="true">▾</span>
-            </button>
-            {materialPickerOpen && (
-              <div className="crb-material-dropdown" role="listbox" aria-label="Select materials">
-                {materialOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    role="option"
-                    aria-selected={materialFilters.has(option.value)}
-                    className={`crb-material-option${materialFilters.has(option.value) ? " crb-material-option--active" : ""}`}
-                    onClick={() => setMaterialFilters((prev) => toggleSetValue(prev, option.value))}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
+        {/* ── Row 3: Contextual facets (vehicle only) + Materials always ── */}
+        <div className="crb-row crb-row--facets">
+            {showVehicleFacets && sizeOptions.length > 0 && (
+              <>
+                <span className="crb-section-label">Size</span>
+                <span className="crb-section-divider" aria-hidden="true" />
+                <div className="crb-chip-group" role="group" aria-label="Size filters">
+                  {sizeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`craft-frl-chip craft-frl-chip--sm${sizeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => setSizeFilters((prev) => toggleSetValue(prev, option.value))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                <span className="crb-section-divider" aria-hidden="true" />
+              </>
             )}
-          </div>
+            {showVehicleFacets && gradeOptions.length > 0 && (
+              <>
+                <span className="crb-section-label">Grade</span>
+                <span className="crb-section-divider" aria-hidden="true" />
+                <div className="crb-chip-group" role="group" aria-label="Grade filters">
+                  {gradeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`craft-frl-chip craft-frl-chip--sm${gradeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => setGradeFilters((prev) => toggleSetValue(prev, option.value))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                <span className="crb-section-divider" aria-hidden="true" />
+              </>
+            )}
+            {showVehicleFacets && classOptions.length > 0 && (
+              <>
+                <span className="crb-section-label">Class</span>
+                <span className="crb-section-divider" aria-hidden="true" />
+                <div className="crb-chip-group" role="group" aria-label="Class filters">
+                  {classOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`craft-frl-chip craft-frl-chip--sm${classFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                      onClick={() => setClassFilters((prev) => toggleSetValue(prev, option.value))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+                {(sizeOptions.length > 0 || gradeOptions.length > 0) && <span className="crb-section-divider" aria-hidden="true" />}
+              </>
+            )}
+
+            <span className="crb-section-label crb-section-label--muted">Materials</span>
+            <span className="crb-section-divider" aria-hidden="true" />
+            <div className="crb-material-picker" ref={materialPickerRef}>
+              <button
+                type="button"
+                className={`crb-material-trigger${materialPickerOpen ? " crb-material-trigger--open" : ""}`}
+                onClick={() => setMaterialPickerOpen((v) => !v)}
+                aria-expanded={materialPickerOpen}
+              >
+                {materialFilters.size > 0 ? `${materialFilters.size} selected` : "Choose Materials"}
+                <span className="crb-material-chevron" aria-hidden="true">▾</span>
+              </button>
+              {materialPickerOpen && (
+                <div className="crb-material-dropdown" role="listbox" aria-label="Select materials">
+                  {materialOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="option"
+                      aria-selected={materialFilters.has(option.value)}
+                      className={`crb-material-option${materialFilters.has(option.value) ? " crb-material-option--active" : ""}`}
+                      onClick={() => setMaterialFilters((prev) => toggleSetValue(prev, option.value))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
         </div>
 
         {/* ── Row 4: Active Filters (only when filters are set) ── */}
@@ -671,13 +827,13 @@ export default function ComponentResultsBrowser({
         )}
       </div>
 
-      {filteredRecords.length === 0 ? (
+      {groupedRecords.length === 0 ? (
         <ComponentBrowserState title="No Results" body="No craftable components match the current browser filters." />
-      ) : filteredRecords.length === 1 ? (
+      ) : groupedRecords.length === 1 ? (
         <SingleComponentResultWorkspace
-          record={filteredRecords[0]}
-          queued={isRecipeQueued(filteredRecords[0])}
-          saved={savedBlueprintIds.has(filteredRecords[0].id)}
+          record={groupedRecords[0]}
+          queued={isRecipeQueued(groupedRecords[0])}
+          saved={savedBlueprintIds.has(groupedRecords[0].id)}
         />
       ) : (
         <>
@@ -688,13 +844,14 @@ export default function ComponentResultsBrowser({
                 record={record}
                 queued={isRecipeQueued(record)}
                 saved={savedBlueprintIds.has(record.id)}
+                variantCount={variantCountMap.get(record.id)}
               />
             ))}
           </section>
 
           <footer className="component-browser-pager" aria-label="Component results pages">
             <span className="component-browser-page-readout">
-              Showing {pageStart + 1}-{Math.min(pageStart + pageRecords.length, filteredRecords.length)} of {filteredRecords.length} results
+              Showing {pageStart + 1}-{Math.min(pageStart + pageRecords.length, groupedRecords.length)} of {groupedRecords.length} results
             </span>
             <div className="component-browser-page-actions">
               <button
@@ -718,6 +875,7 @@ export default function ComponentResultsBrowser({
           </footer>
         </>
       )}
+      <CompareTray />
     </div>
   );
 }

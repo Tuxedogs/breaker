@@ -6,7 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { getComponentDisplayName } from "../utils/componentDisplayNames";
@@ -37,6 +37,7 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { buildComponentCardSchema, buildComponentCardSchemaFromIndex, formatCraftTime, type ComponentCardMetric } from "../utils/componentCardSchema";
 import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
+import { useCompareStore } from "@/stores/compareStore";
 
 
 const NO_VALUE = "__none__";
@@ -2882,6 +2883,9 @@ function RecipeDrawer({
     loading: quantizationLoading,
     getBandsForMaterial,
   } = useQualityQuantization();
+  const location = useLocation();
+  const backTo = (location.state as { from?: string } | null)?.from ?? "/industry/crafting";
+  const { slots, setSlot } = useCompareStore();
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
     ? initialRecipeId
@@ -2983,7 +2987,7 @@ function RecipeDrawer({
   return (
     <div className="craft-detail-stage craft-detail-shell">
       <header className="craft-detail-header">
-        <Link className="craft-summary-queue-link craft-detail-back-link" to="/industry/crafting">
+        <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
           Back to Results
         </Link>
         <div className="craft-detail-title-block">
@@ -2991,6 +2995,22 @@ function RecipeDrawer({
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
         </div>
         <div className="craft-summary-action-row craft-detail-actions">
+          {selectedComponentCard && (() => {
+            const isInCompare = slots[0]?.id === selectedComponentCard.id || slots[1]?.id === selectedComponentCard.id;
+            return (
+              <button
+                type="button"
+                className={`cmp-card-btn${isInCompare ? " cmp-card-btn--active" : ""}`}
+                style={{ alignSelf: "center" }}
+                onClick={() => {
+                  const emptySlot = slots[0] === null ? 0 : slots[1] === null ? 1 : 1;
+                  setSlot(emptySlot, selectedComponentCard);
+                }}
+              >
+                {isInCompare ? "✓ In Compare" : "+ Compare"}
+              </button>
+            );
+          })()}
           <button
             type="button"
             className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
