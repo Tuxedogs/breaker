@@ -132,7 +132,7 @@ function normalizeVehicleTypeLabel(value: string): string {
 }
 
 function buildMineableResourceList(recipes: ComponentRecipe[]) {
-  const byName = new Map<string, { id: string; label: string }>();
+  const byName = new Map<string, { id: string; label: string; miningType?: string }>();
 
   for (const recipe of recipes) {
     for (const material of recipe.materials ?? []) {
@@ -141,7 +141,9 @@ function buildMineableResourceList(recipes: ComponentRecipe[]) {
       const id = material.cost_id || label;
       const key = label.toLowerCase().replace(/[^a-z0-9]+/g, "");
       if (!key || byName.has(key)) continue;
-      byName.set(key, { id, label });
+      // cost_type "item" = FPS/hand-gatherable gems; "resource" = refined ores (ship/vehicle)
+      const miningType = material.cost_type === "item" ? "Hand" : undefined;
+      byName.set(key, { id, label, miningType });
     }
   }
 
