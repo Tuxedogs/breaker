@@ -295,6 +295,13 @@ export function formatStaticQualityChanceFromChances(chances: Record<string, num
   return typeof chance === "number" && Number.isFinite(chance) ? `${Math.round(chance * 100)}%` : "Unknown";
 }
 
+export function formatStaticQualityChanceDecimalBelow1(chances: Record<string, number> | null | undefined, threshold: string): string {
+  const chance = chances?.[threshold];
+  if (typeof chance !== "number" || !Number.isFinite(chance)) return "Unknown";
+  const pct = chance * 100;
+  return pct < 1 ? `${Number(pct.toFixed(2)).toString()}%` : `${Math.round(pct)}%`;
+}
+
 export function formatStaticEncounterSignal(row: StaticLocationMaterialRow): string {
   const value = Number.isFinite(row.materialEncounterScore) ? row.materialEncounterScore : Number.isFinite(row.encounterScore) ? row.encounterScore : row.sourceProbabilitySum;
   if (typeof value !== "number" || !Number.isFinite(value)) return "Unknown";
