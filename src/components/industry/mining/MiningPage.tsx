@@ -7,6 +7,7 @@ import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import { loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
+import "../crafting/recipe-browser.css";
 import { loadManifest, type PlanetAsset } from "../../../features/mining/planetAssets";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getQueueLedgerModel } from "../../../lib/logistics/queueLedger";
@@ -35,7 +36,7 @@ import {
 import { isIndexableMiningResource } from "./miningScoring";
 import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./miningFormatters";
 import { useMiningLocations } from "./useMiningLocations";
-import { MiningFilterBar, MiningDrawer } from "./MiningFilterBar";
+import { MiningFilterBar } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
 import { LocationDetail, CoveragePlanSummaryPanel } from "./LocationDetail";
 
@@ -74,10 +75,8 @@ export default function MiningModule() {
   const [selectedMiningTypes] = useState<Set<string>>(() => new Set(initialSidebarState.miningTypes));
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
+  const [locationSearch, setLocationSearch] = useState("");
   const [buildQueueSelectionActive, setBuildQueueSelectionActive] = useState(initialSidebarState.buildQueueActive);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerGroup, setDrawerGroup] = useState<"system" | "ship" | "vehicle" | "hand">("ship");
-  const [filterSearch, setFilterSearch] = useState("");
 
   // Persist settings
   useEffect(() => { try { localStorage.setItem(MINING_RANKING_MODE_STORAGE_KEY, rankingMode); } catch { /* ignore */ } }, [rankingMode]);
@@ -239,9 +238,17 @@ export default function MiningModule() {
     planner,
   });
 
-  const listLocations = showAllLocations ? displayRankedFilteredLocations : displayRankedFilteredLocations.slice(0, 12);
+  const searchFilteredLocations = useMemo(() => {
+    const q = locationSearch.trim().toLowerCase();
+    if (!q) return displayRankedFilteredLocations;
+    return displayRankedFilteredLocations.filter(
+      (e) => e.locationName.toLowerCase().includes(q) || e.systemName.toLowerCase().includes(q)
+    );
+  }, [displayRankedFilteredLocations, locationSearch]);
 
-  useEffect(() => { setSelectedLocationKey(null); }, [selectedMaterials, selectedSystems, selectedMiningTypes]);
+  const listLocations = showAllLocations ? searchFilteredLocations : searchFilteredLocations.slice(0, 12);
+
+  useEffect(() => { setSelectedLocationKey(null); setLocationSearch(""); }, [selectedMaterials, selectedSystems, selectedMiningTypes]);
 
   // Filter handlers
   function toggleMaterial(id: string) {
@@ -267,60 +274,39 @@ export default function MiningModule() {
     <div className="mine-page mine-page--v2">
       {hasRecommendationData && (
         <>
-          <MiningFilterBar
-            selectedSystems={selectedSystems}
-            selectedMaterials={selectedMaterials}
-            buildQueueSelectionActive={buildQueueSelectionActive}
-            buildQueueMaterials={buildQueueMaterials}
-            showOnlyStarred={planner.filters.showOnlyStarred}
-            drawerOpen={drawerOpen}
-            drawerGroup={drawerGroup}
-            filterSearch={filterSearch}
-            visibleResourceGroups={visibleResourceGroups}
-            hasActiveFilters={hasActiveFilters}
-            onToggleSystem={toggleSystem}
-            onClearAllFilters={clearAllFilters}
-            onSelectBuildQueueMaterials={selectBuildQueueMaterials}
-            onToggleStarred={() => planner.toggleShowOnlyStarred()}
-            onOpenDrawer={(group) => { setDrawerGroup(group); setDrawerOpen(true); setFilterSearch(""); }}
-            onCloseDrawer={() => setDrawerOpen(false)}
-            onSetFilterSearch={setFilterSearch}
-          />
+          <div className="mine-body">
+            <aside className="mine-filter-aside">
+              <MiningFilterBar
+                selectedSystems={selectedSystems}
+                selectedMaterials={selectedMaterials}
+                buildQueueSelectionActive={buildQueueSelectionActive}
+                buildQueueMaterials={buildQueueMaterials}
+                showOnlyStarred={planner.filters.showOnlyStarred}
+                visibleResourceGroups={visibleResourceGroups}
+                hasActiveFilters={hasActiveFilters}
+                searchQuery={locationSearch}
+                onToggleSystem={toggleSystem}
+                onClearAllFilters={clearAllFilters}
+                onSelectBuildQueueMaterials={selectBuildQueueMaterials}
+                onToggleStarred={() => planner.toggleShowOnlyStarred()}
+                onToggleMaterial={toggleMaterial}
+                onSearchChange={setLocationSearch}
+              />
+            </aside>
 
-          {drawerOpen && (
-            <MiningDrawer
-              drawerGroup={drawerGroup}
-              filterSearch={filterSearch}
-              selectedMaterials={selectedMaterials}
-              buildQueueSelectionActive={buildQueueSelectionActive}
-              showOnlyStarred={planner.filters.showOnlyStarred}
-              queueScope={queueScope}
-              queueScopeCounts={queueScopeCounts}
-              shortfallLineCount={queueLedger.refinedShortfallLines.length}
-              visibleResourceGroups={visibleResourceGroups}
-              displayRankedFilteredLocationsCount={displayRankedFilteredLocations.length}
-              hasActiveFilters={hasActiveFilters}
-              onSetDrawerGroup={(g) => { setDrawerGroup(g); setFilterSearch(""); }}
-              onSetFilterSearch={setFilterSearch}
-              onSetQueueScope={setQueueScope}
-              onToggleMaterial={toggleMaterial}
-              onSetSelectedMaterials={setSelectedMaterials}
-              onSetBuildQueueSelectionActive={setBuildQueueSelectionActive}
-            />
-          )}
+            <div className="mine-main">
+              <CoveragePlanSummaryPanel plan={coveragePlan} unfilteredPlan={unfilteredCoveragePlan} />
 
-          <CoveragePlanSummaryPanel plan={coveragePlan} unfilteredPlan={unfilteredCoveragePlan} />
-
-          {displayRankedFilteredLocations.length === 0 ? (
-            <div className="mine-empty-state">
-              <p className="mine-empty-text">{planner.filters.showOnlyStarred ? "No starred locations. Click ☆ on a location to star it." : "No locations match the current filters."}</p>
-            </div>
-          ) : (
-            <div className="mconsole-layout">
+              {searchFilteredLocations.length === 0 ? (
+                <div className="mine-empty-state">
+                  <p className="mine-empty-text">{locationSearch ? `No locations match "${locationSearch}".` : planner.filters.showOnlyStarred ? "No starred locations. Click ☆ on a location to star it." : "No locations match the current filters."}</p>
+                </div>
+              ) : (
+                <div className="mconsole-layout">
               <div className="mlist-panel">
                 <div className="mlist-header">
                   <span className="mlist-header-label">RECOMMENDED LOCATIONS</span>
-                  <span className="mlist-header-count">{displayRankedFilteredLocations.length}</span>
+                  <span className="mlist-header-count">{searchFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
                   {!buildQueueSelectionActive && (
@@ -376,9 +362,9 @@ export default function MiningModule() {
                       </Fragment>
                     );
                   })}
-                  {displayRankedFilteredLocations.length > 12 && (
+                  {searchFilteredLocations.length > 12 && (
                     <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
-                      {showAllLocations ? "Show top 12 ↑" : `View all ${displayRankedFilteredLocations.length} locations ↓`}
+                      {showAllLocations ? "Show top 12 ↑" : `View all ${searchFilteredLocations.length} locations ↓`}
                     </button>
                   )}
                 </div>
@@ -392,7 +378,9 @@ export default function MiningModule() {
                 )}
               </div>
             </div>
-          )}
+              )}
+            </div>
+          </div>
         </>
       )}
 
