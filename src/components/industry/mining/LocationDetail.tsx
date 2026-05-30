@@ -282,13 +282,14 @@ export function LocationDetail({
             <colgroup>
               <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
               <col className="mining-resource-col--encounter" /><col className="mining-resource-col--quality" />
-              <col className="mining-resource-col--yield" />
+              <col className="mining-resource-col--quality" /><col className="mining-resource-col--yield" />
             </colgroup>
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
                 <th><span className="mdet-th-wrap">Encounter Tier<InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High." /></span></th>
                 <th><span className="mdet-th-wrap">{qualityHeader}<InfoTip text={qualityTooltip} /></span></th>
+                <th>900+ Quality</th>
                 <th><span className="mdet-th-wrap">Composition / Yield<InfoTip text="Average material composition inside an encountered source. This is not encounter chance." /></span></th>
               </tr>
             </thead>
@@ -299,12 +300,13 @@ export function LocationDetail({
                   <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
                   <td><span className={`mining-source-badge mining-source-badge--${row.status}`}>{row.densityLabel}{row.sourceWeight !== undefined && <span className="mdet-source-bar-wrap"><span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} /></span>}</span></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
+                  <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
                 </tr>
               ))}
               {missingDemandRows.length > 0 && (
                 <tr className="mining-resource-row mining-resource-row--missing-toggle">
-                  <td colSpan={5}>
+                  <td colSpan={6}>
                     <button type="button" className="mining-missing-material-toggle" onClick={() => setShowMissingDemandRows((o) => !o)} aria-expanded={showMissingDemandRows}>
                       <span>{showMissingDemandRows ? "Hide" : "Show"} Missing Material</span>
                       <strong>{missingDemandRows.length}</strong>
@@ -336,8 +338,17 @@ export function LocationDetail({
             <colgroup>
               <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
               <col className="mining-resource-col--encounter" /><col className="mining-resource-col--quality" />
-              <col className="mining-resource-col--yield" />
+              <col className="mining-resource-col--quality" /><col className="mining-resource-col--yield" />
             </colgroup>
+            <thead>
+              <tr>
+                <th>Material</th><th>Method</th>
+                <th><span className="mdet-th-wrap">Encounter Tier<InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High." /></span></th>
+                <th>800+ Quality</th>
+                <th>900+ Quality</th>
+                <th><span className="mdet-th-wrap">Composition / Yield<InfoTip text="Average material composition inside an encountered source. This is not encounter chance." /></span></th>
+              </tr>
+            </thead>
             <tbody>
               {otherLocationMaterialRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
@@ -345,6 +356,7 @@ export function LocationDetail({
                   <td className="mdet-mat-demand">{row.miningType || "Unknown"}</td>
                   <td title={row.sourceTitle}><span className={`mining-source-badge mining-source-badge--${row.status}`}>{row.densityLabel}{row.sourceWeight !== undefined && <span className="mdet-source-bar-wrap"><span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} /></span>}</span></td>
                   <td className="mdet-mat-score">{row.qualityLabel}</td>
+                  <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
                 </tr>
               ))}

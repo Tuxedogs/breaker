@@ -55,6 +55,7 @@ export type DemandRow = {
   miningType: string;
   coverage: string;
   targetQualityChanceLabel: string;
+  quality900Label: string;
   densityLabel: string;
   compositionLabel: string;
   sourceStrength: string;
@@ -67,6 +68,7 @@ export type ResourceRow = {
   key: string;
   miningType: string;
   qualityLabel: string;
+  quality900Label: string;
   densityLabel: string;
   compositionLabel: string;
   sourceStrength: string;

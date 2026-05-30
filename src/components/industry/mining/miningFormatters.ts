@@ -3,6 +3,7 @@ import {
   formatStaticEncounterSignal,
   formatStaticMethodFit,
   formatStaticQualityChanceFromChances,
+  formatStaticQualityChanceDecimalBelow1,
   getStaticDensityScore,
   getStaticMaterialQualityRow,
   getStaticMaterialKey,
@@ -334,6 +335,9 @@ export function buildDemandRows(
       targetQualityChanceLabel: covered && staticRow
         ? formatThresholdChance(pickWeightedQualityChances(qualityRow, staticRow), targetThreshold)
         : "Unknown",
+      quality900Label: covered && staticRow
+        ? formatStaticQualityChanceDecimalBelow1(pickWeightedQualityChances(qualityRow, staticRow), "900")
+        : "Unknown",
       densityLabel: covered ? formatEncounterTier(sw) : "Missing",
       compositionLabel: covered && staticRow ? formatCompositionYield(staticRow.compositionAveragePercentage) : "Unknown",
       sourceStrength: signal,
@@ -376,11 +380,13 @@ export function buildResourceRows(
         : sourceStrength === "MODERATE" ? "moderate"
         : sourceStrength === "LOW" ? "low"
         : "none";
+      const weightedChances = pickWeightedQualityChances(qualityRow, row);
       return {
         name: row.materialName || canonical.label || "Unknown Material",
         key: key || `${row.systemKey}:${row.locationKey}:${row.materialId || row.materialName}`,
         miningType: displayMiningMethodLabel(row.resolvedMineableClass),
-        qualityLabel: formatStaticQualityChanceFromChances(pickWeightedQualityChances(qualityRow, row)),
+        qualityLabel: formatStaticQualityChanceFromChances(weightedChances),
+        quality900Label: formatStaticQualityChanceDecimalBelow1(weightedChances, "900"),
         densityLabel: formatEncounterTier(sourceWeight),
         compositionLabel: formatCompositionYield(row.compositionAveragePercentage),
         sourceStrength: encounterSignalFromWeight(sourceWeight),
@@ -404,6 +410,7 @@ export function buildResourceRows(
       key,
       miningType: displayMiningMethodLabel((r as { miningType?: string }).miningType ?? ""),
       qualityLabel: qualityDisplay.kind === "ignored" ? "N/A" : qualityDisplay.kind === "chance" ? qualityDisplay.label : "Unknown",
+      quality900Label: "Unknown",
       densityLabel: sw === undefined ? "Not indexed" : formatEncounterTier(sw),
       compositionLabel: "Unknown",
       sourceStrength: st === "strong" ? "STRONG" : st === "moderate" ? "MODERATE" : st === "low" ? "LOW" : "-",
