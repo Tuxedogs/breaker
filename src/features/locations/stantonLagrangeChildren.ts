@@ -39,6 +39,8 @@ type GeneratedLagrangeChildren = {
 
 export type ResolvedStantonLagrangePointChildren = {
   code: string;
+  groupLetter: string;
+  displayName: string;
   pointKey: string;
   bodyName: string;
   lagrange: string;
@@ -74,7 +76,7 @@ function normalizeLocationCode(value: string): string {
 }
 
 function uniqueSortedCodes(codes: string[]): string[] {
-  return [...new Set(codes.map(normalizeLocationCode).filter(isStantonLocationCode))].sort();
+  return [...new Set(codes.map(normalizeLocationCode).filter(isStantonLocationCode))];
 }
 
 function isStantonLocationCode(value: string): boolean {
@@ -109,6 +111,13 @@ function locationCodesForRecommenderLabel(label: string): string[] {
   );
 
   return group ? uniqueSortedCodes(group.locations) : [];
+}
+
+function groupForLocationCode(code: string): GeneratedLagrangeGroup | null {
+  const normalizedCode = normalizeLocationCode(code);
+  return generatedGroups?.groups.find((group) =>
+    group.locations.some((location) => normalizeLocationCode(location) === normalizedCode)
+  ) ?? null;
 }
 
 export function configureStantonLagrangeChildrenData(
@@ -161,6 +170,8 @@ export function getStantonPointChildrenByCode(code: string): ResolvedStantonLagr
 
   return {
     code: normalizedCode,
+    groupLetter: groupForLocationCode(normalizedCode)?.letter ?? "",
+    displayName: normalizedCode,
     pointKey,
     bodyName: bodyNameForCode(normalizedCode),
     lagrange: point.lagrange,
@@ -172,8 +183,9 @@ export function resolveRecommenderStantonLagrangeChildren(
   recommenderLabel: string,
   matchedLocationCodes: string[] = [],
 ): ResolvedStantonLagrangeChildren {
-  const codes = matchedLocationCodes.length > 0
-    ? uniqueSortedCodes(matchedLocationCodes)
+  const matchedCodes = uniqueSortedCodes(matchedLocationCodes);
+  const codes = matchedCodes.length > 0
+    ? matchedCodes
     : locationCodesForRecommenderLabel(recommenderLabel);
 
   return {
@@ -181,7 +193,13 @@ export function resolveRecommenderStantonLagrangeChildren(
     matchedLocationCodes: codes,
     points: codes.flatMap((code) => {
       const point = getStantonPointChildrenByCode(code);
-      return point ? [point] : [];
+      if (!point) return [];
+      const group = groupForLocationCode(code);
+      return [{
+        ...point,
+        groupLetter: group?.letter ?? point.groupLetter,
+        displayName: group ? `Lagrange ${group.letter} ${point.code}` : point.code,
+      }];
     }),
   };
 }

@@ -1745,7 +1745,12 @@ function computeTotalModifiers(
           contributions: [{ materialName: getMaterialName(mat), value: m.value }],
         });
       } else {
-        existing.totalValue += m.value;
+        if (m.modifierMode === "integerAdditive") {
+          existing.totalValue += m.value;
+        } else {
+          // Compound multiplicatively: (1 + a/100) * (1 + b/100) - 1, expressed as %
+          existing.totalValue = ((1 + existing.totalValue / 100) * (1 + m.value / 100) - 1) * 100;
+        }
         existing.contributions.push({ materialName: getMaterialName(mat), value: m.value });
       }
     }
@@ -1877,12 +1882,28 @@ type DetailStatRow = ComponentCardMetric & {
 type ModifierStatBinding = {
   label: string;
   statKeys: string[];
+  statGroups?: string[];
 };
 
 const MODIFIER_STAT_BINDINGS: Record<string, ModifierStatBinding> = {
-  GPP_Weapon_Damage: { label: "Alpha Damage", statKeys: ["alphaDamageTotal"] },
-  GPP_Weapon_FireRate: { label: "Fire Rate", statKeys: ["fireRateRpm"] },
-  GPP_Weapon_Spread: { label: "Spread", statKeys: ["adsSpread", "hipFireSpreadMin"] },
+  GPP_Weapon_Damage: { label: "Alpha Damage", statKeys: ["alphaDamageTotal"], statGroups: ["fpsWeapon", "shipWeapon"] },
+  GPP_Weapon_FireRate: { label: "Fire Rate", statKeys: ["fireRateRpm"], statGroups: ["fpsWeapon", "shipWeapon"] },
+  GPP_Weapon_Spread: { label: "Spread", statKeys: ["adsSpread", "hipFireSpreadMin"], statGroups: ["fpsWeapon"] },
+  GPP_Weapon_HullScraping_Efficiency: { label: "Hull Scraping Efficiency", statKeys: [], statGroups: [] },
+  GPP_Weapon_HullScraping_Radius: { label: "Hull Scraping Radius", statKeys: [], statGroups: [] },
+  GPP_Weapon_HullScraping_Speed: { label: "Hull Scraping Speed", statKeys: [], statGroups: [] },
+  GPP_Weapon_Tractor_Force: { label: "Tractor Force", statKeys: [], statGroups: [] },
+  GPP_Weapon_Tractor_FullStrengthDist: { label: "Tractor Full Strength Dist", statKeys: [], statGroups: [] },
+  GPP_Weapon_Tractor_MaxDist: { label: "Tractor Max Distance", statKeys: [], statGroups: [] },
+  GPP_Weapon_Tractor_MaxVolume: { label: "Tractor Max Volume", statKeys: [], statGroups: [] },
+  GPP_Shield_MaxHealth: { label: "Shield HP", statKeys: ["maxShieldHealth"], statGroups: ["shield"] },
+  GPP_Health_MaxHealth: { label: "Health", statKeys: ["health"], statGroups: ["generic"] },
+  GPP_ItemResource_PowerGeneration: { label: "Power Generation", statKeys: ["powerGeneration"], statGroups: ["powerPlant"] },
+  GPP_ItemResource_CoolantGeneration: { label: "Coolant Generation", statKeys: ["coolantGeneration"], statGroups: ["cooler"] },
+  GPP_Quantum_FuelRequirement: { label: "Quantum Fuel Req.", statKeys: ["quantumFuelRequirement"], statGroups: ["quantumDrive"] },
+  GPP_Quantum_Speed: { label: "Quantum Speed", statKeys: ["normalJumpSpeed"], statGroups: ["quantumDrive"] },
+  GPP_Radar_MaxAimAssistDistance: { label: "Aim Assist Max Range", statKeys: ["aimAssistRangeMax"], statGroups: ["radar"] },
+  GPP_Radar_MinAimAssistDistance: { label: "Aim Assist Min Range", statKeys: ["aimAssistRangeMin"], statGroups: ["radar"] },
 };
 
 function normalizeDetailStatLabel(label: string): string {
@@ -1903,11 +1924,8 @@ function getIndexedModifierBaseValue(
   const binding = getModifierStatBinding(property);
   if (binding.statKeys.length === 0) return undefined;
 
-  const statGroups = [
-    getIndexStatsObject(record, "fpsWeapon"),
-    getIndexStatsObject(record, "fpsAmmo"),
-    getIndexStatsObject(record, "shipWeapon"),
-  ];
+  const groups = binding.statGroups ?? ["fpsWeapon", "fpsAmmo", "shipWeapon"];
+  const statGroups = groups.map((g) => getIndexStatsObject(record, g));
 
   for (const stats of statGroups) {
     if (!stats) continue;
@@ -1999,13 +2017,14 @@ function buildModifiedDetailStatRows(
     if (existingIndex !== undefined && baseValue !== undefined) {
       rows[existingIndex] = {
         ...rows[existingIndex],
+        value: display.total ?? rows[existingIndex].value,
         modifier: modifierDisplay,
       };
       continue;
     }
 
     const value = baseValue !== undefined
-      ? display.base ?? rows[existingIndex ?? -1]?.value ?? ""
+      ? display.total ?? display.base ?? rows[existingIndex ?? -1]?.value ?? ""
       : display.modifierPercent ?? display.modifier;
 
     if (!value) continue;

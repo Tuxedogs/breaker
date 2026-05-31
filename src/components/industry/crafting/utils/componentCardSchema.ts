@@ -395,7 +395,8 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
     const radar = getStatsObject(record, "radar");
     if (!radar) return stats;
     pushMetric(stats, "Ping Cooldown", formatCompactNumber(radar.pingCooldown, "s"));
-    pushMetric(stats, "Aim Assist Range", formatPair(radar.aimAssistRangeMin, radar.aimAssistRangeMax, "m"));
+    pushMetric(stats, "Aim Assist Min Range", formatCompactNumber(radar.aimAssistRangeMin, "m"));
+    pushMetric(stats, "Aim Assist Max Range", formatCompactNumber(radar.aimAssistRangeMax, "m"));
     pushMetric(stats, "Power", formatPair(radar.powerUsageMin, radar.powerUsageMax));
     pushMetric(stats, "Coolant", formatPair(radar.coolantUsageMin, radar.coolantUsageMax));
     pushMetric(stats, "Online EM", formatCompactNumber(radar.onlineEmSignature));

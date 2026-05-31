@@ -1,6 +1,6 @@
 import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 import { resolveRecommenderStantonLagrangeChildren } from "../../../features/locations/stantonLagrangeChildren";
-import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
+import type { PublicLocationEntry } from "../../../features/mining/types";
 import {
   getStaticLocationDisplayName,
   type StaticMiningIndex,
@@ -35,9 +35,7 @@ export function StantonLagrangeChildrenSummary({
       {resolved.points.map((point) => (
         <div key={`${entry.locationKey}:lagrange:${point.code}`} className="mloc-lagrange-point">
           <div className="mloc-lagrange-point-head">
-            <span>{point.code}</span>
-            <span>{point.bodyName}</span>
-            <span>{point.pointKey}</span>
+            <span>{point.displayName}</span>
             {point.children.length > 0 && (
               <span className="mloc-lagrange-count">
                 {point.children.length} {point.children.length === 1 ? "child" : "children"}
@@ -63,7 +61,6 @@ export function LocationListItem({
   entry,
   coveragePlanLocation,
   selectedMaterials,
-  activeDemandMaterials,
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
@@ -77,7 +74,6 @@ export function LocationListItem({
   entry: PublicLocationEntry;
   coveragePlanLocation?: CoveragePlanLocation;
   selectedMaterials: Set<string>;
-  activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
@@ -177,5 +173,3 @@ export function LocationListItem({
     </div>
   );
 }
-
-

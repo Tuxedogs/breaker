@@ -18,7 +18,6 @@ import {
   MINING_COVERAGE_MODE_STORAGE_KEY,
   MINING_FILTER_STORAGE_KEY,
   MINING_QUEUE_FOCUS_STORAGE_KEY,
-  MINING_QUEUE_SCOPES,
   MINING_QUEUE_SCOPE_STORAGE_KEY,
   MINING_RANKING_MODE_STORAGE_KEY,
   readStoredCoverageMode,
@@ -105,7 +104,6 @@ export default function MiningModule() {
   const focusedBuildQueue = useMemo(() => buildQueueSelectionActive && queueFocusItemId ? buildQueue.filter((item) => item.id === queueFocusItemId) : buildQueue, [buildQueue, buildQueueSelectionActive, queueFocusItemId]);
   const queueLedger = useMemo(() => getQueueLedgerModel({ buildQueue: focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId }), [focusedBuildQueue, inventoryEntries, materials, recipeInputsByRecipeId]);
   const scopedShortfallLines = useMemo(() => queueLedger.refinedShortfallLines.filter((line) => queueScopeMatches(line, queueScope)), [queueLedger.refinedShortfallLines, queueScope]);
-  const queueScopeCounts = useMemo(() => new Map(MINING_QUEUE_SCOPES.map((s) => [s.value, queueLedger.refinedShortfallLines.filter((l) => queueScopeMatches(l, s.value)).length])), [queueLedger.refinedShortfallLines]);
 
   const miningRequiredMaterials = useMemo<RequiredMaterial[]>(() => {
     const requirements = scopedShortfallLines.map((line) => {
@@ -348,7 +346,6 @@ export default function MiningModule() {
                           entry={entry}
                           coveragePlanLocation={plannedLocation}
                           selectedMaterials={materialFilterKeys}
-                          activeDemandMaterials={activeBuildQueueDemandMaterials}
                           buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
                           locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
                           staticMiningIndex={staticMiningIndex}
