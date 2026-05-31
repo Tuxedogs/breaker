@@ -10,7 +10,12 @@ import { resolveLocation } from "./locationResolver";
 import { canonicalMaterialDisplayName, canonicalMaterialKey, findMaterialGroup } from "./materialResolver";
 import { resolveSources } from "./sourceResolver";
 import { addWarning } from "./recommenderWarnings";
-import { miningLocationMergeKey } from "./locationNormalization";
+import {
+  isActivePyroMiningLocation,
+  isActiveStantonLagrangeMiningLocation,
+  isMaterialActiveAtPyroLocation,
+  miningLocationMergeKey,
+} from "./locationNormalization";
 
 function qualityFit(requirement: AggregatedRequirement, sourceQuality?: Record<string, unknown>): number {
   if (requirement.selectedQuality === undefined) return 1;
@@ -110,6 +115,13 @@ function buildIndexedResources(
     if (!materialName) continue;
     for (const source of resolveSources(group, warnings)) {
       const location = resolveLocation(source, apiData, warnings);
+      if (
+        !isActivePyroMiningLocation(location.systemName, location.locationName) ||
+        !isActiveStantonLagrangeMiningLocation(location.systemName, location.locationName) ||
+        !isMaterialActiveAtPyroLocation(location.systemName, location.locationName, materialName)
+      ) {
+        continue;
+      }
       const locationKey = physicalLocationKey(location);
       const resourceKey = `${locationKey}|${group.materialId ?? ""}|${materialName}`.toLowerCase();
       if (seen.has(resourceKey)) continue;
@@ -229,6 +241,13 @@ export function scoreLocations(
 
     for (const source of sources) {
       const location = resolveLocation(source, apiData, warnings);
+      if (
+        !isActivePyroMiningLocation(location.systemName, location.locationName) ||
+        !isActiveStantonLagrangeMiningLocation(location.systemName, location.locationName) ||
+        !isMaterialActiveAtPyroLocation(location.systemName, location.locationName, source.materialName ?? group.materialName)
+      ) {
+        continue;
+      }
       const key = physicalLocationKey(location);
       materialDiagnostics.candidateLocations.push({
         locationKey: key,

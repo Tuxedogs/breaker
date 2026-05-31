@@ -10,7 +10,7 @@ interface PersistedState {
   open: boolean;
   pinned: boolean;
   minimized: boolean;
-  opacity: number;
+  fontWeight?: number;
   fontSize: number;
   pos: { x: number; y: number } | null;
   activeIds: number[];
@@ -21,7 +21,7 @@ function loadState(): PersistedState {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) return JSON.parse(raw) as PersistedState;
   } catch { /* ignore */ }
-  return { open: false, pinned: false, minimized: false, opacity: 1, fontSize: 12, pos: null, activeIds: [] };
+  return { open: false, pinned: false, minimized: false, fontWeight: 800, fontSize: 12, pos: null, activeIds: [] };
 }
 
 function saveState(s: PersistedState) {
@@ -74,7 +74,7 @@ export default function SignatureDock() {
   const [open, setOpen]           = useState(init.open);
   const [pinned, setPinned]       = useState(init.pinned);
   const [minimized, setMinimized] = useState(init.minimized);
-  const [opacity, setOpacity]     = useState(init.opacity ?? 1);
+  const [fontWeight, setFontWeight] = useState(init.fontWeight ?? 800);
   const [fontSize, setFontSize]   = useState(init.fontSize ?? 12);
   const [activeIds, setActiveIds] = useState<Set<number>>(() => new Set(init.activeIds));
   const [search, setSearch]       = useState("");
@@ -84,8 +84,8 @@ export default function SignatureDock() {
 
   // ── persist ──────────────────────────────────────────────────────────────────
   useEffect(() => {
-    saveState({ open, pinned, minimized, opacity, fontSize, pos, activeIds: Array.from(activeIds) });
-  }, [open, pinned, minimized, opacity, fontSize, pos, activeIds]);
+    saveState({ open, pinned, minimized, fontWeight, fontSize, pos, activeIds: Array.from(activeIds) });
+  }, [open, pinned, minimized, fontWeight, fontSize, pos, activeIds]);
 
   // ── viewport clamp on resize ─────────────────────────────────────────────────
   useEffect(() => {
@@ -153,7 +153,7 @@ export default function SignatureDock() {
         <div
           className="sdock-pinned-strip"
           ref={elRef}
-          style={{ left: pos.x, top: pos.y }}
+          style={{ left: pos.x, top: pos.y, fontSize, fontWeight }}
         >
           <div className="sdock-pinned-header" onPointerDown={onDrag}>
             <span className="sdock-pinned-header-label">
@@ -167,7 +167,7 @@ export default function SignatureDock() {
             >◈</button>
           </div>
           {pinned && activeRows.length > 0 && (
-            <div className="sdock-pinned-body" style={{ fontSize }}>
+            <div className="sdock-pinned-body" style={{ fontSize, fontWeight }}>
               {activeRows.map((m, i) => (
                 <div key={i} className="sdock-pinned-row">
                   <span className="sdock-pinned-row-name">{m.name}</span>
@@ -190,20 +190,21 @@ export default function SignatureDock() {
         <div
           className="sdock-panel"
           ref={elRef}
-          style={{ left: pos.x, top: pos.y, opacity }}
+          style={{ left: pos.x, top: pos.y }}
         >
           <div className="sdock-topbar" onPointerDown={onDrag}>
             <span className="sdock-title">Signature Dock</span>
             <div className="sdock-topbar-controls" onPointerDown={(e) => e.stopPropagation()}>
               <div className="sdock-opacity-row">
-                <span className="sdock-opacity-label">Opacity</span>
+                <span className="sdock-opacity-label">Weight</span>
                 <input
                   type="range"
                   className="sdock-opacity-slider"
-                  min={35}
-                  max={100}
-                  value={Math.round(opacity * 100)}
-                  onChange={(e) => setOpacity(Number(e.target.value) / 100)}
+                  min={500}
+                  max={800}
+                  step={100}
+                  value={fontWeight}
+                  onChange={(e) => setFontWeight(Number(e.target.value))}
                 />
               </div>
               <div className="sdock-opacity-row">
@@ -246,7 +247,7 @@ export default function SignatureDock() {
               />
             </div>
 
-            <div className="sdock-table-wrap" style={{ fontSize }}>
+            <div className="sdock-table-wrap" style={{ fontSize, fontWeight }}>
               {rows.length === 0 ? (
                 <div className="sdock-empty">No results</div>
               ) : (

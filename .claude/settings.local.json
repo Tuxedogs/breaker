@@ -103,7 +103,11 @@
       "Bash(Get-ChildItem -Path \"d:\\\\Moonbreaker\\\\src\\\\components\\\\industry\\\\crafting\" -Recurse -File)",
       "Bash(node -e \"const d = require\\('./public/api/crafting/blueprints.json'\\); const mats = d.flatMap\\(r => r.materials ?? []\\); console.log\\('total mats:', mats.length\\); console.log\\('empty material_name:', mats.filter\\(m => !m.materialName\\).length\\); console.log\\('sample:', JSON.stringify\\(mats.slice\\(0,3\\), null, 2\\)\\)\")",
       "Bash(node -e \"const d = require\\('./public/api/crafting/blueprints.json'\\); const mats = d.flatMap\\(r => r.materials ?? []\\); const types = [...new Set\\(mats.map\\(m => m.costType\\)\\)]; console.log\\('cost types:', types\\); console.log\\('sample resource:', JSON.stringify\\(mats.find\\(m => m.costType === 'resource'\\), null, 2\\)\\); const fps = require\\('./public/api/crafting/fps_blueprints.json'\\); const fpsMats = fps.flatMap\\(r => r.materials ?? []\\); const fpsTypes = [...new Set\\(fpsMats.map\\(m => m.costType\\)\\)]; console.log\\('fps cost types:', fpsTypes\\);\")",
-      "Bash(node -e \"const d = require\\('./public/api/crafting/blueprints.json'\\); const mats = d.flatMap\\(r => r.materials ?? []\\); const resourceMats = mats.filter\\(m => m.costType === 'resource'\\); const itemMats = mats.filter\\(m => m.costType === 'item'\\); console.log\\('resource count:', resourceMats.length\\); console.log\\('item count:', itemMats.length\\); console.log\\('sample item:', JSON.stringify\\(itemMats[0], null, 2\\)\\);\")"
+      "Bash(node -e \"const d = require\\('./public/api/crafting/blueprints.json'\\); const mats = d.flatMap\\(r => r.materials ?? []\\); const resourceMats = mats.filter\\(m => m.costType === 'resource'\\); const itemMats = mats.filter\\(m => m.costType === 'item'\\); console.log\\('resource count:', resourceMats.length\\); console.log\\('item count:', itemMats.length\\); console.log\\('sample item:', JSON.stringify\\(itemMats[0], null, 2\\)\\);\")",
+      "Bash(xargs grep -l \"blueprints.json\")",
+      "Bash(powershell -Command \"Get-ChildItem public/api/crafting/ | Select-Object Name\")",
+      "Bash(powershell -Command \"Get-Content public/api/crafting/blueprints.json | Select-String -Pattern 'Full Block|Shield' -Context 2 | Select-Object -First 30\")",
+      "Bash(cd /d d:\\\\Moonbreaker)"
     ],
     "additionalDirectories": [
       "d:\\Moonbreaker"

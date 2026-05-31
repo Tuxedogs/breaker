@@ -8,13 +8,18 @@
   max-width: calc(100vw - 24px);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0c141b 0%, #070e14 100%);
-  border: 1px solid var(--void-border-panel);
-  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(7, 22, 29, 0.96) 0%, rgba(3, 8, 11, 0.98) 100%),
+    rgba(3, 8, 10, 0.98);
+  border: 1px solid rgba(31, 203, 225, 0.34);
+  border-left: 1px solid rgba(31, 203, 225, 0.62);
+  border-right: 0;
+  border-top-color: rgba(31, 203, 225, 0.42);
+  border-radius: 10px;
   box-shadow:
-    0 24px 56px rgba(0,0,0,0.62),
-    0 0 40px rgba(255,153,0,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.042);
+    0 24px 56px rgba(0,0,0,0.66),
+    -10px 0 24px rgba(31, 203, 225, 0.12),
+    0 0 18px rgba(31, 203, 225, 0.08);
   overflow: hidden;
   touch-action: none;
 }
@@ -25,8 +30,8 @@
   align-items: center;
   gap: 6px;
   padding: 7px 10px;
-  background: linear-gradient(90deg, #0f1d28 0%, #091218 100%);
-  border-bottom: 1px solid var(--void-border-soft);
+  background: linear-gradient(90deg, rgba(7, 22, 29, 0.92) 0%, rgba(4, 10, 13, 0.94) 100%);
+  border-bottom: 1px solid rgba(95, 226, 241, 0.14);
   cursor: grab;
   user-select: none;
   touch-action: none;
@@ -43,7 +48,8 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--void-accent-amber);
+  color: #48d8ee;
+  text-shadow: 0 0 10px rgba(31, 203, 225, 0.26);
   flex: 1;
   white-space: nowrap;
 }
@@ -65,7 +71,7 @@
   background: transparent;
   border: 1px solid transparent;
   border-radius: 3px;
-  color: var(--void-text-muted);
+  color: rgba(205, 241, 244, 0.72);
   font-size: 12px;
   cursor: pointer;
   transition: color 0.12s, border-color 0.12s, background 0.12s;
@@ -73,15 +79,15 @@
 }
 
 .sdock-ctrl-btn:hover {
-  color: var(--void-text-main);
-  border-color: var(--void-border-soft);
-  background: rgba(255,255,255,0.04);
+  color: #dffcff;
+  border-color: rgba(75, 218, 232, 0.24);
+  background: rgba(75, 218, 232, 0.05);
 }
 
 .sdock-ctrl-btn.active {
-  color: var(--void-accent-amber);
-  border-color: var(--void-border-hover);
-  background: rgba(255,178,26,0.08);
+  color: #7cebf4;
+  border-color: rgba(75, 218, 232, 0.38);
+  background: rgba(75, 218, 232, 0.08);
 }
 
 /* opacity row */
@@ -106,7 +112,7 @@
   appearance: none;
   width: 60px;
   height: 3px;
-  background: var(--void-border-soft);
+  background: rgba(75, 218, 232, 0.18);
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -118,7 +124,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--void-accent-amber);
+  background: #68dce8;
   cursor: pointer;
 }
 
@@ -126,7 +132,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--void-accent-amber);
+  background: #68dce8;
   cursor: pointer;
   border: none;
 }
@@ -143,14 +149,14 @@
 /* search bar */
 .sdock-search-row {
   padding: 7px 10px 6px;
-  border-bottom: 1px solid var(--void-border-divider);
+  border-bottom: 1px solid rgba(75, 218, 232, 0.12);
   flex-shrink: 0;
 }
 
 .sdock-search-input {
   width: 100%;
-  background: rgba(0,0,0,0.35);
-  border: 1px solid var(--void-border-soft);
+  background: rgba(0,0,0,0.42);
+  border: 1px solid rgba(75, 218, 232, 0.16);
   border-radius: 3px;
   color: var(--void-text-main);
   font-family: var(--font-primary);
@@ -166,7 +172,7 @@
 }
 
 .sdock-search-input:focus {
-  border-color: var(--void-border-hover);
+  border-color: rgba(75, 218, 232, 0.4);
 }
 
 /* table */
@@ -187,7 +193,7 @@
   border-radius: 2px;
 }
 .sdock-table-wrap::-webkit-scrollbar-thumb:hover {
-  background: rgba(255,178,26,0.28);
+  background: rgba(75, 218, 232, 0.28);
 }
 
 .sdock-table {
@@ -201,7 +207,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #0a1219;
+  background: rgba(5, 13, 16, 0.98);
   padding: 5px 8px 4px;
   text-align: left;
   font-size: 9px;
@@ -209,7 +215,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--void-text-dim);
-  border-bottom: 1px solid var(--void-border-soft);
+  border-bottom: 1px solid rgba(75, 218, 232, 0.16);
   white-space: nowrap;
 }
 
@@ -219,7 +225,7 @@
 
 .sdock-table tbody tr {
   cursor: pointer;
-  border-bottom: 1px solid var(--void-border-divider);
+  border-bottom: 1px solid rgba(75, 218, 232, 0.09);
   transition: background 0.1s;
 }
 
@@ -228,16 +234,16 @@
 }
 
 .sdock-table tbody tr:hover {
-  background: rgba(255,178,26,0.05);
+  background: rgba(75, 218, 232, 0.04);
 }
 
 .sdock-table tbody tr.sdock-row-active {
-  background: linear-gradient(90deg, rgba(255,178,26,0.1) 0%, rgba(255,178,26,0.04) 60%, transparent 100%);
-  border-left: 2px solid var(--void-accent-amber);
+  background: linear-gradient(90deg, rgba(75, 218, 232, 0.09) 0%, rgba(75, 218, 232, 0.035) 58%, transparent 100%);
+  border-left: 2px solid rgba(98, 225, 237, 0.72);
 }
 
 .sdock-table tbody tr.sdock-row-active:hover {
-  background: linear-gradient(90deg, rgba(255,178,26,0.15) 0%, rgba(255,178,26,0.06) 60%, transparent 100%);
+  background: linear-gradient(90deg, rgba(75, 218, 232, 0.12) 0%, rgba(75, 218, 232, 0.05) 58%, transparent 100%);
 }
 
 .sdock-table td {
@@ -250,6 +256,7 @@
   white-space: nowrap;
   min-width: 110px;
   padding-left: 10px;
+  font-weight: inherit;
 }
 
 .sdock-row-active .sdock-td-name {
@@ -261,7 +268,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--void-accent-amber);
+  background: #68dce8;
   margin-right: 5px;
   flex-shrink: 0;
   vertical-align: middle;
@@ -272,6 +279,7 @@
 /* values cell: chips in a wrapping flex row */
 .sdock-td-values {
   padding: 4px 8px 4px 0;
+  font-weight: inherit;
 }
 
 .sdock-values-wrap {
@@ -283,12 +291,12 @@
 
 .sdock-val-chip {
   font-family: var(--font-primary);
-  font-weight: 500;
+  font-weight: inherit;
   font-size: inherit;
   font-variant-numeric: tabular-nums;
-  color: var(--void-text-muted);
-  background: rgba(0,0,0,0.28);
-  border: 1px solid rgba(130,150,160,0.1);
+  color: rgba(222, 247, 249, 0.82);
+  background: rgba(0,0,0,0.34);
+  border: 1px solid rgba(75, 218, 232, 0.18);
   border-radius: 2px;
   padding: 1px 5px;
   white-space: nowrap;
@@ -296,9 +304,9 @@
 }
 
 .sdock-row-active .sdock-val-chip {
-  color: var(--void-accent-amber);
-  border-color: rgba(255,178,26,0.2);
-  background: rgba(255,178,26,0.06);
+  color: #e6fdff;
+  border-color: rgba(75, 218, 232, 0.34);
+  background: rgba(75, 218, 232, 0.07);
 }
 
 /* empty state */
@@ -314,10 +322,18 @@
 .sdock-pinned-strip {
   position: fixed;
   z-index: 9988;
-  background: linear-gradient(180deg, #070e14 0%, #070c11 100%);
-  border: 1px solid var(--void-border-panel);
-  border-radius: 4px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.52);
+  background:
+    linear-gradient(180deg, rgba(7, 23, 31, 0.96) 0%, rgba(3, 9, 12, 0.98) 100%),
+    rgba(3, 8, 10, 0.98);
+  border: 1px solid rgba(31, 203, 225, 0.34);
+  border-left: 1px solid rgba(31, 203, 225, 0.68);
+  border-right: 0;
+  border-top-color: rgba(31, 203, 225, 0.42);
+  border-radius: 10px;
+  box-shadow:
+    0 18px 44px rgba(0,0,0,0.62),
+    -10px 0 22px rgba(31, 203, 225, 0.14),
+    0 0 16px rgba(31, 203, 225, 0.08);
   user-select: none;
   touch-action: none;
   width: max-content;
@@ -325,7 +341,7 @@
 }
 
 .sdock-pinned-strip:hover {
-  border-color: var(--void-border-hover);
+  border-color: rgba(31, 203, 225, 0.48);
 }
 
 /* drag handle bar at the top of the strip */
@@ -334,8 +350,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 5px 8px 4px;
-  background: linear-gradient(90deg, #0d1821 0%, #070c0f 100%);
-  border-bottom: 1px solid var(--void-border-soft);
+  background: linear-gradient(90deg, rgba(7, 23, 31, 0.78) 0%, rgba(4, 10, 13, 0.42) 100%);
+  border-bottom: 1px solid rgba(95, 226, 241, 0.13);
   cursor: grab;
   touch-action: none;
 }
@@ -345,26 +361,27 @@
 }
 
 .sdock-pinned-header-label {
-  font-size: 8px;
+  font-size: 0.72em;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--void-text-dim);
+  color: #48d8ee;
+  text-shadow: 0 0 10px rgba(31, 203, 225, 0.28);
 }
 
 .sdock-pinned-expand-btn {
   background: transparent;
   border: none;
   padding: 0 2px;
-  font-size: 11px;
-  color: var(--void-text-dim);
+  font-size: 0.92em;
+  color: #75eaff;
   cursor: pointer;
   line-height: 1;
   transition: color 0.12s;
 }
 
 .sdock-pinned-expand-btn:hover {
-  color: var(--void-accent-amber);
+  color: #bdf8ff;
 }
 
 /* rows area */
@@ -378,7 +395,7 @@
   align-items: center;
   gap: 3px;
   padding: 4px 0;
-  border-bottom: 1px solid var(--void-border-divider);
+  border-bottom: 1px solid rgba(95, 226, 241, 0.13);
 }
 
 .sdock-pinned-row:last-child {
@@ -387,12 +404,13 @@
 
 .sdock-pinned-row-name {
   font-family: var(--font-primary);
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--void-text-main);
+  font-size: inherit;
+  font-weight: inherit;
+  color: #f5fdff;
   letter-spacing: 0.04em;
   white-space: nowrap;
   margin-right: 2px;
+  text-shadow: 0 1px 10px rgba(255,255,255,0.12);
 }
 
 .sdock-pinned-row-values {
@@ -402,15 +420,19 @@
 
 .sdock-pinned-sig-muted {
   font-family: var(--font-primary);
-  font-weight: 500;
+  font-weight: inherit;
   font-size: inherit;
   font-variant-numeric: tabular-nums;
-  color: var(--void-text-muted);
-  background: rgba(0,0,0,0.25);
-  border: 1px solid rgba(130,150,160,0.1);
+  color: rgba(238, 252, 255, 0.94);
+  background: rgba(3, 14, 19, 0.78);
+  border: 1px solid rgba(31, 203, 225, 0.26);
   border-radius: 2px;
   padding: 1px 5px;
   white-space: nowrap;
+  line-height: 1.5;
+  box-shadow:
+    inset 0 1px 0 rgba(210, 252, 255, 0.04),
+    0 0 14px rgba(31, 203, 225, 0.05);
 }
 
 /* ---------- responsive ---------- */
