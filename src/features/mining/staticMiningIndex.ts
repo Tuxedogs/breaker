@@ -631,6 +631,13 @@ async function fetchRequiredJsonObject<T>(path: string): Promise<T | null> {
   }
 }
 
+// Akirocluster was removed from the game — filter it out so it doesn't appear in results.
+// Keep data in the JSON files; remove this filter if/when it returns.
+function isRemovedLocation(locationKey: string | null | undefined): boolean {
+  const key = (locationKey ?? "").toLowerCase();
+  return key.includes("akirocluster");
+}
+
 function buildStaticMiningIndex(
   rows: StaticLocationMaterialRow[],
   rankings: StaticMaterialEncounterRankingRow[],
@@ -638,6 +645,11 @@ function buildStaticMiningIndex(
   distributionRows: StaticLocationDistributionRow[],
   locationHierarchy: StaticLocationHierarchyIndex | null,
 ): StaticMiningIndex {
+  rows = rows.filter((row) => !isRemovedLocation(row.locationKey) && !isRemovedLocation(row.location));
+  rankings = rankings.filter((row) => !isRemovedLocation(row.locationKey) && !isRemovedLocation(row.location));
+  qualityRows = qualityRows.filter((row) => !isRemovedLocation(row.locationKey) && !isRemovedLocation(row.location));
+  distributionRows = distributionRows.filter((row) => !isRemovedLocation(row.locationKey) && !isRemovedLocation(row.location));
+
   const primaryGroups = new Map<string, StaticLocationMaterialRow[]>();
   for (const row of rows) {
     const key = getStaticLocationJoinKey(row.systemKey, row.locationKey);
