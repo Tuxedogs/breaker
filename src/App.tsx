@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
+import SignatureDock from "./components/SignatureDock";
 import OnlinePersistenceCoordinator from "./components/logistics/OnlinePersistenceCoordinator";
 import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
@@ -68,6 +69,7 @@ export default function App() {
   return (
     <AuthSessionProvider>
       <OnlinePersistenceCoordinator />
+      <SignatureDock />
       <Routes>
         <Route index element={<RedirectToDashboard />} />
         <Route path="home" element={<RedirectToDashboard />} />

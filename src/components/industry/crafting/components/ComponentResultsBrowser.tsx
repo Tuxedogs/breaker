@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import ComponentResultCard from "./ComponentResultCard";
 import CompareTray from "./CompareTray";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { buildComponentCardSchemaFromIndex, formatCraftTime } from "../utils/componentCardSchema";
 
 // ── Inline SVG icons for component type filter chips ──────────────────────────
 const TYPE_ICONS: Record<string, React.ReactNode> = {
@@ -143,128 +142,6 @@ function ComponentBrowserState({ title, body }: { title: string; body: string })
   );
 }
 
-function SingleComponentResultWorkspace({
-  record,
-  queued,
-  saved,
-}: {
-  record: ComponentCardIndexRecord;
-  queued: boolean;
-  saved: boolean;
-}) {
-  const schema = buildComponentCardSchemaFromIndex(record);
-  const stats = [...schema.familyStats, ...schema.genericStats];
-  const identity = [
-    record.kind === "fps" ? "FPS" : "Vehicle",
-    record.typeLabel,
-    record.category !== record.kind ? record.category : null,
-    record.family,
-  ].filter((value): value is string => Boolean(value));
-  const sizeGradeClass = [
-    record.size !== null ? `S${record.size}` : null,
-    record.grade,
-    record.class,
-  ].filter((value): value is string => Boolean(value));
-
-  return (
-    <section className="craft-detail-stage" aria-label="Single component result">
-      <div className="craft-detail-main">
-        <div
-          className="component-result-card"
-          aria-hidden="true"
-          style={{
-            minHeight: 150,
-            background:
-              "linear-gradient(135deg, rgba(255,153,0,0.12), rgba(56,245,208,0.045) 42%, rgba(0,0,0,0.22))",
-          }}
-        />
-
-        <div className="craft-summary-panel">
-          <div className="craft-summary-head">
-            <div className="craft-summary-title-row">
-              <div className="craft-summary-title">{schema.displayName}</div>
-              <div className="craft-summary-quality-pill">{schema.typeLabel}</div>
-            </div>
-            <div className="craft-summary-chips">
-              {identity.map((value) => (
-                <span key={value} className="craft-badge craft-badge--type-chip">
-                  {value}
-                </span>
-              ))}
-              {sizeGradeClass.map((value) => (
-                <span key={value} className="craft-badge craft-badge--neutral">
-                  {value}
-                </span>
-              ))}
-              {queued && <span className="craft-mini-chip craft-mini-chip--queue">Queued</span>}
-              {saved && <span className="craft-mini-chip craft-mini-chip--saved">Saved</span>}
-            </div>
-          </div>
-
-          <div className="craft-summary-section">
-            <div className="component-card-metrics">
-              {stats.map((metric) => (
-                <span key={`${metric.label}:${metric.value}`} className="component-card-metric">
-                  <span>{metric.label}</span>
-                  <strong>{metric.value}</strong>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {record.entityClass && (
-            <div className="craft-summary-section">
-              <div className="craft-summary-total-modifier">
-                <span className="component-result-card__id">{record.entityClass}</span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="craft-summary-panel craft-summary-column">
-        <div className="craft-summary-head">
-          <div className="craft-summary-title-row">
-            <div className="craft-summary-title">Crafting Overview</div>
-            <div className="craft-summary-quality-pill">{formatCraftTime(record.craftTimeSeconds)}</div>
-          </div>
-          <div className="craft-summary-chips">
-            <span className="craft-badge craft-badge--neutral">
-              {record.materials.length} materials
-            </span>
-          </div>
-        </div>
-
-        <div className="craft-summary-section craft-summary-section--grow">
-          <div className="craft-material-list">
-            {record.materials.map((material, index) => (
-              <div
-                key={`${record.id}:${material.slot ?? index}:${material.costId ?? material.name}`}
-                className="craft-material-card"
-              >
-                <div className="craft-material-card-head">
-                  <span className="craft-result-name">{material.name}</span>
-                  {material.slot && <span className="craft-badge craft-badge--sm craft-badge--slot">{material.slot}</span>}
-                </div>
-                <div className="craft-summary-total-modifier">
-                  <span>Required</span>
-                  <strong>{material.unit ? `${material.quantity} ${material.unit}` : material.quantity}</strong>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="craft-summary-action-row" style={{ gridTemplateColumns: "1fr" }}>
-          <Link className="craft-summary-action-btn craft-summary-queue-btn" to={`/industry/crafting/${record.id}`}>
-            Open Crafting Builder
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export default function ComponentResultsBrowser({
   records,
   loading,
@@ -276,6 +153,7 @@ export default function ComponentResultsBrowser({
   error: string | null;
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
 }) {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // ── Derive all filter state from URL params ──────────────────────────────────
@@ -565,6 +443,12 @@ export default function ComponentResultsBrowser({
     return { groupedRecords: grouped, variantCountMap: counts };
   }, [filteredRecords]);
 
+  useEffect(() => {
+    if (loading || groupedRecords.length !== 1) return;
+    const id = groupedRecords[0].id;
+    if (id) navigate(`/industry/crafting/${id}`, { replace: true });
+  }, [loading, groupedRecords, navigate]);
+
   const totalPages = Math.max(1, Math.ceil(groupedRecords.length / DEFAULT_RESULTS_PER_PAGE));
   const visiblePage = Math.min(page, totalPages);
   const pageStart = (visiblePage - 1) * DEFAULT_RESULTS_PER_PAGE;
@@ -829,13 +713,7 @@ export default function ComponentResultsBrowser({
 
       {groupedRecords.length === 0 ? (
         <ComponentBrowserState title="No Results" body="No craftable components match the current browser filters." />
-      ) : groupedRecords.length === 1 ? (
-        <SingleComponentResultWorkspace
-          record={groupedRecords[0]}
-          queued={isRecipeQueued(groupedRecords[0])}
-          saved={savedBlueprintIds.has(groupedRecords[0].id)}
-        />
-      ) : (
+      ) : groupedRecords.length === 1 ? null : (
         <>
           <section className="component-results-grid" aria-label="Component results">
             {pageRecords.map((record) => (
