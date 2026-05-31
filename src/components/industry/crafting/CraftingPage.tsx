@@ -1,11 +1,10 @@
 import { useEffect, useState, lazy, Suspense, useCallback, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import "./recipe-browser.css";
 
 import type { ComponentRecipe } from "./utils/craftingTypes";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getCraftingItems } from "../../../lib/craftingData";
-import { getComponentCardIndex, type ComponentCardIndexRecord } from "../../../lib/componentCardIndex";
+import { useCraftingContext } from "./CraftingContext";
 
 import ComponentRecipeTable, { type FinalProductQuality } from "./components/ComponentRecipeTable";
 import ComponentResultsBrowser from "./components/ComponentResultsBrowser";
@@ -54,9 +53,11 @@ export default function CraftingModule() {
   const { blueprintId } = useParams<{ blueprintId?: string }>();
   const [tab] = useState<Tab>("recipes");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
-  const [componentCards, setComponentCards] = useState<ComponentCardIndexRecord[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [detailError, setDetailError] = useState<string | null>(null);
+
+  // Component card index comes from CraftingLayout via context
+  const { componentCards, loading: cardsLoading, error: cardsError } = useCraftingContext();
 
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
@@ -64,33 +65,27 @@ export default function CraftingModule() {
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);
 
+  // Only load full recipe data when viewing a detail page
   useEffect(() => {
+    if (!blueprintId) {
+      setRecipes([]);
+      return;
+    }
     let cancelled = false;
-    setLoading(true);
-    setLoadError(null);
-    const request = blueprintId
-      ? Promise.all([getCraftingItems(), getComponentCardIndex()]).then(([items, index]) => {
-        if (cancelled) return;
-        setRecipes(items);
-        setComponentCards(index.records);
-      })
-      : getComponentCardIndex().then((index) => {
-        if (cancelled) return;
-        setComponentCards(index.records);
-        setRecipes([]);
-      });
-
-    request
-      .then(() => {
-        // State is set in the selected loader branch so detail data stays separate from card data.
+    setDetailLoading(true);
+    setDetailError(null);
+    getCraftingItems()
+      .then((items) => {
+        if (!cancelled) {
+          setRecipes(items);
+          setDetailLoading(false);
+        }
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          setLoadError(error instanceof Error ? error.message : "Failed to load crafting data");
+          setDetailError(error instanceof Error ? error.message : "Failed to load crafting data");
+          setDetailLoading(false);
         }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
   }, [blueprintId]);
@@ -157,12 +152,14 @@ export default function CraftingModule() {
     });
   }, [materialTemplates, registerCraftingRecipe, addBuildQueueItem]);
 
-
   const activeQueue = buildQueue.filter((item) => item.status !== "complete");
   const queuedRecipeIds = useMemo(
     () => new Set(activeQueue.map((item) => item.recipeId)),
     [activeQueue],
   );
+
+  const loading = blueprintId ? detailLoading : cardsLoading;
+  const loadError = blueprintId ? detailError : cardsError;
 
   return (
     <>
@@ -202,7 +199,6 @@ export default function CraftingModule() {
           <QualityModifierViewer />
         </Suspense>
       )}
-
     </>
   );
 }

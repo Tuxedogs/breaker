@@ -33,6 +33,9 @@ const ComponentMappingPage = lazy(() =>
 
 
 const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"));
+const IndustryCraftingLayout = lazy(() =>
+  import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
+);
 const IndustryComparePage = lazy(() => import("./pages/industry/ComparePage"));
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
@@ -156,14 +159,6 @@ export default function App() {
 
         {/* Industry */}
         <Route
-          path="industry/crafting"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <IndustryCraftingPage />
-            </Suspense>
-          }
-        />
-        <Route
           path="industry/crafting/compare"
           element={
             <Suspense fallback={<RouteFallback />}>
@@ -172,13 +167,30 @@ export default function App() {
           }
         />
         <Route
-          path="industry/crafting/:blueprintId"
+          path="industry/crafting"
           element={
             <Suspense fallback={<RouteFallback />}>
-              <IndustryCraftingPage />
+              <IndustryCraftingLayout />
             </Suspense>
           }
-        />
+        >
+          <Route
+            index
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <IndustryCraftingPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path=":blueprintId"
+            element={
+              <Suspense fallback={<RouteFallback />}>
+                <IndustryCraftingPage />
+              </Suspense>
+            }
+          />
+        </Route>
         <Route
           path="industry/mining"
           element={

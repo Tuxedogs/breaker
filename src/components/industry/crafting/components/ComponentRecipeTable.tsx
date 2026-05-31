@@ -2886,7 +2886,7 @@ function RecipeDrawer({
     getBandsForMaterial,
   } = useQualityQuantization();
   const location = useLocation();
-  const backTo = (location.state as { from?: string } | null)?.from ?? "/industry/crafting";
+  const backTo = `/industry/crafting${location.search}`;
   const { slots, setSlot } = useCompareStore();
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
