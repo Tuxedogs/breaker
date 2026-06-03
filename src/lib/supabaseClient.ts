@@ -99,8 +99,11 @@ function isAllowedPostAuthRedirectPath(path: string | null) {
   return Boolean(
     path === defaultPostAuthRedirect
       || path?.startsWith("/industry/crafting")
+      || path?.startsWith("/industry/mining")
       || path?.startsWith("/industry/blueprint-tracker")
+      || path?.startsWith("/logistics/build-queue")
       || path?.startsWith("/logistics/inventory")
+      || path?.startsWith("/logistics/carrier-logistics")
   );
 }
 

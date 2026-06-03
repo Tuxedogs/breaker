@@ -627,6 +627,10 @@
   position: relative;
 }
 
+.dash-mobile-auth-bar {
+  display: none;
+}
+
 /* ── Shell search (floating top-right) ───────── */
 
 .dash-shell-search {
@@ -2086,6 +2090,23 @@
 
 @media (max-width: 700px) {
   .dash-sidebar { display: none; }
+  .dash-body {
+    overflow: visible;
+  }
+  .dash-mobile-auth-bar {
+    position: sticky;
+    top: 0;
+    z-index: 45;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.45rem 0.55rem 0.25rem;
+    background:
+      linear-gradient(180deg, rgba(7, 10, 16, 0.96), rgba(7, 10, 16, 0.72) 78%, transparent);
+  }
+  .dash-mobile-auth-button.discord-btn {
+    width: min(100%, 18rem);
+    min-height: 44px;
+  }
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
   .dash-cards-row { grid-template-columns: 1fr; }
   .dash-right-col { grid-template-columns: 1fr; }

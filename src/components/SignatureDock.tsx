@@ -11,6 +11,7 @@ import "./SignatureDock.css";
 
 // ── persistence ──────────────────────────────────────────────────────────────
 const LS_KEY = "sdock_state";
+const presetSearchPlaceholder = "Search location...";
 
 interface PersistedState {
   open: boolean;
@@ -302,7 +303,7 @@ export default function SignatureDock() {
     return presetOptions.filter((option) => option.searchText.includes(qPreset));
   }, [presetOptions, presetSearch]);
 
-  const presetTriggerLabel = selectionLabel || (pinnedRows.length > 0 ? "Custom" : "Signature Dock");
+  const presetTriggerLabel = selectionLabel || (pinnedRows.length > 0 ? "Custom" : presetSearchPlaceholder);
 
   const presetPicker = (
     <div className="sdock-preset-picker" ref={presetPickerRef} onPointerDown={(e) => e.stopPropagation()}>
@@ -313,7 +314,7 @@ export default function SignatureDock() {
             autoFocus
             aria-label="Search location presets"
             value={presetSearch}
-            placeholder="Search location..."
+            placeholder={presetSearchPlaceholder}
             onChange={(e) => {
               setPresetSearch(e.target.value);
               setHighlightedPresetIndex(0);

@@ -111,12 +111,11 @@ function initDraftFromEntry(
   entry: InventoryEntry,
   materials: MaterialTemplate[],
   locations: InventoryLocation[],
-  defaultLocationId: string,
 ): DraftState {
   const mat = entry.materialId ? materials.find((m) => m.id === entry.materialId) : undefined;
   const kind = deriveKindFromEntry(entry, mat);
   const isCatalog = !!entry.materialId && !!mat;
-  const locationName = locations.find((l) => l.id === (entry.locationId ?? defaultLocationId))?.name ?? '';
+  const locationName = locations.find((l) => l.id === entry.locationId)?.name ?? '';
   return {
     catalogMode: isCatalog ? 'catalog' : 'manual',
     materialId: entry.materialId ?? '',
@@ -125,15 +124,14 @@ function initDraftFromEntry(
     unitType: entry.unitType ?? KIND_DEFAULT_UNIT[kind],
     quantity: entry.quantity > 0 ? String(entry.quantity) : '',
     quality: entry.quality !== undefined ? String(entry.quality) : '',
-    locationId: entry.locationId ?? defaultLocationId,
+    locationId: entry.locationId ?? '',
     locationSearch: locationName,
     container: entry.container ?? '',
     notes: entry.notes ?? '',
   };
 }
 
-function initBlankDraft(defaultLocationId: string, _defaultMaterialId: string, locations: InventoryLocation[]): DraftState {
-  const locationName = locations.find((l) => l.id === defaultLocationId)?.name ?? '';
+function initBlankDraft(): DraftState {
   return {
     catalogMode: 'catalog',
     materialId: '',
@@ -142,8 +140,8 @@ function initBlankDraft(defaultLocationId: string, _defaultMaterialId: string, l
     unitType: KIND_DEFAULT_UNIT['ore'],
     quantity: '',
     quality: '',
-    locationId: defaultLocationId,
-    locationSearch: locationName,
+    locationId: '',
+    locationSearch: '',
     container: '',
     notes: '',
   };
@@ -162,15 +160,106 @@ interface LocationTypeaheadProps {
   onClose: () => void;
 }
 
+type LocationSuggestion = InventoryLocation & {
+  categoryLabel: string;
+  searchText: string;
+};
+
+type LocationCategoryGroup = {
+  category: string;
+  locations: LocationSuggestion[];
+};
+
+type LocationSystemGroup = {
+  system: string;
+  categories: LocationCategoryGroup[];
+};
+
+const CATEGORY_LABELS: Record<string, string> = {
+  refinery: 'Refineries',
+  refineries: 'Refineries',
+  city: 'Cities',
+  cities: 'Cities',
+  station: 'Stations',
+  stations: 'Stations',
+  planet: 'Planets',
+  planets: 'Planets',
+  lagrange: 'Lagrange',
+  asteroid: 'Asteroids / Belts',
+  asteroids: 'Asteroids / Belts',
+  belt: 'Asteroids / Belts',
+  belts: 'Asteroids / Belts',
+  outpost: 'Outposts',
+  outposts: 'Outposts',
+};
+
+const CATEGORY_ORDER = ['Refineries', 'Cities', 'Stations', 'Planets', 'Lagrange', 'Asteroids / Belts', 'Outposts'];
+
+function compareCategoryLabel(a: string, b: string): number {
+  const ai = CATEGORY_ORDER.indexOf(a);
+  const bi = CATEGORY_ORDER.indexOf(b);
+  if (ai !== -1 || bi !== -1) return (ai === -1 ? CATEGORY_ORDER.length : ai) - (bi === -1 ? CATEGORY_ORDER.length : bi);
+  return a.localeCompare(b);
+}
+
+function normalizeLocationCategory(location: InventoryLocation): string {
+  const raw = (location.category || location.type || 'station').trim().toLowerCase();
+  return CATEGORY_LABELS[raw] ?? raw.replace(/[_-]+/g, ' ').replace(/\b\w/g, (match) => match.toUpperCase());
+}
+
+function getLocationAliases(location: InventoryLocation): string[] {
+  const raw = location as InventoryLocation & { aliases?: unknown; parent?: unknown; parentName?: unknown; bodyName?: unknown };
+  const aliases = Array.isArray(raw.aliases) ? raw.aliases.filter((alias): alias is string => typeof alias === 'string') : [];
+  return [
+    ...aliases,
+    typeof raw.parent === 'string' ? raw.parent : undefined,
+    typeof raw.parentName === 'string' ? raw.parentName : undefined,
+    typeof raw.bodyName === 'string' ? raw.bodyName : undefined,
+  ].filter((value): value is string => Boolean(value));
+}
+
+function buildLocationSuggestionGroups(locations: InventoryLocation[], query: string): LocationSystemGroup[] {
+  const q = query.trim().toLowerCase();
+  const bySystem = new Map<string, Map<string, LocationSuggestion[]>>();
+
+  for (const location of locations) {
+    const system = location.system?.trim() || 'Unknown System';
+    const categoryLabel = normalizeLocationCategory(location);
+    const searchText = [location.name, system, categoryLabel, location.category, location.type, ...getLocationAliases(location)]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+    if (q && !searchText.includes(q)) continue;
+
+    const systemGroup = bySystem.get(system) ?? new Map<string, LocationSuggestion[]>();
+    const categoryGroup = systemGroup.get(categoryLabel) ?? [];
+    categoryGroup.push({ ...location, categoryLabel, searchText });
+    systemGroup.set(categoryLabel, categoryGroup);
+    bySystem.set(system, systemGroup);
+  }
+
+  return [...bySystem.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([system, categoryMap]) => ({
+      system,
+      categories: [...categoryMap.entries()]
+        .sort(([a], [b]) => compareCategoryLabel(a, b))
+        .map(([category, groupedLocations]) => ({
+          category,
+          locations: groupedLocations.sort((a, b) => a.name.localeCompare(b.name)),
+        })),
+    }));
+}
+
 function LocationTypeahead({
   locations, locationId, locationSearch, open,
   onSearchChange, onSelect, onOpen, onClose,
 }: LocationTypeaheadProps) {
-  const filtered = useMemo(() => {
-    const q = locationSearch.trim().toLowerCase();
-    if (!q) return locations;
-    return locations.filter((l) => l.name.toLowerCase().includes(q));
-  }, [locations, locationSearch]);
+  const groupedSuggestions = useMemo(
+    () => buildLocationSuggestionGroups(locations, locationSearch),
+    [locations, locationSearch],
+  );
+  const hasSuggestions = groupedSuggestions.some((group) => group.categories.some((category) => category.locations.length > 0));
 
   const selectedName = locationId ? locations.find((l) => l.id === locationId)?.name : undefined;
 
@@ -192,25 +281,37 @@ function LocationTypeahead({
         {locationId && selectedName && (
           <span className="logi-form-hint logi-form-hint--value">{selectedName}</span>
         )}
-        {open && filtered.length > 0 && (
+        {open && hasSuggestions && (
           <ul className="logi-location-suggestions" role="listbox">
-            {filtered.map((l) => (
-              <li
-                key={l.id}
-                role="option"
-                aria-selected={l.id === locationId}
-                className={`logi-location-suggestion${l.id === locationId ? ' logi-location-suggestion--active' : ''}`}
-                onMouseDown={() => onSelect(l.id, l.name)}
-              >
-                <span className="logi-location-suggestion-name">{l.name}</span>
-                {l.type && (
-                  <span className="logi-location-suggestion-meta">{l.type}</span>
-                )}
+            {groupedSuggestions.map((systemGroup) => (
+              <li key={systemGroup.system} className="logi-location-suggestion-system" aria-disabled="true">
+                <span>{systemGroup.system}</span>
+                {systemGroup.categories.map((categoryGroup) => (
+                  <div key={categoryGroup.category} className="logi-location-suggestion-category">
+                    <span className="logi-location-suggestion-category-label">{categoryGroup.category}</span>
+                    {categoryGroup.locations.map((l) => (
+                      <button
+                        key={l.id}
+                        type="button"
+                        role="option"
+                        aria-selected={l.id === locationId}
+                        className={`logi-location-suggestion${l.id === locationId ? ' logi-location-suggestion--active' : ''}`}
+                        onMouseDown={(event) => {
+                          event.preventDefault();
+                          onSelect(l.id, l.name);
+                        }}
+                      >
+                        <span className="logi-location-suggestion-name">{l.name}</span>
+                        <span className="logi-location-suggestion-meta">{l.categoryLabel}</span>
+                      </button>
+                    ))}
+                  </div>
+                ))}
               </li>
             ))}
           </ul>
         )}
-        {open && filtered.length === 0 && locationSearch.trim() && (
+        {open && !hasSuggestions && locationSearch.trim() && (
           <div className="logi-location-suggestions logi-location-suggestions--empty">
             No matching locations — add one in Locations first
           </div>
@@ -223,16 +324,15 @@ function LocationTypeahead({
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
-  const defaultLocationId = locations[0]?.id ?? '';
-  const defaultMaterialId = materials[0]?.id ?? '';
   const isNew = entry === null;
 
   const [draft, setDraft] = useState<DraftState>(() =>
     entry
-      ? initDraftFromEntry(entry, materials, locations, defaultLocationId)
-      : initBlankDraft(defaultLocationId, defaultMaterialId, locations),
+      ? initDraftFromEntry(entry, materials, locations)
+      : initBlankDraft(),
   );
   const [locationOpen, setLocationOpen] = useState(false);
+  const [clearLocationOnNextFocus, setClearLocationOnNextFocus] = useState(false);
 
   function patch(updates: Partial<DraftState>) {
     setDraft((d) => ({ ...d, ...updates }));
@@ -309,6 +409,15 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const built = buildEntry();
     if (!built) return;
     onSave([built]);
+    if (isNew && draft.locationSearch.trim()) setClearLocationOnNextFocus(true);
+  }
+
+  function handleLocationFocus() {
+    if (clearLocationOnNextFocus && draft.locationSearch.trim()) {
+      patch({ locationId: '', locationSearch: '' });
+      setClearLocationOnNextFocus(false);
+    }
+    setLocationOpen(true);
   }
 
   // Derived preview: unitType label
@@ -498,13 +607,15 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         open={locationOpen}
         onSearchChange={(search) => {
           patch({ locationSearch: search, locationId: '' });
+          setClearLocationOnNextFocus(false);
           setLocationOpen(true);
         }}
         onSelect={(id, name) => {
           patch({ locationId: id, locationSearch: name });
+          setClearLocationOnNextFocus(false);
           setLocationOpen(false);
         }}
-        onOpen={() => setLocationOpen(true)}
+        onOpen={handleLocationFocus}
         onClose={() => setLocationOpen(false)}
       />
 

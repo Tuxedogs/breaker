@@ -107,6 +107,15 @@ function getMaterialTemplate(materialId: string | undefined, materials: Material
   return materials.find((material) => material.id === materialId);
 }
 
+function mergeInventoryLocationSeeds(seedLocations: InventoryLocation[], persistedLocations: InventoryLocation[] | undefined): InventoryLocation[] {
+  if (!persistedLocations?.length) return seedLocations;
+  const seedIds = new Set(seedLocations.map((location) => location.id));
+  const extraLocations = persistedLocations.filter((location) =>
+    !seedIds.has(location.id) && location.category?.toLowerCase() !== "moon"
+  );
+  return [...seedLocations, ...extraLocations];
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -918,7 +927,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           ...current,
           inventoryEntries: inventoryEntries ?? current.inventoryEntries,
           buildQueue: buildQueue ?? current.buildQueue,
-          locations: locations?.length ? locations : current.locations,
+          locations: mergeInventoryLocationSeeds(current.locations, locations),
           recipeTemplates: mergedRecipes,
           recipeInputTemplates: mergedInputs,
         };

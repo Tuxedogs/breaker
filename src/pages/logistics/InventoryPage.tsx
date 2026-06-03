@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
@@ -19,6 +19,7 @@ type LocationGroup = {
   name: string;
   type: string;
   subtitle: string;
+  isManual: boolean;
   entries: InventoryEntry[];
   uniqueItems: number;
   totalQuantity: number;
@@ -66,6 +67,13 @@ function getLocationSubtitle(location: unknown): string {
   const system = asString(loc.system) ?? asString(loc.systemName) ?? asString(loc.parentSystem);
   const parent = asString(loc.parent) ?? asString(loc.parentName) ?? asString(loc.zone);
   return [system, parent].filter(Boolean).join(' / ') || 'Stored inventory location';
+}
+
+function isManuallyAddedLocation(location: unknown): boolean {
+  const loc = toRecord(location);
+  const category = asString(loc.category)?.toLowerCase();
+  const source = asString(loc.source)?.toLowerCase();
+  return loc.isManual === true || loc.userCreated === true || category === 'manual' || source === 'manual';
 }
 
 function getEntryLocationId(entry: InventoryEntry): string {
@@ -125,11 +133,12 @@ function MaterialGlyph({ quality }: { quality?: number | null }) {
 }
 
 function QualityPill({ quality }: { quality?: number | null }) {
-  if (quality == null || !Number.isFinite(quality)) return <span className="logi-quality-pill logi-quality-pill--empty">Q —</span>;
-  return <span className={`logi-quality-pill ${getQualityClass(quality)}`}>Q {quality}</span>;
+  if (quality == null || !Number.isFinite(quality)) return <span className="logi-quality-pill logi-quality-pill--empty">—</span>;
+  return <span className={`logi-quality-pill ${getQualityClass(quality)}`}>{quality}</span>;
 }
 
 export default function InventoryPage() {
+  const [searchParams] = useSearchParams();
   const entries = useLogisticsStore((state) => state.inventoryEntries);
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const locations = useLogisticsStore((state) => state.locations);
@@ -140,7 +149,7 @@ export default function InventoryPage() {
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [search, setSearch] = useState('');
   const [materialFilter, setMaterialFilter] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState(() => searchParams.get('location') ?? '');
   const [qualityMin, setQualityMin] = useState(0);
   const [sortKey, setSortKey] = useState<SortKey>('quality');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
@@ -161,7 +170,7 @@ export default function InventoryPage() {
   const filtered = useMemo(() => {
     const data = entries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
-      if (locationFilter && toRecord(e).locationId !== locationFilter) return false;
+      if (locationFilter && getEntryLocationId(e) !== locationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
         const mat = getMaterialForEntry(e, materials);
@@ -248,6 +257,7 @@ export default function InventoryPage() {
         name: getLocationName(location),
         type: getLocationType(location),
         subtitle: getLocationSubtitle(location),
+        isManual: isManuallyAddedLocation(location),
         entries: [],
         uniqueItems: 0,
         totalQuantity: 0,
@@ -262,6 +272,7 @@ export default function InventoryPage() {
       name: 'Unassigned Stock',
       type: 'Unassigned',
       subtitle: 'Stacks without a storage location',
+      isManual: false,
       entries: [],
       uniqueItems: 0,
       totalQuantity: 0,
@@ -292,7 +303,7 @@ export default function InventoryPage() {
     }
 
     return [...map.values()]
-      .filter((group) => group.id !== '__unassigned__' || group.entries.length > 0)
+      .filter((group) => group.entries.length > 0 || group.isManual)
       .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.totalQuantity - a.totalQuantity || a.name.localeCompare(b.name));
   }, [filtered, locations]);
 
@@ -444,7 +455,7 @@ export default function InventoryPage() {
         <div className="logi-inv-summary-card logi-inv-summary-card--premium">
           <span>Premium 900+</span>
           <strong>{summary.premiumCount}</strong>
-          <small>{summary.bestQuality ? `${summary.bestQuality.name} Q${summary.bestQuality.quality}` : 'no premium stacks'}</small>
+          <small>{summary.bestQuality ? `${summary.bestQuality.name} ${summary.bestQuality.quality}` : 'no premium stacks'}</small>
         </div>
         <div className={`logi-inv-summary-card${summary.unassigned > 0 ? ' logi-inv-summary-card--warn' : ''}`}>
           <span>Unassigned</span>
@@ -491,10 +502,11 @@ export default function InventoryPage() {
           {locations.map((l) => (
             <option key={l.id} value={l.id}>{l.name}</option>
           ))}
+          {summary.unassigned > 0 && <option value="__unassigned__">Unassigned Stock</option>}
         </select>
 
         <div className="logi-search-wrap logi-inv-quality-filter">
-          <span>Q≥</span>
+          <span>Min</span>
           <input
             type="number"
             className="logi-search-input"
@@ -532,7 +544,7 @@ export default function InventoryPage() {
                 <div className="logi-location-stat-grid">
                   <div><span>Unique</span><strong>{group.uniqueItems}</strong></div>
                   <div><span>Total</span><strong>{formatQuantity(group.totalQuantity)}<em> SCU</em></strong></div>
-                  <div><span>Best Q</span><strong>{group.highestQuality ?? '—'}</strong></div>
+                  <div><span>Best</span><strong>{group.highestQuality ?? '—'}</strong></div>
                   <div><span>900+</span><strong>{group.premiumCount}</strong></div>
                 </div>
 
@@ -572,7 +584,7 @@ export default function InventoryPage() {
                                   value={edit.quality}
                                   min={0}
                                   max={1000}
-                                  placeholder="Q"
+                                  placeholder="Quality"
                                   aria-label="Quality"
                                   onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, quality: e.target.value } }))}
                                 />

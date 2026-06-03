@@ -249,23 +249,23 @@ export function isNonRefinableMaterial(materialId: string): boolean {
 
 export const inventoryLocations: InventoryLocation[] = [
   // Stanton refinery locations
-  { id: "arc-l1", name: "ARC-L1", category: "station", system: "Stanton", type: "station" },
-  { id: "arc-l2", name: "ARC-L2", category: "station", system: "Stanton", type: "station" },
-  { id: "arc-l4", name: "ARC-L4", category: "station", system: "Stanton", type: "station" },
-  { id: "cru-l1", name: "CRU-L1", category: "station", system: "Stanton", type: "station" },
-  { id: "hur-l1", name: "HUR-L1", category: "station", system: "Stanton", type: "station" },
-  { id: "hur-l2", name: "HUR-L2", category: "station", system: "Stanton", type: "station" },
-  { id: "mic-l1", name: "MIC-L1", category: "station", system: "Stanton", type: "station" },
-  { id: "mic-l2", name: "MIC-L2", category: "station", system: "Stanton", type: "station" },
-  { id: "mic-l5", name: "MIC-L5", category: "station", system: "Stanton", type: "station" },
+  { id: "arc-l1", name: "ARC-L1", category: "refinery", system: "Stanton", type: "station" },
+  { id: "arc-l2", name: "ARC-L2", category: "refinery", system: "Stanton", type: "station" },
+  { id: "arc-l4", name: "ARC-L4", category: "refinery", system: "Stanton", type: "station" },
+  { id: "cru-l1", name: "CRU-L1", category: "refinery", system: "Stanton", type: "station" },
+  { id: "hur-l1", name: "HUR-L1", category: "refinery", system: "Stanton", type: "station" },
+  { id: "hur-l2", name: "HUR-L2", category: "refinery", system: "Stanton", type: "station" },
+  { id: "mic-l1", name: "MIC-L1", category: "refinery", system: "Stanton", type: "station" },
+  { id: "mic-l2", name: "MIC-L2", category: "refinery", system: "Stanton", type: "station" },
+  { id: "mic-l5", name: "MIC-L5", category: "refinery", system: "Stanton", type: "station" },
   { id: "nyx-gateway-stanton", name: "Nyx Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
   { id: "pyro-gateway-stanton", name: "Pyro Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
   { id: "terra-gateway-stanton", name: "Terra Gateway (Stanton)", category: "station", system: "Stanton", type: "station" },
 
   // Pyro refinery locations
-  { id: "checkmate", name: "Checkmate", category: "station", system: "Pyro", type: "station" },
-  { id: "orbituary", name: "Orbituary", category: "station", system: "Pyro", type: "station" },
-  { id: "ruin-station", name: "Ruin Station", category: "station", system: "Pyro", type: "station" },
+  { id: "checkmate", name: "Checkmate", category: "refinery", system: "Pyro", type: "station" },
+  { id: "orbituary", name: "Orbituary", category: "refinery", system: "Pyro", type: "station" },
+  { id: "ruin-station", name: "Ruin Station", category: "refinery", system: "Pyro", type: "station" },
   { id: "nyx-gateway-pyro", name: "Nyx Gateway (Pyro)", category: "station", system: "Pyro", type: "station" },
   { id: "stanton-gateway-pyro", name: "Stanton Gateway (Pyro)", category: "station", system: "Pyro", type: "station" },
 
