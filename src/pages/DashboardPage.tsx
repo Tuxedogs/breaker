@@ -166,7 +166,7 @@ function getQueueItemProgress(
   return Math.max(0, Math.min(100, Math.round((covered / required) * 100)));
 }
 
-function buildPrimaryLocations(
+function buildInventoryLocationSummaries(
   inventoryEntries: InventoryEntry[],
   locations: InventoryLocation[],
   materials: MaterialTemplate[],
@@ -191,15 +191,18 @@ function buildPrimaryLocations(
     groups.set(id, current);
   }
   return [...groups.values()]
-    .sort((a, b) => b.scu - a.scu || b.units - a.units || b.entries - a.entries || a.name.localeCompare(b.name))
-    .slice(0, 5);
+    .sort((a, b) => b.scu - a.scu || b.units - a.units || b.entries - a.entries || a.name.localeCompare(b.name));
 }
 
-function formatLocationQuantity(location: ReturnType<typeof buildPrimaryLocations>[number]) {
+function formatLocationQuantity(location: ReturnType<typeof buildInventoryLocationSummaries>[number]) {
   const parts: string[] = [];
   if (location.scu > 0) parts.push(`${formatDashNumber(location.scu)} SCU`);
   if (location.units > 0) parts.push(`x${formatDashNumber(location.units)}`);
   return parts.join(" / ") || "0";
+}
+
+function getTopRecordedInventoryLocation(locations: ReturnType<typeof buildInventoryLocationSummaries>) {
+  return [...locations].sort((a, b) => b.entries - a.entries || b.scu - a.scu || b.units - a.units || a.name.localeCompare(b.name))[0] ?? null;
 }
 
 function toRequiredMaterials(lines: QueueLedgerLine[]): RequiredMaterial[] {
@@ -231,10 +234,18 @@ export default function DashboardPage() {
   const activeQueueItems = useMemo(() => buildQueue.filter((item) => item.status !== "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
   const signatureRows = useMemo(() => signatureRowsFromState(signatureState), [signatureState]);
-  const primaryLocations = useMemo(
-    () => buildPrimaryLocations(inventoryEntries, locations, materialTemplates),
+  const inventoryLocationSummaries = useMemo(
+    () => buildInventoryLocationSummaries(inventoryEntries, locations, materialTemplates),
     [inventoryEntries, locations, materialTemplates]
   );
+  const primaryLocations = useMemo(() => inventoryLocationSummaries.slice(0, 5), [inventoryLocationSummaries]);
+  const topRecordedInventoryLocation = useMemo(
+    () => getTopRecordedInventoryLocation(inventoryLocationSummaries),
+    [inventoryLocationSummaries]
+  );
+  const inventoryOverviewTarget = topRecordedInventoryLocation
+    ? `/logistics/inventory?location=${encodeURIComponent(topRecordedInventoryLocation.id)}`
+    : "/logistics/inventory";
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
   const totalShortage = formatDashNumber(queueLedger.summary.refinedShortfall);
 
@@ -407,7 +418,7 @@ export default function DashboardPage() {
           <article className="dash-card" aria-label="Inventory overview">
             <div className="dash-card-header"><span className="dash-card-title">Inventory Overview</span></div>
             <div className="dash-card-body dash-inventory-body">
-              {signatureRows.length > 0 ? (
+              {inventoryEntries.length > 0 && signatureRows.length > 0 ? (
                 <table className="sdock-table dash-signature-table">
                   <thead>
                     <tr>
@@ -429,12 +440,14 @@ export default function DashboardPage() {
                   </tbody>
                 </table>
               ) : (
-                <div className="dash-empty-state">No signature selections yet</div>
+                <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No signature selections yet" : "No inventory recorded"}</div>
               )}
             </div>
-            <div className="dash-card-footer">
-              <Link to="/logistics/inventory" className="dash-card-footer-link">Go to Inventory <ArrowRight /></Link>
-            </div>
+            {topRecordedInventoryLocation && (
+              <div className="dash-card-footer">
+                <Link to={inventoryOverviewTarget} className="dash-card-footer-link">Go to Inventory <ArrowRight /></Link>
+              </div>
+            )}
           </article>
 
           <article className="dash-card" aria-label="Material shortages">
