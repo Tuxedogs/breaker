@@ -267,6 +267,7 @@ interface Props {
   onQuantityChange: (id: string, quantity: number) => void;
   onAllowLowerQualityChange: (id: string, allowLowerQuality: boolean) => void;
   onMaterialRequirementChange: (id: string, requirementId: string, input: RecipeInputTemplate) => void;
+  onStatusChange: (id: string, status: NonNullable<BuildQueueItem['status']>) => void;
   onRemove: (id: string) => void;
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
@@ -363,7 +364,7 @@ function MaterialQualitySlider({
 export default function BuildQueueGroup({
   category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
   materials, locations, strategy, onQuantityChange,
-  onMaterialRequirementChange, onRemove, onToggleAllocation, onClearStaleAllocations,
+  onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onClearStaleAllocations,
 }: Props) {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [draftBandIndices, setDraftBandIndices] = useState<Record<string, number>>({});
@@ -411,6 +412,7 @@ export default function BuildQueueGroup({
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
         const isEditingThisItem = editingItemId === item.id;
+        const isCompletedCraft = item.status === 'complete';
         const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
         const qualitySummary = getItemQualitySummary(item, inputs, draftBandIndices, isEditingThisItem);
@@ -515,7 +517,7 @@ export default function BuildQueueGroup({
         });
 
         return (
-          <article key={item.id} className={`bq-item bq-item--${fulfillment}`}>
+          <article key={item.id} className={`bq-item bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`}>
 
             {/* ── Left sidebar: name + controls ── */}
             <div className="bq-item-sidebar">
@@ -532,6 +534,9 @@ export default function BuildQueueGroup({
               </div>
 
               <div className="bq-item-badges">
+                {isCompletedCraft && (
+                  <span className="bq-badge bq-badge--complete">Completed Craft</span>
+                )}
                 <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
                   {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
                 </span>
@@ -558,6 +563,14 @@ export default function BuildQueueGroup({
                       <button type="button" className="bq-btn" onClick={() => openEdit(item, inputs)}>Quality</button>
                     )
                   )}
+                  <button
+                    type="button"
+                    className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
+                    onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
+                    aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
+                  >
+                    {isCompletedCraft ? 'Reopen' : 'Complete'}
+                  </button>
                   <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
                 </div>
               </div>

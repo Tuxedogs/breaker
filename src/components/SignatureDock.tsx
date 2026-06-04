@@ -91,6 +91,20 @@ const signatureIndexByMaterialKey = new Map(
   MINEABLE_SIGNATURES.map((signature, index) => [normalizeMaterialKey(signature.name), index])
 );
 
+function useIsMobileSignatureViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 700px)");
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
 function materialKeysFromIds(ids: number[]) {
   return ids
     .map((id) => MINEABLE_SIGNATURES[id]?.name)
@@ -110,6 +124,7 @@ function signatureRowKey(index: number) {
 // ── component ─────────────────────────────────────────────────────────────────
 export default function SignatureDock() {
   const [init] = useState<PersistedState>(() => loadState());
+  const isMobileViewport = useIsMobileSignatureViewport();
 
   const [open, setOpen]           = useState(init.open);
   const [pinned, setPinned]       = useState(init.pinned);
@@ -411,6 +426,8 @@ export default function SignatureDock() {
 
   const showStrip = !open || minimized;
   const showPanel = open && !minimized;
+
+  if (isMobileViewport) return null;
 
   // ── render ───────────────────────────────────────────────────────────────────
   const content = (

@@ -3375,6 +3375,10 @@
   padding: 5px 0;
 }
 
+.crb-facet-group {
+  display: contents;
+}
+
 /* ── Chip group — segmented look via adjacent sibling gap elimination ── */
 .crb-chip-group {
   display: flex;
@@ -4028,9 +4032,223 @@
   }
 }
 
+@media (max-width: 760px) {
+  .component-results-browser {
+    overflow-x: hidden;
+  }
+
+  .component-browser-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 35;
+    flex: 0 0 auto;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+    border: 1px solid rgba(126, 105, 171, 0.2);
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.36),
+      inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .crb-row--search {
+    display: flex;
+    min-height: 52px;
+    padding: 6px 8px;
+  }
+
+  .component-browser-search {
+    height: 42px;
+    flex: 1 1 auto;
+    padding: 0 12px;
+    border-color: rgba(148, 163, 184, 0.2);
+    background: rgba(8, 12, 18, 0.88);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  }
+
+  .component-browser-search input {
+    font-size: 0.95rem;
+    font-weight: 650;
+  }
+
+  .component-browser-search input::placeholder {
+    color: rgba(148, 163, 184, 0.4);
+  }
+
+  .component-browser-count {
+    display: none;
+  }
+
+  .crb-bookmarks-btn {
+    height: 42px;
+    padding: 0 10px;
+  }
+
+  .crb-row--categories {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 50px;
+    padding: 6px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .crb-row--categories .crb-section-label,
+  .crb-row--facets .crb-section-label,
+  .crb-row--active-filters .crb-section-label,
+  .crb-section-divider,
+  .crb-group-divider {
+    display: none;
+  }
+
+  .crb-category-group {
+    padding: 0;
+    min-width: max-content;
+  }
+
+  .crb-category-group--vehicle {
+    scroll-snap-align: start;
+  }
+
+  .crb-category-group--fps {
+    scroll-snap-align: start;
+    margin-left: 8px;
+  }
+
+  .crb-chip-group--vehicle {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .crb-chip-group--vehicle .craft-frl-chip {
+    scroll-snap-align: start;
+    min-width: 7.8rem;
+    justify-content: center;
+  }
+
+  .crb-chip-group--vehicle .craft-frl-chip + .craft-frl-chip {
+    margin-left: 0;
+  }
+
+  .crb-chip-group--vehicle .craft-frl-chip,
+  .crb-chip-group--vehicle .craft-frl-chip:first-child:not(:only-child),
+  .crb-chip-group--vehicle .craft-frl-chip:not(:first-child):not(:last-child),
+  .crb-chip-group--vehicle .craft-frl-chip:last-child:not(:only-child) {
+    border-radius: 5px;
+  }
+
+  .crb-row--facets {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    min-height: 0;
+    max-width: 100%;
+    min-width: 0;
+    padding: 6px 8px;
+    gap: 8px;
+    overflow: visible;
+  }
+
+  .crb-row--facets .crb-chip-group {
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+
+  .crb-chip-group--size,
+  .crb-chip-group--grade,
+  .crb-chip-group--class {
+    gap: 6px;
+  }
+
+  .crb-chip-group--size .craft-frl-chip--sm,
+  .crb-chip-group--grade .craft-frl-chip--sm,
+  .crb-chip-group--class .craft-frl-chip--sm {
+    min-width: 3.9rem;
+    height: 34px;
+    justify-content: center;
+    padding-inline: 14px;
+  }
+
+  .crb-chip-group--size .craft-frl-chip + .craft-frl-chip,
+  .crb-chip-group--grade .craft-frl-chip + .craft-frl-chip,
+  .crb-chip-group--class .craft-frl-chip + .craft-frl-chip {
+    margin-left: 0;
+  }
+
+  .crb-chip-group--size .craft-frl-chip,
+  .crb-chip-group--size .craft-frl-chip:first-child:not(:only-child),
+  .crb-chip-group--size .craft-frl-chip:not(:first-child):not(:last-child),
+  .crb-chip-group--size .craft-frl-chip:last-child:not(:only-child),
+  .crb-chip-group--grade .craft-frl-chip,
+  .crb-chip-group--grade .craft-frl-chip:first-child:not(:only-child),
+  .crb-chip-group--grade .craft-frl-chip:not(:first-child):not(:last-child),
+  .crb-chip-group--grade .craft-frl-chip:last-child:not(:only-child),
+  .crb-chip-group--class .craft-frl-chip,
+  .crb-chip-group--class .craft-frl-chip:first-child:not(:only-child),
+  .crb-chip-group--class .craft-frl-chip:not(:first-child):not(:last-child),
+  .crb-chip-group--class .craft-frl-chip:last-child:not(:only-child) {
+    border-radius: 5px;
+  }
+
+  .crb-facet-group {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+  }
+
+  .crb-facet-group--size,
+  .crb-facet-group--grade,
+  .crb-facet-group--class,
+  .crb-facet-group--materials {
+    flex-direction: row;
+    position: relative;
+    z-index: 80;
+  }
+
+  .crb-facet-group--materials .crb-material-picker,
+  .crb-facet-group--materials .crb-material-trigger {
+    width: 100%;
+  }
+
+  .crb-facet-group--materials .crb-material-trigger {
+    height: 34px;
+    justify-content: space-between;
+    padding-inline: 12px;
+  }
+
+  .crb-material-dropdown {
+    z-index: 220;
+    width: min(360px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+  }
+}
+
 @media (max-width: 560px) {
   .component-results-browser {
     padding: 8px;
+  }
+
+  .crb-row--search {
+    flex-wrap: wrap;
+  }
+
+  .component-browser-search {
+    flex-basis: 100%;
+  }
+
+  .crb-bookmarks-btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .component-results-grid {

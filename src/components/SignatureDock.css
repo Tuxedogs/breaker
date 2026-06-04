@@ -636,6 +636,10 @@ font-family: var(--font-primary);
 
 /* ---------- responsive ---------- */
 @media (max-width: 640px) {
+  .sdock-panel,
+  .sdock-pinned-strip {
+    display: none;
+  }
   .sdock-panel {
     width: calc(100vw - 24px);
     right: 12px !important;

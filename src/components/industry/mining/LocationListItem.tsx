@@ -35,24 +35,20 @@ export function StantonLagrangeChildrenSummary({
       {resolved.points.map((point) => (
         <div key={`${entry.locationKey}:lagrange:${point.code}`} className="mloc-lagrange-point">
           <div className="mloc-lagrange-point-head">
-            <span>{point.displayName}</span>
-            {point.children.length > 0 && (
-              <span className="mloc-lagrange-count">
-                {point.children.length} {point.children.length === 1 ? "child" : "children"}
-              </span>
-            )}
-          </div>
-          <div className="mloc-lagrange-child-list">
-            {point.children.map((child) => (
-              <span key={`${entry.locationKey}:lagrange:${point.code}:${child.id}`}>
-                {child.recordName}
-              </span>
-            ))}
+            <span>{point.code.toUpperCase()}</span>
           </div>
         </div>
       ))}
     </div>
   );
+}
+
+export function hasStantonLagrangeChildren(entry: PublicLocationEntry): boolean {
+  if (entry.systemName.toLowerCase() !== "stanton") return false;
+  return resolveRecommenderStantonLagrangeChildren(
+    entry.locationName,
+    entry.matchedLocationCodes,
+  ).points.length > 0;
 }
 
 
@@ -97,6 +93,7 @@ export function LocationListItem({
   const totalRelevant = hasBuildQueueDemand ? buildQueueMaterialKeys.size : selectedMaterials.size;
   const coveragePct = totalRelevant > 0 ? Math.round((primaryCovered.length / totalRelevant) * 100) : 0;
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
+  const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -140,7 +137,9 @@ export function LocationListItem({
           )}
         </div>
         <div className="mlist-item-sub">
-          <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+          {!isLagrangeChildGroup && (
+            <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+          )}
           <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)} mlist-item-badge`}>
             {spawnTypeLabel(entry.spawnType)}
           </span>

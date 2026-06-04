@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
 import DashboardSidebar from "./DashboardSidebar";
+import MobileIndustryNav from "./MobileIndustryNav";
 
 export default function DashboardShell() {
   return (
@@ -15,6 +16,7 @@ export default function DashboardShell() {
             <Outlet />
           </div>
         </div>
+        <MobileIndustryNav />
       </div>
     </div>
   );
