@@ -24,7 +24,7 @@ function ArrowRight({ size = 12 }: { size?: number }) {
   );
 }
 
-type StatIconType = "materials" | "owned" | "needed" | "shortage" | "queue" | "volume" | "high" | "low";
+type StatIconType = "materials" | "owned" | "needed" | "shortage" | "queue" | "volume" | "high" | "low" | "complete";
 function StatIcon({ type }: { type: StatIconType }) {
   const configs: Record<StatIconType, { bg: string; color: string; d: string }> = {
     materials: { bg: "rgba(167,139,250,0.12)", color: "#a78bfa", d: "M12 2L2 7v10l10 5 10-5V7L12 2zm0 5l5 2.5v5L12 17l-5-2.5v-5L12 7z" },
@@ -35,6 +35,7 @@ function StatIcon({ type }: { type: StatIconType }) {
     volume: { bg: "rgba(255,154,32,0.12)", color: "#ff9d00", d: "M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" },
     high: { bg: "rgba(74,222,128,0.12)", color: "#4ade80", d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" },
     low: { bg: "rgba(248,113,113,0.12)", color: "#f87171", d: "M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" },
+    complete: { bg: "rgba(74,222,128,0.12)", color: "#4ade80", d: "M20 6L9 17l-5-5" },
   };
   const c = configs[type];
   return (
@@ -232,6 +233,7 @@ export default function DashboardPage() {
     [buildQueue, inventoryEntries, materialTemplates, recipeInputTemplates]
   );
   const activeQueueItems = useMemo(() => buildQueue.filter((item) => item.status !== "complete"), [buildQueue]);
+  const completedQueueItems = useMemo(() => buildQueue.filter((item) => item.status === "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
   const signatureRows = useMemo(() => signatureRowsFromState(signatureState), [signatureState]);
   const inventoryLocationSummaries = useMemo(
@@ -247,7 +249,6 @@ export default function DashboardPage() {
     ? `/logistics/inventory?location=${encodeURIComponent(topRecordedInventoryLocation.id)}`
     : "/logistics/inventory";
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
-  const totalShortage = formatDashNumber(queueLedger.summary.refinedShortfall);
 
   useEffect(() => {
     function refreshSignatureState() {
@@ -392,16 +393,13 @@ export default function DashboardPage() {
 
           <div className="dash-stat-card">
             <div className="dash-stat-main">
-              <div className="dash-stat-label">Shortage</div>
-              <div className="dash-stat-value dash-stat-value--shortage">
-                {queueLedger.summary.refinedShortfall > 0 ? totalShortage : "-"}
-                <span className="dash-stat-unit" style={{ color: "rgba(248,113,113,0.6)" }}>
-                  {queueLedger.summary.refinedShortfall > 0 ? " SCU" : ""}
-                </span>
+              <div className="dash-stat-label">Completed Crafts</div>
+              <div className="dash-stat-value dash-stat-value--complete">
+                {completedQueueItems.length > 0 ? completedQueueItems.length : "-"}
               </div>
-              <div className="dash-stat-sublabel">{queueLedger.refinedShortfallLines.length} shortage materials</div>
+              <div className="dash-stat-sublabel">{activeQueueItems.length} active builds remain</div>
             </div>
-            <StatIcon type="shortage" />
+            <StatIcon type="complete" />
           </div>
 
           <div className="dash-stat-card">

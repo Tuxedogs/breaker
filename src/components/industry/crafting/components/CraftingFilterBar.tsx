@@ -345,7 +345,7 @@ export default function CraftingFilterBar({
       <div className="crb-row crb-row--categories">
         <div className="crb-category-group crb-category-group--vehicle">
           <span className="crb-section-label crb-section-label--vehicle">Vehicle</span>
-          <div className="crb-chip-group" role="group" aria-label="Vehicle component filters">
+          <div className="crb-chip-group crb-chip-group--vehicle" role="group" aria-label="Vehicle component filters">
             {vehicleOptions.map((option) => (
               <button
                 key={option.value}
@@ -383,10 +383,10 @@ export default function CraftingFilterBar({
       {/* ── Row 3: Contextual facets (vehicle only) + Materials always ── */}
       <div className="crb-row crb-row--facets">
         {showVehicleFacets && sizeOptions.length > 0 && (
-          <>
+          <div className="crb-facet-group crb-facet-group--size">
             <span className="crb-section-label">Size</span>
             <span className="crb-section-divider" aria-hidden="true" />
-            <div className="crb-chip-group" role="group" aria-label="Size filters">
+            <div className="crb-chip-group crb-chip-group--size" role="group" aria-label="Size filters">
               {sizeOptions.map((option) => (
                 <button
                   key={option.value}
@@ -399,13 +399,13 @@ export default function CraftingFilterBar({
               ))}
             </div>
             <span className="crb-section-divider" aria-hidden="true" />
-          </>
+          </div>
         )}
         {showVehicleFacets && gradeOptions.length > 0 && (
-          <>
+          <div className="crb-facet-group crb-facet-group--grade">
             <span className="crb-section-label">Grade</span>
             <span className="crb-section-divider" aria-hidden="true" />
-            <div className="crb-chip-group" role="group" aria-label="Grade filters">
+            <div className="crb-chip-group crb-chip-group--grade" role="group" aria-label="Grade filters">
               {gradeOptions.map((option) => (
                 <button
                   key={option.value}
@@ -418,13 +418,13 @@ export default function CraftingFilterBar({
               ))}
             </div>
             <span className="crb-section-divider" aria-hidden="true" />
-          </>
+          </div>
         )}
         {showVehicleFacets && classOptions.length > 0 && (
-          <>
+          <div className="crb-facet-group crb-facet-group--class">
             <span className="crb-section-label">Class</span>
             <span className="crb-section-divider" aria-hidden="true" />
-            <div className="crb-chip-group" role="group" aria-label="Class filters">
+            <div className="crb-chip-group crb-chip-group--class" role="group" aria-label="Class filters">
               {classOptions.map((option) => (
                 <button
                   key={option.value}
@@ -437,9 +437,10 @@ export default function CraftingFilterBar({
               ))}
             </div>
             {(sizeOptions.length > 0 || gradeOptions.length > 0) && <span className="crb-section-divider" aria-hidden="true" />}
-          </>
+          </div>
         )}
 
+        <div className="crb-facet-group crb-facet-group--materials">
         <span className="crb-section-label crb-section-label--muted">Materials</span>
         <span className="crb-section-divider" aria-hidden="true" />
         <div className="crb-material-picker" ref={materialPickerRef}>
@@ -468,6 +469,7 @@ export default function CraftingFilterBar({
               ))}
             </div>
           )}
+        </div>
         </div>
       </div>
 

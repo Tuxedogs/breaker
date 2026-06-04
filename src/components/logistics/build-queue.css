@@ -328,6 +328,39 @@
   color: var(--bq-cyan);
 }
 
+.bq-completed-panel {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(74,222,128,0.16);
+}
+
+.bq-completed-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  min-height: 32px;
+  padding: 0 0.08rem;
+  color: rgba(187,247,208,0.86);
+}
+
+.bq-completed-panel-head span {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bq-completed-panel-head strong {
+  color: var(--bq-green);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .logi-rarity--legendary {
   --logi-rarity-accent: var(--rarity-legendary);
   --logi-rarity-accent-border: rgba(var(--rarity-legendary-rgb), 0.36);
@@ -729,6 +762,10 @@
   background: linear-gradient(180deg, rgba(245,158,11,0.7) 0%, rgba(217,119,6,0.38) 100%);
 }
 
+.bq-item--completed-craft::before {
+  background: linear-gradient(180deg, rgba(74,222,128,0.72) 0%, rgba(22,163,74,0.4) 100%);
+}
+
 /* ── Left sidebar ────────────────────────────────────────────────────────── */
 
 .bq-item-sidebar {
@@ -814,6 +851,12 @@
   color: rgba(252,165,165,0.88);
   border-color: rgba(248,113,113,0.22);
   background: rgba(248,113,113,0.05);
+}
+
+.bq-badge--complete {
+  color: rgba(187,247,208,0.9);
+  border-color: rgba(74,222,128,0.24);
+  background: rgba(74,222,128,0.07);
 }
 
 .bq-badge--quality {

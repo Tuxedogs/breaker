@@ -31,7 +31,7 @@ import {
 } from "./miningFormatters";
 import type { ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
-import { StantonLagrangeChildrenSummary } from "./LocationListItem";
+import { hasStantonLagrangeChildren, StantonLagrangeChildrenSummary } from "./LocationListItem";
 
 export function InfoTip({ text }: { text: string }) {
   return (
@@ -157,6 +157,7 @@ export function LocationDetail({
   }, [entry, staticMiningIndex, staticResourceRows]);
 
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
+  const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const detailPlanetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const locationMethodMixItems = useMemo(
     () => getStaticMethodBiasForLocation(entry, staticMiningIndex)
@@ -202,9 +203,11 @@ export function LocationDetail({
             {locationDisplayName}
           </div>
           <StantonLagrangeChildrenSummary entry={entry} />
-          <div className="mdet-meta">
-            <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
-          </div>
+          {!isLagrangeChildGroup && (
+            <div className="mdet-meta">
+              <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+            </div>
+          )}
         </div>
         <div className="mdet-header-right">
           <div className="mdet-thumb" aria-hidden="true">

@@ -25,26 +25,32 @@ export default function BuildQueuePage() {
   const updateBuildQueueItemQuantity = useLogisticsStore((s) => s.updateBuildQueueItemQuantity);
   const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
+  const updateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
   const removeBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
   const clearBuildQueue = useLogisticsStore((s) => s.clearBuildQueue);
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
+  const activeBuildQueue = buildQueue.filter((item) => item.status !== 'complete');
+  const completedBuildQueue = buildQueue.filter((item) => item.status === 'complete');
 
-  const grouped = buildQueue.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
+  const groupQueueByCategory = (items: typeof buildQueue) => items.reduce<Partial<Record<string, typeof buildQueue>>>((acc, item) => {
     const recipe = recipes.find((e) => e.id === item.recipeId);
     const category = recipe?.category ?? 'other';
     (acc[category] ??= []).push(item);
     return acc;
   }, {});
 
-  for (const items of Object.values(grouped)) {
+  const grouped = groupQueueByCategory(activeBuildQueue);
+  const completedGrouped = groupQueueByCategory(completedBuildQueue);
+
+  for (const items of [...Object.values(grouped), ...Object.values(completedGrouped)]) {
     items?.sort((a, b) => Number(b.priorityActive ?? false) - Number(a.priorityActive ?? false) || (a.priority ?? 0) - (b.priority ?? 0));
   }
 
   const categories = Object.keys(grouped);
-  const reservableShortages = queueLedger.summary.reservableLines;
+  const completedCategories = Object.keys(completedGrouped);
   const materialsNeededCount = queueLedger.refinedShortfallLines.length;
 
 
@@ -82,7 +88,7 @@ export default function BuildQueuePage() {
               </div>
               <div className="bq-summary-card bq-summary-card--danger">
                 <span>Blocked Builds</span>
-                <strong>{buildQueue.filter((item) => item.status !== 'complete').length}</strong>
+                <strong>{activeBuildQueue.length}</strong>
                 <em>Active demand with gaps</em>
               </div>
               <div className="bq-summary-card">
@@ -91,14 +97,14 @@ export default function BuildQueuePage() {
                 <em>Unique shortage materials</em>
               </div>
               <div className="bq-summary-card bq-summary-card--success">
-                <span>Ready to Reserve</span>
-                <strong>{reservableShortages}</strong>
-                <em>Shortage lines with stock</em>
+                <span>Completed Crafts</span>
+                <strong>{completedBuildQueue.length}</strong>
+                <em>Moved out of active demand</em>
               </div>
             </div>
 
             <>
-              {categories.length === 0 ? (
+              {categories.length === 0 && completedCategories.length === 0 ? (
                 <div className="bq-empty-state">No builds queued yet.</div>
               ) : categories.map((category) => (
                 <BuildQueueGroup
@@ -115,11 +121,41 @@ export default function BuildQueuePage() {
                   onQuantityChange={updateBuildQueueItemQuantity}
                   onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
                   onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
+                  onStatusChange={updateBuildQueueItemStatus}
                   onRemove={removeBuildQueueItem}
                   onToggleAllocation={toggleBuildQueueAllocation}
                   onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
                 />
               ))}
+              {completedCategories.length > 0 && (
+                <section className="bq-completed-panel" aria-label="Completed crafts">
+                  <div className="bq-completed-panel-head">
+                    <span>Completed Crafts</span>
+                    <strong>{completedBuildQueue.length}</strong>
+                  </div>
+                  {completedCategories.map((category) => (
+                    <BuildQueueGroup
+                      key={`completed:${category}`}
+                      category={category}
+                      items={completedGrouped[category] ?? []}
+                      recipes={recipes}
+                      recipeInputsByRecipeId={recipeInputsByRecipeId}
+                      buildQueue={buildQueue}
+                      inventory={inventoryEntries}
+                      materials={materials}
+                      locations={locations}
+                      strategy={sourceStrategy}
+                      onQuantityChange={updateBuildQueueItemQuantity}
+                      onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
+                      onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
+                      onStatusChange={updateBuildQueueItemStatus}
+                      onRemove={removeBuildQueueItem}
+                      onToggleAllocation={toggleBuildQueueAllocation}
+                      onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
+                    />
+                  ))}
+                </section>
+              )}
             </>
 
           </div>
