@@ -146,12 +146,20 @@ export interface BlueprintSourceSnapshot {
   weight?: number;
 }
 
+export interface BuildQueueFinalProductQualitySnapshot {
+  averageBand?: number;
+  average?: number;
+  quality?: number;
+  band?: number;
+}
+
 export interface BuildQueueItem {
   id: string;
   recipeId: string;
   blueprint_id?: string;
   itemId?: string;
   itemName?: string;
+  finalProductQuality?: BuildQueueFinalProductQualitySnapshot;
   finalProductQualityBand?: number;
   finalProductQualityAverage?: number;
   finalProductRarity?: string;

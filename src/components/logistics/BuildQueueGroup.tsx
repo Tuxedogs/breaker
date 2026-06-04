@@ -206,10 +206,9 @@ function formatDecimal(value: number): string {
 }
 
 function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate[], draftBandIndices: Record<string, number>, isEditing: boolean) {
-  const snapshot = item as any;
-  const finalProductQuality = snapshot.finalProductQuality;
-  const snapshotAverage = Number(snapshot.finalProductQualityAverage ?? finalProductQuality?.averageBand ?? finalProductQuality?.average ?? finalProductQuality?.quality);
-  const snapshotBand = Number(snapshot.finalProductQualityBand ?? finalProductQuality?.band);
+  const finalProductQuality = item.finalProductQuality;
+  const snapshotAverage = Number(item.finalProductQualityAverage ?? finalProductQuality?.averageBand ?? finalProductQuality?.average ?? finalProductQuality?.quality);
+  const snapshotBand = Number(item.finalProductQualityBand ?? finalProductQuality?.band);
 
   if (Number.isFinite(snapshotAverage)) {
     const bandForRarity = Number.isFinite(snapshotBand) ? snapshotBand : Math.max(1, Math.min(8, Math.floor(snapshotAverage)));
