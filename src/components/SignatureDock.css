@@ -339,10 +339,11 @@
   position: relative;
   padding: 5px 8px 4px;
   background: linear-gradient(90deg,#0d1821,#070c0f);
-  border-bottom: 1px solid rgba(255, 153, 0, 0.13);
-  gap: 5px;
+  border-bottom: 1px solid rgba(43, 41, 38, 0.705);
+  gap: 17px;
   cursor: default;
   touch-action: none;
+  border-radius: 8px 8px 0 0;
 }
 
 .sdock-pinned-header:active {
@@ -377,25 +378,16 @@
 }
 
 .sdock-drag-handle {
-  border: 1px solid rgba(130, 150, 160, 0.12);
   color: rgba(163, 174, 169, 0.48);
   cursor: grab;
   font-family: var(--font-primary);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: -0.15em;
+  letter-spacing: 0.3em;
   touch-action: none;
 }
 
-.sdock-drag-handle:active {
-  cursor: grabbing;
-}
 
-.sdock-drag-handle:hover {
-  color: rgba(255, 196, 96, 0.82);
-  border-color: rgba(255, 153, 0, 0.24);
-  background: rgba(255, 153, 0, 0.055);
-}
 
 .sdock-clear-selection-btn {
   border: 1px solid rgba(248, 113, 113, 0.18);
@@ -425,9 +417,8 @@
   background: transparent;
   border: 0;
   border-radius: 0;
-  color: var(--void-accent-amber);
   font-family: var(--font-primary);
-  font-size: 11px;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 18px;
