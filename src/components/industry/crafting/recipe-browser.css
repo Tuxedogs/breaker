@@ -3295,6 +3295,7 @@
 
 /* ── Toolbar shell ── */
 .component-browser-toolbar {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -3620,6 +3621,10 @@
   border: 1px solid rgba(148, 163, 184, 0.15);
   border-radius: 5px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.crb-material-dropdown--toolbar {
+  z-index: 260;
 }
 
 .crb-material-option {
