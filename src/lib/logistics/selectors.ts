@@ -132,14 +132,12 @@ export function getAvailableQuantityForInventoryEntry(
 export function isInventoryEntryEligibleForRequirement(
   inventoryEntry: InventoryEntry,
   materialId: string,
-  selectedQuality?: number,
-  allowLowerQuality = false,
+  _selectedQuality?: number,
+  _allowLowerQuality = false,
 ): boolean {
   if (inventoryEntry.materialId !== materialId) return false;
   if (inventoryEntry.quantity <= 0) return false;
-  if (allowLowerQuality) return true;
-  if (selectedQuality === undefined) return true;
-  return inventoryEntry.quality !== undefined && inventoryEntry.quality >= selectedQuality;
+  return true;
 }
 
 export function allocationMatchesRequirement(
@@ -148,14 +146,8 @@ export function allocationMatchesRequirement(
   identity?: BuildQueueRequirementIdentity,
 ): boolean {
   if (allocation.materialId !== materialId) return false;
-  if (allocation.allowLowerQualityOverride && !identity?.allowLowerQuality) return false;
   if (!identity) return true;
   if (identity.requirementId !== undefined && allocation.requirementId !== identity.requirementId) return false;
-  if (
-    identity.selectedQuality !== undefined &&
-    allocation.selectedQuality !== identity.selectedQuality &&
-    !(identity.allowLowerQuality && allocation.allowLowerQualityOverride)
-  ) return false;
   if (identity.unitType !== undefined && allocation.unitType !== identity.unitType) return false;
   return true;
 }
@@ -231,10 +223,7 @@ export function getBuildQueueMaterialNeedSummary(
   const reservedByOtherQueueItems = buildQueue
     .filter((item) => item.id !== buildQueueItem.id)
     .flatMap((item) => (item.reservedAllocations ?? []).map((allocation) => ({ allocation, item })))
-    .filter(({ allocation, item }) =>
-      allocation.materialId === materialId &&
-      (!allocation.allowLowerQualityOverride || item.allowLowerQuality === true)
-    )
+    .filter(({ allocation }) => allocation.materialId === materialId)
     .reduce((sum, { allocation }) => sum + allocation.quantityReserved, 0);
   const availableQuantity = inventoryEntries
     .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId, identity?.selectedQuality, identity?.allowLowerQuality))

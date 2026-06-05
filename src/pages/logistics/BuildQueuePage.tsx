@@ -29,6 +29,7 @@ export default function BuildQueuePage() {
   const removeBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
   const clearBuildQueue = useLogisticsStore((s) => s.clearBuildQueue);
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
+  const updateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
@@ -124,6 +125,7 @@ export default function BuildQueuePage() {
                   onStatusChange={updateBuildQueueItemStatus}
                   onRemove={removeBuildQueueItem}
                   onToggleAllocation={toggleBuildQueueAllocation}
+                  onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
                   onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
                 />
               ))}
@@ -151,6 +153,7 @@ export default function BuildQueuePage() {
                       onStatusChange={updateBuildQueueItemStatus}
                       onRemove={removeBuildQueueItem}
                       onToggleAllocation={toggleBuildQueueAllocation}
+                      onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
                       onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
                     />
                   ))}
