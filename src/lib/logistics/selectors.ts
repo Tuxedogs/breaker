@@ -132,8 +132,6 @@ export function getAvailableQuantityForInventoryEntry(
 export function isInventoryEntryEligibleForRequirement(
   inventoryEntry: InventoryEntry,
   materialId: string,
-  _selectedQuality?: number,
-  _allowLowerQuality = false,
 ): boolean {
   if (inventoryEntry.materialId !== materialId) return false;
   if (inventoryEntry.quantity <= 0) return false;
@@ -215,7 +213,7 @@ export function getBuildQueueMaterialNeedSummary(
   identity?: BuildQueueRequirementIdentity,
 ): BuildQueueMaterialNeedSummary {
   const ownedQuantity = inventoryEntries
-    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId, identity?.selectedQuality, identity?.allowLowerQuality))
+    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId))
     .reduce((sum, entry) => sum + entry.quantity, 0);
   const reservedByThisQueueItem = (buildQueueItem.reservedAllocations ?? [])
     .filter((allocation) => allocationMatchesRequirement(allocation, materialId, identity))
@@ -226,7 +224,7 @@ export function getBuildQueueMaterialNeedSummary(
     .filter(({ allocation }) => allocation.materialId === materialId)
     .reduce((sum, { allocation }) => sum + allocation.quantityReserved, 0);
   const availableQuantity = inventoryEntries
-    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId, identity?.selectedQuality, identity?.allowLowerQuality))
+    .filter((entry) => isInventoryEntryEligibleForRequirement(entry, materialId))
     .reduce((sum, entry) => sum + getAvailableQuantityForInventoryEntry(entry, buildQueue, buildQueueItem.id), 0);
 
   return {

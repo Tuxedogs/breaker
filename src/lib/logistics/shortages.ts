@@ -15,14 +15,12 @@ export interface Shortage {
 
 function getShortageKey(
   materialKey: string,
-  _selectedQuality?: number,
-  _allowLowerQuality?: boolean,
   unitType?: RecipeInputTemplate["unitType"],
 ): string {
   return `${materialKey}:amount-only:${unitType ?? 'unit'}`;
 }
 
-function isEligible(entry: InventoryEntry, materialId: string, _selectedQuality?: number, _allowLowerQuality = false): boolean {
+function isEligible(entry: InventoryEntry, materialId: string): boolean {
   if (entry.materialId !== materialId) return false;
   if (entry.quantity <= 0) return false;
   return true;
@@ -39,7 +37,7 @@ export function computeShortages(
     const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
     for (const input of inputs) {
       const materialKey = input.materialKey ?? input.materialId;
-      const key = getShortageKey(materialKey, input.selectedQuality, false, input.unitType);
+      const key = getShortageKey(materialKey, input.unitType);
       const current = neededByMaterial[key] ?? {
         materialId: materialKey,
         selectedQuality: input.selectedQuality,
@@ -57,7 +55,7 @@ export function computeShortages(
   return Object.entries(neededByMaterial)
     .map(([materialKey, requirement]) => {
       const have = inventory
-        .filter((entry) => isEligible(entry, requirement.materialId, requirement.selectedQuality, requirement.allowLowerQuality))
+        .filter((entry) => isEligible(entry, requirement.materialId))
         .reduce((sum, entry) => sum + entry.quantity, 0);
       return {
         materialKey,
