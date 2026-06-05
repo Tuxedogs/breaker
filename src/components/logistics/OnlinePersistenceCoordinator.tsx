@@ -1,23 +1,56 @@
 import { useEffect } from "react";
 
+import {
+  initialBuildQueue,
+  initialInventoryEntries,
+  inventoryLocations,
+} from "../../data/logistics/seed";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { getOnlineSyncStatus, remoteMigratedAtKey, setOnlineSyncStatus } from "../../lib/onlineSyncStatus";
 import { fetchOnlinePersistenceState, syncOnlinePersistenceState } from "../../lib/userOnlinePersistence";
 import { setBuildQueueAccessToken } from "../../lib/userBuildQueuePersistence";
 import { useLogisticsStore } from "../../stores/logisticsStore";
+import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../../types/logistics";
+
+const seedLocationIds = new Set(inventoryLocations.map((location) => location.id));
+const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
+const seedBuildQueueIds = new Set(initialBuildQueue.map((item) => item.id));
+
+function isSeedLocation(location: InventoryLocation) {
+  return seedLocationIds.has(location.id);
+}
+
+function isSeedInventoryEntry(entry: InventoryEntry) {
+  return seedInventoryEntryIds.has(entry.id);
+}
+
+function isSeedBuildQueueItem(item: BuildQueueItem) {
+  return seedBuildQueueIds.has(item.id);
+}
+
+function getUserPlanningPayload() {
+  const state = useLogisticsStore.getState();
+  const inventoryEntries = state.inventoryEntries.filter((entry) => !isSeedInventoryEntry(entry));
+  const buildQueue = state.buildQueue.filter((item) => !isSeedBuildQueueItem(item));
+  const referencedLocationIds = new Set(
+    inventoryEntries
+      .map((entry) => entry.locationId)
+      .filter((locationId): locationId is string => Boolean(locationId)),
+  );
+  return {
+    locations: state.locations.filter((location) => !isSeedLocation(location) || referencedLocationIds.has(location.id)),
+    inventoryEntries,
+    buildQueue,
+  };
+}
 
 function hasLocalPlanningState() {
-  const state = useLogisticsStore.getState();
-  return state.locations.length > 0 || state.inventoryEntries.length > 0 || state.buildQueue.length > 0;
+  const payload = getUserPlanningPayload();
+  return payload.locations.length > 0 || payload.inventoryEntries.length > 0 || payload.buildQueue.length > 0;
 }
 
 function getLocalPlanningPayload() {
-  const state = useLogisticsStore.getState();
-  return {
-    locations: state.locations,
-    inventoryEntries: state.inventoryEntries,
-    buildQueue: state.buildQueue,
-  };
+  return getUserPlanningPayload();
 }
 
 function markSynced(migratedAt?: string | null, lastSyncedAt?: string | null) {
