@@ -4,7 +4,6 @@ import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
-import { useCompareStore } from "@/stores/compareStore";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -52,17 +51,6 @@ export default function ComponentResultCard({
   const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
   const location = useLocation();
-  const { slots, setSlot } = useCompareStore();
-
-  function handleCompare(e: React.MouseEvent) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!record) return;
-    const emptySlot = slots[0] === null ? 0 : slots[1] === null ? 1 : 1;
-    setSlot(emptySlot, record);
-  }
-
-  const isInCompare = record && (slots[0]?.id === record.id || slots[1]?.id === record.id);
 
   return (
     <article className="component-result-card">
@@ -131,16 +119,6 @@ export default function ComponentResultCard({
               <span className="component-card-state__empty" aria-hidden="true" />
             )}
           </span>
-          {record && (
-            <button
-              type="button"
-              className={`cmp-card-btn${isInCompare ? " cmp-card-btn--active" : ""}`}
-              onClick={handleCompare}
-              aria-label={isInCompare ? "In compare" : "Add to compare"}
-            >
-              {isInCompare ? "✓ Compare" : "+ Compare"}
-            </button>
-          )}
           <span className="component-card-action">Craft</span>
         </span>
       </Link>

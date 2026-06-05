@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import ComponentResultCard from "./ComponentResultCard";
-import CompareTray from "./CompareTray";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
@@ -280,7 +279,6 @@ export default function ComponentResultsBrowser({
           </button>
         </div>
       </footer>
-      <CompareTray />
     </>
   );
 }

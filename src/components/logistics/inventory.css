@@ -172,6 +172,7 @@
 }
 
 .logi-location-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 282px;
@@ -301,7 +302,7 @@
 }
 
 .logi-location-stack-row {
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto 24px;
   min-height: 31px;
   border-radius: 9px;
   padding: 0.28rem 0.42rem;
@@ -332,6 +333,107 @@
   font-family: var(--font-primary);
   font-size: 0.62rem;
   white-space: nowrap;
+}
+
+.logi-stack-delete-btn {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(251, 113, 133, 0.20);
+  border-radius: 7px;
+  background: rgba(127, 29, 29, 0.12);
+  color: rgba(251, 113, 133, 0.82);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.logi-stack-delete-btn:hover,
+.logi-stack-delete-btn:focus-visible {
+  outline: none;
+  background: rgba(127, 29, 29, 0.24);
+  border-color: rgba(251, 113, 133, 0.42);
+  color: #fecdd3;
+}
+
+.logi-location-delete-confirm {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  padding: 0.9rem;
+  background: rgba(3, 7, 18, 0.58);
+  backdrop-filter: blur(10px) saturate(1.15);
+}
+
+.logi-location-delete-panel {
+  width: min(100%, 280px);
+  padding: 0.85rem;
+  border: 1px solid rgba(251, 113, 133, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.86), rgba(6, 10, 18, 0.92));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+.logi-location-delete-kicker,
+.logi-location-delete-panel p,
+.logi-location-delete-actions button {
+  font-family: var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.logi-location-delete-kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: rgba(251, 113, 133, 0.86);
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.logi-location-delete-panel strong {
+  display: block;
+  color: #f8fbff;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.logi-location-delete-panel p {
+  margin: 0.45rem 0 0.7rem;
+  color: rgba(199, 210, 230, 0.62);
+  font-size: 0.6rem;
+  line-height: 1.35;
+}
+
+.logi-location-delete-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.logi-location-delete-actions button {
+  min-width: 72px;
+  min-height: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.60);
+  color: rgba(231, 237, 255, 0.72);
+  font-size: 0.62rem;
+  cursor: pointer;
+}
+
+.logi-location-delete-actions .logi-location-delete-yes {
+  border-color: rgba(251, 113, 133, 0.34);
+  background: rgba(127, 29, 29, 0.26);
+  color: #fecdd3;
 }
 
 .logi-location-more {

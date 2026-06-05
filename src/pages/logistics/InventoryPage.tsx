@@ -156,6 +156,7 @@ export default function InventoryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
   const [editingCard, setEditingCard] = useState<string | null>(null);
+  const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
   const [cardEdits, setCardEdits] = useState<Record<string, { quantity: string; quality: string; container: string; notes: string }>>({});
 
   function handleSort(key: SortKey) {
@@ -348,6 +349,7 @@ export default function InventoryPage() {
         notes: entry.notes ?? '',
       };
     }
+    setPendingDeleteEntryId(null);
     setCardEdits(edits);
     setEditingCard(group.id);
   }
@@ -389,6 +391,7 @@ export default function InventoryPage() {
 
   function handleDelete(id: string) {
     deleteInventoryEntry(id);
+    setPendingDeleteEntryId(null);
     if (panel?.mode === 'edit' && panel.entry.id === id) setPanel(null);
   }
 
@@ -531,8 +534,14 @@ export default function InventoryPage() {
       {viewMode === 'cards' ? (
         <>
           <div className="logi-location-card-grid">
-            {locationGroups.map((group) => (
-              <article key={group.id} className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}${group.premiumCount > 0 ? ' logi-location-card--premium' : ''}`}>
+            {locationGroups.map((group) => {
+              const pendingDeleteEntry = group.entries.find((entry) => entry.id === pendingDeleteEntryId);
+              const pendingDeleteName = pendingDeleteEntry
+                ? resolveInventoryItemName(pendingDeleteEntry, getMaterialForEntry(pendingDeleteEntry, materials))
+                : null;
+
+              return (
+                <article key={group.id} className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}${group.premiumCount > 0 ? ' logi-location-card--premium' : ''}`}>
                 <div className="logi-location-card-head">
                   <div>
                     <div className="logi-location-card-kicker">{group.subtitle}</div>
@@ -608,6 +617,15 @@ export default function InventoryPage() {
                             </div>
                             <QualityPill quality={entry.quality} />
                             <span className="logi-location-stack-qty">{formatQuantity(entry.quantity)} SCU</span>
+                            <button
+                              type="button"
+                              className="logi-stack-delete-btn"
+                              onClick={() => setPendingDeleteEntryId(entry.id)}
+                              aria-label={`Delete ${resolveInventoryItemName(entry, material)}`}
+                              title="Delete inventory item"
+                            >
+                              X
+                            </button>
                           </div>
                         );
                       })}
@@ -648,8 +666,22 @@ export default function InventoryPage() {
                     </>
                   )}
                 </div>
-              </article>
-            ))}
+                {pendingDeleteEntry && (
+                  <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
+                    <div className="logi-location-delete-panel">
+                      <span className="logi-location-delete-kicker">Are you sure?</span>
+                      <strong>{pendingDeleteName}</strong>
+                      <p>This inventory item will be deleted from {group.name}.</p>
+                      <div className="logi-location-delete-actions">
+                        <button type="button" className="logi-location-delete-yes" onClick={() => handleDelete(pendingDeleteEntry.id)}>Yes</button>
+                        <button type="button" onClick={() => setPendingDeleteEntryId(null)}>Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                </article>
+              );
+            })}
           </div>
 
           <div className="logi-inv-secondary-grid">
