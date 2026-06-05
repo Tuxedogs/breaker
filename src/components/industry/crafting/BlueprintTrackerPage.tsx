@@ -344,7 +344,8 @@ function MissionFactionGroup({
     : false;
 
   useEffect(() => {
-    if (containsSelectedMission) setGroupExpanded(true);
+    if (!containsSelectedMission) return;
+    queueMicrotask(() => setGroupExpanded(true));
   }, [containsSelectedMission]);
 
   return (

@@ -108,12 +108,15 @@ export default function MiningModule() {
 
   // Build queue / demand pipeline
   const queueFocusOptions = useMemo(() => buildQueue.filter((item) => item.status !== "complete"), [buildQueue]);
-  useEffect(() => { if (queueFocusItemId && !queueFocusOptions.some((item) => item.id === queueFocusItemId)) setQueueFocusItemId(""); }, [queueFocusItemId, queueFocusOptions]);
+  useEffect(() => {
+    if (!queueFocusItemId || queueFocusOptions.some((item) => item.id === queueFocusItemId)) return;
+    queueMicrotask(() => setQueueFocusItemId(""));
+  }, [queueFocusItemId, queueFocusOptions]);
   useEffect(() => {
     if (!buildQueueSelectionActive) return;
     if (previousQueueFocusItemIdRef.current === queueFocusItemId) return;
     previousQueueFocusItemIdRef.current = queueFocusItemId;
-    setQueueScope("all-shortfalls");
+    queueMicrotask(() => setQueueScope("all-shortfalls"));
   }, [buildQueueSelectionActive, queueFocusItemId]);
 
   const focusedBuildQueue = useMemo(() => buildQueueSelectionActive && queueFocusItemId ? buildQueue.filter((item) => item.id === queueFocusItemId) : buildQueue, [buildQueue, buildQueueSelectionActive, queueFocusItemId]);
@@ -132,7 +135,10 @@ export default function MiningModule() {
 
   const buildQueueMaterials = useMemo(() => new Set(miningRequiredMaterials.map(materialKeyOf)), [miningRequiredMaterials]);
   const buildQueueMaterialsKey = [...buildQueueMaterials].sort().join(",");
-  useEffect(() => { if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return; setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); }, [buildQueueMaterialsKey, buildQueueSelectionActive]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
+    queueMicrotask(() => setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])));
+  }, [buildQueueMaterials, buildQueueMaterialsKey, buildQueueSelectionActive]);
   useEffect(() => { writeStoredSidebarState<MiningSidebarState>(MINING_FILTER_STORAGE_KEY, { buildQueueActive: buildQueueSelectionActive, systems: [...selectedSystems], miningTypes: [...selectedMiningTypes], resources: [...selectedMaterials] }); }, [buildQueueSelectionActive, selectedMaterials, selectedMiningTypes, selectedSystems]);
 
   const activeBuildQueueMaterialKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : new Set<string>(), [buildQueueMaterials, buildQueueSelectionActive]);
@@ -174,10 +180,10 @@ export default function MiningModule() {
   useEffect(() => {
     if (migrationDoneRef.current || materialOptionByKey.size === 0) return;
     migrationDoneRef.current = true;
-    setSelectedMaterials((prev) => {
+    queueMicrotask(() => setSelectedMaterials((prev) => {
       const cleaned = new Set([...prev].map((key) => canonicalMiningMaterial({ id: key, label: key })).filter((m) => !m.unresolvedUuid && materialOptionByKey.has(m.key)).map((m) => m.key));
       return cleaned.size === prev.size && [...cleaned].every((key) => prev.has(key)) ? prev : cleaned;
-    });
+    }));
   }, [materialOptionByKey]);
 
   const resourceGroups = useMemo(() => buildResourceGroups(allMaterialResources), [allMaterialResources]);
@@ -208,22 +214,24 @@ export default function MiningModule() {
     manualDemand: planner.manualDemand.map((d) => d.id),
   }), [recommenderRequiredMaterials, favoriteLocationIds, planner.filters, rankingMode, planner.priorityStack, planner.manualDemand]);
 
-  const recommendationRequestRef = useRef(buildRecommendationRequest({ priorityStack: planner.priorityStack, manualDemand: planner.manualDemand, favoriteLocationIds, filters: planner.filters }, null, recommenderRequiredMaterials, rankingMode));
-  const recommendationRequestKeyRef = useRef<string | null>(null);
-  if (recommendationRequestKeyRef.current !== recommendationRequestKey) {
-    recommendationRequestKeyRef.current = recommendationRequestKey;
-    recommendationRequestRef.current = buildRecommendationRequest({ priorityStack: planner.priorityStack, manualDemand: planner.manualDemand, favoriteLocationIds, filters: planner.filters }, null, recommenderRequiredMaterials, rankingMode);
-  }
+  const recommendationRequest = useMemo(
+    () => buildRecommendationRequest({ priorityStack: planner.priorityStack, manualDemand: planner.manualDemand, favoriteLocationIds, filters: planner.filters }, null, recommenderRequiredMaterials, rankingMode),
+    [favoriteLocationIds, planner.filters, planner.manualDemand, planner.priorityStack, rankingMode, recommenderRequiredMaterials],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
     const requestSeq = ++recommendationRequestSeqRef.current;
-    setState((prev) => prev.status === "loading" ? prev : { status: "loading", data: "data" in prev ? prev.data : undefined });
-    getMiningRecommendations(recommendationRequestRef.current, controller.signal)
+    queueMicrotask(() => {
+      if (!controller.signal.aborted) {
+        setState((prev) => prev.status === "loading" ? prev : { status: "loading", data: "data" in prev ? prev.data : undefined });
+      }
+    });
+    getMiningRecommendations(recommendationRequest, controller.signal)
       .then((data) => { if (requestSeq !== recommendationRequestSeqRef.current) return; setState({ status: "loaded", data }); })
       .catch((err) => { if (controller.signal.aborted || requestSeq !== recommendationRequestSeqRef.current) return; setState((prev) => ({ status: "error", message: String(err), data: "data" in prev ? prev.data : undefined })); });
     return () => controller.abort();
-  }, [recommendationRequestKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [recommendationRequest, recommendationRequestKey]);
 
   const recommendationData = "data" in state ? state.data : undefined;
   const locations = useMemo(() => recommendationData ? [...recommendationData.recommendations].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)) : [], [recommendationData]);
@@ -285,7 +293,13 @@ export default function MiningModule() {
     return searchFilteredLocations[0] ?? selectedEntry;
   }, [mobileQueueDemandSatisfied, searchFilteredLocations, selectedEntry, selectedLocationKey]);
 
-  useEffect(() => { setSelectedLocationKey(null); setLocationSearch(""); setShowAllLocations(false); }, [selectedMaterials, selectedSystems, selectedMiningTypes, buildQueueSelectionActive]);
+  useEffect(() => {
+    queueMicrotask(() => {
+      setSelectedLocationKey(null);
+      setLocationSearch("");
+      setShowAllLocations(false);
+    });
+  }, [selectedMaterials, selectedSystems, selectedMiningTypes, buildQueueSelectionActive]);
 
   // Filter handlers
   function toggleMaterial(id: string) {

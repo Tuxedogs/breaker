@@ -218,9 +218,6 @@ export default function QualityModifierViewer() {
   useEffect(() => {
     let cancelled = false;
 
-    setLoading(true);
-    setError(null);
-
     getCraftingItems()
       .then((items) => {
         if (cancelled) return;

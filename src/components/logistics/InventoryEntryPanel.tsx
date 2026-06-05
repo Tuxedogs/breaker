@@ -326,6 +326,7 @@ function LocationTypeahead({
 export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
   const isNew = entry === null;
 
+  const [newEntryId] = useState(() => String(Date.now()));
   const [draft, setDraft] = useState<DraftState>(() =>
     entry
       ? initDraftFromEntry(entry, materials, locations)
@@ -389,7 +390,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     }
 
     return createInventoryEntryDraft({
-      id: overrideId ?? entry?.id ?? String(Date.now()),
+      id: overrideId ?? entry?.id ?? newEntryId,
       materialId: resolvedMaterialId,
       itemName: resolvedItemName,
       itemKind: draft.itemKind,
@@ -430,13 +431,13 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       : `×${qty}`;
 
   // Resolve locationId: exact pick, or single-match from search text
-  const resolvedLocationId = useMemo(() => {
+  const resolvedLocationId = (() => {
     if (draft.locationId) return draft.locationId;
     const q = draft.locationSearch.trim().toLowerCase();
     if (!q) return '';
     const matches = locations.filter((l) => l.name.toLowerCase() === q);
     return matches.length === 1 ? matches[0].id : '';
-  }, [draft.locationId, draft.locationSearch, locations]);
+  })();
 
   const canSave = useMemo(() => {
     const q = parseFloat(draft.quantity);

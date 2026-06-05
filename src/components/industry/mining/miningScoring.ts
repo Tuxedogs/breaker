@@ -81,7 +81,6 @@ export function demandWeightedLocationScore(
   let covered = 0;
   let weightedFit = 0;
   let coveredDemandWeight = 0;
-  let totalDemandWeight = 0;
   for (const material of demandMaterials) {
     const canonical = canonicalMiningMaterial({
       materialKey: material.materialKey,
@@ -91,7 +90,6 @@ export function demandWeightedLocationScore(
     });
     if (canonical.unresolvedUuid || !canonical.key) continue;
     const quantityWeight = Math.max(1, Number(material.requiredQuantity) || 1);
-    totalDemandWeight += quantityWeight;
     if (!coveredKeys.has(canonical.key)) {
       continue;
     }
@@ -167,4 +165,3 @@ export function diversifyLocationsByMaterials(
 
   return selected;
 }
-
