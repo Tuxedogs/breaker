@@ -1,0 +1,122 @@
+import type { BuildQueueItem, InventoryEntry, ReservedMaterialAllocation } from "../../types/logistics";
+import type { RecipeInputTemplate } from "../../data/logistics/seed";
+import type { ModifierAtQuality } from "../../components/industry/crafting/utils/qualityModifiers";
+import { getModifiersAtQuality } from "../../components/industry/crafting/utils/qualityModifiers";
+
+export const MIN_MATERIAL_QUALITY = 1;
+export const MAX_MATERIAL_QUALITY = 1000;
+
+export function clampMaterialQuality(value: unknown): number | undefined {
+  if (value === "" || value === null || value === undefined) return undefined;
+  const parsed = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(parsed)) return undefined;
+  return Math.max(MIN_MATERIAL_QUALITY, Math.min(MAX_MATERIAL_QUALITY, Math.trunc(parsed)));
+}
+
+export function getAllocationTotal(allocations: Pick<ReservedMaterialAllocation, "quantityReserved">[]): number {
+  return allocations.reduce((sum, allocation) => sum + Math.max(0, allocation.quantityReserved), 0);
+}
+
+export function getWeightedEffectiveQuality(
+  allocations: Pick<ReservedMaterialAllocation, "quantityReserved" | "quality">[],
+): number | undefined {
+  let weighted = 0;
+  let total = 0;
+  for (const allocation of allocations) {
+    const amount = Math.max(0, allocation.quantityReserved);
+    const quality = clampMaterialQuality(allocation.quality);
+    if (amount <= 0 || quality === undefined) continue;
+    weighted += amount * quality;
+    total += amount;
+  }
+  return total > 0 ? weighted / total : undefined;
+}
+
+export function getRemainingRequiredAmount(requiredAmount: number, allocatedAmount: number): number {
+  return Math.max(0, requiredAmount - Math.max(0, allocatedAmount));
+}
+
+export function getReservedAmountForInventoryLot(
+  buildQueue: BuildQueueItem[],
+  inventoryEntryId: string,
+  options?: {
+    excludeBuildQueueItemId?: string;
+    excludeAllocationIds?: Set<string>;
+  },
+): number {
+  return buildQueue.reduce((sum, item) => {
+    if (item.id === options?.excludeBuildQueueItemId) return sum;
+    return sum + (item.reservedAllocations ?? [])
+      .filter((allocation) =>
+        allocation.inventoryEntryId === inventoryEntryId &&
+        !options?.excludeAllocationIds?.has(allocation.id)
+      )
+      .reduce((allocationSum, allocation) => allocationSum + allocation.quantityReserved, 0);
+  }, 0);
+}
+
+export function getLotAvailableAmountAfterReservations(
+  inventoryEntry: Pick<InventoryEntry, "id" | "quantity">,
+  buildQueue: BuildQueueItem[],
+  currentBuildQueueItemId: string,
+  currentLineAllocations: Pick<ReservedMaterialAllocation, "id" | "inventoryEntryId" | "quantityReserved">[] = [],
+): number {
+  const currentLineAllocationIds = new Set(currentLineAllocations.map((allocation) => allocation.id));
+  const reservedByOthers = getReservedAmountForInventoryLot(buildQueue, inventoryEntry.id, {
+    excludeBuildQueueItemId: currentBuildQueueItemId,
+    excludeAllocationIds: currentLineAllocationIds,
+  });
+  const reservedByCurrentLine = currentLineAllocations
+    .filter((allocation) => allocation.inventoryEntryId === inventoryEntry.id)
+    .reduce((sum, allocation) => sum + allocation.quantityReserved, 0);
+  return Math.max(0, inventoryEntry.quantity - reservedByOthers - reservedByCurrentLine);
+}
+
+export function getRequirementLineKey(
+  item: Pick<BuildQueueItem, "id" | "recipeId" | "blueprint_id">,
+  input: RecipeInputTemplate,
+  inputIndex: number,
+): string {
+  if (input.requirementId) return input.requirementId;
+  return [
+    item.id,
+    item.recipeId,
+    item.blueprint_id ?? "no-blueprint",
+    input.materialKey ?? input.materialId,
+    inputIndex,
+    input.modifierName ?? input.modifierType ?? "material",
+    input.selectedQuality ?? "any",
+  ].join(":");
+}
+
+export function getModifierProjectionFromQuality(
+  input: Pick<RecipeInputTemplate, "qualityModifiers" | "modifierName" | "modifierType" | "modifierValue">,
+  quality: number | undefined,
+): ModifierAtQuality | undefined {
+  if (quality !== undefined && input.qualityModifiers?.length) {
+    return getModifiersAtQuality(input.qualityModifiers, quality)[0];
+  }
+  if (input.modifierName && input.modifierValue !== undefined) {
+    return {
+      slot: "",
+      property: input.modifierName,
+      value: input.modifierValue,
+      modifierMode: input.modifierType,
+    };
+  }
+  return undefined;
+}
+
+export function getQualityProjectionStatus(
+  allocatedAmount: number,
+  requiredAmount: number,
+  effectiveQuality: number | undefined,
+  targetQuality: number | undefined,
+): "unreserved" | "pending" | "below" | "meets" | "above" {
+  if (allocatedAmount <= 0 || effectiveQuality === undefined) return "unreserved";
+  if (allocatedAmount < requiredAmount) return "pending";
+  if (targetQuality === undefined) return "meets";
+  if (effectiveQuality < targetQuality) return "below";
+  if (effectiveQuality > targetQuality) return "above";
+  return "meets";
+}

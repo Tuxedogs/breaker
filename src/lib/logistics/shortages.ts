@@ -15,19 +15,17 @@ export interface Shortage {
 
 function getShortageKey(
   materialKey: string,
-  selectedQuality?: number,
-  allowLowerQuality?: boolean,
+  _selectedQuality?: number,
+  _allowLowerQuality?: boolean,
   unitType?: RecipeInputTemplate["unitType"],
 ): string {
-  return `${materialKey}:${allowLowerQuality ? 'lower-ok' : selectedQuality ?? 'any'}:${unitType ?? 'unit'}`;
+  return `${materialKey}:amount-only:${unitType ?? 'unit'}`;
 }
 
-function isEligible(entry: InventoryEntry, materialId: string, selectedQuality?: number, allowLowerQuality = false): boolean {
+function isEligible(entry: InventoryEntry, materialId: string, _selectedQuality?: number, _allowLowerQuality = false): boolean {
   if (entry.materialId !== materialId) return false;
   if (entry.quantity <= 0) return false;
-  if (allowLowerQuality) return true;
-  if (selectedQuality === undefined) return true;
-  return entry.quality !== undefined && entry.quality >= selectedQuality;
+  return true;
 }
 
 export function computeShortages(
@@ -45,7 +43,7 @@ export function computeShortages(
       const current = neededByMaterial[key] ?? {
         materialId: materialKey,
         selectedQuality: input.selectedQuality,
-        allowLowerQuality: false,
+        allowLowerQuality: true,
         unitType: input.unitType,
         needed: 0,
       };

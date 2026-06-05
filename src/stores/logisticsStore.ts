@@ -24,6 +24,7 @@ import {
   resolveInventoryItemName,
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
+import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
 import type {
   BuildQueueItem,
   InventoryCatalogSource,
@@ -255,7 +256,7 @@ function normalizeInventoryEntry(
   fallbackCreatedAt?: string,
 ): InventoryEntry {
   const material = getMaterialTemplate(entry.materialId, materials);
-  const quality = isNumber(entry.quality) ? Math.max(0, Math.min(1000, entry.quality)) : undefined;
+  const quality = isNumber(entry.quality) ? clampMaterialQuality(entry.quality) : undefined;
   const qualityBand = isNumber(entry.qualityBand) ? Math.trunc(entry.qualityBand) : undefined;
   const rarity = quality !== undefined
     ? getRarityForBand(qualityBand)
@@ -413,7 +414,7 @@ function getReservedQuantityForStack(
 }
 
 function getRequirementLineId(item: BuildQueueItem, input: RecipeInputTemplate, index: number): string {
-  return input.requirementId ?? `${item.id}:${index}:${input.materialKey ?? input.materialId}:${input.modifierName ?? input.modifierType ?? "material"}`;
+  return getRequirementLineKey(item, input, index);
 }
 
 function createValidatedAllocation(
@@ -462,12 +463,6 @@ function sanitizeReservedAllocationsForItem(
     if (!allocation.inventoryEntryId || allocation.quantityReserved <= 0) continue;
     const inventoryEntry = state.inventoryEntries.find((entry) => entry.id === allocation.inventoryEntryId);
     if (!inventoryEntry?.materialId || inventoryEntry.materialId !== allocation.materialId) continue;
-    if (
-      !allocation.allowLowerQualityOverride &&
-      allocation.selectedQuality !== undefined &&
-      (inventoryEntry.quality === undefined || inventoryEntry.quality < allocation.selectedQuality)
-    ) continue;
-
     const reservedByOthers = getReservedQuantityForStack(
       state.buildQueue,
       allocation.inventoryEntryId,
@@ -814,13 +809,6 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             const inventoryEntry = state.inventoryEntries.find((e) => e.id === allocation.inventoryEntryId);
             if (!inventoryEntry) return item;
             if (!allocation || allocation.materialId !== inventoryEntry.materialId) return item;
-            if (
-              !allocation.allowLowerQualityOverride &&
-              allocation.selectedQuality !== undefined &&
-              (inventoryEntry.quality === undefined || inventoryEntry.quality < allocation.selectedQuality)
-            ) {
-              return { ...item, reservedAllocations: allocations.filter((a) => a.id !== allocationId) };
-            }
             const reservedByOthers = getReservedQuantityForStack(state.buildQueue, inventoryEntry.id, buildQueueItemId);
             const reservedByThisStackOtherSlots = allocations
               .filter((entry) => entry.id !== allocationId && entry.inventoryEntryId === inventoryEntry.id)
@@ -942,7 +930,7 @@ export function createInventoryEntryDraft(
 ): InventoryEntry {
   const material = getMaterialTemplate(input.materialId, get().materialTemplates);
   const timestamp = new Date().toISOString();
-  const quality = input.quality === undefined ? undefined : Math.max(0, Math.min(1000, input.quality));
+  const quality = clampMaterialQuality(input.quality);
   const qualityBand = input.qualityBand === undefined ? undefined : Math.trunc(input.qualityBand);
   const rarity = quality !== undefined ? getRarityForBand(qualityBand) : rarityCatalog.common;
   return normalizeInventoryEntry({

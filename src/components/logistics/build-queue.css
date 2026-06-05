@@ -1442,10 +1442,37 @@
   font-size: 0.6rem;
 }
 
+.bq-reserve-summary,
+.bq-reserve-projection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.22rem 0.52rem;
+  margin-bottom: 0.28rem;
+  color: var(--bq-sub);
+  font-size: 0.62rem;
+}
+
+.bq-reserve-summary span,
+.bq-reserve-projection span {
+  padding: 0.08rem 0.32rem;
+  border: 1px solid rgba(148,163,184,0.08);
+  border-radius: 3px;
+  background: rgba(255,255,255,0.016);
+}
+
+.bq-reserve-summary b {
+  color: rgba(226,232,240,0.9);
+  font-weight: 700;
+}
+
+.bq-reserve-projection .is-better { color: var(--bq-green); }
+.bq-reserve-projection .is-worse { color: var(--bq-red); }
+.bq-reserve-projection .is-neutral { color: var(--bq-sub); }
+
 /* stack rows */
 .bq-stack-line {
   display: grid;
-  grid-template-columns: 13px minmax(5rem,1.2fr) minmax(4rem,0.52fr) minmax(3.2rem,1.4fr) minmax(4rem,0.5fr) minmax(6.4rem,0.7fr) minmax(5rem,0.5fr);
+  grid-template-columns: 13px minmax(5rem,1.1fr) minmax(4rem,0.52fr) minmax(6rem,1.1fr) minmax(4rem,0.5fr) minmax(5.6rem,0.6fr) minmax(4.5rem,0.5fr);
   gap: 0.3rem;
   align-items: center;
   min-height: 24px;
@@ -1493,14 +1520,30 @@
 .bq-stack-cb:checked::before { transform: scale(1); }
 .bq-stack-cb:disabled { opacity: 0.35; cursor: not-allowed; }
 
+.bq-reserve-amount-input {
+  width: 100%;
+  min-height: 24px;
+  border: 1px solid rgba(148,163,184,0.14);
+  border-radius: 3px;
+  background: rgba(2,6,20,0.58);
+  color: rgba(226,232,240,0.9);
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  padding: 0 0.32rem;
+}
+
+.bq-reserve-amount-input:disabled {
+  opacity: 0.42;
+}
+
 .bq-stack-line--lower { padding-left: 0.4rem; border-top: 1px solid rgba(148,163,184,0.055); }
 .bq-stack-line--lower.is-disabled { opacity: 0.48; }
-.bq-stack-line--lower.is-selected { background: rgba(245,158,11,0.04); }
+.bq-stack-line--lower.is-selected { background: rgba(148,163,184,0.045); }
 
 .bq-lower-quality {
   margin-top: 0.2rem;
   padding-top: 0.18rem;
-  border-top: 1px solid rgba(245,158,11,0.1);
+  border-top: 1px solid var(--bq-edge-soft);
 }
 
 .bq-lower-toggle {
