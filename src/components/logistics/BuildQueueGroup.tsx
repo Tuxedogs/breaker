@@ -49,6 +49,15 @@ function getModifierTrendClass(property: string | undefined, value: number | und
   return 'is-neutral';
 }
 
+type BuildQueueActiveDrawer = {
+  type: 'quality' | 'reserve';
+  requirementKey: string;
+};
+
+function isDrawerToggleExcluded(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && Boolean(target.closest('button,input,select,textarea,[data-bq-row-control="true"]'));
+}
+
 // ─── Quantization ────────────────────────────────────────────────────────────
 
 const MATERIAL_QUANTIZATION_URL = '/api/crafting/material_quality_quantization.json';
@@ -407,15 +416,42 @@ export default function BuildQueueGroup({
   materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
 }: Props) {
-  const [activeQualityEditorKey, setActiveQualityEditorKey] = useState<string | null>(null);
+  const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
-  const [expandedReserveRows, setExpandedReserveRows] = useState<Record<string, boolean>>({});
   const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
-  function openQualityEditor(editorKey: string, selectedQuality: number) {
-    setActiveQualityEditorKey(editorKey);
-    setQualityDrafts((prev) => ({ ...prev, [editorKey]: String(Math.round(selectedQuality)) }));
+  useEffect(() => {
+    const activeQualityKeys = new Set(
+      Object.values(activeDrawersByItem)
+        .filter((drawer): drawer is BuildQueueActiveDrawer => drawer?.type === 'quality')
+        .map((drawer) => drawer.requirementKey),
+    );
+
+    setQualityDrafts((prev) => {
+      const next: Record<string, string> = {};
+      for (const key of activeQualityKeys) {
+        if (prev[key] !== undefined) next[key] = prev[key];
+      }
+      return next;
+    });
+  }, [activeDrawersByItem]);
+
+  function openQualityEditor(itemId: string, editorKey: string, selectedQuality: number) {
+    const alreadyOpen =
+      activeDrawersByItem[itemId]?.type === 'quality' &&
+      activeDrawersByItem[itemId]?.requirementKey === editorKey;
+    setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: alreadyOpen ? undefined : { type: 'quality', requirementKey: editorKey } }));
+    setQualityDrafts((prev) => {
+      const next = { ...prev };
+      delete next[editorKey];
+      if (!alreadyOpen) next[editorKey] = String(Math.round(selectedQuality));
+      return next;
+    });
+  }
+
+  function toggleReserveDrawer(itemId: string, requirementKey: string, isOpen: boolean) {
+    setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: isOpen ? undefined : { type: 'reserve', requirementKey } }));
   }
 
   function clampQualityDraft(editorKey: string, qualityBands: QualityBand[]) {
@@ -424,8 +460,13 @@ export default function BuildQueueGroup({
     setQualityDrafts((prev) => ({ ...prev, [editorKey]: String(clampQualityForBands(parsed, qualityBands)) }));
   }
 
-  function cancelQualityEditor(editorKey: string) {
-    setActiveQualityEditorKey((current) => (current === editorKey ? null : current));
+  function cancelQualityEditor(itemId: string, editorKey: string) {
+    if (
+      activeDrawersByItem[itemId]?.type === 'quality' &&
+      activeDrawersByItem[itemId]?.requirementKey === editorKey
+    ) {
+      setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: undefined }));
+    }
     setQualityDrafts((prev) => {
       const next = { ...prev };
       delete next[editorKey];
@@ -459,7 +500,7 @@ export default function BuildQueueGroup({
     if (Number.isFinite(effectiveReservedQuality) && draftQuality > Number(effectiveReservedQuality)) {
       ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
     }
-    cancelQualityEditor(editorKey);
+    cancelQualityEditor(item.id, editorKey);
   }
 
   return (
@@ -529,12 +570,6 @@ export default function BuildQueueGroup({
           const ownAllocations = item.reservedAllocations?.filter((a) => allocationMatchesRequirement(a, materialKey, effectiveRequirementIdentity)) ?? [];
           const ownReservedByStack = new Map(ownAllocations.map((a) => [a.inventoryEntryId, a.quantityReserved]));
           const effectiveReservedQuality = getWeightedEffectiveQuality(ownAllocations);
-          const reservedModifierAtQuality = getModifierProjectionFromQuality(input, effectiveReservedQuality);
-          const reservedModifierValue = reservedModifierAtQuality?.value;
-          const reservedModifierDisplayValue = reservedModifierAtQuality
-            ? formatModifierAtQuality(reservedModifierAtQuality)
-            : '';
-          const reservedModifierTone = getModifierTrendClass(reservedModifierAtQuality?.property ?? modifierLabel, reservedModifierValue);
           const allocatedAmount = getAllocationTotal(ownAllocations);
           const remainingRequired = getRemainingRequiredAmount(required, allocatedAmount);
           const qualityProjectionState = getQualityProjectionStatus(allocatedAmount, required, effectiveReservedQuality, requirementSelectedQuality);
@@ -557,7 +592,6 @@ export default function BuildQueueGroup({
             required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview, modifierLabel, modifierValue, modifierDisplayLabel, modifierDisplayValue, modifierTone,
             allowLowerQuality, coverage, needSummary, ownAllocations, ownReservedByStack,
             allocatedAmount, remainingRequired, effectiveReservedQuality, qualityProjectionState, reserveStatusLabel,
-            reservedModifierAtQuality, reservedModifierDisplayValue, reservedModifierTone,
             allMaterialStacks, reservableStacks, ineligibleStacks: [] as InventoryStack[],
             staleAllocations: coverage.validations.filter((v) => v.isStale),
           };
@@ -669,8 +703,13 @@ export default function BuildQueueGroup({
                 </div>
 
                 {materialGroups.map((group) => {
-                  const reserveExpanded = expandedReserveRows[group.groupKey] ?? false;
-                  const qualityExpanded = activeQualityEditorKey === group.groupKey;
+                  const activeDrawer = activeDrawersByItem[item.id];
+                  const reserveExpanded =
+                    activeDrawer?.type === 'reserve' &&
+                    activeDrawer.requirementKey === group.groupKey;
+                  const qualityExpanded =
+                    activeDrawer?.type === 'quality' &&
+                    activeDrawer.requirementKey === group.groupKey;
                   const qualityRequirement = group.requirements[0];
                   const qualityDraft = qualityDrafts[group.groupKey] ?? String(group.selectedQuality);
                   const parsedQualityDraft = parseDraftNumber(qualityDraft);
@@ -682,7 +721,13 @@ export default function BuildQueueGroup({
                     : group.selectedQualityRarity;
                   return (
                     <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
-                      <div className="bq-mat-row">
+                      <div
+                        className="bq-mat-row"
+                        onClick={(event) => {
+                          if (isDrawerToggleExcluded(event.target)) return;
+                          openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                        }}
+                      >
                         <div className="bq-mat-name">
                           <span className="bq-material-name-cell">
                             <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} />
@@ -698,6 +743,7 @@ export default function BuildQueueGroup({
                             className={`bq-quality-inline-input bq-badge bq-badge--quality logi-rarity--${previewQualityRarity} is-active`}
                             value={qualityDraft}
                             aria-label="Material quality"
+                            onClick={(event) => event.stopPropagation()}
                             onChange={(event) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: event.target.value }))}
                             onBlur={() => clampQualityDraft(group.groupKey, qualityRequirement.qualityBands as QualityBand[])}
                             onKeyDown={(event) => {
@@ -712,7 +758,7 @@ export default function BuildQueueGroup({
                                   qualityRequirement.effectiveReservedQuality,
                                 );
                               }
-                              if (event.key === 'Escape') cancelQualityEditor(group.groupKey);
+                              if (event.key === 'Escape') cancelQualityEditor(item.id, group.groupKey);
                             }}
                           />
                         ) : (
@@ -720,7 +766,10 @@ export default function BuildQueueGroup({
                             type="button"
                             className={`bq-quality-badge bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}
                             aria-expanded={qualityExpanded}
-                            onClick={() => openQualityEditor(group.groupKey, group.selectedQuality)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                            }}
                           >
                             {group.selectedQuality}
                           </button>
@@ -734,9 +783,13 @@ export default function BuildQueueGroup({
                             const rowModifierDisplayLabel = rowModifierAtQuality?.property ? formatProperty(rowModifierAtQuality.property) : req.modifierDisplayLabel;
                             const rowModifierDisplayValue = rowModifierAtQuality ? formatModifierAtQuality(rowModifierAtQuality) : req.modifierDisplayValue;
                             const rowModifierPreview = rowModifierDisplayValue ? `${rowModifierDisplayLabel} ${rowModifierDisplayValue}` : rowModifierDisplayLabel;
+                            const rowModifierTone = getModifierTrendClass(
+                              rowModifierAtQuality?.property ?? req.modifierLabel,
+                              rowModifierAtQuality?.value ?? req.modifierValue,
+                            );
                             return (
                             <span
-                              className="bq-mat-modifier-entry"
+                              className={`bq-mat-modifier-entry ${rowModifierTone}`}
                               key={`${req.requirementCardKey}:mod`}
                             >
                               <span className="bq-mat-modifier-label">{rowModifierPreview}</span>
@@ -747,10 +800,13 @@ export default function BuildQueueGroup({
                         <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
                         <button
                           type="button"
-                          className="bq-reserve-btn"
+                          className={`bq-reserve-btn${reserveExpanded ? ' is-active' : ''}`}
                           aria-expanded={reserveExpanded}
                           disabled={!group.hasStock && !reserveExpanded}
-                          onClick={() => setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: !reserveExpanded }))}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                          }}
                         >
                           {reserveExpanded ? 'Hide' : group.hasStock ? 'Reserve' : 'No stock'}
                         </button>
@@ -778,7 +834,7 @@ export default function BuildQueueGroup({
                               qualityRequirement.ownAllocations,
                               qualityRequirement.effectiveReservedQuality,
                             )}
-                            onCancel={() => cancelQualityEditor(group.groupKey)}
+                            onCancel={() => cancelQualityEditor(item.id, group.groupKey)}
                             onReset={() => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: String(qualityRequirement.input.selectedQuality ?? group.selectedQuality) }))}
                           />
                         </div>
@@ -818,7 +874,7 @@ export default function BuildQueueGroup({
                                   onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, isBelowTarget));
                                 }
                               }
-                              setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: false }));
+                              setActiveDrawersByItem((prev) => ({ ...prev, [item.id]: undefined }));
                             };
                             const clearReserve = () => {
                               req.ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
@@ -831,7 +887,7 @@ export default function BuildQueueGroup({
                               });
                             };
                             const cancelReserve = () => {
-                              setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: false }));
+                              setActiveDrawersByItem((prev) => ({ ...prev, [item.id]: undefined }));
                               setReserveDrafts((prev) => {
                                 const next = { ...prev };
                                 for (const stack of req.reservableStacks) {
@@ -844,19 +900,6 @@ export default function BuildQueueGroup({
                               <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
                                 {group.requirements.length > 1 && (
                                   <div className="bq-reserve-req-head">                       
-                                  </div>
-                                )}
-
-                                <div className="bq-reserve-summary">
-                                  <span>Required <b>{formatQuantity(req.required, req.material)}</b></span>
-                                  <span>Allocated <b>{formatQuantity(req.allocatedAmount, req.material)}</b></span>
-                                  <span>Remaining <b>{formatQuantity(req.remainingRequired, req.material)}</b></span>
-                                </div>
-
-                                {req.reservedModifierDisplayValue && req.effectiveReservedQuality !== undefined && (
-                                  <div className="bq-reserve-projection">
-                                    <span>Target: {req.modifierPreview}</span>
-                                    <span className={req.reservedModifierTone}>Reserved: {req.modifierDisplayLabel} {req.reservedModifierDisplayValue} at Effective {formatDecimal(req.effectiveReservedQuality)}</span>
                                   </div>
                                 )}
 

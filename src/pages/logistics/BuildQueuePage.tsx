@@ -27,7 +27,6 @@ export default function BuildQueuePage() {
   const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
   const updateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
   const removeBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
-  const clearBuildQueue = useLogisticsStore((s) => s.clearBuildQueue);
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const updateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
@@ -52,8 +51,6 @@ export default function BuildQueuePage() {
 
   const categories = Object.keys(grouped);
   const completedCategories = Object.keys(completedGrouped);
-  const materialsNeededCount = queueLedger.refinedShortfallLines.length;
-
 
   return (
     <div className="bq-page">
@@ -64,45 +61,6 @@ export default function BuildQueuePage() {
       <div className="bq-main">
         <div className="bq-workspace">
           <div className="bq-shell">
-
-            <div className="bq-shell-header">
-              <div>
-                <div className="bq-shell-title-row">
-                  <span className="bq-shell-kicker">BUILD QUEUE</span>
-                  <span className="bq-shell-count">{materialsNeededCount} materials</span>
-                </div>
-                <h1>Material Shortages</h1>
-                <p>Active build demand, stock gaps, and reservation readiness.</p>
-              </div>
-              {buildQueue.length > 0 && (
-                <button type="button" className="bq-btn bq-btn--danger" onClick={clearBuildQueue}>
-                  Clear queue
-                </button>
-              )}
-            </div>
-
-            <div className="bq-summary-grid" aria-label="Build queue summary metrics">
-              <div className="bq-summary-card">
-                <span>Queued Builds</span>
-                <strong>{buildQueue.length}</strong>
-                <em>Total build plans</em>
-              </div>
-              <div className="bq-summary-card bq-summary-card--danger">
-                <span>Blocked Builds</span>
-                <strong>{activeBuildQueue.length}</strong>
-                <em>Active demand with gaps</em>
-              </div>
-              <div className="bq-summary-card">
-                <span>Materials Needed</span>
-                <strong>{materialsNeededCount}</strong>
-                <em>Unique shortage materials</em>
-              </div>
-              <div className="bq-summary-card bq-summary-card--success">
-                <span>Completed Crafts</span>
-                <strong>{completedBuildQueue.length}</strong>
-                <em>Moved out of active demand</em>
-              </div>
-            </div>
 
             <>
               {categories.length === 0 && completedCategories.length === 0 ? (
