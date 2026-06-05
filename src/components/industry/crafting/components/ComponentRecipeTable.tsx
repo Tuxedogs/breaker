@@ -56,6 +56,18 @@ const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
 const MAX_VISIBLE_RESULTS = 20;
+const FPS_LABEL_MAP: Record<string, string> = { ammo: "Ammo", armor: "Armor", weapons: "Weapons" };
+const CLASS_LABEL_MAP: Record<string, string> = {
+  civilian: "Civilian",
+  competition: "Competition",
+  military: "Military",
+  stealth: "Stealth",
+};
+
+function toggleSetValue<T>(set: Set<T>, value: T) {
+  if (set.has(value)) set.delete(value);
+  else set.add(value);
+}
 
 type RecipeSidebarState = {
   search: string;
@@ -356,7 +368,9 @@ function useMissionRewardEntries(
 
   useEffect(() => {
     let cancelled = false;
-    setApiEntries(null);
+    queueMicrotask(() => {
+      if (!cancelled) setApiEntries(null);
+    });
 
     loadMissionRewardSourceMap()
       .then((map) => {
@@ -3111,7 +3125,8 @@ export default function ComponentRecipeTable({
     const wasSaved = bookmarkedRecipeIds.has(recipeId);
     setBookmarkedRecipeIds((prev) => {
       const next = new Set(prev);
-      wasSaved ? next.delete(recipeId) : next.add(recipeId);
+      if (wasSaved) next.delete(recipeId);
+      else next.add(recipeId);
       return next;
     });
 
@@ -3129,7 +3144,8 @@ export default function ComponentRecipeTable({
     } catch {
       setBookmarkedRecipeIds((prev) => {
         const next = new Set(prev);
-        wasSaved ? next.add(recipeId) : next.delete(recipeId);
+        if (wasSaved) next.add(recipeId);
+        else next.delete(recipeId);
         return next;
       });
     }
@@ -3182,7 +3198,6 @@ export default function ComponentRecipeTable({
   }, [classFilters, fpsFilters, gradeFilters, resourceFilters, search, sizeFilters, vehicleFilters]);
 
   // FPS chips: ammo/armor/weapons — normalized labels
-  const FPS_LABEL_MAP: Record<string, string> = { ammo: "Ammo", armor: "Armor", weapons: "Weapons" };
   const fpsOptions = useMemo(
     () =>
       Array.from(new Set(recipes.filter((r) => r.item_kind === "fps").map((r) => r.component_type).filter(Boolean)))
@@ -3226,9 +3241,6 @@ export default function ComponentRecipeTable({
     [recipes],
   );
 
-  const CLASS_LABEL_MAP: Record<string, string> = {
-    civilian: "Civilian", competition: "Competition", military: "Military", stealth: "Stealth",
-  };
   const classOptions = useMemo(
     () =>
       Array.from(new Set(recipes.map((r) => r.class).filter(Boolean)))
@@ -3337,7 +3349,7 @@ export default function ComponentRecipeTable({
 
   useEffect(() => {
     if (groupedRecipes.length === 0) {
-      if (selectedGroupId !== null) setSelectedGroupId(null);
+      if (selectedGroupId !== null) queueMicrotask(() => setSelectedGroupId(null));
       return;
     }
 
@@ -3346,12 +3358,12 @@ export default function ComponentRecipeTable({
       : null;
 
     if (initialGroup && selectedGroupId !== initialGroup.id) {
-      setSelectedGroupId(initialGroup.id);
+      queueMicrotask(() => setSelectedGroupId(initialGroup.id));
       return;
     }
 
     if (!selectedGroupId || !groupedRecipes.some((group) => group.id === selectedGroupId)) {
-      setSelectedGroupId(groupedRecipes[0].id);
+      queueMicrotask(() => setSelectedGroupId(groupedRecipes[0].id));
     }
   }, [groupedRecipes, initialBlueprintId, selectedGroupId]);
 
@@ -3402,7 +3414,7 @@ export default function ComponentRecipeTable({
               {fpsOptions.map((opt) => (
                 <button key={opt.value} type="button"
                   className={`craft-frl-chip${fpsFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setFpsFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                  onClick={() => { setFpsFilters((prev) => { const n = new Set(prev); toggleSetValue(n, opt.value); return n; }); resetSelection(); }}
                 >{opt.label}</button>
               ))}
             </div>
@@ -3548,7 +3560,7 @@ export default function ComponentRecipeTable({
                           const utilityActive = [...UTILITY_TYPES].some((t) => n.has(t)) || n.has("__utility__");
                           if (utilityActive) { UTILITY_TYPES.forEach((t) => n.delete(t)); n.delete("__utility__"); }
                           else { n.add("__utility__"); }
-                        } else { n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); }
+                        } else { toggleSetValue(n, opt.value); }
                         return n;
                       });
                       resetSelection();
@@ -3567,7 +3579,7 @@ export default function ComponentRecipeTable({
                       .map((opt) => (
                         <button key={opt.value} type="button"
                           className={`craft-frl-chip${sizeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                          onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                          onClick={() => { setSizeFilters((prev) => { const n = new Set(prev); toggleSetValue(n, opt.value); return n; }); resetSelection(); }}
                         >{opt.label}</button>
                       ))}
                   </>
@@ -3580,7 +3592,7 @@ export default function ComponentRecipeTable({
                       .map((opt) => (
                         <button key={opt.value} type="button"
                           className={`craft-frl-chip${gradeFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                          onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                          onClick={() => { setGradeFilters((prev) => { const n = new Set(prev); toggleSetValue(n, opt.value); return n; }); resetSelection(); }}
                         >{opt.label}</button>
                       ))}
                   </>
@@ -3593,7 +3605,7 @@ export default function ComponentRecipeTable({
                       .map((opt) => (
                         <button key={opt.value} type="button"
                           className={`craft-frl-chip${classFilters.has(opt.value) ? " craft-frl-chip--active" : ""}`}
-                          onClick={() => { setClassFilters((prev) => { const n = new Set(prev); n.has(opt.value) ? n.delete(opt.value) : n.add(opt.value); return n; }); resetSelection(); }}
+                          onClick={() => { setClassFilters((prev) => { const n = new Set(prev); toggleSetValue(n, opt.value); return n; }); resetSelection(); }}
                         >{opt.label}</button>
                       ))}
                   </>
@@ -3605,7 +3617,7 @@ export default function ComponentRecipeTable({
               .map((chip) => (
                 <button key={chip.id} type="button"
                   className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); toggleSetValue(n, chip.id); return n; }); resetSelection(); }}
                 >{chip.label}</button>
               ))
             }
@@ -3614,7 +3626,7 @@ export default function ComponentRecipeTable({
               .map((chip) => (
                 <button key={chip.id} type="button"
                   className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); toggleSetValue(n, chip.id); return n; }); resetSelection(); }}
                 >{chip.label}</button>
               ))
             }
@@ -3623,7 +3635,7 @@ export default function ComponentRecipeTable({
               .map((chip) => (
                 <button key={chip.id} type="button"
                   className={`craft-frl-chip${resourceFilters.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); n.has(chip.id) ? n.delete(chip.id) : n.add(chip.id); return n; }); resetSelection(); }}
+                  onClick={() => { setResourceFilters((prev) => { const n = new Set(prev); toggleSetValue(n, chip.id); return n; }); resetSelection(); }}
                 >{chip.label}</button>
               ))
             }

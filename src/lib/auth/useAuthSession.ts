@@ -70,7 +70,6 @@ function useAuthSessionState(): AuthSessionState {
 
   useEffect(() => {
     if (!hasSupabaseConfig()) {
-      setState({ session: null, user: null, loading: false });
       return;
     }
 

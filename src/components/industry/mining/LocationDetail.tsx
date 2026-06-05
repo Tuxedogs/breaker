@@ -31,7 +31,8 @@ import {
 } from "./miningFormatters";
 import type { ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
-import { hasStantonLagrangeChildren, StantonLagrangeChildrenSummary } from "./LocationListItem";
+import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
+import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 
 export function InfoTip({ text }: { text: string }) {
   return (

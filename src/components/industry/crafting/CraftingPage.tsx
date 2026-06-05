@@ -68,12 +68,15 @@ export default function CraftingModule() {
   // Only load full recipe data when viewing a detail page
   useEffect(() => {
     if (!blueprintId) {
-      setRecipes([]);
+      queueMicrotask(() => setRecipes([]));
       return;
     }
     let cancelled = false;
-    setDetailLoading(true);
-    setDetailError(null);
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setDetailLoading(true);
+      setDetailError(null);
+    });
     getCraftingItems()
       .then((items) => {
         if (!cancelled) {

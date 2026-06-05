@@ -249,6 +249,15 @@ export default function DashboardPage() {
     ? `/logistics/inventory?location=${encodeURIComponent(topRecordedInventoryLocation.id)}`
     : "/logistics/inventory";
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
+  const miningRequiredMaterials = useMemo(
+    () => toRequiredMaterials(
+      queueLedger.rawOreRequirementLines.length > 0 ? queueLedger.rawOreRequirementLines : queueLedger.refinedShortfallLines
+    ),
+    [queueLedger.rawOreRequirementLines, queueLedger.refinedShortfallLines]
+  );
+  const displayedMiningState = miningRequiredMaterials.length === 0
+    ? { status: "idle" as const, data: [] as PublicLocationEntry[] }
+    : miningState;
 
   useEffect(() => {
     function refreshSignatureState() {
@@ -263,22 +272,19 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    const requiredMaterials = toRequiredMaterials(
-      queueLedger.rawOreRequirementLines.length > 0 ? queueLedger.rawOreRequirementLines : queueLedger.refinedShortfallLines
-    );
-    if (requiredMaterials.length === 0) {
-      setMiningState({ status: "idle", data: [] });
-      return;
-    }
+    if (miningRequiredMaterials.length === 0) return;
+
     const controller = new AbortController();
-    setMiningState((current) => ({ status: "loading", data: current.data }));
+    queueMicrotask(() => {
+      if (!controller.signal.aborted) setMiningState((current) => ({ status: "loading", data: current.data }));
+    });
     getMiningRecommendations(
       buildRecommendationRequest({
         priorityStack: [],
         manualDemand: [],
         favoriteLocationIds: [],
         filters: { showOnlyStarred: false },
-      }, null, requiredMaterials, "quality"),
+      }, null, miningRequiredMaterials, "quality"),
       controller.signal
     )
       .then((response) => {
@@ -288,7 +294,7 @@ export default function DashboardPage() {
         if (!controller.signal.aborted) setMiningState((current) => ({ status: "error", data: current.data }));
       });
     return () => controller.abort();
-  }, [queueLedger.rawOreRequirementLines, queueLedger.refinedShortfallLines]);
+  }, [miningRequiredMaterials]);
 
   return (
     <div className="dash-content-grid">
@@ -543,7 +549,7 @@ export default function DashboardPage() {
           <div className="dash-panel-header"><span className="dash-panel-title">Mining Recommendations</span></div>
           <div className="dash-panel-body">
             <ul className="dash-updates-list" role="list">
-              {miningState.data.map((rec) => (
+              {displayedMiningState.data.map((rec) => (
                 <li key={rec.locationKey} className="dash-update-item">
                   <div className="dash-update-thumb" aria-hidden>
                     <svg viewBox="0 0 20 14" width="24" height="17" fill="none">
@@ -558,8 +564,8 @@ export default function DashboardPage() {
                   </div>
                 </li>
               ))}
-              {miningState.data.length === 0 && (
-                <li className="dash-empty-state">{miningState.status === "loading" ? "Loading recommendations" : "No queue shortages to route"}</li>
+              {displayedMiningState.data.length === 0 && (
+                <li className="dash-empty-state">{displayedMiningState.status === "loading" ? "Loading recommendations" : "No queue shortages to route"}</li>
               )}
             </ul>
           </div>

@@ -41,8 +41,6 @@ export default function CraftingLayout() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     getComponentCardIndex()
       .then((index) => {
         if (!cancelled) {

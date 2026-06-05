@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { buildCoveragePlan, type CoveragePlan, type CoveragePlanLocation, type MiningCoverageMode } from "../../../features/mining/coveragePlan";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
@@ -160,16 +160,16 @@ export function useMiningLocations({
     [baseRankedFilteredLocations, coveragePlan],
   );
 
-  const previousRankedLocationsRef = useRef<PublicLocationEntry[]>([]);
+  const [previousRankedLocations, setPreviousRankedLocations] = useState<PublicLocationEntry[]>([]);
   useEffect(() => {
     if (loadingState !== "loading" && rankedFilteredLocations.length > 0) {
-      previousRankedLocationsRef.current = rankedFilteredLocations;
+      queueMicrotask(() => setPreviousRankedLocations(rankedFilteredLocations));
     }
   }, [rankedFilteredLocations, loadingState]);
 
   const displayRankedFilteredLocations =
-    loadingState === "loading" && rankedFilteredLocations.length === 0 && previousRankedLocationsRef.current.length > 0
-      ? previousRankedLocationsRef.current
+    loadingState === "loading" && rankedFilteredLocations.length === 0 && previousRankedLocations.length > 0
+      ? previousRankedLocations
       : rankedFilteredLocations;
 
   const selectedEntry = useMemo(() => {
