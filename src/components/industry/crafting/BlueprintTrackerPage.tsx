@@ -155,43 +155,65 @@ function MissionRow({
   pinned,
   acquiredBlueprintIds,
   expanded,
+  selected,
   onToggleCompleted,
   onTogglePinned,
   onToggleAcquired,
   onToggleExpanded,
   onSelectMission,
+  onClearSelectedMission,
 }: {
   mission: MissionBlueprintReward;
   completed: boolean;
   pinned: boolean;
   acquiredBlueprintIds: Set<string>;
   expanded: boolean;
+  selected: boolean;
   onToggleCompleted: (id: string) => void;
   onTogglePinned: (id: string) => void;
   onToggleAcquired: (id: string) => void;
   onToggleExpanded: (id: string) => void;
   onSelectMission: (mission: MissionBlueprintReward) => void;
+  onClearSelectedMission: () => void;
 }) {
   const acquiredCount = mission.rewards.filter((reward) => acquiredBlueprintIds.has(rewardStorageKey(reward))).length;
   const location = mission.location ?? mission.station ?? mission.planet ?? mission.system ?? "Unknown";
 
   return (
-    <div className={`bt-mission-entry${completed ? " is-completed" : ""}${expanded ? " is-expanded" : ""}${pinned ? " is-pinned" : ""}${mission.isDisabled ? " is-disabled" : ""}`}>
-      <div className="bt-mission-main">
+    <div className={`bt-mission-entry${completed ? " is-completed" : ""}${expanded ? " is-expanded" : ""}${pinned ? " is-pinned" : ""}${selected ? " is-selected" : ""}${mission.isDisabled ? " is-disabled" : ""}`}>
+      <div
+        className="bt-mission-main"
+        role="button"
+        tabIndex={0}
+        aria-label={`Show ${mission.title} details`}
+        onClick={() => onSelectMission(mission)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onSelectMission(mission);
+          }
+        }}
+      >
         <button
           type="button"
           className={`bt-pin-btn${pinned ? " is-active" : ""}`}
           aria-pressed={pinned}
           aria-label={pinned ? `Unpin ${mission.title}` : `Pin ${mission.title}`}
-          onClick={() => onTogglePinned(mission.missionId)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePinned(mission.missionId);
+          }}
         >
           <span aria-hidden>*</span>
         </button>
-        <label className="bt-check bt-check--mission" aria-label={`Mark ${mission.title} completed`}>
+        <label
+          className="bt-check bt-check--mission"
+          aria-label={`Mark ${mission.title} completed`}
+          onClick={(e) => e.stopPropagation()}
+        >
           <input
             type="checkbox"
             checked={completed}
-            onClick={(e) => e.stopPropagation()}
             onChange={() => onToggleCompleted(mission.missionId)}
           />
           <span aria-hidden />
@@ -247,6 +269,12 @@ function MissionRow({
         </button>
       </div>
 
+      {selected && (
+        <div className="bt-mission-detail-slot">
+          <MissionDetailPanel mission={mission} onClose={onClearSelectedMission} />
+        </div>
+      )}
+
       {expanded && (
         <div className="bt-reward-list">
           {mission.rewards.map((reward) => {
@@ -287,11 +315,13 @@ function MissionFactionGroup({
   pinnedMissionIds,
   acquiredBlueprintIds,
   expandedMissionIds,
+  selectedMissionId,
   onToggleCompleted,
   onTogglePinned,
   onToggleAcquired,
   onToggleExpanded,
   onSelectMission,
+  onClearSelectedMission,
 }: {
   factionName: string;
   missions: MissionBlueprintReward[];
@@ -299,14 +329,24 @@ function MissionFactionGroup({
   pinnedMissionIds: Set<string>;
   acquiredBlueprintIds: Set<string>;
   expandedMissionIds: Set<string>;
+  selectedMissionId: string | null;
   onToggleCompleted: (id: string) => void;
   onTogglePinned: (id: string) => void;
   onToggleAcquired: (id: string) => void;
   onToggleExpanded: (id: string) => void;
   onSelectMission: (mission: MissionBlueprintReward) => void;
+  onClearSelectedMission: () => void;
 }) {
   const [groupExpanded, setGroupExpanded] = useState(false);
   const completedCount = missions.filter((mission) => completedMissionIds.has(mission.missionId)).length;
+  const containsSelectedMission = selectedMissionId
+    ? missions.some((mission) => mission.missionId === selectedMissionId)
+    : false;
+
+  useEffect(() => {
+    if (containsSelectedMission) setGroupExpanded(true);
+  }, [containsSelectedMission]);
+
   return (
     <section className={`bt-faction-group${groupExpanded ? " is-expanded" : ""}`}>
       <button
@@ -335,11 +375,13 @@ function MissionFactionGroup({
               pinned={pinnedMissionIds.has(mission.missionId)}
               acquiredBlueprintIds={acquiredBlueprintIds}
               expanded={expandedMissionIds.has(mission.missionId)}
+              selected={selectedMissionId === mission.missionId}
               onToggleCompleted={onToggleCompleted}
               onTogglePinned={onTogglePinned}
               onToggleAcquired={onToggleAcquired}
               onToggleExpanded={onToggleExpanded}
               onSelectMission={onSelectMission}
+              onClearSelectedMission={onClearSelectedMission}
             />
           ))}
         </div>
@@ -381,7 +423,6 @@ function MissionTrackerSidebar({
   onSearchChange,
   onSelectMission,
   onTogglePinned,
-  onClearSelectedMission,
 }: {
   selectedMission: MissionBlueprintReward | null;
   pinnedMissions: MissionBlueprintReward[];
@@ -389,7 +430,6 @@ function MissionTrackerSidebar({
   onSearchChange: (query: string) => void;
   onSelectMission: (mission: MissionBlueprintReward) => void;
   onTogglePinned: (id: string) => void;
-  onClearSelectedMission: () => void;
 }) {
   return (
     <aside className="bt-sidebar" aria-label="Mission tracker sidebar">
@@ -443,8 +483,6 @@ function MissionTrackerSidebar({
           </div>
         )}
       </div>
-
-      <MissionDetailPanel mission={selectedMission} onClose={selectedMission ? onClearSelectedMission : undefined} />
     </aside>
   );
 }
@@ -948,11 +986,13 @@ export default function BlueprintTrackerPage() {
                     pinnedMissionIds={pinnedMissionIds}
                     acquiredBlueprintIds={acquiredBlueprintIds}
                     expandedMissionIds={expandedMissionIds}
+                    selectedMissionId={selectedMissionId}
                     onToggleCompleted={toggleCompletedMission}
                     onTogglePinned={togglePinnedMission}
                     onToggleAcquired={toggleAcquiredBlueprint}
                     onToggleExpanded={toggleExpandedMission}
                     onSelectMission={selectMission}
+                    onClearSelectedMission={clearSelectedMission}
                   />
                 ))
               )}
@@ -964,7 +1004,6 @@ export default function BlueprintTrackerPage() {
               onSearchChange={setMissionSearchQuery}
               onSelectMission={selectMission}
               onTogglePinned={togglePinnedMission}
-              onClearSelectedMission={clearSelectedMission}
             />
           </div>
         )}

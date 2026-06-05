@@ -17,6 +17,15 @@ import {
 } from "../utils/qualityModifiers";
 import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
+  buildSelectedQualitySnapshot,
+  computeTotalModifiers,
+  deriveFinalProductQuality,
+  getQualityBandsForMaterial,
+  getTotalModifierKey,
+  type FinalProductQuality,
+  type TotalModifierRow,
+} from "../utils/recipeQuality";
+import {
   getModifierImpact,
 } from "@/lib/gameplay/propertyUtils";
 import { apiUrl } from "@/lib/apiUrl";
@@ -30,7 +39,6 @@ import {
   findNearestBandForQuality,
   getBandEffectiveQuality as getEffectiveQualityFromBands,
   rarityClassFromBandIndex,
-  rarityFromBandIndex,
   type QualityBand,
 } from "../utils/qualityBands";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
@@ -39,6 +47,7 @@ import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 import { useCompareStore } from "@/stores/compareStore";
 
+export type { FinalProductQuality } from "../utils/recipeQuality";
 
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
@@ -830,10 +839,6 @@ function formatMaterialModifierDisplay(
   };
 }
 
-function getTotalModifierKey(property: string, modifierMode?: string): string {
-  return `${property}||${modifierMode ?? ""}`;
-}
-
 function MaterialStatIcon({ property }: { property: string }) {
   const label = formatModifierStatName(property);
 
@@ -1215,27 +1220,6 @@ function OverallModifierGroup({
       )}
     </div>
   );
-}
-
-function hasMaterialQualityModifiers(mat: ComponentRecipe["materials"][number]): boolean {
-  return (mat.qualityModifiers?.length ?? 0) > 0;
-}
-
-function getQualityBandsForMaterial(
-  mat: ComponentRecipe["materials"][number],
-  getBandsForMaterial: (materialName: string) => QualityBand[],
-): QualityBand[] {
-  const bands = getBandsForMaterial(getMaterialName(mat));
-  if (bands.length > 0) return bands;
-  return hasMaterialQualityModifiers(mat) ? FALLBACK_QUALITY_BANDS : bands;
-}
-
-function getMaterialEffectiveQuality(
-  mat: ComponentRecipe["materials"][number],
-  bandIndex: number,
-  getBandsForMaterial: (materialName: string) => QualityBand[],
-): number {
-  return getEffectiveQualityFromBands(getQualityBandsForMaterial(mat, getBandsForMaterial), bandIndex);
 }
 
 function useMaterialQualityModel({
@@ -1700,105 +1684,6 @@ function DetailMaterialQualityRow({
         })}
       </div>
     </div>
-  );
-}
-
-interface TotalModifierRow {
-  property: string;
-  totalValue: number;
-  modifierMode?: string;
-  contributions: { materialName: string; value: number }[];
-}
-
-export type FinalProductQuality = {
-  band: number;
-  averageBand: number;
-  rarity: string;
-  source: "selectedMaterialBands";
-};
-
-function computeTotalModifiers(
-  recipe: ComponentRecipe,
-  getBandsForMaterial: (materialName: string) => QualityBand[],
-  getBandIndex: (key: string) => number,
-): TotalModifierRow[] {
-  const map = new Map<string, TotalModifierRow>();
-
-  for (const [inputIndex, mat] of recipe.materials.entries()) {
-    const modifiers = mat.qualityModifiers ?? [];
-    if (modifiers.length === 0) continue;
-
-    const key = getMaterialQualityKey(recipe, mat, inputIndex);
-    const quality = getMaterialEffectiveQuality(mat, getBandIndex(key), getBandsForMaterial);
-    const atQuality = getModifiersAtQuality(modifiers, quality);
-
-    for (const m of atQuality) {
-      // Group by property + modifierMode so same stat from different slots combine
-      const rowKey = getTotalModifierKey(m.property, m.modifierMode);
-      const existing = map.get(rowKey);
-
-      if (!existing) {
-        map.set(rowKey, {
-          property: m.property,
-          totalValue: m.value,
-          modifierMode: m.modifierMode,
-          contributions: [{ materialName: getMaterialName(mat), value: m.value }],
-        });
-      } else {
-        if (m.modifierMode === "integerAdditive") {
-          existing.totalValue += m.value;
-        } else {
-          // Compound multiplicatively: (1 + a/100) * (1 + b/100) - 1, expressed as %
-          existing.totalValue = ((1 + existing.totalValue / 100) * (1 + m.value / 100) - 1) * 100;
-        }
-        existing.contributions.push({ materialName: getMaterialName(mat), value: m.value });
-      }
-    }
-  }
-
-  return Array.from(map.values());
-}
-
-function deriveFinalProductQuality(
-  recipe: ComponentRecipe,
-  getBandIndex: (key: string) => number,
-): FinalProductQuality {
-  let bandTotal = 0;
-  let materialCount = 0;
-
-  for (const [inputIndex, mat] of recipe.materials.entries()) {
-    const band = getBandIndex(getMaterialQualityKey(recipe, mat, inputIndex)) + 1;
-    bandTotal += band;
-    materialCount += 1;
-  }
-
-  const averageBand = materialCount > 0 ? bandTotal / materialCount : DEFAULT_BAND_INDEX + 1;
-  const band = Math.max(1, Math.min(8, Math.round(averageBand)));
-
-  return {
-    band,
-    averageBand,
-    rarity: rarityFromBandIndex(band),
-    source: "selectedMaterialBands",
-  };
-}
-
-function buildSelectedQualitySnapshot(
-  recipe: ComponentRecipe,
-  materialQualities: Record<string, number>,
-  getBandsForMaterial: (materialName: string) => QualityBand[],
-): Record<string, { quality: number; bandNumber: number; bands: QualityBand[] }> {
-  return Object.fromEntries(
-    recipe.materials.map((mat, inputIndex) => {
-      const key = getMaterialQualityKey(recipe, mat, inputIndex);
-      const bandIndex = materialQualities[key] ?? DEFAULT_BAND_INDEX;
-      const bands = getQualityBandsForMaterial(mat, getBandsForMaterial);
-      return [key, {
-        quality: getEffectiveQualityFromBands(bands, bandIndex),
-        bandNumber: bandIndex + 1,
-        bands,
-      }];
-    }),
   );
 }
 

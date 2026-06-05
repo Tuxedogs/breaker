@@ -180,18 +180,49 @@ export default function CraftingFilterBar({
   }, [savedOnly, setParam]);
 
   const [materialPickerOpen, setMaterialPickerOpen] = useState(false);
+  const [materialDropdownPosition, setMaterialDropdownPosition] = useState({ left: 0, top: 0 });
+  const toolbarRef = useRef<HTMLDivElement>(null);
   const materialPickerRef = useRef<HTMLDivElement>(null);
+  const materialDropdownRef = useRef<HTMLDivElement>(null);
+
+  const updateMaterialDropdownPosition = useCallback(() => {
+    const toolbar = toolbarRef.current;
+    const picker = materialPickerRef.current;
+    if (!toolbar || !picker) return;
+    const toolbarRect = toolbar.getBoundingClientRect();
+    const pickerRect = picker.getBoundingClientRect();
+    setMaterialDropdownPosition({
+      left: pickerRect.left - toolbarRect.left,
+      top: pickerRect.bottom - toolbarRect.top + 4,
+    });
+  }, []);
 
   useEffect(() => {
     if (!materialPickerOpen) return;
     function onPointerDown(e: PointerEvent) {
-      if (materialPickerRef.current && !materialPickerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        materialPickerRef.current &&
+        !materialPickerRef.current.contains(target) &&
+        !materialDropdownRef.current?.contains(target)
+      ) {
         setMaterialPickerOpen(false);
       }
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [materialPickerOpen]);
+
+  useEffect(() => {
+    if (!materialPickerOpen) return;
+    updateMaterialDropdownPosition();
+    window.addEventListener("resize", updateMaterialDropdownPosition);
+    window.addEventListener("scroll", updateMaterialDropdownPosition, true);
+    return () => {
+      window.removeEventListener("resize", updateMaterialDropdownPosition);
+      window.removeEventListener("scroll", updateMaterialDropdownPosition, true);
+    };
+  }, [materialPickerOpen, updateMaterialDropdownPosition]);
 
   const vehicleOptions = useMemo<FilterOption[]>(() => {
     const values = new Set<string>();
@@ -313,7 +344,7 @@ export default function CraftingFilterBar({
   }
 
   return (
-    <div className="component-browser-toolbar">
+    <div className="component-browser-toolbar" ref={toolbarRef}>
 
       {/* ── Row 1: Search + Bookmarks + Count ── */}
       <div className="crb-row crb-row--search">
@@ -447,33 +478,46 @@ export default function CraftingFilterBar({
           <button
             type="button"
             className={`crb-material-trigger${materialPickerOpen ? " crb-material-trigger--open" : ""}`}
-            onClick={() => setMaterialPickerOpen((v) => !v)}
+            onClick={() => {
+              updateMaterialDropdownPosition();
+              setMaterialPickerOpen((v) => !v);
+            }}
             aria-expanded={materialPickerOpen}
           >
             {materialFilters.size > 0 ? `${materialFilters.size} selected` : "Choose Materials"}
             <span className="crb-material-chevron" aria-hidden="true">▾</span>
           </button>
-          {materialPickerOpen && (
-            <div className="crb-material-dropdown" role="listbox" aria-label="Select materials">
-              {materialOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  role="option"
-                  aria-selected={materialFilters.has(option.value)}
-                  className={`crb-material-option${materialFilters.has(option.value) ? " crb-material-option--active" : ""}`}
-                  onClick={() => setMaterialFilters((prev) => toggleSetValue(prev, option.value))}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
         </div>
       </div>
 
       {/* ── Row 4: Active Filters (only when filters are set) ── */}
+      {materialPickerOpen && (
+        <div
+          className="crb-material-dropdown crb-material-dropdown--toolbar"
+          ref={materialDropdownRef}
+          role="listbox"
+          aria-label="Select materials"
+          style={{
+            left: materialDropdownPosition.left,
+            top: materialDropdownPosition.top,
+          }}
+        >
+          {materialOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              role="option"
+              aria-selected={materialFilters.has(option.value)}
+              className={`crb-material-option${materialFilters.has(option.value) ? " crb-material-option--active" : ""}`}
+              onClick={() => setMaterialFilters((prev) => toggleSetValue(prev, option.value))}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {hasFilters && (
         <div className="crb-row crb-row--active-filters">
           <span className="crb-section-label">Active Filters</span>

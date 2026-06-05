@@ -282,6 +282,11 @@
   background: var(--bt-panel-2);
 }
 
+.bt-mission-main:focus-visible {
+  outline: 2px solid var(--bt-orange-border);
+  outline-offset: -2px;
+}
+
 .bt-mission-entry.is-completed .bt-mission-main {
   background: linear-gradient(90deg, rgba(139, 209, 124, 0.08), var(--bt-panel));
 }
@@ -290,11 +295,17 @@
   box-shadow: inset 3px 0 0 rgba(245, 158, 11, 0.55);
 }
 
+.bt-mission-entry.is-selected .bt-mission-main {
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.12), var(--bt-panel-2));
+  box-shadow: inset 3px 0 0 rgba(139, 92, 246, 0.7);
+}
+
 .bt-mission-entry.is-disabled .bt-mission-main {
   background: linear-gradient(90deg, rgba(255, 107, 107, 0.08), var(--bt-panel));
 }
 
 .bt-mission-entry.is-expanded .bt-mission-main,
+.bt-mission-entry.is-selected .bt-mission-main,
 .bt-library-item.is-expanded .bt-library-head {
   border-bottom: 1px solid var(--bt-border-soft);
 }
@@ -569,6 +580,15 @@
 
 .bt-reward-state.is-acquired {
   color: var(--bt-teal);
+}
+
+.bt-mission-detail-slot {
+  padding: 8px 10px 10px 40px;
+  background: #0d1215;
+}
+
+.bt-mission-detail-slot .bt-detail-panel {
+  box-shadow: none;
 }
 
 .bt-detail-panel {
