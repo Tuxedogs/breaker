@@ -26,9 +26,6 @@
 /* Cool accent: nearly invisible, used only for depth/system edges */
 --void-blue-soft: rgba(59, 111, 160, 0.035);
 --void-blue-panel: rgba(46, 53, 71, 0.055);
---void-card-glow: rgba(255, 153, 0, 0.06);
---void-card-dark-glow: rgba(120, 140, 150, 0.035);
-
 /* Cards: cold carbon console, slightly lifted */
 --void-card-top: rgba(11, 20, 26, 0.96);
 --void-card-mid: rgba(10, 18, 24, 0.95);
@@ -84,7 +81,6 @@
       var(--void-panel-bottom) 100%
     );
   --bg-card:
-    radial-gradient(circle at 50% 0%, var(--void-card-glow), transparent 42%),
     linear-gradient(
       180deg,
       var(--void-card-top) 0%,
@@ -92,7 +88,6 @@
       var(--void-card-bottom) 100%
     );
   --bg-card-dark:
-    radial-gradient(circle at 50% 0%, var(--void-card-dark-glow), transparent 42%),
     linear-gradient(
       180deg,
       var(--void-card-dark-top) 0%,

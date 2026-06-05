@@ -15,7 +15,6 @@ const presetSearchPlaceholder = "Search location...";
 
 interface PersistedState {
   open: boolean;
-  pinned: boolean;
   minimized: boolean;
   fontWeight?: number;
   fontSize: number;
@@ -23,7 +22,6 @@ interface PersistedState {
   activeIds: number[];
   activePresetId?: string | null;
   activeMaterialKeys?: string[];
-  pinnedMaterialKeys?: string[];
   isPresetModified?: boolean;
 }
 
@@ -32,7 +30,7 @@ function loadState(): PersistedState {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) return JSON.parse(raw) as PersistedState;
   } catch { /* ignore */ }
-  return { open: false, pinned: false, minimized: false, fontWeight: 800, fontSize: 12, pos: null, activeIds: [] };
+  return { open: false, minimized: false, fontWeight: 800, fontSize: 12, pos: null, activeIds: [] };
 }
 
 function saveState(s: PersistedState) {
@@ -127,16 +125,12 @@ export default function SignatureDock() {
   const isMobileViewport = useIsMobileSignatureViewport();
 
   const [open, setOpen]           = useState(init.open);
-  const [pinned, setPinned]       = useState(init.pinned);
   const [minimized, setMinimized] = useState(init.minimized);
   const [fontWeight, setFontWeight] = useState(init.fontWeight ?? 800);
   const [fontSize, setFontSize]   = useState(init.fontSize ?? 12);
   const [activePresetId, setActivePresetId] = useState<string | null>(init.activePresetId ?? null);
   const [activeMaterialKeys, setActiveMaterialKeys] = useState<Set<string>>(
     () => new Set(init.activeMaterialKeys ?? materialKeysFromIds(init.activeIds))
-  );
-  const [pinnedMaterialKeys, setPinnedMaterialKeys] = useState<Set<string>>(
-    () => new Set(init.pinnedMaterialKeys ?? init.activeMaterialKeys ?? materialKeysFromIds(init.activeIds))
   );
   const [isPresetModified, setIsPresetModified] = useState(init.isPresetModified ?? false);
   const [presetPickerOpen, setPresetPickerOpen] = useState(false);
@@ -153,7 +147,6 @@ export default function SignatureDock() {
   useEffect(() => {
     saveState({
       open,
-      pinned,
       minimized,
       fontWeight,
       fontSize,
@@ -163,10 +156,9 @@ export default function SignatureDock() {
         .filter((id): id is number => typeof id === "number"),
       activePresetId,
       activeMaterialKeys: Array.from(activeMaterialKeys),
-      pinnedMaterialKeys: Array.from(pinnedMaterialKeys),
       isPresetModified,
     });
-  }, [open, pinned, minimized, fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, pinnedMaterialKeys, isPresetModified]);
+  }, [open, minimized, fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, isPresetModified]);
 
   // ── viewport clamp on resize ─────────────────────────────────────────────────
   useEffect(() => {
@@ -231,23 +223,19 @@ export default function SignatureDock() {
       if (next.has(materialKey)) next.delete(materialKey); else next.add(materialKey);
       if (next.size === 0) {
         setActivePresetId(null);
-        setPinnedMaterialKeys(new Set());
         setIsPresetModified(false);
         return next;
       }
-      if (pinned) setPinnedMaterialKeys(new Set(next));
       if (activePresetId) setIsPresetModified(true);
       return next;
     });
-  }, [activePresetId, pinned]);
+  }, [activePresetId]);
 
   const selectPreset = useCallback((presetId: string) => {
     const materialKeys = resolveSignaturePresetMaterialKeys(presetId, presetCatalog);
     const next = new Set(materialKeys);
     setActivePresetId(presetId);
     setActiveMaterialKeys(next);
-    setPinnedMaterialKeys(new Set(next));
-    setPinned(true);
     setMinimized(true);
     setIsPresetModified(false);
     setPresetPickerOpen(false);
@@ -261,8 +249,6 @@ export default function SignatureDock() {
   const clearSelectedMaterials = useCallback(() => {
     setActivePresetId(null);
     setActiveMaterialKeys(new Set());
-    setPinnedMaterialKeys(new Set());
-    setPinned(false);
     setIsPresetModified(false);
     setPresetPickerOpen(false);
     setPresetSearch("");
@@ -278,7 +264,7 @@ export default function SignatureDock() {
       )
     : MINEABLE_SIGNATURES;
 
-  const pinnedRows = rowsFromMaterialKeys(pinnedMaterialKeys);
+  const selectedRows = rowsFromMaterialKeys(activeMaterialKeys);
   const activePreset = activePresetId ? presetCatalog.presetById.get(activePresetId) : null;
   const selectionLabel = activePreset
     ? `${activePreset.shortLabel}${isPresetModified ? " + Custom" : ""}`
@@ -318,7 +304,7 @@ export default function SignatureDock() {
     return presetOptions.filter((option) => option.searchText.includes(qPreset));
   }, [presetOptions, presetSearch]);
 
-  const presetTriggerLabel = selectionLabel || (pinnedRows.length > 0 ? "Custom" : presetSearchPlaceholder);
+  const presetTriggerLabel = selectionLabel || (selectedRows.length > 0 ? "Custom" : presetSearchPlaceholder);
 
   const presetPicker = (
     <div className="sdock-preset-picker" ref={presetPickerRef} onPointerDown={(e) => e.stopPropagation()}>
@@ -452,9 +438,9 @@ export default function SignatureDock() {
               title="Open Signature Dock"
             >◈</button>
           </div>
-          {pinned && pinnedRows.length > 0 && (
+          {minimized && selectedRows.length > 0 && (
             <div className="sdock-pinned-body" style={{ fontSize, fontWeight }}>
-              {pinnedRows.map((m) => (
+              {selectedRows.map((m) => (
                 <div key={m.name} className="sdock-pinned-row">
                   <span className="sdock-pinned-row-name">{m.name}</span>
                   <div className="sdock-pinned-row-values">
@@ -507,21 +493,6 @@ export default function SignatureDock() {
                 />
               </div>
               <button className="sdock-ctrl-btn" onClick={resetPosition} title="Reset position">⌖</button>
-              <button
-                className={`sdock-ctrl-btn sdock-pin-quiet${pinned ? " active" : ""}`}
-                onClick={() => {
-                  setPinned((p) => {
-                    if (!p) {
-                      setPinnedMaterialKeys(new Set(activeMaterialKeys));
-                      setMinimized(true);
-                    }
-                    return !p;
-                  });
-                }}
-                title={pinned ? "Unpin" : "Pin active rows"}
-              >
-                📌
-              </button>
               <button className="sdock-ctrl-btn" onClick={handleMinimize} title="Minimize">−</button>
               <button className="sdock-ctrl-btn" onClick={handleClose} title="Close">×</button>
             </div>

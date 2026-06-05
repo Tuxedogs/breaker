@@ -32,7 +32,6 @@ import { apiUrl } from '../../lib/apiUrl';
 import { getModifierImpact } from '../../lib/gameplay/propertyUtils';
 import { parseJsonResponse } from '../../lib/safeJson';
 
-import QuantityText from './QuantityText';
 import MaterialIcon from './MaterialIcon';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -184,15 +183,15 @@ function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTempla
 
 function getCoverageLabel(state: string): string {
   if (state === 'covered') return 'Covered';
-  if (state === 'partial') return 'Partially covered';
+  if (state === 'partial') return 'Partial';
   if (state === 'overReserved') return 'Over';
   if (state === 'stale') return 'Stale';
-  return 'Missing amount';
+  return 'Missing';
 }
 
 function getReserveStatusLabel(state: string, qualityState: ReturnType<typeof getQualityProjectionStatus>): string {
-  if (state === 'missing') return 'Missing amount';
-  if (state === 'partial') return 'Partially covered';
+  if (state === 'missing') return 'Missing';
+  if (state === 'partial') return 'Partial';
   if (state === 'stale') return 'Stale';
   if (state === 'overReserved') return 'Over';
   if (qualityState === 'below') return 'Covered · Below target quality';
@@ -225,7 +224,29 @@ function formatDecimal(value: number): string {
   return value.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
 }
 
-function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate[], draftBandIndices: Record<string, number>, isEditing: boolean) {
+function getQualityValueFromBand(band: QualityBand | undefined): number | null {
+  if (!band) return null;
+  const value = Number(band.mappedValue ?? band.start);
+  if (!Number.isFinite(value)) return null;
+  return Math.max(0, Math.min(1000, Math.round(value)));
+}
+
+function getQualityRangeMin(qualityBands: QualityBand[] | null): number | null {
+  return getQualityValueFromBand(qualityBands?.[0]);
+}
+
+function clampQualityForBands(value: number, qualityBands: QualityBand[]): number {
+  const min = getQualityRangeMin(qualityBands) ?? getQualityValueFromBand(qualityBands[0]) ?? 0;
+  return Math.max(min, Math.min(1000, Math.round(value)));
+}
+
+function parseDraftNumber(value: string): number | null {
+  if (value.trim() === '' || value === '.' || value === '0.') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
   const finalProductQuality = item.finalProductQuality;
   const snapshotAverage = Number(item.finalProductQualityAverage ?? finalProductQuality?.averageBand ?? finalProductQuality?.average ?? finalProductQuality?.quality);
   const snapshotBand = Number(item.finalProductQualityBand ?? finalProductQuality?.band);
@@ -239,12 +260,9 @@ function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate
     };
   }
 
-  const bands = inputs.map((input, inputIndex) => {
-    const requirementId = getRequirementId(item, input, inputIndex);
+  const bands = inputs.map((input) => {
     const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-    const bandIndex = isEditing
-      ? (draftBandIndices[requirementId] ?? getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500))
-      : (getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500));
+    const bandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
     return bandIndex + 1;
   });
   const average = bands.length ? bands.reduce((s, b) => s + b, 0) / bands.length : 1;
@@ -295,86 +313,89 @@ interface Props {
 
 // ─── Quality Slider ──────────────────────────────────────────────────────────
 
-function MaterialQualitySlider({
-  input, draftBandIndex, onBandChange, quantizedBands,
+function MaterialQualityEditor({
+  draftQuality, onDraftQualityChange, onApply, onCancel, onReset, quantizedBands,
 }: {
-  input: RecipeInputTemplate;
-  draftBandIndex: number;
-  onBandChange: (bandIndex: number) => void;
+  draftQuality: string;
+  onDraftQualityChange: (value: string) => void;
+  onApply: () => void;
+  onCancel: () => void;
+  onReset: () => void;
   quantizedBands: QualityBand[] | null;
 }) {
-  // Prefer quantized bands from API; fall back to stored recipe bands; never use FALLBACK_QUALITY_BANDS arbitrary values
-  const qualityBands: QualityBand[] | null = quantizedBands ?? (input.qualityBands?.length ? input.qualityBands : null);
+  const qualityBands: QualityBand[] | null = quantizedBands;
 
-  const safeBandIndex = qualityBands ? Math.max(0, Math.min(draftBandIndex, qualityBands.length - 1)) : 0;
-  const selectedQualityTierClass = rarityClassFromBandIndex(safeBandIndex + 1);
-  const quality = qualityBands ? getBandEffectiveQuality(qualityBands, safeBandIndex) : null;
+  const minQuality = getQualityRangeMin(qualityBands);
+  const parsedQuality = parseDraftNumber(draftQuality);
+  const quality = qualityBands && parsedQuality !== null ? clampQualityForBands(parsedQuality, qualityBands) : null;
+  const activeBandIndex = qualityBands && quality !== null ? findNearestBandForQuality(qualityBands, quality) : 0;
+  const selectedQualityTierClass = rarityClassFromBandIndex(activeBandIndex + 1);
 
   const railMarkers = useMemo(() => {
-    if (!qualityBands) return [];
+    if (!qualityBands || minQuality === null) return [];
+    const range = Math.max(1, 1000 - minQuality);
     return qualityBands.map((band, i) => {
-      const val = Number(band.mappedValue ?? 0);
-      const left = Math.max(0, Math.min(100, (val / 1000) * 100));
+      const val = getQualityValueFromBand(band) ?? minQuality;
+      const left = Math.max(0, Math.min(100, ((val - minQuality) / range) * 100));
       return { index: i, mappedValue: val, left, edge: left < 4 ? 'start' : left > 96 ? 'end' : 'middle' };
     });
-  }, [qualityBands]);
+  }, [minQuality, qualityBands]);
 
   const bandOnePct = Math.max(0, Math.min(100, railMarkers[0]?.left ?? 0));
-  const selectedPct = quality !== null ? Math.max(0, Math.min(100, (quality / 1000) * 100)) : 0;
+  const selectedPct = quality !== null && minQuality !== null ? Math.max(0, Math.min(100, ((quality - minQuality) / Math.max(1, 1000 - minQuality)) * 100)) : 0;
   const fillPct = Math.max(0, selectedPct - bandOnePct);
 
-  if (!qualityBands || quality === null) {
-    if (import.meta.env.DEV) console.warn(`[quality] no quantization data for "${input.displayName ?? input.materialName ?? input.materialId}"`);
-    return (
-      <div className="bq-quality-panel">
-        <div className="bq-quality-panel-head">
-          <span className="bq-quality-panel-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
-          <span className="bq-quality-panel-val">Quality data unavailable</span>
-        </div>
-      </div>
-    );
+  if (!qualityBands || minQuality === null) {
+    if (import.meta.env.DEV) console.warn('[quality] no quantization data for build queue material');
+    return null;
   }
 
   return (
     <div className="bq-quality-panel">
-      <div className="bq-quality-panel-head">
-        <span className="bq-quality-panel-name">{input.displayName ?? input.materialName ?? input.materialId}</span>
-        <span className={`bq-quality-panel-val ${selectedQualityTierClass}`}>Band {safeBandIndex + 1} / {quality}</span>
-      </div>
-      <div className="bq-quality-rail-wrap">
+      <div className="craft-quality-control craft-matq-slider-wrap bq-quality-control">
+        <div className="craft-quality-rail-wrap craft-matq-rail-wrap bq-quality-rail-wrap">
         <input
           type="range"
-          min={0} max={1000} step={1}
-          value={quality}
-          onChange={(e) => onBandChange(findNearestBandForQuality(qualityBands, Number(e.target.value)))}
-          className="bq-quality-range"
-          aria-label={`Quality band for ${input.displayName ?? input.materialName}`}
+          min={minQuality} max={1000} step={1}
+          value={quality ?? minQuality}
+          onChange={(e) => onDraftQualityChange(e.target.value)}
+          className="craft-quality-input craft-matq-slider bq-quality-range"
+          aria-label="Material quality"
         />
-        <div className={`bq-quality-rail ${selectedQualityTierClass}`} style={{ '--band-one-pct': `${bandOnePct}%` } as React.CSSProperties}>
+        <div className={`craft-quality-rail craft-matq-rail bq-quality-rail ${selectedQualityTierClass}`} style={{ '--band-one-pct': `${bandOnePct}%` } as React.CSSProperties}>
           <div
-            className={`bq-quality-rail-fill ${selectedQualityTierClass}`}
+            className={`craft-quality-rail-fill craft-matq-rail-fill bq-quality-rail-fill ${selectedQualityTierClass}`}
             style={{ '--band-one-pct': `${bandOnePct}%`, '--fill-pct': `${fillPct}%` } as React.CSSProperties}
           />
           {railMarkers.map((marker) => {
             const markerTierClass = rarityClassFromBandIndex(marker.index + 1);
+            const markerState =
+              marker.mappedValue < (quality ?? minQuality)
+                ? ' is-before-active'
+                : marker.index === activeBandIndex
+                  ? ' is-active'
+                  : '';
             return (
-              <button
-                type="button"
+              <span
                 key={`${marker.index}-${marker.mappedValue}`}
-                className={`bq-quality-marker ${markerTierClass}${marker.index === safeBandIndex ? ' is-active' : ''}`}
+                className={`craft-quality-marker craft-matq-band-marker bq-quality-marker ${markerTierClass}${markerState}`}
                 style={{ left: `${marker.left}%` }}
                 data-edge={marker.edge}
-                onClick={() => onBandChange(marker.index)}
-                aria-label={`Quality ${marker.mappedValue}`}
+                aria-label={`Band guide ${marker.mappedValue}`}
               >
-                <span className="bq-quality-marker-line" />
-          
-              </button>
+                <span className="craft-quality-marker-line craft-matq-dot bq-quality-marker-line" />
+                <span className={`craft-quality-marker-value craft-matq-marker-value bq-quality-marker-value ${markerTierClass}`}>{marker.mappedValue}</span>
+              </span>
             );
           })}
         </div>
+        </div>
       </div>
-     
+      <div className="bq-quality-actions">
+        <button type="button" className="bq-btn" onClick={onReset}>Reset to recipe target</button>
+        <button type="button" className="bq-btn" onClick={onCancel}>Cancel</button>
+        <button type="button" className="bq-btn bq-btn--confirm" onClick={onApply}>Apply</button>
+      </div>
     </div>
   );
 }
@@ -386,43 +407,59 @@ export default function BuildQueueGroup({
   materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
 }: Props) {
-  const [editingItemId, setEditingItemId] = useState<string | null>(null);
-  const [draftBandIndices, setDraftBandIndices] = useState<Record<string, number>>({});
+  const [activeQualityEditorKey, setActiveQualityEditorKey] = useState<string | null>(null);
+  const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [expandedReserveRows, setExpandedReserveRows] = useState<Record<string, boolean>>({});
-  const [, setExpandedLowerQuality] = useState<Record<string, boolean>>({});
+  const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
-  function openEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
-    const initial: Record<string, number> = {};
-    inputs.forEach((input, inputIndex) => {
-      const requirementId = getRequirementId(item, input, inputIndex);
-      const bands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId) ?? (input.qualityBands?.length ? input.qualityBands : null);
-      if (!bands) { initial[requirementId] = 0; return; }
-      initial[requirementId] = getSavedBandIndex(input, bands) ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
-    });
-    setDraftBandIndices(initial);
-    setEditingItemId(item.id);
+  function openQualityEditor(editorKey: string, selectedQuality: number) {
+    setActiveQualityEditorKey(editorKey);
+    setQualityDrafts((prev) => ({ ...prev, [editorKey]: String(Math.round(selectedQuality)) }));
   }
 
-  function commitEdit(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
-    inputs.forEach((input, inputIndex) => {
-      const requirementId = getRequirementId(item, input, inputIndex);
-      const bands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId) ?? (input.qualityBands?.length ? input.qualityBands : null);
-      if (!bands) return;
-      const bandIndex = draftBandIndices[requirementId] ?? findNearestBandForQuality(bands, input.selectedQuality ?? 500);
-      const draftQuality = getBandEffectiveQuality(bands, bandIndex);
-      const draftModifier = getModifiersAtQuality(input.qualityModifiers ?? [], draftQuality)[0];
-      onMaterialRequirementChange(item.id, requirementId, {
-        ...input,
-        requirementId,
-        selectedQuality: draftQuality,
-        qualityBand: bandIndex + 1,
-        modifierName: draftModifier?.property ?? input.modifierName,
-        modifierType: draftModifier?.modifierMode ?? input.modifierType,
-        modifierValue: draftModifier?.value ?? input.modifierValue,
-      });
+  function clampQualityDraft(editorKey: string, qualityBands: QualityBand[]) {
+    const parsed = parseDraftNumber(qualityDrafts[editorKey] ?? '');
+    if (parsed === null) return;
+    setQualityDrafts((prev) => ({ ...prev, [editorKey]: String(clampQualityForBands(parsed, qualityBands)) }));
+  }
+
+  function cancelQualityEditor(editorKey: string) {
+    setActiveQualityEditorKey((current) => (current === editorKey ? null : current));
+    setQualityDrafts((prev) => {
+      const next = { ...prev };
+      delete next[editorKey];
+      return next;
     });
-    setEditingItemId(null);
+  }
+
+  function applyQualityEditor(
+    item: BuildQueueItem,
+    input: RecipeInputTemplate,
+    requirementId: string,
+    editorKey: string,
+    qualityBands: QualityBand[],
+    ownAllocations: ReservedMaterialAllocation[],
+    effectiveReservedQuality: number | undefined,
+  ) {
+    const parsed = parseDraftNumber(qualityDrafts[editorKey] ?? '');
+    if (parsed === null) return;
+    const draftQuality = clampQualityForBands(parsed, qualityBands);
+    const bandIndex = findNearestBandForQuality(qualityBands, draftQuality);
+    const draftModifier = getModifiersAtQuality(input.qualityModifiers ?? [], draftQuality)[0];
+    onMaterialRequirementChange(item.id, requirementId, {
+      ...input,
+      requirementId,
+      selectedQuality: draftQuality,
+      qualityBand: bandIndex + 1,
+      modifierName: draftModifier?.property ?? input.modifierName,
+      modifierType: draftModifier?.modifierMode ?? input.modifierType,
+      modifierValue: draftModifier?.value ?? input.modifierValue,
+    });
+    if (Number.isFinite(effectiveReservedQuality) && draftQuality > Number(effectiveReservedQuality)) {
+      ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
+    }
+    cancelQualityEditor(editorKey);
   }
 
   return (
@@ -431,11 +468,10 @@ export default function BuildQueueGroup({
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
-        const isEditingThisItem = editingItemId === item.id;
         const isCompletedCraft = item.status === 'complete';
         const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
-        const qualitySummary = getItemQualitySummary(item, inputs, draftBandIndices, isEditingThisItem);
+        const qualitySummary = getItemQualitySummary(item, inputs);
 
         const summaryMetrics = inputs.reduce<BuildQueueSummaryMetrics>((metrics, input, inputIndex) => {
           const materialKey = input.materialKey ?? input.materialId;
@@ -469,10 +505,11 @@ export default function BuildQueueGroup({
           const savedBandIndex = qualityBands
             ? (getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500))
             : 0;
-          const draftBandIndex = isEditingThisItem ? (draftBandIndices[requirementId] ?? savedBandIndex) : savedBandIndex;
-          const selectedQuality = qualityBands ? getBandEffectiveQuality(qualityBands, draftBandIndex) : (input.selectedQuality ?? 0);
+          const selectedQuality = qualityBands
+            ? clampQualityForBands(input.selectedQuality ?? getBandEffectiveQuality(qualityBands, savedBandIndex), qualityBands)
+            : (input.selectedQuality ?? 0);
           const requirementSelectedQuality = input.selectedQuality;
-          const selectedQualityRarity = rarityFromBandIndex(draftBandIndex + 1);
+          const selectedQualityRarity = rarityFromBandIndex(savedBandIndex + 1);
           const modifierAtQuality = getModifierProjectionFromQuality(input, selectedQuality);
           const modifierLabel = modifierAtQuality?.property ?? input.modifierName;
           const modifierValue = modifierAtQuality?.value ?? input.modifierValue;
@@ -506,12 +543,17 @@ export default function BuildQueueGroup({
             getInventoryStacks(inventory.filter((e) => e.materialId === materialKey && e.quantity > 0), materials, locations),
             strategy,
           );
-          const reservableStacks = allMaterialStacks.filter((stack) =>
-            getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id),
-          );
+          const reservableStacks = allMaterialStacks
+            .filter((stack) => getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id))
+            .sort((a, b) => {
+              if (requirementSelectedQuality === undefined) return 0;
+              const aBelow = (a.quality ?? 0) < requirementSelectedQuality;
+              const bBelow = (b.quality ?? 0) < requirementSelectedQuality;
+              return Number(aBelow) - Number(bBelow);
+            });
 
           return {
-            input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName,
+            input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName, qualityBands,
             required, selectedQuality, requirementSelectedQuality, selectedQualityRarity, modifierPreview, modifierLabel, modifierValue, modifierDisplayLabel, modifierDisplayValue, modifierTone,
             allowLowerQuality, coverage, needSummary, ownAllocations, ownReservedByStack,
             allocatedAmount, remainingRequired, effectiveReservedQuality, qualityProjectionState, reserveStatusLabel,
@@ -536,6 +578,7 @@ export default function BuildQueueGroup({
             material: first.material,
             selectedQuality: first.selectedQuality,
             selectedQualityRarity: first.selectedQualityRarity,
+            qualityBands: first.qualityBands,
             rowTone: getGroupedCoverageState(group.requirements.map((r) => r.coverage.coverageState)),
             reserveStatusLabel: first.reserveStatusLabel,
             requiredTotal: group.requirements.reduce((s, r) => s + r.required, 0),
@@ -555,16 +598,13 @@ export default function BuildQueueGroup({
               <div className="bq-item-name-block">
                 <div className="bq-item-name-top">
                   <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
-                  <span className="bq-item-blueprint">
-                    {blueprintSources.length === 0
-                      ? 'Unknown blueprint'
-                      : blueprintSources.map((s) => s.displayName).join(', ')}
-                  </span>
+                 
                 </div>
                 <h2 className="bq-item-name">{itemName}</h2>
               </div>
 
               <div className="bq-item-badges">
+              
                 {isCompletedCraft && (
                   <span className="bq-badge bq-badge--complete">Completed Craft</span>
                 )}
@@ -574,6 +614,11 @@ export default function BuildQueueGroup({
                 <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
                   {qualitySummary.label}
                 </span>
+                   <span className="bq-item-blueprint">
+                    {blueprintSources.length === 0
+                      ? 'Unknown blueprint'
+                      : blueprintSources.map((s) => s.displayName).join(', ')}
+                  </span>
               </div>
 
               <div className="bq-item-controls">
@@ -584,16 +629,6 @@ export default function BuildQueueGroup({
                 </div>
           
                 <div className="bq-btn-row">
-                  {inputs.length > 0 && (
-                    isEditingThisItem ? (
-                      <>
-                        <button type="button" className="bq-btn" onClick={() => setEditingItemId(null)}>Cancel</button>
-                        <button type="button" className="bq-btn bq-btn--confirm" onClick={() => commitEdit(item, inputs)}>Done</button>
-                      </>
-                    ) : (
-                      <button type="button" className="bq-btn" onClick={() => openEdit(item, inputs)}>Quality</button>
-                    )
-                  )}
                   <button
                     type="button"
                     className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
@@ -620,30 +655,6 @@ export default function BuildQueueGroup({
                 )}
               </div>
 
-              {/* Quality edit grid */}
-              {isEditingThisItem && inputs.length > 0 && (
-                <div className="bq-quality-grid" aria-label={`Quality adjustment for ${itemName}`}>
-                  {inputs.map((input, inputIndex) => {
-                    const requirementId = getRequirementId(item, input, inputIndex);
-                    const quantizedBands = getQuantizedBands(input.displayName ?? input.materialName ?? input.materialId);
-                    const effectiveBands = quantizedBands ?? (input.qualityBands?.length ? input.qualityBands : null);
-                    const savedBandIndex = effectiveBands
-                      ? (getSavedBandIndex(input, effectiveBands) ?? findNearestBandForQuality(effectiveBands, input.selectedQuality ?? 500))
-                      : 0;
-                    const draftBandIndex = draftBandIndices[requirementId] ?? savedBandIndex;
-                    return (
-                      <MaterialQualitySlider
-                        key={`quality:${item.id}:${requirementId}:${inputIndex}`}
-                        input={input}
-                        draftBandIndex={draftBandIndex}
-                        quantizedBands={quantizedBands}
-                        onBandChange={(bandIndex) => setDraftBandIndices((prev) => ({ ...prev, [requirementId]: bandIndex }))}
-                      />
-                    );
-                  })}
-                </div>
-              )}
-
               {/* Material table */}
               {recipe ? (
               <div className="bq-mat-table">
@@ -659,6 +670,16 @@ export default function BuildQueueGroup({
 
                 {materialGroups.map((group) => {
                   const reserveExpanded = expandedReserveRows[group.groupKey] ?? false;
+                  const qualityExpanded = activeQualityEditorKey === group.groupKey;
+                  const qualityRequirement = group.requirements[0];
+                  const qualityDraft = qualityDrafts[group.groupKey] ?? String(group.selectedQuality);
+                  const parsedQualityDraft = parseDraftNumber(qualityDraft);
+                  const previewQuality = qualityExpanded && qualityRequirement.qualityBands && parsedQualityDraft !== null
+                    ? clampQualityForBands(parsedQualityDraft, qualityRequirement.qualityBands)
+                    : group.selectedQuality;
+                  const previewQualityRarity = qualityRequirement.qualityBands
+                    ? rarityFromBandIndex(findNearestBandForQuality(qualityRequirement.qualityBands, previewQuality) + 1)
+                    : group.selectedQualityRarity;
                   return (
                     <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
                       <div className="bq-mat-row">
@@ -670,21 +691,57 @@ export default function BuildQueueGroup({
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
                         <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{group.reserveStatusLabel ?? getCoverageLabel(group.rowTone)}</span>
-                        <span className={`bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}>{group.selectedQuality}</span>
+                        {qualityExpanded && qualityRequirement.qualityBands ? (
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            className={`bq-quality-inline-input bq-badge bq-badge--quality logi-rarity--${previewQualityRarity} is-active`}
+                            value={qualityDraft}
+                            aria-label="Material quality"
+                            onChange={(event) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: event.target.value }))}
+                            onBlur={() => clampQualityDraft(group.groupKey, qualityRequirement.qualityBands as QualityBand[])}
+                            onKeyDown={(event) => {
+                              if (event.key === 'Enter') {
+                                applyQualityEditor(
+                                  item,
+                                  qualityRequirement.input,
+                                  qualityRequirement.requirementId,
+                                  group.groupKey,
+                                  qualityRequirement.qualityBands as QualityBand[],
+                                  qualityRequirement.ownAllocations,
+                                  qualityRequirement.effectiveReservedQuality,
+                                );
+                              }
+                              if (event.key === 'Escape') cancelQualityEditor(group.groupKey);
+                            }}
+                          />
+                        ) : (
+                          <button
+                            type="button"
+                            className={`bq-quality-badge bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}
+                            aria-expanded={qualityExpanded}
+                            onClick={() => openQualityEditor(group.groupKey, group.selectedQuality)}
+                          >
+                            {group.selectedQuality}
+                          </button>
+                        )}
                         <div className="bq-mat-modifier">
-                          {group.requirements.map((req) => (
+                          {group.requirements.map((req) => {
+                            const rowQuality = qualityExpanded && req.requirementCardKey === qualityRequirement.requirementCardKey
+                              ? previewQuality
+                              : req.selectedQuality;
+                            const rowModifierAtQuality = getModifierProjectionFromQuality(req.input, rowQuality);
+                            const rowModifierDisplayLabel = rowModifierAtQuality?.property ? formatProperty(rowModifierAtQuality.property) : req.modifierDisplayLabel;
+                            const rowModifierDisplayValue = rowModifierAtQuality ? formatModifierAtQuality(rowModifierAtQuality) : req.modifierDisplayValue;
+                            const rowModifierPreview = rowModifierDisplayValue ? `${rowModifierDisplayLabel} ${rowModifierDisplayValue}` : rowModifierDisplayLabel;
+                            return (
                             <span
                               className="bq-mat-modifier-entry"
                               key={`${req.requirementCardKey}:mod`}
                             >
-                              <span className="bq-mat-modifier-label">Target: {req.modifierPreview}</span>
-                              {req.reservedModifierDisplayValue && req.effectiveReservedQuality !== undefined && req.reservedModifierDisplayValue !== req.modifierDisplayValue && (
-                                <span className={`bq-mat-modifier-value ${req.reservedModifierTone}`}>
-                                  Reserved: {req.reservedModifierDisplayValue} at Q{formatDecimal(req.effectiveReservedQuality)}
-                                </span>
-                              )}
+                              <span className="bq-mat-modifier-label">{rowModifierPreview}</span>
                             </span>
-                          ))}
+                          );})}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.availableQuantity, group.material)}</span>
                         <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
@@ -706,11 +763,83 @@ export default function BuildQueueGroup({
                         </div>
                       ))}
 
+                      {qualityExpanded && qualityRequirement.qualityBands && (
+                        <div className="bq-quality-inline-drawer">
+                          <MaterialQualityEditor
+                            draftQuality={qualityDraft}
+                            quantizedBands={qualityRequirement.qualityBands}
+                            onDraftQualityChange={(value) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: value }))}
+                            onApply={() => applyQualityEditor(
+                              item,
+                              qualityRequirement.input,
+                              qualityRequirement.requirementId,
+                              group.groupKey,
+                              qualityRequirement.qualityBands as QualityBand[],
+                              qualityRequirement.ownAllocations,
+                              qualityRequirement.effectiveReservedQuality,
+                            )}
+                            onCancel={() => cancelQualityEditor(group.groupKey)}
+                            onReset={() => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: String(qualityRequirement.input.selectedQuality ?? group.selectedQuality) }))}
+                          />
+                        </div>
+                      )}
+
                       {reserveExpanded && (
                         <div className="bq-reserve-panel">
                           <div className="bq-reserve-panel-label">Reserve from inventory</div>
                           {group.requirements.map((req) => {
-                            const lowerQualityExpanded = false;
+                            const getDraftAllocationValue = (allocationId: string, reservedQuantity: number) =>
+                              reserveDrafts[allocationId] ?? (reservedQuantity ? String(reservedQuantity) : '');
+                            const getDraftQuantity = (allocationId: string, reservedQuantity: number) => {
+                              const parsed = parseDraftNumber(getDraftAllocationValue(allocationId, reservedQuantity));
+                              return parsed ?? reservedQuantity;
+                            };
+                            const saveReserve = () => {
+                              let committedTotal = 0;
+                              for (const stack of req.reservableStacks) {
+                                const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
+                                const existingAllocation = req.ownAllocations.find((allocation) => allocation.inventoryEntryId === stack.id);
+                                const reservedQuantity = existingAllocation?.quantityReserved ?? 0;
+                                const availableAfterThisReservation = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
+                                const maxLotQuantity = Math.max(0, reservedQuantity + availableAfterThisReservation);
+                                const parsed = parseDraftNumber(getDraftAllocationValue(allocationId, reservedQuantity));
+                                const desiredQuantity = parsed === null ? reservedQuantity : parsed;
+                                const remainingCapacity = Math.max(0, req.required - committedTotal);
+                                const quantityReserved = Math.max(0, Math.min(desiredQuantity, maxLotQuantity, remainingCapacity));
+                                committedTotal += quantityReserved;
+                                const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
+                                if (quantityReserved <= 0) {
+                                  if (existingAllocation) onToggleAllocation(item.id, existingAllocation);
+                                } else if (existingAllocation) {
+                                  if (existingAllocation.quantityReserved !== quantityReserved) {
+                                    onUpdateAllocationQuantity(item.id, existingAllocation.id, quantityReserved);
+                                  }
+                                } else {
+                                  onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, isBelowTarget));
+                                }
+                              }
+                              setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: false }));
+                            };
+                            const clearReserve = () => {
+                              req.ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
+                              setReserveDrafts((prev) => {
+                                const next = { ...prev };
+                                for (const stack of req.reservableStacks) {
+                                  delete next[getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack)];
+                                }
+                                return next;
+                              });
+                            };
+                            const cancelReserve = () => {
+                              setExpandedReserveRows((prev) => ({ ...prev, [group.groupKey]: false }));
+                              setReserveDrafts((prev) => {
+                                const next = { ...prev };
+                                for (const stack of req.reservableStacks) {
+                                  delete next[getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack)];
+                                }
+                                return next;
+                              });
+                            };
                             return (
                               <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
                                 {group.requirements.length > 1 && (
@@ -722,125 +851,94 @@ export default function BuildQueueGroup({
                                   <span>Required <b>{formatQuantity(req.required, req.material)}</b></span>
                                   <span>Allocated <b>{formatQuantity(req.allocatedAmount, req.material)}</b></span>
                                   <span>Remaining <b>{formatQuantity(req.remainingRequired, req.material)}</b></span>
-                                  <span>Target Q <b>{req.requirementSelectedQuality ?? 'Any'}</b></span>
-                                  <span>Effective Q <b>{req.effectiveReservedQuality !== undefined ? formatDecimal(req.effectiveReservedQuality) : 'Unreserved'}</b></span>
-                                  <span>{req.reserveStatusLabel}</span>
                                 </div>
 
                                 {req.reservedModifierDisplayValue && req.effectiveReservedQuality !== undefined && (
                                   <div className="bq-reserve-projection">
                                     <span>Target: {req.modifierPreview}</span>
-                                    <span className={req.reservedModifierTone}>Reserved: {req.modifierDisplayLabel} {req.reservedModifierDisplayValue} at effective Q{formatDecimal(req.effectiveReservedQuality)}</span>
+                                    <span className={req.reservedModifierTone}>Reserved: {req.modifierDisplayLabel} {req.reservedModifierDisplayValue} at Effective {formatDecimal(req.effectiveReservedQuality)}</span>
                                   </div>
                                 )}
 
-                                {req.reservableStacks.length > 0 ? req.reservableStacks.map((stack) => {
+                                {req.reservableStacks.length > 0 ? req.reservableStacks.map((stack, stackIndex) => {
                                   const existingAllocation = req.ownAllocations.find((allocation) => allocation.inventoryEntryId === stack.id);
                                   const reservedQuantity = existingAllocation?.quantityReserved ?? 0;
                                   const availableAfterThisReservation = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
-                                  const maxQuantity = Math.max(0, Math.min(reservedQuantity + availableAfterThisReservation, reservedQuantity + req.remainingRequired));
-                                  const checked = reservedQuantity > 0;
-                                  const nextQuantity = Math.min(maxQuantity, reservedQuantity + req.remainingRequired);
+                                  const maxQuantity = Math.max(0, reservedQuantity + availableAfterThisReservation);
+                                  const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
+                                  const draftValue = getDraftAllocationValue(allocationId, reservedQuantity);
+                                  const draftQuantity = getDraftQuantity(allocationId, reservedQuantity);
+                                  const checked = draftQuantity > 0;
+                                  const nextQuantity = Math.min(maxQuantity, Math.max(0, req.required - (req.allocatedAmount - reservedQuantity)));
                                   const disabled = !checked && nextQuantity <= 0;
                                   const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
+                                  const previousStack = req.reservableStacks[stackIndex - 1];
+                                  const previousBelowTarget = previousStack ? req.requirementSelectedQuality !== undefined && (previousStack.quality ?? 0) < req.requirementSelectedQuality : null;
+                                  const showSectionTitle = stackIndex === 0 || previousBelowTarget !== isBelowTarget;
                                   const handleQuantityChange = (rawValue: string) => {
-                                    const parsed = Number(rawValue);
-                                    if (!Number.isFinite(parsed)) return;
-                                    const quantityReserved = Math.max(0, Math.min(parsed, maxQuantity));
-                                    if (quantityReserved <= 0) {
-                                      if (existingAllocation) onToggleAllocation(item.id, existingAllocation);
-                                      return;
-                                    }
-                                    if (existingAllocation) {
-                                      onUpdateAllocationQuantity(item.id, existingAllocation.id, quantityReserved);
-                                    } else {
-                                      onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, isBelowTarget));
-                                    }
+                                    setReserveDrafts((prev) => ({ ...prev, [allocationId]: rawValue }));
                                   };
                                   return (
-                                    <label key={stack.id} className="bq-stack-line">
+                                    <div key={stack.id} className="bq-reserve-stack-wrap">
+                                      {showSectionTitle && (
+                                        <div className={`bq-reserve-stock-title${isBelowTarget ? ' bq-reserve-stock-title--below' : ''}`}>
+                                          {isBelowTarget ? 'Below target quality' : 'Meets or exceeds target'}
+                                        </div>
+                                      )}
+                                    <label className={`bq-stack-line${checked ? ' is-selected' : ''}${isBelowTarget ? ' bq-stack-line--below-target' : ''}`}>
                                       <input
                                         type="checkbox"
                                         className="bq-stack-cb"
                                         checked={checked}
                                         disabled={disabled}
                                         onChange={() => {
-                                          const quantityReserved = checked ? reservedQuantity : nextQuantity;
-                                          if (quantityReserved <= 0) return;
-                                          if (existingAllocation) onToggleAllocation(item.id, existingAllocation);
-                                          else onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, isBelowTarget));
+                                          setReserveDrafts((prev) => ({ ...prev, [allocationId]: checked ? '' : String(nextQuantity) }));
                                         }}
                                       />
                                       <span>{stack.location?.name ?? stack.locationId}</span>
                                       <span>{stack.container ?? '—'}</span>
-                                      <span className={rarityClass(stack.rarity)}>Q{stack.quality ?? '—'}{isBelowTarget ? ' below target' : ''}</span>
+                                      <span className={rarityClass(stack.rarity)}>{stack.quality ?? '—'}{isBelowTarget ? ' · Below target' : ''}</span>
                                       <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
                                       <span className={materialTypeClass(req.material)}>{formatQuantity(reservedQuantity, req.material)} reserved</span>
-                                      <input
-                                        type="number"
-                                        className="bq-reserve-amount-input"
-                                        value={reservedQuantity ? String(reservedQuantity) : ''}
-                                        min={0}
-                                        max={maxQuantity}
-                                        step={req.input.unitType === 'scu' ? 0.01 : 1}
-                                        placeholder="0"
-                                        disabled={disabled}
-                                        onChange={(event) => handleQuantityChange(event.target.value)}
-                                      />
+                                      <div className="bq-reserve-input-wrap">
+                                        <input
+                                          type="text"
+                                          inputMode="decimal"
+                                          className="bq-reserve-amount-input"
+                                          value={draftValue}
+                                          placeholder="0"
+                                          disabled={disabled}
+                                          onBlur={() => {
+                                            const parsed = parseDraftNumber(draftValue);
+                                            if (parsed !== null) setReserveDrafts((prev) => ({ ...prev, [allocationId]: String(Math.max(0, Math.min(parsed, maxQuantity))) }));
+                                          }}
+                                          onKeyDown={(event) => {
+                                            if (event.key === 'Enter') saveReserve();
+                                            if (event.key === 'Escape') cancelReserve();
+                                          }}
+                                          onChange={(event) => handleQuantityChange(event.target.value)}
+                                        />
+                                        <button
+                                          type="button"
+                                          className="bq-reserve-quick-fill"
+                                          disabled={nextQuantity <= 0}
+                                          onClick={() => setReserveDrafts((prev) => ({ ...prev, [allocationId]: String(nextQuantity) }))}
+                                        >
+                                          Fill
+                                        </button>
+                                      </div>
                                     </label>
+                                    </div>
                                   );
                                 }) : (
                                   <div className="bq-empty-inline">No stored stock available for this material.</div>
                                 )}
 
-                                {false && req.ineligibleStacks.length > 0 && (
-                                  <div className="bq-lower-quality">
-                                    <button
-                                      type="button"
-                                      className="bq-lower-toggle"
-                                      aria-expanded={lowerQualityExpanded}
-                                      onClick={() => setExpandedLowerQuality((prev) => ({ ...prev, [req.requirementCardKey]: !lowerQualityExpanded }))}
-                                    >
-                                      <span>{lowerQualityExpanded ? '▾' : '▸'}</span>
-                                      <b>Lower quality / ineligible</b>
-                                      <em>{req.ineligibleStacks.length} {req.ineligibleStacks.length === 1 ? 'stack' : 'stacks'}</em>
-                                    </button>
-
-                                    {lowerQualityExpanded && req.ineligibleStacks.map((stack) => {
-                                      const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
-                                      const reservedQuantity = req.ownReservedByStack.get(stack.id) ?? 0;
-                                      const reservedByThisItemOtherSlots = (item.reservedAllocations ?? [])
-                                        .filter((a) => a.inventoryEntryId === stack.id && a.id !== allocationId)
-                                        .reduce((s, a) => s + a.quantityReserved, 0);
-                                      const availableQuantity = getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id);
-                                      const availableAfterThisReservation = Math.max(0, availableQuantity - reservedByThisItemOtherSlots - reservedQuantity);
-                                      const checked = reservedQuantity > 0;
-                                      const nextQuantity = Math.min(req.remainingRequired, availableAfterThisReservation);
-                                      const disabled = !req.allowLowerQuality || (!checked && nextQuantity <= 0);
-                                      return (
-                                        <label key={`ineligible:${stack.id}`} className={`bq-stack-line bq-stack-line--lower${disabled ? ' is-disabled' : ''}${checked ? ' is-selected' : ''}`}>
-                                          <input
-                                            type="checkbox"
-                                            className="bq-stack-cb"
-                                            checked={checked}
-                                            disabled={disabled}
-                                            onChange={() => {
-                                              const quantityReserved = checked ? reservedQuantity : nextQuantity;
-                                              if (quantityReserved <= 0) return;
-                                              onToggleAllocation(item.id, createAllocation(item.id, req.requirementId, req.requirementSelectedQuality, req.input.unitType, stack, req.material?.name, quantityReserved, true));
-                                            }}
-                                          />
-                                          <span>{stack.location?.name ?? stack.locationId}</span>
-                                          <span>{stack.container ?? '—'}</span>
-                                          <span className={rarityClass(stack.rarity)}>{stack.quality}</span>
-                                          <span style={{ color: stack.rarity.colorToken }}>{stack.rarity.label}</span>
-                                          <span className={materialTypeClass(req.material)}><QuantityText value={formatQuantity(reservedQuantity, req.material)} /> / <QuantityText value={formatQuantity(stack.quantity, req.material)} /></span>
-                                          <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
-                                        </label>
-                                      );
-                                    })}
-                                  </div>
-                                )}
+                                <div className="bq-reserve-actions">
+                                  <button type="button" className="bq-btn bq-btn--confirm" onClick={saveReserve}>Save Reserve</button>
+                                  <button type="button" className="bq-btn" onClick={cancelReserve}>Cancel</button>
+                                  <button type="button" className="bq-btn bq-btn--danger" onClick={clearReserve}>Clear Reserve</button>
+                                </div>
                               </div>
                             );
                           })}
