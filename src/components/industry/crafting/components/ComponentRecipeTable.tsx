@@ -2691,7 +2691,6 @@ function EstimatedEffectsPanel({
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
                 <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
                 <strong className={impactClass}>{display.total ?? formatContributionValue(row.totalValue, row.modifierMode)}</strong>
-                <span className={`craft-detail-effect-delta ${impactClass}`}>{display.modifier}</span>
                 {row.contributions.length > 0 && (
                   <span className="craft-detail-effect-sources">
                     {row.contributions.map((c) => `${c.materialName} ${formatContributionValue(c.value, row.modifierMode)}`).join(" / ")}

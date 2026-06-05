@@ -77,10 +77,15 @@ export default function CraftingLayout() {
     const classFilters = new Set((searchParams.get("cl") ?? "").split(",").filter(Boolean));
     const materialFilters = new Set((searchParams.get("mt") ?? "").split(",").filter(Boolean));
     const searchTokens = buildSearchTokens(search);
+    const hasTextSearch = searchTokens.length > 0;
 
     const filtered = componentCards.filter((record) => {
       if (record.kind === "fps") {
-        if (fpsFilters.size === 0 || !fpsFilters.has(record.type)) return false;
+        if (fpsFilters.size > 0) {
+          if (!fpsFilters.has(record.type)) return false;
+        } else if (vehicleFilters.size > 0 || isDefaultState || !hasTextSearch) {
+          return false;
+        }
       } else {
         if (fpsFilters.size > 0) return false;
         if (vehicleFilters.size) {
