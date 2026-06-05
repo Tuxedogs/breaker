@@ -293,6 +293,7 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
     .select()
     .from(inventoryLocations)
     .where(eq(inventoryLocations.userId, userId));
+  const validLocationIds = new Set(refreshedLocations.map((row) => row.id));
   for (const row of refreshedLocations) {
     const localId = getSnapshotLocalId(row.metadata);
     if (localId) locationIdMap[localId] = row.id;
@@ -317,7 +318,10 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
     if (!itemName || quantity === null) continue;
 
     const rawLocationId = asString(raw.locationId);
-    const locationId = rawLocationId ? locationIdMap[rawLocationId] ?? (isUuid(rawLocationId) ? rawLocationId : null) : null;
+    const mappedLocationId = rawLocationId ? locationIdMap[rawLocationId] ?? rawLocationId : null;
+    const locationId = mappedLocationId && isUuid(mappedLocationId) && validLocationIds.has(mappedLocationId)
+      ? mappedLocationId
+      : null;
     const match = (isUuid(localId) ? stacksById.get(localId) : undefined)
       ?? (localId ? stacksByLocalId.get(localId) : undefined)
       ?? stacksByMergeKey.get(stackMergeKey(raw, locationId));
