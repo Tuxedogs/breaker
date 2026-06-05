@@ -1,5 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 
+import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed";
 import { getDb } from "../../db/client";
 import { buildQueueItems, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema";
 
@@ -58,6 +59,27 @@ function toDateString(value: unknown): string {
 function getSnapshotLocalId(value: unknown): string | null {
   const snapshot = asJsonObject(value);
   return asString(snapshot.localId);
+}
+
+const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
+const seedBuildQueueIds = new Set(initialBuildQueue.map((item) => item.id));
+
+function isSeedInventoryPayload(input: UnknownRecord) {
+  const id = asString(input.id);
+  return Boolean(id && seedInventoryEntryIds.has(id));
+}
+
+function isSeedInventoryRow(row: typeof inventoryStacks.$inferSelect) {
+  return Boolean(getSnapshotLocalId(row.snapshot) && seedInventoryEntryIds.has(getSnapshotLocalId(row.snapshot) as string));
+}
+
+function isSeedBuildQueuePayload(input: UnknownRecord) {
+  const id = asString(input.id);
+  return Boolean(id && seedBuildQueueIds.has(id));
+}
+
+function isSeedBuildQueueRow(row: typeof buildQueueItems.$inferSelect) {
+  return Boolean(getSnapshotLocalId(row.snapshot) && seedBuildQueueIds.has(getSnapshotLocalId(row.snapshot) as string));
 }
 
 function getLocationMetadata(input: UnknownRecord) {
@@ -234,8 +256,8 @@ export async function listOnlinePersistenceState(userId: string) {
 
   return {
     locations: locations.map(mapLocationRow),
-    inventoryEntries: stacks.map(mapStackRow),
-    buildQueue: queue.map(mapBuildQueueRow),
+    inventoryEntries: stacks.filter((row) => !isSeedInventoryRow(row)).map(mapStackRow),
+    buildQueue: queue.filter((row) => !isSeedBuildQueueRow(row)).map(mapBuildQueueRow),
     sync: {
       migratedAt: asString(settings.remoteMigratedAt),
       lastSyncedAt: asString(settings.lastSyncedAt),
@@ -312,6 +334,7 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
 
   for (const raw of asArray(payload.inventoryEntries)) {
     if (!isRecord(raw)) continue;
+    if (isSeedInventoryPayload(raw)) continue;
     const localId = asString(raw.id);
     const itemName = asString(raw.itemName) ?? asString(raw.materialName);
     const quantity = asNumber(raw.quantity);
@@ -379,6 +402,7 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
 
   for (const raw of asArray(payload.buildQueue)) {
     if (!isRecord(raw)) continue;
+    if (isSeedBuildQueuePayload(raw)) continue;
     const localId = asString(raw.id);
     const recipeId = asString(raw.recipeId);
     const quantity = asNumber(raw.quantity);
