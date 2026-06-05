@@ -36,7 +36,6 @@ const IndustryCraftingPage = lazy(() => import("./pages/industry/CraftingPage"))
 const IndustryCraftingLayout = lazy(() =>
   import("./components/industry/crafting/CraftingLayout").then((m) => ({ default: m.default }))
 );
-const IndustryComparePage = lazy(() => import("./pages/industry/ComparePage"));
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 
@@ -158,14 +157,6 @@ export default function App() {
         <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />
 
         {/* Industry */}
-        <Route
-          path="industry/crafting/compare"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <IndustryComparePage />
-            </Suspense>
-          }
-        />
         <Route
           path="industry/crafting"
           element={

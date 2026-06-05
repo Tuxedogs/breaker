@@ -45,7 +45,6 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { buildComponentCardSchema, buildComponentCardSchemaFromIndex, formatCraftTime, type ComponentCardMetric } from "../utils/componentCardSchema";
 import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
-import { useCompareStore } from "@/stores/compareStore";
 
 export type { FinalProductQuality } from "../utils/recipeQuality";
 
@@ -2790,7 +2789,6 @@ function RecipeDrawer({
   } = useQualityQuantization();
   const location = useLocation();
   const backTo = `/industry/crafting${location.search}`;
-  const { slots, setSlot } = useCompareStore();
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
     ? initialRecipeId
@@ -2900,22 +2898,6 @@ function RecipeDrawer({
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
         </div>
         <div className="craft-summary-action-row craft-detail-actions">
-          {selectedComponentCard && (() => {
-            const isInCompare = slots[0]?.id === selectedComponentCard.id || slots[1]?.id === selectedComponentCard.id;
-            return (
-              <button
-                type="button"
-                className={`cmp-card-btn${isInCompare ? " cmp-card-btn--active" : ""}`}
-                style={{ alignSelf: "center" }}
-                onClick={() => {
-                  const emptySlot = slots[0] === null ? 0 : slots[1] === null ? 1 : 1;
-                  setSlot(emptySlot, selectedComponentCard);
-                }}
-              >
-                {isInCompare ? "✓ In Compare" : "+ Compare"}
-              </button>
-            );
-          })()}
           <button
             type="button"
             className={`craft-summary-action-btn craft-summary-bookmark-btn${selectedIsBookmarked ? " is-active" : ""}`}
