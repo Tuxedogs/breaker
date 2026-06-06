@@ -645,6 +645,7 @@ async function fetchRequiredJsonObject<T>(path: string): Promise<T | null> {
 // Pyro's recommendation index only exposes currently verified active mining locations.
 const ACTIVE_PYRO_LOCATION_KEYS = new Set([
   "pyro deep space asteroids",
+  "pyro vi (terminus)",
   "terminus ring",
   "pyro v-a (ignis)",
   "pyro v-b (vatra)",
@@ -706,13 +707,17 @@ const PYRO_LOCATION_KEY_ALIASES: Record<string, string> = {
   "pyro v-f": "pyro v-f (vuur)",
   "pyro v f": "pyro v-f (vuur)",
   "pyro 5 f": "pyro v-f (vuur)",
-  pyro6: "terminus ring",
-  terminus: "terminus ring",
+  pyro6: "pyro vi (terminus)",
+  terminus: "pyro vi (terminus)",
+  "pyro vi": "pyro vi (terminus)",
+  "pyro vi (terminus)": "pyro vi (terminus)",
+  "terminus vi": "pyro vi (terminus)",
   "terminus ring": "terminus ring",
 };
 
 const PYRO_CANONICAL_LOCATION_NAMES: Record<string, string> = {
   "pyro deep space asteroids": "Pyro Deep Space Asteroids",
+  "pyro vi (terminus)": "Pyro VI (Terminus)",
   "terminus ring": "Terminus Ring",
   "pyro v-a (ignis)": "Pyro V-a (Ignis)",
   "pyro v-b (vatra)": "Pyro V-b (Vatra)",

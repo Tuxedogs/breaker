@@ -229,6 +229,9 @@ export interface PublicLocationEntry {
       recommendationScore?: number;
       selectedQuality?: number;
       thresholdChance?: number | null;
+      qualitySourceScope?: string | null;
+      qualitySourceFamily?: string | null;
+      qualityDistributionName?: string | null;
       compositionAverage?: number | null;
       compositionMax?: number | null;
       probability?: number | null;

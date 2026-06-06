@@ -20,8 +20,9 @@ const activePyroLocations = new Map<string, string>([
   ["Pyro V-e (Fuego)", "Pyro V-e (Fuego)"],
   ["Pyro5f", "Pyro V-f (Vuur)"],
   ["Pyro V-f (Vuur)", "Pyro V-f (Vuur)"],
-  ["Pyro6", "Terminus Ring"],
-  ["Terminus", "Terminus Ring"],
+  ["Pyro6", "Pyro VI (Terminus)"],
+  ["Terminus", "Pyro VI (Terminus)"],
+  ["Pyro VI (Terminus)", "Pyro VI (Terminus)"],
   ["Terminus Ring", "Terminus Ring"],
 ]);
 

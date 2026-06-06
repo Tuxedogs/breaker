@@ -60,9 +60,10 @@ function materialBiasSignal(source: ApiSource): number | null {
   return relativeProbability * materialProbability;
 }
 
-function selectedQualityScore(source: ApiSource, selectedQuality: number | undefined): number | undefined {
+function selectedQualityChance(source: ApiSource, selectedQuality: number | undefined): number | undefined {
   if (selectedQuality === undefined) return undefined;
-  return percentSignal(source.quality?.thresholdChances?.[String(selectedQuality)]);
+  const chance = source.quality?.thresholdChances?.[String(selectedQuality)];
+  return typeof chance === "number" && Number.isFinite(chance) ? chance : undefined;
 }
 
 function sourceStrengthScore(source: ApiSource): number {
@@ -149,7 +150,7 @@ function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): Q
     };
   }
 
-  const thresholdChance = selectedQualityScore(source, requirement.selectedQuality);
+  const thresholdChance = selectedQualityChance(source, requirement.selectedQuality);
   if (thresholdChance === undefined) {
     return {
       score: null,
@@ -161,7 +162,7 @@ function qualitySignal(source: ApiSource, requirement: AggregatedRequirement): Q
   }
 
   return {
-    score: thresholdChance,
+    score: percentSignal(thresholdChance) ?? null,
     ignored: false,
     thresholdChance,
     fieldsUsed: ["quality.thresholdChances[selectedQuality]"],
@@ -321,7 +322,7 @@ function routeSignalsPayload(args: {
     materialName: requirement.displayName,
     canonicalMaterialName: routeCanonicalMaterialName(source, requirement),
     locationName,
-    qualityChance: built.quality.score,
+    qualityChance: built.quality.thresholdChance,
     qualityIgnored: built.quality.ignored,
     compositionScore: built.composition.score,
     encounterScore: built.encounter.score,
@@ -329,6 +330,9 @@ function routeSignalsPayload(args: {
     recommendationScore: overallTargetabilityScore,
     selectedQuality: requirement.selectedQuality,
     thresholdChance: built.quality.thresholdChance,
+    qualitySourceScope: source.quality?.qualitySourceScope ?? null,
+    qualitySourceFamily: source.quality?.qualitySourceFamily ?? null,
+    qualityDistributionName: source.quality?.distributionName ?? null,
     compositionAverage: built.composition.average,
     compositionMax: built.composition.max,
     probability: percentSignal(source.probability) ?? null,

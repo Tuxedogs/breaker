@@ -25,6 +25,8 @@ import {
   methodBiasToneClass,
   qualityChanceHeader,
   qualityChanceTooltip,
+  qualitySourceFamilyDisplayLabel,
+  qualitySourceScopeDisplayLabel,
   resourceRowMaterialKey,
   scoreToneClass,
   systemBadgeClass,
@@ -169,7 +171,11 @@ export function LocationDetail({
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
   const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
-  const qualityTooltip = qualityChanceTooltip(hasSelectedQualityTarget);
+  const primaryQualitySignals = primaryRouteScore?.signals;
+  const qualitySourceDetails = primaryQualitySignals?.qualitySourceScope
+    ? ` Source: ${qualitySourceScopeDisplayLabel(primaryQualitySignals.qualitySourceScope)}${primaryQualitySignals.qualitySourceFamily ? ` / ${qualitySourceFamilyDisplayLabel(primaryQualitySignals.qualitySourceFamily)}` : ""}.`
+    : "";
+  const qualityTooltip = `${qualityChanceTooltip(hasSelectedQualityTarget)}${qualitySourceDetails}`;
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
     [demandRows],
