@@ -13,6 +13,8 @@ const CANONICAL_LOCATION_ALIASES: Record<string, Record<string, string>> = {
     deepspaceasteroids: "Pyro Deep Space Asteroids",
     pyrodeepspace: "Pyro Deep Space Asteroids",
     deepspace: "Pyro Deep Space Asteroids",
+    pyroakirocluster: "Pyro Deep Space Asteroids",
+    akirocluster: "Pyro Deep Space Asteroids",
     pyro5: "Pyro V",
     pyro5a: "Pyro V-a (Ignis)",
     ignis: "Pyro V-a (Ignis)",
@@ -26,8 +28,10 @@ const CANONICAL_LOCATION_ALIASES: Record<string, Record<string, string>> = {
     fuego: "Pyro V-e (Fuego)",
     pyro5f: "Pyro V-f (Vuur)",
     vuur: "Pyro V-f (Vuur)",
-    pyro6: "Terminus Ring",
-    terminus: "Terminus Ring",
+    pyro6: "Pyro VI (Terminus)",
+    terminus: "Pyro VI (Terminus)",
+    terminusvi: "Pyro VI (Terminus)",
+    pyroviterminus: "Pyro VI (Terminus)",
     terminusring: "Terminus Ring",
   },
   stanton: {
@@ -109,6 +113,10 @@ export function normalizeMiningLocationName(system: string, name: string): strin
   const direct = CANONICAL_LOCATION_ALIASES[systemKey]?.[key];
   if (direct) return direct;
 
+  if (systemKey === "pyro" && /^pyro(?:rab|rmb)/.test(key)) {
+    return "Pyro Deep Space Asteroids";
+  }
+
   const lagrange = CANONICAL_LOCATION_ALIASES.lagrange[key];
   if (lagrange) return lagrange;
 
@@ -125,6 +133,7 @@ export function miningLocationMergeKey(systemName: string, locationName: string)
 
 const ACTIVE_PYRO_LOCATION_NAMES = new Set([
   "Pyro Deep Space Asteroids",
+  "Pyro VI (Terminus)",
   "Terminus Ring",
   "Pyro V-a (Ignis)",
   "Pyro V-b (Vatra)",

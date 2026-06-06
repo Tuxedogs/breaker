@@ -28,17 +28,19 @@ export function resolveLocation(source: ApiSource, apiData: RecommenderApiData, 
 
   const systemName = normalizedMiningSystemName(metadata?.systemName ?? source.system ?? "Unknown");
   const rawLocationName = metadata?.locationName ?? source.location ?? source.providerName ?? "Unknown";
+  const locationName = normalizeMiningLocationName(systemName, rawLocationName);
   const extractedLocationCodes = Array.from(new Set([
     ...extractStantonLocationCodes(metadata?.locationName),
     ...extractStantonLocationCodes(source.location),
     ...extractStantonLocationCodes(source.providerName),
     ...extractStantonLocationCodes(source.groupName),
+    ...(locationName !== rawLocationName ? [rawLocationName] : []),
   ])).sort();
   const matchedLocationCodes = extractedLocationCodes.length > 0 ? extractedLocationCodes : undefined;
 
   return {
     systemName,
-    locationName: normalizeMiningLocationName(systemName, rawLocationName),
+    locationName,
     locationKind: metadata?.locationKind ?? source.locationType ?? "unknown",
     matchedLocationCodes,
     spawnType: source.spawnType ?? "unknown",

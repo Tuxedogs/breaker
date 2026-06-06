@@ -216,6 +216,7 @@ function buildStaticRouteScore(
   rankingMode: MiningRankingMode,
 ): NonNullable<PublicLocationEntry["routeScores"]>[number] {
   const threshold = demand.selectedQuality ?? 800;
+  const qualityRow = getStaticMaterialQualityRow(row, index);
   const qualityChance = getRowQualityChance(row, index, threshold);
   const encounterPct = clampPct(getStaticDensityScore(row, index));
   const qualityPct = qualityChance == null ? 0 : clampPct(qualityChance * 100);
@@ -263,6 +264,9 @@ function buildStaticRouteScore(
       qualityChance,
       selectedQuality: threshold,
       thresholdChance: qualityChance,
+      qualitySourceScope: qualityRow?.qualitySourceScope ?? null,
+      qualitySourceFamily: qualityRow?.qualitySourceFamily ?? null,
+      qualityDistributionName: qualityRow?.qualityDistributionSourceName ?? qualityRow?.qualityDistributionSourceNames?.[0] ?? null,
       compositionAverage: row.compositionAveragePercentage,
       probability: row.sourceProbabilitySum,
       encounterScore: row.materialEncounterScore ?? row.encounterScore,

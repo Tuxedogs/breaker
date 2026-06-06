@@ -77,6 +77,8 @@ export interface ApiSource {
     distributionName?: string;
     distributionPath?: string;
     thresholdChances?: Record<string, number>;
+    qualitySourceScope?: string;
+    qualitySourceFamily?: string;
   };
   estimatedHighQualityPotential?: number;
   scoreInputs?: {
@@ -139,6 +141,9 @@ export interface MaterialRouteScore {
     recommendationScore?: number;
     selectedQuality?: number;
     thresholdChance?: number | null;
+    qualitySourceScope?: string | null;
+    qualitySourceFamily?: string | null;
+    qualityDistributionName?: string | null;
     compositionAverage?: number | null;
     compositionMax?: number | null;
     probability?: number | null;
