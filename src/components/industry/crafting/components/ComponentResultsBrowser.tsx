@@ -4,6 +4,10 @@ import ComponentResultCard from "./ComponentResultCard";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import {
+  getComponentCardVariantGroupKey,
+  pickComponentCardGroupRepresentative,
+} from "../utils/componentCardVariants";
 
 const SAVED_BLUEPRINT_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
@@ -18,21 +22,6 @@ function readStoredStringSet(key: string): Set<string> {
   } catch {
     return new Set();
   }
-}
-
-// Strip a quoted nickname from a component name to get the base family name.
-// "A03 \"Lodestone\" Sniper Rifle" → "A03 Sniper Rifle"
-function getVariantGroupKey(record: ComponentCardIndexRecord): string | null {
-  if (record.kind !== "fps") return null;
-  const stripped = record.name.replace(/\s*"[^"]+"\s*/g, " ").replace(/\s+/g, " ").trim();
-  if (stripped === record.name.trim()) return null;
-  return `${stripped}::${record.type}::${record.kind}`;
-}
-
-function pickGroupRepresentative(group: ComponentCardIndexRecord[]): ComponentCardIndexRecord {
-  if (group.length === 1) return group[0];
-  const base = group.find((r) => !/"\w/.test(r.name));
-  return base ?? group.slice().sort((a, b) => a.name.localeCompare(b.name))[0];
 }
 
 function buildSearchTokens(query: string): string[] {
@@ -184,7 +173,7 @@ export default function ComponentResultsBrowser({
     const ungrouped: ComponentCardIndexRecord[] = [];
 
     for (const record of filteredRecords) {
-      const key = getVariantGroupKey(record);
+      const key = getComponentCardVariantGroupKey(record);
       if (key) {
         const existing = groups.get(key);
         if (existing) { existing.push(record); } else { groups.set(key, [record]); }
@@ -197,7 +186,7 @@ export default function ComponentResultsBrowser({
     const counts = new Map<string, number>();
 
     for (const [, members] of groups) {
-      const rep = pickGroupRepresentative(members);
+      const rep = pickComponentCardGroupRepresentative(members);
       grouped.push(rep);
       if (members.length > 1) counts.set(rep.id, members.length);
     }

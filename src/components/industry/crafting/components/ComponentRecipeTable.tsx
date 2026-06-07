@@ -852,6 +852,16 @@ function formatMaterialModifierDisplay(
   };
 }
 
+function formatModifierDifference(
+  display: ReturnType<typeof formatMaterialModifierDisplay>,
+): string {
+  if (display.modifierPercent && display.modifierPercent !== display.modifier) {
+    return `${display.modifierPercent} / ${display.modifier}`;
+  }
+
+  return display.modifier;
+}
+
 function MaterialStatIcon({ property }: { property: string }) {
   const label = formatModifierStatName(property);
 
@@ -1775,6 +1785,7 @@ type DetailStatModifier = {
 
 type DetailStatRow = ComponentCardMetric & {
   modifier?: DetailStatModifier;
+  valueImpactClass?: string;
 };
 
 type ModifierStatBinding = {
@@ -1906,9 +1917,10 @@ function buildModifiedDetailStatRows(
       modifier.modifierMode,
     );
     const impact = getModifierImpact(modifier.property, modifier.totalValue);
+    const impactClass = getImpactClass(impact);
     const modifierDisplay: DetailStatModifier = {
-      value: baseValue !== undefined ? display.modifier : display.modifierPercent ?? display.modifier,
-      impactClass: getImpactClass(impact),
+      value: formatModifierDifference(display),
+      impactClass,
     };
     const existingIndex = rowIndexByLabel.get(normalizeDetailStatLabel(binding.label));
 
@@ -1931,6 +1943,7 @@ function buildModifiedDetailStatRows(
       label: binding.label,
       value,
       modifier: baseValue !== undefined ? modifierDisplay : undefined,
+      valueImpactClass: baseValue === undefined ? impactClass : undefined,
     };
 
     rows.push(nextRow);
@@ -2464,7 +2477,7 @@ function ItemSummaryPanel({
                 <span key={`${stat.label}:${stat.value}`} className="craft-detail-stat-row">
                   <span>{stat.label}</span>
                   <strong>
-                    <span className="craft-detail-stat-value">{stat.value}</span>
+                    <span className={`craft-detail-stat-value ${stat.valueImpactClass ?? ""}`}>{stat.value}</span>
                     {stat.modifier && (
                       <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
                         ({stat.modifier.value})
@@ -2669,12 +2682,14 @@ function MaterialRequirementsTable({ children }: { children: ReactNode }) {
 
 function EstimatedEffectsPanel({
   recipe,
+  componentCardRecord,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
   finalProductQuality,
 }: {
   recipe: ComponentRecipe;
+  componentCardRecord?: ComponentCardIndexRecord;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
@@ -2691,7 +2706,9 @@ function EstimatedEffectsPanel({
       {hasMaterialModifiers && (
         <div className="craft-detail-effects-list">
           {totalModifiers.map((row) => {
-            const baseValue = getBaseStatValue(recipe, row.property);
+            const baseValue =
+              getIndexedModifierBaseValue(componentCardRecord, row.property) ??
+              getBaseStatValue(recipe, row.property);
             const display = formatMaterialModifierDisplay(
               row.property,
               baseValue,
@@ -2699,11 +2716,14 @@ function EstimatedEffectsPanel({
               row.modifierMode,
             );
             const impactClass = getImpactClass(getModifierImpact(row.property, row.totalValue));
+            const effectValue = display.total
+              ? `${display.total} (${formatModifierDifference(display)})`
+              : formatContributionValue(row.totalValue, row.modifierMode);
 
             return (
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
                 <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
-                <strong className={impactClass}>{display.total ?? formatContributionValue(row.totalValue, row.modifierMode)}</strong>
+                <strong className={impactClass}>{effectValue}</strong>
                 {row.contributions.length > 0 && (
                   <span className="craft-detail-effect-sources">
                     {row.contributions.map((c) => `${c.materialName} ${formatContributionValue(c.value, row.modifierMode)}`).join(" / ")}
@@ -2730,6 +2750,7 @@ function EstimatedEffectsPanel({
 
 function RightCraftingPanel({
   recipe,
+  componentCardRecord,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
@@ -2737,6 +2758,7 @@ function RightCraftingPanel({
   children,
 }: {
   recipe: ComponentRecipe;
+  componentCardRecord?: ComponentCardIndexRecord;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
@@ -2757,6 +2779,7 @@ function RightCraftingPanel({
       </section>
       <EstimatedEffectsPanel
         recipe={recipe}
+        componentCardRecord={componentCardRecord}
         totalModifiers={totalModifiers}
         overallModifiers={overallModifiers}
         overallQualitySource={overallQualitySource}
@@ -2984,6 +3007,7 @@ function RecipeDrawer({
 
         <RightCraftingPanel
           recipe={selectedRecipe}
+          componentCardRecord={selectedComponentCard}
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
