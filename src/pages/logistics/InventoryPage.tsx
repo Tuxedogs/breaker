@@ -4,7 +4,12 @@ import { useLogisticsStore } from '../../stores/logisticsStore';
 import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
-import { resolveInventoryItemName } from '../../lib/logistics/inventory';
+import {
+  formatEntryQuantity,
+  formatInventoryQuantity,
+  resolveInventoryItemName,
+  resolveInventoryUnitType,
+} from '../../lib/logistics/inventory';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
@@ -22,7 +27,8 @@ type LocationGroup = {
   isManual: boolean;
   entries: InventoryEntry[];
   uniqueItems: number;
-  totalQuantity: number;
+  totalScu: number;
+  totalUnits: number;
   highestQuality: number | null;
   premiumCount: number;
   topStacks: InventoryEntry[];
@@ -230,8 +236,9 @@ export default function InventoryPage() {
 
       const material = getMaterialForEntry(entry, materials);
       const kind = getEntryKind(entry, material);
-      if (kind === 'ore') oreScu += entry.quantity;
-      if (kind === 'refined') refinedScu += entry.quantity;
+      const unitType = resolveInventoryUnitType(entry, material);
+      if (kind === 'ore' && unitType === 'scu') oreScu += entry.quantity;
+      if (kind === 'refined' && unitType === 'scu') refinedScu += entry.quantity;
       if ((entry.quality ?? 0) >= 900) premiumCount += 1;
       if (entry.quality != null && (!bestQuality || entry.quality > bestQuality.quality)) {
         bestQuality = { quality: entry.quality, name: resolveInventoryItemName(entry, material) };
@@ -261,7 +268,8 @@ export default function InventoryPage() {
         isManual: isManuallyAddedLocation(location),
         entries: [],
         uniqueItems: 0,
-        totalQuantity: 0,
+        totalScu: 0,
+        totalUnits: 0,
         highestQuality: null,
         premiumCount: 0,
         topStacks: [],
@@ -276,7 +284,8 @@ export default function InventoryPage() {
       isManual: false,
       entries: [],
       uniqueItems: 0,
-      totalQuantity: 0,
+      totalScu: 0,
+      totalUnits: 0,
       highestQuality: null,
       premiumCount: 0,
       topStacks: [],
@@ -292,7 +301,14 @@ export default function InventoryPage() {
     for (const group of map.values()) {
       const unique = new Set(group.entries.map(getEntryMaterialId));
       group.uniqueItems = unique.size;
-      group.totalQuantity = group.entries.reduce((sum, entry) => sum + entry.quantity, 0);
+      group.totalScu = group.entries.reduce((sum, entry) => {
+        const material = getMaterialForEntry(entry, materials);
+        return resolveInventoryUnitType(entry, material) === 'scu' ? sum + entry.quantity : sum;
+      }, 0);
+      group.totalUnits = group.entries.reduce((sum, entry) => {
+        const material = getMaterialForEntry(entry, materials);
+        return resolveInventoryUnitType(entry, material) === 'unit' ? sum + entry.quantity : sum;
+      }, 0);
       group.highestQuality = group.entries.reduce<number | null>((best, entry) => {
         if (entry.quality == null) return best;
         return best == null ? entry.quality : Math.max(best, entry.quality);
@@ -305,8 +321,8 @@ export default function InventoryPage() {
 
     return [...map.values()]
       .filter((group) => group.entries.length > 0 || group.isManual)
-      .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.totalQuantity - a.totalQuantity || a.name.localeCompare(b.name));
-  }, [filtered, locations]);
+      .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.entries.length - a.entries.length || a.name.localeCompare(b.name));
+  }, [filtered, locations, materials]);
 
   const topQualityStacks = useMemo(() => {
     return [...entries]
@@ -552,7 +568,13 @@ export default function InventoryPage() {
 
                 <div className="logi-location-stat-grid">
                   <div><span>Unique</span><strong>{group.uniqueItems}</strong></div>
-                  <div><span>Total</span><strong>{formatQuantity(group.totalQuantity)}<em> SCU</em></strong></div>
+                  <div>
+                    <span>Total</span>
+                    <strong>{[
+                      group.totalScu > 0 ? formatInventoryQuantity(group.totalScu, 'scu') : '',
+                      group.totalUnits > 0 ? formatInventoryQuantity(group.totalUnits, 'unit') : '',
+                    ].filter(Boolean).join(' / ') || '0'}</strong>
+                  </div>
                   <div><span>Best</span><strong>{group.highestQuality ?? '—'}</strong></div>
                   <div><span>900+</span><strong>{group.premiumCount}</strong></div>
                 </div>
@@ -616,7 +638,7 @@ export default function InventoryPage() {
                               <span>{resolveInventoryItemName(entry, material)}</span>
                             </div>
                             <QualityPill quality={entry.quality} />
-                            <span className="logi-location-stack-qty">{formatQuantity(entry.quantity)} SCU</span>
+                            <span className="logi-location-stack-qty">{formatEntryQuantity(entry, material)}</span>
                             <button
                               type="button"
                               className="logi-stack-delete-btn"
@@ -715,7 +737,7 @@ export default function InventoryPage() {
                   <div key={entry.id} className="logi-inv-mini-row">
                     <div className="logi-inv-mini-main"><MaterialGlyph quality={entry.quality} /><span>{resolveInventoryItemName(entry, material)}</span></div>
                     <QualityPill quality={entry.quality} />
-                    <span>{formatQuantity(entry.quantity)} SCU · {loc?.name ?? 'Unassigned'}</span>
+                    <span>{formatEntryQuantity(entry, material)} · {loc?.name ?? 'Unassigned'}</span>
                   </div>
                 );
               }) : <div className="logi-inv-empty-panel">No premium 900+ stacks recorded.</div>}

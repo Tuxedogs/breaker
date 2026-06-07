@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
 import { createInventoryEntryDraft } from '../../stores/logisticsStore';
+import { formatEntryQuantity } from '../../lib/logistics/inventory';
+import { type MaterialIdentity, useMaterialIdentityIndex } from '../../lib/logistics/materialIdentityIndex';
 import type {
   InventoryCatalogSource,
   InventoryEntry,
@@ -87,6 +89,22 @@ function deriveKindFromMaterial(mat: MaterialTemplate | undefined): InventoryIte
 
 function deriveKindFromEntry(entry: InventoryEntry, mat?: MaterialTemplate): InventoryItemKind {
   return entry.itemKind ?? deriveKindFromMaterial(mat);
+}
+
+function deriveKindFromIdentity(identity: MaterialIdentity, material?: MaterialTemplate): InventoryItemKind {
+  if (material) return deriveKindFromMaterial(material);
+  if (identity.materialKey === 'rawice') return 'ice';
+  if (identity.unitType === 'scu') return 'ore';
+  if (identity.materialForm === 'gem' || identity.materialForm === 'raw') return 'raw_mineable';
+  return 'material';
+}
+
+function normalizeItemLookup(value: string): string {
+  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function createNewInventoryId(): string {
+  return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
 // ─── Single-entry draft state ─────────────────────────────────────────────────
@@ -326,7 +344,7 @@ function LocationTypeahead({
 export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
   const isNew = entry === null;
 
-  const [newEntryId] = useState(() => String(Date.now()));
+  const materialIdentities = useMaterialIdentityIndex();
   const [draft, setDraft] = useState<DraftState>(() =>
     entry
       ? initDraftFromEntry(entry, materials, locations)
@@ -334,6 +352,16 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   );
   const [locationOpen, setLocationOpen] = useState(false);
   const [clearLocationOnNextFocus, setClearLocationOnNextFocus] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const identityByLookup = useMemo(() => {
+    const lookup = new Map<string, MaterialIdentity>();
+    for (const identity of materialIdentities) {
+      lookup.set(normalizeItemLookup(identity.displayName), identity);
+      lookup.set(normalizeItemLookup(identity.materialKey), identity);
+    }
+    return lookup;
+  }, [materialIdentities]);
 
   function patch(updates: Partial<DraftState>) {
     setDraft((d) => ({ ...d, ...updates }));
@@ -343,14 +371,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   // Does NOT switch catalogMode.
   function handleKindChange(kind: InventoryItemKind) {
     patch({ itemKind: kind, materialId: '', itemName: '', unitType: KIND_DEFAULT_UNIT[kind] });
-  }
-
-  function handleCatalogModeChange(mode: 'catalog' | 'manual') {
-    if (mode === 'catalog') {
-      patch({ catalogMode: 'catalog', materialId: '', unitType: KIND_DEFAULT_UNIT[draft.itemKind] });
-    } else {
-      patch({ catalogMode: 'manual', materialId: '' });
-    }
+    setSuccessMessage('');
   }
 
   // Catalog item selected: derive unitType from catalog. Do NOT overwrite user's itemKind.
@@ -363,34 +384,38 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     });
   }
 
+  function resolveKnownItem(itemName: string): Partial<DraftState> {
+    const identity = identityByLookup.get(normalizeItemLookup(itemName));
+    if (!identity) {
+      return {
+        catalogMode: 'manual',
+        itemName,
+        materialId: '',
+        unitType: KIND_DEFAULT_UNIT[draft.itemKind],
+      };
+    }
+    const material = materials.find((candidate) => candidate.id === identity.materialKey);
+    return {
+      catalogMode: 'catalog',
+      itemName: identity.displayName,
+      materialId: identity.materialKey,
+      itemKind: deriveKindFromIdentity(identity, material),
+      unitType: identity.unitType,
+    };
+  }
+
   function buildEntry(overrideId?: string): InventoryEntry | null {
     const qty = parseFloat(draft.quantity);
     if (isNaN(qty) || qty <= 0) return null;
     if (!resolvedLocationId) return null;
 
-    let resolvedMaterialId: string | undefined;
-    let resolvedItemName: string | undefined;
-    let catalogSource: InventoryCatalogSource;
-
-    const usingCatalog = draft.catalogMode === 'catalog' &&
-      materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)).length > 0;
-
-    if (usingCatalog) {
-      const mat = materials.find((m) => m.id === draft.materialId);
-      if (!mat) return null;
-      resolvedMaterialId = mat.id;
-      resolvedItemName = mat.name;
-      catalogSource = 'seed';
-    } else {
-      const name = draft.itemName.trim();
-      if (!name) return null;
-      resolvedMaterialId = undefined;
-      resolvedItemName = name;
-      catalogSource = 'manual';
-    }
+    const resolvedItemName = draft.itemName.trim();
+    if (!resolvedItemName) return null;
+    const resolvedMaterialId = draft.materialId || undefined;
+    const catalogSource: InventoryCatalogSource = resolvedMaterialId ? 'api' : 'manual';
 
     return createInventoryEntryDraft({
-      id: overrideId ?? entry?.id ?? newEntryId,
+      id: overrideId ?? entry?.id ?? createNewInventoryId(),
       materialId: resolvedMaterialId,
       itemName: resolvedItemName,
       itemKind: draft.itemKind,
@@ -410,7 +435,26 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const built = buildEntry();
     if (!built) return;
     onSave([built]);
-    if (isNew && draft.locationSearch.trim()) setClearLocationOnNextFocus(true);
+    if (isNew) {
+      const locationName = locations.find((location) => location.id === built.locationId)?.name;
+      const details = [
+        formatEntryQuantity(built, built.materialId ? materials.find((material) => material.id === built.materialId) : undefined),
+        locationName ? `at ${locationName}` : undefined,
+        built.container ? `in ${built.container}` : undefined,
+        built.quality !== undefined ? `quality ${built.quality}` : undefined,
+      ].filter(Boolean).join(' / ');
+      setSuccessMessage(`Added ${built.itemName ?? built.materialName ?? 'item'}: ${details}`);
+      setDraft((current) => ({
+        ...current,
+        catalogMode: 'manual',
+        materialId: '',
+        itemName: '',
+        quantity: '',
+        quality: '',
+        unitType: KIND_DEFAULT_UNIT[current.itemKind],
+      }));
+      setClearLocationOnNextFocus(false);
+    }
   }
 
   function handleLocationFocus() {
@@ -443,22 +487,16 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const q = parseFloat(draft.quantity);
     if (isNaN(q) || q <= 0) return false;
     if (!resolvedLocationId) return false;
-    const usingCatalog = draft.catalogMode === 'catalog' && materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)).length > 0;
-    if (usingCatalog) return !!draft.materialId;
     return draft.itemName.trim().length > 0;
-  }, [draft, materials, resolvedLocationId]);
+  }, [draft, resolvedLocationId]);
 
   const filteredCatalogItems = useMemo(
-    () => materials.filter((m) => kindMatchesMaterial(draft.itemKind, m)),
+    () => materials.filter((material) => kindMatchesMaterial(draft.itemKind, material)),
     [materials, draft.itemKind],
   );
-
-  const selectedMat = draft.catalogMode === 'catalog'
-    ? materials.find((m) => m.id === draft.materialId)
-    : undefined;
-
-  // In catalog mode, kinds with no catalog entries force manual
+  const selectedMat = materials.find((material) => material.id === draft.materialId);
   const hasCatalogForKind = filteredCatalogItems.length > 0;
+  const showLegacySourceFields = false;
 
   return (
     <div className="logi-entry-panel">
@@ -472,26 +510,6 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       </div>
 
       {/* 1. Item Source */}
-      <div className="logi-form-field">
-        <span className="logi-form-label">Item Source</span>
-        <div className="logi-inv-mode-toggle">
-          <button
-            type="button"
-            className={`logi-inv-mode-btn${draft.catalogMode === 'catalog' ? ' logi-inv-mode-btn--active' : ''}`}
-            onClick={() => handleCatalogModeChange('catalog')}
-          >
-            Catalog
-          </button>
-          <button
-            type="button"
-            className={`logi-inv-mode-btn${draft.catalogMode === 'manual' ? ' logi-inv-mode-btn--active' : ''}`}
-            onClick={() => handleCatalogModeChange('manual')}
-          >
-            Manual / Custom
-          </button>
-        </div>
-      </div>
-
       {/* 2. Item Kind */}
       <div className="logi-form-field">
         <label htmlFor="inv-item-kind" className="logi-form-label">Item Kind</label>
@@ -508,7 +526,33 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       </div>
 
       {/* 3. Item — filtered by kind in catalog mode; free-text in manual mode */}
-      {draft.catalogMode === 'catalog' && hasCatalogForKind ? (
+      <div className="logi-form-field">
+        <label htmlFor="inv-item-name" className="logi-form-label">Item Name</label>
+        <input
+          id="inv-item-name"
+          type="text"
+          list="inv-known-items"
+          className={`logi-form-input${draft.materialId ? ' logi-form-input--selected' : ''}`}
+          value={draft.itemName}
+          onChange={(event) => {
+            patch(resolveKnownItem(event.target.value));
+            setSuccessMessage('');
+          }}
+          onBlur={(event) => patch(resolveKnownItem(event.target.value))}
+          placeholder="Search known items or enter a custom item..."
+          autoFocus={isNew}
+        />
+        <datalist id="inv-known-items">
+          {materialIdentities.map((identity) => (
+            <option key={identity.materialKey} value={identity.displayName} />
+          ))}
+        </datalist>
+        <span className="logi-form-hint">
+          {draft.materialId ? `Known material / ${draft.materialId}` : 'Custom item'}
+        </span>
+      </div>
+
+      {showLegacySourceFields && (draft.catalogMode === 'catalog' && hasCatalogForKind ? (
         <div className="logi-form-field">
           <label htmlFor="inv-material" className="logi-form-label">Item</label>
           <select
@@ -523,7 +567,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             ))}
           </select>
           {selectedMat && (
-            <span className="logi-form-hint">{selectedMat.materialType}</span>
+            <span className="logi-form-hint">{selectedMat?.materialType}</span>
           )}
         </div>
       ) : (
@@ -548,7 +592,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             <span className="logi-form-hint">No catalog entries for this kind — enter manually</span>
           )}
         </div>
-      )}
+      ))}
 
       {/* Quantity + Unit Type */}
       <div className="logi-form-row-pair">
@@ -575,6 +619,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             className="logi-form-select"
             value={draft.unitType}
             onChange={(e) => patch({ unitType: e.target.value as InventoryUnitType })}
+            disabled={Boolean(draft.materialId)}
           >
             <option value="scu">SCU (cargo volume)</option>
             <option value="unit">Units / items (×)</option>
@@ -647,6 +692,11 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       </div>
 
       <div className="logi-entry-panel-actions">
+        {successMessage && (
+          <div className="logi-inventory-add-success" role="status" aria-live="polite">
+            {successMessage}
+          </div>
+        )}
         <button
           type="button"
           className="logi-btn-primary"

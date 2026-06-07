@@ -76,6 +76,8 @@ export default function OnlinePersistenceCoordinator() {
     let syncTimer: number | null = null;
     let syncInFlight = false;
     let syncAgain = false;
+    let inventoryMutatedDuringHydration = false;
+    let applyingHydration = false;
 
     async function pushSnapshot() {
       if (!hydrated || cancelled) return;
@@ -115,10 +117,38 @@ export default function OnlinePersistenceCoordinator() {
       }, 900);
     }
 
-    const unsubscribe = useLogisticsStore.subscribe(() => {
-      if (!hydrated) return;
+    const unsubscribe = useLogisticsStore.subscribe((state, previousState) => {
+      if (!hydrated) {
+        if (!applyingHydration && state.inventoryEntries !== previousState.inventoryEntries) {
+          inventoryMutatedDuringHydration = true;
+        }
+        return;
+      }
       scheduleSync();
     });
+
+    function applyHydratedState(remoteState: {
+      locations: InventoryLocation[];
+      inventoryEntries: InventoryEntry[];
+      buildQueue: BuildQueueItem[];
+    }, includedLocalInventoryIds = new Set<string>()) {
+      const localPayload = getLocalPlanningPayload();
+      const localInventory = inventoryMutatedDuringHydration
+        ? localPayload.inventoryEntries.filter((entry) => !includedLocalInventoryIds.has(entry.id))
+        : [];
+      const locations = inventoryMutatedDuringHydration
+        ? [
+            ...remoteState.locations,
+            ...localPayload.locations.filter((location) => !remoteState.locations.some((remoteLocation) => remoteLocation.id === location.id)),
+          ]
+        : remoteState.locations;
+      applyingHydration = true;
+      useLogisticsStore.getState().replaceOnlineState({ ...remoteState, locations });
+      if (localInventory.length > 0) {
+        useLogisticsStore.getState().addInventoryEntries(localInventory);
+      }
+      applyingHydration = false;
+    }
 
     async function hydrate() {
       try {
@@ -127,16 +157,17 @@ export default function OnlinePersistenceCoordinator() {
 
         const migratedAt = window.localStorage.getItem(remoteMigratedAtKey);
         if (!migratedAt && hasLocalPlanningState()) {
-          const synced = await syncOnlinePersistenceState(token, getLocalPlanningPayload());
+          const localPayload = getLocalPlanningPayload();
+          const synced = await syncOnlinePersistenceState(token, localPayload);
           if (cancelled) return;
-          useLogisticsStore.getState().replaceOnlineState({
+          applyHydratedState({
             locations: synced.locations,
             inventoryEntries: synced.inventoryEntries,
             buildQueue: synced.buildQueue,
-          });
+          }, new Set(localPayload.inventoryEntries.map((entry) => entry.id)));
           markSynced(synced.sync?.migratedAt, synced.sync?.lastSyncedAt);
         } else {
-          useLogisticsStore.getState().replaceOnlineState({
+          applyHydratedState({
             locations: remote.locations,
             inventoryEntries: remote.inventoryEntries,
             buildQueue: remote.buildQueue,

@@ -301,6 +301,73 @@ function getInventoryMergeKey(entry: InventoryEntry): string {
   ].join("|");
 }
 
+function getInventoryStackKey(entry: InventoryEntry): string {
+  return [
+    getInventoryMergeKey(entry),
+    entry.locationId ?? "",
+    entry.container ?? "",
+    entry.quality ?? "__none",
+  ].join("|");
+}
+
+function stableInventoryIdSuffix(value: string): string {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+export function repairInventoryEntryIds(entries: InventoryEntry[]): InventoryEntry[] {
+  const repaired: InventoryEntry[] = [];
+  const indexByStackKey = new Map<string, number>();
+  const usedIds = new Set<string>();
+
+  for (const entry of entries) {
+    const stackKey = getInventoryStackKey(entry);
+    const identicalIndex = indexByStackKey.get(stackKey);
+    if (identicalIndex !== undefined) {
+      const existing = repaired[identicalIndex];
+      const sourceHistory = Array.from(new Set([
+        ...(existing.sourceHistory ?? (existing.source ? [existing.source] : [])),
+        ...(entry.sourceHistory ?? (entry.source ? [entry.source] : [])),
+      ]));
+      const workOrderIds = Array.from(new Set([
+        ...(existing.workOrderIds ?? (existing.workOrderId ? [existing.workOrderId] : [])),
+        ...(entry.workOrderIds ?? (entry.workOrderId ? [entry.workOrderId] : [])),
+      ]));
+      repaired[identicalIndex] = {
+        ...existing,
+        quantity: existing.quantity + entry.quantity,
+        source: entry.source ?? existing.source,
+        sourceHistory: sourceHistory.length ? sourceHistory : undefined,
+        workOrderId: entry.workOrderId ?? existing.workOrderId,
+        workOrderIds: workOrderIds.length ? workOrderIds : undefined,
+        updatedAt: entry.updatedAt ?? existing.updatedAt,
+      };
+      continue;
+    }
+
+    let id = entry.id;
+    if (usedIds.has(id)) {
+      const baseId = `${id}--repaired-${stableInventoryIdSuffix(stackKey)}`;
+      id = baseId;
+      let collision = 2;
+      while (usedIds.has(id)) {
+        id = `${baseId}-${collision}`;
+        collision += 1;
+      }
+    }
+
+    usedIds.add(id);
+    indexByStackKey.set(stackKey, repaired.length);
+    repaired.push(id === entry.id ? entry : { ...entry, id });
+  }
+
+  return repaired;
+}
+
 function coercePersistedLocation(value: unknown): InventoryLocation | null {
   if (!isRecord(value) || !isString(value.id) || !isString(value.name)) return null;
   return {
@@ -527,7 +594,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       addInventoryEntries: (entries) => {
         set((state) => ({
-          inventoryEntries: entries.reduce((inventory, entry) => {
+          inventoryEntries: repairInventoryEntryIds(entries.reduce((inventory, entry) => {
             const normalized = normalizeInventoryEntry(entry, state.materialTemplates);
             const incomingWorkOrderIds = normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : []);
             if (
@@ -569,7 +636,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             }, state.materialTemplates, existing.createdAt);
 
             return inventory.map((current, idx) => idx === existingIdx ? merged : current);
-          }, state.inventoryEntries),
+          }, state.inventoryEntries)),
         }));
       },
       updateInventoryEntry: (entry) => {
@@ -616,7 +683,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       replaceOnlineState: (onlineState) => {
         set((state) => ({
           locations: onlineState.locations.length ? onlineState.locations : state.locations,
-          inventoryEntries: onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+          inventoryEntries: repairInventoryEntryIds(
+            onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+          ),
           buildQueue: onlineState.buildQueue.map((item) => ({
             ...item,
             quantity: Math.max(1, Math.trunc(item.quantity)),
@@ -881,8 +950,12 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         const persistedInputs = isRecord(persisted) ? persisted["recipeInputTemplates"] : undefined;
 
         const inventoryEntries = persistedInventory
-          ?.map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
-          .filter((entry): entry is InventoryEntry => entry !== null && !seedInventoryEntryIds.has(entry.id));
+          ? repairInventoryEntryIds(
+              persistedInventory
+                .map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
+                .filter((entry): entry is InventoryEntry => entry !== null && !seedInventoryEntryIds.has(entry.id)),
+            )
+          : undefined;
         const buildQueue = persistedBuildQueue
           ?.map((item) => coercePersistedBuildQueueItem(item, current.materialTemplates))
           .filter((item): item is BuildQueueItem => item !== null);

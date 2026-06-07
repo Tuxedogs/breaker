@@ -4,12 +4,12 @@ import MaterialIcon from "../components/logistics/MaterialIcon";
 import { useLogisticsStore } from "../stores/logisticsStore";
 import { deriveUserDashStats } from "../lib/dashboardStats";
 import type { LogisticsMaterialTemplate } from "../data/logistics/seed";
-import { MINEABLE_SIGNATURES } from "../data/mineableSignatures";
 import { buildRecommendationRequest, getMiningRecommendations } from "../features/mining/recommenderAdapter";
 import type { PublicLocationEntry, RequiredMaterial } from "../features/mining/types";
 import {
   formatInventoryQuantity,
   getBuildQueueItemInputs,
+  getGlobalTopQualityMaterials,
   resolveInventoryItemName,
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
@@ -94,50 +94,10 @@ function LocationIcon({ type }: { type: string }) {
   );
 }
 
-const SIGNATURE_DOCK_STORAGE_KEY = "sdock_state";
-
-type SignatureDockStateSnapshot = {
-  activeMaterialKeys?: string[];
-  pinnedMaterialKeys?: string[];
-  activeIds?: number[];
-};
-
 function formatDashNumber(value: number): string {
   if (!Number.isFinite(value)) return "0";
   const rounded = Math.round(value * 100) / 100;
   return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2).replace(/\.?0+$/, "");
-}
-
-function normalizeSignatureMaterialKey(value: string) {
-  const compact = value.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
-  if (compact === "aluminum") return "aluminium";
-  if (compact === "quantainium") return "quantanium";
-  if (compact === "savrillium") return "savrilium";
-  if (compact === "pressurizedice") return "ice";
-  return compact;
-}
-
-function readSignatureDockState(): SignatureDockStateSnapshot {
-  try {
-    const raw = localStorage.getItem(SIGNATURE_DOCK_STORAGE_KEY);
-    return raw ? JSON.parse(raw) as SignatureDockStateSnapshot : {};
-  } catch {
-    return {};
-  }
-}
-
-function signatureRowsFromState(state: SignatureDockStateSnapshot) {
-  const materialKeys = new Set(
-    (state.pinnedMaterialKeys?.length ? state.pinnedMaterialKeys : state.activeMaterialKeys ?? [])
-      .map(normalizeSignatureMaterialKey)
-  );
-  if (materialKeys.size === 0 && state.activeIds?.length) {
-    for (const id of state.activeIds) {
-      const name = MINEABLE_SIGNATURES[id]?.name;
-      if (name) materialKeys.add(normalizeSignatureMaterialKey(name));
-    }
-  }
-  return MINEABLE_SIGNATURES.filter((signature) => materialKeys.has(normalizeSignatureMaterialKey(signature.name)));
 }
 
 function getQueueItemName(item: BuildQueueItem, recipesById: Map<string, { name: string }>) {
@@ -222,7 +182,6 @@ function toRequiredMaterials(lines: QueueLedgerLine[]): RequiredMaterial[] {
 export default function DashboardPage() {
   const { inventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
   const userStats = deriveUserDashStats(inventoryEntries, materialTemplates as LogisticsMaterialTemplate[]);
-  const [signatureState, setSignatureState] = useState<SignatureDockStateSnapshot>(() => readSignatureDockState());
   const [miningState, setMiningState] = useState<{ status: "idle" | "loading" | "loaded" | "error"; data: PublicLocationEntry[] }>({
     status: "idle",
     data: [],
@@ -235,7 +194,13 @@ export default function DashboardPage() {
   const activeQueueItems = useMemo(() => buildQueue.filter((item) => item.status !== "complete"), [buildQueue]);
   const completedQueueItems = useMemo(() => buildQueue.filter((item) => item.status === "complete"), [buildQueue]);
   const recipesById = useMemo(() => new Map(recipeTemplates.map((recipe) => [recipe.id, recipe])), [recipeTemplates]);
-  const signatureRows = useMemo(() => signatureRowsFromState(signatureState), [signatureState]);
+  const locationNamesById = useMemo(() => new Map(locations.map((location) => [location.id, location.name])), [locations]);
+  const topQualityMaterials = useMemo(
+    () => getGlobalTopQualityMaterials(inventoryEntries, materialTemplates)
+      .filter(({ entry }) => entry.quality != null && Number.isFinite(entry.quality))
+      .slice(0, 6),
+    [inventoryEntries, materialTemplates]
+  );
   const inventoryLocationSummaries = useMemo(
     () => buildInventoryLocationSummaries(inventoryEntries, locations, materialTemplates),
     [inventoryEntries, locations, materialTemplates]
@@ -258,18 +223,6 @@ export default function DashboardPage() {
   const displayedMiningState = miningRequiredMaterials.length === 0
     ? { status: "idle" as const, data: [] as PublicLocationEntry[] }
     : miningState;
-
-  useEffect(() => {
-    function refreshSignatureState() {
-      setSignatureState(readSignatureDockState());
-    }
-    window.addEventListener("storage", refreshSignatureState);
-    window.addEventListener("focus", refreshSignatureState);
-    return () => {
-      window.removeEventListener("storage", refreshSignatureState);
-      window.removeEventListener("focus", refreshSignatureState);
-    };
-  }, []);
 
   useEffect(() => {
     if (miningRequiredMaterials.length === 0) return;
@@ -422,29 +375,36 @@ export default function DashboardPage() {
           <article className="dash-card" aria-label="Inventory overview">
             <div className="dash-card-header"><span className="dash-card-title">Inventory Overview</span></div>
             <div className="dash-card-body dash-inventory-body">
-              {inventoryEntries.length > 0 && signatureRows.length > 0 ? (
-                <table className="sdock-table dash-signature-table">
-                  <thead>
-                    <tr>
-                      <th>Material</th>
-                      <th className="sdock-th-values">Signature Values</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {signatureRows.slice(0, 6).map((row) => (
-                      <tr key={row.name} className="sdock-row-active">
-                        <td className="sdock-td-name"><span className="sdock-active-dot" />{row.name}</td>
-                        <td className="sdock-td-values">
-                          <div className="sdock-values-wrap">
-                            {row.values.map((value, index) => <span key={index} className="sdock-val-chip">{value.toLocaleString("en-US")}</span>)}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              {topQualityMaterials.length > 0 ? (
+                <div className="dash-inventory-quality-list">
+                  {topQualityMaterials.map(({ entry, material }) => {
+                    const itemName = resolveInventoryItemName(entry, material);
+                    const locationId = entry.locationId ?? "__unassigned__";
+                    const locationName = entry.locationId ? locationNamesById.get(entry.locationId) ?? "Unknown Location" : "Unassigned Stock";
+                    return (
+                      <Link
+                        key={entry.id}
+                        to={`/logistics/inventory?location=${encodeURIComponent(locationId)}`}
+                        className="dash-inventory-quality-row"
+                      >
+                        <MaterialIcon
+                          materialName={itemName}
+                          materialState={material?.materialType === "refined" ? "refined" : "raw"}
+                          size={18}
+                        />
+                        <span className="dash-inventory-quality-main">
+                          <strong>{itemName}</strong>
+                          <small>{locationName}</small>
+                        </span>
+                        <span className="dash-inventory-quality-qty">{formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material))}</span>
+                        <span className="dash-inventory-quality-value" style={{ color: entry.rarity.colorHex }}>Q{entry.quality}</span>
+                        <ArrowRight />
+                      </Link>
+                    );
+                  })}
+                </div>
               ) : (
-                <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No signature selections yet" : "No inventory recorded"}</div>
+                <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No material quality recorded" : "No inventory recorded"}</div>
               )}
             </div>
             {topRecordedInventoryLocation && (
