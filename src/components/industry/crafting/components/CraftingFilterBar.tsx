@@ -3,12 +3,54 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 
+const PistolIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M3.5 8.5h11.8l1.1 1.8H21v3.1h-6.2l-1.7 1.7H9.6" />
+    <path d="M8.8 13.4l-1.2 6.1H4.9l-.8-6.1" />
+    <path d="M10.4 13.4v2.2" />
+    <path d="M16.2 10.3h2.2" />
+  </svg>
+);
+
+const BulletsIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.7"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M6 4.5c1.1.9 1.7 2 1.7 3.3v10.7H4.3V7.8c0-1.3.6-2.4 1.7-3.3Z" />
+    <path d="M12 4.5c1.1.9 1.7 2 1.7 3.3v10.7h-3.4V7.8c0-1.3.6-2.4 1.7-3.3Z" />
+    <path d="M18 4.5c1.1.9 1.7 2 1.7 3.3v10.7h-3.4V7.8c0-1.3.6-2.4 1.7-3.3Z" />
+    <path d="M4.4 15.6h3.2" />
+    <path d="M10.4 15.6h3.2" />
+    <path d="M16.4 15.6h3.2" />
+  </svg>
+);
+
 // ── Inline SVG icons for component type filter chips ──────────────────────────
 const TYPE_ICONS: Record<string, React.ReactNode> = {
   // FPS
-  ammo:        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="2" width="6" height="9" rx="1.5"/><path d="M6 11v2a2 2 0 0 0 4 0v-2"/><line x1="8" y1="2" x2="8" y2="0.5"/></svg>,
+  ammo:        <BulletsIcon />,
   armor:       <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 2 3 4.5v4.3C3 12.2 5.2 14.7 8 15.5c2.8-.8 5-3.3 5-6.7V4.5L8 2Z"/></svg>,
-  weapons:     <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 10h8l2-4h2"/><path d="M10 10l1 3M2 10l1-3h5"/></svg>,
+  weapons:     <PistolIcon />,
   // Vehicle
   cooler:      <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="8" y1="1" x2="8" y2="15"/><line x1="1" y1="8" x2="15" y2="8"/><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg>,
   powerplant:  <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 2 5 9h4l-2 5 6-7H9L9 2Z"/></svg>,
