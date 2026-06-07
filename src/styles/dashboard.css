@@ -1590,12 +1590,71 @@
 /* ── Inventory overview (donut chart) ─────────── */
 
 .dash-inventory-body {
-  display: flex;
-  flex-direction: column;
+  padding: 0.4rem 0.55rem;
+}
+
+.dash-inventory-quality-list {
+  display: grid;
+  width: 100%;
+}
+
+.dash-inventory-quality-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto auto 12px;
   align-items: center;
-  gap: 0.8rem;
-  flex: 1;
-  justify-content: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.46rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+  color: rgba(199, 210, 230, 0.72);
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s;
+}
+
+.dash-inventory-quality-row:last-child {
+  border-bottom: 0;
+}
+
+.dash-inventory-quality-row:hover {
+  background: rgba(139, 92, 246, 0.075);
+  color: #ffffff;
+}
+
+.dash-inventory-quality-main {
+  display: grid;
+  min-width: 0;
+}
+
+.dash-inventory-quality-main strong,
+.dash-inventory-quality-main small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-inventory-quality-main strong {
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.dash-inventory-quality-main small {
+  margin-top: 0.05rem;
+  color: rgba(160, 180, 220, 0.42);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+}
+
+.dash-inventory-quality-qty,
+.dash-inventory-quality-value {
+  font-family: var(--font-primary);
+  font-size: 0.66rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.dash-inventory-quality-qty {
+  color: rgba(160, 180, 220, 0.52);
 }
 
 .dash-donut-wrap {
@@ -2218,14 +2277,6 @@
   .dash-doctrine-link {
     width: 100%;
   }
-}
-
-.dash-signature-table {
-  align-self: stretch;
-}
-
-.dash-signature-table tbody tr {
-  cursor: default;
 }
 
 .dash-empty-state {

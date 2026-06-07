@@ -852,11 +852,24 @@
 
 .logi-entry-panel-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: auto;
   padding-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
+}
+
+.logi-inventory-add-success {
+  width: 100%;
+  padding: 0.48rem 0.62rem;
+  border: 1px solid rgba(76, 187, 23, 0.24);
+  border-radius: 4px;
+  background: rgba(76, 187, 23, 0.08);
+  color: rgba(150, 220, 130, 0.88);
+  font-family: var(--font-primary);
+  font-size: 0.67rem;
+  letter-spacing: 0.04em;
 }
 
 /* ── Badges ───────────────────────────────────── */
