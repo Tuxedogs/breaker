@@ -1164,3 +1164,589 @@
     gap: 7px;
   }
 }
+
+/* === Blueprint-first library additions (scoped .bp-*) ===
+   Reuses --bt-* tokens, compact density, orange active, teal accents.
+   Old .bt-* selectors untouched for the preserved missions branch.
+   Semantic classes, low specificity, no !important.
+*/
+.bp-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 10px;
+}
+.bp-search {
+  width: 100%;
+  background: var(--bt-panel-3);
+  border: 1px solid var(--bt-border);
+  color: var(--bt-text);
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 12px;
+}
+.bp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.bp-chip {
+  background: var(--bt-panel);
+  border: 1px solid var(--bt-border);
+  color: var(--bt-muted);
+  padding: 1px 6px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.bp-chip.is-active {
+  border-color: var(--bt-orange);
+  color: var(--bt-orange);
+  background: var(--bt-orange-soft);
+}
+.bp-chip-count {
+  margin-left: 3px;
+  color: var(--bt-faint);
+  font-weight: 700;
+}
+.bp-toggles {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.bp-toggle {
+  font-size: 9px;
+  padding: 1px 5px;
+  border: 1px solid var(--bt-border);
+  background: transparent;
+  color: var(--bt-muted);
+  cursor: pointer;
+}
+.bp-toggle.is-active {
+  border-color: var(--bt-teal);
+  color: var(--bt-teal);
+}
+
+.bp-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 10px;
+  align-items: start;
+}
+.bp-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bp-section-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bt-orange);
+  border-bottom: 1px solid var(--bt-border-soft);
+  padding-bottom: 1px;
+}
+.bp-section-count {
+  color: var(--bt-muted);
+  font-weight: 700;
+}
+.bp-cards {
+  /* overridden by later grid rule for full width wrapping */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+.bp-card {
+  display: flex;
+  gap: 6px;
+  padding: 3px 4px;
+  background: var(--bt-panel-2);
+  border: 1px solid var(--bt-border-soft);
+  font-size: 11px;
+  cursor: pointer;
+}
+.bp-card:hover {
+  border-color: var(--bt-border);
+}
+.bp-card.is-collected {
+  border-left: 2px solid var(--bt-green);
+}
+.bp-card.is-unavailable {
+  opacity: 0.55;
+}
+.bp-card-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bt-panel-3);
+  border: 1px solid var(--bt-border);
+  font-size: 11px;
+  line-height: 1;
+}
+.bp-card-body {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.bp-card-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bp-card-sub {
+  font-size: 9px;
+  color: var(--bt-faint);
+  line-height: 1;
+}
+.bp-card-progress {
+  font-size: 9px;
+  color: var(--bt-muted);
+  line-height: 1;
+  margin: 1px 0;
+}
+.bp-progress-track {
+  height: 2px;
+  background: var(--bt-panel-3);
+}
+.bp-progress-fill {
+  height: 100%;
+  background: var(--bt-teal);
+}
+.bp-unavail-badge {
+  font-size: 8px;
+  color: var(--bt-red);
+  white-space: nowrap;
+  align-self: center;
+}
+
+.bp-detail {
+  background: var(--bt-panel);
+  border: 1px solid var(--bt-border);
+  padding: 6px;
+  font-size: 10px;
+  position: sticky;
+  top: 8px;
+  max-height: 70vh;
+  overflow: auto;
+}
+.bp-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.bp-detail-head strong {
+  color: var(--bt-orange);
+  font-size: 11px;
+}
+.bp-rarity {
+  font-size: 8px;
+  border: 1px solid var(--bt-orange-border);
+  padding: 0 2px;
+}
+.bp-track-btn {
+  margin-left: auto;
+  font-size: 9px;
+  padding: 1px 4px;
+}
+.bp-detail-empty {
+  color: var(--bt-faint);
+}
+.bp-detail-warn {
+  color: var(--bt-red);
+  font-size: 9px;
+  margin: 3px 0;
+}
+.bp-acq-title {
+  font-weight: 700;
+  color: var(--bt-orange);
+  margin: 4px 0 2px;
+  font-size: 10px;
+}
+.bp-acq-sys {
+  margin-bottom: 3px;
+}
+.bp-acq-sysname {
+  font-weight: 600;
+  color: var(--bt-muted);
+}
+.bp-acq-fac {
+  margin-left: 8px;
+}
+.bp-acq-mis {
+  margin-left: 12px;
+  font-size: 9px;
+}
+
+/* === Master-detail layout matching the referenced screenshots === */
+/* Default: full width library with grouped sections (State 1) */
+/* When blueprint selected: split with library content on left, detail panel on right (State 2) */
+
+.bp-split {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 12px;
+  align-items: start;
+}
+
+.bp-library-content {
+  min-width: 0;
+}
+
+.bp-detail-panel {
+  background: #0f1418;
+  border: 1px solid var(--bt-border);
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+  font-size: 12px;
+}
+
+.bp-detail-panel .detail-kicker {
+  font-size: 11px;
+  color: var(--bt-orange);
+  padding: 8px 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bp-detail-panel .detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 8px;
+  border-bottom: 1px solid var(--bt-border-soft);
+}
+
+.bp-detail-panel .detail-title-row .back {
+  font-size: 10px;
+  color: var(--bt-muted);
+  cursor: pointer;
+}
+
+.bp-detail-panel .detail-title-row .name {
+  color: var(--bt-text);
+  font-weight: 600;
+  flex: 1;
+  font-size: 13px;
+}
+
+.bp-detail-panel .rarity-badge {
+  background: #1a2530;
+  border: 1px solid var(--bt-orange-border);
+  color: var(--bt-orange);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+
+.bp-detail-panel .track-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border: 1px solid var(--bt-orange-border);
+  color: var(--bt-orange);
+  background: transparent;
+  cursor: pointer;
+}
+
+.bp-detail-panel .close-btn {
+  font-size: 14px;
+  color: var(--bt-muted);
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.bp-detail-panel .media-area {
+  height: 120px;
+  background: #0a0e12;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bt-faint);
+  font-size: 10px;
+  border-bottom: 1px solid var(--bt-border-soft);
+  margin: 0 12px;
+}
+
+.bp-detail-panel .description {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--bt-muted);
+  line-height: 1.35;
+}
+
+.bp-detail-panel .progress-header {
+  padding: 0 12px 4px;
+  font-weight: 600;
+  color: var(--bt-orange);
+  font-size: 11px;
+}
+
+.bp-detail-panel .progress-list {
+  padding: 0 12px 8px;
+  font-size: 11px;
+}
+
+.bp-detail-panel .progress-list > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 0;
+}
+
+.bp-detail-panel .quick-info {
+  padding: 0 12px 8px;
+  font-size: 10px;
+}
+
+.bp-detail-panel .quick-info table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bp-detail-panel .quick-info td {
+  padding: 1px 0;
+  vertical-align: top;
+}
+
+.bp-detail-panel .quick-info td:first-child {
+  color: var(--bt-faint);
+  width: 38%;
+}
+
+.bp-detail-panel .warning-banner {
+  background: #3a2a10;
+  border: 1px solid #f59e0b;
+  color: #f59e0b;
+  padding: 4px 8px;
+  font-size: 9px;
+  margin: 0 12px 8px;
+}
+
+.bp-detail-panel .acquire-header {
+  padding: 0 12px 4px;
+  font-weight: 600;
+  color: var(--bt-orange);
+  font-size: 10px;
+}
+
+.bp-detail-panel .acquire-entry {
+  margin: 0 12px 6px;
+  border: 1px solid var(--bt-border-soft);
+  background: #0a0e12;
+  padding: 6px 8px;
+  font-size: 10px;
+}
+
+.bp-detail-panel .acquire-entry .sys {
+  font-weight: 600;
+  color: var(--bt-orange);
+  font-size: 10px;
+}
+
+.bp-detail-panel .acquire-entry .fac {
+  font-size: 10px;
+}
+
+.bp-detail-panel .acquire-entry .fac .status {
+  font-size: 9px;
+  padding: 0 4px;
+  border-radius: 2px;
+}
+
+.bp-detail-panel .acquire-entry .mission {
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+.bp-detail-panel .acquire-entry .desc {
+  font-size: 9px;
+  color: var(--bt-faint);
+  line-height: 1.25;
+}
+
+.bp-detail-panel .acquire-entry .meta {
+  font-size: 9px;
+  color: var(--bt-faint);
+  margin-top: 2px;
+}
+
+.bp-detail-panel .acquire-entry .btn {
+  font-size: 9px;
+  margin-top: 4px;
+  padding: 2px 6px;
+  border: 1px solid var(--bt-border);
+  color: var(--bt-muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.bp-detail-panel .locations-table {
+  margin: 0 12px 8px;
+  font-size: 10px;
+}
+
+.bp-detail-panel .locations-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bp-detail-panel .locations-table th,
+.bp-detail-panel .locations-table td {
+  border-bottom: 1px solid var(--bt-border-soft);
+  padding: 2px 4px;
+  text-align: left;
+}
+
+.bp-detail-panel .locations-table th {
+  color: var(--bt-faint);
+  font-weight: normal;
+}
+
+/* Library sections and cards (to match screenshot density) */
+.bp-library-content {
+  width: 100%;
+}
+
+.bp-category-section {
+  margin-bottom: 10px;
+}
+
+.bp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bt-orange);
+  font-weight: 600;
+}
+
+.bp-section-header .icon {
+  font-size: 12px;
+}
+
+.bp-section-header .count {
+  margin-left: auto;
+  color: var(--bt-muted);
+  font-size: 9px;
+}
+
+.bp-section-panel {
+  background: #0f1418;
+  border: 1px solid var(--bt-border);
+  padding: 4px;
+}
+
+.bp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+.bp-card {
+  display: flex;
+  gap: 8px;
+  padding: 6px 8px;
+  background: #0a0e12;
+  border: 1px solid var(--bt-border);
+  font-size: 11px;
+  min-height: 58px;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bp-card-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0e12;
+  border: 1px solid var(--bt-border);
+  font-size: 14px;
+}
+
+.bp-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.bp-card-name {
+  font-weight: 600;
+  line-height: 1.15;
+  font-size: 11px;
+}
+
+.bp-card-sub {
+  font-size: 9px;
+  color: var(--bt-faint);
+}
+
+.bp-card-progress {
+  font-size: 9px;
+  color: var(--bt-muted);
+}
+
+.bp-progress-track {
+  height: 2px;
+  background: #1a2530;
+  margin-top: 1px;
+}
+
+.bp-progress-fill {
+  height: 100%;
+  background: #f59e0b;
+}
+
+@media (max-width: 1100px) {
+  .bp-split {
+    grid-template-columns: 1fr;
+  }
+  .bp-detail-panel {
+    max-height: none;
+  }
+}
+
+/* Force full-width wrapping grid for category shelves - no narrow lists or empty space */
+.bp-library-content,
+.bp-sections,
+.bp-category-section,
+.bp-section-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.bp-cards {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  width: 100% !important;
+  justify-content: flex-start !important;
+}
+
+.bp-card {
+  flex: 0 0 220px !important;
+  max-width: 280px !important;
+  box-sizing: border-box !important;
+}
+
+/* For armor, keep separate but full grid; grouping can be added later if data supports set families */
+

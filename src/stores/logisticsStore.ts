@@ -40,6 +40,8 @@ import type {
   ReservedMaterialAllocation,
 } from "../types/logistics";
 
+const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
+
 export interface CraftingRecipeRegistration {
   recipeId: string;
   name: string;
@@ -512,7 +514,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       recipeTemplates,
       recipeInputTemplates,
       locations: inventoryLocations,
-      inventoryEntries: initialInventoryEntries,
+      inventoryEntries: [],
       buildQueue: initialBuildQueue,
       addLocation: (location) => {
         set((state) => ({ locations: [...state.locations, location] }));
@@ -856,7 +858,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           recipeTemplates,
           recipeInputTemplates,
           locations: inventoryLocations,
-          inventoryEntries: initialInventoryEntries,
+          inventoryEntries: [],
           buildQueue: initialBuildQueue,
         });
       },
@@ -880,7 +882,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
 
         const inventoryEntries = persistedInventory
           ?.map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
-          .filter((entry): entry is InventoryEntry => entry !== null);
+          .filter((entry): entry is InventoryEntry => entry !== null && !seedInventoryEntryIds.has(entry.id));
         const buildQueue = persistedBuildQueue
           ?.map((item) => coercePersistedBuildQueueItem(item, current.materialTemplates))
           .filter((item): item is BuildQueueItem => item !== null);

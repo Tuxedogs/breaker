@@ -3,6 +3,10 @@ import { Outlet, useSearchParams } from "react-router-dom";
 import { getComponentCardIndex, type ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { CraftingContext } from "./CraftingContext";
 import CraftingFilterBar from "./components/CraftingFilterBar";
+import {
+  getComponentCardVariantGroupKey,
+  pickComponentCardGroupRepresentative,
+} from "./utils/componentCardVariants";
 import "./recipe-browser.css";
 
 const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
@@ -18,19 +22,6 @@ function getSearchParam(searchParams: URLSearchParams): string {
 function matchesSearch(record: ComponentCardIndexRecord, tokens: string[]): boolean {
   if (tokens.length === 0) return true;
   return tokens.every((t) => record.searchText.includes(t));
-}
-
-function getVariantGroupKey(record: ComponentCardIndexRecord): string | null {
-  if (record.kind !== "fps") return null;
-  const stripped = record.name.replace(/\s*"[^"]+"\s*/g, " ").replace(/\s+/g, " ").trim();
-  if (stripped === record.name.trim()) return null;
-  return `${stripped}::${record.type}::${record.kind}`;
-}
-
-function pickGroupRepresentative(group: ComponentCardIndexRecord[]): ComponentCardIndexRecord {
-  if (group.length === 1) return group[0];
-  const base = group.find((r) => !/"\w/.test(r.name));
-  return base ?? group.slice().sort((a, b) => a.name.localeCompare(b.name))[0];
 }
 
 export default function CraftingLayout() {
@@ -110,7 +101,7 @@ export default function CraftingLayout() {
     const groups = new Map<string, ComponentCardIndexRecord[]>();
     const ungrouped: ComponentCardIndexRecord[] = [];
     for (const record of filtered) {
-      const key = getVariantGroupKey(record);
+      const key = getComponentCardVariantGroupKey(record);
       if (key) {
         const existing = groups.get(key);
         if (existing) { existing.push(record); } else { groups.set(key, [record]); }
@@ -120,7 +111,7 @@ export default function CraftingLayout() {
     }
     const grouped: ComponentCardIndexRecord[] = [...ungrouped];
     for (const [, members] of groups) {
-      grouped.push(pickGroupRepresentative(members));
+      grouped.push(pickComponentCardGroupRepresentative(members));
     }
     return grouped.length;
   }, [componentCards, loading, searchParams]);

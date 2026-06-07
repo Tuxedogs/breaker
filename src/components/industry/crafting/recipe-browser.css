@@ -978,7 +978,7 @@
 }
 
 .craft-matq-band-marker .craft-matq-dot {
-  top: -14px;
+  top: 0px;
   width: 3px;
   height: 10px;
   border-radius: 999px;
@@ -2777,7 +2777,7 @@
 .craft-detail-effect-chip strong {
   min-width: 0;
   overflow: hidden;
-  font-size: 0.64rem;
+  font-size: 0.84rem;
   line-height: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -2977,11 +2977,13 @@
   white-space: nowrap;
 }
 
-.craft-detail-stat-row .craft-detail-stat-modifier.craft-ok {
+.craft-detail-stat-row .craft-detail-stat-modifier.craft-ok,
+.craft-detail-stat-row .craft-detail-stat-value.craft-ok {
   color: var(--void-accent-teal);
 }
 
-.craft-detail-stat-row .craft-detail-stat-modifier.craft-shortage {
+.craft-detail-stat-row .craft-detail-stat-modifier.craft-shortage,
+.craft-detail-stat-row .craft-detail-stat-value.craft-shortage {
   color: var(--craft-bad);
 }
 

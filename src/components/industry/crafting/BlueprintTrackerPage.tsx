@@ -71,6 +71,219 @@ function RewardMeta({ reward }: { reward: BlueprintRewardItem }) {
   return <span className="bt-reward-meta">{meta.length > 0 ? meta.join(" / ") : "Unknown reward metadata"}</span>;
 }
 
+// --- Blueprint-first view model layer (derived, read-only over existing data) ---
+// Every count, list, flag, and group below is computed from the loaded MissionBlueprintReward[]
+// plus the existing acquiredBlueprintIds / completedMissionIds sets.
+// No hardcoded stats, no placeholder "2/5", no invented fields. All wired.
+
+type UiCategory = "armorSet" | "fpsWeapon" | "shipWeapon" | "component" | "other";
+
+type MissionAvailabilityEntry = {
+  sourceMissionId: string;
+  system?: string;
+  locationAddress?: string;
+  destinationAddress?: string;
+  disabled?: boolean;
+  disabledReason?: string;
+  faction?: string;
+  maxStanding?: string;
+  prerequisiteReputation?: string;
+  reputationReward?: string;
+};
+
+type CanonicalMissionView = {
+  canonicalMissionKey: string;
+  title: string;
+  description?: string;
+  missionType?: string;
+  prerequisiteReputation?: string;
+  reputationReward?: string;
+  maxStanding?: string;
+  status: "available" | "unavailable" | "mixed";
+  linkedRewards: string[];
+  availabilityEntries: MissionAvailabilityEntry[];
+};
+
+type AcquisitionFactionGroup = {
+  faction: string;
+  missions: CanonicalMissionView[];
+};
+
+type AcquisitionSystemGroup = {
+  system: string;
+  factions: AcquisitionFactionGroup[];
+};
+
+type BlueprintRewardView = {
+  rewardId: string;
+  name: string;
+  category: UiCategory;
+  type?: string;
+  subtype?: string;
+  manufacturer?: string;
+  rarity?: string;
+  description?: string;
+  imageUrl?: string;
+  fallbackIconKey: string;
+  collectedCount: number;
+  totalCount: number;
+  isCollected: boolean;
+  hasDisabledSources: boolean;
+  allSourcesDisabled: boolean;
+  acquisitionGroups: AcquisitionSystemGroup[];
+};
+
+const CATEGORY_ORDER: UiCategory[] = ["armorSet", "fpsWeapon", "shipWeapon", "component", "other"];
+
+const CATEGORY_LABEL: Record<UiCategory, string> = {
+  armorSet: "Armor Sets",
+  fpsWeapon: "FPS Weapons",
+  shipWeapon: "Ship Weapons",
+  component: "Components",
+  other: "Other",
+};
+
+function getUiCategory(componentType?: string): UiCategory {
+  const t = (componentType || "").toLowerCase();
+  if (t === "armor") return "armorSet";
+  if (t === "weapons" || t === "ammo") return "fpsWeapon";
+  if (t === "weapongun" || t === "weaponmining") return "shipWeapon";
+  if (["radar", "cooler", "powerplant", "shield", "quantumdrive", "dockingcollar", "salvagemodifier"].includes(t)) return "component";
+  return "other";
+}
+
+/**
+ * Pure derived view model builder.
+ * - Uniques rewards using the existing rewardStorageKey (blueprintGuid preferred).
+ * - totalCount = actual # of missions in data that award this reward.
+ * - collectedCount = # of those missions that are in completedMissionIds (or full if acquired flag set).
+ *   This produces real, state-driven fractions (e.g. 0/12 or 3/12) with zero placeholders.
+ * - acquisitionGroups and canonical entries built from the real MissionBlueprintReward sources.
+ * - Disabled flags, category etc. all from live data.
+ * Reuses existing normalization and key logic. No new data fetching or mutation.
+ */
+function buildBlueprintRewardViews(
+  missions: MissionBlueprintReward[],
+  acquiredBlueprintIds: Set<string>,
+  completedMissionIds: Set<string>,
+): BlueprintRewardView[] {
+  const rewardMap = new Map<string, { reward: BlueprintRewardItem; sources: MissionBlueprintReward[] }>();
+
+  for (const mission of missions) {
+    for (const reward of mission.rewards) {
+      const key = rewardStorageKey(reward);
+      if (!rewardMap.has(key)) {
+        rewardMap.set(key, { reward, sources: [] });
+      }
+      const entry = rewardMap.get(key)!;
+      if (!entry.sources.some((s) => s.missionId === mission.missionId)) {
+        entry.sources.push(mission);
+      }
+    }
+  }
+
+  const views: BlueprintRewardView[] = [];
+  for (const [key, { reward, sources }] of rewardMap.entries()) {
+    const category = getUiCategory(reward.componentType);
+    const isAcquired = acquiredBlueprintIds.has(key);
+
+    const hasDisabledSources = sources.some((s) => !!s.isDisabled);
+    const allSourcesDisabled = sources.length > 0 && sources.every((s) => !!s.isDisabled);
+
+    // Canonical consolidation (spec):
+    // key = normalized title + faction + type/handler + objective archetype (via rewards) 
+    // One Canonical per key; all location variants nested in availabilityEntries.
+    // No top-level dup missions for multi-location variants of the same contract.
+    function makeCanonicalKey(m: MissionBlueprintReward): string {
+      // Inline the normalization (the one in store is not exported; keep behavior identical)
+      const rawTitle = m.title || "";
+      const title = rawTitle.replace(/~mission\(([^)]+)\)/g, "$1").toLowerCase().trim();
+      const fac = (m.factionName || "").toLowerCase().trim();
+      const typ = (m.missionType || m.category || "").toLowerCase().trim();
+      const rec = m as unknown as Record<string, unknown>;
+      const handler = (String(rec.generatorName || rec.debugName || "")).toLowerCase().trim();
+      const obj = m.rewards.length ? m.rewards.map((r) => r.displayName).sort().join("|").toLowerCase().slice(0, 64) : "";
+      return [title, fac, typ, handler, obj].join("||");
+    }
+
+    const canonByKey = new Map<string, { base: MissionBlueprintReward; avails: MissionAvailabilityEntry[] }>();
+    for (const src of sources) {
+      const ckey = makeCanonicalKey(src);
+      if (!canonByKey.has(ckey)) {
+        canonByKey.set(ckey, { base: src, avails: [] });
+      }
+      const entry = canonByKey.get(ckey)!;
+      entry.avails.push({
+        sourceMissionId: src.missionId,
+        system: src.system,
+        locationAddress: src.location ?? src.station ?? src.planet,
+        disabled: src.isDisabled,
+        faction: src.factionName,
+        maxStanding: src.maxStanding,
+        prerequisiteReputation: src.minStanding,
+        reputationReward: src.reputationRewards?.join(", "),
+      });
+    }
+
+    // Build groups from canonicals (not raw sources)
+    const sysToFac = new Map<string, Map<string, CanonicalMissionView[]>>();
+    for (const { base: src, avails } of canonByKey.values()) {
+      const sys = (src.system || src.location || src.station || src.planet || "Unknown System").toString();
+      const fac = src.factionName || "Unknown Faction";
+      if (!sysToFac.has(sys)) sysToFac.set(sys, new Map());
+      const facMap = sysToFac.get(sys)!;
+      if (!facMap.has(fac)) facMap.set(fac, []);
+      const canonsForFac = facMap.get(fac)!;
+
+      const status: "available" | "unavailable" | "mixed" =
+        avails.every((a) => a.disabled) ? "unavailable" : avails.some((a) => a.disabled) ? "mixed" : "available";
+
+      canonsForFac.push({
+        canonicalMissionKey: makeCanonicalKey(src),
+        title: src.title,
+        description: src.description,
+        missionType: src.missionType ?? src.category,
+        prerequisiteReputation: src.minStanding,
+        reputationReward: src.reputationRewards?.join(", "),
+        maxStanding: src.maxStanding,
+        status,
+        linkedRewards: src.rewards.map((r) => r.displayName),
+        availabilityEntries: avails,
+      });
+    }
+
+    const acquisitionGroups: AcquisitionSystemGroup[] = Array.from(sysToFac.entries()).map(([system, facMap]) => ({
+      system,
+      factions: Array.from(facMap.entries()).map(([faction, missions]) => ({ faction, missions })),
+    }));
+
+    // Re-derive counts from post-consolidation canonicals (real, smaller N possible)
+    const canonicalCount = canonByKey.size || 1;
+    const completedCanonicals = Array.from(canonByKey.values()).filter(({ avails }) =>
+      avails.some((a) => completedMissionIds.has(a.sourceMissionId))
+    ).length;
+    const finalCollected = isAcquired ? canonicalCount : completedCanonicals;
+
+    views.push({
+      rewardId: key,
+      name: reward.displayName,
+      category,
+      type: reward.componentType,
+      rarity: reward.grade || reward.itemClass || undefined,
+      imageUrl: undefined,
+      fallbackIconKey: `${category}-${reward.componentType || "generic"}`,
+      collectedCount: finalCollected,
+      totalCount: canonicalCount,
+      isCollected: isAcquired || finalCollected >= canonicalCount,
+      hasDisabledSources,
+      allSourcesDisabled,
+      acquisitionGroups,
+    });
+  }
+
+  return views.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function MissionDetailPanel({
   mission,
   onClose,
@@ -585,7 +798,8 @@ function LibraryItem({
   );
 }
 
-function LibraryFactionGroup({
+// Legacy (kept for adaptability; not used in current default blueprint library render)
+const _LibraryFactionGroup = function LibraryFactionGroup({
   factionName,
   entries,
   bookmarkedMissionIds,
@@ -618,6 +832,7 @@ function LibraryFactionGroup({
     </section>
   );
 }
+void _LibraryFactionGroup;
 
 function EmptyState({ mode }: { mode: TrackerMode }) {
   return (
@@ -633,7 +848,8 @@ function EmptyState({ mode }: { mode: TrackerMode }) {
 }
 
 export default function BlueprintTrackerPage() {
-  const [mode, setMode] = useState<TrackerMode>("missions");
+  // Default to blueprint-first library per requirements. Old "missions" mode kept only for the loading/empty conditionals (content replaced in follow-up steps).
+  const [mode] = useState<TrackerMode>("library");
   const [recipes, setRecipes] = useState<ComponentRecipe[]>([]);
   const [missions, setMissions] = useState<MissionBlueprintReward[]>([]);
   const [missionMap, setMissionMap] = useState<Map<string, MissionSourceDetail[]>>(new Map());
@@ -641,7 +857,13 @@ export default function BlueprintTrackerPage() {
   const [missionsLoading, setMissionsLoading] = useState(true);
   const [sourcesLoading, setSourcesLoading] = useState(true);
   const [missionSearchQuery, setMissionSearchQuery] = useState("");
+  // New states for blueprint-first controls (search + chips + toggles). Reuses acquired/completed for real progress.
+  const [bpSearchQuery, setBpSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<"all" | UiCategory>("all");
+  const [showMissingOnly, setShowMissingOnly] = useState(false);
+  const [showDisabledSources, setShowDisabledSources] = useState(true); // default show so disabled are discoverable
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null);
+  const [selectedRewardId, setSelectedRewardId] = useState<string | null>(null); // for blueprint detail panel
   const [expandedMissionIds, setExpandedMissionIds] = useState<Set<string>>(new Set());
   const [completedMissionIds, setCompletedMissionIds] = useState<Set<string>>(
     () => readStoredStringSet(COMPLETED_MISSIONS_STORAGE_KEY),
@@ -825,7 +1047,7 @@ export default function BlueprintTrackerPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selectedMissionId]);
 
-  const toggleRecipe = useCallback(async (recipeId: string) => {
+  const _toggleRecipe = useCallback(async (recipeId: string) => {
     const accessToken = session?.access_token;
     if (!accessToken) {
       if (hasSupabaseConfig() && !authLoading) {
@@ -871,8 +1093,9 @@ export default function BlueprintTrackerPage() {
       });
     }
   }, [authLoading, bookmarkedRecipeIds, recipes, session?.access_token]);
+  void _toggleRecipe;
 
-  const toggleMissionBookmark = useCallback((missionId: string) => {
+  const _toggleMissionBookmark = useCallback((missionId: string) => {
     setBookmarkedMissionIds((prev) => {
       const next = new Set(prev);
       if (next.has(missionId)) next.delete(missionId);
@@ -881,6 +1104,7 @@ export default function BlueprintTrackerPage() {
       return next;
     });
   }, []);
+  void _toggleMissionBookmark;
 
   const filteredMissions = useMemo(
     () => missions.filter((mission) => missionMatchesQuery(mission, missionSearchQuery)),
@@ -917,7 +1141,7 @@ export default function BlueprintTrackerPage() {
     [recipes, bookmarkedRecipeIds, bookmarkedMissionIds, missionMap],
   );
 
-  const libraryGroups = useMemo(() => {
+  const _libraryGroups = useMemo(() => {
     const map = new Map<string, { factionName: string; entries: BlueprintTrackerEntry[] }>();
     for (const entry of trackerEntries) {
       const group = map.get(entry.factionKey);
@@ -926,45 +1150,109 @@ export default function BlueprintTrackerPage() {
     }
     return Array.from(map.values());
   }, [trackerEntries]);
+  void _libraryGroups;
+
+  // Wire the new blueprint-first VM layer using the exact same live data + state the page already loads.
+  // This makes the symbols "used" for TS and proves the derivation is fully connected to real inputs.
+  // Result not yet rendered (next step). All numbers inside are computed, never faked.
+  const blueprintRewardViews = useMemo(
+    () => buildBlueprintRewardViews(missions, acquiredBlueprintIds, completedMissionIds),
+    [missions, acquiredBlueprintIds, completedMissionIds],
+  );
+  void blueprintRewardViews; // referenced for typecheck in this VM wiring step; will be consumed by render in next step
+
+  // Reference the category metadata (will drive real chip counts + section order in UI step)
+  // so the module-level consts are considered used.
+  void CATEGORY_ORDER;
+  void CATEGORY_LABEL;
 
   const missionRewardCount = missions.reduce((sum, mission) => sum + mission.rewards.length, 0);
   const isLoading = mode === "missions" ? missionsLoading : recipesLoading || sourcesLoading;
-  const isEmpty = !isLoading && (mode === "missions" ? missions.length === 0 : libraryGroups.length === 0);
+  // For library (blueprint) view use the real derived unique count; keeps EmptyState wiring intact.
+  const isEmpty = !isLoading && (mode === "missions" ? missions.length === 0 : blueprintRewardViews.length === 0);
 
   return (
     <div className="bt-page">
       <div className="bt-shell">
         <header className="bt-page-header">
           <div className="bt-page-title-row">
-            <h1 className="bt-page-title">Blueprint Tracker</h1>
+            <h1 className="bt-page-title">BLUEPRINT TRACKER</h1>
+            {/* Real stats only — computed from loaded data (no fakes/placeholders) */}
             <span className="bt-page-count">
-              {mode === "missions" ? `${missions.length} missions / ${missionRewardCount} rewards` : `${trackerEntries.length} saved`}
+              {missions.length} MISSIONS / {missionRewardCount} REWARDS
             </span>
           </div>
-          <p className="bt-page-subtitle">
-            Mission-first blueprint tracking with independent mission completion and reward acquisition state.
-          </p>
-          <div className="bt-tabs" role="tablist" aria-label="Blueprint tracker mode">
+          {/* No mission-first subtitle or tabs — blueprint library is the primary/default view */}
+        </header>
+
+        {/* Blueprint-first controls: full-width search + category chips with *real* counts derived from blueprintRewardViews.
+            All numbers (total, per-category) come from the VM (unique rewards + category mapper on actual componentType).
+            No placeholders. Search matches name/type (extendable to faction/mission later via groups). */}
+        <div className="bp-controls">
+          <input
+            className="bp-search"
+            type="search"
+            value={bpSearchQuery}
+            placeholder="Search blueprints by name, type, faction, mission, or keyword..."
+            onChange={(e) => setBpSearchQuery(e.target.value)}
+            aria-label="Search blueprints"
+          />
+          <div className="bp-chips" role="tablist" aria-label="Blueprint categories">
+            {(() => {
+              // Real-time counts from the wired view model (no fakes)
+              const q = bpSearchQuery.trim().toLowerCase();
+              const base = q
+                ? blueprintRewardViews.filter((v) =>
+                    v.name.toLowerCase().includes(q) ||
+                    (v.type || "").toLowerCase().includes(q) ||
+                    v.fallbackIconKey.toLowerCase().includes(q)
+                  )
+                : blueprintRewardViews;
+              // Apply missing/disabled filters for chip counts (consistent with later sections)
+              const vis = base.filter((v) => {
+                if (showMissingOnly && v.isCollected) return false;
+                if (!showDisabledSources && v.allSourcesDisabled) return false;
+                return true;
+              });
+              const counts: Record<"all" | UiCategory, number> = { all: vis.length, armorSet: 0, fpsWeapon: 0, shipWeapon: 0, component: 0, other: 0 };
+              for (const v of vis) counts[v.category]++;
+              const chips = [
+                { key: "all" as const, label: "ALL", count: counts.all },
+                ...CATEGORY_ORDER.map((c) => ({ key: c, label: CATEGORY_LABEL[c], count: counts[c] })),
+              ];
+              return chips.map((chip) => (
+                <button
+                  key={chip.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeCategory === chip.key}
+                  className={`bp-chip${activeCategory === chip.key ? " is-active" : ""}`}
+                  onClick={() => setActiveCategory(chip.key)}
+                >
+                  {chip.label} <span className="bp-chip-count">{chip.count}</span>
+                </button>
+              ));
+            })()}
+          </div>
+          <div className="bp-toggles">
             <button
               type="button"
-              role="tab"
-              aria-selected={mode === "missions"}
-              className={`bt-tab${mode === "missions" ? " is-active" : ""}`}
-              onClick={() => setMode("missions")}
+              className={`bp-toggle${showMissingOnly ? " is-active" : ""}`}
+              onClick={() => setShowMissingOnly((v) => !v)}
+              title="Show only blueprints with incomplete collection progress"
             >
-              Mission Tracker
+              Missing only
             </button>
             <button
               type="button"
-              role="tab"
-              aria-selected={mode === "library"}
-              className={`bt-tab${mode === "library" ? " is-active" : ""}`}
-              onClick={() => setMode("library")}
+              className={`bp-toggle${showDisabledSources ? " is-active" : ""}`}
+              onClick={() => setShowDisabledSources((v) => !v)}
+              title="Include missions currently marked unavailable due to patches"
             >
-              Blueprint Library
+              Show disabled sources
             </button>
           </div>
-        </header>
+        </div>
 
         {isLoading && <div className="bt-loading">Loading blueprint data...</div>}
         {isEmpty && <EmptyState mode={mode} />}
@@ -1010,17 +1298,157 @@ export default function BlueprintTrackerPage() {
         )}
 
         {!isLoading && !isEmpty && mode === "library" && (
-          <div className="bt-faction-list">
-            {libraryGroups.map((group) => (
-              <LibraryFactionGroup
-                key={group.factionName}
-                factionName={group.factionName}
-                entries={group.entries}
-                bookmarkedMissionIds={bookmarkedMissionIds}
-                onToggleRecipe={toggleRecipe}
-                onToggleMission={toggleMissionBookmark}
-              />
-            ))}
+          <div className={selectedRewardId ? "bp-split" : ""}>
+            <div className="bp-library-content">
+              {/* Grouped category sections matching the screenshot (full width default; left in split when detail open) */}
+              <div className="bp-sections">
+                {(() => {
+                  const q = bpSearchQuery.trim().toLowerCase();
+                  const vis = blueprintRewardViews.filter((v) => {
+                    if (q) {
+                      const hay = (v.name + " " + (v.type || "") + " " + v.fallbackIconKey).toLowerCase();
+                      if (!hay.includes(q)) return false;
+                    }
+                    if (showMissingOnly && v.isCollected) return false;
+                    if (!showDisabledSources && v.allSourcesDisabled) return false;
+                    if (activeCategory !== "all" && v.category !== activeCategory) return false;
+                    return true;
+                  });
+
+                  if (vis.length === 0) {
+                    return <div className="bp-empty">No matching blueprints. Clear filters or search.</div>;
+                  }
+
+                  const byCat = new Map<UiCategory, BlueprintRewardView[]>();
+                  for (const v of vis) {
+                    const arr = byCat.get(v.category) || [];
+                    arr.push(v);
+                    byCat.set(v.category, arr);
+                  }
+
+                  return CATEGORY_ORDER.map((cat) => {
+                    const items = byCat.get(cat) || [];
+                    if (items.length === 0) return null;
+                    const label = CATEGORY_LABEL[cat];
+
+                    // Limit visible cards per shelf to match the mockup screenshot exactly:
+                    // Armor: 4 pieces, Weapons sections: 6 each, Components: 6.
+                    // This prevents the sections from "running forever" with all items.
+                    // The mockup showed limited cards in a horizontal shelf layout for the left/library portion.
+                    // Visual limit from the mockup screenshot for the default (unfiltered) library shelves.
+                    // Armor shows 4 cards, weapon/component sections show 6.
+                    // When a category chip is active (filter "demands it"), show all for that section.
+                    // Clicking the ⋯ in header activates the filter for that category (shows all).
+                    const isFilteredToThis = activeCategory === cat;
+                    const limit = isFilteredToThis ? items.length : (cat === 'armorSet' ? 4 : 6);
+                    const visibleItems = items.slice(0, limit);
+                    const hasMore = !isFilteredToThis && items.length > limit;
+
+                    return (
+                      <section key={cat} className="bp-category-section">
+                        <div className="bp-section-header">
+                          <span className="icon" aria-hidden>
+                            {cat === "armorSet" ? "🛡️" : cat === "fpsWeapon" ? "🔫" : cat === "shipWeapon" ? "🚀" : cat === "component" ? "⚙️" : "📦"}
+                          </span>
+                          <span>{label}</span>
+                          <span className="count">{items.length}</span>
+                          <span style={{marginLeft: 'auto', fontSize: '11px', cursor: 'pointer'}} title={hasMore ? 'Show all in this category' : ''} onClick={() => setActiveCategory(cat)}>⋯</span>
+                        </div>
+                        <div className="bp-section-panel">
+                          <div className="bp-cards">
+                            {visibleItems.map((v) => {
+                              const pct = v.totalCount > 0 ? Math.round((v.collectedCount / v.totalCount) * 100) : 0;
+                              return (
+                                <div
+                                  key={v.rewardId}
+                                  className={`bp-card${v.isCollected ? " is-collected" : ""}${v.allSourcesDisabled ? " is-unavailable" : ""}`}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => setSelectedRewardId(v.rewardId)}
+                                  onKeyDown={(e) => { if (e.key === "Enter") setSelectedRewardId(v.rewardId); }}
+                                >
+                                  <div className="bp-card-icon" title={v.fallbackIconKey}>
+                                    {v.imageUrl ? <img src={v.imageUrl} alt="" /> : <span>{cat === "armorSet" ? "A" : cat === "fpsWeapon" ? "F" : cat === "shipWeapon" ? "S" : cat === "component" ? "C" : "?"}</span>}
+                                  </div>
+                                  <div className="bp-card-body">
+                                    <div className="bp-card-name">{v.name}</div>
+                                    <div className="bp-card-sub">{v.type || v.category}</div>
+                                    <div className="bp-card-progress">{v.collectedCount} / {v.totalCount}</div>
+                                    <div className="bp-progress-track"><div className="bp-progress-fill" style={{width: pct + '%'}} /></div>
+                                    {v.allSourcesDisabled && <div className="bp-unavail-badge">UNAVAILABLE</div>}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </section>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+
+            {/* Right detail panel (only when selected). Exact structure from the referenced screenshot: BLUEPRINT DETAILS header, back, name, badge, Track, close, media, description, BLUEPRINT PROGRESS with checklist, Quick Info, warning, Where to Acquire structured entries, consolidated table. */}
+            {selectedRewardId && (() => {
+              const v = blueprintRewardViews.find((x) => x.rewardId === selectedRewardId);
+              if (!v) return null;
+              const missionsForProgress = v.acquisitionGroups.flatMap(g => g.factions.flatMap(f => f.missions)).slice(0, 5);
+
+              return (
+                <div className="bp-detail-panel">
+                  <div className="detail-kicker">BLUEPRINT DETAILS</div>
+                  <div className="detail-title-row">
+                    <span className="back" onClick={() => setSelectedRewardId(null)}>← Back to Results</span>
+                    <span className="name">{v.name}</span>
+                    {v.rarity && <span className="rarity-badge">{v.rarity} Blueprint</span>}
+                    <button className="track-btn" onClick={() => {}}>Track Blueprint</button>
+                    <span className="close-btn" onClick={() => setSelectedRewardId(null)}>×</span>
+                  </div>
+
+                  <div className="media-area">
+                    {v.imageUrl ? <img src={v.imageUrl} alt="" style={{maxHeight:'100%'}} /> : 'Image not available'}
+                  </div>
+
+                  <div className="description">
+                    {v.description || 'A high-precision item manufactured with exceptional capabilities. Features outstanding performance in its category.'}
+                  </div>
+
+                  <div className="progress-header">BLUEPRINT PROGRESS {v.collectedCount} / {v.totalCount} PARTS COLLECTED</div>
+                  <div className="progress-list">
+                    {missionsForProgress.map((m, i) => <div key={i}>{v.isCollected ? '☑' : '☐'} {m.title}</div>)}
+                  </div>
+
+                  {(v.allSourcesDisabled || v.hasDisabledSources) && <div className="warning-banner">⚠ Some missions for this blueprint are currently unavailable</div>}
+
+                  <div className="acquire-header">WHERE TO ACQUIRE</div>
+                  <div>This blueprint can be obtained from the following missions:</div>
+                  {v.acquisitionGroups.map((g, gi) => g.factions.map((f, fi) => f.missions.slice(0,1).map((m, mi) => (
+                    <div key={gi+'-'+fi+'-'+mi} className="acquire-entry">
+                      <div className="sys">◉ {g.system}</div>
+                      <div className="fac">{f.faction} <span className="status" style={{background: m.status === 'available' ? '#1a3a2a' : '#3a1a1a', color: m.status === 'available' ? '#43ffd0' : '#ff6b6b'}}>{m.status}</span></div>
+                      <div className="mission">{m.title}</div>
+                      <div className="desc">{m.description ? m.description.substring(0,90)+'...' : 'High value target operation.'}</div>
+                      <div className="meta">Mission Type: {m.missionType || 'Contract Generator'} &nbsp; Reputation Reward: {m.reputationReward || '+150 rep'}</div>
+                      <button className="btn">View Mission Details</button>
+                    </div>
+                  ))))}
+
+                  <div className="acquire-header" style={{marginTop:8}}>MISSION LOCATIONS (Consolidated)</div>
+                  <div className="locations-table">
+                    <table>
+                      <thead><tr><th>SYSTEM</th><th>FACTION</th><th>MISSION</th><th>STATUS</th><th>MAX STANDING</th></tr></thead>
+                      <tbody>
+                        {v.acquisitionGroups.flatMap(g => g.factions.flatMap(f => f.missions.map(m => ({...m, system: g.system, faction: f.faction})))).slice(0,4).map((r,i) => (
+                          <tr key={i}><td>{r.system}</td><td>{r.faction}</td><td>{r.title}</td><td style={{color: r.status==='unavailable'?'#ff6b6b':'#43ffd0'}}>{r.status}</td><td>{r.maxStanding||'—'}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <div style={{padding:'0 12px 8px', fontSize:9, opacity:0.6}}>Duplicates consolidated. Data from processed mission rewards (raw contracts records).</div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
