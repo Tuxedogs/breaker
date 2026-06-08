@@ -167,15 +167,15 @@
 .logi-location-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
-  gap: 0.82rem;
-  align-items: stretch;
+  gap: 0.65rem;
+  align-items: start;
 }
 
 .logi-location-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 282px;
+  min-height: 0;
   border: 1px solid var(--inv-border);
   border-radius: 15px;
   background: linear-gradient(180deg, rgba(10, 16, 26, 0.96), rgba(5, 9, 16, 0.985));
@@ -185,17 +185,22 @@
 }
 
 .logi-location-card:hover {
-  transform: translateY(-1px);
-  border-color: rgba(251, 191, 36, 0.26);
+  transform: none;
+  border-color: var(--border-hover-color);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.045), 0 16px 36px rgba(0,0,0,0.24);
 }
 
 .logi-location-card--premium {
-  border-color: rgba(251,191,36,0.24);
+  border-color: var(--inv-border);
 }
 
 .logi-location-card--empty {
   opacity: 0.78;
+}
+
+.logi-location-card--selected {
+  border-color: rgba(45, 212, 191, 0.68);
+  box-shadow: inset 0 2px 0 rgba(45, 212, 191, 0.72), 0 0 22px rgba(45, 212, 191, 0.07), 0 14px 32px rgba(0,0,0,0.20);
 }
 
 .logi-location-card-head {
@@ -243,19 +248,38 @@
   letter-spacing: 0.1em;
 }
 
+.logi-location-card-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.logi-location-active-badge {
+  padding: 0.24rem 0.45rem;
+  border: 1px solid rgba(45,212,191,0.30);
+  border-radius: 3px;
+  background: rgba(45,212,191,0.09);
+  color: rgba(153,246,228,0.94);
+  font-family: var(--font-primary);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 .logi-location-stat-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.38rem;
-  padding: 0.65rem 0.75rem;
+  gap: 0.28rem;
+  padding: 0.48rem 0.65rem;
 }
 
 .logi-location-stat-grid div {
   min-width: 0;
   border: 1px solid rgba(148,163,184,0.10);
-  border-radius: 10px;
+  border-radius: 4px;
   background: rgba(2, 6, 23, 0.36);
-  padding: 0.42rem 0.38rem;
+  padding: 0.32rem 0.34rem;
 }
 
 .logi-location-stat-grid span {
@@ -287,9 +311,16 @@
 .logi-location-stack-list {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 0 0.75rem 0.72rem;
-  flex: 1;
+  gap: 0.22rem;
+  padding: 0 0.65rem 0.48rem;
+}
+
+.logi-location-preview-label {
+  color: rgba(160, 180, 220, 0.42);
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 
 .logi-location-stack-row,
@@ -302,10 +333,10 @@
 }
 
 .logi-location-stack-row {
-  grid-template-columns: minmax(0, 1fr) auto auto 24px;
-  min-height: 31px;
-  border-radius: 9px;
-  padding: 0.28rem 0.42rem;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  min-height: 28px;
+  border-radius: 4px;
+  padding: 0.22rem 0.36rem;
 }
 
 .logi-location-stack-main,
@@ -524,11 +555,11 @@
 }
 
 .logi-location-empty-state {
-  flex: 1;
   display: grid;
   place-items: center;
   gap: 0.45rem;
-  padding: 1.1rem 0.75rem 1.3rem;
+  min-height: 48px;
+  padding: 0.65rem;
   color: rgba(160, 180, 220, 0.42);
   font-family: var(--font-primary);
   font-size: 0.72rem;
@@ -561,13 +592,26 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.62rem 0.75rem 0.75rem;
+  padding: 0.42rem 0.65rem 0.55rem;
   border-top: 1px solid rgba(148,163,184,0.08);
 }
 
 .logi-location-card-actions button,
 .logi-location-card-actions a {
   padding: 0.36rem 0.52rem;
+}
+
+.logi-location-card-actions .logi-location-details-btn {
+  width: 100%;
+  min-height: 29px;
+  padding: 0.28rem 0.48rem;
+  color: rgba(231,237,255,0.82);
+}
+
+.logi-location-card--selected .logi-location-details-btn {
+  color: rgba(153,246,228,0.96);
+  border-color: rgba(45,212,191,0.30);
+  background: rgba(45,212,191,0.055);
 }
 
 .logi-location-card-actions button:disabled {
@@ -709,8 +753,270 @@
   letter-spacing: 0.1em;
 }
 
+.logi-location-detail {
+  position: relative;
+  margin-top: 0.4rem;
+  border: 1px solid rgba(45,212,191,0.50);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(8,17,24,0.98), rgba(5,10,17,0.99));
+  box-shadow: var(--shadow-card), inset 0 2px 0 rgba(45,212,191,0.68), 0 0 26px rgba(45,212,191,0.055);
+  overflow: hidden;
+}
+
+.logi-location-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.72rem 0.8rem;
+  border-bottom: 1px solid var(--border-soft-color);
+  background: linear-gradient(90deg, rgba(45,212,191,0.045), transparent 38%), var(--bg-panel);
+}
+
+.logi-location-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logi-location-detail-title-row h2 {
+  margin: 0;
+  color: #eef4ff;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1;
+  letter-spacing: 0.035em;
+}
+
+.logi-location-detail-stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(90px, auto));
+  gap: 0;
+  margin-top: 0.58rem;
+  border: 1px solid var(--border-soft-color);
+  background: rgba(2,6,23,0.24);
+}
+
+.logi-location-detail-stats span {
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.38rem 0.62rem;
+  border-right: 1px solid var(--border-soft-color);
+}
+
+.logi-location-detail-stats span:last-child { border-right: 0; }
+
+.logi-location-detail-stats small,
+.logi-location-detail-stats strong {
+  font-family: var(--font-primary);
+}
+
+.logi-location-detail-stats small {
+  color: rgba(160,180,220,0.60);
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+
+.logi-location-detail-stats strong {
+  color: rgba(238,244,255,0.94);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.logi-location-collapse-btn,
+.logi-location-detail-sort button,
+.logi-location-detail-filters button,
+.logi-location-row-actions button {
+  border: 1px solid var(--border-soft-color);
+  border-radius: 4px;
+  background: var(--bg-card-dark);
+  color: rgba(231,237,255,0.68);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.logi-location-collapse-btn {
+  padding: 0.4rem 0.62rem;
+}
+
+.logi-location-detail-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.46rem 0.65rem;
+  border-bottom: 1px solid var(--border-soft-color);
+  background: rgba(2,6,23,0.18);
+}
+
+.logi-location-detail-controls > .logi-search-wrap {
+  max-width: 270px;
+}
+
+.logi-location-detail-sort {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(160,180,220,0.46);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.logi-location-detail-sort button {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.logi-location-detail-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+}
+
+.logi-location-detail-filters button {
+  min-height: 30px;
+  padding: 0.3rem 0.58rem;
+}
+
+.logi-location-detail-filters button.is-active {
+  color: rgba(221,214,254,0.96);
+  border-color: rgba(167,139,250,0.38);
+  background: rgba(167,139,250,0.10);
+}
+
+.logi-location-stack-table-wrap {
+  max-height: 560px;
+  overflow: auto;
+  padding: 0 0.65rem 0.65rem;
+}
+
+.logi-location-stack-table-head,
+.logi-location-detail-row {
+  display: grid;
+  grid-template-columns: 84px 105px minmax(160px, 1fr) 86px 105px 124px;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.logi-location-stack-table-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  min-width: 690px;
+  padding: 0.4rem 0.58rem;
+  border-bottom: 1px solid var(--border-soft-color);
+  background: var(--bg-panel);
+  color: rgba(160,180,220,0.44);
+  font-family: var(--font-primary);
+  font-size: 0.54rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.logi-location-material-group {
+  min-width: 690px;
+  border-bottom: 1px solid var(--border-soft-color);
+}
+
+.logi-location-material-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.42rem 0.58rem;
+  border-left: 2px solid rgba(45,212,191,0.42);
+  background: linear-gradient(90deg, rgba(45,212,191,0.045), transparent 30%), rgba(15,23,42,0.48);
+}
+
+.logi-location-material-head > span {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: rgba(238,244,255,0.92);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.logi-location-material-head small {
+  color: rgba(160,180,220,0.46);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.logi-location-detail-row {
+  min-height: 34px;
+  padding: 0.26rem 0.58rem;
+  border-top: 1px solid rgba(148,163,184,0.06);
+  color: rgba(199,210,230,0.66);
+  font-family: var(--font-primary);
+  font-size: 0.65rem;
+}
+
+.logi-location-detail-row:hover {
+  background: rgba(255,255,255,0.018);
+}
+
+.logi-location-kind {
+  width: fit-content;
+  padding: 0.16rem 0.34rem;
+  border: 1px solid var(--border-soft-color);
+  border-radius: 3px;
+  color: rgba(160,180,220,0.58);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.logi-location-kind--refined { color: rgba(94,234,212,0.72); }
+.logi-location-kind--ore { color: rgba(167,139,250,0.76); }
+
+.logi-location-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.logi-location-row-actions button {
+  min-height: 27px;
+  padding: 0.25rem 0.42rem;
+}
+
+.logi-location-row-actions button:hover,
+.logi-location-collapse-btn:hover,
+.logi-location-detail-sort button:hover {
+  border-color: var(--border-hover-color);
+  color: rgba(238,244,255,0.92);
+}
+
+.logi-location-row-actions button.is-delete {
+  color: rgba(251,113,133,0.82);
+  border-color: rgba(251,113,133,0.24);
+}
+
+.logi-location-detail-empty {
+  padding: 2.2rem 1rem;
+  color: rgba(160,180,220,0.46);
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
 @media (max-width: 1260px) {
   .logi-inv-summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .logi-location-detail-controls { flex-wrap: wrap; }
+  .logi-location-detail-filters { margin-left: 0; }
 }
 
 @media (max-width: 900px) {
@@ -728,6 +1034,19 @@
   .logi-inv-summary-grid,
   .logi-location-card-grid {
     grid-template-columns: 1fr;
+  }
+
+  .logi-location-detail-head,
+  .logi-location-detail-controls {
+    display: grid;
+  }
+
+  .logi-location-detail-controls > .logi-search-wrap {
+    max-width: none;
+  }
+
+  .logi-location-detail-filters {
+    overflow-x: auto;
   }
 }
 
@@ -758,7 +1077,7 @@
 }
 
 .logi-location-card--premium .logi-location-card-head {
-  background: rgba(251, 191, 36, 0.025);
+  background: rgba(255, 255, 255, 0.012);
 }
 
 .logi-location-type-badge {
@@ -782,9 +1101,9 @@
 }
 
 .logi-inv-view-toggle button.is-active {
-  color: #fbbf24;
-  background: rgba(251, 191, 36, 0.085);
-  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.24);
+  color: rgba(221,214,254,0.96);
+  background: rgba(167,139,250,0.09);
+  box-shadow: inset 0 0 0 1px rgba(167,139,250,0.26);
 }
 
 .logi-quality-pill.logi-quality--legendary,
@@ -852,9 +1171,23 @@
   border-color: var(--border-hover-color);
 }
 
-.logi-inv-page .logi-location-card--premium,
 .logi-inv-page .logi-inv-summary-card--premium {
   border-color: var(--border-active-color);
+}
+
+.logi-inv-page .logi-location-card--selected {
+  border-color: rgba(45, 212, 191, 0.68);
+  box-shadow: inset 0 2px 0 rgba(45, 212, 191, 0.72), 0 0 22px rgba(45, 212, 191, 0.07), var(--shadow-card);
+}
+
+.logi-inv-page .logi-location-card--selected:hover {
+  border-color: rgba(45, 212, 191, 0.78);
+}
+
+.logi-inv-page .logi-location-card--selected .logi-location-details-btn {
+  color: rgba(153,246,228,0.96);
+  border-color: rgba(45,212,191,0.30);
+  background: rgba(45,212,191,0.055);
 }
 
 .logi-inv-page .logi-inv-summary-card--warn {
