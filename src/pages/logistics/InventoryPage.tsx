@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
 import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
@@ -15,6 +15,8 @@ import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
+type DrawerSortKey = 'material' | 'quality' | 'quantity' | 'container' | 'updated';
+type DrawerFilter = 'all' | 'premium' | 'raw' | 'refined' | 'unassigned';
 type UnknownRecord = Record<string, unknown>;
 
 const MINABLE_KINDS = new Set<InventoryItemKind>(['ore', 'raw_mineable', 'ice', 'material']);
@@ -32,6 +34,7 @@ type LocationGroup = {
   highestQuality: number | null;
   premiumCount: number;
   topStacks: InventoryEntry[];
+  lastUpdated: string | null;
 };
 
 function toRecord(value: unknown): UnknownRecord {
@@ -108,7 +111,7 @@ function getEntryKind(entry: InventoryEntry, material: unknown): 'ore' | 'refine
   ].filter(Boolean).join(' ').toLowerCase();
 
   if (raw.includes('refined')) return 'refined';
-  if (raw.includes('ore') || raw.includes('mining') || raw.includes('mineable')) return 'ore';
+  if (raw.includes('ore') || raw.includes('raw') || raw.includes('mining') || raw.includes('mineable')) return 'ore';
   if (raw.includes('personal') || raw.includes('custom')) return 'personal';
   return 'unknown';
 }
@@ -160,10 +163,12 @@ export default function InventoryPage() {
   const [sortKey, setSortKey] = useState<SortKey>('quality');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
-  const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
-  const [editingCard, setEditingCard] = useState<string | null>(null);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [drawerSearch, setDrawerSearch] = useState('');
+  const [drawerSortKey, setDrawerSortKey] = useState<DrawerSortKey>('quality');
+  const [drawerSortDir, setDrawerSortDir] = useState<'asc' | 'desc'>('desc');
+  const [drawerFilter, setDrawerFilter] = useState<DrawerFilter>('all');
   const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
-  const [cardEdits, setCardEdits] = useState<Record<string, { quantity: string; quality: string; container: string; notes: string }>>({});
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -273,6 +278,7 @@ export default function InventoryPage() {
         highestQuality: null,
         premiumCount: 0,
         topStacks: [],
+        lastUpdated: null,
       });
     }
 
@@ -289,6 +295,7 @@ export default function InventoryPage() {
       highestQuality: null,
       premiumCount: 0,
       topStacks: [],
+      lastUpdated: null,
     });
 
     for (const entry of filtered) {
@@ -316,13 +323,103 @@ export default function InventoryPage() {
       group.premiumCount = group.entries.filter((entry) => (entry.quality ?? 0) >= 900).length;
       group.topStacks = [...group.entries]
         .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || (b.quantity - a.quantity))
-        .slice(0, 6);
+        .filter((entry, index, sorted) => sorted.findIndex((candidate) => getEntryMaterialId(candidate) === getEntryMaterialId(entry)) === index)
+        .slice(0, 3);
+      group.lastUpdated = group.entries.reduce<string | null>((latest, entry) => {
+        if (!entry.updatedAt) return latest;
+        return !latest || Date.parse(entry.updatedAt) > Date.parse(latest) ? entry.updatedAt : latest;
+      }, null);
     }
 
     return [...map.values()]
-      .filter((group) => group.entries.length > 0 || group.isManual)
+      .filter((group) => group.entries.length > 0 || group.isManual || group.id === '__unassigned__')
       .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.entries.length - a.entries.length || a.name.localeCompare(b.name));
   }, [filtered, locations, materials]);
+
+  const selectedLocation = useMemo(
+    () => locationGroups.find((group) => group.id === selectedLocationId) ?? null,
+    [locationGroups, selectedLocationId],
+  );
+
+  const drawerEntries = useMemo(() => {
+    if (!selectedLocation) return [];
+    const query = drawerSearch.trim().toLowerCase();
+    const next = selectedLocation.entries.filter((entry) => {
+      const material = getMaterialForEntry(entry, materials);
+      const kind = getEntryKind(entry, material);
+      if (drawerFilter === 'premium' && (entry.quality ?? 0) < 900) return false;
+      if (drawerFilter === 'raw' && kind !== 'ore') return false;
+      if (drawerFilter === 'refined' && kind !== 'refined') return false;
+      if (drawerFilter === 'unassigned' && getEntryLocationId(entry) !== '__unassigned__') return false;
+      if (!query) return true;
+      return resolveInventoryItemName(entry, material).toLowerCase().includes(query)
+        || (entry.container?.toLowerCase().includes(query) ?? false)
+        || (entry.notes?.toLowerCase().includes(query) ?? false);
+    });
+
+    return next.sort((a, b) => {
+      const materialA = getMaterialForEntry(a, materials);
+      const materialB = getMaterialForEntry(b, materials);
+      let comparison = 0;
+      switch (drawerSortKey) {
+        case 'material':
+          comparison = resolveInventoryItemName(a, materialA).localeCompare(resolveInventoryItemName(b, materialB));
+          break;
+        case 'quality':
+          comparison = (a.quality ?? -1) - (b.quality ?? -1);
+          break;
+        case 'quantity':
+          comparison = a.quantity - b.quantity;
+          break;
+        case 'container':
+          comparison = (a.container ?? '').localeCompare(b.container ?? '');
+          break;
+        case 'updated':
+          comparison = Date.parse(a.updatedAt) - Date.parse(b.updatedAt);
+          break;
+      }
+      return drawerSortDir === 'asc' ? comparison : -comparison;
+    });
+  }, [selectedLocation, drawerSearch, drawerFilter, drawerSortKey, drawerSortDir, materials]);
+
+  const drawerMaterialGroups = useMemo(() => {
+    const groups = new Map<string, { id: string; name: string; entries: InventoryEntry[]; total: number; unitType: 'scu' | 'unit' }>();
+    for (const entry of drawerEntries) {
+      const material = getMaterialForEntry(entry, materials);
+      const id = getEntryMaterialId(entry);
+      const existing = groups.get(id);
+      if (existing) {
+        existing.entries.push(entry);
+        existing.total += entry.quantity;
+      } else {
+        groups.set(id, {
+          id,
+          name: resolveInventoryItemName(entry, material),
+          entries: [entry],
+          total: entry.quantity,
+          unitType: resolveInventoryUnitType(entry, material),
+        });
+      }
+    }
+    return [...groups.values()];
+  }, [drawerEntries, materials]);
+
+  const drawerAvailableFilters = useMemo(() => {
+    if (!selectedLocation) return new Set<DrawerFilter>(['all']);
+    const available = new Set<DrawerFilter>(['all']);
+    for (const entry of selectedLocation.entries) {
+      const kind = getEntryKind(entry, getMaterialForEntry(entry, materials));
+      if ((entry.quality ?? 0) >= 900) available.add('premium');
+      if (kind === 'ore') available.add('raw');
+      if (kind === 'refined') available.add('refined');
+      if (getEntryLocationId(entry) === '__unassigned__') available.add('unassigned');
+    }
+    return available;
+  }, [selectedLocation, materials]);
+
+  useEffect(() => {
+    if (!drawerAvailableFilters.has(drawerFilter)) setDrawerFilter('all');
+  }, [drawerAvailableFilters, drawerFilter]);
 
   const topQualityStacks = useMemo(() => {
     return [...entries]
@@ -346,52 +443,11 @@ export default function InventoryPage() {
       .slice(0, 8);
   }, [entries]);
 
-  function toggleExpanded(cardId: string) {
-    setExpandedCards((prev) => {
-      const next = new Set(prev);
-      if (next.has(cardId)) next.delete(cardId);
-      else next.add(cardId);
-      return next;
-    });
-  }
-
-  function startCardEdit(group: LocationGroup) {
-    const edits: Record<string, { quantity: string; quality: string; container: string; notes: string }> = {};
-    for (const entry of group.entries) {
-      edits[entry.id] = {
-        quantity: String(entry.quantity),
-        quality: entry.quality != null ? String(entry.quality) : '',
-        container: entry.container ?? '',
-        notes: entry.notes ?? '',
-      };
-    }
+  function toggleLocationDrawer(locationId: string) {
+    setSelectedLocationId((current) => current === locationId ? null : locationId);
+    setDrawerSearch('');
+    setDrawerFilter('all');
     setPendingDeleteEntryId(null);
-    setCardEdits(edits);
-    setEditingCard(group.id);
-  }
-
-  function cancelCardEdit() {
-    setEditingCard(null);
-    setCardEdits({});
-  }
-
-  function saveCardEdit(group: LocationGroup) {
-    for (const entry of group.entries) {
-      const edit = cardEdits[entry.id];
-      if (!edit) continue;
-      const qty = parseFloat(edit.quantity);
-      const qual = edit.quality.trim() ? parseInt(edit.quality) : undefined;
-      updateInventoryEntry({
-        ...entry,
-        quantity: Number.isFinite(qty) ? qty : entry.quantity,
-        quality: qual != null && Number.isFinite(qual) ? qual : entry.quality,
-        container: edit.container.trim() || undefined,
-        notes: edit.notes.trim() || undefined,
-        updatedAt: new Date().toISOString(),
-      });
-    }
-    setEditingCard(null);
-    setCardEdits({});
   }
 
   function handleSave(updatedEntries: InventoryEntry[]) {
@@ -551,19 +607,19 @@ export default function InventoryPage() {
         <>
           <div className="logi-location-card-grid">
             {locationGroups.map((group) => {
-              const pendingDeleteEntry = group.entries.find((entry) => entry.id === pendingDeleteEntryId);
-              const pendingDeleteName = pendingDeleteEntry
-                ? resolveInventoryItemName(pendingDeleteEntry, getMaterialForEntry(pendingDeleteEntry, materials))
-                : null;
+              const isSelected = selectedLocationId === group.id;
 
               return (
-                <article key={group.id} className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}${group.premiumCount > 0 ? ' logi-location-card--premium' : ''}`}>
+                <article key={group.id} className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}`}>
                 <div className="logi-location-card-head">
                   <div>
                     <div className="logi-location-card-kicker">{group.subtitle}</div>
                     <h2>{group.name}</h2>
                   </div>
-                  <span className="logi-location-type-badge">{group.type}</span>
+                  <div className="logi-location-card-badges">
+                    {isSelected && <span className="logi-location-active-badge">Active</span>}
+                    <span className="logi-location-type-badge">{group.type}</span>
+                  </div>
                 </div>
 
                 <div className="logi-location-stat-grid">
@@ -579,132 +635,175 @@ export default function InventoryPage() {
                   <div><span>900+</span><strong>{group.premiumCount}</strong></div>
                 </div>
 
-                {(() => {
-                  const isExpanded = expandedCards.has(group.id);
-                  const isEditing = editingCard === group.id;
-                  const visibleStacks = isExpanded ? group.entries : group.topStacks;
-                  return group.topStacks.length > 0 ? (
-                    <div
-                      className="logi-location-stack-list"
-                      onKeyDown={isEditing ? (e) => { if (e.key === 'Enter') { e.preventDefault(); saveCardEdit(group); } } : undefined}
-                    >
-                      {visibleStacks.map((entry) => {
-                        const material = getMaterialForEntry(entry, materials);
-                        if (isEditing) {
-                          const edit = cardEdits[entry.id] ?? { quantity: String(entry.quantity), quality: entry.quality != null ? String(entry.quality) : '', container: entry.container ?? '', notes: entry.notes ?? '' };
-                          return (
-                            <div key={entry.id} className="logi-location-stack-row logi-location-stack-row--editing">
-                              <div className="logi-location-stack-main">
-                                <MaterialGlyph quality={entry.quality} />
-                                <span className="logi-stack-edit-name">{resolveInventoryItemName(entry, material)}</span>
-                              </div>
-                              <div className="logi-stack-edit-fields">
-                                <input
-                                  type="number"
-                                  className="logi-stack-edit-input"
-                                  value={edit.quantity}
-                                  min={0}
-                                  step={0.01}
-                                  placeholder="SCU"
-                                  aria-label="Quantity"
-                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, quantity: e.target.value } }))}
-                                />
-                                <input
-                                  type="number"
-                                  className="logi-stack-edit-input"
-                                  value={edit.quality}
-                                  min={0}
-                                  max={1000}
-                                  placeholder="Quality"
-                                  aria-label="Quality"
-                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, quality: e.target.value } }))}
-                                />
-                                <input
-                                  type="text"
-                                  className="logi-stack-edit-input logi-stack-edit-input--wide"
-                                  value={edit.container}
-                                  placeholder="Container"
-                                  aria-label="Container"
-                                  onChange={(e) => setCardEdits((prev) => ({ ...prev, [entry.id]: { ...edit, container: e.target.value } }))}
-                                />
-                              </div>
-                            </div>
-                          );
-                        }
-                        return (
-                          <div key={entry.id} className="logi-location-stack-row">
-                            <div className="logi-location-stack-main">
-                              <MaterialGlyph quality={entry.quality} />
-                              <span>{resolveInventoryItemName(entry, material)}</span>
-                            </div>
-                            <QualityPill quality={entry.quality} />
-                            <span className="logi-location-stack-qty">{formatEntryQuantity(entry, material)}</span>
-                            <button
-                              type="button"
-                              className="logi-stack-delete-btn"
-                              onClick={() => setPendingDeleteEntryId(entry.id)}
-                              aria-label={`Delete ${resolveInventoryItemName(entry, material)}`}
-                              title="Delete inventory item"
-                            >
-                              X
-                            </button>
+                {group.topStacks.length > 0 ? (
+                  <div className="logi-location-stack-list" aria-label="Top materials preview">
+                    <span className="logi-location-preview-label">Top materials</span>
+                    {group.topStacks.map((entry) => {
+                      const material = getMaterialForEntry(entry, materials);
+                      return (
+                        <div key={entry.id} className="logi-location-stack-row">
+                          <div className="logi-location-stack-main">
+                            <MaterialGlyph quality={entry.quality} />
+                            <span>{resolveInventoryItemName(entry, material)}</span>
                           </div>
-                        );
-                      })}
-                      {!isExpanded && group.entries.length > group.topStacks.length && (
-                        <button type="button" className="logi-location-more logi-location-more--btn" onClick={() => toggleExpanded(group.id)}>
-                          +{group.entries.length - group.topStacks.length} more stacks
-                        </button>
-                      )}
-                      {isExpanded && group.entries.length > group.topStacks.length && (
-                        <button type="button" className="logi-location-more logi-location-more--btn" onClick={() => toggleExpanded(group.id)}>
-                          Show less
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="logi-location-empty-state">
-                      <span>No inventory recorded</span>
-                      <button type="button" onClick={() => setPanel({ mode: 'new' })}>Add stock</button>
-                    </div>
-                  );
-                })()}
-
-                <div className="logi-location-card-actions">
-                  {editingCard === group.id ? (
-                    <>
-                      <button type="button" className="logi-card-save-btn" onClick={() => saveCardEdit(group)}>Save</button>
-                      <button type="button" onClick={cancelCardEdit}>Cancel</button>
-                    </>
-                  ) : (
-                    <>
-                      <button type="button" onClick={() => toggleExpanded(group.id)}>
-                        {expandedCards.has(group.id) ? 'Collapse' : 'View'}
-                      </button>
-                      {group.entries.length > 0 && (
-                        <button type="button" onClick={() => startCardEdit(group)}>Edit</button>
-                      )}
-                      <button type="button" disabled={group.entries.length > 0} title={group.entries.length > 0 ? 'Delete location after moving stock' : 'Delete location'}>Delete</button>
-                    </>
-                  )}
-                </div>
-                {pendingDeleteEntry && (
-                  <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
-                    <div className="logi-location-delete-panel">
-                      <span className="logi-location-delete-kicker">Are you sure?</span>
-                      <strong>{pendingDeleteName}</strong>
-                      <p>This inventory item will be deleted from {group.name}.</p>
-                      <div className="logi-location-delete-actions">
-                        <button type="button" className="logi-location-delete-yes" onClick={() => handleDelete(pendingDeleteEntry.id)}>Yes</button>
-                        <button type="button" onClick={() => setPendingDeleteEntryId(null)}>Cancel</button>
-                      </div>
-                    </div>
+                          <QualityPill quality={entry.quality} />
+                          <span className="logi-location-stack-qty">{formatEntryQuantity(entry, material)}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="logi-location-empty-state">
+                    <span>{group.id === '__unassigned__' ? 'No stacks without assigned location.' : 'No stacks recorded at this location.'}</span>
                   </div>
                 )}
+
+                <div className="logi-location-card-actions">
+                  <button
+                    type="button"
+                    className="logi-location-details-btn"
+                    onClick={() => toggleLocationDrawer(group.id)}
+                    aria-expanded={isSelected}
+                    aria-controls="inventory-location-detail"
+                  >
+                    {isSelected ? 'Collapse' : 'View Details'}
+                  </button>
+                </div>
                 </article>
               );
             })}
           </div>
+
+          {selectedLocation && (
+            <section id="inventory-location-detail" className="logi-location-detail" aria-label={`${selectedLocation.name} inventory details`}>
+              <div className="logi-location-detail-head">
+                <div>
+                  <div className="logi-location-detail-title-row">
+                    <h2>{selectedLocation.name}</h2>
+                    <span className="logi-location-active-badge">Active</span>
+                  </div>
+                  <div className="logi-location-detail-stats">
+                    <span><small>Unique materials</small><strong>{selectedLocation.uniqueItems}</strong></span>
+                    <span><small>Total</small><strong>{[
+                      selectedLocation.totalScu > 0 ? formatInventoryQuantity(selectedLocation.totalScu, 'scu') : '',
+                      selectedLocation.totalUnits > 0 ? formatInventoryQuantity(selectedLocation.totalUnits, 'unit') : '',
+                    ].filter(Boolean).join(' / ') || '0'}</strong></span>
+                    <span><small>Best quality</small><strong>{selectedLocation.highestQuality ?? '—'}</strong></span>
+                    <span><small>900+ stacks</small><strong>{selectedLocation.premiumCount}</strong></span>
+                    <span><small>Last updated</small><strong>{selectedLocation.lastUpdated ? new Date(selectedLocation.lastUpdated).toLocaleString() : '—'}</strong></span>
+                  </div>
+                </div>
+                <button type="button" className="logi-location-collapse-btn" onClick={() => toggleLocationDrawer(selectedLocation.id)}>
+                  Collapse
+                </button>
+              </div>
+
+              <div className="logi-location-detail-controls">
+                <div className="logi-search-wrap">
+                  <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="logi-search-icon">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="M21 21l-4.35-4.35" />
+                  </svg>
+                  <input
+                    type="search"
+                    className="logi-search-input"
+                    placeholder="Search within this location..."
+                    value={drawerSearch}
+                    onChange={(event) => setDrawerSearch(event.target.value)}
+                    aria-label="Search within selected location"
+                  />
+                </div>
+                <label className="logi-location-detail-sort">
+                  <span>Sort by</span>
+                  <select className="logi-select" value={drawerSortKey} onChange={(event) => setDrawerSortKey(event.target.value as DrawerSortKey)}>
+                    <option value="material">Material</option>
+                    <option value="quality">Quality</option>
+                    <option value="quantity">SCU / Quantity</option>
+                    <option value="container">Container</option>
+                    <option value="updated">Updated</option>
+                  </select>
+                  <button type="button" onClick={() => setDrawerSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label={`Sort ${drawerSortDir === 'asc' ? 'descending' : 'ascending'}`}>
+                    {drawerSortDir === 'asc' ? '↑' : '↓'}
+                  </button>
+                </label>
+                <div className="logi-location-detail-filters" role="group" aria-label="Filter selected location stacks">
+                  {([
+                    ['all', 'All'],
+                    ['premium', '900+'],
+                    ['raw', 'Raw'],
+                    ['refined', 'Refined'],
+                    ['unassigned', 'Unassigned'],
+                  ] as [DrawerFilter, string][]).filter(([value]) => drawerAvailableFilters.has(value)).map(([value, label]) => (
+                    <button key={value} type="button" className={drawerFilter === value ? 'is-active' : ''} onClick={() => setDrawerFilter(value)}>
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="logi-location-stack-table-wrap">
+                <div className="logi-location-stack-table-head" aria-hidden>
+                  <span>Quality</span>
+                  <span>SCU / Qty</span>
+                  <span>Container</span>
+                  <span>Type</span>
+                  <span>Updated</span>
+                  <span>Actions</span>
+                </div>
+                {drawerMaterialGroups.length > 0 ? drawerMaterialGroups.map((materialGroup) => (
+                  <div key={materialGroup.id} className="logi-location-material-group">
+                    <div className="logi-location-material-head">
+                      <span><MaterialGlyph quality={materialGroup.entries[0]?.quality} />{materialGroup.name}</span>
+                      <small>{materialGroup.entries.length} {materialGroup.entries.length === 1 ? 'stack' : 'stacks'} · {formatInventoryQuantity(materialGroup.total, materialGroup.unitType)}</small>
+                    </div>
+                    {materialGroup.entries.map((entry) => {
+                      const material = getMaterialForEntry(entry, materials);
+                      const kind = getEntryKind(entry, material);
+                      return (
+                        <div key={entry.id} className="logi-location-detail-row">
+                          <QualityPill quality={entry.quality} />
+                          <span>{formatEntryQuantity(entry, material)}</span>
+                          <span>{entry.container || '—'}</span>
+                          <span className={`logi-location-kind logi-location-kind--${kind}`}>{kind === 'ore' ? 'Raw' : titleCase(kind)}</span>
+                          <span>{entry.updatedAt ? new Date(entry.updatedAt).toLocaleDateString() : '—'}</span>
+                          <span className="logi-location-row-actions">
+                            <button type="button" onClick={() => setPanel({ mode: 'edit', entry })}>Edit</button>
+                            <button type="button" className="is-delete" onClick={() => setPendingDeleteEntryId(entry.id)}>Delete</button>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )) : (
+                  <div className="logi-location-detail-empty">
+                    {selectedLocation.id === '__unassigned__' && drawerSearch === '' && drawerFilter === 'all'
+                      ? 'No stacks without assigned location.'
+                      : selectedLocation.entries.length === 0
+                        ? 'No stacks recorded at this location.'
+                        : 'No stacks match the selected location filters.'}
+                  </div>
+                )}
+              </div>
+
+              {pendingDeleteEntryId && selectedLocation.entries.some((entry) => entry.id === pendingDeleteEntryId) && (() => {
+                const pendingEntry = selectedLocation.entries.find((entry) => entry.id === pendingDeleteEntryId);
+                if (!pendingEntry) return null;
+                return (
+                  <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
+                    <div className="logi-location-delete-panel">
+                      <span className="logi-location-delete-kicker">Are you sure?</span>
+                      <strong>{resolveInventoryItemName(pendingEntry, getMaterialForEntry(pendingEntry, materials))}</strong>
+                      <p>This inventory item will be deleted from {selectedLocation.name}.</p>
+                      <div className="logi-location-delete-actions">
+                        <button type="button" className="logi-location-delete-yes" onClick={() => handleDelete(pendingEntry.id)}>Yes</button>
+                        <button type="button" onClick={() => setPendingDeleteEntryId(null)}>Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </section>
+          )}
 
           <div className="logi-inv-secondary-grid">
             <section className="logi-inv-panel">

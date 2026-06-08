@@ -148,6 +148,7 @@ const sections = [
       { label: "Build Queue", to: "/logistics/build-queue", icon: "list", svgIcon: "buildQueue" },
       { label: "Mining", to: "/industry/mining", icon: "pickaxe", svgIcon: "mining" },
       { label: "Blueprint Tracker", to: "/industry/blueprint-tracker", icon: "clipboard", svgIcon: "blueprintTracker" },
+      { label: "Mission Browser", to: "/industry/missions", icon: "list" },
     ],
   },
   {
