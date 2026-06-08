@@ -54,42 +54,74 @@ export default function BuildQueuePage() {
 
   return (
     <div className="bq-page">
-
-      {/* Stat Rail */}
-      
-
       <div className="bq-main">
         <div className="bq-workspace">
           <div className="bq-shell">
+            <header className="bq-stat-rail">
+              <div className="bq-stat-rail-title">
+                <span className="bq-section-kicker">Crafting Operations</span>
+                <h1>Build Queue</h1>
+              </div>
+              <div className="bq-stats" aria-label="Build queue summary">
+                <span className="bq-stat">
+                  <em>Active Crafts</em>
+                  <strong>{activeBuildQueue.length}</strong>
+                </span>
+                <span className="bq-stat bq-stat--success">
+                  <em>Completed Crafts</em>
+                  <strong>{completedBuildQueue.length}</strong>
+                </span>
+                <span className="bq-stat bq-stat--alert">
+                  <em>Refined Shortfall</em>
+                  <strong>{formatSummaryNumber(queueLedger.summary.refinedShortfall)}</strong>
+                </span>
+                <span className="bq-stat bq-stat--success">
+                  <em>Reservable Lines</em>
+                  <strong>{queueLedger.summary.reservableLines}</strong>
+                </span>
+                <span className="bq-stat bq-stat--alert">
+                  <em>No Stock Lines</em>
+                  <strong>{queueLedger.summary.noStockLines}</strong>
+                </span>
+              </div>
+            </header>
 
-            <>
+            <div className="bq-queue-content">
               {categories.length === 0 && completedCategories.length === 0 ? (
                 <div className="bq-empty-state">No builds queued yet.</div>
-              ) : categories.map((category) => (
-                <BuildQueueGroup
-                  key={category}
-                  category={category}
-                  items={grouped[category] ?? []}
-                  recipes={recipes}
-                  recipeInputsByRecipeId={recipeInputsByRecipeId}
-                  buildQueue={buildQueue}
-                  inventory={inventoryEntries}
-                  materials={materials}
-                  locations={locations}
-                  strategy={sourceStrategy}
-                  onQuantityChange={updateBuildQueueItemQuantity}
-                  onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
-                  onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
-                  onStatusChange={updateBuildQueueItemStatus}
-                  onRemove={removeBuildQueueItem}
-                  onToggleAllocation={toggleBuildQueueAllocation}
-                  onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
-                  onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
-                />
-              ))}
+              ) : categories.length > 0 && (
+                <section className="bq-queue-section" aria-label="Active crafts">
+                  <div className="bq-queue-section-head">
+                    <span>Active Crafts</span>
+                    <strong>{activeBuildQueue.length}</strong>
+                  </div>
+                  {categories.map((category) => (
+                    <BuildQueueGroup
+                      key={category}
+                      category={category}
+                      items={grouped[category] ?? []}
+                      recipes={recipes}
+                      recipeInputsByRecipeId={recipeInputsByRecipeId}
+                      buildQueue={buildQueue}
+                      inventory={inventoryEntries}
+                      materials={materials}
+                      locations={locations}
+                      strategy={sourceStrategy}
+                      onQuantityChange={updateBuildQueueItemQuantity}
+                      onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
+                      onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
+                      onStatusChange={updateBuildQueueItemStatus}
+                      onRemove={removeBuildQueueItem}
+                      onToggleAllocation={toggleBuildQueueAllocation}
+                      onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
+                      onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
+                    />
+                  ))}
+                </section>
+              )}
               {completedCategories.length > 0 && (
-                <section className="bq-completed-panel" aria-label="Completed crafts">
-                  <div className="bq-completed-panel-head">
+                <section className="bq-queue-section bq-completed-panel" aria-label="Completed crafts">
+                  <div className="bq-queue-section-head bq-completed-panel-head">
                     <span>Completed Crafts</span>
                     <strong>{completedBuildQueue.length}</strong>
                   </div>
@@ -117,8 +149,7 @@ export default function BuildQueuePage() {
                   ))}
                 </section>
               )}
-            </>
-
+            </div>
           </div>
         </div>
 

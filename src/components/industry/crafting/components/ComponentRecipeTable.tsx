@@ -2389,15 +2389,11 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
 
 function ItemSummaryPanel({
   recipe,
-  displayName,
-  finalProductQuality,
   componentCardRecord,
   totalModifiers,
   p6lrReference,
 }: {
   recipe: ComponentRecipe;
-  displayName: string;
-  finalProductQuality: FinalProductQuality;
   componentCardRecord?: ComponentCardIndexRecord;
   totalModifiers: TotalModifierRow[];
   p6lrReference?: P6LRReference;
@@ -2405,7 +2401,6 @@ function ItemSummaryPanel({
   const schema = componentCardRecord
     ? buildComponentCardSchemaFromIndex(componentCardRecord)
     : buildComponentCardSchema(recipe);
-  const typeBadges = getTypeBadges(recipe);
   const identityRows: ComponentCardMetric[] = componentCardRecord
     ? [
         { label: "Type", value: componentCardRecord.typeLabel },
@@ -2415,12 +2410,6 @@ function ItemSummaryPanel({
         { label: "Craft Time", value: formatCraftTime(componentCardRecord.craftTimeSeconds) },
       ].filter((row) => Boolean(row.value))
     : [];
-  const meta = [
-    componentCardRecord?.kind === "fps" ? "FPS" : schema.kindLabel,
-    componentCardRecord?.typeLabel ?? schema.typeLabel,
-    componentCardRecord?.family,
-    componentCardRecord?.variantName,
-  ].filter((value): value is string => Boolean(value));
   const stats = buildDetailStatRows(componentCardRecord);
   const modifiedStats = buildModifiedDetailStatRows(recipe, componentCardRecord, stats, totalModifiers);
   const secondaryStats = componentCardRecord
@@ -2429,45 +2418,11 @@ function ItemSummaryPanel({
   const graphData =
     buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
     buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
-  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
 
   return (
-    <section className="craft-detail-cockpit" aria-label="Selected item summary">
-      <div className="craft-summary-panel craft-detail-cockpit-panel">
-        <div className="craft-detail-cockpit-grid">
-          <div className="craft-detail-visual-panel">
-            <span className="craft-detail-visual-kind">{componentCardRecord?.typeLabel ?? schema.typeLabel}</span>
-            <strong>{displayName}</strong>
-            <span className={`craft-detail-band-pill ${componentRarityClass}`}>
-              {formatCompactNumber(finalProductQuality.averageBand)}
-            </span>
-          </div>
-
-          <div className="craft-detail-identity-panel">
-            <div className="craft-summary-section-label">Item Overview</div>
-            {componentCardRecord?.description ? (
-              <p className="craft-item-description">
-                {trimItemDescription(componentCardRecord.description)}
-              </p>
-            ) : (
-              <div className="craft-summary-chips">
-                {typeBadges.map((badge) => (
-                  <span
-                    key={badge}
-                    className={`craft-badge craft-badge--type-chip${badge === "FPS" ? " craft-badge--fps" : ""}`}
-                  >
-                    {badge}
-                  </span>
-                ))}
-                {meta.map((value) => (
-                  <span key={value} className="craft-badge craft-badge--neutral">
-                    {value}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+    <section className="craft-detail-summary-section" aria-label="Selected item summary">
+      <div className="craft-summary-section-label">Item Summary</div>
+      <div className="craft-detail-summary-content">
 
         {modifiedStats.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
@@ -2503,7 +2458,7 @@ function ItemSummaryPanel({
               </span>
             ))}
           </div>
-        </div>
+          </div>
         )}
       </div>
     </section>
@@ -2538,10 +2493,9 @@ function MissionSourcePanel({
   const hasAdvancedSourceData = blueprintRows.length > 0 || sourceRows.length > 0;
 
   return (
-    <div className="craft-detail-lower-grid">
-      <section className="craft-summary-panel craft-detail-lower-panel">
-        <div className="craft-summary-section craft-summary-mission-section">
-          <div className="craft-summary-section-label">Blueprint Sources</div>
+    <section className="craft-detail-sources-section">
+      <div className="craft-summary-section craft-summary-mission-section">
+        <div className="craft-summary-section-label">Blueprint Sources</div>
           {missionEntries.length === 0 ? (
             <div className="craft-summary-empty craft-summary-empty--compact">
               No mission data for this blueprint
@@ -2591,8 +2545,7 @@ function MissionSourcePanel({
               })}
             </div>
           )}
-        </div>
-      </section>
+      </div>
       {hasAdvancedSourceData && (
         <details className="craft-detail-source-advanced">
           <summary>Advanced Source Data</summary>
@@ -2626,7 +2579,7 @@ function MissionSourcePanel({
           </div>
         </details>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -2766,7 +2719,7 @@ function RightCraftingPanel({
   children: ReactNode;
 }) {
   return (
-    <section className="craft-detail-right-panel" aria-label="Crafting and materials">
+    <section className="craft-detail-crafting-section" aria-label="Crafting and materials">
       <div className="craft-detail-panel-head">
         <div>
           <div className="craft-summary-section-label">Crafting Overview</div>
@@ -2923,16 +2876,47 @@ function RecipeDrawer({
     .filter((value) => value.trim().toLowerCase() !== "fps")
     .filter((value, index, values) => values.findIndex((item) => item.trim().toLowerCase() === value.trim().toLowerCase()) === index)
     .join(" / ");
+  const heroMeta = [
+    formatSize(selectedRecipe.size),
+    selectedRecipe.grade ? `Grade ${selectedRecipe.grade}` : null,
+    selectedRecipe.class,
+  ].filter((value): value is string => Boolean(value));
+  const heroTypeLabel =
+    selectedComponentCard?.typeLabel ??
+    buildComponentCardSchema(selectedRecipe).typeLabel;
+  const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
       <header className="craft-detail-header">
-        <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
-          Back to Results
-        </Link>
+        <div className="craft-detail-hero-left">
+          <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
+            Back to Results
+          </Link>
+          <div className="craft-detail-visual-panel">
+            <span className="craft-detail-visual-kind">{heroTypeLabel}</span>
+            <strong>{displayName}</strong>
+            <span className={`craft-detail-band-pill ${componentRarityClass}`}>
+              {formatCompactNumber(finalProductQuality.averageBand)}
+            </span>
+          </div>
+        </div>
         <div className="craft-detail-title-block">
-          <h1 className="craft-detail-title">{displayName}</h1>
           {categoryLine && <div className="craft-detail-meta">{categoryLine}</div>}
+          <h1 className="craft-detail-title">{displayName}</h1>
+          <div className="craft-summary-chips craft-detail-hero-chips">
+            <span className={`craft-detail-band-pill ${componentRarityClass}`}>
+              {formatCompactNumber(finalProductQuality.averageBand)} Quality
+            </span>
+            {heroMeta.map((value) => (
+              <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
+            ))}
+          </div>
+          {selectedComponentCard?.description && (
+            <p className="craft-item-description">
+              {trimItemDescription(selectedComponentCard.description)}
+            </p>
+          )}
         </div>
         <div className="craft-summary-action-row craft-detail-actions">
           <button
@@ -2967,8 +2951,6 @@ function RecipeDrawer({
       <div className="craft-detail-workspace">
         <ItemSummaryPanel
           recipe={selectedRecipe}
-          displayName={displayName}
-          finalProductQuality={finalProductQuality}
           componentCardRecord={selectedComponentCard}
           totalModifiers={totalModifiers}
           p6lrReference={p6lrReference}
