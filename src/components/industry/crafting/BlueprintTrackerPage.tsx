@@ -133,6 +133,70 @@ type BlueprintRewardView = {
   acquisitionGroups: AcquisitionSystemGroup[];
 };
 
+type ArmorPieceType = "helmet" | "core" | "arms" | "legs" | "backpack" | "undersuit" | "other";
+
+type ArmorSetPieceView = {
+  reward: BlueprintRewardView;
+  pieceType: ArmorPieceType;
+};
+
+type ArmorSetVariantView = {
+  variantKey: string;
+  displayName: string;
+  pieces: ArmorSetPieceView[];
+  totalPieces: number;
+  collectedPieces: number;
+  hasDisabledSources: boolean;
+  allSourcesDisabled: boolean;
+};
+
+type ArmorSetGroupView = {
+  baseSetKey: string;
+  displayName: string;
+  category: "armorSet";
+  variants: ArmorSetVariantView[];
+  totalPieces: number;
+  collectedPieces: number;
+  hasDisabledSources: boolean;
+  allSourcesDisabled: boolean;
+  fallbackIconKey: string;
+  searchText: string;
+};
+
+type FpsWeaponRelatedPartType = "magazine" | "battery" | "ammo" | "barrel" | "optic" | "attachment" | "other";
+
+type FpsWeaponFamilyView = {
+  baseWeaponKey: string;
+  displayName: string;
+  category: "fpsWeapon";
+  weaponType: string;
+  variants: { variantKey: string; displayName: string; reward: BlueprintRewardView }[];
+  relatedParts: { partType: FpsWeaponRelatedPartType; reward: BlueprintRewardView }[];
+  totalRewards: number;
+  collectedRewards: number;
+  hasDisabledSources: boolean;
+  allSourcesDisabled: boolean;
+  fallbackIconKey: string;
+  searchText: string;
+};
+
+type TrackerTab = "tracker" | "browse" | "completed";
+
+type TrackerItemView = {
+  id: string;
+  name: string;
+  category: UiCategory;
+  typeLabel: string;
+  memberIds: string[];
+  collectedCount: number;
+  totalCount: number;
+  sourceCount: number;
+  bestSource: string;
+  searchText: string;
+  allSourcesDisabled: boolean;
+  open: () => void;
+};
+
 const CATEGORY_ORDER: UiCategory[] = ["armorSet", "fpsWeapon", "shipWeapon", "component", "other"];
 
 const CATEGORY_LABEL: Record<UiCategory, string> = {
@@ -142,6 +206,237 @@ const CATEGORY_LABEL: Record<UiCategory, string> = {
   component: "Components",
   other: "Other",
 };
+
+const ARMOR_PIECE_PATTERN = /\b(helmet|helm|core|chest|torso|arms?|gauntlets?|legs?|boots?|backpack|pack|undersuit)\b/i;
+
+function normalizeArmorPieceType(value: string): ArmorPieceType {
+  const piece = value.toLowerCase();
+  if (piece === "helmet" || piece === "helm") return "helmet";
+  if (piece === "core" || piece === "chest" || piece === "torso") return "core";
+  if (piece === "arm" || piece === "arms" || piece.startsWith("gauntlet")) return "arms";
+  if (piece === "leg" || piece === "legs" || piece.startsWith("boot")) return "legs";
+  if (piece === "backpack" || piece === "pack") return "backpack";
+  if (piece === "undersuit") return "undersuit";
+  return "other";
+}
+
+function parseArmorRewardName(name: string): { baseSet: string; variant: string; pieceType: ArmorPieceType } {
+  const match = ARMOR_PIECE_PATTERN.exec(name);
+  if (!match || match.index === undefined) {
+    return { baseSet: name.trim(), variant: "Default", pieceType: "other" };
+  }
+
+  const baseSet = name
+    .slice(0, match.index)
+    .replace(/\barmor\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim() || name.trim();
+  const variant = name
+    .slice(match.index + match[0].length)
+    .replace(/^[\s\-:]+|[\s\-:]+$/g, "")
+    .replace(/^\((.+)\)$/, "$1")
+    .trim() || "Default";
+
+  return { baseSet, variant, pieceType: normalizeArmorPieceType(match[0]) };
+}
+
+function buildArmorSetGroups(rewards: BlueprintRewardView[]): ArmorSetGroupView[] {
+  const groups = new Map<string, { displayName: string; variants: Map<string, ArmorSetPieceView[]> }>();
+
+  for (const reward of rewards.filter((item) => item.category === "armorSet")) {
+    const parsed = parseArmorRewardName(reward.name);
+    const baseSetKey = parsed.baseSet.toLowerCase();
+    const variantKey = parsed.variant.toLowerCase();
+    const group = groups.get(baseSetKey) ?? { displayName: parsed.baseSet, variants: new Map() };
+    const pieces = group.variants.get(variantKey) ?? [];
+    pieces.push({ reward, pieceType: parsed.pieceType });
+    group.variants.set(variantKey, pieces);
+    groups.set(baseSetKey, group);
+  }
+
+  return Array.from(groups.entries())
+    .map(([baseSetKey, group]) => {
+      const variants = Array.from(group.variants.entries())
+        .map(([variantKey, pieces]) => ({
+          variantKey,
+          displayName: variantKey === "default" ? "Default" : parseArmorRewardName(pieces[0].reward.name).variant,
+          pieces: pieces.sort((a, b) => a.pieceType.localeCompare(b.pieceType)),
+          totalPieces: pieces.length,
+          collectedPieces: pieces.filter((piece) => piece.reward.isCollected).length,
+          hasDisabledSources: pieces.some((piece) => piece.reward.hasDisabledSources),
+          allSourcesDisabled: pieces.every((piece) => piece.reward.allSourcesDisabled),
+        }))
+        .sort((a, b) => a.displayName === "Default" ? -1 : b.displayName === "Default" ? 1 : a.displayName.localeCompare(b.displayName));
+      const allPieces = variants.flatMap((variant) => variant.pieces);
+      return {
+        baseSetKey,
+        displayName: group.displayName,
+        category: "armorSet" as const,
+        variants,
+        totalPieces: allPieces.length,
+        collectedPieces: allPieces.filter((piece) => piece.reward.isCollected).length,
+        hasDisabledSources: allPieces.some((piece) => piece.reward.hasDisabledSources),
+        allSourcesDisabled: allPieces.every((piece) => piece.reward.allSourcesDisabled),
+        fallbackIconKey: "armorSet-armor",
+        searchText: [group.displayName, ...allPieces.map((piece) => piece.reward.name)].join(" ").toLowerCase(),
+      };
+    })
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
+}
+
+const WEAPON_TYPE_PATTERN = /\b(sniper rifle|assault rifle|laser rifle|energy rifle|rifle|shotgun|submachine gun|smg|light machine gun|lmg|pistol|launcher|melee)\b/i;
+const WEAPON_PART_PATTERN = /\b(magazine|mag|battery|ammo|rounds?|cartridge|barrel|optic|scope|sight|suppressor|compensator|grip|stock|attachment)\b/i;
+
+function normalizeWeaponType(name: string): string {
+  const type = WEAPON_TYPE_PATTERN.exec(name)?.[0].toLowerCase() || "weapon";
+  if (type.includes("sniper")) return "sniper";
+  if (type === "pistol") return "pistol";
+  if (type.includes("shotgun")) return "shotgun";
+  if (type === "smg" || type.includes("submachine")) return "smg";
+  if (type === "lmg" || type.includes("light machine")) return "lmg";
+  if (type.includes("launcher")) return "launcher";
+  if (type.includes("melee")) return "melee";
+  return "rifle";
+}
+
+function normalizeRelatedPartType(name: string): FpsWeaponRelatedPartType {
+  const value = name.toLowerCase();
+  if (/\bmagazine|\bmag\b/.test(value)) return "magazine";
+  if (/\bbattery\b/.test(value)) return "battery";
+  if (/\bammo|\bround|\bcartridge/.test(value)) return "ammo";
+  if (/\bbarrel\b/.test(value)) return "barrel";
+  if (/\boptic|\bscope|\bsight/.test(value)) return "optic";
+  if (/\bsuppressor|\bcompensator|\bgrip|\bstock|\battachment/.test(value)) return "attachment";
+  return "other";
+}
+
+function parseFpsWeaponRewardName(name: string): {
+  baseWeapon: string;
+  variant: string;
+  weaponType: string;
+  relatedPartType?: FpsWeaponRelatedPartType;
+} | null {
+  const weaponMatch = WEAPON_TYPE_PATTERN.exec(name);
+  if (!weaponMatch || weaponMatch.index === undefined) return null;
+  const partMatch = WEAPON_PART_PATTERN.exec(name);
+  const quoteMatch = /["“](.+?)["”]/.exec(name);
+  const weaponEnd = weaponMatch.index + weaponMatch[0].length;
+  const baseWeapon = name
+    .slice(0, weaponEnd)
+    .replace(/["“].+?["”]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return {
+    baseWeapon,
+    variant: quoteMatch?.[1]?.trim() || "Default",
+    weaponType: normalizeWeaponType(name),
+    relatedPartType: partMatch && partMatch.index >= weaponEnd ? normalizeRelatedPartType(partMatch[0]) : undefined,
+  };
+}
+
+function buildFpsWeaponFamilies(rewards: BlueprintRewardView[]): FpsWeaponFamilyView[] {
+  const families = new Map<string, {
+    displayName: string;
+    weaponType: string;
+    variants: FpsWeaponFamilyView["variants"];
+    relatedParts: FpsWeaponFamilyView["relatedParts"];
+  }>();
+
+  for (const reward of rewards.filter((item) => item.category === "fpsWeapon")) {
+    const parsed = parseFpsWeaponRewardName(reward.name);
+    if (!parsed) continue;
+    const baseWeaponKey = parsed.baseWeapon.toLowerCase();
+    const family = families.get(baseWeaponKey) ?? {
+      displayName: parsed.baseWeapon,
+      weaponType: parsed.weaponType,
+      variants: [],
+      relatedParts: [],
+    };
+    if (parsed.relatedPartType) {
+      family.relatedParts.push({ partType: parsed.relatedPartType, reward });
+    } else {
+      family.variants.push({ variantKey: parsed.variant.toLowerCase(), displayName: parsed.variant, reward });
+    }
+    families.set(baseWeaponKey, family);
+  }
+
+  return Array.from(families.entries())
+    .map(([baseWeaponKey, family]) => {
+      const rewardsInFamily = [...family.variants.map((item) => item.reward), ...family.relatedParts.map((item) => item.reward)];
+      return {
+        baseWeaponKey,
+        displayName: family.displayName,
+        category: "fpsWeapon" as const,
+        weaponType: family.weaponType,
+        variants: family.variants.sort((a, b) => a.displayName === "Default" ? -1 : b.displayName === "Default" ? 1 : a.displayName.localeCompare(b.displayName)),
+        relatedParts: family.relatedParts.sort((a, b) => a.reward.name.localeCompare(b.reward.name)),
+        totalRewards: rewardsInFamily.length,
+        collectedRewards: rewardsInFamily.filter((item) => item.isCollected).length,
+        hasDisabledSources: rewardsInFamily.some((item) => item.hasDisabledSources),
+        allSourcesDisabled: rewardsInFamily.every((item) => item.allSourcesDisabled),
+        fallbackIconKey: `fpsWeapon-${family.weaponType}`,
+        searchText: [family.displayName, ...rewardsInFamily.map((item) => item.name)].join(" ").toLowerCase(),
+      };
+    })
+    .sort((a, b) => a.displayName.localeCompare(b.displayName));
+}
+
+type BlueprintFallbackIconProps = {
+  category: UiCategory;
+  type?: string;
+  subtype?: string;
+  status?: "default" | "collected" | "unavailable";
+};
+
+export function BlueprintFallbackIcon({ category, type, subtype, status = "default" }: BlueprintFallbackIconProps) {
+  const key = `${category} ${type || ""} ${subtype || ""}`.toLowerCase();
+  let paths;
+
+  if (/\bhelmet|\bhelm/.test(key)) {
+    paths = <><path d="M7 18v-5.5A5 5 0 0 1 17 12.5V18" /><path d="M7 14h10M9 18v-3m6 3v-3M10 8.5h4" /></>;
+  } else if (/\bcore|\bchest|\btorso/.test(key)) {
+    paths = <><path d="m8 5 4-2 4 2 3 4-3 2v8H8v-8L5 9l3-4Z" /><path d="M10 8h4m-4 4h4" /></>;
+  } else if (/\barms?|\bgauntlet/.test(key)) {
+    paths = <><path d="m7 5-3 3 3 10 4-1-1-8m7-4 3 3-3 10-4-1 1-8" /><path d="m8 7 2 2m6-2-2 2" /></>;
+  } else if (/\blegs?|\bboots?/.test(key)) {
+    paths = <><path d="M8 4h8l1 7-2 8h-3l-1-7-1 7H7l-1-8 2-7Z" /><path d="M8 8h8m-5-4v8" /></>;
+  } else if (/\bbackpack|\bpack/.test(key)) {
+    paths = <><rect x="6" y="7" width="12" height="13" rx="2" /><path d="M9 7V5h6v2M9 11h6m-7 3H5m11 0h3" /></>;
+  } else if (category === "armorSet" || /\bshield/.test(key)) {
+    paths = <><path d="M12 3 5 6v5c0 4.5 2.8 8 7 10 4.2-2 7-5.5 7-10V6l-7-3Z" /><path d="M9 11.5 11 14l4-5" /></>;
+  } else if (/\b(sniper|rifle|smg|shotgun|weapons?)\b/.test(key)) {
+    paths = <><path d="M3 10h12l3 2h3v3h-8l-2 2H7l-1-4H3v-3Z" /><path d="M8 17 7 21m7-6 2 4m-7-9V7h6v3" /></>;
+  } else if (/\bpistol/.test(key)) {
+    paths = <><path d="M4 9h13l3 2v3h-9l-2 2H6l-1-4H4V9Z" /><path d="m10 16-1 5H6l-1-5" /></>;
+  } else if (/\bammo|\bmagazine/.test(key)) {
+    paths = <><path d="M8 4h8v15l-4 2-4-2V4Z" /><path d="M10 8h4m-4 4h4m-4 4h4" /></>;
+  } else if (category === "shipWeapon" || /\bcannon|\brepeater|\bmissile|\btorpedo|\blaser|\bdistortion/.test(key)) {
+    paths = <><path d="M3 11h12l5 3-5 3H3v-6Z" /><path d="M7 11V7h8v4m-6 6v3h6v-3" /><path d="m18 10 3-2m-3 10 3 2" /></>;
+  } else if (/\bcooler/.test(key)) {
+    paths = <><circle cx="12" cy="12" r="3" /><path d="M12 3v6m0 6v6M3 12h6m6 0h6M5.6 5.6l4.2 4.2m4.4 4.4 4.2 4.2m0-12.8-4.2 4.2m-4.4 4.4-4.2 4.2" /></>;
+  } else if (/\bpower/.test(key)) {
+    paths = <path d="m13 2-7 12h6l-1 8 7-12h-6l1-8Z" />;
+  } else if (/\bquantum/.test(key)) {
+    paths = <><circle cx="12" cy="12" r="3" /><circle cx="12" cy="12" r="8" /><path d="M12 1v3m0 16v3M1 12h3m16 0h3" /></>;
+  } else if (/\bradar|\bscanner/.test(key)) {
+    paths = <><circle cx="12" cy="12" r="2" /><path d="M12 6a6 6 0 0 1 0 12m0-16a10 10 0 0 1 0 20M12 12l6-6" /></>;
+  } else if (/\bthruster/.test(key)) {
+    paths = <><path d="m12 3 5 7-2 7H9l-2-7 5-7Z" /><path d="m10 17-2 4m6-4 2 4" /></>;
+  } else if (/\bpaint|\bswirl/.test(key)) {
+    paths = <><path d="M12 4a8 8 0 1 0 8 8c0-2-1-3-3-3h-2a2 2 0 0 1-2-2c0-2-1-3-1-3Z" /><circle cx="8" cy="10" r=".8" /><circle cx="10" cy="7" r=".8" /></>;
+  } else if (/\btool|\butility|\battachment/.test(key)) {
+    paths = <><path d="m14 6 4-3 3 3-3 4-3-1-7 7 1 3-2 2-4-4 2-2 3 1 7-7-1-3Z" /></>;
+  } else {
+    paths = <><path d="M7 3h8l4 4v14H7V3Z" /><path d="M15 3v5h5M10 12h6m-6 4h6" /></>;
+  }
+
+  return (
+    <svg className={`bp-fallback-icon is-${status}`} viewBox="0 0 24 24" aria-hidden="true">
+      {paths}
+    </svg>
+  );
+}
 
 function getUiCategory(componentType?: string): UiCategory {
   const t = (componentType || "").toLowerCase();
@@ -862,8 +1157,12 @@ export default function BlueprintTrackerPage() {
   const [activeCategory, setActiveCategory] = useState<"all" | UiCategory>("all");
   const [showMissingOnly, setShowMissingOnly] = useState(false);
   const [showDisabledSources, setShowDisabledSources] = useState(true); // default show so disabled are discoverable
+  const [trackerTab, setTrackerTab] = useState<TrackerTab>("tracker");
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null);
   const [selectedRewardId, setSelectedRewardId] = useState<string | null>(null); // for blueprint detail panel
+  const [selectedArmorSetKey, setSelectedArmorSetKey] = useState<string | null>(null);
+  const [selectedArmorVariantKey, setSelectedArmorVariantKey] = useState<string | null>(null);
+  const [selectedFpsWeaponKey, setSelectedFpsWeaponKey] = useState<string | null>(null);
   const [expandedMissionIds, setExpandedMissionIds] = useState<Set<string>>(new Set());
   const [completedMissionIds, setCompletedMissionIds] = useState<Set<string>>(
     () => readStoredStringSet(COMPLETED_MISSIONS_STORAGE_KEY),
@@ -1047,7 +1346,7 @@ export default function BlueprintTrackerPage() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selectedMissionId]);
 
-  const _toggleRecipe = useCallback(async (recipeId: string) => {
+  const toggleRecipe = useCallback(async (recipeId: string) => {
     const accessToken = session?.access_token;
     if (!accessToken) {
       if (hasSupabaseConfig() && !authLoading) {
@@ -1093,7 +1392,69 @@ export default function BlueprintTrackerPage() {
       });
     }
   }, [authLoading, bookmarkedRecipeIds, recipes, session?.access_token]);
-  void _toggleRecipe;
+
+  const setRecipesTracked = useCallback(async (recipeIds: string[], tracked: boolean) => {
+    const uniqueIds = Array.from(new Set(recipeIds.filter(Boolean)));
+    if (uniqueIds.length === 0) return;
+    const accessToken = session?.access_token;
+    if (!accessToken) {
+      if (hasSupabaseConfig() && !authLoading) {
+        await signInWithDiscord();
+        return;
+      }
+      setBookmarkedRecipeIds((prev) => {
+        const next = new Set(prev);
+        for (const recipeId of uniqueIds) {
+          if (tracked) next.add(recipeId);
+          else next.delete(recipeId);
+        }
+        writeStoredStringSet(RECIPE_BOOKMARK_STORAGE_KEY, next);
+        return next;
+      });
+      return;
+    }
+
+    const previous = bookmarkedRecipeIds;
+    setBookmarkedRecipeIds((prev) => {
+      const next = new Set(prev);
+      for (const recipeId of uniqueIds) {
+        if (tracked) next.add(recipeId);
+        else next.delete(recipeId);
+      }
+      return next;
+    });
+
+    try {
+      await Promise.all(uniqueIds.map((recipeId) => {
+        if (!tracked) return deleteUserBlueprint(accessToken, recipeId);
+        const recipe = recipes.find((item) => item.blueprint_id === recipeId);
+        return saveUserBlueprint(accessToken, {
+          blueprintId: recipeId,
+          faction: recipe?.manufacturer,
+          itemName: recipe?.component_name,
+          sourceType: "blueprint",
+        });
+      }));
+    } catch {
+      setBookmarkedRecipeIds(new Set(previous));
+    }
+  }, [authLoading, bookmarkedRecipeIds, recipes, session?.access_token]);
+
+  const setBlueprintsCompleted = useCallback((blueprintIds: string[], completed: boolean) => {
+    setAcquiredBlueprintIds((prev) => {
+      const next = new Set(prev);
+      for (const blueprintId of blueprintIds) {
+        if (completed) next.add(blueprintId);
+        else next.delete(blueprintId);
+      }
+      persistTrackerState({
+        completedMissionIds: setToList(completedMissionIds),
+        acquiredBlueprintIds: setToList(next),
+        pinnedMissionIds: setToList(pinnedMissionIds),
+      });
+      return next;
+    });
+  }, [completedMissionIds, persistTrackerState, pinnedMissionIds]);
 
   const _toggleMissionBookmark = useCallback((missionId: string) => {
     setBookmarkedMissionIds((prev) => {
@@ -1159,18 +1520,261 @@ export default function BlueprintTrackerPage() {
     () => buildBlueprintRewardViews(missions, acquiredBlueprintIds, completedMissionIds),
     [missions, acquiredBlueprintIds, completedMissionIds],
   );
-  void blueprintRewardViews; // referenced for typecheck in this VM wiring step; will be consumed by render in next step
+  const armorSetGroups = useMemo(() => buildArmorSetGroups(blueprintRewardViews), [blueprintRewardViews]);
+  const fpsWeaponFamilies = useMemo(() => buildFpsWeaponFamilies(blueprintRewardViews), [blueprintRewardViews]);
+  const groupedFpsRewardIds = useMemo(
+    () => new Set(fpsWeaponFamilies.flatMap((family) => [
+      ...family.variants.map((variant) => variant.reward.rewardId),
+      ...family.relatedParts.map((part) => part.reward.rewardId),
+    ])),
+    [fpsWeaponFamilies],
+  );
+  const groupedArmorRewardIds = useMemo(
+    () => new Set(armorSetGroups.flatMap((group) => group.variants.flatMap((variant) => variant.pieces.map((piece) => piece.reward.rewardId)))),
+    [armorSetGroups],
+  );
+  const trackerItems = useMemo<TrackerItemView[]>(() => {
+    const items: TrackerItemView[] = [];
+    const getBestSource = (rewards: BlueprintRewardView[]) => {
+      const source = rewards[0]?.acquisitionGroups[0]?.factions[0]?.missions[0];
+      return source ? source.title : "Unknown source";
+    };
+    for (const group of armorSetGroups) {
+      const rewards = group.variants.flatMap((variant) => variant.pieces.map((piece) => piece.reward));
+      items.push({
+        id: `armor:${group.baseSetKey}`,
+        name: `${group.displayName} Armor Set`,
+        category: "armorSet",
+        typeLabel: `${group.variants.length} ${group.variants.length === 1 ? "variant" : "variants"}`,
+        memberIds: rewards.map((reward) => reward.rewardId),
+        collectedCount: rewards.filter((reward) => reward.isCollected).length,
+        totalCount: rewards.length,
+        sourceCount: rewards.reduce((sum, reward) => sum + reward.totalCount, 0),
+        bestSource: getBestSource(rewards),
+        searchText: group.searchText,
+        allSourcesDisabled: group.allSourcesDisabled,
+        open: () => {
+          setSelectedRewardId(null);
+          setSelectedFpsWeaponKey(null);
+          setSelectedArmorSetKey(group.baseSetKey);
+          setSelectedArmorVariantKey(group.variants[0]?.variantKey ?? null);
+        },
+      });
+    }
+    for (const group of fpsWeaponFamilies) {
+      const rewards = [...group.variants.map((variant) => variant.reward), ...group.relatedParts.map((part) => part.reward)];
+      items.push({
+        id: `fps:${group.baseWeaponKey}`,
+        name: group.displayName,
+        category: "fpsWeapon",
+        typeLabel: `${group.variants.length} ${group.variants.length === 1 ? "variant" : "variants"}`,
+        memberIds: rewards.map((reward) => reward.rewardId),
+        collectedCount: rewards.filter((reward) => reward.isCollected).length,
+        totalCount: rewards.length,
+        sourceCount: rewards.reduce((sum, reward) => sum + reward.totalCount, 0),
+        bestSource: getBestSource(rewards),
+        searchText: group.searchText,
+        allSourcesDisabled: group.allSourcesDisabled,
+        open: () => {
+          setSelectedRewardId(null);
+          setSelectedArmorSetKey(null);
+          setSelectedFpsWeaponKey(group.baseWeaponKey);
+        },
+      });
+    }
+    for (const reward of blueprintRewardViews) {
+      if (groupedArmorRewardIds.has(reward.rewardId) || groupedFpsRewardIds.has(reward.rewardId)) continue;
+      items.push({
+        id: reward.rewardId,
+        name: reward.name,
+        category: reward.category,
+        typeLabel: reward.type || CATEGORY_LABEL[reward.category],
+        memberIds: [reward.rewardId],
+        collectedCount: reward.isCollected ? 1 : 0,
+        totalCount: 1,
+        sourceCount: reward.totalCount,
+        bestSource: getBestSource([reward]),
+        searchText: `${reward.name} ${reward.type || ""} ${reward.fallbackIconKey}`.toLowerCase(),
+        allSourcesDisabled: reward.allSourcesDisabled,
+        open: () => {
+          setSelectedArmorSetKey(null);
+          setSelectedFpsWeaponKey(null);
+          setSelectedRewardId(reward.rewardId);
+        },
+      });
+    }
+    const representedIds = new Set(items.flatMap((item) => item.memberIds));
+    for (const recipe of recipes) {
+      if (representedIds.has(recipe.blueprint_id)) continue;
+      const category = getUiCategory(recipe.component_type);
+      items.push({
+        id: recipe.blueprint_id,
+        name: recipe.component_name,
+        category,
+        typeLabel: recipe.component_type || CATEGORY_LABEL[category],
+        memberIds: [recipe.blueprint_id],
+        collectedCount: acquiredBlueprintIds.has(recipe.blueprint_id) ? 1 : 0,
+        totalCount: 1,
+        sourceCount: missionMap.get(recipe.blueprint_id)?.length ?? 0,
+        bestSource: missionMap.get(recipe.blueprint_id)?.[0]?.title ?? "Unknown source",
+        searchText: `${recipe.component_name} ${recipe.component_type} ${recipe.manufacturer || ""}`.toLowerCase(),
+        allSourcesDisabled: false,
+        open: () => {
+          setSelectedArmorSetKey(null);
+          setSelectedFpsWeaponKey(null);
+          setSelectedRewardId(recipe.blueprint_id);
+        },
+      });
+    }
+    return items.sort((a, b) => a.name.localeCompare(b.name));
+  }, [acquiredBlueprintIds, armorSetGroups, blueprintRewardViews, fpsWeaponFamilies, groupedArmorRewardIds, groupedFpsRewardIds, missionMap, recipes]);
 
-  // Reference the category metadata (will drive real chip counts + section order in UI step)
-  // so the module-level consts are considered used.
-  void CATEGORY_ORDER;
-  void CATEGORY_LABEL;
+  const isItemTracked = useCallback(
+    (item: TrackerItemView) => item.memberIds.some((id) => bookmarkedRecipeIds.has(id)),
+    [bookmarkedRecipeIds],
+  );
+  const isItemComplete = useCallback(
+    (item: TrackerItemView) => item.memberIds.length > 0 && item.memberIds.every((id) => acquiredBlueprintIds.has(id)),
+    [acquiredBlueprintIds],
+  );
+  const trackedItems = trackerItems.filter(isItemTracked);
+  const completedItems = trackedItems.filter(isItemComplete);
+  const activeTrackedItems = trackedItems.filter((item) => !isItemComplete(item));
+  const visibleTrackerItems = (trackerTab === "browse" ? trackerItems : trackerTab === "completed" ? completedItems : activeTrackedItems)
+    .filter((item) => activeCategory === "all" || item.category === activeCategory)
+    .filter((item) => !bpSearchQuery.trim() || item.searchText.includes(bpSearchQuery.trim().toLowerCase()))
+    .filter((item) => trackerTab !== "browse" || !showMissingOnly || !isItemComplete(item))
+    .filter((item) => showDisabledSources || !item.allSourcesDisabled);
+  const selectedTrackerItem = trackerItems.find((item) => {
+    if (selectedArmorSetKey) return item.id === `armor:${selectedArmorSetKey}`;
+    if (selectedFpsWeaponKey) return item.id === `fps:${selectedFpsWeaponKey}`;
+    return selectedRewardId ? item.memberIds.includes(selectedRewardId) : false;
+  }) ?? null;
+  const selectedDetailRewards = selectedTrackerItem
+    ? blueprintRewardViews.filter((reward) => selectedTrackerItem.memberIds.includes(reward.rewardId))
+    : [];
+  void toggleRecipe;
 
   const missionRewardCount = missions.reduce((sum, mission) => sum + mission.rewards.length, 0);
   const isLoading = mode === "missions" ? missionsLoading : recipesLoading || sourcesLoading;
   // For library (blueprint) view use the real derived unique count; keeps EmptyState wiring intact.
   const isEmpty = !isLoading && (mode === "missions" ? missions.length === 0 : blueprintRewardViews.length === 0);
 
+  if (mode === "library") return (
+    <div className="bt-page bt-preference-tracker">
+      <div className="bt-shell">
+        <header className="bt-page-header">
+          <div className="bt-page-title-row">
+            <h1 className="bt-page-title">Blueprint Tracker</h1>
+            <span className="bt-page-count">{missions.length} missions / {missionRewardCount} rewards</span>
+          </div>
+          <div className="bt-tabs" role="tablist" aria-label="Blueprint tracker views">
+            {([
+              ["tracker", "My Tracker", activeTrackedItems.length],
+              ["browse", "Browse Blueprints", trackerItems.length],
+              ["completed", "Completed", completedItems.length],
+            ] as const).map(([key, label, count]) => (
+              <button key={key} type="button" role="tab" aria-selected={trackerTab === key} className={`bt-tab${trackerTab === key ? " is-active" : ""}`} onClick={() => setTrackerTab(key)}>
+                {label} <span>{count}</span>
+              </button>
+            ))}
+          </div>
+        </header>
+
+        <section className="bt-tracker-stats" aria-label="Tracker summary">
+          <div className="is-tracked"><i><BlueprintFallbackIcon category="other" /></i><span>Tracked</span><strong>{trackedItems.length}</strong></div>
+          <div className="is-missing"><i><BlueprintFallbackIcon category="shipWeapon" /></i><span>Missing</span><strong>{activeTrackedItems.length}</strong></div>
+          <div className="is-complete"><i><BlueprintFallbackIcon category="component" type="power" /></i><span>Completed</span><strong>{completedItems.length}</strong></div>
+          <div className="is-category"><i><BlueprintFallbackIcon category="armorSet" /></i><span>Categories</span><strong>{new Set(trackedItems.map((item) => item.category)).size}</strong></div>
+        </section>
+
+        <div className="bp-controls bt-tracker-controls">
+          <input className="bp-search" type="search" value={bpSearchQuery} placeholder={trackerTab === "browse" ? "Search blueprint catalog..." : "Search tracked blueprints..."} onChange={(event) => setBpSearchQuery(event.target.value)} />
+          <div className="bp-chips" role="tablist" aria-label="Blueprint categories">
+            {[{ key: "all" as const, label: "All" }, ...CATEGORY_ORDER.map((key) => ({ key, label: CATEGORY_LABEL[key] }))].map((chip) => (
+              <button key={chip.key} type="button" className={`bp-chip${activeCategory === chip.key ? " is-active" : ""}`} onClick={() => setActiveCategory(chip.key)}>{chip.label}</button>
+            ))}
+          </div>
+          {trackerTab === "browse" && <div className="bp-toggles"><button type="button" className={`bp-toggle${showMissingOnly ? " is-active" : ""}`} onClick={() => setShowMissingOnly((value) => !value)}>Missing only</button><button type="button" className={`bp-toggle${showDisabledSources ? " is-active" : ""}`} onClick={() => setShowDisabledSources((value) => !value)}>Show disabled sources</button></div>}
+        </div>
+
+        {isLoading && <div className="bt-loading">Loading blueprint data...</div>}
+        {!isLoading && isEmpty && <EmptyState mode={mode} />}
+        {!isLoading && !isEmpty && (
+          <div className={`bt-tracker-workspace${selectedTrackerItem ? " has-detail" : ""}`}>
+            <main className="bt-tracked-list">
+              {visibleTrackerItems.length === 0 ? (
+                <div className="bt-empty-state"><div className="bt-empty-title">{trackerTab === "browse" ? "No matching blueprints" : trackerTab === "completed" ? "No completed blueprints" : "Nothing tracked yet"}</div><div className="bt-empty-body">{trackerTab === "tracker" ? "Browse the catalog and track blueprints to build your active queue." : "Adjust the search or category filters."}</div>{trackerTab === "tracker" && <button className="bt-action bt-action--primary" type="button" onClick={() => setTrackerTab("browse")}>Browse Blueprints</button>}</div>
+              ) : visibleTrackerItems.map((item) => {
+                const tracked = isItemTracked(item);
+                const complete = isItemComplete(item);
+                const partial = item.collectedCount > 0 && !complete;
+                const progress = item.totalCount ? Math.round((item.collectedCount / item.totalCount) * 100) : 0;
+                return (
+                  <article key={item.id} className={`bt-tracked-card${selectedTrackerItem?.id === item.id ? " is-selected" : ""}${complete ? " is-complete" : partial ? " is-partial" : ""}`}>
+                    <button className="bt-tracked-card-main" type="button" onClick={item.open}>
+                      <span className="bt-tracked-icon"><BlueprintFallbackIcon category={item.category} type={item.typeLabel} status={item.allSourcesDisabled ? "unavailable" : complete ? "collected" : "default"} /></span>
+                      <span className="bt-tracked-copy"><strong>{item.name}</strong><span>{item.typeLabel}</span></span>
+                      <span className="bt-tracked-category"><span>Category</span><strong>{CATEGORY_LABEL[item.category]}</strong></span>
+                      <span className="bt-tracked-progress"><span>Progress</span><strong>{item.collectedCount} / {item.totalCount}</strong><i><b style={{ width: `${progress}%` }} /></i></span>
+                      <span className="bt-tracked-source"><span>Sources</span><strong>{item.sourceCount || "Unknown"}</strong><small>{item.bestSource}</small></span>
+                      <span className={`bt-tracked-status is-${complete ? "complete" : partial ? "partial" : "tracking"}`}>{complete ? "Complete" : partial ? "Partial" : tracked ? "Tracking" : "Not tracked"}</span>
+                    </button>
+                    <div className="bt-tracked-actions"><button className="bt-action" type="button" onClick={item.open}>View Details</button>{tracked && <button className="bt-action bt-action--positive" type="button" onClick={() => setBlueprintsCompleted(item.memberIds, !complete)}>{complete ? "Reopen" : "Mark Complete"}</button>}<button className={`bt-action${tracked ? " bt-action--danger" : " bt-action--primary"}`} type="button" onClick={() => void setRecipesTracked(item.memberIds, !tracked)}>{tracked ? "Untrack" : "Track Blueprint"}</button></div>
+                  </article>
+                );
+              })}
+            </main>
+
+            {selectedTrackerItem && (
+              <aside className="bt-tracker-detail">
+                <header className="bt-tracker-detail-head"><div><span>{CATEGORY_LABEL[selectedTrackerItem.category]}</span><h2>{selectedTrackerItem.name}</h2><p>{selectedTrackerItem.typeLabel}</p></div><div className="bt-tracker-detail-head-actions"><button className={`bt-action${isItemTracked(selectedTrackerItem) ? " bt-action--danger" : " bt-action--primary"}`} type="button" onClick={() => void setRecipesTracked(selectedTrackerItem.memberIds, !isItemTracked(selectedTrackerItem))}>{isItemTracked(selectedTrackerItem) ? "Untrack" : "Track Blueprint"}</button>{isItemTracked(selectedTrackerItem) && <button className="bt-action bt-action--positive" type="button" onClick={() => setBlueprintsCompleted(selectedTrackerItem.memberIds, !isItemComplete(selectedTrackerItem))}>{isItemComplete(selectedTrackerItem) ? "Reopen" : "Mark Complete"}</button>}<button className="bt-detail-close-action" type="button" onClick={() => { setSelectedRewardId(null); setSelectedArmorSetKey(null); setSelectedFpsWeaponKey(null); }} aria-label="Close details">x</button></div></header>
+                <section className="bt-detail-summary-strip"><div><span>Progress</span><strong>{selectedTrackerItem.collectedCount} / {selectedTrackerItem.totalCount}</strong></div><div><span>Sources</span><strong>{selectedTrackerItem.sourceCount}</strong></div><div><span>Status</span><strong>{isItemComplete(selectedTrackerItem) ? "Complete" : isItemTracked(selectedTrackerItem) ? "Tracking" : "Not tracked"}</strong></div></section>
+                {selectedArmorSetKey && (() => {
+                  const group = armorSetGroups.find((item) => item.baseSetKey === selectedArmorSetKey);
+                  const variant = group?.variants.find((item) => item.variantKey === selectedArmorVariantKey) ?? group?.variants[0];
+                  if (!group || !variant) return null;
+                  return <section className="bt-detail-section"><h3>Variants</h3><div className="bp-variant-chips">{group.variants.map((item) => <button key={item.variantKey} type="button" className={`bp-variant-chip${variant.variantKey === item.variantKey ? " is-active" : ""}`} onClick={() => setSelectedArmorVariantKey(item.variantKey)}>{item.displayName} <span>{item.collectedPieces}/{item.totalPieces}</span></button>)}</div><div className="bp-family-list">{variant.pieces.map((piece) => <button key={piece.reward.rewardId} type="button" className="bp-family-row" onClick={() => { setSelectedArmorSetKey(null); setSelectedRewardId(piece.reward.rewardId); }}><span className="bp-family-row-copy"><strong>{piece.reward.name}</strong><span>{piece.pieceType}</span></span><span className={`bp-family-state${piece.reward.isCollected ? " is-collected" : ""}`}>{piece.reward.isCollected ? "Complete" : "Inspect"}</span></button>)}</div></section>;
+                })()}
+                <section className="bt-detail-section">
+                  <h3>Blueprint Sources</h3>
+                  <p>Grouped by system, faction, and mission family. Expand a source to inspect its variants.</p>
+                  <div className="bt-source-groups">
+                    {selectedDetailRewards.flatMap((reward) =>
+                      reward.acquisitionGroups.flatMap((systemGroup) =>
+                        systemGroup.factions.flatMap((factionGroup) =>
+                          factionGroup.missions.map((mission) => (
+                            <details key={`${reward.rewardId}-${systemGroup.system}-${factionGroup.faction}-${mission.canonicalMissionKey}`} className="bt-source-group">
+                              <summary>
+                                <span><strong>{factionGroup.faction} - {mission.title}</strong><small>{systemGroup.system} / {mission.availabilityEntries.length} variants</small></span>
+                                <span>{mission.maxStanding || "Unknown standing"}</span>
+                              </summary>
+                              <div className="bt-source-variants">
+                                {mission.availabilityEntries.map((entry) => (
+                                  <div key={entry.sourceMissionId}>
+                                    <strong>{entry.system || systemGroup.system}</strong>
+                                    <span>{entry.locationAddress || mission.missionType || "Unknown location"}</span>
+                                    <span className={entry.disabled ? "is-disabled" : "is-available"}>{entry.disabled ? "Unavailable" : "Available"}</span>
+                                    <span>{entry.maxStanding || mission.maxStanding || "Unknown standing"}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </details>
+                          ))
+                        )
+                      )
+                    )}
+                  </div>
+                </section>
+              </aside>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  /* Preserved mission-mode render below; the preference tracker is the default library mode. */
   return (
     <div className="bt-page">
       <div className="bt-shell">
@@ -1199,23 +1803,33 @@ export default function BlueprintTrackerPage() {
           />
           <div className="bp-chips" role="tablist" aria-label="Blueprint categories">
             {(() => {
-              // Real-time counts from the wired view model (no fakes)
               const q = bpSearchQuery.trim().toLowerCase();
-              const base = q
-                ? blueprintRewardViews.filter((v) =>
-                    v.name.toLowerCase().includes(q) ||
-                    (v.type || "").toLowerCase().includes(q) ||
-                    v.fallbackIconKey.toLowerCase().includes(q)
-                  )
-                : blueprintRewardViews;
-              // Apply missing/disabled filters for chip counts (consistent with later sections)
-              const vis = base.filter((v) => {
+              const rawVisible = blueprintRewardViews.filter((v) => {
+                if (v.category === "armorSet" || groupedFpsRewardIds.has(v.rewardId)) return false;
+                if (q && !(v.name + " " + (v.type || "") + " " + v.fallbackIconKey).toLowerCase().includes(q)) return false;
                 if (showMissingOnly && v.isCollected) return false;
                 if (!showDisabledSources && v.allSourcesDisabled) return false;
                 return true;
               });
-              const counts: Record<"all" | UiCategory, number> = { all: vis.length, armorSet: 0, fpsWeapon: 0, shipWeapon: 0, component: 0, other: 0 };
-              for (const v of vis) counts[v.category]++;
+              const visibleArmor = armorSetGroups.filter((group) =>
+                (!q || group.searchText.includes(q))
+                && (!showMissingOnly || group.collectedPieces < group.totalPieces)
+                && (showDisabledSources || !group.allSourcesDisabled)
+              );
+              const visibleFps = fpsWeaponFamilies.filter((group) =>
+                (!q || group.searchText.includes(q))
+                && (!showMissingOnly || group.collectedRewards < group.totalRewards)
+                && (showDisabledSources || !group.allSourcesDisabled)
+              );
+              const counts: Record<"all" | UiCategory, number> = {
+                all: rawVisible.length + visibleArmor.length + visibleFps.length,
+                armorSet: visibleArmor.length,
+                fpsWeapon: visibleFps.length,
+                shipWeapon: 0,
+                component: 0,
+                other: 0,
+              };
+              for (const v of rawVisible) counts[v.category]++;
               const chips = [
                 { key: "all" as const, label: "ALL", count: counts.all },
                 ...CATEGORY_ORDER.map((c) => ({ key: c, label: CATEGORY_LABEL[c], count: counts[c] })),
@@ -1297,14 +1911,15 @@ export default function BlueprintTrackerPage() {
           </div>
         )}
 
-        {!isLoading && !isEmpty && mode === "library" && (
-          <div className={selectedRewardId ? "bp-split" : ""}>
-            <div className="bp-library-content">
+        {false && !isLoading && !isEmpty && (
+          <div className={`bp-workspace${selectedRewardId || selectedArmorSetKey || selectedFpsWeaponKey ? " has-detail" : ""}`}>
+            <main className="bp-library-content bp-library-scroll">
               {/* Grouped category sections matching the screenshot (full width default; left in split when detail open) */}
               <div className="bp-sections">
                 {(() => {
                   const q = bpSearchQuery.trim().toLowerCase();
                   const vis = blueprintRewardViews.filter((v) => {
+                    if (v.category === "armorSet" || groupedFpsRewardIds.has(v.rewardId)) return false;
                     if (q) {
                       const hay = (v.name + " " + (v.type || "") + " " + v.fallbackIconKey).toLowerCase();
                       if (!hay.includes(q)) return false;
@@ -1314,8 +1929,20 @@ export default function BlueprintTrackerPage() {
                     if (activeCategory !== "all" && v.category !== activeCategory) return false;
                     return true;
                   });
+                  const visibleArmor = armorSetGroups.filter((group) =>
+                    (!q || group.searchText.includes(q))
+                    && (!showMissingOnly || group.collectedPieces < group.totalPieces)
+                    && (showDisabledSources || !group.allSourcesDisabled)
+                    && (activeCategory === "all" || activeCategory === "armorSet")
+                  );
+                  const visibleFps = fpsWeaponFamilies.filter((group) =>
+                    (!q || group.searchText.includes(q))
+                    && (!showMissingOnly || group.collectedRewards < group.totalRewards)
+                    && (showDisabledSources || !group.allSourcesDisabled)
+                    && (activeCategory === "all" || activeCategory === "fpsWeapon")
+                  );
 
-                  if (vis.length === 0) {
+                  if (vis.length === 0 && visibleArmor.length === 0 && visibleFps.length === 0) {
                     return <div className="bp-empty">No matching blueprints. Clear filters or search.</div>;
                   }
 
@@ -1328,34 +1955,79 @@ export default function BlueprintTrackerPage() {
 
                   return CATEGORY_ORDER.map((cat) => {
                     const items = byCat.get(cat) || [];
-                    if (items.length === 0) return null;
+                    const groupedCount = cat === "armorSet" ? visibleArmor.length : cat === "fpsWeapon" ? visibleFps.length : 0;
+                    if (items.length === 0 && groupedCount === 0) return null;
                     const label = CATEGORY_LABEL[cat];
 
-                    // Limit visible cards per shelf to match the mockup screenshot exactly:
-                    // Armor: 4 pieces, Weapons sections: 6 each, Components: 6.
-                    // This prevents the sections from "running forever" with all items.
-                    // The mockup showed limited cards in a horizontal shelf layout for the left/library portion.
-                    // Visual limit from the mockup screenshot for the default (unfiltered) library shelves.
-                    // Armor shows 4 cards, weapon/component sections show 6.
-                    // When a category chip is active (filter "demands it"), show all for that section.
-                    // Clicking the ⋯ in header activates the filter for that category (shows all).
-                    const isFilteredToThis = activeCategory === cat;
-                    const limit = isFilteredToThis ? items.length : (cat === 'armorSet' ? 4 : 6);
+                    const limit = items.length;
                     const visibleItems = items.slice(0, limit);
-                    const hasMore = !isFilteredToThis && items.length > limit;
 
                     return (
                       <section key={cat} className="bp-category-section">
                         <div className="bp-section-header">
-                          <span className="icon" aria-hidden>
-                            {cat === "armorSet" ? "🛡️" : cat === "fpsWeapon" ? "🔫" : cat === "shipWeapon" ? "🚀" : cat === "component" ? "⚙️" : "📦"}
-                          </span>
+                          <span className="icon"><BlueprintFallbackIcon category={cat} /></span>
                           <span>{label}</span>
-                          <span className="count">{items.length}</span>
-                          <span style={{marginLeft: 'auto', fontSize: '11px', cursor: 'pointer'}} title={hasMore ? 'Show all in this category' : ''} onClick={() => setActiveCategory(cat)}>⋯</span>
+                          <span className="count">{items.length + groupedCount}</span>
                         </div>
                         <div className="bp-section-panel">
-                          <div className="bp-cards">
+                          <div className={`bp-cards${cat === "fpsWeapon" ? " bp-cards--weapons" : ""}`}>
+                            {cat === "armorSet" && visibleArmor.map((group) => {
+                              const pct = group.totalPieces > 0 ? Math.round((group.collectedPieces / group.totalPieces) * 100) : 0;
+                              return (
+                                <div
+                                  key={group.baseSetKey}
+                                  className={`bp-card${group.collectedPieces === group.totalPieces ? " is-collected" : ""}${group.allSourcesDisabled ? " is-unavailable" : ""}`}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => {
+                                    setSelectedRewardId(null);
+                                    setSelectedFpsWeaponKey(null);
+                                    setSelectedArmorSetKey(group.baseSetKey);
+                                    setSelectedArmorVariantKey(group.variants[0]?.variantKey ?? null);
+                                  }}
+                                  onKeyDown={(event) => { if (event.key === "Enter") setSelectedArmorSetKey(group.baseSetKey); }}
+                                >
+                                  <div className="bp-card-icon">
+                                    <BlueprintFallbackIcon category="armorSet" status={group.allSourcesDisabled ? "unavailable" : group.collectedPieces === group.totalPieces ? "collected" : "default"} />
+                                  </div>
+                                  <div className="bp-card-body">
+                                    <div className="bp-card-name">{group.displayName} Armor Set</div>
+                                    <div className="bp-card-sub">{group.variants.length} {group.variants.length === 1 ? "variant" : "variants"}</div>
+                                    <div className="bp-card-progress">{group.collectedPieces} / {group.totalPieces} pieces collected</div>
+                                    <div className="bp-progress-track"><div className="bp-progress-fill" style={{ width: `${pct}%` }} /></div>
+                                    {group.allSourcesDisabled && <div className="bp-unavail-badge">Unavailable</div>}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            {cat === "fpsWeapon" && visibleFps.map((group) => {
+                              const pct = group.totalRewards > 0 ? Math.round((group.collectedRewards / group.totalRewards) * 100) : 0;
+                              return (
+                                <div
+                                  key={group.baseWeaponKey}
+                                  className={`bp-card${group.collectedRewards === group.totalRewards ? " is-collected" : ""}${group.allSourcesDisabled ? " is-unavailable" : ""}`}
+                                  role="button"
+                                  tabIndex={0}
+                                  onClick={() => {
+                                    setSelectedRewardId(null);
+                                    setSelectedArmorSetKey(null);
+                                    setSelectedFpsWeaponKey(group.baseWeaponKey);
+                                  }}
+                                  onKeyDown={(event) => { if (event.key === "Enter") setSelectedFpsWeaponKey(group.baseWeaponKey); }}
+                                >
+                                  <div className="bp-card-icon">
+                                    <BlueprintFallbackIcon category="fpsWeapon" type={group.weaponType} status={group.allSourcesDisabled ? "unavailable" : group.collectedRewards === group.totalRewards ? "collected" : "default"} />
+                                  </div>
+                                  <div className="bp-card-body">
+                                    <div className="bp-card-name">{group.displayName}</div>
+                                    <div className="bp-card-sub">{group.weaponType} / {group.variants.length} variants{group.relatedParts.length ? ` / ${group.relatedParts.length} parts` : ""}</div>
+                                    <div className="bp-card-progress">{group.collectedRewards} / {group.totalRewards} rewards collected</div>
+                                    <div className="bp-progress-track"><div className="bp-progress-fill" style={{ width: `${pct}%` }} /></div>
+                                    {group.allSourcesDisabled && <div className="bp-unavail-badge">Unavailable</div>}
+                                  </div>
+                                </div>
+                              );
+                            })}
                             {visibleItems.map((v) => {
                               const pct = v.totalCount > 0 ? Math.round((v.collectedCount / v.totalCount) * 100) : 0;
                               return (
@@ -1364,16 +2036,16 @@ export default function BlueprintTrackerPage() {
                                   className={`bp-card${v.isCollected ? " is-collected" : ""}${v.allSourcesDisabled ? " is-unavailable" : ""}`}
                                   role="button"
                                   tabIndex={0}
-                                  onClick={() => setSelectedRewardId(v.rewardId)}
+                                  onClick={() => { setSelectedArmorSetKey(null); setSelectedFpsWeaponKey(null); setSelectedRewardId(v.rewardId); }}
                                   onKeyDown={(e) => { if (e.key === "Enter") setSelectedRewardId(v.rewardId); }}
                                 >
                                   <div className="bp-card-icon" title={v.fallbackIconKey}>
-                                    {v.imageUrl ? <img src={v.imageUrl} alt="" /> : <span>{cat === "armorSet" ? "A" : cat === "fpsWeapon" ? "F" : cat === "shipWeapon" ? "S" : cat === "component" ? "C" : "?"}</span>}
+                                    {v.imageUrl ? <img src={v.imageUrl} alt="" /> : <BlueprintFallbackIcon category={v.category} type={v.type} subtype={v.subtype || v.name} status={v.allSourcesDisabled ? "unavailable" : v.isCollected ? "collected" : "default"} />}
                                   </div>
                                   <div className="bp-card-body">
                                     <div className="bp-card-name">{v.name}</div>
                                     <div className="bp-card-sub">{v.type || v.category}</div>
-                                    <div className="bp-card-progress">{v.collectedCount} / {v.totalCount}</div>
+                                    <div className="bp-card-progress">{v.collectedCount} / {v.totalCount} collected</div>
                                     <div className="bp-progress-track"><div className="bp-progress-fill" style={{width: pct + '%'}} /></div>
                                     {v.allSourcesDisabled && <div className="bp-unavail-badge">UNAVAILABLE</div>}
                                   </div>
@@ -1387,66 +2059,190 @@ export default function BlueprintTrackerPage() {
                   });
                 })()}
               </div>
-            </div>
+            </main>
+
+            {selectedArmorSetKey && (() => {
+              const group = armorSetGroups.find((item) => item.baseSetKey === selectedArmorSetKey)!;
+              if (!group) return null;
+              const variant = group.variants.find((item) => item.variantKey === selectedArmorVariantKey) ?? group.variants[0];
+              return (
+                <aside className="bp-detail-panel">
+                  <div className="bp-detail-header">
+                    <div className="detail-kicker">Armor Set Details</div>
+                    <div className="detail-title-row">
+                    <span className="name">{group.displayName} Armor Set</span>
+                    <button className="close-btn" type="button" onClick={() => setSelectedArmorSetKey(null)} aria-label="Close armor set details">x</button>
+                    </div>
+                  </div>
+                  <div className="bp-detail-content">
+                    <div className="bp-detail-card bp-family-summary">{group.collectedPieces} / {group.totalPieces} pieces collected across {group.variants.length} variants</div>
+                    <div className="bp-detail-card bp-variant-chips">
+                      {group.variants.map((item) => (
+                        <button key={item.variantKey} type="button" className={`bp-variant-chip${variant?.variantKey === item.variantKey ? " is-active" : ""}`} onClick={() => setSelectedArmorVariantKey(item.variantKey)}>
+                          {item.displayName} <span>{item.collectedPieces}/{item.totalPieces}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="bp-detail-card bp-family-list">
+                      {variant?.pieces.map((piece) => (
+                        <button key={piece.reward.rewardId} type="button" className="bp-family-row" onClick={() => { setSelectedArmorSetKey(null); setSelectedRewardId(piece.reward.rewardId); }}>
+                          <span className="bp-family-row-icon"><BlueprintFallbackIcon category="armorSet" subtype={piece.pieceType} status={piece.reward.allSourcesDisabled ? "unavailable" : piece.reward.isCollected ? "collected" : "default"} /></span>
+                          <span className="bp-family-row-copy"><strong>{piece.reward.name}</strong><span>{piece.pieceType} / {piece.reward.collectedCount} of {piece.reward.totalCount} sources complete</span></span>
+                          <span className={`bp-family-state${piece.reward.isCollected ? " is-collected" : ""}`}>{piece.reward.isCollected ? "Collected" : "Inspect"}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </aside>
+              );
+            })()}
+
+            {selectedFpsWeaponKey && (() => {
+              const group = fpsWeaponFamilies.find((item) => item.baseWeaponKey === selectedFpsWeaponKey)!;
+              if (!group) return null;
+              return (
+                <aside className="bp-detail-panel">
+                  <div className="bp-detail-header">
+                    <div className="detail-kicker">FPS Weapon Family</div>
+                    <div className="detail-title-row">
+                      <span className="name">{group.displayName}</span>
+                      <button className="close-btn" type="button" onClick={() => setSelectedFpsWeaponKey(null)} aria-label="Close weapon family details">x</button>
+                    </div>
+                  </div>
+                  <div className="bp-detail-content">
+                    <div className="bp-detail-card bp-family-summary">{group.collectedRewards} / {group.totalRewards} rewards collected</div>
+                    <div className="bp-detail-card bp-family-list">
+                      {[...group.variants.map((item) => ({ label: item.displayName, kind: "Variant", reward: item.reward })), ...group.relatedParts.map((item) => ({ label: item.reward.name, kind: item.partType, reward: item.reward }))].map((item) => (
+                        <button key={item.reward.rewardId} type="button" className="bp-family-row" onClick={() => { setSelectedFpsWeaponKey(null); setSelectedRewardId(item.reward.rewardId); }}>
+                          <span className="bp-family-row-icon"><BlueprintFallbackIcon category="fpsWeapon" type={item.kind === "Variant" ? group.weaponType : item.kind} status={item.reward.allSourcesDisabled ? "unavailable" : item.reward.isCollected ? "collected" : "default"} /></span>
+                          <span className="bp-family-row-copy"><strong>{item.label}</strong><span>{item.kind} / {item.reward.name}</span></span>
+                          <span className={`bp-family-state${item.reward.isCollected ? " is-collected" : ""}`}>{item.reward.isCollected ? "Collected" : "Inspect"}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </aside>
+              );
+            })()}
 
             {/* Right detail panel (only when selected). Exact structure from the referenced screenshot: BLUEPRINT DETAILS header, back, name, badge, Track, close, media, description, BLUEPRINT PROGRESS with checklist, Quick Info, warning, Where to Acquire structured entries, consolidated table. */}
             {selectedRewardId && (() => {
-              const v = blueprintRewardViews.find((x) => x.rewardId === selectedRewardId);
+              const v = blueprintRewardViews.find((x) => x.rewardId === selectedRewardId)!;
               if (!v) return null;
-              const missionsForProgress = v.acquisitionGroups.flatMap(g => g.factions.flatMap(f => f.missions)).slice(0, 5);
+              const missionsForProgress = v.acquisitionGroups.flatMap(g => g.factions.flatMap(f => f.missions));
+              const locationRows = v.acquisitionGroups.flatMap((group) =>
+                group.factions.flatMap((faction) =>
+                  faction.missions.map((mission) => ({ ...mission, system: group.system, faction: faction.faction }))
+                )
+              );
 
               return (
-                <div className="bp-detail-panel">
-                  <div className="detail-kicker">BLUEPRINT DETAILS</div>
-                  <div className="detail-title-row">
-                    <span className="back" onClick={() => setSelectedRewardId(null)}>← Back to Results</span>
-                    <span className="name">{v.name}</span>
-                    {v.rarity && <span className="rarity-badge">{v.rarity} Blueprint</span>}
-                    <button className="track-btn" onClick={() => {}}>Track Blueprint</button>
-                    <span className="close-btn" onClick={() => setSelectedRewardId(null)}>×</span>
-                  </div>
-
-                  <div className="media-area">
-                    {v.imageUrl ? <img src={v.imageUrl} alt="" style={{maxHeight:'100%'}} /> : 'Image not available'}
-                  </div>
-
-                  <div className="description">
-                    {v.description || 'A high-precision item manufactured with exceptional capabilities. Features outstanding performance in its category.'}
-                  </div>
-
-                  <div className="progress-header">BLUEPRINT PROGRESS {v.collectedCount} / {v.totalCount} PARTS COLLECTED</div>
-                  <div className="progress-list">
-                    {missionsForProgress.map((m, i) => <div key={i}>{v.isCollected ? '☑' : '☐'} {m.title}</div>)}
-                  </div>
-
-                  {(v.allSourcesDisabled || v.hasDisabledSources) && <div className="warning-banner">⚠ Some missions for this blueprint are currently unavailable</div>}
-
-                  <div className="acquire-header">WHERE TO ACQUIRE</div>
-                  <div>This blueprint can be obtained from the following missions:</div>
-                  {v.acquisitionGroups.map((g, gi) => g.factions.map((f, fi) => f.missions.slice(0,1).map((m, mi) => (
-                    <div key={gi+'-'+fi+'-'+mi} className="acquire-entry">
-                      <div className="sys">◉ {g.system}</div>
-                      <div className="fac">{f.faction} <span className="status" style={{background: m.status === 'available' ? '#1a3a2a' : '#3a1a1a', color: m.status === 'available' ? '#43ffd0' : '#ff6b6b'}}>{m.status}</span></div>
-                      <div className="mission">{m.title}</div>
-                      <div className="desc">{m.description ? m.description.substring(0,90)+'...' : 'High value target operation.'}</div>
-                      <div className="meta">Mission Type: {m.missionType || 'Contract Generator'} &nbsp; Reputation Reward: {m.reputationReward || '+150 rep'}</div>
-                      <button className="btn">View Mission Details</button>
+                <aside className="bp-detail-panel">
+                  <div className="bp-detail-header">
+                    <button className="back" type="button" onClick={() => setSelectedRewardId(null)}>Back to Results</button>
+                    <div className="detail-title-row">
+                      <span className="name">{v.name}</span>
+                      <button className="track-btn" type="button" onClick={() => {}}>Track Blueprint</button>
+                      <button className="close-btn" type="button" onClick={() => setSelectedRewardId(null)} aria-label="Close blueprint details">x</button>
                     </div>
-                  ))))}
-
-                  <div className="acquire-header" style={{marginTop:8}}>MISSION LOCATIONS (Consolidated)</div>
-                  <div className="locations-table">
-                    <table>
-                      <thead><tr><th>SYSTEM</th><th>FACTION</th><th>MISSION</th><th>STATUS</th><th>MAX STANDING</th></tr></thead>
-                      <tbody>
-                        {v.acquisitionGroups.flatMap(g => g.factions.flatMap(f => f.missions.map(m => ({...m, system: g.system, faction: f.faction})))).slice(0,4).map((r,i) => (
-                          <tr key={i}><td>{r.system}</td><td>{r.faction}</td><td>{r.title}</td><td style={{color: r.status==='unavailable'?'#ff6b6b':'#43ffd0'}}>{r.status}</td><td>{r.maxStanding||'—'}</td></tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
-                  <div style={{padding:'0 12px 8px', fontSize:9, opacity:0.6}}>Duplicates consolidated. Data from processed mission rewards (raw contracts records).</div>
-                </div>
+
+                  <div className="bp-detail-content">
+                    <section className="bp-detail-card bp-detail-summary">
+                      <div className="media-area">
+                        {v.imageUrl
+                          ? <img src={v.imageUrl} alt="" />
+                          : <BlueprintFallbackIcon category={v.category} type={v.type} subtype={v.subtype || v.name} status={v.allSourcesDisabled ? "unavailable" : v.isCollected ? "collected" : "default"} />}
+                      </div>
+                      <div className="bp-detail-summary-copy">
+                        <div className="bp-detail-badges">
+                          <span className="bp-detail-badge">{CATEGORY_LABEL[v.category]}</span>
+                          {v.type && <span className="bp-detail-badge">{v.type}</span>}
+                          {v.rarity && <span className="bp-detail-badge is-rarity">{v.rarity}</span>}
+                          <span className={`bp-detail-badge${v.isCollected ? " is-collected" : ""}`}>{v.isCollected ? "Collected" : "In Progress"}</span>
+                        </div>
+                        <p className="description">{v.description || "Blueprint reward with mission-linked acquisition sources."}</p>
+                      </div>
+                    </section>
+
+                    <section className="bp-detail-card">
+                      <div className="bp-detail-section-title">Blueprint Progress</div>
+                      <div className="bp-detail-progress-row"><strong>{v.collectedCount} / {v.totalCount}</strong><span>sources completed</span></div>
+                      <div className="bp-progress-track"><div className="bp-progress-fill" style={{ width: `${v.totalCount ? Math.round((v.collectedCount / v.totalCount) * 100) : 0}%` }} /></div>
+                      <div className="progress-list">
+                        {missionsForProgress.map((mission) => (
+                          <div key={mission.canonicalMissionKey}>
+                            <span className={`bp-progress-check${v.isCollected ? " is-complete" : ""}`} aria-hidden>{v.isCollected ? "x" : ""}</span>
+                            <span>{mission.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {(v.allSourcesDisabled || v.hasDisabledSources) && (
+                      <div className={`warning-banner${v.allSourcesDisabled ? " is-unavailable" : ""}`}>
+                        <strong>{v.allSourcesDisabled ? "All sources unavailable" : "Some sources unavailable"}</strong>
+                        <span>{v.allSourcesDisabled ? "Every known mission source is currently disabled." : "At least one mission source is currently disabled."}</span>
+                      </div>
+                    )}
+
+                    <section className="bp-detail-section">
+                      <div className="bp-detail-section-title">Where to Acquire</div>
+                      <div className="bp-acquisition-list">
+                        {v.acquisitionGroups.flatMap((group) => group.factions.flatMap((faction) => faction.missions.map((mission) => (
+                          <article key={`${group.system}-${faction.faction}-${mission.canonicalMissionKey}`} className="acquire-entry">
+                            <div className="bp-acquire-head"><strong>{mission.title}</strong><span className={`status is-${mission.status}`}>{mission.status}</span></div>
+                            <dl className="bp-acquire-grid">
+                              <div><dt>System</dt><dd>{group.system}</dd></div>
+                              <div><dt>Faction</dt><dd>{faction.faction}</dd></div>
+                              <div><dt>Mission Type</dt><dd>{mission.missionType || "Unknown"}</dd></div>
+                              <div><dt>Max Standing</dt><dd>{mission.maxStanding || "Unknown"}</dd></div>
+                              <div><dt>Reputation Reward</dt><dd>{mission.reputationReward || "Unknown"}</dd></div>
+                            </dl>
+                          </article>
+                        ))))}
+                      </div>
+                    </section>
+
+                    <section className="bp-detail-card">
+                      <div className="bp-detail-section-title">Mission Locations</div>
+                      <div className="locations-table">
+                        <table>
+                          <thead><tr><th>System</th><th>Faction</th><th>Mission</th><th>Status</th><th>Max Standing</th></tr></thead>
+                          <tbody>
+                            {locationRows.map((row) => (
+                              <tr key={`${row.system}-${row.faction}-${row.canonicalMissionKey}`}>
+                                <td data-label="System">{row.system}</td>
+                                <td data-label="Faction">{row.faction}</td>
+                                <td data-label="Mission">{row.title}</td>
+                                <td data-label="Status"><span className={`status is-${row.status}`}>{row.status}</span></td>
+                                <td data-label="Max Standing">{row.maxStanding || "Unknown"}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+
+                    <section className="bp-detail-section">
+                      <div className="bp-detail-section-title">Mission Details</div>
+                      <div className="bp-mission-accordions">
+                        {missionsForProgress.map((mission) => (
+                          <details key={mission.canonicalMissionKey} className="bp-mission-accordion">
+                            <summary><span>{mission.title}</span><span className={`status is-${mission.status}`}>{mission.status}</span></summary>
+                            <div className="bp-mission-accordion-body">
+                              <p>{mission.description || "No mission description available."}</p>
+                              <div><strong>Linked rewards:</strong> {mission.linkedRewards.join(", ") || "Unknown"}</div>
+                              <div><strong>Prerequisite reputation:</strong> {mission.prerequisiteReputation || "Unknown"}</div>
+                            </div>
+                          </details>
+                        ))}
+                      </div>
+                    </section>
+
+                    <div className="bp-detail-source-note">Duplicates consolidated from processed mission reward sources.</div>
+                  </div>
+                </aside>
               );
             })()}
           </div>

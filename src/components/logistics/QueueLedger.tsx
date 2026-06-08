@@ -14,18 +14,23 @@ function defaultFormatValue(value: number): string {
 export default function QueueLedger({ ledger, formatValue = defaultFormatValue }: QueueLedgerProps) {
   return (
     <aside className="bq-ledger-panel" aria-label="Queue Ledger">
-      <div className="bq-ledger-title">Queue Ledger</div>
-      <div className="bq-ledger-stat bq-ledger-stat--danger">
-        <span>Refined Shortfall</span>
-        <strong>{formatValue(ledger.summary.refinedShortfall)}</strong>
-      </div>
-      <div className="bq-ledger-stat bq-ledger-stat--success">
-        <span>Reservable Lines</span>
-        <strong>{ledger.summary.reservableLines}</strong>
-      </div>
-      <div className="bq-ledger-stat bq-ledger-stat--danger">
-        <span>No Stock Lines</span>
-        <strong>{ledger.summary.noStockLines}</strong>
+      <header className="bq-ledger-headline">
+        <span className="bq-section-kicker">Queue Readout</span>
+        <div className="bq-ledger-title">Queue Ledger</div>
+      </header>
+      <div className="bq-ledger-stats">
+        <div className="bq-ledger-stat bq-ledger-stat--danger">
+          <span>Refined Shortfall</span>
+          <strong>{formatValue(ledger.summary.refinedShortfall)}</strong>
+        </div>
+        <div className="bq-ledger-stat bq-ledger-stat--success">
+          <span>Reservable Lines</span>
+          <strong>{ledger.summary.reservableLines}</strong>
+        </div>
+        <div className="bq-ledger-stat bq-ledger-stat--danger">
+          <span>No Stock Lines</span>
+          <strong>{ledger.summary.noStockLines}</strong>
+        </div>
       </div>
 
       <section className="bq-ledger-section bq-ledger-section--refined" aria-labelledby="bq-ledger-refined-title">
