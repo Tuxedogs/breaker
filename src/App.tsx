@@ -39,6 +39,7 @@ const IndustryCraftingLayout = lazy(() =>
 const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 const IndustryMissionBrowserPage = lazy(() => import("./pages/industry/MissionBrowserPage"));
+const IndustryRefineryPlannerPage = lazy(() => import("./pages/industry/RefineryPlannerPage"));
 
 function RouteFallback() {
   return (
@@ -204,6 +205,14 @@ export default function App() {
           element={
             <Suspense fallback={<RouteFallback />}>
               <IndustryMissionBrowserPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="industry/refinery"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <IndustryRefineryPlannerPage />
             </Suspense>
           }
         />

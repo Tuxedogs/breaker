@@ -147,6 +147,7 @@ const sections = [
       { label: "Crafting", to: "/industry/crafting", icon: "hammer", svgIcon: "crafting" },
       { label: "Build Queue", to: "/logistics/build-queue", icon: "list", svgIcon: "buildQueue" },
       { label: "Mining", to: "/industry/mining", icon: "pickaxe", svgIcon: "mining" },
+      { label: "Refinery Planner", to: "/industry/refinery", icon: "flask" },
       { label: "Blueprint Tracker", to: "/industry/blueprint-tracker", icon: "clipboard", svgIcon: "blueprintTracker" },
       { label: "Mission Browser", to: "/industry/missions", icon: "list" },
     ],
