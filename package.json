@@ -9,6 +9,8 @@
         "lint": "eslint .",
         "content:check": "node --import tsx scripts/validate-content.mts",
         "api:check": "node --import tsx scripts/validate-public-api.mts",
+        "refinery:import": "node --import tsx scripts/import-refinery-yields.mts",
+        "refinery:validate": "node --import tsx scripts/validate-refinery.mts",
         "crafting:card-index": "tsx D:/scintel/scripts/generate-component-card-index.ts",
         "preview": "vite preview",
         "changelog": "git-cliff -c cliff.toml -o CHANGELOG.md",
