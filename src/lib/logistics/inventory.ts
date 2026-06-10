@@ -25,7 +25,8 @@ export interface StackAllocation {
 export function getLegacyMaterialItemKind(material: MaterialTemplate | undefined): InventoryItemKind {
   if (!material) return 'unknown';
   if (material.id === 'rawice') return 'ice';
-  if (material.materialType === 'ore' || material.materialType === 'refined') return 'ore';
+  if (material.materialType === 'ore') return 'ore';
+  if (material.materialType === 'refined') return 'refined';
   if (material.materialType === 'raw') return 'raw_mineable';
   if (material.materialType === 'special') return 'raw_mineable';
   return 'material';

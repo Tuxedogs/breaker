@@ -150,6 +150,7 @@ function isInventoryItemKind(value: unknown): value is InventoryItemKind {
   return (
     value === "material" ||
     value === "ore" ||
+    value === "refined" ||
     value === "raw_mineable" ||
     value === "ice" ||
     value === "fps_weapon" ||
@@ -269,7 +270,7 @@ function normalizeInventoryEntry(
   return {
     ...entry,
     materialName: material?.name ?? entry.materialName,
-    materialType: material?.materialType ?? entry.materialType,
+    materialType: entry.materialType ?? material?.materialType,
     catalogItemId: entry.catalogItemId ?? entry.materialId,
     catalogSource: entry.catalogSource ?? (material ? "seed" : "manual"),
     itemName,
