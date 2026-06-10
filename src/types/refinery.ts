@@ -1,23 +1,4 @@
-export type RefineryMaterialId =
-  | "agricium"
-  | "aluminum"
-  | "beryl"
-  | "bexalite"
-  | "borase"
-  | "copper"
-  | "corundum"
-  | "gold"
-  | "hephaestanite"
-  | "iron"
-  | "laranite"
-  | "lindinium"
-  | "quantanium"
-  | "quartz"
-  | "savrilium"
-  | "taranite"
-  | "titanium"
-  | "torite"
-  | "tungsten";
+export type RefineryMaterialId = string;
 
 export interface RefineryMaterialDefinition {
   id: RefineryMaterialId;
@@ -25,11 +6,19 @@ export interface RefineryMaterialDefinition {
   displayName: string;
 }
 
+export interface RefineryCanonicalMaterial {
+  id: RefineryMaterialId;
+  displayName: string;
+  materialForm: string;
+  unitType: string;
+  sourceMaterialKeys: string[];
+}
+
 export interface RefineryRecord {
   id: string;
   name: string;
   systemCode: string;
-  materialBonuses: Record<RefineryMaterialId, number>;
+  materialBonuses: Record<string, number>;
 }
 
 export interface RefineryDataset {
@@ -43,20 +32,21 @@ export interface RefineryDataset {
 
 export interface RefineryTarget {
   materialId: RefineryMaterialId;
-  desiredRefinedAmount: number;
+  rawInputScu: number;
 }
 
 export interface RefineryMaterialCalculation extends RefineryTarget {
   refineryId: string;
   refineryName: string;
   bonusPercent: number;
-  finalYieldMultiplier: number;
-  rawRequired: number;
+  hasRefineryBonus: boolean;
+  baseYieldScu: number;
+  refinedOutputScu: number;
 }
 
 export interface RefineryOptimizationResult {
   calculations: RefineryMaterialCalculation[];
-  totalRawRequired: number;
+  totalRefinedOutputScu: number;
 }
 
 export interface RefinerySingleScore extends RefineryOptimizationResult {

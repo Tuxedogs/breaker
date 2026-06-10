@@ -1,11 +1,13 @@
 import path from "node:path";
 
 export const publicApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
+export const fittingApiRoot = path.resolve(process.env.SCINTEL_FITTING_API_ROOT ?? path.join(publicApiRoot, "fitting"));
 
 export const apiPaths = {
   materialSourceScores: path.join(publicApiRoot, "recommendations", "material_source_scores.json"),
   materialSourcesQualityEnriched: path.join(publicApiRoot, "mining", "material_sources_quality_enriched.json"),
   locationMetadata: path.join(publicApiRoot, "recommendations", "location_metadata.json"),
+  fittingRoot: fittingApiRoot,
 } as const;
 
 export const recommenderApiPath = "/api/recommender/recommendations";

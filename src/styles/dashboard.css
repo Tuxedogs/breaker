@@ -1954,6 +1954,225 @@
   color: rgba(255, 200, 120, 0.9);
 }
 
+/* Fitting launch panel */
+.dash-fitting-panel {
+  border-color: rgba(167, 139, 250, 0.16);
+}
+
+.dash-fitting-count {
+  font-family: var(--font-primary);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.72);
+}
+
+.dash-fitting-body {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.dash-fitting-search {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.42rem;
+  min-height: 2rem;
+  padding: 0 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(167, 139, 250, 0.78);
+}
+
+.dash-fitting-search svg {
+  width: 14px;
+  height: 14px;
+}
+
+.dash-fitting-search input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: rgba(226, 232, 245, 0.88);
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+}
+
+.dash-fitting-search input::placeholder {
+  color: rgba(160, 180, 220, 0.42);
+}
+
+.dash-fitting-selector {
+  display: grid;
+  gap: 0.32rem;
+  max-height: 15.1rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.24) transparent;
+}
+
+.dash-fitting-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.55rem;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(199, 210, 230, 0.76);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.dash-fitting-option:hover,
+.dash-fitting-option--active {
+  border-color: rgba(167, 139, 250, 0.34);
+  background: rgba(167, 139, 250, 0.085);
+  color: rgba(238, 241, 255, 0.96);
+}
+
+.dash-fitting-option-main {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.dash-fitting-option-name,
+.dash-fitting-option-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dash-fitting-option-name {
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.dash-fitting-option-meta {
+  color: rgba(160, 180, 220, 0.48);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+}
+
+.dash-fitting-proto {
+  border: 1px solid rgba(160, 180, 220, 0.13);
+  border-radius: 3px;
+  padding: 0.1rem 0.28rem;
+  color: rgba(160, 180, 220, 0.52);
+  font-family: var(--font-primary);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dash-fitting-proto--ready {
+  border-color: rgba(74, 222, 128, 0.26);
+  color: rgba(74, 222, 128, 0.82);
+}
+
+.dash-fitting-summary {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.65rem;
+  border: 1px solid rgba(167, 139, 250, 0.18);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(167, 139, 250, 0.075), rgba(255, 255, 255, 0.025));
+}
+
+.dash-fitting-summary-head {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.dash-fitting-summary-head span {
+  color: rgba(167, 139, 250, 0.74);
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.dash-fitting-summary-head strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(238, 241, 255, 0.95);
+  font-family: var(--font-primary);
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+
+.dash-fitting-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.dash-fitting-metrics span {
+  min-width: 0;
+  padding: 0.42rem;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.12);
+  color: rgba(199, 210, 230, 0.78);
+  font-family: var(--font-primary);
+  font-size: 0.64rem;
+  line-height: 1.2;
+}
+
+.dash-fitting-metrics b {
+  display: block;
+  margin-bottom: 0.16rem;
+  color: rgba(160, 180, 220, 0.45);
+  font-size: 0.52rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dash-fitting-open {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(167, 139, 250, 0.26);
+  border-radius: 4px;
+  background: rgba(167, 139, 250, 0.08);
+  padding: 0.38rem 0.55rem;
+  color: rgba(225, 219, 255, 0.9);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.dash-fitting-open:hover {
+  background: rgba(167, 139, 250, 0.14);
+  color: #ffffff;
+}
+
+.dash-fitting-note {
+  margin: 0;
+  color: rgba(160, 180, 220, 0.44);
+  font-family: var(--font-primary);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
 /* System status */
 .dash-status-all-good {
   display: flex;

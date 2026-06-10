@@ -18,6 +18,7 @@ const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
+const FittingPage = lazy(() => import("./pages/FittingPage"));
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -40,6 +41,8 @@ const IndustryMiningPage = lazy(() => import("./pages/industry/MiningPage"));
 const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/BlueprintTrackerPage"));
 const IndustryMissionBrowserPage = lazy(() => import("./pages/industry/MissionBrowserPage"));
 const IndustryRefineryPlannerPage = lazy(() => import("./pages/industry/RefineryPlannerPage"));
+
+const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
 
 function RouteFallback() {
   return (
@@ -67,6 +70,31 @@ function RedirectToDashboardDoctrineLibrary() {
 function RedirectLegacyDoctrineModule() {
   const location = useLocation();
   return <Navigate to={`/dashboard/doctrine/module/${location.pathname.split("/").pop() ?? ""}`} replace />;
+}
+
+function FittingWipPlaceholder() {
+  return (
+    <main className="flex min-h-[55vh] items-center justify-center px-6" aria-label="Fitting disabled">
+      <section className="max-w-xl rounded border border-slate-700 bg-slate-950/70 p-6 text-center">
+        <p className="base-card-kicker">Fitting WIP</p>
+        <h1 className="mt-2 text-xl font-semibold text-slate-100">
+          Fitting WIP: backend/API complete through Phase 5.3; UI paused.
+        </h1>
+        <p className="mt-3 text-sm text-slate-400">
+          The fitting interface is hidden from normal navigation while the broader API migration work is active.
+        </p>
+      </section>
+    </main>
+  );
+}
+
+function FittingRoute() {
+  if (!ENABLE_FITTING_UI) return <FittingWipPlaceholder />;
+  return (
+    <Suspense fallback={<RouteFallback />}>
+      <FittingPage />
+    </Suspense>
+  );
 }
 
 export default function App() {
@@ -154,6 +182,8 @@ export default function App() {
             </Suspense>
           }
         />
+        <Route path="fitting" element={<FittingRoute />} />
+        <Route path="fitting/:shipKey" element={<FittingRoute />} />
         {/* Legacy redirect — preserve old gunnery URL */}
         <Route path="tools/gunnery" element={<Navigate to="/combat/component-mapping" replace />} />
         <Route path="tools/component-mapping" element={<Navigate to="/combat/component-mapping" replace />} />

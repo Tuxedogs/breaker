@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { BASE_REFINERY_YIELD, getRawRequired } from "../src/lib/refineryCalculations";
+import { BASE_REFINERY_YIELD, getRefinedOutput } from "../src/lib/refineryCalculations";
 import type {
   RefineryDataset,
   RefineryMaterialDefinition,
@@ -173,8 +173,8 @@ async function main(): Promise<void> {
     outputJsonPath: outputPath,
     generatedAt,
     formulaExamples: [
-      { desiredRefinedAmount: 100, bonusPercent: 0, rawRequired: getRawRequired(100, 0) },
-      { desiredRefinedAmount: 100, bonusPercent: 20, rawRequired: getRawRequired(100, 20) },
+      { rawInputScu: 100, bonusPercent: 0, refinedOutputScu: getRefinedOutput(100, 0) },
+      { rawInputScu: 100, bonusPercent: 20, refinedOutputScu: getRefinedOutput(100, 20) },
     ],
   };
 
