@@ -89,6 +89,10 @@
 
 .logi-btn-primary:hover { background: rgba(167, 139, 250, 0.3); border-color: rgba(167, 139, 250, 0.6); }
 
+.logi-btn-primary[aria-disabled="true"] {
+  opacity: 0.68;
+}
+
 .logi-btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -902,6 +906,18 @@
   border-radius: 4px;
   background: rgba(76, 187, 23, 0.08);
   color: rgba(150, 220, 130, 0.88);
+  font-family: var(--font-primary);
+  font-size: 0.67rem;
+  letter-spacing: 0.04em;
+}
+
+.logi-inventory-add-error {
+  width: 100%;
+  padding: 0.48rem 0.62rem;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 4px;
+  background: rgba(239, 68, 68, 0.08);
+  color: rgba(255, 170, 170, 0.9);
   font-family: var(--font-primary);
   font-size: 0.67rem;
   letter-spacing: 0.04em;

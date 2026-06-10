@@ -100,7 +100,9 @@ export default function InventoryTable({ entries, materials, locations, sortKey,
             const location = locations.find((l) => l.id === entry.locationId);
             const materialName = resolveInventoryItemName(entry, material);
             const isBest = bestIds.has(entry.id);
-            const typeKey = material?.materialType ?? entry.materialType ?? resolveInventoryItemKind(entry, material);
+            const typeKey = resolveInventoryItemKind(entry, material) === 'refined'
+              ? 'refined'
+              : entry.materialType ?? material?.materialType ?? resolveInventoryItemKind(entry, material);
             return (
               <tr key={entry.id} className={isBest ? 'logi-row--best' : undefined}>
                 <td>

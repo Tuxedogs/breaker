@@ -19,6 +19,7 @@ export interface RarityInfo {
 export type InventoryItemKind =
   | "material"
   | "ore"
+  | "refined"
   | "raw_mineable"
   | "ice"
   | "fps_weapon"

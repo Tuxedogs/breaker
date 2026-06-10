@@ -23,6 +23,7 @@ interface Props {
 const KIND_DEFAULT_UNIT: Record<InventoryItemKind, InventoryUnitType> = {
   material: 'scu',
   ore: 'scu',
+  refined: 'scu',
   raw_mineable: 'unit',
   ice: 'unit',
   fps_weapon: 'unit',
@@ -100,7 +101,7 @@ function initDraftFromEntry(
   return {
     catalogMode: isCatalog ? 'catalog' : 'manual',
     materialId: entry.materialId ?? '',
-    mineableForm: kind === 'ore' ? 'raw' : kind === 'material' ? 'refined' : '',
+    mineableForm: kind === 'ore' ? 'raw' : kind === 'refined' || entry.materialType === 'refined' ? 'refined' : '',
     itemName: entry.itemName ?? entry.materialName ?? mat?.name ?? '',
     itemKind: kind,
     unitType: entry.unitType ?? KIND_DEFAULT_UNIT[kind],
@@ -241,7 +242,7 @@ function isRefinableScuMineable(material: MaterialTemplate | undefined, identity
 
 function deriveInventoryKindFromForm(choice: MineableFormChoice): InventoryItemKind | undefined {
   if (choice === 'raw') return 'ore';
-  if (choice === 'refined') return 'material';
+  if (choice === 'refined') return 'refined';
   return undefined;
 }
 
@@ -362,6 +363,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   const [locationOpen, setLocationOpen] = useState(false);
   const [clearLocationOnNextFocus, setClearLocationOnNextFocus] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const identityByLookup = useMemo(() => {
     const lookup = new Map<string, MaterialIdentity>();
@@ -415,11 +417,11 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const resolved = findMineableIdentity(itemName);
     if (!resolved) {
       return {
-        catalogMode: 'catalog',
+        catalogMode: 'manual',
         itemName,
         materialId: '',
         mineableForm: '',
-        itemKind: 'unknown',
+        itemKind: 'manual',
         unitType: 'unit',
       };
     }
@@ -443,7 +445,45 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     if (!resolvedLocationId) return null;
 
     const resolvedMineable = findMineableIdentity(draft.itemName);
-    if (!resolvedMineable || !isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity)) return null;
+    if (!resolvedMineable) {
+      const customName = draft.itemName.trim();
+      if (!customName) return null;
+      return createInventoryEntryDraft({
+        id: overrideId ?? entry?.id ?? createNewInventoryId(),
+        itemName: customName,
+        itemKind: 'manual',
+        unitType: 'unit',
+        catalogSource: 'manual',
+        quality: parseOptionalQuality(draft.quality),
+        quantity: qty,
+        locationId: resolvedLocationId,
+        container: draft.container.trim() || undefined,
+        notes: draft.notes.trim() || undefined,
+        createdAt: entry?.createdAt,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    if (!isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity)) {
+      const resolvedItemName = resolvedMineable.identity?.displayName ?? resolvedMineable.material.name;
+      return createInventoryEntryDraft({
+        id: overrideId ?? entry?.id ?? createNewInventoryId(),
+        materialId: resolvedMineable.material.id,
+        materialType: resolvedMineable.material.materialType,
+        itemName: resolvedItemName,
+        itemKind: deriveKindFromMaterial(resolvedMineable.material),
+        unitType: resolveUnitFromMaterial(resolvedMineable.material, deriveKindFromMaterial(resolvedMineable.material)),
+        catalogSource: 'api',
+        quality: parseOptionalQuality(draft.quality),
+        quantity: qty,
+        locationId: resolvedLocationId,
+        container: draft.container.trim() || undefined,
+        notes: draft.notes.trim() || undefined,
+        createdAt: entry?.createdAt,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
     const derivedKind = deriveInventoryKindFromForm(draft.mineableForm);
     if (!derivedKind) return null;
 
@@ -455,6 +495,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     return createInventoryEntryDraft({
       id: overrideId ?? entry?.id ?? createNewInventoryId(),
       materialId: resolvedMaterialId,
+      materialType: draft.mineableForm === 'refined' ? 'refined' : 'ore',
       itemName: resolvedItemName,
       itemKind: derivedKind,
       unitType: 'scu',
@@ -470,8 +511,23 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   }
 
   function handleSave() {
+    setErrorMessage('');
     const built = buildEntry();
-    if (!built) return;
+    if (!built) {
+      const qty = parseFloat(draft.quantity);
+      const resolvedMineable = findMineableIdentity(draft.itemName);
+      const message = !draft.itemName.trim()
+        ? 'Enter an item name.'
+        : isNaN(qty) || qty <= 0
+          ? 'Enter a quantity greater than zero.'
+          : !resolvedLocationId
+            ? 'Choose a known inventory location.'
+            : resolvedMineable && isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity) && !deriveInventoryKindFromForm(draft.mineableForm)
+              ? 'Choose Raw or Refined for this known mineable.'
+              : 'Inventory item could not be saved.';
+      setErrorMessage(message);
+      return;
+    }
     onSave([built]);
     if (isNew) {
       const locationName = locations.find((location) => location.id === built.locationId)?.name;
@@ -488,7 +544,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         materialId: '',
         mineableForm: '',
         itemName: '',
-        itemKind: 'unknown',
+        itemKind: 'manual',
         quantity: '',
         quality: '',
         unitType: 'unit',
@@ -530,16 +586,18 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const q = parseFloat(draft.quantity);
     if (isNaN(q) || q <= 0) return false;
     if (!resolvedLocationId) return false;
-    if (!selectedIsKnownMineable || !selectedIsRefinableScu) return false;
+    if (!draft.itemName.trim()) return false;
+    if (!selectedIsKnownMineable) return true;
+    if (!selectedIsRefinableScu) return true;
     return Boolean(deriveInventoryKindFromForm(draft.mineableForm));
-  }, [draft.mineableForm, draft.quantity, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
+  }, [draft.itemName, draft.mineableForm, draft.quantity, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
 
   const itemHint = !draft.itemName.trim()
-    ? 'Select a known mineable material.'
+    ? 'Search known mineables or type a custom item name.'
     : !selectedIsKnownMineable
-      ? 'Select a known mineable material. Custom items cannot be added as raw/refined inventory.'
+      ? 'Custom inventory item / not used for raw/refined material matching.'
       : !selectedIsRefinableScu
-        ? 'This mineable is not a refinable SCU material. Custom raw/refined entries are disabled here.'
+        ? `Known mineable / ${selectedMaterial?.id} / single pipeline state`
         : draft.mineableForm
           ? `Known mineable / ${selectedMaterial?.id} / ${draft.mineableForm === 'raw' ? 'Raw ore' : 'Refined material'}`
           : 'Choose Raw or Refined before adding this material.';
@@ -566,6 +624,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
           onChange={(event) => {
             patch(resolveKnownItem(event.target.value));
             setSuccessMessage('');
+            setErrorMessage('');
           }}
           onBlur={(event) => patch(resolveKnownItem(event.target.value))}
           placeholder="Search mineable material..."
@@ -603,8 +662,23 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         </div>
       )}
 
-      {/* Quantity + Quality */}
+      {/* Quality + Quantity */}
       <div className="logi-form-row-pair">
+        <div className="logi-form-field">
+          <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0-1000)</span></label>
+          <input
+            id="inv-quality"
+            type="number"
+            className="logi-form-input"
+            value={draft.quality}
+            onChange={(e) => patch({ quality: e.target.value })}
+            placeholder="Optional"
+            min="0"
+            max="1000"
+            step="1"
+          />
+          <span className="logi-form-hint">Blank shows no accent</span>
+        </div>
         <div className="logi-form-field">
           <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
           <input
@@ -620,21 +694,6 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
           {quantityPreview && (
             <span className="logi-form-hint logi-form-hint--value">{quantityPreview}</span>
           )}
-        </div>
-        <div className="logi-form-field">
-          <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0-1000)</span></label>
-          <input
-            id="inv-quality"
-            type="number"
-            className="logi-form-input"
-            value={draft.quality}
-            onChange={(e) => patch({ quality: e.target.value })}
-            placeholder="Optional"
-            min="0"
-            max="1000"
-            step="1"
-          />
-          <span className="logi-form-hint">Blank shows no accent</span>
         </div>
       </div>
 
@@ -690,11 +749,16 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             {successMessage}
           </div>
         )}
+        {errorMessage && (
+          <div className="logi-inventory-add-error" role="alert">
+            {errorMessage}
+          </div>
+        )}
         <button
           type="button"
           className="logi-btn-primary"
           onClick={handleSave}
-          disabled={!canSave}
+          aria-disabled={!canSave}
         >
           {isNew ? 'Add to Inventory' : 'Save Changes'}
         </button>

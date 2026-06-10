@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
+import type { InventoryEntry, InventoryItemKind, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import {
@@ -19,7 +19,7 @@ type DrawerSortKey = 'material' | 'quality' | 'quantity' | 'container' | 'update
 type DrawerFilter = 'all' | 'premium' | 'raw' | 'refined' | 'unassigned';
 type UnknownRecord = Record<string, unknown>;
 
-const MINABLE_KINDS = new Set<InventoryItemKind>(['ore', 'raw_mineable', 'ice', 'material']);
+const MINABLE_KINDS = new Set<InventoryItemKind>(['ore', 'refined', 'raw_mineable', 'ice', 'material']);
 
 type LocationGroup = {
   id: string;
@@ -35,6 +35,18 @@ type LocationGroup = {
   premiumCount: number;
   topStacks: InventoryEntry[];
   lastUpdated: string | null;
+};
+
+type DrawerMaterialGroup = {
+  id: string;
+  name: string;
+  entries: Array<{
+    entry: InventoryEntry;
+    material: MaterialTemplate | undefined;
+    kind: 'ore' | 'refined' | 'personal' | 'unknown';
+  }>;
+  total: number;
+  unitType: 'scu' | 'unit';
 };
 
 function toRecord(value: unknown): UnknownRecord {
@@ -261,6 +273,8 @@ export default function InventoryPage() {
     };
   }, [entries, materials]);
 
+  const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
+
   const locationGroups = useMemo<LocationGroup[]>(() => {
     const map = new Map<string, LocationGroup>();
 
@@ -341,23 +355,39 @@ export default function InventoryPage() {
     [locationGroups, selectedLocationId],
   );
 
+  const drawerAvailableFilters = useMemo(() => {
+    if (!selectedLocation) return new Set<DrawerFilter>(['all']);
+    const available = new Set<DrawerFilter>(['all']);
+    for (const entry of selectedLocation.entries) {
+      const materialId = asString(toRecord(entry).materialId);
+      const kind = getEntryKind(entry, materialId ? materialById.get(materialId) : undefined);
+      if ((entry.quality ?? 0) >= 900) available.add('premium');
+      if (kind === 'ore') available.add('raw');
+      if (kind === 'refined') available.add('refined');
+      if (getEntryLocationId(entry) === '__unassigned__') available.add('unassigned');
+    }
+    return available;
+  }, [selectedLocation, materialById]);
+
+  const effectiveDrawerFilter = drawerAvailableFilters.has(drawerFilter) ? drawerFilter : 'all';
+
   const drawerEntries = useMemo(() => {
     if (!selectedLocation) return [];
     const query = drawerSearch.trim().toLowerCase();
     const next = selectedLocation.entries.filter((entry) => {
       const material = getMaterialForEntry(entry, materials);
       const kind = getEntryKind(entry, material);
-      if (drawerFilter === 'premium' && (entry.quality ?? 0) < 900) return false;
-      if (drawerFilter === 'raw' && kind !== 'ore') return false;
-      if (drawerFilter === 'refined' && kind !== 'refined') return false;
-      if (drawerFilter === 'unassigned' && getEntryLocationId(entry) !== '__unassigned__') return false;
+      if (effectiveDrawerFilter === 'premium' && (entry.quality ?? 0) < 900) return false;
+      if (effectiveDrawerFilter === 'raw' && kind !== 'ore') return false;
+      if (effectiveDrawerFilter === 'refined' && kind !== 'refined') return false;
+      if (effectiveDrawerFilter === 'unassigned' && getEntryLocationId(entry) !== '__unassigned__') return false;
       if (!query) return true;
       return resolveInventoryItemName(entry, material).toLowerCase().includes(query)
         || (entry.container?.toLowerCase().includes(query) ?? false)
         || (entry.notes?.toLowerCase().includes(query) ?? false);
     });
 
-    return next.sort((a, b) => {
+    return [...next].sort((a, b) => {
       const materialA = getMaterialForEntry(a, materials);
       const materialB = getMaterialForEntry(b, materials);
       let comparison = 0;
@@ -380,46 +410,31 @@ export default function InventoryPage() {
       }
       return drawerSortDir === 'asc' ? comparison : -comparison;
     });
-  }, [selectedLocation, drawerSearch, drawerFilter, drawerSortKey, drawerSortDir, materials]);
+  }, [selectedLocation, drawerSearch, effectiveDrawerFilter, drawerSortKey, drawerSortDir, materials]);
 
   const drawerMaterialGroups = useMemo(() => {
-    const groups = new Map<string, { id: string; name: string; entries: InventoryEntry[]; total: number; unitType: 'scu' | 'unit' }>();
+    const groups = new Map<string, DrawerMaterialGroup>();
     for (const entry of drawerEntries) {
-      const material = getMaterialForEntry(entry, materials);
+      const materialId = asString(toRecord(entry).materialId);
+      const material = materialId ? materialById.get(materialId) : undefined;
       const id = getEntryMaterialId(entry);
       const existing = groups.get(id);
+      const groupEntry = { entry, material, kind: getEntryKind(entry, material) };
       if (existing) {
-        existing.entries.push(entry);
+        existing.entries.push(groupEntry);
         existing.total += entry.quantity;
       } else {
         groups.set(id, {
           id,
           name: resolveInventoryItemName(entry, material),
-          entries: [entry],
+          entries: [groupEntry],
           total: entry.quantity,
           unitType: resolveInventoryUnitType(entry, material),
         });
       }
     }
     return [...groups.values()];
-  }, [drawerEntries, materials]);
-
-  const drawerAvailableFilters = useMemo(() => {
-    if (!selectedLocation) return new Set<DrawerFilter>(['all']);
-    const available = new Set<DrawerFilter>(['all']);
-    for (const entry of selectedLocation.entries) {
-      const kind = getEntryKind(entry, getMaterialForEntry(entry, materials));
-      if ((entry.quality ?? 0) >= 900) available.add('premium');
-      if (kind === 'ore') available.add('raw');
-      if (kind === 'refined') available.add('refined');
-      if (getEntryLocationId(entry) === '__unassigned__') available.add('unassigned');
-    }
-    return available;
-  }, [selectedLocation, materials]);
-
-  useEffect(() => {
-    if (!drawerAvailableFilters.has(drawerFilter)) setDrawerFilter('all');
-  }, [drawerAvailableFilters, drawerFilter]);
+  }, [drawerEntries, materialById]);
 
   const topQualityStacks = useMemo(() => {
     return [...entries]
@@ -753,12 +768,10 @@ export default function InventoryPage() {
                 {drawerMaterialGroups.length > 0 ? drawerMaterialGroups.map((materialGroup) => (
                   <div key={materialGroup.id} className="logi-location-material-group">
                     <div className="logi-location-material-head">
-                      <span><MaterialGlyph quality={materialGroup.entries[0]?.quality} />{materialGroup.name}</span>
+                      <span><MaterialGlyph quality={materialGroup.entries[0]?.entry.quality} />{materialGroup.name}</span>
                       <small>{materialGroup.entries.length} {materialGroup.entries.length === 1 ? 'stack' : 'stacks'} · {formatInventoryQuantity(materialGroup.total, materialGroup.unitType)}</small>
                     </div>
-                    {materialGroup.entries.map((entry) => {
-                      const material = getMaterialForEntry(entry, materials);
-                      const kind = getEntryKind(entry, material);
+                    {materialGroup.entries.map(({ entry, material, kind }) => {
                       return (
                         <div key={entry.id} className="logi-location-detail-row">
                           <QualityPill quality={entry.quality} />
