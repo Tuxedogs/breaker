@@ -1,0 +1,1508 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+
+type RawStanding = {
+  displayName?: string;
+  minReputation?: number;
+};
+
+type RawPrerequisite = {
+  type?: string;
+  attributes?: Record<string, unknown>;
+  resolved?: Record<string, unknown>;
+  references?: string[];
+};
+
+type RefIndexEntry = {
+  guid?: string;
+  recordName?: string;
+  type?: string;
+  path?: string;
+};
+
+type RawReward = {
+  type?: string;
+  blueprintPoolGuid?: string;
+  factionReputation?: string;
+  reputationScope?: string;
+  rewardGuid?: string;
+  reputationAmount?: number;
+  xp?: number;
+  reward?: Record<string, unknown>;
+  attributes?: Record<string, unknown>;
+  references?: string[];
+};
+
+type RawMission = {
+  contractId: string;
+  familyId?: string;
+  contractType?: string;
+  debugName?: string;
+  title?: string;
+  titleRaw?: string;
+  stringParams?: Record<string, { raw?: string; text?: string | null }>;
+  description?: string;
+  descriptionRaw?: string;
+  generatorGuid?: string;
+  generatorName?: string;
+  generatorPath?: string;
+  handlerDebugName?: string;
+  handlerType?: string;
+  notForRelease?: boolean | string;
+  workInProgress?: boolean | string;
+  missionType?: string;
+  factionReputationGuid?: string | null;
+  reputationScopeGuid?: string | null;
+  factionName?: string;
+  minStanding?: RawStanding;
+  maxStanding?: RawStanding;
+  prerequisites?: RawPrerequisite[];
+  blueprintRewards?: RawReward[];
+  reputationRewards?: RawReward[];
+  creditRewardTypes?: RawReward[];
+  itemRewards?: RawReward[];
+  completionTags?: RawReward[];
+  classifications?: {
+    tutorial?: boolean;
+    event?: boolean;
+  };
+};
+
+type RawCatalog = {
+  schemaVersion: number;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  records: RawMission[];
+};
+
+type BlueprintPoolLookup = {
+  poolGuid?: string;
+  displayName?: string;
+  poolName?: string;
+  rewards?: Array<{
+    blueprintGuid?: string;
+    displayName?: string;
+    componentType?: string;
+    blueprintName?: string;
+    size?: string;
+    grade?: string;
+    weight?: number;
+    poolChance?: number;
+  }>;
+};
+
+type Lookups = {
+  blueprintPools?: BlueprintPoolLookup[];
+};
+
+type ShapedPrerequisite = {
+  type: "reputation" | "standing" | "rank" | "location" | "locality" | "crimeStat" | "unlock" | "unresolved";
+  label: string;
+  confidence: "resolved" | "unresolved" | "explicit" | "inferred";
+  rawType?: string;
+  raw?: Record<string, unknown>;
+};
+
+type PickupLocation = {
+  status: "exact" | "generated_from_pool" | "system_scope" | "system_only" | "unknown" | "unresolved";
+  displayName: string;
+  system?: string;
+  parentLocation?: string;
+  locationType?: string;
+  localityPool?: string;
+  regions?: string[];
+  specificPickup?: string | null;
+  sourceRole: "availability" | "mission_giver" | "origin" | "locality_pool" | "system_scope" | "unknown";
+  confidence: "high" | "medium" | "partial" | "low" | "unresolved";
+  reason: string;
+  sourceRefs: string[];
+  possibleLocations: string[];
+  unresolvedRefs: string[];
+  technicalRefs: Array<{
+    role: string;
+    ref: string;
+    resolvedName?: string;
+    type?: string;
+    path?: string;
+    consideredPickup: boolean;
+    reason: string;
+  }>;
+};
+
+type ReputationScope = {
+  scopeKey: string;
+  displayName: string;
+  rawName?: string;
+  factionKey: string;
+  factionDisplayName: string;
+  trackType: string;
+  confidence: "resolved" | "partial" | "unresolved";
+  sourceRefs: string[];
+  unresolvedReason?: string;
+};
+
+type ShapedVariant = {
+  variantKey: string;
+  familyKey: string;
+  displayName: string;
+  titleSource: "localized_family" | "localized_clean" | "shared_variant_localized" | "common_variant_title" | "token_template_cleaned" | "generated_from_fields" | "provider_archetype_fallback" | "internal_fallback";
+  titleConfidence: "high" | "medium" | "low";
+  briefing?: string;
+  rawName?: string;
+  internalName?: string;
+  missionType: string;
+  provider: string;
+  faction: string;
+  contractType: string;
+  reputationScope: ReputationScope;
+  missionArchetype: string;
+  standingRequirement: string;
+  reputationRequirement?: string;
+  prerequisiteSummary: string;
+  prerequisites: ShapedPrerequisite[];
+  pickupLocation: PickupLocation;
+  locations: string[];
+  unresolvedLocationTokens: string[];
+  rewards: {
+    summary: string[];
+    blueprintRewards: string[];
+    blueprintRewardGroups: BlueprintRewardGroup[];
+    reputationRewards: string[];
+    credits: string;
+    creditStatus: "extracted" | "unresolved" | "provenAbsent";
+    unresolvedRewardTokens: string[];
+  };
+  rewardedReputationPaths: RewardedReputationPath[];
+  flags: string[];
+  releaseFlags: string[];
+  lawfulClassification: "lawful" | "unlawful" | "unknown";
+  lawfulConfidence: "explicit" | "inferred" | "unknown";
+  crimeStatRequirement: "required" | "notRequired" | "bounded" | "unknown";
+  confidence: {
+    hasUnresolvedLocation: boolean;
+    hasUnresolvedRewards: boolean;
+    hasUnresolvedPrerequisites: boolean;
+  };
+  technical: {
+    contractId: string;
+    generatorGuid?: string;
+    generatorName?: string;
+    generatorPath?: string;
+    handlerType?: string;
+    titleRaw?: string;
+    descriptionRaw?: string;
+  };
+};
+
+type ShapedFamily = {
+  familyKey: string;
+  displayName: string;
+  titleSource: "localized_family" | "localized_clean" | "shared_variant_localized" | "common_variant_title" | "token_template_cleaned" | "generated_from_fields" | "provider_archetype_fallback" | "internal_fallback";
+  titleConfidence: "high" | "medium" | "low";
+  briefing?: string;
+  rawName?: string;
+  internalName?: string;
+  provider: string;
+  faction: string;
+  missionType: string;
+  reputationScope: ReputationScope;
+  missionArchetype: string;
+  variantCount: number;
+  statusFlags: string[];
+  releaseFlags: string[];
+  rewardSummary: string[];
+  blueprintRewards: string[];
+  blueprintRewardGroups: BlueprintRewardGroup[];
+  reputationRewards: string[];
+  rewardedReputationPaths: RewardedReputationPath[];
+  creditRewardSummary: string;
+  unresolvedRewardFields: string[];
+  reputationRequirement?: string;
+  prerequisiteRequirements: string[];
+  pickupSummary: string;
+  pickupStatuses: PickupLocation["status"][];
+  pickupUnresolvedCount: number;
+  crimeStatRequirement: "notRequired" | "required" | "bounded" | "unknown";
+  lawfulClassification: "lawful" | "unlawful" | "unknown";
+  lawfulConfidence: "explicit" | "inferred" | "unknown";
+  locations: string[];
+  unresolvedLocationTokens: string[];
+  confidenceFlags: string[];
+  unresolvedReferences: string[];
+  variantKeys: string[];
+  searchText: string;
+};
+
+type MissionBrowseGroup = {
+  factionKey: string;
+  factionDisplayName: string;
+  reputationScopes: Array<{
+    scopeKey: string;
+    displayName: string;
+    confidence: ReputationScope["confidence"];
+    trackType: string;
+    missionArchetypes: Array<{
+      archetypeKey: string;
+      displayName: string;
+      familyKeys: string[];
+      missionCount: number;
+      variantCount: number;
+      standingSummary: string;
+      unresolvedCount: number;
+    }>;
+  }>;
+};
+
+type RewardedReputationPath = {
+  factionKey: string;
+  factionDisplayName: string;
+  scopeKey: string;
+  scopeDisplayName: string;
+  amount?: number;
+  xp?: number;
+  confidence: "resolved" | "partial" | "unresolved";
+  sourceRefs: string[];
+  unresolvedReason?: string;
+};
+
+type BlueprintRewardGroup = {
+  poolGuid?: string;
+  poolName: string;
+  rewardCount: number;
+  chanceLabel?: string;
+  rewards: Array<{
+    blueprintGuid?: string;
+    displayName: string;
+    componentType?: string;
+    size?: string;
+    grade?: string;
+    chanceLabel?: string;
+  }>;
+};
+
+type ShapedCatalog = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  sourceFiles: string[];
+  summary: {
+    familyCount: number;
+    variantCount: number;
+    unresolvedLocationCount: number;
+    unresolvedRewardCount: number;
+    explicitCrimeStatRequiredCount: number;
+    pickupExactCount: number;
+    pickupGeneratedFromPoolCount: number;
+    pickupSystemScopeCount: number;
+    pickupSystemOnlyCount: number;
+    pickupUnknownCount: number;
+    pickupUnresolvedCount: number;
+    reputationScopeResolvedCount: number;
+    reputationScopePartialCount: number;
+    reputationScopeUnresolvedCount: number;
+    factionGroupCount: number;
+    reputationScopeGroupCount: number;
+    archetypeGroupCount: number;
+  };
+  families: ShapedFamily[];
+  variants: ShapedVariant[];
+  missionBrowseGroups: MissionBrowseGroup[];
+};
+
+const apiRoot = path.resolve("public", "api");
+const missionRoot = path.join(apiRoot, "missions");
+const contractsPath = path.join(missionRoot, "mission_contracts.json");
+const lookupsPath = path.join(missionRoot, "mission_reward_lookups.json");
+const refIndexPath = path.resolve("tmp", "scintel-api-candidate", "ref_index.json");
+
+function truthy(value: unknown): boolean {
+  return value === true || value === 1 || value === "1" || value === "true";
+}
+
+function clean(value: unknown): string | undefined {
+  if (typeof value !== "string" && typeof value !== "number") return undefined;
+  const text = String(value).trim();
+  if (!text || /^(undefined|null|nan)$/i.test(text)) return undefined;
+  return text;
+}
+
+function guidValue(value: unknown): string | undefined {
+  const text = clean(value);
+  return text && /^[0-9a-f-]{36}$/i.test(text) ? text.toLowerCase() : undefined;
+}
+
+function readableName(value?: string): string {
+  if (!value) return "Unknown mission";
+  return value
+    .replace(/^ContractGenerator\./, "")
+    .replace(/^ContractPrerequisite_/, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z0-9])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function displayNameFromRef(entry?: RefIndexEntry): string | undefined {
+  const raw = clean(entry?.recordName)?.replace(/^(StarMapObject|MissionLocality|Location|SReputationScopeParams)\./, "");
+  if (!raw) return undefined;
+  return raw
+    .replace(/^ReputationScope_/, "")
+    .replace(/^FactionReputationScope$/i, "Standing")
+    .replace(/^RR_/, "Rest Stop ")
+    .replace(/_/g, " ")
+    .replace(/([a-z])([A-Z0-9])/g, "$1 $2")
+    .replace(/\bStantonStar\b/i, "Stanton")
+    .replace(/\bPyroStar\b/i, "Pyro")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function keySlug(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unknown";
+}
+
+function factionKey(mission: RawMission): string {
+  return clean(mission.factionReputationGuid) ?? keySlug(mission.factionName ?? "Unknown faction");
+}
+
+function classifyMissionArchetype(mission: RawMission): string {
+  const text = [
+    mission.missionType,
+    mission.contractType,
+    mission.debugName,
+    mission.generatorName,
+    mission.handlerDebugName,
+    mission.title,
+  ].filter(Boolean).join(" ").toLowerCase();
+  if (/cargo|hauling|haul|delivery|courier|ato?b|linehaul/.test(text)) return /courier|delivery/.test(text) ? "Courier" : "Cargo";
+  if (/defendship|defend ship|escort/.test(text)) return "Defend Ship";
+  if (/ambush/.test(text)) return "Ambush";
+  if (/assassination|assassinate/.test(text)) return "Assassination";
+  if (/bounty/.test(text)) return "Bounty";
+  if (/salvage|scrap/.test(text)) return "Salvage";
+  if (/refuel/.test(text)) return "Refuel";
+  if (/recover|retrieval|retrieve/.test(text)) return "Recovery";
+  if (/mercenary|security|patrol|eliminate|combat|shipwaveattack|attack/.test(text)) return "Mercenary";
+  if (/investigation|missingperson|missing person|search/.test(text)) return "Investigation";
+  return clean(mission.missionType) ?? clean(mission.contractType) ?? "Other / unresolved";
+}
+
+function deriveTrackType(mission: RawMission, archetype: string): string {
+  const text = [mission.debugName, mission.generatorName, mission.handlerDebugName, mission.missionType, mission.title].filter(Boolean).join(" ").toLowerCase();
+  if (/haul|cargo|courier|delivery|linehaul|ato?b/.test(text) || ["Cargo", "Courier", "Recovery"].includes(archetype)) return "Hauling";
+  if (/shipcombat|ship combat|bounty|assassination|ambush|defendship|defend ship|patrol|eliminate|combat|attack/.test(text) || ["Assassination", "Ambush", "Bounty", "Defend Ship", "Mercenary"].includes(archetype)) return "Ship Combat";
+  if (/security/.test(text)) return "Security";
+  if (/salvage|scrap/.test(text)) return "Salvage";
+  if (/refuel/.test(text)) return "Refueling";
+  return "Standing";
+}
+
+function resolveReputationScope(mission: RawMission, refMap: Map<string, RefIndexEntry>, archetype: string): ReputationScope {
+  const scopeGuid = guidValue(mission.reputationScopeGuid);
+  const scopeRef = scopeGuid ? refMap.get(scopeGuid) : undefined;
+  const rawName = scopeRef?.recordName;
+  const factionDisplayName = mission.factionName ?? "Unknown faction";
+  const baseDisplay = displayNameFromRef(scopeRef);
+  const derivedTrack = deriveTrackType(mission, archetype);
+  const genericScope = !scopeGuid || /FactionReputationScope$/i.test(rawName ?? "") || baseDisplay === "Standing";
+  const isHeadhunters = /headhunter/i.test(factionDisplayName);
+
+  if (scopeGuid && scopeRef && !genericScope) {
+    const displayName = baseDisplay ?? derivedTrack;
+    return {
+      scopeKey: scopeGuid,
+      displayName,
+      rawName,
+      factionKey: factionKey(mission),
+      factionDisplayName,
+      trackType: displayName,
+      confidence: baseDisplay ? "resolved" : "partial",
+      sourceRefs: [scopeGuid],
+      unresolvedReason: baseDisplay ? undefined : "Scope record resolved, but display text required cleaned record-name fallback.",
+    };
+  }
+
+  if (isHeadhunters && derivedTrack !== "Standing") {
+    return {
+      scopeKey: `${factionKey(mission)}:${keySlug(derivedTrack)}`,
+      displayName: derivedTrack,
+      rawName,
+      factionKey: factionKey(mission),
+      factionDisplayName,
+      trackType: derivedTrack,
+      confidence: "partial",
+      sourceRefs: unique([scopeGuid, mission.familyId, mission.debugName]),
+      unresolvedReason: "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming.",
+    };
+  }
+
+  if (scopeGuid && scopeRef) {
+    return {
+      scopeKey: scopeGuid,
+      displayName: baseDisplay ?? "Standing",
+      rawName,
+      factionKey: factionKey(mission),
+      factionDisplayName,
+      trackType: "Standing",
+      confidence: baseDisplay ? "resolved" : "partial",
+      sourceRefs: [scopeGuid],
+      unresolvedReason: baseDisplay ? undefined : "Generic scope record used cleaned fallback display.",
+    };
+  }
+
+  return {
+    scopeKey: `${factionKey(mission)}:unknown-scope`,
+    displayName: derivedTrack,
+    factionKey: factionKey(mission),
+    factionDisplayName,
+    trackType: derivedTrack,
+    confidence: "unresolved",
+    sourceRefs: unique([mission.familyId, mission.debugName]),
+    unresolvedReason: "No reputationScopeGuid extracted for this mission.",
+  };
+}
+
+function systemFromRef(entry?: RefIndexEntry, fallbackText?: string): string | undefined {
+  const text = `${entry?.recordName ?? ""} ${entry?.path ?? ""} ${fallbackText ?? ""}`.toLowerCase();
+  const systems = ["stanton", "pyro", "nyx"];
+  const found = systems.filter((system) => text.includes(system));
+  if (found.length === 1) return found[0][0]!.toUpperCase() + found[0]!.slice(1);
+  if (found.length > 1) return found.map((system) => system[0]!.toUpperCase() + system.slice(1)).join(", ");
+  return undefined;
+}
+
+function pickupDisplay(pickup: PickupLocation): string {
+  if (pickup.status === "generated_from_pool") return `Generated from ${pickup.displayName} locality pool`;
+  return pickup.displayName;
+}
+
+function normalizeMissionTitle(value?: string): string | undefined {
+  const text = clean(value)
+    ?.replace(/<[^>]+>/g, "")
+    .replace(/~mission\(([^|)]+)(?:\|[^)]+)?\)/g, "[$1]")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text || text.startsWith("@")) return undefined;
+  if (/^\[[^\]]+\]$/.test(text)) return undefined;
+  return text;
+}
+
+function isInternalTitle(value?: string): boolean {
+  const text = clean(value);
+  if (!text) return true;
+  if (/ContractGenerator\.|^[a-z0-9]+_[a-z0-9_]+$/i.test(text)) return true;
+  if ((text.match(/_/g)?.length ?? 0) >= 2) return true;
+  if (/\bRank\d+\b|NOTFORRELEASE|DISABLED/i.test(text) && text.includes("_")) return true;
+  return false;
+}
+
+function localizedTitle(mission: RawMission): string | undefined {
+  const explicit = normalizeMissionTitle(mission.stringParams?.Title?.text ?? undefined);
+  if (explicit && !isInternalTitle(explicit)) return explicit;
+  const title = normalizeMissionTitle(mission.title);
+  if (title && !isInternalTitle(title)) return title;
+  return undefined;
+}
+
+function hasUnresolvedTitleToken(value?: string): boolean {
+  return /\[[^\]]+\]/.test(value ?? "");
+}
+
+function cleanTemplateTitle(value?: string): string | undefined {
+  const text = clean(value)
+    ?.replace(/\[[^\]]+\]/g, " ")
+    .replace(/\bRank\s*-\s*/i, "")
+    .replace(/\s+-\s+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text || text.length < 5 || isInternalTitle(text)) return undefined;
+  return text;
+}
+
+function generatedMissionTitle(mission: RawMission, archetype: string, pickup?: PickupLocation): string {
+  const pieces = [
+    archetype && !/^Other/i.test(archetype) ? archetype : clean(mission.missionType) ?? clean(mission.contractType),
+    pickup?.system ?? (pickup?.displayName && !/unknown|unresolved/i.test(pickup.displayName) ? pickup.displayName : undefined),
+  ].filter(Boolean);
+  if (pieces.length) return `${pieces.join(", ")} Mission`;
+  return `${mission.factionName ?? "Mission"} ${clean(mission.missionType) ?? "Variant"}`;
+}
+
+function variantTitle(mission: RawMission, archetype: string, pickup?: PickupLocation): { displayName: string; titleSource: ShapedVariant["titleSource"]; titleConfidence: ShapedVariant["titleConfidence"] } {
+  const title = localizedTitle(mission);
+  if (title && !hasUnresolvedTitleToken(title)) return { displayName: title, titleSource: "localized_clean", titleConfidence: "high" };
+  const cleaned = cleanTemplateTitle(title);
+  if (cleaned) return { displayName: cleaned, titleSource: "token_template_cleaned", titleConfidence: "medium" };
+  if (title && hasUnresolvedTitleToken(title)) {
+    return { displayName: generatedMissionTitle(mission, archetype, pickup), titleSource: "generated_from_fields", titleConfidence: "medium" };
+  }
+  return {
+    displayName: readableName(mission.debugName ?? mission.handlerDebugName ?? mission.generatorName),
+    titleSource: "internal_fallback",
+    titleConfidence: "low",
+  };
+}
+
+function unique(values: Array<string | undefined>): string[] {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value))));
+}
+
+function firstKnown(values: Array<string | undefined>, fallback: string): string {
+  return values.find(Boolean) ?? fallback;
+}
+
+function rawValue(record: Record<string, unknown> | undefined, keys: string[]): unknown {
+  for (const key of keys) {
+    const value = record?.[key];
+    if (value !== undefined && value !== null && value !== "") return value;
+  }
+  return undefined;
+}
+
+function numberValue(record: Record<string, unknown> | undefined, keys: string[]): number | undefined {
+  const value = rawValue(record, keys);
+  const parsed = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function formatStandingRange(min?: RawStanding, max?: RawStanding): string {
+  const minLabel = [min?.displayName, typeof min?.minReputation === "number" ? `${min.minReputation.toLocaleString()} rep` : undefined].filter(Boolean).join(" / ");
+  const maxLabel = [max?.displayName, typeof max?.minReputation === "number" ? `${max.minReputation.toLocaleString()} rep` : undefined].filter(Boolean).join(" / ");
+  if (minLabel && maxLabel) return `${minLabel} to ${maxLabel}`;
+  if (minLabel) return `Requires ${minLabel}`;
+  if (maxLabel) return `Up to ${maxLabel}`;
+  return "No extracted standing requirement";
+}
+
+function cleanBriefing(value?: string): string | undefined {
+  const text = clean(value)
+    ?.replace(/<[^>]+>/g, "")
+    .replace(/~mission\(([^|)]+)(?:\|[^)]+)?\)/g, "[$1]")
+    .replace(/\\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return text && !text.startsWith("@") ? text : undefined;
+}
+
+function chanceLabel(value: unknown): string | undefined {
+  if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
+  const percent = value <= 1 ? value * 100 : value;
+  return `${Number.isInteger(percent) ? percent : Number(percent.toFixed(2))}% chance`;
+}
+
+function formatSignedAmount(value?: number): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "unresolved";
+  return `${value >= 0 ? "+" : ""}${value.toLocaleString()}`;
+}
+
+function shortScopeLabel(value: string): string {
+  return value
+    .replace(/\bReputation\b/gi, "")
+    .replace(/\bPath\b/gi, "")
+    .replace(/\s+/g, " ")
+    .trim() || value;
+}
+
+function shapeRewardedReputationPaths(mission: RawMission, refMap: Map<string, RefIndexEntry>, missionScope: ReputationScope): RewardedReputationPath[] {
+  return (mission.reputationRewards ?? []).map((reward) => {
+    const scopeGuid = guidValue(reward.reputationScope);
+    const factionGuid = guidValue(reward.factionReputation) ?? guidValue(mission.factionReputationGuid);
+    const rewardGuid = guidValue(reward.rewardGuid) ?? guidValue(reward.reward?.guid);
+    const scopeRef = scopeGuid ? refMap.get(scopeGuid) : undefined;
+    const usesDerivedMissionScope = Boolean(scopeGuid && missionScope.sourceRefs.includes(scopeGuid) && missionScope.scopeKey !== scopeGuid);
+    const scopeDisplayName = scopeGuid === missionScope.scopeKey || usesDerivedMissionScope
+      ? missionScope.displayName
+      : displayNameFromRef(scopeRef);
+    const amount = reward.reputationAmount ?? numberValue(reward.reward, ["reputationAmount"]);
+    const xp = reward.xp ?? numberValue(reward.reward, ["xp", "experience"]);
+    const sourceRefs = unique([factionGuid, scopeGuid, rewardGuid, ...(reward.references ?? [])]);
+    const confidence: RewardedReputationPath["confidence"] = usesDerivedMissionScope
+      ? "partial"
+      : scopeDisplayName && amount !== undefined
+      ? "resolved"
+      : scopeDisplayName || amount !== undefined
+        ? "partial"
+        : "unresolved";
+
+    return {
+      factionKey: factionGuid ?? missionScope.factionKey,
+      factionDisplayName: mission.factionName ?? missionScope.factionDisplayName,
+      scopeKey: usesDerivedMissionScope ? missionScope.scopeKey : scopeGuid ?? missionScope.scopeKey,
+      scopeDisplayName: scopeDisplayName ?? "Rep reward unresolved",
+      amount,
+      xp,
+      confidence,
+      sourceRefs,
+      unresolvedReason: usesDerivedMissionScope
+        ? "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        : confidence === "resolved" ? undefined : "Reputation reward amount or scope path could not be fully resolved from current refs.",
+    };
+  });
+}
+
+function missionFlags(mission: RawMission): string[] {
+  return unique([
+    truthy(mission.classifications?.tutorial) ? "Tutorial" : undefined,
+    truthy(mission.classifications?.event) ? "Event" : undefined,
+  ]);
+}
+
+function releaseFlags(mission: RawMission): string[] {
+  return unique([
+    truthy(mission.notForRelease) ? "Not for release" : "Release flag not set",
+    truthy(mission.workInProgress) ? "Work in progress" : undefined,
+  ]);
+}
+
+function prerequisiteType(rawType?: string): ShapedPrerequisite["type"] {
+  const normalized = rawType?.toLowerCase() ?? "";
+  if (normalized.includes("crimestat")) return "crimeStat";
+  if (normalized.includes("reputation")) return "reputation";
+  if (normalized.includes("standing")) return "standing";
+  if (normalized.includes("rank")) return "rank";
+  if (normalized.includes("locality")) return "locality";
+  if (normalized.includes("location")) return "location";
+  if (normalized.includes("completedcontracttags") || normalized.includes("unlock")) return "unlock";
+  return "unresolved";
+}
+
+function resolvePlace(prerequisite: RawPrerequisite): string | undefined {
+  return clean(rawValue(prerequisite.resolved, [
+    "displayName",
+    "name",
+    "locationDisplay",
+    "localityDisplay",
+    "locationName",
+    "localityName",
+    "address",
+  ]));
+}
+
+function crimeStatRequirement(prerequisites: RawPrerequisite[]): ShapedVariant["crimeStatRequirement"] {
+  const crimeStats = prerequisites.filter((item) => prerequisiteType(item.type) === "crimeStat");
+  if (!crimeStats.length) return "unknown";
+  const requiresCrimeStat = crimeStats.some((item) => {
+    const min = numberValue(item.attributes, ["minCrimeStat", "minimumCrimeStat"]);
+    return min !== undefined && min > 0;
+  });
+  return requiresCrimeStat ? "required" : "bounded";
+}
+
+function classifyLawful(mission: RawMission): Pick<ShapedVariant, "lawfulClassification" | "lawfulConfidence"> {
+  const haystack = [
+    mission.debugName,
+    mission.generatorName,
+    mission.handlerDebugName,
+    mission.title,
+    mission.factionName,
+  ].filter(Boolean).join(" ").toLowerCase();
+  if (/\bunlawful\b|\billegal\b|\bcontraband\b|\bcriminal\b/.test(haystack)) {
+    return { lawfulClassification: "unlawful", lawfulConfidence: "inferred" };
+  }
+  if (/\blawful\b|\bsecurity\b|\benforcement\b|\buee\b/.test(haystack)) {
+    return { lawfulClassification: "lawful", lawfulConfidence: "inferred" };
+  }
+  return { lawfulClassification: "unknown", lawfulConfidence: "unknown" };
+}
+
+function shapePrerequisite(prerequisite: RawPrerequisite, mission: RawMission, refMap: Map<string, RefIndexEntry>): ShapedPrerequisite {
+  const type = prerequisiteType(prerequisite.type);
+  if (type === "location" || type === "locality") {
+    if (prerequisite.type === "ContractPrerequisite_LocationProperty") {
+      return {
+        type,
+        label: "Procedural location placeholder",
+        confidence: "inferred",
+        rawType: prerequisite.type,
+        raw: {
+          propertyVariableName: clean(rawValue(prerequisite.attributes, ["propertyVariableName"])),
+          propertyExtendedTextToken: clean(rawValue(prerequisite.attributes, ["propertyExtendedTextToken"])),
+          locationLevelType: clean(rawValue(prerequisite.attributes, ["locationLevelType"])),
+        },
+      };
+    }
+    const token = clean(rawValue(prerequisite.attributes, ["locationAvailable", "localityAvailable", "location", "locality"]));
+    const ref = token ? refMap.get(token.toLowerCase()) : undefined;
+    const place = resolvePlace(prerequisite) ?? displayNameFromRef(ref);
+    return {
+      type,
+      label: place ?? "Location unresolved",
+      confidence: place ? "resolved" : "unresolved",
+      rawType: prerequisite.type,
+      raw: place ? undefined : { token },
+    };
+  }
+  if (type === "reputation") {
+    const faction = clean(rawValue(prerequisite.resolved, ["factionReputationDisplay", "factionDisplay", "factionName"])) ?? mission.factionName;
+    const minName = clean(rawValue(prerequisite.resolved, ["minStandingDisplay", "minimumStandingDisplay", "minStanding"]));
+    const maxName = clean(rawValue(prerequisite.resolved, ["maxStandingDisplay", "maximumStandingDisplay", "maxStanding"]));
+    const minRep = numberValue(prerequisite.resolved, ["minReputation", "minimumReputation"]) ?? numberValue(prerequisite.attributes, ["minReputation", "minimumReputation"]);
+    const maxRep = numberValue(prerequisite.resolved, ["maxReputation", "maximumReputation"]) ?? numberValue(prerequisite.attributes, ["maxReputation", "maximumReputation"]);
+    const range = [minName, minRep !== undefined ? `${minRep.toLocaleString()} rep` : undefined, maxName, maxRep !== undefined ? `to ${maxRep.toLocaleString()} rep` : undefined]
+      .filter(Boolean)
+      .join(" ");
+    return {
+      type,
+      label: [faction, range || "Reputation requirement"].filter(Boolean).join(": "),
+      confidence: "resolved",
+      rawType: prerequisite.type,
+    };
+  }
+  if (type === "crimeStat") {
+    const min = numberValue(prerequisite.attributes, ["minCrimeStat"]);
+    const max = numberValue(prerequisite.attributes, ["maxCrimeStat"]);
+    return {
+      type,
+      label: min !== undefined && min > 0
+        ? `CrimeStat ${min}${max !== undefined ? `-${max}` : "+"} required`
+        : `CrimeStat limited${max !== undefined ? ` to ${max} or below` : ""}`,
+      confidence: "explicit",
+      rawType: prerequisite.type,
+      raw: { minCrimeStat: min, maxCrimeStat: max },
+    };
+  }
+  if (type === "unlock") {
+    return {
+      type,
+      label: "Prerequisite mission or completion tag",
+      confidence: "unresolved",
+      rawType: prerequisite.type,
+        raw: { references: (prerequisite.references ?? []).slice(0, 6) },
+    };
+  }
+  return {
+    type: "unresolved",
+    label: `${readableName(prerequisite.type)} unresolved`,
+    confidence: "unresolved",
+    rawType: prerequisite.type,
+    raw: { references: (prerequisite.references ?? []).slice(0, 6) },
+  };
+}
+
+function classifyLocationRefs(mission: RawMission, refMap: Map<string, RefIndexEntry>): PickupLocation["technicalRefs"] {
+  return (mission.prerequisites ?? [])
+    .filter((item) => prerequisiteType(item.type) === "location" || prerequisiteType(item.type) === "locality")
+    .flatMap((item) => {
+      const role = item.type === "ContractPrerequisite_Location"
+        ? "availability / accepted-at"
+        : item.type === "ContractPrerequisite_Locality"
+          ? "locality pool"
+          : item.type === "ContractPrerequisite_LocationProperty"
+            ? "procedural region / placeholder"
+            : "unknown location ref";
+      const ref = guidValue(rawValue(item.attributes, ["locationAvailable", "localityAvailable", "location", "locality"]))
+        ?? clean(rawValue(item.attributes, ["propertyVariableName", "propertyExtendedTextToken", "locationLevelType"]));
+      if (!ref) return [];
+      const entry = refMap.get(ref.toLowerCase());
+      const consideredPickup = item.type === "ContractPrerequisite_Location" || item.type === "ContractPrerequisite_Locality";
+      return [{
+        role,
+        ref,
+        resolvedName: displayNameFromRef(entry),
+        type: entry?.type ?? item.type,
+        path: entry?.path,
+        consideredPickup,
+        reason: consideredPickup
+          ? "Contract prerequisite gates mission availability."
+          : "Location property shapes generated objective/placeholders and is not proven to control pickup.",
+      }];
+    });
+}
+
+function resolvePickupLocation(mission: RawMission, refMap: Map<string, RefIndexEntry>): PickupLocation {
+  const technicalRefs = classifyLocationRefs(mission, refMap);
+  const prerequisites = mission.prerequisites ?? [];
+  const explicitLocationRefs = unique(prerequisites
+    .filter((item) => item.type === "ContractPrerequisite_Location")
+    .map((item) => guidValue(rawValue(item.attributes, ["locationAvailable", "availableAt", "acceptedAt", "offerLocation"]))));
+
+  const exactLocations = explicitLocationRefs
+    .map((ref) => ({ ref, entry: refMap.get(ref.toLowerCase()) }))
+    .filter((item) => item.entry && item.entry.type !== "MissionLocality");
+
+  if (exactLocations.length > 0) {
+    const names = unique(exactLocations.map((item) => displayNameFromRef(item.entry)));
+    const regions = unique(names.filter((name) => /^Region [A-D]$/i.test(name)));
+    const hasPyroStar = exactLocations.some((item) => /PyroStar|pyrostar/i.test(`${item.entry?.recordName ?? ""} ${item.entry?.path ?? ""}`));
+    if (hasPyroStar || (regions.length > 0 && exactLocations.some((item) => systemFromRef(item.entry) === "Pyro"))) {
+      return {
+        status: "system_scope",
+        displayName: "Pyro system",
+        system: "Pyro",
+        locationType: "Procedural availability scope",
+        localityPool: hasPyroStar ? "Pyro StarLocality" : "Pyro locality",
+        regions,
+        specificPickup: null,
+        sourceRole: "system_scope",
+        confidence: "partial",
+        reason: "Procedural region scope. Specific pickup generated at mission offer.",
+        sourceRefs: exactLocations.map((item) => item.ref),
+        possibleLocations: names.filter((name) => name !== "Pyro Star"),
+        unresolvedRefs: explicitLocationRefs.filter((ref) => !refMap.has(ref.toLowerCase())),
+        technicalRefs,
+      };
+    }
+    return {
+      status: "exact",
+      displayName: names.length ? names.slice(0, 3).join(", ") + (names.length > 3 ? ` +${names.length - 3}` : "") : "Pickup location resolved",
+      system: systemFromRef(exactLocations[0]?.entry),
+      parentLocation: undefined,
+      locationType: exactLocations[0]?.entry?.type,
+      sourceRole: "availability",
+      confidence: "high",
+      reason: "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      sourceRefs: exactLocations.map((item) => item.ref),
+      possibleLocations: names,
+      unresolvedRefs: explicitLocationRefs.filter((ref) => !refMap.has(ref.toLowerCase())),
+      technicalRefs,
+    };
+  }
+
+  const localityRefs = unique(prerequisites
+    .filter((item) => item.type === "ContractPrerequisite_Locality")
+    .map((item) => guidValue(rawValue(item.attributes, ["localityAvailable", "availableAt", "acceptedAt"]))));
+  const resolvedLocalities = localityRefs
+    .map((ref) => ({ ref, entry: refMap.get(ref.toLowerCase()) }))
+    .filter((item) => item.entry?.type === "MissionLocality");
+
+  if (resolvedLocalities.length > 0) {
+    const names = unique(resolvedLocalities.map((item) => displayNameFromRef(item.entry))).filter(Boolean);
+    const systems = unique(resolvedLocalities.map((item) => systemFromRef(item.entry)));
+    const regions = unique(names.filter((name) => /^Region [A-D]$/i.test(name)));
+    if (systems.length === 1 && systems[0] === "Pyro" && regions.length > 0) {
+      return {
+        status: "system_scope",
+        displayName: "Pyro system",
+        system: "Pyro",
+        locationType: "MissionLocality procedural region scope",
+        localityPool: "Pyro StarLocality",
+        regions,
+        specificPickup: null,
+        sourceRole: "system_scope",
+        confidence: "partial",
+        reason: "Procedural region scope. Specific pickup generated at mission offer.",
+        sourceRefs: resolvedLocalities.map((item) => item.ref),
+        possibleLocations: names,
+        unresolvedRefs: localityRefs.filter((ref) => !refMap.has(ref.toLowerCase())),
+        technicalRefs,
+      };
+    }
+    return {
+      status: "generated_from_pool",
+      displayName: names.length === 1 ? names[0]! : names.length ? `${names.slice(0, 3).join(", ")}${names.length > 3 ? ` +${names.length - 3}` : ""}` : "Mission locality",
+      system: systems.length === 1 ? systems[0] : systems.length ? systems.join(", ") : undefined,
+      locationType: "MissionLocality",
+      sourceRole: "locality_pool",
+      confidence: "medium",
+      reason: "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      sourceRefs: resolvedLocalities.map((item) => item.ref),
+      possibleLocations: [],
+      unresolvedRefs: localityRefs.filter((ref) => !refMap.has(ref.toLowerCase())),
+      technicalRefs,
+    };
+  }
+
+  const unresolvedRefs = unique([...explicitLocationRefs, ...localityRefs].filter((ref) => !refMap.has(ref.toLowerCase())));
+  if (unresolvedRefs.length > 0) {
+    return {
+      status: "unresolved",
+      displayName: "Unresolved",
+      sourceRole: "unknown",
+      confidence: "unresolved",
+      reason: "Availability/location refs were present but did not resolve in the reference index.",
+      sourceRefs: [...explicitLocationRefs, ...localityRefs],
+      possibleLocations: [],
+      unresolvedRefs,
+      technicalRefs,
+    };
+  }
+
+  return {
+    status: "unknown",
+    displayName: "Unknown",
+    sourceRole: "unknown",
+    confidence: "low",
+    reason: "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+    sourceRefs: [],
+    possibleLocations: [],
+    unresolvedRefs: [],
+    technicalRefs,
+  };
+}
+
+function dedupePrerequisites(prerequisites: ShapedPrerequisite[]): ShapedPrerequisite[] {
+  const grouped = new Map<string, ShapedPrerequisite>();
+  for (const prerequisite of prerequisites) {
+    const key = JSON.stringify([prerequisite.type, prerequisite.label, prerequisite.confidence, prerequisite.rawType, prerequisite.raw]);
+    if (!grouped.has(key)) grouped.set(key, prerequisite);
+  }
+  return Array.from(grouped.values());
+}
+
+function reputationRewardLabel(path: RewardedReputationPath): string {
+  if (path.confidence === "unresolved") return "Rep reward unresolved";
+  return `${shortScopeLabel(path.scopeDisplayName)} ${formatSignedAmount(path.amount)}`;
+}
+
+function shapeRewards(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, rewardedReputationPaths: RewardedReputationPath[]): ShapedVariant["rewards"] {
+  const blueprintRewardGroups: BlueprintRewardGroup[] = unique((mission.blueprintRewards ?? []).map((reward) => clean(reward.blueprintPoolGuid)))
+    .map((poolGuid) => {
+      const pool = pools.get(String(poolGuid ?? "").toLowerCase());
+      const rewards = (pool?.rewards ?? []).map((item) => ({
+        blueprintGuid: item.blueprintGuid,
+        displayName: item.displayName ?? item.blueprintName ?? item.blueprintGuid ?? "Unknown blueprint",
+        componentType: item.componentType,
+        size: item.size,
+        grade: item.grade,
+        chanceLabel: chanceLabel(item.poolChance),
+      }));
+      const chanceLabels = unique(rewards.map((item) => item.chanceLabel));
+      return {
+        poolGuid,
+        poolName: pool?.displayName ?? pool?.poolName ?? "Unknown blueprint pool",
+        rewardCount: rewards.length,
+        chanceLabel: chanceLabels.length === 1 ? `${chanceLabels[0]} - 1 of ${rewards.length}` : undefined,
+        rewards,
+      };
+    });
+
+  const blueprintRewards = unique((mission.blueprintRewards ?? []).flatMap((reward) => {
+    const pool = pools.get(String(reward.blueprintPoolGuid ?? "").toLowerCase());
+    const poolName = pool?.displayName ?? pool?.poolName;
+    const blueprintNames = pool?.rewards?.map((item) => item.displayName ?? item.blueprintGuid).filter(Boolean).slice(0, 4) ?? [];
+    const suffix = (pool?.rewards?.length ?? 0) > 4 ? ` +${(pool?.rewards?.length ?? 0) - 4}` : "";
+    return poolName ? [`${poolName}${blueprintNames.length ? `: ${blueprintNames.join(", ")}${suffix}` : ""}`] : ["Unknown blueprint pool"];
+  }));
+
+  const reputationRewards = unique(rewardedReputationPaths.map(reputationRewardLabel));
+
+  const unresolvedRewardTokens = unique([
+    ...(mission.blueprintRewards ?? []).filter((reward) => !pools.has(String(reward.blueprintPoolGuid ?? "").toLowerCase())).map((reward) => clean(reward.blueprintPoolGuid) ?? "unknown blueprint pool"),
+    ...(mission.creditRewardTypes ?? []).map((reward) => reward.type),
+    ...(mission.itemRewards ?? []).map((reward) => reward.type),
+  ]);
+
+  let credits = "No credit reward extracted";
+  let creditStatus: ShapedVariant["rewards"]["creditStatus"] = "provenAbsent";
+  if ((mission.creditRewardTypes ?? []).length > 0) {
+    credits = "Credits unresolved";
+    creditStatus = "unresolved";
+  }
+
+  const summary = unique([
+    ...blueprintRewards.map((reward) => `Blueprint: ${reward}`),
+    ...reputationRewards,
+    credits,
+    (mission.itemRewards ?? []).length > 0 ? "Item reward unresolved" : undefined,
+    (mission.completionTags ?? []).length > 0 ? "Completion tag" : undefined,
+  ]);
+
+  return { summary, blueprintRewards, blueprintRewardGroups, reputationRewards, credits, creditStatus, unresolvedRewardTokens };
+}
+
+function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, refMap: Map<string, RefIndexEntry>): ShapedVariant {
+  const prerequisites = dedupePrerequisites([
+    ...(mission.minStanding || mission.maxStanding
+      ? [{
+        type: "standing" as const,
+        label: formatStandingRange(mission.minStanding, mission.maxStanding),
+        confidence: "resolved" as const,
+        rawType: "standingRange",
+      }]
+      : []),
+    ...(mission.prerequisites ?? []).map((item) => shapePrerequisite(item, mission, refMap)),
+  ]);
+  const locations = unique(prerequisites.filter((item) => (item.type === "location" || item.type === "locality") && item.confidence === "resolved").map((item) => item.label));
+  const unresolvedLocationTokens = unique(prerequisites
+    .filter((item) => (item.type === "location" || item.type === "locality") && item.confidence === "unresolved")
+    .flatMap((item) => [clean(item.raw?.token)]));
+  const lawful = classifyLawful(mission);
+  const prerequisiteSummary = unique(prerequisites.map((item) => item.label)).slice(0, 3).join("; ") || "No extracted prerequisites";
+  const pickupLocation = resolvePickupLocation(mission, refMap);
+  const missionArchetype = classifyMissionArchetype(mission);
+  const resolvedTitle = variantTitle(mission, missionArchetype, pickupLocation);
+  const reputationScope = resolveReputationScope(mission, refMap, missionArchetype);
+  const rewardedReputationPaths = shapeRewardedReputationPaths(mission, refMap, reputationScope);
+  const rewards = shapeRewards(mission, pools, rewardedReputationPaths);
+
+  return {
+    variantKey: mission.contractId,
+    familyKey: mission.familyId ?? mission.contractId,
+    displayName: resolvedTitle.displayName,
+    titleSource: resolvedTitle.titleSource,
+    titleConfidence: resolvedTitle.titleConfidence,
+    briefing: cleanBriefing(mission.description),
+    rawName: mission.titleRaw,
+    internalName: mission.debugName,
+    missionType: mission.missionType ?? mission.contractType ?? "Unknown type",
+    provider: mission.factionName ?? "Unknown provider",
+    faction: mission.factionName ?? "Unknown faction",
+    contractType: mission.contractType ?? "Unknown contract",
+    reputationScope,
+    missionArchetype,
+    standingRequirement: formatStandingRange(mission.minStanding, mission.maxStanding),
+    reputationRequirement: prerequisites.find((item) => item.type === "reputation")?.label,
+    prerequisiteSummary,
+    prerequisites,
+    pickupLocation,
+    locations,
+    unresolvedLocationTokens,
+    rewards,
+    rewardedReputationPaths,
+    flags: missionFlags(mission),
+    releaseFlags: releaseFlags(mission),
+    crimeStatRequirement: crimeStatRequirement(mission.prerequisites ?? []),
+    ...lawful,
+    confidence: {
+      hasUnresolvedLocation: pickupLocation.status === "unresolved" || unresolvedLocationTokens.length > 0,
+      hasUnresolvedRewards: rewards.creditStatus === "unresolved" || rewards.unresolvedRewardTokens.length > 0,
+      hasUnresolvedPrerequisites: prerequisites.some((item) => item.confidence === "unresolved"),
+    },
+    technical: {
+      contractId: mission.contractId,
+      generatorGuid: mission.generatorGuid,
+      generatorName: mission.generatorName,
+      generatorPath: mission.generatorPath,
+      handlerType: mission.handlerType,
+      titleRaw: mission.titleRaw,
+      descriptionRaw: mission.descriptionRaw,
+    },
+  };
+}
+
+function aggregateCrimeStat(variants: ShapedVariant[]): ShapedFamily["crimeStatRequirement"] {
+  if (variants.some((variant) => variant.crimeStatRequirement === "required")) return "required";
+  if (variants.some((variant) => variant.crimeStatRequirement === "bounded")) return "bounded";
+  if (variants.some((variant) => variant.crimeStatRequirement === "notRequired")) return "notRequired";
+  return "unknown";
+}
+
+function aggregateLawful(variants: ShapedVariant[]): Pick<ShapedFamily, "lawfulClassification" | "lawfulConfidence"> {
+  if (variants.some((variant) => variant.lawfulClassification === "unlawful")) return { lawfulClassification: "unlawful", lawfulConfidence: "inferred" };
+  if (variants.some((variant) => variant.lawfulClassification === "lawful")) return { lawfulClassification: "lawful", lawfulConfidence: "inferred" };
+  return { lawfulClassification: "unknown", lawfulConfidence: "unknown" };
+}
+
+function familyPickupSummary(variants: ShapedVariant[]): Pick<ShapedFamily, "pickupSummary" | "pickupStatuses" | "pickupUnresolvedCount"> {
+  const pickups = variants.map((variant) => variant.pickupLocation);
+  const statuses = unique(pickups.map((pickup) => pickup.status)) as PickupLocation["status"][];
+  const unresolved = pickups.filter((pickup) => pickup.status === "unknown" || pickup.status === "unresolved").length;
+  const generated = pickups.filter((pickup) => pickup.status === "generated_from_pool");
+  if (generated.length === pickups.length && generated.length > 0) {
+    const names = unique(generated.map((pickup) => pickup.displayName));
+    return {
+      pickupSummary: `Pickup: Generated from ${names.length === 1 ? names[0] : `${names.slice(0, 2).join(", ")}${names.length > 2 ? ` +${names.length - 2}` : ""}`} pool`,
+      pickupStatuses: statuses,
+      pickupUnresolvedCount: unresolved,
+    };
+  }
+  const scopes = unique(pickups.flatMap((pickup) => pickup.system ? [pickup.system] : pickup.status === "exact" ? [pickup.displayName] : []));
+  if (scopes.length) {
+    return {
+      pickupSummary: scopes.length > 3 ? `Pickup: ${scopes.slice(0, 3).join(", ")} +${scopes.length - 3} more` : `Pickup: ${scopes.join(", ")}`,
+      pickupStatuses: statuses,
+      pickupUnresolvedCount: unresolved,
+    };
+  }
+  return {
+    pickupSummary: unresolved ? `Pickup: unresolved for ${unresolved} variant${unresolved === 1 ? "" : "s"}` : "Pickup: unknown",
+    pickupStatuses: statuses,
+    pickupUnresolvedCount: unresolved,
+  };
+}
+
+function commonTitlePrefix(titles: string[]): string | undefined {
+  if (titles.length < 2) return undefined;
+  const normalized = titles
+    .map((title) => title.replace(/\s+-\s+.*$/, "").replace(/\s*\([^)]*\)\s*$/, "").trim())
+    .filter((title) => title.length >= 8);
+  if (normalized.length < 2) return undefined;
+  let prefix = normalized[0] ?? "";
+  for (const title of normalized.slice(1)) {
+    let index = 0;
+    while (index < prefix.length && index < title.length && prefix[index]?.toLowerCase() === title[index]?.toLowerCase()) index += 1;
+    prefix = prefix.slice(0, index).trim();
+    if (prefix.length < 8) return undefined;
+  }
+  return prefix.replace(/[|:,\-\s]+$/, "").trim();
+}
+
+function providerArchetypeName(provider: string, missionType: string): string | undefined {
+  if (!provider || /^Unknown/i.test(provider) || !missionType || /^Unknown/i.test(missionType)) return undefined;
+  return `${provider} ${missionType}`;
+}
+
+function resolveFamilyTitle(
+  variants: ShapedVariant[],
+  rawRepresentative: RawMission | undefined,
+  provider: string,
+  missionType: string,
+): Pick<ShapedFamily, "displayName" | "titleSource" | "titleConfidence"> {
+  const localizedFamilyTitle = rawRepresentative ? localizedTitle(rawRepresentative) : undefined;
+  const cleanVariantTitles = variants
+    .filter((variant) => variant.titleSource !== "internal_fallback" && !isInternalTitle(variant.displayName) && !hasUnresolvedTitleToken(variant.displayName))
+    .map((variant) => variant.displayName);
+
+  if (localizedFamilyTitle && !hasUnresolvedTitleToken(localizedFamilyTitle) && cleanVariantTitles.every((title) => title === localizedFamilyTitle)) {
+    return { displayName: localizedFamilyTitle, titleSource: "localized_family", titleConfidence: "high" };
+  }
+
+  const cleanedFamilyTitle = cleanTemplateTitle(localizedFamilyTitle);
+  if (cleanedFamilyTitle && cleanVariantTitles.every((title) => title === cleanedFamilyTitle)) {
+    return { displayName: cleanedFamilyTitle, titleSource: "token_template_cleaned", titleConfidence: "medium" };
+  }
+
+  const counts = new Map<string, number>();
+  for (const title of cleanVariantTitles) counts.set(title, (counts.get(title) ?? 0) + 1);
+  const ranked = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+  const dominant = ranked[0];
+  if (dominant && dominant[1] >= 2) {
+    return {
+      displayName: dominant[0],
+      titleSource: "shared_variant_localized",
+      titleConfidence: dominant[1] === variants.length ? "high" : "medium",
+    };
+  }
+
+  const prefix = commonTitlePrefix(cleanVariantTitles);
+  if (prefix) return { displayName: prefix, titleSource: "common_variant_title", titleConfidence: "medium" };
+
+  const providerFallback = providerArchetypeName(provider, missionType);
+  if (providerFallback) return { displayName: providerFallback, titleSource: "provider_archetype_fallback", titleConfidence: "low" };
+
+  return {
+    displayName: readableName(rawRepresentative?.handlerDebugName ?? rawRepresentative?.generatorName ?? rawRepresentative?.familyId),
+    titleSource: "internal_fallback",
+    titleConfidence: "low",
+  };
+}
+
+function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: RawMission[]): ShapedFamily {
+  const representative = variants[0];
+  const rawRepresentative = rawVariants[0];
+  const provider = firstKnown(unique(variants.map((variant) => variant.provider)), "Unknown provider");
+  const missionType = firstKnown(unique(variants.map((variant) => variant.missionType)), "Unknown type");
+  const reputationScope = variants[0]?.reputationScope ?? {
+    scopeKey: `${keySlug(provider)}:unknown-scope`,
+    displayName: "Unknown scope",
+    factionKey: keySlug(provider),
+    factionDisplayName: provider,
+    trackType: "Unknown",
+    confidence: "unresolved" as const,
+    sourceRefs: [],
+    unresolvedReason: "No variants available.",
+  };
+  const archetypes = unique(variants.map((variant) => variant.missionArchetype));
+  const missionArchetype = archetypes.length === 1 ? archetypes[0]! : archetypes.length ? `${archetypes[0]} +${archetypes.length - 1}` : "Other / unresolved";
+  const release = unique(variants.flatMap((variant) => variant.releaseFlags));
+  const rewards = unique(variants.flatMap((variant) => variant.rewards.summary)).slice(0, 8);
+  const unresolvedRewardFields = unique(variants.flatMap((variant) => variant.rewards.unresolvedRewardTokens));
+  const confidenceFlags = unique([
+    variants.some((variant) => variant.confidence.hasUnresolvedLocation) ? "Location unresolved" : undefined,
+    variants.some((variant) => variant.confidence.hasUnresolvedRewards) ? "Reward data unresolved" : undefined,
+    variants.some((variant) => variant.confidence.hasUnresolvedPrerequisites) ? "Prerequisite unresolved" : undefined,
+    variants.some((variant) => variant.lawfulClassification === "unlawful" && variant.lawfulConfidence !== "explicit") ? "Unlawful context, requirement unconfirmed" : undefined,
+  ]);
+  const resolvedTitle = resolveFamilyTitle(variants, rawRepresentative, provider, missionType);
+  const lawful = aggregateLawful(variants);
+  const pickup = familyPickupSummary(variants);
+  const rewardedReputationPaths = Array.from(
+    new Map(
+      variants.flatMap((variant) => variant.rewardedReputationPaths)
+        .map((path) => [JSON.stringify([path.factionKey, path.scopeKey, path.amount, path.confidence, path.sourceRefs]), path])
+    ).values()
+  );
+
+  return {
+    familyKey,
+    displayName: resolvedTitle.displayName,
+    titleSource: resolvedTitle.titleSource,
+    titleConfidence: resolvedTitle.titleConfidence,
+    rawName: rawRepresentative?.handlerDebugName ?? rawRepresentative?.generatorName,
+    internalName: rawRepresentative?.debugName,
+    provider,
+    faction: firstKnown(unique(variants.map((variant) => variant.faction)), "Unknown faction"),
+    missionType,
+    reputationScope,
+    missionArchetype,
+    variantCount: variants.length,
+    statusFlags: unique(variants.flatMap((variant) => variant.flags)),
+    releaseFlags: release,
+    rewardSummary: rewards,
+    blueprintRewards: unique(variants.flatMap((variant) => variant.rewards.blueprintRewards)).slice(0, 10),
+    blueprintRewardGroups: Array.from(
+      new Map(
+        variants.flatMap((variant) => variant.rewards.blueprintRewardGroups)
+          .map((group) => [group.poolGuid ?? group.poolName, group])
+      ).values()
+    ).slice(0, 12),
+    reputationRewards: unique(variants.flatMap((variant) => variant.rewards.reputationRewards)).slice(0, 8),
+    rewardedReputationPaths,
+    creditRewardSummary: variants.some((variant) => variant.rewards.creditStatus === "unresolved") ? "Credits unresolved" : "No credit reward extracted",
+    unresolvedRewardFields,
+    reputationRequirement: unique(variants.map((variant) => variant.reputationRequirement)).join("; ") || undefined,
+    prerequisiteRequirements: unique(variants.flatMap((variant) => variant.prerequisites.map((item) => item.label))).slice(0, 10),
+    ...pickup,
+    crimeStatRequirement: aggregateCrimeStat(variants),
+    ...lawful,
+    locations: unique(variants.flatMap((variant) => variant.locations)).slice(0, 8),
+    unresolvedLocationTokens: unique(variants.flatMap((variant) => variant.unresolvedLocationTokens)).slice(0, 20),
+    confidenceFlags,
+    unresolvedReferences: unique(variants.flatMap((variant) => [
+      ...variant.unresolvedLocationTokens,
+      ...variant.rewards.unresolvedRewardTokens,
+    ])).slice(0, 30),
+    variantKeys: variants.map((variant) => variant.variantKey),
+    searchText: unique([
+      resolvedTitle.displayName,
+      representative?.displayName,
+      representative?.internalName,
+      representative?.provider,
+      representative?.missionType,
+      reputationScope.displayName,
+      missionArchetype,
+      pickup.pickupSummary,
+      representative?.briefing,
+      ...variants.map((variant) => variant.displayName),
+      ...variants.map((variant) => variant.technical.contractId),
+      ...rewards,
+    ]).join(" ").toLowerCase(),
+  };
+}
+
+function buildBrowseGroups(families: ShapedFamily[]): MissionBrowseGroup[] {
+  const factionMap = new Map<string, ShapedFamily[]>();
+  for (const family of families) {
+    factionMap.set(family.reputationScope.factionKey, [...(factionMap.get(family.reputationScope.factionKey) ?? []), family]);
+  }
+
+  return Array.from(factionMap.entries()).map(([factionKeyValue, factionFamilies]) => {
+    const scopeMap = new Map<string, ShapedFamily[]>();
+    for (const family of factionFamilies) {
+      scopeMap.set(family.reputationScope.scopeKey, [...(scopeMap.get(family.reputationScope.scopeKey) ?? []), family]);
+    }
+
+    return {
+      factionKey: factionKeyValue,
+      factionDisplayName: firstKnown(unique(factionFamilies.map((family) => family.reputationScope.factionDisplayName)), factionFamilies[0]?.provider ?? "Unknown faction"),
+      reputationScopes: Array.from(scopeMap.entries()).map(([scopeKey, scopeFamilies]) => {
+        const archetypeMap = new Map<string, ShapedFamily[]>();
+        for (const family of scopeFamilies) {
+          archetypeMap.set(family.missionArchetype, [...(archetypeMap.get(family.missionArchetype) ?? []), family]);
+        }
+        const representative = scopeFamilies[0]!;
+        return {
+          scopeKey,
+          displayName: representative.reputationScope.displayName,
+          confidence: representative.reputationScope.confidence,
+          trackType: representative.reputationScope.trackType,
+          missionArchetypes: Array.from(archetypeMap.entries()).map(([archetypeKey, archetypeFamilies]) => ({
+            archetypeKey: keySlug(archetypeKey),
+            displayName: archetypeKey,
+            familyKeys: archetypeFamilies.map((family) => family.familyKey),
+            missionCount: archetypeFamilies.length,
+            variantCount: archetypeFamilies.reduce((sum, family) => sum + family.variantCount, 0),
+            standingSummary: compactSummary(unique(archetypeFamilies.map((family) => family.reputationRequirement)), "No standing requirement extracted", 2),
+            unresolvedCount: archetypeFamilies.filter((family) => family.confidenceFlags.length || family.pickupUnresolvedCount).length,
+          })).sort((a, b) => a.displayName.localeCompare(b.displayName)),
+        };
+      }).sort((a, b) => a.displayName.localeCompare(b.displayName)),
+    };
+  }).sort((a, b) => a.factionDisplayName.localeCompare(b.factionDisplayName));
+}
+
+function compactSummary(values: string[], fallback: string, max: number): string {
+  if (!values.length) return fallback;
+  const visible = values.slice(0, max).join("; ");
+  return values.length > max ? `${visible}; +${values.length - max} more` : visible;
+}
+
+async function writeJson(fileName: string, value: unknown): Promise<void> {
+  await writeFile(path.join(missionRoot, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+const [catalog, lookups, refIndex] = await Promise.all([
+  readFile(contractsPath, "utf8").then((content) => JSON.parse(content) as RawCatalog),
+  readFile(lookupsPath, "utf8").then((content) => JSON.parse(content) as Lookups),
+  readFile(refIndexPath, "utf8").then((content) => JSON.parse(content) as RefIndexEntry[]).catch(() => []),
+]);
+
+const poolMap = new Map((lookups.blueprintPools ?? []).map((pool) => [String(pool.poolGuid ?? "").toLowerCase(), pool]));
+const refMap = new Map(refIndex.map((entry) => [String(entry.guid ?? "").toLowerCase(), entry]));
+const variants = catalog.records.map((mission) => shapeVariant(mission, poolMap, refMap));
+const rawByFamily = new Map<string, RawMission[]>();
+const variantsByFamily = new Map<string, ShapedVariant[]>();
+
+for (const mission of catalog.records) {
+  const familyKey = mission.familyId ?? mission.contractId;
+  rawByFamily.set(familyKey, [...(rawByFamily.get(familyKey) ?? []), mission]);
+}
+
+for (const variant of variants) {
+  variantsByFamily.set(variant.familyKey, [...(variantsByFamily.get(variant.familyKey) ?? []), variant]);
+}
+
+const families = Array.from(variantsByFamily.entries())
+  .map(([familyKey, familyVariants]) => shapeFamily(familyKey, familyVariants, rawByFamily.get(familyKey) ?? []))
+  .sort((a, b) => a.displayName.localeCompare(b.displayName));
+const missionBrowseGroups = buildBrowseGroups(families);
+
+const shaped: ShapedCatalog = {
+  schemaVersion: 1,
+  generatedAt: new Date().toISOString(),
+  sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
+  sourceFiles: [
+    "public/api/missions/mission_contracts.json",
+    "public/api/missions/mission_reward_lookups.json",
+    "tmp/scintel-api-candidate/ref_index.json",
+  ],
+  summary: {
+    familyCount: families.length,
+    variantCount: variants.length,
+    unresolvedLocationCount: variants.filter((variant) => variant.confidence.hasUnresolvedLocation).length,
+    unresolvedRewardCount: variants.filter((variant) => variant.confidence.hasUnresolvedRewards).length,
+    explicitCrimeStatRequiredCount: variants.filter((variant) => variant.crimeStatRequirement === "required").length,
+    pickupExactCount: variants.filter((variant) => variant.pickupLocation.status === "exact").length,
+    pickupGeneratedFromPoolCount: variants.filter((variant) => variant.pickupLocation.status === "generated_from_pool").length,
+    pickupSystemScopeCount: variants.filter((variant) => variant.pickupLocation.status === "system_scope").length,
+    pickupSystemOnlyCount: variants.filter((variant) => variant.pickupLocation.status === "system_only").length,
+    pickupUnknownCount: variants.filter((variant) => variant.pickupLocation.status === "unknown").length,
+    pickupUnresolvedCount: variants.filter((variant) => variant.pickupLocation.status === "unresolved").length,
+    reputationScopeResolvedCount: variants.filter((variant) => variant.reputationScope.confidence === "resolved").length,
+    reputationScopePartialCount: variants.filter((variant) => variant.reputationScope.confidence === "partial").length,
+    reputationScopeUnresolvedCount: variants.filter((variant) => variant.reputationScope.confidence === "unresolved").length,
+    factionGroupCount: missionBrowseGroups.length,
+    reputationScopeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.length, 0),
+    archetypeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.reduce((scopeSum, scope) => scopeSum + scope.missionArchetypes.length, 0), 0),
+  },
+  families,
+  variants,
+  missionBrowseGroups,
+};
+
+const rewards = variants.map((variant) => ({
+  variantKey: variant.variantKey,
+  familyKey: variant.familyKey,
+  rewards: variant.rewards,
+  rewardedReputationPaths: variant.rewardedReputationPaths,
+}));
+
+const locations = variants.map((variant) => ({
+  variantKey: variant.variantKey,
+  familyKey: variant.familyKey,
+  pickupLocation: variant.pickupLocation,
+  locations: variant.locations,
+  unresolvedLocationTokens: variant.unresolvedLocationTokens,
+}));
+
+const prerequisites = variants.map((variant) => ({
+  variantKey: variant.variantKey,
+  familyKey: variant.familyKey,
+  standingRequirement: variant.standingRequirement,
+  reputationRequirement: variant.reputationRequirement,
+  prerequisites: variant.prerequisites,
+  crimeStatRequirement: variant.crimeStatRequirement,
+}));
+
+const reputation = variants
+  .filter((variant) => variant.reputationRequirement || variant.rewards.reputationRewards.length)
+  .map((variant) => ({
+    variantKey: variant.variantKey,
+    familyKey: variant.familyKey,
+    reputationScope: variant.reputationScope,
+    requirement: variant.reputationRequirement,
+    rewards: variant.rewards.reputationRewards,
+  }));
+
+const unresolvedRefs = variants
+  .filter((variant) => variant.confidence.hasUnresolvedLocation || variant.confidence.hasUnresolvedPrerequisites || variant.confidence.hasUnresolvedRewards)
+  .map((variant) => ({
+    variantKey: variant.variantKey,
+    familyKey: variant.familyKey,
+    pickupStatus: variant.pickupLocation.status,
+    pickupReason: variant.pickupLocation.reason,
+    pickupUnresolvedRefs: variant.pickupLocation.unresolvedRefs,
+    nonPickupUnresolvedLocations: variant.unresolvedLocationTokens.filter((token) => !variant.pickupLocation.sourceRefs.includes(token)),
+    unresolvedRewards: variant.rewards.unresolvedRewardTokens,
+    unresolvedPrerequisites: variant.prerequisites
+      .filter((item) => item.confidence === "unresolved")
+      .map((item) => ({ type: item.type, label: item.label, rawType: item.rawType, raw: item.raw })),
+  }));
+
+const report = {
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+  inputMissionCount: catalog.records.length,
+  familyCount: families.length,
+  variantCount: variants.length,
+  explicitCrimeStatRequiredCount: shaped.summary.explicitCrimeStatRequiredCount,
+  crimeStatBoundedCount: variants.filter((variant) => variant.crimeStatRequirement === "bounded").length,
+  creditExtractedCount: variants.filter((variant) => variant.rewards.creditStatus === "extracted").length,
+  creditUnresolvedCount: variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length,
+  creditNoResultCount: variants.filter((variant) => variant.rewards.creditStatus === "provenAbsent").length,
+  blueprintRewardVariantCount: variants.filter((variant) => variant.rewards.blueprintRewards.length > 0).length,
+  reputationRewardVariantCount: variants.filter((variant) => variant.rewards.reputationRewards.length > 0).length,
+  unresolvedLocationVariantCount: shaped.summary.unresolvedLocationCount,
+  pickupExactResolvedCount: shaped.summary.pickupExactCount,
+  pickupGeneratedFromPoolCount: shaped.summary.pickupGeneratedFromPoolCount,
+  pickupSystemScopeResolvedCount: shaped.summary.pickupSystemScopeCount,
+  pickupSystemOnlyCount: shaped.summary.pickupSystemOnlyCount,
+  pickupUnknownCount: shaped.summary.pickupUnknownCount,
+  pickupUnresolvedMissingRefsCount: shaped.summary.pickupUnresolvedCount,
+  nonPickupObjectiveLocationsUnresolvedCount: variants.filter((variant) =>
+    variant.unresolvedLocationTokens.some((token) => !variant.pickupLocation.sourceRefs.includes(token))
+  ).length,
+  destinationDropoffUnresolvedCount: 0,
+  proceduralRegionUnresolvedCount: variants.filter((variant) =>
+    variant.pickupLocation.technicalRefs.some((ref) => ref.role.includes("procedural") && !ref.consideredPickup)
+  ).length,
+  reputationScopesResolvedCount: shaped.summary.reputationScopeResolvedCount,
+  reputationScopesPartialCount: shaped.summary.reputationScopePartialCount,
+  reputationScopesUnresolvedCount: shaped.summary.reputationScopeUnresolvedCount,
+  rawRepScopeTokensUnresolvedCount: variants.filter((variant) => /@REPSCOPE/i.test(`${variant.reputationScope.rawName ?? ""} ${variant.reputationScope.displayName}`)).length,
+  factionsGroupedCount: shaped.summary.factionGroupCount,
+  reputationScopesGroupedCount: shaped.summary.reputationScopeGroupCount,
+  archetypesGroupedCount: shaped.summary.archetypeGroupCount,
+  missionGroupsWithInternalFallbackTitleCount: families.filter((family) => family.titleSource === "internal_fallback").length,
+  unresolvedReferenceCount: unresolvedRefs.length,
+  familyTitleSourceCounts: families.reduce<Record<string, number>>((counts, family) => {
+    counts[family.titleSource] = (counts[family.titleSource] ?? 0) + 1;
+    return counts;
+  }, {}),
+  variantTitleSourceCounts: variants.reduce<Record<string, number>>((counts, variant) => {
+    counts[variant.titleSource] = (counts[variant.titleSource] ?? 0) + 1;
+    return counts;
+  }, {}),
+  rewardedReputationPathResolvedCount: variants.filter((variant) => variant.rewardedReputationPaths.some((path) => path.confidence === "resolved")).length,
+  rewardedReputationPathPartialCount: variants.filter((variant) => variant.rewardedReputationPaths.some((path) => path.confidence === "partial")).length,
+  rewardedReputationPathUnresolvedCount: variants.filter((variant) => variant.rewardedReputationPaths.some((path) => path.confidence === "unresolved")).length,
+  rewardedReputationMixedFamilyCount: families.filter((family) => new Set(family.rewardedReputationPaths.filter((path) => path.confidence !== "unresolved").map((path) => path.scopeKey)).size > 1).length,
+  internalFallbackFamilyCount: families.filter((family) => family.titleSource === "internal_fallback").length,
+  notes: [
+    "CrimeStat required is emitted only when minCrimeStat is greater than zero.",
+    "Current source data contains CrimeStat bounds but no explicit positive minCrimeStat requirement.",
+    "Credit reward result types are present without resolved amounts, so browser labels them Credits unresolved.",
+    "Pickup / availability uses explicit location prerequisites first and MissionLocality availability pools second.",
+    "Pyro StarLocality and Region A-D style refs are shaped as procedural Pyro system availability scopes.",
+    "Mission browse groups are Faction -> Reputation Scope / Career Track -> Mission Archetype -> Mission Group -> Variants.",
+    "Headhunters sub-tracks are marked partial when the extracted scope GUID is generic and the track is derived from Scintel mission fields.",
+    "MissionLocality records are displayed as generated-from-pool scopes; child availableLocations are not invented when absent from current generated inputs.",
+    "Location names are not invented; raw GUID tokens are retained for technical details.",
+  ],
+};
+
+await mkdir(missionRoot, { recursive: true });
+await Promise.all([
+  writeJson("missions.json", shaped),
+  writeJson("mission_families.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
+  writeJson("mission_variants.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: variants }),
+  writeJson("mission_browse_groups.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
+  writeJson("mission_rewards.json", { generatedAt: shaped.generatedAt, records: rewards }),
+  writeJson("mission_locations.json", { generatedAt: shaped.generatedAt, records: locations }),
+  writeJson("mission_prerequisites.json", { generatedAt: shaped.generatedAt, records: prerequisites }),
+  writeJson("mission_reputation.json", { generatedAt: shaped.generatedAt, records: reputation }),
+  writeJson("mission_unresolved_refs.json", { generatedAt: shaped.generatedAt, records: unresolvedRefs }),
+  writeJson("mission_browser_extraction_report.json", report),
+]);
+
+console.log(`Shaped ${families.length} mission families and ${variants.length} variants.`);

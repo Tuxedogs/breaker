@@ -750,6 +750,41 @@
   color: rgba(199, 210, 230, 0.75);
 }
 
+.logi-inv-segmented {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.logi-inv-segmented-btn {
+  flex: 1;
+  padding: 0.36rem 0.5rem;
+  background: none;
+  border: none;
+  font-family: var(--font-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(160, 180, 220, 0.55);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.logi-inv-segmented-btn + .logi-inv-segmented-btn {
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.logi-inv-segmented-btn--active {
+  background: rgba(167, 139, 250, 0.12);
+  color: #c4b5fd;
+}
+
+.logi-inv-segmented-btn:not(.logi-inv-segmented-btn--active):hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(199, 210, 230, 0.75);
+}
+
 /* Location typeahead */
 .logi-location-typeahead {
   position: relative;
@@ -1011,6 +1046,7 @@
 .logi-form-input,
 .logi-form-select,
 .logi-inv-mode-toggle,
+.logi-inv-segmented,
 .logi-nav-card-icon--wip {
   background: var(--bg-card-dark);
   border-color: var(--border-soft-color);
@@ -1019,6 +1055,7 @@
 .logi-btn-ghost:hover,
 .logi-action-btn:hover,
 .logi-inv-mode-btn:not(.logi-inv-mode-btn--active):hover,
+.logi-inv-segmented-btn:not(.logi-inv-segmented-btn--active):hover,
 .logi-location-suggestion:hover,
 .logi-location-suggestion--active,
 .logi-table tr:hover td {
@@ -1027,6 +1064,11 @@
 }
 
 .logi-inv-mode-btn--active {
+  background: var(--bg-card-active);
+  color: #c4b5fd;
+}
+
+.logi-inv-segmented-btn--active {
   background: var(--bg-card-active);
   color: #c4b5fd;
 }

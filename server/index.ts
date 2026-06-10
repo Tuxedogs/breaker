@@ -1,6 +1,7 @@
 import http from "node:http";
 import { fileURLToPath } from "node:url";
 import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
+import { handleFittingRoute } from "./routes/fitting.routes";
 import { handleRecommenderRoute } from "./routes/recommender.routes";
 import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "../src/server/user/buildQueueRoute";
@@ -18,7 +19,8 @@ export function createServer() {
   return http.createServer(async (request, response) => {
     try {
       const body = await readBody(request);
-      const url = request.url?.split("?")[0] ?? "";
+      const rawUrl = request.url ?? "";
+      const url = rawUrl.split("?")[0] ?? "";
       const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
         ?? (url === "/api/user/saved-blueprints"
         ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
@@ -26,7 +28,8 @@ export function createServer() {
           ? await handleBlueprintTrackerRoute(request.method ?? "GET", request.headers, body)
         : url === "/api/user/build-queue"
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
+        : await handleFittingRoute(request.method ?? "GET", rawUrl, body) ??
+          await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {
         response.writeHead(404, { "content-type": "application/json" });

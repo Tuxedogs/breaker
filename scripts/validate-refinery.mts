@@ -5,7 +5,7 @@ import {
   calculateMaterialAtRefinery,
   findBestSingleRefinery,
   getFinalYieldMultiplier,
-  getRawRequired,
+  getRefinedOutput,
   optimizePerMaterial,
   optimizeSelectedRoute,
 } from "../src/lib/refineryCalculations";
@@ -55,21 +55,24 @@ function refinery(id: string, name: string, agricium: number, aluminum: number):
 }
 
 const targets = [
-  { materialId: "agricium" as const, desiredRefinedAmount: 100 },
-  { materialId: "aluminum" as const, desiredRefinedAmount: 200 },
+  { materialId: "agricium" as const, rawInputScu: 100 },
+  { materialId: "aluminum" as const, rawInputScu: 200 },
 ];
 const alpha = refinery("alpha", "Alpha", 20, 0);
 const beta = refinery("beta", "Beta", 0, 20);
 const alphaLaterId = refinery("alpha-z", "Alpha", 20, 0);
 
 assertApprox(getFinalYieldMultiplier(20), 0.48, "20% multiplier");
-assertApprox(getRawRequired(100, 0), 250, "0% raw requirement");
-assertApprox(getRawRequired(100, 20), 208.33333333333334, "20% raw requirement");
-assert(getRawRequired(0, 20) === 0, "Zero desired refined amount must return zero.");
-assertThrows(() => getRawRequired(-1, 0), "Negative desired refined amount must throw.");
-assertThrows(() => getRawRequired(Number.NaN, 0), "Non-finite desired refined amount must throw.");
-assertThrows(() => getRawRequired(1, Number.POSITIVE_INFINITY), "Non-finite bonus must throw.");
-assertThrows(() => getRawRequired(0, Number.NaN), "Zero desired amount must still reject a non-finite bonus.");
+assertApprox(getRefinedOutput(100, 0), 40, "0% refined output");
+assertApprox(getRefinedOutput(100, 20), 48, "20% refined output");
+assertApprox(getRefinedOutput(100, 8), 43.2, "8% refined output");
+assertApprox(getRefinedOutput(200, 12), 89.6, "12% refined output");
+assertApprox(getRefinedOutput(50, 5), 21, "5% refined output");
+assert(getRefinedOutput(0, 20) === 0, "Zero raw input must return zero.");
+assertThrows(() => getRefinedOutput(-1, 0), "Negative raw input must throw.");
+assertThrows(() => getRefinedOutput(Number.NaN, 0), "Non-finite raw input must throw.");
+assertThrows(() => getRefinedOutput(1, Number.POSITIVE_INFINITY), "Non-finite bonus must throw.");
+assertThrows(() => getRefinedOutput(0, Number.NaN), "Zero raw input must still reject a non-finite bonus.");
 assertThrows(() => getFinalYieldMultiplier(-100), "Non-positive final multiplier must throw.");
 
 const optimized = optimizePerMaterial([alpha, beta], targets);
@@ -79,6 +82,10 @@ assert(findBestSingleRefinery([alpha, beta], targets)?.refineryId === "beta", "B
 assert(optimizeSelectedRoute([alpha, beta], ["alpha"], targets)?.calculations.every((row) => row.refineryId === "alpha"), "Selected route must exclude unselected refineries.");
 assert(findBestSingleRefinery([alphaLaterId, alpha], [targets[0]])?.refineryId === "alpha", "Ties must resolve by refinery name then ID.");
 assert(calculateMaterialAtRefinery(alpha, targets[0]).bonusPercent === 20, "Calculation must use the requested material bonus.");
+const missingBonusCalculation = calculateMaterialAtRefinery(alpha, { materialId: "riccite", rawInputScu: 100 });
+assert(missingBonusCalculation.bonusPercent === 0, "Missing material bonus data must fall back to 0%.");
+assert(missingBonusCalculation.hasRefineryBonus === false, "Missing material bonus data must be flagged.");
+assertApprox(missingBonusCalculation.refinedOutputScu, 40, "Missing bonus material refined output");
 assert(optimizePerMaterial([], targets) === null, "Empty refinery candidates must return null.");
 assert(findBestSingleRefinery([], targets) === null, "Empty single-refinery candidates must return null.");
 assert(optimizeSelectedRoute([alpha], ["missing"], targets) === null, "Unknown selected refinery IDs must return null.");

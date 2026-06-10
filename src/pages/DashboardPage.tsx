@@ -14,6 +14,7 @@ import {
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
 import { getQueueLedgerModel, type QueueLedgerLine } from "../lib/logistics/queueLedger";
+import { apiUrl } from "../lib/apiUrl";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from "../types/logistics";
 
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -46,6 +47,20 @@ function StatIcon({ type }: { type: StatIconType }) {
     </div>
   );
 }
+
+type FittingShipSummary = {
+  shipKey: string;
+  name: string;
+  manufacturer: string | null;
+  role: string | null;
+  career: string | null;
+  movementClass: string | null;
+  crewSize: number | null;
+  isGroundVehicle: boolean | null;
+  hasPrototypeCalculation: boolean;
+};
+
+const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
 
 function StatTooltip({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -488,6 +503,7 @@ export default function DashboardPage() {
 
       <aside className="dash-right-col" aria-label="System panels">
         <QuickInventoryPanel />
+        {ENABLE_FITTING_UI && <FittingLaunchPanel />}
 
         <div className="dash-panel">
           <div className="dash-panel-header"><span className="dash-panel-title">Primary Locations</span></div>
@@ -562,6 +578,132 @@ function QuickInventoryPanel() {
             View Inventory
           </Link>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function FittingLaunchPanel() {
+  const [ships, setShips] = useState<FittingShipSummary[]>([]);
+  const [status, setStatus] = useState<"idle" | "loading" | "loaded" | "error">("idle");
+  const [query, setQuery] = useState("");
+  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    queueMicrotask(() => {
+      if (!controller.signal.aborted) setStatus("loading");
+    });
+    fetch(apiUrl("/api/fitting/ships"), { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Fitting ships request failed: ${response.status}`);
+        return response.json() as Promise<{ records?: FittingShipSummary[] }>;
+      })
+      .then((payload) => {
+        if (controller.signal.aborted) return;
+        const records = Array.isArray(payload.records) ? payload.records : [];
+        setShips(records);
+        setSelectedShipKey((current) => current ?? records.find((ship) => ship.hasPrototypeCalculation)?.shipKey ?? records[0]?.shipKey ?? null);
+        setStatus("loaded");
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setStatus("error");
+      });
+    return () => controller.abort();
+  }, []);
+
+  const filteredShips = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    const matches = needle
+      ? ships.filter((ship) => [
+        ship.name,
+        ship.manufacturer,
+        ship.role,
+        ship.career,
+      ].filter(Boolean).join(" ").toLowerCase().includes(needle))
+      : ships;
+    return matches.slice(0, 8);
+  }, [query, ships]);
+
+  const selectedShip = useMemo(
+    () => ships.find((ship) => ship.shipKey === selectedShipKey) ?? filteredShips[0] ?? null,
+    [filteredShips, selectedShipKey, ships],
+  );
+
+  const prototypeCount = useMemo(
+    () => ships.filter((ship) => ship.hasPrototypeCalculation).length,
+    [ships],
+  );
+
+  return (
+    <div className="dash-panel dash-fitting-panel">
+      <div className="dash-panel-header">
+        <span className="dash-panel-title">Fitting Prototype</span>
+        <span className="dash-fitting-count">{status === "loaded" ? `${ships.length} ships` : "Internal"}</span>
+      </div>
+      <div className="dash-panel-body dash-fitting-body">
+        <label className="dash-fitting-search">
+          <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search ships..."
+            aria-label="Search fitting ships"
+          />
+        </label>
+
+        <div className="dash-fitting-selector" role="listbox" aria-label="Fitting ship selector">
+          {filteredShips.map((ship) => {
+            const selected = ship.shipKey === selectedShip?.shipKey;
+            return (
+              <button
+                key={ship.shipKey}
+                type="button"
+                className={["dash-fitting-option", selected ? "dash-fitting-option--active" : ""].filter(Boolean).join(" ")}
+                onClick={() => setSelectedShipKey(ship.shipKey)}
+                role="option"
+                aria-selected={selected}
+              >
+                <span className="dash-fitting-option-main">
+                  <span className="dash-fitting-option-name">{ship.name}</span>
+                  <span className="dash-fitting-option-meta">{ship.manufacturer ?? "Unknown"} / {ship.role ?? ship.career ?? "Unclassified"}</span>
+                </span>
+                <span className={ship.hasPrototypeCalculation ? "dash-fitting-proto dash-fitting-proto--ready" : "dash-fitting-proto"}>
+                  {ship.hasPrototypeCalculation ? "Calc" : "Map"}
+                </span>
+              </button>
+            );
+          })}
+          {status === "loading" && <div className="dash-empty-state">Loading fitting ships</div>}
+          {status === "error" && <div className="dash-empty-state">Fitting ships unavailable</div>}
+          {status === "loaded" && filteredShips.length === 0 && <div className="dash-empty-state">No matching ships</div>}
+        </div>
+
+        {selectedShip && (
+          <div className="dash-fitting-summary" aria-label="Selected fitting ship">
+            <div className="dash-fitting-summary-head">
+              <span>{selectedShip.manufacturer ?? "Unknown"}</span>
+              <strong>{selectedShip.name}</strong>
+            </div>
+            <div className="dash-fitting-metrics">
+              <span><b>Role</b>{selectedShip.role ?? selectedShip.career ?? "Unknown"}</span>
+              <span><b>Crew</b>{selectedShip.crewSize ?? "-"}</span>
+              <span><b>Prototype</b>{selectedShip.hasPrototypeCalculation ? "Calculation ready" : "Loadout map only"}</span>
+            </div>
+            <Link to={`/fitting/${selectedShip.shipKey}`} className="dash-fitting-open">
+              Open Fitting
+              <ArrowRight size={10} />
+            </Link>
+          </div>
+        )}
+
+        <p className="dash-fitting-note">
+          {prototypeCount} ships have prototype calculations. Dashboard preview only.
+        </p>
       </div>
     </div>
   );

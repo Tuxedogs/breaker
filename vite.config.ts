@@ -10,6 +10,7 @@ import { stat } from "node:fs/promises";
 import path from "node:path";
 import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
+import { handleFittingRoute } from "./server/routes/fitting.routes";
 import { handleSavedBlueprintsRoute } from "./src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "./src/server/user/buildQueueRoute";
 import { handleUserInventoryRoute } from "./src/server/user/inventoryRoute";
@@ -26,7 +27,9 @@ const dynamicApiPaths = [
 ];
 
 function isDynamicApiPath(pathname: string) {
-  return dynamicApiPaths.includes(pathname) || pathname.startsWith("/api/user/inventory/stacks/");
+  return dynamicApiPaths.includes(pathname)
+    || pathname.startsWith("/api/fitting/")
+    || pathname.startsWith("/api/user/inventory/stacks/");
 }
 
 const contentTypes: Record<string, string> = {
@@ -95,7 +98,8 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
       : url === "/api/user/build-queue"
         ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleRecommenderRoute(request.method ?? "GET", url, body) ??
+        : await handleFittingRoute(request.method ?? "GET", request.url ?? url, body) ??
+          await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
     if (!route) {
       next();

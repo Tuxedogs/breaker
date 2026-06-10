@@ -23,14 +23,14 @@ function compareCalculations(
   right: RefineryMaterialCalculation,
 ): number {
   return (
-    left.rawRequired - right.rawRequired ||
+    right.refinedOutputScu - left.refinedOutputScu ||
     left.refineryName.localeCompare(right.refineryName) ||
     left.refineryId.localeCompare(right.refineryId)
   );
 }
 
-function totalRawRequired(calculations: RefineryMaterialCalculation[]): number {
-  return calculations.reduce((total, calculation) => total + calculation.rawRequired, 0);
+function totalRefinedOutput(calculations: RefineryMaterialCalculation[]): number {
+  return calculations.reduce((total, calculation) => total + calculation.refinedOutputScu, 0);
 }
 
 export function getFinalYieldMultiplier(bonusPercent: number): number {
@@ -42,29 +42,31 @@ export function getFinalYieldMultiplier(bonusPercent: number): number {
   return multiplier;
 }
 
-export function getRawRequired(desiredRefinedAmount: number, bonusPercent: number): number {
-  requireFinite(desiredRefinedAmount, "desiredRefinedAmount");
-  if (desiredRefinedAmount < 0) {
-    throw new RangeError("desiredRefinedAmount must not be negative.");
+export function getRefinedOutput(rawInputScu: number, bonusPercent: number): number {
+  requireFinite(rawInputScu, "rawInputScu");
+  if (rawInputScu < 0) {
+    throw new RangeError("rawInputScu must not be negative.");
   }
   const multiplier = getFinalYieldMultiplier(bonusPercent);
-  if (desiredRefinedAmount === 0) return 0;
-  return desiredRefinedAmount / multiplier;
+  if (rawInputScu === 0) return 0;
+  return rawInputScu * multiplier;
 }
 
 export function calculateMaterialAtRefinery(
   refinery: RefineryRecord,
   target: RefineryTarget,
 ): RefineryMaterialCalculation {
-  const bonusPercent = refinery.materialBonuses[target.materialId];
-  requireFinite(bonusPercent, `Bonus for ${target.materialId} at ${refinery.name}`);
+  const rawBonusPercent = refinery.materialBonuses[target.materialId];
+  const hasRefineryBonus = Number.isFinite(rawBonusPercent);
+  const bonusPercent = hasRefineryBonus ? rawBonusPercent : 0;
   return {
     ...target,
     refineryId: refinery.id,
     refineryName: refinery.name,
     bonusPercent,
-    finalYieldMultiplier: getFinalYieldMultiplier(bonusPercent),
-    rawRequired: getRawRequired(target.desiredRefinedAmount, bonusPercent),
+    hasRefineryBonus,
+    baseYieldScu: target.rawInputScu * BASE_REFINERY_YIELD,
+    refinedOutputScu: getRefinedOutput(target.rawInputScu, bonusPercent),
   };
 }
 
@@ -80,7 +82,7 @@ export function optimizePerMaterial(
   );
   return {
     calculations,
-    totalRawRequired: totalRawRequired(calculations),
+    totalRefinedOutputScu: totalRefinedOutput(calculations),
   };
 }
 
@@ -93,7 +95,7 @@ export function scoreSingleRefinery(
     refineryId: refinery.id,
     refineryName: refinery.name,
     calculations,
-    totalRawRequired: totalRawRequired(calculations),
+    totalRefinedOutputScu: totalRefinedOutput(calculations),
   };
 }
 
@@ -109,7 +111,7 @@ export function findBestSingleRefinery(
       const leftRefinery = refineryById.get(left.refineryId);
       const rightRefinery = refineryById.get(right.refineryId);
       if (!leftRefinery || !rightRefinery) return 0;
-      return left.totalRawRequired - right.totalRawRequired || compareRefineries(leftRefinery, rightRefinery);
+      return right.totalRefinedOutputScu - left.totalRefinedOutputScu || compareRefineries(leftRefinery, rightRefinery);
     })[0];
 }
 

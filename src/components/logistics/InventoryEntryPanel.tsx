@@ -33,36 +33,6 @@ const KIND_DEFAULT_UNIT: Record<InventoryItemKind, InventoryUnitType> = {
   unknown: 'unit',
 };
 
-const KIND_LABELS: Record<InventoryItemKind, string> = {
-  material: 'Refined Material',
-  ore: 'Ore',
-  raw_mineable: 'Raw Mineable',
-  ice: 'Ice',
-  fps_weapon: 'FPS Weapon',
-  fps_armor: 'FPS Armor',
-  vehicle_component: 'Vehicle Component',
-  crafted_item: 'Crafted Item Tracking',
-  manual: 'Misc / Custom',
-  unknown: 'Unknown',
-};
-
-const ALL_KINDS: InventoryItemKind[] = [
-  'ore', 'material', 'raw_mineable', 'ice',
-  'fps_weapon', 'fps_armor', 'vehicle_component', 'crafted_item', 'manual',
-];
-
-// Map itemKind → which materialTypes match it in the catalog
-function kindMatchesMaterial(kind: InventoryItemKind, mat: MaterialTemplate): boolean {
-  if (mat.id === 'rawice') return kind === 'ice';
-  switch (kind) {
-    case 'ore': return mat.materialType === 'ore' || mat.materialType === 'refined';
-    case 'material': return mat.materialType === 'refined' || mat.materialType === 'ore';
-    case 'raw_mineable': return mat.materialType === 'raw' || mat.materialType === 'special';
-    case 'ice': return mat.id === 'rawice';
-    default: return false; // fps_weapon, fps_armor, vehicle_component, crafted_item, manual → no catalog entries yet
-  }
-}
-
 // Derive unit from catalog material, falling back to kind default
 function resolveUnitFromMaterial(mat: MaterialTemplate | undefined, kind: InventoryItemKind): InventoryUnitType {
   if (!mat) return KIND_DEFAULT_UNIT[kind];
@@ -91,14 +61,6 @@ function deriveKindFromEntry(entry: InventoryEntry, mat?: MaterialTemplate): Inv
   return entry.itemKind ?? deriveKindFromMaterial(mat);
 }
 
-function deriveKindFromIdentity(identity: MaterialIdentity, material?: MaterialTemplate): InventoryItemKind {
-  if (material) return deriveKindFromMaterial(material);
-  if (identity.materialKey === 'rawice') return 'ice';
-  if (identity.unitType === 'scu') return 'ore';
-  if (identity.materialForm === 'gem' || identity.materialForm === 'raw') return 'raw_mineable';
-  return 'material';
-}
-
 function normalizeItemLookup(value: string): string {
   return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
@@ -113,6 +75,7 @@ interface DraftState {
   // catalog lookup (legacy materialId path)
   catalogMode: 'catalog' | 'manual';
   materialId: string;      // only used when catalogMode === 'catalog'
+  mineableForm: MineableFormChoice;
   // manual / generalized
   itemName: string;
   itemKind: InventoryItemKind;
@@ -137,6 +100,7 @@ function initDraftFromEntry(
   return {
     catalogMode: isCatalog ? 'catalog' : 'manual',
     materialId: entry.materialId ?? '',
+    mineableForm: kind === 'ore' ? 'raw' : kind === 'material' ? 'refined' : '',
     itemName: entry.itemName ?? entry.materialName ?? mat?.name ?? '',
     itemKind: kind,
     unitType: entry.unitType ?? KIND_DEFAULT_UNIT[kind],
@@ -153,6 +117,7 @@ function initBlankDraft(): DraftState {
   return {
     catalogMode: 'catalog',
     materialId: '',
+    mineableForm: '',
     itemName: '',
     itemKind: 'ore',
     unitType: KIND_DEFAULT_UNIT['ore'],
@@ -181,6 +146,24 @@ interface LocationTypeaheadProps {
 type LocationSuggestion = InventoryLocation & {
   categoryLabel: string;
   searchText: string;
+};
+
+type MineableFormChoice = '' | 'raw' | 'refined';
+
+type MineableRuntimeFields = MaterialTemplate & {
+  isRefinable?: boolean;
+  canComeFromRefinery?: boolean;
+  sourceGroups?: string[];
+};
+
+type ResolvedMineable = {
+  identity: MaterialIdentity | undefined;
+  material: MaterialTemplate;
+};
+
+type MineableSuggestion = {
+  identity: MaterialIdentity;
+  material: MaterialTemplate;
 };
 
 type LocationCategoryGroup = {
@@ -234,6 +217,32 @@ function getLocationAliases(location: InventoryLocation): string[] {
     typeof raw.parentName === 'string' ? raw.parentName : undefined,
     typeof raw.bodyName === 'string' ? raw.bodyName : undefined,
   ].filter((value): value is string => Boolean(value));
+}
+
+function isKnownMineable(material: MaterialTemplate | undefined): material is MaterialTemplate {
+  return Boolean(
+    material &&
+    (material.materialType === 'ore' ||
+      material.materialType === 'refined' ||
+      material.materialType === 'raw' ||
+      material.materialType === 'special'),
+  );
+}
+
+function isRefinableScuMineable(material: MaterialTemplate | undefined, identity?: MaterialIdentity): boolean {
+  if (!isKnownMineable(material)) return false;
+  const flagged = material as MineableRuntimeFields;
+  const hasRefinerySource = flagged.isRefinable === true ||
+    flagged.canComeFromRefinery === true ||
+    flagged.sourceGroups?.includes('ores') === true;
+  const usesScu = identity?.unitType === 'scu' || material.materialType === 'ore' || material.materialType === 'refined';
+  return hasRefinerySource && usesScu;
+}
+
+function deriveInventoryKindFromForm(choice: MineableFormChoice): InventoryItemKind | undefined {
+  if (choice === 'raw') return 'ore';
+  if (choice === 'refined') return 'material';
+  return undefined;
 }
 
 function buildLocationSuggestionGroups(locations: InventoryLocation[], query: string): LocationSystemGroup[] {
@@ -363,44 +372,68 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     return lookup;
   }, [materialIdentities]);
 
+  const materialByLookup = useMemo(() => {
+    const lookup = new Map<string, MaterialTemplate>();
+    for (const material of materials) {
+      if (!isKnownMineable(material)) continue;
+      lookup.set(normalizeItemLookup(material.id), material);
+      lookup.set(normalizeItemLookup(material.name), material);
+    }
+    return lookup;
+  }, [materials]);
+
+  const mineableIdentities = useMemo(() => {
+    return materialIdentities
+      .map<MineableSuggestion | null>((identity) => {
+        const material = materialByLookup.get(normalizeItemLookup(identity.materialKey)) ??
+          materialByLookup.get(normalizeItemLookup(identity.displayName));
+        return material ? { identity, material } : null;
+      })
+      .filter((item): item is MineableSuggestion => item !== null)
+      .sort((left, right) => left.identity.displayName.localeCompare(right.identity.displayName));
+  }, [materialByLookup, materialIdentities]);
+
   function patch(updates: Partial<DraftState>) {
     setDraft((d) => ({ ...d, ...updates }));
   }
 
-  // Kind changed: clear selected item, keep kind-default unitType.
-  // Does NOT switch catalogMode.
-  function handleKindChange(kind: InventoryItemKind) {
-    patch({ itemKind: kind, materialId: '', itemName: '', unitType: KIND_DEFAULT_UNIT[kind] });
-    setSuccessMessage('');
-  }
-
-  // Catalog item selected: derive unitType from catalog. Do NOT overwrite user's itemKind.
-  function handleMaterialSelect(materialId: string) {
-    const mat = materials.find((m) => m.id === materialId);
-    patch({
-      materialId,
-      itemName: mat?.name ?? '',
-      unitType: resolveUnitFromMaterial(mat, draft.itemKind),
-    });
+  function findMineableIdentity(itemName: string): ResolvedMineable | undefined {
+    const key = normalizeItemLookup(itemName);
+    if (!key) return undefined;
+    const identity = identityByLookup.get(key);
+    if (identity) {
+      const material = materialByLookup.get(normalizeItemLookup(identity.materialKey)) ??
+        materialByLookup.get(normalizeItemLookup(identity.displayName));
+      if (material) return { identity, material };
+    }
+    const material = materialByLookup.get(key);
+    if (!material) return undefined;
+    return { identity: undefined, material };
   }
 
   function resolveKnownItem(itemName: string): Partial<DraftState> {
-    const identity = identityByLookup.get(normalizeItemLookup(itemName));
-    if (!identity) {
+    const resolved = findMineableIdentity(itemName);
+    if (!resolved) {
       return {
-        catalogMode: 'manual',
+        catalogMode: 'catalog',
         itemName,
         materialId: '',
-        unitType: KIND_DEFAULT_UNIT[draft.itemKind],
+        mineableForm: '',
+        itemKind: 'unknown',
+        unitType: 'unit',
       };
     }
-    const material = materials.find((candidate) => candidate.id === identity.materialKey);
+    const { identity, material } = resolved;
+    const isRefinable = isRefinableScuMineable(material, identity);
+    const nextForm = isRefinable ? draft.mineableForm : '';
+    const nextKind = deriveInventoryKindFromForm(nextForm) ?? (isRefinable ? 'unknown' : deriveKindFromMaterial(material));
     return {
       catalogMode: 'catalog',
-      itemName: identity.displayName,
-      materialId: identity.materialKey,
-      itemKind: deriveKindFromIdentity(identity, material),
-      unitType: identity.unitType,
+      itemName: identity?.displayName ?? material.name,
+      materialId: material.id,
+      mineableForm: nextForm,
+      itemKind: nextKind,
+      unitType: isRefinable ? 'scu' : resolveUnitFromMaterial(material, nextKind),
     };
   }
 
@@ -409,17 +442,22 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     if (isNaN(qty) || qty <= 0) return null;
     if (!resolvedLocationId) return null;
 
-    const resolvedItemName = draft.itemName.trim();
+    const resolvedMineable = findMineableIdentity(draft.itemName);
+    if (!resolvedMineable || !isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity)) return null;
+    const derivedKind = deriveInventoryKindFromForm(draft.mineableForm);
+    if (!derivedKind) return null;
+
+    const resolvedItemName = resolvedMineable.identity?.displayName ?? resolvedMineable.material.name;
     if (!resolvedItemName) return null;
-    const resolvedMaterialId = draft.materialId || undefined;
-    const catalogSource: InventoryCatalogSource = resolvedMaterialId ? 'api' : 'manual';
+    const resolvedMaterialId = resolvedMineable.material.id;
+    const catalogSource: InventoryCatalogSource = 'api';
 
     return createInventoryEntryDraft({
       id: overrideId ?? entry?.id ?? createNewInventoryId(),
       materialId: resolvedMaterialId,
       itemName: resolvedItemName,
-      itemKind: draft.itemKind,
-      unitType: draft.unitType,
+      itemKind: derivedKind,
+      unitType: 'scu',
       catalogSource,
       quality: parseOptionalQuality(draft.quality),
       quantity: qty,
@@ -446,12 +484,14 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       setSuccessMessage(`Added ${built.itemName ?? built.materialName ?? 'item'}: ${details}`);
       setDraft((current) => ({
         ...current,
-        catalogMode: 'manual',
+        catalogMode: 'catalog',
         materialId: '',
+        mineableForm: '',
         itemName: '',
+        itemKind: 'unknown',
         quantity: '',
         quality: '',
-        unitType: KIND_DEFAULT_UNIT[current.itemKind],
+        unitType: 'unit',
       }));
       setClearLocationOnNextFocus(false);
     }
@@ -465,12 +505,15 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     setLocationOpen(true);
   }
 
-  // Derived preview: unitType label
-  const unitLabel = draft.unitType === 'scu' ? 'SCU' : 'units';
+  const selectedMineable = findMineableIdentity(draft.itemName);
+  const selectedMaterial = selectedMineable?.material;
+  const selectedIsKnownMineable = isKnownMineable(selectedMaterial);
+  const selectedIsRefinableScu = isRefinableScuMineable(selectedMaterial, selectedMineable?.identity);
+  const derivedUnitType: InventoryUnitType = selectedIsRefinableScu ? 'scu' : resolveUnitFromMaterial(selectedMaterial, draft.itemKind);
   const qty = parseFloat(draft.quantity);
   const quantityPreview = isNaN(qty) || qty <= 0
     ? null
-    : draft.unitType === 'scu'
+    : derivedUnitType === 'scu'
       ? `${qty} SCU`
       : `×${qty}`;
 
@@ -487,16 +530,19 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     const q = parseFloat(draft.quantity);
     if (isNaN(q) || q <= 0) return false;
     if (!resolvedLocationId) return false;
-    return draft.itemName.trim().length > 0;
-  }, [draft, resolvedLocationId]);
+    if (!selectedIsKnownMineable || !selectedIsRefinableScu) return false;
+    return Boolean(deriveInventoryKindFromForm(draft.mineableForm));
+  }, [draft.mineableForm, draft.quantity, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
 
-  const filteredCatalogItems = useMemo(
-    () => materials.filter((material) => kindMatchesMaterial(draft.itemKind, material)),
-    [materials, draft.itemKind],
-  );
-  const selectedMat = materials.find((material) => material.id === draft.materialId);
-  const hasCatalogForKind = filteredCatalogItems.length > 0;
-  const showLegacySourceFields = false;
+  const itemHint = !draft.itemName.trim()
+    ? 'Select a known mineable material.'
+    : !selectedIsKnownMineable
+      ? 'Select a known mineable material. Custom items cannot be added as raw/refined inventory.'
+      : !selectedIsRefinableScu
+        ? 'This mineable is not a refinable SCU material. Custom raw/refined entries are disabled here.'
+        : draft.mineableForm
+          ? `Known mineable / ${selectedMaterial?.id} / ${draft.mineableForm === 'raw' ? 'Raw ore' : 'Refined material'}`
+          : 'Choose Raw or Refined before adding this material.';
 
   return (
     <div className="logi-entry-panel">
@@ -509,23 +555,6 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         </button>
       </div>
 
-      {/* 1. Item Source */}
-      {/* 2. Item Kind */}
-      <div className="logi-form-field">
-        <label htmlFor="inv-item-kind" className="logi-form-label">Item Kind</label>
-        <select
-          id="inv-item-kind"
-          className="logi-form-select"
-          value={draft.itemKind}
-          onChange={(e) => handleKindChange(e.target.value as InventoryItemKind)}
-        >
-          {ALL_KINDS.map((k) => (
-            <option key={k} value={k}>{KIND_LABELS[k]}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* 3. Item — filtered by kind in catalog mode; free-text in manual mode */}
       <div className="logi-form-field">
         <label htmlFor="inv-item-name" className="logi-form-label">Item Name</label>
         <input
@@ -539,62 +568,42 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             setSuccessMessage('');
           }}
           onBlur={(event) => patch(resolveKnownItem(event.target.value))}
-          placeholder="Search known items or enter a custom item..."
+          placeholder="Search mineable material..."
           autoFocus={isNew}
         />
         <datalist id="inv-known-items">
-          {materialIdentities.map((identity) => (
+          {mineableIdentities.map(({ identity }) => (
             <option key={identity.materialKey} value={identity.displayName} />
           ))}
         </datalist>
         <span className="logi-form-hint">
-          {draft.materialId ? `Known material / ${draft.materialId}` : 'Custom item'}
+          {itemHint}
         </span>
       </div>
 
-      {showLegacySourceFields && (draft.catalogMode === 'catalog' && hasCatalogForKind ? (
+      {selectedIsRefinableScu && (
         <div className="logi-form-field">
-          <label htmlFor="inv-material" className="logi-form-label">Item</label>
-          <select
-            id="inv-material"
-            className="logi-form-select"
-            value={draft.materialId}
-            onChange={(e) => e.target.value ? handleMaterialSelect(e.target.value) : patch({ materialId: '', itemName: '' })}
-          >
-            <option value="">Select item…</option>
-            {filteredCatalogItems.map((m) => (
-              <option key={m.id} value={m.id}>{m.name}</option>
-            ))}
-          </select>
-          {selectedMat && (
-            <span className="logi-form-hint">{selectedMat?.materialType}</span>
-          )}
+          <span className="logi-form-label">Raw / Refined</span>
+          <div className="logi-inv-segmented" role="group" aria-label="Raw or refined material">
+            <button
+              type="button"
+              className={`logi-inv-segmented-btn${draft.mineableForm === 'raw' ? ' logi-inv-segmented-btn--active' : ''}`}
+              onClick={() => patch({ mineableForm: 'raw', itemKind: 'ore', unitType: 'scu' })}
+            >
+              Raw
+            </button>
+            <button
+              type="button"
+              className={`logi-inv-segmented-btn${draft.mineableForm === 'refined' ? ' logi-inv-segmented-btn--active' : ''}`}
+              onClick={() => patch({ mineableForm: 'refined', itemKind: 'material', unitType: 'scu' })}
+            >
+              Refined
+            </button>
+          </div>
         </div>
-      ) : (
-        <div className="logi-form-field">
-          <label htmlFor="inv-item-name" className="logi-form-label">Item Name</label>
-          <input
-            id="inv-item-name"
-            type="text"
-            className="logi-form-input"
-            value={draft.itemName}
-            onChange={(e) => patch({ itemName: e.target.value })}
-            placeholder={
-              draft.itemKind === 'fps_weapon' ? 'e.g. Nightstalker P4-AR, S38 Combine…' :
-              draft.itemKind === 'fps_armor' ? 'e.g. Caldera Medium Helmet…' :
-              draft.itemKind === 'ice' ? 'e.g. Raw Ice, Pressurized Ice…' :
-              draft.itemKind === 'raw_mineable' ? 'e.g. Aphorite, Feynmaline…' :
-              'Item name…'
-            }
-            autoFocus={isNew}
-          />
-          {draft.catalogMode === 'catalog' && !hasCatalogForKind && (
-            <span className="logi-form-hint">No catalog entries for this kind — enter manually</span>
-          )}
-        </div>
-      ))}
+      )}
 
-      {/* Quantity + Unit Type */}
+      {/* Quantity + Quality */}
       <div className="logi-form-row-pair">
         <div className="logi-form-field">
           <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
@@ -604,45 +613,29 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
             className="logi-form-input"
             value={draft.quantity}
             onChange={(e) => patch({ quantity: e.target.value })}
-            placeholder={draft.unitType === 'scu' ? '0.00' : '1'}
+            placeholder="0.00"
             min="0"
-            step={draft.unitType === 'scu' ? '0.01' : '1'}
+            step="0.01"
           />
           {quantityPreview && (
             <span className="logi-form-hint logi-form-hint--value">{quantityPreview}</span>
           )}
         </div>
         <div className="logi-form-field">
-          <label htmlFor="inv-unit-type" className="logi-form-label">Unit</label>
-          <select
-            id="inv-unit-type"
-            className="logi-form-select"
-            value={draft.unitType}
-            onChange={(e) => patch({ unitType: e.target.value as InventoryUnitType })}
-            disabled={Boolean(draft.materialId)}
-          >
-            <option value="scu">SCU (cargo volume)</option>
-            <option value="unit">Units / items (×)</option>
-          </select>
-          <span className="logi-form-hint">Displays as: {unitLabel}</span>
+          <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0-1000)</span></label>
+          <input
+            id="inv-quality"
+            type="number"
+            className="logi-form-input"
+            value={draft.quality}
+            onChange={(e) => patch({ quality: e.target.value })}
+            placeholder="Optional"
+            min="0"
+            max="1000"
+            step="1"
+          />
+          <span className="logi-form-hint">Blank shows no accent</span>
         </div>
-      </div>
-
-      {/* Quality (accent only) */}
-      <div className="logi-form-field">
-        <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0–1000, accent color only)</span></label>
-        <input
-          id="inv-quality"
-          type="number"
-          className="logi-form-input"
-          value={draft.quality}
-          onChange={(e) => patch({ quality: e.target.value })}
-          placeholder="Leave blank if unknown"
-          min="0"
-          max="1000"
-          step="1"
-        />
-        <span className="logi-form-hint">Blank quality shows as — (no color accent)</span>
       </div>
 
       {/* Location — typeahead */}

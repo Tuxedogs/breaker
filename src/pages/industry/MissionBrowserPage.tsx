@@ -1,296 +1,376 @@
 import { useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   loadMissionData,
-  type BlueprintPoolLookup,
-  type MissionContract,
-  type MissionLookups,
-  type MissionPrerequisite,
+  type BlueprintRewardGroupView,
+  type MissionBrowserCatalog,
+  type MissionFamilyView,
+  type MissionPrerequisiteView,
+  type MissionRewardedReputationPathView,
+  type MissionVariantView,
 } from "@/lib/missionData";
 import "./mission-browser.css";
 
-const FAMILIES_PER_PAGE = 15;
+const MAX_VISIBLE_VARIANTS = 8;
 
-type MissionFamily = {
-  id: string;
-  name: string;
-  variants: MissionContract[];
-  factions: string[];
-  missionTypes: string[];
-  statuses: string[];
-  searchText: string;
-};
+type RewardFilter = "blueprints" | "reputation" | "credits-unresolved" | "credits-none";
+type ConfidenceFilter = "unresolved" | "locations" | "rewards" | "crime-bounded" | "unlawful";
 
-function truthy(value: unknown): boolean {
-  return value === true || value === 1 || value === "1" || value === "true";
+function stripSummaryPrefix(value: string, prefix: string): string {
+  return value.startsWith(prefix) ? value.slice(prefix.length).trim() : value;
 }
 
-function readableName(value?: string): string {
-  if (!value) return "Unknown mission family";
+function signedAmount(value?: number): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "unresolved";
+  return `${value >= 0 ? "+" : ""}${value.toLocaleString()}`;
+}
+
+function shortRepScope(value: string): string {
   return value
-    .replace(/^ContractGenerator\./, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/([a-z])([A-Z0-9])/g, "$1 $2")
+    .replace(/\bReputation\b/gi, "")
+    .replace(/\bPath\b/gi, "")
     .replace(/\s+/g, " ")
-    .trim();
+    .trim() || value;
 }
 
-function missionStatuses(mission: MissionContract): string[] {
-  const statuses = [truthy(mission.notForRelease) ? "not-for-release" : "unflagged"];
-  if (truthy(mission.workInProgress)) statuses.push("work-in-progress");
-  if (mission.classifications?.tutorial) statuses.push("tutorial");
-  if (mission.classifications?.event) statuses.push("event");
-  return statuses;
+function repScopeDescription(value: string): string {
+  const label = shortRepScope(value);
+  const text = label.toLowerCase();
+  if (text.includes("haul")) return "Earn Hauling reputation through cargo operations.";
+  if (text.includes("ship combat") || text.includes("combat") || text.includes("mercenary")) return "Earn Ship Combat reputation through combat operations.";
+  if (text.includes("bounty")) return "Earn Bounty reputation through hunting targets.";
+  if (text.includes("salvage")) return "Earn Salvage reputation through recovery operations.";
+  if (text.includes("standing")) return "Earn Standing reputation through lawful operations.";
+  return `Earn ${label} reputation through available operations.`;
 }
 
-function statusLabel(status: string): string {
-  return {
-    "not-for-release": "Not for release",
-    "work-in-progress": "Work in progress",
-    unflagged: "Unflagged",
-    tutorial: "Tutorial",
-    event: "Event",
-  }[status] ?? status;
+function factionInitials(value: string): string {
+  const words = value.replace(/[^a-z0-9\s]/gi, " ").trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return "??";
+  if (words.length === 1) return words[0]!.slice(0, 2).toUpperCase();
+  return words.slice(0, 2).map((word) => word[0]).join("").toUpperCase();
 }
 
-function buildFamilies(records: MissionContract[], pools: Map<string, BlueprintPoolLookup>): MissionFamily[] {
-  const grouped = new Map<string, MissionContract[]>();
-  for (const mission of records) {
-    const variants = grouped.get(mission.familyId) ?? [];
-    variants.push(mission);
-    grouped.set(mission.familyId, variants);
-  }
-  return Array.from(grouped.entries()).map(([id, variants]) => {
-    variants.sort((a, b) => (a.title ?? a.debugName ?? "").localeCompare(b.title ?? b.debugName ?? ""));
-    const representative = variants[0];
-    const factions = Array.from(new Set(variants.map((item) => item.factionName).filter((value): value is string => Boolean(value)))).sort();
-    const missionTypes = Array.from(new Set(variants.map((item) => item.missionType ?? item.contractType).filter((value): value is string => Boolean(value)))).sort();
-    const statuses = Array.from(new Set(variants.flatMap(missionStatuses)));
-    const rewardNames = variants.flatMap((mission) =>
-      (mission.blueprintRewards ?? []).flatMap((reward) =>
-        pools.get(reward.blueprintPoolGuid ?? "")?.rewards?.map((item) => item.displayName ?? item.blueprintGuid ?? "") ?? []
-      )
+function repScopeClass(value?: string): string {
+  const text = (value ?? "").toLowerCase();
+  if (text.includes("haul")) return "mission-rep-scope--hauling";
+  if (text.includes("ship combat") || text.includes("combat") || text.includes("mercenary")) return "mission-rep-scope--ship-combat";
+  if (text.includes("salvage")) return "mission-rep-scope--salvage";
+  if (text.includes("security")) return "mission-rep-scope--security";
+  if (text.includes("bounty")) return "mission-rep-scope--bounty";
+  if (text.includes("courier")) return "mission-rep-scope--courier";
+  if (text.includes("refuel")) return "mission-rep-scope--refuel";
+  if (text.includes("standing")) return "mission-rep-scope--standing";
+  if (text.includes("mixed")) return "mission-rep-scope--mixed";
+  return "mission-rep-scope--unknown";
+}
+
+function ReputationPathIcon({ scope }: { scope: string }) {
+  const label = shortRepScope(scope);
+  const text = label.toLowerCase();
+  if (text.includes("haul")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m4 7.5 8-3.5 8 3.5v9L12 20 4 16.5v-9Z" />
+        <path d="M4 7.5 12 11l8-3.5M12 11v9" />
+        <path d="m8.5 9.4 8-3.5" />
+      </svg>
     );
-    const name = readableName(representative.handlerDebugName ?? representative.generatorName ?? representative.title);
-    return {
-      id,
-      name,
-      variants,
-      factions,
-      missionTypes,
-      statuses,
-      searchText: [
-        name,
-        ...factions,
-        ...missionTypes,
-        ...rewardNames,
-        ...variants.flatMap((item) => [item.title, item.debugName, item.description, item.contractId]),
-      ].filter(Boolean).join(" ").toLowerCase(),
-    };
-  }).sort((a, b) => a.name.localeCompare(b.name));
-}
-
-function formatStanding(value?: { displayName?: string; minReputation?: number }): string {
-  if (!value) return "Unknown";
-  return [value.displayName, typeof value.minReputation === "number" ? `${value.minReputation.toLocaleString()} rep` : null]
-    .filter(Boolean).join(" / ") || "Unknown";
-}
-
-type RequirementCategory = "Reputation" | "Standing / Rank" | "Location" | "Locality" | "Other Requirements";
-
-type RequirementBadge = {
-  category: RequirementCategory;
-  identity: string;
-  labels: string[];
-  variantIds: Set<string>;
-  recordCount: number;
-  resolved: boolean;
-};
-
-const GUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function asDisplayString(value: unknown): string | undefined {
-  if (typeof value !== "string" && typeof value !== "number") return undefined;
-  const display = String(value).trim();
-  if (!display || GUID_PATTERN.test(display) || /^(undefined|null|nan)$/i.test(display)) return undefined;
-  return display;
-}
-
-function recordValue(record: Record<string, unknown> | undefined, keys: string[]): unknown {
-  for (const key of keys) {
-    if (record?.[key] !== undefined && record[key] !== null && record[key] !== "") return record[key];
   }
-  return undefined;
-}
-
-function numberValue(record: Record<string, unknown> | undefined, keys: string[]): number | undefined {
-  const value = recordValue(record, keys);
-  const parsed = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
-  return Number.isFinite(parsed) ? parsed : undefined;
-}
-
-function formatStandingRange(
-  minName?: string,
-  maxName?: string,
-  minReputation?: number,
-  maxReputation?: number,
-): string {
-  const min = [minName, minReputation !== undefined ? `${minReputation.toLocaleString()} rep` : null].filter(Boolean).join(" / ");
-  const max = [maxName, maxReputation !== undefined ? `${maxReputation.toLocaleString()} rep` : null].filter(Boolean).join(" / ");
-  if (min && max) return `${min} -> ${max}`;
-  if (min) return `Requires ${min}`;
-  if (max) return `Up to ${max}`;
-  return "Standing requirement";
-}
-
-function prerequisiteCategory(type?: string): RequirementCategory {
-  const normalized = type?.toLowerCase() ?? "";
-  if (normalized.includes("reputation")) return "Reputation";
-  if (normalized.includes("standing") || normalized.includes("rank")) return "Standing / Rank";
-  if (normalized.includes("locality")) return "Locality";
-  if (normalized.includes("location")) return "Location";
-  return "Other Requirements";
-}
-
-function prerequisiteIdentity(item: MissionPrerequisite): string {
-  const category = prerequisiteCategory(item.type);
-  if (category === "Location" || category === "Locality") {
-    return String(recordValue(item.resolved, ["displayName", "name", "locationDisplay", "localityDisplay"])
-      ?? recordValue(item.attributes, ["locationAvailable", "localityAvailable", "location", "locality"])
-      ?? category);
+  if (text.includes("combat") || text.includes("mercenary")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="6.5" />
+        <circle cx="12" cy="12" r="2.2" />
+        <path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4" />
+      </svg>
+    );
   }
-  return JSON.stringify([item.type, item.resolved, item.attributes, item.references]);
-}
-
-function resolveMissionPlaceName(item: MissionPrerequisite): string | undefined {
-  return asDisplayString(recordValue(item.resolved, [
-    "displayName",
-    "name",
-    "locationDisplay",
-    "localityDisplay",
-    "locationName",
-    "localityName",
-    "address",
-  ]));
-}
-
-function formatMissionPrerequisite(item: MissionPrerequisite, variantId: string): RequirementBadge {
-  const category = prerequisiteCategory(item.type);
-  const resolved = item.resolved;
-  const attributes = item.attributes;
-
-  if (category === "Reputation") {
-    const faction = asDisplayString(recordValue(resolved, ["factionReputationDisplay", "factionDisplay", "factionName"]));
-    const minName = asDisplayString(recordValue(resolved, ["minStandingDisplay", "minimumStandingDisplay", "minStanding"]));
-    const maxName = asDisplayString(recordValue(resolved, ["maxStandingDisplay", "maximumStandingDisplay", "maxStanding"]));
-    const minRep = numberValue(resolved, ["minReputation", "minimumReputation"])
-      ?? numberValue(attributes, ["minReputation", "minimumReputation"]);
-    const maxRep = numberValue(resolved, ["maxReputation", "maximumReputation"])
-      ?? numberValue(attributes, ["maxReputation", "maximumReputation"]);
-    return {
-      category,
-      identity: [faction, minName, maxName, minRep, maxRep].join("|"),
-      labels: [faction, formatStandingRange(minName, maxName, minRep, maxRep)].filter((value): value is string => Boolean(value)),
-      variantIds: new Set([variantId]),
-      recordCount: 1,
-      resolved: true,
-    };
+  if (text.includes("bounty")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 10.5 6.8 7.2l2.7 1.2M16 10.5l1.2-3.3-2.7 1.2" />
+        <path d="M7.5 12.2c0-3 1.8-5 4.5-5s4.5 2 4.5 5c0 2.5-1.5 4.4-4.5 4.4s-4.5-1.9-4.5-4.4Z" />
+        <path d="M9.2 18.5h5.6M10 13.3h.1M14 13.3h.1M11 15.2h2" />
+        <path d="M5.2 17.5 3 21M18.8 17.5 21 21" />
+      </svg>
+    );
   }
-
-  if (category === "Location" || category === "Locality") {
-    const display = resolveMissionPlaceName(item);
-    return {
-      category,
-      identity: prerequisiteIdentity(item),
-      labels: [display ?? `${category} Required`],
-      variantIds: new Set([variantId]),
-      recordCount: 1,
-      resolved: Boolean(display),
-    };
+  if (text.includes("salvage")) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m6 6 4 4M10 6l-4 4M14.5 5.5 18 9l-8 8-3.5.8.8-3.5 8-8Z" />
+        <path d="m15 14 3 3M17 12l3 3" />
+      </svg>
+    );
   }
-
-  const label = readableName(item.type)
-    .replace(/^Contract Prerequisite\s*/i, "")
-    .replace(/\s*Prerequisite$/i, "")
-    .trim();
-  return {
-    category,
-    identity: item.type ?? "other",
-    labels: [`${label || "Other"} Required`],
-    variantIds: new Set([variantId]),
-    recordCount: 1,
-    resolved: true,
-  };
-}
-
-function groupMissionPrerequisites(missions: MissionContract[]): RequirementBadge[] {
-  const grouped = new Map<string, RequirementBadge>();
-  for (const mission of missions) {
-    if (mission.minStanding || mission.maxStanding) {
-      const label = formatStandingRange(
-        mission.minStanding?.displayName,
-        mission.maxStanding?.displayName,
-        mission.minStanding?.minReputation,
-        mission.maxStanding?.minReputation,
-      );
-      const standing: RequirementBadge = {
-        category: "Standing / Rank",
-        identity: label,
-        labels: [label],
-        variantIds: new Set([mission.contractId]),
-        recordCount: 1,
-        resolved: true,
-      };
-      const existing = grouped.get(`Standing / Rank|${label}`);
-      if (existing) existing.variantIds.add(mission.contractId);
-      else grouped.set(`Standing / Rank|${label}`, standing);
-    }
-    for (const prerequisite of mission.prerequisites ?? []) {
-      const formatted = formatMissionPrerequisite(prerequisite, mission.contractId);
-      const key = `${formatted.category}|${formatted.identity}`;
-      const existing = grouped.get(key);
-      if (existing) {
-        existing.variantIds.add(mission.contractId);
-        existing.recordCount += 1;
-      } else {
-        grouped.set(key, formatted);
-      }
-    }
-  }
-  return Array.from(grouped.values());
-}
-
-function MissionRequirementBadges({ missions, familySummary = false, compact = false }: { missions: MissionContract[]; familySummary?: boolean; compact?: boolean }) {
-  const requirements = groupMissionPrerequisites(missions);
-  if (!requirements.length) return <p className="mb-empty-note">No extracted prerequisites.</p>;
-
-  const categories: RequirementCategory[] = ["Reputation", "Standing / Rank", "Location", "Locality", "Other Requirements"];
   return (
-    <div className="mb-requirement-groups">
-      {categories.map((category) => {
-        const items = requirements.filter((item) => item.category === category);
-        if (!items.length) return null;
-        const isPlace = category === "Location" || category === "Locality";
-        const resolvedPlaceNames = Array.from(new Set(items.flatMap((item) => item.resolved ? item.labels : [])));
-        const placeLabels = [
-          ...resolvedPlaceNames.slice(0, 4),
-          ...(resolvedPlaceNames.length > 4 ? [`+${resolvedPlaceNames.length - 4} more`] : []),
-          ...(items.some((item) => !item.resolved) ? [`${category} Required`] : []),
-          ...(familySummary && items.length > 1 ? [`x${items.length} unique`] : []),
-          ...(familySummary && items.length === 1 && items[0].variantIds.size > 1 ? [`x${items[0].variantIds.size} variants`] : []),
-          ...(familySummary && resolvedPlaceNames.length > 0 && items.length > resolvedPlaceNames.length ? [`x${items.length} records`] : []),
-        ];
-        const labels = isPlace
-          ? placeLabels
-          : items.flatMap((item) => [
-            ...item.labels,
-            ...(familySummary && item.variantIds.size > 1 ? [`x${item.variantIds.size} variants`] : []),
-          ]);
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3.5 19 7v5.2c0 4.1-2.8 7.2-7 8.3-4.2-1.1-7-4.2-7-8.3V7l7-3.5Z" />
+      <path d="m9 12 2 2 4-5" />
+    </svg>
+  );
+}
+
+function MissionCardRowIcon({ type }: { type: "pickup" | "missions" | "blueprints" | "credits" }) {
+  const paths: Record<typeof type, ReactNode> = {
+    pickup: (
+      <>
+        <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z" />
+        <circle cx="12" cy="10" r="2" />
+      </>
+    ),
+    missions: (
+      <>
+        <circle cx="8" cy="8" r="2.5" />
+        <circle cx="16" cy="8" r="2.5" />
+        <path d="M4.5 18c.6-2.5 2.4-4 3.5-4s2.9 1.5 3.5 4M12.5 18c.6-2.5 2.4-4 3.5-4s2.9 1.5 3.5 4" />
+      </>
+    ),
+    blueprints: (
+      <>
+        <path d="M7 4h10l3 3v13H7V4Z" />
+        <path d="M17 4v4h3M10 11h7M10 15h7" />
+      </>
+    ),
+    credits: (
+      <>
+        <circle cx="12" cy="12" r="7" />
+        <path d="M14.5 8.8c-.8-.5-1.7-.8-2.8-.8-1.5 0-2.7.7-2.7 1.9 0 2.8 6 1.2 6 4.2 0 1.2-1.2 1.9-2.8 1.9-1.2 0-2.3-.3-3.1-.9M12 6.5v11" />
+      </>
+    ),
+  };
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      {paths[type]}
+    </svg>
+  );
+}
+
+function repPathLabel(path: MissionRewardedReputationPathView, includeFaction = false): string {
+  if (path.confidence === "unresolved") return "Rep reward unresolved";
+  const prefix = includeFaction ? `${path.factionDisplayName} ` : "";
+  return `${prefix}${shortRepScope(path.scopeDisplayName)} ${signedAmount(path.amount)}`;
+}
+
+function repPathSummary(paths: MissionRewardedReputationPathView[]): string {
+  if (!paths.length) return "Rep reward unresolved";
+  const unresolved = paths.filter((path) => path.confidence === "unresolved").length;
+  const byScope = new Map<string, MissionRewardedReputationPathView[]>();
+  for (const path of paths.filter((path) => path.confidence !== "unresolved")) {
+    byScope.set(path.scopeKey, [...(byScope.get(path.scopeKey) ?? []), path]);
+  }
+  if (byScope.size > 1) return "Mixed rep paths";
+  const scopePaths = Array.from(byScope.values())[0];
+  if (!scopePaths?.length) return `Rep reward unresolved${unresolved ? ` (${unresolved})` : ""}`;
+  const amounts = scopePaths.map((path) => path.amount).filter((value): value is number => typeof value === "number");
+  const min = amounts.length ? Math.min(...amounts) : undefined;
+  const max = amounts.length ? Math.max(...amounts) : undefined;
+  const amount = min === undefined ? "unresolved" : min === max ? signedAmount(min) : `${signedAmount(min)} to ${signedAmount(max)}`;
+  return `${shortRepScope(scopePaths[0]!.scopeDisplayName)} ${amount}${unresolved ? `; ${unresolved} unresolved` : ""}`;
+}
+
+function primaryRepScope(paths: MissionRewardedReputationPathView[], fallback: string): string {
+  const resolved = paths.filter((path) => path.confidence !== "unresolved");
+  const scopes = Array.from(new Set(resolved.map((path) => path.scopeDisplayName)));
+  if (scopes.length > 1) return "Mixed";
+  return scopes[0] ?? fallback;
+}
+
+function rewardsDifferentFromScope(family: MissionFamilyView): boolean {
+  const rewardScopes = new Set(family.rewardedReputationPaths.filter((path) => path.confidence !== "unresolved").map((path) => path.scopeKey));
+  return rewardScopes.size > 0 && !rewardScopes.has(family.reputationScope.scopeKey);
+}
+
+function variantDifficulty(variant: MissionVariantView): string {
+  const text = [variant.displayName, variant.internalName, variant.rawName].filter(Boolean).join(" ");
+  const rank = text.match(/\bRank\s*([0-9IVX]+)\b/i)?.[0];
+  const difficulty = text.match(/\b(Very Easy|Very Hard|Easy|Medium|Hard|Super)\b/i)?.[0];
+  return rank ?? difficulty ?? "Varies";
+}
+
+function groupCreditSummary(variants: MissionVariantView[]): string {
+  const unresolvedCount = variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length;
+  if (unresolvedCount === variants.length && unresolvedCount > 0) return `Credits unresolved across ${unresolvedCount} variants`;
+  if (unresolvedCount > 0) return `Credits unresolved for ${unresolvedCount} variant${unresolvedCount === 1 ? "" : "s"}`;
+  const extracted = Array.from(new Set(variants.filter((variant) => variant.rewards.creditStatus === "extracted").map((variant) => variant.rewards.credits)));
+  if (extracted.length > 1) return "Credits vary by variant";
+  if (extracted.length === 1 && variants.every((variant) => variant.rewards.creditStatus === "extracted")) return extracted[0]!;
+  if (variants.every((variant) => variant.rewards.creditStatus === "provenAbsent")) return "No credit reward extracted";
+  return "Credits vary by variant";
+}
+
+function groupPickupSummary(family: MissionFamilyView, variants: MissionVariantView[]): string {
+  const labels = Array.from(new Set(variants.map((variant) => pickupLabel(variant.pickupLocation))));
+  const unresolvedCount = family.pickupUnresolvedCount;
+  const coverage = stripSummaryPrefix(family.pickupSummary, "Pickup:");
+  if (unresolvedCount === variants.length && unresolvedCount > 0) return `Pickup unresolved for ${unresolvedCount} variants`;
+  if (labels.length > 1) return `Pickup varies by variant: ${coverage}`;
+  if (unresolvedCount > 0) return `${coverage}; unresolved for ${unresolvedCount} variant${unresolvedCount === 1 ? "" : "s"}`;
+  return coverage;
+}
+
+function groupStandingSummary(variants: MissionVariantView[]): string {
+  const values = Array.from(new Set(variants.map((variant) => variant.standingRequirement).filter((value) => value && value !== "No extracted standing requirement")));
+  if (!values.length) return "No standing range extracted";
+  if (values.length === 1) return values[0]!;
+  return `${values[0]} -> ${values[values.length - 1]}${values.length > 2 ? ` (+${values.length - 2} more)` : ""}`;
+}
+
+function cardCreditSummary(variants: MissionVariantView[]): string {
+  return groupCreditSummary(variants).replace(/^Credits /, "").replace(/^No credit reward extracted$/, "none extracted");
+}
+
+function cardBlueprintSummary(family: MissionFamilyView): string {
+  if (!family.blueprintRewardGroups.length) return "No blueprint rewards";
+  return "Blueprint rewards";
+}
+
+function groupUnresolvedSummary(family: MissionFamilyView, variants: MissionVariantView[]): string[] {
+  return [
+    family.unresolvedRewardFields.length ? `${family.unresolvedRewardFields.length} reward field${family.unresolvedRewardFields.length === 1 ? "" : "s"}` : undefined,
+    family.pickupUnresolvedCount ? `${family.pickupUnresolvedCount} pickup field${family.pickupUnresolvedCount === 1 ? "" : "s"}` : undefined,
+    variants.filter((variant) => variant.confidence.hasUnresolvedPrerequisites).length
+      ? `${variants.filter((variant) => variant.confidence.hasUnresolvedPrerequisites).length} prerequisite field${variants.filter((variant) => variant.confidence.hasUnresolvedPrerequisites).length === 1 ? "" : "s"}`
+      : undefined,
+    family.titleConfidence === "low" ? "low title confidence" : undefined,
+  ].filter((value): value is string => Boolean(value));
+}
+
+function statusTone(label: string): string {
+  const normalized = label.toLowerCase();
+  if (normalized.includes("not for release")) return "is-red";
+  if (normalized.includes("work") || normalized.includes("unresolved")) return "is-amber";
+  if (normalized.includes("release flag not set")) return "is-green";
+  return "is-neutral";
+}
+
+function pickupLabel(pickup: MissionVariantView["pickupLocation"]): string {
+  if (pickup.status === "generated_from_pool") return `Generated from ${pickup.displayName} locality pool`;
+  return pickup.displayName;
+}
+
+function pickupDetail(pickup: MissionVariantView["pickupLocation"]): string {
+  if (pickup.status === "system_only") return "Specific pickup unavailable in source";
+  if (pickup.status === "system_scope") {
+    const scope = [pickup.localityPool, pickup.regions?.length ? `Regions ${pickup.regions.join(", ").replace(/Region /g, "")}` : undefined].filter(Boolean).join(" / ");
+    return scope ? `Scope: ${scope}; specific pickup generated at mission offer` : pickup.reason;
+  }
+  if (pickup.status === "generated_from_pool") return pickup.possibleLocations.length
+    ? `Possible locations: ${pickup.possibleLocations.length}`
+    : "Exact pickup generated from locality pool";
+  if (pickup.status === "unknown" || pickup.status === "unresolved") return pickup.reason;
+  return [pickup.system, pickup.parentLocation, pickup.locationType].filter(Boolean).join(" / ") || pickup.reason;
+}
+
+function crimeStatLabel(value: MissionFamilyView["crimeStatRequirement"] | MissionVariantView["crimeStatRequirement"]): string {
+  if (value === "required") return "CrimeStat required";
+  if (value === "bounded") return "CrimeStat limited";
+  if (value === "notRequired") return "CrimeStat not required";
+  return "CrimeStat unknown";
+}
+
+function lawfulLabel(item: Pick<MissionFamilyView, "lawfulClassification" | "lawfulConfidence">): string {
+  if (item.lawfulClassification === "unlawful") return "Unlawful context, requirement unconfirmed";
+  if (item.lawfulClassification === "lawful") return item.lawfulConfidence === "explicit" ? "Lawful" : "Likely lawful";
+  return "Lawful status unknown";
+}
+
+function legalBadge(family: MissionFamilyView): { label: string; tone: string } {
+  if (family.crimeStatRequirement === "required") return { label: "CrimeStat required", tone: "is-red" };
+  if (family.lawfulClassification === "unlawful") return { label: "Possible unlawful", tone: "is-amber" };
+  if (family.lawfulClassification === "lawful") return { label: "Likely lawful", tone: "is-green" };
+  return { label: "Legal unknown", tone: "is-muted" };
+}
+
+function titleSourceLabel(source: MissionFamilyView["titleSource"]): string {
+  return {
+    localized_family: "Localized family title",
+    localized_clean: "Clean localized title",
+    shared_variant_localized: "Shared localized variant title",
+    common_variant_title: "Common localized variant title",
+    token_template_cleaned: "Cleaned template title",
+    generated_from_fields: "Generated from resolved fields",
+    provider_archetype_fallback: "Provider/type fallback",
+    internal_fallback: "Internal title fallback",
+  }[source];
+}
+
+function rewardMatches(family: MissionFamilyView, rewardFilter: string): boolean {
+  if (!rewardFilter) return true;
+  const filter = rewardFilter as RewardFilter;
+  if (filter === "blueprints") return family.blueprintRewards.length > 0;
+  if (filter === "reputation") return family.reputationRewards.length > 0;
+  if (filter === "credits-unresolved") return family.creditRewardSummary === "Credits unresolved";
+  if (filter === "credits-none") return family.creditRewardSummary === "No credit reward extracted";
+  return true;
+}
+
+function confidenceMatches(family: MissionFamilyView, confidenceFilter: string): boolean {
+  if (!confidenceFilter) return true;
+  const filter = confidenceFilter as ConfidenceFilter;
+  if (filter === "unresolved") return family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0;
+  if (filter === "locations") return family.unresolvedLocationTokens.length > 0;
+  if (filter === "rewards") return family.unresolvedRewardFields.length > 0 || family.creditRewardSummary === "Credits unresolved";
+  if (filter === "crime-bounded") return family.crimeStatRequirement === "bounded";
+  if (filter === "unlawful") return family.lawfulClassification === "unlawful";
+  return true;
+}
+
+function Badge({ children, tone = "is-neutral", title }: { children: string; tone?: string; title?: string }) {
+  return <span className={`mb-badge ${tone}`} title={title}>{children}</span>;
+}
+
+function BadgeList({ values, fallback, tone = "is-neutral", max = 4 }: { values: string[]; fallback: string; tone?: string; max?: number }) {
+  if (!values.length) return <span className="mb-muted">{fallback}</span>;
+  return (
+    <div className="mb-badges">
+      {values.slice(0, max).map((value) => <Badge key={value} tone={tone} title={value}>{value}</Badge>)}
+      {values.length > max && <Badge tone="is-muted">{`+${values.length - max}`}</Badge>}
+    </div>
+  );
+}
+
+function RepPathBadge({ path, includeFaction = false }: { path: MissionRewardedReputationPathView; includeFaction?: boolean }) {
+  return (
+    <span className={`mb-rep-badge ${repScopeClass(path.scopeDisplayName)}`} title={`${path.factionDisplayName} / ${path.scopeDisplayName} / ${path.confidence}`}>
+      {repPathLabel(path, includeFaction)}
+    </span>
+  );
+}
+
+function RepPathBadgeList({ paths, includeFaction = false, max = 3 }: { paths: MissionRewardedReputationPathView[]; includeFaction?: boolean; max?: number }) {
+  if (!paths.length) return <span className="mb-rep-badge mission-rep-scope--unknown">Rep reward unresolved</span>;
+  return (
+    <div className="mb-rep-badges">
+      {paths.slice(0, max).map((path, index) => <RepPathBadge key={`${path.scopeKey}-${path.amount ?? "x"}-${index}`} path={path} includeFaction={includeFaction} />)}
+      {paths.length > max && <span className="mb-rep-badge mission-rep-scope--mixed">+{paths.length - max} more</span>}
+    </div>
+  );
+}
+
+function ReputationRewardSummary({ variants }: { variants: MissionVariantView[] }) {
+  const rows = Array.from(
+    variants.flatMap((variant) => variant.rewardedReputationPaths).reduce((grouped, path) => {
+      const key = path.confidence === "unresolved" ? "unresolved" : `${path.factionKey}:${path.scopeKey}`;
+      grouped.set(key, [...(grouped.get(key) ?? []), path]);
+      return grouped;
+    }, new Map<string, MissionRewardedReputationPathView[]>()).values()
+  );
+  if (!rows.length) return <p className="mb-empty-note">Rep reward unresolved across variants.</p>;
+  return (
+    <div className="mb-rep-summary">
+      {rows.map((paths) => {
+        const first = paths[0]!;
+        const amounts = paths.map((path) => path.amount).filter((value): value is number => typeof value === "number");
+        const min = amounts.length ? Math.min(...amounts) : undefined;
+        const max = amounts.length ? Math.max(...amounts) : undefined;
+        const amount = min === undefined ? "unresolved" : min === max ? signedAmount(min) : `${signedAmount(min)} to ${signedAmount(max)}`;
         return (
-          <div className={`mb-requirement-group${compact ? " is-compact" : ""}`} key={category}>
-            <strong>{category}</strong>
-            <div className="mb-badges">{Array.from(new Set(labels)).map((label) => <span className="mb-badge is-requirement" key={label}>{label}</span>)}</div>
-            {isPlace && items.every((item) => !item.resolved) && <small>{category} name unavailable</small>}
+          <div className={`mb-rep-summary-row ${repScopeClass(first.scopeDisplayName)}`} key={`${first.factionKey}-${first.scopeKey}`}>
+            <strong>{first.confidence === "unresolved" ? "Unresolved" : shortRepScope(first.scopeDisplayName)}</strong>
+            <span>{amount} across {paths.length} variant{paths.length === 1 ? "" : "s"}</span>
           </div>
         );
       })}
@@ -298,68 +378,300 @@ function MissionRequirementBadges({ missions, familySummary = false, compact = f
   );
 }
 
-function rewardBadges(mission: MissionContract, pools: Map<string, BlueprintPoolLookup>): string[] {
-  const badges: string[] = [];
-  for (const reward of mission.blueprintRewards ?? []) {
-    const pool = pools.get(reward.blueprintPoolGuid ?? "");
-    badges.push(`Blueprint: ${pool?.displayName ?? pool?.poolName ?? "Unknown pool"}`);
-  }
-  for (const reward of mission.itemRewards ?? []) {
-    const amount = asDisplayString(recordValue(reward.attributes, ["amount", "quantity"]));
-    badges.push(amount ? `Item x${amount}` : "Item reward");
-  }
-  for (const reward of mission.reputationRewards ?? []) {
-    const amount = reward.reputationAmount ?? numberValue(reward.reward, ["reputationAmount"]);
-    badges.push(amount !== undefined ? `Reputation ${amount >= 0 ? "+" : ""}${amount.toLocaleString()}` : "Reputation unavailable");
-  }
-  if (mission.creditRewardTypes?.length) badges.push("Credits unavailable");
-  if (mission.completionTags?.length) badges.push("Completion tag");
-  return Array.from(new Set(badges));
-}
-
-function RewardSection({ mission, pools }: { mission: MissionContract; pools: Map<string, BlueprintPoolLookup> }) {
-  const badges = rewardBadges(mission, pools);
-  if (!badges.length) return <p className="mb-empty-note">No extracted rewards.</p>;
+function BlueprintRewardGroups({ groups, compact = false }: { groups: BlueprintRewardGroupView[]; compact?: boolean }) {
+  if (!groups.length) return <p className="mb-empty-note">No blueprint rewards extracted.</p>;
   return (
-    <div className="mb-badges">{badges.map((label) => <span className="mb-badge is-reward" key={label}>{label}</span>)}</div>
+    <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}`}>
+      {groups.map((group) => (
+        <section className="mb-blueprint-group" key={group.poolGuid ?? group.poolName}>
+          <header>
+            <strong>{group.poolName}</strong>
+            <span>{group.chanceLabel ?? `${group.rewardCount} possible rewards`}</span>
+          </header>
+          <div className="mb-blueprint-list">
+            {group.rewards.slice(0, compact ? 4 : 12).map((reward) => (
+              <div className="mb-blueprint-item" key={reward.blueprintGuid ?? reward.displayName}>
+                <span>{reward.displayName}</span>
+                <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, reward.chanceLabel].filter(Boolean).join(" / ") || "Blueprint"}</small>
+              </div>
+            ))}
+            {group.rewards.length > (compact ? 4 : 12) && <div className="mb-blueprint-more">+{group.rewards.length - (compact ? 4 : 12)} more</div>}
+          </div>
+        </section>
+      ))}
+    </div>
   );
 }
 
-function familyRewardBadges(missions: MissionContract[], pools: Map<string, BlueprintPoolLookup>): string[] {
-  return Array.from(new Set(missions.flatMap((mission) => rewardBadges(mission, pools))));
+function TechnicalDetails({ variant }: { variant: MissionVariantView }) {
+  return (
+    <details className="mb-technical">
+      <summary>Technical details</summary>
+      <dl>
+        <div><dt>Contract ID</dt><dd title={variant.technical.contractId}>{variant.technical.contractId}</dd></div>
+        <div><dt>Internal Name</dt><dd>{variant.internalName ?? "Unavailable"}</dd></div>
+        <div><dt>Generator</dt><dd>{variant.technical.generatorName ?? "Unavailable"}</dd></div>
+        <div><dt>Generator Path</dt><dd>{variant.technical.generatorPath ?? "Unavailable"}</dd></div>
+        <div><dt>Title Token</dt><dd>{variant.technical.titleRaw ?? variant.rawName ?? "Unavailable"}</dd></div>
+        <div><dt>Pickup Source</dt><dd>{variant.pickupLocation.sourceRole} / {variant.pickupLocation.confidence}</dd></div>
+        <div><dt>Rep Scope</dt><dd>{variant.reputationScope.displayName} / {variant.reputationScope.confidence}</dd></div>
+        <div><dt>Archetype</dt><dd>{variant.missionArchetype}</dd></div>
+      </dl>
+      <div className="mb-tech-tokens">
+        <strong>Pickup resolver</strong>
+        <p>{variant.pickupLocation.reason}</p>
+      </div>
+      {variant.pickupLocation.technicalRefs.length > 0 && (
+        <div className="mb-tech-tokens">
+          <strong>Location role classification</strong>
+          {variant.pickupLocation.technicalRefs.map((ref) => (
+            <p key={`${ref.role}-${ref.ref}`}>
+              {ref.role}: {ref.resolvedName ?? ref.ref} ({ref.consideredPickup ? "pickup candidate" : "secondary"}) - {ref.reason}
+            </p>
+          ))}
+        </div>
+      )}
+      {variant.unresolvedLocationTokens.length > 0 && (
+        <div className="mb-tech-tokens">
+          <strong>Secondary unresolved location tokens</strong>
+          <p>{variant.unresolvedLocationTokens.join(", ")}</p>
+        </div>
+      )}
+      {variant.pickupLocation.unresolvedRefs.length > 0 && (
+        <div className="mb-tech-tokens">
+          <strong>Pickup unresolved refs</strong>
+          <p>{variant.pickupLocation.unresolvedRefs.join(", ")}</p>
+        </div>
+      )}
+      {variant.rewards.unresolvedRewardTokens.length > 0 && (
+        <div className="mb-tech-tokens">
+          <strong>Unresolved reward tokens</strong>
+          <p>{variant.rewards.unresolvedRewardTokens.join(", ")}</p>
+        </div>
+      )}
+      {variant.rewardedReputationPaths.length > 0 && (
+        <div className="mb-tech-tokens">
+          <strong>Rewarded reputation refs</strong>
+          {variant.rewardedReputationPaths.map((path, index) => (
+            <p key={`${path.scopeKey}-${index}`}>
+              {path.factionDisplayName} / {path.scopeDisplayName} / {path.confidence}: {path.sourceRefs.join(", ") || "No source refs"}
+              {path.unresolvedReason ? ` - ${path.unresolvedReason}` : ""}
+            </p>
+          ))}
+        </div>
+      )}
+    </details>
+  );
 }
 
-function cleanDescription(description?: string): string {
-  return description?.replace(/\\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim() ?? "";
+function PrerequisitePanel({ prerequisites }: { prerequisites: MissionPrerequisiteView[] }) {
+  if (!prerequisites.length) return <p className="mb-empty-note">No extracted prerequisites.</p>;
+  const grouped = new Map<MissionPrerequisiteView["type"], MissionPrerequisiteView[]>();
+  for (const prerequisite of prerequisites) {
+    grouped.set(prerequisite.type, [...(grouped.get(prerequisite.type) ?? []), prerequisite]);
+  }
+  return (
+    <div className="mb-requirement-grid">
+      {Array.from(grouped.entries()).map(([type, items]) => (
+        <section key={type}>
+          <h4>{type === "crimeStat" ? "CrimeStat" : type}</h4>
+          <BadgeList
+            values={items.map((item) => item.label)}
+            fallback="Unresolved prerequisite"
+            tone={items.some((item) => item.confidence === "unresolved") ? "is-amber" : "is-neutral"}
+            max={6}
+          />
+        </section>
+      ))}
+    </div>
+  );
 }
 
-function placeSummary(mission: MissionContract): string {
-  const requirements = groupMissionPrerequisites([mission]).filter((item) => item.category === "Location" || item.category === "Locality");
-  const labels = Array.from(new Set(requirements.flatMap((item) => item.labels)));
-  return labels.slice(0, 2).join(", ") || "None";
+function VariantDrawer({ variant }: { variant: MissionVariantView }) {
+  return (
+    <div className="mb-variant-drawer">
+      {variant.briefing && (
+        <section className="mb-briefing is-variant">
+          <h3>Mission Briefing</h3>
+          <p>{variant.briefing}</p>
+        </section>
+      )}
+      <div className="mb-drawer-grid">
+        <section>
+          <h3>Rewards</h3>
+          {variant.rewards.blueprintRewardGroups.length > 0 && <BlueprintRewardGroups groups={variant.rewards.blueprintRewardGroups} compact />}
+          <div>
+            <h4 className="mb-inline-heading">Rewarded Reputation</h4>
+            <RepPathBadgeList paths={variant.rewardedReputationPaths} includeFaction max={5} />
+          </div>
+          <Badge tone={variant.rewards.creditStatus === "unresolved" ? "is-amber" : "is-muted"}>{variant.rewards.credits}</Badge>
+        </section>
+        <section>
+          <h3>Requirements</h3>
+          <PrerequisitePanel prerequisites={variant.prerequisites} />
+        </section>
+        <section>
+          <h3>Pickup / Availability</h3>
+          <div className="mb-pickup-readout">
+            <strong>{pickupLabel(variant.pickupLocation)}</strong>
+            <small>{pickupDetail(variant.pickupLocation)}</small>
+          </div>
+        </section>
+        <section>
+          <h3>Secondary Locations</h3>
+          <BadgeList values={variant.locations.filter((item) => item !== variant.pickupLocation.displayName)} fallback={variant.unresolvedLocationTokens.length ? "Secondary location unresolved" : "No secondary location requirement extracted"} tone={variant.unresolvedLocationTokens.length ? "is-amber" : "is-neutral"} />
+        </section>
+        <section>
+          <h3>Status</h3>
+          <div className="mb-badges">
+            <Badge tone={variant.crimeStatRequirement === "required" ? "is-red" : variant.crimeStatRequirement === "bounded" ? "is-amber" : "is-muted"}>{crimeStatLabel(variant.crimeStatRequirement)}</Badge>
+            <Badge tone={variant.lawfulClassification === "unlawful" ? "is-amber" : "is-neutral"}>{lawfulLabel(variant)}</Badge>
+            {variant.releaseFlags.map((flag) => <Badge key={flag} tone={statusTone(flag)}>{flag}</Badge>)}
+          </div>
+        </section>
+        <section>
+          <h3>Operational Details</h3>
+          <BadgeList
+            values={[
+              `Required Standing: ${variant.standingRequirement}`,
+              `Reputation Scope: ${variant.reputationScope.displayName}`,
+              `Rewarded Reputation: ${variant.rewardedReputationPaths.map((path) => repPathLabel(path, true)).join(", ") || "Unresolved"}`,
+              `Archetype: ${variant.missionArchetype}`,
+              `Behavior: ${variant.releaseFlags.join(", ")}`,
+            ]}
+            fallback="No operational details extracted"
+            max={8}
+          />
+        </section>
+      </div>
+      <TechnicalDetails variant={variant} />
+    </div>
+  );
+}
+
+function FamilyDetail({
+  family,
+  variants,
+  openVariant,
+  setOpenVariant,
+  onClose,
+}: {
+  family: MissionFamilyView;
+  variants: MissionVariantView[];
+  openVariant: string;
+  setOpenVariant: (variantKey: string) => void;
+  onClose: () => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const visibleVariants = showAll ? variants : variants.slice(0, MAX_VISIBLE_VARIANTS);
+  const unresolvedSummary = groupUnresolvedSummary(family, variants);
+  return (
+    <section className={`mb-detail mission-group-expansion ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, family.reputationScope.displayName))}`} aria-label={`${family.displayName} mission family details`}>
+      <header>
+        <div>
+          <span>Mission Group Container</span>
+          <h2>{family.displayName}</h2>
+          <p>{family.provider} / {family.reputationScope.displayName} / {family.missionArchetype} / {family.variantCount} playable mission{family.variantCount === 1 ? "" : "s"}</p>
+        </div>
+        <div className="mb-detail-actions">
+          <div className="mb-badges">
+            <Badge tone={family.crimeStatRequirement === "required" ? "is-red" : family.crimeStatRequirement === "bounded" ? "is-amber" : "is-muted"}>{crimeStatLabel(family.crimeStatRequirement)}</Badge>
+            <Badge tone={family.lawfulClassification === "unlawful" ? "is-amber" : "is-neutral"}>{lawfulLabel(family)}</Badge>
+          </div>
+          <button type="button" onClick={onClose}>Close</button>
+        </div>
+      </header>
+
+      <div className="mission-group-summary-strip">
+        <span><strong>Type</strong>{family.missionArchetype}</span>
+        <span><strong>Playable</strong>{family.variantCount} missions</span>
+        <span><strong>Pickup</strong>{groupPickupSummary(family, variants)}</span>
+        <span><strong>Rep</strong>{repPathSummary(family.rewardedReputationPaths)}</span>
+        <span><strong>Standing</strong>{groupStandingSummary(variants)}</span>
+        <span><strong>Credits</strong>{cardCreditSummary(variants)}</span>
+        {family.blueprintRewardGroups.length > 0 && <span><strong>Blueprints</strong>{family.blueprintRewardGroups.length} pool{family.blueprintRewardGroups.length === 1 ? "" : "s"}</span>}
+        {unresolvedSummary.length > 0 && <span><strong>Unresolved</strong>{unresolvedSummary.length} categories</span>}
+      </div>
+
+      <section className="mission-group-rep-summary">
+        <div className="mb-section-heading"><strong>Reputation Rewards</strong><span>{family.rewardedReputationPaths.length || "unresolved"}</span></div>
+        <ReputationRewardSummary variants={variants} />
+      </section>
+
+      {family.blueprintRewardGroups.length > 0 && (
+        <details className="mission-technical-toggle">
+          <summary>View blueprint pool</summary>
+          <BlueprintRewardGroups groups={family.blueprintRewardGroups} />
+        </details>
+      )}
+
+      <div className="mb-section-heading" id={`variants-${family.familyKey}`}><strong>Playable Missions</strong><span>{variants.length}</span></div>
+      <div className="mb-variant-table mission-variant-list">
+        {visibleVariants.map((variant) => {
+          const isOpen = openVariant === variant.variantKey;
+          return (
+            <div className={`mb-variant-row-wrap mission-variant-row${isOpen ? " is-open mission-variant-row--expanded" : ""}`} key={variant.variantKey}>
+              <button type="button" className="mb-variant-row" aria-expanded={isOpen} onClick={() => setOpenVariant(isOpen ? "" : variant.variantKey)}>
+                <span className="mission-variant-row__title"><strong>{variant.displayName}</strong><small>{variantDifficulty(variant)} / {variant.missionType}</small></span>
+                <span><strong>Pickup</strong><small title={pickupDetail(variant.pickupLocation)}>{pickupLabel(variant.pickupLocation)}</small></span>
+                <span><strong>Standing</strong><small>{variant.standingRequirement}</small></span>
+                <span className="mb-variant-rewards">
+                  <strong>Rewards</strong>
+                  <small>{variant.rewards.credits}</small>
+                  {variant.rewards.blueprintRewardGroups.length > 0 && <small>Blueprint: {variant.rewards.blueprintRewardGroups[0]?.poolName}</small>}
+                  <RepPathBadgeList paths={variant.rewardedReputationPaths} max={2} />
+                </span>
+                <span className="mb-badges">
+                  <Badge tone={isOpen ? "is-violet" : "is-neutral"}>{isOpen ? "Hide" : "Details"}</Badge>
+                  {variant.confidence.hasUnresolvedRewards && <Badge tone="is-amber">Rewards unresolved</Badge>}
+                  {(variant.pickupLocation.status === "unknown" || variant.pickupLocation.status === "unresolved") && <Badge tone="is-amber">Pickup unresolved</Badge>}
+                </span>
+              </button>
+              {isOpen && <VariantDrawer variant={variant} />}
+            </div>
+          );
+        })}
+      </div>
+      {variants.length > MAX_VISIBLE_VARIANTS && (
+        <button className="mb-view-all" type="button" onClick={() => setShowAll((current) => !current)}>
+          {showAll ? "Show fewer variants" : `Show all ${variants.length} variants`}
+        </button>
+      )}
+      <details className="mb-family-technical" id={`technical-${family.familyKey}`}>
+        <summary>Group technical details</summary>
+        <dl>
+          <div><dt>Group Key</dt><dd>{family.familyKey}</dd></div>
+          <div><dt>Grouping Source</dt><dd>familyId + contract family</dd></div>
+          <div><dt>Raw Name</dt><dd>{family.rawName ?? "Unavailable"}</dd></div>
+          <div><dt>Internal Name</dt><dd>{family.internalName ?? "Unavailable"}</dd></div>
+          <div><dt>Rep Scope</dt><dd>{family.reputationScope.displayName} / {family.reputationScope.confidence}</dd></div>
+          <div><dt>Archetype</dt><dd>{family.missionArchetype}</dd></div>
+          <div><dt>Title Source</dt><dd>{titleSourceLabel(family.titleSource)} / {family.titleConfidence}</dd></div>
+          <div><dt>Pickup Summary</dt><dd>{family.pickupSummary}</dd></div>
+          <div><dt>Unresolved Pickup</dt><dd>{family.pickupUnresolvedCount || "None"}</dd></div>
+          <div><dt>Unresolved Rewards</dt><dd>{family.unresolvedRewardFields.join(", ") || "None"}</dd></div>
+          <div><dt>Child Variant Keys</dt><dd title={family.variantKeys.join(", ")}>{family.variantKeys.join(", ") || "None"}</dd></div>
+        </dl>
+      </details>
+    </section>
+  );
 }
 
 export default function MissionBrowserPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [records, setRecords] = useState<MissionContract[]>([]);
-  const [lookups, setLookups] = useState<MissionLookups>({});
-  const [metadata, setMetadata] = useState<{ generatedAt: string; sourceLatestModifiedAt: string } | null>(null);
+  const [catalog, setCatalog] = useState<MissionBrowserCatalog | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAllVariants, setShowAllVariants] = useState(false);
-  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(new Set());
+  const [openVariant, setOpenVariant] = useState("");
 
   useEffect(() => {
     let cancelled = false;
     loadMissionData()
-      .then(({ catalog, lookups: dataLookups }) => {
-        if (cancelled) return;
-        setRecords(catalog.records);
-        setMetadata({ generatedAt: catalog.generatedAt, sourceLatestModifiedAt: catalog.sourceLatestModifiedAt });
-        setLookups(dataLookups);
+      .then((data) => {
+        if (!cancelled) setCatalog(data);
       })
       .catch((reason: unknown) => {
-        if (!cancelled) setError(reason instanceof Error ? reason.message : "Mission catalog unavailable");
+        if (!cancelled) setError(reason instanceof Error ? reason.message : "Mission browser catalog unavailable");
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -367,204 +679,246 @@ export default function MissionBrowserPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const pools = useMemo(() => new Map((lookups.blueprintPools ?? []).map((pool) => [pool.poolGuid ?? "", pool])), [lookups]);
-  const families = useMemo(() => buildFamilies(records, pools), [records, pools]);
-  const query = searchParams.get("search") ?? "";
-  const status = searchParams.get("status") ?? "";
-  const faction = searchParams.get("faction") ?? "";
-  const missionType = searchParams.get("type") ?? "";
-  const contractType = searchParams.get("contract") ?? "";
-  const requestedPage = Number(searchParams.get("page") ?? "1");
-  const selectedId = searchParams.get("family");
-  const selectedFamily = families.find((family) => family.id === selectedId) ?? null;
-  const selectedDescription = cleanDescription(selectedFamily?.variants.find((mission) => mission.description)?.description);
+  const families = useMemo(() => catalog?.families ?? [], [catalog]);
+  const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
+  const variantsByFamily = useMemo(() => {
+    const grouped = new Map<string, MissionVariantView[]>();
+    for (const variant of catalog?.variants ?? []) {
+      grouped.set(variant.familyKey, [...(grouped.get(variant.familyKey) ?? []), variant]);
+    }
+    return grouped;
+  }, [catalog]);
 
-  const factions = useMemo(() => Array.from(new Set(records.map((item) => item.factionName).filter((value): value is string => Boolean(value)))).sort(), [records]);
-  const missionTypes = useMemo(() => Array.from(new Set(records.map((item) => item.missionType).filter((value): value is string => Boolean(value)))).sort(), [records]);
-  const contractTypes = useMemo(() => Array.from(new Set(records.map((item) => item.contractType).filter((value): value is string => Boolean(value)))).sort(), [records]);
+  const query = searchParams.get("search") ?? "";
+  const provider = searchParams.get("provider") ?? "";
+  const missionType = searchParams.get("type") ?? "";
+  const reward = searchParams.get("reward") ?? "";
+  const repReward = searchParams.get("repReward") ?? "";
+  const status = searchParams.get("status") ?? "";
+  const confidence = searchParams.get("confidence") ?? "";
+  const selectedFamilyKey = searchParams.get("family") ?? "";
+
+  const providers = useMemo(() => Array.from(new Set(families.map((family) => family.provider))).sort(), [families]);
+  const missionTypes = useMemo(() => Array.from(new Set(families.map((family) => family.missionType))).sort(), [families]);
+  const rewardedRepPaths = useMemo(() => Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort(), [families]);
+  const statuses = ["Release flag not set", "Not for release", "Work in progress"];
+
   const visibleFamilies = families.filter((family) => {
     if (query.trim() && !family.searchText.includes(query.trim().toLowerCase())) return false;
-    if (status && !family.variants.some((item) => missionStatuses(item).includes(status))) return false;
-    if (faction && !family.variants.some((item) => item.factionName === faction)) return false;
-    if (missionType && !family.variants.some((item) => item.missionType === missionType)) return false;
-    if (contractType && !family.variants.some((item) => item.contractType === contractType)) return false;
+    if (provider && family.provider !== provider) return false;
+    if (missionType && family.missionType !== missionType) return false;
+    if (repReward && !family.rewardedReputationPaths.some((path) => path.scopeDisplayName === repReward)) return false;
+    if (status && !family.releaseFlags.includes(status)) return false;
+    if (!rewardMatches(family, reward)) return false;
+    if (!confidenceMatches(family, confidence)) return false;
     return true;
   });
-  const pageCount = Math.max(1, Math.ceil(visibleFamilies.length / FAMILIES_PER_PAGE));
-  const currentPage = Number.isInteger(requestedPage) ? Math.min(Math.max(requestedPage, 1), pageCount) : 1;
-  const pageStart = (currentPage - 1) * FAMILIES_PER_PAGE;
-  const pagedFamilies = visibleFamilies.slice(pageStart, pageStart + FAMILIES_PER_PAGE);
+  const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
+  const visibleGroups = (catalog?.missionBrowseGroups ?? [])
+    .map((group) => ({
+      ...group,
+      reputationScopes: group.reputationScopes
+        .map((scope) => ({
+          ...scope,
+          missionArchetypes: scope.missionArchetypes
+            .map((archetype) => ({
+              ...archetype,
+              familyKeys: archetype.familyKeys.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
+            }))
+            .filter((archetype) => archetype.familyKeys.length > 0),
+        }))
+        .filter((scope) => scope.missionArchetypes.length > 0),
+    }))
+    .filter((group) => group.reputationScopes.length > 0);
+
+  const groupedVariantCount = visibleGroups.reduce((sum, group) => sum + group.reputationScopes.reduce((scopeSum, scope) => scopeSum + scope.missionArchetypes.reduce((archSum, archetype) => archSum + archetype.familyKeys.reduce((familySum, familyKey) => familySum + (familiesByKey.get(familyKey)?.variantCount ?? 0), 0), 0), 0), 0);
 
   function setParam(key: string, value: string) {
     const next = new URLSearchParams(searchParams);
-    if (value) next.set(key, value); else next.delete(key);
-    if (key !== "family") next.delete("family");
+    if (value) next.set(key, value);
+    else next.delete(key);
+    if (key !== "family") {
+      next.delete("family");
+      setOpenVariant("");
+    }
     if (key !== "page" && key !== "family") next.delete("page");
-    setShowAllVariants(false);
-    setExpandedDescriptions(new Set());
     setSearchParams(next);
-  }
-
-  function setPage(page: number) {
-    const next = new URLSearchParams(searchParams);
-    if (page <= 1) next.delete("page"); else next.set("page", String(page));
-    next.delete("family");
-    setShowAllVariants(false);
-    setExpandedDescriptions(new Set());
-    setSearchParams(next);
-  }
-
-  function toggleDescription(id: string) {
-    setExpandedDescriptions((current) => {
-      const next = new Set(current);
-      if (next.has(id)) next.delete(id); else next.add(id);
-      return next;
-    });
   }
 
   return (
     <div className="mb-page">
       <div className="mb-shell">
         <header className="mb-header">
-          <div><span className="mb-kicker">Industry Intelligence</span><h1>Mission Browser</h1></div>
-          <div className="mb-summary"><strong>{records.length.toLocaleString()}</strong><span>contracts</span><strong>{families.length}</strong><span>families</span></div>
-        </header>
-        <p className="mb-source-note">Read-only extracted contract records. Unflagged does not guarantee current in-game availability.{metadata ? ` Source updated ${new Date(metadata.sourceLatestModifiedAt).toLocaleDateString()}.` : ""}</p>
-        <section className="mb-controls" aria-label="Mission browser filters">
-          <input type="search" value={query} onChange={(event) => setParam("search", event.target.value)} placeholder="Search missions, factions, debug names, rewards..." />
-          <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{["unflagged", "not-for-release", "work-in-progress", "tutorial", "event"].map((item) => <option key={item} value={item}>{statusLabel(item)}</option>)}</select>
-          <select value={faction} onChange={(event) => setParam("faction", event.target.value)}><option value="">All factions</option>{factions.map((item) => <option key={item}>{item}</option>)}</select>
-          <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item}>{item}</option>)}</select>
-          <select value={contractType} onChange={(event) => setParam("contract", event.target.value)}><option value="">All contract types</option>{contractTypes.map((item) => <option key={item}>{item}</option>)}</select>
-        </section>
-        {loading && <div className="mb-state">Loading mission catalog...</div>}
-        {error && <div className="mb-state is-error">{error}</div>}
-        {!loading && !error && (
-          <div className="mb-workspace">
-            <main className="mb-family-list">
-              <div className="mb-result-count">
-                {visibleFamilies.length} families / {visibleFamilies.reduce((sum, item) => sum + item.variants.length, 0)} contracts
-                {visibleFamilies.length > 0 && <span>Showing {pageStart + 1}-{Math.min(pageStart + FAMILIES_PER_PAGE, visibleFamilies.length)}</span>}
-              </div>
-              {pagedFamilies.map((family) => (
-                <button
-                  key={family.id}
-                  type="button"
-                  className={`mb-family-row${selectedFamily?.id === family.id ? " is-selected" : ""}`}
-                  aria-expanded={selectedFamily?.id === family.id}
-                  aria-controls="mission-family-detail"
-                  onClick={() => setParam("family", selectedFamily?.id === family.id ? "" : family.id)}
-                >
-                  <span className="mb-family-copy"><strong>{family.name}</strong><small>{family.factions.join(", ") || "Unknown faction"} / {family.missionTypes.join(", ") || "Unknown type"}</small></span>
-                  <span className="mb-family-statuses">{family.statuses.map((item) => <i className={`is-${item}`} key={item}>{statusLabel(item)}</i>)}</span>
-                  <span className="mb-family-count"><strong>{family.variants.length}</strong><small>variants</small></span>
-                </button>
-              ))}
-              {visibleFamilies.length > 0 && (
-                <footer className="mb-pagination" aria-label="Mission family pages">
-                  <span>Page {currentPage} of {pageCount}</span>
-                  <nav>
-                    <button type="button" disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button>
-                    {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => (
-                      <button
-                        key={page}
-                        type="button"
-                        className={page === currentPage ? "is-active" : ""}
-                        aria-current={page === currentPage ? "page" : undefined}
-                        onClick={() => setPage(page)}
-                      >
-                        {page}
-                      </button>
-                    ))}
-                    <button type="button" disabled={currentPage === pageCount} onClick={() => setPage(currentPage + 1)}>Next</button>
-                  </nav>
-                </footer>
-              )}
-            </main>
-            {selectedFamily && (
-              <section className="mb-detail" id="mission-family-detail" aria-label={`${selectedFamily.name} mission family details`}>
-                <header>
-                  <div>
-                    <span>Mission Family</span>
-                    <h2>{selectedFamily.name}</h2>
-                    <p>{selectedFamily.factions.join(", ") || "Unknown faction"} / {Array.from(new Set(selectedFamily.variants.map((item) => item.contractType).filter(Boolean))).join(", ") || "Unknown contract type"} / {selectedFamily.variants.length} extracted contract variants</p>
-                    <div className="mb-badges">
-                      {selectedFamily.factions.map((item) => <i className="mb-badge is-neutral" key={item}>{item}</i>)}
-                      {Array.from(new Set(selectedFamily.variants.map((item) => item.contractType).filter((item): item is string => Boolean(item)))).map((item) => <i className="mb-badge is-neutral" key={item}>{item}</i>)}
-                      {selectedFamily.statuses.map((item) => <i className={`mb-badge is-${item}`} key={item}>{statusLabel(item)}</i>)}
-                    </div>
-                  </div>
-                  <button type="button" onClick={() => setParam("family", "")}>Collapse</button>
-                </header>
-                <div className="mb-summary-strip">
-                  <MissionRequirementBadges missions={selectedFamily.variants} familySummary compact />
-                  <div className="mb-requirement-group is-compact">
-                    <strong>Rewards</strong>
-                    <div className="mb-badges">
-                      {familyRewardBadges(selectedFamily.variants, pools).map((label) => <span className="mb-badge is-reward" key={label}>{label}</span>)}
-                    </div>
-                  </div>
-                </div>
-                {selectedDescription && (
-                  <section className="mb-description">
-                    <div className="mb-section-heading"><strong>Description</strong></div>
-                    <p className={expandedDescriptions.has(selectedFamily.id) ? "is-expanded" : ""}>{selectedDescription}</p>
-                    <button type="button" onClick={() => toggleDescription(selectedFamily.id)}>
-                      {expandedDescriptions.has(selectedFamily.id) ? "Collapse Description" : "Expand Description"}
-                    </button>
-                  </section>
-                )}
-                <section className="mb-family-requirements">
-                  <div className="mb-section-heading"><strong>Requirement Details</strong></div>
-                  <MissionRequirementBadges missions={selectedFamily.variants} familySummary />
-                </section>
-                <div className="mb-section-heading"><strong>Contract Variants</strong><span>{selectedFamily.variants.length}</span></div>
-                <div className="mb-variant-columns" aria-hidden="true">
-                  <span>Contract Title</span><span>Mission Type</span><span>Standing</span><span>Location / Locality</span><span>Rewards</span><span>Status</span><span>Expand</span>
-                </div>
-                <div className="mb-variant-list">
-                  {(showAllVariants ? selectedFamily.variants : selectedFamily.variants.slice(0, 8)).map((mission) => (
-                    <details key={mission.contractId} className="mb-variant">
-                      <summary>
-                        <strong>{mission.title ?? mission.debugName ?? "Unknown mission"}</strong>
-                        <span>{mission.missionType ?? "Unknown"}</span>
-                        <span>{formatStandingRange(mission.minStanding?.displayName, mission.maxStanding?.displayName, mission.minStanding?.minReputation, mission.maxStanding?.minReputation)}</span>
-                        <span>{placeSummary(mission)}</span>
-                        <span>{rewardBadges(mission, pools).slice(0, 2).join(", ") || "None"}</span>
-                        <span className="mb-family-statuses">{missionStatuses(mission).map((item) => <i className={`is-${item}`} key={item}>{statusLabel(item)}</i>)}</span>
-                        <span className="mb-expand-label">Details</span>
-                      </summary>
-                      <div className="mb-variant-body">
-                        {mission.description && (
-                          <section className="mb-description is-variant">
-                            <h3>Description</h3>
-                            <p className={expandedDescriptions.has(mission.contractId) ? "is-expanded" : ""}>{cleanDescription(mission.description)}</p>
-                            <button type="button" onClick={() => toggleDescription(mission.contractId)}>
-                              {expandedDescriptions.has(mission.contractId) ? "Collapse Description" : "Expand Description"}
-                            </button>
-                          </section>
-                        )}
-                        <dl>
-                          <div><dt>Organization / Faction</dt><dd>{mission.factionName ?? "Unknown"}</dd></div>
-                          <div><dt>Contract Type</dt><dd>{mission.contractType ?? "Unknown"}</dd></div>
-                          <div><dt>Mission Type</dt><dd>{mission.missionType ?? "Unknown"}</dd></div>
-                          <div><dt>Minimum Standing</dt><dd>{formatStanding(mission.minStanding)}</dd></div>
-                          <div><dt>Maximum Standing</dt><dd>{formatStanding(mission.maxStanding)}</dd></div>
-                        </dl>
-                        <section><h3>Requirements</h3><MissionRequirementBadges missions={[mission]} /></section>
-                        <section><h3>Rewards</h3><RewardSection mission={mission} pools={pools} /></section>
-                      </div>
-                    </details>
-                  ))}
-                </div>
-                {selectedFamily.variants.length > 8 && (
-                  <button className="mb-view-all" type="button" onClick={() => setShowAllVariants((current) => !current)}>
-                    {showAllVariants ? "Show Fewer Variants" : `View All ${selectedFamily.variants.length} Variants`}
-                  </button>
-                )}
-              </section>
-            )}
+          <div>
+            <span className="mb-kicker">Industry Intelligence</span>
+            <h1>Mission Browser</h1>
+            <p>Shaped mission registry from Foundry contract data. Raw identifiers stay in technical details.</p>
           </div>
+          <div className="mb-summary">
+            <strong>{catalog?.summary.variantCount.toLocaleString() ?? "..."}</strong><span>variants</span>
+            <strong>{catalog?.summary.factionGroupCount.toLocaleString() ?? "..."}</strong><span>factions</span>
+            <strong>{catalog?.summary.reputationScopeGroupCount.toLocaleString() ?? "..."}</strong><span>scopes</span>
+            <strong>{catalog?.summary.archetypeGroupCount.toLocaleString() ?? "..."}</strong><span>archetypes</span>
+          </div>
+        </header>
+
+        <section className="mb-controls" aria-label="Mission browser filters">
+          <input type="search" value={query} onChange={(event) => setParam("search", event.target.value)} placeholder="Search missions, providers, rewards, internal IDs..." />
+          <select value={provider} onChange={(event) => setParam("provider", event.target.value)}><option value="">All providers</option>{providers.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={reward} onChange={(event) => setParam("reward", event.target.value)}>
+            <option value="">All rewards</option>
+            <option value="blueprints">Blueprint rewards</option>
+            <option value="reputation">Reputation rewards</option>
+            <option value="credits-unresolved">Credits unresolved</option>
+            <option value="credits-none">No credit reward extracted</option>
+          </select>
+          <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)}><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{statuses.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={confidence} onChange={(event) => setParam("confidence", event.target.value)}>
+            <option value="">All confidence</option>
+            <option value="unresolved">Any unresolved</option>
+            <option value="locations">Locations unresolved</option>
+            <option value="rewards">Rewards unresolved</option>
+            <option value="crime-bounded">CrimeStat limited</option>
+            <option value="unlawful">Possible unlawful</option>
+          </select>
+        </section>
+        <div className="mb-rep-legend" aria-label="Reputation path color legend">
+          {["Hauling", "Ship Combat", "Salvage", "Standing", "Bounty", "Courier", "Refuel"].map((item) => (
+            <span key={item} className={`mb-rep-badge ${repScopeClass(item)}`}>{item}</span>
+          ))}
+        </div>
+
+        {loading && <div className="mb-state">Loading shaped mission registry...</div>}
+        {error && <div className="mb-state is-error">{error}</div>}
+        {!loading && !error && catalog && (
+          <main className="mb-family-list">
+            <div className="mb-result-count">
+              <span>{visibleGroups.length} factions / {visibleFamilies.length} mission groups / {groupedVariantCount} variants</span>
+              <span>{catalog.summary.reputationScopeResolvedCount} resolved scopes / {catalog.summary.reputationScopePartialCount} partial / {catalog.summary.reputationScopeUnresolvedCount} unresolved</span>
+            </div>
+
+            {visibleGroups.map((group) => {
+              const groupCount = group.reputationScopes.reduce((sum, scope) => sum + scope.missionArchetypes.reduce((archSum, archetype) => archSum + archetype.familyKeys.length, 0), 0);
+              const variantCount = group.reputationScopes.reduce((sum, scope) => sum + scope.missionArchetypes.reduce((archSum, archetype) => archSum + archetype.variantCount, 0), 0);
+              const pathNames = group.reputationScopes.map((scope) => shortRepScope(scope.displayName));
+              return (
+              <section className="mb-browse-group mission-faction-block" key={group.factionKey}>
+                <header className="mb-group-header mission-faction-block__header">
+                  <div>
+                    <span>Faction</span>
+                    <h2>{group.factionDisplayName}</h2>
+                    <small>{pathNames.slice(0, 4).join(" / ")}{pathNames.length > 4 ? ` / +${pathNames.length - 4}` : ""}</small>
+                  </div>
+                  <strong>{groupCount} groups / {variantCount} playable missions</strong>
+                </header>
+                {group.reputationScopes.map((scope) => (
+                  <section className={`mb-scope-group mission-path-lane ${repScopeClass(scope.displayName)}`} key={scope.scopeKey}>
+                    <header className={`mb-scope-header mission-path-lane__header ${repScopeClass(scope.displayName)}`}>
+                      <div className="mission-path-lane__identity">
+                        <span className="mission-path-lane__icon"><ReputationPathIcon scope={scope.displayName} /></span>
+                        <div>
+                          <h3>{shortRepScope(scope.displayName)}</h3>
+                          <p>{group.factionDisplayName} reputation path</p>
+                          <small>{scope.missionArchetypes.reduce((sum, archetype) => sum + archetype.familyKeys.length, 0)} groups / {scope.missionArchetypes.reduce((sum, archetype) => sum + archetype.variantCount, 0)} playable missions</small>
+                        </div>
+                      </div>
+                      <div className="mission-path-lane__reward-note">
+                        <strong>Rewards {shortRepScope(scope.displayName)} Rep</strong>
+                        <span>{repScopeDescription(scope.displayName)}</span>
+                        <div className="mb-badges">
+                          {scope.confidence !== "resolved" && <Badge tone={scope.confidence === "partial" ? "is-amber" : "is-red"}>{scope.confidence}</Badge>}
+                          <Badge tone="is-neutral">{scope.trackType}</Badge>
+                        </div>
+                      </div>
+                    </header>
+                    <div className="mission-path-lane__body">
+                    {scope.missionArchetypes.map((archetype) => (
+                      <section className="mb-archetype-group" key={`${scope.scopeKey}-${archetype.archetypeKey}`}>
+                        <div className="mb-archetype-header mission-archetype-band">
+                          <strong>{archetype.displayName}</strong>
+                          <span>{archetype.familyKeys.length} groups / {archetype.familyKeys.reduce((sum, familyKey) => sum + (familiesByKey.get(familyKey)?.variantCount ?? 0), 0)} variants</span>
+                          {archetype.unresolvedCount > 0 && <small>{archetype.unresolvedCount} with unresolved fields</small>}
+                        </div>
+                        <div className="mission-group-grid">
+                        {archetype.familyKeys.map((familyKey) => {
+                          const family = familiesByKey.get(familyKey);
+                          if (!family) return null;
+                          const isSelected = selectedFamilyKey === family.familyKey;
+                          const variants = variantsByFamily.get(family.familyKey) ?? [];
+              return (
+                <div className={`mb-family-block ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, family.reputationScope.displayName))}${isSelected ? " is-selected" : ""}`} key={family.familyKey}>
+                  <button
+                    type="button"
+                    className="mb-family-row mission-group-card"
+                    aria-expanded={isSelected}
+                    onClick={() => {
+                      setOpenVariant("");
+                      setParam("family", isSelected ? "" : family.familyKey);
+                    }}
+                  >
+                      <span className="mission-group-card__rail" aria-hidden="true" />
+                      <span className="mission-group-card__body">
+                        <span className="mission-group-card__header">
+                          <span className="mission-faction-initials" aria-hidden="true">{factionInitials(family.provider)}</span>
+                          <span className="mb-family-copy mission-group-card__title-block">
+                            <strong className="mission-group-card__title">{family.displayName}</strong>
+                            <small>{family.provider}</small>
+                          </span>
+                        </span>
+                      <span className="mission-group-card__primary">
+                        <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, family.reputationScope.displayName))}`}>{repPathSummary(family.rewardedReputationPaths)}</span>
+                        {rewardsDifferentFromScope(family) && <span className={`mb-rep-badge ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, "Mixed"))}`}>Grouped under {shortRepScope(family.reputationScope.displayName)}</span>}
+                      </span>
+                      <span className="mission-group-card__meta">
+                        <span className="mission-card-row mission-card-row--pickup" title={groupPickupSummary(family, variants)}>
+                          <span className="mission-card-row__icon"><MissionCardRowIcon type="pickup" /></span>
+                          <span>Pickup: {groupPickupSummary(family, variants)}</span>
+                        </span>
+                        <span className="mission-card-row">
+                          <span className="mission-card-row__icon"><MissionCardRowIcon type="missions" /></span>
+                          <span>{family.variantCount} playable mission{family.variantCount === 1 ? "" : "s"}</span>
+                        </span>
+                        <span className={`mission-card-row mission-card-row--blueprint${family.blueprintRewardGroups.length > 0 ? " has-blueprints" : ""}`}>
+                          <span className="mission-card-row__icon"><MissionCardRowIcon type="blueprints" /></span>
+                          <span>{cardBlueprintSummary(family)}</span>
+                        </span>
+                        <span className="mission-card-row">
+                          <span className="mission-card-row__icon"><MissionCardRowIcon type="credits" /></span>
+                          <span>Credits: {cardCreditSummary(variants)}</span>
+                        </span>
+                        {groupUnresolvedSummary(family, variants).length > 0 && <span>{groupUnresolvedSummary(family, variants).length} unresolved categor{groupUnresolvedSummary(family, variants).length === 1 ? "y" : "ies"}</span>}
+                      </span>
+                      {(family.crimeStatRequirement === "required" || family.lawfulClassification === "unlawful") && (
+                        <span className="mission-warning-summary">
+                          {family.crimeStatRequirement === "required" || family.lawfulClassification === "unlawful" ? <span>{legalBadge(family).label}</span> : null}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                  {isSelected && (
+                    <FamilyDetail
+                      family={family}
+                      variants={variants}
+                      openVariant={openVariant}
+                      setOpenVariant={setOpenVariant}
+                      onClose={() => setParam("family", "")}
+                    />
+                  )}
+                </div>
+              );
+                        })}
+                        </div>
+                      </section>
+                    ))}
+                    </div>
+                  </section>
+                ))}
+              </section>
+              );
+            })}
+          </main>
         )}
       </div>
     </div>
