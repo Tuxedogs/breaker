@@ -827,6 +827,7 @@
 .logi-location-collapse-btn,
 .logi-location-detail-sort button,
 .logi-location-detail-filters button,
+.logi-location-detail-view-toggle button,
 .logi-location-row-actions button {
   border: 1px solid var(--border-soft-color);
   border-radius: 4px;
@@ -873,19 +874,30 @@
   min-height: 30px;
 }
 
-.logi-location-detail-filters {
+.logi-location-detail-filters,
+.logi-location-detail-view-toggle {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+}
+
+.logi-location-detail-filters {
   margin-left: auto;
 }
 
-.logi-location-detail-filters button {
+.logi-location-detail-view-toggle {
+  padding-left: 0.45rem;
+  border-left: 1px solid var(--border-soft-color);
+}
+
+.logi-location-detail-filters button,
+.logi-location-detail-view-toggle button {
   min-height: 30px;
   padding: 0.3rem 0.58rem;
 }
 
-.logi-location-detail-filters button.is-active {
+.logi-location-detail-filters button.is-active,
+.logi-location-detail-view-toggle button.is-active {
   color: rgba(221,214,254,0.96);
   border-color: rgba(167,139,250,0.38);
   background: rgba(167,139,250,0.10);
@@ -895,6 +907,14 @@
   max-height: 560px;
   overflow: auto;
   padding: 0 0.65rem 0.65rem;
+  contain: content;
+}
+
+.logi-location-stack-table-wrap--cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: 0.55rem;
+  padding-top: 0.65rem;
 }
 
 .logi-location-stack-table-head,
@@ -906,10 +926,9 @@
 }
 
 .logi-location-stack-table-head {
-  position: sticky;
-  top: 0;
   z-index: 2;
   min-width: 690px;
+  margin: 0 0.65rem;
   padding: 0.4rem 0.58rem;
   border-bottom: 1px solid var(--border-soft-color);
   background: var(--bg-panel);
@@ -923,6 +942,140 @@
 .logi-location-material-group {
   min-width: 690px;
   border-bottom: 1px solid var(--border-soft-color);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 96px;
+}
+
+.logi-location-material-card {
+  min-width: 0;
+  border: 1px solid var(--border-soft-color);
+  border-radius: 6px;
+  background: rgba(8, 14, 22, 0.72);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 178px;
+  overflow: hidden;
+}
+
+.logi-location-material-card-head {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.52rem 0.58rem 0.42rem;
+  border-bottom: 1px solid rgba(148,163,184,0.08);
+  background: rgba(15,23,42,0.34);
+}
+
+.logi-location-material-card-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+}
+
+.logi-location-material-card-title h3 {
+  min-width: 0;
+  margin: 0;
+  color: rgba(238,244,255,0.94);
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  line-height: 1.08;
+  letter-spacing: 0.035em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-location-material-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+}
+
+.logi-location-material-card-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-bottom: 1px solid rgba(148,163,184,0.08);
+}
+
+.logi-location-material-card-meta span {
+  min-width: 0;
+  display: grid;
+  gap: 0.08rem;
+  padding: 0.34rem 0.42rem;
+  border-right: 1px solid rgba(148,163,184,0.07);
+}
+
+.logi-location-material-card-meta span:last-child {
+  border-right: 0;
+}
+
+.logi-location-material-card-meta small,
+.logi-location-material-card-meta strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-primary);
+}
+
+.logi-location-material-card-meta small {
+  color: rgba(160,180,220,0.44);
+  font-size: 0.49rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.logi-location-material-card-meta strong {
+  color: rgba(231,237,255,0.82);
+  font-size: 0.64rem;
+  font-weight: 700;
+}
+
+.logi-location-material-card-rows {
+  display: grid;
+}
+
+.logi-location-card-stack-row {
+  min-width: 0;
+  min-height: 32px;
+  display: grid;
+  grid-template-columns: auto minmax(58px, auto) minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.46rem;
+  border-top: 1px solid rgba(148,163,184,0.055);
+  color: rgba(199,210,230,0.66);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  contain: content;
+}
+
+.logi-location-card-stack-row:first-child {
+  border-top: 0;
+}
+
+.logi-location-card-stack-row:hover {
+  background: rgba(255,255,255,0.018);
+}
+
+.logi-location-card-stack-qty,
+.logi-location-card-stack-container {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-location-card-stack-qty {
+  color: rgba(231,237,255,0.76);
+}
+
+.logi-location-card-stack-container {
+  color: rgba(160,180,220,0.46);
+}
+
+.logi-location-card-stack-row > .logi-location-row-actions {
+  grid-column: -2 / -1;
+  justify-self: end;
 }
 
 .logi-location-material-head {
@@ -961,10 +1114,17 @@
   color: rgba(199,210,230,0.66);
   font-family: var(--font-primary);
   font-size: 0.65rem;
+  contain: content;
 }
 
 .logi-location-detail-row:hover {
   background: rgba(255,255,255,0.018);
+}
+
+.logi-location-stack-table-wrap .logi-mat-glyph,
+.logi-location-stack-table-wrap .logi-mat-glyph.logi-quality--premium,
+.logi-location-stack-table-wrap .logi-mat-glyph.logi-quality--legendary {
+  box-shadow: inset 0 0 0 1px rgba(167,139,250,0.18);
 }
 
 .logi-location-kind {
@@ -993,7 +1153,8 @@
 
 .logi-location-row-actions button:hover,
 .logi-location-collapse-btn:hover,
-.logi-location-detail-sort button:hover {
+.logi-location-detail-sort button:hover,
+.logi-location-detail-view-toggle button:hover {
   border-color: var(--border-hover-color);
   color: rgba(238,244,255,0.92);
 }
@@ -1017,6 +1178,7 @@
   .logi-inv-summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .logi-location-detail-controls { flex-wrap: wrap; }
   .logi-location-detail-filters { margin-left: 0; }
+  .logi-location-detail-view-toggle { padding-left: 0; border-left: 0; }
 }
 
 @media (max-width: 900px) {
