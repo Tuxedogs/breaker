@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton4",
+  "variant": {
+    "variantKey": "99b9940b-441d-4b82-83f2-faec32f58cbd",
+    "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton4",
+    "displayName": "RESOURCE DRIVE: LARGE SHIP UNDER ATTACK",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "This one is urgent. A transport ship of ours is currently under attack. They were able to share their last known location of [Location] shortly before losing contact.\n\nSince this is a high-risk situation, we strongly suggest you bring backup. I have every confidence that you and your crew will be able to occupy the outlaws long enough for the ship to complete repairs and escape with its cargo.\n\nOutside of the contract’s payment, you’ll receive credit for the resources they deliver.\n\nLooking forward to hearing of your success.\n\nAster Remmington\nContractor Liaison Officer\nmicroTech",
+    "rawName": "@GoblinG_MicroTech_SupportAttackedShip_L_Title",
+    "internalName": "GoblinG_SupportAttackedShip_L_Stanton4",
+    "missionType": "Resource Drive - MicroTech",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Ship Combat",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Ship Combat",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton4",
+        "GoblinG_SupportAttackedShip_L_Stanton4"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "e8c2560f-a4b3-49b8-b753-939e85338d0f"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "49bd0424-bf21-4703-81bf-71eb55b3e511"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/gobling_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "99b9940b-441d-4b82-83f2-faec32f58cbd",
+      "generatorGuid": "9a501367-1c36-4dda-8326-0c3a75896e26",
+      "generatorName": "ContractGenerator.GoblinG_Generator",
+      "generatorPath": "contracts/contractgenerator/gobling_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@GoblinG_MicroTech_SupportAttackedShip_L_Title",
+      "descriptionRaw": "@GoblinG_MicroTech_SupportAttackedShip_L_Desc"
+    }
+  }
+}

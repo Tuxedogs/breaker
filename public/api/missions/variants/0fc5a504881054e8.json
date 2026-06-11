@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "7cd94a2f-e1ba-492b-9420-5d056d8742c5|WallaceKlim_InitialInvite_Career",
+  "variant": {
+    "variantKey": "df80b67b-0fb9-4902-83a5-6913378c6c1b",
+    "familyKey": "7cd94a2f-e1ba-492b-9420-5d056d8742c5|WallaceKlim_InitialInvite_Career",
+    "displayName": "Production Oversight",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "[Contractor]",
+    "rawName": "@mg_klim_localdelivery_drugprod_title_001",
+    "internalName": "Luminalia_1",
+    "missionType": "CareerContract",
+    "provider": "Wallace Klim",
+    "faction": "Wallace Klim",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+      "displayName": "Affinity",
+      "rawName": "SReputationScopeParams.ReputationScope_Affinity",
+      "factionKey": "1d52a0fd-705b-483d-9e9b-2f5c6f16959f",
+      "factionDisplayName": "Wallace Klim",
+      "trackType": "Affinity",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+      ]
+    },
+    "missionArchetype": "CareerContract",
+    "standingRequirement": "Affinity Good 005 / 500 rep to Affinity Good 100 Exalted / 10,000 rep",
+    "prerequisiteSummary": "Affinity Good 005 / 500 rep to Affinity Good 100 Exalted / 10,000 rep; CrimeStat limited to 5 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Affinity Good 005 / 500 rep to Affinity Good 100 Exalted / 10,000 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 5 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 5
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 2",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 3",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 4",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "resolvedName": "Stanton 2",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "resolvedName": "Stanton 3",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "resolvedName": "Stanton 4",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "resolvedName": "Stanton 2",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "resolvedName": "Stanton 3",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "resolvedName": "Stanton 4",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Stanton Star",
+      "Stanton 2",
+      "Stanton 3",
+      "Stanton 4",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/missionproviders/wallaceklim_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "df80b67b-0fb9-4902-83a5-6913378c6c1b",
+      "generatorGuid": "7cd94a2f-e1ba-492b-9420-5d056d8742c5",
+      "generatorName": "ContractGenerator.WallaceKlim_Generator",
+      "generatorPath": "contracts/contractgenerator/missionproviders/wallaceklim_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@mg_klim_localdelivery_drugprod_title_001",
+      "descriptionRaw": "@LocalDelivery_DrugProd_desc_01"
+    }
+  }
+}

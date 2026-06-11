@@ -15,7 +15,31 @@ export type MissionRewardView = {
   blueprintRewardGroups: BlueprintRewardGroupView[];
   reputationRewards: string[];
   credits: string;
-  creditStatus: "extracted" | "unresolved" | "provenAbsent";
+  creditStatus: "fixed" | "calculated" | "formula_unresolved" | "variable" | "provenAbsent" | "unresolved";
+  creditsDetail?: {
+    status: "fixed" | "calculated" | "formula_unresolved" | "variable" | "provenAbsent" | "unresolved";
+    amount?: number;
+    currency?: string;
+    displayText?: string;
+    confidence?: string;
+    sourceResultType?: string;
+    unresolvedReason?: string;
+    attributes?: Record<string, unknown>;
+    sourceRefs?: string[];
+  };
+  itemRewards?: Array<{
+    status: "resolved" | "unresolved_entityClass" | "weighted_unresolved";
+    entityClass?: string;
+    amount?: number | string | null;
+    displayName?: string;
+    itemKey?: string;
+    deliveryTarget?: "player_home_location" | "unknown";
+    ownerOnly?: boolean;
+    confidence?: string;
+    unresolvedReason?: string;
+    sourceRefs?: string[];
+  }>;
+  itemRewardStatus?: "resolved" | "unresolved_entityClass" | "weighted_unresolved" | "none";
   unresolvedRewardTokens: string[];
 };
 
@@ -151,6 +175,8 @@ export type MissionFamilyView = {
   reputationRewards: string[];
   rewardedReputationPaths: MissionRewardedReputationPathView[];
   creditRewardSummary: string;
+  creditRewardStatuses?: MissionRewardView["creditStatus"][];
+  itemRewardStatus?: MissionRewardView["itemRewardStatus"];
   unresolvedRewardFields: string[];
   reputationRequirement?: string;
   prerequisiteRequirements: string[];
@@ -206,7 +232,54 @@ export type MissionBrowserCatalog = {
   };
   families: MissionFamilyView[];
   variants: MissionVariantView[];
+  familiesByKey?: Record<string, MissionFamilyView>;
+  familyDetailFiles?: Record<string, string>;
+  familyVariantFiles?: Record<string, string>;
+  variantDetailFiles?: Record<string, string>;
+  unresolvedSummary?: {
+    unresolvedLocationCount: number;
+    unresolvedRewardCount: number;
+    pickupUnknownCount: number;
+    reputationScopePartialCount: number;
+    reputationScopeUnresolvedCount: number;
+  };
+  report?: {
+    extractionReport: string;
+    unresolvedReport: string;
+    legacyCombinedCatalog: string;
+  };
+  filtersMeta?: MissionBrowserFiltersMeta;
   missionBrowseGroups: MissionBrowseGroupView[];
+};
+
+export type MissionBrowserFilterOption = {
+  key: string;
+  label: string;
+  count: number;
+  colorKey?: string;
+};
+
+export type MissionBrowserFiltersMeta = {
+  factions: MissionBrowserFilterOption[];
+  reputationScopes: MissionBrowserFilterOption[];
+  archetypes: MissionBrowserFilterOption[];
+  rewardTypes: MissionBrowserFilterOption[];
+  pickupSystems: MissionBrowserFilterOption[];
+  confidenceStates: MissionBrowserFilterOption[];
+  legalStates: MissionBrowserFilterOption[];
+  missionTypes?: MissionBrowserFilterOption[];
+  releaseStates?: MissionBrowserFilterOption[];
+};
+
+export type MissionBrowserFilters = {
+  search?: string;
+  faction?: string;
+  provider?: string;
+  type?: string;
+  reward?: string;
+  repReward?: string;
+  status?: string;
+  confidence?: string;
 };
 
 export type MissionBrowseGroupView = {
@@ -229,16 +302,251 @@ export type MissionBrowseGroupView = {
   }>;
 };
 
-let missionDataPromise: Promise<MissionBrowserCatalog> | null = null;
+export type MissionFamilyDetailPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  family: MissionFamilyView;
+  groupSummary: {
+    familyKey: string;
+    provider: string;
+    reputationScope: MissionReputationScopeView;
+    missionArchetype: string;
+    variantCount: number;
+  };
+  rewardSummary: {
+    rewardSummary: string[];
+    blueprintRewards: string[];
+    blueprintRewardGroups: BlueprintRewardGroupView[];
+    reputationRewards: string[];
+    rewardedReputationPaths: MissionRewardedReputationPathView[];
+    creditRewardSummary: string;
+  };
+  pickupSummary: {
+    pickupSummary: string;
+    pickupStatuses: MissionPickupLocationView["status"][];
+    pickupUnresolvedCount: number;
+    locations: string[];
+    unresolvedLocationTokens: string[];
+  };
+  blueprintSummary: {
+    blueprintRewards: string[];
+    blueprintRewardGroups: BlueprintRewardGroupView[];
+  };
+  variantKeys: string[];
+  variantSummaries: Array<{
+    variantKey: string;
+    displayName: string;
+    missionType: string;
+    pickupLocation: Pick<MissionPickupLocationView, "status" | "displayName" | "confidence">;
+    standingRequirement: string;
+    creditStatus: MissionRewardView["creditStatus"];
+    credits: string;
+    hasBlueprintRewards: boolean;
+    hasUnresolvedRewards: boolean;
+  }>;
+  variantsFile: string;
+};
 
-export function loadMissionData(): Promise<MissionBrowserCatalog> {
-  missionDataPromise ??= fetch(apiUrl("/api/missions/missions.json")).then(async (response) => {
-    const data = await parseJsonResponse<MissionBrowserCatalog>(response, {
-      label: "mission browser catalog",
-      url: response.url,
-    });
-    if (!response.ok) throw new Error(`Mission browser catalog unavailable: ${response.status}`);
-    return data;
+export type MissionFamilyVariantsPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  familyKey: string;
+  variants: MissionVariantView[];
+};
+
+export type MissionVariantDetailPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  familyKey: string;
+  variant: MissionVariantView;
+};
+
+const missionDataPromises = new Map<string, Promise<MissionBrowserCatalog>>();
+const familyDetailPromises = new Map<string, Promise<MissionFamilyDetailPayload>>();
+const familyVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
+const variantDetailPromises = new Map<string, Promise<MissionVariantView>>();
+
+async function fetchJson<T>(path: string, label: string): Promise<T> {
+  const response = await fetch(apiUrl(path));
+  const data = await parseJsonResponse<T>(response, {
+    label,
+    url: response.url,
   });
-  return missionDataPromise;
+  if (!response.ok) throw new Error(`${label} unavailable: ${response.status}`);
+  return data;
+}
+
+function toBrowserCatalog(data: MissionBrowserCatalog): MissionBrowserCatalog {
+  if (data.familiesByKey && !data.families?.length) {
+    return {
+      ...data,
+      families: Object.values(data.familiesByKey),
+      variants: [],
+    };
+  }
+  return {
+    ...data,
+    familiesByKey: data.familiesByKey ?? Object.fromEntries((data.families ?? []).map((family) => [family.familyKey, family])),
+    variants: data.variants ?? [],
+  };
+}
+
+function filterKey(filters: MissionBrowserFilters = {}): string {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(filters)) {
+    if (value) params.set(key, value);
+  }
+  return params.toString();
+}
+
+function browserPath(filters: MissionBrowserFilters = {}): string {
+  const key = filterKey(filters);
+  return key ? `/api/missions/browser?${key}` : "/api/missions/browser";
+}
+
+function staticIndexPath(filters: MissionBrowserFilters = {}): string {
+  const key = filterKey(filters);
+  return key ? `/api/missions/mission_browser_index.json?${key}` : "/api/missions/mission_browser_index.json";
+}
+
+function rewardMatches(family: MissionFamilyView, reward: string): boolean {
+  if (!reward) return true;
+  if (reward === "blueprints") return family.blueprintRewards.length > 0;
+  if (reward === "reputation") return family.reputationRewards.length > 0;
+  if (reward === "credits-fixed") return family.creditRewardStatuses?.includes("fixed") ?? family.creditRewardSummary !== "No credit reward extracted";
+  if (reward === "credits-calculated") return family.creditRewardStatuses?.includes("calculated") ?? family.creditRewardSummary === "Calculated payout";
+  if (reward === "credits-variable") return family.creditRewardStatuses?.includes("variable") ?? family.creditRewardSummary === "Variable payout";
+  if (reward === "credits-formula-unresolved") return family.creditRewardStatuses?.includes("formula_unresolved") ?? family.creditRewardSummary === "Credits formula unresolved";
+  if (reward === "credits-unresolved") return family.creditRewardSummary === "Credits unresolved";
+  if (reward === "credits-none") return family.creditRewardSummary === "No credit reward extracted";
+  if (reward === "items") return family.itemRewardStatus === "resolved";
+  if (reward === "items-unresolved") return family.itemRewardStatus === "unresolved_entityClass" || family.itemRewardStatus === "weighted_unresolved";
+  return true;
+}
+
+function confidenceMatches(family: MissionFamilyView, confidence: string): boolean {
+  if (!confidence) return true;
+  if (confidence === "unresolved") return family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0;
+  if (confidence === "locations") return family.unresolvedLocationTokens.length > 0;
+  if (confidence === "rewards") return family.unresolvedRewardFields.length > 0 || (family.creditRewardStatuses?.includes("unresolved") ?? family.creditRewardSummary === "Credits unresolved");
+  if (confidence === "crime-bounded") return family.crimeStatRequirement === "bounded";
+  if (confidence === "unlawful") return family.lawfulClassification === "unlawful";
+  return true;
+}
+
+function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBrowserFilters): MissionBrowserCatalog {
+  const query = filters.search?.trim().toLowerCase() ?? "";
+  const visibleFamilies = catalog.families.filter((family) => {
+    const faction = filters.faction ?? filters.provider;
+    if (query && !family.searchText.includes(query)) return false;
+    if (faction && family.provider !== faction) return false;
+    if (filters.type && family.missionType !== filters.type) return false;
+    if (filters.repReward && !family.rewardedReputationPaths.some((path) => path.scopeDisplayName === filters.repReward)) return false;
+    if (filters.status && !family.releaseFlags.includes(filters.status)) return false;
+    if (!rewardMatches(family, filters.reward ?? "")) return false;
+    if (!confidenceMatches(family, filters.confidence ?? "")) return false;
+    return true;
+  });
+  const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
+  const missionBrowseGroups = catalog.missionBrowseGroups
+    .map((group) => ({
+      ...group,
+      reputationScopes: group.reputationScopes
+        .map((scope) => ({
+          ...scope,
+          missionArchetypes: scope.missionArchetypes
+            .map((archetype) => ({
+              ...archetype,
+              familyKeys: archetype.familyKeys.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
+            }))
+            .filter((archetype) => archetype.familyKeys.length > 0),
+        }))
+        .filter((scope) => scope.missionArchetypes.length > 0),
+    }))
+    .filter((group) => group.reputationScopes.length > 0);
+  const referencedFamilyKeys = new Set(
+    missionBrowseGroups.flatMap((group) =>
+      group.reputationScopes.flatMap((scope) => scope.missionArchetypes.flatMap((archetype) => archetype.familyKeys))
+    )
+  );
+  const families = visibleFamilies.filter((family) => referencedFamilyKeys.has(family.familyKey));
+  return {
+    ...catalog,
+    families,
+    familiesByKey: Object.fromEntries(families.map((family) => [family.familyKey, family])),
+    missionBrowseGroups,
+  };
+}
+
+export function loadMissionData(filters: MissionBrowserFilters = {}): Promise<MissionBrowserCatalog> {
+  const key = filterKey(filters);
+  if (!missionDataPromises.has(key)) {
+    missionDataPromises.set(
+      key,
+      fetchJson<MissionBrowserCatalog>(browserPath(filters), "mission browser index")
+        .then(toBrowserCatalog)
+        .catch(() =>
+          fetchJson<MissionBrowserCatalog>(staticIndexPath(filters), "mission browser index")
+            .then(toBrowserCatalog)
+            .then((catalog) => applyBrowserFilters(catalog, filters))
+            .catch(() => fetchJson<MissionBrowserCatalog>("/api/missions/missions.json", "mission browser catalog").then(toBrowserCatalog).then((catalog) => applyBrowserFilters(catalog, filters)))
+        ),
+    );
+  }
+  return missionDataPromises.get(key)!;
+}
+
+export async function loadMissionFamilyDetail(familyKey: string): Promise<MissionFamilyDetailPayload> {
+  const catalog = await loadMissionData();
+  const file = catalog.familyDetailFiles?.[familyKey];
+  if (!file) throw new Error(`Mission family detail unavailable for ${familyKey}`);
+  if (!familyDetailPromises.has(familyKey)) {
+    familyDetailPromises.set(
+      familyKey,
+      fetchJson<MissionFamilyDetailPayload>(`/api/missions/families/${encodeURIComponent(familyKey)}`, "mission family detail")
+        .catch(() => fetchJson<MissionFamilyDetailPayload>(`/api/missions/${file}`, "mission family detail")),
+    );
+  }
+  return familyDetailPromises.get(familyKey)!;
+}
+
+export async function loadMissionFamilyVariants(familyKey: string): Promise<MissionVariantView[]> {
+  const catalog = await loadMissionData();
+  const file = catalog.familyVariantFiles?.[familyKey];
+  if (!file) {
+    const fallback = catalog.variants.filter((variant) => variant.familyKey === familyKey);
+    if (fallback.length) return fallback;
+    throw new Error(`Mission family variants unavailable for ${familyKey}`);
+  }
+  if (!familyVariantPromises.has(familyKey)) {
+    familyVariantPromises.set(
+      familyKey,
+      fetchJson<MissionFamilyVariantsPayload>(`/api/missions/families/${encodeURIComponent(familyKey)}/variants`, "mission family variants")
+        .catch(() => fetchJson<MissionFamilyVariantsPayload>(`/api/missions/${file}`, "mission family variants"))
+        .then((payload) => payload.variants),
+    );
+  }
+  return familyVariantPromises.get(familyKey)!;
+}
+
+export async function loadMissionVariantDetail(variantKey: string): Promise<MissionVariantView> {
+  const catalog = await loadMissionData();
+  const file = catalog.variantDetailFiles?.[variantKey];
+  if (!file) {
+    const fallback = catalog.variants.find((variant) => variant.variantKey === variantKey);
+    if (fallback) return fallback;
+    throw new Error(`Mission variant detail unavailable for ${variantKey}`);
+  }
+  if (!variantDetailPromises.has(variantKey)) {
+    variantDetailPromises.set(
+      variantKey,
+      fetchJson<MissionVariantDetailPayload>(`/api/missions/variants/${encodeURIComponent(variantKey)}`, "mission variant detail")
+        .catch(() => fetchJson<MissionVariantDetailPayload>(`/api/missions/${file}`, "mission variant detail"))
+        .then((payload) => payload.variant),
+    );
+  }
+  return variantDetailPromises.get(variantKey)!;
 }

@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "98a2d07a-45f0-4f6e-8c56-4563b1775f58|Pacheco_EliminateSpecific_Career",
+  "variants": [
+    {
+      "variantKey": "4296fd18-1430-4a23-79b8-062c2fa19bb8",
+      "familyKey": "98a2d07a-45f0-4f6e-8c56-4563b1775f58|Pacheco_EliminateSpecific_Career",
+      "displayName": "Pacheco Stanton 3 Eliminate Specific Standard",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "briefing": "[Contractor]",
+      "rawName": "@assassin_title",
+      "internalName": "Pacheco_Stanton3_EliminateSpecific_Standard",
+      "missionType": "CareerContract",
+      "provider": "Tecia \"Twitch\" Pacheco",
+      "faction": "Tecia \"Twitch\" Pacheco",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "displayName": "Affinity",
+        "rawName": "SReputationScopeParams.ReputationScope_Affinity",
+        "factionKey": "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+        "factionDisplayName": "Tecia \"Twitch\" Pacheco",
+        "trackType": "Affinity",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77"
+        ]
+      },
+      "missionArchetype": "Assassination",
+      "standingRequirement": "Affinity Bad 005 / -500 rep to Affinity Good 100 Exalted / 10,000 rep",
+      "prerequisiteSummary": "Affinity Bad 005 / -500 rep to Affinity Good 100 Exalted / 10,000 rep; CrimeStat limited to 5 or below; Procedural location placeholder",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Affinity Bad 005 / -500 rep to Affinity Good 100 Exalted / 10,000 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 5 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 5
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "BP_MissionLocation",
+            "propertyExtendedTextToken": "Location",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef2476b2-c545-4648-b6ab-28963536f6d9"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "unknown",
+        "displayName": "Unknown",
+        "sourceRole": "unknown",
+        "confidence": "low",
+        "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+        "sourceRefs": [],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "procedural region / placeholder",
+            "ref": "BP_MissionLocation",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ]
+      },
+      "locations": [],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Affinity +100",
+          "Affinity -50",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Affinity +100",
+          "Affinity -50"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/missionproviders/pacheco_generator.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+          "factionDisplayName": "Tecia \"Twitch\" Pacheco",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+          ]
+        },
+        {
+          "factionKey": "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+          "factionDisplayName": "Tecia \"Twitch\" Pacheco",
+          "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "scopeDisplayName": "Affinity",
+          "amount": -50,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "7e716658-9c65-4ebe-819e-8fffd8390e6a",
+            "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+            "5a59f6f6-245f-4e43-a08b-8b67e38286a7"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "4296fd18-1430-4a23-79b8-062c2fa19bb8",
+        "generatorGuid": "98a2d07a-45f0-4f6e-8c56-4563b1775f58",
+        "generatorName": "ContractGenerator.Pacheco_Generator",
+        "generatorPath": "contracts/contractgenerator/missionproviders/pacheco_generator.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@assassin_title",
+        "descriptionRaw": "@assassin_desc"
+      }
+    }
+  ]
+}

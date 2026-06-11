@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+  "variant": {
+    "variantKey": "8abf7ff6-9f52-4421-a3c3-16a9aae6a9d7",
+    "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+    "displayName": "RESOURCE DRIVE: SMALL GOODS RECOVERY",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "A small transport ship of ours has been intercepted by outlaws and its contents were stolen.\n\nThe good news is we’ve managed to track down some of these outlaws to [Location] and are looking for contractors with combat experience to deal with them and recover our [ItemsToRecover] cargo boxes (all [MaxBoxSize] SCU or smaller). You’ll be working as part of a team covering multiple locations, so it’s crucial that everyone brings back as much of their assigned cargo as possible. Also, be on your guard, these outlaws aren’t likely to part with the cargo easily.\n\nOnce you’ve recovered the cargo, take it to a freight elevator at: [Destination]. Our logistics team will make sure it gets processed.\n\nIf you’re able to do this, we’ll be sure to credit you for the total amount of SCU recovered by all teams.\n\nGood luck.\n\nDenver Samuels\nContractor Liaison Officer\nCrusader Industries",
+    "rawName": "@GoblinG_Crusader_RecoverCargoFPS_S_Title",
+    "internalName": "GoblinG_RecoverCargoFPS_S_Stanton2",
+    "missionType": "Resource Drive - Crusader",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Hauling",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Hauling",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+        "GoblinG_RecoverCargoFPS_S_Stanton2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "f74d7040-ba0a-4fee-9531-60c268c2e00b"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "bc8d31bc-e97f-4559-9b09-23dadcd26333"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/gobling_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "8abf7ff6-9f52-4421-a3c3-16a9aae6a9d7",
+      "generatorGuid": "9a501367-1c36-4dda-8326-0c3a75896e26",
+      "generatorName": "ContractGenerator.GoblinG_Generator",
+      "generatorPath": "contracts/contractgenerator/gobling_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@GoblinG_Crusader_RecoverCargoFPS_S_Title",
+      "descriptionRaw": "@GoblinG_Crusader_RecoverCargoFPS_S_Desc"
+    }
+  }
+}

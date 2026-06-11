@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton1",
+  "variant": {
+    "variantKey": "634be5cd-a038-48e9-aa8d-49ad15eade7c",
+    "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton1",
+    "displayName": "RESOURCE DRIVE: SMALL STOLEN CARGO RETRIEVAL",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "HURSTON DYNAMICS OUTSOURCING\nCONTRACT: Resource Drive\nOUTSOURCE MANAGER: A. Carmichael\nRISK ASSESSMENT: Low\n\nFollowing a recent theft, we have learned that the outlaws responsible have distributed the stolen goods amongst various hideouts. As such, we are coordinating several strike teams to target each stash and take back our resources. \n\nYour assignment will be to recover the portion being stashed at [Location]. Handle these criminals and deliver the [ItemsToRecover] cargo boxes (all [MaxBoxSize] SCU or smaller) to a freight elevator at: [Destination]. Staff will process the cargo once delivered.\n\nThis operation’s success hinges on all contractors recovering their assigned cargo. As a result, you will be credited for the total amount retrieved from all outposts.\n\n** The information transmitted may contain confidential and/or privileged material. Any review, retransmission, dissemination or other use of or taking action in reliance upon this information by persons or entities other than the intended recipient is prohibited. **",
+    "rawName": "@GoblinG_Hurston_RecoverCargoFPS_S_Title",
+    "internalName": "GoblinG_RecoverCargoFPS_S_Stanton1",
+    "missionType": "Resource Drive - Hurston",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Hauling",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Hauling",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton1",
+        "GoblinG_RecoverCargoFPS_S_Stanton1"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "af980699-99d9-41ac-aac2-fe2ec273e969"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "4c48f869-9a00-47bd-8c37-9b595cec51ae"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/gobling_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "634be5cd-a038-48e9-aa8d-49ad15eade7c",
+      "generatorGuid": "9a501367-1c36-4dda-8326-0c3a75896e26",
+      "generatorName": "ContractGenerator.GoblinG_Generator",
+      "generatorPath": "contracts/contractgenerator/gobling_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@GoblinG_Hurston_RecoverCargoFPS_S_Title",
+      "descriptionRaw": "@GoblinG_Hurston_RecoverCargoFPS_S_Desc"
+    }
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+  "variant": {
+    "variantKey": "4472405b-dc81-4b7e-8845-bbd4b66554cf",
+    "familyKey": "ad5cab74-24dd-41d9-8471-33695fc60e0b|LingFamilyHauling_Hauling_Interstellar",
+    "displayName": "Cargo Hauling Opportunity with Ling Hauling",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hi,  \n \nThis is Petra Ling, and I’m proud to offer you a new and exciting opportunity to partner with Ling Family Hauling. When my parents started this company, their goal was to provide fast and reliable courier deliveries around the greater Crusader area. It quickly became a success, and as our reputation grew, so did our operations.  \n \nNow, under my stewardship, Ling Family Hauling is taking the next big step – cargo hauling. Demand for this new service is growing faster than I expected, and that’s great news for both of us.   \n \nIf you’ve ever wanted to be a hauler, then I can make your dreams come true. Best way to learn something is by doing it, and I’ve got a haul of [Item] that needs to go from [Location] to [Destination].  \n\nNo prior experience is necessary, but here’s a few things to keep in mind. All pick-ups and deliveries must be done at a freight elevator or autoloaded. You will need a ship that can hold [MissionMaxSCUSize] cargo containers, and a handheld tractor beam to move them around. \n \nUpon successful completion of this delivery, you will be promoted to a ‘trusted contractor’ status and more hauls will become available to you.     \n\n \nSincerely,  \nPetra Ling  \nManaging Director of Cargo Operations \nLing Family Hauling \n\n \n\n \n\n \n\nLing Family Hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. To ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. A delivery timer will be set for each haul. Any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. All pick-ups and deliveries must be autoloaded or done at a freight elevator.",
+    "rawName": "@LingFamily_HaulCargo_AToB_Intro_title",
+    "internalName": "HaulCargo_AToB_Interstellar_Small_SunB_GolDMed_Intro",
+    "missionType": "Hauling Interstellar",
+    "provider": "Ling Family Hauling",
+    "faction": "Ling Family Hauling",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+      "displayName": "Hauling",
+      "rawName": "SReputationScopeParams.ReputationScope_Hauling",
+      "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+      "factionDisplayName": "Ling Family Hauling",
+      "trackType": "Hauling",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "4c086729-2be5-4c08-870f-2bfe1f170083"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Trainee / 0 rep to Trainee / 0 rep",
+    "prerequisiteSummary": "Trainee / 0 rep to Trainee / 0 rep; CrimeStat limited to 2 or below; Pyro",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Trainee / 0 rep to Trainee / 0 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Pyro",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "1351a46c-2e40-40c5-98f9-70fe28942de9"
+          ]
+        }
+      },
+      {
+        "type": "locality",
+        "label": "Nyx",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "generated_from_pool",
+      "displayName": "Pyro, Nyx, Stanton",
+      "system": "Pyro, Nyx, Stanton",
+      "locationType": "MissionLocality",
+      "sourceRole": "locality_pool",
+      "confidence": "medium",
+      "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+      "sourceRefs": [
+        "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "a335e8b0-e551-4126-a213-5634d7d23511"
+      ],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "resolvedName": "Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
+          "resolvedName": "Stanton",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a335e8b0-e551-4126-a213-5634d7d23511",
+          "resolvedName": "Stanton",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "resolvedName": "Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+          "resolvedName": "Nyx",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+          "resolvedName": "Pyro",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Pyro",
+      "Nyx",
+      "Stanton"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Ling Hard: Spectre, Zephyr, Bolt, Spicule +3",
+        "Hauling +100",
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Ling Hard: Spectre, Zephyr, Bolt, Spicule +3"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "8e69e4bd-3b6a-42a0-8b8b-808eede34d29",
+          "poolName": "Ling Hard",
+          "rewardCount": 7,
+          "chanceLabel": "14.29% chance - 1 of 7",
+          "rewards": [
+            {
+              "blueprintGuid": "1f57b7a3-ae43-405f-b9cc-457efb01cbc8",
+              "displayName": "Spectre",
+              "componentType": "quantumdrive",
+              "size": "1",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "8d52ba42-4652-46cc-8ab2-80208d2a86af",
+              "displayName": "Zephyr",
+              "componentType": "quantumdrive",
+              "size": "1",
+              "grade": "B",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "ae7c1cc4-0e85-44b4-b975-5307f44ab4fe",
+              "displayName": "Bolt",
+              "componentType": "quantumdrive",
+              "size": "2",
+              "grade": "B",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "99773ffb-9f57-40f0-9a52-1ff3235f0581",
+              "displayName": "Spicule",
+              "componentType": "quantumdrive",
+              "size": "2",
+              "grade": "A",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "dc29ad18-61c1-48c5-b72e-48558de31d8f",
+              "displayName": "Guardian",
+              "componentType": "shield",
+              "size": "1",
+              "grade": "B",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "9de8d5a0-7c70-4320-b67e-6adb4b0881e2",
+              "displayName": "Citadel",
+              "componentType": "shield",
+              "size": "2",
+              "grade": "B",
+              "chanceLabel": "14.29% chance"
+            },
+            {
+              "blueprintGuid": "b997eb17-cd7d-43a4-8e49-2a580d5019f9",
+              "displayName": "Barbican",
+              "componentType": "shield",
+              "size": "3",
+              "grade": "B",
+              "chanceLabel": "14.29% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [
+        "Hauling +100"
+      ],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+        "factionDisplayName": "Ling Family Hauling",
+        "scopeKey": "4c086729-2be5-4c08-870f-2bfe1f170083",
+        "scopeDisplayName": "Hauling",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "8ca58dc2-ecec-49ea-bb62-39a56bb28420",
+          "4c086729-2be5-4c08-870f-2bfe1f170083",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "4472405b-dc81-4b7e-8845-bbd4b66554cf",
+      "generatorGuid": "ad5cab74-24dd-41d9-8471-33695fc60e0b",
+      "generatorName": "ContractGenerator.LingFamilyHauling_Hauling",
+      "generatorPath": "contracts/contractgenerator/interstellartransport_guild/lingfamilyhauling/lingfamilyhauling_hauling.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@LingFamily_HaulCargo_AToB_Intro_title",
+      "descriptionRaw": "@LingFamily_HaulCargo_AToB_Intro_desc"
+    }
+  }
+}

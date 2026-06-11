@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "f4baf10a-43a4-4087-9bf5-f20c34a061d6|Crusader Tutorial",
+  "variant": {
+    "variantKey": "4b41cb10-4551-d550-6f36-dd1d985ab8a0",
+    "familyKey": "f4baf10a-43a4-4087-9bf5-f20c34a061d6|Crusader Tutorial",
+    "displayName": "Tutorial Part 2 Orison",
+    "titleSource": "internal_fallback",
+    "titleConfidence": "low",
+    "rawName": null,
+    "internalName": "Tutorial_Part2_Orison",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "f4baf10a-43a4-4087-9bf5-f20c34a061d6|Crusader Tutorial",
+        "Tutorial_Part2_Orison"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "Stanton 2",
+    "prerequisites": [
+      {
+        "type": "location",
+        "label": "Stanton 2",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton 2",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "c15033ab-2eb3-4d6d-b882-0cb336e67ed8"
+      ],
+      "possibleLocations": [
+        "Stanton 2"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+          "resolvedName": "Stanton 2",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton2/starmapobject.stanton2.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Stanton 2"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "No credit reward extracted"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [
+      "Tutorial"
+    ],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "4b41cb10-4551-d550-6f36-dd1d985ab8a0",
+      "generatorGuid": "f4baf10a-43a4-4087-9bf5-f20c34a061d6",
+      "generatorName": "ContractGenerator.Tutorial_Generator_Stanton2",
+      "generatorPath": "contracts/contractgenerator/tutorial/tutorial_generator_stanton2.xml",
+      "handlerType": "ContractGeneratorHandler_TutorialSeriesDef",
+      "titleRaw": null,
+      "descriptionRaw": null
+    }
+  }
+}

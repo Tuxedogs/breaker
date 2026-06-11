@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 type RawStanding = {
@@ -30,7 +31,30 @@ type RawReward = {
   xp?: number;
   reward?: Record<string, unknown>;
   attributes?: Record<string, unknown>;
+  fixedReward?: {
+    reward?: number | string | null;
+    max?: number | string | null;
+    plusBonuses?: number | string | null;
+    currencyType?: string | null;
+  };
+  resolved?: {
+    guid?: string;
+    recordName?: string;
+    displayName?: string;
+    path?: string;
+  };
+  items?: Array<{
+    entityClass?: string | null;
+    weight?: number | string | null;
+    resolved?: {
+      guid?: string;
+      recordName?: string;
+      displayName?: string;
+      path?: string;
+    };
+  }>;
   references?: string[];
+  sourceRefs?: string[];
 };
 
 type RawMission = {
@@ -61,6 +85,7 @@ type RawMission = {
   reputationRewards?: RawReward[];
   creditRewardTypes?: RawReward[];
   itemRewards?: RawReward[];
+  weightedItemRewards?: RawReward[];
   completionTags?: RawReward[];
   classifications?: {
     tutorial?: boolean;
@@ -141,6 +166,61 @@ type ReputationScope = {
   unresolvedReason?: string;
 };
 
+type CreditRewardDetail =
+  | {
+    status: "fixed";
+    amount: number;
+    currency: string;
+    max?: number | string | null;
+    plusBonuses?: number | string | null;
+    confidence: "extracted_fixed";
+    sourceResultType: "ContractResult_Reward";
+    sourceRefs: string[];
+  }
+  | {
+    status: "calculated" | "formula_unresolved" | "variable";
+    displayText: string;
+    confidence: "calculated_unresolved";
+    sourceResultType: "ContractResult_CalculatedReward";
+    unresolvedReason: string;
+    attributes?: Record<string, unknown>;
+    sourceRefs: string[];
+  }
+  | {
+    status: "provenAbsent";
+    displayText: "No credit reward extracted";
+    confidence: "proven_absent";
+    sourceRefs: string[];
+  }
+  | {
+    status: "unresolved";
+    displayText: "Credits unresolved";
+    confidence: "unresolved";
+    sourceResultType?: string;
+    unresolvedReason: string;
+    attributes?: Record<string, unknown>;
+    sourceRefs: string[];
+  };
+
+type ItemRewardDetail = {
+  status: "resolved" | "unresolved_entityClass" | "weighted_unresolved";
+  entityClass?: string;
+  amount?: number | string | null;
+  displayName?: string;
+  itemKey?: string;
+  deliveryTarget?: "player_home_location" | "unknown";
+  ownerOnly?: boolean;
+  confidence: "resolved_entityClass" | "unresolved_entityClass" | "weighted_unresolved";
+  unresolvedReason?: string;
+  sourceRefs: string[];
+  weightedOptions?: Array<{
+    entityClass?: string | null;
+    weight?: number | string | null;
+    displayName?: string;
+    itemKey?: string;
+  }>;
+};
+
 type ShapedVariant = {
   variantKey: string;
   familyKey: string;
@@ -169,7 +249,10 @@ type ShapedVariant = {
     blueprintRewardGroups: BlueprintRewardGroup[];
     reputationRewards: string[];
     credits: string;
-    creditStatus: "extracted" | "unresolved" | "provenAbsent";
+    creditStatus: "fixed" | "calculated" | "formula_unresolved" | "variable" | "provenAbsent" | "unresolved";
+    creditsDetail: CreditRewardDetail;
+    itemRewards: ItemRewardDetail[];
+    itemRewardStatus: "resolved" | "unresolved_entityClass" | "weighted_unresolved" | "none";
     unresolvedRewardTokens: string[];
   };
   rewardedReputationPaths: RewardedReputationPath[];
@@ -216,6 +299,8 @@ type ShapedFamily = {
   reputationRewards: string[];
   rewardedReputationPaths: RewardedReputationPath[];
   creditRewardSummary: string;
+  creditRewardStatuses: ShapedVariant["rewards"]["creditStatus"][];
+  itemRewardStatus: ShapedVariant["rewards"]["itemRewardStatus"];
   unresolvedRewardFields: string[];
   reputationRequirement?: string;
   prerequisiteRequirements: string[];
@@ -309,8 +394,118 @@ type ShapedCatalog = {
   missionBrowseGroups: MissionBrowseGroup[];
 };
 
+type MissionBrowserIndex = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  sourceFiles: string[];
+  summary: ShapedCatalog["summary"];
+  unresolvedSummary: {
+    unresolvedLocationCount: number;
+    unresolvedRewardCount: number;
+    pickupUnknownCount: number;
+    reputationScopePartialCount: number;
+    reputationScopeUnresolvedCount: number;
+  };
+  report: {
+    extractionReport: string;
+    unresolvedReport: string;
+    legacyCombinedCatalog: string;
+  };
+  filtersMeta: MissionBrowserFiltersMeta;
+  familiesByKey: Record<string, ShapedFamily>;
+  familyDetailFiles: Record<string, string>;
+  familyVariantFiles: Record<string, string>;
+  variantDetailFiles: Record<string, string>;
+  missionBrowseGroups: MissionBrowseGroup[];
+};
+
+type MissionBrowserFilterOption = {
+  key: string;
+  label: string;
+  count: number;
+  colorKey?: string;
+};
+
+type MissionBrowserFiltersMeta = {
+  factions: MissionBrowserFilterOption[];
+  reputationScopes: MissionBrowserFilterOption[];
+  archetypes: MissionBrowserFilterOption[];
+  rewardTypes: MissionBrowserFilterOption[];
+  pickupSystems: MissionBrowserFilterOption[];
+  confidenceStates: MissionBrowserFilterOption[];
+  legalStates: MissionBrowserFilterOption[];
+  missionTypes: MissionBrowserFilterOption[];
+  releaseStates: MissionBrowserFilterOption[];
+};
+
+type MissionFamilyDetailPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  family: ShapedFamily;
+  groupSummary: {
+    familyKey: string;
+    provider: string;
+    reputationScope: ReputationScope;
+    missionArchetype: string;
+    variantCount: number;
+  };
+  rewardSummary: {
+    rewardSummary: string[];
+    blueprintRewards: string[];
+    blueprintRewardGroups: BlueprintRewardGroup[];
+    reputationRewards: string[];
+    rewardedReputationPaths: RewardedReputationPath[];
+    creditRewardSummary: string;
+  };
+  pickupSummary: {
+    pickupSummary: string;
+    pickupStatuses: PickupLocation["status"][];
+    pickupUnresolvedCount: number;
+    locations: string[];
+    unresolvedLocationTokens: string[];
+  };
+  blueprintSummary: {
+    blueprintRewards: string[];
+    blueprintRewardGroups: BlueprintRewardGroup[];
+  };
+  variantKeys: string[];
+  variantSummaries: Array<{
+    variantKey: string;
+    displayName: string;
+    missionType: string;
+    pickupLocation: Pick<PickupLocation, "status" | "displayName" | "confidence">;
+    standingRequirement: string;
+    creditStatus: ShapedVariant["rewards"]["creditStatus"];
+    credits: string;
+    hasBlueprintRewards: boolean;
+    hasUnresolvedRewards: boolean;
+  }>;
+  variantsFile: string;
+};
+
+type MissionFamilyVariantsPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  familyKey: string;
+  variants: ShapedVariant[];
+};
+
+type MissionVariantDetailPayload = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  familyKey: string;
+  variant: ShapedVariant;
+};
+
 const apiRoot = path.resolve("public", "api");
 const missionRoot = path.join(apiRoot, "missions");
+const familyRoot = path.join(missionRoot, "families");
+const familyVariantsRoot = path.join(missionRoot, "family-variants");
+const variantRoot = path.join(missionRoot, "variants");
 const contractsPath = path.join(missionRoot, "mission_contracts.json");
 const lookupsPath = path.join(missionRoot, "mission_reward_lookups.json");
 const refIndexPath = path.resolve("tmp", "scintel-api-candidate", "ref_index.json");
@@ -944,6 +1139,141 @@ function reputationRewardLabel(path: RewardedReputationPath): string {
   return `${shortScopeLabel(path.scopeDisplayName)} ${formatSignedAmount(path.amount)}`;
 }
 
+function asFiniteNumber(value: unknown): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim()) {
+    const numeric = Number(value);
+    if (Number.isFinite(numeric)) return numeric;
+  }
+  return undefined;
+}
+
+function formatCreditAmount(amount: number, currency: string): string {
+  const suffix = currency || "UEC";
+  return `${amount.toLocaleString()} ${suffix}`;
+}
+
+function shapeCreditReward(mission: RawMission): { credits: string; creditStatus: ShapedVariant["rewards"]["creditStatus"]; creditsDetail: CreditRewardDetail; unresolvedTokens: string[] } {
+  const creditRewards = mission.creditRewardTypes ?? [];
+  if (!creditRewards.length) {
+    return {
+      credits: "No credit reward extracted",
+      creditStatus: "provenAbsent",
+      creditsDetail: {
+        status: "provenAbsent",
+        displayText: "No credit reward extracted",
+        confidence: "proven_absent",
+        sourceRefs: [],
+      },
+      unresolvedTokens: [],
+    };
+  }
+
+  const fixedReward = creditRewards.find((reward) => reward.type === "ContractResult_Reward" && asFiniteNumber(reward.fixedReward?.reward) !== undefined);
+  if (fixedReward) {
+    const amount = asFiniteNumber(fixedReward.fixedReward?.reward)!;
+    const currency = clean(fixedReward.fixedReward?.currencyType) ?? "UEC";
+    return {
+      credits: formatCreditAmount(amount, currency),
+      creditStatus: "fixed",
+      creditsDetail: {
+        status: "fixed",
+        amount,
+        currency,
+        max: fixedReward.fixedReward?.max,
+        plusBonuses: fixedReward.fixedReward?.plusBonuses,
+        confidence: "extracted_fixed",
+        sourceResultType: "ContractResult_Reward",
+        sourceRefs: fixedReward.sourceRefs ?? [],
+      },
+      unresolvedTokens: [],
+    };
+  }
+
+  const calculatedReward = creditRewards.find((reward) => reward.type === "ContractResult_CalculatedReward");
+  if (calculatedReward) {
+    return {
+      credits: "Calculated payout",
+      creditStatus: "calculated",
+      creditsDetail: {
+        status: "calculated",
+        displayText: "Calculated payout",
+        confidence: "calculated_unresolved",
+        sourceResultType: "ContractResult_CalculatedReward",
+        unresolvedReason: "Calculated reward formula not resolved",
+        attributes: calculatedReward.attributes,
+        sourceRefs: calculatedReward.sourceRefs ?? [],
+      },
+      unresolvedTokens: [],
+    };
+  }
+
+  const unresolvedReward = creditRewards[0];
+  return {
+    credits: "Credits unresolved",
+    creditStatus: "unresolved",
+    creditsDetail: {
+      status: "unresolved",
+      displayText: "Credits unresolved",
+      confidence: "unresolved",
+      sourceResultType: unresolvedReward?.type,
+      unresolvedReason: "Credit reward result type was not resolved.",
+      attributes: unresolvedReward?.attributes,
+      sourceRefs: unresolvedReward?.sourceRefs ?? [],
+    },
+    unresolvedTokens: unique(creditRewards.map((reward) => reward.type)),
+  };
+}
+
+function shapeItemRewards(mission: RawMission): { itemRewards: ItemRewardDetail[]; itemRewardStatus: ShapedVariant["rewards"]["itemRewardStatus"]; unresolvedTokens: string[] } {
+  const directItems = (mission.itemRewards ?? []).map((reward): ItemRewardDetail => {
+    const entityClass = clean(reward.attributes?.entityClass);
+    const resolvedName = clean(reward.resolved?.displayName);
+    const itemKey = clean(reward.resolved?.guid) ?? entityClass;
+    const base = {
+      entityClass,
+      amount: reward.attributes?.amount as number | string | null | undefined,
+      displayName: resolvedName,
+      itemKey,
+      deliveryTarget: truthy(reward.attributes?.sendToPlayerHomeLocation) ? "player_home_location" as const : "unknown" as const,
+      ownerOnly: truthy(reward.attributes?.awardOnlyToMissionOwner),
+      sourceRefs: reward.sourceRefs ?? [],
+    };
+    if (resolvedName) {
+      return {
+        ...base,
+        status: "resolved",
+        confidence: "resolved_entityClass",
+      };
+    }
+    return {
+      ...base,
+      status: "unresolved_entityClass",
+      confidence: "unresolved_entityClass",
+      unresolvedReason: "entityClass not resolved",
+    };
+  });
+
+  const weightedItems = (mission.weightedItemRewards ?? []).map((reward): ItemRewardDetail => ({
+    status: "weighted_unresolved",
+    confidence: "weighted_unresolved",
+    unresolvedReason: "Weighted item reward extraction is audited but not resolved.",
+    sourceRefs: reward.sourceRefs ?? [],
+    weightedOptions: (reward.items ?? []).map((item) => ({
+      entityClass: item.entityClass,
+      weight: item.weight,
+      displayName: clean(item.resolved?.displayName),
+      itemKey: clean(item.resolved?.guid) ?? clean(item.entityClass),
+    })),
+  }));
+
+  const itemRewards = [...directItems, ...weightedItems];
+  if (!itemRewards.length) return { itemRewards, itemRewardStatus: "none", unresolvedTokens: [] };
+  if (itemRewards.some((reward) => reward.status === "weighted_unresolved")) return { itemRewards, itemRewardStatus: "weighted_unresolved", unresolvedTokens: ["ContractResult_ItemsWeighting"] };
+  if (itemRewards.some((reward) => reward.status === "unresolved_entityClass")) return { itemRewards, itemRewardStatus: "unresolved_entityClass", unresolvedTokens: ["ContractResult_Item:entityClass"] };
+  return { itemRewards, itemRewardStatus: "resolved", unresolvedTokens: [] };
+}
+
 function shapeRewards(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, rewardedReputationPaths: RewardedReputationPath[]): ShapedVariant["rewards"] {
   const blueprintRewardGroups: BlueprintRewardGroup[] = unique((mission.blueprintRewards ?? []).map((reward) => clean(reward.blueprintPoolGuid)))
     .map((poolGuid) => {
@@ -975,29 +1305,35 @@ function shapeRewards(mission: RawMission, pools: Map<string, BlueprintPoolLooku
   }));
 
   const reputationRewards = unique(rewardedReputationPaths.map(reputationRewardLabel));
+  const creditReward = shapeCreditReward(mission);
+  const itemReward = shapeItemRewards(mission);
 
   const unresolvedRewardTokens = unique([
     ...(mission.blueprintRewards ?? []).filter((reward) => !pools.has(String(reward.blueprintPoolGuid ?? "").toLowerCase())).map((reward) => clean(reward.blueprintPoolGuid) ?? "unknown blueprint pool"),
-    ...(mission.creditRewardTypes ?? []).map((reward) => reward.type),
-    ...(mission.itemRewards ?? []).map((reward) => reward.type),
+    ...creditReward.unresolvedTokens,
+    ...itemReward.unresolvedTokens,
   ]);
-
-  let credits = "No credit reward extracted";
-  let creditStatus: ShapedVariant["rewards"]["creditStatus"] = "provenAbsent";
-  if ((mission.creditRewardTypes ?? []).length > 0) {
-    credits = "Credits unresolved";
-    creditStatus = "unresolved";
-  }
 
   const summary = unique([
     ...blueprintRewards.map((reward) => `Blueprint: ${reward}`),
     ...reputationRewards,
-    credits,
-    (mission.itemRewards ?? []).length > 0 ? "Item reward unresolved" : undefined,
+    creditReward.credits,
+    ...itemReward.itemRewards.map((reward) => reward.status === "resolved" ? `Item reward: ${reward.displayName ?? reward.entityClass ?? "Unknown item"}` : "Item reward unresolved"),
     (mission.completionTags ?? []).length > 0 ? "Completion tag" : undefined,
   ]);
 
-  return { summary, blueprintRewards, blueprintRewardGroups, reputationRewards, credits, creditStatus, unresolvedRewardTokens };
+  return {
+    summary,
+    blueprintRewards,
+    blueprintRewardGroups,
+    reputationRewards,
+    credits: creditReward.credits,
+    creditStatus: creditReward.creditStatus,
+    creditsDetail: creditReward.creditsDetail,
+    itemRewards: itemReward.itemRewards,
+    itemRewardStatus: itemReward.itemRewardStatus,
+    unresolvedRewardTokens,
+  };
 }
 
 function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLookup>, refMap: Map<string, RefIndexEntry>): ShapedVariant {
@@ -1075,6 +1411,29 @@ function aggregateCrimeStat(variants: ShapedVariant[]): ShapedFamily["crimeStatR
   if (variants.some((variant) => variant.crimeStatRequirement === "bounded")) return "bounded";
   if (variants.some((variant) => variant.crimeStatRequirement === "notRequired")) return "notRequired";
   return "unknown";
+}
+
+function summarizeFamilyCredits(variants: ShapedVariant[]): string {
+  if (!variants.length) return "No credit reward extracted";
+  const statuses = unique(variants.map((variant) => variant.rewards.creditStatus));
+  if (statuses.length === 1) {
+    const status = statuses[0];
+    if (status === "fixed") {
+      const values = unique(variants.map((variant) => variant.rewards.credits));
+      return values.length === 1 ? values[0]! : "Credits vary by variant";
+    }
+    if (status === "calculated") return "Calculated payout";
+    if (status === "formula_unresolved") return "Credits formula unresolved";
+    if (status === "variable") return "Variable payout";
+    if (status === "provenAbsent") return "No credit reward extracted";
+    return "Credits unresolved";
+  }
+  if (statuses.includes("unresolved")) return "Credits unresolved";
+  if (statuses.includes("formula_unresolved")) return "Credits formula unresolved";
+  if (statuses.includes("variable")) return "Variable payout";
+  if (statuses.includes("calculated")) return "Calculated payout";
+  if (statuses.includes("fixed")) return "Credits vary by variant";
+  return "No credit reward extracted";
 }
 
 function aggregateLawful(variants: ShapedVariant[]): Pick<ShapedFamily, "lawfulClassification" | "lawfulConfidence"> {
@@ -1212,6 +1571,16 @@ function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: 
         .map((path) => [JSON.stringify([path.factionKey, path.scopeKey, path.amount, path.confidence, path.sourceRefs]), path])
     ).values()
   );
+  const creditRewardStatuses = unique(variants.map((variant) => variant.rewards.creditStatus));
+  const creditRewardSummary = summarizeFamilyCredits(variants);
+  const itemRewardStatuses = unique(variants.map((variant) => variant.rewards.itemRewardStatus).filter((status) => status !== "none"));
+  const itemRewardStatus = itemRewardStatuses.includes("weighted_unresolved")
+    ? "weighted_unresolved"
+    : itemRewardStatuses.includes("unresolved_entityClass")
+      ? "unresolved_entityClass"
+      : itemRewardStatuses.includes("resolved")
+        ? "resolved"
+        : "none";
 
   return {
     familyKey,
@@ -1238,7 +1607,9 @@ function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: 
     ).slice(0, 12),
     reputationRewards: unique(variants.flatMap((variant) => variant.rewards.reputationRewards)).slice(0, 8),
     rewardedReputationPaths,
-    creditRewardSummary: variants.some((variant) => variant.rewards.creditStatus === "unresolved") ? "Credits unresolved" : "No credit reward extracted",
+    creditRewardSummary,
+    creditRewardStatuses,
+    itemRewardStatus,
     unresolvedRewardFields,
     reputationRequirement: unique(variants.map((variant) => variant.reputationRequirement)).join("; ") || undefined,
     prerequisiteRequirements: unique(variants.flatMap((variant) => variant.prerequisites.map((item) => item.label))).slice(0, 10),
@@ -1317,8 +1688,94 @@ function compactSummary(values: string[], fallback: string, max: number): string
   return values.length > max ? `${visible}; +${values.length - max} more` : visible;
 }
 
+function optionList(
+  rows: Array<{ key?: string; label?: string; colorKey?: string }>,
+): MissionBrowserFilterOption[] {
+  const map = new Map<string, MissionBrowserFilterOption>();
+  for (const row of rows) {
+    const key = clean(row.key);
+    if (!key) continue;
+    const existing = map.get(key);
+    if (existing) {
+      existing.count += 1;
+      continue;
+    }
+    map.set(key, {
+      key,
+      label: clean(row.label) ?? key,
+      count: 1,
+      colorKey: row.colorKey,
+    });
+  }
+  return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label));
+}
+
+function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[]): MissionBrowserFiltersMeta {
+  return {
+    factions: optionList(families.map((family) => ({
+      key: family.provider,
+      label: family.provider,
+    }))),
+    reputationScopes: optionList(families.flatMap((family) => family.rewardedReputationPaths.map((path) => ({
+      key: path.scopeDisplayName,
+      label: path.scopeDisplayName,
+      colorKey: keySlug(path.scopeDisplayName),
+    })))),
+    archetypes: optionList(families.map((family) => ({
+      key: family.missionArchetype,
+      label: family.missionArchetype,
+    }))),
+    rewardTypes: [
+      { key: "blueprints", label: "Blueprint rewards", count: families.filter((family) => family.blueprintRewards.length > 0).length, colorKey: "blueprints" },
+      { key: "reputation", label: "Reputation rewards", count: families.filter((family) => family.reputationRewards.length > 0).length, colorKey: "reputation" },
+      { key: "credits-fixed", label: "Credits fixed", count: families.filter((family) => family.creditRewardStatuses.includes("fixed")).length, colorKey: "positive" },
+      { key: "credits-calculated", label: "Calculated payout", count: families.filter((family) => family.creditRewardStatuses.includes("calculated")).length, colorKey: "warning" },
+      { key: "credits-variable", label: "Variable payout", count: families.filter((family) => family.creditRewardStatuses.includes("variable")).length, colorKey: "warning" },
+      { key: "credits-formula-unresolved", label: "Credits formula unresolved", count: families.filter((family) => family.creditRewardStatuses.includes("formula_unresolved")).length, colorKey: "warning" },
+      { key: "credits-unresolved", label: "Credits unresolved", count: families.filter((family) => family.creditRewardStatuses.includes("unresolved")).length, colorKey: "warning" },
+      { key: "credits-none", label: "No credit reward extracted", count: families.filter((family) => family.creditRewardSummary === "No credit reward extracted").length, colorKey: "muted" },
+      { key: "items", label: "Item reward", count: families.filter((family) => family.itemRewardStatus === "resolved").length, colorKey: "reputation" },
+      { key: "items-unresolved", label: "Item reward unresolved", count: families.filter((family) => family.itemRewardStatus === "unresolved_entityClass" || family.itemRewardStatus === "weighted_unresolved").length, colorKey: "warning" },
+    ].filter((option) => option.count > 0),
+    pickupSystems: optionList(variants.map((variant) => ({
+      key: variant.pickupLocation.system ?? variant.pickupLocation.displayName,
+      label: variant.pickupLocation.system ?? variant.pickupLocation.displayName,
+      colorKey: variant.pickupLocation.status,
+    }))),
+    confidenceStates: [
+      { key: "unresolved", label: "Any unresolved", count: families.filter((family) => family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0).length, colorKey: "warning" },
+      { key: "locations", label: "Locations unresolved", count: families.filter((family) => family.unresolvedLocationTokens.length > 0).length, colorKey: "warning" },
+      { key: "rewards", label: "Rewards unresolved", count: families.filter((family) => family.unresolvedRewardFields.length > 0 || family.creditRewardStatuses.includes("unresolved")).length, colorKey: "warning" },
+      { key: "crime-bounded", label: "CrimeStat limited", count: families.filter((family) => family.crimeStatRequirement === "bounded").length, colorKey: "amber" },
+      { key: "unlawful", label: "Possible unlawful", count: families.filter((family) => family.lawfulClassification === "unlawful").length, colorKey: "red" },
+    ].filter((option) => option.count > 0),
+    legalStates: optionList(families.map((family) => ({
+      key: family.lawfulClassification,
+      label: family.lawfulClassification === "lawful" ? "Likely lawful" : family.lawfulClassification === "unlawful" ? "Possible unlawful" : "Legal unknown",
+      colorKey: family.lawfulClassification,
+    }))),
+    missionTypes: optionList(families.map((family) => ({
+      key: family.missionType,
+      label: family.missionType,
+    }))),
+    releaseStates: optionList(families.flatMap((family) => family.releaseFlags.map((flag) => ({
+      key: flag,
+      label: flag,
+      colorKey: keySlug(flag),
+    })))),
+  };
+}
+
 async function writeJson(fileName: string, value: unknown): Promise<void> {
   await writeFile(path.join(missionRoot, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+async function writeJsonAt(root: string, fileName: string, value: unknown): Promise<void> {
+  await writeFile(path.join(root, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
+}
+
+function payloadFileName(key: string): string {
+  return `${createHash("sha256").update(key).digest("hex").slice(0, 16)}.json`;
 }
 
 const [catalog, lookups, refIndex] = await Promise.all([
@@ -1380,6 +1837,42 @@ const shaped: ShapedCatalog = {
   missionBrowseGroups,
 };
 
+const familyVariantFiles = Object.fromEntries(
+  families.map((family) => [family.familyKey, `family-variants/${payloadFileName(family.familyKey)}`])
+);
+const familyDetailFiles = Object.fromEntries(
+  families.map((family) => [family.familyKey, `families/${payloadFileName(family.familyKey)}`])
+);
+const variantDetailFiles = Object.fromEntries(
+  variants.map((variant) => [variant.variantKey, `variants/${payloadFileName(variant.variantKey)}`])
+);
+const familiesByKey = Object.fromEntries(families.map((family) => [family.familyKey, family]));
+const browserIndex: MissionBrowserIndex = {
+  schemaVersion: 1,
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+  sourceFiles: shaped.sourceFiles,
+  summary: shaped.summary,
+  unresolvedSummary: {
+    unresolvedLocationCount: shaped.summary.unresolvedLocationCount,
+    unresolvedRewardCount: shaped.summary.unresolvedRewardCount,
+    pickupUnknownCount: shaped.summary.pickupUnknownCount,
+    reputationScopePartialCount: shaped.summary.reputationScopePartialCount,
+    reputationScopeUnresolvedCount: shaped.summary.reputationScopeUnresolvedCount,
+  },
+  report: {
+    extractionReport: "mission_browser_extraction_report.json",
+    unresolvedReport: "mission_unresolved_refs.json",
+    legacyCombinedCatalog: "missions.json",
+  },
+  filtersMeta: buildFiltersMeta(families, variants),
+  familiesByKey,
+  familyDetailFiles,
+  familyVariantFiles,
+  variantDetailFiles,
+  missionBrowseGroups,
+};
+
 const rewards = variants.map((variant) => ({
   variantKey: variant.variantKey,
   familyKey: variant.familyKey,
@@ -1437,9 +1930,19 @@ const report = {
   variantCount: variants.length,
   explicitCrimeStatRequiredCount: shaped.summary.explicitCrimeStatRequiredCount,
   crimeStatBoundedCount: variants.filter((variant) => variant.crimeStatRequirement === "bounded").length,
-  creditExtractedCount: variants.filter((variant) => variant.rewards.creditStatus === "extracted").length,
+  creditFixedCount: variants.filter((variant) => variant.rewards.creditStatus === "fixed").length,
+  creditCalculatedClassifiedCount: variants.filter((variant) => variant.rewards.creditStatus === "calculated").length,
+  creditFormulaUnresolvedCount: variants.filter((variant) => variant.rewards.creditStatus === "formula_unresolved").length,
+  creditVariableCount: variants.filter((variant) => variant.rewards.creditStatus === "variable").length,
   creditUnresolvedCount: variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length,
   creditNoResultCount: variants.filter((variant) => variant.rewards.creditStatus === "provenAbsent").length,
+  contractResultRewardFixedExtractedCount: variants.filter((variant) => variant.rewards.creditsDetail.status === "fixed" && variant.rewards.creditsDetail.sourceResultType === "ContractResult_Reward").length,
+  contractResultCalculatedRewardClassifiedCount: variants.filter((variant) => variant.rewards.creditsDetail.status === "calculated" && variant.rewards.creditsDetail.sourceResultType === "ContractResult_CalculatedReward").length,
+  itemRewardsResolvedCount: variants.filter((variant) => variant.rewards.itemRewardStatus === "resolved").length,
+  itemEntityClassUnresolvedCount: variants.filter((variant) => variant.rewards.itemRewardStatus === "unresolved_entityClass").length,
+  weightedItemRewardsUnresolvedCount: variants.filter((variant) => variant.rewards.itemRewardStatus === "weighted_unresolved").length,
+  trueNoCreditCount: variants.filter((variant) => variant.rewards.creditStatus === "provenAbsent" && variant.rewards.itemRewardStatus === "none").length,
+  remainingGenericUnresolvedRewardCount: variants.filter((variant) => variant.rewards.creditStatus === "unresolved" || variant.rewards.unresolvedRewardTokens.some((token) => token !== "ContractResult_Item:entityClass" && token !== "ContractResult_ItemsWeighting")).length,
   blueprintRewardVariantCount: variants.filter((variant) => variant.rewards.blueprintRewards.length > 0).length,
   reputationRewardVariantCount: variants.filter((variant) => variant.rewards.reputationRewards.length > 0).length,
   unresolvedLocationVariantCount: shaped.summary.unresolvedLocationCount,
@@ -1481,7 +1984,8 @@ const report = {
   notes: [
     "CrimeStat required is emitted only when minCrimeStat is greater than zero.",
     "Current source data contains CrimeStat bounds but no explicit positive minCrimeStat requirement.",
-    "Credit reward result types are present without resolved amounts, so browser labels them Credits unresolved.",
+    "ContractResult_Reward child contractReward is extracted as fixed credits when present.",
+    "ContractResult_CalculatedReward is classified as Calculated payout until a deterministic formula resolver exists.",
     "Pickup / availability uses explicit location prerequisites first and MissionLocality availability pools second.",
     "Pyro StarLocality and Region A-D style refs are shaped as procedural Pyro system availability scopes.",
     "Mission browse groups are Faction -> Reputation Scope / Career Track -> Mission Archetype -> Mission Group -> Variants.",
@@ -1491,9 +1995,15 @@ const report = {
   ],
 };
 
-await mkdir(missionRoot, { recursive: true });
+await Promise.all([
+  mkdir(missionRoot, { recursive: true }),
+  mkdir(familyRoot, { recursive: true }),
+  mkdir(familyVariantsRoot, { recursive: true }),
+  mkdir(variantRoot, { recursive: true }),
+]);
 await Promise.all([
   writeJson("missions.json", shaped),
+  writeJson("mission_browser_index.json", browserIndex),
   writeJson("mission_families.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
   writeJson("mission_variants.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: variants }),
   writeJson("mission_browse_groups.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
@@ -1503,6 +2013,79 @@ await Promise.all([
   writeJson("mission_reputation.json", { generatedAt: shaped.generatedAt, records: reputation }),
   writeJson("mission_unresolved_refs.json", { generatedAt: shaped.generatedAt, records: unresolvedRefs }),
   writeJson("mission_browser_extraction_report.json", report),
+  ...families.map((family) => {
+    const familyVariants = variantsByFamily.get(family.familyKey) ?? [];
+    const detail: MissionFamilyDetailPayload = {
+      schemaVersion: 1,
+      generatedAt: shaped.generatedAt,
+      sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+      family,
+      groupSummary: {
+        familyKey: family.familyKey,
+        provider: family.provider,
+        reputationScope: family.reputationScope,
+        missionArchetype: family.missionArchetype,
+        variantCount: family.variantCount,
+      },
+      rewardSummary: {
+        rewardSummary: family.rewardSummary,
+        blueprintRewards: family.blueprintRewards,
+        blueprintRewardGroups: family.blueprintRewardGroups,
+        reputationRewards: family.reputationRewards,
+        rewardedReputationPaths: family.rewardedReputationPaths,
+        creditRewardSummary: family.creditRewardSummary,
+      },
+      pickupSummary: {
+        pickupSummary: family.pickupSummary,
+        pickupStatuses: family.pickupStatuses,
+        pickupUnresolvedCount: family.pickupUnresolvedCount,
+        locations: family.locations,
+        unresolvedLocationTokens: family.unresolvedLocationTokens,
+      },
+      blueprintSummary: {
+        blueprintRewards: family.blueprintRewards,
+        blueprintRewardGroups: family.blueprintRewardGroups,
+      },
+      variantKeys: family.variantKeys,
+      variantSummaries: familyVariants.map((variant) => ({
+        variantKey: variant.variantKey,
+        displayName: variant.displayName,
+        missionType: variant.missionType,
+        pickupLocation: {
+          status: variant.pickupLocation.status,
+          displayName: variant.pickupLocation.displayName,
+          confidence: variant.pickupLocation.confidence,
+        },
+        standingRequirement: variant.standingRequirement,
+        creditStatus: variant.rewards.creditStatus,
+        credits: variant.rewards.credits,
+        hasBlueprintRewards: variant.rewards.blueprintRewardGroups.length > 0,
+        hasUnresolvedRewards: variant.confidence.hasUnresolvedRewards,
+      })),
+      variantsFile: familyVariantFiles[family.familyKey]!,
+    };
+    return writeJsonAt(familyRoot, payloadFileName(family.familyKey), detail);
+  }),
+  ...families.map((family) => {
+    const payload: MissionFamilyVariantsPayload = {
+      schemaVersion: 1,
+      generatedAt: shaped.generatedAt,
+      sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+      familyKey: family.familyKey,
+      variants: variantsByFamily.get(family.familyKey) ?? [],
+    };
+    return writeJsonAt(familyVariantsRoot, payloadFileName(family.familyKey), payload);
+  }),
+  ...variants.map((variant) => {
+    const payload: MissionVariantDetailPayload = {
+      schemaVersion: 1,
+      generatedAt: shaped.generatedAt,
+      sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+      familyKey: variant.familyKey,
+      variant,
+    };
+    return writeJsonAt(variantRoot, payloadFileName(variant.variantKey), payload);
+  }),
 ]);
 
 console.log(`Shaped ${families.length} mission families and ${variants.length} variants.`);

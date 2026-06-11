@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Vehicles",
+  "variant": {
+    "variantKey": "77fa8882-e82f-4c97-9cab-a7151758cb99",
+    "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Vehicles",
+    "displayName": "Special Idris For Killing",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Since Wikelo has done good business with you, make you this very special trade. Idris is a powerful ship perfect for big important person like you. Wikelo has even done mod to make it more dangerous! Bring me a few items and the ship is yours.",
+    "rawName": "@TheCollector_Ships_Idris_Title",
+    "internalName": "TheCollector_Vehicle_Super_Idris",
+    "missionType": "Wikelo - Vehicles",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Vehicles",
+        "TheCollector_Vehicle_Super_Idris"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Wikelo - Vehicles",
+    "standingRequirement": "No extracted standing requirement",
+    "reputationRequirement": "Wikelo Emporium: Very Good Customer Very Best Customer",
+    "prerequisiteSummary": "Prerequisite mission or completion tag; CrimeStat limited to 2 or below; Wikelo Emporium: Very Good Customer Very Best Customer",
+    "prerequisites": [
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+          ]
+        }
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "reputation",
+        "label": "Wikelo Emporium: Very Good Customer Very Best Customer",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      },
+      {
+        "type": "reputation",
+        "label": "Wikelo Emporium: Very Best Customer Very Best Customer",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "No credit reward extracted",
+        "Item reward: Aegis Idris-P Wikelo War Special"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [
+        {
+          "entityClass": "deb6d97e-38ce-48a2-9e12-d63eb01a0207",
+          "amount": "1",
+          "displayName": "Aegis Idris-P Wikelo War Special",
+          "itemKey": "deb6d97e-38ce-48a2-9e12-d63eb01a0207",
+          "deliveryTarget": "unknown",
+          "ownerOnly": true,
+          "sourceRefs": [
+            "contracts/contractgenerator/thecollector.xml"
+          ],
+          "status": "resolved",
+          "confidence": "resolved_entityClass"
+        }
+      ],
+      "itemRewardStatus": "resolved",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "77fa8882-e82f-4c97-9cab-a7151758cb99",
+      "generatorGuid": "4a6043af-de6a-8a9b-fd31-60db0855e697",
+      "generatorName": "ContractGenerator.TheCollector",
+      "generatorPath": "contracts/contractgenerator/thecollector.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@TheCollector_Ships_Idris_Title",
+      "descriptionRaw": "@TheCollector_Ships_Idris_Desc"
+    }
+  }
+}

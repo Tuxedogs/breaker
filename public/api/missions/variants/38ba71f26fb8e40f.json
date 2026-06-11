@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton3",
+  "variant": {
+    "variantKey": "5789f55c-ac78-4518-8d93-4d7ec07ecdf4",
+    "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton3",
+    "displayName": "RESOURCE DRIVE: DELIVER MATERIAL DONATION",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "ArcCorp needs your help.\n\nUnder Imperator Addison’s new Second Life initiative, they’ve introduced a government program that will reward whichever company gathers the most resources to help with the regen crisis. ArcCorp is eager to win, and to do that we need plenty of reliable and dependable contractors.\n\nIf you can knock out this easy hauling job and show you’re competent, then I can start offering you some more complicated work next.\n\nFor this job, you’ll need a ship that can take [MissionMaxSCUSize] cargo containers and a multi-tool with a tractor beam attachment. Once you’re ready, head over to [Location], grab the cargo from the freight elevator, and deliver it to a freight elevator at: [Destination]. Easy, right?\n\nIf you want to keep track of how ArcCorp is stacking up against the competition, you can go to the Second Life Resource Drive section of your Journal. If you do really well and help us get to the top, I’ve been given permission by my superiors at ArcCorp to reward the hardest working contractors with some extra stuff on top of whatever credits you earn.\n\nCome work for ArcCorp and be part of the winning team.\n\nElla Tieno\nContractor Liaison Officer\nArcCorp",
+    "rawName": "@GoblinG_ArcCorp_ResourceGathering_Title_Intro",
+    "internalName": "GoblinG_ResourceGathering_Stanton3_Intro",
+    "missionType": "Resource Drive - ArcCorp",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton3",
+        "GoblinG_ResourceGathering_Stanton3_Intro"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Resource Drive - ArcCorp",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "c6594231-cfda-435e-992b-90b8a45f4e6e"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "c80ea7db-f76d-4305-82c1-03e1525d6e7c"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/gobling_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "5789f55c-ac78-4518-8d93-4d7ec07ecdf4",
+      "generatorGuid": "9a501367-1c36-4dda-8326-0c3a75896e26",
+      "generatorName": "ContractGenerator.GoblinG_Generator",
+      "generatorPath": "contracts/contractgenerator/gobling_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@GoblinG_ArcCorp_ResourceGathering_Title_Intro",
+      "descriptionRaw": "@GoblinG_ArcCorp_ResourceGathering_Desc_Intro"
+    }
+  }
+}
