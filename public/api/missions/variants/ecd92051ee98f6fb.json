@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+  "variant": {
+    "variantKey": "6b64a540-6119-4d66-b07e-9635ef3ca7cb",
+    "familyKey": "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+    "displayName": "RESOURCE DRIVE: DEFEND SMALL CARGO SHIP",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "To all contractors with combat pilot experience: we need your help urgently.\n\nA small cargo vessel of ours is currently under fire from a group of outlaws at [Location]. We need a capable pilot to head out there and help defend them as they prepare to quantum.\n\nThey don’t have much time. The resources they’re carrying, however small, will make a difference in the UEE’s call for resources. If they can deliver them, we’ll be sure to compensate you appropriately.\n\nDenver Samuels\nContractor Liaison Officer\nCrusader Industries",
+    "rawName": "@GoblinG_Crusader_SupportAttackedShip_S_Title",
+    "internalName": "GoblinG_SupportAttackedShip_S_Stanton2",
+    "missionType": "Resource Drive - Crusader",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Hauling",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Hauling",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "9a501367-1c36-4dda-8326-0c3a75896e26|GoblinG_Stanton2",
+        "GoblinG_SupportAttackedShip_S_Stanton2"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "f74d7040-ba0a-4fee-9531-60c268c2e00b"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "bc8d31bc-e97f-4559-9b09-23dadcd26333"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/gobling_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "6b64a540-6119-4d66-b07e-9635ef3ca7cb",
+      "generatorGuid": "9a501367-1c36-4dda-8326-0c3a75896e26",
+      "generatorName": "ContractGenerator.GoblinG_Generator",
+      "generatorPath": "contracts/contractgenerator/gobling_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@GoblinG_Crusader_SupportAttackedShip_S_Title",
+      "descriptionRaw": "@GoblinG_Crusader_SupportAttackedShip_S_Desc"
+    }
+  }
+}

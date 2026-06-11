@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Shubin",
+  "variant": {
+    "variantKey": "5c0a5e29-b43e-4c91-a1cd-cddf4ba37882",
+    "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Shubin",
+    "displayName": "Alliance Aid: Collect Manufacturing Resource - Large Scale",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "POSTING: Resource Gathering \nLOCATION: Pyro System, Stanton System\nWORK EXPERIENCE: Mining, Commodity Trading\nTERMS*: \nShubin Interstellar is stepping up to help stop the spread of the People’s Ailment. Our facilities are helping in the efforts to produce much needed ventilation filters to replace the faulty ones responsible for the spread of the dangerous Molina Mold, but we need your help to hit that ambitious goal. \n\nOur current stockpiles of an important resource are not sufficient enough, so we need contractors who can deliver a large-scale haul of it to [Destination].\n\nResources tied to another contract will not be accepted.   \n\n*Shubin Interstellar is an equal opportunity contractor. By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+    "rawName": "@CleanAir_ResourceGathering_Bulk_Filters_title",
+    "internalName": "CleanAir_Bulk_ResourceGathering_Filters_Borase",
+    "missionType": "Priority",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_Shubin",
+        "CleanAir_Bulk_ResourceGathering_Filters_Borase"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Priority",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "72f86012-4475-46fa-b533-8190402b2c2a"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "5c0a5e29-b43e-4c91-a1cd-cddf4ba37882",
+      "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+      "generatorName": "ContractGenerator.CleanAir",
+      "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@CleanAir_ResourceGathering_Bulk_Filters_title",
+      "descriptionRaw": "@CleanAir_ResourceGathering_Bulk_Filters_desc"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+  "variant": {
+    "variantKey": "e7352f49-da6c-45c3-a7f7-6e897d788913",
+    "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+    "displayName": "Want Better Eyes?",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Wikelo has best eyes for seeing far away. I give to you if you give me",
+    "rawName": "@TheCollector_Recipes_Title_Bino",
+    "internalName": "TheCollector_ICanSee(DO_NOT_USE_NOW_LOOT)",
+    "missionType": "Wikelo - Other Items",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+        "TheCollector_ICanSee(DO_NOT_USE_NOW_LOOT)"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Wikelo - Other Items",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "Prerequisite mission or completion tag; CrimeStat limited to 2 or below",
+    "prerequisites": [
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+          ]
+        }
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "No credit reward extracted",
+        "Item reward: XDL \"Mark I\" Monocular Rangefinder"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [
+        {
+          "entityClass": "b226305b-c44e-4990-829e-732c31d04d8a",
+          "amount": "1",
+          "displayName": "XDL \"Mark I\" Monocular Rangefinder",
+          "itemKey": "b226305b-c44e-4990-829e-732c31d04d8a",
+          "deliveryTarget": "unknown",
+          "ownerOnly": true,
+          "sourceRefs": [
+            "contracts/contractgenerator/thecollector.xml"
+          ],
+          "status": "resolved",
+          "confidence": "resolved_entityClass"
+        }
+      ],
+      "itemRewardStatus": "resolved",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "e7352f49-da6c-45c3-a7f7-6e897d788913",
+      "generatorGuid": "4a6043af-de6a-8a9b-fd31-60db0855e697",
+      "generatorName": "ContractGenerator.TheCollector",
+      "generatorPath": "contracts/contractgenerator/thecollector.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@TheCollector_Recipes_Title_Bino",
+      "descriptionRaw": "@TheCollector_Recipes_Desc_Bino"
+    }
+  }
+}

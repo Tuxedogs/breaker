@@ -1,0 +1,2876 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+  "variants": [
+    {
+      "variantKey": "1f6cfc2b-bc89-440d-8324-977133d3b643",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Escort Needed",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Citizens for Prosperity need a combat-experienced pilot to provide extra support to an Alliance Aid pilot who is making a vital trip from [Location] for the ongoing relief effort. \n\nOutlaws have been launching more attacks thanks to the increased activity brought on by the Molina Mold outbreak, so it’ll be your job to make sure that they stay safe while they’re completing their work. This route is relatively safe, so I'm not expecting too much trouble, but its better not to take the risk.\n\nIf you’re interested, you’ll rendezvous there and await further instructions.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_EscortShip_Easy_title",
+      "internalName": "CleanAir_EscortShip_Easy",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_EscortShip_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1f6cfc2b-bc89-440d-8324-977133d3b643",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_EscortShip_Easy_title",
+        "descriptionRaw": "@CleanAir_EscortShip_Easy_desc"
+      }
+    },
+    {
+      "variantKey": "ac17cd12-2ed3-462b-b75c-eb88017be147",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Protection Detail Needed",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Alliance Aid has a ship vital to the relief effort leaving from [Location]. They have received credible threats that they may be attacked and are looking to bring on additional security.\n\nWhen you're ready, head to the rendezvous with yourself and any additional combat ships you can recruit  and await further instructions.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_EscortShip_Hard_title",
+      "internalName": "CleanAir_EscortShip_Hard",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_EscortShip_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "ac17cd12-2ed3-462b-b75c-eb88017be147",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_EscortShip_Hard_title",
+        "descriptionRaw": "@CleanAir_EscortShip_Hard_desc"
+      }
+    },
+    {
+      "variantKey": "b4aa8f20-baed-4e51-823c-628bceae5126",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Security Needed",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "I was just contacted by an Alliance Aid rep who is deeply concerned for one of their contractors heading out from  [Location]. The ships helping the relief effort have been drawing a lot of outlaw attention and they're worried that without extra protection they won't be able to finish their vital work.  \n\nOwing with the increased risk level and the value of the ship, it might behoove you to bring some combat support of your own along.\n\nIf you’re interested, head to the rendezvous and await further instructions.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_EscortShip_Medium_title",
+      "internalName": "CleanAir_EscortShip_Medium",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_EscortShip_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "lawful",
+      "lawfulConfidence": "inferred",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b4aa8f20-baed-4e51-823c-628bceae5126",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_EscortShip_Medium_title",
+        "descriptionRaw": "@CleanAir_EscortShip_Medium_desc"
+      }
+    },
+    {
+      "variantKey": "75270f8c-5afa-4c99-8dc1-77736f666bfe",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Ship Under Attack",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Everyone has been joining with Alliance Aid to help with the ongoing crisis in Levski, but it seems you can't do good in this 'verse without attracting the bad. One of the critical relief convoys was just attacked by a powerful outlaw fleet. We need you to put together a fleet of your own and deploy to [Location] as soon as possible. With any luck, you may be able to right this wrong before it's too late.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_DefendShip_Hard_title",
+      "internalName": "CleanAir_DefendShip_Hard",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_DefendShip_Hard"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "75270f8c-5afa-4c99-8dc1-77736f666bfe",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_DefendShip_Hard_title",
+        "descriptionRaw": "@CleanAir_DefendShip_Hard_desc"
+      }
+    },
+    {
+      "variantKey": "0c00412c-47e4-49a2-a307-73524b57a95a",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Ship in Distress",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "You figure these outlaws would have the decency not to interfere with relief efforts but unfortunately we've gotten word that an Alliance Aid convoy is under attack. These criminals seem to be a serious threat so it would be recommended to bring some support along with you. \n\nOnce you're ready, head to [Location] and face these criminals head on.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_DefendShip_Medium_title",
+      "internalName": "CleanAir_DefendShip_Medium",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_DefendShip_Medium"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0c00412c-47e4-49a2-a307-73524b57a95a",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_DefendShip_Medium_title",
+        "descriptionRaw": "@CleanAir_DefendShip_Medium_desc"
+      }
+    },
+    {
+      "variantKey": "53400464-c0f6-4a27-8095-c8ce288b372e",
+      "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+      "displayName": "Alliance Aid: Ship in Trouble",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve lost contact with an Alliance Aid supply convoy and are concerned it might be under attack from outlaws. We need you to hurry to [Location] and support them. Any delays to the ongoing relief efforts could cost lives in Levski.\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+      "rawName": "@CleanAir_DefendShip_Easy_title",
+      "internalName": "CleanAir_DefendShip_Easy",
+      "missionType": "Priority",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Ship Combat",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Ship Combat",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_CFP",
+          "CleanAir_DefendShip_Easy"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Defend Ship",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton 1; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "ef61dd87-b138-4791-b87f-7571689daa8b"
+            ]
+          }
+        },
+        {
+          "type": "location",
+          "label": "Nyx Solar System",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Nyx Solar System",
+        "system": "Nyx",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "17092f34-d9c8-4d50-89f6-a92940b9cd52"
+        ],
+        "possibleLocations": [
+          "Nyx Solar System"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "17092f34-d9c8-4d50-89f6-a92940b9cd52",
+            "resolvedName": "Nyx Solar System",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/nyxsolarsystem.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 1",
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Nyx",
+        "Nyx Solar System"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/yearspecificcontent/cleanair.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "53400464-c0f6-4a27-8095-c8ce288b372e",
+        "generatorGuid": "c3a826c8-368d-4a28-8487-162f70d61469",
+        "generatorName": "ContractGenerator.CleanAir",
+        "generatorPath": "contracts/contractgenerator/yearspecificcontent/cleanair.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@CleanAir_DefendShip_Easy_title",
+        "descriptionRaw": "@CleanAir_DefendShip_Easy_desc"
+      }
+    }
+  ]
+}

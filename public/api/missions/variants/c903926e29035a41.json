@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_MercenaryStanton",
+  "variant": {
+    "variantKey": "db858e87-56ce-48bf-8eea-b172b253c2ff",
+    "familyKey": "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_MercenaryStanton",
+    "displayName": "Settle a Grudge",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Not everyone is cut out to be a Headhunter. Some folks have too many screws loose even for us.  \n\n[TargetName] ran with us in Pyro until they beat another member to death over a stupid game of Trigger. They fled to Stanton to hide out, but now that we’re expanding our footprint here, figure it’s the perfect time for payback.    \n\n[TargetName] has been busy though. They’re running a crew that’s currently hunkered down at [Location]. Head there and settle this grudge once and for all. I can’t imagine any of ‘em will go quiet, so best come prepared.\n\nStows out.",
+    "rawName": "@Headhunters_EliminateBoss_OLP_VH_title_001",
+    "internalName": "Headhunters_OLP_EliminateBoss",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Ship Combat",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Ship Combat",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "716fdae9-1d2c-4714-8bef-af636f35d8ca|HH_MercenaryStanton",
+        "Headhunters_OLP_EliminateBoss"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Mercenary",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "Stanton Star",
+    "prerequisites": [
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "db858e87-56ce-48bf-8eea-b172b253c2ff",
+      "generatorGuid": "716fdae9-1d2c-4714-8bef-af636f35d8ca",
+      "generatorName": "ContractGenerator.HeadHunters_Mercenary_FPS",
+      "generatorPath": "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_mercenary_fps.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@Headhunters_EliminateBoss_OLP_VH_title_001",
+      "descriptionRaw": "@Headhunters_EliminateBoss_OLP_VH_desc_001"
+    }
+  }
+}

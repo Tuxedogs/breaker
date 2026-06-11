@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_OpenTrack_List",
+  "variant": {
+    "variantKey": "4eef02d4-50c0-1c58-b6b2-5f4b0720c6b5",
+    "familyKey": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_OpenTrack_List",
+    "displayName": "Open Track:",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "Looking to get some practice track time to improve your piloting skills? Then strap in and throttle up with Wildstar Racing Amateur League.\n\n[RaceDetails]\n\nDISCLAIMER\nWildstar Racing requires the contracted racer to be the vehicle pilot, no substitutes or stand-ins are allowed. Please be mindful that Wildstar Racing utilizes publicly accessible tracks and that other individuals may be present. Wildstar Racing is not responsible for any damage your ship may suffer while racing.",
+    "rawName": "@WSTR_TimeTrial_OpenTrack_Title",
+    "internalName": "WildstarRacing_Race7_MinersLament_OpenTrack",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5|WildstarRacing_OpenTrack_List",
+        "WildstarRacing_Race7_MinersLament_OpenTrack"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Stanton Star"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Calculated payout"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "4eef02d4-50c0-1c58-b6b2-5f4b0720c6b5",
+      "generatorGuid": "ecdf89e6-65a1-43c0-9f47-b8d45a31a2f5",
+      "generatorName": "ContractGenerator.WildstarRacing_Generator",
+      "generatorPath": "contracts/contractgenerator/imperialsportsfederation_guild/wildstarracing_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@WSTR_TimeTrial_OpenTrack_Title",
+      "descriptionRaw": "@WSTR_TimeTrial_OpenTrack_Desc"
+    }
+  }
+}

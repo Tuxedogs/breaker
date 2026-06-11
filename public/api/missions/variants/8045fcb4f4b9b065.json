@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+  "variant": {
+    "variantKey": "e404f6c6-997d-4195-8e48-1a8f859398c9",
+    "familyKey": "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+    "displayName": "Make VOLT shotgun angrier",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "You feel like gun not angry enough? VOLT shotgun very powerful, very dangerous, but not scary? Bring to me. Can make very scary and angry.\n\nThey respect you then. Bring to [destination] and we make.\n\nBye.",
+    "rawName": "@TheCollector_Recipes_Title_VoltThwack",
+    "internalName": "TheCollector_AO_VoltThwack",
+    "missionType": "Wikelo - Other Items",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4a6043af-de6a-8a9b-fd31-60db0855e697|TheCollector_Small_Items",
+        "TheCollector_AO_VoltThwack"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Wikelo - Other Items",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "Prerequisite mission or completion tag; CrimeStat limited to 2 or below",
+    "prerequisites": [
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "87e124b5-79d4-438d-9be4-64c6c9f755f9"
+          ]
+        }
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": []
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Wikelo +10",
+        "No credit reward extracted",
+        "Item reward unresolved"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Wikelo +10"
+      ],
+      "credits": "No credit reward extracted",
+      "creditStatus": "provenAbsent",
+      "creditsDetail": {
+        "status": "provenAbsent",
+        "displayText": "No credit reward extracted",
+        "confidence": "proven_absent",
+        "sourceRefs": []
+      },
+      "itemRewards": [
+        {
+          "status": "weighted_unresolved",
+          "confidence": "weighted_unresolved",
+          "unresolvedReason": "Weighted item reward extraction is audited but not resolved.",
+          "sourceRefs": [
+            "contracts/contractgenerator/thecollector.xml"
+          ],
+          "weightedOptions": [
+            {
+              "entityClass": "979be032-a7e7-472c-9322-dbde7537ac25",
+              "weight": null,
+              "displayName": "Prism \"Irradiated\" Laser Shotgun",
+              "itemKey": "979be032-a7e7-472c-9322-dbde7537ac25"
+            },
+            {
+              "entityClass": "14e12fed-37fd-4c75-b61e-1b21d1bbade7",
+              "weight": null,
+              "displayName": "Prism Laser Shotgun Battery (20 cap)",
+              "itemKey": "14e12fed-37fd-4c75-b61e-1b21d1bbade7"
+            }
+          ]
+        }
+      ],
+      "itemRewardStatus": "weighted_unresolved",
+      "unresolvedRewardTokens": [
+        "ContractResult_ItemsWeighting"
+      ]
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5f442fdd-15cc-4f62-bd10-fce2023f4d0c",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "041cce33-d883-4d0b-8ae6-2f4928f2e590",
+        "scopeDisplayName": "Wikelo",
+        "amount": 10,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5f442fdd-15cc-4f62-bd10-fce2023f4d0c",
+          "041cce33-d883-4d0b-8ae6-2f4928f2e590",
+          "e1d9b434-fcae-4442-96c0-ae9ba8f01f4b"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": true,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "e404f6c6-997d-4195-8e48-1a8f859398c9",
+      "generatorGuid": "4a6043af-de6a-8a9b-fd31-60db0855e697",
+      "generatorName": "ContractGenerator.TheCollector",
+      "generatorPath": "contracts/contractgenerator/thecollector.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@TheCollector_Recipes_Title_VoltThwack",
+      "descriptionRaw": "@TheCollector_Recipes_Desc_VoltThwack"
+    }
+  }
+}

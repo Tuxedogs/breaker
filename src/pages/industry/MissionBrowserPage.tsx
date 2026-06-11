@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
+  loadMissionFamilyVariants,
   loadMissionData,
   type BlueprintRewardGroupView,
   type MissionBrowserCatalog,
@@ -14,7 +15,7 @@ import "./mission-browser.css";
 
 const MAX_VISIBLE_VARIANTS = 8;
 
-type RewardFilter = "blueprints" | "reputation" | "credits-unresolved" | "credits-none";
+type RewardFilter = "blueprints" | "reputation" | "credits-fixed" | "credits-calculated" | "credits-variable" | "credits-formula-unresolved" | "credits-unresolved" | "credits-none" | "items" | "items-unresolved";
 type ConfidenceFilter = "unresolved" | "locations" | "rewards" | "crime-bounded" | "unlawful";
 
 function stripSummaryPrefix(value: string, prefix: string): string {
@@ -194,9 +195,12 @@ function groupCreditSummary(variants: MissionVariantView[]): string {
   const unresolvedCount = variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length;
   if (unresolvedCount === variants.length && unresolvedCount > 0) return `Credits unresolved across ${unresolvedCount} variants`;
   if (unresolvedCount > 0) return `Credits unresolved for ${unresolvedCount} variant${unresolvedCount === 1 ? "" : "s"}`;
-  const extracted = Array.from(new Set(variants.filter((variant) => variant.rewards.creditStatus === "extracted").map((variant) => variant.rewards.credits)));
-  if (extracted.length > 1) return "Credits vary by variant";
-  if (extracted.length === 1 && variants.every((variant) => variant.rewards.creditStatus === "extracted")) return extracted[0]!;
+  const fixed = Array.from(new Set(variants.filter((variant) => variant.rewards.creditStatus === "fixed").map((variant) => variant.rewards.credits)));
+  if (fixed.length > 1) return "Credits vary by variant";
+  if (fixed.length === 1 && variants.every((variant) => variant.rewards.creditStatus === "fixed")) return fixed[0]!;
+  if (variants.every((variant) => variant.rewards.creditStatus === "calculated")) return "Calculated payout";
+  if (variants.every((variant) => variant.rewards.creditStatus === "variable")) return "Variable payout";
+  if (variants.every((variant) => variant.rewards.creditStatus === "formula_unresolved")) return "Credits formula unresolved";
   if (variants.every((variant) => variant.rewards.creditStatus === "provenAbsent")) return "No credit reward extracted";
   return "Credits vary by variant";
 }
@@ -220,6 +224,14 @@ function groupStandingSummary(variants: MissionVariantView[]): string {
 
 function cardCreditSummary(variants: MissionVariantView[]): string {
   return groupCreditSummary(variants).replace(/^Credits /, "").replace(/^No credit reward extracted$/, "none extracted");
+}
+
+function unloadedFamilyCreditSummary(family: MissionFamilyView): string {
+  return family.creditRewardSummary.replace(/^Credits /, "").replace(/^No credit reward extracted$/, "none extracted");
+}
+
+function unloadedFamilyPickupSummary(family: MissionFamilyView): string {
+  return stripSummaryPrefix(family.pickupSummary, "Pickup:");
 }
 
 function cardBlueprintSummary(family: MissionFamilyView): string {
@@ -302,8 +314,14 @@ function rewardMatches(family: MissionFamilyView, rewardFilter: string): boolean
   const filter = rewardFilter as RewardFilter;
   if (filter === "blueprints") return family.blueprintRewards.length > 0;
   if (filter === "reputation") return family.reputationRewards.length > 0;
+  if (filter === "credits-fixed") return family.creditRewardStatuses?.includes("fixed") ?? family.creditRewardSummary !== "No credit reward extracted";
+  if (filter === "credits-calculated") return family.creditRewardStatuses?.includes("calculated") ?? family.creditRewardSummary === "Calculated payout";
+  if (filter === "credits-variable") return family.creditRewardStatuses?.includes("variable") ?? family.creditRewardSummary === "Variable payout";
+  if (filter === "credits-formula-unresolved") return family.creditRewardStatuses?.includes("formula_unresolved") ?? family.creditRewardSummary === "Credits formula unresolved";
   if (filter === "credits-unresolved") return family.creditRewardSummary === "Credits unresolved";
   if (filter === "credits-none") return family.creditRewardSummary === "No credit reward extracted";
+  if (filter === "items") return family.itemRewardStatus === "resolved";
+  if (filter === "items-unresolved") return family.itemRewardStatus === "unresolved_entityClass" || family.itemRewardStatus === "weighted_unresolved";
   return true;
 }
 
@@ -312,7 +330,7 @@ function confidenceMatches(family: MissionFamilyView, confidenceFilter: string):
   const filter = confidenceFilter as ConfidenceFilter;
   if (filter === "unresolved") return family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0;
   if (filter === "locations") return family.unresolvedLocationTokens.length > 0;
-  if (filter === "rewards") return family.unresolvedRewardFields.length > 0 || family.creditRewardSummary === "Credits unresolved";
+  if (filter === "rewards") return family.unresolvedRewardFields.length > 0 || (family.creditRewardStatuses?.includes("unresolved") ?? family.creditRewardSummary === "Credits unresolved");
   if (filter === "crime-bounded") return family.crimeStatRequirement === "bounded";
   if (filter === "unlawful") return family.lawfulClassification === "unlawful";
   return true;
@@ -504,7 +522,7 @@ function VariantDrawer({ variant }: { variant: MissionVariantView }) {
             <h4 className="mb-inline-heading">Rewarded Reputation</h4>
             <RepPathBadgeList paths={variant.rewardedReputationPaths} includeFaction max={5} />
           </div>
-          <Badge tone={variant.rewards.creditStatus === "unresolved" ? "is-amber" : "is-muted"}>{variant.rewards.credits}</Badge>
+          <Badge tone={["unresolved", "calculated", "formula_unresolved", "variable"].includes(variant.rewards.creditStatus) ? "is-amber" : "is-muted"}>{variant.rewards.credits}</Badge>
         </section>
         <section>
           <h3>Requirements</h3>
@@ -663,10 +681,35 @@ export default function MissionBrowserPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openVariant, setOpenVariant] = useState("");
+  const [familyVariantsByKey, setFamilyVariantsByKey] = useState<Record<string, MissionVariantView[]>>({});
+  const [familyVariantLoadingKey, setFamilyVariantLoadingKey] = useState("");
+  const [familyVariantErrors, setFamilyVariantErrors] = useState<Record<string, string>>({});
+
+  const families = useMemo(() => catalog?.families ?? [], [catalog]);
+  const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
+  const query = searchParams.get("search") ?? "";
+  const provider = searchParams.get("provider") ?? "";
+  const missionType = searchParams.get("type") ?? "";
+  const reward = searchParams.get("reward") ?? "";
+  const repReward = searchParams.get("repReward") ?? "";
+  const status = searchParams.get("status") ?? "";
+  const confidence = searchParams.get("confidence") ?? "";
+  const selectedFamilyKey = searchParams.get("family") ?? "";
+  const missionFilters = useMemo(() => ({
+    search: query,
+    provider,
+    type: missionType,
+    reward,
+    repReward,
+    status,
+    confidence,
+  }), [confidence, missionType, provider, query, repReward, reward, status]);
 
   useEffect(() => {
     let cancelled = false;
-    loadMissionData()
+    setLoading(true);
+    setError(null);
+    loadMissionData(missionFilters)
       .then((data) => {
         if (!cancelled) setCatalog(data);
       })
@@ -677,31 +720,82 @@ export default function MissionBrowserPage() {
         if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
-  }, []);
+  }, [missionFilters]);
 
-  const families = useMemo(() => catalog?.families ?? [], [catalog]);
-  const familiesByKey = useMemo(() => new Map(families.map((family) => [family.familyKey, family])), [families]);
-  const variantsByFamily = useMemo(() => {
-    const grouped = new Map<string, MissionVariantView[]>();
-    for (const variant of catalog?.variants ?? []) {
-      grouped.set(variant.familyKey, [...(grouped.get(variant.familyKey) ?? []), variant]);
-    }
-    return grouped;
+  useEffect(() => {
+    if (!selectedFamilyKey || familyVariantsByKey[selectedFamilyKey]) return;
+    let cancelled = false;
+    setFamilyVariantLoadingKey(selectedFamilyKey);
+    setFamilyVariantErrors((current) => {
+      const next = { ...current };
+      delete next[selectedFamilyKey];
+      return next;
+    });
+    loadMissionFamilyVariants(selectedFamilyKey)
+      .then((variants) => {
+        if (cancelled) return;
+        setFamilyVariantsByKey((current) => ({ ...current, [selectedFamilyKey]: variants }));
+      })
+      .catch((reason: unknown) => {
+        if (cancelled) return;
+        setFamilyVariantErrors((current) => ({
+          ...current,
+          [selectedFamilyKey]: reason instanceof Error ? reason.message : "Mission family variants unavailable",
+        }));
+      })
+      .finally(() => {
+        if (!cancelled) setFamilyVariantLoadingKey((current) => current === selectedFamilyKey ? "" : current);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [familyVariantsByKey, selectedFamilyKey]);
+
+  useEffect(() => {
+    const initialVariants = catalog?.variants ?? [];
+    if (!initialVariants.length) return;
+    setFamilyVariantsByKey((current) => {
+      const next = { ...current };
+      for (const variant of initialVariants) {
+        if (next[variant.familyKey]) continue;
+        next[variant.familyKey] = initialVariants.filter((item) => item.familyKey === variant.familyKey);
+      }
+      return next;
+    });
   }, [catalog]);
 
-  const query = searchParams.get("search") ?? "";
-  const provider = searchParams.get("provider") ?? "";
-  const missionType = searchParams.get("type") ?? "";
-  const reward = searchParams.get("reward") ?? "";
-  const repReward = searchParams.get("repReward") ?? "";
-  const status = searchParams.get("status") ?? "";
-  const confidence = searchParams.get("confidence") ?? "";
-  const selectedFamilyKey = searchParams.get("family") ?? "";
-
-  const providers = useMemo(() => Array.from(new Set(families.map((family) => family.provider))).sort(), [families]);
-  const missionTypes = useMemo(() => Array.from(new Set(families.map((family) => family.missionType))).sort(), [families]);
-  const rewardedRepPaths = useMemo(() => Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort(), [families]);
-  const statuses = ["Release flag not set", "Not for release", "Work in progress"];
+  const providers = useMemo(
+    () => catalog?.filtersMeta?.factions ?? Array.from(new Set(families.map((family) => family.provider))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families],
+  );
+  const missionTypes = useMemo(
+    () => catalog?.filtersMeta?.missionTypes ?? Array.from(new Set(families.map((family) => family.missionType))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families],
+  );
+  const rewardedRepPaths = useMemo(
+    () => catalog?.filtersMeta?.reputationScopes ?? Array.from(new Set(families.flatMap((family) => family.rewardedReputationPaths.map((path) => path.scopeDisplayName)))).sort().map((value) => ({ key: value, label: value, count: 0 })),
+    [catalog, families],
+  );
+  const rewardOptions = catalog?.filtersMeta?.rewardTypes ?? [
+    { key: "blueprints", label: "Blueprint rewards", count: 0 },
+    { key: "reputation", label: "Reputation rewards", count: 0 },
+    { key: "credits-fixed", label: "Credits fixed", count: 0 },
+    { key: "credits-calculated", label: "Calculated payout", count: 0 },
+    { key: "credits-variable", label: "Variable payout", count: 0 },
+    { key: "credits-formula-unresolved", label: "Credits formula unresolved", count: 0 },
+    { key: "credits-unresolved", label: "Credits unresolved", count: 0 },
+    { key: "credits-none", label: "No credit reward extracted", count: 0 },
+    { key: "items", label: "Item reward", count: 0 },
+    { key: "items-unresolved", label: "Item reward unresolved", count: 0 },
+  ];
+  const statuses = catalog?.filtersMeta?.releaseStates ?? ["Release flag not set", "Not for release", "Work in progress"].map((value) => ({ key: value, label: value, count: 0 }));
+  const confidenceOptions = catalog?.filtersMeta?.confidenceStates ?? [
+    { key: "unresolved", label: "Any unresolved", count: 0 },
+    { key: "locations", label: "Locations unresolved", count: 0 },
+    { key: "rewards", label: "Rewards unresolved", count: 0 },
+    { key: "crime-bounded", label: "CrimeStat limited", count: 0 },
+    { key: "unlawful", label: "Possible unlawful", count: 0 },
+  ];
 
   const visibleFamilies = families.filter((family) => {
     if (query.trim() && !family.searchText.includes(query.trim().toLowerCase())) return false;
@@ -764,24 +858,17 @@ export default function MissionBrowserPage() {
 
         <section className="mb-controls" aria-label="Mission browser filters">
           <input type="search" value={query} onChange={(event) => setParam("search", event.target.value)} placeholder="Search missions, providers, rewards, internal IDs..." />
-          <select value={provider} onChange={(event) => setParam("provider", event.target.value)}><option value="">All providers</option>{providers.map((item) => <option key={item}>{item}</option>)}</select>
-          <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={provider} onChange={(event) => setParam("provider", event.target.value)}><option value="">All providers</option>{providers.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+          <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <select value={reward} onChange={(event) => setParam("reward", event.target.value)}>
             <option value="">All rewards</option>
-            <option value="blueprints">Blueprint rewards</option>
-            <option value="reputation">Reputation rewards</option>
-            <option value="credits-unresolved">Credits unresolved</option>
-            <option value="credits-none">No credit reward extracted</option>
+            {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
           </select>
-          <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)}><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item}>{item}</option>)}</select>
-          <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{statuses.map((item) => <option key={item}>{item}</option>)}</select>
+          <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)}><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+          <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{statuses.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <select value={confidence} onChange={(event) => setParam("confidence", event.target.value)}>
             <option value="">All confidence</option>
-            <option value="unresolved">Any unresolved</option>
-            <option value="locations">Locations unresolved</option>
-            <option value="rewards">Rewards unresolved</option>
-            <option value="crime-bounded">CrimeStat limited</option>
-            <option value="unlawful">Possible unlawful</option>
+            {confidenceOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
           </select>
         </section>
         <div className="mb-rep-legend" aria-label="Reputation path color legend">
@@ -846,7 +933,11 @@ export default function MissionBrowserPage() {
                           const family = familiesByKey.get(familyKey);
                           if (!family) return null;
                           const isSelected = selectedFamilyKey === family.familyKey;
-                          const variants = variantsByFamily.get(family.familyKey) ?? [];
+                          const loadedVariants = familyVariantsByKey[family.familyKey];
+                          const variants = loadedVariants ?? [];
+                          const pickupSummary = loadedVariants ? groupPickupSummary(family, variants) : unloadedFamilyPickupSummary(family);
+                          const creditSummary = loadedVariants ? cardCreditSummary(variants) : unloadedFamilyCreditSummary(family);
+                          const unresolvedCategoryCount = groupUnresolvedSummary(family, variants).length;
               return (
                 <div className={`mb-family-block ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, family.reputationScope.displayName))}${isSelected ? " is-selected" : ""}`} key={family.familyKey}>
                   <button
@@ -872,9 +963,9 @@ export default function MissionBrowserPage() {
                         {rewardsDifferentFromScope(family) && <span className={`mb-rep-badge ${repScopeClass(primaryRepScope(family.rewardedReputationPaths, "Mixed"))}`}>Grouped under {shortRepScope(family.reputationScope.displayName)}</span>}
                       </span>
                       <span className="mission-group-card__meta">
-                        <span className="mission-card-row mission-card-row--pickup" title={groupPickupSummary(family, variants)}>
+                        <span className="mission-card-row mission-card-row--pickup" title={pickupSummary}>
                           <span className="mission-card-row__icon"><MissionCardRowIcon type="pickup" /></span>
-                          <span>Pickup: {groupPickupSummary(family, variants)}</span>
+                          <span>Pickup: {pickupSummary}</span>
                         </span>
                         <span className="mission-card-row">
                           <span className="mission-card-row__icon"><MissionCardRowIcon type="missions" /></span>
@@ -886,9 +977,9 @@ export default function MissionBrowserPage() {
                         </span>
                         <span className="mission-card-row">
                           <span className="mission-card-row__icon"><MissionCardRowIcon type="credits" /></span>
-                          <span>Credits: {cardCreditSummary(variants)}</span>
+                          <span>Credits: {creditSummary}</span>
                         </span>
-                        {groupUnresolvedSummary(family, variants).length > 0 && <span>{groupUnresolvedSummary(family, variants).length} unresolved categor{groupUnresolvedSummary(family, variants).length === 1 ? "y" : "ies"}</span>}
+                        {unresolvedCategoryCount > 0 && <span>{unresolvedCategoryCount} unresolved categor{unresolvedCategoryCount === 1 ? "y" : "ies"}</span>}
                       </span>
                       {(family.crimeStatRequirement === "required" || family.lawfulClassification === "unlawful") && (
                         <span className="mission-warning-summary">
@@ -897,7 +988,13 @@ export default function MissionBrowserPage() {
                       )}
                     </span>
                   </button>
-                  {isSelected && (
+                  {isSelected && familyVariantLoadingKey === family.familyKey && !loadedVariants && (
+                    <div className="mb-state">Loading family variants...</div>
+                  )}
+                  {isSelected && familyVariantErrors[family.familyKey] && (
+                    <div className="mb-state is-error">{familyVariantErrors[family.familyKey]}</div>
+                  )}
+                  {isSelected && loadedVariants && (
                     <FamilyDetail
                       family={family}
                       variants={variants}

@@ -1,0 +1,2155 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+  "variants": [
+    {
+      "variantKey": "61af9886-2117-45f8-9fd2-77e16fb12bcf",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Cull Invasive Creatures",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Highpoint Wilderness Specialists are dedicated to keeping the delicate ecosystems of the empire in balance. A client recently hired us to evaluate the environmental impact of a number of invasive creatures near [Location]. We’ve determined that to preserve the natural order of the region a conscientious culling of these species is necessary.  \n\nLooking for someone able and willing to help in this effort. Please refer to \"The Guide to Stanton Wildlife\" in your Journal for further information on the creatures being targeted.     \n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_MultiType_M_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimals_Medium_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimals_Medium_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "61af9886-2117-45f8-9fd2-77e16fb12bcf",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_MultiType_M_title",
+        "descriptionRaw": "@Highpoint_KillAnimals_MultiType_M_desc"
+      }
+    },
+    {
+      "variantKey": "9d31564a-6d9e-45cf-a512-4f58266be4d3",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Cull Irradiated Kopions",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "As a consequence of the ongoing radiation storm on Pyro I, some of the invasive kopions have become irradiated. This poses a threat to the health of the indigenous wildlife and to those who live and work in [Location]. \n\nWe are seeking out a skilled contractor who can cull any irradiated kopions in and around [Location]. Do not accept this contract unless you have the proper weapons and equipment that can reliably function in a radioactive environment. \n\nYour compensation will be adjusted to match the risks associated with this contract.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_storm_H_title_001",
+      "internalName": "HighpointWildernessSpecialists_IrradiatedKopions_RegionA_KillAnimals",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_IrradiatedKopions_RegionA_KillAnimals"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "9d31564a-6d9e-45cf-a512-4f58266be4d3",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_storm_H_title_001",
+        "descriptionRaw": "@Highpoint_KillAnimals_storm_H_desc_001"
+      }
+    },
+    {
+      "variantKey": "d7cd01d3-edf4-468d-a4f3-f14c40f8a733",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "HWS PAF Kill Wm",
+      "titleSource": "internal_fallback",
+      "titleConfidence": "low",
+      "rawName": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_name",
+      "internalName": "HWS_PAF_KillWm",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HWS_PAF_KillWm"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "d7cd01d3-edf4-468d-a4f3-f14c40f8a733",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_name",
+        "descriptionRaw": "@Highpoint_KillAnimals_PAF_Valakkar_Fangs_desc"
+      }
+    },
+    {
+      "variantKey": "0f753484-1914-4770-aa59-25eeb460866b",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Intensive Eradication Effort",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "Native plants and animals near [Location] are on the verge of environmental collapse due to the dramatic population spikes of several invasive species. We’ve been contracted to dramatically reduce the current population of these species to help avoid an environmental collapse. We need a dedicated and highly skilled exterminator to carry out this contract.     \n\nYou can better acquaint yourself with the creatures in question by referencing \"The Guide to Stanton Wildlife\" in your Journal.     \n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_MultiType_H_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimals_Hard_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimals_Hard_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0f753484-1914-4770-aa59-25eeb460866b",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_MultiType_H_title",
+        "descriptionRaw": "@Highpoint_KillAnimals_MultiType_H_desc"
+      }
+    },
+    {
+      "variantKey": "146de300-7fb5-40e0-abd8-f780456ce6c0",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Kopion Culling Request",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve recently received reports from our team in [Location], that a particularly virile pack of kopions are causing a surge in numbers. As a result, their prey is being over hunted, and if left unattended, will ultimately lead to the starvation of the kopion population there.\n\nWe are looking for a skilled contractor to cull this pack of kopions in a swift and efficient manner, assisting with bringing a natural equilibrium back to [Location]. Access to combat equipment, transport, and a familiarity with wild and unpredictable animals are all required for this job.\n\nFor further details on the targeted creatures, please refer to \"The Guide to Stanton Wildlife\" in your Journal.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_PAF_Kopion_name",
+      "internalName": "HWS_PAF_KillKopions",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HWS_PAF_KillKopions"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "146de300-7fb5-40e0-abd8-f780456ce6c0",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_PAF_Kopion_name",
+        "descriptionRaw": "@Highpoint_KillAnimals_PAF_Kopion_desc"
+      }
+    },
+    {
+      "variantKey": "5c0ccaf1-cd37-4090-8e71-f10de0bc9232",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Pest Control",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "There’s a growing [Creature] problem at [Location]. Looking for a contractor to quickly and professionally take care of this infestation issue.  \n\nFor further details on the targeted creature, please refer to \"The Guide to Stanton Wildlife\" in your Journal.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_AtLocation_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimalsAtLocation_Easy_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimalsAtLocation_Easy_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5c0ccaf1-cd37-4090-8e71-f10de0bc9232",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_AtLocation_title",
+        "descriptionRaw": "@Highpoint_KillAnimals_AtLocation_desc"
+      }
+    },
+    {
+      "variantKey": "838e2184-f5f4-4f77-867f-a7747aeb0b53",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Pest Control",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "A client has contacted us about resolving a [Creature] infestation issue before it gets any worse. Several locations around [Location] are currently beset by the creatures. There’s a growing concern that if this goes on for too much longer, then the natural habit will be ravaged beyond repair. Are you available to take care of this issue?\n\nYou can refer to \"The Guide to Stanton Wildlife\" in your Journal for more specific information on the targeted creature.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_AtLocation_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimalsAtLocation_Medium_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimalsAtLocation_Medium_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "838e2184-f5f4-4f77-867f-a7747aeb0b53",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_AtLocation_title",
+        "descriptionRaw": "@Highpoint_KillAnimals_AtLocation_multi_desc"
+      }
+    },
+    {
+      "variantKey": "92d9b411-dd37-4236-9173-b91df52ea713",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Pest Control",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "A client has contacted us about resolving a [Creature] infestation issue before it gets any worse. Several locations around [Location] are currently beset by the creatures. There’s a growing concern that if this goes on for too much longer, then the natural habit will be ravaged beyond repair. Are you available to take care of this issue?\n\nYou can refer to \"The Guide to Stanton Wildlife\" in your Journal for more specific information on the targeted creature.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_AtLocation_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimalsAtLocation_Hard_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimalsAtLocation_Hard_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Not for release"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "92d9b411-dd37-4236-9173-b91df52ea713",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_AtLocation_title",
+        "descriptionRaw": "@Highpoint_KillAnimals_AtLocation_multi_desc"
+      }
+    },
+    {
+      "variantKey": "b7587d9d-2141-4d61-89d6-dd11ca9a96e8",
+      "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+      "displayName": "Reduce Overpopulation",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "We’ve been monitoring a situation at [Location] regarding an uptick in the [Creature] population over the past few months. Our models indicate that if this continues many of the native plants and animals will be adversely affected. It’s imperative that the [Creature] population is reduced before that happens.     \n\nIf you can help, please refer to \"The Guide to Stanton Wildlife\" in your Journal for more specifics on the targeted creature.\n\nBest,\n\nWanda Werkheiser\nContract Manager\nHighpoint Wilderness Specialists",
+      "rawName": "@Highpoint_KillAnimals_OneType_title",
+      "internalName": "HighpointWildernessSpecialists_KillAnimals_Easy_NoRep",
+      "missionType": "Contract",
+      "provider": "Unknown provider",
+      "faction": "Unknown faction",
+      "contractType": "Contract",
+      "reputationScope": {
+        "scopeKey": "unknown-faction:unknown-scope",
+        "displayName": "Standing",
+        "factionKey": "unknown-faction",
+        "factionDisplayName": "Unknown faction",
+        "trackType": "Standing",
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_Unique",
+          "HighpointWildernessSpecialists_KillAnimals_Easy_NoRep"
+        ],
+        "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+      },
+      "missionArchetype": "Contract",
+      "standingRequirement": "No extracted standing requirement",
+      "prerequisiteSummary": "Stanton Star; CrimeStat limited to 2 or below; Prerequisite mission or completion tag",
+      "prerequisites": [
+        {
+          "type": "location",
+          "label": "Stanton Star",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Location"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "680b5e1a-c8a2-4cbe-a356-87a8dc1efab4"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "980871f4-ebd2-425f-ad7c-43d4b3fdc3d6"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Region A",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "exact",
+        "displayName": "Stanton Star",
+        "system": "Stanton",
+        "locationType": "StarMapObject",
+        "sourceRole": "availability",
+        "confidence": "high",
+        "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+        "sourceRefs": [
+          "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+        ],
+        "possibleLocations": [
+          "Stanton Star"
+        ],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "availability / accepted-at",
+            "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+            "resolvedName": "Stanton Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+            "resolvedName": "Region A",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton Star",
+        "Stanton 4",
+        "Stanton 1",
+        "Region A"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Calculated payout",
+          "Completion tag"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "b7587d9d-2141-4d61-89d6-dd11ca9a96e8",
+        "generatorGuid": "ef092d52-1a67-4502-a404-b322ca766f59",
+        "generatorName": "ContractGenerator.HighpointWildernessSpecialists_KillAnimals",
+        "generatorPath": "contracts/contractgenerator/academyofsciences_guild/highpoint wilderness specialists/highpointwildernessspecialists_killanimals.xml",
+        "handlerType": "ContractGeneratorHandler_List",
+        "titleRaw": "@Highpoint_KillAnimals_OneType_title",
+        "descriptionRaw": "@Highpoint_KillAnimal_OneType_desc"
+      }
+    }
+  ]
+}

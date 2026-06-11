@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+  "variant": {
+    "variantKey": "1464ed09-2099-4102-8672-25f764e278d2",
+    "familyKey": "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+    "displayName": "Inmate Maintenance Opportunity",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hello Guests,\n\nWe have recently been alerted that one of our Oxygen Dispensers has suffered a technical error. As you know these kiosks are vital to ensure that you have plenty of oxygen handy while participating in our Work Release Program.\n\nWe are looking for any available guest to reset the kiosk. That should reconnect the kiosk to the network and resolve the issue. The first guest who's able to complete this task will not only be compensated with merits, but also with the satisfaction that they're making the workplace safer for other guests.\n\nThank you.",
+    "rawName": "@RepairOxygenKiosk_Title",
+    "internalName": "RepairO2Kiosk",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Standing",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Standing",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "50835d56-5f0a-4581-a3db-404e50f7ff29|Klescher_Prisoner_Missions",
+        "RepairO2Kiosk"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Contract",
+    "standingRequirement": "No extracted standing requirement",
+    "reputationRequirement": "Klescher Rehabilitation Facilities: Affinity Bad 005 Affinity Good 100 Exalted",
+    "prerequisiteSummary": "Prison Mine Stanton 1b; Klescher Rehabilitation Facilities: Affinity Bad 005 Affinity Good 100 Exalted",
+    "prerequisites": [
+      {
+        "type": "location",
+        "label": "Prison Mine Stanton 1b",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "reputation",
+        "label": "Klescher Rehabilitation Facilities: Affinity Bad 005 Affinity Good 100 Exalted",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Reputation"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Prison Mine Stanton 1b",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "b9b1a547-c415-44cb-826b-6c28cbd0c0bb"
+      ],
+      "possibleLocations": [
+        "Prison Mine Stanton 1b"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "b9b1a547-c415-44cb-826b-6c28cbd0c0bb",
+          "resolvedName": "Prison Mine Stanton 1b",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/prisonmine_stanton1b.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Prison Mine Stanton 1b"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Affinity +100",
+        "3,000 MER"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Affinity +100"
+      ],
+      "credits": "3,000 MER",
+      "creditStatus": "fixed",
+      "creditsDetail": {
+        "status": "fixed",
+        "amount": 3000,
+        "currency": "MER",
+        "max": 5000,
+        "plusBonuses": 0,
+        "confidence": "extracted_fixed",
+        "sourceResultType": "ContractResult_Reward",
+        "sourceRefs": [
+          "contracts/contractgenerator/klescher_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+        "factionDisplayName": "Unknown faction",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "cfe06ba5-968d-4e27-b738-7cc7abfb511f",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "7bb38f6d-3d7a-458a-a430-fe55a64f7743"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "1464ed09-2099-4102-8672-25f764e278d2",
+      "generatorGuid": "50835d56-5f0a-4581-a3db-404e50f7ff29",
+      "generatorName": "ContractGenerator.Klescher_Generator",
+      "generatorPath": "contracts/contractgenerator/klescher_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@RepairOxygenKiosk_Title",
+      "descriptionRaw": "@RepairOxygenKiosk_DescriptionLong"
+    }
+  }
+}

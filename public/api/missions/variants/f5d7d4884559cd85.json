@@ -1,0 +1,236 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_DefendShipNamed",
+  "variant": {
+    "variantKey": "03aa1c79-aef0-4b03-863a-d56baf1b4bae",
+    "familyKey": "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_DefendShipNamed",
+    "displayName": "Yellow Level Contract: Ship Under Attack",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Foxwell is looking for an available combat pilot to provide immediate assistance to a [Ship] under attack over by [Location]. We have not identified the perpetrators in the attack, but have been assured it is a small force.\n\nPlease dispatch quickly and clear out all hostiles. We need the client to make it through this as they haven't paid us yet.\n\nGood luck,\n\nMarcus Clenn\nFoxwell Enforcement\n'Security, Your Way'\n\nFoxwell Enforcement is a bonded security specialist licensed to operate throughout the UEE. We are always looking for new operators to join our family. If you or anyone you know is interested, please reach out to one of our contract representatives.",
+    "rawName": "@foxwell_DefendShip_E_title_001",
+    "internalName": "FoxwellEnforcement_Stanton_DefendShipNamed_E",
+    "missionType": "Contract",
+    "provider": "Unknown provider",
+    "faction": "Unknown faction",
+    "contractType": "Contract",
+    "reputationScope": {
+      "scopeKey": "unknown-faction:unknown-scope",
+      "displayName": "Ship Combat",
+      "factionKey": "unknown-faction",
+      "factionDisplayName": "Unknown faction",
+      "trackType": "Ship Combat",
+      "confidence": "unresolved",
+      "sourceRefs": [
+        "4ea43286-cc88-4d7c-aa7e-d84077893446|FoxwellEnforcement_DefendShipNamed",
+        "FoxwellEnforcement_Stanton_DefendShipNamed_E"
+      ],
+      "unresolvedReason": "No reputationScopeGuid extracted for this mission."
+    },
+    "missionArchetype": "Defend Ship",
+    "standingRequirement": "No extracted standing requirement",
+    "prerequisiteSummary": "CrimeStat limited to 2 or below; Procedural location placeholder; Prerequisite mission or completion tag",
+    "prerequisites": [
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Procedural location placeholder",
+        "confidence": "inferred",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "raw": {
+          "propertyVariableName": "MissionLocation_BP",
+          "propertyExtendedTextToken": "Location",
+          "locationLevelType": "LocalSystem"
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "9d28902d-5467-456b-8e54-18834d204234"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "c667e79d-90c9-4733-95a5-a6b169710c32"
+          ]
+        }
+      },
+      {
+        "type": "unlock",
+        "label": "Prerequisite mission or completion tag",
+        "confidence": "unresolved",
+        "rawType": "ContractPrerequisite_CompletedContractTags",
+        "raw": {
+          "references": [
+            "d57836c0-ada4-4530-a3c9-07aa9b3a7aa8"
+          ]
+        }
+      }
+    ],
+    "pickupLocation": {
+      "status": "unknown",
+      "displayName": "Unknown",
+      "sourceRole": "unknown",
+      "confidence": "low",
+      "reason": "No accepted-at, offer, mission giver, explicit location, or pickup locality ref found.",
+      "sourceRefs": [],
+      "possibleLocations": [],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "procedural region / placeholder",
+          "ref": "MissionLocation_BP",
+          "type": "ContractPrerequisite_LocationProperty",
+          "consideredPickup": false,
+          "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+        }
+      ]
+    },
+    "locations": [],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Blueprint: Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4",
+        "Calculated payout",
+        "Completion tag"
+      ],
+      "blueprintRewards": [
+        "Foxwell Enforcement Generator: Antium Helmet Jet, Antium Core Maroon, Antium Legs Maroon, Antium Helmet Maroon +4"
+      ],
+      "blueprintRewardGroups": [
+        {
+          "poolGuid": "5b74b911-ef2e-4bcd-8767-84abdc6bf6f9",
+          "poolName": "Foxwell Enforcement Generator",
+          "rewardCount": 8,
+          "chanceLabel": "12.5% chance - 1 of 8",
+          "rewards": [
+            {
+              "blueprintGuid": "cdd236fa-56b9-4913-90cf-be7f4e6ca5a7",
+              "displayName": "Antium Helmet Jet",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "197066ae-86df-40a1-a10b-1b927a43cbe7",
+              "displayName": "Antium Core Maroon",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "d68aeaa3-cb28-48ed-8233-a83439e3adad",
+              "displayName": "Antium Legs Maroon",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "0f184cb6-2404-4a12-b12f-54ed9d6997ce",
+              "displayName": "Antium Helmet Maroon",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "46a6c1ed-8109-4cc3-9a82-9cd46337b3e5",
+              "displayName": "Antium Helmet",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "dbecb53a-9eaa-4f11-acd3-54690d502fe9",
+              "displayName": "Antium Arms",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "dafc406f-d828-4904-bbed-4964158c09e3",
+              "displayName": "Antium Core",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            },
+            {
+              "blueprintGuid": "828aaaf9-03fb-4baf-bee5-26cefced3ddd",
+              "displayName": "Antium Legs",
+              "componentType": "armor",
+              "size": null,
+              "grade": null,
+              "chanceLabel": "12.5% chance"
+            }
+          ]
+        }
+      ],
+      "reputationRewards": [],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [],
+    "flags": [],
+    "releaseFlags": [
+      "Release flag not set"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": true
+    },
+    "technical": {
+      "contractId": "03aa1c79-aef0-4b03-863a-d56baf1b4bae",
+      "generatorGuid": "4ea43286-cc88-4d7c-aa7e-d84077893446",
+      "generatorName": "ContractGenerator.FoxwellEnforcement_Generator",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/foxwellenforcement/foxwellenforcement_generator.xml",
+      "handlerType": "ContractGeneratorHandler_List",
+      "titleRaw": "@foxwell_DefendShip_E_title_001",
+      "descriptionRaw": "@foxwell_DefendShip_E_desc_001"
+    }
+  }
+}

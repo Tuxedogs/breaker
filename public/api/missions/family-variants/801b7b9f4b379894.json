@@ -1,0 +1,989 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+  "variants": [
+    {
+      "variantKey": "5673cea0-752a-4c64-bbab-f313a5274cd9",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "displayName": "Patrol Dangerous Sector",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: InterSec has received intelligence that outlaws are planning to launch an attack on a target within the UEE. In an effort to prevent this from happening, we need a contractor to patrol a sector we believe these outlaws are using to prepare for their attack.\n\nOutlaw activity in this sector is higher than normal, so InterSec recommends that you bring backup. When ready, dispatch to the location marker on your HUD and scan the waypoints along the route. Once you've confirmed that the entire sector is clear, the main contractor will receive a bonus of [ScripAmount] MG Scrip. \n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_H_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_Hard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Neutral / 0 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab",
+              "96d993ac-26d9-4763-af2d-ffbd5bc03ed4"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ]
+      },
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9",
+          "Standing +200",
+          "Calculated payout",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "Quartz \"Lumen\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "Testudo Arms Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "Testudo Core Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "Testudo Legs Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "Testudo Helmet Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "Quartz \"Deadfall\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "Testudo Arms Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "Testudo Core Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "Testudo Legs Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "Testudo Helmet Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "Quartz Energy SMG Battery (45 cap)",
+                "componentType": "ammo",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "Testudo Backpack Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "Testudo Backpack Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +200"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ]
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "14",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 200,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "51e63405-693e-4cdd-a140-9dd34de582ff"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "5673cea0-752a-4c64-bbab-f313a5274cd9",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_H_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_H_Desc_001"
+      }
+    },
+    {
+      "variantKey": "c3fa11ea-d56f-4b04-a967-d90b65762f93",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "displayName": "Patrol Vanduul Hunting Ground",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Vanduul\nEquipment Specs: Combat-rated Ships\nBriefing: There's a growing concern that Vanduul hunting parties are pushing further into Nyx. The first line of defense against this encroachment is increased patrols. InterSec has identified a sector that has seen an uptick in Vanduul activity and are looking for someone to patrol the region and provide an update on it.\n\nYou'll begin your patrol at a location marker sent to your HUD and then scan a series of waypoints along a designated route. The Vanduul ships in this sector are highly skilled and aggressive, so InterSec highly recommends that you bring several combat-ready ships along as backup.\n\nInterSec understands the immense danger you'll be under on this patrol, so we'll send a special bonus of [ScripAmount] MG Scrip to the main contractor once the sector is clear.      \n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_S_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_Super",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab",
+              "96d993ac-26d9-4763-af2d-ffbd5bc03ed4"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ]
+      },
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9",
+          "Standing +300",
+          "Calculated payout",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "Quartz \"Lumen\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "Testudo Arms Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "Testudo Core Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "Testudo Legs Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "Testudo Helmet Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "Quartz \"Deadfall\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "Testudo Arms Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "Testudo Core Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "Testudo Legs Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "Testudo Helmet Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "Quartz Energy SMG Battery (45 cap)",
+                "componentType": "ammo",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "Testudo Backpack Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "Testudo Backpack Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +300"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ]
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "24",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 300,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "65e015b0-afb2-4316-9eb5-9b0652f221cd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "c3fa11ea-d56f-4b04-a967-d90b65762f93",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_S_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_S_Desc_001"
+      }
+    },
+    {
+      "variantKey": "afbd5caf-585e-4f1e-b357-afea66248852",
+      "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
+      "displayName": "Patrol to Prevent Possible Attack",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "MISSION SPECS\n\nArea of Operation: Nyx System\nHostile Forces: Outlaws\nEquipment Specs: Combat-rated Ships\nBriefing: InterSec has been tracking increased outlaw activity in certain sectors of the system. This activity in conjunction with other intelligence leads us to believe that outlaws are planning an attack on elements traveling from the UEE. We're aiming to patrol these sectors and disrupt any plans before they can be put into action.\n\nCurrently, we need someone who can help patrol a highly dangerous sector. Once you've accepted the mission, you can proceed to the location marker on your HUD. From there, we'll send you along a specific route with additional waypoints to scan. Complete the patrol and we'll send the main contractor a bonus of [ScripAmount] MG Scrip.\n\nDue to the high probability of attack and general threat level of local outlaws, we recommend recruiting trusted wingmen to provide combat support.\n\nRespectfully,\n\nDeacon Tobin\nOperations Manager\nInterSec Defense Solutions\n\nThis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. All operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable.",
+      "rawName": "@InterSec_SecurityPatrol_VH_Title_001",
+      "internalName": "InterSec_Patrol_Nyx_VeryHard",
+      "missionType": "CareerContract",
+      "provider": "InterSec Defense Solutions",
+      "faction": "InterSec Defense Solutions",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+        "factionDisplayName": "InterSec Defense Solutions",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Mercenary",
+      "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Nyx; CrimeStat limited to 2 or below",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "locality",
+          "label": "Nyx",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "location",
+          "label": "Procedural location placeholder",
+          "confidence": "inferred",
+          "rawType": "ContractPrerequisite_LocationProperty",
+          "raw": {
+            "propertyVariableName": "InvisibleTimer_MissionLocation_BP",
+            "locationLevelType": "LocalSystem"
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "893d5cad-2a8c-4c27-bdbe-98f05603bf5a"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab"
+            ]
+          }
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "aee09f10-3192-4de8-98e4-109bc5767fab",
+              "96d993ac-26d9-4763-af2d-ffbd5bc03ed4"
+            ]
+          }
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "system": "Nyx",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "resolvedName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "procedural region / placeholder",
+            "ref": "InvisibleTimer_MissionLocation_BP",
+            "type": "ContractPrerequisite_LocationProperty",
+            "consideredPickup": false,
+            "reason": "Location property shapes generated objective/placeholders and is not proven to control pickup."
+          }
+        ]
+      },
+      "locations": [
+        "Nyx"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Blueprint: Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9",
+          "Standing +250",
+          "Calculated payout",
+          "Item reward: MG Scrip"
+        ],
+        "blueprintRewards": [
+          "Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9"
+        ],
+        "blueprintRewardGroups": [
+          {
+            "poolGuid": "1fdd6657-5947-4f64-ab2b-3b001d88f1f7",
+            "poolName": "Inter Sec Patrol",
+            "rewardCount": 13,
+            "chanceLabel": "7.69% chance - 1 of 13",
+            "rewards": [
+              {
+                "blueprintGuid": "4acc160d-9b38-40df-8b03-24074b9e2aaf",
+                "displayName": "Quartz \"Lumen\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "afd1907d-fdaa-454e-85b0-2d240df18e98",
+                "displayName": "Testudo Arms Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "1c9bbc0c-843f-47c9-8f11-73ac3ad8db62",
+                "displayName": "Testudo Core Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "2864d252-0e9f-461f-b81e-9c9eadb6a5a2",
+                "displayName": "Testudo Legs Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "9fd63c83-089a-4914-91da-9f705517aee2",
+                "displayName": "Testudo Helmet Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "85831071-5a5d-49d3-a7ea-05354d95f8eb",
+                "displayName": "Quartz \"Deadfall\" Energy SMG",
+                "componentType": "weapons",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "bdba2cf6-6aac-44a4-a265-8f0bb977df34",
+                "displayName": "Testudo Arms Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "7bbbfb57-16a8-49d7-9ae3-cc1381fadf08",
+                "displayName": "Testudo Core Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "a62a4480-1c78-4418-b972-49eae09e9877",
+                "displayName": "Testudo Legs Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "c1d12ada-3d8f-4248-a86a-20fa6a4f82c1",
+                "displayName": "Testudo Helmet Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "eed8ab0d-ad9c-41e2-996f-14cdd263e100",
+                "displayName": "Quartz Energy SMG Battery (45 cap)",
+                "componentType": "ammo",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "cd7f1e71-fa55-4c5a-b794-1ca570561620",
+                "displayName": "Testudo Backpack Turfwar",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              },
+              {
+                "blueprintGuid": "d6a9f8c5-c859-48ae-9e68-163307e53100",
+                "displayName": "Testudo Backpack Nightveil",
+                "componentType": "armor",
+                "size": null,
+                "grade": null,
+                "chanceLabel": "7.69% chance"
+              }
+            ]
+          }
+        ],
+        "reputationRewards": [
+          "Standing +250"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+          ]
+        },
+        "itemRewards": [
+          {
+            "entityClass": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "amount": "18",
+            "displayName": "MG Scrip",
+            "itemKey": "0df18692-2cc7-4d9d-af85-95b8a7a45419",
+            "deliveryTarget": "player_home_location",
+            "ownerOnly": true,
+            "sourceRefs": [
+              "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml"
+            ],
+            "status": "resolved",
+            "confidence": "resolved_entityClass"
+          }
+        ],
+        "itemRewardStatus": "resolved",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+          "factionDisplayName": "InterSec Defense Solutions",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 250,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "a9ab3e4f-30a3-4816-a1dd-4df51fd6678c",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "7b82e00e-07eb-4b56-990c-b23399673504"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "afbd5caf-585e-4f1e-b357-afea66248852",
+        "generatorGuid": "9661de97-1975-4484-8406-ac14ec6a98ae",
+        "generatorName": "ContractGenerator.InterSec_Patrol",
+        "generatorPath": "contracts/contractgenerator/mercenary_guild/intersecdefensesolutions/intersec_patrol.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@InterSec_SecurityPatrol_VH_Title_001",
+        "descriptionRaw": "@InterSec_SecurityPatrol_VH_desc_001"
+      }
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+  "variant": {
+    "variantKey": "72effcf5-7f52-4150-bb41-90ea25270453",
+    "familyKey": "a1f72137-20f1-4d15-a15f-5ac6b97649a0|CFP_RetrieveCargo",
+    "displayName": "Reclaim Stolen Cargo",
+    "titleSource": "localized_clean",
+    "titleConfidence": "high",
+    "briefing": "Hey,\n\nOutlaws used a fake distress beacon to lure one of our cargo ships into a trap and steal the supplies onboard. Thankfully, we placed trackers in the cargo containers, because the stuff is valuable mining and construction materials needed at [Destination]. \n\nLooks like the goods ended up at [Location]. Need someone to head there, reclaim the supplies, and take them to [Destination]. Doubt they’ll make it easy for you, but if it helps, they didn’t show any mercy to our ship crew. Reclaiming those supplies will not only help the CFP but ensure that our crew didn’t die in vain.   \n\nAlso, to make your life easier, I'd make sure you have a handheld tractor beam with you. \n\nThanks,\n\nLima Endicott\nLead Dispatcher\nCitizens for Prosperity",
+    "rawName": "@CFP_RetrieveCargo_CrimBase_M_title_001",
+    "internalName": "CFP_Pyro_RegionD_CrimBase_MRT_RetrieveCargo",
+    "missionType": "CareerContract",
+    "provider": "Citizens For Prosperity",
+    "faction": "Citizens For Prosperity",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
+      "rawName": "SReputationScopeParams.FactionReputationScope",
+      "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+      "factionDisplayName": "Citizens For Prosperity",
+      "trackType": "Standing",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
+    "missionArchetype": "Cargo",
+    "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+    "prerequisiteSummary": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep; Region A; Region B",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "locality",
+        "label": "Region A",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Region B",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Region C",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      },
+      {
+        "type": "locality",
+        "label": "Region D",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "system_scope",
+      "displayName": "Pyro system",
+      "system": "Pyro",
+      "locationType": "MissionLocality procedural region scope",
+      "localityPool": "Pyro StarLocality",
+      "regions": [
+        "Region A",
+        "Region B",
+        "Region C",
+        "Region D"
+      ],
+      "specificPickup": null,
+      "sourceRole": "system_scope",
+      "confidence": "partial",
+      "reason": "Procedural region scope. Specific pickup generated at mission offer.",
+      "sourceRefs": [
+        "9d323b1b-5805-4ddd-8641-563246d55279",
+        "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+        "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+        "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720"
+      ],
+      "possibleLocations": [
+        "Region A",
+        "Region B",
+        "Region C",
+        "Region D"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "9d323b1b-5805-4ddd-8641-563246d55279",
+          "resolvedName": "Region A",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiona.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "a3b085f5-9a4f-4681-b2d0-55b072dc0519",
+          "resolvedName": "Region B",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionb.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "resolvedName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "22d7b6c5-a09d-4414-82bf-7dfb9f8ca720",
+          "resolvedName": "Region D",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regiond.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Region A",
+      "Region B",
+      "Region C",
+      "Region D"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Standing +150",
+        "Affinity +100",
+        "Calculated payout"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Standing +150",
+        "Affinity +100"
+      ],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
+        "amount": 150,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "7f8f04c4-92bd-48a0-8017-b922c2404849"
+        ]
+      },
+      {
+        "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+        "factionDisplayName": "Citizens For Prosperity",
+        "scopeKey": "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+        "scopeDisplayName": "Affinity",
+        "amount": 100,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
+          "f340b011-c40c-4229-b9c1-ce6a3eb1df77",
+          "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "unknown",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "72effcf5-7f52-4150-bb41-90ea25270453",
+      "generatorGuid": "a1f72137-20f1-4d15-a15f-5ac6b97649a0",
+      "generatorName": "ContractGenerator.CitizensForProsperity_RecoverCargo",
+      "generatorPath": "contracts/contractgenerator/mercenary_guild/citizensforprosperity/citizensforprosperity_recovercargo.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@CFP_RetrieveCargo_CrimBase_M_title_001",
+      "descriptionRaw": "@CFP_RetrieveCargo_CrimBase_M_desc_001"
+    }
+  }
+}

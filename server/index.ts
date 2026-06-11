@@ -2,6 +2,7 @@ import http from "node:http";
 import { fileURLToPath } from "node:url";
 import { handleBuildQueueRoute } from "./routes/buildQueue.routes";
 import { handleFittingRoute } from "./routes/fitting.routes";
+import { handleMissionsRoute } from "./routes/missions.routes";
 import { handleRecommenderRoute } from "./routes/recommender.routes";
 import { handleSavedBlueprintsRoute } from "../src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "../src/server/user/buildQueueRoute";
@@ -29,6 +30,7 @@ export function createServer() {
         : url === "/api/user/build-queue"
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleFittingRoute(request.method ?? "GET", rawUrl, body) ??
+          await handleMissionsRoute(request.method ?? "GET", rawUrl) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {

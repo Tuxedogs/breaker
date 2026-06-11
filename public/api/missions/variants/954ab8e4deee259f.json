@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+  "variant": {
+    "variantKey": "400d4c85-4d6b-2f04-6226-0e1a35319caa",
+    "familyKey": "532030c6-85e4-4bde-9d22-51ecd7895dc1|TarPits_Misc_Career",
+    "displayName": "Scrap",
+    "titleSource": "token_template_cleaned",
+    "titleConfidence": "medium",
+    "briefing": "I ain’t got time to waste so I’ll get straight to the point - [TargetName] needs to be dead and I want you to do it. You can find them over near the [Location] at [Location]. They won’t be alone, but don’t get distracted by those other useless piles. You only get paid for taking out [TargetName].",
+    "rawName": "@Tarpits_assassinate_dc_title_001",
+    "internalName": "TarPits_Stanton1_S1ComplexB_Warehouse_EliminateSpecific",
+    "missionType": "CareerContract",
+    "provider": "Tar Pits",
+    "faction": "Tar Pits",
+    "contractType": "CareerContract",
+    "reputationScope": {
+      "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+      "displayName": "Hired Muscle",
+      "rawName": "SReputationScopeParams.ReputationScope_HiredMuscle",
+      "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+      "factionDisplayName": "Tar Pits",
+      "trackType": "Hired Muscle",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "e2d3fa61-2727-4f45-91c1-b345976fa22d"
+      ]
+    },
+    "missionArchetype": "Salvage",
+    "standingRequirement": "Applicant / 0 rep to Rank I / 1 rep",
+    "prerequisiteSummary": "Applicant / 0 rep to Rank I / 1 rep; CrimeStat limited to 2 or below; Stanton Star",
+    "prerequisites": [
+      {
+        "type": "standing",
+        "label": "Applicant / 0 rep to Rank I / 1 rep",
+        "confidence": "resolved",
+        "rawType": "standingRange"
+      },
+      {
+        "type": "crimeStat",
+        "label": "CrimeStat limited to 2 or below",
+        "confidence": "explicit",
+        "rawType": "ContractPrerequisite_CrimeStat",
+        "raw": {
+          "minCrimeStat": 0,
+          "maxCrimeStat": 2
+        }
+      },
+      {
+        "type": "location",
+        "label": "Stanton Star",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Location"
+      },
+      {
+        "type": "locality",
+        "label": "Stanton 1",
+        "confidence": "resolved",
+        "rawType": "ContractPrerequisite_Locality"
+      }
+    ],
+    "pickupLocation": {
+      "status": "exact",
+      "displayName": "Stanton Star",
+      "system": "Stanton",
+      "locationType": "StarMapObject",
+      "sourceRole": "availability",
+      "confidence": "high",
+      "reason": "Resolved from ContractPrerequisite_Location.locationAvailable, which gates contract availability.",
+      "sourceRefs": [
+        "34ff378f-faee-47bb-b5fe-f505e665c5ca"
+      ],
+      "possibleLocations": [
+        "Stanton Star"
+      ],
+      "unresolvedRefs": [],
+      "technicalRefs": [
+        {
+          "role": "availability / accepted-at",
+          "ref": "34ff378f-faee-47bb-b5fe-f505e665c5ca",
+          "resolvedName": "Stanton Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stantonstar/starmapobject.stantonstar.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        },
+        {
+          "role": "locality pool",
+          "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "resolvedName": "Stanton 1",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+          "consideredPickup": true,
+          "reason": "Contract prerequisite gates mission availability."
+        }
+      ]
+    },
+    "locations": [
+      "Stanton Star",
+      "Stanton 1"
+    ],
+    "unresolvedLocationTokens": [],
+    "rewards": {
+      "summary": [
+        "Hired Muscle +1,000",
+        "Calculated payout"
+      ],
+      "blueprintRewards": [],
+      "blueprintRewardGroups": [],
+      "reputationRewards": [
+        "Hired Muscle +1,000"
+      ],
+      "credits": "Calculated payout",
+      "creditStatus": "calculated",
+      "creditsDetail": {
+        "status": "calculated",
+        "displayText": "Calculated payout",
+        "confidence": "calculated_unresolved",
+        "sourceResultType": "ContractResult_CalculatedReward",
+        "unresolvedReason": "Calculated reward formula not resolved",
+        "attributes": {},
+        "sourceRefs": [
+          "contracts/contractgenerator/tarpits_generator.xml"
+        ]
+      },
+      "itemRewards": [],
+      "itemRewardStatus": "none",
+      "unresolvedRewardTokens": []
+    },
+    "rewardedReputationPaths": [
+      {
+        "factionKey": "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+        "factionDisplayName": "Tar Pits",
+        "scopeKey": "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+        "scopeDisplayName": "Hired Muscle",
+        "amount": 1000,
+        "confidence": "resolved",
+        "sourceRefs": [
+          "5ebbd81d-82cb-4534-81fc-db7a2c386f70",
+          "e2d3fa61-2727-4f45-91c1-b345976fa22d",
+          "1335b737-6188-4c21-8923-98a74bcd3071"
+        ]
+      }
+    ],
+    "flags": [],
+    "releaseFlags": [
+      "Not for release"
+    ],
+    "crimeStatRequirement": "bounded",
+    "lawfulClassification": "unknown",
+    "lawfulConfidence": "unknown",
+    "confidence": {
+      "hasUnresolvedLocation": false,
+      "hasUnresolvedRewards": false,
+      "hasUnresolvedPrerequisites": false
+    },
+    "technical": {
+      "contractId": "400d4c85-4d6b-2f04-6226-0e1a35319caa",
+      "generatorGuid": "532030c6-85e4-4bde-9d22-51ecd7895dc1",
+      "generatorName": "ContractGenerator.TarPits_Generator",
+      "generatorPath": "contracts/contractgenerator/tarpits_generator.xml",
+      "handlerType": "ContractGeneratorHandler_Career",
+      "titleRaw": "@Tarpits_assassinate_dc_title_001",
+      "descriptionRaw": "@Tarpits_assassinate_dc_desc_001"
+    }
+  }
+}

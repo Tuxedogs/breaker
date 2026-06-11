@@ -1,0 +1,3164 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
+  "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+  "variants": [
+    {
+      "variantKey": "0eddd66a-e377-443a-a83d-b3f9f4087e54",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank1_SmallQuantity_Beradom",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "0eddd66a-e377-443a-a83d-b3f9f4087e54",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Desc_001"
+      }
+    },
+    {
+      "variantKey": "1e1f3cfb-ccd0-4601-91dd-1e5bbe7d9058",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank1_SmallQuantity_Feynmaline",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1e1f3cfb-ccd0-4601-91dd-1e5bbe7d9058",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Desc_001"
+      }
+    },
+    {
+      "variantKey": "1e5e14a6-c015-4c1b-843d-275fbedee022",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank1_SmallQuantity_Glacosite",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "1e5e14a6-c015-4c1b-843d-275fbedee022",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Desc_001"
+      }
+    },
+    {
+      "variantKey": "3d3b9d80-bfab-45c6-8e50-b278b737d044",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank1_SmallQuantity_Beradom",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "3d3b9d80-bfab-45c6-8e50-b278b737d044",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Desc_001"
+      }
+    },
+    {
+      "variantKey": "90b70229-3874-48fa-91d9-a73268237752",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n~[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Pyro_Rank1_SmallQuantity_Feynmaline",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "90b70229-3874-48fa-91d9-a73268237752",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Pyro_E_DiscoverPlanetary_Desc_001"
+      }
+    },
+    {
+      "variantKey": "cd343fff-3ece-447c-ab17-2670f75a6896",
+      "familyKey": "ff82ebbd-9da6-4da1-8929-529ddbe440c1|Shubin_RG_GroundMining_Rank1",
+      "displayName": "Small Purchase Order: Vehicle Mined Ore",
+      "titleSource": "localized_clean",
+      "titleConfidence": "high",
+      "briefing": "POSTING: Purchase Order\nLOCATION: [System] \n\nTERMS*: \nDue to changes in our sourcing pipeline, Shubin Interstellar is currently looking to purchase a variety of materials from independent miners operating in the area. While selling at a trade hub may net you a more competitive price than fulfilling our order, many miners find that strengthening their ties to Shubin to be a wise long-term investment for their career.\n\n[Hint_Location] For a comprehensive list of where to find these minerals, consult Mining Fundamentals #2: Where to Mine in your mobiGlas Journal. While you're there, feel free to read the first part Mining Fundamentals #1: Basic Overview if you want a refresher on how to get the materials.\n\nSince this is a purchase order and not a mining contract, you are expected to provide your own equipment, such as a [Hint_Tool].\n\nOnce you’re ready to sell us the required materials, deposit them in the freight elevator located at [Destination].\n\n*By accepting this contract you are assuming any and all risks associated with the work outlined herein and in no way can Shubin Interstellar be held accountable for any damages accrued during the duration of the contract.",
+      "rawName": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+      "internalName": "Shubin_RG_Discovery_GroundMine_Stanton_Rank1_SmallQuantity_Glacosite",
+      "missionType": "Ground Vehicle Mining",
+      "provider": "Shubin Interstellar",
+      "faction": "Shubin Interstellar",
+      "contractType": "CareerContract",
+      "reputationScope": {
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "displayName": "Standing",
+        "rawName": "SReputationScopeParams.FactionReputationScope",
+        "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+        "factionDisplayName": "Shubin Interstellar",
+        "trackType": "Standing",
+        "confidence": "resolved",
+        "sourceRefs": [
+          "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+        ]
+      },
+      "missionArchetype": "Ground Vehicle Mining",
+      "standingRequirement": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+      "prerequisiteSummary": "Jr. Contractor / 800 rep to Contractor / 2,200 rep; CrimeStat limited to 2 or below; Stanton 2",
+      "prerequisites": [
+        {
+          "type": "standing",
+          "label": "Jr. Contractor / 800 rep to Contractor / 2,200 rep",
+          "confidence": "resolved",
+          "rawType": "standingRange"
+        },
+        {
+          "type": "crimeStat",
+          "label": "CrimeStat limited to 2 or below",
+          "confidence": "explicit",
+          "rawType": "ContractPrerequisite_CrimeStat",
+          "raw": {
+            "minCrimeStat": 0,
+            "maxCrimeStat": 2
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 4",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Stanton 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 2",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "unlock",
+          "label": "Prerequisite mission or completion tag",
+          "confidence": "unresolved",
+          "rawType": "ContractPrerequisite_CompletedContractTags",
+          "raw": {
+            "references": [
+              "9bbb0de3-76b0-4021-a3b2-fbd236e6b136"
+            ]
+          }
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 3",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 5",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 6",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        },
+        {
+          "type": "locality",
+          "label": "Pyro 1",
+          "confidence": "resolved",
+          "rawType": "ContractPrerequisite_Locality"
+        }
+      ],
+      "pickupLocation": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +6",
+        "system": "Stanton, Pyro",
+        "locationType": "MissionLocality",
+        "sourceRole": "locality_pool",
+        "confidence": "medium",
+        "reason": "Resolved from ContractPrerequisite_Locality.localityAvailable; exact child pickup locations are generated by the locality pool.",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "7a2e709c-042a-4c46-b776-0c66a587af4f",
+          "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+          "9a5db783-28de-42fc-97b8-4e9adb34d561",
+          "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+          "de936c42-60ae-4dd7-9324-081a533139a6"
+        ],
+        "possibleLocations": [],
+        "unresolvedRefs": [],
+        "technicalRefs": [
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "7a2e709c-042a-4c46-b776-0c66a587af4f",
+            "resolvedName": "Pyro 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "fcfb7582-5fbe-480a-98af-de0e926d21a6",
+            "resolvedName": "Pyro 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "9a5db783-28de-42fc-97b8-4e9adb34d561",
+            "resolvedName": "Pyro 5",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro5.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "bf833f5a-6cea-4446-817f-d02f61ae3a15",
+            "resolvedName": "Pyro 6",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro6.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "de936c42-60ae-4dd7-9324-081a533139a6",
+            "resolvedName": "Pyro 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "resolvedName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "resolvedName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "resolvedName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          },
+          {
+            "role": "locality pool",
+            "ref": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "resolvedName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "consideredPickup": true,
+            "reason": "Contract prerequisite gates mission availability."
+          }
+        ]
+      },
+      "locations": [
+        "Stanton 2",
+        "Stanton 3",
+        "Stanton 4",
+        "Stanton 1",
+        "Pyro 2",
+        "Pyro 3",
+        "Pyro 5",
+        "Pyro 6",
+        "Pyro 1"
+      ],
+      "unresolvedLocationTokens": [],
+      "rewards": {
+        "summary": [
+          "Standing +100",
+          "Calculated payout"
+        ],
+        "blueprintRewards": [],
+        "blueprintRewardGroups": [],
+        "reputationRewards": [
+          "Standing +100"
+        ],
+        "credits": "Calculated payout",
+        "creditStatus": "calculated",
+        "creditsDetail": {
+          "status": "calculated",
+          "displayText": "Calculated payout",
+          "confidence": "calculated_unresolved",
+          "sourceResultType": "ContractResult_CalculatedReward",
+          "unresolvedReason": "Calculated reward formula not resolved",
+          "attributes": {},
+          "sourceRefs": [
+            "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml"
+          ]
+        },
+        "itemRewards": [],
+        "itemRewardStatus": "none",
+        "unresolvedRewardTokens": []
+      },
+      "rewardedReputationPaths": [
+        {
+          "factionKey": "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+          "factionDisplayName": "Shubin Interstellar",
+          "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+          "scopeDisplayName": "Standing",
+          "amount": 100,
+          "confidence": "resolved",
+          "sourceRefs": [
+            "e4527dd7-f0eb-4342-afe8-5ded1fe428df",
+            "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+            "a13ab3bd-b4c3-4b87-88a2-8fb84e7179bd"
+          ]
+        }
+      ],
+      "flags": [],
+      "releaseFlags": [
+        "Release flag not set"
+      ],
+      "crimeStatRequirement": "bounded",
+      "lawfulClassification": "unknown",
+      "lawfulConfidence": "unknown",
+      "confidence": {
+        "hasUnresolvedLocation": false,
+        "hasUnresolvedRewards": false,
+        "hasUnresolvedPrerequisites": true
+      },
+      "technical": {
+        "contractId": "cd343fff-3ece-447c-ab17-2670f75a6896",
+        "generatorGuid": "ff82ebbd-9da6-4da1-8929-529ddbe440c1",
+        "generatorName": "ContractGenerator.Shubin_ResourceGathering_GroundMining",
+        "generatorPath": "contracts/contractgenerator/unitedresourceworkers_guild/shubin interstellar/shubin_resourcegathering_groundmining.xml",
+        "handlerType": "ContractGeneratorHandler_Career",
+        "titleRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Title_001",
+        "descriptionRaw": "@Shubin_Industrial_GroundVehicle_Stanton_E_DiscoverPlanetary_Desc_001"
+      }
+    }
+  ]
+}
