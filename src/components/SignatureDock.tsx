@@ -388,7 +388,7 @@ export default function SignatureDock() {
       title="Move Signature Dock"
       onPointerDown={onDrag}
     >
-      <span aria-hidden="true">::</span>
+      <span aria-hidden="true">:::</span>
     </button>
   );
 

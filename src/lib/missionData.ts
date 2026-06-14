@@ -111,6 +111,11 @@ export type MissionReputationScopeView = {
 export type MissionVariantView = {
   variantKey: string;
   familyKey: string;
+  conceptKey?: string;
+  tierKey?: string;
+  tierLabel?: string;
+  isIntro?: boolean;
+  specificityBadges?: string[];
   displayName: string;
   titleSource: MissionTitleSource;
   titleConfidence: MissionTitleConfidence;
@@ -233,9 +238,11 @@ export type MissionBrowserCatalog = {
   families: MissionFamilyView[];
   variants: MissionVariantView[];
   familiesByKey?: Record<string, MissionFamilyView>;
+  conceptsByKey?: Record<string, MissionConceptView>;
   familyDetailFiles?: Record<string, string>;
   familyVariantFiles?: Record<string, string>;
   variantDetailFiles?: Record<string, string>;
+  conceptFamilyVariantFiles?: Record<string, string[]>;
   unresolvedSummary?: {
     unresolvedLocationCount: number;
     unresolvedRewardCount: number;
@@ -247,9 +254,13 @@ export type MissionBrowserCatalog = {
     extractionReport: string;
     unresolvedReport: string;
     legacyCombinedCatalog: string;
+    conceptReport?: string;
+    conceptCatalog?: string;
+    categoryReport?: string;
   };
   filtersMeta?: MissionBrowserFiltersMeta;
   missionBrowseGroups: MissionBrowseGroupView[];
+  browseViews?: MissionBrowseViews;
 };
 
 export type MissionBrowserFilterOption = {
@@ -263,6 +274,7 @@ export type MissionBrowserFiltersMeta = {
   factions: MissionBrowserFilterOption[];
   reputationScopes: MissionBrowserFilterOption[];
   archetypes: MissionBrowserFilterOption[];
+  displayCategories?: MissionBrowserFilterOption[];
   rewardTypes: MissionBrowserFilterOption[];
   pickupSystems: MissionBrowserFilterOption[];
   confidenceStates: MissionBrowserFilterOption[];
@@ -290,6 +302,8 @@ export type MissionBrowseGroupView = {
     displayName: string;
     confidence: MissionReputationScopeView["confidence"];
     trackType: string;
+    conceptKeys?: string[];
+    familyKeys?: string[];
     missionArchetypes: Array<{
       archetypeKey: string;
       displayName: string;
@@ -300,6 +314,58 @@ export type MissionBrowseGroupView = {
       unresolvedCount: number;
     }>;
   }>;
+};
+
+export type MissionConceptView = {
+  conceptKey: string;
+  displayName: string;
+  activityKey: string;
+  displayCategory: {
+    version: 1 | 2;
+    key: string;
+    label: string;
+    confidence: "resolved" | "inferred" | "unresolved";
+    source: "archetype" | "activity" | "combined" | "fallback";
+    evidence: string[];
+  };
+  displaySubcategories: string[];
+  factionKey: string;
+  factionDisplayName: string;
+  reputationScope: MissionReputationScopeView;
+  familyKeys: string[];
+  variantKeys: string[];
+  variantCount: number;
+  archetypes: string[];
+  specificityBadges: string[];
+  rewardedReputationPaths: MissionRewardedReputationPathView[];
+  pickupCoverage: Array<{
+    status: MissionPickupLocationView["status"];
+    displayName: string;
+    system?: string;
+    localityPool?: string;
+    variantCount: number;
+  }>;
+  tierSummaries: Array<{
+    tierKey: string;
+    tierLabel: string;
+    variantCount: number;
+  }>;
+  groupingConfidence: "strong" | "partial" | "unresolved";
+  groupingEvidence: string[];
+  familyVariantFiles: string[];
+  mixedRewardPaths: boolean;
+};
+
+export type MissionBrowseViews = {
+  full: {
+    categories: Array<{ categoryKey: string; displayName: string; conceptKeys: string[] }>;
+  };
+  factions: Array<{
+    factionKey: string;
+    factionDisplayName: string;
+    categories: Array<{ categoryKey: string; displayName: string; conceptKeys: string[] }>;
+  }>;
+  reputation: MissionBrowseGroupView[];
 };
 
 export type MissionFamilyDetailPayload = {
@@ -368,15 +434,28 @@ const missionDataPromises = new Map<string, Promise<MissionBrowserCatalog>>();
 const familyDetailPromises = new Map<string, Promise<MissionFamilyDetailPayload>>();
 const familyVariantPromises = new Map<string, Promise<MissionVariantView[]>>();
 const variantDetailPromises = new Map<string, Promise<MissionVariantView>>();
+const jsonPromises = new Map<string, Promise<unknown>>();
 
-async function fetchJson<T>(path: string, label: string): Promise<T> {
-  const response = await fetch(apiUrl(path));
-  const data = await parseJsonResponse<T>(response, {
-    label,
-    url: response.url,
-  });
-  if (!response.ok) throw new Error(`${label} unavailable: ${response.status}`);
-  return data;
+function fetchJson<T>(path: string, label: string): Promise<T> {
+  const url = apiUrl(path);
+  const cached = jsonPromises.get(url);
+  if (cached) return cached as Promise<T>;
+
+  const request = fetch(url)
+    .then(async (response) => {
+      const data = await parseJsonResponse<T>(response, {
+        label,
+        url: response.url,
+      });
+      if (!response.ok) throw new Error(`${label} unavailable: ${response.status}`);
+      return data;
+    })
+    .catch((error: unknown) => {
+      jsonPromises.delete(url);
+      throw error;
+    });
+  jsonPromises.set(url, request);
+  return request;
 }
 
 function toBrowserCatalog(data: MissionBrowserCatalog): MissionBrowserCatalog {
@@ -451,12 +530,19 @@ function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBro
     return true;
   });
   const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
+  const visibleConceptKeys = new Set(
+    Object.values(catalog.conceptsByKey ?? {})
+      .filter((concept) => concept.familyKeys.some((familyKey) => visibleFamilyKeys.has(familyKey)))
+      .map((concept) => concept.conceptKey)
+  );
   const missionBrowseGroups = catalog.missionBrowseGroups
     .map((group) => ({
       ...group,
       reputationScopes: group.reputationScopes
         .map((scope) => ({
           ...scope,
+          conceptKeys: scope.conceptKeys?.filter((conceptKey) => visibleConceptKeys.has(conceptKey)),
+          familyKeys: scope.familyKeys?.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
           missionArchetypes: scope.missionArchetypes
             .map((archetype) => ({
               ...archetype,
@@ -467,6 +553,22 @@ function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBro
         .filter((scope) => scope.missionArchetypes.length > 0),
     }))
     .filter((group) => group.reputationScopes.length > 0);
+  const browseViews = catalog.browseViews ? {
+    full: {
+      categories: catalog.browseViews.full.categories
+        .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
+        .filter((category) => category.conceptKeys.length > 0),
+    },
+    factions: catalog.browseViews.factions
+      .map((faction) => ({
+        ...faction,
+        categories: faction.categories
+          .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
+          .filter((category) => category.conceptKeys.length > 0),
+      }))
+      .filter((faction) => faction.categories.length > 0),
+    reputation: missionBrowseGroups,
+  } : undefined;
   const referencedFamilyKeys = new Set(
     missionBrowseGroups.flatMap((group) =>
       group.reputationScopes.flatMap((scope) => scope.missionArchetypes.flatMap((archetype) => archetype.familyKeys))
@@ -477,24 +579,33 @@ function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBro
     ...catalog,
     families,
     familiesByKey: Object.fromEntries(families.map((family) => [family.familyKey, family])),
+    conceptsByKey: catalog.conceptsByKey
+      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, catalog.conceptsByKey?.[conceptKey]]).filter((entry): entry is [string, MissionConceptView] => Boolean(entry[1])))
+      : undefined,
+    conceptFamilyVariantFiles: catalog.conceptFamilyVariantFiles
+      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, catalog.conceptFamilyVariantFiles?.[conceptKey]]).filter((entry): entry is [string, string[]] => Boolean(entry[1])))
+      : undefined,
     missionBrowseGroups,
+    browseViews,
   };
 }
 
 export function loadMissionData(filters: MissionBrowserFilters = {}): Promise<MissionBrowserCatalog> {
   const key = filterKey(filters);
   if (!missionDataPromises.has(key)) {
-    missionDataPromises.set(
-      key,
-      fetchJson<MissionBrowserCatalog>(browserPath(filters), "mission browser index")
+    const request = fetchJson<MissionBrowserCatalog>(browserPath(filters), "mission browser index")
         .then(toBrowserCatalog)
         .catch(() =>
           fetchJson<MissionBrowserCatalog>(staticIndexPath(filters), "mission browser index")
             .then(toBrowserCatalog)
             .then((catalog) => applyBrowserFilters(catalog, filters))
             .catch(() => fetchJson<MissionBrowserCatalog>("/api/missions/missions.json", "mission browser catalog").then(toBrowserCatalog).then((catalog) => applyBrowserFilters(catalog, filters)))
-        ),
-    );
+        )
+        .catch((error: unknown) => {
+          missionDataPromises.delete(key);
+          throw error;
+        });
+    missionDataPromises.set(key, request);
   }
   return missionDataPromises.get(key)!;
 }
@@ -530,6 +641,13 @@ export async function loadMissionFamilyVariants(familyKey: string): Promise<Miss
     );
   }
   return familyVariantPromises.get(familyKey)!;
+}
+
+export async function loadMissionConceptVariants(concept: MissionConceptView): Promise<MissionVariantView[]> {
+  const variants = (await Promise.all(concept.familyKeys.map((familyKey) => loadMissionFamilyVariants(familyKey))))
+    .flat()
+    .filter((variant) => variant.conceptKey === concept.conceptKey);
+  return Array.from(new Map(variants.map((variant) => [variant.variantKey, variant])).values());
 }
 
 export async function loadMissionVariantDetail(variantKey: string): Promise<MissionVariantView> {

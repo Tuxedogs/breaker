@@ -1,9 +1,10 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import type { InventoryEntry, InventoryItemKind } from '../../types/logistics';
+import type { InventoryEntry, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
+import MaterialIcon from '../../components/logistics/MaterialIcon';
 import {
   formatEntryQuantity,
   formatInventoryQuantity,
@@ -15,12 +16,10 @@ import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
-type DrawerViewMode = 'cards' | 'table';
-type DrawerSortKey = 'material' | 'quality' | 'quantity' | 'container' | 'updated';
-type DrawerFilter = 'all' | 'premium' | 'raw' | 'refined' | 'unassigned';
 type UnknownRecord = Record<string, unknown>;
 
-const MINABLE_KINDS = new Set<InventoryItemKind>(['ore', 'refined', 'raw_mineable', 'ice', 'material']);
+const WINDOW_GROUP_SIZE = 4;
+const WINDOW_STACK_CHUNK_SIZE = 25;
 
 type LocationGroup = {
   id: string;
@@ -34,8 +33,6 @@ type LocationGroup = {
   totalUnits: number;
   highestQuality: number | null;
   premiumCount: number;
-  topStacks: InventoryEntry[];
-  lastUpdated: string | null;
 };
 
 type DrawerMaterialGroup = {
@@ -45,11 +42,9 @@ type DrawerMaterialGroup = {
   total: number;
   unitType: 'scu' | 'unit';
   totalLabel: string;
-  glyphQuality: number | null | undefined;
-  bestQuality: number | null;
   kindLabels: string[];
-  lastUpdatedLabel: string;
-  lastUpdatedTime: number;
+  stackCount: number;
+  stackRangeLabel?: string;
 };
 
 type DrawerEntryRow = {
@@ -61,8 +56,6 @@ type DrawerEntryRow = {
   kindLabel: string;
   quantityLabel: string;
   containerLabel: string;
-  updatedLabel: string;
-  updatedTime: number;
 };
 
 function toRecord(value: unknown): UnknownRecord {
@@ -79,13 +72,6 @@ function titleCase(value: string): string {
     .replace(/\s+/g, ' ')
     .trim()
     .replace(/\b\w/g, (match) => match.toUpperCase());
-}
-
-function formatQuantity(value: number): string {
-  if (!Number.isFinite(value)) return '0';
-  if (Math.abs(value) >= 100) return value.toFixed(0);
-  if (Math.abs(value) >= 10) return value.toFixed(1);
-  return value.toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
 }
 
 function getLocationName(location: unknown): string {
@@ -144,11 +130,6 @@ function getEntryKind(entry: InventoryEntry, material: unknown): 'ore' | 'refine
   return 'unknown';
 }
 
-function getMaterialForEntry<T extends { id: string }>(entry: InventoryEntry, materials: T[]): T | undefined {
-  const materialId = asString(toRecord(entry).materialId);
-  return materialId ? materials.find((material) => material.id === materialId) : undefined;
-}
-
 function getQualityClass(quality: number | null | undefined): string {
   if (quality == null || !Number.isFinite(quality)) return '';
   if (quality >= 950) return 'logi-quality--legendary';
@@ -158,43 +139,10 @@ function getQualityClass(quality: number | null | undefined): string {
   return 'logi-quality--low';
 }
 
-function MaterialGlyph({ quality }: { quality?: number | null }) {
-  return (
-    <span className={`logi-mat-glyph ${getQualityClass(quality)}`} aria-hidden>
-      <svg viewBox="0 0 20 20" fill="none">
-        <path d="M10 1.8 17.4 6v8L10 18.2 2.6 14V6L10 1.8Z" />
-        <path d="M10 1.8v16.4M2.6 6 10 10.1 17.4 6M2.6 14l7.4-3.9 7.4 3.9" />
-      </svg>
-    </span>
-  );
-}
-
 function QualityPill({ quality }: { quality?: number | null }) {
   if (quality == null || !Number.isFinite(quality)) return <span className="logi-quality-pill logi-quality-pill--empty">—</span>;
   return <span className={`logi-quality-pill ${getQualityClass(quality)}`}>{quality}</span>;
 }
-
-type InventoryDetailRowProps = {
-  row: DrawerEntryRow;
-  onEdit: (entry: InventoryEntry) => void;
-  onRequestDelete: (entryId: string) => void;
-};
-
-const InventoryDetailRow = memo(function InventoryDetailRow({ row, onEdit, onRequestDelete }: InventoryDetailRowProps) {
-  return (
-    <div className="logi-location-detail-row">
-      <QualityPill quality={row.entry.quality} />
-      <span>{row.quantityLabel}</span>
-      <span>{row.containerLabel}</span>
-      <span className={`logi-location-kind logi-location-kind--${row.kind}`}>{row.kindLabel}</span>
-      <span>{row.updatedLabel}</span>
-      <span className="logi-location-row-actions">
-        <button type="button" onClick={() => onEdit(row.entry)}>Edit</button>
-        <button type="button" className="is-delete" onClick={() => onRequestDelete(row.id)}>Delete</button>
-      </span>
-    </div>
-  );
-});
 
 type InventoryMaterialGroupProps = {
   group: DrawerMaterialGroup;
@@ -202,40 +150,24 @@ type InventoryMaterialGroupProps = {
   onRequestDelete: (entryId: string) => void;
 };
 
-const InventoryMaterialGroup = memo(function InventoryMaterialGroup({ group, onEdit, onRequestDelete }: InventoryMaterialGroupProps) {
-  return (
-    <div className="logi-location-material-group">
-      <div className="logi-location-material-head">
-        <span><MaterialGlyph quality={group.glyphQuality} />{group.name}</span>
-        <small>{group.entries.length} {group.entries.length === 1 ? 'stack' : 'stacks'} - {group.totalLabel}</small>
-      </div>
-      {group.entries.map((row) => (
-        <InventoryDetailRow key={row.id} row={row} onEdit={onEdit} onRequestDelete={onRequestDelete} />
-      ))}
-    </div>
-  );
-});
-
 const InventoryMaterialCard = memo(function InventoryMaterialCard({ group, onEdit, onRequestDelete }: InventoryMaterialGroupProps) {
   return (
     <article className="logi-location-material-card">
       <div className="logi-location-material-card-head">
         <div className="logi-location-material-card-title">
-          <MaterialGlyph quality={group.glyphQuality} />
+          <MaterialIcon
+            materialName={group.name}
+            materialState={group.entries.every((row) => row.kind === 'refined') ? 'refined' : 'raw'}
+            size={18}
+          />
           <h3>{group.name}</h3>
+          <span className="logi-location-material-card-total">{group.totalLabel}</span>
         </div>
         <div className="logi-location-material-card-badges" aria-label="Item types">
           {group.kindLabels.map((label) => (
             <span key={label} className="logi-location-kind">{label}</span>
           ))}
         </div>
-      </div>
-
-      <div className="logi-location-material-card-meta">
-        <span><small>Total</small><strong>{group.totalLabel}</strong></span>
-        <span><small>Stacks</small><strong>{group.entries.length}</strong></span>
-        <span><small>Best</small><strong>{group.bestQuality ?? '-'}</strong></span>
-        <span><small>Updated</small><strong>{group.lastUpdatedLabel}</strong></span>
       </div>
 
       <div className="logi-location-material-card-rows">
@@ -253,6 +185,247 @@ const InventoryMaterialCard = memo(function InventoryMaterialCard({ group, onEdi
         ))}
       </div>
     </article>
+  );
+});
+
+type LocationCardProps = {
+  group: LocationGroup;
+  isSelected: boolean;
+  onToggle: (locationId: string) => void;
+};
+
+const InventoryLocationCard = memo(function InventoryLocationCard({
+  group,
+  isSelected,
+  onToggle,
+}: LocationCardProps) {
+  return (
+    <article className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}`}>
+      <div className="logi-location-card-head">
+        <div>
+          <div className="logi-location-card-kicker">{group.subtitle}</div>
+          <h2>{group.name}</h2>
+        </div>
+        <div className="logi-location-card-badges">
+          {isSelected && <span className="logi-location-active-badge">Active</span>}
+          <span className="logi-location-type-badge">{group.type}</span>
+        </div>
+      </div>
+
+      <div className="logi-location-stat-grid">
+        <div><span>Unique</span><strong>{group.uniqueItems}</strong></div>
+        <div>
+          <span>Total</span>
+          <strong>{[
+            group.totalScu > 0 ? formatInventoryQuantity(group.totalScu, 'scu') : '',
+            group.totalUnits > 0 ? formatInventoryQuantity(group.totalUnits, 'unit') : '',
+          ].filter(Boolean).join(' / ') || '0'}</strong>
+        </div>
+        <div><span>Best</span><strong>{group.highestQuality ?? '—'}</strong></div>
+        <div><span>900+</span><strong>{group.premiumCount}</strong></div>
+      </div>
+
+
+      <div className="logi-location-card-actions">
+        <button
+          type="button"
+          className="logi-location-details-btn"
+          onClick={() => onToggle(group.id)}
+          aria-expanded={isSelected}
+          aria-controls="inventory-location-detail"
+        >
+          {isSelected ? 'Collapse' : 'View Details'}
+        </button>
+      </div>
+    </article>
+  );
+});
+
+function splitLargeMaterialGroups(groups: DrawerMaterialGroup[]): DrawerMaterialGroup[] {
+  return groups.flatMap((group) => {
+    if (group.entries.length <= WINDOW_STACK_CHUNK_SIZE) return group;
+    const chunks: DrawerMaterialGroup[] = [];
+    for (let index = 0; index < group.entries.length; index += WINDOW_STACK_CHUNK_SIZE) {
+      chunks.push({
+        ...group,
+        id: `${group.id}:${index}`,
+        entries: group.entries.slice(index, index + WINDOW_STACK_CHUNK_SIZE),
+        stackRangeLabel: `${index + 1}-${Math.min(index + WINDOW_STACK_CHUNK_SIZE, group.stackCount)} of ${group.stackCount}`,
+      });
+    }
+    return chunks;
+  });
+}
+
+function chunkGroups(groups: DrawerMaterialGroup[]): DrawerMaterialGroup[][] {
+  const chunks: DrawerMaterialGroup[][] = [];
+  for (let index = 0; index < groups.length; index += WINDOW_GROUP_SIZE) {
+    chunks.push(groups.slice(index, index + WINDOW_GROUP_SIZE));
+  }
+  return chunks;
+}
+
+function estimateWindowHeight(groups: DrawerMaterialGroup[]): number {
+  return groups.reduce(
+    (height, group) => height + 178 + group.entries.length * 31,
+    0,
+  );
+}
+
+type WindowedGroupBlockProps = {
+  groups: DrawerMaterialGroup[];
+  root: HTMLDivElement | null;
+  initiallyVisible: boolean;
+  onEdit: (entry: InventoryEntry) => void;
+  onRequestDelete: (entryId: string) => void;
+};
+
+const WindowedGroupBlock = memo(function WindowedGroupBlock({
+  groups,
+  root,
+  initiallyVisible,
+  onEdit,
+  onRequestDelete,
+}: WindowedGroupBlockProps) {
+  const blockRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(initiallyVisible || typeof IntersectionObserver === 'undefined');
+  const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
+  const estimatedHeight = useMemo(() => estimateWindowHeight(groups), [groups]);
+
+  useEffect(() => {
+    const block = blockRef.current;
+    if (!block || !root || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { root, rootMargin: '560px 0px' },
+    );
+    observer.observe(block);
+    return () => observer.disconnect();
+  }, [root]);
+
+  useEffect(() => {
+    const block = blockRef.current;
+    if (!block || !isVisible || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(([entry]) => {
+      const height = Math.ceil(entry.contentRect.height);
+      if (height > 0) setMeasuredHeight(height);
+    });
+    observer.observe(block);
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  return (
+    <div
+      ref={blockRef}
+      className="logi-location-window-block logi-location-window-block--cards"
+      style={!isVisible ? { minHeight: measuredHeight ?? estimatedHeight } : undefined}
+    >
+      {isVisible && groups.map((group) => (
+        <InventoryMaterialCard key={group.id} group={group} onEdit={onEdit} onRequestDelete={onRequestDelete} />
+      ))}
+    </div>
+  );
+});
+
+type WindowedMaterialGroupsProps = {
+  groups: DrawerMaterialGroup[];
+  onEdit: (entry: InventoryEntry) => void;
+  onRequestDelete: (entryId: string) => void;
+};
+
+const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
+  groups,
+  onEdit,
+  onRequestDelete,
+}: WindowedMaterialGroupsProps) {
+  const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
+  const blocks = useMemo(() => chunkGroups(splitLargeMaterialGroups(groups)), [groups]);
+
+  return (
+    <div
+      ref={setScrollRoot}
+      className="logi-location-stack-table-wrap logi-location-stack-table-wrap--cards"
+    >
+      {blocks.map((block, index) => (
+        <WindowedGroupBlock
+          key={block[0]?.id ?? index}
+          groups={block}
+          root={scrollRoot}
+          initiallyVisible={index === 0}
+          onEdit={onEdit}
+          onRequestDelete={onRequestDelete}
+        />
+      ))}
+    </div>
+  );
+});
+
+type SelectedLocationDetailProps = {
+  selectedLocation: LocationGroup;
+  drawerMaterialGroups: DrawerMaterialGroup[];
+  pendingDeleteEntryId: string | null;
+  materialById: Map<string, MaterialTemplate>;
+  onCollapse: (locationId: string) => void;
+  onEdit: (entry: InventoryEntry) => void;
+  onRequestDelete: (entryId: string) => void;
+  onDelete: (entryId: string) => void;
+  onCancelDelete: () => void;
+};
+
+const SelectedLocationDetail = memo(function SelectedLocationDetail({
+  selectedLocation,
+  drawerMaterialGroups,
+  pendingDeleteEntryId,
+  materialById,
+  onCollapse,
+  onEdit,
+  onRequestDelete,
+  onDelete,
+  onCancelDelete,
+}: SelectedLocationDetailProps) {
+  const pendingEntry = pendingDeleteEntryId
+    ? selectedLocation.entries.find((entry) => entry.id === pendingDeleteEntryId)
+    : undefined;
+
+  return (
+    <section id="inventory-location-detail" className="logi-location-detail" aria-label={`${selectedLocation.name} inventory details`}>
+      <div className="logi-location-detail-head">
+        <div>
+          <div className="logi-location-detail-title-row">
+            <h2>{selectedLocation.name}</h2>
+            <span className="logi-location-active-badge">Active</span>
+          </div>
+        </div>
+        <button type="button" className="logi-location-collapse-btn" onClick={() => onCollapse(selectedLocation.id)}>Collapse</button>
+      </div>
+
+
+      {drawerMaterialGroups.length > 0 ? (
+        <WindowedMaterialGroups groups={drawerMaterialGroups} onEdit={onEdit} onRequestDelete={onRequestDelete} />
+      ) : (
+        <div className="logi-location-stack-table-wrap logi-location-stack-table-wrap--cards">
+          <div className="logi-location-detail-empty">
+            {selectedLocation.id === '__unassigned__'
+              ? 'No stacks without assigned location.'
+              : 'No stacks recorded at this location.'}
+          </div>
+        </div>
+      )}
+
+      {pendingEntry && (
+        <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
+          <div className="logi-location-delete-panel">
+            <span className="logi-location-delete-kicker">Are you sure?</span>
+            <strong>{resolveInventoryItemName(pendingEntry, pendingEntry.materialId ? materialById.get(pendingEntry.materialId) : undefined)}</strong>
+            <p>This inventory item will be deleted from {selectedLocation.name}.</p>
+            <div className="logi-location-delete-actions">
+              <button type="button" className="logi-location-delete-yes" onClick={() => onDelete(pendingEntry.id)}>Yes</button>
+              <button type="button" onClick={onCancelDelete}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
   );
 });
 
@@ -274,11 +447,6 @@ export default function InventoryPage() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
-  const [drawerSearch, setDrawerSearch] = useState('');
-  const [drawerViewMode, setDrawerViewMode] = useState<DrawerViewMode>('cards');
-  const [drawerSortKey, setDrawerSortKey] = useState<DrawerSortKey>('quality');
-  const [drawerSortDir, setDrawerSortDir] = useState<'asc' | 'desc'>('desc');
-  const [drawerFilter, setDrawerFilter] = useState<DrawerFilter>('all');
   const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
 
   function handleSort(key: SortKey) {
@@ -290,14 +458,17 @@ export default function InventoryPage() {
     }
   }
 
+  const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
+  const locationById = useMemo(() => new Map(locations.map((location) => [location.id, location])), [locations]);
+
   const filtered = useMemo(() => {
     const data = entries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
       if (locationFilter && getEntryLocationId(e) !== locationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
-        const mat = getMaterialForEntry(e, materials);
-        const loc = locations.find((l) => l.id === toRecord(e).locationId);
+        const mat = e.materialId ? materialById.get(e.materialId) : undefined;
+        const loc = e.locationId ? locationById.get(e.locationId) : undefined;
         const q = search.toLowerCase();
         const hit =
           resolveInventoryItemName(e, mat).toLowerCase().includes(q) ||
@@ -319,14 +490,14 @@ export default function InventoryPage() {
           cmp = a.quantity - b.quantity;
           break;
         case 'material': {
-          const ma = resolveInventoryItemName(a, getMaterialForEntry(a, materials));
-          const mb = resolveInventoryItemName(b, getMaterialForEntry(b, materials));
+          const ma = resolveInventoryItemName(a, a.materialId ? materialById.get(a.materialId) : undefined);
+          const mb = resolveInventoryItemName(b, b.materialId ? materialById.get(b.materialId) : undefined);
           cmp = ma.localeCompare(mb);
           break;
         }
         case 'location': {
-          const la = locations.find((l) => l.id === toRecord(a).locationId)?.name ?? '';
-          const lb = locations.find((l) => l.id === toRecord(b).locationId)?.name ?? '';
+          const la = a.locationId ? locationById.get(a.locationId)?.name ?? '' : '';
+          const lb = b.locationId ? locationById.get(b.locationId)?.name ?? '' : '';
           cmp = la.localeCompare(lb);
           break;
         }
@@ -335,44 +506,12 @@ export default function InventoryPage() {
     });
 
     return data;
-  }, [entries, materials, locations, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
+  }, [entries, materialById, locationById, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
 
-  const summary = useMemo(() => {
-    const locationIds = new Set<string>();
-    let oreScu = 0;
-    let refinedScu = 0;
-    let premiumCount = 0;
-    let unassigned = 0;
-    let bestQuality: { quality: number; name: string } | null = null;
-
-    for (const entry of entries) {
-      const locId = getEntryLocationId(entry);
-      if (locId === '__unassigned__') unassigned += 1;
-      else locationIds.add(locId);
-
-      const material = getMaterialForEntry(entry, materials);
-      const kind = getEntryKind(entry, material);
-      const unitType = resolveInventoryUnitType(entry, material);
-      if (kind === 'ore' && unitType === 'scu') oreScu += entry.quantity;
-      if (kind === 'refined' && unitType === 'scu') refinedScu += entry.quantity;
-      if ((entry.quality ?? 0) >= 900) premiumCount += 1;
-      if (entry.quality != null && (!bestQuality || entry.quality > bestQuality.quality)) {
-        bestQuality = { quality: entry.quality, name: resolveInventoryItemName(entry, material) };
-      }
-    }
-
-    return {
-      locations: locationIds.size,
-      totalItems: entries.length,
-      oreScu,
-      refinedScu,
-      premiumCount,
-      unassigned,
-      bestQuality,
-    };
-  }, [entries, materials]);
-
-  const materialById = useMemo(() => new Map(materials.map((material) => [material.id, material])), [materials]);
+  const unassignedCount = useMemo(
+    () => entries.filter((entry) => getEntryLocationId(entry) === '__unassigned__').length,
+    [entries],
+  );
 
   const locationGroups = useMemo<LocationGroup[]>(() => {
     const map = new Map<string, LocationGroup>();
@@ -390,8 +529,6 @@ export default function InventoryPage() {
         totalUnits: 0,
         highestQuality: null,
         premiumCount: 0,
-        topStacks: [],
-        lastUpdated: null,
       });
     }
 
@@ -407,8 +544,6 @@ export default function InventoryPage() {
       totalUnits: 0,
       highestQuality: null,
       premiumCount: 0,
-      topStacks: [],
-      lastUpdated: null,
     });
 
     for (const entry of filtered) {
@@ -419,56 +554,29 @@ export default function InventoryPage() {
     }
 
     for (const group of map.values()) {
-      const unique = new Set(group.entries.map(getEntryMaterialId));
-      group.uniqueItems = unique.size;
-      group.totalScu = group.entries.reduce((sum, entry) => {
-        const material = getMaterialForEntry(entry, materials);
-        return resolveInventoryUnitType(entry, material) === 'scu' ? sum + entry.quantity : sum;
-      }, 0);
-      group.totalUnits = group.entries.reduce((sum, entry) => {
-        const material = getMaterialForEntry(entry, materials);
-        return resolveInventoryUnitType(entry, material) === 'unit' ? sum + entry.quantity : sum;
-      }, 0);
-      group.highestQuality = group.entries.reduce<number | null>((best, entry) => {
-        if (entry.quality == null) return best;
-        return best == null ? entry.quality : Math.max(best, entry.quality);
-      }, null);
-      group.premiumCount = group.entries.filter((entry) => (entry.quality ?? 0) >= 900).length;
-      group.topStacks = [...group.entries]
-        .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || (b.quantity - a.quantity))
-        .filter((entry, index, sorted) => sorted.findIndex((candidate) => getEntryMaterialId(candidate) === getEntryMaterialId(entry)) === index)
-        .slice(0, 3);
-      group.lastUpdated = group.entries.reduce<string | null>((latest, entry) => {
-        if (!entry.updatedAt) return latest;
-        return !latest || Date.parse(entry.updatedAt) > Date.parse(latest) ? entry.updatedAt : latest;
-      }, null);
+      const uniqueMaterialIds = new Set<string>();
+      for (const entry of group.entries) {
+        uniqueMaterialIds.add(getEntryMaterialId(entry));
+        const material = entry.materialId ? materialById.get(entry.materialId) : undefined;
+        if (resolveInventoryUnitType(entry, material) === 'scu') group.totalScu += entry.quantity;
+        else group.totalUnits += entry.quantity;
+        if (entry.quality != null) {
+          group.highestQuality = group.highestQuality == null ? entry.quality : Math.max(group.highestQuality, entry.quality);
+          if (entry.quality >= 900) group.premiumCount += 1;
+        }
+      }
+      group.uniqueItems = uniqueMaterialIds.size;
     }
 
     return [...map.values()]
       .filter((group) => group.entries.length > 0 || group.isManual || group.id === '__unassigned__')
       .sort((a, b) => (b.entries.length > 0 ? 1 : 0) - (a.entries.length > 0 ? 1 : 0) || b.entries.length - a.entries.length || a.name.localeCompare(b.name));
-  }, [filtered, locations, materials]);
+  }, [filtered, locations, materialById]);
 
   const selectedLocation = useMemo(
     () => locationGroups.find((group) => group.id === selectedLocationId) ?? null,
     [locationGroups, selectedLocationId],
   );
-
-  const drawerAvailableFilters = useMemo(() => {
-    if (!selectedLocation) return new Set<DrawerFilter>(['all']);
-    const available = new Set<DrawerFilter>(['all']);
-    for (const entry of selectedLocation.entries) {
-      const materialId = asString(toRecord(entry).materialId);
-      const kind = getEntryKind(entry, materialId ? materialById.get(materialId) : undefined);
-      if ((entry.quality ?? 0) >= 900) available.add('premium');
-      if (kind === 'ore') available.add('raw');
-      if (kind === 'refined') available.add('refined');
-      if (getEntryLocationId(entry) === '__unassigned__') available.add('unassigned');
-    }
-    return available;
-  }, [selectedLocation, materialById]);
-
-  const effectiveDrawerFilter = drawerAvailableFilters.has(drawerFilter) ? drawerFilter : 'all';
 
   const selectedLocationRows = useMemo<DrawerEntryRow[]>(() => {
     if (!selectedLocation) return [];
@@ -476,7 +584,6 @@ export default function InventoryPage() {
       const materialId = asString(toRecord(entry).materialId);
       const material = materialId ? materialById.get(materialId) : undefined;
       const kind = getEntryKind(entry, material);
-      const updatedTime = Date.parse(entry.updatedAt);
 
       return {
         id: entry.id,
@@ -487,47 +594,15 @@ export default function InventoryPage() {
         kindLabel: kind === 'ore' ? 'Raw' : titleCase(kind),
         quantityLabel: formatEntryQuantity(entry, material),
         containerLabel: entry.container || '-',
-        updatedLabel: Number.isFinite(updatedTime) ? new Date(updatedTime).toLocaleDateString() : '-',
-        updatedTime: Number.isFinite(updatedTime) ? updatedTime : 0,
       };
     });
   }, [selectedLocation, materialById]);
 
   const drawerRows = useMemo(() => {
-    const query = drawerSearch.trim().toLowerCase();
-    const next = selectedLocationRows.filter((row) => {
-      if (effectiveDrawerFilter === 'premium' && (row.entry.quality ?? 0) < 900) return false;
-      if (effectiveDrawerFilter === 'raw' && row.kind !== 'ore') return false;
-      if (effectiveDrawerFilter === 'refined' && row.kind !== 'refined') return false;
-      if (effectiveDrawerFilter === 'unassigned' && getEntryLocationId(row.entry) !== '__unassigned__') return false;
-      if (!query) return true;
-      return row.materialName.toLowerCase().includes(query)
-        || (row.entry.container?.toLowerCase().includes(query) ?? false)
-        || (row.entry.notes?.toLowerCase().includes(query) ?? false);
-    });
-
-    return [...next].sort((a, b) => {
-      let comparison = 0;
-      switch (drawerSortKey) {
-        case 'material':
-          comparison = a.materialName.localeCompare(b.materialName);
-          break;
-        case 'quality':
-          comparison = (a.entry.quality ?? -1) - (b.entry.quality ?? -1);
-          break;
-        case 'quantity':
-          comparison = a.entry.quantity - b.entry.quantity;
-          break;
-        case 'container':
-          comparison = (a.entry.container ?? '').localeCompare(b.entry.container ?? '');
-          break;
-        case 'updated':
-          comparison = a.updatedTime - b.updatedTime;
-          break;
-      }
-      return drawerSortDir === 'asc' ? comparison : -comparison;
-    });
-  }, [selectedLocationRows, drawerSearch, effectiveDrawerFilter, drawerSortKey, drawerSortDir]);
+    return [...selectedLocationRows].sort(
+      (a, b) => ((b.entry.quality ?? -1) - (a.entry.quality ?? -1)) || a.materialName.localeCompare(b.materialName),
+    );
+  }, [selectedLocationRows]);
 
   const drawerMaterialGroups = useMemo(() => {
     const groups = new Map<string, DrawerMaterialGroup>();
@@ -536,15 +611,8 @@ export default function InventoryPage() {
       if (existing) {
         existing.entries.push(row);
         existing.total += row.entry.quantity;
-        existing.totalLabel = formatInventoryQuantity(existing.total, existing.unitType);
-        if (row.entry.quality != null) {
-          existing.bestQuality = existing.bestQuality == null ? row.entry.quality : Math.max(existing.bestQuality, row.entry.quality);
-        }
+        existing.stackCount += 1;
         if (!existing.kindLabels.includes(row.kindLabel)) existing.kindLabels.push(row.kindLabel);
-        if (row.updatedTime > existing.lastUpdatedTime) {
-          existing.lastUpdatedTime = row.updatedTime;
-          existing.lastUpdatedLabel = row.updatedLabel;
-        }
       } else {
         const materialId = asString(toRecord(row.entry).materialId);
         const unitType = resolveInventoryUnitType(row.entry, materialId ? materialById.get(materialId) : undefined);
@@ -555,45 +623,21 @@ export default function InventoryPage() {
           total: row.entry.quantity,
           unitType,
           totalLabel: formatInventoryQuantity(row.entry.quantity, unitType),
-          glyphQuality: row.entry.quality,
-          bestQuality: row.entry.quality ?? null,
           kindLabels: [row.kindLabel],
-          lastUpdatedLabel: row.updatedLabel,
-          lastUpdatedTime: row.updatedTime,
+          stackCount: 1,
         });
       }
     }
-    return [...groups.values()];
+    return [...groups.values()].map((group) => ({
+      ...group,
+      totalLabel: formatInventoryQuantity(group.total, group.unitType),
+    }));
   }, [drawerRows, materialById]);
 
-  const topQualityStacks = useMemo(() => {
-    return [...entries]
-      .filter((entry) => {
-        if (entry.quality == null || entry.quality < 800) return false;
-        const kind = entry.itemKind ?? (entry.materialId ? 'material' : undefined);
-        return kind == null || MINABLE_KINDS.has(kind);
-      })
-      .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || b.quantity - a.quantity)
-      .slice(0, 8);
-  }, [entries]);
-
-  const premiumStacks = useMemo(() => {
-    return [...entries]
-      .filter((entry) => {
-        if ((entry.quality ?? 0) < 900) return false;
-        const kind = entry.itemKind ?? (entry.materialId ? 'material' : undefined);
-        return kind != null && !MINABLE_KINDS.has(kind);
-      })
-      .sort((a, b) => ((b.quality ?? -1) - (a.quality ?? -1)) || b.quantity - a.quantity)
-      .slice(0, 8);
-  }, [entries]);
-
-  function toggleLocationDrawer(locationId: string) {
+  const toggleLocationDrawer = useCallback((locationId: string) => {
     setSelectedLocationId((current) => current === locationId ? null : locationId);
-    setDrawerSearch('');
-    setDrawerFilter('all');
     setPendingDeleteEntryId(null);
-  }
+  }, []);
 
   const handleEditDrawerEntry = useCallback((entry: InventoryEntry) => {
     setPanel({ mode: 'edit', entry });
@@ -601,6 +645,10 @@ export default function InventoryPage() {
 
   const handleRequestDrawerDelete = useCallback((entryId: string) => {
     setPendingDeleteEntryId(entryId);
+  }, []);
+
+  const handleCancelDrawerDelete = useCallback(() => {
+    setPendingDeleteEntryId(null);
   }, []);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
@@ -614,11 +662,11 @@ export default function InventoryPage() {
     // In new mode, keep the drawer open so users can add multiple stacks quickly.
   }
 
-  function handleDelete(id: string) {
+  const handleDelete = useCallback((id: string) => {
     deleteInventoryEntry(id);
     setPendingDeleteEntryId(null);
-    if (panel?.mode === 'edit' && panel.entry.id === id) setPanel(null);
-  }
+    setPanel((current) => current?.mode === 'edit' && current.entry.id === id ? null : current);
+  }, [deleteInventoryEntry]);
 
   const editingEntry = panel?.mode === 'edit' ? panel.entry : null;
 
@@ -656,39 +704,6 @@ export default function InventoryPage() {
             </svg>
             Add Stack
           </button>
-        </div>
-      </div>
-
-      <div className="logi-inv-summary-grid" aria-label="Inventory summary">
-        <div className="logi-inv-summary-card">
-          <span>Locations</span>
-          <strong>{summary.locations}</strong>
-          <small>with assigned stock</small>
-        </div>
-        <div className="logi-inv-summary-card">
-          <span>Total Items</span>
-          <strong>{summary.totalItems}</strong>
-          <small>recorded stacks</small>
-        </div>
-        <div className="logi-inv-summary-card">
-          <span>Total Ore SCU</span>
-          <strong>{formatQuantity(summary.oreScu)}</strong>
-          <small>raw mining stock</small>
-        </div>
-        <div className="logi-inv-summary-card">
-          <span>Total Refined SCU</span>
-          <strong>{formatQuantity(summary.refinedScu)}</strong>
-          <small>refined inventory</small>
-        </div>
-        <div className="logi-inv-summary-card logi-inv-summary-card--premium">
-          <span>Premium 900+</span>
-          <strong>{summary.premiumCount}</strong>
-          <small>{summary.bestQuality ? `${summary.bestQuality.name} ${summary.bestQuality.quality}` : 'no premium stacks'}</small>
-        </div>
-        <div className={`logi-inv-summary-card${summary.unassigned > 0 ? ' logi-inv-summary-card--warn' : ''}`}>
-          <span>Unassigned</span>
-          <strong>{summary.unassigned}</strong>
-          <small>needs location</small>
         </div>
       </div>
 
@@ -730,7 +745,7 @@ export default function InventoryPage() {
           {locations.map((l) => (
             <option key={l.id} value={l.id}>{l.name}</option>
           ))}
-          {summary.unassigned > 0 && <option value="__unassigned__">Unassigned Stock</option>}
+          {unassignedCount > 0 && <option value="__unassigned__">Unassigned Stock</option>}
         </select>
 
         <div className="logi-search-wrap logi-inv-quality-filter">
@@ -759,244 +774,30 @@ export default function InventoryPage() {
       {viewMode === 'cards' ? (
         <>
           <div className="logi-location-card-grid">
-            {locationGroups.map((group) => {
-              const isSelected = selectedLocationId === group.id;
-
-              return (
-                <article key={group.id} className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}`}>
-                <div className="logi-location-card-head">
-                  <div>
-                    <div className="logi-location-card-kicker">{group.subtitle}</div>
-                    <h2>{group.name}</h2>
-                  </div>
-                  <div className="logi-location-card-badges">
-                    {isSelected && <span className="logi-location-active-badge">Active</span>}
-                    <span className="logi-location-type-badge">{group.type}</span>
-                  </div>
-                </div>
-
-                <div className="logi-location-stat-grid">
-                  <div><span>Unique</span><strong>{group.uniqueItems}</strong></div>
-                  <div>
-                    <span>Total</span>
-                    <strong>{[
-                      group.totalScu > 0 ? formatInventoryQuantity(group.totalScu, 'scu') : '',
-                      group.totalUnits > 0 ? formatInventoryQuantity(group.totalUnits, 'unit') : '',
-                    ].filter(Boolean).join(' / ') || '0'}</strong>
-                  </div>
-                  <div><span>Best</span><strong>{group.highestQuality ?? '—'}</strong></div>
-                  <div><span>900+</span><strong>{group.premiumCount}</strong></div>
-                </div>
-
-                {group.topStacks.length > 0 ? (
-                  <div className="logi-location-stack-list" aria-label="Top materials preview">
-                    <span className="logi-location-preview-label">Top materials</span>
-                    {group.topStacks.map((entry) => {
-                      const material = getMaterialForEntry(entry, materials);
-                      return (
-                        <div key={entry.id} className="logi-location-stack-row">
-                          <div className="logi-location-stack-main">
-                            <MaterialGlyph quality={entry.quality} />
-                            <span>{resolveInventoryItemName(entry, material)}</span>
-                          </div>
-                          <QualityPill quality={entry.quality} />
-                          <span className="logi-location-stack-qty">{formatEntryQuantity(entry, material)}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="logi-location-empty-state">
-                    <span>{group.id === '__unassigned__' ? 'No stacks without assigned location.' : 'No stacks recorded at this location.'}</span>
-                  </div>
-                )}
-
-                <div className="logi-location-card-actions">
-                  <button
-                    type="button"
-                    className="logi-location-details-btn"
-                    onClick={() => toggleLocationDrawer(group.id)}
-                    aria-expanded={isSelected}
-                    aria-controls="inventory-location-detail"
-                  >
-                    {isSelected ? 'Collapse' : 'View Details'}
-                  </button>
-                </div>
-                </article>
-              );
-            })}
+            {locationGroups.map((group) => (
+              <InventoryLocationCard
+                key={group.id}
+                group={group}
+                isSelected={selectedLocationId === group.id}
+                onToggle={toggleLocationDrawer}
+              />
+            ))}
           </div>
 
           {selectedLocation && (
-            <section id="inventory-location-detail" className="logi-location-detail" aria-label={`${selectedLocation.name} inventory details`}>
-              <div className="logi-location-detail-head">
-                <div>
-                  <div className="logi-location-detail-title-row">
-                    <h2>{selectedLocation.name}</h2>
-                    <span className="logi-location-active-badge">Active</span>
-                  </div>
-                  <div className="logi-location-detail-stats">
-                    <span><small>Unique materials</small><strong>{selectedLocation.uniqueItems}</strong></span>
-                    <span><small>Total</small><strong>{[
-                      selectedLocation.totalScu > 0 ? formatInventoryQuantity(selectedLocation.totalScu, 'scu') : '',
-                      selectedLocation.totalUnits > 0 ? formatInventoryQuantity(selectedLocation.totalUnits, 'unit') : '',
-                    ].filter(Boolean).join(' / ') || '0'}</strong></span>
-                    <span><small>Best quality</small><strong>{selectedLocation.highestQuality ?? '—'}</strong></span>
-                    <span><small>900+ stacks</small><strong>{selectedLocation.premiumCount}</strong></span>
-                    <span><small>Last updated</small><strong>{selectedLocation.lastUpdated ? new Date(selectedLocation.lastUpdated).toLocaleString() : '—'}</strong></span>
-                  </div>
-                </div>
-                <button type="button" className="logi-location-collapse-btn" onClick={() => toggleLocationDrawer(selectedLocation.id)}>
-                  Collapse
-                </button>
-              </div>
-
-              <div className="logi-location-detail-controls">
-                <div className="logi-search-wrap">
-                  <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="logi-search-icon">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="M21 21l-4.35-4.35" />
-                  </svg>
-                  <input
-                    type="search"
-                    className="logi-search-input"
-                    placeholder="Search within this location..."
-                    value={drawerSearch}
-                    onChange={(event) => setDrawerSearch(event.target.value)}
-                    aria-label="Search within selected location"
-                  />
-                </div>
-                <label className="logi-location-detail-sort">
-                  <span>Sort by</span>
-                  <select className="logi-select" value={drawerSortKey} onChange={(event) => setDrawerSortKey(event.target.value as DrawerSortKey)}>
-                    <option value="material">Material</option>
-                    <option value="quality">Quality</option>
-                    <option value="quantity">SCU / Quantity</option>
-                    <option value="container">Container</option>
-                    <option value="updated">Updated</option>
-                  </select>
-                  <button type="button" onClick={() => setDrawerSortDir((direction) => direction === 'asc' ? 'desc' : 'asc')} aria-label={`Sort ${drawerSortDir === 'asc' ? 'descending' : 'ascending'}`}>
-                    {drawerSortDir === 'asc' ? '↑' : '↓'}
-                  </button>
-                </label>
-                <div className="logi-location-detail-filters" role="group" aria-label="Filter selected location stacks">
-                  {([
-                    ['all', 'All'],
-                    ['premium', '900+'],
-                    ['raw', 'Raw'],
-                    ['refined', 'Refined'],
-                    ['unassigned', 'Unassigned'],
-                  ] as [DrawerFilter, string][]).filter(([value]) => drawerAvailableFilters.has(value)).map(([value, label]) => (
-                    <button key={value} type="button" className={drawerFilter === value ? 'is-active' : ''} onClick={() => setDrawerFilter(value)}>
-                      {label}
-                    </button>
-                  ))}
-                </div>
-                <div className="logi-location-detail-view-toggle" role="group" aria-label="Selected location detail view">
-                  <button type="button" className={drawerViewMode === 'cards' ? 'is-active' : ''} onClick={() => setDrawerViewMode('cards')}>
-                    Cards
-                  </button>
-                  <button type="button" className={drawerViewMode === 'table' ? 'is-active' : ''} onClick={() => setDrawerViewMode('table')}>
-                    Table
-                  </button>
-                </div>
-              </div>
-
-              {drawerViewMode === 'table' && (
-                <div className="logi-location-stack-table-head" aria-hidden>
-                  <span>Quality</span>
-                  <span>SCU / Qty</span>
-                  <span>Container</span>
-                  <span>Type</span>
-                  <span>Updated</span>
-                  <span>Actions</span>
-                </div>
-              )}
-              <div className={`logi-location-stack-table-wrap logi-location-stack-table-wrap--${drawerViewMode}`}>
-                {drawerMaterialGroups.length > 0 ? drawerMaterialGroups.map((materialGroup) => (
-                  drawerViewMode === 'cards' ? (
-                    <InventoryMaterialCard
-                      key={materialGroup.id}
-                      group={materialGroup}
-                      onEdit={handleEditDrawerEntry}
-                      onRequestDelete={handleRequestDrawerDelete}
-                    />
-                  ) : (
-                    <InventoryMaterialGroup
-                      key={materialGroup.id}
-                      group={materialGroup}
-                      onEdit={handleEditDrawerEntry}
-                      onRequestDelete={handleRequestDrawerDelete}
-                    />
-                  )
-                )) : (
-                  <div className="logi-location-detail-empty">
-                    {selectedLocation.id === '__unassigned__' && drawerSearch === '' && drawerFilter === 'all'
-                      ? 'No stacks without assigned location.'
-                      : selectedLocation.entries.length === 0
-                        ? 'No stacks recorded at this location.'
-                        : 'No stacks match the selected location filters.'}
-                  </div>
-                )}
-              </div>
-
-              {pendingDeleteEntryId && selectedLocation.entries.some((entry) => entry.id === pendingDeleteEntryId) && (() => {
-                const pendingEntry = selectedLocation.entries.find((entry) => entry.id === pendingDeleteEntryId);
-                if (!pendingEntry) return null;
-                return (
-                  <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
-                    <div className="logi-location-delete-panel">
-                      <span className="logi-location-delete-kicker">Are you sure?</span>
-                      <strong>{resolveInventoryItemName(pendingEntry, getMaterialForEntry(pendingEntry, materials))}</strong>
-                      <p>This inventory item will be deleted from {selectedLocation.name}.</p>
-                      <div className="logi-location-delete-actions">
-                        <button type="button" className="logi-location-delete-yes" onClick={() => handleDelete(pendingEntry.id)}>Yes</button>
-                        <button type="button" onClick={() => setPendingDeleteEntryId(null)}>Cancel</button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </section>
+            <SelectedLocationDetail
+              selectedLocation={selectedLocation}
+              drawerMaterialGroups={drawerMaterialGroups}
+              pendingDeleteEntryId={pendingDeleteEntryId}
+              materialById={materialById}
+              onCollapse={toggleLocationDrawer}
+              onEdit={handleEditDrawerEntry}
+              onRequestDelete={handleRequestDrawerDelete}
+              onDelete={handleDelete}
+              onCancelDelete={handleCancelDrawerDelete}
+            />
           )}
 
-          <div className="logi-inv-secondary-grid">
-            <section className="logi-inv-panel">
-              <div className="logi-inv-panel-head">
-                <span>Global Top-Quality Materials</span>
-                <small>{topQualityStacks.length} tracked</small>
-              </div>
-              {topQualityStacks.length > 0 ? topQualityStacks.map((entry) => {
-                const material = getMaterialForEntry(entry, materials);
-                const loc = locations.find((location) => location.id === getEntryLocationId(entry));
-                return (
-                  <div key={entry.id} className="logi-inv-mini-row">
-                    <div className="logi-inv-mini-main"><MaterialGlyph quality={entry.quality} /><span>{resolveInventoryItemName(entry, material)}</span></div>
-                    <QualityPill quality={entry.quality} />
-                    <span>{loc?.name ?? 'Unassigned'}</span>
-                  </div>
-                );
-              }) : <div className="logi-inv-empty-panel">No quality values recorded yet.</div>}
-            </section>
-
-            <section className="logi-inv-panel">
-              <div className="logi-inv-panel-head">
-                <span>Premium Stash 900+</span>
-                <small>{premiumStacks.length} stacks</small>
-              </div>
-              {premiumStacks.length > 0 ? premiumStacks.map((entry) => {
-                const material = getMaterialForEntry(entry, materials);
-                const loc = locations.find((location) => location.id === getEntryLocationId(entry));
-                return (
-                  <div key={entry.id} className="logi-inv-mini-row">
-                    <div className="logi-inv-mini-main"><MaterialGlyph quality={entry.quality} /><span>{resolveInventoryItemName(entry, material)}</span></div>
-                    <QualityPill quality={entry.quality} />
-                    <span>{formatEntryQuantity(entry, material)} · {loc?.name ?? 'Unassigned'}</span>
-                  </div>
-                );
-              }) : <div className="logi-inv-empty-panel">No premium 900+ stacks recorded.</div>}
-            </section>
-          </div>
         </>
       ) : (
         <div className="logi-inv-layout">

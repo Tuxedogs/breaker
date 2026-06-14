@@ -1,11 +1,50 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "generatedAt": "2026-06-12T05:10:38.631Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
   "variant": {
     "variantKey": "4eae8b24-d6ee-023d-b427-12845cd7daaf",
     "familyKey": "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
+    "conceptKey": "cdff2ede581d44705138",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|steal-cargo|activity-defined|standard|unlock:f3cdcfcd3354|unknown:unknown||||",
+      "activityKey": "steal-cargo",
+      "titleStem": "headhunters-theft-outpost-cfp",
+      "descriptionStem": "headhunters-theft-outpost-cfp",
+      "handlerStem": "hh-courier",
+      "archetype": "CareerContract",
+      "contractType": "CareerContract",
+      "introState": "standard",
+      "chainState": "unlock:f3cdcfcd3354",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:steal-cargo",
+        "activity-source:structural",
+        "title:headhunters-theft-outpost-cfp",
+        "description:headhunters-theft-outpost-cfp",
+        "handler:hh-courier",
+        "contract:careercontract",
+        "archetype:careercontract",
+        "intro:standard",
+        "chain:unlock:f3cdcfcd3354",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": false,
+    "specificityBadges": [
+      "CareerContract"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
     "displayName": "Time to Resupply",
     "titleSource": "localized_clean",
     "titleConfidence": "high",
@@ -17,21 +56,18 @@
     "faction": "Headhunters",
     "contractType": "CareerContract",
     "reputationScope": {
-      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
-      "displayName": "Hauling",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
       "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
       "factionDisplayName": "Headhunters",
-      "trackType": "Hauling",
-      "confidence": "partial",
+      "trackType": "Standing",
+      "confidence": "resolved",
       "sourceRefs": [
-        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-        "c99e07ca-d1ba-4a90-a199-c66d69f22352|HH_Courier",
-        "HH_Pyro_RegionC_CFPOutpost_StoleGoods"
-      ],
-      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
     },
-    "missionArchetype": "Courier",
+    "missionArchetype": "CareerContract",
     "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
     "reputationRequirement": "Citizens For Prosperity: Neutral Elite Contractor",
     "prerequisiteSummary": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep; Rest Stop JP Pyro Stanton; Region A",
@@ -1168,13 +1204,13 @@
     "unresolvedLocationTokens": [],
     "rewards": {
       "summary": [
-        "Hauling +800",
+        "Standing +800",
         "Calculated payout"
       ],
       "blueprintRewards": [],
       "blueprintRewardGroups": [],
       "reputationRewards": [
-        "Hauling +800"
+        "Standing +800"
       ],
       "credits": "Calculated payout",
       "creditStatus": "calculated",
@@ -1197,16 +1233,15 @@
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
         "factionDisplayName": "Headhunters",
-        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:hauling",
-        "scopeDisplayName": "Hauling",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
         "amount": 800,
-        "confidence": "partial",
+        "confidence": "resolved",
         "sourceRefs": [
           "09efeef4-c646-408d-a979-3ae56a3b1beb",
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "c1b58aae-a947-40d1-a4b1-26529d55b7f6"
-        ],
-        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        ]
       }
     ],
     "flags": [],
