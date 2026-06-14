@@ -1,11 +1,51 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-11T04:36:57.829Z",
+  "generatedAt": "2026-06-12T05:10:38.631Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "716f51c8-3d2f-460a-a127-52c7957be976|HH_OOS_Intro",
   "variant": {
     "variantKey": "c2503f41-c663-4097-aa95-763109c87f85",
     "familyKey": "716f51c8-3d2f-460a-a127-52c7957be976|HH_OOS_Intro",
+    "conceptKey": "6f0c44110ce097270e5a",
+    "objectiveSignature": {
+      "key": "09efeef4-c646-408d-a979-3ae56a3b1beb|d31bd373-35ab-4ea4-b0a7-0ccc867ef082|resupply|activity-defined|intro|open|unknown:unknown||||",
+      "activityKey": "resupply",
+      "titleStem": "location-rush-hh-salvage",
+      "descriptionStem": "location-rush-hh-salvage",
+      "handlerStem": "hh-oos",
+      "archetype": "CareerContract",
+      "contractType": "CareerContract",
+      "introState": "intro",
+      "chainState": "open",
+      "legalState": "unknown:unknown",
+      "confidence": "strong",
+      "evidence": [
+        "activity:resupply",
+        "activity-source:structural",
+        "title:location-rush-hh-salvage",
+        "description:location-rush-hh-salvage",
+        "handler:hh-oos",
+        "contract:careercontract",
+        "archetype:careercontract",
+        "intro:intro",
+        "chain:open",
+        "legal:unknown:unknown"
+      ]
+    },
+    "tierKey": "unclassified",
+    "tierLabel": "Unclassified tier",
+    "isIntro": true,
+    "specificityBadges": [
+      "CareerContract",
+      "Intro"
+    ],
+    "owningScopeProvenance": {
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "confidence": "resolved",
+      "sourceRefs": [
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
+    },
     "displayName": "Out of Salvage – Small Resupply",
     "titleSource": "localized_clean",
     "titleConfidence": "high",
@@ -17,21 +57,18 @@
     "faction": "Headhunters",
     "contractType": "CareerContract",
     "reputationScope": {
-      "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:salvage",
-      "displayName": "Salvage",
+      "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+      "displayName": "Standing",
       "rawName": "SReputationScopeParams.FactionReputationScope",
       "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
       "factionDisplayName": "Headhunters",
-      "trackType": "Salvage",
-      "confidence": "partial",
+      "trackType": "Standing",
+      "confidence": "resolved",
       "sourceRefs": [
-        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
-        "716f51c8-3d2f-460a-a127-52c7957be976|HH_OOS_Intro",
-        "YardRush_Salvage_Intro_HH"
-      ],
-      "unresolvedReason": "Current extracted reputation scope GUID is generic; track derived from Scintel mission fields/internal family naming."
+        "d31bd373-35ab-4ea4-b0a7-0ccc867ef082"
+      ]
     },
-    "missionArchetype": "Salvage",
+    "missionArchetype": "CareerContract",
     "standingRequirement": "Neutral / 0 rep to Applicant / 750 rep",
     "reputationRequirement": "Citizens For Prosperity: Jr. Contractor Elite Contractor",
     "prerequisiteSummary": "Neutral / 0 rep to Applicant / 750 rep; Citizens For Prosperity: Jr. Contractor Elite Contractor",
@@ -64,16 +101,16 @@
     "unresolvedLocationTokens": [],
     "rewards": {
       "summary": [
-        "Salvage +2,400",
-        "Salvage -190,500",
+        "Standing +2,400",
+        "Standing -190,500",
         "Calculated payout",
         "Completion tag"
       ],
       "blueprintRewards": [],
       "blueprintRewardGroups": [],
       "reputationRewards": [
-        "Salvage +2,400",
-        "Salvage -190,500"
+        "Standing +2,400",
+        "Standing -190,500"
       ],
       "credits": "Calculated payout",
       "creditStatus": "calculated",
@@ -96,30 +133,28 @@
       {
         "factionKey": "09efeef4-c646-408d-a979-3ae56a3b1beb",
         "factionDisplayName": "Headhunters",
-        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:salvage",
-        "scopeDisplayName": "Salvage",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
         "amount": 2400,
-        "confidence": "partial",
+        "confidence": "resolved",
         "sourceRefs": [
           "09efeef4-c646-408d-a979-3ae56a3b1beb",
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "b84929f8-1403-4f50-9798-20b3f81762a3"
-        ],
-        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        ]
       },
       {
         "factionKey": "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
         "factionDisplayName": "Headhunters",
-        "scopeKey": "09efeef4-c646-408d-a979-3ae56a3b1beb:salvage",
-        "scopeDisplayName": "Salvage",
+        "scopeKey": "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
+        "scopeDisplayName": "Standing",
         "amount": -190500,
-        "confidence": "partial",
+        "confidence": "resolved",
         "sourceRefs": [
           "5a6914c9-3d56-47e0-9fe2-b264ee17b992",
           "d31bd373-35ab-4ea4-b0a7-0ccc867ef082",
           "4e92cbff-d509-4fed-aad5-5172f5b020a1"
-        ],
-        "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
+        ]
       }
     ],
     "flags": [],

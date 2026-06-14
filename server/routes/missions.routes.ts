@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 type RouteResult = { status: number; body: unknown };
@@ -32,6 +32,8 @@ type MissionBrowseGroupView = {
     displayName: string;
     confidence: string;
     trackType: string;
+    conceptKeys?: string[];
+    familyKeys?: string[];
     missionArchetypes: Array<{
       archetypeKey: string;
       displayName: string;
@@ -42,6 +44,21 @@ type MissionBrowseGroupView = {
       unresolvedCount: number;
     }>;
   }>;
+};
+
+type MissionConceptView = {
+  conceptKey: string;
+  familyKeys: string[];
+};
+
+type MissionBrowseViews = {
+  full: { categories: Array<{ categoryKey: string; displayName: string; conceptKeys: string[] }> };
+  factions: Array<{
+    factionKey: string;
+    factionDisplayName: string;
+    categories: Array<{ categoryKey: string; displayName: string; conceptKeys: string[] }>;
+  }>;
+  reputation: MissionBrowseGroupView[];
 };
 
 type MissionBrowserIndex = {
@@ -56,6 +73,7 @@ type MissionBrowserIndex = {
     factions: MissionBrowserFilterOption[];
     reputationScopes: MissionBrowserFilterOption[];
     archetypes: MissionBrowserFilterOption[];
+    displayCategories?: MissionBrowserFilterOption[];
     rewardTypes: MissionBrowserFilterOption[];
     pickupSystems: MissionBrowserFilterOption[];
     confidenceStates: MissionBrowserFilterOption[];
@@ -67,7 +85,10 @@ type MissionBrowserIndex = {
   familyDetailFiles?: Record<string, string>;
   familyVariantFiles?: Record<string, string>;
   variantDetailFiles?: Record<string, string>;
+  conceptsByKey?: Record<string, MissionConceptView>;
+  conceptFamilyVariantFiles?: Record<string, string[]>;
   missionBrowseGroups: MissionBrowseGroupView[];
+  browseViews?: MissionBrowseViews;
 };
 
 type MissionBrowserFilterOption = {
@@ -79,6 +100,7 @@ type MissionBrowserFilterOption = {
 
 const missionRoot = path.resolve(process.cwd(), "public", "api", "missions");
 let browserIndexCache: Promise<MissionBrowserIndex> | null = null;
+let browserIndexModifiedAt = 0;
 
 function parseRouteUrl(rawUrl: string): URL {
   return new URL(rawUrl, "http://localhost");
@@ -93,8 +115,13 @@ async function readJson<T>(relativePath: string): Promise<T> {
   return JSON.parse(await readFile(filePath, "utf8")) as T;
 }
 
-function loadBrowserIndex(): Promise<MissionBrowserIndex> {
-  browserIndexCache ??= readJson<MissionBrowserIndex>("mission_browser_index.json");
+async function loadBrowserIndex(): Promise<MissionBrowserIndex> {
+  const indexPath = path.join(missionRoot, "mission_browser_index.json");
+  const modifiedAt = (await stat(indexPath)).mtimeMs;
+  if (!browserIndexCache || modifiedAt !== browserIndexModifiedAt) {
+    browserIndexModifiedAt = modifiedAt;
+    browserIndexCache = readJson<MissionBrowserIndex>("mission_browser_index.json");
+  }
   return browserIndexCache;
 }
 
@@ -143,12 +170,19 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
     return true;
   });
   const visibleFamilyKeys = new Set(visibleFamilies.map((family) => family.familyKey));
+  const visibleConceptKeys = new Set(
+    Object.values(index.conceptsByKey ?? {})
+      .filter((concept) => concept.familyKeys.some((familyKey) => visibleFamilyKeys.has(familyKey)))
+      .map((concept) => concept.conceptKey)
+  );
   const missionBrowseGroups = index.missionBrowseGroups
     .map((group) => ({
       ...group,
       reputationScopes: group.reputationScopes
         .map((scope) => ({
           ...scope,
+          conceptKeys: scope.conceptKeys?.filter((conceptKey) => visibleConceptKeys.has(conceptKey)),
+          familyKeys: scope.familyKeys?.filter((familyKey) => visibleFamilyKeys.has(familyKey)),
           missionArchetypes: scope.missionArchetypes
             .map((archetype) => ({
               ...archetype,
@@ -159,6 +193,22 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
         .filter((scope) => scope.missionArchetypes.length > 0),
     }))
     .filter((group) => group.reputationScopes.length > 0);
+  const browseViews = index.browseViews ? {
+    full: {
+      categories: index.browseViews.full.categories
+        .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
+        .filter((category) => category.conceptKeys.length > 0),
+    },
+    factions: index.browseViews.factions
+      .map((faction) => ({
+        ...faction,
+        categories: faction.categories
+          .map((category) => ({ ...category, conceptKeys: category.conceptKeys.filter((conceptKey) => visibleConceptKeys.has(conceptKey)) }))
+          .filter((category) => category.conceptKeys.length > 0),
+      }))
+      .filter((faction) => faction.categories.length > 0),
+    reputation: missionBrowseGroups,
+  } : undefined;
   const referencedFamilyKeys = new Set(
     missionBrowseGroups.flatMap((group) =>
       group.reputationScopes.flatMap((scope) => scope.missionArchetypes.flatMap((archetype) => archetype.familyKeys))
@@ -168,7 +218,14 @@ function filterBrowserIndex(index: MissionBrowserIndex, url: URL): MissionBrowse
   return {
     ...index,
     familiesByKey: Object.fromEntries(Array.from(referencedFamilyKeys).map((familyKey) => [familyKey, index.familiesByKey[familyKey]]).filter((entry): entry is [string, MissionFamilyView] => Boolean(entry[1]))),
+    conceptsByKey: index.conceptsByKey
+      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, index.conceptsByKey?.[conceptKey]]).filter((entry): entry is [string, MissionConceptView] => Boolean(entry[1])))
+      : undefined,
+    conceptFamilyVariantFiles: index.conceptFamilyVariantFiles
+      ? Object.fromEntries(Array.from(visibleConceptKeys).map((conceptKey) => [conceptKey, index.conceptFamilyVariantFiles?.[conceptKey]]).filter((entry): entry is [string, string[]] => Boolean(entry[1])))
+      : undefined,
     missionBrowseGroups,
+    browseViews,
   };
 }
 

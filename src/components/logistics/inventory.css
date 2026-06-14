@@ -23,18 +23,8 @@
 /* ── Inventory primary view ───────────────────── */
 
 .logi-inv-page {
-  --inv-bg-0: var(--void-bg-0);
-  --inv-bg-1: var(--void-bg-1);
-  --inv-bg-2: var(--void-bg-2);
-  --inv-panel: var(--bg-panel);
-  --inv-panel-2: var(--bg-card);
   --inv-border: var(--border-soft-color);
-  --inv-border-strong: var(--border-panel-color);
-  --inv-green: #34d399;
   --inv-teal: #5eead4;
-  --inv-gold: #fbbf24;
-  --inv-purple: #a78bfa;
-  --inv-red: #fb7185;
   background: var(--bg-app);
 }
 
@@ -49,69 +39,6 @@
   gap: 0.5rem;
   flex-shrink: 0;
 }
-
-.logi-inv-summary-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.65rem;
-  margin: 0.7rem 0 0.8rem;
-}
-
-.logi-inv-summary-card {
-  position: relative;
-  overflow: hidden;
-  min-height: 76px;
-  padding: 0.72rem 0.75rem;
-  border: 1px solid var(--inv-border);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(10, 16, 26, 0.92), rgba(5, 9, 16, 0.96));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.028), 0 10px 24px rgba(0,0,0,0.16);
-}
-
-.logi-inv-summary-card::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 2px;
-  background: rgba(251, 191, 36, 0.58);
-}
-
-.logi-inv-summary-card span,
-.logi-inv-summary-card small {
-  display: block;
-  font-family: var(--font-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.logi-inv-summary-card span {
-  font-size: 0.58rem;
-  color: rgba(160, 180, 220, 0.55);
-  margin-bottom: 0.25rem;
-}
-
-.logi-inv-summary-card strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  line-height: 1.05;
-  color: #e7edff;
-  letter-spacing: 0.04em;
-}
-
-.logi-inv-summary-card small {
-  margin-top: 0.3rem;
-  font-size: 0.54rem;
-  color: rgba(160, 180, 220, 0.38);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.logi-inv-summary-card--premium::before { background: rgba(251,191,36,0.72); }
-.logi-inv-summary-card--premium strong { color: var(--inv-gold); }
-.logi-inv-summary-card--warn::before { background: rgba(251,113,133,0.72); }
-.logi-inv-summary-card--warn strong { color: var(--inv-red); }
 
 .logi-inv-filter-bar {
   align-items: center;
@@ -190,17 +117,8 @@
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.045), 0 16px 36px rgba(0,0,0,0.24);
 }
 
-.logi-location-card--premium {
-  border-color: var(--inv-border);
-}
-
 .logi-location-card--empty {
   opacity: 0.78;
-}
-
-.logi-location-card--selected {
-  border-color: rgba(45, 212, 191, 0.68);
-  box-shadow: inset 0 2px 0 rgba(45, 212, 191, 0.72), 0 0 22px rgba(45, 212, 191, 0.07), 0 14px 32px rgba(0,0,0,0.20);
 }
 
 .logi-location-card-head {
@@ -302,96 +220,6 @@
   white-space: nowrap;
 }
 
-.logi-location-stat-grid em {
-  font-style: normal;
-  font-size: 0.55rem;
-  color: rgba(160,180,220,0.46);
-}
-
-.logi-location-stack-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.22rem;
-  padding: 0 0.65rem 0.48rem;
-}
-
-.logi-location-preview-label {
-  color: rgba(160, 180, 220, 0.42);
-  font-family: var(--font-primary);
-  font-size: 0.52rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.logi-location-stack-row,
-.logi-inv-mini-row {
-  display: grid;
-  align-items: center;
-  gap: 0.42rem;
-  border: 1px solid rgba(148,163,184,0.08);
-  background: rgba(2, 6, 23, 0.24);
-}
-
-.logi-location-stack-row {
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  min-height: 28px;
-  border-radius: 4px;
-  padding: 0.22rem 0.36rem;
-}
-
-.logi-location-stack-main,
-.logi-inv-mini-main {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.38rem;
-  color: rgba(231,237,255,0.88);
-  font-family: var(--font-primary);
-  font-size: 0.76rem;
-  line-height: 1.1;
-}
-
-.logi-location-stack-main span,
-.logi-inv-mini-main span {
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.logi-location-stack-qty {
-  color: rgba(160, 180, 220, 0.48);
-  font-family: var(--font-primary);
-  font-size: 0.62rem;
-  white-space: nowrap;
-}
-
-.logi-stack-delete-btn {
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(251, 113, 133, 0.20);
-  border-radius: 7px;
-  background: rgba(127, 29, 29, 0.12);
-  color: rgba(251, 113, 133, 0.82);
-  font-family: var(--font-primary);
-  font-size: 0.62rem;
-  font-weight: 900;
-  line-height: 1;
-  cursor: pointer;
-  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
-}
-
-.logi-stack-delete-btn:hover,
-.logi-stack-delete-btn:focus-visible {
-  outline: none;
-  background: rgba(127, 29, 29, 0.24);
-  border-color: rgba(251, 113, 133, 0.42);
-  color: #fecdd3;
-}
-
 .logi-location-delete-confirm {
   position: absolute;
   inset: 0;
@@ -467,109 +295,7 @@
   color: #fecdd3;
 }
 
-.logi-location-more {
-  padding: 0.12rem 0.2rem;
-  color: rgba(246,199,111,0.66);
-  font-family: var(--font-primary);
-  font-size: 0.63rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.logi-location-more--btn {
-  display: block;
-  width: 100%;
-  text-align: left;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 0.18rem 0.28rem;
-}
-
-.logi-location-more--btn:hover {
-  color: rgba(246,199,111,0.88);
-}
-
-.logi-location-stack-row--editing {
-  grid-template-columns: minmax(0, 1fr) auto;
-  height: auto;
-  min-height: 36px;
-  padding: 0.3rem 0.42rem;
-  border-color: rgba(251, 191, 36, 0.22);
-  background: rgba(251, 191, 36, 0.025);
-}
-
-.logi-stack-edit-name {
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 0.72rem;
-  color: rgba(231,237,255,0.76);
-}
-
-.logi-stack-edit-fields {
-  display: flex;
-  gap: 0.28rem;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.logi-stack-edit-input::-webkit-outer-spin-button,
-.logi-stack-edit-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.logi-stack-edit-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-.logi-stack-edit-input {
-  height: 24px;
-  padding: 0 0.36rem;
-  border: 1px solid rgba(148,163,184,0.18);
-  border-radius: 6px;
-  background: rgba(2, 6, 23, 0.56);
-  color: #e7edff;
-  font-family: var(--font-primary);
-  font-size: 0.68rem;
-  width: 52px;
-  text-align: right;
-}
-
-.logi-stack-edit-input:focus {
-  outline: none;
-  border-color: rgba(251, 191, 36, 0.42);
-}
-
-.logi-stack-edit-input--wide {
-  width: 90px;
-  text-align: left;
-}
-
-.logi-card-save-btn {
-  color: var(--inv-green) !important;
-  border-color: rgba(52, 211, 153, 0.28) !important;
-}
-
-.logi-location-empty-state {
-  display: grid;
-  place-items: center;
-  gap: 0.45rem;
-  min-height: 48px;
-  padding: 0.65rem;
-  color: rgba(160, 180, 220, 0.42);
-  font-family: var(--font-primary);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
-}
-
-.logi-location-empty-state button,
-.logi-location-card-actions button,
-.logi-location-card-actions a {
+.logi-location-card-actions button {
   border: 1px solid rgba(148,163,184,0.13);
   border-radius: 9px;
   background: rgba(15,23,42,0.48);
@@ -582,12 +308,6 @@
   cursor: pointer;
 }
 
-.logi-location-empty-state button {
-  padding: 0.38rem 0.58rem;
-  color: var(--inv-green);
-  border-color: rgba(86,240,178,0.22);
-}
-
 .logi-location-card-actions {
   display: flex;
   align-items: center;
@@ -596,8 +316,7 @@
   border-top: 1px solid rgba(148,163,184,0.08);
 }
 
-.logi-location-card-actions button,
-.logi-location-card-actions a {
+.logi-location-card-actions button {
   padding: 0.36rem 0.52rem;
 }
 
@@ -608,46 +327,18 @@
   color: rgba(231,237,255,0.82);
 }
 
-.logi-location-card--selected .logi-location-details-btn {
-  color: rgba(153,246,228,0.96);
-  border-color: rgba(45,212,191,0.30);
-  background: rgba(45,212,191,0.055);
+.logi-inv-page .bq-material-icon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.72));
 }
 
-.logi-location-card-actions button:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
+.logi-inv-page .bq-material-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-
-.logi-mat-glyph {
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  background: rgba(167,139,250,0.08);
-  box-shadow: inset 0 0 0 1px rgba(167,139,250,0.18);
-}
-
-.logi-mat-glyph svg {
-  width: 13px;
-  height: 13px;
-  stroke: rgba(167,139,250,0.78);
-  stroke-width: 1.2;
-}
-
-.logi-mat-glyph.logi-quality--premium,
-.logi-mat-glyph.logi-quality--legendary {
-  background: rgba(246,199,111,0.10);
-  box-shadow: inset 0 0 0 1px rgba(246,199,111,0.28), 0 0 14px rgba(246,199,111,0.08);
-}
-
-.logi-mat-glyph.logi-quality--premium svg,
-.logi-mat-glyph.logi-quality--legendary svg { stroke: rgba(246,199,111,0.88); }
-.logi-mat-glyph.logi-quality--strong svg { stroke: rgba(86,240,178,0.84); }
-.logi-mat-glyph.logi-quality--low svg { stroke: rgba(160,180,220,0.52); }
 
 .logi-quality-pill {
   display: inline-flex;
@@ -660,7 +351,7 @@
   color: rgba(160,180,220,0.64);
   background: rgba(2,6,23,0.42);
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: 0.76rem;
   letter-spacing: 0.06em;
   white-space: nowrap;
 }
@@ -686,71 +377,6 @@
 
 .logi-quality-pill--empty {
   opacity: 0.52;
-}
-
-.logi-inv-secondary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.82rem;
-  margin-top: 0.9rem;
-}
-
-.logi-inv-panel {
-  border: 1px solid var(--inv-border);
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(10,16,26,0.92), rgba(5,9,16,0.97));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.028);
-  overflow: hidden;
-}
-
-.logi-inv-panel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.72rem 0.8rem;
-  border-bottom: 1px solid rgba(148,163,184,0.09);
-}
-
-.logi-inv-panel-head span {
-  color: #e7edff;
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.logi-inv-panel-head small {
-  color: rgba(160,180,220,0.4);
-  font-family: var(--font-primary);
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-}
-
-.logi-inv-mini-row {
-  grid-template-columns: minmax(0, 1fr) auto minmax(95px, auto);
-  min-height: 35px;
-  border-width: 0 0 1px;
-  border-radius: 0;
-  padding: 0.35rem 0.72rem;
-}
-
-.logi-inv-mini-row > span:last-child {
-  color: rgba(160,180,220,0.52);
-  font-family: var(--font-primary);
-  font-size: 0.64rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.logi-inv-empty-panel {
-  padding: 1.35rem 0.8rem;
-  color: rgba(160,180,220,0.42);
-  font-family: var(--font-primary);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 .logi-location-detail {
@@ -786,48 +412,10 @@
   font-size: 1.15rem;
   line-height: 1;
   letter-spacing: 0.035em;
-}
-
-.logi-location-detail-stats {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(90px, auto));
-  gap: 0;
-  margin-top: 0.58rem;
-  border: 1px solid var(--border-soft-color);
-  background: rgba(2,6,23,0.24);
-}
-
-.logi-location-detail-stats span {
-  display: grid;
-  gap: 0.12rem;
-  padding: 0.38rem 0.62rem;
-  border-right: 1px solid var(--border-soft-color);
-}
-
-.logi-location-detail-stats span:last-child { border-right: 0; }
-
-.logi-location-detail-stats small,
-.logi-location-detail-stats strong {
-  font-family: var(--font-primary);
-}
-
-.logi-location-detail-stats small {
-  color: rgba(160,180,220,0.60);
-  font-size: 0.52rem;
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
-}
-
-.logi-location-detail-stats strong {
-  color: rgba(238,244,255,0.94);
-  font-size: 0.72rem;
   font-weight: 600;
 }
 
 .logi-location-collapse-btn,
-.logi-location-detail-sort button,
-.logi-location-detail-filters button,
-.logi-location-detail-view-toggle button,
 .logi-location-row-actions button {
   border: 1px solid var(--border-soft-color);
   border-radius: 4px;
@@ -844,65 +432,6 @@
   padding: 0.4rem 0.62rem;
 }
 
-.logi-location-detail-controls {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.46rem 0.65rem;
-  border-bottom: 1px solid var(--border-soft-color);
-  background: rgba(2,6,23,0.18);
-}
-
-.logi-location-detail-controls > .logi-search-wrap {
-  max-width: 270px;
-}
-
-.logi-location-detail-sort {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: rgba(160,180,220,0.46);
-  font-family: var(--font-primary);
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
-}
-
-.logi-location-detail-sort button {
-  min-width: 30px;
-  min-height: 30px;
-}
-
-.logi-location-detail-filters,
-.logi-location-detail-view-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.logi-location-detail-filters {
-  margin-left: auto;
-}
-
-.logi-location-detail-view-toggle {
-  padding-left: 0.45rem;
-  border-left: 1px solid var(--border-soft-color);
-}
-
-.logi-location-detail-filters button,
-.logi-location-detail-view-toggle button {
-  min-height: 30px;
-  padding: 0.3rem 0.58rem;
-}
-
-.logi-location-detail-filters button.is-active,
-.logi-location-detail-view-toggle button.is-active {
-  color: rgba(221,214,254,0.96);
-  border-color: rgba(167,139,250,0.38);
-  background: rgba(167,139,250,0.10);
-}
-
 .logi-location-stack-table-wrap {
   max-height: 560px;
   overflow: auto;
@@ -917,33 +446,15 @@
   padding-top: 0.65rem;
 }
 
-.logi-location-stack-table-head,
-.logi-location-detail-row {
+.logi-location-window-block {
+  min-width: 0;
+}
+
+.logi-location-window-block--cards {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: 84px 105px minmax(160px, 1fr) 86px 105px 124px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
   gap: 0.55rem;
-}
-
-.logi-location-stack-table-head {
-  z-index: 2;
-  min-width: 690px;
-  margin: 0 0.65rem;
-  padding: 0.4rem 0.58rem;
-  border-bottom: 1px solid var(--border-soft-color);
-  background: var(--bg-panel);
-  color: rgba(160,180,220,0.44);
-  font-family: var(--font-primary);
-  font-size: 0.54rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.logi-location-material-group {
-  min-width: 690px;
-  border-bottom: 1px solid var(--border-soft-color);
-  content-visibility: auto;
-  contain-intrinsic-size: auto 96px;
 }
 
 .logi-location-material-card {
@@ -971,12 +482,20 @@
   gap: 0.42rem;
 }
 
+.logi-location-material-card-total{
+  font-weight: 500;
+  color: var(--inv-teal);
+  font-family: var(--font-primary);
+  font-size: 0.85rem;
+}
+
 .logi-location-material-card-title h3 {
   min-width: 0;
   margin: 0;
   color: rgba(238,244,255,0.94);
   font-family: var(--font-display);
-  font-size: 0.86rem;
+  font-size: 1.2rem;
+  font-weight: 600;
   line-height: 1.08;
   letter-spacing: 0.035em;
   overflow: hidden;
@@ -988,46 +507,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.28rem;
-}
-
-.logi-location-material-card-meta {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-bottom: 1px solid rgba(148,163,184,0.08);
-}
-
-.logi-location-material-card-meta span {
-  min-width: 0;
-  display: grid;
-  gap: 0.08rem;
-  padding: 0.34rem 0.42rem;
-  border-right: 1px solid rgba(148,163,184,0.07);
-}
-
-.logi-location-material-card-meta span:last-child {
-  border-right: 0;
-}
-
-.logi-location-material-card-meta small,
-.logi-location-material-card-meta strong {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: var(--font-primary);
-}
-
-.logi-location-material-card-meta small {
-  color: rgba(160,180,220,0.44);
-  font-size: 0.49rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.logi-location-material-card-meta strong {
-  color: rgba(231,237,255,0.82);
-  font-size: 0.64rem;
-  font-weight: 700;
 }
 
 .logi-location-material-card-rows {
@@ -1067,6 +546,9 @@
 
 .logi-location-card-stack-qty {
   color: rgba(231,237,255,0.76);
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.05rem;
 }
 
 .logi-location-card-stack-container {
@@ -1078,55 +560,6 @@
   justify-self: end;
 }
 
-.logi-location-material-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.42rem 0.58rem;
-  border-left: 2px solid rgba(45,212,191,0.42);
-  background: linear-gradient(90deg, rgba(45,212,191,0.045), transparent 30%), rgba(15,23,42,0.48);
-}
-
-.logi-location-material-head > span {
-  display: flex;
-  align-items: center;
-  gap: 0.42rem;
-  color: rgba(238,244,255,0.92);
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.logi-location-material-head small {
-  color: rgba(160,180,220,0.46);
-  font-family: var(--font-primary);
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.logi-location-detail-row {
-  min-height: 34px;
-  padding: 0.26rem 0.58rem;
-  border-top: 1px solid rgba(148,163,184,0.06);
-  color: rgba(199,210,230,0.66);
-  font-family: var(--font-primary);
-  font-size: 0.65rem;
-  contain: content;
-}
-
-.logi-location-detail-row:hover {
-  background: rgba(255,255,255,0.018);
-}
-
-.logi-location-stack-table-wrap .logi-mat-glyph,
-.logi-location-stack-table-wrap .logi-mat-glyph.logi-quality--premium,
-.logi-location-stack-table-wrap .logi-mat-glyph.logi-quality--legendary {
-  box-shadow: inset 0 0 0 1px rgba(167,139,250,0.18);
-}
-
 .logi-location-kind {
   width: fit-content;
   padding: 0.16rem 0.34rem;
@@ -1135,9 +568,12 @@
   color: rgba(160,180,220,0.58);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  font-size: 0.58rem;
+  font-weight: 500;
 }
 
-.logi-location-kind--refined { color: rgba(94,234,212,0.72); }
+.logi-location-kind--refined { color: rgba(225, 234, 94, 0.72);
+  border: 1px solid var(--border-soft-color); }
 .logi-location-kind--ore { color: rgba(167,139,250,0.76); }
 
 .logi-location-row-actions {
@@ -1152,9 +588,7 @@
 }
 
 .logi-location-row-actions button:hover,
-.logi-location-collapse-btn:hover,
-.logi-location-detail-sort button:hover,
-.logi-location-detail-view-toggle button:hover {
+.logi-location-collapse-btn:hover {
   border-color: var(--border-hover-color);
   color: rgba(238,244,255,0.92);
 }
@@ -1174,17 +608,9 @@
   letter-spacing: 0.1em;
 }
 
-@media (max-width: 1260px) {
-  .logi-inv-summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .logi-location-detail-controls { flex-wrap: wrap; }
-  .logi-location-detail-filters { margin-left: 0; }
-  .logi-location-detail-view-toggle { padding-left: 0; border-left: 0; }
-}
-
 @media (max-width: 900px) {
   .logi-inv-header,
-  .logi-inv-header-actions,
-  .logi-inv-secondary-grid {
+  .logi-inv-header-actions {
     display: block;
   }
 
@@ -1193,36 +619,22 @@
     margin-right: 0.45rem;
   }
 
-  .logi-inv-summary-grid,
   .logi-location-card-grid {
     grid-template-columns: 1fr;
   }
 
-  .logi-location-detail-head,
-  .logi-location-detail-controls {
+  .logi-location-detail-head {
     display: grid;
-  }
-
-  .logi-location-detail-controls > .logi-search-wrap {
-    max-width: none;
-  }
-
-  .logi-location-detail-filters {
-    overflow-x: auto;
   }
 }
 
 
 /* ── Mining-theme tone correction: muted console surfaces, no candy gradients ── */
-.logi-inv-page .logi-inv-summary-card,
-.logi-inv-page .logi-location-card,
-.logi-inv-page .logi-inv-panel {
+.logi-inv-page .logi-location-card {
   background-image: linear-gradient(180deg, rgba(10, 16, 26, 0.94), rgba(5, 9, 16, 0.985));
 }
 
-.logi-inv-page .logi-inv-summary-card::after,
-.logi-inv-page .logi-location-card::before,
-.logi-inv-page .logi-inv-panel::before {
+.logi-inv-page .logi-location-card::before {
   content: none !important;
 }
 
@@ -1238,10 +650,6 @@
   background: rgba(255, 255, 255, 0.012);
 }
 
-.logi-location-card--premium .logi-location-card-head {
-  background: rgba(255, 255, 255, 0.012);
-}
-
 .logi-location-type-badge {
   border-radius: 3px;
   background: rgba(167, 139, 250, 0.075);
@@ -1249,17 +657,8 @@
 }
 
 .logi-location-stat-grid div,
-.logi-location-stack-row,
-.logi-inv-mini-row,
-.logi-quality-pill,
-.logi-mat-glyph {
+.logi-quality-pill {
   background-color: rgba(2, 6, 23, 0.34);
-}
-
-.logi-location-stack-row:hover,
-.logi-inv-mini-row:hover {
-  background-color: rgba(255, 255, 255, 0.026);
-  border-color: rgba(148, 163, 184, 0.13);
 }
 
 .logi-inv-view-toggle button.is-active {
@@ -1269,9 +668,7 @@
 }
 
 .logi-quality-pill.logi-quality--legendary,
-.logi-quality-pill.logi-quality--premium,
-.logi-mat-glyph.logi-quality--premium,
-.logi-mat-glyph.logi-quality--legendary {
+.logi-quality-pill.logi-quality--premium {
   background: rgba(251, 191, 36, 0.075);
 }
 
@@ -1279,79 +676,40 @@
   background: rgba(52, 211, 153, 0.06);
 }
 
-.logi-inv-panel-head span,
-.logi-location-card h2,
-.logi-inv-summary-card strong {
+.logi-location-card h2 {
   text-shadow: none;
 }
 
 /* Void Navy color pass: Inventory cards, panels, rows, and controls only */
-.logi-inv-page .logi-inv-summary-card,
-.logi-inv-page .logi-location-card,
-.logi-inv-page .logi-inv-panel {
+.logi-inv-page .logi-location-card {
   background: var(--bg-card);
   background-image: var(--bg-card);
   border-color: var(--border-soft-color);
   box-shadow: var(--shadow-card);
 }
 
-.logi-inv-page .logi-inv-summary-card:hover,
-.logi-inv-page .logi-location-card:hover,
-.logi-inv-page .logi-inv-panel:hover {
+.logi-inv-page .logi-location-card:hover {
   border-color: var(--border-hover-color);
 }
 
 .logi-inv-page .logi-inv-filter-bar,
 .logi-inv-page .logi-filter-bar,
-.logi-inv-page .logi-location-card-head,
-.logi-inv-page .logi-inv-panel-head {
+.logi-inv-page .logi-location-card-head {
   background: var(--bg-panel);
   border-color: var(--border-soft-color);
 }
 
 .logi-inv-page .logi-inv-view-toggle,
 .logi-inv-page .logi-location-stat-grid div,
-.logi-inv-page .logi-location-stack-row,
-.logi-inv-page .logi-inv-mini-row,
 .logi-inv-page .logi-quality-pill,
-.logi-inv-page .logi-mat-glyph,
-.logi-inv-page .logi-stack-edit-input,
-.logi-inv-page .logi-location-card-actions button,
-.logi-inv-page .logi-location-card-actions a,
-.logi-inv-page .logi-location-empty-state button {
+.logi-inv-page .logi-location-card-actions button {
   background: var(--bg-card-dark);
   background-color: transparent;
   border-color: var(--border-soft-color);
 }
 
-.logi-inv-page .logi-location-stack-row:hover,
-.logi-inv-page .logi-inv-mini-row:hover,
-.logi-inv-page .logi-location-card-actions button:hover,
-.logi-inv-page .logi-location-card-actions a:hover {
+.logi-inv-page .logi-location-card-actions button:hover {
   background: var(--bg-card);
   background-color: transparent;
   border-color: var(--border-hover-color);
-}
-
-.logi-inv-page .logi-inv-summary-card--premium {
-  border-color: var(--border-active-color);
-}
-
-.logi-inv-page .logi-location-card--selected {
-  border-color: rgba(45, 212, 191, 0.68);
-  box-shadow: inset 0 2px 0 rgba(45, 212, 191, 0.72), 0 0 22px rgba(45, 212, 191, 0.07), var(--shadow-card);
-}
-
-.logi-inv-page .logi-location-card--selected:hover {
-  border-color: rgba(45, 212, 191, 0.78);
-}
-
-.logi-inv-page .logi-location-card--selected .logi-location-details-btn {
-  color: rgba(153,246,228,0.96);
-  border-color: rgba(45,212,191,0.30);
-  background: rgba(45,212,191,0.055);
-}
-
-.logi-inv-page .logi-inv-summary-card--warn {
-  border-color: var(--border-danger-color);
 }

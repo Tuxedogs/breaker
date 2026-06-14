@@ -60,6 +60,7 @@ type RawReward = {
 type RawMission = {
   contractId: string;
   familyId?: string;
+  template?: string;
   contractType?: string;
   debugName?: string;
   title?: string;
@@ -224,6 +225,32 @@ type ItemRewardDetail = {
 type ShapedVariant = {
   variantKey: string;
   familyKey: string;
+  conceptKey: string;
+  objectiveSignature: {
+    key: string;
+    activityKey: string;
+    titleStem?: string;
+    descriptionStem?: string;
+    handlerStem?: string;
+    offerTitleIdentity?: string;
+    archetype: string;
+    contractType: string;
+    introState: "intro" | "standard";
+    chainState: string;
+    legalState: string;
+    confidence: "strong" | "partial" | "unresolved";
+    evidence: string[];
+  };
+  tierKey: string;
+  tierLabel: string;
+  isIntro: boolean;
+  specificityBadges: string[];
+  owningScopeProvenance: {
+    scopeKey: string;
+    confidence: ReputationScope["confidence"];
+    sourceRefs: string[];
+    unresolvedReason?: string;
+  };
   displayName: string;
   titleSource: "localized_family" | "localized_clean" | "shared_variant_localized" | "common_variant_title" | "token_template_cleaned" | "generated_from_fields" | "provider_archetype_fallback" | "internal_fallback";
   titleConfidence: "high" | "medium" | "low";
@@ -326,6 +353,8 @@ type MissionBrowseGroup = {
     displayName: string;
     confidence: ReputationScope["confidence"];
     trackType: string;
+    conceptKeys: string[];
+    familyKeys: string[];
     missionArchetypes: Array<{
       archetypeKey: string;
       displayName: string;
@@ -336,6 +365,66 @@ type MissionBrowseGroup = {
       unresolvedCount: number;
     }>;
   }>;
+};
+
+type MissionConcept = {
+  conceptKey: string;
+  displayName: string;
+  activityKey: string;
+  displayCategory: DisplayCategory;
+  displaySubcategories: string[];
+  factionKey: string;
+  factionDisplayName: string;
+  reputationScope: ReputationScope;
+  familyKeys: string[];
+  variantKeys: string[];
+  variantCount: number;
+  archetypes: string[];
+  specificityBadges: string[];
+  rewardedReputationPaths: RewardedReputationPath[];
+  pickupCoverage: Array<{
+    status: PickupLocation["status"];
+    displayName: string;
+    system?: string;
+    localityPool?: string;
+    variantCount: number;
+  }>;
+  tierSummaries: Array<{
+    tierKey: string;
+    tierLabel: string;
+    variantCount: number;
+  }>;
+  groupingConfidence: "strong" | "partial" | "unresolved";
+  groupingEvidence: string[];
+  familyVariantFiles: string[];
+  mixedRewardPaths: boolean;
+};
+
+type DisplayCategory = {
+  version: 1 | 2;
+  key: string;
+  label: string;
+  confidence: "resolved" | "inferred" | "unresolved";
+  source: "archetype" | "activity" | "combined" | "fallback";
+  evidence: string[];
+};
+
+type ConceptCategoryProjection = {
+  categoryKey: string;
+  displayName: string;
+  conceptKeys: string[];
+};
+
+type MissionBrowseViews = {
+  full: {
+    categories: ConceptCategoryProjection[];
+  };
+  factions: Array<{
+    factionKey: string;
+    factionDisplayName: string;
+    categories: ConceptCategoryProjection[];
+  }>;
+  reputation: MissionBrowseGroup[];
 };
 
 type RewardedReputationPath = {
@@ -388,10 +477,13 @@ type ShapedCatalog = {
     factionGroupCount: number;
     reputationScopeGroupCount: number;
     archetypeGroupCount: number;
+    conceptCount: number;
   };
   families: ShapedFamily[];
   variants: ShapedVariant[];
   missionBrowseGroups: MissionBrowseGroup[];
+  browseViews: MissionBrowseViews;
+  concepts: MissionConcept[];
 };
 
 type MissionBrowserIndex = {
@@ -411,13 +503,19 @@ type MissionBrowserIndex = {
     extractionReport: string;
     unresolvedReport: string;
     legacyCombinedCatalog: string;
+    conceptReport: string;
+    conceptCatalog: string;
+    categoryReport: string;
   };
   filtersMeta: MissionBrowserFiltersMeta;
   familiesByKey: Record<string, ShapedFamily>;
+  conceptsByKey: Record<string, MissionConcept>;
   familyDetailFiles: Record<string, string>;
   familyVariantFiles: Record<string, string>;
   variantDetailFiles: Record<string, string>;
+  conceptFamilyVariantFiles: Record<string, string[]>;
   missionBrowseGroups: MissionBrowseGroup[];
+  browseViews: MissionBrowseViews;
 };
 
 type MissionBrowserFilterOption = {
@@ -431,6 +529,7 @@ type MissionBrowserFiltersMeta = {
   factions: MissionBrowserFilterOption[];
   reputationScopes: MissionBrowserFilterOption[];
   archetypes: MissionBrowserFilterOption[];
+  displayCategories: MissionBrowserFilterOption[];
   rewardTypes: MissionBrowserFilterOption[];
   pickupSystems: MissionBrowserFilterOption[];
   confidenceStates: MissionBrowserFilterOption[];
@@ -556,6 +655,227 @@ function keySlug(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unknown";
 }
 
+function normalizedObjectiveStem(value?: string, removableTokens: string[] = []): string | undefined {
+  const text = clean(value);
+  if (!text) return undefined;
+  const removable = new Set(removableTokens.flatMap((token) => token.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)));
+  const ignored = new Set([
+    "title", "desc", "description", "career", "contract", "mission", "rank", "intro",
+    "veryeasy", "easy", "medium", "hard", "veryhard", "super",
+    "vlrt", "lrt", "mrt", "hrt", "vhrt", "ert", "srt",
+  ]);
+  const tokens = text
+    .replace(/^@/, "")
+    .replace(/([a-z])([A-Z])/g, "$1_$2")
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .filter((token) => !ignored.has(token))
+    .filter((token) => !/^(?:rank)?\d+$/.test(token))
+    .filter((token) => !/^(?:ve|e|m|h|vh|s)$/.test(token))
+    .filter((token) => !removable.has(token));
+  return tokens.length ? tokens.join("-") : undefined;
+}
+
+function isIntroMission(mission: RawMission): boolean {
+  const text = [mission.debugName, mission.handlerDebugName, mission.titleRaw, mission.descriptionRaw]
+    .filter(Boolean)
+    .join(" ");
+  return /(?:^|[_\s-])intro(?:$|[_\s-])/i.test(text);
+}
+
+function deriveTier(mission: RawMission): { tierKey: string; tierLabel: string } {
+  const text = [mission.debugName, mission.titleRaw, mission.descriptionRaw].filter(Boolean).join(" ");
+  const named = [
+    ["veryhard", "Very High Risk"],
+    ["super", "Extreme Risk"],
+    ["hard", "High Risk"],
+    ["medium", "Medium Risk"],
+    ["veryeasy", "Very Low Risk"],
+    ["easy", "Low Risk"],
+  ] as const;
+  const normalized = text.replace(/[^a-z0-9]+/gi, "").toLowerCase();
+  for (const [key, label] of named) {
+    if (normalized.includes(key)) return { tierKey: key, tierLabel: label };
+  }
+  const rank = text.match(/(?:^|[_\s-])rank[_\s-]?([0-9]+)(?:$|[_\s-])/i)?.[1];
+  if (rank) return { tierKey: `rank-${rank}`, tierLabel: `Rank ${rank}` };
+  const risk = text.match(/(?:^|[_\s-])(VLRT|LRT|MRT|HRT|VHRT|ERT|SRT)(?:$|[_\s-])/i)?.[1]?.toUpperCase();
+  if (risk) return { tierKey: keySlug(risk), tierLabel: risk };
+  return { tierKey: "unclassified", tierLabel: "Unclassified tier" };
+}
+
+function deriveActivityKey(mission: RawMission): { activityKey: string; source: "structural" | "supporting" | "unresolved" } {
+  const normalizeEvidenceText = (values: Array<string | undefined>) => values
+    .filter(Boolean)
+    .join(" ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const structuralText = normalizeEvidenceText([
+    mission.missionType,
+    mission.contractType,
+    mission.debugName,
+    mission.generatorName,
+    mission.handlerDebugName,
+    mission.handlerType,
+  ]);
+  const supportingText = normalizeEvidenceText([mission.titleRaw, mission.descriptionRaw]);
+  const combinedText = `${structuralText} ${supportingText}`;
+  const activities: string[] = [];
+  const add = (activity: string, pattern: RegExp) => {
+    if (pattern.test(combinedText)) activities.push(activity);
+  };
+
+  add("collector-offer", /\bcollector\b|thecollector|wikelo\s+(?:offer|reward|request)/);
+  add("bounty-certification", /\bcertification\b|\bcertify\b|\bassessment\b|\bqualification\b/);
+  add("defend-ship", /defend\s+ship|ship\s+defen[cs]e/);
+  add("escort-ship", /\bescort\b/);
+  add("defend-location", /\bdefend\b|defen[cs]e\s+(?:location|outpost|base|site)/);
+  add("sabotage-server", /sabotage\s+server|server\s+sabotage/);
+  add("sabotage-generator", /sabotage\s+generator|generator\s+sabotage/);
+  add("sabotage-fuel", /sabotage\s+fuel|fuel\s+(?:tank|sabotage)/);
+  add("destroy-items", /destroy\s+(?:items?|drugs?|goods?|contraband|equipment)|destruction\s+items?/);
+  add("search-body", /search\s+body|find\s+(?:a\s+)?body/);
+  add("missing-person-investigation", /missing\s+persons?|missingperson|investigat/);
+  add("steal-cargo", /\btheft\b|\bsteal\b|\bstole\b|stolen[_\s-]?(?:goods|cargo)/);
+  add("recover-cargo", /recover\s+cargo|cargo\s+recover/);
+  add("retrieve-cargo", /retrieve\s+cargo|cargo\s+retriev/);
+  add("courier-delivery", /\bcourier\b|\bdelivery\b|deliver\s+(?:cargo|package|goods|shipment)|tradepost\s+to\s+tradepost/);
+  add("resupply", /\bresupply\b|out\s+of\s+stock|\boos\b|\bfiresale\b|location\s+rush|yard\s+rush/);
+  add("salvage-fps", /fps\s+(?:salvage|scrap)|(?:salvage|scrap)\s+fps/);
+  add("salvage-ship", /ship\s+(?:salvage|scrap)|(?:salvage|scrap)\s+ship|\bsalvage\b/);
+  add("repair", /\brepair\b/);
+  add("refuel", /\brefuel\b|\brefueling\b/);
+  add("patrol", /\bpatrol\b/);
+  add("ambush", /\bambush\b/);
+  add("resource-gathering", /resource\s+gather|gathering/);
+  add("mining-fps", /fps\s+mining|fps\s+mine/);
+  add("eliminate-animals", /kill\s+animals?|eliminate\s+animals?/);
+  add("eliminate-all", /eliminate\s+all|kill\s+all|multi\s+kill|ship\s+wave\s+attack/);
+  add("eliminate-specific", /eliminate\s+specific|kill\s+ship|\bassassinat/);
+
+  let uniqueActivities = unique(activities);
+  if (uniqueActivities.includes("steal-cargo")) {
+    uniqueActivities = uniqueActivities.filter((activity) => !["courier-delivery", "recover-cargo", "retrieve-cargo"].includes(activity));
+  } else if (uniqueActivities.includes("retrieve-cargo")) {
+    uniqueActivities = uniqueActivities.filter((activity) => !["courier-delivery", "recover-cargo"].includes(activity));
+  } else if (uniqueActivities.includes("recover-cargo")) {
+    uniqueActivities = uniqueActivities.filter((activity) => activity !== "courier-delivery");
+  }
+  if (uniqueActivities.includes("resupply")) {
+    uniqueActivities = uniqueActivities.filter((activity) => activity !== "salvage-ship");
+  }
+  if (uniqueActivities.includes("defend-ship")) {
+    uniqueActivities = uniqueActivities.filter((activity) => activity !== "defend-location");
+  }
+  if (!uniqueActivities.length) {
+    if (/\bhauling\b|\bhaul\b|linehaul|system\s+to\s+system|\ba\s+to\s+b\b/.test(combinedText)) uniqueActivities.push("deliver");
+    else if (/\bbounty\b/.test(combinedText)) uniqueActivities.push("bounty-repeatable");
+  }
+  if (!uniqueActivities.length) return { activityKey: "unknown", source: "unresolved" };
+  const structuralMatches = /collector|certification|certify|assessment|qualification|defend|escort|sabotage|destroy|search|missing|theft|steal|stole|recover|retrieve|courier|delivery|oos|firesale|location rush|yard rush|salvage|repair|refuel|patrol|ambush|gather|mining|kill|eliminate|assassinat|bounty|hauling|haul|linehaul|system to system/.test(structuralText);
+  return {
+    activityKey: uniqueActivities.sort().join("+"),
+    source: structuralMatches ? "structural" : "supporting",
+  };
+}
+
+function deriveChainState(mission: RawMission): string {
+  const unlockRefs = unique((mission.prerequisites ?? [])
+    .filter((item) => prerequisiteType(item.type) === "unlock")
+    .flatMap((item) => item.references ?? [])
+    .map((ref) => clean(ref))
+  );
+  if (!unlockRefs.length) return "open";
+  return `unlock:${createHash("sha256").update(unlockRefs.sort().join("|")).digest("hex").slice(0, 12)}`;
+}
+
+function deriveObjectiveSignature(
+  mission: RawMission,
+  reputationScope: ReputationScope,
+  archetype: string,
+  pickupLocation: PickupLocation,
+  lawfulClassification: string,
+  crimeRequirement: string,
+  resolvedTitle: ReturnType<typeof variantTitle>,
+): ShapedVariant["objectiveSignature"] {
+  const removableTokens = unique([
+    pickupLocation.system,
+    pickupLocation.parentLocation,
+    pickupLocation.localityPool,
+    ...(pickupLocation.regions ?? []),
+  ]);
+  const titleStem = normalizedObjectiveStem(mission.titleRaw, removableTokens);
+  const descriptionStem = normalizedObjectiveStem(mission.descriptionRaw, removableTokens);
+  const handlerStem = normalizedObjectiveStem(mission.handlerDebugName, removableTokens);
+  const activity = deriveActivityKey(mission);
+  const introState = isIntroMission(mission) ? "intro" : "standard";
+  const chainState = deriveChainState(mission);
+  const legalState = `${lawfulClassification}:${crimeRequirement}`;
+  const namedOfferBoundaryActivities = new Set([
+    "destroy-items",
+  ]);
+  const activityParts = activity.activityKey.split("+");
+  const normalizedOfferTitle = resolvedTitle.titleSource === "localized_clean"
+    ? normalizedObjectiveStem(resolvedTitle.displayName, removableTokens)
+    : undefined;
+  const offerTitleIdentity = activityParts.length > 0
+    && activityParts.every((part) => namedOfferBoundaryActivities.has(part))
+    && normalizedOfferTitle
+    ? normalizedOfferTitle
+    : undefined;
+  const collectorOfferIdentity = activity.activityKey.includes("collector-offer")
+    ? titleStem ?? descriptionStem ?? normalizedObjectiveStem(mission.debugName, removableTokens) ?? mission.contractId
+    : undefined;
+  const evidence = unique([
+    `activity:${activity.activityKey}`,
+    `activity-source:${activity.source}`,
+    titleStem ? `title:${titleStem}` : undefined,
+    descriptionStem ? `description:${descriptionStem}` : undefined,
+    handlerStem ? `handler:${handlerStem}` : undefined,
+    clean(mission.contractType) ? `contract:${keySlug(mission.contractType!)}` : undefined,
+    `archetype:${keySlug(archetype)}`,
+    `intro:${introState}`,
+    `chain:${chainState}`,
+    `legal:${legalState}`,
+    offerTitleIdentity ? `offer-title:${offerTitleIdentity}` : undefined,
+    collectorOfferIdentity ? `collector-offer:${collectorOfferIdentity}` : undefined,
+  ]);
+  const confidence = activity.source === "unresolved" ? "unresolved" : activity.source === "supporting" ? "partial" : "strong";
+  const objectiveArchetype = activity.activityKey === "unknown" ? keySlug(archetype) : "activity-defined";
+  const key = [
+    reputationScope.factionKey,
+    reputationScope.scopeKey,
+    activity.activityKey,
+    objectiveArchetype,
+    introState,
+    chainState,
+    legalState,
+    offerTitleIdentity ? `offer-title:${offerTitleIdentity}` : undefined,
+    collectorOfferIdentity ? `collector-offer:${collectorOfferIdentity}` : undefined,
+    activity.source === "supporting" ? `supporting-family:${mission.familyId ?? mission.contractId}` : undefined,
+    activity.source === "unresolved" ? `variant:${mission.contractId}` : undefined,
+  ].join("|");
+  return {
+    key,
+    activityKey: activity.activityKey,
+    titleStem,
+    descriptionStem,
+    handlerStem,
+    offerTitleIdentity,
+    archetype,
+    contractType: mission.contractType ?? mission.missionType ?? "Unknown contract",
+    introState,
+    chainState,
+    legalState,
+    confidence,
+    evidence,
+  };
+}
+
 function factionKey(mission: RawMission): string {
   return clean(mission.factionReputationGuid) ?? keySlug(mission.factionName ?? "Unknown faction");
 }
@@ -569,6 +889,9 @@ function classifyMissionArchetype(mission: RawMission): string {
     mission.handlerDebugName,
     mission.title,
   ].filter(Boolean).join(" ").toLowerCase();
+  if (/\boos\b|firesale|locationrush|yardrush|out[_\s-]?of[_\s-]?stock|\bresupply\b/.test(text)) {
+    return clean(mission.missionType) ?? clean(mission.contractType) ?? "Other / unresolved";
+  }
   if (/cargo|hauling|haul|delivery|courier|ato?b|linehaul/.test(text)) return /courier|delivery/.test(text) ? "Courier" : "Cargo";
   if (/defendship|defend ship|escort/.test(text)) return "Defend Ship";
   if (/ambush/.test(text)) return "Ambush";
@@ -584,6 +907,7 @@ function classifyMissionArchetype(mission: RawMission): string {
 
 function deriveTrackType(mission: RawMission, archetype: string): string {
   const text = [mission.debugName, mission.generatorName, mission.handlerDebugName, mission.missionType, mission.title].filter(Boolean).join(" ").toLowerCase();
+  if (/\boos\b|firesale|locationrush|yardrush|out[_\s-]?of[_\s-]?stock|\bresupply\b/.test(text)) return "Standing";
   if (/haul|cargo|courier|delivery|linehaul|ato?b/.test(text) || ["Cargo", "Courier", "Recovery"].includes(archetype)) return "Hauling";
   if (/shipcombat|ship combat|bounty|assassination|ambush|defendship|defend ship|patrol|eliminate|combat|attack/.test(text) || ["Assassination", "Ambush", "Bounty", "Defend Ship", "Mercenary"].includes(archetype)) return "Ship Combat";
   if (/security/.test(text)) return "Security";
@@ -1360,10 +1684,42 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
   const reputationScope = resolveReputationScope(mission, refMap, missionArchetype);
   const rewardedReputationPaths = shapeRewardedReputationPaths(mission, refMap, reputationScope);
   const rewards = shapeRewards(mission, pools, rewardedReputationPaths);
+  const crimeRequirement = crimeStatRequirement(mission.prerequisites ?? []);
+  const objectiveSignature = deriveObjectiveSignature(
+    mission,
+    reputationScope,
+    missionArchetype,
+    pickupLocation,
+    lawful.lawfulClassification,
+    crimeRequirement,
+    resolvedTitle,
+  );
+  const conceptKey = createHash("sha256").update(objectiveSignature.key).digest("hex").slice(0, 20);
+  const tier = deriveTier(mission);
+  const isIntro = objectiveSignature.introState === "intro";
+  const specificityBadges = unique([
+    missionArchetype,
+    isIntro ? "Intro" : undefined,
+    lawful.lawfulClassification === "unlawful" ? "Possible unlawful" : undefined,
+    crimeRequirement === "required" ? "CrimeStat required" : crimeRequirement === "bounded" ? "CrimeStat limited" : undefined,
+    pickupLocation.status === "generated_from_pool" ? "Generated pickup pool" : undefined,
+  ]);
 
   return {
     variantKey: mission.contractId,
     familyKey: mission.familyId ?? mission.contractId,
+    conceptKey,
+    objectiveSignature,
+    tierKey: tier.tierKey,
+    tierLabel: tier.tierLabel,
+    isIntro,
+    specificityBadges,
+    owningScopeProvenance: {
+      scopeKey: reputationScope.scopeKey,
+      confidence: reputationScope.confidence,
+      sourceRefs: reputationScope.sourceRefs,
+      unresolvedReason: reputationScope.unresolvedReason,
+    },
     displayName: resolvedTitle.displayName,
     titleSource: resolvedTitle.titleSource,
     titleConfidence: resolvedTitle.titleConfidence,
@@ -1387,7 +1743,7 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
     rewardedReputationPaths,
     flags: missionFlags(mission),
     releaseFlags: releaseFlags(mission),
-    crimeStatRequirement: crimeStatRequirement(mission.prerequisites ?? []),
+    crimeStatRequirement: crimeRequirement,
     ...lawful,
     confidence: {
       hasUnresolvedLocation: pickupLocation.status === "unresolved" || unresolvedLocationTokens.length > 0,
@@ -1641,7 +1997,198 @@ function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: 
   };
 }
 
-function buildBrowseGroups(families: ShapedFamily[]): MissionBrowseGroup[] {
+function deriveDisplayCategory(
+  activityKey: string,
+  archetypes: string[],
+  reputationScope: ReputationScope,
+  familyKeys: string[],
+  displayName: string,
+  groupingEvidence: string[],
+): { displayCategory: DisplayCategory; displaySubcategories: string[] } {
+  const activityParts = activityKey.split("+").filter(Boolean);
+  const archetypeKeys = archetypes.map(keySlug);
+  const evidence = [
+    ...activityParts.map((activity) => `activity:${activity}`),
+    ...archetypes.map((archetype) => `archetype:${keySlug(archetype)}`),
+  ];
+  const hasActivity = (...values: string[]) => values.some((value) => activityParts.includes(value));
+  const hasActivityContaining = (...values: string[]) => values.some((value) => activityParts.some((activity) => activity.includes(value)));
+  const hasArchetype = (...values: string[]) => values.some((value) => archetypeKeys.includes(keySlug(value)));
+  const familyText = familyKeys.join(" ").toLowerCase();
+  const contextText = [displayName, familyText, ...groupingEvidence].join(" ").toLowerCase();
+  const secondaryActivityCategories = activityParts.length > 1
+    ? unique([
+      activityParts.some((activity) => /missing-person-investigation|search-body/.test(activity)) ? "Investigation" : undefined,
+      activityParts.some((activity) => /salvage/.test(activity)) ? "Salvage" : undefined,
+      activityParts.some((activity) => /recover-cargo|retrieve-cargo|steal-cargo/.test(activity)) ? "Cargo Recovery" : undefined,
+      activityParts.some((activity) => /courier-delivery|deliver/.test(activity)) ? "Delivery" : undefined,
+      activityParts.some((activity) => /defend|escort|patrol/.test(activity)) ? "Security" : undefined,
+      activityParts.some((activity) => /eliminate|destroy-items|sabotage|ambush/.test(activity)) ? "Mercenary" : undefined,
+    ].filter((value): value is string => Boolean(value)))
+    : [];
+  const result = (
+    label: string,
+    source: DisplayCategory["source"],
+    confidence: DisplayCategory["confidence"],
+    reason: string,
+    displaySubcategories: string[] = [],
+  ) => ({
+    displayCategory: {
+      version: 2 as const,
+      key: keySlug(label),
+      label,
+      confidence,
+      source,
+      evidence: unique([...evidence, reason]),
+    },
+    displaySubcategories: unique([
+      ...displaySubcategories,
+      ...secondaryActivityCategories.filter((subcategory) => subcategory !== label),
+    ]),
+  });
+
+  if (hasActivity("collector-offer")) return result("Collection", "activity", "resolved", "rule:collector-offer");
+  if (hasActivityContaining("missing-person-investigation", "search-body") || hasArchetype("Investigation")) {
+    return result("Investigation", hasArchetype("Investigation") ? "combined" : "activity", "resolved", "rule:investigation");
+  }
+  if (hasActivityContaining("salvage") || hasArchetype("Salvage")) {
+    return result("Salvage", hasArchetype("Salvage") ? "combined" : "activity", "resolved", "rule:salvage");
+  }
+  if (hasActivity("mining-fps") || hasArchetype("Hand Mining")) {
+    return result("Hand Mining", hasArchetype("Hand Mining") ? "combined" : "activity", "resolved", "rule:hand-mining");
+  }
+  if (hasActivity("resource-gathering") || archetypes.some((archetype) => /\bmining\b/i.test(archetype))) {
+    return result("Mining", "combined", "inferred", "rule:resource-gathering-or-mining-archetype");
+  }
+  if (hasActivity("repair")) return result("Repair", "activity", "resolved", "rule:repair");
+  if (hasActivity("refuel") || hasArchetype("Refuel")) return result("Refueling", "combined", "resolved", "rule:refuel");
+  if (hasActivity("resupply")) return result("Delivery", "activity", "resolved", "rule:resupply-delivery");
+  if (/\bracing\b/i.test(reputationScope.trackType) || archetypes.some((archetype) => /\bracing\b/i.test(archetype))) {
+    return result("Racing", "combined", "resolved", "rule:racing-track-or-archetype");
+  }
+  if (hasActivityContaining("bounty") || hasArchetype("Bounty")) {
+    return result("Bounty", hasArchetype("Bounty") ? "combined" : "activity", "resolved", "rule:bounty");
+  }
+  if (hasArchetype("Courier") || hasActivity("courier-delivery")) {
+    return result("Courier", hasArchetype("Courier") ? "combined" : "activity", "resolved", "rule:courier");
+  }
+  if (hasActivityContaining("recover-cargo", "retrieve-cargo", "steal-cargo")) {
+    return result("Cargo Recovery", hasArchetype("Cargo") ? "combined" : "activity", "resolved", "rule:cargo-recovery");
+  }
+  if (hasActivity("deliver") || hasArchetype("Cargo")) {
+    const subcategories = [
+      /interstellar|intersteller|system[_\s-]?to[_\s-]?system/.test(familyText) ? "Hauling - Interstellar" : undefined,
+      /planetary|local|region|linehaul/.test(familyText) ? "Hauling - Stellar" : undefined,
+    ].filter((value): value is string => Boolean(value));
+    return result("Hauling", hasArchetype("Cargo") ? "combined" : "activity", "resolved", "rule:cargo-logistics", subcategories);
+  }
+  if (hasArchetype("Recovery")) {
+    if (/recover-data|collect-data|retrieve-vanduul-data|station-assault|missing-person/.test(contextText)) {
+      return result("Investigation", "combined", "inferred", "rule:recovery-investigation-evidence", ["Retrieval"]);
+    }
+    if (/black.?box|recover-item|recover-package|spacecollect-cargo|retrieve-item/.test(contextText)) {
+      return result("Retrieval", "combined", "inferred", "rule:recovery-retrieval-evidence");
+    }
+    return result("Recovery", "archetype", "inferred", "rule:recovery-archetype-conservative");
+  }
+  if (hasActivityContaining("defend", "escort", "patrol")) {
+    return result("Security", "activity", "resolved", "rule:security-operation");
+  }
+  if (
+    hasArchetype("Mercenary", "Ambush", "Defend Ship", "Assassination")
+    || hasActivityContaining("eliminate", "ambush", "patrol", "defend", "escort", "destroy-items", "sabotage")
+  ) {
+    return result("Mercenary", hasArchetype("Mercenary", "Ambush", "Defend Ship", "Assassination") ? "combined" : "activity", "resolved", "rule:combat-or-security-operation");
+  }
+  if (activityKey === "unknown") {
+    if (/wildstar-racing-open-track|open track/.test(contextText)) return result("Racing", "fallback", "inferred", "rule:racing-handler-or-title");
+    if (/asdfacility-delving|jorrit dossier/.test(contextText)) return result("Investigation", "fallback", "inferred", "rule:dossier-investigation-evidence");
+    if (/mining rights/.test(contextText)) return result("Mining", "fallback", "inferred", "rule:mining-rights-title");
+    if (/hijacked-ship|hijacked ship|boarding action/.test(contextText)) return result("Security", "fallback", "inferred", "rule:hijacked-ship-security-evidence");
+    if (/criminal-kills|demolition|bombing|strike-group|strike group|hunt-the-polaris|hunt the polaris/.test(contextText)) {
+      return result("Mercenary", "fallback", "inferred", "rule:combat-handler-or-title");
+    }
+  }
+  return result("Other / Unresolved", "fallback", "unresolved", activityKey === "unknown" ? "rule:unknown-activity" : "rule:no-category-rule-matched");
+}
+
+function shapeConcepts(variants: ShapedVariant[]): MissionConcept[] {
+  const byConcept = new Map<string, ShapedVariant[]>();
+  for (const variant of variants) {
+    byConcept.set(variant.conceptKey, [...(byConcept.get(variant.conceptKey) ?? []), variant]);
+  }
+  return Array.from(byConcept.entries()).map(([conceptKey, conceptVariants]) => {
+    const representative = conceptVariants[0]!;
+    const titleCounts = new Map<string, number>();
+    for (const variant of conceptVariants) titleCounts.set(variant.displayName, (titleCounts.get(variant.displayName) ?? 0) + 1);
+    const displayName = Array.from(titleCounts.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0] ?? representative.displayName;
+    const familyKeys = unique(conceptVariants.map((variant) => variant.familyKey));
+    const signatureConfidences = unique(conceptVariants.map((variant) => variant.objectiveSignature.confidence));
+    const groupingConfidence = signatureConfidences.includes("unresolved")
+      ? "unresolved"
+      : signatureConfidences.includes("partial")
+        ? "partial"
+        : "strong";
+    const pickupMap = new Map<string, MissionConcept["pickupCoverage"][number]>();
+    for (const variant of conceptVariants) {
+      const pickup = variant.pickupLocation;
+      const pickupKey = JSON.stringify([pickup.status, pickup.displayName, pickup.system, pickup.localityPool]);
+      const existing = pickupMap.get(pickupKey);
+      if (existing) existing.variantCount += 1;
+      else pickupMap.set(pickupKey, {
+        status: pickup.status,
+        displayName: pickup.displayName,
+        system: pickup.system,
+        localityPool: pickup.localityPool,
+        variantCount: 1,
+      });
+    }
+    const tierMap = new Map<string, MissionConcept["tierSummaries"][number]>();
+    for (const variant of conceptVariants) {
+      const existing = tierMap.get(variant.tierKey);
+      if (existing) existing.variantCount += 1;
+      else tierMap.set(variant.tierKey, { tierKey: variant.tierKey, tierLabel: variant.tierLabel, variantCount: 1 });
+    }
+    const rewardedReputationPaths = Array.from(new Map(
+      conceptVariants.flatMap((variant) => variant.rewardedReputationPaths)
+        .map((rewardPath) => [JSON.stringify([rewardPath.factionKey, rewardPath.scopeKey, rewardPath.amount, rewardPath.xp, rewardPath.confidence]), rewardPath])
+    ).values());
+    const rewardedScopeKeys = unique(rewardedReputationPaths.filter((rewardPath) => rewardPath.confidence !== "unresolved").map((rewardPath) => rewardPath.scopeKey));
+    const archetypes = unique(conceptVariants.map((variant) => variant.missionArchetype));
+    const groupingEvidence = unique(conceptVariants.flatMap((variant) => variant.objectiveSignature.evidence));
+    const category = deriveDisplayCategory(
+      representative.objectiveSignature.activityKey,
+      archetypes,
+      representative.reputationScope,
+      familyKeys,
+      displayName,
+      groupingEvidence,
+    );
+    return {
+      conceptKey,
+      displayName,
+      activityKey: representative.objectiveSignature.activityKey,
+      ...category,
+      factionKey: representative.reputationScope.factionKey,
+      factionDisplayName: representative.reputationScope.factionDisplayName,
+      reputationScope: representative.reputationScope,
+      familyKeys,
+      variantKeys: conceptVariants.map((variant) => variant.variantKey),
+      variantCount: conceptVariants.length,
+      archetypes,
+      specificityBadges: unique(conceptVariants.flatMap((variant) => variant.specificityBadges)),
+      rewardedReputationPaths,
+      pickupCoverage: Array.from(pickupMap.values()),
+      tierSummaries: Array.from(tierMap.values()),
+      groupingConfidence,
+      groupingEvidence,
+      familyVariantFiles: [],
+      mixedRewardPaths: rewardedScopeKeys.length > 1,
+    };
+  }).sort((a, b) => a.displayName.localeCompare(b.displayName));
+}
+
+function buildBrowseGroups(families: ShapedFamily[], concepts: MissionConcept[]): MissionBrowseGroup[] {
   const factionMap = new Map<string, ShapedFamily[]>();
   for (const family of families) {
     factionMap.set(family.reputationScope.factionKey, [...(factionMap.get(family.reputationScope.factionKey) ?? []), family]);
@@ -1662,11 +2209,16 @@ function buildBrowseGroups(families: ShapedFamily[]): MissionBrowseGroup[] {
           archetypeMap.set(family.missionArchetype, [...(archetypeMap.get(family.missionArchetype) ?? []), family]);
         }
         const representative = scopeFamilies[0]!;
+        const scopeConcepts = concepts.filter((concept) =>
+          concept.factionKey === factionKeyValue && concept.reputationScope.scopeKey === scopeKey
+        );
         return {
           scopeKey,
           displayName: representative.reputationScope.displayName,
           confidence: representative.reputationScope.confidence,
           trackType: representative.reputationScope.trackType,
+          conceptKeys: scopeConcepts.map((concept) => concept.conceptKey),
+          familyKeys: scopeFamilies.map((family) => family.familyKey),
           missionArchetypes: Array.from(archetypeMap.entries()).map(([archetypeKey, archetypeFamilies]) => ({
             archetypeKey: keySlug(archetypeKey),
             displayName: archetypeKey,
@@ -1680,6 +2232,44 @@ function buildBrowseGroups(families: ShapedFamily[]): MissionBrowseGroup[] {
       }).sort((a, b) => a.displayName.localeCompare(b.displayName)),
     };
   }).sort((a, b) => a.factionDisplayName.localeCompare(b.factionDisplayName));
+}
+
+function buildCategoryProjections(concepts: MissionConcept[]): ConceptCategoryProjection[] {
+  return Array.from(
+    concepts.reduce((groups, concept) => {
+      const key = concept.displayCategory.key;
+      const existing = groups.get(key) ?? { categoryKey: key, displayName: concept.displayCategory.label, conceptKeys: [] };
+      existing.conceptKeys.push(concept.conceptKey);
+      groups.set(key, existing);
+      return groups;
+    }, new Map<string, ConceptCategoryProjection>()).values()
+  ).map((category) => ({
+    ...category,
+    conceptKeys: category.conceptKeys.sort((a, b) => {
+      const left = concepts.find((concept) => concept.conceptKey === a)?.displayName ?? a;
+      const right = concepts.find((concept) => concept.conceptKey === b)?.displayName ?? b;
+      return left.localeCompare(right);
+    }),
+  })).sort((a, b) => a.displayName.localeCompare(b.displayName));
+}
+
+function buildBrowseViews(concepts: MissionConcept[], reputation: MissionBrowseGroup[]): MissionBrowseViews {
+  const factionGroups = Array.from(
+    concepts.reduce((groups, concept) => {
+      groups.set(concept.factionKey, [...(groups.get(concept.factionKey) ?? []), concept]);
+      return groups;
+    }, new Map<string, MissionConcept[]>()).entries()
+  ).map(([factionKeyValue, factionConcepts]) => ({
+    factionKey: factionKeyValue,
+    factionDisplayName: factionConcepts[0]?.factionDisplayName ?? "Unknown faction",
+    categories: buildCategoryProjections(factionConcepts),
+  })).sort((a, b) => a.factionDisplayName.localeCompare(b.factionDisplayName));
+
+  return {
+    full: { categories: buildCategoryProjections(concepts) },
+    factions: factionGroups,
+    reputation,
+  };
 }
 
 function compactSummary(values: string[], fallback: string, max: number): string {
@@ -1710,7 +2300,7 @@ function optionList(
   return Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label));
 }
 
-function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[]): MissionBrowserFiltersMeta {
+function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[], concepts: MissionConcept[]): MissionBrowserFiltersMeta {
   return {
     factions: optionList(families.map((family) => ({
       key: family.provider,
@@ -1724,6 +2314,10 @@ function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[]): 
     archetypes: optionList(families.map((family) => ({
       key: family.missionArchetype,
       label: family.missionArchetype,
+    }))),
+    displayCategories: optionList(concepts.map((concept) => ({
+      key: concept.displayCategory.key,
+      label: concept.displayCategory.label,
     }))),
     rewardTypes: [
       { key: "blueprints", label: "Blueprint rewards", count: families.filter((family) => family.blueprintRewards.length > 0).length, colorKey: "blueprints" },
@@ -1802,7 +2396,21 @@ for (const variant of variants) {
 const families = Array.from(variantsByFamily.entries())
   .map(([familyKey, familyVariants]) => shapeFamily(familyKey, familyVariants, rawByFamily.get(familyKey) ?? []))
   .sort((a, b) => a.displayName.localeCompare(b.displayName));
-const missionBrowseGroups = buildBrowseGroups(families);
+const familyVariantFiles = Object.fromEntries(
+  families.map((family) => [family.familyKey, `family-variants/${payloadFileName(family.familyKey)}`])
+);
+const familyDetailFiles = Object.fromEntries(
+  families.map((family) => [family.familyKey, `families/${payloadFileName(family.familyKey)}`])
+);
+const variantDetailFiles = Object.fromEntries(
+  variants.map((variant) => [variant.variantKey, `variants/${payloadFileName(variant.variantKey)}`])
+);
+const concepts = shapeConcepts(variants).map((concept) => ({
+  ...concept,
+  familyVariantFiles: concept.familyKeys.map((familyKey) => familyVariantFiles[familyKey]!).filter(Boolean),
+}));
+const missionBrowseGroups = buildBrowseGroups(families, concepts);
+const browseViews = buildBrowseViews(concepts, missionBrowseGroups);
 
 const shaped: ShapedCatalog = {
   schemaVersion: 1,
@@ -1831,22 +2439,18 @@ const shaped: ShapedCatalog = {
     factionGroupCount: missionBrowseGroups.length,
     reputationScopeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.length, 0),
     archetypeGroupCount: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.reduce((scopeSum, scope) => scopeSum + scope.missionArchetypes.length, 0), 0),
+    conceptCount: concepts.length,
   },
   families,
   variants,
   missionBrowseGroups,
+  browseViews,
+  concepts,
 };
 
-const familyVariantFiles = Object.fromEntries(
-  families.map((family) => [family.familyKey, `family-variants/${payloadFileName(family.familyKey)}`])
-);
-const familyDetailFiles = Object.fromEntries(
-  families.map((family) => [family.familyKey, `families/${payloadFileName(family.familyKey)}`])
-);
-const variantDetailFiles = Object.fromEntries(
-  variants.map((variant) => [variant.variantKey, `variants/${payloadFileName(variant.variantKey)}`])
-);
 const familiesByKey = Object.fromEntries(families.map((family) => [family.familyKey, family]));
+const conceptsByKey = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept]));
+const conceptFamilyVariantFiles = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept.familyVariantFiles]));
 const browserIndex: MissionBrowserIndex = {
   schemaVersion: 1,
   generatedAt: shaped.generatedAt,
@@ -1864,13 +2468,19 @@ const browserIndex: MissionBrowserIndex = {
     extractionReport: "mission_browser_extraction_report.json",
     unresolvedReport: "mission_unresolved_refs.json",
     legacyCombinedCatalog: "missions.json",
+    conceptReport: "mission_concept_shaping_report.json",
+    conceptCatalog: "mission_concepts.json",
+    categoryReport: "mission_category_projection_report.json",
   },
-  filtersMeta: buildFiltersMeta(families, variants),
+  filtersMeta: buildFiltersMeta(families, variants, concepts),
   familiesByKey,
+  conceptsByKey,
   familyDetailFiles,
   familyVariantFiles,
   variantDetailFiles,
+  conceptFamilyVariantFiles,
   missionBrowseGroups,
+  browseViews,
 };
 
 const rewards = variants.map((variant) => ({
@@ -1995,6 +2605,394 @@ const report = {
   ],
 };
 
+const conceptAssignments = new Map<string, string[]>();
+for (const concept of concepts) {
+  for (const variantKey of concept.variantKeys) {
+    conceptAssignments.set(variantKey, [...(conceptAssignments.get(variantKey) ?? []), concept.conceptKey]);
+  }
+}
+const unassignedVariantKeys = variants.filter((variant) => !conceptAssignments.has(variant.variantKey)).map((variant) => variant.variantKey);
+const multiplyAssignedVariantKeys = Array.from(conceptAssignments.entries()).filter(([, conceptKeys]) => conceptKeys.length !== 1).map(([variantKey]) => variantKey);
+const familiesToConcepts = new Map<string, Set<string>>();
+for (const concept of concepts) {
+  for (const familyKey of concept.familyKeys) {
+    const conceptKeys = familiesToConcepts.get(familyKey) ?? new Set<string>();
+    conceptKeys.add(concept.conceptKey);
+    familiesToConcepts.set(familyKey, conceptKeys);
+  }
+}
+const conceptsCrossingOwningScopes = concepts.filter((concept) =>
+  unique(concept.variantKeys.map((variantKey) => variants.find((variant) => variant.variantKey === variantKey)?.reputationScope.scopeKey)).length > 1
+);
+const mixedRewardConcepts = concepts.filter((concept) => concept.mixedRewardPaths);
+const mixedRewardShelfViolations = mixedRewardConcepts.filter((concept) =>
+  concept.variantKeys.some((variantKey) => variants.find((variant) => variant.variantKey === variantKey)?.reputationScope.scopeKey !== concept.reputationScope.scopeKey)
+);
+const multiFamilyNonStrongConcepts = concepts.filter((concept) => concept.familyKeys.length > 1 && concept.groupingConfidence !== "strong");
+const validationFactionNames = new Set([
+  "Headhunters",
+  "Covalex",
+  "Adagio Holdings",
+  "Citizens For Prosperity",
+  "Dead Saints",
+  "Bounty Hunters Guild",
+  "Eckhart Security",
+]);
+const oneOffFaction = missionBrowseGroups
+  .map((group) => ({
+    name: group.factionDisplayName,
+    conceptCount: group.reputationScopes.reduce((sum, scope) => sum + scope.conceptKeys.length, 0),
+  }))
+  .filter((item) => !validationFactionNames.has(item.name))
+  .sort((a, b) => a.conceptCount - b.conceptCount || a.name.localeCompare(b.name))[0]?.name;
+if (oneOffFaction) validationFactionNames.add(oneOffFaction);
+
+const validationExamples = Array.from(validationFactionNames).map((factionName) => {
+  const factionConcepts = concepts.filter((concept) => concept.factionDisplayName === factionName);
+  const factionFamilies = families.filter((family) => family.reputationScope.factionDisplayName === factionName);
+  const collapsed = factionConcepts
+    .filter((concept) => concept.familyKeys.length > 1)
+    .slice(0, 5)
+    .map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      owningScope: concept.reputationScope.displayName,
+      familyKeys: concept.familyKeys,
+      variantCount: concept.variantCount,
+      confidence: concept.groupingConfidence,
+    }));
+  const intentionallySeparate = factionFamilies
+    .filter((family) => (familiesToConcepts.get(family.familyKey)?.size ?? 0) > 1)
+    .slice(0, 5)
+    .map((family) => ({
+      familyKey: family.familyKey,
+      displayName: family.displayName,
+      owningScope: family.reputationScope.displayName,
+      conceptKeys: Array.from(familiesToConcepts.get(family.familyKey) ?? []),
+      reason: "Family contains multiple evidence-gated objective signatures.",
+    }));
+  return {
+    factionName,
+    oldFamilyCardCount: factionFamilies.length,
+    newConceptCardCount: factionConcepts.length,
+    collapsed,
+    intentionallySeparate,
+  };
+});
+
+const conceptReport = {
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+  stage: "Stage 1.2 meaningful offer-title boundary tuning",
+  gatePassed:
+    unassignedVariantKeys.length === 0
+    && multiplyAssignedVariantKeys.length === 0
+    && conceptsCrossingOwningScopes.length === 0
+    && mixedRewardShelfViolations.length === 0
+    && multiFamilyNonStrongConcepts.length === 0,
+  stage2Recommendation: "hold_for_concept-granularity_review",
+  totals: {
+    oldStage1GlobalConceptCount: 755,
+    factionsProcessed: missionBrowseGroups.length,
+    reputationScopesProcessed: missionBrowseGroups.reduce((sum, group) => sum + group.reputationScopes.length, 0),
+    oldGlobalFamilyCardCount: families.length,
+    newGlobalConceptCardCount: concepts.length,
+    conceptsWithOneFamily: concepts.filter((concept) => concept.familyKeys.length === 1).length,
+    conceptsWithMultipleFamilies: concepts.filter((concept) => concept.familyKeys.length > 1).length,
+    familiesSplitIntoMultipleConcepts: Array.from(familiesToConcepts.values()).filter((conceptKeys) => conceptKeys.size > 1).length,
+    variantsAssignedExactlyOnce: variants.filter((variant) => conceptAssignments.get(variant.variantKey)?.length === 1).length,
+    unassignedVariants: unassignedVariantKeys.length,
+    multiplyAssignedVariants: multiplyAssignedVariantKeys.length,
+    groupingConfidence: {
+      strong: concepts.filter((concept) => concept.groupingConfidence === "strong").length,
+      partial: concepts.filter((concept) => concept.groupingConfidence === "partial").length,
+      unresolved: concepts.filter((concept) => concept.groupingConfidence === "unresolved").length,
+    },
+    mixedRewardConcepts: mixedRewardConcepts.length,
+    mixedRewardShelfViolations: mixedRewardShelfViolations.length,
+    conceptsCrossingOwningScopes: conceptsCrossingOwningScopes.length,
+    multiFamilyNonStrongConcepts: multiFamilyNonStrongConcepts.length,
+    headhuntersOldStage1ConceptCount: 141,
+    headhuntersTunedConceptCount: concepts.filter((concept) => concept.factionDisplayName === "Headhunters").length,
+  },
+  slicedApi: {
+    browserIndexVariantBodies: 0,
+    browserIndexSerializedBytes: Buffer.byteLength(JSON.stringify(browserIndex), "utf8"),
+    conceptFamilyVariantReferenceCount: Object.values(conceptFamilyVariantFiles).reduce((sum, files) => sum + files.length, 0),
+    familyVariantRouteReferences: Object.keys(familyVariantFiles).length,
+    familyDetailRouteReferences: Object.keys(familyDetailFiles).length,
+    exactVariantRouteReferences: Object.keys(variantDetailFiles).length,
+    familyRoutesPreserved: Object.keys(familyDetailFiles).length === families.length && Object.keys(familyVariantFiles).length === families.length,
+    exactVariantRoutesPreserved: Object.keys(variantDetailFiles).length === variants.length,
+  },
+  failures: {
+    unassignedVariantKeys,
+    multiplyAssignedVariantKeys,
+    conceptKeysCrossingOwningScopes: conceptsCrossingOwningScopes.map((concept) => concept.conceptKey),
+    mixedRewardShelfViolationConceptKeys: mixedRewardShelfViolations.map((concept) => concept.conceptKey),
+    multiFamilyNonStrongConceptKeys: multiFamilyNonStrongConcepts.map((concept) => concept.conceptKey),
+  },
+  validationExamples,
+  reviewFlags: [
+    concepts.length > families.length
+      ? `Conservative objective splitting increases candidate cards from ${families.length} families to ${concepts.length} concepts; review readability before Stage 2.`
+      : undefined,
+    concepts.filter((concept) => concept.groupingConfidence !== "strong").length > 0
+      ? `${concepts.filter((concept) => concept.groupingConfidence !== "strong").length} partial or unresolved concepts remain intentionally unmerged.`
+      : undefined,
+  ].filter(Boolean),
+  notes: [
+    "Concept grouping is global and contains no faction-specific grouping rules.",
+    "Raw title and description stems are supporting evidence only. Clean localized offer titles become concept boundaries only for broad generated activities where activity identity alone is insufficient.",
+    "Partial activity derivations remain within their source family; unresolved activity derivations remain variant-specific.",
+    "Rewarded reputation paths are metadata only and never determine owning shelf placement.",
+    "Partial and unresolved signatures remain separate because their fallback signature includes variant identity when no structural objective evidence exists.",
+    "Existing family and exact variant payloads remain the lazy-loading and technical-detail provenance layer.",
+  ],
+};
+
+const categoryCountRows = (rows: MissionConcept[]) => Array.from(
+  rows.reduce((counts, concept) => {
+    const existing = counts.get(concept.displayCategory.key) ?? {
+      categoryKey: concept.displayCategory.key,
+      displayName: concept.displayCategory.label,
+      conceptCount: 0,
+      variantCount: 0,
+    };
+    existing.conceptCount += 1;
+    existing.variantCount += concept.variantCount;
+    counts.set(concept.displayCategory.key, existing);
+    return counts;
+  }, new Map<string, { categoryKey: string; displayName: string; conceptCount: number; variantCount: number }>()).values()
+).sort((a, b) => b.conceptCount - a.conceptCount || a.displayName.localeCompare(b.displayName));
+
+const countConceptValues = (values: string[]) => Array.from(
+  values.reduce((counts, value) => {
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+    return counts;
+  }, new Map<string, number>()).entries()
+).map(([value, conceptCount]) => ({ value, conceptCount }))
+  .sort((a, b) => b.conceptCount - a.conceptCount || a.value.localeCompare(b.value));
+
+const conceptEvidenceValue = (concept: MissionConcept, prefix: string) =>
+  concept.groupingEvidence.find((item) => item.startsWith(prefix));
+
+const recoveryPattern = (concept: MissionConcept) => {
+  const text = [concept.displayName, ...concept.familyKeys, ...concept.groupingEvidence].join(" ").toLowerCase();
+  if (/black.?box/.test(text)) return "black-box-retrieval";
+  if (/recover-data|collect-data|retrieve-vanduul-data|station-assault|missing-person/.test(text)) return "investigation-or-data-retrieval";
+  if (/recover-item|recover-package|spacecollect-cargo|retrieve-item/.test(text)) return "item-or-package-retrieval";
+  if (/resource-gathering/.test(text)) return "resource-gathering";
+  return "ambiguous-recovery";
+};
+
+const wasStageARecoveryCollection = (concept: MissionConcept) => {
+  if (!concept.archetypes.includes("Recovery")) return false;
+  return !concept.activityKey.split("+").some((activity) =>
+    /missing-person-investigation|search-body|salvage|mining-fps|resource-gathering|repair|refuel|bounty|courier-delivery|deliver|recover-cargo|retrieve-cargo|steal-cargo/.test(activity)
+  );
+};
+
+const wasStageAUnresolved = (concept: MissionConcept) => {
+  const activities = concept.activityKey.split("+");
+  const archetypes = concept.archetypes.map(keySlug);
+  const hasActivity = (pattern: RegExp) => activities.some((activity) => pattern.test(activity));
+  const hasArchetype = (pattern: RegExp) => archetypes.some((archetype) => pattern.test(archetype));
+  return !(
+    hasActivity(/collector-offer|missing-person-investigation|search-body|salvage|mining-fps|resource-gathering|repair|refuel|bounty|courier-delivery|deliver|recover-cargo|retrieve-cargo|steal-cargo|eliminate|ambush|patrol|defend|escort|destroy-items|sabotage/)
+    || hasArchetype(/investigation|salvage|hand-mining|mining|refuel|racing|bounty|courier|cargo|recovery|mercenary|ambush|defend-ship|assassination/)
+    || /\bracing\b/i.test(concept.reputationScope.trackType)
+  );
+};
+
+const previousStageACategoryCounts = [
+  { categoryKey: "collection", displayName: "Collection", conceptCount: 161, variantCount: 164 },
+  { categoryKey: "mercenary", displayName: "Mercenary", conceptCount: 134, variantCount: 743 },
+  { categoryKey: "other-unresolved", displayName: "Other / Unresolved", conceptCount: 76, variantCount: 120 },
+  { categoryKey: "hauling", displayName: "Hauling", conceptCount: 42, variantCount: 438 },
+  { categoryKey: "investigation", displayName: "Investigation", conceptCount: 29, variantCount: 256 },
+  { categoryKey: "bounty", displayName: "Bounty", conceptCount: 20, variantCount: 65 },
+  { categoryKey: "courier", displayName: "Courier", conceptCount: 19, variantCount: 347 },
+  { categoryKey: "salvage", displayName: "Salvage", conceptCount: 13, variantCount: 103 },
+  { categoryKey: "mining", displayName: "Mining", conceptCount: 12, variantCount: 32 },
+  { categoryKey: "racing", displayName: "Racing", conceptCount: 6, variantCount: 6 },
+  { categoryKey: "hand-mining", displayName: "Hand Mining", conceptCount: 3, variantCount: 156 },
+  { categoryKey: "refueling", displayName: "Refueling", conceptCount: 2, variantCount: 29 },
+  { categoryKey: "repair", displayName: "Repair", conceptCount: 1, variantCount: 1 },
+];
+
+const unresolvedCategoryConcepts = concepts.filter((concept) => concept.displayCategory.confidence === "unresolved");
+const previousUnresolvedConcepts = concepts.filter(wasStageAUnresolved);
+const collectionConcepts = concepts.filter((concept) => concept.displayCategory.key === "collection");
+const recoveryConcepts = concepts.filter((concept) => concept.archetypes.includes("Recovery"));
+const previousRecoveryCollectionConcepts = recoveryConcepts.filter(wasStageARecoveryCollection);
+const haulingConcepts = concepts.filter((concept) => concept.displayCategory.key === "hauling");
+const compoundActivityConcepts = concepts.filter((concept) => concept.activityKey.includes("+"));
+const categoryReport = {
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+  stage: "Stage A.1 category taxonomy tuning",
+  categoryVersion: 2,
+  totals: {
+    conceptsCategorized: concepts.length,
+    conceptsInOtherUnresolved: unresolvedCategoryConcepts.length,
+    conceptsWithUnknownActivity: concepts.filter((concept) => concept.activityKey === "unknown").length,
+    unknownActivityConceptsCategorized: concepts.filter((concept) => concept.activityKey === "unknown" && concept.displayCategory.confidence !== "unresolved").length,
+    unknownActivityConceptsUnresolved: concepts.filter((concept) => concept.activityKey === "unknown" && concept.displayCategory.confidence === "unresolved").length,
+    sourceCounts: {
+      archetype: concepts.filter((concept) => concept.displayCategory.source === "archetype").length,
+      activity: concepts.filter((concept) => concept.displayCategory.source === "activity").length,
+      combined: concepts.filter((concept) => concept.displayCategory.source === "combined").length,
+      fallback: concepts.filter((concept) => concept.displayCategory.source === "fallback").length,
+    },
+    confidenceCounts: {
+      resolved: concepts.filter((concept) => concept.displayCategory.confidence === "resolved").length,
+      inferred: concepts.filter((concept) => concept.displayCategory.confidence === "inferred").length,
+      unresolved: unresolvedCategoryConcepts.length,
+    },
+  },
+  previousStageACategoryCounts,
+  globalCategoryCounts: categoryCountRows(concepts),
+  collectionAudit: {
+    previousConceptCount: previousStageACategoryCounts.find((row) => row.categoryKey === "collection")?.conceptCount,
+    currentConceptCount: collectionConcepts.length,
+    byArchetype: countConceptValues(collectionConcepts.flatMap((concept) => concept.archetypes)),
+    byActivityKey: countConceptValues(collectionConcepts.map((concept) => concept.activityKey)),
+    byFaction: countConceptValues(collectionConcepts.map((concept) => concept.factionDisplayName)),
+    byMissionType: countConceptValues(collectionConcepts.map((concept) => conceptEvidenceValue(concept, "contract:") ?? "contract:unknown")),
+    titlePatterns: countConceptValues(collectionConcepts.map((concept) => /\bcollector\b/i.test(concept.displayName) ? "collector-offer-title" : "other-title")),
+    objectiveHandlerEvidence: countConceptValues(collectionConcepts.map((concept) => conceptEvidenceValue(concept, "handler:") ?? "handler:unknown")).slice(0, 20),
+    rewardPickupClues: {
+      mixedRewardConcepts: collectionConcepts.filter((concept) => concept.mixedRewardPaths).length,
+      pickupSystems: countConceptValues(collectionConcepts.flatMap((concept) => concept.pickupCoverage.map((pickup) => pickup.system ?? pickup.displayName))).slice(0, 20),
+    },
+  },
+  recoveryAudit: {
+    totalRecoveryArchetypeConcepts: recoveryConcepts.length,
+    previouslyInferredIntoCollection: previousRecoveryCollectionConcepts.length,
+    placementSummary: categoryCountRows(recoveryConcepts),
+    patternSummary: countConceptValues(recoveryConcepts.map(recoveryPattern)),
+    concepts: recoveryConcepts.map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      factionDisplayName: concept.factionDisplayName,
+      activityKey: concept.activityKey,
+      pattern: recoveryPattern(concept),
+      previousStageAPlacement: wasStageARecoveryCollection(concept) ? "Collection" : "Other resolved category",
+      recommendedCategory: concept.displayCategory.label,
+      recommendationConfidence: concept.displayCategory.confidence,
+      objectiveHandlerEvidence: concept.groupingEvidence.filter((item) => /^(activity|handler|title|description|contract):/.test(item)),
+    })),
+  },
+  haulingAudit: {
+    recommendation: "Keep Stellar and Interstellar as subcategories/badges and optional filters, not top-level categories.",
+    totalHaulingConcepts: haulingConcepts.length,
+    subcategoryCounts: countConceptValues(haulingConcepts.flatMap((concept) => concept.displaySubcategories.length ? concept.displaySubcategories : ["No route subcategory"])),
+    concepts: haulingConcepts.map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      factionDisplayName: concept.factionDisplayName,
+      activityKey: concept.activityKey,
+      displaySubcategories: concept.displaySubcategories,
+      familyKeys: concept.familyKeys,
+    })),
+  },
+  compoundActivityAudit: {
+    totalConcepts: compoundActivityConcepts.length,
+    activityKeyCounts: countConceptValues(compoundActivityConcepts.map((concept) => concept.activityKey)),
+    concepts: compoundActivityConcepts.map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      factionDisplayName: concept.factionDisplayName,
+      activityKey: concept.activityKey,
+      primaryCategory: concept.displayCategory.label,
+      secondaryCategories: concept.displaySubcategories,
+    })),
+  },
+  validationFactions: Array.from(validationFactionNames).map((factionName) => ({
+    factionName,
+    categoryCounts: categoryCountRows(concepts.filter((concept) => concept.factionDisplayName === factionName)),
+  })),
+  unresolvedCategories: unresolvedCategoryConcepts.map((concept) => ({
+    conceptKey: concept.conceptKey,
+    displayName: concept.displayName,
+    factionDisplayName: concept.factionDisplayName,
+    activityKey: concept.activityKey,
+    archetypes: concept.archetypes,
+    missionContractType: conceptEvidenceValue(concept, "contract:") ?? "contract:unknown",
+    objectiveHandlerEvidence: concept.groupingEvidence.filter((item) => /^(activity|handler|title|description):/.test(item)),
+    reason: concept.displayCategory.evidence.find((item) => item.startsWith("rule:")) ?? "rule:unknown",
+    recommendedCategory: "Other / Unresolved",
+    recommendationConfidence: "unresolved",
+  })),
+  previousStageAUnresolvedAudit: {
+    previousCount: previousUnresolvedConcepts.length,
+    currentUnresolvedCount: unresolvedCategoryConcepts.length,
+    concepts: previousUnresolvedConcepts.map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      factionDisplayName: concept.factionDisplayName,
+      archetypes: concept.archetypes,
+      activityKey: concept.activityKey,
+      missionContractType: conceptEvidenceValue(concept, "contract:") ?? "contract:unknown",
+      objectiveHandlerEvidence: concept.groupingEvidence.filter((item) => /^(activity|handler|title|description):/.test(item)),
+      previousReason: concept.activityKey === "unknown" ? "rule:unknown-activity" : "rule:no-category-rule-matched",
+      recommendedCategory: concept.displayCategory.label,
+      recommendationConfidence: concept.displayCategory.confidence,
+      currentRule: concept.displayCategory.evidence.find((item) => item.startsWith("rule:")) ?? "rule:unknown",
+    })),
+  },
+  topUnresolvedReasons: Array.from(
+    unresolvedCategoryConcepts.reduce((counts, concept) => {
+      const reason = concept.displayCategory.evidence.find((item) => item.startsWith("rule:")) ?? "rule:unknown";
+      counts.set(reason, (counts.get(reason) ?? 0) + 1);
+      return counts;
+    }, new Map<string, number>()).entries()
+  ).map(([reason, conceptCount]) => ({ reason, conceptCount })).sort((a, b) => b.conceptCount - a.conceptCount),
+  examplesPerCategory: browseViews.full.categories.map((category) => ({
+    categoryKey: category.categoryKey,
+    displayName: category.displayName,
+    examples: category.conceptKeys.slice(0, 8).map((conceptKey) => {
+      const concept = conceptsByKey[conceptKey]!;
+      return { conceptKey, displayName: concept.displayName, factionDisplayName: concept.factionDisplayName };
+    }),
+  })),
+  questionablePlacements: concepts
+    .filter((concept) => concept.displayCategory.confidence !== "resolved" || concept.displayCategory.label === "Collection" && concept.displayCategory.source === "archetype")
+    .slice(0, 100)
+    .map((concept) => ({
+      conceptKey: concept.conceptKey,
+      displayName: concept.displayName,
+      factionDisplayName: concept.factionDisplayName,
+      category: concept.displayCategory.label,
+      categorySource: concept.displayCategory.source,
+      categoryConfidence: concept.displayCategory.confidence,
+      activityKey: concept.activityKey,
+      archetypes: concept.archetypes,
+      reason: concept.displayCategory.evidence.find((item) => item.startsWith("rule:")) ?? "rule:unknown",
+    })),
+  proposedFixesBeforeUiAdoption: [
+    "Review remaining Other / Unresolved concepts only when structural handler or objective evidence becomes available.",
+    "Validate Retrieval versus Cargo Recovery labels with in-game contract-manager terminology.",
+    "Keep compound secondary activities as badges/subcategories rather than additional top-level cards.",
+    "Keep Hauling - Stellar and Hauling - Interstellar as subcategories/badges and optional filters.",
+  ],
+  projections: {
+    fullCategoryCount: browseViews.full.categories.length,
+    factionProjectionCount: browseViews.factions.length,
+    reputationProjectionCount: browseViews.reputation.length,
+      fullAndFactionContainConceptKeysOnly: true,
+      reputationPreservesExistingBrowseGroups: true,
+  },
+  slicedApi: {
+    browserIndexVariantBodies: 0,
+    browserIndexSerializedBytes: Buffer.byteLength(JSON.stringify(browserIndex), "utf8"),
+    familyRoutesPreserved: Object.keys(familyDetailFiles).length === families.length && Object.keys(familyVariantFiles).length === families.length,
+    exactVariantRoutesPreserved: Object.keys(variantDetailFiles).length === variants.length,
+    conceptFamilyVariantReferencesPreserved: Object.keys(conceptFamilyVariantFiles).length === concepts.length,
+  },
+};
+
 await Promise.all([
   mkdir(missionRoot, { recursive: true }),
   mkdir(familyRoot, { recursive: true }),
@@ -2013,6 +3011,9 @@ await Promise.all([
   writeJson("mission_reputation.json", { generatedAt: shaped.generatedAt, records: reputation }),
   writeJson("mission_unresolved_refs.json", { generatedAt: shaped.generatedAt, records: unresolvedRefs }),
   writeJson("mission_browser_extraction_report.json", report),
+  writeJson("mission_concepts.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: concepts }),
+  writeJson("mission_concept_shaping_report.json", conceptReport),
+  writeJson("mission_category_projection_report.json", categoryReport),
   ...families.map((family) => {
     const familyVariants = variantsByFamily.get(family.familyKey) ?? [];
     const detail: MissionFamilyDetailPayload = {
