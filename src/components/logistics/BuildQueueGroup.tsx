@@ -699,7 +699,7 @@ export default function BuildQueueGroup({
                   <span>Modifier</span>
                   <span>Available</span>
                   <span>Need</span>
-                  <span>Reserve</span>
+                  <span>Quality</span>
                 </div>
 
                 {materialGroups.map((group) => {
@@ -725,7 +725,7 @@ export default function BuildQueueGroup({
                         className="bq-mat-row"
                         onClick={(event) => {
                           if (isDrawerToggleExcluded(event.target)) return;
-                          openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                          toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
                         }}
                       >
                         <div className="bq-mat-name">
@@ -800,15 +800,14 @@ export default function BuildQueueGroup({
                         <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
                         <button
                           type="button"
-                          className={`bq-reserve-btn${reserveExpanded ? ' is-active' : ''}`}
-                          aria-expanded={reserveExpanded}
-                          disabled={!group.hasStock && !reserveExpanded}
+                          className={`bq-reserve-btn${qualityExpanded ? ' is-active' : ''}`}
+                          aria-expanded={qualityExpanded}
                           onClick={(event) => {
                             event.stopPropagation();
-                            toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                            openQualityEditor(item.id, group.groupKey, group.selectedQuality);
                           }}
                         >
-                          {reserveExpanded ? 'Hide' : group.hasStock ? 'Reserve' : 'No stock'}
+                          {qualityExpanded ? 'Hide' : 'Quality'}
                         </button>
                       </div>
 
