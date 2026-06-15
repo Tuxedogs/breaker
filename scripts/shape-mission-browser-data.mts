@@ -502,7 +502,6 @@ type MissionBrowserIndex = {
   report: {
     extractionReport: string;
     unresolvedReport: string;
-    legacyCombinedCatalog: string;
     conceptReport: string;
     conceptCatalog: string;
     categoryReport: string;
@@ -2484,7 +2483,6 @@ const browserIndex: MissionBrowserIndex = {
   report: {
     extractionReport: "mission_browser_extraction_report.json",
     unresolvedReport: "mission_unresolved_refs.json",
-    legacyCombinedCatalog: "missions.json",
     conceptReport: "mission_concept_shaping_report.json",
     conceptCatalog: "mission_concepts.json",
     categoryReport: "mission_category_projection_report.json",
@@ -3020,7 +3018,6 @@ await Promise.all([
   mkdir(variantRoot, { recursive: true }),
 ]);
 await Promise.all([
-  writeJson("missions.json", shaped),
   writeJson("mission_browser_index.json", browserIndex),
   writeJson("mission_families.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
   writeJson("mission_variants.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: variants }),
