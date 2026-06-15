@@ -94,6 +94,7 @@ export async function handleUserBuildQueueRoute(
     if (error instanceof TypeError) {
       return safeError(400, error.message);
     }
+    console.error("[api/user/build-queue] Database request failed.", error);
     return safeError(500, "Database request failed.");
   }
 }

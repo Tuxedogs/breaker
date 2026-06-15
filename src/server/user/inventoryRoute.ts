@@ -88,6 +88,7 @@ export async function handleUserInventoryRoute(
   } catch (error) {
     if (error instanceof AuthError) return safeError(error.status, error.message);
     if (error instanceof TypeError) return safeError(400, error.message);
+    console.error("[api/user/inventory] Database request failed.", error);
     return safeError(500, "Database request failed.");
   }
 }
