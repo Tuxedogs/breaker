@@ -253,7 +253,6 @@ export type MissionBrowserCatalog = {
   report?: {
     extractionReport: string;
     unresolvedReport: string;
-    legacyCombinedCatalog: string;
     conceptReport?: string;
     conceptCatalog?: string;
     categoryReport?: string;
@@ -491,6 +490,10 @@ function staticIndexPath(filters: MissionBrowserFilters = {}): string {
   return key ? `/api/missions/mission_browser_index.json?${key}` : "/api/missions/mission_browser_index.json";
 }
 
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 function rewardMatches(family: MissionFamilyView, reward: string): boolean {
   if (!reward) return true;
   if (reward === "blueprints") return family.blueprintRewards.length > 0;
@@ -593,13 +596,17 @@ function applyBrowserFilters(catalog: MissionBrowserCatalog, filters: MissionBro
 export function loadMissionData(filters: MissionBrowserFilters = {}): Promise<MissionBrowserCatalog> {
   const key = filterKey(filters);
   if (!missionDataPromises.has(key)) {
-    const request = fetchJson<MissionBrowserCatalog>(browserPath(filters), "mission browser index")
+    const dynamicPath = browserPath(filters);
+    const staticPath = staticIndexPath(filters);
+    const request = fetchJson<MissionBrowserCatalog>(dynamicPath, "mission browser index")
         .then(toBrowserCatalog)
-        .catch(() =>
-          fetchJson<MissionBrowserCatalog>(staticIndexPath(filters), "mission browser index")
+        .catch((dynamicError: unknown) =>
+          fetchJson<MissionBrowserCatalog>(staticPath, "mission browser index")
             .then(toBrowserCatalog)
             .then((catalog) => applyBrowserFilters(catalog, filters))
-            .catch(() => fetchJson<MissionBrowserCatalog>("/api/missions/missions.json", "mission browser catalog").then(toBrowserCatalog).then((catalog) => applyBrowserFilters(catalog, filters)))
+            .catch((staticError: unknown) => {
+              throw new Error(`Mission browser shaped data unavailable. ${dynamicPath}: ${errorMessage(dynamicError)}; ${staticPath}: ${errorMessage(staticError)}`);
+            })
         )
         .catch((error: unknown) => {
           missionDataPromises.delete(key);
