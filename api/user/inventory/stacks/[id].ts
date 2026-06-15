@@ -1,7 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { handleUserInventoryRoute } from "../../../../src/server/user/inventoryRoute";
-
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "DELETE") return {};
 
@@ -18,21 +16,35 @@ function getStackId(request: IncomingMessage) {
 }
 
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
+  let body: unknown;
+
   try {
+    body = await readBody(request);
+  } catch (error) {
+    console.error("[api/user/inventory/stacks/:id] Invalid request body.", error);
+    response.statusCode = 400;
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify({ error: "Invalid request body." }));
+    return;
+  }
+
+  try {
+    const { handleUserInventoryRoute } = await import("../../../../src/server/user/inventoryRoute.js");
     const stackId = getStackId(request);
     const result = await handleUserInventoryRoute(
       request.method ?? "PATCH",
       `/api/user/inventory/stacks/${stackId}`,
       request.headers,
-      await readBody(request),
+      body,
     );
     response.statusCode = result?.status ?? 404;
     response.setHeader("content-type", "application/json");
     if (result?.status === 405) response.setHeader("allow", "PATCH, DELETE");
     response.end(JSON.stringify(result?.body ?? { error: "Not found." }));
-  } catch {
-    response.statusCode = 400;
+  } catch (error) {
+    console.error("[api/user/inventory/stacks/:id] Unhandled route error.", error);
+    response.statusCode = 500;
     response.setHeader("content-type", "application/json");
-    response.end(JSON.stringify({ error: "Invalid request body." }));
+    response.end(JSON.stringify({ error: "Inventory stack request failed." }));
   }
 }

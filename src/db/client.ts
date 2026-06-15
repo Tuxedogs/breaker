@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import type { PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import * as schema from "./schema";
+import * as schema from "./schema.js";
 
 let dbInstance: PostgresJsDatabase<typeof schema> | null = null;
 

@@ -1,11 +1,11 @@
-import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId.js";
 import {
   deleteInventoryStack,
   deleteInventoryLocation,
   listOnlinePersistenceState,
   syncOnlinePersistenceState,
   type OnlinePersistencePayload,
-} from "./onlinePersistenceService";
+} from "./onlinePersistenceService.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;

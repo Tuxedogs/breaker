@@ -1,8 +1,8 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed";
-import { getDb } from "../../db/client";
-import { buildQueueItems, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema";
+import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed.js";
+import { getDb } from "../../db/client.js";
+import { buildQueueItems, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema.js";
 
 type UnknownRecord = Record<string, unknown>;
 

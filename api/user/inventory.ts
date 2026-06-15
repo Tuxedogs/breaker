@@ -1,7 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { handleUserInventoryRoute } from "../../src/server/user/inventoryRoute";
-
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "GET" || request.method === "HEAD") return {};
 
@@ -11,21 +9,37 @@ async function readBody(request: IncomingMessage): Promise<unknown> {
   return raw ? JSON.parse(raw) : {};
 }
 
+function sendJson(response: ServerResponse, status: number, body: unknown) {
+  response.statusCode = status;
+  response.setHeader("content-type", "application/json");
+  response.end(JSON.stringify(body));
+}
+
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
+  let body: unknown;
+
   try {
+    body = await readBody(request);
+  } catch (error) {
+    console.error("[api/user/inventory] Invalid request body.", error);
+    sendJson(response, 400, { error: "Invalid request body." });
+    return;
+  }
+
+  try {
+    const { handleUserInventoryRoute } = await import("../../src/server/user/inventoryRoute.js");
     const result = await handleUserInventoryRoute(
       request.method ?? "GET",
       "/api/user/inventory",
       request.headers,
-      await readBody(request),
+      body,
     );
     response.statusCode = result?.status ?? 404;
     response.setHeader("content-type", "application/json");
     if (result?.status === 405) response.setHeader("allow", "GET");
     response.end(JSON.stringify(result?.body ?? { error: "Not found." }));
-  } catch {
-    response.statusCode = 400;
-    response.setHeader("content-type", "application/json");
-    response.end(JSON.stringify({ error: "Invalid request body." }));
+  } catch (error) {
+    console.error("[api/user/inventory] Unhandled route error.", error);
+    sendJson(response, 500, { error: "Inventory request failed." });
   }
 }
