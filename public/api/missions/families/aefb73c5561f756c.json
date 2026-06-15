@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton",
@@ -35,7 +35,7 @@
     ],
     "rewardSummary": [
       "Hauling +150",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Hauling +200",
       "Hauling +50",
       "Hauling +100",
@@ -122,12 +122,14 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
       "Stanton 2",
@@ -156,9 +158,12 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "efd928c9-d734-4c5b-934f-1403215252d2",
       "1e9a81a9-4b5c-47b7-b144-7e9b199cea7e",
@@ -167,7 +172,7 @@
       "84476b48-109a-4871-b361-0ec3aa3a4d9d",
       "e18860a1-c82b-46cf-8e18-6e46110c2ad6"
     ],
-    "searchText": "headhunters careercontract finish the job headhunters_stanton_medium_recovercargo headhunters careercontract hauling cargo pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble efd928c9-d734-4c5b-934f-1403215252d2 1e9a81a9-4b5c-47b7-b144-7e9b199cea7e da02741b-c8b5-4528-b638-df1d71d0e9b5 470b8268-5416-4b72-afdd-8ec73b11bf11 84476b48-109a-4871-b361-0ec3aa3a4d9d e18860a1-c82b-46cf-8e18-6e46110c2ad6 hauling +150 calculated payout hauling +200 hauling +50 hauling +100 hauling +300"
+    "searchText": "headhunters careercontract finish the job headhunters_stanton_medium_recovercargo headhunters careercontract hauling cargo pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble efd928c9-d734-4c5b-934f-1403215252d2 1e9a81a9-4b5c-47b7-b144-7e9b199cea7e da02741b-c8b5-4528-b638-df1d71d0e9b5 470b8268-5416-4b72-afdd-8ec73b11bf11 84476b48-109a-4871-b361-0ec3aa3a4d9d e18860a1-c82b-46cf-8e18-6e46110c2ad6 hauling +150 credits formula unresolved hauling +200 hauling +50 hauling +100 hauling +300"
   },
   "groupSummary": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton",
@@ -193,7 +198,7 @@
   "rewardSummary": {
     "rewardSummary": [
       "Hauling +150",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Hauling +200",
       "Hauling +50",
       "Hauling +100",
@@ -280,7 +285,7 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
@@ -319,10 +324,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "1e9a81a9-4b5c-47b7-b144-7e9b199cea7e",
@@ -334,10 +339,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "da02741b-c8b5-4528-b638-df1d71d0e9b5",
@@ -349,10 +354,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "470b8268-5416-4b72-afdd-8ec73b11bf11",
@@ -364,10 +369,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "84476b48-109a-4871-b361-0ec3aa3a4d9d",
@@ -379,10 +384,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "e18860a1-c82b-46cf-8e18-6e46110c2ad6",
@@ -394,10 +399,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/aefb73c5561f756c.json"

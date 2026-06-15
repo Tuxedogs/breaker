@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "4f9a20ad-f76e-47e9-a9d1-412a0931f15f|Covalex Hauling Interstellar",
@@ -32,7 +32,7 @@
     ],
     "rewardSummary": [
       "Blueprint: Covalex Super: VK-00, Siren, XL1, Yeager +5",
-      "Calculated payout"
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [
       "Covalex Super: VK-00, Siren, XL1, Yeager +5"
@@ -121,12 +121,14 @@
     ],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "reputationRequirement": "Covalex: Master Master",
     "prerequisiteRequirements": [
       "Master / 237,750 rep to Master / 237,750 rep",
@@ -151,8 +153,12 @@
       "Stanton And Nyx"
     ],
     "unresolvedLocationTokens": [],
-    "confidenceFlags": [],
-    "unresolvedReferences": [],
+    "confidenceFlags": [
+      "Reward data unresolved"
+    ],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "0b400963-0b00-456a-bbc9-c036063cb6d8",
       "416b5ed7-5e08-47e4-afa7-da00eef0a5fe",
@@ -171,7 +177,7 @@
       "0461cdb8-aa0a-4354-a903-9f57668d6add",
       "2701ce42-2812-4ee2-b170-250a73d3c82a"
     ],
-    "searchText": "direct cargo haul haulcargo_atob_interstellar_bulk_plas_shipam_rmc_larin covalex hauling interstellar hauling cargo pickup: generated from stanton, nyx, pyro +1 pool hi, \n\nthere’s a bunch of cargo at [location] that needs to be moved to levski. the people’s alliance has a standing order for this stuff because they desperately need it, but it’s not easy to get in nyx. funny how they don’t want to be part of the uee but still rely on us for their survival.  \n\nanyway, you’ll need a handheld tractor beam and a ship that can hold [missionmaxscusize] cargo containers to knock this one out. \n\n[contractor] \n \nella tieno \njr. logistics coordinator \ncovalex shipping   \n'anything you need, anywhere you need it.' \n\ncovalex shipping is a limited liability corporation. to encourage timely deliveries and prevent fraud on cargo hauls, covalex shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. total payment will be prorated according to the percentage of cargo successfully delivered. cargo haul 0b400963-0b00-456a-bbc9-c036063cb6d8 416b5ed7-5e08-47e4-afa7-da00eef0a5fe 4292f5a2-bc07-4df4-b3f7-cf3a43acbdd5 4b91c6f3-360f-4fe6-b704-6c664a950d75 5d268648-079b-4673-8c25-fa9286f5493f 61967331-20e5-409b-9a75-f7aa0253c4fe 64609b77-29e3-44d0-99df-c78a093851e1 69a17b80-b5cd-4644-8598-f6bdea857fe3 7f658b85-c9dc-4877-b81b-b1341c7de428 b398f60a-f591-4462-a2c2-5f22df911639 c10d9de6-bb8e-4cce-9fa0-ad0ed691a94e c3d7f66e-ca09-45f7-97de-0e9121f58639 c4de1ea8-9853-4caf-9e49-a6f35e0a6c72 d437b432-f18b-4cd8-b932-c9e3e72b1d34 0461cdb8-aa0a-4354-a903-9f57668d6add 2701ce42-2812-4ee2-b170-250a73d3c82a blueprint: covalex super: vk-00, siren, xl1, yeager +5 calculated payout"
+    "searchText": "direct cargo haul haulcargo_atob_interstellar_bulk_plas_shipam_rmc_larin covalex hauling interstellar hauling cargo pickup: generated from stanton, nyx, pyro +1 pool hi, \n\nthere’s a bunch of cargo at [location] that needs to be moved to levski. the people’s alliance has a standing order for this stuff because they desperately need it, but it’s not easy to get in nyx. funny how they don’t want to be part of the uee but still rely on us for their survival.  \n\nanyway, you’ll need a handheld tractor beam and a ship that can hold [missionmaxscusize] cargo containers to knock this one out. \n\n[contractor] \n \nella tieno \njr. logistics coordinator \ncovalex shipping   \n'anything you need, anywhere you need it.' \n\ncovalex shipping is a limited liability corporation. to encourage timely deliveries and prevent fraud on cargo hauls, covalex shipping will set a delivery time limit and upon expiration, any undelivered cargo will be considered stolen and treated as such. total payment will be prorated according to the percentage of cargo successfully delivered. cargo haul 0b400963-0b00-456a-bbc9-c036063cb6d8 416b5ed7-5e08-47e4-afa7-da00eef0a5fe 4292f5a2-bc07-4df4-b3f7-cf3a43acbdd5 4b91c6f3-360f-4fe6-b704-6c664a950d75 5d268648-079b-4673-8c25-fa9286f5493f 61967331-20e5-409b-9a75-f7aa0253c4fe 64609b77-29e3-44d0-99df-c78a093851e1 69a17b80-b5cd-4644-8598-f6bdea857fe3 7f658b85-c9dc-4877-b81b-b1341c7de428 b398f60a-f591-4462-a2c2-5f22df911639 c10d9de6-bb8e-4cce-9fa0-ad0ed691a94e c3d7f66e-ca09-45f7-97de-0e9121f58639 c4de1ea8-9853-4caf-9e49-a6f35e0a6c72 d437b432-f18b-4cd8-b932-c9e3e72b1d34 0461cdb8-aa0a-4354-a903-9f57668d6add 2701ce42-2812-4ee2-b170-250a73d3c82a blueprint: covalex super: vk-00, siren, xl1, yeager +5 credits formula unresolved"
   },
   "groupSummary": {
     "familyKey": "4f9a20ad-f76e-47e9-a9d1-412a0931f15f|Covalex Hauling Interstellar",
@@ -194,7 +200,7 @@
   "rewardSummary": {
     "rewardSummary": [
       "Blueprint: Covalex Super: VK-00, Siren, XL1, Yeager +5",
-      "Calculated payout"
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [
       "Covalex Super: VK-00, Siren, XL1, Yeager +5"
@@ -283,7 +289,7 @@
     ],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Generated from Stanton, Nyx, Pyro +1 pool",
@@ -415,10 +421,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "416b5ed7-5e08-47e4-afa7-da00eef0a5fe",
@@ -430,10 +436,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "4292f5a2-bc07-4df4-b3f7-cf3a43acbdd5",
@@ -445,10 +451,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "4b91c6f3-360f-4fe6-b704-6c664a950d75",
@@ -460,10 +466,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "5d268648-079b-4673-8c25-fa9286f5493f",
@@ -475,10 +481,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "61967331-20e5-409b-9a75-f7aa0253c4fe",
@@ -490,10 +496,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "64609b77-29e3-44d0-99df-c78a093851e1",
@@ -505,10 +511,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "69a17b80-b5cd-4644-8598-f6bdea857fe3",
@@ -520,10 +526,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "7f658b85-c9dc-4877-b81b-b1341c7de428",
@@ -535,10 +541,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "b398f60a-f591-4462-a2c2-5f22df911639",
@@ -550,10 +556,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c10d9de6-bb8e-4cce-9fa0-ad0ed691a94e",
@@ -565,10 +571,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c3d7f66e-ca09-45f7-97de-0e9121f58639",
@@ -580,10 +586,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c4de1ea8-9853-4caf-9e49-a6f35e0a6c72",
@@ -595,10 +601,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "d437b432-f18b-4cd8-b932-c9e3e72b1d34",
@@ -610,10 +616,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "0461cdb8-aa0a-4354-a903-9f57668d6add",
@@ -625,10 +631,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "2701ce42-2812-4ee2-b170-250a73d3c82a",
@@ -640,10 +646,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Master / 237,750 rep to Master / 237,750 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/bfe38e9e6afc6bab.json"

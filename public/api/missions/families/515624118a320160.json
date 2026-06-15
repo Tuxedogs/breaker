@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "57d7286e-1786-4a4c-9ec4-37bf8c54eb61|HH_KillShip",
@@ -37,7 +37,7 @@
     "rewardSummary": [
       "Blueprint: Head Hunters Mercenary Ship Region A: 9-Series Longsword Cannon, 10-Series Greatsword Cannon, 11-Series Broadsword Cannon, Sledge I Mass Driver Cannon +3",
       "Ship Combat +300",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Blueprint: Head Hunters Mercenary Ship Region D: SnowBlind, Night Fall, M6A Cannon, M7A Cannon +4",
       "Blueprint: Head Hunters Mercenary Ship Region C: VaporBlock, Ice Box, NN-13 Cannon, NN-14 Cannon +1",
       "Blueprint: Head Hunters Mercenary Ship Region B: HeatSafe, HeatSink, Dominance-1 Scattergun, S2 +1",
@@ -393,12 +393,14 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "reputationRequirement": "Headhunters: Jr. Contractor Elite Contractor",
     "prerequisiteRequirements": [
       "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
@@ -428,8 +430,12 @@
       "Pyro Star"
     ],
     "unresolvedLocationTokens": [],
-    "confidenceFlags": [],
-    "unresolvedReferences": [],
+    "confidenceFlags": [
+      "Reward data unresolved"
+    ],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "16b275fb-710e-45b6-8a35-61943afb34c2",
       "65e45729-c492-4b98-b4d1-cf6b1f1806e8",
@@ -481,7 +487,7 @@
       "7462c715-9517-451b-a32d-8e6b3ec0122d",
       "8d28f35c-ce26-4952-996b-b66afe6a74f2"
     ],
-    "searchText": "crash some ships hh_pyro_regiona_m_2asteroidbase_criminals_multikillship headhunters careercontract ship combat mercenary pickup: pyro a lotta wannabe gangs have stepped to the headhunters over the years thinking that they could force their way into the system. we're still here. they aren't. but it seems the survivors of these groups have decided to band together and try again. guess some people never learn.\n\nlatest group hit a couple of our convoys while on supply runs. shouldn't be a surprise that the judge wants to stomp them out quick. we've learned they're out near [location] and likely rearming for another attack. \n\nwe want you to go there and make them wish they died with their old gang.\n\nstows out ghost some xenotrash hh pyro destroy remaining frontier fighters hit a cfp ship kill order primo target simple hit target at target takedown for a fast track in treat yourself to a fight wanna be a headhunter? wanted: needs stomping 16b275fb-710e-45b6-8a35-61943afb34c2 65e45729-c492-4b98-b4d1-cf6b1f1806e8 755acda5-cce4-4f39-bc26-96c355a226e5 d090cc84-eaaf-4cbc-b8fc-4d16ca0b6885 526597b2-adad-4807-9b82-d56ccce3412f bc1e5f05-8746-4887-8630-e33fdf73a2b9 c296798f-b311-4c0a-9dff-f25c8fa2d337 ddade8ae-7198-477d-82c6-07e679ffbb65 af8a1475-6203-41c2-b20a-8630ab3aa0ee 4cb2a9b5-388a-47db-8568-8e37676aa288 6d0aaf2f-eace-4827-ad28-7a3c68454780 f21844db-4cda-4ee5-bbdd-3fb2e80178d4 f3b897c1-9103-43e5-9dec-3771b6edc148 3d49d036-67ae-4525-a8de-a0573b68dc3f 8b6695f0-37c0-4a3f-ad59-3a310b40c5ea 94151a89-d345-4621-8504-d89f6c5487d6 9aced3fa-2745-48ae-882d-491aa7f2b031 5222f94d-4fa0-437d-9a05-b59c16215007 927f4e62-c90e-4366-a31d-9183c377806e da6f602d-fc21-4d2e-9b82-efc6f92d6521 dcf7e7cf-e117-44ed-a1dc-97b4010a2da2 22f6dfbf-b51c-40e1-9759-6472d4cf3457 504a89f9-d2cc-4b0b-ad9a-8725fea66412 71f0b5a6-97cf-4e50-a62e-9ad12e4fa887 b1171c7d-39a6-4ac0-9f32-0ad0ed29bd1d 283ea69b-0b76-48aa-9d24-2efee50002dc 2f9663f3-ed47-446a-ab0e-ec60526059d3 8af7e67c-72a6-4bc3-aa35-835ea4923d85 d20220e2-8d2e-482a-b037-1e7674892908 172b308e-afef-4f72-be18-ce210e84581a 1d48bcd0-53d0-4356-9f2b-d05d92c6ac3e d75a442e-f2f5-4c97-b6e4-9e6ed4a6e4be de33df35-1925-4b63-95de-89d34928cc2d 1f36f769-0efe-40da-8a2b-1140a4c3672a 4ccf0936-33b2-4810-a345-a37bb4205018 743a8964-37b0-46f9-a5b2-e6e7ffc43fc3 80a7c19b-3856-434e-846d-e2966df891d6 67855b20-0a46-4464-87c1-bc6fcbf412ce 7c309093-37d7-421f-91d5-609a2d16e240 b1f24137-188f-41cd-9e9f-11fbfad8b757 f47f6cdf-86a9-4d36-8261-fba9ec217541 0f7184eb-c4c8-4a67-8d31-6cd2d8755ff1 e1bdc963-67b3-413a-b4aa-0992494428b2 ead7c561-656b-415f-bacd-d16795d2fe82 f2b6ac4d-2cc7-44b8-a798-8d6feda8d174 088a00d5-8068-4061-8248-aff38b8b199c 43a7a749-c185-4d71-a4d5-297f0b2072ea 7462c715-9517-451b-a32d-8e6b3ec0122d 8d28f35c-ce26-4952-996b-b66afe6a74f2 blueprint: head hunters mercenary ship region a: 9-series longsword cannon, 10-series greatsword cannon, 11-series broadsword cannon, sledge i mass driver cannon +3 ship combat +300 calculated payout blueprint: head hunters mercenary ship region d: snowblind, night fall, m6a cannon, m7a cannon +4 blueprint: head hunters mercenary ship region c: vaporblock, ice box, nn-13 cannon, nn-14 cannon +1 blueprint: head hunters mercenary ship region b: heatsafe, heatsink, dominance-1 scattergun, s2 +1 ship combat +3,200 ship combat +25"
+    "searchText": "crash some ships hh_pyro_regiona_m_2asteroidbase_criminals_multikillship headhunters careercontract ship combat mercenary pickup: pyro a lotta wannabe gangs have stepped to the headhunters over the years thinking that they could force their way into the system. we're still here. they aren't. but it seems the survivors of these groups have decided to band together and try again. guess some people never learn.\n\nlatest group hit a couple of our convoys while on supply runs. shouldn't be a surprise that the judge wants to stomp them out quick. we've learned they're out near [location] and likely rearming for another attack. \n\nwe want you to go there and make them wish they died with their old gang.\n\nstows out ghost some xenotrash hh pyro destroy remaining frontier fighters hit a cfp ship kill order primo target simple hit target at target takedown for a fast track in treat yourself to a fight wanna be a headhunter? wanted: needs stomping 16b275fb-710e-45b6-8a35-61943afb34c2 65e45729-c492-4b98-b4d1-cf6b1f1806e8 755acda5-cce4-4f39-bc26-96c355a226e5 d090cc84-eaaf-4cbc-b8fc-4d16ca0b6885 526597b2-adad-4807-9b82-d56ccce3412f bc1e5f05-8746-4887-8630-e33fdf73a2b9 c296798f-b311-4c0a-9dff-f25c8fa2d337 ddade8ae-7198-477d-82c6-07e679ffbb65 af8a1475-6203-41c2-b20a-8630ab3aa0ee 4cb2a9b5-388a-47db-8568-8e37676aa288 6d0aaf2f-eace-4827-ad28-7a3c68454780 f21844db-4cda-4ee5-bbdd-3fb2e80178d4 f3b897c1-9103-43e5-9dec-3771b6edc148 3d49d036-67ae-4525-a8de-a0573b68dc3f 8b6695f0-37c0-4a3f-ad59-3a310b40c5ea 94151a89-d345-4621-8504-d89f6c5487d6 9aced3fa-2745-48ae-882d-491aa7f2b031 5222f94d-4fa0-437d-9a05-b59c16215007 927f4e62-c90e-4366-a31d-9183c377806e da6f602d-fc21-4d2e-9b82-efc6f92d6521 dcf7e7cf-e117-44ed-a1dc-97b4010a2da2 22f6dfbf-b51c-40e1-9759-6472d4cf3457 504a89f9-d2cc-4b0b-ad9a-8725fea66412 71f0b5a6-97cf-4e50-a62e-9ad12e4fa887 b1171c7d-39a6-4ac0-9f32-0ad0ed29bd1d 283ea69b-0b76-48aa-9d24-2efee50002dc 2f9663f3-ed47-446a-ab0e-ec60526059d3 8af7e67c-72a6-4bc3-aa35-835ea4923d85 d20220e2-8d2e-482a-b037-1e7674892908 172b308e-afef-4f72-be18-ce210e84581a 1d48bcd0-53d0-4356-9f2b-d05d92c6ac3e d75a442e-f2f5-4c97-b6e4-9e6ed4a6e4be de33df35-1925-4b63-95de-89d34928cc2d 1f36f769-0efe-40da-8a2b-1140a4c3672a 4ccf0936-33b2-4810-a345-a37bb4205018 743a8964-37b0-46f9-a5b2-e6e7ffc43fc3 80a7c19b-3856-434e-846d-e2966df891d6 67855b20-0a46-4464-87c1-bc6fcbf412ce 7c309093-37d7-421f-91d5-609a2d16e240 b1f24137-188f-41cd-9e9f-11fbfad8b757 f47f6cdf-86a9-4d36-8261-fba9ec217541 0f7184eb-c4c8-4a67-8d31-6cd2d8755ff1 e1bdc963-67b3-413a-b4aa-0992494428b2 ead7c561-656b-415f-bacd-d16795d2fe82 f2b6ac4d-2cc7-44b8-a798-8d6feda8d174 088a00d5-8068-4061-8248-aff38b8b199c 43a7a749-c185-4d71-a4d5-297f0b2072ea 7462c715-9517-451b-a32d-8e6b3ec0122d 8d28f35c-ce26-4952-996b-b66afe6a74f2 blueprint: head hunters mercenary ship region a: 9-series longsword cannon, 10-series greatsword cannon, 11-series broadsword cannon, sledge i mass driver cannon +3 ship combat +300 credits formula unresolved blueprint: head hunters mercenary ship region d: snowblind, night fall, m6a cannon, m7a cannon +4 blueprint: head hunters mercenary ship region c: vaporblock, ice box, nn-13 cannon, nn-14 cannon +1 blueprint: head hunters mercenary ship region b: heatsafe, heatsink, dominance-1 scattergun, s2 +1 ship combat +3,200 ship combat +25"
   },
   "groupSummary": {
     "familyKey": "57d7286e-1786-4a4c-9ec4-37bf8c54eb61|HH_KillShip",
@@ -508,7 +514,7 @@
     "rewardSummary": [
       "Blueprint: Head Hunters Mercenary Ship Region A: 9-Series Longsword Cannon, 10-Series Greatsword Cannon, 11-Series Broadsword Cannon, Sledge I Mass Driver Cannon +3",
       "Ship Combat +300",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Blueprint: Head Hunters Mercenary Ship Region D: SnowBlind, Night Fall, M6A Cannon, M7A Cannon +4",
       "Blueprint: Head Hunters Mercenary Ship Region C: VaporBlock, Ice Box, NN-13 Cannon, NN-14 Cannon +1",
       "Blueprint: Head Hunters Mercenary Ship Region B: HeatSafe, HeatSink, Dominance-1 Scattergun, S2 +1",
@@ -864,7 +870,7 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Pyro",
@@ -1185,10 +1191,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "65e45729-c492-4b98-b4d1-cf6b1f1806e8",
@@ -1200,10 +1206,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "755acda5-cce4-4f39-bc26-96c355a226e5",
@@ -1215,10 +1221,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "d090cc84-eaaf-4cbc-b8fc-4d16ca0b6885",
@@ -1230,10 +1236,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "526597b2-adad-4807-9b82-d56ccce3412f",
@@ -1245,10 +1251,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "bc1e5f05-8746-4887-8630-e33fdf73a2b9",
@@ -1260,10 +1266,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c296798f-b311-4c0a-9dff-f25c8fa2d337",
@@ -1275,10 +1281,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "ddade8ae-7198-477d-82c6-07e679ffbb65",
@@ -1290,10 +1296,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Elite Contractor / 95,250 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "af8a1475-6203-41c2-b20a-8630ab3aa0ee",
@@ -1305,10 +1311,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "4cb2a9b5-388a-47db-8568-8e37676aa288",
@@ -1320,10 +1326,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "6d0aaf2f-eace-4827-ad28-7a3c68454780",
@@ -1335,10 +1341,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f21844db-4cda-4ee5-bbdd-3fb2e80178d4",
@@ -1350,10 +1356,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f3b897c1-9103-43e5-9dec-3771b6edc148",
@@ -1365,10 +1371,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "3d49d036-67ae-4525-a8de-a0573b68dc3f",
@@ -1380,10 +1386,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "8b6695f0-37c0-4a3f-ad59-3a310b40c5ea",
@@ -1395,10 +1401,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "94151a89-d345-4621-8504-d89f6c5487d6",
@@ -1410,10 +1416,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "9aced3fa-2745-48ae-882d-491aa7f2b031",
@@ -1425,10 +1431,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "5222f94d-4fa0-437d-9a05-b59c16215007",
@@ -1440,10 +1446,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "927f4e62-c90e-4366-a31d-9183c377806e",
@@ -1455,10 +1461,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "da6f602d-fc21-4d2e-9b82-efc6f92d6521",
@@ -1470,10 +1476,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "dcf7e7cf-e117-44ed-a1dc-97b4010a2da2",
@@ -1485,10 +1491,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "22f6dfbf-b51c-40e1-9759-6472d4cf3457",
@@ -1500,10 +1506,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "504a89f9-d2cc-4b0b-ad9a-8725fea66412",
@@ -1515,10 +1521,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "71f0b5a6-97cf-4e50-a62e-9ad12e4fa887",
@@ -1530,10 +1536,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "b1171c7d-39a6-4ac0-9f32-0ad0ed29bd1d",
@@ -1545,10 +1551,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "283ea69b-0b76-48aa-9d24-2efee50002dc",
@@ -1560,10 +1566,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "2f9663f3-ed47-446a-ab0e-ec60526059d3",
@@ -1575,10 +1581,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "8af7e67c-72a6-4bc3-aa35-835ea4923d85",
@@ -1590,10 +1596,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "d20220e2-8d2e-482a-b037-1e7674892908",
@@ -1605,10 +1611,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "172b308e-afef-4f72-be18-ce210e84581a",
@@ -1620,10 +1626,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "1d48bcd0-53d0-4356-9f2b-d05d92c6ac3e",
@@ -1635,10 +1641,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "d75a442e-f2f5-4c97-b6e4-9e6ed4a6e4be",
@@ -1650,10 +1656,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "de33df35-1925-4b63-95de-89d34928cc2d",
@@ -1665,10 +1671,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "1f36f769-0efe-40da-8a2b-1140a4c3672a",
@@ -1680,10 +1686,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "4ccf0936-33b2-4810-a345-a37bb4205018",
@@ -1695,10 +1701,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "743a8964-37b0-46f9-a5b2-e6e7ffc43fc3",
@@ -1710,10 +1716,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "80a7c19b-3856-434e-846d-e2966df891d6",
@@ -1725,10 +1731,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "67855b20-0a46-4464-87c1-bc6fcbf412ce",
@@ -1740,10 +1746,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "7c309093-37d7-421f-91d5-609a2d16e240",
@@ -1755,10 +1761,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "b1f24137-188f-41cd-9e9f-11fbfad8b757",
@@ -1770,10 +1776,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f47f6cdf-86a9-4d36-8261-fba9ec217541",
@@ -1785,10 +1791,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Neutral / 0 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "0f7184eb-c4c8-4a67-8d31-6cd2d8755ff1",
@@ -1800,10 +1806,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "e1bdc963-67b3-413a-b4aa-0992494428b2",
@@ -1815,10 +1821,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "ead7c561-656b-415f-bacd-d16795d2fe82",
@@ -1830,10 +1836,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f2b6ac4d-2cc7-44b8-a798-8d6feda8d174",
@@ -1845,10 +1851,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "088a00d5-8068-4061-8248-aff38b8b199c",
@@ -1860,10 +1866,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "43a7a749-c185-4d71-a4d5-297f0b2072ea",
@@ -1875,10 +1881,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "7462c715-9517-451b-a32d-8e6b3ec0122d",
@@ -1890,10 +1896,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "8d28f35c-ce26-4952-996b-b66afe6a74f2",
@@ -1905,10 +1911,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/515624118a320160.json"

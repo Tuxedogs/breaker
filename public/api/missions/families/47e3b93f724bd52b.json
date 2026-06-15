@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "f596db89-120e-40db-8bd8-fd886b3158d7|Hockrow Agency Resource Gathering",
@@ -32,18 +32,20 @@
       "Release flag not set"
     ],
     "rewardSummary": [
-      "Calculated payout"
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [],
     "blueprintRewardGroups": [],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Prerequisite mission or completion tag"
     ],
@@ -58,13 +60,16 @@
     "locations": [],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "f4c7498d-bd4e-4b15-a3ff-660d6270cb8b"
     ],
-    "searchText": "jorrit dossier: lab sample hockrow_asd_resourcegathering unknown provider contract standing pickup: unresolved for 1 variant hockrow agency \ncase file #jd10285\nlead investigator: arken mallor\n\ncase update: \nin going through the files, i’ve seen a couple of allusions to a specific lab sample that would potentially be useful to have our people analyze. not sure where it is exactly, but if you hunt around onyx facility you should be able to find the sample and bring it to me.\n\ncontract investigator actions:\nexplore the onyx facility research wing and track down the lab sample and deliver it to [destination].\n\nadditional notes:\nbe wary of possible hostile forces on site. \n\ntravel to onyx in a vehicle that can be stored in a large hangar. f4c7498d-bd4e-4b15-a3ff-660d6270cb8b calculated payout"
+    "searchText": "jorrit dossier: lab sample hockrow_asd_resourcegathering unknown provider contract standing pickup: unresolved for 1 variant hockrow agency \ncase file #jd10285\nlead investigator: arken mallor\n\ncase update: \nin going through the files, i’ve seen a couple of allusions to a specific lab sample that would potentially be useful to have our people analyze. not sure where it is exactly, but if you hunt around onyx facility you should be able to find the sample and bring it to me.\n\ncontract investigator actions:\nexplore the onyx facility research wing and track down the lab sample and deliver it to [destination].\n\nadditional notes:\nbe wary of possible hostile forces on site. \n\ntravel to onyx in a vehicle that can be stored in a large hangar. f4c7498d-bd4e-4b15-a3ff-660d6270cb8b credits formula unresolved"
   },
   "groupSummary": {
     "familyKey": "f596db89-120e-40db-8bd8-fd886b3158d7|Hockrow Agency Resource Gathering",
@@ -87,13 +92,13 @@
   },
   "rewardSummary": {
     "rewardSummary": [
-      "Calculated payout"
+      "Credits formula unresolved"
     ],
     "blueprintRewards": [],
     "blueprintRewardGroups": [],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: unresolved for 1 variant",
@@ -122,10 +127,10 @@
         "confidence": "low"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/47e3b93f724bd52b.json"
