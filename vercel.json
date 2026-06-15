@@ -1,5 +1,16 @@
 {
-  "rewrites": [{ 
+  "rewrites": [
+    {
+      "source": "/api/user/inventory/stacks/:id",
+      "destination": "/api/user/inventory/stacks/[id]"
+    },
+    {
+      "source": "/api/user/inventory/locations/:id",
+      "destination": "/api/user/inventory/locations/[id]"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/" }]
+      "destination": "/"
+    }
+  ]
 }
