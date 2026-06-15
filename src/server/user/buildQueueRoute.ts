@@ -76,8 +76,10 @@ export async function handleUserBuildQueueRoute(
       }
 
       const recipeId = normalizeRecipeId(body.recipeId);
-      if (!recipeId) return safeError(400, "recipeId is required.");
+      const id = normalizeRecipeId(body.id);
+      if (!recipeId && !id) return safeError(400, "id or recipeId is required.");
       await deleteBuildQueueItem(userId, {
+        id,
         recipeId,
         variantId: normalizeVariantId(body.variantId),
       });

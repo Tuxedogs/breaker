@@ -10,6 +10,7 @@ export type BuildQueuePayload = {
 };
 
 export type DeleteBuildQueuePayload = {
+  id?: string | null;
   recipeId?: string | null;
   variantId?: string | null;
   clearAll?: boolean;
@@ -122,6 +123,26 @@ export async function updateBuildQueueItem(userId: string, payload: BuildQueuePa
 }
 
 export async function deleteBuildQueueItem(userId: string, payload: DeleteBuildQueuePayload) {
+  const id = normalizeRecipeId(payload.id);
+  if (id) {
+    const existingRows = await getDb()
+      .select()
+      .from(buildQueueItems)
+      .where(eq(buildQueueItems.userId, userId));
+    const match = existingRows.find((row) => row.id === id || (
+      typeof row.snapshot === "object"
+      && row.snapshot !== null
+      && "localId" in row.snapshot
+      && row.snapshot.localId === id
+    ));
+    if (match) {
+      await getDb()
+        .delete(buildQueueItems)
+        .where(and(eq(buildQueueItems.userId, userId), eq(buildQueueItems.id, match.id)));
+      return;
+    }
+  }
+
   const recipeId = normalizeRecipeId(payload.recipeId);
   if (!recipeId) throw new TypeError("recipeId is required.");
 

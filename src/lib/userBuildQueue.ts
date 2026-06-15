@@ -13,6 +13,7 @@ export type UserBuildQueueItem = {
 };
 
 export type BuildQueueItemRequest = {
+  id?: string;
   recipeId: string;
   variantId?: string | null;
   quantity?: number;
@@ -88,7 +89,7 @@ export async function updateUserBuildQueueItem(
 
 export async function deleteUserBuildQueueItem(
   accessToken: string,
-  payload: Pick<BuildQueueItemRequest, "recipeId" | "variantId">,
+  payload: Pick<BuildQueueItemRequest, "id" | "recipeId" | "variantId">,
 ): Promise<void> {
   const url = apiUrl(BUILD_QUEUE_URL);
   const response = await fetch(url, {

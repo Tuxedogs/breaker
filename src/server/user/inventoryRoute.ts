@@ -1,6 +1,7 @@
 import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
 import {
   deleteInventoryStack,
+  deleteInventoryLocation,
   listOnlinePersistenceState,
   syncOnlinePersistenceState,
   type OnlinePersistencePayload,
@@ -29,7 +30,8 @@ export async function handleUserInventoryRoute(
   body: unknown,
 ): Promise<RouteResult | null> {
   const stackMatch = path.match(/^\/api\/user\/inventory\/stacks(?:\/([^/]+))?$/);
-  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch) return null;
+  const locationMatch = path.match(/^\/api\/user\/inventory\/locations(?:\/([^/]+))?$/);
+  if (path !== "/api/user/inventory" && path !== "/api/user/inventory/sync" && !stackMatch && !locationMatch) return null;
 
   try {
     const { userId } = await requireAuthenticatedUser(headers);
@@ -74,6 +76,12 @@ export async function handleUserInventoryRoute(
       const stackId = stackMatch[1];
       if (!stackId) return safeError(400, "Stack id is required.");
       return { status: 200, body: await deleteInventoryStack(userId, stackId) };
+    }
+
+    if (locationMatch && method === "DELETE") {
+      const locationId = locationMatch[1];
+      if (!locationId) return safeError(400, "Location id is required.");
+      return { status: 200, body: await deleteInventoryLocation(userId, locationId) };
     }
 
     return safeError(405, "Method not allowed.");

@@ -463,9 +463,37 @@ export async function syncOnlinePersistenceState(userId: string, payload: Online
 }
 
 export async function deleteInventoryStack(userId: string, stackId: string) {
-  if (!isUuid(stackId)) throw new TypeError("Valid stack id is required.");
+  const existingStacks = await getDb()
+    .select()
+    .from(inventoryStacks)
+    .where(eq(inventoryStacks.userId, userId));
+  const match = existingStacks.find((row) => row.id === stackId || getSnapshotLocalId(row.snapshot) === stackId);
+  if (!match) return listOnlinePersistenceState(userId);
   await getDb()
     .delete(inventoryStacks)
-    .where(and(eq(inventoryStacks.userId, userId), eq(inventoryStacks.id, stackId)));
+    .where(and(eq(inventoryStacks.userId, userId), eq(inventoryStacks.id, match.id)));
+  return listOnlinePersistenceState(userId);
+}
+
+export async function deleteInventoryLocation(userId: string, locationId: string) {
+  const existingLocations = await getDb()
+    .select()
+    .from(inventoryLocations)
+    .where(eq(inventoryLocations.userId, userId));
+  const match = existingLocations.find((row) => row.id === locationId || getSnapshotLocalId(row.metadata) === locationId);
+  if (!match) return listOnlinePersistenceState(userId);
+
+  const referencedStacks = await getDb()
+    .select({ id: inventoryStacks.id })
+    .from(inventoryStacks)
+    .where(and(eq(inventoryStacks.userId, userId), eq(inventoryStacks.locationId, match.id)))
+    .limit(1);
+  if (referencedStacks.length > 0) {
+    throw new TypeError("Location cannot be deleted while inventory stacks reference it.");
+  }
+
+  await getDb()
+    .delete(inventoryLocations)
+    .where(and(eq(inventoryLocations.userId, userId), eq(inventoryLocations.id, match.id)));
   return listOnlinePersistenceState(userId);
 }

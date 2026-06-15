@@ -1,9 +1,9 @@
 import {
-  addUserBuildQueueItem,
   clearUserBuildQueue,
   deleteUserBuildQueueItem,
-  updateUserBuildQueueItem,
 } from "./userBuildQueue";
+import { runOnlinePersistenceMutation, upsertOnlineBuildQueueItem } from "./userOnlinePersistence";
+import type { BuildQueueItem } from "../types/logistics";
 
 let currentAccessToken: string | null = null;
 
@@ -15,22 +15,21 @@ export function hasBuildQueueAccessToken(): boolean {
   return Boolean(currentAccessToken);
 }
 
-export function persistBuildQueueAdd(recipeId: string, quantity: number, variantId?: string | null) {
+export function persistBuildQueueItem(item: BuildQueueItem) {
   if (!currentAccessToken) return null;
-  return addUserBuildQueueItem(currentAccessToken, { recipeId, variantId, quantity });
+  return upsertOnlineBuildQueueItem(currentAccessToken, item);
 }
 
-export function persistBuildQueueQuantity(recipeId: string, quantity: number, variantId?: string | null) {
+export function persistBuildQueueDelete(item: Pick<BuildQueueItem, "id" | "recipeId" | "blueprint_id">) {
   if (!currentAccessToken) return null;
-  return updateUserBuildQueueItem(currentAccessToken, { recipeId, variantId, quantity });
-}
-
-export function persistBuildQueueDelete(recipeId: string, variantId?: string | null) {
-  if (!currentAccessToken) return null;
-  return deleteUserBuildQueueItem(currentAccessToken, { recipeId, variantId });
+  return runOnlinePersistenceMutation(() => deleteUserBuildQueueItem(currentAccessToken as string, {
+    id: item.id,
+    recipeId: item.recipeId,
+    variantId: item.blueprint_id,
+  }));
 }
 
 export function persistBuildQueueClear() {
   if (!currentAccessToken) return null;
-  return clearUserBuildQueue(currentAccessToken);
+  return runOnlinePersistenceMutation(() => clearUserBuildQueue(currentAccessToken as string));
 }
