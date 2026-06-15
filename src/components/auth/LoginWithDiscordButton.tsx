@@ -180,6 +180,12 @@ function DiscordAccountModal({
             <span>Last Sync</span>
             <strong>{formatDateTime(syncStatus.lastSyncedAt)}</strong>
           </div>
+          {syncStatus.lastError ? (
+            <div role="alert">
+              <span>Sync Error</span>
+              <strong>{syncStatus.lastError}</strong>
+            </div>
+          ) : null}
         </div>
 
         <div className="discord-account-actions">

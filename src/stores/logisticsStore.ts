@@ -24,6 +24,7 @@ import {
   persistOnlineInventoryStack,
   persistOnlineInventoryStackDelete,
 } from "../lib/userOnlinePersistence";
+import { setOnlineSyncStatus } from "../lib/onlineSyncStatus";
 import {
   getLegacyMaterialItemKind,
   resolveInventoryItemName,
@@ -572,12 +573,18 @@ function removeStaleReservedAllocations(
 }
 
 function logBuildQueuePersistenceFailure(action: string, error: unknown) {
+  setOnlineSyncStatus({
+    lastError: `Build queue failed to ${action}: ${error instanceof Error ? error.message : String(error)}`,
+  });
   if (import.meta.env.DEV) {
     console.warn(`[build-queue] failed to ${action}`, error);
   }
 }
 
 function logOnlinePersistenceFailure(action: string, error: unknown) {
+  setOnlineSyncStatus({
+    lastError: `Online sync failed to ${action}: ${error instanceof Error ? error.message : String(error)}`,
+  });
   if (import.meta.env.DEV) {
     console.warn(`[online-sync] failed to ${action}`, error);
   }
