@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
@@ -32,7 +32,7 @@
     ],
     "rewardSummary": [
       "Standing +100",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Standing +200",
       "Standing +50",
       "Standing +300",
@@ -114,12 +114,14 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "CrimeStat limited to 2 or below",
@@ -148,9 +150,12 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "319056e2-5012-4213-b9bc-875b0e453af7",
       "30d3f472-7ac9-47db-8654-62ec8208f1f2",
@@ -159,7 +164,7 @@
       "6748b11b-0e43-402c-951c-f0a6a00773ce",
       "a634bdf9-14dc-484f-9a41-abcdf8dd5dfb"
     ],
-    "searchText": "eckhart security careercontract client's cargo needs recovering echhartsecurity_pyro_easy_recovercargo eckhart security careercontract standing cargo pickup: pyro eckhart security, llc.\ncontracts & dispatch\n\ncontract type: recover cargo\napproval code: = [approvalcode]\n\nfor immediate processing\n\nclient's cargo was mid-transport when they ran into some ship trouble, and now a group of opportunistic outlaws are looking to cash in on this.\n\nif you accept, head to [location] and deal with the outlaws guarding the cargo. extract it using a heavy-duty tractor beam, recover the cargo, load it in to a ship that can transport [missionmaxscusize] cargo containers, and deposit it on the freight elevator at [destination].\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. critical cargo extraction extreme risk cargo retrieval high risk shipment recovery low risk cargo retrieval standard cargo recovery op. 319056e2-5012-4213-b9bc-875b0e453af7 30d3f472-7ac9-47db-8654-62ec8208f1f2 c894d121-d7b6-424f-82a4-bd3d47607e7f 39c8f9ef-1208-41e7-a7e4-a626117eba60 6748b11b-0e43-402c-951c-f0a6a00773ce a634bdf9-14dc-484f-9a41-abcdf8dd5dfb standing +100 calculated payout standing +200 standing +50 standing +300 standing +150"
+    "searchText": "eckhart security careercontract client's cargo needs recovering echhartsecurity_pyro_easy_recovercargo eckhart security careercontract standing cargo pickup: pyro eckhart security, llc.\ncontracts & dispatch\n\ncontract type: recover cargo\napproval code: = [approvalcode]\n\nfor immediate processing\n\nclient's cargo was mid-transport when they ran into some ship trouble, and now a group of opportunistic outlaws are looking to cash in on this.\n\nif you accept, head to [location] and deal with the outlaws guarding the cargo. extract it using a heavy-duty tractor beam, recover the cargo, load it in to a ship that can transport [missionmaxscusize] cargo containers, and deposit it on the freight elevator at [destination].\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. critical cargo extraction extreme risk cargo retrieval high risk shipment recovery low risk cargo retrieval standard cargo recovery op. 319056e2-5012-4213-b9bc-875b0e453af7 30d3f472-7ac9-47db-8654-62ec8208f1f2 c894d121-d7b6-424f-82a4-bd3d47607e7f 39c8f9ef-1208-41e7-a7e4-a626117eba60 6748b11b-0e43-402c-951c-f0a6a00773ce a634bdf9-14dc-484f-9a41-abcdf8dd5dfb standing +100 credits formula unresolved standing +200 standing +50 standing +300 standing +150"
   },
   "groupSummary": {
     "familyKey": "fd860091-200e-4d26-b57b-2bdcc75b6ba0|EckhartSecurity_RecoverCargo_Pyro",
@@ -182,7 +187,7 @@
   "rewardSummary": {
     "rewardSummary": [
       "Standing +100",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Standing +200",
       "Standing +50",
       "Standing +300",
@@ -264,7 +269,7 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Pyro",
@@ -303,10 +308,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "30d3f472-7ac9-47db-8654-62ec8208f1f2",
@@ -318,10 +323,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Veteran Contractor / 15,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c894d121-d7b6-424f-82a4-bd3d47607e7f",
@@ -333,10 +338,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "39c8f9ef-1208-41e7-a7e4-a626117eba60",
@@ -348,10 +353,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "6748b11b-0e43-402c-951c-f0a6a00773ce",
@@ -363,10 +368,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "a634bdf9-14dc-484f-9a41-abcdf8dd5dfb",
@@ -378,10 +383,10 @@
         "confidence": "partial"
       },
       "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/17491cfc4f76d8d5.json"

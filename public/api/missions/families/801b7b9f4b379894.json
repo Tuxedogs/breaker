@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
@@ -33,7 +33,7 @@
     "rewardSummary": [
       "Blueprint: Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9",
       "Standing +200",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Item reward: MG Scrip",
       "Standing +300",
       "Standing +250"
@@ -201,12 +201,14 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "resolved",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Neutral / 0 rep to Elite Contractor / 95,250 rep",
       "Nyx",
@@ -229,15 +231,18 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "5673cea0-752a-4c64-bbab-f313a5274cd9",
       "c3fa11ea-d56f-4b04-a967-d90b65762f93",
       "afbd5caf-585e-4f1e-b357-afea66248852"
     ],
-    "searchText": "intersec defense solutions careercontract patrol dangerous sector intersec_patrol_nyx_hard intersec defense solutions careercontract standing mercenary pickup: generated from nyx pool mission specs\n\narea of operation: nyx system\nhostile forces: outlaws\nequipment specs: combat-rated ships\nbriefing: intersec has received intelligence that outlaws are planning to launch an attack on a target within the uee. in an effort to prevent this from happening, we need a contractor to patrol a sector we believe these outlaws are using to prepare for their attack.\n\noutlaw activity in this sector is higher than normal, so intersec recommends that you bring backup. when ready, dispatch to the location marker on your hud and scan the waypoints along the route. once you've confirmed that the entire sector is clear, the main contractor will receive a bonus of [scripamount] mg scrip. \n\nrespectfully,\n\ndeacon tobin\noperations manager\nintersec defense solutions\n\nthis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. all operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable. patrol vanduul hunting ground patrol to prevent possible attack 5673cea0-752a-4c64-bbab-f313a5274cd9 c3fa11ea-d56f-4b04-a967-d90b65762f93 afbd5caf-585e-4f1e-b357-afea66248852 blueprint: inter sec patrol: quartz \"lumen\" energy smg, testudo arms nightveil, testudo core nightveil, testudo legs nightveil +9 standing +200 calculated payout item reward: mg scrip standing +300 standing +250"
+    "searchText": "intersec defense solutions careercontract patrol dangerous sector intersec_patrol_nyx_hard intersec defense solutions careercontract standing mercenary pickup: generated from nyx pool mission specs\n\narea of operation: nyx system\nhostile forces: outlaws\nequipment specs: combat-rated ships\nbriefing: intersec has received intelligence that outlaws are planning to launch an attack on a target within the uee. in an effort to prevent this from happening, we need a contractor to patrol a sector we believe these outlaws are using to prepare for their attack.\n\noutlaw activity in this sector is higher than normal, so intersec recommends that you bring backup. when ready, dispatch to the location marker on your hud and scan the waypoints along the route. once you've confirmed that the entire sector is clear, the main contractor will receive a bonus of [scripamount] mg scrip. \n\nrespectfully,\n\ndeacon tobin\noperations manager\nintersec defense solutions\n\nthis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. all operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable. patrol vanduul hunting ground patrol to prevent possible attack 5673cea0-752a-4c64-bbab-f313a5274cd9 c3fa11ea-d56f-4b04-a967-d90b65762f93 afbd5caf-585e-4f1e-b357-afea66248852 blueprint: inter sec patrol: quartz \"lumen\" energy smg, testudo arms nightveil, testudo core nightveil, testudo legs nightveil +9 standing +200 credits formula unresolved item reward: mg scrip standing +300 standing +250"
   },
   "groupSummary": {
     "familyKey": "9661de97-1975-4484-8406-ac14ec6a98ae|InterSec_Patrol_Nyx",
@@ -261,7 +266,7 @@
     "rewardSummary": [
       "Blueprint: Inter Sec Patrol: Quartz \"Lumen\" Energy SMG, Testudo Arms Nightveil, Testudo Core Nightveil, Testudo Legs Nightveil +9",
       "Standing +200",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Item reward: MG Scrip",
       "Standing +300",
       "Standing +250"
@@ -429,7 +434,7 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Generated from Nyx pool",
@@ -577,10 +582,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "c3fa11ea-d56f-4b04-a967-d90b65762f93",
@@ -592,10 +597,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "afbd5caf-585e-4f1e-b357-afea66248852",
@@ -607,10 +612,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/801b7b9f4b379894.json"

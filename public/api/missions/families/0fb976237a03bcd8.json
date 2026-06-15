@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_DestroyItems_Narcotics_Career",
@@ -35,7 +35,7 @@
       "Security -4,000",
       "Affinity +100",
       "Affinity -50",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Security +1,000",
       "Security -1,000",
       "Security +2,000"
@@ -158,12 +158,14 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Affinity Good 020 / 2,000 rep to Affinity Good 100 Exalted / 10,000 rep",
       "Stanton Star",
@@ -184,15 +186,18 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "4f38a5fe-cd87-716a-eea3-4b5def10b6b3",
       "4dc98542-6b8b-6186-35d5-8266ce883c84",
       "47195082-d808-99ff-13a3-f8ce612707ad"
     ],
-    "searchText": "ruto careercontract inventory clear out ruto_stanton1_illegal_destroyitems_narcotics_hard ruto careercontract security pickup: stanton a client of mine‘s trying to negotiate a deal, but isn’t having much luck. the other party feels like they got all the leverage because they’re sitting comfortably on a pile of inventory. to help move the negotiations along, i’m gonna need you to head down to [location] and destroy all the drugs on site. \n\nnow, i should probably tell you that the site’s being protected by some very serious people, so getting to the stash is going to be a bit tricky, but i trust you’ll find a way. limited supply out of stock 4f38a5fe-cd87-716a-eea3-4b5def10b6b3 4dc98542-6b8b-6186-35d5-8266ce883c84 47195082-d808-99ff-13a3-f8ce612707ad security +4,000 security -4,000 affinity +100 affinity -50 calculated payout security +1,000 security -1,000 security +2,000"
+    "searchText": "ruto careercontract inventory clear out ruto_stanton1_illegal_destroyitems_narcotics_hard ruto careercontract security pickup: stanton a client of mine‘s trying to negotiate a deal, but isn’t having much luck. the other party feels like they got all the leverage because they’re sitting comfortably on a pile of inventory. to help move the negotiations along, i’m gonna need you to head down to [location] and destroy all the drugs on site. \n\nnow, i should probably tell you that the site’s being protected by some very serious people, so getting to the stash is going to be a bit tricky, but i trust you’ll find a way. limited supply out of stock 4f38a5fe-cd87-716a-eea3-4b5def10b6b3 4dc98542-6b8b-6186-35d5-8266ce883c84 47195082-d808-99ff-13a3-f8ce612707ad security +4,000 security -4,000 affinity +100 affinity -50 credits formula unresolved security +1,000 security -1,000 security +2,000"
   },
   "groupSummary": {
     "familyKey": "3b90594c-ea63-454c-8cb4-b6d469b3f64b|Ruto_DestroyItems_Narcotics_Career",
@@ -218,7 +223,7 @@
       "Security -4,000",
       "Affinity +100",
       "Affinity -50",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Security +1,000",
       "Security -1,000",
       "Security +2,000"
@@ -341,7 +346,7 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Stanton",
@@ -374,10 +379,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Affinity Good 020 / 2,000 rep to Affinity Good 100 Exalted / 10,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "4dc98542-6b8b-6186-35d5-8266ce883c84",
@@ -389,10 +394,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Affinity Good 005 / 500 rep to Affinity Good 100 Exalted / 10,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "47195082-d808-99ff-13a3-f8ce612707ad",
@@ -404,10 +409,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Affinity Good 015 / 1,500 rep to Affinity Good 100 Exalted / 10,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/0fb976237a03bcd8.json"

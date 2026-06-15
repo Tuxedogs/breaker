@@ -10,6 +10,7 @@ import {
   type MissionFamilyView,
   type MissionConceptView,
   type MissionPrerequisiteView,
+  type MissionRewardView,
   type MissionRewardedReputationPathView,
   type MissionVariantView,
 } from "@/lib/missionData";
@@ -183,6 +184,13 @@ function primaryRepScope(paths: MissionRewardedReputationPathView[], fallback: s
   return scopes[0] ?? fallback;
 }
 
+function reputationOutcomeAmount(paths: MissionRewardedReputationPathView[]): string {
+  const amounts = Array.from(new Set(paths.map((path) => path.amount).filter((value): value is number => typeof value === "number"))).sort((a, b) => a - b);
+  if (!amounts.length) return "unresolved";
+  if (amounts.length === 1) return `${signedAmount(amounts[0]!)} rep`;
+  return `${signedAmount(amounts[0]!)} to ${signedAmount(amounts[amounts.length - 1]!)} rep`;
+}
+
 function variantDifficulty(variant: MissionVariantView): string {
   const text = [variant.displayName, variant.internalName, variant.rawName].filter(Boolean).join(" ");
   const rank = text.match(/\bRank\s*([0-9IVX]+)\b/i)?.[0];
@@ -190,18 +198,28 @@ function variantDifficulty(variant: MissionVariantView): string {
   return rank ?? difficulty ?? "Varies";
 }
 
+const AUEC_REWARD_NOT_REPORTED = "aUEC reward not reported";
+
+function playerFacingCreditReward(reward: MissionRewardView): string {
+  const currency = reward.creditsDetail?.currency?.toUpperCase();
+  const approvedUserSubmittedAuec = reward.creditsDetail?.confidence === "user_submitted_approved";
+  if (reward.creditStatus === "fixed" && currency && currency !== "UEC" && currency !== "AUEC") return reward.credits;
+  if (reward.creditStatus === "fixed" && approvedUserSubmittedAuec) return reward.credits;
+  return AUEC_REWARD_NOT_REPORTED;
+}
+
+function playerFacingBriefing(value: string): string {
+  return value.replace(/\[([A-Za-z][A-Za-z0-9 _.-]*)\]/g, (_match, token: string) => {
+    const normalized = token.toLowerCase();
+    if (normalized.includes("location") || normalized.includes("destination")) return "an unresolved location";
+    if (normalized.includes("target")) return "an unresolved target";
+    return "an unresolved mission detail";
+  });
+}
+
 function groupCreditSummary(variants: MissionVariantView[]): string {
-  const unresolvedCount = variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length;
-  if (unresolvedCount === variants.length && unresolvedCount > 0) return `Credits unresolved across ${unresolvedCount} variants`;
-  if (unresolvedCount > 0) return `Credits unresolved for ${unresolvedCount} variant${unresolvedCount === 1 ? "" : "s"}`;
-  const fixed = Array.from(new Set(variants.filter((variant) => variant.rewards.creditStatus === "fixed").map((variant) => variant.rewards.credits)));
-  if (fixed.length > 1) return "Credits vary by variant";
-  if (fixed.length === 1 && variants.every((variant) => variant.rewards.creditStatus === "fixed")) return fixed[0]!;
-  if (variants.every((variant) => variant.rewards.creditStatus === "calculated")) return "Calculated payout";
-  if (variants.every((variant) => variant.rewards.creditStatus === "variable")) return "Variable payout";
-  if (variants.every((variant) => variant.rewards.creditStatus === "formula_unresolved")) return "Credits formula unresolved";
-  if (variants.every((variant) => variant.rewards.creditStatus === "provenAbsent")) return "No credit reward extracted";
-  return "Credits vary by variant";
+  const rewards = Array.from(new Set(variants.map((variant) => playerFacingCreditReward(variant.rewards))));
+  return rewards.length === 1 ? rewards[0]! : "Rewards vary by variant";
 }
 
 function groupPickupSummary(family: MissionFamilyView, variants: MissionVariantView[]): string {
@@ -222,11 +240,11 @@ function groupStandingSummary(variants: MissionVariantView[]): string {
 }
 
 function cardCreditSummary(variants: MissionVariantView[]): string {
-  return groupCreditSummary(variants).replace(/^Credits /, "").replace(/^No credit reward extracted$/, "none extracted");
+  return groupCreditSummary(variants);
 }
 
-function unloadedFamilyCreditSummary(family: MissionFamilyView): string {
-  return family.creditRewardSummary.replace(/^Credits /, "").replace(/^No credit reward extracted$/, "none extracted");
+function unloadedFamilyCreditSummary(_family: MissionFamilyView): string {
+  return AUEC_REWARD_NOT_REPORTED;
 }
 
 function conceptFamilies(concept: MissionConceptView, familiesByKey: Map<string, MissionFamilyView>): MissionFamilyView[] {
@@ -240,6 +258,10 @@ function conceptCreditSummary(concept: MissionConceptView, familiesByKey: Map<st
 
 function conceptBlueprintCount(concept: MissionConceptView, familiesByKey: Map<string, MissionFamilyView>): number {
   return new Set(conceptFamilies(concept, familiesByKey).flatMap((family) => family.blueprintRewardGroups.map((group) => group.poolGuid ?? group.poolName))).size;
+}
+
+function conceptHasItemRewards(concept: MissionConceptView, familiesByKey: Map<string, MissionFamilyView>): boolean {
+  return conceptFamilies(concept, familiesByKey).some((family) => family.itemRewardStatus && family.itemRewardStatus !== "none");
 }
 
 function conceptPickupBadges(concept: MissionConceptView): string[] {
@@ -448,14 +470,17 @@ function VariantTabs({
   }, new Map<string, MissionVariantView[]>()).values())
     .sort((a, b) => variantCompletenessScore(b[0]!) - variantCompletenessScore(a[0]!)), [variants]);
   const [selectedKey, setSelectedKey] = useState(() => equivalentGroups[0]?.[0]?.variantKey ?? "");
-  const selectedGroup = equivalentGroups.find((group) => group[0]?.variantKey === selectedKey) ?? equivalentGroups[0];
+  const selectedGroup = useMemo(
+    () => equivalentGroups.find((group) => group[0]?.variantKey === selectedKey) ?? equivalentGroups[0],
+    [equivalentGroups, selectedKey],
+  );
   const selectedVariant = selectedGroup?.[0];
-  const differenceLabels = playerFacingDifferenceLabels(equivalentGroups);
-  const duplicateLabels = equivalentGroups.reduce((counts, group) => {
+  const differenceLabels = useMemo(() => playerFacingDifferenceLabels(equivalentGroups), [equivalentGroups]);
+  const duplicateLabels = useMemo(() => equivalentGroups.reduce((counts, group) => {
     const label = variantTabBaseLabel(group);
     counts.set(label, (counts.get(label) ?? 0) + 1);
     return counts;
-  }, new Map<string, number>());
+  }, new Map<string, number>()), [equivalentGroups]);
   const showVariantTabs = equivalentGroups.length > 1;
   const showVariantSummary = differenceLabels.length > 0 || (!showVariantTabs && selectedGroup.length > 1);
 
@@ -572,6 +597,29 @@ function pickupDetail(pickup: MissionVariantView["pickupLocation"]): string {
   return [pickup.system, pickup.parentLocation, pickup.locationType].filter(Boolean).join(" / ") || pickup.reason;
 }
 
+function playerFacingLocations(values: Array<string | undefined>): string[] {
+  return meaningfulLocations(values.filter((value): value is string => Boolean(value)))
+    .filter((value) => !/^region\s+[a-z]+$/i.test(value));
+}
+
+function locationSystemTone(system?: string): string {
+  const normalized = system?.trim().toLowerCase();
+  if (normalized === "stanton") return "is-system-stanton";
+  if (normalized === "pyro") return "is-system-pyro";
+  if (normalized === "nyx") return "is-system-nyx";
+  return "is-neutral";
+}
+
+function dossierLocationBadge(pickup: MissionVariantView["pickupLocation"]): { label: string; unresolved: boolean; tone: string } {
+  const tone = locationSystemTone(pickup.system);
+  if (pickup.status === "unresolved") return { label: "Location unresolved", unresolved: true, tone: "is-muted" };
+  if (pickup.status === "unknown") return { label: "Pickup unresolved", unresolved: true, tone: "is-muted" };
+  const locations = playerFacingLocations([pickup.specificPickup ?? undefined, pickup.system, pickup.localityPool, pickup.displayName]);
+  if (pickup.status === "exact" && locations.length) return { label: `Pickup: ${locations[0]}`, unresolved: false, tone };
+  const availability = locations[0];
+  return { label: availability ? `Availability: ${availability}` : "Location unresolved", unresolved: !availability, tone };
+}
+
 function meaningfulPrerequisites(prerequisites: MissionPrerequisiteView[]): MissionPrerequisiteView[] {
   const hiddenTypes = new Set<MissionPrerequisiteView["type"]>(["crimeStat", "standing", "reputation", "rank", "location", "locality", "unresolved"]);
   const labels = new Set<string>();
@@ -655,6 +703,7 @@ const MissionConceptCard = memo(function MissionConceptCard({
 }) {
   const pickupBadges = conceptPickupBadges(concept);
   const blueprintCount = conceptBlueprintCount(concept, familiesByKey);
+  const hasItemRewards = conceptHasItemRewards(concept, familiesByKey);
   const compactBadges = Array.from(new Set([
     concept.displayCategory.label,
     shortRepScope(concept.reputationScope.displayName),
@@ -685,6 +734,8 @@ const MissionConceptCard = memo(function MissionConceptCard({
           <span className="mission-group-card__primary">
             <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName))}`}>{repPathSummary(concept.rewardedReputationPaths)}</span>
             {concept.mixedRewardPaths && <span className="mb-rep-badge mission-rep-scope--mixed">Mixed rep paths</span>}
+            {blueprintCount > 0 && <Badge tone="is-neutral">Blueprint rewards</Badge>}
+            {hasItemRewards && <Badge tone="is-neutral">Item rewards</Badge>}
           </span>
           <span className="mb-badges">
             {visibleBadges.map((badge, index) => <Badge key={badge} tone={index < 2 ? "is-neutral" : "is-muted"}>{badge}</Badge>)}
@@ -705,7 +756,7 @@ const MissionConceptCard = memo(function MissionConceptCard({
             </span>}
             <span className="mission-card-row">
               <span className="mission-card-row__icon"><MissionCardRowIcon type="credits" /></span>
-              <span>Credits: {conceptCreditSummary(concept, familiesByKey)}</span>
+              <span>{conceptCreditSummary(concept, familiesByKey)}</span>
             </span>
           </span>
         </span>
@@ -742,6 +793,36 @@ function RepPathBadgeList({ paths, includeFaction = false, max = 3 }: { paths: M
   );
 }
 
+function DossierReputationRewards({ paths }: { paths: MissionRewardedReputationPathView[] }) {
+  const groups = useMemo(() => Array.from(paths.reduce((grouped, path) => {
+    const key = `${path.factionKey}:${path.scopeKey}`;
+    grouped.set(key, [...(grouped.get(key) ?? []), path]);
+    return grouped;
+  }, new Map<string, MissionRewardedReputationPathView[]>()).values()), [paths]);
+
+  if (!groups.length) return <Badge tone="is-muted">Rep reward unresolved</Badge>;
+  return (
+    <div className="mb-dossier-reputation">
+      {groups.map((group) => {
+        const first = group[0]!;
+        const positive = group.filter((path) => path.confidence !== "unresolved" && typeof path.amount === "number" && path.amount > 0);
+        const negative = group.filter((path) => path.confidence !== "unresolved" && typeof path.amount === "number" && path.amount < 0);
+        const unresolved = group.filter((path) => typeof path.amount !== "number" || path.confidence === "unresolved");
+        return (
+          <div className={`mb-dossier-reputation__group ${repScopeClass(first.scopeDisplayName)}`} key={`${first.factionKey}-${first.scopeKey}`}>
+            <strong>{first.factionDisplayName} / {shortRepScope(first.scopeDisplayName)}</strong>
+            <div className="mb-dossier-reputation__outcomes">
+              {positive.length > 0 && <span>Success: {reputationOutcomeAmount(positive)}</span>}
+              {negative.length > 0 && <span className="is-negative">Negative rep: {reputationOutcomeAmount(negative)}</span>}
+              {unresolved.length > 0 && <span className="is-unresolved">Rep outcome unresolved</span>}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ReputationRewardSummary({ variants }: { variants: MissionVariantView[] }) {
   const rows = Array.from(
     variants.flatMap((variant) => variant.rewardedReputationPaths).reduce((grouped, path) => {
@@ -770,27 +851,33 @@ function ReputationRewardSummary({ variants }: { variants: MissionVariantView[] 
   );
 }
 
+function playerFacingChance(value?: string): string | undefined {
+  return value?.replace(/\s+-\s+(?=1 of \d+)/i, " · ");
+}
+
 function BlueprintRewardGroups({ groups, compact = false }: { groups: BlueprintRewardGroupView[]; compact?: boolean }) {
   if (!groups.length) return <p className="mb-empty-note">No blueprint rewards extracted.</p>;
+  const visibleGroups = groups.slice(0, compact ? 3 : groups.length);
   return (
     <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}`}>
-      {groups.map((group) => (
+      {visibleGroups.map((group) => (
         <section className="mb-blueprint-group" key={group.poolGuid ?? group.poolName}>
           <header>
             <strong>{group.poolName}</strong>
-            <span>{group.chanceLabel ?? `${group.rewardCount} possible rewards`}</span>
+            <span>{playerFacingChance(group.chanceLabel) ?? `${group.rewardCount} possible rewards`}</span>
           </header>
           <div className="mb-blueprint-list">
             {group.rewards.slice(0, compact ? 4 : 12).map((reward) => (
               <div className="mb-blueprint-item" key={reward.blueprintGuid ?? reward.displayName}>
                 <span>{reward.displayName}</span>
-                <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, reward.chanceLabel].filter(Boolean).join(" / ") || "Blueprint"}</small>
+                <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, playerFacingChance(reward.chanceLabel)].filter(Boolean).join(" / ") || "Blueprint"}</small>
               </div>
             ))}
             {group.rewards.length > (compact ? 4 : 12) && <div className="mb-blueprint-more">+{group.rewards.length - (compact ? 4 : 12)} more</div>}
           </div>
         </section>
       ))}
+      {groups.length > visibleGroups.length && <div className="mb-blueprint-more">+{groups.length - visibleGroups.length} more reward pools</div>}
     </div>
   );
 }
@@ -896,7 +983,7 @@ function VariantDrawer({ variant, dossier = false }: { variant: MissionVariantVi
       {variant.briefing && (
         <section className="mb-briefing is-variant">
           <h3>Mission Briefing</h3>
-          <p>{variant.briefing}</p>
+          <p>{dossier ? playerFacingBriefing(variant.briefing) : variant.briefing}</p>
         </section>
       )}
       <div className="mb-drawer-grid">
@@ -905,9 +992,9 @@ function VariantDrawer({ variant, dossier = false }: { variant: MissionVariantVi
           {variant.rewards.blueprintRewardGroups.length > 0 && <BlueprintRewardGroups groups={variant.rewards.blueprintRewardGroups} compact />}
           <div>
             <h4 className="mb-inline-heading">Rewarded Reputation</h4>
-            <RepPathBadgeList paths={variant.rewardedReputationPaths} includeFaction max={5} />
+            <DossierReputationRewards paths={variant.rewardedReputationPaths} />
           </div>
-          <Badge tone={["unresolved", "calculated", "formula_unresolved", "variable"].includes(variant.rewards.creditStatus) ? "is-amber" : "is-muted"}>{variant.rewards.credits}</Badge>
+          <Badge tone="is-muted">{playerFacingCreditReward(variant.rewards)}</Badge>
           {(variant.rewards.itemRewards ?? []).length > 0 && (
             <div>
               <h4 className="mb-inline-heading">Item Rewards</h4>
@@ -933,16 +1020,18 @@ function VariantDrawer({ variant, dossier = false }: { variant: MissionVariantVi
             )}
           </section>
         )}
-        <section className="mb-drawer-pickup">
-          <h3>Pickup / Availability</h3>
-          <div className="mb-pickup-readout">
-            <strong>{pickupLabel(variant.pickupLocation)}</strong>
-            {variant.pickupLocation.status === "exact" && variant.pickupLocation.parentLocation && <small>{variant.pickupLocation.parentLocation}</small>}
-          </div>
-          {localityChips.length > 0 && <BadgeList values={localityChips} fallback="" max={6} />}
-        </section>
+        {!dossier && (
+          <section className="mb-drawer-pickup">
+            <h3>Pickup / Availability</h3>
+            <div className="mb-pickup-readout">
+              <strong>{pickupLabel(variant.pickupLocation)}</strong>
+              {variant.pickupLocation.status === "exact" && variant.pickupLocation.parentLocation && <small>{variant.pickupLocation.parentLocation}</small>}
+            </div>
+            {localityChips.length > 0 && <BadgeList values={localityChips} fallback="" max={6} />}
+          </section>
+        )}
       </div>
-      <TechnicalDetails variant={variant} />
+      {!dossier && <TechnicalDetails variant={variant} />}
     </div>
   );
 }
@@ -1015,7 +1104,7 @@ function FamilyDetail({
                 <span><strong>Standing</strong><small>{variant.standingRequirement}</small></span>
                 <span className="mb-variant-rewards">
                   <strong>Rewards</strong>
-                  <small>{variant.rewards.credits}</small>
+                  <small>{playerFacingCreditReward(variant.rewards)}</small>
                   {variant.rewards.blueprintRewardGroups.length > 0 && <small>Blueprint: {variant.rewards.blueprintRewardGroups[0]?.poolName}</small>}
                   <RepPathBadgeList paths={variant.rewardedReputationPaths} max={2} />
                 </span>
@@ -1071,28 +1160,35 @@ function ConceptDetail({
   }, new Map<string, MissionVariantView[]>()).entries())
     .sort((a, b) => tierDisplayOrder(a[0]) - tierDisplayOrder(b[0]) || a[0].localeCompare(b[0])), [variants]);
   const [selectedTierKey, setSelectedTierKey] = useState(() => tiers[0]?.[0] ?? "");
-  const selectedTier = tiers.find(([tierKey]) => tierKey === selectedTierKey) ?? tiers[0];
+  const selectedTier = useMemo(() => tiers.find(([tierKey]) => tierKey === selectedTierKey) ?? tiers[0], [selectedTierKey, tiers]);
   const availabilityGroups = useMemo(() => Array.from((selectedTier?.[1] ?? []).reduce((groups, variant) => {
     const key = expansionGroupKey(variant);
     groups.set(key, [...(groups.get(key) ?? []), variant]);
     return groups;
   }, new Map<string, MissionVariantView[]>()).entries()), [selectedTier]);
   const [selectedAvailabilityKey, setSelectedAvailabilityKey] = useState(() => availabilityGroups[0]?.[0] ?? "");
-  const selectedAvailability = availabilityGroups.find(([groupKey]) => groupKey === selectedAvailabilityKey) ?? availabilityGroups[0];
+  const selectedAvailability = useMemo(
+    () => availabilityGroups.find(([groupKey]) => groupKey === selectedAvailabilityKey) ?? availabilityGroups[0],
+    [availabilityGroups, selectedAvailabilityKey],
+  );
   const selectedVariants = selectedAvailability?.[1] ?? [];
   const representative = selectedVariants[0];
-  const blueprintGroups = Array.from(new Map(selectedVariants.flatMap((variant) => variant.rewards.blueprintRewardGroups).map((group) => [group.poolGuid ?? group.poolName, group])).values());
+  const blueprintGroups = useMemo(
+    () => Array.from(new Map(selectedVariants.flatMap((variant) => variant.rewards.blueprintRewardGroups).map((group) => [group.poolGuid ?? group.poolName, group])).values()),
+    [selectedVariants],
+  );
+  const hasItemRewards = useMemo(() => selectedVariants.some((variant) => (variant.rewards.itemRewards?.length ?? 0) > 0), [selectedVariants]);
+  const hasReputationRewards = concept.rewardedReputationPaths.length > 0;
   const poolVariesWithoutRegion = blueprintGroups.length > 1 && !selectedVariants.some(explicitVariantRegion);
-
-  const availabilityLabel = (groupVariants: MissionVariantView[]): string => {
-    const variant = groupVariants[0]!;
-    const location = variant.pickupLocation;
-    return [
-      location.system ?? location.displayName,
-      location.localityPool,
-      explicitVariantRegion(variant),
-    ].filter(Boolean).join(" / ") || "Availability unresolved";
-  };
+  const meaningfulTiers = useMemo(() => tiers.filter(([tierKey, tierVariants]) => {
+    const label = tierVariants[0]?.tierLabel ?? tierKey;
+    return !/^(unclassified|unknown|unresolved)(\s+tier)?$/i.test(label);
+  }), [tiers]);
+  const showRiskTierSelector = meaningfulTiers.length > 1;
+  const availabilityBadges = useMemo(() => new Map(availabilityGroups.map(([groupKey, groupVariants]) => [
+    groupKey,
+    dossierLocationBadge(groupVariants[0]!.pickupLocation),
+  ])), [availabilityGroups]);
 
   return (
     <section className={`mb-detail mission-group-expansion mission-concept-dossier ${repScopeClass(concept.reputationScope.displayName)}`} aria-label={`${concept.displayName} concept details`}>
@@ -1109,15 +1205,17 @@ function ConceptDetail({
           </div>
         </div>
         <div className="mission-dossier-header__actions">
-          <span className={`mission-rep-reward-pill ${repScopeClass(primaryRepScope(concept.rewardedReputationPaths, concept.reputationScope.displayName))}`}>{repPathSummary(concept.rewardedReputationPaths)}</span>
+          {blueprintGroups.length > 0 && <Badge tone="is-neutral">Blueprint rewards</Badge>}
+          {hasItemRewards && <Badge tone="is-neutral">Item rewards</Badge>}
+          {hasReputationRewards && <Badge tone="is-neutral">Standing / Rep</Badge>}
           <button type="button" aria-label="Close mission dossier" autoFocus onClick={onClose}>Close</button>
         </div>
       </header>
-      {tiers.length > 0 && (
+      {showRiskTierSelector && (
         <div className="mission-dossier-selector">
           <span>Risk Tier</span>
           <div className="mission-dossier-tabs" role="tablist" aria-label="Mission risk or tier">
-            {tiers.map(([tierKey, tierVariants]) => (
+            {meaningfulTiers.map(([tierKey, tierVariants]) => (
               <button
                 type="button"
                 role="tab"
@@ -1136,28 +1234,32 @@ function ConceptDetail({
         </div>
       )}
       {availabilityGroups.length > 0 && (
-        <div className="mission-dossier-selector">
-          <span>Location Group</span>
-          <div className="mission-dossier-chips" role="tablist" aria-label="Mission pickup or location group">
-            {availabilityGroups.map(([groupKey, groupVariants]) => (
+        <div className="mission-dossier-location-badges" role={availabilityGroups.length > 1 ? "tablist" : undefined} aria-label="Mission pickup and availability">
+          {availabilityGroups.map(([groupKey, groupVariants]) => {
+            const locationBadge = availabilityBadges.get(groupKey)!;
+            if (availabilityGroups.length === 1) {
+              return <Badge key={groupKey} tone={locationBadge.unresolved ? "is-muted" : locationBadge.tone} title={pickupDetail(groupVariants[0]!.pickupLocation)}>{locationBadge.label}</Badge>;
+            }
+            return (
               <button
                 type="button"
                 role="tab"
                 aria-selected={selectedAvailability?.[0] === groupKey}
-                className={selectedAvailability?.[0] === groupKey ? "is-active" : ""}
+                className={`${locationBadge.unresolved ? "is-unresolved" : locationBadge.tone}${selectedAvailability?.[0] === groupKey ? " is-active" : ""}`}
                 key={groupKey}
                 onClick={() => setSelectedAvailabilityKey(groupKey)}
+                title={pickupDetail(groupVariants[0]!.pickupLocation)}
               >
-                {availabilityLabel(groupVariants)}
+                {locationBadge.label}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
       )}
       {representative && (
         <section className="mission-dossier-panel">
           {poolVariesWithoutRegion && <p className="mb-empty-note">Blueprint pool varies by generated locality; exact region mapping unresolved.</p>}
-          <VariantTabs variants={selectedVariants} />
+          <VariantTabs key={selectedAvailability?.[0]} variants={selectedVariants} />
         </section>
       )}
     </section>
@@ -1302,7 +1404,7 @@ export default function MissionBrowserPage() {
     { key: "blueprints", label: "Blueprint rewards", count: 0 },
     { key: "reputation", label: "Reputation rewards", count: 0 },
     { key: "credits-fixed", label: "Credits fixed", count: 0 },
-    { key: "credits-calculated", label: "Calculated payout", count: 0 },
+    { key: "credits-calculated", label: AUEC_REWARD_NOT_REPORTED, count: 0 },
     { key: "credits-variable", label: "Variable payout", count: 0 },
     { key: "credits-formula-unresolved", label: "Credits formula unresolved", count: 0 },
     { key: "credits-unresolved", label: "Credits unresolved", count: 0 },
@@ -1483,7 +1585,7 @@ export default function MissionBrowserPage() {
           <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <select value={reward} onChange={(event) => setParam("reward", event.target.value)}>
             <option value="">All rewards</option>
-            {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
+            {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.key === "credits-calculated" ? AUEC_REWARD_NOT_REPORTED : item.label}</option>)}
           </select>
           <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)}><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
           <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{statuses.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>

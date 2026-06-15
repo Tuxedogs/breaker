@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "18f50b34-8b12-42b4-b4d0-eaf22e8ae028|HeadHunters_Patrol_Nyx",
   "variant": {
@@ -151,7 +151,7 @@
     "rewards": {
       "summary": [
         "Ship Combat +300",
-        "Calculated payout",
+        "Credits formula unresolved",
         "Item reward: Council Scrip"
       ],
       "blueprintRewards": [],
@@ -159,14 +159,14 @@
       "reputationRewards": [
         "Ship Combat +300"
       ],
-      "credits": "Calculated payout",
-      "creditStatus": "calculated",
+      "credits": "Credits formula unresolved",
+      "creditStatus": "formula_unresolved",
       "creditsDetail": {
-        "status": "calculated",
-        "displayText": "Calculated payout",
+        "status": "formula_unresolved",
+        "displayText": "Credits formula unresolved",
         "confidence": "calculated_unresolved",
         "sourceResultType": "ContractResult_CalculatedReward",
-        "unresolvedReason": "Calculated reward formula not resolved",
+        "unresolvedReason": "Calculated reward result has no extracted formula or fixed child payout.",
         "attributes": {},
         "sourceRefs": [
           "contracts/contractgenerator/thecouncil_guild/headhunters/headhunters_patrol.xml"
@@ -188,7 +188,9 @@
         }
       ],
       "itemRewardStatus": "resolved",
-      "unresolvedRewardTokens": []
+      "unresolvedRewardTokens": [
+        "ContractResult_CalculatedReward:formula"
+      ]
     },
     "rewardedReputationPaths": [
       {
@@ -215,7 +217,7 @@
     "lawfulConfidence": "unknown",
     "confidence": {
       "hasUnresolvedLocation": false,
-      "hasUnresolvedRewards": false,
+      "hasUnresolvedRewards": true,
       "hasUnresolvedPrerequisites": true
     },
     "technical": {

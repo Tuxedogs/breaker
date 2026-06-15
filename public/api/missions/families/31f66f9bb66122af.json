@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "eae5ec36-856b-48ef-8e70-faff1940a12a|ASDFacilityDelving_Repeat",
@@ -33,7 +33,7 @@
     ],
     "rewardSummary": [
       "Blueprint: ASD2A: Fresnel Energy LMG, Zenith Laser Sniper Rifle, Geist Armor Arms Forest, Geist Armor Core Forest +8",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Item reward: ASD Secure Drive",
       "Blueprint: ASD2D: Fresnel \"Icebox\" Energy LMG, Geist Armor Arms Rogue, Geist Armor Core Rogue, Geist Armor Legs Rogue +11",
       "Blueprint: ASD3: Zenith \"Darkwave\" Laser Sniper Rifle, Fresnel \"Molten\" Energy LMG, Geist Armor Arms ASD Edition, Geist Armor Core ASD Edition +3",
@@ -613,12 +613,14 @@
     ],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "resolved",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Prerequisite mission or completion tag",
       "Stanton 2",
@@ -642,9 +644,12 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "3d0693fd-b4e4-4dc8-a42d-7e9acff7fd42",
       "80dd4f7d-b3f4-46dd-ae44-ce679e0705df",
@@ -652,7 +657,7 @@
       "fe6ba414-1375-4442-816e-30c4fe36e6f1",
       "89376110-728c-40f1-b489-8ef4ff95e4f9"
     ],
-    "searchText": "jorrit dossier: updated power usage data jorrit dossier: updated energy anomaly data hockrow_facilitydelve_p2m1-stanton4_repeat unknown provider contract standing contract +1 pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool hockrow agency \ncase file #jd10285\nlead investigator: arken mallor\n\ncase update: \nit would be helpful to have the most recent energy anomaly data so that we can compare it to what you delivered last time. any difference between the two data sets could prove useful.\n\ncontract investigator actions:\nexplore the engineering wing and retrieve the energy anomaly data and deliver it to [destination].\n\nadditional notes:\nbe wary of possible hostile forces on site. \n\ntravel to onyx in a vehicle that can be stored in a large hangar.\n\nonce you hand off this data, i'll send you a asd secure drive that you can collect at your home location. jorrit dossier: updated security data jorrit dossier: updated seismic data 3d0693fd-b4e4-4dc8-a42d-7e9acff7fd42 80dd4f7d-b3f4-46dd-ae44-ce679e0705df bbb52b26-4a27-4afa-aac5-9299fde95dbf fe6ba414-1375-4442-816e-30c4fe36e6f1 89376110-728c-40f1-b489-8ef4ff95e4f9 blueprint: asd2a: fresnel energy lmg, zenith laser sniper rifle, geist armor arms forest, geist armor core forest +8 calculated payout item reward: asd secure drive blueprint: asd2d: fresnel \"icebox\" energy lmg, geist armor arms rogue, geist armor core rogue, geist armor legs rogue +11 blueprint: asd3: zenith \"darkwave\" laser sniper rifle, fresnel \"molten\" energy lmg, geist armor arms asd edition, geist armor core asd edition +3 blueprint: asd3vgear: dynaflux, bolide, fulgur blueprint: asd2b: fresnel \"rockfall\" energy lmg, zenith \"landslide\" laser sniper rifle, geist armor arms, geist armor core +8 blueprint: asd2c: zenith \"thunderstrike\" laser sniper rifle, geist armor helmet desert, geist armor arms desert, geist armor core desert +11"
+    "searchText": "jorrit dossier: updated power usage data jorrit dossier: updated energy anomaly data hockrow_facilitydelve_p2m1-stanton4_repeat unknown provider contract standing contract +1 pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool hockrow agency \ncase file #jd10285\nlead investigator: arken mallor\n\ncase update: \nit would be helpful to have the most recent energy anomaly data so that we can compare it to what you delivered last time. any difference between the two data sets could prove useful.\n\ncontract investigator actions:\nexplore the engineering wing and retrieve the energy anomaly data and deliver it to [destination].\n\nadditional notes:\nbe wary of possible hostile forces on site. \n\ntravel to onyx in a vehicle that can be stored in a large hangar.\n\nonce you hand off this data, i'll send you a asd secure drive that you can collect at your home location. jorrit dossier: updated security data jorrit dossier: updated seismic data 3d0693fd-b4e4-4dc8-a42d-7e9acff7fd42 80dd4f7d-b3f4-46dd-ae44-ce679e0705df bbb52b26-4a27-4afa-aac5-9299fde95dbf fe6ba414-1375-4442-816e-30c4fe36e6f1 89376110-728c-40f1-b489-8ef4ff95e4f9 blueprint: asd2a: fresnel energy lmg, zenith laser sniper rifle, geist armor arms forest, geist armor core forest +8 credits formula unresolved item reward: asd secure drive blueprint: asd2d: fresnel \"icebox\" energy lmg, geist armor arms rogue, geist armor core rogue, geist armor legs rogue +11 blueprint: asd3: zenith \"darkwave\" laser sniper rifle, fresnel \"molten\" energy lmg, geist armor arms asd edition, geist armor core asd edition +3 blueprint: asd3vgear: dynaflux, bolide, fulgur blueprint: asd2b: fresnel \"rockfall\" energy lmg, zenith \"landslide\" laser sniper rifle, geist armor arms, geist armor core +8 blueprint: asd2c: zenith \"thunderstrike\" laser sniper rifle, geist armor helmet desert, geist armor arms desert, geist armor core desert +11"
   },
   "groupSummary": {
     "familyKey": "eae5ec36-856b-48ef-8e70-faff1940a12a|ASDFacilityDelving_Repeat",
@@ -676,7 +681,7 @@
   "rewardSummary": {
     "rewardSummary": [
       "Blueprint: ASD2A: Fresnel Energy LMG, Zenith Laser Sniper Rifle, Geist Armor Arms Forest, Geist Armor Core Forest +8",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Item reward: ASD Secure Drive",
       "Blueprint: ASD2D: Fresnel \"Icebox\" Energy LMG, Geist Armor Arms Rogue, Geist Armor Core Rogue, Geist Armor Legs Rogue +11",
       "Blueprint: ASD3: Zenith \"Darkwave\" Laser Sniper Rifle, Fresnel \"Molten\" Energy LMG, Geist Armor Arms ASD Edition, Geist Armor Core ASD Edition +3",
@@ -1256,7 +1261,7 @@
     ],
     "reputationRewards": [],
     "rewardedReputationPaths": [],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
@@ -1862,10 +1867,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "80dd4f7d-b3f4-46dd-ae44-ce679e0705df",
@@ -1877,10 +1882,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "bbb52b26-4a27-4afa-aac5-9299fde95dbf",
@@ -1892,10 +1897,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "fe6ba414-1375-4442-816e-30c4fe36e6f1",
@@ -1907,10 +1912,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "89376110-728c-40f1-b489-8ef4ff95e4f9",
@@ -1922,10 +1927,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "No extracted standing requirement",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/31f66f9bb66122af.json"

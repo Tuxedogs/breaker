@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
@@ -34,7 +34,7 @@
     "rewardSummary": [
       "Blueprint: Fuel Nozzle: Nozzle Fast, Nozzle Secure, Nozzle Very Fast, Nozzle Very Secure +4",
       "Standing +200",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Standing +100",
       "Standing +50",
       "Standing +150",
@@ -177,13 +177,15 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated",
+      "formula_unresolved",
       "provenAbsent"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "Prerequisite mission or completion tag",
@@ -212,9 +214,12 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "1f2d664c-2c64-4469-85ee-037febaa382b",
       "b3db49e8-ec3c-42a4-a70f-d2e48fd71e46",
@@ -229,7 +234,7 @@
       "37e70865-127e-4554-aa3e-2b0dce92ff90",
       "40c66c12-9f62-4fdd-a2fc-afff1ca9e406"
     ],
-    "searchText": "urgent fleet refuel critical refuel request: refueling_stanton_hard united wayfarers club careercontract standing refuel pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool refuel request: urgent refuel request: 1f2d664c-2c64-4469-85ee-037febaa382b b3db49e8-ec3c-42a4-a70f-d2e48fd71e46 6d1b2fe3-ed6b-4b94-9b6f-18fd3dccf2a0 90da5507-58fa-45a6-8388-f2bb84d4b814 fcd7e623-2711-465f-89c2-903716b97244 14910f0b-9b69-41ae-bd78-d072725b074a 33944d03-1b31-4457-8717-75b36a6f0ad6 85d17b53-5f6c-4c8b-876b-5032d998642c b4e4ae39-322b-445d-aa04-2e2873422427 ddd46f94-3762-4d25-8627-237015289bbe 37e70865-127e-4554-aa3e-2b0dce92ff90 40c66c12-9f62-4fdd-a2fc-afff1ca9e406 blueprint: fuel nozzle: nozzle fast, nozzle secure, nozzle very fast, nozzle very secure +4 standing +200 calculated payout standing +100 standing +50 standing +150 no credit reward extracted"
+    "searchText": "urgent fleet refuel critical refuel request: refueling_stanton_hard united wayfarers club careercontract standing refuel pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool refuel request: urgent refuel request: 1f2d664c-2c64-4469-85ee-037febaa382b b3db49e8-ec3c-42a4-a70f-d2e48fd71e46 6d1b2fe3-ed6b-4b94-9b6f-18fd3dccf2a0 90da5507-58fa-45a6-8388-f2bb84d4b814 fcd7e623-2711-465f-89c2-903716b97244 14910f0b-9b69-41ae-bd78-d072725b074a 33944d03-1b31-4457-8717-75b36a6f0ad6 85d17b53-5f6c-4c8b-876b-5032d998642c b4e4ae39-322b-445d-aa04-2e2873422427 ddd46f94-3762-4d25-8627-237015289bbe 37e70865-127e-4554-aa3e-2b0dce92ff90 40c66c12-9f62-4fdd-a2fc-afff1ca9e406 blueprint: fuel nozzle: nozzle fast, nozzle secure, nozzle very fast, nozzle very secure +4 standing +200 credits formula unresolved standing +100 standing +50 standing +150 no credit reward extracted"
   },
   "groupSummary": {
     "familyKey": "9d045828-9b93-4cf3-bfb2-3e48c05fb539|Refueling_Stanton",
@@ -253,7 +258,7 @@
     "rewardSummary": [
       "Blueprint: Fuel Nozzle: Nozzle Fast, Nozzle Secure, Nozzle Very Fast, Nozzle Very Secure +4",
       "Standing +200",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Standing +100",
       "Standing +50",
       "Standing +150",
@@ -396,7 +401,7 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
@@ -516,10 +521,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "b3db49e8-ec3c-42a4-a70f-d2e48fd71e46",
@@ -531,10 +536,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "6d1b2fe3-ed6b-4b94-9b6f-18fd3dccf2a0",
@@ -546,10 +551,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "90da5507-58fa-45a6-8388-f2bb84d4b814",
@@ -561,10 +566,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "fcd7e623-2711-465f-89c2-903716b97244",
@@ -576,10 +581,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "14910f0b-9b69-41ae-bd78-d072725b074a",
@@ -591,10 +596,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "33944d03-1b31-4457-8717-75b36a6f0ad6",
@@ -606,10 +611,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "85d17b53-5f6c-4c8b-876b-5032d998642c",
@@ -621,10 +626,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Contractor / 2,200 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "b4e4ae39-322b-445d-aa04-2e2873422427",
@@ -666,10 +671,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "40c66c12-9f62-4fdd-a2fc-afff1ca9e406",
@@ -681,10 +686,10 @@
         "confidence": "medium"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/1f33b243ba3e0a93.json"

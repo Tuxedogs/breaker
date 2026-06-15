@@ -647,6 +647,27 @@
   color: var(--mb-muted);
 }
 
+.mb-badge.is-system-stanton,
+.mission-dossier-location-badges button.is-system-stanton {
+  border-color: rgba(91, 199, 255, 0.42);
+  background: rgba(91, 199, 255, 0.09);
+  color: #8bd8ff;
+}
+
+.mb-badge.is-system-pyro,
+.mission-dossier-location-badges button.is-system-pyro {
+  border-color: rgba(255, 135, 82, 0.42);
+  background: rgba(255, 116, 72, 0.09);
+  color: #ffad82;
+}
+
+.mb-badge.is-system-nyx,
+.mission-dossier-location-badges button.is-system-nyx {
+  border-color: rgba(167, 139, 250, 0.46);
+  background: rgba(167, 139, 250, 0.11);
+  color: #c2adff;
+}
+
 .mission-rep-scope--hauling {
   --mission-path-color: #43e0d3;
   --mission-path-glow: rgba(67, 224, 211, 0.28);
@@ -746,6 +767,41 @@
   white-space: nowrap;
 }
 
+.mb-dossier-reputation {
+  display: grid;
+  gap: 4px;
+}
+
+.mb-dossier-reputation__group {
+  display: grid;
+  gap: 3px;
+  border-left: 2px solid var(--rep-scope-color, var(--mb-border));
+  padding-left: 6px;
+}
+
+.mb-dossier-reputation__group > strong {
+  color: var(--rep-scope-color, var(--mb-text));
+  font-size: 11px;
+}
+
+.mb-dossier-reputation__outcomes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 8px;
+}
+
+.mb-dossier-reputation__outcomes span {
+  color: var(--mb-text);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mb-dossier-reputation__outcomes .is-negative,
+.mb-dossier-reputation__outcomes .is-unresolved {
+  color: var(--mb-muted);
+  font-weight: 600;
+}
+
 .mb-rep-summary {
   display: grid;
   gap: 6px;
@@ -786,7 +842,9 @@
 
 .mission-concept-dossier {
   width: 100%;
+  height: 100%;
   margin: 0;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
   gap: 0;
   border: 1px solid var(--mb-border-strong);
   border-left: 1px solid var(--mb-border-strong);
@@ -799,11 +857,9 @@
 }
 
 .mission-concept-dossier > .mission-dossier-header {
-  position: sticky;
-  top: 0;
   z-index: 2;
-  padding: 14px 16px;
-  background: rgba(16, 22, 26, 0.8);
+  padding: 10px 12px;
+  background: rgba(16, 22, 26, 0.96);
 }
 
 .mission-dossier-modal-backdrop {
@@ -812,17 +868,17 @@
   z-index: 1000;
   display: grid;
   place-items: center;
-  padding: 24px;
-  background: rgba(3, 6, 8, 0.78);
-  backdrop-filter: blur(3px);
+  padding: 16px;
+  background: rgba(3, 6, 8, 0.88);
 }
 
 .mission-dossier-modal-shell {
   width: min(1220px, 100%);
-  max-height: 88vh;
-  overflow: auto;
+  height: min(860px, calc(100vh - 32px));
+  max-height: calc(100vh - 32px);
+  overflow: hidden;
   border-radius: 5px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   outline: none;
   overscroll-behavior: contain;
 }
@@ -873,13 +929,17 @@
 }
 
 .mission-dossier-selector {
-  display: grid;
-  gap: 5px;
-  padding: 9px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 5px 12px;
   border-bottom: 1px solid var(--mb-border);
+  background: rgba(16, 22, 26, 0.72);
 }
 
 .mission-dossier-selector > span {
+  flex: 0 0 auto;
   color: var(--mb-violet);
   font-size: 10px;
   font-weight: 800;
@@ -887,24 +947,88 @@
   text-transform: uppercase;
 }
 
+.mission-dossier-location-badges {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 5px 12px;
+  border-bottom: 1px solid var(--mb-border);
+  scrollbar-width: thin;
+}
+
+.mission-dossier-location-badges button {
+  flex: 0 0 auto;
+  min-height: 19px;
+  border: 1px solid var(--mb-border);
+  border-radius: 2px;
+  background: rgba(112, 198, 191, 0.05);
+  color: var(--mb-teal);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.mission-dossier-location-badges button.is-active {
+  border-color: var(--mb-violet);
+  background: rgba(167, 139, 250, 0.12);
+  color: var(--mb-text);
+}
+
+.mission-dossier-location-badges button.is-unresolved {
+  color: var(--mb-muted);
+}
+
+.mission-dossier-location-badges button.is-system-stanton.is-active {
+  border-color: rgba(91, 199, 255, 0.68);
+  background: rgba(91, 199, 255, 0.16);
+  color: #b4e7ff;
+}
+
+.mission-dossier-location-badges button.is-system-pyro.is-active {
+  border-color: rgba(255, 135, 82, 0.68);
+  background: rgba(255, 116, 72, 0.16);
+  color: #ffc2a3;
+}
+
+.mission-dossier-location-badges button.is-system-nyx.is-active {
+  border-color: rgba(167, 139, 250, 0.72);
+  background: rgba(167, 139, 250, 0.18);
+  color: #d6c9ff;
+}
+
 .mission-dossier-tabs,
 .mission-dossier-chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .mission-dossier-tabs button,
 .mission-dossier-chips button {
   border: 1px solid var(--mb-border);
   border-radius: 3px;
-  background: var(--mb-panel-3);
-  color: var(--mb-muted);
+  background: rgba(31, 42, 56, 0.5);
+  color: color-mix(in srgb, var(--mb-text) 70%, var(--mb-muted));
   cursor: pointer;
   font: inherit;
   font-size: 12px;
   font-weight: 800;
-  padding: 6px 10px;
+  line-height: 1;
+  padding: 5px 9px;
+  white-space: nowrap;
+}
+
+.mission-dossier-tabs button:hover {
+  border-color: color-mix(in srgb, var(--mb-violet) 50%, var(--mb-border));
+  color: var(--mb-text);
 }
 
 .mission-dossier-chips button {
@@ -915,15 +1039,21 @@
 .mission-dossier-tabs button.is-active,
 .mission-dossier-chips button.is-active {
   border-color: var(--mb-violet);
-  background: rgba(167, 139, 250, 0.14);
+  background: rgba(167, 139, 250, 0.18);
   color: var(--mb-text);
+  box-shadow: inset 0 -2px 0 rgba(167, 139, 250, 0.72);
 }
 
 .mission-dossier-panel {
   display: grid;
+  grid-row: 4;
+  grid-template-rows: minmax(0, 1fr);
   gap: 10px;
+  min-height: 0;
   min-width: 0;
-  padding: 12px 16px 14px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 8px 12px 10px;
 }
 
 .mb-detail > header {
@@ -1135,7 +1265,8 @@
   justify-content: space-between;
   gap: 8px;
   color: var(--mb-muted);
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 1.25;
 }
 
 .mb-blueprint-group > header strong {
@@ -1165,6 +1296,7 @@
 .mb-blueprint-item span {
   overflow: hidden;
   color: var(--mb-text);
+  font-size: 12px;
   font-weight: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1173,7 +1305,8 @@
 .mb-blueprint-item small,
 .mb-blueprint-more {
   color: var(--mb-muted);
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 1.25;
 }
 
 .mb-detail h2 {
@@ -1197,13 +1330,17 @@
 
 .mission-concept-dossier .mb-variant-drawer.is-dossier {
   grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
-  grid-auto-flow: row dense;
-  gap: 10px;
+  grid-template-rows: repeat(3, minmax(0, auto));
+  gap: 8px;
+  min-height: 0;
 }
 
 .mission-concept-dossier .mb-variant-drawer.is-dossier > .mb-briefing {
   grid-column: 1;
-  grid-row: 1;
+  grid-row: 1 / 4;
+  max-height: 52vh;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .mission-concept-dossier .mb-variant-drawer.is-dossier > .mb-drawer-grid {
@@ -1219,14 +1356,36 @@
   padding: 0;
 }
 
+.mission-concept-dossier .mb-drawer-rewards {
+  grid-column: 2;
+  grid-row: 1;
+  max-height: none;
+  overflow: visible;
+}
+
+.mission-concept-dossier .mb-drawer-requirements {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.mission-concept-dossier .mb-drawer-pickup {
+  grid-column: 2;
+  grid-row: 3;
+}
+
 .mission-concept-dossier .mb-drawer-grid section {
   border-radius: 3px;
-  padding: 11px 12px;
+  padding: 8px 10px;
 }
 
 .mission-concept-dossier .mb-briefing.is-variant {
   margin: 0;
-  padding: 14px 16px;
+  padding: 10px 12px;
+}
+
+.mission-concept-dossier .mb-briefing.is-variant p {
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .mission-concept-dossier .mb-technical,
@@ -1311,7 +1470,9 @@
 
 .mission-variant-tabs {
   display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
   gap: 8px;
+  min-height: 0;
 }
 
 .mission-variant-tabs__list {
@@ -1365,6 +1526,7 @@
 .mission-variant-tabs__panel {
   display: grid;
   gap: 8px;
+  min-height: 0;
   min-width: 0;
 }
 

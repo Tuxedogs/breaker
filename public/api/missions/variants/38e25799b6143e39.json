@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "eae5ec36-856b-48ef-8e70-faff1940a12a|ASDFacilityDelving_Repeat",
   "variant": {
@@ -361,7 +361,7 @@
     "rewards": {
       "summary": [
         "Blueprint: ASD2B: Fresnel \"Rockfall\" Energy LMG, Zenith \"Landslide\" Laser Sniper Rifle, Geist Armor Arms, Geist Armor Core +8",
-        "Calculated payout",
+        "Credits formula unresolved",
         "Item reward: ASD Secure Drive"
       ],
       "blueprintRewards": [
@@ -474,14 +474,14 @@
         }
       ],
       "reputationRewards": [],
-      "credits": "Calculated payout",
-      "creditStatus": "calculated",
+      "credits": "Credits formula unresolved",
+      "creditStatus": "formula_unresolved",
       "creditsDetail": {
-        "status": "calculated",
-        "displayText": "Calculated payout",
+        "status": "formula_unresolved",
+        "displayText": "Credits formula unresolved",
         "confidence": "calculated_unresolved",
         "sourceResultType": "ContractResult_CalculatedReward",
-        "unresolvedReason": "Calculated reward formula not resolved",
+        "unresolvedReason": "Calculated reward result has no extracted formula or fixed child payout.",
         "attributes": {},
         "sourceRefs": [
           "contracts/contractgenerator/mercenary_guild/hockrowagency/hockrowagency_facilitydelve.xml"
@@ -503,7 +503,9 @@
         }
       ],
       "itemRewardStatus": "resolved",
-      "unresolvedRewardTokens": []
+      "unresolvedRewardTokens": [
+        "ContractResult_CalculatedReward:formula"
+      ]
     },
     "rewardedReputationPaths": [],
     "flags": [],
@@ -515,7 +517,7 @@
     "lawfulConfidence": "inferred",
     "confidence": {
       "hasUnresolvedLocation": false,
-      "hasUnresolvedRewards": false,
+      "hasUnresolvedRewards": true,
       "hasUnresolvedPrerequisites": true
     },
     "technical": {

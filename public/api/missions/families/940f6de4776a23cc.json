@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
@@ -35,7 +35,7 @@
     ],
     "rewardSummary": [
       "Hauling +1,000",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Hauling +200",
       "Completion tag"
     ],
@@ -74,12 +74,14 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Neutral / 0 rep to Elite Contractor / 95,250 rep",
       "Region A",
@@ -107,9 +109,12 @@
     ],
     "unresolvedLocationTokens": [],
     "confidenceFlags": [
+      "Reward data unresolved",
       "Prerequisite unresolved"
     ],
-    "unresolvedReferences": [],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "f56b2ee1-1729-4374-a2d5-f6a5607f3a5d",
       "38437a9a-f57f-4771-8f4f-d5b6612b5cb5",
@@ -119,7 +124,7 @@
       "f47a2d1f-8f4f-49c7-9a7c-3e8e9a040495",
       "9bb5529b-54ed-4f46-a37d-634836687ac6"
     ],
-    "searchText": "hauling ask. cargo retrieval hh_olp_atob_wtp_medicalsupplies headhunters careercontract hauling cargo pickup: stanton need someone to snag some cargo for us. we were using an old hathor paf for dead drops, but a local gang has dug in and we can’t get our shit.\n\nif you feel like kicking some ass, grab the cargo from the freight elevator at [location] and deliver it to the freight elevator at [destination]. \n\nfrom what i’ve heard this place is full of all sorts. won’t be easy getting out stuff back, but that’s what we’re paying you for.\n\njust make sure you got a ship that can handle a [missionmaxscusize] load, and try not to get shot in the process. a handheld tractor beam would also be smart to bring along. \n\nstows out. getting our goods back stock taking f56b2ee1-1729-4374-a2d5-f6a5607f3a5d 38437a9a-f57f-4771-8f4f-d5b6612b5cb5 857464b8-d35f-46ef-9c25-409395dfaf28 89aee723-a004-48cc-8cc6-bc3224ff5f5f bd3158f8-4654-43bb-a736-7a1225fd0796 f47a2d1f-8f4f-49c7-9a7c-3e8e9a040495 9bb5529b-54ed-4f46-a37d-634836687ac6 hauling +1,000 calculated payout hauling +200 completion tag"
+    "searchText": "hauling ask. cargo retrieval hh_olp_atob_wtp_medicalsupplies headhunters careercontract hauling cargo pickup: stanton need someone to snag some cargo for us. we were using an old hathor paf for dead drops, but a local gang has dug in and we can’t get our shit.\n\nif you feel like kicking some ass, grab the cargo from the freight elevator at [location] and deliver it to the freight elevator at [destination]. \n\nfrom what i’ve heard this place is full of all sorts. won’t be easy getting out stuff back, but that’s what we’re paying you for.\n\njust make sure you got a ship that can handle a [missionmaxscusize] load, and try not to get shot in the process. a handheld tractor beam would also be smart to bring along. \n\nstows out. getting our goods back stock taking f56b2ee1-1729-4374-a2d5-f6a5607f3a5d 38437a9a-f57f-4771-8f4f-d5b6612b5cb5 857464b8-d35f-46ef-9c25-409395dfaf28 89aee723-a004-48cc-8cc6-bc3224ff5f5f bd3158f8-4654-43bb-a736-7a1225fd0796 f47a2d1f-8f4f-49c7-9a7c-3e8e9a040495 9bb5529b-54ed-4f46-a37d-634836687ac6 hauling +1,000 credits formula unresolved hauling +200 completion tag"
   },
   "groupSummary": {
     "familyKey": "14aa6102-c23c-4c92-9b70-09c3fe765b86|HH_Hauling",
@@ -145,7 +150,7 @@
   "rewardSummary": {
     "rewardSummary": [
       "Hauling +1,000",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Hauling +200",
       "Completion tag"
     ],
@@ -184,7 +189,7 @@
         "unresolvedReason": "Reward scope used the same generic reputation ref as the mission; path label follows existing Scintel-derived career track."
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: Stanton",
@@ -225,10 +230,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "38437a9a-f57f-4771-8f4f-d5b6612b5cb5",
@@ -240,10 +245,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "857464b8-d35f-46ef-9c25-409395dfaf28",
@@ -255,10 +260,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "89aee723-a004-48cc-8cc6-bc3224ff5f5f",
@@ -270,10 +275,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "bd3158f8-4654-43bb-a736-7a1225fd0796",
@@ -285,10 +290,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f47a2d1f-8f4f-49c7-9a7c-3e8e9a040495",
@@ -300,10 +305,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "9bb5529b-54ed-4f46-a37d-634836687ac6",
@@ -315,10 +320,10 @@
         "confidence": "high"
       },
       "standingRequirement": "Neutral / 0 rep to Elite Contractor / 95,250 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/940f6de4776a23cc.json"

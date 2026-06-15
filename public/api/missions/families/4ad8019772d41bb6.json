@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-12T05:10:38.631Z",
+  "generatedAt": "2026-06-15T03:11:57.086Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateSpecific_Stanton_Career",
@@ -35,7 +35,7 @@
       "Blueprint: Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8",
       "Assassination +1,000",
       "Assassination -500",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Assassination +500",
       "Assassination -250"
     ],
@@ -208,12 +208,14 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout",
+    "creditRewardSummary": "Credits formula unresolved",
     "creditRewardStatuses": [
-      "calculated"
+      "formula_unresolved"
     ],
     "itemRewardStatus": "none",
-    "unresolvedRewardFields": [],
+    "unresolvedRewardFields": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "prerequisiteRequirements": [
       "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
       "Procedural location placeholder",
@@ -229,14 +231,18 @@
     "lawfulConfidence": "unknown",
     "locations": [],
     "unresolvedLocationTokens": [],
-    "confidenceFlags": [],
-    "unresolvedReferences": [],
+    "confidenceFlags": [
+      "Reward data unresolved"
+    ],
+    "unresolvedReferences": [
+      "ContractResult_CalculatedReward:formula"
+    ],
     "variantKeys": [
       "41d02f67-3abc-4a67-86bc-7037c2c4b2bd",
       "f0274151-6591-4bab-b6db-bd01536f9f28",
       "494d970a-a73e-af8d-155e-ab608cf65e92"
     ],
-    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminatespecific_eliminatecompetionworkers vaughn careercontract assassination mercenary pickup: unresolved for 3 variants they say there is no honor among thieves. today, it seems, you're targeting one of your own. \n\nplease head to [location] and kill [targetname]. what you do with the others there is entirely up to you.\n\nearnestly,\nvaughn pyro contract they will be missed 41d02f67-3abc-4a67-86bc-7037c2c4b2bd f0274151-6591-4bab-b6db-bd01536f9f28 494d970a-a73e-af8d-155e-ab608cf65e92 blueprint: vaughn generator eliminate specific: killshot rifle, deadrig shotgun, overlord arms supernova, overlord core supernova +8 assassination +1,000 assassination -500 calculated payout assassination +500 assassination -250"
+    "searchText": "vaughn careercontract all things come to an end vaughn_stanton1_eliminatespecific_eliminatecompetionworkers vaughn careercontract assassination mercenary pickup: unresolved for 3 variants they say there is no honor among thieves. today, it seems, you're targeting one of your own. \n\nplease head to [location] and kill [targetname]. what you do with the others there is entirely up to you.\n\nearnestly,\nvaughn pyro contract they will be missed 41d02f67-3abc-4a67-86bc-7037c2c4b2bd f0274151-6591-4bab-b6db-bd01536f9f28 494d970a-a73e-af8d-155e-ab608cf65e92 blueprint: vaughn generator eliminate specific: killshot rifle, deadrig shotgun, overlord arms supernova, overlord core supernova +8 assassination +1,000 assassination -500 credits formula unresolved assassination +500 assassination -250"
   },
   "groupSummary": {
     "familyKey": "4fe175e2-d47a-4d26-9b44-634511a2fe29|Vaughn_EliminateSpecific_Stanton_Career",
@@ -261,7 +267,7 @@
       "Blueprint: Vaughn Generator Eliminate Specific: Killshot Rifle, Deadrig Shotgun, Overlord Arms Supernova, Overlord Core Supernova +8",
       "Assassination +1,000",
       "Assassination -500",
-      "Calculated payout",
+      "Credits formula unresolved",
       "Assassination +500",
       "Assassination -250"
     ],
@@ -434,7 +440,7 @@
         ]
       }
     ],
-    "creditRewardSummary": "Calculated payout"
+    "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
     "pickupSummary": "Pickup: unresolved for 3 variants",
@@ -572,10 +578,10 @@
         "confidence": "low"
       },
       "standingRequirement": "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "f0274151-6591-4bab-b6db-bd01536f9f28",
@@ -587,10 +593,10 @@
         "confidence": "low"
       },
       "standingRequirement": "Low Level Assassin / 3,000 rep to Master Assassin / 112,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": true,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     },
     {
       "variantKey": "494d970a-a73e-af8d-155e-ab608cf65e92",
@@ -602,10 +608,10 @@
         "confidence": "low"
       },
       "standingRequirement": "Assassin In Training / 1 rep to Master Assassin / 112,000 rep",
-      "creditStatus": "calculated",
-      "credits": "Calculated payout",
+      "creditStatus": "formula_unresolved",
+      "credits": "Credits formula unresolved",
       "hasBlueprintRewards": false,
-      "hasUnresolvedRewards": false
+      "hasUnresolvedRewards": true
     }
   ],
   "variantsFile": "family-variants/4ad8019772d41bb6.json"

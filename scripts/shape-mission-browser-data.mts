@@ -1516,6 +1516,23 @@ function shapeCreditReward(mission: RawMission): { credits: string; creditStatus
 
   const calculatedReward = creditRewards.find((reward) => reward.type === "ContractResult_CalculatedReward");
   if (calculatedReward) {
+    const hasFormulaAttributes = Object.keys(calculatedReward.attributes ?? {}).length > 0;
+    if (!hasFormulaAttributes) {
+      return {
+        credits: "Credits formula unresolved",
+        creditStatus: "formula_unresolved",
+        creditsDetail: {
+          status: "formula_unresolved",
+          displayText: "Credits formula unresolved",
+          confidence: "calculated_unresolved",
+          sourceResultType: "ContractResult_CalculatedReward",
+          unresolvedReason: "Calculated reward result has no extracted formula or fixed child payout.",
+          attributes: calculatedReward.attributes,
+          sourceRefs: calculatedReward.sourceRefs ?? [],
+        },
+        unresolvedTokens: ["ContractResult_CalculatedReward:formula"],
+      };
+    }
     return {
       credits: "Calculated payout",
       creditStatus: "calculated",
@@ -1747,7 +1764,7 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
     ...lawful,
     confidence: {
       hasUnresolvedLocation: pickupLocation.status === "unresolved" || unresolvedLocationTokens.length > 0,
-      hasUnresolvedRewards: rewards.creditStatus === "unresolved" || rewards.unresolvedRewardTokens.length > 0,
+      hasUnresolvedRewards: rewards.creditStatus === "formula_unresolved" || rewards.creditStatus === "unresolved" || rewards.unresolvedRewardTokens.length > 0,
       hasUnresolvedPrerequisites: prerequisites.some((item) => item.confidence === "unresolved"),
     },
     technical: {
@@ -2542,6 +2559,8 @@ const report = {
   crimeStatBoundedCount: variants.filter((variant) => variant.crimeStatRequirement === "bounded").length,
   creditFixedCount: variants.filter((variant) => variant.rewards.creditStatus === "fixed").length,
   creditCalculatedClassifiedCount: variants.filter((variant) => variant.rewards.creditStatus === "calculated").length,
+  creditCalculatedToFixedUpgradeCount: 0,
+  creditStillCalculatedCount: variants.filter((variant) => variant.rewards.creditStatus === "calculated").length,
   creditFormulaUnresolvedCount: variants.filter((variant) => variant.rewards.creditStatus === "formula_unresolved").length,
   creditVariableCount: variants.filter((variant) => variant.rewards.creditStatus === "variable").length,
   creditUnresolvedCount: variants.filter((variant) => variant.rewards.creditStatus === "unresolved").length,
@@ -2595,7 +2614,8 @@ const report = {
     "CrimeStat required is emitted only when minCrimeStat is greater than zero.",
     "Current source data contains CrimeStat bounds but no explicit positive minCrimeStat requirement.",
     "ContractResult_Reward child contractReward is extracted as fixed credits when present.",
-    "ContractResult_CalculatedReward is classified as Calculated payout until a deterministic formula resolver exists.",
+    "ContractResult_CalculatedReward remains calculated only when formula attributes are extracted; empty calculated results are classified as formula unresolved.",
+    "Calculated-to-fixed upgrades require a concrete fixed child payout in the current mission input; none are inferred from sibling missions.",
     "Pickup / availability uses explicit location prerequisites first and MissionLocality availability pools second.",
     "Pyro StarLocality and Region A-D style refs are shaped as procedural Pyro system availability scopes.",
     "Mission browse groups are Faction -> Reputation Scope / Career Track -> Mission Archetype -> Mission Group -> Variants.",
