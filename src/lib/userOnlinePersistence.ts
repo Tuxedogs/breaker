@@ -4,6 +4,12 @@ import { parseJsonResponse, type JsonParseOptions } from "./safeJson";
 
 const INVENTORY_URL = "/api/user/inventory";
 const INVENTORY_SYNC_URL = "/api/user/inventory/sync";
+const INVENTORY_STACKS_URL = "/api/user/inventory/stacks";
+const INVENTORY_LOCATIONS_URL = "/api/user/inventory/locations";
+
+let onlineMutationCount = 0;
+let currentOnlineAccessToken: string | null = null;
+let onlineMutationTail: Promise<void> = Promise.resolve();
 
 export type OnlinePersistenceState = {
   locations: InventoryLocation[];
@@ -21,9 +27,9 @@ export type OnlinePersistenceState = {
 };
 
 export type OnlinePersistencePayload = {
-  locations: InventoryLocation[];
-  inventoryEntries: InventoryEntry[];
-  buildQueue: BuildQueueItem[];
+  locations?: InventoryLocation[];
+  inventoryEntries?: InventoryEntry[];
+  buildQueue?: BuildQueueItem[];
 };
 
 function authHeaders(accessToken: string) {
@@ -70,4 +76,86 @@ export async function syncOnlinePersistenceState(
     label: "sync inventory",
     url,
   });
+}
+
+export function isOnlinePersistenceMutationInFlight() {
+  return onlineMutationCount > 0;
+}
+
+export function setOnlinePersistenceAccessToken(accessToken: string | null) {
+  currentOnlineAccessToken = accessToken;
+}
+
+export async function runOnlinePersistenceMutation<T>(request: () => Promise<T>): Promise<T> {
+  onlineMutationCount += 1;
+  const result = onlineMutationTail.then(request, request);
+  onlineMutationTail = result.then(() => undefined, () => undefined);
+  try {
+    return await result;
+  } finally {
+    onlineMutationCount -= 1;
+  }
+}
+
+export function upsertOnlineInventoryStack(accessToken: string, entry: InventoryEntry, location?: InventoryLocation) {
+  return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
+    locations: location ? [location] : undefined,
+    inventoryEntries: [entry],
+  }));
+}
+
+export function deleteOnlineInventoryStack(accessToken: string, stackId: string) {
+  return runOnlinePersistenceMutation(async () => {
+    const url = apiUrl(`${INVENTORY_STACKS_URL}/${encodeURIComponent(stackId)}`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return parseUserJsonResponse<OnlinePersistenceState>(response, {
+      label: "delete inventory stack",
+      url,
+    });
+  });
+}
+
+export function upsertOnlineInventoryLocation(accessToken: string, location: InventoryLocation) {
+  return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
+    locations: [location],
+  }));
+}
+
+export function deleteOnlineInventoryLocation(accessToken: string, locationId: string) {
+  return runOnlinePersistenceMutation(async () => {
+    const url = apiUrl(`${INVENTORY_LOCATIONS_URL}/${encodeURIComponent(locationId)}`);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: authHeaders(accessToken),
+    });
+    return parseUserJsonResponse<OnlinePersistenceState>(response, {
+      label: "delete inventory location",
+      url,
+    });
+  });
+}
+
+export function upsertOnlineBuildQueueItem(accessToken: string, item: BuildQueueItem) {
+  return runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
+    buildQueue: [item],
+  }));
+}
+
+export function persistOnlineInventoryStack(entry: InventoryEntry, location?: InventoryLocation) {
+  return currentOnlineAccessToken ? upsertOnlineInventoryStack(currentOnlineAccessToken, entry, location) : null;
+}
+
+export function persistOnlineInventoryStackDelete(stackId: string) {
+  return currentOnlineAccessToken ? deleteOnlineInventoryStack(currentOnlineAccessToken, stackId) : null;
+}
+
+export function persistOnlineInventoryLocation(location: InventoryLocation) {
+  return currentOnlineAccessToken ? upsertOnlineInventoryLocation(currentOnlineAccessToken, location) : null;
+}
+
+export function persistOnlineInventoryLocationDelete(locationId: string) {
+  return currentOnlineAccessToken ? deleteOnlineInventoryLocation(currentOnlineAccessToken, locationId) : null;
 }

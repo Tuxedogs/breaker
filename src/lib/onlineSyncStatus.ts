@@ -46,3 +46,7 @@ export function setOnlineSyncStatus(input: Partial<OnlineSyncStatus>) {
     window.dispatchEvent(new Event(onlineSyncStatusEvent));
   }
 }
+
+export function getUserRemoteMigratedAtKey(userId: string) {
+  return `${remoteMigratedAtKey}:${userId}`;
+}

@@ -14,11 +14,16 @@ import {
 import { normalizeRecipeInputTemplate } from "../lib/logistics/materialResolver";
 import { rarityFromBandIndex } from "../components/industry/crafting/utils/qualityBands";
 import {
-  persistBuildQueueAdd,
   persistBuildQueueClear,
   persistBuildQueueDelete,
-  persistBuildQueueQuantity,
+  persistBuildQueueItem,
 } from "../lib/userBuildQueuePersistence";
+import {
+  persistOnlineInventoryLocation,
+  persistOnlineInventoryLocationDelete,
+  persistOnlineInventoryStack,
+  persistOnlineInventoryStackDelete,
+} from "../lib/userOnlinePersistence";
 import {
   getLegacyMaterialItemKind,
   resolveInventoryItemName,
@@ -572,6 +577,16 @@ function logBuildQueuePersistenceFailure(action: string, error: unknown) {
   }
 }
 
+function logOnlinePersistenceFailure(action: string, error: unknown) {
+  if (import.meta.env.DEV) {
+    console.warn(`[online-sync] failed to ${action}`, error);
+  }
+}
+
+function persistQueueSnapshot(action: string, item: BuildQueueItem) {
+  persistBuildQueueItem(item)?.catch((error: unknown) => logBuildQueuePersistenceFailure(action, error));
+}
+
 migrateLegacyLogisticsStorage();
 
 export const useLogisticsStore = create<LogisticsStoreState>()(
@@ -585,18 +600,21 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       inventoryEntries: [],
       buildQueue: initialBuildQueue,
       addLocation: (location) => {
+        persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("add location", error));
         set((state) => ({ locations: [...state.locations, location] }));
       },
       updateLocation: (location) => {
+        persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("update location", error));
         set((state) => ({ locations: state.locations.map((l) => l.id === location.id ? location : l) }));
       },
       deleteLocation: (id) => {
+        persistOnlineInventoryLocationDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("delete location", error));
         set((state) => ({ locations: state.locations.filter((l) => l.id !== id) }));
       },
       addInventoryEntries: (entries) => {
-        set((state) => ({
-          inventoryEntries: repairInventoryEntryIds(entries.reduce((inventory, entry) => {
-            const normalized = normalizeInventoryEntry(entry, state.materialTemplates);
+        set((state) => {
+          const normalizedIncoming = entries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates));
+          const inventoryEntries = repairInventoryEntryIds(normalizedIncoming.reduce((inventory, normalized) => {
             const incomingWorkOrderIds = normalized.workOrderIds ?? (normalized.workOrderId ? [normalized.workOrderId] : []);
             if (
               incomingWorkOrderIds.length > 0 &&
@@ -637,19 +655,35 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             }, state.materialTemplates, existing.createdAt);
 
             return inventory.map((current, idx) => idx === existingIdx ? merged : current);
-          }, state.inventoryEntries)),
-        }));
+          }, state.inventoryEntries));
+          for (const incoming of normalizedIncoming) {
+            const saved = inventoryEntries.find((entry) => getInventoryStackKey(entry) === getInventoryStackKey(incoming));
+            if (saved) {
+              const location = state.locations.find((entry) => entry.id === saved.locationId);
+              persistOnlineInventoryStack(saved, location)?.catch((error: unknown) => logOnlinePersistenceFailure("add inventory stack", error));
+            }
+          }
+          return { inventoryEntries };
+        });
       },
       updateInventoryEntry: (entry) => {
-        set((state) => ({
-          inventoryEntries: state.inventoryEntries.map((current) =>
+        set((state) => {
+          const normalized = normalizeInventoryEntry(
+            entry,
+            state.materialTemplates,
+            state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
+          );
+          const location = state.locations.find((entry) => entry.id === normalized.locationId);
+          persistOnlineInventoryStack(normalized, location)?.catch((error: unknown) => logOnlinePersistenceFailure("update inventory stack", error));
+          return { inventoryEntries: state.inventoryEntries.map((current) =>
             current.id === entry.id
-              ? normalizeInventoryEntry(entry, state.materialTemplates, current.createdAt)
+              ? normalized
               : current,
-          ),
-        }));
+          ) };
+        });
       },
       deleteInventoryEntry: (id) => {
+        persistOnlineInventoryStackDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("delete inventory stack", error));
         set((state) => ({
           inventoryEntries: state.inventoryEntries.filter((entry) => entry.id !== id),
         }));
@@ -708,11 +742,8 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                   }
                 : item,
             );
-            const request = persistBuildQueueAdd(recipeId, quantity);
-            request?.catch((error: unknown) => {
-              logBuildQueuePersistenceFailure("add item", error);
-              set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
-            });
+            const changedItem = nextBuildQueue.find((item) => item.id === existing.id);
+            if (changedItem) persistQueueSnapshot("add item", changedItem);
             return { buildQueue: nextBuildQueue };
           }
           const nextPriority = state.buildQueue.reduce((max, item) => Math.max(max, item.priority ?? 0), 0) + 1;
@@ -737,32 +768,37 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             })),
           };
           const nextBuildQueue = [...state.buildQueue, newItem];
-          const request = persistBuildQueueAdd(recipeId, quantity);
-          request?.catch((error: unknown) => {
-            logBuildQueuePersistenceFailure("add item", error);
-            set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
-          });
+          persistQueueSnapshot("add item", newItem);
           return { buildQueue: nextBuildQueue };
         });
       },
       updateBuildQueueItemStatus: (id, status) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) => (item.id === id ? { ...item, status } : item)),
-        }));
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) => (item.id === id ? { ...item, status } : item));
+          const changed = buildQueue.find((item) => item.id === id);
+          if (changed) persistQueueSnapshot("update status", changed);
+          return { buildQueue };
+        });
       },
       updateBuildQueueItemPriority: (id, priority) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === id ? { ...item, priority: Math.max(1, Math.trunc(priority)) } : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === id);
+          if (changed) persistQueueSnapshot("update priority", changed);
+          return { buildQueue };
+        });
       },
       toggleBuildQueueItemPriority: (id) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === id ? { ...item, priorityActive: !(item.priorityActive ?? false) } : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === id);
+          if (changed) persistQueueSnapshot("toggle priority", changed);
+          return { buildQueue };
+        });
       },
       updateBuildQueueItemQuantity: (id, quantity) => {
         set((state) => {
@@ -772,17 +808,14 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           const nextBuildQueue = state.buildQueue.map((entry) =>
             entry.id === id ? { ...entry, quantity: nextQuantity } : entry,
           );
-          const request = persistBuildQueueQuantity(item.recipeId, nextQuantity);
-          request?.catch((error: unknown) => {
-            logBuildQueuePersistenceFailure("update quantity", error);
-            set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
-          });
+          const changed = nextBuildQueue.find((entry) => entry.id === id);
+          if (changed) persistQueueSnapshot("update quantity", changed);
           return { buildQueue: nextBuildQueue };
         });
       },
       updateBuildQueueItemAllowLowerQuality: (id, allowLowerQuality) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === id
               ? {
                   ...item,
@@ -792,8 +825,11 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                     : (item.reservedAllocations ?? []).filter((allocation) => !allocation.allowLowerQualityOverride),
                 }
               : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === id);
+          if (changed) persistQueueSnapshot("update lower quality", changed);
+          return { buildQueue };
+        });
       },
       updateBuildQueueMaterialRequirement: (id, requirementId, input) => {
         set((state) => {
@@ -803,8 +839,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             ...entry,
             requirementId: getRequirementLineId(item, entry, index),
           }));
-          return {
-            buildQueue: state.buildQueue.map((entry) =>
+          const buildQueue = state.buildQueue.map((entry) =>
               entry.id === id
                 ? {
                     ...entry,
@@ -815,8 +850,10 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                     ),
                   }
                 : entry,
-            ),
-          };
+            );
+          const changed = buildQueue.find((entry) => entry.id === id);
+          if (changed) persistQueueSnapshot("update material requirement", changed);
+          return { buildQueue };
         });
       },
       removeBuildQueueItem: (id) => {
@@ -824,7 +861,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           const item = state.buildQueue.find((entry) => entry.id === id);
           const nextBuildQueue = state.buildQueue.filter((entry) => entry.id !== id);
           if (item) {
-            const request = persistBuildQueueDelete(item.recipeId);
+            const request = persistBuildQueueDelete(item);
             request?.catch((error: unknown) => {
               logBuildQueuePersistenceFailure("remove item", error);
               set((current) => current.buildQueue === nextBuildQueue ? { buildQueue: state.buildQueue } : {});
@@ -847,17 +884,20 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       setBuildQueueItemAllocations: (buildQueueItemId, allocations) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === buildQueueItemId
               ? { ...item, reservedAllocations: sanitizeReservedAllocationsForItem(buildQueueItemId, allocations, state) }
               : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === buildQueueItemId);
+          if (changed) persistQueueSnapshot("set allocations", changed);
+          return { buildQueue };
+        });
       },
       toggleBuildQueueAllocation: (buildQueueItemId, allocation) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) => {
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) => {
             if (item.id !== buildQueueItemId) return item;
             const allocations = item.reservedAllocations ?? [];
             const exists = allocations.some((current) => current.id === allocation.id);
@@ -868,12 +908,15 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
               ...item,
               reservedAllocations: nextAllocations,
             };
-          }),
-        }));
+          });
+          const changed = buildQueue.find((item) => item.id === buildQueueItemId);
+          if (changed) persistQueueSnapshot("toggle allocation", changed);
+          return { buildQueue };
+        });
       },
       updateBuildQueueAllocationQuantity: (buildQueueItemId, allocationId, quantity) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) => {
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) => {
             if (item.id !== buildQueueItemId) return item;
             const allocations = item.reservedAllocations ?? [];
             const allocation = allocations.find((entry) => entry.id === allocationId);
@@ -896,19 +939,25 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                 a.id === allocationId ? createValidatedAllocation(a, inventoryEntry, clamped) : a,
               ),
             };
-          }),
-        }));
+          });
+          const changed = buildQueue.find((item) => item.id === buildQueueItemId);
+          if (changed) persistQueueSnapshot("update allocation quantity", changed);
+          return { buildQueue };
+        });
       },
       clearBuildQueueItemAllocations: (buildQueueItemId) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === buildQueueItemId ? { ...item, reservedAllocations: [] } : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === buildQueueItemId);
+          if (changed) persistQueueSnapshot("clear allocations", changed);
+          return { buildQueue };
+        });
       },
       clearStaleBuildQueueItemAllocations: (buildQueueItemId) => {
-        set((state) => ({
-          buildQueue: state.buildQueue.map((item) =>
+        set((state) => {
+          const buildQueue = state.buildQueue.map((item) =>
             item.id === buildQueueItemId
               ? {
                   ...item,
@@ -916,10 +965,13 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
                     item.reservedAllocations ?? [],
                     state.inventoryEntries,
                   ),
-                }
+              }
               : item,
-          ),
-        }));
+          );
+          const changed = buildQueue.find((item) => item.id === buildQueueItemId);
+          if (changed) persistQueueSnapshot("clear stale allocations", changed);
+          return { buildQueue };
+        });
       },
       resetLogisticsState: () => {
         set({
