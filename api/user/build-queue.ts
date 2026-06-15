@@ -1,7 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { handleUserBuildQueueRoute } from "../../src/server/user/buildQueueRoute";
-
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "GET" || request.method === "HEAD") return {};
 
@@ -12,19 +10,33 @@ async function readBody(request: IncomingMessage): Promise<unknown> {
 }
 
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
+  let body: unknown;
+
   try {
+    body = await readBody(request);
+  } catch (error) {
+    console.error("[api/user/build-queue] Invalid request body.", error);
+    response.statusCode = 400;
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify({ error: "Invalid request body." }));
+    return;
+  }
+
+  try {
+    const { handleUserBuildQueueRoute } = await import("../../src/server/user/buildQueueRoute.js");
     const result = await handleUserBuildQueueRoute(
       request.method ?? "GET",
       request.headers,
-      await readBody(request),
+      body,
     );
     response.statusCode = result.status;
     response.setHeader("content-type", "application/json");
     if (result.status === 405) response.setHeader("allow", "GET, POST, PATCH, DELETE");
     response.end(JSON.stringify(result.body));
-  } catch {
-    response.statusCode = 400;
+  } catch (error) {
+    console.error("[api/user/build-queue] Unhandled route error.", error);
+    response.statusCode = 500;
     response.setHeader("content-type", "application/json");
-    response.end(JSON.stringify({ error: "Invalid request body." }));
+    response.end(JSON.stringify({ error: "Build queue request failed." }));
   }
 }

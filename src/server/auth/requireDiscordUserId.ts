@@ -1,8 +1,8 @@
 import { createClient, type User } from "@supabase/supabase-js";
 import { sql } from "drizzle-orm";
 
-import { getDb } from "../../db/client";
-import { profiles } from "../../db/schema";
+import { getDb } from "../../db/client.js";
+import { profiles } from "../../db/schema.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;

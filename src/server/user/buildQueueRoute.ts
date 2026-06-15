@@ -1,4 +1,4 @@
-import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId.js";
 import {
   addBuildQueueItem,
   clearBuildQueue,
@@ -8,7 +8,7 @@ import {
   normalizeRecipeId,
   normalizeVariantId,
   updateBuildQueueItem,
-} from "./buildQueueService";
+} from "./buildQueueService.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;

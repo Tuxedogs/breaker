@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { getDb } from "../../db/client";
-import { buildQueueItems } from "../../db/schema";
+import { getDb } from "../../db/client.js";
+import { buildQueueItems } from "../../db/schema.js";
 
 export type BuildQueuePayload = {
   recipeId: string;
