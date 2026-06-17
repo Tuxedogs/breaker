@@ -77,10 +77,11 @@ function markSynced(migratedAt?: string | null, lastSyncedAt?: string | null) {
 }
 
 export default function OnlinePersistenceCoordinator() {
-  const { session } = useAuthSession();
+  const { session, loading } = useAuthSession();
   const accessToken = session?.access_token ?? null;
 
   useEffect(() => {
+    if (loading) return;
     setBuildQueueAccessToken(accessToken);
     setOnlinePersistenceAccessToken(accessToken);
     if (!accessToken) return;
@@ -114,7 +115,7 @@ export default function OnlinePersistenceCoordinator() {
       refreshInFlight = true;
       try {
         const remote = await fetchOnlinePersistenceState(token);
-        if (cancelled || !remote) return;
+        if (cancelled) return;
         if (isOnlinePersistenceMutationInFlight()) {
           refreshAgain = true;
           scheduleRefresh();
@@ -125,7 +126,7 @@ export default function OnlinePersistenceCoordinator() {
           inventoryEntries: remote.inventoryEntries,
           buildQueue: remote.buildQueue,
         });
-        markSynced(remote.sync?.migratedAt, remote.sync?.lastSyncedAt);
+        markSynced(remote.sync?.migratedAt);
       } catch (error) {
         setOnlineSyncStatus({
           lastError: error instanceof Error ? error.message : String(error),
@@ -151,6 +152,10 @@ export default function OnlinePersistenceCoordinator() {
       if (document.visibilityState === "visible") scheduleRefresh();
     }
 
+    function handlePageShow(event: PageTransitionEvent) {
+      if (event.persisted) scheduleRefresh();
+    }
+
     async function waitForPendingMutations() {
       while (!cancelled && isOnlinePersistenceMutationInFlight()) {
         await new Promise((resolve) => window.setTimeout(resolve, 50));
@@ -160,12 +165,12 @@ export default function OnlinePersistenceCoordinator() {
     async function hydrate() {
       try {
         let remote = await fetchOnlinePersistenceState(token);
-        if (cancelled || !remote) return;
+        if (cancelled) return;
         if (isOnlinePersistenceMutationInFlight()) {
           await waitForPendingMutations();
           if (cancelled) return;
           remote = await fetchOnlinePersistenceState(token);
-          if (cancelled || !remote) return;
+          if (cancelled) return;
         }
 
         const userMigratedAtKey = getUserRemoteMigratedAtKey(authenticatedUserId);
@@ -187,7 +192,7 @@ export default function OnlinePersistenceCoordinator() {
             buildQueue: remote.buildQueue,
           });
           window.localStorage.setItem(userMigratedAtKey, remote.sync?.migratedAt ?? new Date().toISOString());
-          markSynced(remote.sync?.migratedAt, remote.sync?.lastSyncedAt);
+          markSynced(remote.sync?.migratedAt);
         }
       } catch (error) {
         if (import.meta.env.DEV) {
@@ -204,6 +209,7 @@ export default function OnlinePersistenceCoordinator() {
     void hydrate();
     window.addEventListener("focus", scheduleRefresh);
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pageshow", handlePageShow);
 
     return () => {
       cancelled = true;
@@ -212,9 +218,10 @@ export default function OnlinePersistenceCoordinator() {
       setOnlinePersistenceAccessToken(null);
       window.removeEventListener("focus", scheduleRefresh);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pageshow", handlePageShow);
       if (refreshTimer !== null) window.clearTimeout(refreshTimer);
     };
-  }, [accessToken, session?.user.id]);
+  }, [accessToken, loading, session?.user.id]);
 
   return null;
 }
