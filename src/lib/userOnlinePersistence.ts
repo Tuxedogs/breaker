@@ -1,5 +1,6 @@
 import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../types/logistics";
 import { apiUrl } from "./apiUrl";
+import { setOnlineSyncStatus } from "./onlineSyncStatus";
 import { parseJsonResponse, type JsonParseOptions } from "./safeJson";
 
 const INVENTORY_URL = "/api/user/inventory";
@@ -47,12 +48,14 @@ async function parseUserJsonResponse<T>(response: Response, options: JsonParseOp
   return data as T;
 }
 
-export async function fetchOnlinePersistenceState(accessToken: string): Promise<OnlinePersistenceState | null> {
+export async function fetchOnlinePersistenceState(accessToken: string): Promise<OnlinePersistenceState> {
   const url = apiUrl(INVENTORY_URL);
   const response = await fetch(url, {
     headers: authHeaders(accessToken),
   });
-  if (response.status === 401) return null;
+  if (response.status === 401) {
+    throw new Error("Authentication required. Sign in again to sync.");
+  }
   return parseUserJsonResponse<OnlinePersistenceState>(response, {
     label: "online inventory",
     url,
@@ -86,12 +89,25 @@ export function setOnlinePersistenceAccessToken(accessToken: string | null) {
   currentOnlineAccessToken = accessToken;
 }
 
+function applySyncFromMutationResult(result: unknown) {
+  if (!result || typeof result !== "object" || !("sync" in result)) return;
+  const sync = (result as OnlinePersistenceState).sync;
+  if (!sync) return;
+  setOnlineSyncStatus({
+    migratedAt: sync.migratedAt ?? undefined,
+    lastSyncedAt: sync.lastSyncedAt ?? new Date().toISOString(),
+    lastError: null,
+  });
+}
+
 export async function runOnlinePersistenceMutation<T>(request: () => Promise<T>): Promise<T> {
   onlineMutationCount += 1;
   const result = onlineMutationTail.then(request, request);
   onlineMutationTail = result.then(() => undefined, () => undefined);
   try {
-    return await result;
+    const value = await result;
+    applySyncFromMutationResult(value);
+    return value;
   } finally {
     onlineMutationCount -= 1;
   }
