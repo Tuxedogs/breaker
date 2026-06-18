@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { FittingComponentIcon } from "../components/fitting/FittingComponentIcon";
 import { apiUrl } from "../lib/apiUrl";
+import {
+  readFittingIconMode,
+  writeFittingIconMode,
+  type FittingIconMode,
+} from "../lib/fitting/fittingIconMode";
+import type { ResolveFittingComponentIconInput } from "../lib/fitting/resolveFittingComponentIcon";
 import "./fitting.css";
 
 type FittingShipSummary = {
@@ -84,6 +91,7 @@ type FittingComponentRecord = {
   displayName: string | null;
   category: string | null;
   type: string | null;
+  size?: number | null;
   mass: number | null;
   health: number | null;
   stats?: Record<string, unknown>;
@@ -385,9 +393,40 @@ async function readJson<T>(url: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-function FittingRow({ row }: { row: PortBreakdownRow }) {
+function rowIconInput(
+  row: PortBreakdownRow,
+  componentLookup: Map<string, FittingComponentRecord>,
+): ResolveFittingComponentIconInput {
+  const component = row.equippedComponentKey ? componentLookup.get(row.equippedComponentKey) : undefined;
+  return {
+    componentType: component?.category ?? row.componentCategory,
+    componentName: component?.displayName ?? row.equippedComponentName,
+    size: component?.size,
+  };
+}
+
+function FittingRow({
+  row,
+  componentLookup,
+  iconMode,
+}: {
+  row: PortBreakdownRow;
+  componentLookup: Map<string, FittingComponentRecord>;
+  iconMode: FittingIconMode;
+}) {
+  const iconInput = rowIconInput(row, componentLookup);
+  const showIcon = Boolean(iconInput.componentName || iconInput.componentType);
+
   return (
     <div className={["fit-row", isUnsupported(row) ? "fit-row--unsupported" : ""].filter(Boolean).join(" ")}>
+      {showIcon && (
+        <FittingComponentIcon
+          {...iconInput}
+          preferredMode={iconMode}
+          alt={getRowTitle(row)}
+          iconSize="md"
+        />
+      )}
       <div className="fit-row-main">
         <strong>{getRowTitle(row)}</strong>
         <span>{getRowMeta(row) || "Unclassified port"}</span>
@@ -400,7 +439,19 @@ function FittingRow({ row }: { row: PortBreakdownRow }) {
   );
 }
 
-function GroupPanel({ title, rows, emptyLabel }: { title: string; rows: PortBreakdownRow[]; emptyLabel: string }) {
+function GroupPanel({
+  title,
+  rows,
+  emptyLabel,
+  componentLookup,
+  iconMode,
+}: {
+  title: string;
+  rows: PortBreakdownRow[];
+  emptyLabel: string;
+  componentLookup: Map<string, FittingComponentRecord>;
+  iconMode: FittingIconMode;
+}) {
   return (
     <section className="fit-panel fit-group-panel">
       <div className="fit-panel-head">
@@ -409,7 +460,12 @@ function GroupPanel({ title, rows, emptyLabel }: { title: string; rows: PortBrea
       </div>
       <div className="fit-row-list">
         {rows.map((row) => (
-          <FittingRow key={`${row.portId}-${row.equippedComponentKey ?? "empty"}-${title}`} row={row} />
+          <FittingRow
+            key={`${row.portId}-${row.equippedComponentKey ?? "empty"}-${title}`}
+            row={row}
+            componentLookup={componentLookup}
+            iconMode={iconMode}
+          />
         ))}
         {rows.length === 0 && <p className="fit-empty">{emptyLabel}</p>}
       </div>
@@ -417,7 +473,19 @@ function GroupPanel({ title, rows, emptyLabel }: { title: string; rows: PortBrea
   );
 }
 
-function OffensiveTreePanel({ title, nodes, emptyLabel }: { title: string; nodes: OffensiveTreeNode[]; emptyLabel: string }) {
+function OffensiveTreePanel({
+  title,
+  nodes,
+  emptyLabel,
+  componentLookup,
+  iconMode,
+}: {
+  title: string;
+  nodes: OffensiveTreeNode[];
+  emptyLabel: string;
+  componentLookup: Map<string, FittingComponentRecord>;
+  iconMode: FittingIconMode;
+}) {
   const itemCount = nodes.reduce((sum, node) => sum + node.itemRows.length, 0);
   return (
     <section className="fit-panel fit-group-panel">
@@ -438,8 +506,18 @@ function OffensiveTreePanel({ title, nodes, emptyLabel }: { title: string; nodes
             <div className="fit-offense-children">
               {node.items.map((item) => {
                 const statusRow = item.rows.find(isProblem) ?? item.rows.find(isUnsupported) ?? item.rows[0];
+                const iconRow = item.rows[0];
+                const iconInput = iconRow ? rowIconInput(iconRow, componentLookup) : null;
                 return (
                   <div key={item.key} className="fit-offense-child">
+                    {iconInput && (
+                      <FittingComponentIcon
+                        {...iconInput}
+                        preferredMode={iconMode}
+                        alt={item.label}
+                        iconSize="sm"
+                      />
+                    )}
                     <span>{item.label}{item.count > 1 ? ` x${item.count}` : ""}</span>
                     {statusRow && <span className={`fit-status fit-status--${statusTone(statusRow)}`}>{statusRow.compatibilityStatus ?? "unknown"}</span>}
                   </div>
@@ -487,6 +565,7 @@ export default function FittingPage() {
   const [calculationState, setCalculationState] = useState<LoadState<FittingLoadoutResponse>>(emptyLoad);
   const [componentsState, setComponentsState] = useState<LoadState<FittingComponentRecord[]>>(emptyLoad);
   const [massOpen, setMassOpen] = useState(false);
+  const [iconMode, setIconMode] = useState<FittingIconMode>(() => readFittingIconMode());
 
   useEffect(() => {
     const controller = new AbortController();
@@ -634,6 +713,11 @@ export default function FittingPage() {
     navigate(`/fitting/${nextShipKey}`);
   }
 
+  function selectIconMode(nextMode: FittingIconMode) {
+    setIconMode(nextMode);
+    writeFittingIconMode(nextMode);
+  }
+
   return (
     <div className="fit-page">
       <header className="fit-console-head">
@@ -655,6 +739,14 @@ export default function FittingPage() {
             ))}
           </select>
         </label>
+        <label className="fit-icon-mode-select">
+          <span>Icon Mode</span>
+          <select value={iconMode} onChange={(event) => selectIconMode(event.target.value as FittingIconMode)}>
+            <option value="auto">Auto</option>
+            <option value="accent">Accent</option>
+            <option value="mono">Mono</option>
+          </select>
+        </label>
         <Link to="/dashboard" className="fit-back-link">Dashboard</Link>
       </header>
 
@@ -673,14 +765,25 @@ export default function FittingPage() {
             title="Weapons"
             nodes={weaponTree}
             emptyLabel="No equipped weapon hardpoints in the shaped loadout."
+            componentLookup={componentLookup}
+            iconMode={iconMode}
           />
           <OffensiveTreePanel
             title="Missiles & Bombs"
             nodes={missileTree}
             emptyLabel="No missile racks or launchers in the shaped loadout."
+            componentLookup={componentLookup}
+            iconMode={iconMode}
           />
           {specialOffensiveGroups.map((group) => (
-            <GroupPanel key={group.key} title={group.label} rows={group.rows} emptyLabel="No shaped fitting rows in this group." />
+            <GroupPanel
+              key={group.key}
+              title={group.label}
+              rows={group.rows}
+              emptyLabel="No shaped fitting rows in this group."
+              componentLookup={componentLookup}
+              iconMode={iconMode}
+            />
           ))}
         </aside>
 
@@ -764,7 +867,14 @@ export default function FittingPage() {
 
         <aside className="fit-column fit-column--right" aria-label="Components">
           {componentGroups.map((group) => (
-            <GroupPanel key={group.key} title={group.label} rows={group.rows} emptyLabel="No shaped fitting rows in this group." />
+            <GroupPanel
+              key={group.key}
+              title={group.label}
+              rows={group.rows}
+              emptyLabel="No shaped fitting rows in this group."
+              componentLookup={componentLookup}
+              iconMode={iconMode}
+            />
           ))}
         </aside>
       </div>
@@ -876,8 +986,15 @@ export default function FittingPage() {
                       const mass = typeof component?.mass === "number" && Number.isFinite(component.mass)
                         ? `${formatNumber(component.mass)} kg`
                         : "missing";
+                      const iconInput = rowIconInput(row, componentLookup);
                       return (
-                        <div key={`${group.label}-${row.portId}-${row.equippedComponentKey ?? "empty"}`}>
+                        <div key={`${group.label}-${row.portId}-${row.equippedComponentKey ?? "empty"}`} className="fit-mass-row">
+                          <FittingComponentIcon
+                            {...iconInput}
+                            preferredMode={iconMode}
+                            alt={getRowTitle(row)}
+                            iconSize="sm"
+                          />
                           <span>{getRowTitle(row)}</span>
                           <strong>{mass}</strong>
                         </div>

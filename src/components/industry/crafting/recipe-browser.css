@@ -1,3 +1,5 @@
+@import "../../../styles/scintel-filter-shell.css";
+
 /* ==========================================================================
    Recipe Browser / Crafting Planner — Obsidian Dark-Orange Theme
    ========================================================================== */
@@ -2154,8 +2156,16 @@
 
 .craft-detail-page {
   height: auto;
-  min-height: 100%;
+  min-height: 0;
+  flex: 0 1 auto;
   overflow: visible;
+}
+
+.craft-detail-page > .craft-detail-stage.craft-detail-shell {
+  flex: 0 0 auto;
+  min-height: auto;
+  height: auto;
+  align-self: stretch;
 }
 
 .craft-detail-header {
@@ -3313,17 +3323,10 @@
 /* ── Toolbar shell ── */
 .component-browser-toolbar {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 0;
-  border-radius: 7px;
-  background: linear-gradient(180deg, #10151a 0%, #090c10 100%);
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.55),
     0 0 28px rgba(255, 153, 0, 0.04),
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
-  overflow: visible;
 }
 
 /* ── Generic row band ── */
@@ -4202,7 +4205,8 @@
   cursor: default;
 }
 
-.crb-filters-btn {
+.crb-filters-btn,
+.scintel-filter-toggle.crb-filters-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
