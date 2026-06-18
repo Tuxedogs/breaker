@@ -625,11 +625,22 @@ export default function BuildQueueGroup({
           };
         });
 
-        return (
-          <article key={item.id} className={`bq-item bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`}>
+        const blueprintLabel = blueprintSources.length === 0
+          ? 'Unknown blueprint'
+          : blueprintSources.map((s) => s.displayName).join(', ');
 
-            {/* ── Left sidebar: name + controls ── */}
-            <div className="bq-item-sidebar">
+        return (
+          <article
+            key={item.id}
+            className={[
+              'bq-item',
+              `bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`,
+              isMobileTouchLayout ? 'bq-item--mobile-touch' : '',
+            ].filter(Boolean).join(' ')}
+          >
+
+            {/* ── Component header: name + controls ── */}
+            <div className="bq-item-sidebar bq-item-header">
               <div className="bq-item-name-block">
                 <div className="bq-item-name-top">
                   <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
@@ -654,11 +665,9 @@ export default function BuildQueueGroup({
                     Recipe not mapped
                   </span>
                 ) : null}
-                   <span className="bq-item-blueprint">
-                    {blueprintSources.length === 0
-                      ? 'Unknown blueprint'
-                      : blueprintSources.map((s) => s.displayName).join(', ')}
-                  </span>
+                <span className="bq-item-blueprint" title={blueprintLabel}>
+                  {blueprintLabel}
+                </span>
               </div>
 
               <div className="bq-item-controls">
@@ -697,7 +706,12 @@ export default function BuildQueueGroup({
 
               {/* Material table */}
               {hasMaterialInputs ? (
+              <section className="bq-materials-section">
+                {isMobileTouchLayout ? (
+                  <h3 className="bq-materials-section-label">Required Materials</h3>
+                ) : null}
               <div className="bq-mat-table">
+                {!isMobileTouchLayout ? (
                 <div className="bq-mat-head" aria-hidden="true">
                   <span>Material</span>
                   <span>Status</span>
@@ -707,6 +721,7 @@ export default function BuildQueueGroup({
                   <span>Need</span>
                   <span>Quality</span>
                 </div>
+                ) : null}
 
                 {materialGroups.map((group) => {
                   const activeDrawer = activeDrawersByItem[item.id];
@@ -727,12 +742,144 @@ export default function BuildQueueGroup({
                   const previewQualityRarity = qualityRequirement.qualityBands
                     ? rarityFromBandIndex(findNearestBandForQuality(qualityRequirement.qualityBands, previewQuality) + 1)
                     : group.selectedQualityRarity;
+                  const materialStatusLabel = group.reserveStatusLabel ?? getCoverageLabel(group.rowTone);
+                  const hideMaterialStatus = isMobileTouchLayout
+                    && fulfillment === 'missing'
+                    && (materialStatusLabel === 'Missing' || group.rowTone === 'missing');
+                  const coveredScu = Math.max(0, group.requiredTotal - group.needTotal);
+                  const primaryModifier = group.requirements.map((req) => {
+                    const rowQuality = qualityExpanded && req.requirementCardKey === qualityRequirement.requirementCardKey
+                      ? previewQuality
+                      : req.selectedQuality;
+                    const rowModifierAtQuality = getModifierProjectionFromQuality(req.input, rowQuality);
+                    const rowModifierDisplayLabel = rowModifierAtQuality?.property ? formatProperty(rowModifierAtQuality.property) : req.modifierDisplayLabel;
+                    const rowModifierDisplayValue = rowModifierAtQuality ? formatModifierAtQuality(rowModifierAtQuality) : req.modifierDisplayValue;
+                    const rowModifierPreview = rowModifierDisplayValue ? `${rowModifierDisplayLabel} ${rowModifierDisplayValue}` : rowModifierDisplayLabel;
+                    const rowModifierTone = getModifierTrendClass(
+                      rowModifierAtQuality?.property ?? req.modifierLabel,
+                      rowModifierAtQuality?.value ?? req.modifierValue,
+                    );
+                    return {
+                      key: `${req.requirementCardKey}:mod`,
+                      preview: rowModifierPreview,
+                      tone: rowModifierTone,
+                    };
+                  });
+                  const primaryAffix = primaryModifier[0];
                   return (
-                    <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
+                    <section
+                      key={group.groupKey}
+                      className={[
+                        'bq-mat-group',
+                        group.needTotal > 0 ? 'bq-mat-group--missing' : '',
+                        isMobileTouchLayout ? 'bq-mat-group--mobile-card' : '',
+                      ].filter(Boolean).join(' ')}
+                    >
+                      {isMobileTouchLayout ? (
+                      <div className="bq-mat-row bq-mat-row--mobile-card bq-mat-row--touch">
+                        <div className="bq-mat-card-head">
+                          <div className="bq-mat-name">
+                            <span className="bq-material-name-cell">
+                              <MaterialIcon materialName={group.displayName} materialState={isRefinableMaterial(group.material) ? 'refined' : 'raw'} />
+                              <strong>{group.displayName}</strong>
+                            </span>
+                            {group.requirements.length > 1 ? (
+                              <span>{group.requirements.length} requirements</span>
+                            ) : null}
+                          </div>
+                          {!hideMaterialStatus ? (
+                            <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{materialStatusLabel}</span>
+                          ) : null}
+                        </div>
+                        <div className="bq-mat-card-metrics">
+                          <span className={`bq-mat-card-scu ${materialTypeClass(group.material)}`}>
+                            <em>{formatQuantity(coveredScu, group.material)}</em>
+                            {' / '}
+                            {formatQuantity(group.requiredTotal, group.material)} SCU
+                          </span>
+                          {qualityExpanded && qualityRequirement.qualityBands ? (
+                            <input
+                              type="text"
+                              inputMode="numeric"
+                              className={`bq-quality-inline-input bq-badge bq-badge--quality logi-rarity--${previewQualityRarity} is-active`}
+                              value={qualityDraft}
+                              aria-label="Material quality"
+                              onClick={(event) => event.stopPropagation()}
+                              onChange={(event) => setQualityDrafts((prev) => ({ ...prev, [group.groupKey]: event.target.value }))}
+                              onBlur={() => clampQualityDraft(group.groupKey, qualityRequirement.qualityBands as QualityBand[])}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                  applyQualityEditor(
+                                    item,
+                                    qualityRequirement.input,
+                                    qualityRequirement.requirementId,
+                                    group.groupKey,
+                                    qualityRequirement.qualityBands as QualityBand[],
+                                    qualityRequirement.ownAllocations,
+                                    qualityRequirement.effectiveReservedQuality,
+                                  );
+                                }
+                                if (event.key === 'Escape') cancelQualityEditor(item.id, group.groupKey);
+                              }}
+                            />
+                          ) : (
+                            <button
+                              type="button"
+                              className={`bq-mat-card-quality bq-quality-badge bq-badge bq-badge--quality logi-rarity--${group.selectedQualityRarity}`}
+                              aria-expanded={qualityExpanded}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                              }}
+                            >
+                              Q{group.selectedQuality}
+                            </button>
+                          )}
+                        </div>
+                        {primaryAffix ? (
+                          <div className="bq-mat-card-affix">
+                            <span className={`bq-mat-modifier-entry ${primaryAffix.tone}`}>
+                              <span className="bq-mat-modifier-label">{primaryAffix.preview}</span>
+                            </span>
+                          </div>
+                        ) : null}
+                        {group.needTotal > 0 ? (
+                          <span className={`bq-mat-card-short${fulfillment === 'missing' ? ' bq-mat-card-short--critical' : ''} ${materialTypeClass(group.material)}`}>
+                            {formatQuantity(group.needTotal, group.material)} short
+                          </span>
+                        ) : null}
+                        <div className="bq-mat-actions" data-bq-row-control="true">
+                          <button
+                            type="button"
+                            className={`bq-reserve-open-btn${reserveExpanded ? ' is-active' : ''}`}
+                            aria-expanded={reserveExpanded}
+                            data-bq-row-control="true"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                            }}
+                          >
+                            {reserveExpanded ? 'Hide' : 'Reserve'}
+                          </button>
+                          <button
+                            type="button"
+                            className={`bq-quality-toggle-btn${qualityExpanded ? ' is-active' : ''}`}
+                            aria-expanded={qualityExpanded}
+                            data-bq-row-control="true"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                            }}
+                          >
+                            {qualityExpanded ? 'Hide' : 'Quality'}
+                          </button>
+                        </div>
+                      </div>
+                      ) : (
                       <div
-                        className={`bq-mat-row${isMobileTouchLayout ? ' bq-mat-row--touch' : ''}`}
+                        className="bq-mat-row"
                         onClick={(event) => {
-                          if (isMobileTouchLayout || isDrawerToggleExcluded(event.target)) return;
+                          if (isDrawerToggleExcluded(event.target)) return;
                           toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
                         }}
                       >
@@ -743,7 +890,7 @@ export default function BuildQueueGroup({
                           </span>
                           {group.requirements.length > 1 && <span>{group.requirements.length} requirements</span>}
                         </div>
-                        <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{group.reserveStatusLabel ?? getCoverageLabel(group.rowTone)}</span>
+                        <span className={`bq-mat-status bq-mat-status--${group.rowTone}`}>{materialStatusLabel}</span>
                         {qualityExpanded && qualityRequirement.qualityBands ? (
                           <input
                             type="text"
@@ -783,26 +930,14 @@ export default function BuildQueueGroup({
                           </button>
                         )}
                         <div className="bq-mat-modifier">
-                          {group.requirements.map((req) => {
-                            const rowQuality = qualityExpanded && req.requirementCardKey === qualityRequirement.requirementCardKey
-                              ? previewQuality
-                              : req.selectedQuality;
-                            const rowModifierAtQuality = getModifierProjectionFromQuality(req.input, rowQuality);
-                            const rowModifierDisplayLabel = rowModifierAtQuality?.property ? formatProperty(rowModifierAtQuality.property) : req.modifierDisplayLabel;
-                            const rowModifierDisplayValue = rowModifierAtQuality ? formatModifierAtQuality(rowModifierAtQuality) : req.modifierDisplayValue;
-                            const rowModifierPreview = rowModifierDisplayValue ? `${rowModifierDisplayLabel} ${rowModifierDisplayValue}` : rowModifierDisplayLabel;
-                            const rowModifierTone = getModifierTrendClass(
-                              rowModifierAtQuality?.property ?? req.modifierLabel,
-                              rowModifierAtQuality?.value ?? req.modifierValue,
-                            );
-                            return (
+                          {primaryModifier.map((entry) => (
                             <span
-                              className={`bq-mat-modifier-entry ${rowModifierTone}`}
-                              key={`${req.requirementCardKey}:mod`}
+                              className={`bq-mat-modifier-entry ${entry.tone}`}
+                              key={entry.key}
                             >
-                              <span className="bq-mat-modifier-label">{rowModifierPreview}</span>
+                              <span className="bq-mat-modifier-label">{entry.preview}</span>
                             </span>
-                          );})}
+                          ))}
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.availableQuantity, group.material)}</span>
                         <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
@@ -833,6 +968,7 @@ export default function BuildQueueGroup({
                           </button>
                         </div>
                       </div>
+                      )}
 
                       {group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
                         <div key={allocation.id} className="bq-stale-line">
@@ -1032,6 +1168,7 @@ export default function BuildQueueGroup({
                   );
                 })}
               </div>
+              </section>
             ) : null}
             </div>{/* bq-item-body */}
           </article>
