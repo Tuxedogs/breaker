@@ -13,26 +13,54 @@ const CANONICAL_LOCATION_ALIASES: Record<string, Record<string, string>> = {
     deepspaceasteroids: "Pyro Deep Space Asteroids",
     pyrodeepspace: "Pyro Deep Space Asteroids",
     deepspace: "Pyro Deep Space Asteroids",
-    pyroakirocluster: "Pyro Deep Space Asteroids",
-    akirocluster: "Pyro Deep Space Asteroids",
+    pyroakirocluster: "Akiro Cluster",
+    akirocluster: "Akiro Cluster",
+    akiro: "Akiro Cluster",
+    pyro1: "Pyro I",
+    pyroi: "Pyro I",
+    pyro2: "Monox",
+    pyroii: "Monox",
+    monox: "Monox",
+    pyroiimonox: "Monox",
+    pyro3: "Bloom",
+    pyroiii: "Bloom",
+    bloom: "Bloom",
+    pyroiiibloom: "Bloom",
+    pyroiiimonox: "Monox",
+    pyro4: "Pyro IV",
+    pyroiv: "Pyro IV",
     pyro5: "Pyro V",
     pyro5a: "Pyro V-a (Ignis)",
+    pyrovaignis: "Pyro V-a (Ignis)",
     ignis: "Pyro V-a (Ignis)",
     pyro5b: "Pyro V-b (Vatra)",
+    pyrovbvatra: "Pyro V-b (Vatra)",
     vatra: "Pyro V-b (Vatra)",
     pyro5c: "Pyro V-c (Adir)",
+    pyrovcadir: "Pyro V-c (Adir)",
     adir: "Pyro V-c (Adir)",
     pyro5d: "Pyro V-d (Fairo)",
+    pyrovdfairo: "Pyro V-d (Fairo)",
     fairo: "Pyro V-d (Fairo)",
     pyro5e: "Pyro V-e (Fuego)",
+    pyrovefuego: "Pyro V-e (Fuego)",
     fuego: "Pyro V-e (Fuego)",
     pyro5f: "Pyro V-f (Vuur)",
+    pyrovfvuur: "Pyro V-f (Vuur)",
     vuur: "Pyro V-f (Vuur)",
     pyro6: "Pyro VI (Terminus)",
     terminus: "Pyro VI (Terminus)",
     terminusvi: "Pyro VI (Terminus)",
     pyroviterminus: "Pyro VI (Terminus)",
     terminusring: "Terminus Ring",
+    pyrocool01: "Pyro Cool01",
+    cool01: "Pyro Cool01",
+    pyrocool02: "Pyro Cool02",
+    cool02: "Pyro Cool02",
+    pyrowarm01: "Pyro Warm01",
+    warm01: "Pyro Warm01",
+    pyrowarm02: "Pyro Warm02",
+    warm02: "Pyro Warm02",
   },
   stanton: {
     stanton1: "Hurston",
@@ -131,18 +159,6 @@ export function miningLocationMergeKey(systemName: string, locationName: string)
   return `${normalizedMiningSystemName(systemName).toLowerCase()}|${locationName}`;
 }
 
-const ACTIVE_PYRO_LOCATION_NAMES = new Set([
-  "Pyro Deep Space Asteroids",
-  "Pyro VI (Terminus)",
-  "Terminus Ring",
-  "Pyro V-a (Ignis)",
-  "Pyro V-b (Vatra)",
-  "Pyro V-c (Adir)",
-  "Pyro V-d (Fairo)",
-  "Pyro V-e (Fuego)",
-  "Pyro V-f (Vuur)",
-]);
-
 const ACTIVE_STANTON_LAGRANGE_LOCATION_NAMES = new Set([
   "Lagrange A",
   "Lagrange B",
@@ -152,28 +168,17 @@ const ACTIVE_STANTON_LAGRANGE_LOCATION_NAMES = new Set([
   "Lagrange F",
 ]);
 
-const PYRO_LOCATION_MATERIALS: Record<string, Set<string>> = {
-  "Pyro Deep Space Asteroids": new Set([
-    "aluminum",
-    "corundum",
-    "quartz",
-    "riccite",
-    "stileron",
-    "tin",
-    "torite",
-  ]),
-  "Terminus Ring": new Set([
-    "copper",
-    "iron",
-    "ouratite",
-    "pressurized ice",
-    "titanium",
-  ]),
-};
+const EXCLUDED_PYRO_LOCATION_NAMES = new Set([
+  "Pyro Cool01",
+  "Pyro Cool02",
+  "Pyro Warm01",
+  "Pyro Warm02",
+]);
 
 export function isActivePyroMiningLocation(systemName: string, locationName: string): boolean {
-  return normalizeSystemKey(systemName) !== "pyro" ||
-    ACTIVE_PYRO_LOCATION_NAMES.has(normalizeMiningLocationName(systemName, locationName));
+  if (normalizeSystemKey(systemName) !== "pyro") return true;
+  const normalizedName = normalizeMiningLocationName(systemName, locationName);
+  return normalizedName.trim().length > 0 && !EXCLUDED_PYRO_LOCATION_NAMES.has(normalizedName);
 }
 
 export function isActiveStantonLagrangeMiningLocation(systemName: string, locationName: string): boolean {
@@ -188,8 +193,8 @@ export function isMaterialActiveAtPyroLocation(
   locationName: string,
   materialName: string | undefined,
 ): boolean {
-  if (normalizeSystemKey(systemName) !== "pyro") return true;
-  const allowedMaterials = PYRO_LOCATION_MATERIALS[normalizeMiningLocationName(systemName, locationName)];
-  if (!allowedMaterials) return true;
-  return allowedMaterials.has((materialName ?? "").trim().toLowerCase());
+  void systemName;
+  void locationName;
+  void materialName;
+  return true;
 }

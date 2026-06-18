@@ -549,6 +549,18 @@ const KNOWN_VARIANT_SUFFIXES = [
 ];
 
 function buildRecipeGroupKey(recipe: ComponentRecipe, baseName: string): string {
+  if (
+    recipe.item_kind !== "fps" &&
+    recipe.component_type &&
+    UTILITY_TYPES.has(recipe.component_type)
+  ) {
+    return [
+      recipe.item_kind ?? "vehicle",
+      recipe.component_type,
+      recipe.blueprint_id,
+    ].join("::");
+  }
+
   return [
     recipe.item_kind ?? "vehicle",
     recipe.component_type ?? "",
@@ -3328,10 +3340,12 @@ export default function ComponentRecipeTable({
     recipeSearchTexts,
   ]);
 
+  const recipesForGrouping = initialBlueprintId ? recipes : filtered;
+
   const groupedRecipes = useMemo(() => {
     const map = new Map<string, { id: string; displayName: string; recipes: ComponentRecipe[] }>();
 
-    for (const recipe of filtered) {
+    for (const recipe of recipesForGrouping) {
       const identity = deriveRecipeVariantIdentity(recipe);
       const id = identity.groupKey;
       const group = map.get(id);
@@ -3351,7 +3365,7 @@ export default function ComponentRecipeTable({
       ...group,
       recipes: dedupeRecipeVariants(group.recipes, group.displayName),
     }));
-  }, [filtered]);
+  }, [recipesForGrouping]);
 
   useEffect(() => {
     if (groupedRecipes.length === 0) {
@@ -3363,6 +3377,11 @@ export default function ComponentRecipeTable({
       ? groupedRecipes.find((group) => group.recipes.some((recipe) => recipe.blueprint_id === initialBlueprintId))
       : null;
 
+    if (initialBlueprintId && !initialGroup) {
+      if (selectedGroupId !== null) queueMicrotask(() => setSelectedGroupId(null));
+      return;
+    }
+
     if (initialGroup && selectedGroupId !== initialGroup.id) {
       queueMicrotask(() => setSelectedGroupId(initialGroup.id));
       return;
@@ -3373,7 +3392,9 @@ export default function ComponentRecipeTable({
     }
   }, [groupedRecipes, initialBlueprintId, selectedGroupId]);
 
-  const selectedGroup = groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
+  const selectedGroup = initialBlueprintId
+    ? groupedRecipes.find((group) => group.recipes.some((recipe) => recipe.blueprint_id === initialBlueprintId)) ?? null
+    : groupedRecipes.find((group) => group.id === selectedGroupId) ?? groupedRecipes[0] ?? null;
   const visibleRecipeGroups = groupedRecipes.slice(0, MAX_VISIBLE_RESULTS);
   const hiddenRecipeCount = Math.max(0, groupedRecipes.length - visibleRecipeGroups.length);
 
@@ -3398,7 +3419,7 @@ export default function ComponentRecipeTable({
           />
         ) : (
           <section className="craft-detail-stage craft-detail-stage--empty">
-            <div className="craft-empty-card">Recipe not found.</div>
+            <div className="craft-empty-card">Detail unavailable.</div>
           </section>
         )}
       </div>

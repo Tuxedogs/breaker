@@ -791,15 +791,34 @@
 }
 
 .mb-dossier-reputation__outcomes span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border: 1px solid var(--mb-border);
+  border-radius: 3px;
   color: var(--mb-text);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.1;
+  padding: 4px 10px;
 }
 
-.mb-dossier-reputation__outcomes .is-negative,
+.mb-dossier-reputation__outcomes .is-positive {
+  border-color: rgba(130, 200, 132, 0.36);
+  background: rgba(130, 200, 132, 0.1);
+  color: var(--mb-green);
+}
+
+.mb-dossier-reputation__outcomes .is-negative {
+  border-color: rgba(239, 109, 109, 0.38);
+  background: rgba(239, 109, 109, 0.1);
+  color: var(--mb-red);
+}
+
 .mb-dossier-reputation__outcomes .is-unresolved {
-  color: var(--mb-muted);
-  font-weight: 600;
+  border-color: rgba(220, 180, 93, 0.34);
+  background: rgba(220, 180, 93, 0.08);
+  color: var(--mb-amber);
 }
 
 .mb-rep-summary {
@@ -928,6 +947,49 @@
   text-transform: uppercase;
 }
 
+.mission-dossier-header__actions .mission-dossier-bookmark,
+.mission-dossier-header__actions .mission-dossier-close {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--mb-border);
+  border-radius: 4px;
+  background: rgba(11, 16, 19, 0.84);
+  padding: 0;
+}
+
+.mission-dossier-header__actions .mission-dossier-bookmark {
+  color: var(--mb-amber);
+}
+
+.mission-dossier-header__actions .mission-dossier-bookmark.is-active {
+  border-color: rgba(220, 180, 93, 0.58);
+  background: rgba(220, 180, 93, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(220, 180, 93, 0.14);
+}
+
+.mission-dossier-bookmark svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.mission-dossier-bookmark.is-active svg {
+  fill: currentColor;
+}
+
+.mission-dossier-header__actions .mission-dossier-close {
+  color: var(--mb-text);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: none;
+}
+
 .mission-dossier-selector {
   display: flex;
   align-items: center;
@@ -1047,13 +1109,246 @@
 .mission-dossier-panel {
   display: grid;
   grid-row: 4;
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, auto);
   gap: 10px;
   min-height: 0;
   min-width: 0;
   overflow: auto;
   overscroll-behavior: contain;
   padding: 8px 12px 10px;
+}
+
+.mission-dossier-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mission-dossier-summary-card,
+.mission-dossier-card {
+  min-width: 0;
+  border: 1px solid var(--mb-border);
+  border-radius: 4px;
+  background: rgba(16, 22, 26, 0.78);
+}
+
+.mission-dossier-summary-card {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-height: 86px;
+  border-left: 2px solid rgba(112, 198, 191, 0.34);
+  padding: 10px 12px;
+}
+
+.mission-dossier-summary-card.is-location,
+.mission-dossier-summary-card.is-blueprint {
+  border-left-color: rgba(91, 199, 255, 0.56);
+}
+
+.mission-dossier-summary-card.is-requirement {
+  border-left-color: rgba(239, 109, 109, 0.48);
+}
+
+.mission-dossier-summary-card > span,
+.mission-dossier-card__heading > span,
+.mission-dossier-reward-status span {
+  color: var(--mb-muted);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mission-dossier-summary-card strong {
+  overflow-wrap: anywhere;
+  color: var(--mb-text);
+  font-size: 16px;
+  line-height: 1.15;
+}
+
+.mission-dossier-body-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.95fr) minmax(260px, 0.74fr) minmax(360px, 1.05fr);
+  gap: 12px;
+  min-height: 0;
+}
+
+.mission-dossier-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 14px;
+}
+
+.mission-dossier-card__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mission-dossier-card__heading h3 {
+  margin: 0;
+  color: var(--mb-violet);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mission-dossier-briefing-card {
+  max-height: 56vh;
+  overflow: auto;
+}
+
+.mission-dossier-briefing-card p {
+  margin: 0;
+  color: #b1bec6;
+  font-size: 15px;
+  line-height: 1.58;
+  white-space: pre-line;
+}
+
+.mission-dossier-middle-column {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mission-dossier-reward-status {
+  display: grid;
+  gap: 4px;
+  border-top: 1px solid var(--mb-border);
+  padding-top: 10px;
+}
+
+.mission-dossier-reward-status strong {
+  color: var(--mb-text);
+  font-size: 16px;
+}
+
+.mb-blueprint-unresolved {
+  display: grid;
+  min-height: 78px;
+  place-items: center;
+  border: 1px dashed rgba(220, 180, 93, 0.28);
+  border-radius: 3px;
+  color: var(--mb-amber);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.mission-dossier-variant-list {
+  display: grid;
+  gap: 8px;
+}
+
+.mission-dossier-variant-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) minmax(130px, auto) 18px;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  border: 1px solid var(--mb-border);
+  border-radius: 4px;
+  background: rgba(11, 16, 19, 0.62);
+  color: var(--mb-text);
+  cursor: pointer;
+  font: inherit;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.mission-dossier-variant-row:hover {
+  border-color: rgba(167, 139, 250, 0.35);
+  background: rgba(167, 139, 250, 0.07);
+}
+
+.mission-dossier-variant-row.is-selected {
+  border-color: rgba(167, 139, 250, 0.72);
+  background: rgba(167, 139, 250, 0.13);
+  box-shadow: inset 2px 0 0 var(--mb-violet);
+}
+
+.mission-dossier-variant-row__index {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--mb-border);
+  border-radius: 4px;
+  color: var(--mb-muted);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.mission-dossier-variant-row.is-selected .mission-dossier-variant-row__index {
+  border-color: rgba(167, 139, 250, 0.72);
+  color: var(--mb-text);
+}
+
+.mission-dossier-variant-row__main {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.mission-dossier-variant-row__main strong,
+.mission-dossier-variant-row__main small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-dossier-variant-row__main strong {
+  color: var(--mb-text);
+  font-size: 15px;
+  line-height: 1.15;
+}
+
+.mission-dossier-variant-row__main small {
+  color: var(--mb-muted);
+  font-size: 12px;
+}
+
+.mission-dossier-variant-row__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.mission-dossier-variant-row__chevron {
+  color: var(--mb-muted);
+  font-size: 26px;
+  line-height: 1;
+}
+
+.mission-dossier-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 34px;
+  border: 1px solid var(--mb-border);
+  border-radius: 4px;
+  background: rgba(11, 16, 19, 0.74);
+  color: var(--mb-muted);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 12px;
+}
+
+.mission-dossier-confidence {
+  color: var(--mb-green);
+}
+
+.mission-dossier-confidence.is-partial,
+.mission-dossier-confidence.is-medium {
+  color: var(--mb-amber);
 }
 
 .mb-detail > header {
@@ -1872,6 +2167,18 @@
     display: grid;
   }
 
+  .mission-dossier-summary-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .mission-dossier-body-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+  }
+
+  .mission-dossier-variants-card {
+    grid-column: 1 / -1;
+  }
+
   .mb-technical dl,
   .mb-family-technical dl {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
@@ -1879,6 +2186,24 @@
 }
 
 @media (max-width: 1080px) {
+  .mission-dossier-summary-strip,
+  .mission-dossier-body-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-dossier-briefing-card {
+    max-height: none;
+  }
+
+  .mission-dossier-variant-row {
+    grid-template-columns: 34px minmax(0, 1fr) 18px;
+  }
+
+  .mission-dossier-variant-row__badges {
+    grid-column: 2 / 3;
+    justify-content: flex-start;
+  }
+
   .mission-concept-dossier .mb-variant-drawer.is-dossier {
     grid-template-columns: 1fr;
   }
@@ -1963,7 +2288,15 @@
   }
 
   .mission-group-summary-strip,
-  .mission-variant-list .mb-variant-row {
+  .mission-variant-list .mb-variant-row,
+  .mission-dossier-summary-strip,
+  .mission-dossier-body-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mission-dossier-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
   }
 }

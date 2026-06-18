@@ -7,12 +7,12 @@ import OnlinePersistenceCoordinator from "./components/logistics/OnlinePersisten
 import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
 import DashboardPage from "./pages/DashboardPage";
-import DoctrineLibraryPage from "./pages/DoctrineLibraryPage";
-import DoctrineModulePage from "./pages/DoctrineModulePage";
 import ModuleIndexPage from "./pages/ModuleIndexPage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 
 /* Lazy loaded tools because shipping everything up front is a cry for help */
+const DoctrineLibraryPage = lazy(() => import("./pages/DoctrineLibraryPage"));
+const DoctrineModulePage = lazy(() => import("./pages/DoctrineModulePage"));
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
@@ -135,9 +135,18 @@ export default function App() {
       {/* Dashboard shell — sidebar + topbar always visible */}
       <Route element={<DashboardShell />}>
         <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="dashboard/doctrine" element={<DoctrineLibraryPage />} />
-        <Route path="dashboard/doctrine/library" element={<DoctrineLibraryPage />} />
-        <Route path="dashboard/doctrine/module/:id" element={<DoctrineModulePage />} />
+        <Route
+          path="dashboard/doctrine"
+          element={<Suspense fallback={<RouteFallback />}><DoctrineLibraryPage /></Suspense>}
+        />
+        <Route
+          path="dashboard/doctrine/library"
+          element={<Suspense fallback={<RouteFallback />}><DoctrineLibraryPage /></Suspense>}
+        />
+        <Route
+          path="dashboard/doctrine/module/:id"
+          element={<Suspense fallback={<RouteFallback />}><DoctrineModulePage /></Suspense>}
+        />
         <Route
           path="dashboard/doctrine/armor-threshold"
           element={<Suspense fallback={<RouteFallback />}><AlphaThresholdToolPage /></Suspense>}

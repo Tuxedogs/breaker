@@ -346,7 +346,7 @@ export function scoreLocations(
   }
 
   return {
-    locations: pickCoverageAwareLocations(Array.from(locations.values()), requirements, 24),
+    locations: pickCoverageAwareLocations(Array.from(locations.values()), requirements, locations.size),
     diagnostics,
     scoreContributions,
   };
