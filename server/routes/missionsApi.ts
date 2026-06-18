@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { handleMissionsRoute } from "./missions.routes";
+import { handleMissionsRoute } from "./missions.routes.js";
 
 function sendJson(response: ServerResponse, status: number, body: unknown, extraHeaders?: Record<string, string>) {
   response.statusCode = status;
