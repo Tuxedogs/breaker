@@ -642,41 +642,32 @@ async function fetchRequiredJsonObject<T>(path: string): Promise<T | null> {
   }
 }
 
-// Pyro's recommendation index only exposes currently verified active mining locations.
-const ACTIVE_PYRO_LOCATION_KEYS = new Set([
-  "pyro deep space asteroids",
-  "pyro vi (terminus)",
-  "terminus ring",
-  "pyro v-a (ignis)",
-  "pyro v-b (vatra)",
-  "pyro v-c (adir)",
-  "pyro v-d (fairo)",
-  "pyro v-e (fuego)",
-  "pyro v-f (vuur)",
-]);
-
-const PYRO_LOCATION_MATERIALS: Record<string, Set<string>> = {
-  "pyro deep space asteroids": new Set([
-    "aluminum",
-    "corundum",
-    "quartz",
-    "riccite",
-    "stileron",
-    "tin",
-    "torite",
-  ]),
-  "terminus ring": new Set([
-    "copper",
-    "iron",
-    "ouratite",
-    "pressurized ice",
-    "titanium",
-  ]),
-};
-
 const PYRO_LOCATION_KEY_ALIASES: Record<string, string> = {
+  pyro1: "pyro i",
+  "pyro i": "pyro i",
+  pyro2: "monox",
+  monox: "monox",
+  "pyro ii": "monox",
+  "pyro ii monox": "monox",
+  "pyro ii (monox)": "monox",
+  "pyro iii monox": "monox",
+  "pyro iii (monox)": "monox",
+  pyro3: "bloom",
+  bloom: "bloom",
+  "pyro iii": "bloom",
+  "pyro iii bloom": "bloom",
+  "pyro iii (bloom)": "bloom",
+  pyro4: "pyro iv",
+  "pyro iv": "pyro iv",
+  "pyro akirocluster": "akiro cluster",
+  "pyro_akirocluster": "akiro cluster",
+  "akiro cluster": "akiro cluster",
   "pyro deepspaceasteroids": "pyro deep space asteroids",
   "pyro deep space asteroids": "pyro deep space asteroids",
+  "pyro cool01": "pyro cool01",
+  "pyro cool02": "pyro cool02",
+  "pyro warm01": "pyro warm01",
+  "pyro warm02": "pyro warm02",
   pyro5a: "pyro v-a (ignis)",
   "pyro v-a (ignis)": "pyro v-a (ignis)",
   "pyro v-a": "pyro v-a (ignis)",
@@ -716,7 +707,16 @@ const PYRO_LOCATION_KEY_ALIASES: Record<string, string> = {
 };
 
 const PYRO_CANONICAL_LOCATION_NAMES: Record<string, string> = {
+  "pyro i": "Pyro I",
+  monox: "Monox",
+  bloom: "Bloom",
+  "pyro iv": "Pyro IV",
+  "akiro cluster": "Akiro Cluster",
   "pyro deep space asteroids": "Pyro Deep Space Asteroids",
+  "pyro cool01": "Pyro Cool01",
+  "pyro cool02": "Pyro Cool02",
+  "pyro warm01": "Pyro Warm01",
+  "pyro warm02": "Pyro Warm02",
   "pyro vi (terminus)": "Pyro VI (Terminus)",
   "terminus ring": "Terminus Ring",
   "pyro v-a (ignis)": "Pyro V-a (Ignis)",
@@ -726,6 +726,13 @@ const PYRO_CANONICAL_LOCATION_NAMES: Record<string, string> = {
   "pyro v-e (fuego)": "Pyro V-e (Fuego)",
   "pyro v-f (vuur)": "Pyro V-f (Vuur)",
 };
+
+const EXCLUDED_PYRO_LOCATION_NAMES = new Set([
+  "Pyro Cool01",
+  "Pyro Cool02",
+  "Pyro Warm01",
+  "Pyro Warm02",
+]);
 
 const ACTIVE_STANTON_LAGRANGE_LOCATION_KEYS = new Set([
   "lagrange a",
@@ -773,20 +780,10 @@ function canonicalizePyroRowLocation<T extends {
   return row;
 }
 
-function isInactivePyroLocation(systemKey: string | null | undefined, locationKey: string | null | undefined): boolean {
+function isExcludedPyroLocation(systemKey: string | null | undefined, locationKey: string | null | undefined): boolean {
   if (normalizeExact(systemKey) !== "pyro") return false;
-  return !ACTIVE_PYRO_LOCATION_KEYS.has(normalizePyroLocationKey(locationKey));
-}
-
-function isInactivePyroMaterial(
-  systemKey: string | null | undefined,
-  locationKey: string | null | undefined,
-  materialName: string | null | undefined,
-): boolean {
-  if (normalizeExact(systemKey) !== "pyro") return false;
-  const allowedMaterials = PYRO_LOCATION_MATERIALS[normalizePyroLocationKey(locationKey)];
-  if (!allowedMaterials) return false;
-  return !allowedMaterials.has(normalizeExact(materialName));
+  const locationName = canonicalPyroLocationName(locationKey) ?? locationKey;
+  return EXCLUDED_PYRO_LOCATION_NAMES.has(locationName ?? "");
 }
 
 function isInactiveStantonLagrangeLocation(systemKey: string | null | undefined, locationKey: string | null | undefined): boolean {
@@ -803,22 +800,19 @@ function buildStaticMiningIndex(
   locationHierarchy: StaticLocationHierarchyIndex | null,
 ): StaticMiningIndex {
   rows = rows.filter((row) =>
-    !isInactivePyroLocation(row.systemKey, row.locationKey) &&
-    !isInactivePyroMaterial(row.systemKey, row.locationKey, row.materialName) &&
+    !isExcludedPyroLocation(row.systemKey, row.locationKey) &&
     !isInactiveStantonLagrangeLocation(row.systemKey, row.locationKey)
   ).map(canonicalizePyroRowLocation);
   rankings = rankings.filter((row) =>
-    !isInactivePyroLocation(row.systemKey, row.locationKey) &&
-    !isInactivePyroMaterial(row.systemKey, row.locationKey, row.materialName) &&
+    !isExcludedPyroLocation(row.systemKey, row.locationKey) &&
     !isInactiveStantonLagrangeLocation(row.systemKey, row.locationKey)
   ).map(canonicalizePyroRowLocation);
   qualityRows = qualityRows.filter((row) =>
-    !isInactivePyroLocation(row.systemKey, row.locationKey) &&
-    !isInactivePyroMaterial(row.systemKey, row.locationKey, row.materialName) &&
+    !isExcludedPyroLocation(row.systemKey, row.locationKey) &&
     !isInactiveStantonLagrangeLocation(row.systemKey, row.locationKey)
   ).map(canonicalizePyroRowLocation);
   distributionRows = distributionRows.filter((row) =>
-    !isInactivePyroLocation(row.systemKey, row.locationKey) &&
+    !isExcludedPyroLocation(row.systemKey, row.locationKey) &&
     !isInactiveStantonLagrangeLocation(row.systemKey, row.locationKey)
   ).map(canonicalizePyroRowLocation);
 

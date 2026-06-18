@@ -1,80 +1,75 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 type IndexRow = Record<string, any>;
 
-const base = path.resolve("public/api/recommendations");
+const base = path.resolve(process.env.RECOMMENDATIONS_BASE ?? "public/api/recommendations");
+const foundryRecordsRoot = process.env.FOUNDRY_RECORDS_ROOT ?? "D:/scintel/libs/foundry/records";
+const localizationRoot = process.env.SCINTEL_LOCALIZATION_ROOT ?? "D:/scintel/data/Data/Localization/english";
+const pyroProviderRoot = path.join(foundryRecordsRoot, "harvestable/providerpresets/system/pyro");
+const localizationPath = path.join(localizationRoot, "global.ini");
 
-const activePyroLocations = new Map<string, string>([
-  ["Pyro Deepspaceasteroids", "Pyro Deep Space Asteroids"],
-  ["Pyro Deep Space Asteroids", "Pyro Deep Space Asteroids"],
-  ["Pyro5a", "Pyro V-a (Ignis)"],
-  ["Pyro V-a (Ignis)", "Pyro V-a (Ignis)"],
-  ["Pyro5b", "Pyro V-b (Vatra)"],
-  ["Pyro V-b (Vatra)", "Pyro V-b (Vatra)"],
-  ["Pyro5c", "Pyro V-c (Adir)"],
-  ["Pyro V-c (Adir)", "Pyro V-c (Adir)"],
-  ["Pyro5d", "Pyro V-d (Fairo)"],
-  ["Pyro V-d (Fairo)", "Pyro V-d (Fairo)"],
-  ["Pyro5e", "Pyro V-e (Fuego)"],
-  ["Pyro V-e (Fuego)", "Pyro V-e (Fuego)"],
-  ["Pyro5f", "Pyro V-f (Vuur)"],
-  ["Pyro V-f (Vuur)", "Pyro V-f (Vuur)"],
-  ["Pyro6", "Pyro VI (Terminus)"],
-  ["Terminus", "Pyro VI (Terminus)"],
-  ["Pyro VI (Terminus)", "Pyro VI (Terminus)"],
-  ["Terminus Ring", "Terminus Ring"],
+const providerBackedCanonicalOverrides: Record<string, string> = {
+  pyro1: "Pyro I",
+  pyro2: "Monox",
+  pyro3: "Bloom",
+  pyro4: "Pyro IV",
+  pyro5a: "Pyro V-a (Ignis)",
+  pyro5b: "Pyro V-b (Vatra)",
+  pyro5c: "Pyro V-c (Adir)",
+  pyro5d: "Pyro V-d (Fairo)",
+  pyro5e: "Pyro V-e (Fuego)",
+  pyro5f: "Pyro V-f (Vuur)",
+  pyro6: "Pyro VI (Terminus)",
+  pyroakirocluster: "Akiro Cluster",
+  pyrodeepspaceasteroids: "Pyro Deep Space Asteroids",
+  pyrocool01: "Pyro Cool01",
+  pyrocool02: "Pyro Cool02",
+  pyrowarm01: "Pyro Warm01",
+  pyrowarm02: "Pyro Warm02",
+};
+
+const excludedPyroLocationNames = new Set([
+  "Pyro Cool01",
+  "Pyro Cool02",
+  "Pyro Warm01",
+  "Pyro Warm02",
 ]);
 
-const limitedMaterials: Record<string, Set<string>> = {
-  "Pyro Deep Space Asteroids": new Set([
-    "Aluminum",
-    "Corundum",
-    "Quartz",
-    "Riccite",
-    "Stileron",
-    "Tin",
-    "Torite",
-  ]),
-  "Terminus Ring": new Set([
-    "Copper",
-    "Iron",
-    "Ouratite",
-    "Pressurized Ice",
-    "Titanium",
-  ]),
-};
-
-const providerNameByLocation: Record<string, string> = {
-  "Pyro Deep Space Asteroids": "HPP_Pyro_DeepSpaceAsteroids",
-  "Terminus Ring": "HPP_Pyro_TerminusRing",
-  "Pyro V-a (Ignis)": "HPP_Pyro_Va_Ignis",
-  "Pyro V-b (Vatra)": "HPP_Pyro_Vb_Vatra",
-  "Pyro V-c (Adir)": "HPP_Pyro_Vc_Adir",
-  "Pyro V-d (Fairo)": "HPP_Pyro_Vd_Fairo",
-  "Pyro V-e (Fuego)": "HPP_Pyro_Ve_Fuego",
-  "Pyro V-f (Vuur)": "HPP_Pyro_Vf_Vuur",
-};
-
-const providerPathByLocation: Record<string, string> = {
-  "Pyro Deep Space Asteroids": "libs/foundry/records/harvestable/providerpresets/system/pyro/asteroidfield/hpp_pyro_deepspaceasteroids.xml",
-  "Terminus Ring": "libs/foundry/records/harvestable/providerpresets/system/pyro/asteroidfield/hpp_pyro_terminusring.xml",
-  "Pyro V-a (Ignis)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_va_ignis.xml",
-  "Pyro V-b (Vatra)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_vb_vatra.xml",
-  "Pyro V-c (Adir)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_vc_adir.xml",
-  "Pyro V-d (Fairo)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_vd_fairo.xml",
-  "Pyro V-e (Fuego)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_ve_fuego.xml",
-  "Pyro V-f (Vuur)": "libs/foundry/records/harvestable/providerpresets/system/pyro/hpp_pyro_vf_vuur.xml",
-};
-
-const terminusMaterials = ["Copper", "Iron", "Ouratite", "Pressurized Ice", "Titanium"];
-
-const templateLocationByMaterial: Record<string, [string, string]> = {
-  Copper: ["Stanton", "Aaronhalo"],
-  Iron: ["Stanton", "Stanton2c Belt"],
-  Ouratite: ["Stanton", "Stanton2c Belt"],
-  "Pressurized Ice": ["Nyx", "Nyx Glaciemring"],
-  Titanium: ["Stanton", "Aaronhalo"],
+const explicitAliases: Record<string, string> = {
+  "Pyro I": "Pyro I",
+  "Pyro II": "Monox",
+  Monox: "Monox",
+  "Pyro II Monox": "Monox",
+  "Pyro II (Monox)": "Monox",
+  "Pyro III": "Bloom",
+  Bloom: "Bloom",
+  "Pyro III Bloom": "Bloom",
+  "Pyro III (Bloom)": "Bloom",
+  "Pyro III Monox": "Monox",
+  "Pyro III (Monox)": "Monox",
+  "Pyro IV": "Pyro IV",
+  Terminus: "Pyro VI (Terminus)",
+  "Pyro VI": "Pyro VI (Terminus)",
+  "Pyro VI Terminus": "Pyro VI (Terminus)",
+  "Pyro VI (Terminus)": "Pyro VI (Terminus)",
+  "Pyro V-a": "Pyro V-a (Ignis)",
+  Ignis: "Pyro V-a (Ignis)",
+  "Pyro V-b": "Pyro V-b (Vatra)",
+  Vatra: "Pyro V-b (Vatra)",
+  "Pyro V-c": "Pyro V-c (Adir)",
+  Adir: "Pyro V-c (Adir)",
+  "Pyro V-d": "Pyro V-d (Fairo)",
+  Fairo: "Pyro V-d (Fairo)",
+  "Pyro V-e": "Pyro V-e (Fuego)",
+  Fuego: "Pyro V-e (Fuego)",
+  "Pyro V-f": "Pyro V-f (Vuur)",
+  Vuur: "Pyro V-f (Vuur)",
+  "Akiro Cluster": "Akiro Cluster",
+  "Pyro Akirocluster": "Akiro Cluster",
+  "Pyro_AkiroCluster": "Akiro Cluster",
+  "Pyro Deep Space Asteroids": "Pyro Deep Space Asteroids",
+  "Pyro Deepspaceasteroids": "Pyro Deep Space Asteroids",
 };
 
 function readRows(name: string): IndexRow[] {
@@ -85,21 +80,98 @@ function writeRows(name: string, rows: IndexRow[]): void {
   writeFileSync(path.join(base, name), `${JSON.stringify(rows, null, 2)}\n`);
 }
 
+function norm(value: string | null | undefined): string {
+  return String(value ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
 function locationKey(row: IndexRow): string {
   return String(row.locationKey ?? row.location ?? row.locationDisplayName ?? "");
 }
 
+function loadLocalization(): Map<string, string> {
+  const labels = new Map<string, string>();
+  if (!existsSync(localizationPath)) return labels;
+
+  for (const line of readFileSync(localizationPath, "utf8").split(/\r?\n/)) {
+    const match = line.match(/^([^=]+)=(.*)$/);
+    if (!match) continue;
+    labels.set(match[1].trim(), match[2].trim());
+  }
+  return labels;
+}
+
+function findXmlFiles(root: string): string[] {
+  if (!existsSync(root)) return [];
+  return readdirSync(root, { withFileTypes: true }).flatMap((entry) => {
+    const child = path.join(root, entry.name);
+    if (entry.isDirectory()) return findXmlFiles(child);
+    return entry.isFile() && entry.name.toLowerCase().endsWith(".xml") ? [child] : [];
+  });
+}
+
+function titleFromProviderStem(stem: string): string {
+  return stem
+    .replace(/^hpp[_-]?/i, "")
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase())
+    .trim();
+}
+
+function providerKeyFromFile(file: string): string {
+  return path.basename(file, ".xml").replace(/^hpp[_-]?/i, "");
+}
+
+function buildProviderBackedPyroLocationMap(): Map<string, string> {
+  const labels = loadLocalization();
+  const aliases = new Map<string, string>();
+
+  for (const file of findXmlFiles(pyroProviderRoot)) {
+    const providerKey = providerKeyFromFile(file);
+    const canonical = providerBackedCanonicalOverrides[norm(providerKey)]
+      ?? labels.get(providerKey)
+      ?? titleFromProviderStem(providerKey);
+    const sourceName = titleFromProviderStem(providerKey);
+
+    for (const alias of [
+      providerKey,
+      sourceName,
+      labels.get(providerKey),
+      canonical,
+      `HPP_${providerKey}`,
+      `HPP_${providerKey.replace(/([A-Z])/g, "_$1").replace(/^_/, "")}`,
+    ]) {
+      if (alias) aliases.set(norm(alias), canonical);
+    }
+  }
+
+  for (const [alias, canonical] of Object.entries(explicitAliases)) {
+    aliases.set(norm(alias), canonical);
+  }
+
+  return aliases;
+}
+
+const activePyroLocations = buildProviderBackedPyroLocationMap();
+const unresolvedPyroLocationKeys = new Set<string>();
+
 function canonicalPyroLocation(row: IndexRow): string | null {
-  return activePyroLocations.get(locationKey(row)) ?? activePyroLocations.get(String(row.locationDisplayName ?? "")) ?? null;
+  for (const candidate of [
+    locationKey(row),
+    String(row.locationDisplayName ?? ""),
+    String(row.providerName ?? "").replace(/^HPP_/i, ""),
+  ]) {
+    const canonical = activePyroLocations.get(norm(candidate));
+    if (canonical) return canonical;
+  }
+
+  const key = locationKey(row);
+  if (key) unresolvedPyroLocationKeys.add(key);
+  return null;
 }
 
 function isPyro(row: IndexRow): boolean {
   return String(row.systemKey ?? row.system ?? "").toLowerCase() === "pyro";
-}
-
-function materialAllowed(row: IndexRow, locationName: string): boolean {
-  const allowed = limitedMaterials[locationName];
-  return !allowed || allowed.has(String(row.materialName ?? ""));
 }
 
 function setLocation(row: IndexRow, locationName: string): IndexRow {
@@ -112,33 +184,8 @@ function setLocation(row: IndexRow, locationName: string): IndexRow {
   row.parents = [];
   row.parentDisplayNames = [];
 
-  if (locationName === "Terminus Ring") {
-    row.resolvedMineableClass = "Orbitborne";
-    row.locationClassDistributionShare = 1.0;
-    row.methodFit = 1.0;
-  }
-
   if (Array.isArray(row.sources)) {
     row.sources = row.sources.map((source) => setLocation({ ...source }, locationName));
-  }
-
-  if (typeof row.providerName === "string" && providerNameByLocation[locationName]) {
-    row.providerName = providerNameByLocation[locationName];
-  }
-  if (typeof row.providerPath === "string" && providerPathByLocation[locationName]) {
-    row.providerPath = providerPathByLocation[locationName];
-  }
-
-  if (locationName === "Terminus Ring" && Array.isArray(row.sources)) {
-    row.sources = row.sources.map((source) => ({
-      ...source,
-      providerName: providerNameByLocation[locationName],
-      providerPath: providerPathByLocation[locationName],
-      resolvedMineableClass: "Orbitborne",
-      resolvedMineableClassReason: "active Pyro Terminus Ring asteroid composition override",
-      resolvedMineableConfidence: "medium",
-      methodFit: 1.0,
-    }));
   }
 
   return row;
@@ -148,37 +195,10 @@ function transformPyroRows(rows: IndexRow[]): IndexRow[] {
   return rows.flatMap((row) => {
     if (!isPyro(row)) return [row];
     const locationName = canonicalPyroLocation(row);
-    if (!locationName || !materialAllowed(row, locationName)) return [];
+    if (!locationName) return [];
+    if (excludedPyroLocationNames.has(locationName)) return [];
     return [setLocation(row, locationName)];
   });
-}
-
-function findTemplate(rows: IndexRow[], materialName: string): IndexRow {
-  const preferred = templateLocationByMaterial[materialName];
-  const template = rows.find((row) =>
-    row.materialName === materialName &&
-    row.systemKey === preferred?.[0] &&
-    row.locationKey === preferred?.[1]
-  ) ?? rows.find((row) =>
-    row.materialName === materialName &&
-    row.resolvedMineableClass === "Orbitborne"
-  ) ?? rows.find((row) => row.materialName === materialName);
-
-  if (!template) throw new Error(`Missing template row for ${materialName}`);
-  return structuredClone(template);
-}
-
-function addMissingTerminusRows(rows: IndexRow[]): IndexRow[] {
-  const existing = new Set(rows
-    .filter((row) => row.systemKey === "Pyro" && row.locationKey === "Terminus Ring")
-    .map((row) => row.materialName));
-
-  for (const materialName of terminusMaterials) {
-    if (existing.has(materialName)) continue;
-    rows.push(setLocation(findTemplate(rows, materialName), "Terminus Ring"));
-  }
-
-  return rows;
 }
 
 function sortMaterialRows(rows: IndexRow[]): IndexRow[] {
@@ -191,7 +211,7 @@ function sortMaterialRows(rows: IndexRow[]): IndexRow[] {
 }
 
 function transformMaterialFile(name: string): void {
-  const rows = addMissingTerminusRows(transformPyroRows(readRows(name)));
+  const rows = transformPyroRows(readRows(name));
   writeRows(name, sortMaterialRows(rows));
 }
 
@@ -200,6 +220,7 @@ function transformDistributionFile(): void {
     if (!isPyro(row)) return [row];
     const locationName = canonicalPyroLocation(row);
     if (!locationName) return [];
+    if (excludedPyroLocationNames.has(locationName)) return [];
 
     const next = setLocation(row, locationName);
     if (locationName === "Pyro Deep Space Asteroids" || locationName === "Terminus Ring") {
@@ -246,3 +267,7 @@ transformMaterialFile("location_material_index.json");
 transformMaterialFile("material_quality_index.json");
 transformMaterialFile("material_encounter_rankings.json");
 transformDistributionFile();
+
+if (unresolvedPyroLocationKeys.size > 0) {
+  console.warn("[mining] unresolved Pyro provider/location keys were dropped", [...unresolvedPyroLocationKeys].sort());
+}
