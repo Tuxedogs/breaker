@@ -2,6 +2,7 @@ const BASE = "/assets/planetsandmoons";
 
 interface PlanetAssetEntry {
   id: string;
+  label: string;
   thumbnail: string;
   thumbnail2x: string;
   main: string;
@@ -16,11 +17,27 @@ export interface PlanetAsset {
 }
 
 function normalize(s: string): string {
-  return s.toLowerCase().replace(/[\s'\-_.]/g, "");
+  return s.toLowerCase().replace(/[\s'\-_.()]/g, "");
 }
 
-let assetMap: Map<string, PlanetAsset> | null = null;
-let loadPromise: Promise<Map<string, PlanetAsset>> | null = null;
+const LOCATION_ASSET_ALIASES: Record<string, string> = {
+  pyroi: "pyro1",
+  pyrovbvatra: "vatra",
+  pyrovcaadir: "adir",
+  pyrovdfairo: "fairo",
+  pyrovefuego: "fuego",
+  pyroviaterminus: "terminus",
+  pyroiimonox: "monox",
+  pyroiiimonox: "monox",
+  pyroiiibloom: "bloom",
+  pyroiv: "pyroiv",
+};
+
+function registerAssetKey(map: Map<string, PlanetAsset>, key: string, asset: PlanetAsset) {
+  const normalized = normalize(key);
+  if (!normalized) return;
+  map.set(normalized, asset);
+}
 
 async function loadManifest(): Promise<Map<string, PlanetAsset>> {
   if (assetMap) return assetMap;
@@ -36,9 +53,16 @@ async function loadManifest(): Promise<Map<string, PlanetAsset>> {
           main: `${BASE}/${e.main}`,
           main2x: `${BASE}/${e.main2x}`,
         };
-        map.set(normalize(e.id), asset);
-        map.set(normalize(e.id.replace(/-/g, "")), asset);
+        registerAssetKey(map, e.id, asset);
+        registerAssetKey(map, e.id.replace(/-/g, ""), asset);
+        registerAssetKey(map, e.label, asset);
       }
+
+      for (const [alias, targetId] of Object.entries(LOCATION_ASSET_ALIASES)) {
+        const asset = map.get(targetId);
+        if (asset) map.set(alias, asset);
+      }
+
       assetMap = map;
       return map;
     })
@@ -49,13 +73,26 @@ async function loadManifest(): Promise<Map<string, PlanetAsset>> {
   return loadPromise;
 }
 
+let assetMap: Map<string, PlanetAsset> | null = null;
+let loadPromise: Promise<Map<string, PlanetAsset>> | null = null;
+
 export function usePlanetAssets(): Map<string, PlanetAsset> | null {
   return assetMap;
 }
 
 export function getPlanetAsset(map: Map<string, PlanetAsset> | null, name: string): PlanetAsset | null {
-  if (!map) return null;
-  return map.get(normalize(name)) ?? null;
+  if (!map || !name.trim()) return null;
+
+  const direct = map.get(normalize(name));
+  if (direct) return direct;
+
+  const parenMatch = name.match(/\(([^)]+)\)\s*$/);
+  if (parenMatch) {
+    const fromParen = map.get(normalize(parenMatch[1]));
+    if (fromParen) return fromParen;
+  }
+
+  return null;
 }
 
 export { loadManifest };
