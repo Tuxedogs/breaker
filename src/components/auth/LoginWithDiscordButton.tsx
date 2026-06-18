@@ -299,7 +299,7 @@ export default function LoginWithDiscordButton({
       <>
       <button
         type="button"
-        className={["discord-btn discord-btn--icon", className].filter(Boolean).join(" ")}
+        className={["discord-btn discord-btn--icon", signedIn ? "discord-btn--signed-in" : "", className].filter(Boolean).join(" ")}
         aria-label={signedIn ? "Open Discord account details" : "Sign in with Discord"}
         onClick={handleClick}
         onMouseEnter={onMouseEnter}

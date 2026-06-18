@@ -1841,11 +1841,235 @@
     padding-bottom: calc(0.35rem + env(safe-area-inset-bottom));
   }
 
+  .bq-item--mobile-touch {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .bq-item--mobile-touch .bq-item-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.55rem;
+    padding: 0.75rem 0.8rem 0.8rem;
+    border-right: 0;
+    border-bottom: 1px solid rgba(137, 161, 176, 0.2);
+    background:
+      linear-gradient(180deg, rgba(16, 28, 36, 0.96), rgba(10, 18, 24, 0.94));
+  }
+
+  .bq-item--mobile-touch .bq-item-name-top {
+    margin-bottom: 0.14rem;
+  }
+
+  .bq-item--mobile-touch .bq-item-name {
+    font-size: 1.02rem;
+    line-height: 1.15;
+  }
+
+  .bq-item--mobile-touch .bq-item-badges {
+    gap: 0.28rem;
+  }
+
+  .bq-item--mobile-touch .bq-item-blueprint {
+    flex-basis: auto;
+    width: 100%;
+    margin-top: 0.08rem;
+    font-size: 0.68rem;
+    color: rgba(94, 234, 212, 0.82);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .bq-item--mobile-touch .bq-item-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.45rem;
+    width: 100%;
+    margin-top: 0.1rem;
+    padding-right: 0;
+  }
+
+  .bq-item--mobile-touch .bq-btn-row {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+  }
+
+  .bq-item--mobile-touch .bq-item-body {
+    background: rgba(4, 10, 14, 0.55);
+  }
+
+  .bq-item--mobile-touch .bq-coverage {
+    padding: 0.42rem 0.8rem;
+    border-bottom: 1px solid rgba(137, 161, 176, 0.12);
+    background: rgba(2, 7, 11, 0.35);
+  }
+
+  .bq-item--mobile-touch .bq-coverage-short {
+    color: rgba(148, 163, 184, 0.78);
+    font-size: 0.62rem;
+    font-weight: 600;
+  }
+
+  .bq-item--mobile-touch.bq-item--missing .bq-coverage-short {
+    color: rgba(252, 165, 165, 0.82);
+  }
+
+  .bq-materials-section {
+    padding: 0.55rem 0.7rem 0.7rem;
+    background: rgba(3, 8, 12, 0.62);
+    border-top: 1px solid rgba(137, 161, 176, 0.1);
+  }
+
+  .bq-materials-section-label {
+    margin: 0 0 0.48rem;
+    padding: 0 0.08rem;
+    font-size: 0.58rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(120, 136, 148, 0.82);
+  }
+
+  .bq-item--mobile-touch .bq-mat-table {
+    display: flex;
+    flex-direction: column;
+    gap: 0.42rem;
+    overflow: visible;
+  }
+
+  .bq-mat-group--mobile-card {
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 8px;
+    background: rgba(6, 14, 20, 0.82);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+  }
+
+  .bq-mat-group--mobile-card:last-child {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  }
+
+  .bq-mat-group--mobile-card.bq-mat-group--missing {
+    background: rgba(8, 14, 20, 0.88);
+    border-color: rgba(148, 163, 184, 0.16);
+  }
+
+  .bq-mat-group--mobile-card.bq-mat-group--missing::before {
+    width: 2px;
+    opacity: 0.45;
+  }
+
+  .bq-mat-row--mobile-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.38rem;
+    padding: 0.68rem 0.7rem;
+    min-height: 0;
+  }
+
+  .bq-mat-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .bq-mat-card-head .bq-mat-name {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .bq-mat-card-head .bq-mat-status {
+    flex-shrink: 0;
+    max-width: 46%;
+    white-space: normal;
+    text-align: right;
+    line-height: 1.2;
+    border-color: rgba(148, 163, 184, 0.12);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .bq-mat-card-head .bq-mat-status--missing,
+  .bq-mat-card-head .bq-mat-status--stale {
+    color: rgba(203, 213, 225, 0.72);
+    border-color: rgba(148, 163, 184, 0.14);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .bq-mat-card-metrics {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.55rem;
+    min-width: 0;
+  }
+
+  .bq-mat-card-scu {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: rgba(148, 163, 184, 0.82);
+    letter-spacing: 0.02em;
+  }
+
+  .bq-mat-card-scu em {
+    font-style: normal;
+    color: rgba(226, 232, 240, 0.9);
+    font-weight: 700;
+  }
+
+  .bq-mat-card-quality {
+    flex-shrink: 0;
+    min-height: 22px;
+    padding: 0.08rem 0.42rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  .bq-mat-card-affix {
+    min-width: 0;
+    font-size: 0.68rem;
+    line-height: 1.25;
+    color: rgba(148, 163, 184, 0.78);
+  }
+
+  .bq-mat-card-affix .bq-mat-modifier-entry {
+    display: block;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .bq-mat-card-short {
+    font-size: 0.64rem;
+    font-weight: 600;
+    color: rgba(148, 163, 184, 0.72);
+  }
+
+  .bq-mat-card-short--critical {
+    color: rgba(252, 165, 165, 0.78);
+  }
+
   .bq-stale-line,
   .bq-reserve-panel,
   .bq-quality-inline-drawer {
     min-width: 0;
     margin-inline: 0;
+  }
+
+  .bq-mat-group--mobile-card .bq-reserve-panel,
+  .bq-mat-group--mobile-card .bq-quality-inline-drawer,
+  .bq-mat-group--mobile-card .bq-stale-line {
+    margin-inline: 0.7rem;
+  }
+
+  .bq-mat-group--mobile-card .bq-stale-line {
+    margin-bottom: 0.45rem;
   }
 
   .bq-reserve-panel {
@@ -1854,29 +2078,13 @@
     border-radius: 8px;
   }
 
-  .bq-page .bq-mat-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.45rem 0.55rem;
-    padding: 0.7rem 0.65rem;
-  }
-
-  .bq-mat-name,
-  .bq-mat-modifier,
-  .bq-mat-actions {
-    grid-column: 1 / -1;
-  }
-
-  .bq-mat-row .bq-quality-badge,
-  .bq-mat-row .bq-quality-inline-input {
-    display: none;
-  }
-
-  .bq-mat-actions {
+  .bq-mat-group--mobile-card .bq-mat-actions {
     display: flex;
     gap: 0.5rem;
+    margin-top: 0.08rem;
   }
 
-  .bq-reserve-open-btn {
+  .bq-mat-group--mobile-card .bq-reserve-open-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1887,7 +2095,7 @@
     font-size: 0.72rem;
   }
 
-  .bq-quality-toggle-btn {
+  .bq-mat-group--mobile-card .bq-quality-toggle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1896,7 +2104,6 @@
     min-width: 0;
     padding: 0 0.65rem;
     font-size: 0.72rem;
-    justify-self: stretch;
   }
 
   .bq-stack-line-top {
