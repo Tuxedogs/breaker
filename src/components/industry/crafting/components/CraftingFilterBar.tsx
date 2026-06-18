@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
@@ -126,6 +127,20 @@ function getSearchParam(searchParams: URLSearchParams): string {
   return searchParams.get("search") ?? searchParams.get("q") ?? "";
 }
 
+function useMobileToolbarLayout() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 760px)");
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
 export default function CraftingFilterBar({
   records,
   resultCount,
@@ -223,6 +238,10 @@ export default function CraftingFilterBar({
 
   const [materialPickerOpen, setMaterialPickerOpen] = useState(false);
   const [materialDropdownPosition, setMaterialDropdownPosition] = useState({ left: 0, top: 0 });
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [toolbarScrolled, setToolbarScrolled] = useState(false);
+  const [drawerMaterialSearch, setDrawerMaterialSearch] = useState("");
+  const isMobileLayout = useMobileToolbarLayout();
   const toolbarRef = useRef<HTMLDivElement>(null);
   const materialPickerRef = useRef<HTMLDivElement>(null);
   const materialDropdownRef = useRef<HTMLDivElement>(null);
@@ -265,6 +284,37 @@ export default function CraftingFilterBar({
       window.removeEventListener("scroll", updateMaterialDropdownPosition, true);
     };
   }, [materialPickerOpen, updateMaterialDropdownPosition]);
+
+  useEffect(() => {
+    const scrollRoot = toolbarRef.current?.closest(".component-results-browser");
+    if (!scrollRoot) return;
+    const onScroll = () => setToolbarScrolled(scrollRoot.scrollTop > 12);
+    onScroll();
+    scrollRoot.addEventListener("scroll", onScroll, { passive: true });
+    return () => scrollRoot.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!mobileFilterOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileFilterOpen]);
+
+  useEffect(() => {
+    if (!isMobileLayout) setMobileFilterOpen(false);
+  }, [isMobileLayout]);
+
+  useEffect(() => {
+    if (!mobileFilterOpen) return;
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setMobileFilterOpen(false);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileFilterOpen]);
 
   const vehicleOptions = useMemo<FilterOption[]>(() => {
     const values = new Set<string>();
@@ -328,7 +378,21 @@ export default function CraftingFilterBar({
 
   const materialOptions = useMemo(() => buildMaterialOptions(records), [records]);
 
+  const drawerMaterialOptions = useMemo(() => {
+    const query = drawerMaterialSearch.trim().toLowerCase();
+    if (!query) return materialOptions;
+    return materialOptions.filter((option) => option.label.toLowerCase().includes(query));
+  }, [drawerMaterialSearch, materialOptions]);
+
   const showVehicleFacets = fpsFilters.size === 0 || vehicleFilters.size > 0;
+
+  const advancedFilterCount =
+    vehicleFilters.size +
+    fpsFilters.size +
+    sizeFilters.size +
+    gradeFilters.size +
+    classFilters.size +
+    materialFilters.size;
 
   const hasFilters = !isDefaultState && Boolean(
     search || vehicleFilters.size || fpsFilters.size || sizeFilters.size ||
@@ -367,7 +431,7 @@ export default function CraftingFilterBar({
     for (const opt of activeMaterialOptions) {
       tokens.push({ ...opt, kind: "material" });
     }
-    if (savedOnly) tokens.push({ value: "saved", label: "Blueprint Bookmarks", kind: "saved" });
+    if (savedOnly) tokens.push({ value: "saved", label: "Bookmarked", kind: "saved" });
     return tokens;
   }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, isDefaultState, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
 
@@ -385,11 +449,190 @@ export default function CraftingFilterBar({
     if (token.kind === "saved") setSavedOnly(false);
   }
 
-  return (
-    <div className="component-browser-toolbar" ref={toolbarRef}>
+  const mobileFilterDrawer = isMobileLayout && mobileFilterOpen ? createPortal(
+    <div
+      className="crb-mobile-drawer-backdrop"
+      role="presentation"
+      onClick={() => setMobileFilterOpen(false)}
+    >
+      <section
+        className="crb-mobile-drawer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="crb-mobile-drawer-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <header className="crb-mobile-drawer-head">
+          <h2 id="crb-mobile-drawer-title">Filters</h2>
+          <button
+            type="button"
+            className="crb-mobile-drawer-close"
+            aria-label="Close filters"
+            onClick={() => setMobileFilterOpen(false)}
+          >
+            ×
+          </button>
+        </header>
 
-      {/* ── Row 1: Search + Bookmarks + Count ── */}
-      <div className="crb-row crb-row--search">
+        <div className="crb-mobile-drawer-body">
+          {vehicleOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">Type</h3>
+              <div className="crb-drawer-chip-grid" role="group" aria-label="Component type filters">
+                {vehicleOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip${vehicleFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setVehicleFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {TYPE_ICONS[option.value]}
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {fpsOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">FPS</h3>
+              <div className="crb-drawer-chip-grid" role="group" aria-label="FPS filters">
+                {fpsOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip${fpsFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setFpsFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {TYPE_ICONS[option.value]}
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {showVehicleFacets && sizeOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">Size</h3>
+              <div className="crb-drawer-chip-grid" role="group" aria-label="Size filters">
+                {sizeOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip craft-frl-chip--sm${sizeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setSizeFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {showVehicleFacets && gradeOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">Grade</h3>
+              <div className="crb-drawer-chip-grid" role="group" aria-label="Grade filters">
+                {gradeOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip craft-frl-chip--sm${gradeFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setGradeFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {showVehicleFacets && classOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">Category</h3>
+              <div className="crb-drawer-chip-grid" role="group" aria-label="Category filters">
+                {classOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip craft-frl-chip--sm${classFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setClassFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {materialOptions.length > 0 && (
+            <section className="crb-drawer-section">
+              <h3 className="crb-drawer-section-label">Materials</h3>
+              <label className="crb-drawer-material-search">
+                <span className="craft-search-icon" aria-hidden="true">/</span>
+                <input
+                  type="search"
+                  aria-label="Search materials"
+                  value={drawerMaterialSearch}
+                  onChange={(event) => setDrawerMaterialSearch(event.target.value)}
+                  placeholder="Search materials..."
+                />
+              </label>
+              <div className="crb-drawer-chip-grid crb-drawer-chip-grid--materials" role="group" aria-label="Material filters">
+                {drawerMaterialOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`craft-frl-chip${materialFilters.has(option.value) ? " craft-frl-chip--active" : ""}`}
+                    onClick={() => setMaterialFilters((prev) => toggleSetValue(prev, option.value))}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+
+        <footer className="crb-mobile-drawer-foot">
+          <button
+            type="button"
+            className="crb-drawer-apply-btn"
+            onClick={() => setMobileFilterOpen(false)}
+          >
+            Apply Filters
+          </button>
+          <button
+            type="button"
+            className="crb-drawer-clear-btn"
+            onClick={() => {
+              clearFilters();
+              setDrawerMaterialSearch("");
+            }}
+            disabled={!hasFilters}
+          >
+            Clear Filters
+          </button>
+        </footer>
+      </section>
+    </div>,
+    document.body,
+  ) : null;
+
+  return (
+    <div
+      className={[
+        "component-browser-toolbar",
+        toolbarScrolled ? "crb-toolbar--scrolled" : "",
+        mobileFilterOpen ? "crb-toolbar--drawer-open" : "",
+      ].filter(Boolean).join(" ")}
+      ref={toolbarRef}
+    >
+
+      {/* ── Search + desktop bookmarks/count + mobile inline actions when scrolled ── */}
+      <div className="crb-row crb-row--search crb-row--mobile-header">
         <label className="component-browser-search">
           <span className="craft-search-icon" aria-hidden="true">/</span>
           <input
@@ -401,9 +644,31 @@ export default function CraftingFilterBar({
           />
           <span className="crb-search-slash" aria-hidden="true">/</span>
         </label>
+        <div className="crb-mobile-inline-actions" aria-label="Recipe browser controls">
+          <button
+            type="button"
+            className={`crb-filters-btn${advancedFilterCount > 0 ? " crb-filters-btn--active" : ""}`}
+            aria-expanded={mobileFilterOpen}
+            onClick={() => setMobileFilterOpen((open) => !open)}
+          >
+            Filters
+            {advancedFilterCount > 0 ? (
+              <span className="crb-filters-count">{advancedFilterCount}</span>
+            ) : null}
+          </button>
+          <button
+            type="button"
+            className={`crb-bookmarks-btn crb-bookmarks-btn--chip${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
+            aria-pressed={savedOnly}
+            onClick={() => setSavedOnly((value) => !value)}
+          >
+            <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
+            Bookmarked
+          </button>
+        </div>
         <button
           type="button"
-          className={`crb-bookmarks-btn${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
+          className={`crb-bookmarks-btn crb-bookmarks-btn--desktop${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
           onClick={() => setSavedOnly((v) => !v)}
         >
           <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
@@ -414,8 +679,31 @@ export default function CraftingFilterBar({
         </span>
       </div>
 
-      {/* ── Row 2: Category groups — Vehicle | FPS ── */}
-      <div className="crb-row crb-row--categories">
+      <div className="crb-row crb-row--mobile-controls" aria-label="Recipe browser filters">
+        <button
+          type="button"
+          className={`crb-filters-btn${advancedFilterCount > 0 ? " crb-filters-btn--active" : ""}`}
+          aria-expanded={mobileFilterOpen}
+          onClick={() => setMobileFilterOpen((open) => !open)}
+        >
+          Filters
+          {advancedFilterCount > 0 ? (
+            <span className="crb-filters-count">{advancedFilterCount}</span>
+          ) : null}
+        </button>
+        <button
+          type="button"
+          className={`crb-bookmarks-btn crb-bookmarks-btn--chip${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
+          aria-pressed={savedOnly}
+          onClick={() => setSavedOnly((value) => !value)}
+        >
+          <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
+          Bookmarked
+        </button>
+      </div>
+
+      {/* ── Desktop: Category groups — Vehicle | FPS ── */}
+      <div className="crb-row crb-row--categories crb-row--desktop-filters">
         <div className="crb-category-group crb-category-group--vehicle">
           <span className="crb-section-label crb-section-label--vehicle">Vehicle</span>
           <div className="crb-chip-group crb-chip-group--vehicle" role="group" aria-label="Vehicle component filters">
@@ -453,8 +741,8 @@ export default function CraftingFilterBar({
         </div>
       </div>
 
-      {/* ── Row 3: Contextual facets (vehicle only) + Materials always ── */}
-      <div className="crb-row crb-row--facets">
+      {/* ── Desktop: Contextual facets (vehicle only) + Materials ── */}
+      <div className="crb-row crb-row--facets crb-row--desktop-filters">
         {showVehicleFacets && sizeOptions.length > 0 && (
           <div className="crb-facet-group crb-facet-group--size">
             <span className="crb-section-label">Size</span>
@@ -562,8 +850,8 @@ export default function CraftingFilterBar({
 
       {hasFilters && (
         <div className="crb-row crb-row--active-filters">
-          <span className="crb-section-label">Active Filters</span>
-          <span className="crb-section-divider" aria-hidden="true" />
+          <span className="crb-section-label crb-active-label--desktop">Active Filters</span>
+          <span className="crb-section-divider crb-active-label--desktop" aria-hidden="true" />
           {activeFilterTokens.map((tok) => (
             <button
               key={`${tok.kind}:${tok.value}`}
@@ -576,12 +864,14 @@ export default function CraftingFilterBar({
               <span className="crb-token-x" aria-hidden="true">×</span>
             </button>
           ))}
-          <button type="button" className="crb-clear-all" onClick={clearFilters}>
+          <button type="button" className="crb-clear-all crb-clear-all--desktop" onClick={clearFilters}>
             Clear All
             <span className="crb-clear-all-icon" aria-hidden="true">🗑</span>
           </button>
         </div>
       )}
+
+      {mobileFilterDrawer}
     </div>
   );
 }
