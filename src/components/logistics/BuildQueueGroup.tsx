@@ -421,22 +421,6 @@ export default function BuildQueueGroup({
   const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
-  useEffect(() => {
-    const activeQualityKeys = new Set(
-      Object.values(activeDrawersByItem)
-        .filter((drawer): drawer is BuildQueueActiveDrawer => drawer?.type === 'quality')
-        .map((drawer) => drawer.requirementKey),
-    );
-
-    setQualityDrafts((prev) => {
-      const next: Record<string, string> = {};
-      for (const key of activeQualityKeys) {
-        if (prev[key] !== undefined) next[key] = prev[key];
-      }
-      return next;
-    });
-  }, [activeDrawersByItem]);
-
   function openQualityEditor(itemId: string, editorKey: string, selectedQuality: number) {
     const alreadyOpen =
       activeDrawersByItem[itemId]?.type === 'quality' &&
@@ -711,7 +695,9 @@ export default function BuildQueueGroup({
                     activeDrawer?.type === 'quality' &&
                     activeDrawer.requirementKey === group.groupKey;
                   const qualityRequirement = group.requirements[0];
-                  const qualityDraft = qualityDrafts[group.groupKey] ?? String(group.selectedQuality);
+                  const qualityDraft = qualityExpanded
+                    ? (qualityDrafts[group.groupKey] ?? String(group.selectedQuality))
+                    : String(group.selectedQuality);
                   const parsedQualityDraft = parseDraftNumber(qualityDraft);
                   const previewQuality = qualityExpanded && qualityRequirement.qualityBands && parsedQualityDraft !== null
                     ? clampQualityForBands(parsedQualityDraft, qualityRequirement.qualityBands)
