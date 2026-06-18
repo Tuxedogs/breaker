@@ -1,16 +1,8 @@
 {
   "functions": {
-    "api/missions/browser.ts": {
-      "includeFiles": "server-data/missions/**"
-    },
-    "api/missions/family/[familyKey].ts": {
-      "includeFiles": "server-data/missions/**"
-    },
-    "api/missions/family/[familyKey]/variants.ts": {
-      "includeFiles": "server-data/missions/**"
-    },
-    "api/missions/variant/[variantKey].ts": {
-      "includeFiles": "server-data/missions/**"
+    "api/missions/[...path].ts": {
+      "includeFiles": "server-data/missions/{mission_browser_index.json,families/**,family-variants/**,variants/**}",
+      "excludeFiles": "server-data/missions/mission_{variants,locations,rewards,prerequisites,families,concepts,reputation,unresolved_refs,browse_groups}.json"
     }
   },
   "rewrites": [
@@ -21,18 +13,6 @@
     {
       "source": "/api/user/inventory/locations/:id",
       "destination": "/api/user/inventory/locations/[id]"
-    },
-    {
-      "source": "/api/missions/family/:familyKey/variants",
-      "destination": "/api/missions/family/[familyKey]/variants"
-    },
-    {
-      "source": "/api/missions/family/:familyKey",
-      "destination": "/api/missions/family/[familyKey]"
-    },
-    {
-      "source": "/api/missions/variant/:variantKey",
-      "destination": "/api/missions/variant/[variantKey]"
     },
     {
       "source": "/(.*)",
