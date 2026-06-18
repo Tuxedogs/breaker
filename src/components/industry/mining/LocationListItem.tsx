@@ -15,6 +15,13 @@ import {
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 
+function BookmarkIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 4h10v16l-5-3.2L7 20V4Z" />
+    </svg>
+  );
+}
 
 export function LocationListItem({
   rank,
@@ -70,7 +77,7 @@ export function LocationListItem({
 
   return (
     <div
-      className={`mlist-item${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--starred" : ""}`}
+      className={`mlist-item${selected ? " mlist-item--selected" : ""}${starred ? " mlist-item--bookmarked" : ""}`}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       role="button"
@@ -80,13 +87,15 @@ export function LocationListItem({
     >
       <div className="mlist-item-rank">{rank}</div>
       <div className="mlist-item-thumb" aria-hidden="true">
-        {planetAsset && (
+        {planetAsset ? (
           <img
             src={planetAsset.thumbnail}
             srcSet={`${planetAsset.thumbnail2x} 2x`}
             alt=""
             className="mlist-item-thumb-img"
           />
+        ) : (
+          <span className="mlist-item-thumb-fallback">{locationDisplayName.slice(0, 1).toUpperCase()}</span>
         )}
       </div>
       <div className="mlist-item-body">
@@ -126,12 +135,13 @@ export function LocationListItem({
       </div>
       <button
         type="button"
-        className={`mloc-star-btn${starred ? " mloc-star-btn--on" : ""}`}
+        className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
         onClick={onToggleStar}
-        title={starred ? "Unstar" : "Star"}
-        aria-label={starred ? "Unstar" : "Star"}
+        aria-pressed={starred}
+        title={starred ? "Remove bookmark" : "Bookmark location"}
+        aria-label={starred ? "Remove bookmark" : "Bookmark location"}
       >
-        {starred ? "★" : "☆"}
+        <BookmarkIcon />
       </button>
     </div>
   );

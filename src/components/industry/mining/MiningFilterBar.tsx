@@ -43,9 +43,14 @@ export function MiningFilterBar({
   onToggleMaterial: (id: string) => void;
   onSearchChange: (q: string) => void;
 }) {
-  const [filtersExpanded, setFiltersExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const { shipAndHarvestable, vehicle, hand } = visibleResourceGroups;
   const handFiltered = hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
+
+  const allMaterialChips = useMemo(
+    () => [...shipAndHarvestable, ...vehicle, ...handFiltered],
+    [handFiltered, shipAndHarvestable, vehicle],
+  );
 
   const activeFilterCount = useMemo(
     () =>
@@ -56,22 +61,34 @@ export function MiningFilterBar({
     [buildQueueSelectionActive, selectedMaterials.size, selectedSystems.size, showOnlyStarred],
   );
 
+  const scopeIsDefault = !buildQueueSelectionActive && selectedMaterials.size === 0 && !showOnlyStarred;
+
+  const activeFilterChips = useMemo(() => {
+    const chips: Array<{ key: string; label: string }> = [];
+    if (buildQueueSelectionActive) chips.push({ key: "scope:queue", label: "Queue" });
+    if (showOnlyStarred) chips.push({ key: "scope:starred", label: "Starred" });
+    for (const sys of [...selectedSystems].sort()) chips.push({ key: `system:${sys}`, label: sys });
+    for (const chip of allMaterialChips) {
+      if (selectedMaterials.has(chip.id)) chips.push({ key: `material:${chip.id}`, label: chip.label });
+    }
+    return chips;
+  }, [allMaterialChips, buildQueueSelectionActive, selectedMaterials, selectedSystems, showOnlyStarred]);
+
   return (
     <div
       className={[
-        "scintel-filter-shell",
-        "mining-browser-toolbar",
-        buildQueueSelectionActive ? "scintel-filter-shell--queue mining-browser-toolbar--queue" : "",
-        filtersExpanded ? "scintel-filter-shell--expanded" : "",
+        "mining-filter-compact",
+        buildQueueSelectionActive ? "mining-filter-compact--queue" : "",
+        expanded ? "mining-filter-compact--expanded" : "",
       ].filter(Boolean).join(" ")}
     >
-      <div className="scintel-filter-header">
-        <div className="scintel-filter-search">
+      <div className="mining-filter-bar">
+        <div className="mining-filter-search">
           <div className="mfp-search-wrap">
             <input
               type="search"
               className="mfp-search-input"
-              placeholder="Filter locations…"
+              placeholder="Search locations…"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
@@ -80,58 +97,70 @@ export function MiningFilterBar({
             )}
           </div>
         </div>
-        <div className="scintel-filter-actions">
-          {hasActiveFilters && !filtersExpanded ? (
-            <span className="scintel-filter-summary">{activeFilterCount} active</span>
-          ) : null}
-          <button
-            type="button"
-            className="scintel-filter-toggle"
-            aria-expanded={filtersExpanded}
-            onClick={() => setFiltersExpanded((open) => !open)}
-          >
-            {filtersExpanded ? "Hide" : "Filters"}
-            {activeFilterCount > 0 ? (
-              <span className="scintel-filter-toggle-count">{activeFilterCount}</span>
-            ) : null}
+
+        {hasActiveFilters && (
+          <span className="mining-filter-active-count">{activeFilterCount} active</span>
+        )}
+
+        {!expanded && activeFilterChips.length > 0 && (
+          <div className="mining-filter-active-chips" aria-label="Active filters">
+            {activeFilterChips.slice(0, 4).map((chip) => (
+              <span key={chip.key} className="mining-filter-active-chip">{chip.label}</span>
+            ))}
+            {activeFilterChips.length > 4 && (
+              <span className="mining-filter-active-chip">+{activeFilterChips.length - 4}</span>
+            )}
+          </div>
+        )}
+
+        {hasActiveFilters && (
+          <button type="button" className="mining-filter-clear" onClick={onClearAllFilters}>
+            Clear
           </button>
-          {hasActiveFilters && !filtersExpanded ? (
-            <button type="button" className="scintel-filter-clear" onClick={onClearAllFilters}>
-              Clear
-            </button>
-          ) : null}
-        </div>
+        )}
+
+        <button
+          type="button"
+          className="mining-filter-toggle"
+          aria-expanded={expanded}
+          aria-label={expanded ? "Collapse filters" : "Expand filters"}
+          onClick={() => setExpanded((open) => !open)}
+        >
+          <span className="mining-filter-chevron" aria-hidden="true">{expanded ? "▴" : "▾"}</span>
+        </button>
       </div>
 
-      {filtersExpanded ? (
-        <div className="scintel-filter-body">
-          <div className="crb-row">
-            <span className="crb-section-label">System</span>
-            <span className="crb-section-divider" aria-hidden="true" />
-            <div className="crb-chip-group" role="group" aria-label="System filters">
+      {expanded && (
+        <div className="mining-filter-drawer">
+          <div className="mining-filter-drawer-row">
+            <span className="mining-filter-label">System</span>
+            <div className="mining-filter-chips" role="group" aria-label="System filters">
               {MINING_SYSTEM_FILTERS.map((sys) => (
                 <button
                   key={sys}
                   type="button"
-                  className={`craft-frl-chip${selectedSystems.has(sys) ? " craft-frl-chip--active" : ""}`}
+                  className={`craft-frl-chip craft-frl-chip--sm${selectedSystems.has(sys) ? " craft-frl-chip--active" : ""}`}
                   onClick={() => onToggleSystem(sys)}
-                >{sys}</button>
+                >
+                  {sys}
+                </button>
               ))}
             </div>
           </div>
 
-          <div className="crb-row">
-            <span className="crb-section-label">Scope</span>
-            <span className="crb-section-divider" aria-hidden="true" />
-            <div className="crb-chip-group" role="group" aria-label="Scope filters">
+          <div className="mining-filter-drawer-row">
+            <span className="mining-filter-label">Scope</span>
+            <div className="mining-filter-chips" role="group" aria-label="Scope filters">
               <button
                 type="button"
-                className={`craft-frl-chip${!buildQueueSelectionActive && selectedMaterials.size === 0 && !showOnlyStarred ? " craft-frl-chip--active" : ""}`}
+                className={`craft-frl-chip craft-frl-chip--sm${scopeIsDefault ? " craft-frl-chip--active" : ""}`}
                 onClick={onClearAllFilters}
-              >All</button>
+              >
+                All
+              </button>
               <button
                 type="button"
-                className={`craft-frl-chip${buildQueueSelectionActive ? " craft-frl-chip--active mfr-chip--bq" : ""}`}
+                className={`craft-frl-chip craft-frl-chip--sm${buildQueueSelectionActive ? " craft-frl-chip--active mfr-chip--bq" : ""}`}
                 onClick={onSelectBuildQueueMaterials}
               >
                 Queue
@@ -139,83 +168,44 @@ export function MiningFilterBar({
               </button>
               <button
                 type="button"
-                className={`craft-frl-chip${showOnlyStarred ? " craft-frl-chip--active" : ""}`}
+                className={`craft-frl-chip craft-frl-chip--sm${showOnlyStarred ? " craft-frl-chip--active" : ""}`}
                 onClick={onToggleStarred}
-              >Starred</button>
+              >
+                Starred
+              </button>
             </div>
           </div>
 
-          {(shipAndHarvestable.length > 0 || vehicle.length > 0 || handFiltered.length > 0) && (
-            <div className="crb-row crb-row--separator" aria-hidden="true" />
-          )}
-
-          {shipAndHarvestable.length > 0 && (
-            <div className="crb-row crb-row--wrap">
-              <span className="crb-section-label">Ship</span>
-              <div className="crb-chip-group mfp-chips--ship" role="group" aria-label="Ship material filters">
-                {shipAndHarvestable.map((chip) => (
+          {allMaterialChips.length > 0 && (
+            <div className="mining-filter-drawer-row mining-filter-drawer-row--materials">
+              <span className="mining-filter-label">Type</span>
+              <div className="mining-filter-chips mining-filter-chips--wrap" role="group" aria-label="Material filters">
+                {allMaterialChips.map((chip) => (
                   <button
                     key={chip.id}
                     type="button"
                     className={`craft-frl-chip craft-frl-chip--sm${selectedMaterials.has(chip.id) ? " craft-frl-chip--active" : ""}`}
                     onClick={() => onToggleMaterial(chip.id)}
-                  >{chip.label}</button>
+                  >
+                    {chip.label}
+                  </button>
                 ))}
               </div>
             </div>
           )}
 
-          {(handFiltered.length > 0 || vehicle.length > 0) && (
-            <div className="crb-row">
-              {handFiltered.length > 0 && (
-                <>
-                  <span className="crb-section-label crb-section-label--fps">FPS</span>
-                  <span className="crb-section-divider" aria-hidden="true" />
-                  <div className="crb-chip-group" role="group" aria-label="FPS material filters">
-                    {handFiltered.map((chip) => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`craft-frl-chip craft-frl-chip--sm${selectedMaterials.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                        onClick={() => onToggleMaterial(chip.id)}
-                      >{chip.label}</button>
-                    ))}
-                  </div>
-                </>
-              )}
-              {handFiltered.length > 0 && vehicle.length > 0 && (
-                <span className="crb-group-divider" aria-hidden="true" />
-              )}
-              {vehicle.length > 0 && (
-                <>
-                  <span className="crb-section-label crb-section-label--vehicle">Vehicle</span>
-                  <span className="crb-section-divider" aria-hidden="true" />
-                  <div className="crb-chip-group" role="group" aria-label="Vehicle material filters">
-                    {vehicle.map((chip) => (
-                      <button
-                        key={chip.id}
-                        type="button"
-                        className={`craft-frl-chip craft-frl-chip--sm${selectedMaterials.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                        onClick={() => onToggleMaterial(chip.id)}
-                      >{chip.label}</button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
-          {hasActiveFilters && (
-            <div className="crb-row crb-row--active-filters">
-              <span className="crb-section-label">Active</span>
-              <span className="crb-section-divider" aria-hidden="true" />
-              <button type="button" className="mfr-clear-btn scintel-filter-clear" onClick={onClearAllFilters}>
-                Clear filters
-              </button>
+          {activeFilterChips.length > 0 && (
+            <div className="mining-filter-drawer-row">
+              <span className="mining-filter-label">Active</span>
+              <div className="mining-filter-active-chips mining-filter-active-chips--expanded" aria-label="Active filters">
+                {activeFilterChips.map((chip) => (
+                  <span key={chip.key} className="mining-filter-active-chip">{chip.label}</span>
+                ))}
+              </div>
             </div>
           )}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

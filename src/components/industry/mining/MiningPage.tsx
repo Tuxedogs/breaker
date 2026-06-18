@@ -354,7 +354,7 @@ export default function MiningModule() {
                 </div>
               ) : searchFilteredLocations.length === 0 ? (
                 <div className="mine-empty-state">
-                  <p className="mine-empty-text">{locationSearch ? `No locations match "${locationSearch}".` : planner.filters.showOnlyStarred ? "No starred locations. Click ☆ on a location to star it." : "No locations match the current filters."}</p>
+                  <p className="mine-empty-text">{locationSearch ? `No locations match "${locationSearch}".` : planner.filters.showOnlyStarred ? "No bookmarked locations. Bookmark a location from the list." : "No locations match the current filters."}</p>
                 </div>
               ) : (
                 <div className="mconsole-layout">

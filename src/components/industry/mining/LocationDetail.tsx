@@ -14,7 +14,7 @@ import {
 } from "../../../features/mining/staticMiningIndex";
 import type { CoveragePlan } from "../../../features/mining/coveragePlan";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
-import { getPlanetAsset } from "../../../features/mining/planetAssets";
+
 import {
   buildDemandRows,
   buildResourceRows,
@@ -29,6 +29,8 @@ import {
   qualitySourceScopeDisplayLabel,
   resourceRowMaterialKey,
   scoreToneClass,
+  spawnTypeBadgeClass,
+  spawnTypeLabel,
   systemBadgeClass,
 } from "./miningFormatters";
 import type { ResourceRow } from "./miningTypes";
@@ -51,7 +53,7 @@ export function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
-  planetAssetMap,
+  planetAssetMap: _planetAssetMap,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
@@ -161,7 +163,6 @@ export function LocationDetail({
 
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
-  const detailPlanetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const locationMethodMixItems = useMemo(
     () => getStaticMethodBiasForLocation(entry, staticMiningIndex)
       .filter((item) => Number.isFinite(item.share) && item.share > 0)
@@ -213,19 +214,9 @@ export function LocationDetail({
           {!isLagrangeChildGroup && (
             <div className="mdet-meta">
               <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+              <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>{spawnTypeLabel(entry.spawnType)}</span>
             </div>
           )}
-        </div>
-        <div className="mdet-header-right">
-          <div className="mdet-thumb" aria-hidden="true">
-            {detailPlanetAsset ? (
-              <img src={detailPlanetAsset.main} srcSet={`${detailPlanetAsset.main2x} 2x`} alt="" className="mdet-thumb-img" />
-            ) : (
-              <div className="mdet-thumb-inner">
-                <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
