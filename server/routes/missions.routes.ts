@@ -1,6 +1,8 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
+import { getMissionDataRoot } from "../config/missionDataRoot";
+
 type RouteResult = { status: number; body: unknown };
 
 type MissionFamilyView = {
@@ -98,7 +100,7 @@ type MissionBrowserFilterOption = {
   colorKey?: string;
 };
 
-const missionRoot = path.resolve(process.cwd(), "public", "api", "missions");
+const missionRoot = getMissionDataRoot();
 let browserIndexCache: Promise<MissionBrowserIndex> | null = null;
 let browserIndexModifiedAt = 0;
 
@@ -243,7 +245,7 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
     return { status: 200, body: filterBrowserIndex(await loadBrowserIndex(), url) };
   }
 
-  const familyVariantsMatch = pathName.match(/^\/api\/missions\/families\/([^/]+)\/variants$/);
+  const familyVariantsMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)\/variants$/);
   if (familyVariantsMatch) {
     const familyKey = decodeURIComponent(familyVariantsMatch[1] ?? "");
     const index = await loadBrowserIndex();
@@ -252,7 +254,7 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
     return { status: 200, body: await readJson(file) };
   }
 
-  const familyMatch = pathName.match(/^\/api\/missions\/families\/([^/]+)$/);
+  const familyMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)$/);
   if (familyMatch) {
     const familyKey = decodeURIComponent(familyMatch[1] ?? "");
     const index = await loadBrowserIndex();
@@ -261,7 +263,8 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
     return { status: 200, body: await readJson(file) };
   }
 
-  const variantMatch = pathName.match(/^\/api\/missions\/variants\/([^/]+)$/);
+  const variantMatch = pathName.match(/^\/api\/missions\/variant\/([^/]+)$/)
+    ?? pathName.match(/^\/api\/missions\/variants\/([^/]+)$/);
   if (variantMatch) {
     const variantKey = decodeURIComponent(variantMatch[1] ?? "");
     const index = await loadBrowserIndex();

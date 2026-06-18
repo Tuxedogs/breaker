@@ -624,7 +624,7 @@ export async function loadMissionFamilyDetail(familyKey: string): Promise<Missio
   if (!familyDetailPromises.has(familyKey)) {
     familyDetailPromises.set(
       familyKey,
-      fetchJson<MissionFamilyDetailPayload>(`/api/missions/families/${encodeURIComponent(familyKey)}`, "mission family detail")
+      fetchJson<MissionFamilyDetailPayload>(`/api/missions/family/${encodeURIComponent(familyKey)}`, "mission family detail")
         .catch(() => fetchJson<MissionFamilyDetailPayload>(`/api/missions/${file}`, "mission family detail")),
     );
   }
@@ -642,7 +642,7 @@ export async function loadMissionFamilyVariants(familyKey: string): Promise<Miss
   if (!familyVariantPromises.has(familyKey)) {
     familyVariantPromises.set(
       familyKey,
-      fetchJson<MissionFamilyVariantsPayload>(`/api/missions/families/${encodeURIComponent(familyKey)}/variants`, "mission family variants")
+      fetchJson<MissionFamilyVariantsPayload>(`/api/missions/family/${encodeURIComponent(familyKey)}/variants`, "mission family variants")
         .catch(() => fetchJson<MissionFamilyVariantsPayload>(`/api/missions/${file}`, "mission family variants"))
         .then((payload) => payload.variants),
     );
@@ -668,7 +668,7 @@ export async function loadMissionVariantDetail(variantKey: string): Promise<Miss
   if (!variantDetailPromises.has(variantKey)) {
     variantDetailPromises.set(
       variantKey,
-      fetchJson<MissionVariantDetailPayload>(`/api/missions/variants/${encodeURIComponent(variantKey)}`, "mission variant detail")
+      fetchJson<MissionVariantDetailPayload>(`/api/missions/variant/${encodeURIComponent(variantKey)}`, "mission variant detail")
         .catch(() => fetchJson<MissionVariantDetailPayload>(`/api/missions/${file}`, "mission variant detail"))
         .then((payload) => payload.variant),
     );

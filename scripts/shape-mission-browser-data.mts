@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 
@@ -599,13 +599,14 @@ type MissionVariantDetailPayload = {
   variant: ShapedVariant;
 };
 
-const apiRoot = path.resolve("public", "api");
-const missionRoot = path.join(apiRoot, "missions");
+const sourceMissionRoot = path.resolve("public", "api", "missions");
+const missionRoot = path.resolve("server-data", "missions");
+const publicMissionFallbackRoot = sourceMissionRoot;
 const familyRoot = path.join(missionRoot, "families");
 const familyVariantsRoot = path.join(missionRoot, "family-variants");
 const variantRoot = path.join(missionRoot, "variants");
-const contractsPath = path.join(missionRoot, "mission_contracts.json");
-const lookupsPath = path.join(missionRoot, "mission_reward_lookups.json");
+const contractsPath = path.join(sourceMissionRoot, "mission_contracts.json");
+const lookupsPath = path.join(sourceMissionRoot, "mission_reward_lookups.json");
 const refIndexPath = path.resolve("tmp", "scintel-api-candidate", "ref_index.json");
 
 function truthy(value: unknown): boolean {
@@ -3106,4 +3107,32 @@ await Promise.all([
   }),
 ]);
 
-console.log(`Shaped ${families.length} mission families and ${variants.length} variants.`);
+const shapedIndexFiles = [
+  "mission_browser_index.json",
+  "mission_families.json",
+  "mission_variants.json",
+  "mission_browse_groups.json",
+  "mission_rewards.json",
+  "mission_locations.json",
+  "mission_prerequisites.json",
+  "mission_reputation.json",
+  "mission_unresolved_refs.json",
+  "mission_browser_extraction_report.json",
+  "mission_concepts.json",
+  "mission_concept_shaping_report.json",
+  "mission_category_projection_report.json",
+];
+
+async function mirrorShapedToPublicFallback(): Promise<void> {
+  await mkdir(publicMissionFallbackRoot, { recursive: true });
+  for (const fileName of shapedIndexFiles) {
+    await cp(path.join(missionRoot, fileName), path.join(publicMissionFallbackRoot, fileName));
+  }
+  for (const directory of ["families", "family-variants", "variants"] as const) {
+    await cp(path.join(missionRoot, directory), path.join(publicMissionFallbackRoot, directory), { recursive: true });
+  }
+}
+
+await mirrorShapedToPublicFallback();
+
+console.log(`Shaped ${families.length} mission families and ${variants.length} variants into server-data/missions.`);

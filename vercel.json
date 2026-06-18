@@ -9,6 +9,18 @@
       "destination": "/api/user/inventory/locations/[id]"
     },
     {
+      "source": "/api/missions/family/:familyKey/variants",
+      "destination": "/api/missions/family/[familyKey]/variants"
+    },
+    {
+      "source": "/api/missions/family/:familyKey",
+      "destination": "/api/missions/family/[familyKey]"
+    },
+    {
+      "source": "/api/missions/variant/:variantKey",
+      "destination": "/api/missions/variant/[variantKey]"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
