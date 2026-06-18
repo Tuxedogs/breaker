@@ -31,7 +31,9 @@ const dynamicApiPaths = [
 function isDynamicApiPath(pathname: string) {
   return dynamicApiPaths.includes(pathname)
     || pathname.startsWith("/api/fitting/")
+    || pathname.startsWith("/api/missions/family/")
     || pathname.startsWith("/api/missions/families/")
+    || pathname.startsWith("/api/missions/variant/")
     || pathname.startsWith("/api/missions/variants/")
     || pathname.startsWith("/api/user/inventory/stacks/")
     || pathname.startsWith("/api/user/inventory/locations/");

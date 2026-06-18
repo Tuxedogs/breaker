@@ -76,4 +76,25 @@ if (
   process.exit(1);
 }
 
+const serverMissionIndexPath = path.join("server-data", "missions", "mission_browser_index.json");
+try {
+  const serverIndex = JSON.parse(await readFile(serverMissionIndexPath, "utf8")) as {
+    summary?: { familyCount?: number; variantCount?: number };
+    sourceLatestModifiedAt?: string;
+  };
+  if (
+    serverIndex.summary?.familyCount !== 247 ||
+    serverIndex.summary?.variantCount !== 2460 ||
+    !serverIndex.sourceLatestModifiedAt
+  ) {
+    console.error("server-data/missions browser index validation failed.");
+    process.exit(1);
+  }
+} catch (error) {
+  console.error("server-data/missions browser index is missing or unreadable.");
+  console.error(error);
+  process.exit(1);
+}
+
 console.log("public/api contract hygiene check passed.");
+console.log("server-data/missions browser index check passed.");
