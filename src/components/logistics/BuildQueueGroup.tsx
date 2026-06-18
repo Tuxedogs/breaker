@@ -508,6 +508,8 @@ export default function BuildQueueGroup({
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
+        const hasMaterialInputs = inputs.length > 0;
+        const showRecipeUnmappedBadge = !hasMaterialInputs && item.status !== 'complete';
         const isCompletedCraft = item.status === 'complete';
         const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
@@ -647,6 +649,11 @@ export default function BuildQueueGroup({
                 <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
                   {qualitySummary.label}
                 </span>
+                {showRecipeUnmappedBadge ? (
+                  <span className="bq-badge bq-badge--neutral" title="Material requirements are unavailable until this craft is linked to a recipe.">
+                    Recipe not mapped
+                  </span>
+                ) : null}
                    <span className="bq-item-blueprint">
                     {blueprintSources.length === 0
                       ? 'Unknown blueprint'
@@ -689,7 +696,7 @@ export default function BuildQueueGroup({
               </div>
 
               {/* Material table */}
-              {recipe ? (
+              {hasMaterialInputs ? (
               <div className="bq-mat-table">
                 <div className="bq-mat-head" aria-hidden="true">
                   <span>Material</span>
@@ -1025,9 +1032,7 @@ export default function BuildQueueGroup({
                   );
                 })}
               </div>
-            ) : (
-              <div className="bq-empty-inline">No recipe mapped for source selection.</div>
-            )}
+            ) : null}
             </div>{/* bq-item-body */}
           </article>
         );
