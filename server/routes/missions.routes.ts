@@ -1,7 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
-import { getMissionDataRoot } from "../config/missionDataRoot";
+import { getMissionDataRoot } from "../config/missionDataRoot.js";
 
 type RouteResult = { status: number; body: unknown };
 
