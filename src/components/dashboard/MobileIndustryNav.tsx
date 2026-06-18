@@ -26,20 +26,26 @@ const items = [
   {
     to: "/industry/mining",
     label: "Mining",
-    icon: "M14.5 4l5.5 5.5-11 11L3.5 15 14.5 4zM9 9l6 6",
+    icon: [
+      "M3 21l7-7",
+      "M7.5 3.5c3.8-.45 5.2 0.2 9 2.6",
+      "M17.2 5.2c2.8 2.8 3.2 4.6 3.8 9.3",
+      "M18 5.5 9 14.5",
+    ],
     exact: false,
     badge: null,
   },
   {
     to: "/logistics/inventory",
-    label: "Stock",
+    label: "Inventory",
     icon: "M21 16V8l-9-5-9 5v8l9 5 9-5zM3.5 8.5 12 13l8.5-4.5M12 13v8",
     exact: false,
     badge: null,
   },
 ] as const;
 
-function MobileNavIcon({ d }: { d: string }) {
+function MobileNavIcon({ d }: { d: string | readonly string[] }) {
+  const paths = Array.isArray(d) ? d : [d];
   return (
     <svg
       aria-hidden
@@ -51,7 +57,9 @@ function MobileNavIcon({ d }: { d: string }) {
       strokeLinejoin="round"
       className="dash-mobile-nav-icon"
     >
-      <path d={d} />
+      {paths.map((path) => (
+        <path key={path} d={path} />
+      ))}
     </svg>
   );
 }
