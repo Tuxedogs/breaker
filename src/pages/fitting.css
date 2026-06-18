@@ -21,7 +21,7 @@
 
 .fit-console-head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem) minmax(9rem, 11rem) auto;
   gap: 0.75rem;
   align-items: center;
   padding: 0.7rem 0.85rem;
@@ -56,12 +56,14 @@
   white-space: nowrap;
 }
 
-.fit-ship-select {
+.fit-ship-select,
+.fit-icon-mode-select {
   display: grid;
   gap: 0.28rem;
 }
 
-.fit-ship-select select {
+.fit-ship-select select,
+.fit-icon-mode-select select {
   min-height: 2.15rem;
   width: 100%;
   border: 1px solid rgba(125, 205, 239, 0.22);
@@ -164,7 +166,7 @@
 
 .fit-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 0.65rem;
   align-items: center;
   min-height: 3rem;
@@ -243,14 +245,6 @@
 }
 
 .fit-offense-parent span,
-.fit-offense-child span:first-child {
-  overflow: hidden;
-  color: rgba(154, 171, 197, 0.62);
-  font-size: 0.68rem;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .fit-offense-children {
   display: grid;
   gap: 0.25rem;
@@ -261,14 +255,38 @@
 
 .fit-offense-child {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   gap: 0.5rem;
   align-items: center;
 }
 
-.fit-offense-child span:first-child {
+.fit-offense-child > span {
+  overflow: hidden;
   color: rgba(225, 232, 247, 0.84);
   font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fit-component-icon {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 4px;
+  border: 1px solid rgba(128, 154, 190, 0.18);
+  background: rgba(4, 9, 15, 0.72);
+  object-fit: contain;
+  object-position: center;
+}
+
+.fit-component-icon--sm {
+  width: 1.65rem;
+  height: 1.65rem;
+}
+
+.fit-component-icon--placeholder {
+  opacity: 0.72;
+  filter: grayscale(0.35);
 }
 
 .fit-status,
@@ -686,9 +704,11 @@
   gap: 0.28rem;
 }
 
+.fit-mass-list .fit-mass-row,
 .fit-mass-list div {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 0.8rem;
   border-top: 1px solid rgba(128, 154, 190, 0.08);
   padding-top: 0.3rem;

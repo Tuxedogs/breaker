@@ -33,6 +33,8 @@ import { getModifierImpact } from '../../lib/gameplay/propertyUtils';
 import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
+import { BuildQueueProductIcon } from './BuildQueueProductIcon';
+import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -332,6 +334,7 @@ interface Props {
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
   onUpdateAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
+  iconMode: FittingIconMode;
 }
 
 // ─── Quality Slider ──────────────────────────────────────────────────────────
@@ -429,6 +432,7 @@ export default function BuildQueueGroup({
   category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
   materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
+  iconMode,
 }: Props) {
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
@@ -639,35 +643,45 @@ export default function BuildQueueGroup({
             ].filter(Boolean).join(' ')}
           >
 
-            {/* ── Component header: name + controls ── */}
+            {/* ── Component header: summary | product visual | controls ── */}
             <div className="bq-item-sidebar bq-item-header">
-              <div className="bq-item-name-block">
-                <div className="bq-item-name-top">
-                  <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
-                 
+              <div className="bq-item-summary">
+                <div className="bq-item-name-block">
+                  <div className="bq-item-name-top">
+                    <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
+                  </div>
+                  <h2 className="bq-item-name">{itemName}</h2>
                 </div>
-                <h2 className="bq-item-name">{itemName}</h2>
+
+                <div className="bq-item-badges">
+                  {isCompletedCraft && (
+                    <span className="bq-badge bq-badge--complete">Completed Craft</span>
+                  )}
+                  <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
+                    {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
+                  </span>
+                  <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
+                    {qualitySummary.label}
+                  </span>
+                  {showRecipeUnmappedBadge ? (
+                    <span className="bq-badge bq-badge--neutral" title="Material requirements are unavailable until this craft is linked to a recipe.">
+                      Recipe not mapped
+                    </span>
+                  ) : null}
+                  <span className="bq-item-blueprint" title={blueprintLabel}>
+                    {blueprintLabel}
+                  </span>
+                </div>
               </div>
 
-              <div className="bq-item-badges">
-              
-                {isCompletedCraft && (
-                  <span className="bq-badge bq-badge--complete">Completed Craft</span>
-                )}
-                <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
-                  {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
-                </span>
-                <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
-                  {qualitySummary.label}
-                </span>
-                {showRecipeUnmappedBadge ? (
-                  <span className="bq-badge bq-badge--neutral" title="Material requirements are unavailable until this craft is linked to a recipe.">
-                    Recipe not mapped
-                  </span>
-                ) : null}
-                <span className="bq-item-blueprint" title={blueprintLabel}>
-                  {blueprintLabel}
-                </span>
+              <div className="bq-item-visual" aria-hidden="true">
+                <BuildQueueProductIcon
+                  item={item}
+                  recipe={recipe}
+                  preferredMode={iconMode}
+                  layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
+                  alt={itemName}
+                />
               </div>
 
               <div className="bq-item-controls">

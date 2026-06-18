@@ -1,0 +1,184 @@
+/* Shared Scintel filter shell — Mining + Recipe Browser */
+
+.scintel-filter-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  border: 1px solid rgba(137, 161, 176, 0.17);
+  border-radius: 7px;
+  background: linear-gradient(180deg, #10151a 0%, #090c10 100%);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  overflow: visible;
+  width: 100%;
+  font-family: var(--font-primary, Rajdhani, sans-serif);
+}
+
+.scintel-filter-shell--queue {
+  border-color: rgba(255, 153, 0, 0.28);
+}
+
+.scintel-filter-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  min-height: 40px;
+  padding: 6px 12px;
+  border-radius: 7px 7px 0 0;
+}
+
+.scintel-filter-shell:not(.scintel-filter-shell--expanded) .scintel-filter-header {
+  border-radius: 7px;
+}
+
+.scintel-filter-search {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.scintel-filter-search .mfp-search-wrap {
+  max-width: none;
+  width: 100%;
+}
+
+.scintel-filter-header.crb-row--search {
+  border-top: 0;
+}
+
+.scintel-filter-actions {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+}
+
+.scintel-filter-summary {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.62);
+  white-space: nowrap;
+}
+
+.scintel-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+  background: rgba(8, 12, 18, 0.82);
+  color: rgba(203, 213, 225, 0.88);
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s, color 0.14s;
+}
+
+.scintel-filter-toggle:hover {
+  border-color: rgba(255, 153, 0, 0.28);
+  color: rgba(255, 214, 140, 0.95);
+}
+
+.scintel-filter-toggle[aria-expanded="true"] {
+  border-color: rgba(255, 153, 0, 0.34);
+  background: rgba(255, 153, 0, 0.08);
+  color: rgba(255, 214, 140, 0.98);
+}
+
+.scintel-filter-toggle-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.28rem;
+  border-radius: 999px;
+  background: rgba(255, 153, 0, 0.18);
+  color: rgba(255, 214, 140, 0.98);
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.scintel-filter-clear {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid rgba(248, 113, 113, 0.22);
+  border-radius: 4px;
+  background: rgba(248, 113, 113, 0.06);
+  color: rgba(252, 165, 165, 0.9);
+  font-family: inherit;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s;
+}
+
+.scintel-filter-clear:hover {
+  border-color: rgba(248, 113, 113, 0.38);
+  background: rgba(248, 113, 113, 0.12);
+}
+
+.scintel-filter-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.scintel-filter-body .crb-row:first-child {
+  border-top: 0;
+}
+
+.scintel-filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.scintel-filter-label {
+  font-family: var(--font-primary, Rajdhani, sans-serif);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.45);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (max-width: 760px) {
+  .scintel-filter-header {
+    min-height: 0;
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .scintel-filter-toggle,
+  .scintel-filter-clear {
+    min-height: 34px;
+  }
+
+  .scintel-filter-header .scintel-filter-actions > .scintel-filter-toggle,
+  .scintel-filter-header .scintel-filter-actions > .scintel-filter-summary,
+  .scintel-filter-header .scintel-filter-actions > .scintel-filter-clear {
+    display: none;
+  }
+}

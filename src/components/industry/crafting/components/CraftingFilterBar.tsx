@@ -239,6 +239,7 @@ export default function CraftingFilterBar({
   const [materialPickerOpen, setMaterialPickerOpen] = useState(false);
   const [materialDropdownPosition, setMaterialDropdownPosition] = useState({ left: 0, top: 0 });
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [desktopFiltersExpanded, setDesktopFiltersExpanded] = useState(false);
   const [toolbarScrolled, setToolbarScrolled] = useState(false);
   const [drawerMaterialSearch, setDrawerMaterialSearch] = useState("");
   const isMobileLayout = useMobileToolbarLayout();
@@ -306,6 +307,10 @@ export default function CraftingFilterBar({
   useEffect(() => {
     if (!isMobileLayout) setMobileFilterOpen(false);
   }, [isMobileLayout]);
+
+  useEffect(() => {
+    if (!desktopFiltersExpanded) setMaterialPickerOpen(false);
+  }, [desktopFiltersExpanded]);
 
   useEffect(() => {
     if (!mobileFilterOpen) return;
@@ -621,50 +626,74 @@ export default function CraftingFilterBar({
     document.body,
   ) : null;
 
+  const filtersExpanded = isMobileLayout ? mobileFilterOpen : desktopFiltersExpanded;
+  const activeSummaryCount = advancedFilterCount + (savedOnly ? 1 : 0);
+
   return (
     <div
       className={[
+        "scintel-filter-shell",
         "component-browser-toolbar",
+        filtersExpanded ? "scintel-filter-shell--expanded" : "",
         toolbarScrolled ? "crb-toolbar--scrolled" : "",
         mobileFilterOpen ? "crb-toolbar--drawer-open" : "",
       ].filter(Boolean).join(" ")}
       ref={toolbarRef}
     >
 
-      {/* ── Search + desktop bookmarks/count + mobile inline actions when scrolled ── */}
-      <div className="crb-row crb-row--search crb-row--mobile-header">
-        <label className="component-browser-search">
-          <span className="craft-search-icon" aria-hidden="true">/</span>
-          <input
-            type="search"
-            aria-label="Search components"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search components, type, material, GUID..."
-          />
-          <span className="crb-search-slash" aria-hidden="true">/</span>
-        </label>
-        <div className="crb-mobile-inline-actions" aria-label="Recipe browser controls">
+      {/* ── Search + filter toggle + bookmarks/count ── */}
+      <div className="scintel-filter-header crb-row--search crb-row--mobile-header">
+        <div className="scintel-filter-search">
+          <label className="component-browser-search">
+            <span className="craft-search-icon" aria-hidden="true">/</span>
+            <input
+              type="search"
+              aria-label="Search components"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search components, type, material, GUID..."
+            />
+            <span className="crb-search-slash" aria-hidden="true">/</span>
+          </label>
+        </div>
+        <div className="scintel-filter-actions">
+          {hasFilters && !filtersExpanded && !isMobileLayout ? (
+            <span className="scintel-filter-summary">{activeSummaryCount} active</span>
+          ) : null}
           <button
             type="button"
-            className={`crb-filters-btn${advancedFilterCount > 0 ? " crb-filters-btn--active" : ""}`}
-            aria-expanded={mobileFilterOpen}
-            onClick={() => setMobileFilterOpen((open) => !open)}
+            className={[
+              "scintel-filter-toggle",
+              "crb-filters-btn",
+              advancedFilterCount > 0 ? "crb-filters-btn--active" : "",
+            ].filter(Boolean).join(" ")}
+            aria-expanded={filtersExpanded}
+            onClick={() => {
+              if (isMobileLayout) setMobileFilterOpen((open) => !open);
+              else setDesktopFiltersExpanded((open) => !open);
+            }}
           >
-            Filters
-            {advancedFilterCount > 0 ? (
-              <span className="crb-filters-count">{advancedFilterCount}</span>
+            {filtersExpanded ? "Hide" : "Filters"}
+            {activeSummaryCount > 0 ? (
+              <span className="scintel-filter-toggle-count">{activeSummaryCount}</span>
             ) : null}
           </button>
-          <button
-            type="button"
-            className={`crb-bookmarks-btn crb-bookmarks-btn--chip${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
-            aria-pressed={savedOnly}
-            onClick={() => setSavedOnly((value) => !value)}
-          >
-            <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
-            Bookmarked
-          </button>
+          {hasFilters && !filtersExpanded && !isMobileLayout ? (
+            <button type="button" className="scintel-filter-clear" onClick={clearFilters}>
+              Clear
+            </button>
+          ) : null}
+          <div className="crb-mobile-inline-actions" aria-label="Recipe browser controls">
+            <button
+              type="button"
+              className={`crb-bookmarks-btn crb-bookmarks-btn--chip${savedOnly ? " crb-bookmarks-btn--active" : ""}`}
+              aria-pressed={savedOnly}
+              onClick={() => setSavedOnly((value) => !value)}
+            >
+              <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
+              Bookmarked
+            </button>
+          </div>
         </div>
         <button
           type="button"
@@ -682,13 +711,17 @@ export default function CraftingFilterBar({
       <div className="crb-row crb-row--mobile-controls" aria-label="Recipe browser filters">
         <button
           type="button"
-          className={`crb-filters-btn${advancedFilterCount > 0 ? " crb-filters-btn--active" : ""}`}
+          className={[
+            "scintel-filter-toggle",
+            "crb-filters-btn",
+            advancedFilterCount > 0 ? "crb-filters-btn--active" : "",
+          ].filter(Boolean).join(" ")}
           aria-expanded={mobileFilterOpen}
           onClick={() => setMobileFilterOpen((open) => !open)}
         >
-          Filters
-          {advancedFilterCount > 0 ? (
-            <span className="crb-filters-count">{advancedFilterCount}</span>
+          {mobileFilterOpen ? "Hide" : "Filters"}
+          {activeSummaryCount > 0 ? (
+            <span className="scintel-filter-toggle-count">{activeSummaryCount}</span>
           ) : null}
         </button>
         <button
@@ -700,8 +733,15 @@ export default function CraftingFilterBar({
           <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
           Bookmarked
         </button>
+        {hasFilters && !mobileFilterOpen ? (
+          <button type="button" className="scintel-filter-clear" onClick={clearFilters}>
+            Clear
+          </button>
+        ) : null}
       </div>
 
+      {!isMobileLayout && desktopFiltersExpanded ? (
+      <div className="scintel-filter-body">
       {/* ── Desktop: Category groups — Vehicle | FPS ── */}
       <div className="crb-row crb-row--categories crb-row--desktop-filters">
         <div className="crb-category-group crb-category-group--vehicle">
@@ -821,7 +861,32 @@ export default function CraftingFilterBar({
         </div>
       </div>
 
-      {/* ── Row 4: Active Filters (only when filters are set) ── */}
+      {hasFilters && (
+        <div className="crb-row crb-row--active-filters">
+          <span className="crb-section-label crb-active-label--desktop">Active Filters</span>
+          <span className="crb-section-divider crb-active-label--desktop" aria-hidden="true" />
+          {activeFilterTokens.map((tok) => (
+            <button
+              key={`${tok.kind}:${tok.value}`}
+              type="button"
+              className={`crb-token${tok.kind === "material" ? " crb-token--material" : " crb-token--type"}`}
+              onClick={() => removeActiveFilter(tok)}
+            >
+              {(tok.kind === "fps" || tok.kind === "vehicle") && TYPE_ICONS[tok.value]}
+              {tok.label}
+              <span className="crb-token-x" aria-hidden="true">×</span>
+            </button>
+          ))}
+          <button type="button" className="crb-clear-all crb-clear-all--desktop scintel-filter-clear" onClick={clearFilters}>
+            Clear All
+            <span className="crb-clear-all-icon" aria-hidden="true">🗑</span>
+          </button>
+        </div>
+      )}
+      </div>
+      ) : null}
+
+      {/* ── Material picker dropdown (desktop expanded) ── */}
       {materialPickerOpen && (
         <div
           className="crb-material-dropdown crb-material-dropdown--toolbar"
@@ -848,10 +913,8 @@ export default function CraftingFilterBar({
         </div>
       )}
 
-      {hasFilters && (
+      {isMobileLayout && hasFilters && (
         <div className="crb-row crb-row--active-filters">
-          <span className="crb-section-label crb-active-label--desktop">Active Filters</span>
-          <span className="crb-section-divider crb-active-label--desktop" aria-hidden="true" />
           {activeFilterTokens.map((tok) => (
             <button
               key={`${tok.kind}:${tok.value}`}
@@ -864,10 +927,6 @@ export default function CraftingFilterBar({
               <span className="crb-token-x" aria-hidden="true">×</span>
             </button>
           ))}
-          <button type="button" className="crb-clear-all crb-clear-all--desktop" onClick={clearFilters}>
-            Clear All
-            <span className="crb-clear-all-icon" aria-hidden="true">🗑</span>
-          </button>
         </div>
       )}
 
