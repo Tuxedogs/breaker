@@ -1,4 +1,18 @@
 {
+  "functions": {
+    "api/missions/browser.ts": {
+      "includeFiles": "server-data/missions/**"
+    },
+    "api/missions/family/[familyKey].ts": {
+      "includeFiles": "server-data/missions/**"
+    },
+    "api/missions/family/[familyKey]/variants.ts": {
+      "includeFiles": "server-data/missions/**"
+    },
+    "api/missions/variant/[variantKey].ts": {
+      "includeFiles": "server-data/missions/**"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/user/inventory/stacks/:id",
