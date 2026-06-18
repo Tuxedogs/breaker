@@ -58,6 +58,20 @@ function isDrawerToggleExcluded(target: EventTarget | null): boolean {
   return target instanceof HTMLElement && Boolean(target.closest('button,input,select,textarea,[data-bq-row-control="true"]'));
 }
 
+function useIsMobileTouchLayout() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  return isMobile;
+}
+
 // ─── Quantization ────────────────────────────────────────────────────────────
 
 const MATERIAL_QUANTIZATION_URL = '/api/crafting/material_quality_quantization.json';
@@ -419,6 +433,7 @@ export default function BuildQueueGroup({
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
+  const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
   function openQualityEditor(itemId: string, editorKey: string, selectedQuality: number) {
@@ -708,9 +723,9 @@ export default function BuildQueueGroup({
                   return (
                     <section key={group.groupKey} className={`bq-mat-group${group.needTotal > 0 ? ' bq-mat-group--missing' : ''}`}>
                       <div
-                        className="bq-mat-row"
+                        className={`bq-mat-row${isMobileTouchLayout ? ' bq-mat-row--touch' : ''}`}
                         onClick={(event) => {
-                          if (isDrawerToggleExcluded(event.target)) return;
+                          if (isMobileTouchLayout || isDrawerToggleExcluded(event.target)) return;
                           toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
                         }}
                       >
@@ -784,17 +799,32 @@ export default function BuildQueueGroup({
                         </div>
                         <span className={`bq-qty-cell ${materialTypeClass(group.material)}`}>{formatQuantity(group.availableQuantity, group.material)}</span>
                         <span className={`bq-qty-cell${group.needTotal > 0 ? ' bq-qty-cell--short' : ''} ${materialTypeClass(group.material)}`}>{formatQuantity(group.needTotal, group.material)}</span>
-                        <button
-                          type="button"
-                          className={`bq-reserve-btn${qualityExpanded ? ' is-active' : ''}`}
-                          aria-expanded={qualityExpanded}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            openQualityEditor(item.id, group.groupKey, group.selectedQuality);
-                          }}
-                        >
-                          {qualityExpanded ? 'Hide' : 'Quality'}
-                        </button>
+                        <div className="bq-mat-actions" data-bq-row-control="true">
+                          <button
+                            type="button"
+                            className={`bq-reserve-open-btn${reserveExpanded ? ' is-active' : ''}`}
+                            aria-expanded={reserveExpanded}
+                            data-bq-row-control="true"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
+                            }}
+                          >
+                            {reserveExpanded ? 'Hide' : 'Reserve'}
+                          </button>
+                          <button
+                            type="button"
+                            className={`bq-quality-toggle-btn${qualityExpanded ? ' is-active' : ''}`}
+                            aria-expanded={qualityExpanded}
+                            data-bq-row-control="true"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              openQualityEditor(item.id, group.groupKey, group.selectedQuality);
+                            }}
+                          >
+                            {qualityExpanded ? 'Hide' : 'Quality'}
+                          </button>
+                        </div>
                       </div>
 
                       {group.requirements.flatMap((req) => req.staleAllocations).map(({ allocation, staleReason }) => (
@@ -914,20 +944,28 @@ export default function BuildQueueGroup({
                                         </div>
                                       )}
                                     <label className={`bq-stack-line${checked ? ' is-selected' : ''}${isBelowTarget ? ' bq-stack-line--below-target' : ''}`}>
-                                      <input
-                                        type="checkbox"
-                                        className="bq-stack-cb"
-                                        checked={checked}
-                                        disabled={disabled}
-                                        onChange={() => {
-                                          setReserveDrafts((prev) => ({ ...prev, [allocationId]: checked ? '' : String(nextQuantity) }));
-                                        }}
-                                      />
-                                      <span>{stack.location?.name ?? stack.locationId}</span>
-                                      <span>{stack.container ?? '—'}</span>
-                                      <span className={rarityClass(stack.rarity)}>{stack.quality ?? '—'}{isBelowTarget ? ' · Below target' : ''}</span>
-                                      <span className={materialTypeClass(req.material)}>{formatQuantity(availableAfterThisReservation, req.material)} avail</span>
-                                      <span className={materialTypeClass(req.material)}>{formatQuantity(reservedQuantity, req.material)} reserved</span>
+                                      <div className="bq-stack-line-top">
+                                        <input
+                                          type="checkbox"
+                                          className="bq-stack-cb"
+                                          checked={checked}
+                                          disabled={disabled}
+                                          onChange={() => {
+                                            setReserveDrafts((prev) => ({ ...prev, [allocationId]: checked ? '' : String(nextQuantity) }));
+                                          }}
+                                        />
+                                        <span className="bq-stack-location">{stack.location?.name ?? stack.locationId}</span>
+                                        <span className="bq-stack-container">{stack.container ?? '—'}</span>
+                                      </div>
+                                      <span className={`bq-stack-quality ${rarityClass(stack.rarity)}`}>
+                                        Q{stack.quality ?? '—'}{isBelowTarget ? ' · Below target' : ''}
+                                      </span>
+                                      <span className={`bq-stack-available ${materialTypeClass(req.material)}`}>
+                                        {formatQuantity(availableAfterThisReservation, req.material)} SCU avail
+                                      </span>
+                                      <span className={`bq-stack-reserved ${materialTypeClass(req.material)}`}>
+                                        {formatQuantity(reservedQuantity, req.material)} SCU reserved
+                                      </span>
                                       <div className="bq-reserve-input-wrap">
                                         <input
                                           type="text"
@@ -935,6 +973,7 @@ export default function BuildQueueGroup({
                                           className="bq-reserve-amount-input"
                                           value={draftValue}
                                           placeholder="0"
+                                          aria-label={`Reserved SCU for ${stack.location?.name ?? stack.locationId}`}
                                           disabled={disabled}
                                           onBlur={() => {
                                             const parsed = parseDraftNumber(draftValue);
@@ -954,6 +993,16 @@ export default function BuildQueueGroup({
                                         >
                                           Fill
                                         </button>
+                                        {checked ? (
+                                          <button
+                                            type="button"
+                                            className="bq-reserve-clear-row"
+                                            aria-label="Clear reservation for this stack"
+                                            onClick={() => setReserveDrafts((prev) => ({ ...prev, [allocationId]: '' }))}
+                                          >
+                                            −
+                                          </button>
+                                        ) : null}
                                       </div>
                                     </label>
                                     </div>
