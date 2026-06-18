@@ -15,6 +15,10 @@
       "destination": "/api/user/inventory/locations/[id]"
     },
     {
+      "source": "/api/missions/:path*",
+      "destination": "/api/missions/[...path]"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
