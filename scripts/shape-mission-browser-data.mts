@@ -599,11 +599,23 @@ type MissionVariantDetailPayload = {
   variant: ShapedVariant;
 };
 
-const sourceMissionRoot = path.resolve("public", "api", "missions");
+const serverMissionSourceRoot = path.resolve("server-data", "missions", "source");
 const missionRoot = path.resolve("server-data", "missions");
 const familyRoot = path.join(missionRoot, "families");
 const familyVariantsRoot = path.join(missionRoot, "family-variants");
 const variantRoot = path.join(missionRoot, "variants");
+async function resolveMissionSourceRoot(): Promise<string> {
+  try {
+    await readFile(path.join(serverMissionSourceRoot, "mission_contracts.json"), "utf8");
+    return serverMissionSourceRoot;
+  } catch {
+    throw new Error(
+      "Mission source inputs are missing. Expected mission_contracts.json in server-data/missions/source.",
+    );
+  }
+}
+
+const sourceMissionRoot = await resolveMissionSourceRoot();
 const contractsPath = path.join(sourceMissionRoot, "mission_contracts.json");
 const lookupsPath = path.join(sourceMissionRoot, "mission_reward_lookups.json");
 const refIndexPath = path.resolve("tmp", "scintel-api-candidate", "ref_index.json");
@@ -2433,8 +2445,8 @@ const shaped: ShapedCatalog = {
   generatedAt: new Date().toISOString(),
   sourceLatestModifiedAt: catalog.sourceLatestModifiedAt,
   sourceFiles: [
-    "public/api/missions/mission_contracts.json",
-    "public/api/missions/mission_reward_lookups.json",
+    "server-data/missions/source/mission_contracts.json",
+    "server-data/missions/source/mission_reward_lookups.json",
     "tmp/scintel-api-candidate/ref_index.json",
   ],
   summary: {

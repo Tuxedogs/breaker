@@ -1,7 +1,16 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 
 const publicApiRoot = path.resolve("public", "api");
+const missionSourceRoot = path.resolve("server-data", "missions", "source");
+const craftingBlueprintSourcesRoot = path.resolve("server-data", "crafting", "blueprint-sources");
+const forbiddenPublicMissionFiles = new Set([
+  "mission_contracts.json",
+  "mission_extraction_report.json",
+  "mission_blueprint_rewards.json",
+  "blueprint_reward_sources.json",
+  "mission_reward_lookups.json",
+]);
 const forbiddenFilePatterns = [
   /\.bak_/,
   /_audit\.json$/i,
@@ -9,6 +18,7 @@ const forbiddenFilePatterns = [
   /\.(ts|tsx|js|jsx|mjs|cjs|mts|cts|py|ps1|sh)$/i,
 ];
 const forbiddenDirectoryNames = new Set(["server", "scripts"]);
+const maxPublicMissionJsonBytes = 1 * 1024 * 1024;
 
 async function walk(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -30,6 +40,27 @@ async function walk(directory: string): Promise<string[]> {
   return files;
 }
 
+async function validatePublicMissionHygiene(): Promise<void> {
+  const missionsDir = path.join(publicApiRoot, "missions");
+  let entries: Awaited<ReturnType<typeof readdir>>;
+  try {
+    entries = await readdir(missionsDir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith(".json")) continue;
+    const fullPath = path.join(missionsDir, entry.name);
+    const fileStat = await stat(fullPath);
+    if (forbiddenPublicMissionFiles.has(entry.name) || fileStat.size > maxPublicMissionJsonBytes) {
+      console.error("public/api/missions must not contain runtime or build-input mission JSON:");
+      console.error(`- ${path.relative(process.cwd(), fullPath)} (${fileStat.size} bytes)`);
+      process.exit(1);
+    }
+  }
+}
+
 const offenders = await walk(publicApiRoot);
 
 if (offenders.length > 0) {
@@ -40,8 +71,10 @@ if (offenders.length > 0) {
   process.exit(1);
 }
 
-const missionCatalogPath = path.join(publicApiRoot, "missions", "mission_contracts.json");
-const missionReportPath = path.join(publicApiRoot, "missions", "mission_extraction_report.json");
+await validatePublicMissionHygiene();
+
+const missionCatalogPath = path.join(missionSourceRoot, "mission_contracts.json");
+const missionReportPath = path.join(missionSourceRoot, "mission_extraction_report.json");
 const missionCatalog = JSON.parse(await readFile(missionCatalogPath, "utf8")) as {
   sourceLatestModifiedAt?: string;
   records?: Array<{ contractId?: string; familyId?: string; blueprintRewards?: unknown[] }>;
@@ -72,7 +105,7 @@ if (
   missionReport.missionCountWithBlueprintRewards !== 685 ||
   missionReport.missionCountWithoutBlueprintRewards !== 1775
 ) {
-  console.error("Mission API publication validation failed.");
+  console.error("Mission source publication validation failed.");
   process.exit(1);
 }
 
@@ -96,5 +129,21 @@ try {
   process.exit(1);
 }
 
+const craftingIndex = JSON.parse(
+  await readFile(path.join(craftingBlueprintSourcesRoot, "index.json"), "utf8"),
+) as {
+  summary?: { blueprintSourceCount?: number; missionRewardCount?: number };
+};
+if (
+  craftingIndex.summary?.blueprintSourceCount !== 654 ||
+  craftingIndex.summary?.missionRewardCount !== 685
+) {
+  console.error("server-data/crafting/blueprint-sources index validation failed.");
+  process.exit(1);
+}
+
 console.log("public/api contract hygiene check passed.");
+console.log("public/api/missions runtime JSON guard passed.");
+console.log("server-data/missions source check passed.");
 console.log("server-data/missions browser index check passed.");
+console.log("server-data/crafting/blueprint-sources index check passed.");
