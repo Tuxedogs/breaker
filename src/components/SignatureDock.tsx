@@ -142,6 +142,7 @@ export default function SignatureDock() {
 
   const elRef = useRef<HTMLDivElement>(null);
   const presetPickerRef = useRef<HTMLDivElement>(null);
+  const miningIndexLoadedRef = useRef(false);
 
   // ── persist ──────────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -185,10 +186,14 @@ export default function SignatureDock() {
   }, [presetPickerOpen]);
 
   useEffect(() => {
+    if (!open || miningIndexLoadedRef.current) return;
+
     let cancelled = false;
     loadStaticMiningIndex()
       .then((index) => {
-        if (!cancelled) setPresetCatalog(buildSignaturePresetCatalog(index.rows));
+        if (cancelled) return;
+        miningIndexLoadedRef.current = true;
+        setPresetCatalog(buildSignaturePresetCatalog(index.rows));
       })
       .catch((error) => {
         if (import.meta.env.DEV) console.warn("[signature dock] failed to load location presets", error);
@@ -196,7 +201,7 @@ export default function SignatureDock() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [open]);
 
   // ── single shared drag handler ────────────────────────────────────────────────
   const onDrag = useCallback(

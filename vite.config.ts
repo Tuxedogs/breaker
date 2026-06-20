@@ -12,7 +12,7 @@ import { handleRecommenderRoute } from "./server/routes/recommender.routes";
 import { handleBuildQueueRoute } from "./server/routes/buildQueue.routes";
 import { handleFittingRoute } from "./server/routes/fitting.routes";
 import { handleMissionsRoute } from "./server/routes/missions.routes";
-import { handleCraftingBlueprintSourcesRoute } from "./server/routes/craftingBlueprintSources.routes";
+import { runCraftingBlueprintSourcesApiHandler } from "./server/routes/craftingBlueprintSourcesApi";
 import { handleSavedBlueprintsRoute } from "./src/server/user/savedBlueprintsRoute";
 import { handleUserBuildQueueRoute } from "./src/server/user/buildQueueRoute";
 import { handleUserInventoryRoute } from "./src/server/user/inventoryRoute";
@@ -38,9 +38,20 @@ function isCraftingBlueprintSourcesApiPath(pathname: string) {
     || pathname.startsWith("/api/crafting/blueprint-rewards/missions/");
 }
 
+function isComponentCardsApiPath(pathname: string) {
+  return pathname === "/api/crafting/component-cards/index"
+    || pathname === "/api/crafting/component-cards/facets"
+    || pathname === "/api/crafting/component-cards/browse"
+    || /^\/api\/crafting\/component-cards\/[^/]+$/.test(pathname);
+}
+
+function isCraftingShapedApiPath(pathname: string) {
+  return isCraftingBlueprintSourcesApiPath(pathname) || isComponentCardsApiPath(pathname);
+}
+
 function isDynamicApiPath(pathname: string) {
   return dynamicApiPaths.includes(pathname)
-    || isCraftingBlueprintSourcesApiPath(pathname)
+    || isCraftingShapedApiPath(pathname)
     || pathname.startsWith("/api/fitting/")
     || pathname.startsWith("/api/missions/family/")
     || pathname.startsWith("/api/missions/families/")
@@ -111,6 +122,11 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
       response.end(JSON.stringify({ error: "Invalid request body." }));
       return;
     }
+    if (isCraftingShapedApiPath(url)) {
+      await runCraftingBlueprintSourcesApiHandler(request, response);
+      return;
+    }
+
     const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
       ?? (url === "/api/user/saved-blueprints"
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
@@ -118,7 +134,6 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
         ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
         : await handleFittingRoute(request.method ?? "GET", request.url ?? url, body) ??
           await handleMissionsRoute(request.method ?? "GET", request.url ?? url) ??
-          await handleCraftingBlueprintSourcesRoute(request.method ?? "GET", request.url ?? url, body) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
     if (!route) {

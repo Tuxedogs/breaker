@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleComponentCardsRoute } from "./componentCards.routes.js";
 import { handleCraftingBlueprintSourcesRoute } from "./craftingBlueprintSources.routes.js";
 
 function sendJson(
@@ -41,9 +42,20 @@ export async function runCraftingBlueprintSourcesApiHandler(
       }
     }
 
+    const componentCardsResult = await handleComponentCardsRoute(method, rawUrl);
+    if (componentCardsResult) {
+      sendJson(
+        response,
+        componentCardsResult.status,
+        componentCardsResult.body,
+        componentCardsResult.status === 405 ? { allow: "GET" } : undefined,
+      );
+      return;
+    }
+
     const result = await handleCraftingBlueprintSourcesRoute(method, rawUrl, body);
     if (!result) {
-      sendJson(response, 404, { error: "Crafting blueprint source route not found." });
+      sendJson(response, 404, { error: "Crafting route not found." });
       return;
     }
     sendJson(

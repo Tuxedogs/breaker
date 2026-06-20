@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Outlet, useSearchParams } from "react-router-dom";
-import { getComponentCardIndex, type ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { getComponentCardIndex } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
 import CraftingFilterBar from "./components/CraftingFilterBar";
 import {
