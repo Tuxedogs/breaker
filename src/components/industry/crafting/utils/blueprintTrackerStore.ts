@@ -1,8 +1,11 @@
 // Blueprint Tracker shared localStorage keys and data helpers.
 
 import type { ComponentRecipe } from "./craftingTypes";
-import { apiUrl } from "@/lib/apiUrl";
-import { parseJsonResponse } from "@/lib/safeJson";
+import {
+  loadBlueprintReleaseStateMap,
+  loadBlueprintRewardMissionsCatalog,
+  loadBlueprintSourceMissionMap,
+} from "@/lib/craftingBlueprintSourcesApi";
 
 export const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 export const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -322,48 +325,18 @@ function normalizeMission(raw: unknown): MissionBlueprintReward | null {
 }
 
 let missionRewardsCache: Promise<MissionBlueprintReward[]> | null = null;
-let missionReleaseStateMapCache: Promise<Map<string, boolean>> | null = null;
-
-async function loadMissionReleaseStateMap(): Promise<Map<string, boolean>> {
-  if (!missionReleaseStateMapCache) {
-    const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
-    missionReleaseStateMapCache = fetch(url)
-      .then(async (r) => {
-        const data = await parseJsonResponse<unknown>(r, {
-          label: "mission blueprint rewards release state",
-          url,
-        });
-        if (!r.ok) throw new Error(`Mission blueprint rewards unavailable: ${r.status}`);
-        return data;
-      })
-      .then((data) => {
-        const map = new Map<string, boolean>();
-        if (!Array.isArray(data)) return map;
-        for (const item of data) {
-          const mission = asRecord(item);
-          const contractId = mission ? asNonEmptyString(mission.contractId) : undefined;
-          if (mission && contractId) map.set(contractId, isMissionDisabledRecord(mission));
-        }
-        return map;
-      })
-      .catch(() => new Map());
-  }
-  return missionReleaseStateMapCache;
-}
 
 export async function loadMissionBlueprintRewards(): Promise<MissionBlueprintReward[]> {
   if (!missionRewardsCache) {
-    const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
-    missionRewardsCache = fetch(url)
-      .then(async (r) => {
-        const data = await parseJsonResponse<unknown>(r, {
-          label: "mission blueprint rewards",
-          url,
-        });
-        if (!r.ok) throw new Error(`Mission blueprint rewards unavailable: ${r.status}`);
-        return data;
+    missionRewardsCache = loadBlueprintRewardMissionsCatalog()
+      .then(({ missions, normalized }) => {
+        if (normalized) {
+          return missions as MissionBlueprintReward[];
+        }
+        return Array.isArray(missions)
+          ? missions.map(normalizeMission).filter((value): value is MissionBlueprintReward => Boolean(value))
+          : [];
       })
-      .then((data) => Array.isArray(data) ? data.map(normalizeMission).filter((v): v is MissionBlueprintReward => Boolean(v)) : [])
       .catch(() => []);
   }
   return missionRewardsCache;
@@ -484,26 +457,19 @@ let missionMapCache: Promise<Map<string, MissionSourceDetail[]>> | null = null;
 
 export async function loadMissionDetailMap(): Promise<Map<string, MissionSourceDetail[]>> {
   if (!missionMapCache) {
-    const url = apiUrl(MISSION_REWARD_SOURCES_URL);
-    missionMapCache = fetch(url)
-      .then(async (r) => {
-        const data = await parseJsonResponse<unknown>(r, {
-          label: "blueprint reward sources",
-          url,
-        });
-        if (!r.ok) throw new Error(`Mission sources unavailable: ${r.status}`);
-        return data;
-      })
-      .then(async (data) => {
+    missionMapCache = Promise.all([
+      loadBlueprintSourceMissionMap(),
+      loadBlueprintReleaseStateMap(),
+    ])
+      .then(([sourceMap, releaseStateMap]) => {
         const map = new Map<string, MissionSourceDetail[]>();
-        if (!Array.isArray(data)) return map;
-        const releaseStateMap = await loadMissionReleaseStateMap();
-        for (const item of data) {
-          const record = asRecord(item);
-          const blueprintGuid = record ? asNonEmptyString(record.blueprintGuid) : undefined;
-          const missions = record && Array.isArray(record.missions) ? record.missions : [];
-          if (!blueprintGuid) continue;
-          map.set(blueprintGuid, missions.map((mission) => normalizeReverseMission(mission, releaseStateMap)).filter((v): v is MissionSourceDetail => Boolean(v)));
+        for (const [blueprintGuid, missions] of sourceMap.entries()) {
+          map.set(
+            blueprintGuid,
+            missions
+              .map((mission) => normalizeReverseMission(mission, releaseStateMap))
+              .filter((value): value is MissionSourceDetail => Boolean(value)),
+          );
         }
         return map;
       })

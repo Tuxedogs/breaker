@@ -3,6 +3,9 @@
     "api/missions/[...path].ts": {
       "includeFiles": "server-data/missions/{mission_browser_index.json,families/**,family-variants/**,variants/**}",
       "excludeFiles": "server-data/missions/mission_{variants,locations,rewards,prerequisites,families,concepts,reputation,unresolved_refs,browse_groups}.json"
+    },
+    "api/crafting/[...path].ts": {
+      "includeFiles": "server-data/crafting/blueprint-sources/{index.json,release-state.json,by-blueprint/**,missions/catalog.json,missions/by-contract/**}"
     }
   },
   "rewrites": [
@@ -17,6 +20,22 @@
     {
       "source": "/api/missions/:path*",
       "destination": "/api/missions/[...path]"
+    },
+    {
+      "source": "/api/crafting/blueprint-sources",
+      "destination": "/api/crafting/[...path]"
+    },
+    {
+      "source": "/api/crafting/blueprint-sources/index",
+      "destination": "/api/crafting/[...path]"
+    },
+    {
+      "source": "/api/crafting/blueprint-sources/batch",
+      "destination": "/api/crafting/[...path]"
+    },
+    {
+      "source": "/api/crafting/blueprint-rewards/:path*",
+      "destination": "/api/crafting/[...path]"
     },
     {
       "source": "/(.*)",

@@ -30,6 +30,10 @@ import {
 } from "@/lib/gameplay/propertyUtils";
 import { apiUrl } from "@/lib/apiUrl";
 import { parseJsonResponse } from "@/lib/safeJson";
+import {
+  loadBlueprintReleaseStateMap,
+  loadBlueprintSourceMissions,
+} from "@/lib/craftingBlueprintSourcesApi";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import {
   DEFAULT_BAND_INDEX,
@@ -50,8 +54,6 @@ export type { FinalProductQuality } from "../utils/recipeQuality";
 
 const NO_VALUE = "__none__";
 const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
-const MISSION_REWARD_SOURCES_URL = "/api/missions/blueprint_reward_sources.json";
-const MISSION_BLUEPRINT_REWARDS_URL = "/api/missions/mission_blueprint_rewards.json";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -99,11 +101,6 @@ type MissionRewardEntry = {
   source: "mission" | "pool";
 };
 
-type ApiBlueprintMissionSource = {
-  blueprintGuid?: unknown;
-  missions?: unknown;
-};
-
 type ApiBlueprintMission = {
   contractId?: unknown;
   contractTitle?: unknown;
@@ -119,9 +116,6 @@ type ApiBlueprintMission = {
   notForRelease?: unknown;
   workInProgress?: unknown;
 };
-
-let missionRewardSourceMapPromise: Promise<Map<string, MissionRewardEntry[]>> | null = null;
-let missionReleaseStateMapPromise: Promise<Map<string, boolean>> | null = null;
 
 const EMPTY_RECIPE_SIDEBAR_STATE: RecipeSidebarState = {
   search: "",
@@ -235,32 +229,6 @@ function isMissionDisabledRecord(mission: ApiBlueprintMission): boolean {
   return isTruthyFlag(mission.notForRelease) || /\bdisabled\b/i.test([debugName, title].filter(Boolean).join(" "));
 }
 
-async function loadMissionReleaseStateMap(): Promise<Map<string, boolean>> {
-  const url = apiUrl(MISSION_BLUEPRINT_REWARDS_URL);
-  missionReleaseStateMapPromise ??= fetch(url)
-    .then(async (response) => {
-      const data = await parseJsonResponse<unknown>(response, {
-        label: "mission blueprint rewards release state",
-        url,
-      });
-      if (!response.ok) throw new Error(`Mission blueprint rewards unavailable: ${response.status}`);
-      return data;
-    })
-    .then((data) => {
-      const map = new Map<string, boolean>();
-      if (!Array.isArray(data)) return map;
-      for (const value of data) {
-        if (!isRecord(value)) continue;
-        const mission = value as ApiBlueprintMission;
-        const contractId = asNonEmptyString(mission.contractId);
-        if (contractId) map.set(contractId, isMissionDisabledRecord(mission));
-      }
-      return map;
-    })
-    .catch(() => new Map());
-  return missionReleaseStateMapPromise;
-}
-
 function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string, boolean>): MissionRewardEntry | null {
   if (!isRecord(value)) return null;
 
@@ -293,48 +261,6 @@ function normalizeMissionRewardEntry(value: unknown, releaseStateMap: Map<string
     isDisabled,
     source: "mission",
   };
-}
-
-function normalizeMissionSourceRecord(value: unknown, releaseStateMap: Map<string, boolean>): { blueprintGuid: string; entries: MissionRewardEntry[] } | null {
-  if (!isRecord(value)) return null;
-
-  const record = value as ApiBlueprintMissionSource;
-  const blueprintGuid = asNonEmptyString(record.blueprintGuid);
-  if (!blueprintGuid || !Array.isArray(record.missions)) return null;
-
-  const entries = record.missions.flatMap((mission) => {
-    const entry = normalizeMissionRewardEntry(mission, releaseStateMap);
-    return entry ? [entry] : [];
-  });
-
-  return { blueprintGuid, entries };
-}
-
-async function loadMissionRewardSourceMap(): Promise<Map<string, MissionRewardEntry[]>> {
-  const url = apiUrl(MISSION_REWARD_SOURCES_URL);
-  missionRewardSourceMapPromise ??= fetch(url)
-    .then(async (response) => {
-      const data = await parseJsonResponse<unknown>(response, {
-        label: "crafting blueprint reward sources",
-        url,
-      });
-      if (!response.ok) throw new Error(`Mission reward sources unavailable: ${response.status}`);
-      return data;
-    })
-    .then(async (data) => {
-      const map = new Map<string, MissionRewardEntry[]>();
-      if (!Array.isArray(data)) return map;
-      const releaseStateMap = await loadMissionReleaseStateMap();
-
-      for (const value of data) {
-        const record = normalizeMissionSourceRecord(value, releaseStateMap);
-        if (record) map.set(record.blueprintGuid, record.entries);
-      }
-
-      return map;
-    });
-
-  return missionRewardSourceMapPromise;
 }
 
 function buildPoolMissionEntries(
@@ -372,9 +298,16 @@ function useMissionRewardEntries(
       if (!cancelled) setApiEntries(null);
     });
 
-    loadMissionRewardSourceMap()
-      .then((map) => {
-        if (!cancelled) setApiEntries(map.get(recipe.blueprint_id) ?? []);
+    Promise.all([
+      loadBlueprintSourceMissions(recipe.blueprint_id),
+      loadBlueprintReleaseStateMap(),
+    ])
+      .then(([missions, releaseStateMap]) => {
+        if (cancelled) return;
+        const entries = missions
+          .map((mission) => normalizeMissionRewardEntry(mission, releaseStateMap))
+          .filter((entry): entry is MissionRewardEntry => Boolean(entry));
+        setApiEntries(entries);
       })
       .catch(() => {
         if (!cancelled) setApiEntries([]);
