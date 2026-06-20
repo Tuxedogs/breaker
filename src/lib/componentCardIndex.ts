@@ -167,7 +167,7 @@ function logComponentCardIndexLoadFailure(details: {
   });
 }
 
-export async function getComponentCardIndex(): Promise<ComponentCardIndex> {
+export async function getComponentCardIndexFromMonolith(): Promise<ComponentCardIndex> {
   componentCardIndexPromise ??= fetch(COMPONENT_CARD_INDEX_URL).then(async (response) => {
     const requestedUrl = COMPONENT_CARD_INDEX_URL;
     const text = await response.text();
@@ -216,6 +216,6 @@ export async function getComponentCardIndex(): Promise<ComponentCardIndex> {
   return componentCardIndexPromise;
 }
 
-export function clearComponentCardIndexCache(): void {
+export function clearComponentCardIndexMonolithCache(): void {
   componentCardIndexPromise = null;
 }
