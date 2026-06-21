@@ -36,6 +36,7 @@ const CATEGORY_PLACEHOLDER: Record<string, string> = {
   cooler: "/images/component-icons/cooler.webp",
   quantum_drive: "/images/component-icons/quantum_drive.webp",
   quantum: "/images/component-icons/quantum_drive.webp",
+  quantumdrive: "/images/component-icons/quantum_drive.webp",
   power: "/images/component-icons/powerplant.webp",
   powerplant: "/images/component-icons/powerplant.webp",
   radar: "/images/component-icons/turret.webp",

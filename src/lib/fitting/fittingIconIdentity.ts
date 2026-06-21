@@ -25,6 +25,7 @@ const CATEGORY_FALLBACK_KEYS: Record<string, string> = {
   cooler: "cooler",
   quantum_drive: "quantum_drive",
   quantum: "quantum_drive",
+  quantumdrive: "quantum_drive",
   power: "power_plant",
   powerplant: "power_plant",
 };

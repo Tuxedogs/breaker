@@ -1,4 +1,5 @@
 import type { ComponentCardIndexRecord } from "./componentCardIndex";
+import { resolveFittingComponentIcon } from "./fitting/resolveFittingComponentIcon";
 
 // Maps a component record to its fallback icon filename (no extension).
 // Icons live at /images/component-icons/<key>.webp
@@ -84,6 +85,14 @@ export function getComponentCategoryIcon(record: ComponentCardIndexRecord): stri
 }
 
 export function getComponentCategoryIconUrl(record: ComponentCardIndexRecord): string | null {
+  if (record.kind === "vehicle" && record.type === "quantumdrive") {
+    return resolveFittingComponentIcon({
+      componentType: "quantum_drive",
+      componentName: record.name,
+      size: record.size,
+    }).src;
+  }
+
   const key = getComponentCategoryIcon(record);
   return key ? `/images/component-icons/${key}.webp` : null;
 }

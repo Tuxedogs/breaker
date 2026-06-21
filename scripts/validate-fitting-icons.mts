@@ -45,6 +45,30 @@ const cases = [
     expectPath: "s1QuantumDrive_outline-mono",
   },
   {
+    label: "S3 quantum drive auto accent fallback",
+    input: { componentType: "quantum_drive", componentName: "TS-3 Quantum Drive", size: 3, preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "s3QuantumDrive_outline-accent",
+  },
+  {
+    label: "S2 quantum drive keeps S1 icon",
+    input: { componentType: "quantum_drive", componentName: "TS-2 Quantum Drive", size: 2, preferredMode: "auto" as const },
+    expectMode: "mono",
+    expectPath: "s1QuantumDrive_outline-mono",
+  },
+  {
+    label: "S4 quantum drive keeps S1 icon",
+    input: { componentType: "quantum_drive", componentName: "VK-44 Quantum Drive", size: 4, preferredMode: "auto" as const },
+    expectMode: "mono",
+    expectPath: "s1QuantumDrive_outline-mono",
+  },
+  {
+    label: "quantumdrive category S3 via component cards",
+    input: { componentType: "quantumdrive", componentName: "Colossus QD", size: 3, preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "s3QuantumDrive_outline-accent",
+  },
+  {
     label: "Global accent override on cooler",
     input: { componentType: "cooler", componentName: "IcePlunge", size: 1, preferredMode: "accent" as const },
     expectMode: "mono",
