@@ -41,12 +41,11 @@
 }
 
 .mine-page {
- 
- 
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 12px;
   min-height: 100%;
+  padding: 12px;
   box-sizing: border-box;
   min-width: 0;
   overflow-x: clip;
@@ -2404,15 +2403,6 @@
 /* ── 4K / ultra-wide: max-width cap + centering ── */
 
 @media (min-width: 1800px) {
-  .mine-page--v2 {
-    max-width: 2000px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    padding-left: clamp(0.5rem, 2vw, 0.1rem);
-    padding-right: 0.5rem
-  }
-
   .mconsole-layout {
     grid-template-columns: clamp(280px, 16vw, 360px) minmax(0, 1fr);
     gap: 1rem;
@@ -2420,6 +2410,20 @@
 
   .mining-filter-rail {
     padding: 0.5rem 1rem;
+  }
+}
+
+@media (min-width: 2200px) {
+  .mine-page--v2 {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: clamp(0.5rem, 1.5vw, 1.25rem);
+  }
+
+  .mconsole-layout {
+    grid-template-columns: clamp(340px, 18vw, 420px) minmax(0, 1fr);
+    gap: 1.1rem;
   }
 }
 
@@ -2883,10 +2887,7 @@
 /* ── Mining filter compact bar (performance-safe) ─────────────────────── */
 
 .mining-filter-compact {
-  border: 1px solid rgba(137, 161, 176, 0.17);
-  border-radius: 7px;
-  background: #0f1419;
-  overflow: hidden;
+  flex: 0 0 auto;
 }
 
 .mining-filter-compact--queue {
@@ -2894,22 +2895,37 @@
 }
 
 .mining-filter-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.34rem 0.5rem;
-  min-height: 36px;
-  padding: 0.3rem 0.5rem;
+  min-height: 48px;
 }
 
 .mining-filter-search {
-  flex: 1 1 180px;
-  min-width: 140px;
-  max-width: 320px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
-.mining-filter-search .mfp-search-wrap {
-  max-width: none;
+.mining-browser-search {
+  width: 100%;
+}
+
+.mining-browser-search .mfp-search-input {
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+}
+
+.mining-browser-search .mfp-search-input:focus {
+  border: 0;
+  box-shadow: none;
+}
+
+.mining-filter-actions {
+  flex: 0 0 auto;
 }
 
 .mining-filter-active-count {
@@ -2965,22 +2981,59 @@
 }
 
 .mining-filter-toggle {
-  display: inline-grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 4px;
-  background: rgba(8, 12, 18, 0.72);
-  color: rgba(203, 213, 225, 0.78);
-  cursor: pointer;
-  padding: 0;
-  margin-left: auto;
+  width: auto;
+  height: auto;
+  margin-left: 0;
 }
 
-.mining-filter-chevron {
-  font-size: 0.62rem;
-  line-height: 1;
+.mining-scope-switch {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  min-height: 36px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+  background: rgba(8, 12, 18, 0.82);
+}
+
+.mining-scope-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 58px;
+  padding: 0 12px;
+  border: 0;
+  border-left: 1px solid rgba(148, 163, 184, 0.14);
+  background: transparent;
+  color: rgba(203, 213, 225, 0.72);
+  font-family: var(--font-primary);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s, box-shadow 0.14s;
+}
+
+.mining-scope-button:first-child {
+  border-left: 0;
+}
+
+.mining-scope-button:hover {
+  background: rgba(255, 153, 0, 0.06);
+  color: rgba(255, 224, 170, 0.94);
+}
+
+.mining-scope-button--active {
+  background: rgba(255, 153, 0, 0.12);
+  color: rgba(255, 207, 116, 0.98);
+  box-shadow: inset 0 -2px 0 rgba(255, 153, 0, 0.72);
+}
+
+.mining-scope-button--starred.mining-scope-button--active {
+  color: rgba(251, 191, 36, 0.98);
 }
 
 .mining-filter-drawer {
@@ -3201,9 +3254,31 @@
 }
 
 @media (max-width: 760px) {
+  .mine-page {
+    padding: 6px 8px calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
   .mining-filter-bar,
   .mining-filter-drawer {
     padding-inline: 0.45rem;
+  }
+
+  .mining-filter-bar {
+    flex-wrap: wrap;
+  }
+
+  .mining-filter-search {
+    flex-basis: calc(100% - 92px);
+  }
+
+  .mining-scope-switch {
+    width: 100%;
+    order: 3;
+  }
+
+  .mining-scope-button {
+    flex: 1 1 0;
+    min-height: 38px;
   }
 
   .mining-filter-clear,

@@ -319,7 +319,11 @@ export default function MiningModule() {
     setSelectedSystems(new Set());
   }
 
-  const hasActiveFilters = selectedSystems.size > 0 || selectedMaterials.size > 0 || selectedMiningTypes.size > 0 || buildQueueSelectionActive;
+  const hasActiveFilters = selectedSystems.size > 0
+    || selectedMaterials.size > 0
+    || selectedMiningTypes.size > 0
+    || buildQueueSelectionActive
+    || planner.filters.showOnlyStarred;
 
   return (
     <div className="mine-page mine-page--v2">

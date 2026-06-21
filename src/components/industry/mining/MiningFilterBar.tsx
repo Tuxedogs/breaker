@@ -77,61 +77,86 @@ export function MiningFilterBar({
   return (
     <div
       className={[
+        "scintel-filter-shell",
         "mining-filter-compact",
-        buildQueueSelectionActive ? "mining-filter-compact--queue" : "",
+        buildQueueSelectionActive ? "scintel-filter-shell--queue mining-filter-compact--queue" : "",
+        expanded ? "scintel-filter-shell--expanded" : "",
         expanded ? "mining-filter-compact--expanded" : "",
       ].filter(Boolean).join(" ")}
     >
-      <div className="mining-filter-bar">
-        <div className="mining-filter-search">
-          <div className="mfp-search-wrap">
+      <div className="scintel-filter-header mining-filter-bar">
+        <div className="scintel-filter-search mining-filter-search">
+          <label className="component-browser-search mining-browser-search">
+            <span className="craft-search-icon" aria-hidden="true">/</span>
             <input
               type="search"
               className="mfp-search-input"
-              placeholder="Search locations…"
+              aria-label="Search mining locations"
+              placeholder="Search locations..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
             {searchQuery && (
               <button type="button" className="mfp-search-clear" onClick={() => onSearchChange("")} aria-label="Clear search">×</button>
             )}
-          </div>
+            {!searchQuery && <span className="crb-search-slash" aria-hidden="true">/</span>}
+          </label>
         </div>
 
-        {hasActiveFilters && (
-          <span className="mining-filter-active-count">{activeFilterCount} active</span>
-        )}
-
-        {!expanded && activeFilterChips.length > 0 && (
-          <div className="mining-filter-active-chips" aria-label="Active filters">
-            {activeFilterChips.slice(0, 4).map((chip) => (
-              <span key={chip.key} className="mining-filter-active-chip">{chip.label}</span>
-            ))}
-            {activeFilterChips.length > 4 && (
-              <span className="mining-filter-active-chip">+{activeFilterChips.length - 4}</span>
+        <div className="scintel-filter-actions mining-filter-actions">
+          {hasActiveFilters && !expanded && (
+            <span className="scintel-filter-summary">{activeFilterCount} active</span>
+          )}
+          <button
+            type="button"
+            className="scintel-filter-toggle mining-filter-toggle"
+            aria-expanded={expanded}
+            onClick={() => setExpanded((open) => !open)}
+          >
+            {expanded ? "Hide" : "Filters"}
+            {activeFilterCount > 0 && (
+              <span className="scintel-filter-toggle-count">{activeFilterCount}</span>
             )}
-          </div>
-        )}
-
-        {hasActiveFilters && (
-          <button type="button" className="mining-filter-clear" onClick={onClearAllFilters}>
-            Clear
           </button>
-        )}
+          {hasActiveFilters && !expanded && (
+            <button type="button" className="scintel-filter-clear" onClick={onClearAllFilters}>
+              Clear
+            </button>
+          )}
+        </div>
 
-        <button
-          type="button"
-          className="mining-filter-toggle"
-          aria-expanded={expanded}
-          aria-label={expanded ? "Collapse filters" : "Expand filters"}
-          onClick={() => setExpanded((open) => !open)}
-        >
-          <span className="mining-filter-chevron" aria-hidden="true">{expanded ? "▴" : "▾"}</span>
-        </button>
+        <div className="mining-scope-switch" role="group" aria-label="Mining location scope">
+          <button
+            type="button"
+            className={`mining-scope-button mining-scope-button--queue${buildQueueSelectionActive ? " mining-scope-button--active" : ""}`}
+            aria-pressed={buildQueueSelectionActive}
+            onClick={onSelectBuildQueueMaterials}
+          >
+            Queue
+            {buildQueueMaterials.size > 0 && <span className="mfr-chip-count">{buildQueueMaterials.size}</span>}
+          </button>
+          <button
+            type="button"
+            className={`mining-scope-button${scopeIsDefault ? " mining-scope-button--active" : ""}`}
+            aria-pressed={scopeIsDefault}
+            onClick={onClearAllFilters}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            className={`mining-scope-button mining-scope-button--starred${showOnlyStarred ? " mining-scope-button--active" : ""}`}
+            aria-pressed={showOnlyStarred}
+            onClick={onToggleStarred}
+          >
+            <span aria-hidden="true">☆</span>
+            Starred
+          </button>
+        </div>
       </div>
 
       {expanded && (
-        <div className="mining-filter-drawer">
+        <div className="scintel-filter-body mining-filter-drawer">
           <div className="mining-filter-drawer-row">
             <span className="mining-filter-label">System</span>
             <div className="mining-filter-chips" role="group" aria-label="System filters">
@@ -145,34 +170,6 @@ export function MiningFilterBar({
                   {sys}
                 </button>
               ))}
-            </div>
-          </div>
-
-          <div className="mining-filter-drawer-row">
-            <span className="mining-filter-label">Scope</span>
-            <div className="mining-filter-chips" role="group" aria-label="Scope filters">
-              <button
-                type="button"
-                className={`craft-frl-chip craft-frl-chip--sm${scopeIsDefault ? " craft-frl-chip--active" : ""}`}
-                onClick={onClearAllFilters}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                className={`craft-frl-chip craft-frl-chip--sm${buildQueueSelectionActive ? " craft-frl-chip--active mfr-chip--bq" : ""}`}
-                onClick={onSelectBuildQueueMaterials}
-              >
-                Queue
-                {buildQueueMaterials.size > 0 && <span className="mfr-chip-count">{buildQueueMaterials.size}</span>}
-              </button>
-              <button
-                type="button"
-                className={`craft-frl-chip craft-frl-chip--sm${showOnlyStarred ? " craft-frl-chip--active" : ""}`}
-                onClick={onToggleStarred}
-              >
-                Starred
-              </button>
             </div>
           </div>
 

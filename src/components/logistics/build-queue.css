@@ -2389,4 +2389,42 @@
   }
 }
 
+@media (min-width: 2200px) {
+  .bq-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .bq-main {
+    flex: 1 1 0;
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .bq-workspace {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .bq-shortage-panel {
+    max-width: none;
+  }
+
+  .bq-item {
+    grid-template-columns: clamp(300px, 28%, 380px) minmax(0, 1fr);
+  }
+
+  .bq-ledger-panel {
+    position: static;
+    max-height: none;
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
 

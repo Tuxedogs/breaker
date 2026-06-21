@@ -19,9 +19,33 @@
 }
 
 .mb-shell {
-  width: min(1880px, 100%);
+  width: min(var(--dash-content-max-standard, 1880px), 100%);
+  margin-inline: auto;
   display: grid;
   gap: 14px;
+}
+
+@media (min-width: 2200px) {
+  .mb-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: clamp(18px, 1.5vw, 28px) clamp(12px, 2vw, 32px) clamp(24px, 2vw, 36px);
+  }
+
+  .mb-shell {
+    width: 100%;
+    max-width: none;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .mission-group-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 .mb-header {
