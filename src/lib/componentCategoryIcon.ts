@@ -73,7 +73,7 @@ export function getComponentCategoryIcon(record: ComponentCardIndexRecord): stri
 
   if (record.kind === "fps") {
     if (record.type === "armor") {
-      return armorIcon(record.facets.armorSlot, record.facets.armorWeight);
+      return armorIcon(record.facets.armorSlot ?? null, record.facets.armorWeight ?? null);
     }
     if (record.type === "weapons") {
       return WEAPON_CLASS_ICON[record.facets.weaponClass ?? ""] ?? "smg";
