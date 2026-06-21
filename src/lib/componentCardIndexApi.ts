@@ -91,15 +91,45 @@ export async function getComponentCardIndexFromApi(): Promise<ComponentCardIndex
 
 export async function fetchComponentCardById(id: string): Promise<ComponentCardIndexRecord> {
   const normalizedId = id.trim().toLowerCase();
+  if (!normalizedId) {
+    throw new Error("Component card id is required.");
+  }
+
   const response = await fetch(apiUrl(`${COMPONENT_CARD_BY_ID_URL}/${encodeURIComponent(normalizedId)}`));
   const data = await parseJsonResponse<ComponentCardIndexRecord>(response, {
     label: "component card by id",
     url: response.url,
   });
   if (!response.ok) {
-    throw new Error(`Component card not found: ${response.status}`);
+    const message = typeof data === "object" && data !== null && "error" in data && typeof data.error === "string"
+      ? data.error
+      : `Component card not found: ${response.status}`;
+    throw new Error(message);
   }
   return data;
+}
+
+export async function resolveComponentCardById(
+  id: string,
+  browseFallback?: ComponentCardIndexRecord | null,
+): Promise<ComponentCardIndexRecord> {
+  const normalizedId = id.trim().toLowerCase();
+  if (!normalizedId) {
+    if (browseFallback) return browseFallback;
+    throw new Error("Component card id is required.");
+  }
+
+  try {
+    return await fetchComponentCardById(normalizedId);
+  } catch (error) {
+    if (browseFallback && browseFallback.id.trim().toLowerCase() === normalizedId) {
+      if (import.meta.env.DEV) {
+        console.warn("[component-card-index] by-id fetch failed; using browse record.", error);
+      }
+      return browseFallback;
+    }
+    throw error;
+  }
 }
 
 export async function getComponentCardIndex(): Promise<ComponentCardIndex> {

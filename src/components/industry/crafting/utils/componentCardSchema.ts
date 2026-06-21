@@ -273,7 +273,7 @@ function getFallbackIndexStats(record: ComponentCardIndexRecord): ComponentCardM
   pushMetric(stats, "Grade", record.grade);
   pushMetric(stats, "Class", record.class ? titleCase(record.class) : null);
   pushMetric(stats, "Craft", formatCraftTime(record.craftTimeSeconds));
-  if (record.materials.length > 0) pushMetric(stats, "Materials", String(record.materials.length));
+  if ((record.materials?.length ?? 0) > 0) pushMetric(stats, "Materials", String(record.materials?.length));
   return stats;
 }
 

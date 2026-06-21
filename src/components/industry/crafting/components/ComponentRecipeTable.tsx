@@ -46,6 +46,7 @@ import {
   type QualityBand,
 } from "../utils/qualityBands";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { buildComponentCardSchema, buildComponentCardSchemaFromIndex, formatCraftTime, type ComponentCardMetric } from "../utils/componentCardSchema";
 import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
@@ -1974,6 +1975,14 @@ function getAmmoPerformanceStats(componentCardRecord: ComponentCardIndexRecord |
   );
 }
 
+function findBrowseComponentCard(
+  componentCards: ComponentCardIndexRecord[],
+  blueprintId: string,
+): ComponentCardIndexRecord | null {
+  const normalizedId = blueprintId.trim().toLowerCase();
+  return componentCards.find((record) => record.id.trim().toLowerCase() === normalizedId) ?? null;
+}
+
 function findP6LRWeaponRecord(componentCards: ComponentCardIndexRecord[]): ComponentCardIndexRecord | undefined {
   return (
     componentCards.find((record) => record.type === "weapons" && /P6-LR\s+"Blacklist"/i.test(record.name)) ??
@@ -2777,7 +2786,34 @@ function RecipeDrawer({
     .filter((pool) => pool.displayName.trim().length > 0 && !/^unknown|n\/a$/i.test(pool.displayName.trim()));
 
   const displayName = getRecipeDisplayName(selectedRecipe);
-  const selectedComponentCard = componentCards.find((record) => record.id === selectedRecipe.blueprint_id);
+  const browseComponentCard = findBrowseComponentCard(componentCards, selectedRecipe.blueprint_id);
+  const [selectedComponentCard, setSelectedComponentCard] = useState<ComponentCardIndexRecord | undefined>(
+    browseComponentCard ?? undefined,
+  );
+
+  useEffect(() => {
+    const blueprintId = selectedRecipe.blueprint_id;
+    const fallback = findBrowseComponentCard(componentCards, blueprintId);
+    setSelectedComponentCard(fallback ?? undefined);
+
+    let cancelled = false;
+    resolveComponentCardById(blueprintId, fallback)
+      .then((record) => {
+        if (!cancelled) setSelectedComponentCard(record);
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          if (import.meta.env.DEV) {
+            console.warn("[crafting] component card detail fetch failed", error);
+          }
+          setSelectedComponentCard(fallback ?? undefined);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [componentCards, selectedRecipe.blueprint_id]);
 
   const totalModifiers = useMemo(
     () => computeTotalModifiers(selectedRecipe, getBandsForMaterial, getBandIndex),
