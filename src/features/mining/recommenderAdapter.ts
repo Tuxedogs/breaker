@@ -471,7 +471,8 @@ export async function getMiningRecommendations(
 ): Promise<RecommendationResponse> {
   const url = apiUrl("/api/recommender/recommendations");
 
-  if (recommenderUnavailable) {
+  // No Vercel recommender route exists in production yet; dev/preview still POSTs via Vite middleware.
+  if (import.meta.env.PROD || recommenderUnavailable) {
     return getStaticMiningRecommendations(request);
   }
 
