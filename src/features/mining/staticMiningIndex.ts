@@ -123,6 +123,7 @@ const MATERIAL_QUALITY_INDEX_URL = "/api/recommendations/material_quality_index.
 const LOCATION_DISTRIBUTION_INDEX_URL = "/api/recommendations/location_distribution_index.json";
 const LOCATION_HIERARCHY_INDEX_URL = "/api/recommendations/location_hierarchy_index.json";
 
+let resolvedCache: StaticMiningIndex | null = null;
 let loadPromise: Promise<StaticMiningIndex> | null = null;
 
 function normalizeExact(value: string | null | undefined): string {
@@ -914,16 +915,23 @@ function buildStaticMiningIndex(
 }
 
 export async function loadStaticMiningIndex(): Promise<StaticMiningIndex> {
-  loadPromise ??= Promise.all([
-    fetchRequiredJsonArray<StaticLocationMaterialRow>(LOCATION_INDEX_URL),
-    fetchRequiredJsonArray<StaticMaterialEncounterRankingRow>(MATERIAL_RANKINGS_URL),
-    fetchRequiredJsonArray<StaticMaterialQualityRow>(MATERIAL_QUALITY_INDEX_URL),
-    fetchRequiredJsonArray<StaticLocationDistributionRow>(LOCATION_DISTRIBUTION_INDEX_URL),
-    fetchRequiredJsonObject<StaticLocationHierarchyIndex>(LOCATION_HIERARCHY_INDEX_URL),
-  ]).then(([rows, rankings, qualityRows, distributionRows, locationHierarchy]) =>
-    buildStaticMiningIndex(rows, rankings, qualityRows, distributionRows, locationHierarchy)
-  ).finally(() => {
-    loadPromise = null;
-  });
+  if (resolvedCache) return resolvedCache;
+  if (!loadPromise) {
+    loadPromise = Promise.all([
+      fetchRequiredJsonArray<StaticLocationMaterialRow>(LOCATION_INDEX_URL),
+      fetchRequiredJsonArray<StaticMaterialEncounterRankingRow>(MATERIAL_RANKINGS_URL),
+      fetchRequiredJsonArray<StaticMaterialQualityRow>(MATERIAL_QUALITY_INDEX_URL),
+      fetchRequiredJsonArray<StaticLocationDistributionRow>(LOCATION_DISTRIBUTION_INDEX_URL),
+      fetchRequiredJsonObject<StaticLocationHierarchyIndex>(LOCATION_HIERARCHY_INDEX_URL),
+    ])
+      .then(([rows, rankings, qualityRows, distributionRows, locationHierarchy]) => {
+        resolvedCache = buildStaticMiningIndex(rows, rankings, qualityRows, distributionRows, locationHierarchy);
+        return resolvedCache;
+      })
+      .catch((error: unknown) => {
+        loadPromise = null;
+        throw error;
+      });
+  }
   return loadPromise;
 }
