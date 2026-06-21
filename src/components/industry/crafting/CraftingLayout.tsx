@@ -128,7 +128,9 @@ export default function CraftingLayout() {
     <CraftingContext.Provider value={contextValue}>
       <div className="craft-page craft-planner-shell component-results-browser">
         <CraftingFilterBar records={componentCards} resultCount={resultCount} />
-        <Outlet />
+        <div className="component-browser-body">
+          <Outlet />
+        </div>
       </div>
     </CraftingContext.Provider>
   );

@@ -12,6 +12,7 @@ import ArmorThresholdIcon from "@/assets/sidebar-icons/10-armor-threshold.svg?re
 import ComponentMappingIcon from "@/assets/sidebar-icons/11-component-mapping.svg?react";
 import BlueprintTrackerIcon from "@/assets/sidebar-icons/12-blueprint-tracker.svg?react";
 import LoginWithDiscordButton from "../auth/LoginWithDiscordButton";
+import { useSignatureDock } from "@/lib/useSignatureDock";
 
 // ── Inline icon primitives ─────────────────────────────────────────
 function Icon({ d, size = 15 }: { d: string; size?: number }) {
@@ -47,6 +48,25 @@ function SidebarSvgIcon({
       height={size}
       className="dash-sidebar-icon"
     />
+  );
+}
+
+function SignatureDockToggleIcon() {
+  return (
+    <svg
+      aria-hidden
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="discord-btn-leading-icon"
+    >
+      <path d={ICONS.crosshair} />
+    </svg>
   );
 }
 
@@ -220,6 +240,7 @@ export default function DashboardSidebar() {
   }, [highContrast]);
 
   const { tip, show, hide } = useNavTooltip(collapsed);
+  const { enabled: signatureDockEnabled, toggleEnabled } = useSignatureDock();
 
   function isActive(to: string, exact = false) {
     return exact
@@ -297,6 +318,29 @@ export default function DashboardSidebar() {
             onMouseLeave={hide}
             collapsed={collapsed}
           />
+
+          <button
+            type="button"
+            className={[
+              "discord-btn",
+              "discord-btn--signed-in",
+              "dash-sidebar-sdock-toggle",
+              collapsed ? "discord-btn--icon" : "",
+              signatureDockEnabled ? "dash-sidebar-sdock-toggle--on" : "",
+            ].filter(Boolean).join(" ")}
+            aria-pressed={signatureDockEnabled}
+            aria-label="Toggle Signature Dock"
+            title={signatureDockEnabled ? "Hide Signature Dock" : "Show Signature Dock"}
+            onClick={toggleEnabled}
+            onMouseEnter={(e) => show(e, signatureDockEnabled ? "Hide Signature Dock" : "Show Signature Dock")}
+            onMouseLeave={hide}
+          >
+            <SignatureDockToggleIcon />
+            {!collapsed && <span className="discord-btn-label">Signature Dock</span>}
+            {!collapsed && (
+              <span className="discord-btn-status">{signatureDockEnabled ? "on" : "off"}</span>
+            )}
+          </button>
 
           {/* Bottom controls */}
           <div className="dash-sidebar-footer-controls">

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import DashboardShell from "./components/dashboard/DashboardShell";
 import SignatureDock from "./components/SignatureDock";
+import { SignatureDockProvider } from "./lib/SignatureDockProvider";
 import OnlinePersistenceCoordinator from "./components/logistics/OnlinePersistenceCoordinator";
 import { AuthSessionProvider } from "./lib/auth/useAuthSession";
 
@@ -101,8 +102,9 @@ export default function App() {
   return (
     <AuthSessionProvider>
       <OnlinePersistenceCoordinator />
-      <SignatureDock />
-      <Routes>
+      <SignatureDockProvider>
+        <SignatureDock />
+        <Routes>
         <Route index element={<RedirectToDashboard />} />
         <Route path="home" element={<RedirectToDashboard />} />
         <Route path="index" element={<RedirectToDashboard />} />
@@ -260,7 +262,8 @@ export default function App() {
 
         <Route path="*" element={<RedirectToDashboard />} />
 
-      </Routes>
+        </Routes>
+      </SignatureDockProvider>
     </AuthSessionProvider>
   );
 }
