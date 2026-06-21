@@ -4,6 +4,7 @@ import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
+import { getShipWeaponBadgeClassName } from "../utils/shipWeaponCardDisplay";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -50,37 +51,58 @@ export default function ComponentResultCard({
     : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
   const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
+  const isShipWeapon = record?.type === "weaponGun" || recipe?.component_type === "weaponGun";
   const location = useLocation();
 
   return (
-    <article className="component-result-card">
+    <article className={`component-result-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
       <Link
         className="component-result-card__hit"
         to={`/industry/crafting/${schema.id}`}
         state={{ from: location.pathname + location.search }}
       >
-        <span className="component-result-card__topline">
-          <span className="component-result-card__kind">{schema.typeLabel}</span>
-          {iconUrl ? (
-            <img
-              src={iconUrl}
-              alt=""
-              aria-hidden="true"
-              className="component-result-card__cat-icon"
-            />
-          ) : (
-            <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
-          )}
-        </span>
+        {isShipWeapon ? (
+          <div className="component-result-card__title-row">
+            <h3 className="component-result-card__title">{schema.displayName}</h3>
+            {iconUrl ? (
+              <img
+                src={iconUrl}
+                alt=""
+                aria-hidden="true"
+                className="component-result-card__cat-icon"
+              />
+            ) : (
+              <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
+            )}
+          </div>
+        ) : (
+          <>
+            <span className="component-result-card__topline">
+              <span className="component-result-card__kind">{schema.typeLabel}</span>
+              {iconUrl ? (
+                <img
+                  src={iconUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="component-result-card__cat-icon"
+                />
+              ) : (
+                <span className="component-result-card__id">{schema.id.slice(0, 8)}</span>
+              )}
+            </span>
 
-        <h3 className="component-result-card__title">{schema.displayName}</h3>
+            <h3 className="component-result-card__title">{schema.displayName}</h3>
+          </>
+        )}
 
-        <div className="component-result-card__subline">
-          <span>{schema.kindLabel}</span>
-          {record?.type && <span>{record.type}</span>}
-          {recipe?.component_type && <span>{recipe.component_type}</span>}
-          {schema.categoryLabel && schema.categoryLabel !== (record?.type ?? recipe?.component_type) && <span>{schema.categoryLabel}</span>}
-        </div>
+        {record?.type !== "weaponGun" && (
+          <div className="component-result-card__subline">
+            <span>{schema.kindLabel}</span>
+            {record?.type && <span>{record.type}</span>}
+            {recipe?.component_type && <span>{recipe.component_type}</span>}
+            {schema.categoryLabel && schema.categoryLabel !== (record?.type ?? recipe?.component_type) && <span>{schema.categoryLabel}</span>}
+          </div>
+        )}
 
         {schema.meta.length > 0 && (
           <div className="component-card-metrics component-card-metrics--meta">
@@ -98,10 +120,20 @@ export default function ComponentResultCard({
           </div>
         )}
 
-        {schema.modifierLabels.length > 0 && (
-          <div className="component-card-modifiers" aria-label="Quality modifier labels">
+        {(schema.classificationBadges?.length ?? 0) > 0 && (
+          <div className="component-card-modifiers" aria-label="Weapon classification">
+            {schema.classificationBadges?.map((badge) => (
+              <span key={badge.label} className={getShipWeaponBadgeClassName(badge.variant)}>
+                {badge.label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {!isShipWeapon && schema.modifierLabels.length > 0 && (
+          <div className="component-card-craft-modifiers" aria-label="Crafting modifier labels">
             {schema.modifierLabels.map((label) => (
-              <span key={label}>{label}</span>
+              <span key={label} className="component-card-craft-modifier">{label}</span>
             ))}
           </div>
         )}

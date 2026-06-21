@@ -2,6 +2,12 @@ import type { ComponentRecipe } from "./craftingTypes";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentDisplayName } from "./componentDisplayNames";
 import { formatProperty } from "./qualityModifiers";
+import {
+  buildShipWeaponBrowsePresentation,
+  extractShipWeaponTypeBadge,
+  formatShipWeaponDamageTypeBadge,
+  type ShipWeaponBrowseBadge,
+} from "./shipWeaponCardDisplay";
 
 export type ComponentCardMetric = {
   label: string;
@@ -25,6 +31,7 @@ export type ComponentCardSchema = {
   genericStats: ComponentCardMetric[];
   familyStats: ComponentCardMetric[];
   modifierLabels: string[];
+  classificationBadges?: ShipWeaponBrowseBadge[];
   materialsPreview: ComponentCardMaterialPreview[];
 };
 
@@ -230,7 +237,8 @@ function getFamilyStats(recipe: ComponentRecipe, familyVariantCounts: Map<string
 function getModifierLabels(recipe: ComponentRecipe): string[] {
   const allowModifierLabels =
     recipe.item_kind === "fps" ||
-    recipe.component_type === "powerplant";
+    recipe.component_type === "powerplant" ||
+    recipe.component_type === "weaponGun";
   if (!allowModifierLabels) return [];
 
   const seen = new Set<string>();
@@ -245,6 +253,8 @@ function getModifierLabels(recipe: ComponentRecipe): string[] {
 }
 
 function getIndexGenericStats(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  if (record.type === "weaponGun") return [];
+
   const generic = getStatsObject(record, "generic");
   if (!generic) return [];
 
@@ -255,6 +265,8 @@ function getIndexGenericStats(record: ComponentCardIndexRecord): ComponentCardMe
 }
 
 function getIndexMeta(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  if (record.type === "weaponGun") return [];
+
   const meta: ComponentCardMetric[] = [];
   const craftTime = formatCraftTime(record.craftTimeSeconds);
 
@@ -335,14 +347,8 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
   if (type === "weaponGun") {
     const weapon = getStatsObject(record, "shipWeapon");
     if (!weapon) return stats;
-    pushMetric(stats, "Damage Type", formatToken(weapon.damageType));
     pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
-    pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
-    pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
-    pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(weapon.calculatedRange, "m"));
     pushMetric(stats, "Projectile Speed", formatCompactNumber(weapon.projectileSpeed, " m/s"));
-    pushMetric(stats, "Charge Time", formatCompactNumber(weapon.chargeTime, "s"));
-    pushMetric(stats, "Cooling Rate", formatCompactNumber(weapon.coolingRate));
     return stats;
   }
 
@@ -461,12 +467,73 @@ export function buildFamilyVariantCounts(recipes: ComponentRecipe[]): Map<string
   return new Map([...byFamily.entries()].map(([key, values]) => [key, values.size]));
 }
 
+export function buildShipWeaponDetailStatRows(record: ComponentCardIndexRecord): ComponentCardMetric[] {
+  const weapon = getStatsObject(record, "shipWeapon");
+  const generic = getStatsObject(record, "generic");
+  if (!weapon) return [];
+
+  const stats: ComponentCardMetric[] = [];
+  const weaponTypeBadge = extractShipWeaponTypeBadge(record.name);
+  if (record.size !== null) pushMetric(stats, "Size", `S${record.size}`);
+  pushMetric(stats, "Grade", record.grade ?? null);
+  pushMetric(stats, "Class", record.class ? titleCase(record.class) : null);
+  pushMetric(stats, "Craft Time", formatCraftTime(record.craftTimeSeconds));
+  pushMetric(stats, "Weapon Type", weaponTypeBadge);
+  pushMetric(stats, "Damage Type", formatShipWeaponDamageTypeBadge(weapon.damageType) ?? formatToken(weapon.damageType));
+  pushMetric(stats, "Alpha Damage", formatCompactNumber(weapon.alphaDamageTotal));
+  pushMetric(stats, "Fire Rate", formatCompactNumber(weapon.fireRateRpm, " rpm"));
+  pushMetric(stats, "Projectile Speed", formatCompactNumber(weapon.projectileSpeed, " m/s"));
+  pushMetric(stats, "Projectile Range / Max Travel", formatCompactNumber(weapon.calculatedRange, "m"));
+  pushMetric(stats, "Stated Range", formatCompactNumber(weapon.statedRange, "m"));
+  pushMetric(stats, "Ammo Capacity", formatCompactNumber(weapon.ammoCapacity));
+  pushMetric(stats, "Ammo Cost Per Shot", formatCompactNumber(weapon.ammoCostPerShot));
+  pushMetric(stats, "Charge Time", formatCompactNumber(weapon.chargeTime, "s"));
+  pushMetric(stats, "Physical Damage", formatCompactNumber(weapon.damagePhysical));
+  pushMetric(stats, "Energy Damage", formatCompactNumber(weapon.damageEnergy));
+  pushMetric(stats, "Distortion Damage", formatCompactNumber(weapon.damageDistortion));
+  pushMetric(stats, "Thermal Damage", formatCompactNumber(weapon.damageThermal));
+  pushMetric(stats, "Biochemical Damage", formatCompactNumber(weapon.damageBiochemical));
+  pushMetric(stats, "Stun Damage", formatCompactNumber(weapon.damageStun));
+  pushMetric(stats, "Penetration", formatCompactNumber(weapon.penetration));
+  pushMetric(stats, "Penetration Distance", formatCompactNumber(weapon.penetrationDistance, "m"));
+  pushMetric(stats, "Damage Falloff Start", formatCompactNumber(weapon.damageFalloffMinDistance, "m"));
+  pushMetric(stats, "Damage Falloff Range", formatCompactNumber(weapon.damageFalloffDropRange, "m"));
+  pushMetric(stats, "Damage Falloff Max", formatCompactNumber(weapon.damageFalloffMaxDistance, "m"));
+  pushMetric(stats, "Heat Per Shot", formatCompactNumber(weapon.heatPerShot));
+  pushMetric(stats, "Heat Generation", formatCompactNumber(weapon.heatGeneration));
+  pushMetric(stats, "Heat Capacity", formatCompactNumber(weapon.heatCapacity));
+  pushMetric(stats, "Cooling Rate", formatCompactNumber(weapon.coolingRate));
+  pushMetric(stats, "Wear Per Shot", formatCompactNumber(weapon.wearPerShot));
+  pushMetric(stats, "Power", formatPair(weapon.powerUsageMin, weapon.powerUsageMax));
+  pushMetric(stats, "Coolant", formatPair(weapon.coolantUsageMin, weapon.coolantUsageMax));
+  pushMetric(stats, "Online EM", formatCompactNumber(weapon.onlineEmSignature));
+  pushMetric(stats, "Online IR", formatCompactNumber(weapon.onlineIrSignature));
+  pushMetric(stats, "Firing EM", formatCompactNumber(weapon.firingEmSignature));
+  pushMetric(stats, "Firing IR", formatCompactNumber(weapon.firingIrSignature));
+
+  if (generic) {
+    pushMetric(stats, "Component HP", formatCompactNumber(generic.health));
+    pushMetric(stats, "Mass", formatCompactNumber(generic.mass));
+    pushMetric(stats, "EM Signature", formatCompactNumber(generic.emSignature));
+    pushMetric(stats, "IR Signature", formatCompactNumber(generic.irSignature));
+    pushMetric(stats, "Distortion Maximum", formatCompactNumber(generic.distortionMaximum));
+  }
+
+  return stats;
+}
+
 export function buildComponentCardSchemaFromIndex(
   record: ComponentCardIndexRecord,
+  options?: { preserveDisplayName?: boolean },
 ): ComponentCardSchema {
+  const weapon = record.type === "weaponGun" ? getStatsObject(record, "shipWeapon") : null;
+  const weaponClassification = record.type === "weaponGun" && !options?.preserveDisplayName
+    ? buildShipWeaponBrowsePresentation(record, weapon?.damageType)
+    : null;
+
   return {
     id: record.id,
-    displayName: record.name,
+    displayName: weaponClassification?.displayName ?? record.name,
     typeLabel: record.typeLabel,
     kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: record.category === record.kind ? undefined : record.category,
@@ -474,6 +541,7 @@ export function buildComponentCardSchemaFromIndex(
     genericStats: getIndexGenericStats(record),
     familyStats: getIndexFamilyStats(record),
     modifierLabels: record.card.badges,
+    classificationBadges: weaponClassification?.badges,
     materialsPreview: record.card.materialsPreview.map((material, index) => ({
       slot: `${index}`,
       cost_id: `${record.id}:${index}:${material.name}`,
