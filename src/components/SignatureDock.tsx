@@ -7,35 +7,15 @@ import {
   resolveSignaturePresetMaterialKeys,
 } from "../data/signaturePresets";
 import { loadStaticMiningIndex } from "../features/mining/staticMiningIndex";
+import { useSignatureDock } from "../lib/useSignatureDock";
+import {
+  loadSignatureDockState,
+  saveSignatureDockState,
+  type SignatureDockPersistedState,
+} from "../lib/signatureDockState";
 import "./SignatureDock.css";
 
-// ── persistence ──────────────────────────────────────────────────────────────
-const LS_KEY = "sdock_state";
 const presetSearchPlaceholder = "Search location...";
-
-interface PersistedState {
-  open: boolean;
-  minimized: boolean;
-  fontWeight?: number;
-  fontSize: number;
-  pos: { x: number; y: number } | null;
-  activeIds: number[];
-  activePresetId?: string | null;
-  activeMaterialKeys?: string[];
-  isPresetModified?: boolean;
-}
-
-function loadState(): PersistedState {
-  try {
-    const raw = localStorage.getItem(LS_KEY);
-    if (raw) return JSON.parse(raw) as PersistedState;
-  } catch { /* ignore */ }
-  return { open: false, minimized: false, fontWeight: 800, fontSize: 12, pos: null, activeIds: [] };
-}
-
-function saveState(s: PersistedState) {
-  try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch { /* ignore */ }
-}
 
 // ── drag helper ───────────────────────────────────────────────────────────────
 function clamp(v: number, lo: number, hi: number) {
@@ -121,7 +101,8 @@ function signatureRowKey(index: number) {
 
 // ── component ─────────────────────────────────────────────────────────────────
 export default function SignatureDock() {
-  const [init] = useState<PersistedState>(() => loadState());
+  const { enabled } = useSignatureDock();
+  const [init] = useState<SignatureDockPersistedState>(() => loadSignatureDockState());
   const isMobileViewport = useIsMobileSignatureViewport();
 
   const [open, setOpen]           = useState(init.open);
@@ -146,7 +127,8 @@ export default function SignatureDock() {
 
   // ── persist ──────────────────────────────────────────────────────────────────
   useEffect(() => {
-    saveState({
+    saveSignatureDockState({
+      enabled,
       open,
       minimized,
       fontWeight,
@@ -159,7 +141,7 @@ export default function SignatureDock() {
       activeMaterialKeys: Array.from(activeMaterialKeys),
       isPresetModified,
     });
-  }, [open, minimized, fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, isPresetModified]);
+  }, [enabled, open, minimized, fontWeight, fontSize, pos, activePresetId, activeMaterialKeys, isPresetModified]);
 
   // ── viewport clamp on resize ─────────────────────────────────────────────────
   useEffect(() => {
@@ -186,7 +168,7 @@ export default function SignatureDock() {
   }, [presetPickerOpen]);
 
   useEffect(() => {
-    if (!open || miningIndexLoadedRef.current) return;
+    if (!enabled || !open || miningIndexLoadedRef.current) return;
 
     let cancelled = false;
     loadStaticMiningIndex()
@@ -201,7 +183,7 @@ export default function SignatureDock() {
     return () => {
       cancelled = true;
     };
-  }, [open]);
+  }, [enabled, open]);
 
   // ── single shared drag handler ────────────────────────────────────────────────
   const onDrag = useCallback(
@@ -418,7 +400,7 @@ export default function SignatureDock() {
   const showStrip = !open || minimized;
   const showPanel = open && !minimized;
 
-  if (isMobileViewport) return null;
+  if (!enabled || isMobileViewport) return null;
 
   // ── render ───────────────────────────────────────────────────────────────────
   const content = (
