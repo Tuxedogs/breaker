@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { getDb } from "../../db/client";
-import { userSavedBlueprints } from "../../db/schema";
+import { getDb } from "../../db/client.js";
+import { userSavedBlueprints } from "../../db/schema.js";
 
 export type SaveBlueprintPayload = {
   blueprintId: string;
