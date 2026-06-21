@@ -1,10 +1,10 @@
-import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId.js";
 import {
   deleteSavedBlueprint,
   listSavedBlueprints,
   normalizeBlueprintId,
   saveBlueprint,
-} from "./savedBlueprintsService";
+} from "./savedBlueprintsService.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;
@@ -69,6 +69,7 @@ export async function handleSavedBlueprintsRoute(
     if (error instanceof TypeError) {
       return safeError(400, error.message);
     }
+    console.error("[api/user/saved-blueprints] Database request failed.", error);
     return safeError(500, "Database request failed.");
   }
 }
