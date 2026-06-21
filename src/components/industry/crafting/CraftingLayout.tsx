@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Outlet, useSearchParams } from "react-router-dom";
-import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCardIndex } from "@/lib/componentCardIndexApi";
 import { CraftingContext } from "./CraftingContext";
 import CraftingFilterBar from "./components/CraftingFilterBar";
@@ -27,6 +27,7 @@ function matchesSearch(record: ComponentCardIndexRecord, tokens: string[]): bool
 
 export default function CraftingLayout() {
   const [componentCards, setComponentCards] = useState<ComponentCardIndexRecord[]>([]);
+  const [componentCardFacets, setComponentCardFacets] = useState<ComponentCardIndex["facets"] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
@@ -37,6 +38,7 @@ export default function CraftingLayout() {
       .then((index) => {
         if (!cancelled) {
           setComponentCards(index.records);
+          setComponentCardFacets(index.facets);
           setLoading(false);
         }
       })
@@ -118,8 +120,8 @@ export default function CraftingLayout() {
   }, [componentCards, loading, searchParams]);
 
   const contextValue = useMemo(
-    () => ({ componentCards, loading, error }),
-    [componentCards, loading, error],
+    () => ({ componentCards, componentCardFacets, loading, error }),
+    [componentCards, componentCardFacets, loading, error],
   );
 
   return (

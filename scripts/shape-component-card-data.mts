@@ -35,11 +35,61 @@ function recordFileName(id: string): string {
   return `${id.toLowerCase()}.json`;
 }
 
+function asRecord(value: unknown): JsonRecord | null {
+  return typeof value === "object" && value !== null && !Array.isArray(value) ? value as JsonRecord : null;
+}
+
 function toBrowseSlim(record: JsonRecord): JsonRecord {
-  const slim = { ...record };
-  delete slim.source;
-  delete slim.description;
-  delete slim.descriptionSourceKey;
+  const facets = asRecord(record.facets);
+  const card = asRecord(record.card);
+  const sort = asRecord(record.sort);
+
+  const slimFacets: JsonRecord = {};
+  if (facets) {
+    if (Array.isArray(facets.materials)) slimFacets.materials = facets.materials;
+    if (Array.isArray(facets.materialNames)) slimFacets.materialNames = facets.materialNames;
+    if ("weaponClass" in facets) slimFacets.weaponClass = facets.weaponClass;
+    if ("armorSlot" in facets) slimFacets.armorSlot = facets.armorSlot;
+    if ("armorWeight" in facets) slimFacets.armorWeight = facets.armorWeight;
+    if ("ammoClass" in facets) slimFacets.ammoClass = facets.ammoClass;
+  }
+
+  const slimCard: JsonRecord = {};
+  if (card) {
+    if (Array.isArray(card.badges)) slimCard.badges = card.badges;
+    if (Array.isArray(card.materialsPreview)) slimCard.materialsPreview = card.materialsPreview;
+  }
+
+  const slimSort: JsonRecord = {};
+  if (sort) {
+    if (typeof sort.name === "string") slimSort.name = sort.name;
+    if (typeof sort.type === "string") slimSort.type = sort.type;
+  }
+
+  const slim: JsonRecord = {
+    id: record.id,
+    name: record.name,
+    kind: record.kind,
+    category: record.category,
+    type: record.type,
+    typeLabel: record.typeLabel,
+    size: record.size,
+    grade: record.grade,
+    class: record.class,
+    craftTimeSeconds: record.craftTimeSeconds,
+    searchText: record.searchText,
+    stats: record.stats,
+  };
+
+  if (record.family !== undefined) slim.family = record.family;
+  if (record.familyKey !== undefined) slim.familyKey = record.familyKey;
+  if (record.variantName !== undefined) slim.variantName = record.variantName;
+  if (record.manufacturer !== undefined) slim.manufacturer = record.manufacturer;
+
+  if (Object.keys(slimFacets).length > 0) slim.facets = slimFacets;
+  if (Object.keys(slimCard).length > 0) slim.card = slimCard;
+  if (Object.keys(slimSort).length > 0) slim.sort = slimSort;
+
   return slim;
 }
 

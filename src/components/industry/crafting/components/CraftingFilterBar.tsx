@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
-import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { useCraftingContext } from "../CraftingContext";
 
 const PistolIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -98,17 +99,31 @@ type ActiveFilterToken = FilterOption & {
   kind: "fps" | "vehicle" | "size" | "grade" | "class" | "material" | "saved";
 };
 
-function buildMaterialOptions(records: ComponentCardIndexRecord[]): FilterOption[] {
+function buildMaterialOptions(
+  materialFacets: ComponentCardIndex["facets"]["materials"] | undefined,
+  records: ComponentCardIndexRecord[],
+): FilterOption[] {
   const byName = new Map<string, FilterOption>();
-  for (const record of records) {
-    for (const material of record.materials ?? []) {
-      const label = material.name?.trim();
-      if (!label) continue;
-      const value = material.costId ?? material.materialId ?? label;
-      const key = value.toLowerCase();
-      if (!byName.has(key)) byName.set(key, { value, label });
+
+  if (materialFacets?.length) {
+    for (const material of materialFacets) {
+      const label = material.label?.trim();
+      const value = material.value?.trim();
+      if (!label || !value) continue;
+      byName.set(value.toLowerCase(), { value, label });
+    }
+  } else {
+    for (const record of records) {
+      for (const material of record.materials ?? []) {
+        const label = material.name?.trim();
+        if (!label) continue;
+        const value = material.costId ?? material.materialId ?? label;
+        const key = value.toLowerCase();
+        if (!byName.has(key)) byName.set(key, { value, label });
+      }
     }
   }
+
   const groups = buildResourceGroups([...byName.values()].map((o) => ({ id: o.value, label: o.label })));
   return [
     ...groups.shipAndHarvestable,
@@ -148,6 +163,7 @@ export default function CraftingFilterBar({
   records: ComponentCardIndexRecord[];
   resultCount: number;
 }) {
+  const { componentCardFacets } = useCraftingContext();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -381,7 +397,10 @@ export default function CraftingFilterBar({
     return CLASS_FILTER_ORDER.filter((o) => values.has(o.value));
   }, [records]);
 
-  const materialOptions = useMemo(() => buildMaterialOptions(records), [records]);
+  const materialOptions = useMemo(
+    () => buildMaterialOptions(componentCardFacets?.materials, records),
+    [componentCardFacets?.materials, records],
+  );
 
   const drawerMaterialOptions = useMemo(() => {
     const query = drawerMaterialSearch.trim().toLowerCase();
