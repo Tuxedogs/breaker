@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import ComponentResultCard from "./ComponentResultCard";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
@@ -11,8 +11,31 @@ import {
 
 const SAVED_BLUEPRINT_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
-const DEFAULT_RESULTS_PER_PAGE = 18;
+const MOBILE_TABLET_RESULTS_PER_PAGE = 18;
+const DESKTOP_RESULTS_PER_PAGE = 40;
+const DESKTOP_MIN_WIDTH = 981;
 
+function resolveResultsPerPage(viewportWidth: number): number {
+  return viewportWidth >= DESKTOP_MIN_WIDTH
+    ? DESKTOP_RESULTS_PER_PAGE
+    : MOBILE_TABLET_RESULTS_PER_PAGE;
+}
+
+function useResultsPerPage(): number {
+  const [resultsPerPage, setResultsPerPage] = useState(() => {
+    if (typeof window === "undefined") return MOBILE_TABLET_RESULTS_PER_PAGE;
+    return resolveResultsPerPage(window.innerWidth);
+  });
+
+  useEffect(() => {
+    const update = () => setResultsPerPage(resolveResultsPerPage(window.innerWidth));
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return resultsPerPage;
+}
 function readStoredStringSet(key: string): Set<string> {
   if (typeof window === "undefined" || !window.localStorage) return new Set();
   try {
@@ -98,15 +121,17 @@ export default function ComponentResultsBrowser({
   }, [searchParams]);
   const savedOnly = searchParams.get("bk") === "1";
   const page = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
+  const resultsPerPage = useResultsPerPage();
 
-  const setPage = (value: number | ((prev: number) => number)) => {
-    const next = typeof value === "function" ? value(page) : value;
+  const setPage = useCallback((value: number | ((prev: number) => number)) => {
     setSearchParams((prev) => {
       const p = new URLSearchParams(prev);
+      const currentPage = Math.max(1, Number(p.get("pg") ?? "1") || 1);
+      const next = typeof value === "function" ? value(currentPage) : value;
       if (next <= 1) { p.delete("pg"); } else { p.set("pg", String(next)); }
       return p;
     }, { replace: true });
-  };
+  }, [setSearchParams]);
 
   const [savedBlueprintIds, setSavedBlueprintIds] = useState<Set<string>>(
     () => readStoredStringSet(SAVED_BLUEPRINT_STORAGE_KEY),
@@ -206,24 +231,49 @@ export default function ComponentResultsBrowser({
     if (id) navigate(`/industry/crafting/${id}${location.search}`, { replace: true });
   }, [loading, groupedRecords, navigate, location.search]);
 
-  const totalPages = Math.max(1, Math.ceil(groupedRecords.length / DEFAULT_RESULTS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(groupedRecords.length / resultsPerPage));
   const visiblePage = Math.min(page, totalPages);
-  const pageStart = (visiblePage - 1) * DEFAULT_RESULTS_PER_PAGE;
+  const pageStart = (visiblePage - 1) * resultsPerPage;
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages, setPage]);
+
   const pageRecords = useMemo(
-    () => groupedRecords.slice(pageStart, pageStart + DEFAULT_RESULTS_PER_PAGE),
-    [groupedRecords, pageStart],
+    () => groupedRecords.slice(pageStart, pageStart + resultsPerPage),
+    [groupedRecords, pageStart, resultsPerPage],
   );
 
   if (loading) {
-    return <ComponentBrowserState title="Loading" body="Component blueprints are loading." />;
+    return (
+      <div className="component-browser-results">
+        <div className="component-results-scroll">
+          <ComponentBrowserState title="Loading" body="Component blueprints are loading." />
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <ComponentBrowserState title="Error" body={error} />;
+    return (
+      <div className="component-browser-results">
+        <div className="component-results-scroll">
+          <ComponentBrowserState title="Error" body={error} />
+        </div>
+      </div>
+    );
   }
 
   if (groupedRecords.length === 0) {
-    return <ComponentBrowserState title="No Results" body="No craftable components match the current browser filters." />;
+    return (
+      <div className="component-browser-results">
+        <div className="component-results-scroll">
+          <ComponentBrowserState title="No Results" body="No craftable components match the current browser filters." />
+        </div>
+      </div>
+    );
   }
 
   if (groupedRecords.length === 1) {
@@ -231,18 +281,20 @@ export default function ComponentResultsBrowser({
   }
 
   return (
-    <>
-      <section className="component-results-grid" aria-label="Component results">
-        {pageRecords.map((record) => (
-          <ComponentResultCard
-            key={record.id}
-            record={record}
-            queued={isRecipeQueued(record)}
-            saved={savedBlueprintIds.has(record.id)}
-            variantCount={variantCountMap.get(record.id)}
-          />
-        ))}
-      </section>
+    <div className="component-browser-results">
+      <div className="component-results-scroll">
+        <section className="component-results-grid" aria-label="Component results">
+          {pageRecords.map((record) => (
+            <ComponentResultCard
+              key={record.id}
+              record={record}
+              queued={isRecipeQueued(record)}
+              saved={savedBlueprintIds.has(record.id)}
+              variantCount={variantCountMap.get(record.id)}
+            />
+          ))}
+        </section>
+      </div>
 
       <footer className="component-browser-pager" aria-label="Component results pages">
         <span className="component-browser-page-readout">
@@ -268,6 +320,6 @@ export default function ComponentResultsBrowser({
           </button>
         </div>
       </footer>
-    </>
+    </div>
   );
 }

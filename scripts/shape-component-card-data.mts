@@ -18,8 +18,43 @@ type SourceIndex = {
 };
 
 const sourcePath = path.resolve("public", "api", "crafting", "component_card_index.json");
+const blueprintsPath = path.resolve("public", "api", "crafting", "blueprints.json");
 const outputRoot = getComponentCardsRoot();
 const byIdRoot = path.join(outputRoot, "by-id");
+
+type BlueprintRecord = {
+  blueprintGuid?: unknown;
+  componentType?: unknown;
+  qualityModifiers?: Array<{ gameplayProperty?: unknown }> | null;
+};
+
+function formatModifierProperty(raw: string): string {
+  return raw.replace(/^GPP_/, "").replace(/_/g, " ");
+}
+
+function buildWeaponModifierBadgeMap(blueprints: BlueprintRecord[]): Map<string, string[]> {
+  const map = new Map<string, string[]>();
+
+  for (const blueprint of blueprints) {
+    if (blueprint.componentType !== "weaponGun") continue;
+
+    const id = normalizeId(blueprint.blueprintGuid);
+    if (!id) continue;
+
+    const seen = new Set<string>();
+    const labels: string[] = [];
+    for (const modifier of blueprint.qualityModifiers ?? []) {
+      const raw = typeof modifier.gameplayProperty === "string" ? modifier.gameplayProperty.trim() : "";
+      if (!raw || seen.has(raw)) continue;
+      seen.add(raw);
+      labels.push(formatModifierProperty(raw));
+    }
+
+    if (labels.length > 0) map.set(id, labels);
+  }
+
+  return map;
+}
 
 function isGuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
@@ -39,7 +74,186 @@ function asRecord(value: unknown): JsonRecord | null {
   return typeof value === "object" && value !== null && !Array.isArray(value) ? value as JsonRecord : null;
 }
 
-function toBrowseSlim(record: JsonRecord): JsonRecord {
+const BROWSE_GENERIC_STAT_FIELDS = ["mass", "health"] as const;
+
+const BROWSE_TYPE_STAT_FIELDS: Record<string, readonly string[]> = {
+  shield: [
+    "maxShieldHealth",
+    "regenRate",
+    "damageRegenDelay",
+    "downedRegenDelay",
+    "physicalAbsorption",
+    "physicalResistance",
+    "powerUsageMin",
+    "powerUsageMax",
+    "coolantUsageMin",
+    "coolantUsageMax",
+  ],
+  quantumDrive: [
+    "normalJumpSpeed",
+    "spoolTime",
+    "cooldown",
+    "quantumFuelRequirement",
+    "quantumFuelConsumptionRate",
+    "calibrationRequirementMin",
+    "calibrationRequirementMax",
+    "powerUsageMin",
+    "powerUsageMax",
+    "coolantUsageMin",
+    "coolantUsageMax",
+  ],
+  cooler: [
+    "coolantGeneration",
+    "powerUsageMin",
+    "powerUsageMax",
+    "selfRepairTime",
+    "onlineEmSignature",
+    "onlineIrSignature",
+  ],
+  powerPlant: [
+    "powerGeneration",
+    "heatGeneration",
+    "coolantUsageMin",
+    "coolantUsageMax",
+    "selfRepairTime",
+    "onlineEmSignature",
+    "onlineIrSignature",
+  ],
+  shipWeapon: [
+    "damageType",
+    "alphaDamageTotal",
+    "fireRateRpm",
+    "ammoCapacity",
+    "calculatedRange",
+    "projectileSpeed",
+  ],
+  fpsWeapon: [
+    "weaponClass",
+    "fireMode",
+    "fireRateRpm",
+    "ammoCapacity",
+    "chargeTime",
+    "alphaDamageTotal",
+    "dps",
+    "hardRange",
+    "projectileLifetimeTravel",
+    "calculatedRange",
+    "falloffGraphStatus",
+    "damageDropMinDistance",
+    "damageDropPerMeter",
+    "damageDropMinDamage",
+    "attachments",
+  ],
+  fpsArmor: [
+    "armorSlot",
+    "armorWeight",
+    "physicalResistance",
+    "energyResistance",
+    "temperatureMin",
+    "temperatureMax",
+    "storageCapacity",
+    "mass",
+  ],
+  fpsAmmo: [
+    "ammoClass",
+    "compatibleWeaponClass",
+    "magazineCapacity",
+    "alphaDamageTotal",
+    "hardRange",
+    "projectileLifetimeTravel",
+    "calculatedRange",
+    "projectileSpeed",
+    "damageDropMinDistance",
+    "damageDropPerMeter",
+    "damageDropMinDamage",
+    "penetrationBaseDistance",
+  ],
+  radar: [
+    "pingCooldown",
+    "aimAssistRangeMin",
+    "aimAssistRangeMax",
+    "powerUsageMin",
+    "powerUsageMax",
+    "coolantUsageMin",
+    "coolantUsageMax",
+    "onlineEmSignature",
+    "onlineIrSignature",
+  ],
+  miningLaser: [
+    "miningPower",
+    "extractionPower",
+    "instabilityModifier",
+    "resistanceModifier",
+    "fractureWindowSize",
+    "laserRange",
+    "beamRange",
+    "compatibleConsumables",
+    "powerUsageMin",
+    "powerUsageMax",
+    "heatGeneration",
+    "wearRate",
+  ],
+  weaponMining: [
+    "miningPower",
+    "extractionPower",
+    "instabilityModifier",
+    "resistanceModifier",
+    "fractureWindowSize",
+    "laserRange",
+    "beamRange",
+    "compatibleConsumables",
+    "powerUsageMin",
+    "powerUsageMax",
+    "heatGeneration",
+    "wearRate",
+  ],
+};
+
+function pickRecordFields(record: JsonRecord, fields: readonly string[]): JsonRecord {
+  const picked: JsonRecord = {};
+  for (const field of fields) {
+    if (field in record) picked[field] = record[field];
+  }
+  return picked;
+}
+
+function slimAttachmentPreview(value: unknown): unknown {
+  if (!Array.isArray(value)) return value;
+  return value.map((item) => {
+    const attachment = asRecord(item);
+    if (!attachment) return item;
+    const slim: JsonRecord = {};
+    if ("type" in attachment) slim.type = attachment.type;
+    if (Array.isArray(attachment.subTypes)) slim.subTypes = attachment.subTypes;
+    return slim;
+  });
+}
+
+function toBrowseStats(record: JsonRecord): JsonRecord | undefined {
+  const stats = asRecord(record.stats);
+  if (!stats) return undefined;
+
+  const slim: JsonRecord = {};
+  const generic = asRecord(stats.generic);
+  if (generic) {
+    const slimGeneric = pickRecordFields(generic, BROWSE_GENERIC_STAT_FIELDS);
+    if (Object.keys(slimGeneric).length > 0) slim.generic = slimGeneric;
+  }
+
+  for (const [group, fields] of Object.entries(BROWSE_TYPE_STAT_FIELDS)) {
+    const groupStats = asRecord(stats[group]);
+    if (!groupStats) continue;
+    const picked = pickRecordFields(groupStats, fields);
+    if (group === "fpsWeapon" && "attachments" in groupStats) {
+      picked.attachments = slimAttachmentPreview(groupStats.attachments);
+    }
+    if (Object.keys(picked).length > 0) slim[group] = picked;
+  }
+
+  return Object.keys(slim).length > 0 ? slim : undefined;
+}
+
+function toBrowseSlim(record: JsonRecord, weaponModifierBadges: Map<string, string[]>): JsonRecord {
   const facets = asRecord(record.facets);
   const card = asRecord(record.card);
   const sort = asRecord(record.sort);
@@ -56,7 +270,12 @@ function toBrowseSlim(record: JsonRecord): JsonRecord {
 
   const slimCard: JsonRecord = {};
   if (card) {
-    if (Array.isArray(card.badges)) slimCard.badges = card.badges;
+    let badges = Array.isArray(card.badges) ? [...card.badges] : [];
+    if (record.type === "weaponGun" && badges.length === 0) {
+      const id = normalizeId(record.id);
+      if (id) badges = weaponModifierBadges.get(id) ?? badges;
+    }
+    if (badges.length > 0) slimCard.badges = badges;
     if (Array.isArray(card.materialsPreview)) slimCard.materialsPreview = card.materialsPreview;
   }
 
@@ -78,8 +297,10 @@ function toBrowseSlim(record: JsonRecord): JsonRecord {
     class: record.class,
     craftTimeSeconds: record.craftTimeSeconds,
     searchText: record.searchText,
-    stats: record.stats,
   };
+
+  const browseStats = toBrowseStats(record);
+  if (browseStats) slim.stats = browseStats;
 
   if (record.family !== undefined) slim.family = record.family;
   if (record.familyKey !== undefined) slim.familyKey = record.familyKey;
@@ -99,6 +320,8 @@ async function writeJson(filePath: string, value: unknown): Promise<void> {
 }
 
 const source = JSON.parse(await readFile(sourcePath, "utf8")) as SourceIndex;
+const blueprints = JSON.parse(await readFile(blueprintsPath, "utf8")) as BlueprintRecord[];
+const weaponModifierBadges = buildWeaponModifierBadgeMap(blueprints);
 const warnings: string[] = [];
 const sourceRecords = Array.isArray(source.records) ? source.records : [];
 
@@ -137,7 +360,7 @@ for (const [index, rawRecord] of sourceRecords.entries()) {
 
   const relativeFile = path.join("by-id", recordFileName(id)).replace(/\\/g, "/");
   recordFiles[id] = relativeFile;
-  browseRecords.push(toBrowseSlim(rawRecord));
+  browseRecords.push(toBrowseSlim(rawRecord, weaponModifierBadges));
 
   await writeJson(path.join(outputRoot, relativeFile), rawRecord);
 }

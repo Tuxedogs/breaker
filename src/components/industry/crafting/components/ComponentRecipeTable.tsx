@@ -47,7 +47,13 @@ import {
 } from "../utils/qualityBands";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
-import { buildComponentCardSchema, buildComponentCardSchemaFromIndex, formatCraftTime, type ComponentCardMetric } from "../utils/componentCardSchema";
+import {
+  buildComponentCardSchema,
+  buildComponentCardSchemaFromIndex,
+  buildShipWeaponDetailStatRows,
+  formatCraftTime,
+  type ComponentCardMetric,
+} from "../utils/componentCardSchema";
 import { hasSupabaseConfig, signInWithDiscord } from "@/lib/supabaseClient";
 import { deleteUserBlueprint, fetchSavedBlueprints, saveUserBlueprint } from "@/lib/userSavedBlueprints";
 
@@ -1721,7 +1727,11 @@ function buildDetailStatRows(record: ComponentCardIndexRecord | undefined): Comp
     return rows;
   }
 
-  return buildComponentCardSchemaFromIndex(record).familyStats;
+  if (record.type === "weaponGun") {
+    return buildShipWeaponDetailStatRows(record);
+  }
+
+  return buildComponentCardSchemaFromIndex(record, { preserveDisplayName: true }).familyStats;
 }
 
 type DetailStatModifier = {
@@ -2353,7 +2363,7 @@ function ItemSummaryPanel({
   p6lrReference?: P6LRReference;
 }) {
   const schema = componentCardRecord
-    ? buildComponentCardSchemaFromIndex(componentCardRecord)
+    ? buildComponentCardSchemaFromIndex(componentCardRecord, { preserveDisplayName: true })
     : buildComponentCardSchema(recipe);
   const identityRows: ComponentCardMetric[] = componentCardRecord
     ? [
@@ -2366,9 +2376,14 @@ function ItemSummaryPanel({
     : [];
   const stats = buildDetailStatRows(componentCardRecord);
   const modifiedStats = buildModifiedDetailStatRows(recipe, componentCardRecord, stats, totalModifiers);
-  const secondaryStats = componentCardRecord
-    ? buildComponentCardSchemaFromIndex(componentCardRecord).genericStats
-    : [];
+  const secondaryStats = componentCardRecord?.type === "weaponGun"
+    ? []
+    : componentCardRecord
+      ? buildComponentCardSchemaFromIndex(componentCardRecord, { preserveDisplayName: true }).genericStats
+      : [];
+  const statsSectionLabel = componentCardRecord?.type === "weaponGun"
+    ? "Weapon Performance"
+    : `${componentCardRecord?.typeLabel ?? schema.typeLabel} Stats`;
   const graphData =
     buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
     buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
@@ -2380,7 +2395,7 @@ function ItemSummaryPanel({
 
         {modifiedStats.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
-            <div className="craft-summary-section-label">{componentCardRecord?.typeLabel ?? schema.typeLabel} Stats</div>
+            <div className="craft-summary-section-label">{statsSectionLabel}</div>
             <div className="craft-detail-stat-list">
               {modifiedStats.map((stat) => (
                 <span key={`${stat.label}:${stat.value}`} className="craft-detail-stat-row">
