@@ -359,6 +359,33 @@
   width: 100%;
 }
 
+.discord-btn-leading-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.dash-sidebar-sdock-toggle .discord-btn-status {
+  color: rgba(160, 180, 220, 0.45);
+}
+
+.dash-sidebar-sdock-toggle--on {
+  background: rgba(255, 138, 0, 0.12);
+  border-color: rgba(255, 138, 0, 0.3);
+  color: rgba(255, 196, 130, 0.95);
+}
+
+.dash-sidebar-sdock-toggle--on:hover:not(:disabled) {
+  background: rgba(255, 138, 0, 0.2);
+  border-color: rgba(255, 138, 0, 0.5);
+  color: #ffe0b8;
+}
+
+.dash-sidebar-sdock-toggle--on .discord-btn-status {
+  color: rgba(255, 170, 70, 0.9);
+}
+
 .discord-account-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -792,7 +819,8 @@
 /* ── Scrollable content area ──────────────────── */
 
 :root {
-
+  --dash-viewport-wide-min: 2200px;
+  --dash-content-max-standard: 1880px;
 }
 
 .dash-content {
@@ -838,17 +866,26 @@
 }
 
 .dash-content:has(> .dash-content-frame > .craft-page),
-.dash-content:has(> .dash-content-frame > .mine-page) {
+.dash-content:has(> .dash-content-frame > .mine-page),
+.dash-content:has(> .dash-content-frame > .bq-page),
+.dash-content:has(> .dash-content-frame > .rp-page),
+.dash-content:has(> .dash-content-frame > .mb-page) {
   overflow: hidden;
 }
 
 .dash-content:has(> .dash-content-frame > .craft-page) > .dash-content-frame,
-.dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame {
+.dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame,
+.dash-content:has(> .dash-content-frame > .bq-page) > .dash-content-frame,
+.dash-content:has(> .dash-content-frame > .rp-page) > .dash-content-frame,
+.dash-content:has(> .dash-content-frame > .mb-page) > .dash-content-frame {
   height: 100%;
   min-height: 0;
 }
 
-.dash-content-frame > .mine-page {
+.dash-content-frame > .mine-page,
+.dash-content-frame > .bq-page,
+.dash-content-frame > .rp-page,
+.dash-content-frame > .mb-page {
   flex: 1 1 0;
   min-height: 0;
   height: 0;

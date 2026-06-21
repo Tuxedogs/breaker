@@ -70,6 +70,28 @@
   align-items: start;
 }
 
+@media (min-width: 2200px) {
+  .rp-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    padding: clamp(0.9rem, 1.2vw, 1.75rem);
+  }
+
+  .rp-layout {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+    grid-template-columns: minmax(280px, 0.82fr) minmax(0, 2.35fr) minmax(300px, 0.95fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+}
+
 .rp-panel {
   min-width: 0;
   border: 1px solid var(--rp-border);
