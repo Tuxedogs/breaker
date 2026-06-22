@@ -269,13 +269,16 @@ function toBrowseSlim(record: JsonRecord, weaponModifierBadges: Map<string, stri
   }
 
   const slimCard: JsonRecord = {};
+  let modifierLabels = Array.isArray(card?.modifierLabels)
+    ? [...card.modifierLabels]
+    : Array.isArray(card?.badges) ? [...card.badges] : [];
+  if (record.type === "weaponGun" && modifierLabels.length === 0) {
+    const id = normalizeId(record.id);
+    if (id) modifierLabels = weaponModifierBadges.get(id) ?? modifierLabels;
+  }
+  slimCard.modifierLabels = modifierLabels;
+  if (modifierLabels.length > 0) slimCard.badges = modifierLabels;
   if (card) {
-    let badges = Array.isArray(card.badges) ? [...card.badges] : [];
-    if (record.type === "weaponGun" && badges.length === 0) {
-      const id = normalizeId(record.id);
-      if (id) badges = weaponModifierBadges.get(id) ?? badges;
-    }
-    if (badges.length > 0) slimCard.badges = badges;
     if (Array.isArray(card.materialsPreview)) slimCard.materialsPreview = card.materialsPreview;
   }
 
@@ -308,7 +311,7 @@ function toBrowseSlim(record: JsonRecord, weaponModifierBadges: Map<string, stri
   if (record.manufacturer !== undefined) slim.manufacturer = record.manufacturer;
 
   if (Object.keys(slimFacets).length > 0) slim.facets = slimFacets;
-  if (Object.keys(slimCard).length > 0) slim.card = slimCard;
+  slim.card = slimCard;
   if (Object.keys(slimSort).length > 0) slim.sort = slimSort;
 
   return slim;
@@ -360,9 +363,16 @@ for (const [index, rawRecord] of sourceRecords.entries()) {
 
   const relativeFile = path.join("by-id", recordFileName(id)).replace(/\\/g, "/");
   recordFiles[id] = relativeFile;
-  browseRecords.push(toBrowseSlim(rawRecord, weaponModifierBadges));
+  const browseRecord = toBrowseSlim(rawRecord, weaponModifierBadges);
+  const browseCard = asRecord(browseRecord.card);
+  const shapedCard = {
+    ...(asRecord(rawRecord.card) ?? {}),
+    modifierLabels: Array.isArray(browseCard?.modifierLabels) ? browseCard.modifierLabels : [],
+  };
+  const shapedRecord = { ...rawRecord, card: shapedCard };
+  browseRecords.push(browseRecord);
 
-  await writeJson(path.join(outputRoot, relativeFile), rawRecord);
+  await writeJson(path.join(outputRoot, relativeFile), shapedRecord);
 }
 
 const shapedRecordCount = browseRecords.length;

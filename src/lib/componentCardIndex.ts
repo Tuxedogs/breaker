@@ -95,6 +95,7 @@ export type ComponentCardIndexRecord = {
     secondary?: ComponentCardIndexMetric[];
     materialsPreview: Array<Pick<ComponentCardIndexMaterial, "name" | "quantity" | "unit">>;
     badges: string[];
+    modifierLabels: string[];
   };
   stats: {
     generic: {
