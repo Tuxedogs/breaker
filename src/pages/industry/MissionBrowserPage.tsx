@@ -1833,7 +1833,7 @@ export default function MissionBrowserPage() {
   return (
     <div className="mb-page">
       <div className="mb-shell">
-        <header className="mb-header">
+        <header className="mb-header page-compact-header">
           <div>
             <span className="mb-kicker">Industry Intelligence</span>
             <h1>Mission Browser</h1>

@@ -672,7 +672,7 @@ export default function InventoryPage() {
 
   return (
     <div className="logi-page logi-inv-page">
-      <div className="logi-page-header logi-inv-header">
+      <div className="logi-page-header logi-inv-header page-compact-header">
         <div>
           <div className="logi-breadcrumb">
             <Link to="/logistics" className="logi-breadcrumb-link">Logistics</Link>

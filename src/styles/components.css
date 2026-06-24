@@ -1068,3 +1068,46 @@ outline: 2px solid rgb(148 163 184 / 0.4);
   margin: 0;
   line-height: 1.4;
 }
+
+/* Unified compact page header for 2k readability */
+.page-compact-header { 
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border-soft-color, rgba(130,150,160,0.12));
+  flex-wrap: wrap;
+}
+.page-compact-header .page-kicker {
+  font-size: var(--app-text-label, 0.7rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #708090;
+  margin-right: 0.4rem;
+}
+.page-compact-header h1,
+.page-compact-header .page-title {
+  margin: 0;
+  font-size: var(--app-text-page-title, 20px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.page-compact-header .page-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: var(--app-text-meta, 0.75rem);
+  color: #9aa5a4;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-left: auto;
+}
+.page-compact-header .page-stats strong {
+  color: #e7edff;
+  font-size: var(--app-text-title-sm, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0;
+}

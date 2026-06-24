@@ -98,7 +98,7 @@
   margin-bottom: 0.12rem;
   color: var(--bq-amber);
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.12em;
   line-height: 1;
@@ -130,7 +130,7 @@
 
 .bq-ledger-stat span {
   color: var(--bq-dim);
-  font-size: 0.56rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -184,7 +184,7 @@
   border-radius: 5px;
   background: rgba(2,6,20,0.2);
   color: var(--bq-sub);
-  font-size: 0.64rem;
+  font-size: 13px !important;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -254,7 +254,7 @@
 }
 
 .bq-completed-panel-head span {
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.14em;
   line-height: 1;
@@ -312,14 +312,14 @@
 
 /* ── Stat Rail ───────────────────────────────────────────────────────────── */
 
-.bq-stat-rail {
-  display: grid;
-  grid-template-columns: minmax(170px, 0.35fr) minmax(9rem, 11rem) minmax(0, 1fr);
-  gap: 1rem;
-  align-items: end;
-  padding: 0.15rem 0.15rem 0.8rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(137,161,176,0.14);
+.bq-stat-rail { 
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-soft-color, rgba(130,150,160,0.12));
 }
 
 .bq-icon-mode-select {
@@ -330,7 +330,7 @@
 
 .bq-icon-mode-select span {
   color: rgba(148, 163, 184, 0.72);
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -344,23 +344,24 @@
   background: rgba(4, 10, 14, 0.92);
   color: rgba(231, 237, 255, 0.9);
   font: inherit;
-  font-size: 0.78rem;
+  font-size: 13px !important;
   padding: 0 0.5rem;
 }
 
 .bq-stat-rail-title h1 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: 1.4rem;
-  font-weight: 900;
-  letter-spacing: 0;
-  line-height: 1;
+  font-size: var(--app-text-page-title, 22px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
   color: var(--bq-text);
 }
 
 .bq-section-kicker {
   color: rgba(194, 151, 255, 0.92);
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -434,14 +435,14 @@
 }
 
 .bq-shortage-panel-head-left > span {
-  font-size: 0.58rem;
+  font-size: 13px !important;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bq-text);
 }
 
 .bq-shortage-count {
-  font-size: 0.52rem;
+  font-size: 13px !important;
   font-weight: 700;
   padding: 0.08rem 0.36rem;
   border-radius: 3px;
@@ -453,7 +454,7 @@
 
 .bq-shortage-all-clear {
   padding: 0.6rem 0.72rem;
-  font-size: 0.72rem;
+  font-size: 14px !important;
   color: var(--bq-sub);
 }
 
@@ -483,7 +484,7 @@
 }
 
 .bq-shortage-card-qty {
-  font-size: 0.78rem;
+  font-size: 13px !important;
   font-weight: 700;
   color: var(--bq-red);
   line-height: 1;
@@ -531,7 +532,7 @@
   background: rgba(255,255,255,0.022);
   color: var(--bq-sub);
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -573,7 +574,7 @@
 .bq-ledger-row {
   min-height: 36px;
   border-bottom: 1px solid rgba(148,163,184,0.048);
-  font-size: 0.72rem;
+  font-size: 14px !important;
 }
 
 .bq-ledger-row:last-child { border-bottom: 0; }
@@ -605,7 +606,7 @@
 .bq-ledger-chip {
   display: inline-flex;
   gap: 0.22rem;
-  font-size: 0.72rem;
+  font-size: 14px !important;
   color: var(--bq-sub);
   padding: 0.06rem 0.3rem;
   border: 1px solid rgba(148,163,184,0.08);
@@ -636,7 +637,7 @@
 
 .bq-queue-section-head span,
 .bq-completed-panel-head span {
-  font-size: 0.62rem;
+  font-size: 14px !important;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -652,7 +653,7 @@
   border-radius: 4px;
   background: rgba(45,212,191,0.08);
   color: var(--bq-green);
-  font-size: 0.68rem;
+  font-size: 14px !important;
 }
 
 .bq-empty-state {
@@ -851,7 +852,7 @@
 }
 
 .bq-item-cat {
-  font-size: 0.65rem;
+  font-size: 13px !important;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--bq-dim);
@@ -861,7 +862,7 @@
 
 .bq-item-blueprint {
   flex-basis: 100%;
-  font-size: 0.65rem;
+  font-size: 13px !important;
   color: var(--bq-cyan);
   text-align: left;
   white-space: nowrap;
@@ -892,7 +893,7 @@
   min-height: 19px;
   padding: 0.05rem 0.34rem;
   background: rgba(255,255,255,0.022);
-  font-size: 0.75rem;
+  font-size: 14px !important;
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0.03em;
@@ -981,7 +982,7 @@
   line-height: 28px;
   padding: 0 0.3rem;
   text-align: center;
-  font-size: 0.76rem;
+  font-size: 14px !important;
   font-weight: 700;
   color: rgba(226,232,240,0.86);
   background: rgba(2,6,20,0.35);
@@ -1000,7 +1001,7 @@
   background: rgba(255,255,255,0.024);
   color: var(--bq-sub);
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: 14px !important;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1052,7 +1053,7 @@
   background: rgba(255,255,255,0.018);
   color: var(--bq-sub);
   font-family: var(--font-primary);
-  font-size: 0.62rem;
+  font-size: 14px !important;
   font-weight: 600;
   letter-spacing: 0.03em;
   cursor: pointer;
@@ -1095,13 +1096,13 @@
   gap: 0.46rem;
   padding: 0.38rem 0.7rem;
   border-bottom: 1px solid var(--bq-edge-soft);
-  font-size: 0.62rem;
+  font-size: 14px !important;
   color: var(--bq-sub);
   flex-wrap: wrap;
 }
 
 .bq-item-meta-label {
-  font-size: 0.75rem;
+  font-size: 14px !important;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--bq-dim);
@@ -1114,7 +1115,7 @@
 }
 
 .bq-source-chip {
-  font-size: 0.62rem;
+  font-size: 14px !important;
   font-weight: 600;
   color: rgba(226,232,240,0.76);
   padding: 0.06rem 0.32rem;
@@ -1132,7 +1133,7 @@
   padding: 0.34rem 0.65rem;
   border-bottom: 1px solid rgba(137,161,176,0.14);
   background: rgba(2,7,11,0.4);
-  font-size: 0.62rem;
+  font-size: 14px !important;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--bq-dim);
@@ -1197,7 +1198,7 @@
 }
 
 .bq-quality-panel-val {
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1256,7 +1257,7 @@
   display: grid;
   gap: 0.18rem;
   color: var(--bq-dim);
-  font-size: 0.52rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -1269,13 +1270,13 @@
   background: rgba(2,6,20,0.58);
   color: rgba(226,232,240,0.92);
   font-family: var(--font-primary);
-  font-size: 0.72rem;
+  font-size: 14px !important;
   padding: 0 0.38rem;
 }
 
 .bq-quality-manual-row > span {
   color: var(--bq-dim);
-  font-size: 0.58rem;
+  font-size: 13px !important;
   font-weight: 700;
   white-space: nowrap;
 }
@@ -1382,7 +1383,7 @@
   min-height: 28px;
   border-bottom: 1px solid rgba(148,163,184,0.12);
   background: rgba(0,0,0,0.18);
-  font-size: 0.62rem;
+  font-size: 14px !important;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--bq-dim);
@@ -1419,7 +1420,7 @@
   padding: 0.34rem 0.65rem;
   min-height: 46px;
   color: rgba(203,213,225,0.82);
-  font-size: 0.78rem;
+  font-size: 13px !important;
   font-weight: 500;
 }
 
@@ -1446,7 +1447,7 @@
 }
 
 .bq-mat-name span {
-  font-size: 0.52rem;
+  font-size: 13px !important;
   color: var(--bq-dim);
 }
 
@@ -1457,7 +1458,7 @@
 }
 
 .bq-mat-modifier span {
-  font-size: 0.72rem;
+  font-size: 14px !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1541,7 +1542,7 @@
   padding: 0 0.4rem;
   border-radius: 3px;
   font-family: var(--font-primary);
-  font-size: 0.65rem;
+  font-size: 13px !important;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1760,7 +1761,7 @@
   background: rgba(2,6,20,0.58);
   color: rgba(226,232,240,0.9);
   font-family: var(--font-primary);
-  font-size: 0.68rem;
+  font-size: 14px !important;
   padding: 0 0.32rem;
 }
 
@@ -1803,7 +1804,7 @@
   background: rgba(148,163,184,0.055);
   color: var(--bq-sub);
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: 13px !important;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1856,7 +1857,7 @@
   background: transparent;
   color: var(--bq-sub);
   font-family: var(--font-primary);
-  font-size: 0.56rem;
+  font-size: 13px !important;
   text-align: left;
   cursor: pointer;
 }
@@ -1866,7 +1867,7 @@
 
 .bq-empty-inline {
   padding: 0.5rem 0.72rem;
-  font-size: 0.68rem;
+  font-size: 14px !important;
   color: var(--bq-sub);
 }
 
@@ -1997,7 +1998,7 @@
     flex-basis: auto;
     width: 100%;
     margin-top: 0.08rem;
-    font-size: 0.68rem;
+    font-size: 14px !important;
     color: rgba(94, 234, 212, 0.82);
     white-space: normal;
     overflow: visible;
@@ -2032,7 +2033,7 @@
 
   .bq-item--mobile-touch .bq-coverage-short {
     color: rgba(148, 163, 184, 0.78);
-    font-size: 0.62rem;
+    font-size: 14px !important;
     font-weight: 600;
   }
 
@@ -2049,7 +2050,7 @@
   .bq-materials-section-label {
     margin: 0 0 0.48rem;
     padding: 0 0.08rem;
-    font-size: 0.58rem;
+    font-size: 13px !important;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -2132,7 +2133,7 @@
   }
 
   .bq-mat-card-scu {
-    font-size: 0.72rem;
+    font-size: 14px !important;
     font-weight: 600;
     color: rgba(148, 163, 184, 0.82);
     letter-spacing: 0.02em;
@@ -2148,13 +2149,13 @@
     flex-shrink: 0;
     min-height: 22px;
     padding: 0.08rem 0.42rem;
-    font-size: 0.68rem;
+    font-size: 14px !important;
     font-weight: 700;
   }
 
   .bq-mat-card-affix {
     min-width: 0;
-    font-size: 0.68rem;
+    font-size: 14px !important;
     line-height: 1.25;
     color: rgba(148, 163, 184, 0.78);
   }
@@ -2167,7 +2168,7 @@
   }
 
   .bq-mat-card-short {
-    font-size: 0.64rem;
+    font-size: 13px !important;
     font-weight: 600;
     color: rgba(148, 163, 184, 0.72);
   }
@@ -2213,7 +2214,7 @@
     min-height: 44px;
     min-width: 0;
     padding: 0 0.65rem;
-    font-size: 0.72rem;
+    font-size: 14px !important;
   }
 
   .bq-mat-group--mobile-card .bq-quality-toggle-btn {
@@ -2224,7 +2225,7 @@
     min-height: 44px;
     min-width: 0;
     padding: 0 0.65rem;
-    font-size: 0.72rem;
+    font-size: 14px !important;
   }
 
   .bq-stack-line-top {
@@ -2263,7 +2264,7 @@
 
   .bq-stack-container {
     flex: 0 0 auto;
-    font-size: 0.62rem;
+    font-size: 14px !important;
     color: var(--bq-dim);
     white-space: nowrap;
   }
@@ -2278,14 +2279,14 @@
     min-width: 0;
     padding: 0.28rem 0;
     border-top: 1px solid rgba(148,163,184,0.08);
-    font-size: 0.72rem;
+    font-size: 14px !important;
     white-space: normal;
   }
 
   .bq-stack-quality::before {
     content: "Quality";
     color: var(--bq-dim);
-    font-size: 0.58rem;
+    font-size: 13px !important;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2294,7 +2295,7 @@
   .bq-stack-available::before {
     content: "Available";
     color: var(--bq-dim);
-    font-size: 0.58rem;
+    font-size: 13px !important;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2303,7 +2304,7 @@
   .bq-stack-reserved::before {
     content: "Reserved";
     color: var(--bq-dim);
-    font-size: 0.58rem;
+    font-size: 13px !important;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -2327,7 +2328,7 @@
   .bq-reserve-quick-fill {
     min-width: 3.5rem;
     padding: 0 0.65rem;
-    font-size: 0.68rem;
+    font-size: 14px !important;
   }
 
   .bq-stack-cb {

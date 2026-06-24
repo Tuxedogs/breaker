@@ -149,6 +149,15 @@
   --cards-grey: var(--bg-card);
   --cards-toplayer: var(--bg-panel);
 
+  /* 2k / 1440p+ readability tokens (stronger floors) */
+  --app-text-body: clamp(14px, 0.85rem + 0.15vw, 15.5px);
+  --app-text-meta: clamp(12.5px, 0.78rem + 0.12vw, 14px);
+  --app-text-label: clamp(12px, 0.75rem + 0.1vw, 13.5px);
+  --app-text-chip: clamp(12px, 0.75rem + 0.1vw, 13.5px);
+  --app-text-title-sm: clamp(15px, 0.92rem + 0.18vw, 17px);
+  --app-text-title: clamp(16px, 0.98rem + 0.2vw, 18px);
+  --app-text-page-title: clamp(20px, 1.15rem + 0.25vw, 24px);
+
   /* Ship component category colors
      Used in map legend (--legend-accent) and sub-target trainer.
      Note: colorHint values in deck map data files must remain as hex

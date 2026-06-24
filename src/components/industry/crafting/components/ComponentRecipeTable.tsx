@@ -2884,7 +2884,7 @@ function RecipeDrawer({
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
-      <header className="craft-detail-header">
+      <header className="craft-detail-header page-compact-header">
         <div className="craft-detail-hero-left">
           <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
             Back to Results
