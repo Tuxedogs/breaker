@@ -14,7 +14,7 @@ import {
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
 import { getQueueLedgerModel, type QueueLedgerLine } from "../lib/logistics/queueLedger";
-import { apiUrl } from "../lib/apiUrl";
+import { isDisplayableFittingShip, listFittingShips, type FittingShipSummary as ApiFittingShipSummary } from "../lib/fitting/fittingApi";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from "../types/logistics";
 
 function ArrowRight({ size = 12 }: { size?: number }) {
@@ -57,8 +57,20 @@ type FittingShipSummary = {
   movementClass: string | null;
   crewSize: number | null;
   isGroundVehicle: boolean | null;
-  hasPrototypeCalculation: boolean;
 };
+
+function adaptFittingShip(ship: ApiFittingShipSummary): FittingShipSummary {
+  return {
+    shipKey: ship.id,
+    name: ship.displayName || ship.name,
+    manufacturer: ship.manufacturer,
+    role: ship.role,
+    career: ship.career,
+    movementClass: ship.vehicleType,
+    crewSize: ship.crew.max ?? ship.crew.min,
+    isGroundVehicle: ship.isGroundVehicle,
+  };
+}
 
 const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
 
@@ -594,16 +606,12 @@ function FittingLaunchPanel() {
     queueMicrotask(() => {
       if (!controller.signal.aborted) setStatus("loading");
     });
-    fetch(apiUrl("/api/fitting/ships"), { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error(`Fitting ships request failed: ${response.status}`);
-        return response.json() as Promise<{ records?: FittingShipSummary[] }>;
-      })
+    listFittingShips(controller.signal)
       .then((payload) => {
         if (controller.signal.aborted) return;
-        const records = Array.isArray(payload.records) ? payload.records : [];
+        const records = payload.filter(isDisplayableFittingShip).map(adaptFittingShip);
         setShips(records);
-        setSelectedShipKey((current) => current ?? records.find((ship) => ship.hasPrototypeCalculation)?.shipKey ?? records[0]?.shipKey ?? null);
+        setSelectedShipKey((current) => current ?? records[0]?.shipKey ?? null);
         setStatus("loaded");
       })
       .catch(() => {
@@ -630,15 +638,10 @@ function FittingLaunchPanel() {
     [filteredShips, selectedShipKey, ships],
   );
 
-  const prototypeCount = useMemo(
-    () => ships.filter((ship) => ship.hasPrototypeCalculation).length,
-    [ships],
-  );
-
   return (
     <div className="dash-panel dash-fitting-panel">
       <div className="dash-panel-header">
-        <span className="dash-panel-title">Fitting Prototype</span>
+        <span className="dash-panel-title">Fitting</span>
         <span className="dash-fitting-count">{status === "loaded" ? `${ships.length} ships` : "Internal"}</span>
       </div>
       <div className="dash-panel-body dash-fitting-body">
@@ -672,9 +675,7 @@ function FittingLaunchPanel() {
                   <span className="dash-fitting-option-name">{ship.name}</span>
                   <span className="dash-fitting-option-meta">{ship.manufacturer ?? "Unknown"} / {ship.role ?? ship.career ?? "Unclassified"}</span>
                 </span>
-                <span className={ship.hasPrototypeCalculation ? "dash-fitting-proto dash-fitting-proto--ready" : "dash-fitting-proto"}>
-                  {ship.hasPrototypeCalculation ? "Calc" : "Map"}
-                </span>
+                <span className="dash-fitting-proto dash-fitting-proto--ready">Ready</span>
               </button>
             );
           })}
@@ -692,7 +693,7 @@ function FittingLaunchPanel() {
             <div className="dash-fitting-metrics">
               <span><b>Role</b>{selectedShip.role ?? selectedShip.career ?? "Unknown"}</span>
               <span><b>Crew</b>{selectedShip.crewSize ?? "-"}</span>
-              <span><b>Prototype</b>{selectedShip.hasPrototypeCalculation ? "Calculation ready" : "Loadout map only"}</span>
+              <span><b>Dataset</b>Stock loadout</span>
             </div>
             <Link to={`/fitting/${selectedShip.shipKey}`} className="dash-fitting-open">
               Open Fitting
@@ -702,7 +703,7 @@ function FittingLaunchPanel() {
         )}
 
         <p className="dash-fitting-note">
-          {prototypeCount} ships have prototype calculations. Dashboard preview only.
+          Read-only LIVE fitting data. Dashboard preview only.
         </p>
       </div>
     </div>

@@ -1,7 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FittingComponentIcon } from "../components/fitting/FittingComponentIcon";
-import { apiUrl } from "../lib/apiUrl";
+import {
+  getFittingCalculations,
+  getFittingHardpoints,
+  getFittingLoadout,
+  getFittingShip,
+  isDisplayableFittingShip,
+  listFittingComponents,
+  listFittingShips,
+  type FittingCalculation,
+  type FittingComponentSummary as ApiFittingComponentSummary,
+  type FittingHardpoint,
+  type FittingLoadoutEntry,
+  type FittingShipDetail as ApiFittingShipDetail,
+  type FittingShipSummary as ApiFittingShipSummary,
+} from "../lib/fitting/fittingApi";
 import {
   readFittingIconMode,
   writeFittingIconMode,
@@ -18,7 +32,11 @@ type FittingShipSummary = {
   career: string | null;
   movementClass: string | null;
   crewSize: number | null;
-  hasPrototypeCalculation: boolean;
+  maxSpeed?: number | null;
+  boostSpeedForward?: number | null;
+  pitchRate?: number | null;
+  yawRate?: number | null;
+  rollRate?: number | null;
 };
 
 type FittingShipDetail = {
@@ -97,6 +115,137 @@ type FittingComponentRecord = {
   stats?: Record<string, unknown>;
   confidence?: unknown;
 };
+
+function adaptShipSummary(ship: ApiFittingShipSummary): FittingShipSummary {
+  return {
+    shipKey: ship.id,
+    name: ship.displayName || ship.name,
+    manufacturer: ship.manufacturer,
+    role: ship.role,
+    career: ship.career,
+    movementClass: ship.vehicleType,
+    crewSize: ship.crew.max ?? ship.crew.min,
+  };
+}
+
+function adaptShipDetail(ship: ApiFittingShipDetail): FittingShipDetail {
+  return {
+    ship: {
+      ...adaptShipSummary(ship),
+      maxSpeed: ship.performance.maxSpeed,
+      boostSpeedForward: ship.performance.boostSpeedForward,
+      pitchRate: ship.performance.pitchRate,
+      yawRate: ship.performance.yawRate,
+      rollRate: ship.performance.rollRate,
+    },
+    confidence: ship.confidence,
+    warnings: [],
+  };
+}
+
+function adaptComponent(component: ApiFittingComponentSummary): FittingComponentRecord {
+  return {
+    componentKey: component.id,
+    displayName: component.displayName || component.name,
+    category: component.type,
+    type: component.subtype,
+    size: component.size,
+    mass: null,
+    health: null,
+    stats: {},
+    confidence: component.confidence,
+  };
+}
+
+function portCategory(port: FittingHardpoint): string {
+  const value = `${port.type} ${port.subtype ?? ""} ${port.name}`.toLowerCase();
+  if (value.includes("missile") || value.includes("torpedo") || value.includes("bomb")) return "missile";
+  if (value.includes("turret")) return "turret";
+  if (value.includes("weapon") || value.includes("gun")) return "weapon";
+  if (value.includes("power")) return "power";
+  if (value.includes("thruster")) return "thruster";
+  if (value.includes("shield")) return "shield";
+  if (value.includes("cooler") || value.includes("cooling")) return "cooler";
+  if (value.includes("quantum")) return "quantum";
+  if (value.includes("radar") || value.includes("scanner")) return "radar";
+  if (value.includes("armor")) return "armor";
+  if (value.includes("fuel")) return "fuel";
+  return port.type.toLowerCase();
+}
+
+function loadoutStatus(entry: FittingLoadoutEntry | undefined, port: FittingHardpoint): string {
+  if (port.locked || entry?.status === "locked") return "locked";
+  if (entry?.status === "resolved") return "compatible";
+  return entry?.status ?? port.compatibilityStatus ?? "unknown";
+}
+
+function adaptLoadout(shipKey: string, ports: FittingHardpoint[], entries: FittingLoadoutEntry[]): FittingLoadoutResponse {
+  const entriesByPort = new Map(entries.map((entry) => [entry.portId, entry]));
+  const childIds = new Map<string, string[]>();
+  for (const port of ports) {
+    if (port.parentId) childIds.set(port.parentId, [...(childIds.get(port.parentId) ?? []), port.id]);
+  }
+  const portBreakdown = ports.map((port): PortBreakdownRow => {
+    const entry = entriesByPort.get(port.id);
+    return {
+      shipKey,
+      portId: port.id,
+      portName: port.name,
+      portCategory: portCategory(port),
+      ruleCategory: portCategory(port),
+      parentPortId: port.parentId,
+      childPortIds: childIds.get(port.id) ?? [],
+      equippedComponentKey: entry?.componentId ?? port.defaultComponentId,
+      equippedComponentName: null,
+      componentCategory: null,
+      compatibilityStatus: loadoutStatus(entry, port),
+      calculationContribution: {},
+      warnings: entry?.status === "unresolved" ? ["Default component unresolved"] : [],
+      confidence: entry?.confidence ?? port.confidence,
+    };
+  });
+  return {
+    shipKey,
+    summary: null,
+    warnings: [],
+    confidence: entries.every((entry) => entry.confidence === "high") ? "high" : "medium",
+    unsupportedCategories: [],
+    unsupportedMechanics: [],
+    unresolvedRefs: [],
+    portBreakdown,
+  };
+}
+
+function derivedNumber(calculation: FittingCalculation, category: keyof FittingCalculation["categories"], key: string): number | undefined {
+  const value = calculation.categories[category]?.derived[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+}
+
+function adaptCalculation(calculation: FittingCalculation): FittingLoadoutResponse {
+  const summary: FittingSummary = {
+    shieldHpTotal: derivedNumber(calculation, "shields", "totalShieldHP"),
+    shieldRegenTotal: derivedNumber(calculation, "shields", "totalRegenRate"),
+    powerGenerated: derivedNumber(calculation, "power", "totalPowerGenerated"),
+    powerRequired: derivedNumber(calculation, "power", "totalPowerRequired"),
+    powerBalance: derivedNumber(calculation, "power", "powerSurplus"),
+    coolingGenerated: derivedNumber(calculation, "cooling", "totalCoolingGenerated"),
+    coolingRequired: derivedNumber(calculation, "cooling", "totalCoolingRequired"),
+    coolingBalance: derivedNumber(calculation, "cooling", "coolingSurplus"),
+    directWeaponAlpha: derivedNumber(calculation, "weapons", "weaponAlphaTotal"),
+    directWeaponDps: derivedNumber(calculation, "weapons", "weaponDpsTotal"),
+  };
+  const confidence = Object.values(calculation.categories).find((category) => category?.confidence)?.confidence ?? "low";
+  return {
+    shipKey: calculation.shipId,
+    summary,
+    warnings: calculation.warnings,
+    confidence,
+    unsupportedCategories: [],
+    unsupportedMechanics: [],
+    unresolvedRefs: [],
+    portBreakdown: [],
+  };
+}
 
 type LoadState<T> = {
   status: "idle" | "loading" | "loaded" | "error";
@@ -387,12 +536,6 @@ function groupMassRows(rows: PortBreakdownRow[], componentLookup: Map<string, Fi
   return [...groups.values()];
 }
 
-async function readJson<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, init);
-  if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-  return response.json() as Promise<T>;
-}
-
 function rowIconInput(
   row: PortBreakdownRow,
   componentLookup: Map<string, FittingComponentRecord>,
@@ -433,7 +576,7 @@ function FittingRow({
       </div>
       <div className="fit-row-side">
         <span className={`fit-status fit-status--${statusTone(row)}`}>{row.compatibilityStatus ?? "unknown"}</span>
-        {isUnsupported(row) && <span className="fit-prototype">Prototype</span>}
+        {isUnsupported(row) && <span className="fit-prototype">Unmodeled</span>}
       </div>
     </div>
   );
@@ -501,7 +644,7 @@ function OffensiveTreePanel({
                 <strong>{node.label}</strong>
                 {node.meta && <span>{node.meta}</span>}
               </div>
-              {isUnsupported(node.parentRow) && <span className="fit-prototype">Prototype</span>}
+              {isUnsupported(node.parentRow) && <span className="fit-prototype">Unmodeled</span>}
             </div>
             <div className="fit-offense-children">
               {node.items.map((item) => {
@@ -572,11 +715,10 @@ export default function FittingPage() {
     queueMicrotask(() => {
       if (!controller.signal.aborted) setShipsState({ status: "loading", data: null });
     });
-    readJson<{ records?: FittingShipSummary[] }>(apiUrl("/api/fitting/ships"), { signal: controller.signal })
-      .then((payload) => {
+    listFittingShips(controller.signal)
+      .then((records) => {
         if (controller.signal.aborted) return;
-        const records = Array.isArray(payload.records) ? payload.records : [];
-        setShipsState({ status: "loaded", data: records });
+        setShipsState({ status: "loaded", data: records.filter(isDisplayableFittingShip).map(adaptShipSummary) });
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipsState({ status: "error", data: null });
@@ -589,10 +731,10 @@ export default function FittingPage() {
     queueMicrotask(() => {
       if (!controller.signal.aborted) setComponentsState({ status: "loading", data: null });
     });
-    readJson<{ records?: FittingComponentRecord[] }>(apiUrl("/api/fitting/components"), { signal: controller.signal })
-      .then((payload) => {
+    listFittingComponents(controller.signal)
+      .then((records) => {
         if (controller.signal.aborted) return;
-        setComponentsState({ status: "loaded", data: Array.isArray(payload.records) ? payload.records : [] });
+        setComponentsState({ status: "loaded", data: records.map(adaptComponent) });
       })
       .catch(() => {
         if (!controller.signal.aborted) setComponentsState({ status: "error", data: null });
@@ -601,7 +743,7 @@ export default function FittingPage() {
   }, []);
 
   const ships = useMemo(() => shipsState.data ?? [], [shipsState.data]);
-  const selectedShipKey = routeShipKey ?? searchParams.get("ship") ?? ships.find((ship) => ship.hasPrototypeCalculation)?.shipKey ?? ships[0]?.shipKey ?? null;
+  const selectedShipKey = routeShipKey ?? searchParams.get("ship") ?? ships[0]?.shipKey ?? null;
   const selectedShip = ships.find((ship) => ship.shipKey === selectedShipKey) ?? null;
 
   useEffect(() => {
@@ -614,42 +756,38 @@ export default function FittingPage() {
       setCalculationState(emptyLoad());
     });
 
-    readJson<FittingShipDetail>(apiUrl(`/api/fitting/ships/${encodeURIComponent(selectedShipKey)}`), { signal: controller.signal })
-      .then((payload) => {
-        if (!controller.signal.aborted) setShipState({ status: "loaded", data: payload });
+    getFittingShip(selectedShipKey, controller.signal)
+      .then((ship) => {
+        if (!controller.signal.aborted) setShipState({ status: "loaded", data: adaptShipDetail(ship) });
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipState({ status: "error", data: null });
       });
 
-    readJson<FittingLoadoutResponse>(apiUrl(`/api/fitting/ships/${encodeURIComponent(selectedShipKey)}/loadout`), { signal: controller.signal })
-      .then((payload) => {
-        if (!controller.signal.aborted) setLoadoutState({ status: "loaded", data: payload });
+    Promise.all([
+      getFittingHardpoints(selectedShipKey, controller.signal),
+      getFittingLoadout(selectedShipKey, controller.signal),
+    ])
+      .then(([ports, entries]) => {
+        if (!controller.signal.aborted) setLoadoutState({ status: "loaded", data: adaptLoadout(selectedShipKey, ports, entries) });
       })
       .catch(() => {
         if (!controller.signal.aborted) setLoadoutState({ status: "error", data: null });
       });
 
-    if (selectedShip?.hasPrototypeCalculation) {
-      queueMicrotask(() => {
-        if (!controller.signal.aborted) setCalculationState({ status: "loading", data: null });
-      });
-      readJson<FittingLoadoutResponse>(apiUrl("/api/fitting/calculate"), {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ shipKey: selectedShipKey }),
-        signal: controller.signal,
+    queueMicrotask(() => {
+      if (!controller.signal.aborted) setCalculationState({ status: "loading", data: null });
+    });
+    getFittingCalculations(selectedShipKey, controller.signal)
+      .then((payload) => {
+        if (!controller.signal.aborted) setCalculationState({ status: "loaded", data: adaptCalculation(payload) });
       })
-        .then((payload) => {
-          if (!controller.signal.aborted) setCalculationState({ status: "loaded", data: payload });
-        })
-        .catch(() => {
-          if (!controller.signal.aborted) setCalculationState({ status: "error", data: null });
-        });
-    }
+      .catch(() => {
+        if (!controller.signal.aborted) setCalculationState({ status: "error", data: null });
+      });
 
     return () => controller.abort();
-  }, [selectedShip?.hasPrototypeCalculation, selectedShipKey]);
+  }, [selectedShipKey]);
 
   useEffect(() => {
     if (!routeShipKey && !searchParams.get("ship") && selectedShipKey) {
@@ -661,16 +799,23 @@ export default function FittingPage() {
   const shipDetail = detailShip ?? selectedShip;
   const loadout = loadoutState.data;
   const calculation = calculationState.data;
-  const summary = selectedShip?.hasPrototypeCalculation ? calculation?.summary ?? loadout?.summary ?? null : loadout?.summary ?? null;
-  const portRows = useMemo(
-    () => loadout?.portBreakdown ?? calculation?.portBreakdown ?? [],
-    [calculation?.portBreakdown, loadout?.portBreakdown],
-  );
+  const summary = calculation?.summary ?? loadout?.summary ?? null;
   const componentLookup = useMemo(() => {
     const lookup = new Map<string, FittingComponentRecord>();
     for (const component of componentsState.data ?? []) lookup.set(component.componentKey, component);
     return lookup;
   }, [componentsState.data]);
+  const portRows = useMemo(
+    () => (loadout?.portBreakdown ?? calculation?.portBreakdown ?? []).map((row) => {
+      const component = row.equippedComponentKey ? componentLookup.get(row.equippedComponentKey) : undefined;
+      return component ? {
+        ...row,
+        equippedComponentName: component.displayName,
+        componentCategory: component.category,
+      } : row;
+    }),
+    [calculation?.portBreakdown, componentLookup, loadout?.portBreakdown],
+  );
   const offensiveGroups = useMemo(() => buildGroups(offensiveGroupDefs, portRows, offensiveGroupKey), [portRows]);
   const weaponTree = useMemo(() => buildOffensiveTree(portRows, "weapon"), [portRows]);
   const missileTree = useMemo(() => buildOffensiveTree(portRows, "missile"), [portRows]);
@@ -696,16 +841,18 @@ export default function FittingPage() {
   ];
   const unsupportedMechanics = calculation?.unsupportedMechanics ?? loadout?.unsupportedMechanics ?? [];
   const confidence = confidenceLabel(calculation?.confidence, loadout?.confidence, shipState.data?.confidence);
-  const missingTopStats = ["mass", "durability", "top speed", "boost speed", "pitch/yaw/roll", "signature"];
+  const missingTopStats = ["mass", "durability", "signature"];
 
   const topStats = [
     { label: "Role", value: shipDetail?.role ?? shipDetail?.career ?? "unknown" },
     { label: "Crew", value: shipDetail?.crewSize != null ? String(shipDetail.crewSize) : "unknown" },
     { label: "Mass", value: "unknown" },
     { label: "Durability", value: "unknown" },
-    { label: "Top Speed", value: "unknown" },
-    { label: "Boost Speed", value: "unknown" },
-    { label: "Pitch / Yaw / Roll", value: "unknown" },
+    { label: "Top Speed", value: shipDetail?.maxSpeed != null ? formatNumber(shipDetail.maxSpeed) : "unknown" },
+    { label: "Boost Speed", value: shipDetail?.boostSpeedForward != null ? formatNumber(shipDetail.boostSpeedForward) : "unknown" },
+    { label: "Pitch / Yaw / Roll", value: [shipDetail?.pitchRate, shipDetail?.yawRate, shipDetail?.rollRate].every((value) => value != null)
+      ? `${formatNumber(shipDetail?.pitchRate)} / ${formatNumber(shipDetail?.yawRate)} / ${formatNumber(shipDetail?.rollRate)}`
+      : "unknown" },
     { label: "Signature", value: "unknown" },
   ];
 
@@ -799,7 +946,7 @@ export default function FittingPage() {
                 <strong>{shipDetail?.name ?? "Ship"}</strong>
               </div>
             </div>
-            <div className="fit-pips" aria-label="Prototype resource totals">
+            <div className="fit-pips" aria-label="Stock loadout resource totals">
               <ResourcePips
                 label="Firepower"
                 value={`${formatNumber(summary?.directWeaponDps)} dps`}
@@ -841,16 +988,16 @@ export default function FittingPage() {
               </button>
             </div>
             <div className="fit-stat-grid">
-              <StatTile label="CPT DPS" value={statValue(summary?.directWeaponDps)} meta="prototype direct weapons" />
+              <StatTile label="CPT DPS" value={statValue(summary?.directWeaponDps)} meta="stock direct weapons" />
               <StatTile label="DPS Delta" value="unknown" meta="stock comparison unavailable" tone="muted" />
-              <StatTile label="CPT Alpha" value={statValue(summary?.directWeaponAlpha)} meta="prototype direct weapons" />
+              <StatTile label="CPT Alpha" value={statValue(summary?.directWeaponAlpha)} meta="stock direct weapons" />
               <StatTile label="Alpha Delta" value="unknown" meta="stock comparison unavailable" tone="muted" />
               <StatTile label="Crew DPS" value="unknown" meta="crew allocation unavailable" tone="muted" />
               <StatTile label="Crew Alpha" value="unknown" meta="crew allocation unavailable" tone="muted" />
               <StatTile label="Missile Damage" value="unknown" meta={missileRows.length ? `${missileRows.length} missile rows; projectile damage not exposed` : "no missile damage total"} tone="muted" />
               <StatTile label="Special Damage" value="unknown" meta={specialRows.length ? `${specialRows.length} EMP/QED/QID/special rows` : "none exposed"} tone="muted" />
-              <StatTile label="Shield HP" value={statValue(summary?.shieldHpTotal)} meta="prototype shield total" tone="good" />
-              <StatTile label="Shield Regen" value={statValue(summary?.shieldRegenTotal)} meta="prototype shield total" tone="good" />
+              <StatTile label="Shield HP" value={statValue(summary?.shieldHpTotal)} meta="stock shield total" tone="good" />
+              <StatTile label="Shield Regen" value={statValue(summary?.shieldRegenTotal)} meta="stock shield total" tone="good" />
               <StatTile label="Physical Resist" value="unknown" meta="not labeled in shaped API" tone="muted" />
               <StatTile label="Energy Resist" value="unknown" meta="not labeled in shaped API" tone="muted" />
               <StatTile label="Distortion Resist" value="unknown" meta="not labeled in shaped API" tone="muted" />
@@ -887,7 +1034,7 @@ export default function FittingPage() {
           </div>
           <dl className="fit-summary-list">
             <div><dt>Relevant Rows</dt><dd>{calculationRows.length}</dd></div>
-            <div><dt>Unsupported / Prototype</dt><dd>{unsupportedRows.length}</dd></div>
+            <div><dt>Unsupported / Unmodeled</dt><dd>{unsupportedRows.length}</dd></div>
             <div><dt>Port Map</dt><dd>{detailShip?.fittingRelevantPortCount ?? detailShip?.portCount ?? portRows.length}</dd></div>
             <div><dt>Validation</dt><dd>{loadoutState.status === "error" ? "unavailable" : "default loadout"}</dd></div>
           </dl>
@@ -921,7 +1068,7 @@ export default function FittingPage() {
           <ul>
             <li>Using shaped fitting APIs only; no SPViewer or invented stat values.</li>
             <li>Missing top-bar fields: {missingTopStats.join(", ")}.</li>
-            {unsupportedMechanics.slice(0, 3).map((mechanic) => <li key={mechanic}>Unsupported prototype mechanic: {mechanic}.</li>)}
+            {unsupportedMechanics.slice(0, 3).map((mechanic) => <li key={mechanic}>Unmodeled mechanic: {mechanic}.</li>)}
             {warnings.slice(0, 3).map((warning) => <li key={warning}>{warning}</li>)}
           </ul>
         </article>
