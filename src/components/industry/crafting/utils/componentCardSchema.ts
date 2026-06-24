@@ -530,6 +530,13 @@ export function buildComponentCardSchemaFromIndex(
   const weaponClassification = record.type === "weaponGun" && !options?.preserveDisplayName
     ? buildShipWeaponBrowsePresentation(record, weapon?.damageType)
     : null;
+  const card: Record<string, unknown> = isRecord(record.card) ? record.card : {};
+  const modifierLabels = Array.isArray(card.modifierLabels)
+    ? (card.modifierLabels as unknown[]).filter((label): label is string => typeof label === "string")
+    : Array.isArray(card.badges)
+      ? (card.badges as unknown[]).filter((label): label is string => typeof label === "string")
+      : [];
+  const materialsPreview: unknown[] = Array.isArray(card.materialsPreview) ? card.materialsPreview : [];
 
   return {
     id: record.id,
@@ -540,13 +547,19 @@ export function buildComponentCardSchemaFromIndex(
     meta: getIndexMeta(record),
     genericStats: getIndexGenericStats(record),
     familyStats: getIndexFamilyStats(record),
-    modifierLabels: record.card.badges,
+    modifierLabels,
     classificationBadges: weaponClassification?.badges,
-    materialsPreview: record.card.materialsPreview.map((material, index) => ({
+    materialsPreview: materialsPreview
+      .filter(isRecord)
+      .map((material, index) => ({
       slot: `${index}`,
       cost_id: `${record.id}:${index}:${material.name}`,
-      material_name: material.name,
-      quantity: material.unit ? `${material.quantity} ${material.unit}` : material.quantity,
+      material_name: typeof material.name === "string" ? material.name : "Unknown Material",
+      quantity: typeof material.unit === "string" && material.unit
+        ? `${String(material.quantity ?? "")} ${material.unit}`
+        : typeof material.quantity === "number" || typeof material.quantity === "string"
+          ? material.quantity
+          : "",
     })),
   };
 }

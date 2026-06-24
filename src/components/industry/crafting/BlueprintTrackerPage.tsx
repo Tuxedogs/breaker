@@ -1663,7 +1663,7 @@ export default function BlueprintTrackerPage() {
   if (mode === "library") return (
     <div className="bt-page bt-preference-tracker">
       <div className="bt-shell">
-        <header className="bt-page-header">
+        <header className="bt-page-header page-compact-header">
           <div className="bt-page-title-row">
             <h1 className="bt-page-title">Blueprint Tracker</h1>
             <span className="bt-page-count">{missions.length} missions / {missionRewardCount} rewards</span>
@@ -1778,7 +1778,7 @@ export default function BlueprintTrackerPage() {
   return (
     <div className="bt-page">
       <div className="bt-shell">
-        <header className="bt-page-header">
+        <header className="bt-page-header page-compact-header">
           <div className="bt-page-title-row">
             <h1 className="bt-page-title">BLUEPRINT TRACKER</h1>
             {/* Real stats only â€” computed from loaded data (no fakes/placeholders) */}

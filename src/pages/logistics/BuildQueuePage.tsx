@@ -63,7 +63,7 @@ export default function BuildQueuePage() {
       <div className="bq-main">
         <div className="bq-workspace">
           <div className="bq-shell">
-            <header className="bq-stat-rail">
+            <header className="bq-stat-rail page-compact-header">
               <div className="bq-stat-rail-title">
                 <span className="bq-section-kicker">Crafting Operations</span>
                 <h1>Build Queue</h1>

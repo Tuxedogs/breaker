@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ComponentResultCard from "./ComponentResultCard";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
@@ -8,9 +8,9 @@ import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
 } from "../utils/componentCardVariants";
+import { filterRecipeBrowserRecords, compareRecipeBrowserRecords } from "../utils/recipeBrowserFilters";
 
 const SAVED_BLUEPRINT_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
-const UTILITY_TYPES = new Set(["dockingCollar", "salvageHead", "salvageModifier", "weaponMining"]);
 const MOBILE_TABLET_RESULTS_PER_PAGE = 18;
 const DESKTOP_RESULTS_PER_PAGE = 40;
 const DESKTOP_MIN_WIDTH = 981;
@@ -47,19 +47,6 @@ function readStoredStringSet(key: string): Set<string> {
   }
 }
 
-function buildSearchTokens(query: string): string[] {
-  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
-}
-
-function getSearchParam(searchParams: URLSearchParams): string {
-  return searchParams.get("search") ?? searchParams.get("q") ?? "";
-}
-
-function matchesSearch(record: ComponentCardIndexRecord, queryTokens: string[]): boolean {
-  if (queryTokens.length === 0) return true;
-  return queryTokens.every((token) => record.searchText.includes(token));
-}
-
 function ComponentBrowserState({ title, body }: { title: string; body: string }) {
   return (
     <section className="component-browser-state">
@@ -80,45 +67,8 @@ export default function ComponentResultsBrowser({
   error: string | null;
   isRecipeQueued: (record: ComponentCardIndexRecord) => boolean;
 }) {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // ── Derive filter state from URL params ──────────────────────────────────────
-  const DEFAULT_VEHICLE_TYPE = "weaponGun";
-  const isDefaultState = searchParams.get("v") === null &&
-    !getSearchParam(searchParams) && !searchParams.get("f") &&
-    !searchParams.get("sz") && !searchParams.get("gr") &&
-    !searchParams.get("cl") && !searchParams.get("mt") &&
-    searchParams.get("bk") !== "1";
-
-  const search = getSearchParam(searchParams);
-  const vehicleFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("v");
-    if (raw === null) return new Set();
-    if (raw === "") return new Set();
-    return new Set(raw.split(",").filter(Boolean));
-  }, [searchParams]);
-  const fpsFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("f");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const sizeFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("sz");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const gradeFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("gr");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const classFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("cl");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const materialFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("mt");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
   const savedOnly = searchParams.get("bk") === "1";
   const page = Math.max(1, Number(searchParams.get("pg") ?? "1") || 1);
   const resultsPerPage = useResultsPerPage();
@@ -150,47 +100,10 @@ export default function ComponentResultsBrowser({
     return () => { cancelled = true; };
   }, [session?.access_token]);
 
-  const searchTokens = useMemo(() => buildSearchTokens(search), [search]);
-
-  const filteredRecords = useMemo(() => {
-    const hasTextSearch = searchTokens.length > 0;
-
-    return records
-      .filter((record) => {
-        if (savedOnly && !savedBlueprintIds.has(record.id)) return false;
-        if (record.kind === "fps") {
-          if (fpsFilters.size > 0) {
-            if (!fpsFilters.has(record.type)) return false;
-          } else if (vehicleFilters.size > 0 || isDefaultState || !hasTextSearch) {
-            return false;
-          }
-        } else {
-          if (fpsFilters.size > 0) return false;
-          if (vehicleFilters.size) {
-            const type = record.type;
-            const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);
-            if (!vehicleFilters.has(type) && !utilityMatch) return false;
-          } else if (isDefaultState) {
-            if (record.type !== DEFAULT_VEHICLE_TYPE) return false;
-          }
-        }
-        if (sizeFilters.size && !sizeFilters.has(record.size !== null ? String(record.size) : "")) return false;
-        if (gradeFilters.size && !gradeFilters.has(record.grade ?? "")) return false;
-        if (classFilters.size && !classFilters.has(record.class?.toLowerCase() ?? "")) return false;
-        if (materialFilters.size) {
-          const usesMaterial =
-            record.facets.materials.some((id) => materialFilters.has(id)) ||
-            record.facets.materialNames.some((name) => materialFilters.has(name));
-          if (!usesMaterial) return false;
-        }
-        if (!matchesSearch(record, searchTokens)) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        const type = a.sort.type.localeCompare(b.sort.type);
-        return type || a.sort.name.localeCompare(b.sort.name);
-      });
-  }, [classFilters, fpsFilters, gradeFilters, materialFilters, records, savedBlueprintIds, savedOnly, searchTokens, sizeFilters, vehicleFilters, isDefaultState]);
+  const filteredRecords = useMemo(() => filterRecipeBrowserRecords(records, searchParams, {
+    savedOnly,
+    savedBlueprintIds,
+  }), [records, savedBlueprintIds, savedOnly, searchParams]);
 
   // ── Variant grouping ─────────────────────────────────────────────────────────
   const { groupedRecords, variantCountMap } = useMemo(() => {
@@ -216,20 +129,10 @@ export default function ComponentResultsBrowser({
       if (members.length > 1) counts.set(rep.id, members.length);
     }
 
-    grouped.sort((a, b) => {
-      const type = a.sort.type.localeCompare(b.sort.type);
-      return type || a.sort.name.localeCompare(b.sort.name);
-    });
+    grouped.sort(compareRecipeBrowserRecords);
 
     return { groupedRecords: grouped, variantCountMap: counts };
   }, [filteredRecords]);
-
-  // Auto-navigate to detail when exactly one result — preserve current query params.
-  useEffect(() => {
-    if (loading || groupedRecords.length !== 1) return;
-    const id = groupedRecords[0].id;
-    if (id) navigate(`/industry/crafting/${id}${location.search}`, { replace: true });
-  }, [loading, groupedRecords, navigate, location.search]);
 
   const totalPages = Math.max(1, Math.ceil(groupedRecords.length / resultsPerPage));
   const visiblePage = Math.min(page, totalPages);
@@ -274,10 +177,6 @@ export default function ComponentResultsBrowser({
         </div>
       </div>
     );
-  }
-
-  if (groupedRecords.length === 1) {
-    return null;
   }
 
   return (
