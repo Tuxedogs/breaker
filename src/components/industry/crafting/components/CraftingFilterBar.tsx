@@ -4,6 +4,12 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { buildResourceGroups } from "../../shared/msbResourceGroups";
 import type { ComponentCardIndex, ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { useCraftingContext } from "../CraftingContext";
+import {
+  getRecipeBrowserSearchParam,
+  hasExplicitVehicleFilter,
+  isRecipeBrowserDefaultState,
+  parseRecipeBrowserFilterSet,
+} from "../utils/recipeBrowserFilters";
 
 const PistolIcon = ({ className = "" }: { className?: string }) => (
   <svg
@@ -138,10 +144,6 @@ function toggleSetValue(prev: Set<string>, value: string): Set<string> {
   return next;
 }
 
-function getSearchParam(searchParams: URLSearchParams): string {
-  return searchParams.get("search") ?? searchParams.get("q") ?? "";
-}
-
 function useMobileToolbarLayout() {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -170,62 +172,70 @@ export default function CraftingFilterBar({
   const normalizedPath = location.pathname.replace(/\/+$/, "");
   const isDetailRoute = normalizedPath !== "/industry/crafting";
 
-  const isDefaultState = searchParams.get("v") === null &&
-    !getSearchParam(searchParams) && !searchParams.get("f") &&
-    !searchParams.get("sz") && !searchParams.get("gr") &&
-    !searchParams.get("cl") && !searchParams.get("mt") &&
-    searchParams.get("bk") !== "1";
+  const isDefaultState = isRecipeBrowserDefaultState(searchParams);
 
-  const search = getSearchParam(searchParams);
-  const vehicleFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("v");
-    if (raw === null) return new Set();
-    if (raw === "") return new Set();
-    return new Set(raw.split(",").filter(Boolean));
-  }, [searchParams]);
-  const fpsFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("f");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const sizeFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("sz");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const gradeFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("gr");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const classFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("cl");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
-  const materialFilters = useMemo<Set<string>>(() => {
-    const raw = searchParams.get("mt");
-    return raw ? new Set(raw.split(",").filter(Boolean)) : new Set();
-  }, [searchParams]);
+  const search = getRecipeBrowserSearchParam(searchParams);
+  const vehicleFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "v"),
+    [searchParams],
+  );
+  const fpsFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "f"),
+    [searchParams],
+  );
+  const sizeFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "sz"),
+    [searchParams],
+  );
+  const gradeFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "gr"),
+    [searchParams],
+  );
+  const classFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "cl"),
+    [searchParams],
+  );
+  const materialFilters = useMemo(
+    () => parseRecipeBrowserFilterSet(searchParams, "mt"),
+    [searchParams],
+  );
   const savedOnly = searchParams.get("bk") === "1";
 
-  const writeSearchParams = useCallback((next: URLSearchParams) => {
+  const applySearchParams = useCallback((
+    updater: URLSearchParams | ((prev: URLSearchParams) => URLSearchParams),
+  ) => {
+    const resolveNext = (prev: URLSearchParams) => (
+      typeof updater === "function" ? updater(prev) : updater
+    );
+
     if (isDetailRoute) {
+      const next = resolveNext(searchParams);
       const query = next.toString();
       navigate(`/industry/crafting${query ? `?${query}` : ""}`, { replace: true });
       return;
     }
-    setSearchParams(next, { replace: true });
-  }, [isDetailRoute, navigate, setSearchParams]);
 
-  const setParam = useCallback((key: string, value: string | null) => {
-    const next = new URLSearchParams(searchParams);
-    if (key === "search") next.delete("q");
-    if (value === null) { next.delete(key); } else { next.set(key, value); }
-    if (key !== "pg") next.delete("pg");
-    writeSearchParams(next);
-  }, [searchParams, writeSearchParams]);
+    setSearchParams((prev) => resolveNext(prev), { replace: true });
+  }, [isDetailRoute, navigate, searchParams, setSearchParams]);
+
+  const setParam = useCallback((key: string, value: string | null | undefined) => {
+    applySearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      if (key === "search") next.delete("q");
+      if (value == null || value === "") {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+      if (key !== "pg") next.delete("pg");
+      return next;
+    });
+  }, [applySearchParams]);
 
   const setSearch = useCallback((value: string) => setParam("search", value || null), [setParam]);
   const setVehicleFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
     const next = updater(vehicleFilters);
-    setParam("v", next.size ? [...next].join(",") : "");
+    setParam("v", next.size ? [...next].join(",") : null);
   }, [vehicleFilters, setParam]);
   const setFpsFilters = useCallback((updater: (prev: Set<string>) => Set<string>) => {
     const next = updater(fpsFilters);
@@ -434,7 +444,7 @@ export default function CraftingFilterBar({
       const opt = fpsOptions.find((o) => o.value === v);
       if (opt) tokens.push({ value: v, label: opt.label, kind: "fps" });
     }
-    if (!isDefaultState) {
+    if (hasExplicitVehicleFilter(searchParams)) {
       for (const v of vehicleFilters) {
         const opt = vehicleOptions.find((o) => o.value === v);
         if (opt) tokens.push({ value: v, label: opt.label, kind: "vehicle" });
@@ -460,7 +470,7 @@ export default function CraftingFilterBar({
   }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, isDefaultState, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
 
   function clearFilters() {
-    writeSearchParams(new URLSearchParams());
+    applySearchParams(new URLSearchParams());
   }
 
   function removeActiveFilter(token: ActiveFilterToken) {

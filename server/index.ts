@@ -19,8 +19,22 @@ async function readBody(request: http.IncomingMessage): Promise<unknown> {
 export function createServer() {
   return http.createServer(async (request, response) => {
     try {
-      const body = await readBody(request);
       const rawUrl = request.url ?? "";
+      const method = request.method ?? "GET";
+      const fittingRoute = await handleFittingRoute(method, rawUrl);
+      if (fittingRoute) {
+        for (const [key, value] of Object.entries(fittingRoute.headers ?? {})) response.setHeader(key, value);
+        if (fittingRoute.status === 200 && fittingRoute.headers?.etag && request.headers["if-none-match"] === fittingRoute.headers.etag) {
+          response.writeHead(304);
+          response.end();
+          return;
+        }
+        response.writeHead(fittingRoute.status);
+        response.end(method === "HEAD" ? undefined : JSON.stringify(fittingRoute.body));
+        return;
+      }
+
+      const body = await readBody(request);
       const url = rawUrl.split("?")[0] ?? "";
       const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
         ?? (url === "/api/user/saved-blueprints"
@@ -29,8 +43,7 @@ export function createServer() {
           ? await handleBlueprintTrackerRoute(request.method ?? "GET", request.headers, body)
         : url === "/api/user/build-queue"
           ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleFittingRoute(request.method ?? "GET", rawUrl, body) ??
-          await handleMissionsRoute(request.method ?? "GET", rawUrl) ??
+        : await handleMissionsRoute(request.method ?? "GET", rawUrl) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
       if (!route) {

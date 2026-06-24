@@ -12,7 +12,7 @@ type ComponentCardsIndex = {
 };
 
 type BrowsePayload = {
-  records?: Array<{ id?: string }>;
+  records?: Array<{ id?: string; card?: { modifierLabels?: unknown } }>;
 };
 
 const root = getComponentCardsRoot();
@@ -56,6 +56,9 @@ for (const record of browseRecords) {
   if (!recordFiles[normalizedId]) {
     throw new Error(`Browse id ${normalizedId} is missing a by-id file mapping.`);
   }
+  if (!record.card || !Array.isArray(record.card.modifierLabels)) {
+    throw new Error(`Browse record ${normalizedId} is missing card.modifierLabels array.`);
+  }
 }
 
 const sampleId = browseRecords[0]?.id?.trim().toLowerCase();
@@ -98,6 +101,12 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
       if (!Array.isArray(body.records) || body.records.length !== 1553) {
         throw new Error(`Expected 1553 browse records, found ${body.records?.length ?? 0}.`);
       }
+      for (const [index, record] of body.records.entries()) {
+        const card = record && typeof record === "object" ? (record as { card?: { modifierLabels?: unknown } }).card : null;
+        if (!card || !Array.isArray(card.modifierLabels)) {
+          throw new Error(`Browse route record ${index} is missing card.modifierLabels array.`);
+        }
+      }
     },
   },
   {
@@ -108,12 +117,15 @@ const checks: Array<{ name: string; run: () => Promise<void> }> = [
         `/api/crafting/component-cards/${encodeURIComponent(sampleId)}`,
       );
       if (!result || result.status !== 200) throw new Error(`Unexpected status: ${result?.status ?? "null"}`);
-      const body = result.body as { id?: string; source?: unknown };
+      const body = result.body as { id?: string; source?: unknown; card?: { modifierLabels?: unknown } };
       if (body.id?.trim().toLowerCase() !== sampleId) {
         throw new Error("by-id route returned mismatched record id.");
       }
       if (!body.source || typeof body.source !== "object") {
         throw new Error("by-id route should include full source metadata.");
+      }
+      if (!body.card || !Array.isArray(body.card.modifierLabels)) {
+        throw new Error("by-id route card is missing modifierLabels array.");
       }
       const browseRecord = browseRecords.find((record) => record.id?.trim().toLowerCase() === sampleId);
       if (!browseRecord) throw new Error("Sample browse record missing.");

@@ -16,12 +16,13 @@ function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) 
 }
 
 function MaterialsPreview({ schema }: { schema: ComponentCardSchema }) {
-  const remaining = schema.materialsPreview.length;
+  const materialsPreview = Array.isArray(schema.materialsPreview) ? schema.materialsPreview : [];
+  const remaining = materialsPreview.length;
   if (remaining === 0) return null;
 
   return (
     <div className="component-card-materials" aria-label="Materials preview">
-      {schema.materialsPreview.map((material) => (
+      {materialsPreview.map((material) => (
         <span key={`${schema.id}:${material.slot}:${material.cost_id}`} className="component-card-material">
           <strong>{material.material_name}</strong>
           <span>{material.quantity}</span>
@@ -49,7 +50,12 @@ export default function ComponentResultCard({
   const schema = record
     ? buildComponentCardSchemaFromIndex(record)
     : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
-  const visibleStats = [...schema.familyStats, ...schema.genericStats].slice(0, 5);
+  const meta = Array.isArray(schema.meta) ? schema.meta : [];
+  const familyStats = Array.isArray(schema.familyStats) ? schema.familyStats : [];
+  const genericStats = Array.isArray(schema.genericStats) ? schema.genericStats : [];
+  const classificationBadges = Array.isArray(schema.classificationBadges) ? schema.classificationBadges : [];
+  const modifierLabels = Array.isArray(schema.modifierLabels) ? schema.modifierLabels : [];
+  const visibleStats = [...familyStats, ...genericStats].slice(0, 5);
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
   const isShipWeapon = record?.type === "weaponGun" || recipe?.component_type === "weaponGun";
   const location = useLocation();
@@ -104,9 +110,9 @@ export default function ComponentResultCard({
           </div>
         )}
 
-        {schema.meta.length > 0 && (
+        {meta.length > 0 && (
           <div className="component-card-metrics component-card-metrics--meta">
-            {schema.meta.slice(0, 5).map((metric) => (
+            {meta.slice(0, 5).map((metric) => (
               <MetricRow key={`${metric.label}:${metric.value}`} metric={metric} />
             ))}
           </div>
@@ -120,9 +126,9 @@ export default function ComponentResultCard({
           </div>
         )}
 
-        {(schema.classificationBadges?.length ?? 0) > 0 && (
+        {classificationBadges.length > 0 && (
           <div className="component-card-modifiers" aria-label="Weapon classification">
-            {schema.classificationBadges?.map((badge) => (
+            {classificationBadges.map((badge) => (
               <span key={badge.label} className={getShipWeaponBadgeClassName(badge.variant)}>
                 {badge.label}
               </span>
@@ -130,9 +136,9 @@ export default function ComponentResultCard({
           </div>
         )}
 
-        {!isShipWeapon && schema.modifierLabels.length > 0 && (
+        {!isShipWeapon && modifierLabels.length > 0 && (
           <div className="component-card-craft-modifiers" aria-label="Crafting modifier labels">
-            {schema.modifierLabels.map((label) => (
+            {modifierLabels.map((label) => (
               <span key={label} className="component-card-craft-modifier">{label}</span>
             ))}
           </div>
