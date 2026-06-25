@@ -14,6 +14,76 @@ type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
 
+const FITTING_BUILD_ID = "4.8.184.2887-12061511";
+const FITTING_BUILD_QUERY = `channel=LIVE&buildId=${encodeURIComponent(FITTING_BUILD_ID)}`;
+
+function withFittingBuild(path: string): string {
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}${FITTING_BUILD_QUERY}`;
+}
+
+type DamageType = "physical" | "energy" | "distortion" | "thermal" | "biochemical" | "stun";
+export type DamageTypeValue = {
+  value?: number | null;
+  min?: number | null;
+  max?: number | null;
+  multiplier?: number | null;
+  threshold?: number | null;
+  damageCap?: number | null;
+  index?: number | null;
+  confidence?: FittingConfidence | string;
+  sourcePath?: string | null;
+};
+export type DamageTypeMap = Partial<Record<DamageType, DamageTypeValue>>;
+
+export type FittingShipMitigation = {
+  hullHp: number | null;
+  componentPenetrationDamageMultiplier: number | null;
+  componentPenetrationDamageMultiplierProvenance: Record<string, unknown> | null;
+  fusePenetrationDamageMultiplier: number | null;
+  fusePenetrationDamageMultiplierProvenance: Record<string, unknown> | null;
+};
+
+export type FittingComponentMitigation =
+  | {
+    kind: "shield";
+    shieldHp: number | null;
+    maxShieldHealth: number | null;
+    maxShieldRegen: number | null;
+    damagedRegenDelay: number | null;
+    shieldFaceCount: number | null;
+    resistanceByDamageType: DamageTypeMap | null;
+    absorptionByDamageType: DamageTypeMap | null;
+    regenByPowerPip: unknown[] | null;
+    regenPowerFormula: string | null;
+    regenPowerFormulaConfidence: string | null;
+  }
+  | {
+    kind: "armor";
+    health: number | null;
+    basePenetrationReduction: number | null;
+    damageMultiplierByDamageType: DamageTypeMap | null;
+    deflectionThresholdByDamageType: DamageTypeMap | null;
+    penetrationAbsorptionByDamageType: DamageTypeMap | null;
+    resistanceByDamageType: DamageTypeMap | null;
+  }
+  | {
+    kind: "weapon_projectile";
+    damage: Record<DamageType, number | null>;
+    ammoPenetration: number | null;
+    basePenetrationDistance: number | null;
+    maxPenetrationThickness: number | null;
+    penetrationParams: Record<string, unknown> | null;
+  };
+
+export type FittingAmmoMitigation = {
+  damage: Record<DamageType, number | null>;
+  ammoPenetration: number | null;
+  basePenetrationDistance: number | null;
+  maxPenetrationThickness: number | null;
+  penetrationParams: Record<string, unknown> | null;
+};
+
 export type FittingShipSummary = {
   id: string;
   name: string;
@@ -31,6 +101,8 @@ export type FittingShipSummary = {
 export type FittingShipDetail = FittingShipSummary & {
   description: string | null;
   className: string | null;
+  hullHP?: number | null;
+  mitigation?: FittingShipMitigation;
   performance: {
     scmSpeed?: number | null;
     maxSpeed?: number | null;
@@ -90,6 +162,7 @@ export type FittingCalculationCategory = {
   confidence: FittingConfidence;
   unavailableReason: string | null;
   derived: Record<string, string | number | boolean | null>;
+  extracted?: Record<string, unknown>;
 };
 
 export type FittingCalculation = {
@@ -159,11 +232,11 @@ async function writeJson<T>(path: string, payload: unknown, signal?: AbortSignal
 }
 
 export async function validateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingValidationResult> {
-  return (await writeJson<DetailResponse<FittingValidationResult>>("/api/v1/fitting/validate", request, signal)).data;
+  return (await writeJson<DetailResponse<FittingValidationResult>>(withFittingBuild("/api/v1/fitting/validate"), request, signal)).data;
 }
 
 export async function calculateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingCalculateResult> {
-  return (await writeJson<DetailResponse<FittingCalculateResult>>("/api/v1/fitting/calculate", request, signal)).data;
+  return (await writeJson<DetailResponse<FittingCalculateResult>>(withFittingBuild("/api/v1/fitting/calculate"), request, signal)).data;
 }
 
 async function readResponse<T>(path: string, signal?: AbortSignal): Promise<T> {
@@ -187,20 +260,20 @@ async function readAllPages<T>(path: string, signal?: AbortSignal): Promise<T[]>
 }
 
 export function listFittingShips(signal?: AbortSignal): Promise<FittingShipSummary[]> {
-  return readAllPages<FittingShipSummary>("/api/v1/fitting/ships", signal);
+  return readAllPages<FittingShipSummary>(withFittingBuild("/api/v1/fitting/ships"), signal);
 }
 
 export function listFittingComponents(signal?: AbortSignal): Promise<FittingComponentSummary[]> {
-  return readAllPages<FittingComponentSummary>("/api/v1/fitting/components", signal);
+  return readAllPages<FittingComponentSummary>(withFittingBuild("/api/v1/fitting/components"), signal);
 }
 
 export async function getFittingShip(shipId: string, signal?: AbortSignal): Promise<FittingShipDetail> {
-  return (await readResponse<DetailResponse<FittingShipDetail>>(`/api/v1/fitting/ships/${encodeURIComponent(shipId)}`, signal)).data;
+  return (await readResponse<DetailResponse<FittingShipDetail>>(withFittingBuild(`/api/v1/fitting/ships/${encodeURIComponent(shipId)}`), signal)).data;
 }
 
 export async function getFittingHardpoints(shipId: string, signal?: AbortSignal): Promise<FittingHardpoint[]> {
   const response = await readResponse<DetailResponse<{ shipId: string; format: "flat"; ports: FittingHardpoint[] }>>(
-    `/api/v1/fitting/ships/${encodeURIComponent(shipId)}/hardpoints?format=flat`,
+    withFittingBuild(`/api/v1/fitting/ships/${encodeURIComponent(shipId)}/hardpoints?format=flat`),
     signal,
   );
   return response.data.ports;
@@ -208,7 +281,7 @@ export async function getFittingHardpoints(shipId: string, signal?: AbortSignal)
 
 export async function getFittingLoadout(shipId: string, signal?: AbortSignal): Promise<FittingLoadoutEntry[]> {
   const response = await readResponse<DetailResponse<{ shipId: string; scope: "stock_default_loadout"; entries: FittingLoadoutEntry[] }>>(
-    `/api/v1/fitting/ships/${encodeURIComponent(shipId)}/loadout`,
+    withFittingBuild(`/api/v1/fitting/ships/${encodeURIComponent(shipId)}/loadout`),
     signal,
   );
   return response.data.entries;
@@ -216,18 +289,57 @@ export async function getFittingLoadout(shipId: string, signal?: AbortSignal): P
 
 export async function getFittingCalculations(shipId: string, signal?: AbortSignal): Promise<FittingCalculation> {
   return (await readResponse<DetailResponse<FittingCalculation>>(
-    `/api/v1/fitting/ships/${encodeURIComponent(shipId)}/calculations`,
+    withFittingBuild(`/api/v1/fitting/ships/${encodeURIComponent(shipId)}/calculations`),
     signal,
   )).data;
 }
 
+export type FittingComponentStats = {
+  mass?: number | null;
+  volume?: number | null;
+  health?: number | null;
+  powerDraw?: number | null;
+  coolingDraw?: number | null;
+  heatGenerated?: number | null;
+  infraredEmission?: number | null;
+  electromagneticEmission?: number | null;
+  alphaDamage?: number | null;
+  dps?: number | null;
+  projectileSpeed?: number | null;
+  projectileLifetime?: number | null;
+  calculatedRange?: number | null;
+  ammoCapacity?: number | null;
+  shieldHp?: number | null;
+  regenRate?: number | null;
+  powerGenerated?: number | null;
+  coolingGenerated?: number | null;
+  quantumSpeed?: number | null;
+  spoolTime?: number | null;
+  quantumCooldown?: number | null;
+  fuelRate?: number | null;
+  detectionRange?: number | null;
+  scanRange?: number | null;
+  scanRate?: number | null;
+  scanCooldownTime?: number | null;
+  signatureSensitivity?: number | null;
+  thrustCapacity?: number | null;
+  damageEnergy?: number | null;
+  damagePhysical?: number | null;
+  damageThermal?: number | null;
+  damageDistortion?: number | null;
+  damageBiochemical?: number | null;
+  damageStun?: number | null;
+  fireRateRpm?: number | null;
+};
+
 export type FittingComponentDetail = FittingComponentSummary & {
-  stats: Record<string, number | null>;
+  stats: FittingComponentStats;
+  mitigation: FittingComponentMitigation | null;
 };
 
 export async function getFittingComponent(componentId: string, signal?: AbortSignal): Promise<FittingComponentDetail> {
   return (await readResponse<DetailResponse<FittingComponentDetail>>(
-    `/api/v1/fitting/components/${encodeURIComponent(componentId)}`,
+    withFittingBuild(`/api/v1/fitting/components/${encodeURIComponent(componentId)}`),
     signal,
   )).data;
 }
