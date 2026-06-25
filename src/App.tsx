@@ -20,6 +20,7 @@ const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPa
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
 const FittingPage = lazy(() => import("./pages/FittingPage"));
+const FittingMockupPage = lazy(() => import("./pages/FittingMockupPage"));
 
 const AlphaThresholdToolPage = lazy(() =>
   import("./tools/alpha-threshold").then((module) => ({
@@ -240,6 +241,16 @@ export default function App() {
         />
 
       </Route>
+
+        {/* Full-viewport fitting mockup — outside dashboard shell */}
+        <Route
+          path="fitting-mockup"
+          element={
+            <Suspense fallback={<RouteFallback />}>
+              <FittingMockupPage />
+            </Suspense>
+          }
+        />
 
         <Route path="*" element={<RedirectToDashboard />} />
 
