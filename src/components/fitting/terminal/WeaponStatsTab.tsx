@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { getFittingComponent, type FittingComponentDetail } from "../../../lib/fitting/fittingApi";
+import { getFittingComponent, type FittingComponentStats } from "../../../lib/fitting/fittingApi";
 import {
   buildOffensiveGroups,
   formatNumber,
+  inferDamageType,
+  portShortLabel,
   type NamedGroup,
   type PortBreakdownRow,
 } from "../../../lib/fitting/fittingPortGrouping";
@@ -10,18 +12,30 @@ import {
 type WeaponStatEntry = {
   portId: string;
   name: string;
+  portLabel: string;
   size: string;
   type: string;
+  damageType: string;
   alpha: string;
   alphaShare: string;
-  stats: FittingComponentDetail["stats"] | null;
+  stats: FittingComponentStats | null;
   loading: boolean;
 };
 
 function statOrUnavailable(value: number | null | undefined, suffix = ""): string {
-  if (typeof value !== "number" || !Number.isFinite(value)) return "Source data unavailable";
+  if (typeof value !== "number" || !Number.isFinite(value)) return "—";
   return `${formatNumber(value)}${suffix}`;
 }
+
+const weaponGroupKeys = [
+  "pilot-weapons",
+  "remote-turrets",
+  "manned-turrets",
+  "installed-weapons",
+  "missiles",
+  "torpedoes",
+  "emp-qed",
+];
 
 type WeaponStatsTabProps = {
   portRows: PortBreakdownRow[];
@@ -30,9 +44,7 @@ type WeaponStatsTabProps = {
 
 export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabProps) {
   const groups = useMemo(() => buildOffensiveGroups(portRows), [portRows]);
-  const weaponGroups = groups.filter((group) =>
-    ["pilot-weapons", "remote-turrets", "manned-turrets", "missiles", "torpedoes", "emp-qed"].includes(group.key),
-  );
+  const weaponGroups = groups.filter((group) => weaponGroupKeys.includes(group.key));
   const [entries, setEntries] = useState<Record<string, WeaponStatEntry>>({});
 
   useEffect(() => {
@@ -40,47 +52,46 @@ export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabP
     const weaponRows = weaponGroups
       .flatMap((group) => group.rows)
       .filter((row) => row.equippedComponentKey);
-    const uniqueIds = [...new Set(weaponRows.map((row) => row.equippedComponentKey!))];
 
     void (async () => {
-      for (const componentId of uniqueIds) {
-        const row = weaponRows.find((entry) => entry.equippedComponentKey === componentId)!;
-        try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
-          const alpha = detail.stats.alphaDamage;
-          const share = totalAlpha != null && alpha != null && totalAlpha > 0
-            ? `${formatNumber((alpha / totalAlpha) * 100)}%`
-            : "—";
-          setEntries((current) => ({
-            ...current,
-            [componentId]: {
-              portId: row.portId,
-              name: detail.displayName || detail.name,
-              size: detail.size != null ? `S${detail.size}` : "—",
-              type: detail.subtype ?? detail.type,
-              alpha: statOrUnavailable(alpha),
-              alphaShare: share,
-              stats: detail.stats,
-              loading: false,
-            },
-          }));
-        } catch {
-          if (controller.signal.aborted) return;
-          setEntries((current) => ({
-            ...current,
-            [componentId]: {
-              portId: row.portId,
-              name: row.equippedComponentName ?? componentId,
-              size: row.componentSize != null ? `S${row.componentSize}` : "—",
-              type: row.componentSubtype ?? "—",
-              alpha: "Requires fitting API",
-              alphaShare: "—",
-              stats: null,
-              loading: false,
-            },
-          }));
+      const componentCache = new Map<string, FittingComponentStats>();
+      for (const row of weaponRows) {
+        const componentId = row.equippedComponentKey!;
+        if (controller.signal.aborted) return;
+
+        if (!componentCache.has(componentId)) {
+          try {
+            const detail = await getFittingComponent(componentId, controller.signal);
+            if (controller.signal.aborted) return;
+            componentCache.set(componentId, detail.stats);
+          } catch {
+            if (controller.signal.aborted) return;
+            componentCache.set(componentId, {});
+          }
         }
+
+        const stats = componentCache.get(componentId) ?? {};
+        const alpha = stats.alphaDamage;
+        const share = totalAlpha != null && alpha != null && totalAlpha > 0
+          ? `${formatNumber((alpha / totalAlpha) * 100)}%`
+          : "—";
+        const damageType = inferDamageType(stats) ?? "—";
+
+        setEntries((current) => ({
+          ...current,
+          [row.portId]: {
+            portId: row.portId,
+            portLabel: portShortLabel(row),
+            name: row.equippedComponentName ?? portShortLabel(row),
+            size: row.componentSize != null ? `S${row.componentSize}` : "—",
+            type: row.componentSubtype ?? row.componentCategory ?? "—",
+            damageType,
+            alpha: statOrUnavailable(alpha),
+            alphaShare: share,
+            stats,
+            loading: false,
+          },
+        }));
       }
     })();
 
@@ -107,45 +118,54 @@ function WeaponGroupTable({ group, entries }: { group: NamedGroup; entries: Reco
   return (
     <section className="fit-term-weapon-group">
       <h2>{group.label}</h2>
-      <table className="fit-term-table fit-term-table--weapons">
-        <thead>
-          <tr>
-            <th>Port</th>
-            <th>Size</th>
-            <th>Weapon</th>
-            <th>Type</th>
-            <th>Alpha</th>
-            <th>Share</th>
-            <th>Range</th>
-            <th>Speed</th>
-            <th>Fire Rate</th>
-            <th>Power</th>
-            <th>Heat</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => {
-            const entry = row.equippedComponentKey ? entries[row.equippedComponentKey] : undefined;
-            const stats = entry?.stats;
-            return (
-              <tr key={row.portId}>
-                <td>{row.portId.split("/").pop() ?? row.portId}</td>
-                <td>{entry?.size ?? (row.componentSize != null ? `S${row.componentSize}` : "—")}</td>
-                <td>{entry?.name ?? row.equippedComponentName ?? "—"}</td>
-                <td>{entry?.type ?? "—"}</td>
-                <td>{entry?.loading || !entry ? "…" : entry.alpha}</td>
-                <td>{entry?.alphaShare ?? "—"}</td>
-                <td>{statOrUnavailable(stats?.calculatedRange)}</td>
-                <td>{statOrUnavailable(stats?.projectileSpeed)}</td>
-                <td className="fit-term-unavail">Raw stat unavailable</td>
-                <td>{statOrUnavailable(stats?.powerDraw, " MW")}</td>
-                <td>{statOrUnavailable(stats?.heatGenerated)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <p className="fit-term-note">DPS and TTK are intentionally excluded. Fire rate shown only when present in source data.</p>
+      <div className="fit-term-table-wrap">
+        <table className="fit-term-table fit-term-table--weapons">
+          <thead>
+            <tr>
+              <th>Hardpoint</th>
+              <th>Size</th>
+              <th>Weapon</th>
+              <th>Type</th>
+              <th>Damage</th>
+              <th>Alpha</th>
+              <th>Share</th>
+              <th>Range</th>
+              <th>Speed</th>
+              <th>Lifetime</th>
+              <th>Fire Rate</th>
+              <th>Ammo</th>
+              <th>Power</th>
+              <th>Heat</th>
+              <th>Coolant</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => {
+              const entry = entries[row.portId];
+              const stats = entry?.stats;
+              return (
+                <tr key={row.portId}>
+                  <td>{entry?.portLabel ?? portShortLabel(row)}</td>
+                  <td>{entry?.size ?? (row.componentSize != null ? `S${row.componentSize}` : "—")}</td>
+                  <td>{entry?.name ?? row.equippedComponentName ?? "—"}</td>
+                  <td>{entry?.type ?? "—"}</td>
+                  <td>{entry?.loading || !entry ? "…" : entry.damageType}</td>
+                  <td>{entry?.loading || !entry ? "…" : entry.alpha}</td>
+                  <td>{entry?.alphaShare ?? "—"}</td>
+                  <td>{statOrUnavailable(stats?.calculatedRange)}</td>
+                  <td>{statOrUnavailable(stats?.projectileSpeed)}</td>
+                  <td>{statOrUnavailable(stats?.projectileLifetime)}</td>
+                  <td>{statOrUnavailable(stats?.fireRateRpm, " RPM")}</td>
+                  <td>{statOrUnavailable(stats?.ammoCapacity)}</td>
+                  <td>{statOrUnavailable(stats?.powerDraw, " MW")}</td>
+                  <td>{statOrUnavailable(stats?.heatGenerated)}</td>
+                  <td>{statOrUnavailable(stats?.coolingDraw, " kW")}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }

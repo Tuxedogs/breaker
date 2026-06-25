@@ -17,23 +17,25 @@ export type FittingTerminalTab =
 
 export type PipCategory =
   | "weapons"
-  | "shields"
   | "engines"
   | "quantum"
-  | "systems"
-  | "utility"
-  | "reserved";
+  | "radar"
+  | "lifeSupport"
+  | "cooler1"
+  | "cooler2";
 
 export type PipAssignment = Record<PipCategory, number>;
 
+export const PIP_MAX_PER_CATEGORY = 10;
+
 export const DEFAULT_PIP_ASSIGNMENT: PipAssignment = {
-  weapons: 25,
-  shields: 20,
-  engines: 20,
-  quantum: 10,
-  systems: 15,
-  utility: 5,
-  reserved: 5,
+  weapons: 0,
+  engines: 0,
+  quantum: 0,
+  radar: 0,
+  lifeSupport: 0,
+  cooler1: 0,
+  cooler2: 0,
 };
 
 export type CraftQualityOverride = {

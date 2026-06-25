@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import {
   DEFAULT_PIP_ASSIGNMENT,
+  PIP_MAX_PER_CATEGORY,
   type CraftQualityOverride,
   type FittingFocusTarget,
   type FittingTerminalTab,
@@ -14,7 +15,6 @@ export function useFittingTerminalState(shipId: string | null) {
   const [selectedPortId, setSelectedPortId] = useState<string | null>(null);
   const [focusTarget, setFocusTarget] = useState<FittingFocusTarget | null>(null);
   const [pipAssignment, setPipAssignment] = useState<PipAssignment>(initialPips);
-  const [shieldThresholdPercent, setShieldThresholdPercent] = useState(60);
   const [craftOverrides, setCraftOverrides] = useState<Record<string, CraftQualityOverride>>({});
   const [activeCraftPortId, setActiveCraftPortId] = useState<string | null>(null);
 
@@ -35,7 +35,14 @@ export function useFittingTerminalState(shipId: string | null) {
   }, []);
 
   const updatePip = useCallback((category: keyof PipAssignment, value: number) => {
-    setPipAssignment((current) => ({ ...current, [category]: Math.max(0, Math.min(100, value)) }));
+    setPipAssignment((current) => ({
+      ...current,
+      [category]: Math.max(0, Math.min(PIP_MAX_PER_CATEGORY, Math.round(value))),
+    }));
+  }, []);
+
+  const syncPipsFromDraws = useCallback((assignment: PipAssignment) => {
+    setPipAssignment({ ...assignment });
   }, []);
 
   const applyCraftOverride = useCallback((override: CraftQualityOverride) => {
@@ -60,8 +67,7 @@ export function useFittingTerminalState(shipId: string | null) {
     clearSelection,
     pipAssignment,
     updatePip,
-    shieldThresholdPercent,
-    setShieldThresholdPercent,
+    syncPipsFromDraws,
     craftOverrides,
     activeCraftPortId,
     setActiveCraftPortId,

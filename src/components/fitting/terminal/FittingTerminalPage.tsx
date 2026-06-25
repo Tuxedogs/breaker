@@ -1,16 +1,20 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { FittingCalculateResult } from "../../../lib/fitting/fittingApi";
 import {
   buildDefensiveGroups,
   buildOffensiveGroups,
   categoryLabel,
+  portShortLabel,
   type FittingComponentRecord,
   type FittingShipDetail,
   type FittingShipSummary,
   type PortBreakdownRow,
 } from "../../../lib/fitting/fittingPortGrouping";
+import { useCombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
 import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import { useFittingTerminalState } from "../../../lib/fitting/useFittingTerminalState";
+import { pipAssignmentFromDraws } from "../../../lib/fitting/fittingPipPower";
+import { usePipSystemPowerDraw } from "../../../lib/fitting/usePipSystemPowerDraw";
 import CraftQualityModal from "./CraftQualityModal";
 import FittingPerformanceGrid from "./FittingPerformanceGrid";
 import FittingSystemsPanel from "./FittingSystemsPanel";
@@ -56,7 +60,7 @@ function HardpointsTab({ portRows }: { portRows: PortBreakdownRow[] }) {
         <tbody>
           {portRows.map((row) => (
             <tr key={row.portId}>
-              <td>{row.portName ?? row.portId}</td>
+              <td>{portShortLabel(row)}</td>
               <td>{categoryLabel(row.ruleCategory ?? row.portCategory)}</td>
               <td>{row.equippedComponentName ?? "Empty"}</td>
               <td>{row.compatibilityStatus ?? "unknown"}</td>
@@ -81,17 +85,38 @@ export default function FittingTerminalPage({
   shipsLoading,
 }: FittingTerminalPageProps) {
   const terminal = useFittingTerminalState(shipId);
+  const pipPower = usePipSystemPowerDraw(portRows);
+  const pipSyncedShipRef = useRef<string | null>(null);
+  const combatAlpha = useCombatAlphaBreakdown(portRows);
+  const { syncPipsFromDraws } = terminal;
   const ship = shipDetail?.ship;
   const offensiveGroups = useMemo(() => buildOffensiveGroups(portRows), [portRows]);
   const defensiveGroups = useMemo(() => buildDefensiveGroups(portRows), [portRows]);
+  const defensiveCoreGroups = useMemo(
+    () => defensiveGroups.filter((group) => ["shields", "armor", "hull"].includes(group.key) && group.rows.length > 0),
+    [defensiveGroups],
+  );
+  const supportGroups = useMemo(
+    () => defensiveGroups.filter((group) => !["shields", "armor", "hull"].includes(group.key) && group.rows.length > 0),
+    [defensiveGroups],
+  );
   const craftOverridePortIds = useMemo(
     () => new Set(Object.keys(terminal.craftOverrides)),
     [terminal.craftOverrides],
   );
+  const portLookup = useMemo(
+    () => new Map(portRows.map((row) => [row.portId, row])),
+    [portRows],
+  );
 
   const selectedRow = portRows.find((row) => row.portId === terminal.selectedPortId) ?? null;
   const selectedLabel = selectedRow
-    ? selectedRow.equippedComponentName ?? selectedRow.portName ?? selectedRow.portId
+    ? selectedRow.equippedComponentName ?? selectedRow.portName ?? null
+    : null;
+  const selectedMeta = selectedRow
+    ? [selectedRow.componentManufacturer, selectedRow.componentSize != null ? `S${selectedRow.componentSize}` : null]
+      .filter(Boolean)
+      .join(" · ") || null
     : null;
 
   const totalAlpha = (() => {
@@ -102,6 +127,16 @@ export default function FittingTerminalPage({
   const activeCraftRow = terminal.activeCraftPortId
     ? portRows.find((row) => row.portId === terminal.activeCraftPortId) ?? null
     : null;
+
+  useEffect(() => {
+    pipSyncedShipRef.current = null;
+  }, [shipId]);
+
+  useEffect(() => {
+    if (!shipId || !pipPower.ready || pipSyncedShipRef.current === shipId) return;
+    pipSyncedShipRef.current = shipId;
+    syncPipsFromDraws(pipAssignmentFromDraws(pipPower.draws));
+  }, [shipId, pipPower.ready, pipPower.draws, syncPipsFromDraws]);
 
   return (
     <div className="fit-page fit-term-page">
@@ -121,41 +156,75 @@ export default function FittingTerminalPage({
 
       {terminal.activeTab === "overview" && !loading && (
         <div className="fit-term-body">
-          <FittingSystemsPanel
-            title="Offensive Systems"
-            groups={offensiveGroups}
-            selectedPortId={terminal.selectedPortId}
-            craftOverridePortIds={craftOverridePortIds}
-            craftablePortIds={craftablePortIds}
-            iconMode={iconMode}
-            onSelectPort={terminal.selectComponent}
-            onCraftPort={terminal.setActiveCraftPortId}
-          />
+          <div className="fit-term-col fit-term-col--left">
+            <FittingSystemsPanel
+              title="Offensive Systems"
+              groups={offensiveGroups}
+              portLookup={portLookup}
+              selectedPortId={terminal.selectedPortId}
+              craftOverridePortIds={craftOverridePortIds}
+              craftablePortIds={craftablePortIds}
+              iconMode={iconMode}
+              onSelectPort={terminal.selectComponent}
+              onCraftPort={terminal.setActiveCraftPortId}
+            />
+          </div>
           <div className="fit-term-center">
             <ShipHeroPanel
+              shipId={shipId}
               manufacturer={ship?.manufacturer ?? null}
               shipName={ship?.name ?? "Ship"}
               focusTarget={terminal.focusTarget}
               selectedLabel={selectedLabel}
+              selectedMeta={selectedMeta}
             />
           </div>
-          <FittingSystemsPanel
-            title="Defensive / Support Systems"
-            groups={defensiveGroups}
-            selectedPortId={terminal.selectedPortId}
-            craftOverridePortIds={craftOverridePortIds}
-            craftablePortIds={craftablePortIds}
-            iconMode={iconMode}
-            onSelectPort={terminal.selectComponent}
-            onCraftPort={terminal.setActiveCraftPortId}
-          />
+          <div className="fit-term-col fit-term-col--right">
+            <FittingSystemsPanel
+              title="Defensive Systems"
+              groups={defensiveCoreGroups}
+              portLookup={portLookup}
+              selectedPortId={terminal.selectedPortId}
+              craftOverridePortIds={craftOverridePortIds}
+              craftablePortIds={craftablePortIds}
+              iconMode={iconMode}
+              onSelectPort={terminal.selectComponent}
+              onCraftPort={terminal.setActiveCraftPortId}
+              compact
+            />
+            <FittingSystemsPanel
+              title="Support Systems"
+              groups={supportGroups}
+              portLookup={portLookup}
+              selectedPortId={terminal.selectedPortId}
+              craftOverridePortIds={craftOverridePortIds}
+              craftablePortIds={craftablePortIds}
+              iconMode={iconMode}
+              onSelectPort={terminal.selectComponent}
+              onCraftPort={terminal.setActiveCraftPortId}
+              compact
+            />
+            <footer className="fit-term-col-foot">
+              <div className="fit-term-fitting-status">
+                <span className="fit-term-meta-label">Fitting Status</span>
+                <span className="fit-term-status-pill fit-term-status-pill--valid">
+                  <i aria-hidden />
+                  Valid
+                </span>
+              </div>
+              <button type="button" className="fit-term-foot-btn">View Full Stats</button>
+            </footer>
+          </div>
           <FittingPerformanceGrid
             calculateResult={calculateResult}
             shipPerformance={ship ?? null}
+            hullHP={shipDetail?.hullHP ?? null}
+            cargoCapacityScu={ship?.cargoCapacityScu ?? null}
+            portRows={portRows}
+            combatAlpha={combatAlpha}
             pipAssignment={terminal.pipAssignment}
+            systemDraws={pipPower.draws}
             onPipChange={terminal.updatePip}
-            shieldThresholdPercent={terminal.shieldThresholdPercent}
-            onThresholdChange={terminal.setShieldThresholdPercent}
             onViewWeaponStats={() => terminal.setActiveTab("weapon-stats")}
           />
         </div>

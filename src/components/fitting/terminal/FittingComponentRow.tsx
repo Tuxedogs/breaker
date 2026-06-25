@@ -3,7 +3,7 @@ import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import type { SummarizedRow } from "../../../lib/fitting/fittingPortGrouping";
 
 type FittingComponentRowProps = {
-  item: SummarizedRow;
+  summary: SummarizedRow;
   active: boolean;
   hasCustomQuality: boolean;
   craftable: boolean;
@@ -12,8 +12,21 @@ type FittingComponentRowProps = {
   onCraftClick: () => void;
 };
 
+function quantityLabel(summary: SummarizedRow): string {
+  const sizePart = summary.size != null ? `S${summary.size}` : null;
+  if (summary.quantity > 1 && sizePart) return `${summary.quantity}x ${sizePart}`;
+  if (summary.quantity > 1) return `${summary.quantity}x`;
+  if (sizePart) return sizePart;
+  return "1x";
+}
+
+function turretWeaponLine(summary: SummarizedRow): string {
+  const sizePart = summary.size != null ? `S${summary.size} ` : "";
+  return `x${summary.quantity} ${sizePart}${summary.name}`.replace(/\s+/g, " ").trim();
+}
+
 export default function FittingComponentRow({
-  item,
+  summary,
   active,
   hasCustomQuality,
   craftable,
@@ -21,14 +34,17 @@ export default function FittingComponentRow({
   onSelect,
   onCraftClick,
 }: FittingComponentRowProps) {
-  const firstRow = item.rows[0];
-  const sizeLabel = item.size != null ? `S${item.size}` : "—";
+  const firstRow = summary.rows[0];
+  const isTurretRow = Boolean(summary.turretLabel);
+  const sublabel = isTurretRow
+    ? summary.manufacturer ?? summary.type
+    : summary.manufacturer ?? summary.type;
 
   return (
     <div
       role="button"
       tabIndex={0}
-      className={["fit-term-row", active ? "is-active" : ""].filter(Boolean).join(" ")}
+      className={["fit-term-row", isTurretRow ? "fit-term-row--turret" : "", active ? "is-active" : ""].filter(Boolean).join(" ")}
       onClick={onSelect}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -37,39 +53,67 @@ export default function FittingComponentRow({
         }
       }}
     >
-      <span className="fit-term-row-qty">{item.quantity}x</span>
-      <span className="fit-term-row-size">{sizeLabel}</span>
-      <FittingComponentIcon
-        componentType={firstRow.componentCategory}
-        componentName={item.name}
-        size={item.size}
-        preferredMode={iconMode}
-        alt={item.name}
-        iconSize="sm"
-      />
-      <span className="fit-term-row-main">
-        <strong>
-          {item.name}
-          {hasCustomQuality && <i className="fit-term-custom-dot" title="Custom quality active" />}
-          {craftable && (
-            <button
-              type="button"
-              className="fit-term-craft-btn"
-              title="Tune crafted quality"
-              aria-label={`Tune crafted quality for ${item.name}`}
-              onClick={(event) => {
-                event.stopPropagation();
-                onCraftClick();
-              }}
-            >
-              ⚙
-            </button>
-          )}
-        </strong>
-        <span>{[item.type, item.manufacturer].filter(Boolean).join(" · ") || "Type unavailable"}</span>
+      <span className="fit-term-row-icon" aria-hidden>
+        <FittingComponentIcon
+          componentType={firstRow.componentCategory}
+          componentName={summary.name}
+          size={summary.size}
+          preferredMode={iconMode}
+          alt=""
+          iconSize="sm"
+        />
       </span>
-      {item.controlMode && <span className="fit-term-row-badge">{item.controlMode}</span>}
-      <span className="fit-term-row-detail" title="Component replacement — future">›</span>
+      <span className="fit-term-row-main">
+        {isTurretRow ? (
+          <>
+            <strong className="fit-term-row-turret">{summary.turretLabel}</strong>
+            <span className="fit-term-row-weapon-line">{turretWeaponLine(summary)}</span>
+            {sublabel && <span className="fit-term-row-meta">{sublabel}</span>}
+          </>
+        ) : (
+          <>
+            <span className="fit-term-row-title-line">
+              <span className="fit-term-row-qty">{quantityLabel(summary)}</span>
+              <strong className="fit-term-row-name">{summary.name}</strong>
+              {hasCustomQuality && <i className="fit-term-custom-dot" title="Custom quality active" />}
+              {craftable && (
+                <button
+                  type="button"
+                  className="fit-term-craft-btn"
+                  title="Tune crafted quality"
+                  aria-label={`Tune crafted quality for ${summary.name}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onCraftClick();
+                  }}
+                >
+                  ⚙
+                </button>
+              )}
+            </span>
+            {sublabel && <span className="fit-term-row-meta">{sublabel}</span>}
+          </>
+        )}
+        {isTurretRow && (hasCustomQuality || craftable) && (
+          <span className="fit-term-row-title-line">
+            {hasCustomQuality && <i className="fit-term-custom-dot" title="Custom quality active" />}
+            {craftable && (
+              <button
+                type="button"
+                className="fit-term-craft-btn"
+                title="Tune crafted quality"
+                aria-label={`Tune crafted quality for ${summary.name}`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onCraftClick();
+                }}
+              >
+                ⚙
+              </button>
+            )}
+          </span>
+        )}
+      </span>
     </div>
   );
 }

@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { getFittingComponent } from "./fittingApi";
 import {
+  aggregateDamageAlpha,
   buildOffensiveGroups,
   type PortBreakdownRow,
 } from "./fittingPortGrouping";
 
 export type CombatAlphaBreakdown = {
   gunAlpha: number | null;
+  pilotAlpha: number | null;
+  crewAlpha: number | null;
   missileAlpha: number | null;
   torpedoAlpha: number | null;
   byDamageType: Record<string, number | null>;
@@ -14,6 +17,8 @@ export type CombatAlphaBreakdown = {
 };
 
 const gunGroupKeys = new Set(["pilot-weapons", "remote-turrets", "manned-turrets", "installed-weapons"]);
+const pilotGroupKeys = new Set(["pilot-weapons", "installed-weapons"]);
+const crewGroupKeys = new Set(["remote-turrets", "manned-turrets"]);
 
 function sumAlphas(values: Array<number | null | undefined>): number | null {
   const nums = values.filter((value): value is number => typeof value === "number" && Number.isFinite(value));
@@ -22,7 +27,7 @@ function sumAlphas(values: Array<number | null | undefined>): number | null {
 }
 
 export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlphaBreakdown {
-  const [alphaByComponentId, setAlphaByComponentId] = useState<Record<string, number | null>>({});
+  const [statsByComponentId, setStatsByComponentId] = useState<Record<string, Record<string, number | null>>>({});
   const [loading, setLoading] = useState(false);
 
   const weaponRows = useMemo(() => {
@@ -41,7 +46,7 @@ export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlp
   useEffect(() => {
     if (componentIds.length === 0) {
       queueMicrotask(() => {
-        setAlphaByComponentId({});
+        setStatsByComponentId({});
         setLoading(false);
       });
       return;
@@ -51,19 +56,19 @@ export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlp
     queueMicrotask(() => setLoading(true));
 
     void (async () => {
-      const next: Record<string, number | null> = {};
+      const next: Record<string, Record<string, number | null>> = {};
       for (const componentId of componentIds) {
         try {
           const detail = await getFittingComponent(componentId, controller.signal);
           if (controller.signal.aborted) return;
-          next[componentId] = detail.stats.alphaDamage ?? null;
+          next[componentId] = detail.stats;
         } catch {
           if (controller.signal.aborted) return;
-          next[componentId] = null;
+          next[componentId] = {};
         }
       }
       if (!controller.signal.aborted) {
-        setAlphaByComponentId(next);
+        setStatsByComponentId(next);
         setLoading(false);
       }
     })();
@@ -75,20 +80,36 @@ export function useCombatAlphaBreakdown(portRows: PortBreakdownRow[]): CombatAlp
     const groups = buildOffensiveGroups(portRows);
     const alphaForGroup = (key: string) => {
       const rows = groups.find((group) => group.key === key)?.rows ?? [];
-      return sumAlphas(rows.map((row) => (row.equippedComponentKey ? alphaByComponentId[row.equippedComponentKey] : null)));
+      return sumAlphas(rows.map((row) => (row.equippedComponentKey ? statsByComponentId[row.equippedComponentKey]?.alphaDamage : null)));
     };
 
+    const gunStats = groups
+      .filter((group) => gunGroupKeys.has(group.key))
+      .flatMap((group) => group.rows)
+      .map((row) => (row.equippedComponentKey ? statsByComponentId[row.equippedComponentKey] : null))
+      .filter((stats): stats is Record<string, number | null> => !!stats);
+
+    const damageTotals = aggregateDamageAlpha(gunStats);
+    const byDamageType: Record<string, number | null> = {};
+    for (const [type, value] of Object.entries(damageTotals)) {
+      byDamageType[type] = value;
+    }
+
+    const alphaForGroups = (keys: Set<string>) => sumAlphas(
+      groups
+        .filter((group) => keys.has(group.key))
+        .flatMap((group) => group.rows)
+        .map((row) => (row.equippedComponentKey ? statsByComponentId[row.equippedComponentKey]?.alphaDamage : null)),
+    );
+
     return {
-      gunAlpha: sumAlphas(
-        groups
-          .filter((group) => gunGroupKeys.has(group.key))
-          .flatMap((group) => group.rows)
-          .map((row) => (row.equippedComponentKey ? alphaByComponentId[row.equippedComponentKey] : null)),
-      ),
+      gunAlpha: alphaForGroups(gunGroupKeys),
+      pilotAlpha: alphaForGroups(pilotGroupKeys),
+      crewAlpha: alphaForGroups(crewGroupKeys),
       missileAlpha: alphaForGroup("missiles"),
       torpedoAlpha: alphaForGroup("torpedoes"),
-      byDamageType: {},
+      byDamageType,
       loading,
     };
-  }, [alphaByComponentId, loading, portRows]);
+  }, [loading, portRows, statsByComponentId]);
 }

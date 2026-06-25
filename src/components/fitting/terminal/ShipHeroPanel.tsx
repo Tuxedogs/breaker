@@ -8,30 +8,36 @@ type ShipHeroPanelProps = {
   shipName: string;
   focusTarget: FittingFocusTarget | null;
   selectedLabel: string | null;
+  selectedMeta?: string | null;
 };
 
 function ShipStageSilhouette() {
   return (
-    <svg className="fit-term-hero-svg" viewBox="0 0 640 320" aria-hidden>
+    <svg className="fit-term-hero-svg" viewBox="0 0 800 400" aria-hidden>
       <defs>
-        <linearGradient id="fit-ship-fill" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="rgba(148, 158, 168, 0.22)" />
-          <stop offset="100%" stopColor="rgba(70, 78, 88, 0.12)" />
+        <linearGradient id="fit-hull-top" x1="0.5" x2="0.5" y1="0" y2="1">
+          <stop offset="0%" stopColor="rgba(90, 98, 108, 0.55)" />
+          <stop offset="100%" stopColor="rgba(35, 40, 48, 0.35)" />
+        </linearGradient>
+        <linearGradient id="fit-hull-rim" x1="0" x2="1" y1="0.5" y2="0.5">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.05)" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0.14)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0.05)" />
         </linearGradient>
       </defs>
+      <ellipse cx="400" cy="340" rx="280" ry="22" fill="rgba(255,140,40,0.12)" />
       <path
-        d="M320 36 L560 150 L520 248 L320 286 L120 248 L80 150 Z"
-        fill="url(#fit-ship-fill)"
-        stroke="rgba(180, 190, 200, 0.28)"
-        strokeWidth="1.5"
+        d="M400 40 L680 175 L630 310 L400 360 L170 310 L120 175 Z"
+        fill="url(#fit-hull-top)"
+        stroke="url(#fit-hull-rim)"
+        strokeWidth="1.2"
       />
       <path
-        d="M320 72 L470 150 L450 220 L320 248 L190 220 L170 150 Z"
+        d="M400 95 L580 175 L555 265 L400 300 L245 265 L220 175 Z"
         fill="none"
-        stroke="rgba(120, 130, 140, 0.22)"
+        stroke="rgba(255,255,255,0.06)"
         strokeWidth="1"
       />
-      <line x1="320" y1="36" x2="320" y2="286" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
     </svg>
   );
 }
@@ -40,8 +46,8 @@ export default function ShipHeroPanel({
   shipId,
   manufacturer,
   shipName,
-  focusTarget,
   selectedLabel,
+  selectedMeta,
 }: ShipHeroPanelProps) {
   const [imageFailed, setImageFailed] = useState(false);
 
@@ -50,24 +56,17 @@ export default function ShipHeroPanel({
       id: shipId ?? shipName,
       manufacturer: manufacturer ?? "",
       name: shipName,
-      imageSrc: null,
-      imageAlt: null,
     });
     return candidates.find((candidate) => candidate.source !== "placeholder") ?? null;
   }, [manufacturer, shipId, shipName]);
 
   const showImage = heroImage && !imageFailed;
-  const anchorState = focusTarget?.source === "real-anchor"
-    ? "Focused"
-    : focusTarget
-      ? "Anchor unavailable"
-      : null;
 
   return (
     <section className="fit-term-hero" aria-label="Ship viewer">
-      {/* TODO: integrate real portPath → worldPosition anchor mapping when available */}
       <div className="fit-term-hero-stage" role="img" aria-label={`${shipName} fitting view`}>
-        <div className="fit-term-hero-grid" aria-hidden />
+        <div className="fit-term-hero-spotlight" aria-hidden />
+        <div className="fit-term-hero-floor" aria-hidden />
         <div className="fit-term-hero-visual">
           {showImage ? (
             <img
@@ -77,25 +76,26 @@ export default function ShipHeroPanel({
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <>
-              <ShipStageSilhouette />
-              <div className="fit-term-hero-unavailable">
-                <span className="fit-term-hero-unavailable-label">Ship render unavailable</span>
-                <span className="fit-term-hero-unavailable-meta">Top-down schematic placeholder</span>
-              </div>
-            </>
+            <ShipStageSilhouette />
           )}
         </div>
+
         {selectedLabel && (
-          <div className="fit-term-hero-focus">
-            <span className="fit-term-meta-label">Selected</span>
+          <div className="fit-term-hero-detail-card">
+            <span className="fit-term-detail-kicker">{selectedMeta ?? "Component"}</span>
             <strong>{selectedLabel}</strong>
-            {anchorState && (
-              <span className={focusTarget?.source === "real-anchor" ? "fit-term-focus-ok" : "fit-term-focus-missing"}>
-                {anchorState}
-              </span>
-            )}
+            <p className="fit-term-detail-desc">Selected loadout component · prototype inspect overlay</p>
+            <button type="button" className="fit-term-detail-btn">View Details</button>
           </div>
+        )}
+
+        <button type="button" className="fit-term-hero-nav fit-term-hero-nav--prev" aria-label="Previous view">‹</button>
+        <button type="button" className="fit-term-hero-nav fit-term-hero-nav--next" aria-label="Next view">›</button>
+
+        {selectedLabel && (
+          <button type="button" className="fit-term-hero-exit">
+            <span aria-hidden>⌕</span> Exit Inspect Mode
+          </button>
         )}
       </div>
     </section>
