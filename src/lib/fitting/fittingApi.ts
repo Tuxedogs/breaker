@@ -101,6 +101,71 @@ export type FittingCalculation = {
   warnings: string[];
 };
 
+export type FittingValidationResult = {
+  valid: boolean;
+  shipId: string;
+  portsChecked: number;
+  missingRequiredPorts: string[];
+  emptyOptionalPorts: string[];
+  incompatibleItems: Array<{ portId: string; componentId: string; reason: string; confidence: FittingConfidence }>;
+  lockedBespokePorts: string[];
+  unknownItemIds: Array<{ portId: string; componentId: string }>;
+  unknownPortIds: string[];
+  mismatchReasons: Array<{ portId: string; componentId: string; kind: string; message: string; confidence: FittingConfidence }>;
+  confidence: FittingConfidence;
+  unresolvedReferences: Array<{ kind: string; message: string; confidence: FittingConfidence }>;
+};
+
+export type FittingCalculateResult = {
+  shipId: string;
+  scope: "custom_loadout";
+  resolutionStatus: string;
+  componentCountsByType: Record<string, number>;
+  categories: FittingCalculation["categories"];
+  summary: {
+    firepower: { weaponAlphaTotal: number | null; weaponDpsTotal: number | null; weaponCount: number; confidence: FittingConfidence; inferred: boolean };
+    shields: { totalShieldHP: number | null; totalRegenRate: number | null; confidence: FittingConfidence; inferred: boolean };
+    power: { produced: number | null; required: number | null; margin: number | null; confidence: FittingConfidence; inferred: boolean };
+    cooling: { produced: number | null; required: number | null; margin: number | null; confidence: FittingConfidence; inferred: boolean };
+    quantum: { componentCount: number; confidence: FittingConfidence; inferred: boolean };
+    radar: { componentCount: number; maxSignatureSensitivity: number | null; confidence: FittingConfidence; inferred: boolean };
+  };
+  warnings: string[];
+  confidence: FittingConfidence;
+  unresolvedReferences: Array<{ kind: string; message: string; confidence: FittingConfidence }>;
+  missingStats: Array<{ portId: string; componentId: string; fields: string[]; confidence: FittingConfidence }>;
+  unknownItemIds: string[];
+  stockComparison?: Record<string, unknown>;
+};
+
+export type FittingLoadoutRequest = {
+  shipId: string;
+  loadout: Record<string, string | null>;
+  options?: { compareToStock?: boolean };
+};
+
+async function writeJson<T>(path: string, payload: unknown, signal?: AbortSignal): Promise<T> {
+  const response = await fetch(apiUrl(path), {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(payload),
+    signal,
+  });
+  if (!response.ok) {
+    const problem = await response.json().catch(() => null) as { detail?: string } | null;
+    throw new Error(problem?.detail ?? `Fitting API request failed: ${response.status}`);
+  }
+  return response.json() as Promise<T>;
+}
+
+export async function validateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingValidationResult> {
+  return (await writeJson<DetailResponse<FittingValidationResult>>("/api/v1/fitting/validate", request, signal)).data;
+}
+
+export async function calculateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingCalculateResult> {
+  return (await writeJson<DetailResponse<FittingCalculateResult>>("/api/v1/fitting/calculate", request, signal)).data;
+}
+
 async function readResponse<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(apiUrl(path), { signal });
   if (!response.ok) throw new Error(`Fitting API request failed: ${response.status}`);
@@ -152,6 +217,17 @@ export async function getFittingLoadout(shipId: string, signal?: AbortSignal): P
 export async function getFittingCalculations(shipId: string, signal?: AbortSignal): Promise<FittingCalculation> {
   return (await readResponse<DetailResponse<FittingCalculation>>(
     `/api/v1/fitting/ships/${encodeURIComponent(shipId)}/calculations`,
+    signal,
+  )).data;
+}
+
+export type FittingComponentDetail = FittingComponentSummary & {
+  stats: Record<string, number | null>;
+};
+
+export async function getFittingComponent(componentId: string, signal?: AbortSignal): Promise<FittingComponentDetail> {
+  return (await readResponse<DetailResponse<FittingComponentDetail>>(
+    `/api/v1/fitting/components/${encodeURIComponent(componentId)}`,
     signal,
   )).data;
 }

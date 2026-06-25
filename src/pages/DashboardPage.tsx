@@ -72,8 +72,6 @@ function adaptFittingShip(ship: ApiFittingShipSummary): FittingShipSummary {
   };
 }
 
-const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
-
 function StatTooltip({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
@@ -515,7 +513,7 @@ export default function DashboardPage() {
 
       <aside className="dash-right-col" aria-label="System panels">
         <QuickInventoryPanel />
-        {ENABLE_FITTING_UI && <FittingLaunchPanel />}
+        <FittingLaunchPanel />
 
         <div className="dash-panel">
           <div className="dash-panel-header"><span className="dash-panel-title">Primary Locations</span></div>

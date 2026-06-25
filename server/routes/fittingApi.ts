@@ -5,11 +5,25 @@ function applyHeaders(response: ServerResponse, headers?: Record<string, string>
   for (const [key, value] of Object.entries(headers ?? {})) response.setHeader(key, value);
 }
 
+async function readJsonBody(request: IncomingMessage): Promise<unknown> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of request) chunks.push(Buffer.from(chunk));
+  if (chunks.length === 0) return {};
+  const raw = Buffer.concat(chunks).toString("utf8").trim();
+  if (!raw) return {};
+  return JSON.parse(raw) as unknown;
+}
+
 export async function runFittingApiHandler(request: IncomingMessage, response: ServerResponse): Promise<void> {
   const method = request.method ?? "GET";
   const rawUrl = request.url ?? "/";
   try {
-    const result = await handleFittingRoute(method, rawUrl);
+    const pathname = new URL(rawUrl, "http://localhost").pathname;
+    const body = method === "POST" && (pathname.endsWith("/validate") || pathname.endsWith("/calculate"))
+      ? await readJsonBody(request)
+      : undefined;
+    const requestId = typeof request.headers["x-vercel-id"] === "string" ? request.headers["x-vercel-id"] : "unavailable";
+    const result = await handleFittingRoute(method, rawUrl, requestId, undefined, body);
     if (!result) {
       response.statusCode = 404;
       response.setHeader("content-type", "application/problem+json; charset=utf-8");

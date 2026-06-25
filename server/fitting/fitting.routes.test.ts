@@ -82,13 +82,48 @@ test("implements the ten read-only v1 fitting routes", async () => {
   }
 });
 
-test("keeps mutation and future calculate routes unavailable", async () => {
+test("keeps read routes read-only and supports POST validate/calculate", async () => {
   const known = await handleFittingRoute("POST", "/api/v1/fitting/ships", "test-request");
   assert.equal(known?.status, 405);
   assert.equal((known?.body as { code: string }).code, "METHOD_NOT_ALLOWED");
-  const future = await handleFittingRoute("POST", "/api/v1/fitting/calculate", "test-request");
-  assert.equal(future?.status, 404);
-  assert.equal((future?.body as { code: string }).code, "RESOURCE_NOT_FOUND");
+
+  const root = await fixtureRoot();
+  const loadoutPayload = {
+    shipId,
+    loadout: {
+      "weapon/main": componentId,
+      "unknown/port": null,
+    },
+    options: { compareToStock: false },
+  };
+  try {
+    const validate = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, loadoutPayload);
+    assert.equal(validate?.status, 200);
+    assert.equal((validate?.body as { data: { valid: boolean } }).data.valid, false);
+
+    const calculate = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: shipId,
+      loadout: { "weapon/main": componentId },
+      options: { compareToStock: false },
+    });
+    assert.equal(calculate?.status, 200);
+    assert.equal((calculate?.body as { data: { scope: string } }).data.scope, "custom_loadout");
+
+    const invalidShip = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: "99999999-9999-4999-8999-999999999999",
+      loadout: {},
+    });
+    assert.equal(invalidShip?.status, 404);
+
+    const invalidItem = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: shipId,
+      loadout: { "weapon/main": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" },
+    });
+    assert.equal(invalidItem?.status, 200);
+    assert.equal((invalidItem?.body as { data: { unknownItemIds: unknown[] } }).data.unknownItemIds.length, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("binds cursors to route filters and rejects unknown query parameters", async () => {
@@ -111,7 +146,7 @@ test("binds cursors to route filters and rejects unknown query parameters", asyn
   }
 });
 
-test("Vercel adapter supports GET, HEAD, ETag/304 and leaves POST routes absent", async () => {
+test("Vercel adapter supports GET, HEAD, ETag/304 and POST validate/calculate", async () => {
   const root = await fixtureRoot();
   const previousRoot = process.env.FITTING_DATA_ROOT;
   process.env.FITTING_DATA_ROOT = root;
@@ -134,10 +169,18 @@ test("Vercel adapter supports GET, HEAD, ETag/304 and leaves POST routes absent"
     assert.equal((await head.text()).length, 0);
     const notModified = await fetch(`${base}/ships?channel=LIVE&buildId=test-build&limit=1`, { headers: { "if-none-match": etag } });
     assert.equal(notModified.status, 304);
-    const validate = await fetch(`${base}/validate`, { method: "POST" });
-    assert.equal(validate.status, 404);
-    const calculate = await fetch(`${base}/calculate`, { method: "POST" });
-    assert.equal(calculate.status, 404);
+    const validate = await fetch(`${base}/validate?channel=LIVE&buildId=test-build`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ shipId, loadout: { "weapon/main": componentId.replaceAll("-", "_") }, options: { compareToStock: false } }),
+    });
+    assert.equal(validate.status, 200);
+    const calculate = await fetch(`${base}/calculate?channel=LIVE&buildId=test-build`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ shipId, loadout: { "weapon/main": componentId.replaceAll("-", "_") }, options: { compareToStock: false } }),
+    });
+    assert.equal(calculate.status, 200);
   } finally {
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     if (previousRoot === undefined) delete process.env.FITTING_DATA_ROOT;

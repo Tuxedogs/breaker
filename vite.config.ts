@@ -129,7 +129,9 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
     }
 
     if (url.startsWith("/api/v1/fitting/")) {
-      const fittingResult = await handleFittingRoute(request.method ?? "GET", request.url ?? url);
+      const pathname = url.split("?")[0] ?? url;
+      const fittingBody = (request.method === "POST" && (pathname.endsWith("/validate") || pathname.endsWith("/calculate"))) ? body : undefined;
+      const fittingResult = await handleFittingRoute(request.method ?? "GET", request.url ?? url, undefined, undefined, fittingBody);
       if (!fittingResult) {
         next();
         return;
