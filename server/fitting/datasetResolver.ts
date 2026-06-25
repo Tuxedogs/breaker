@@ -69,10 +69,20 @@ export async function resolveDataset(searchParams: URLSearchParams, dataRoot = g
     );
   }
 
-  const fittingRoot = path.join(dataRoot, channel, buildId);
-  if (!(await directoryExists(fittingRoot))) {
-    throw new FittingHttpError(503, "DATASET_UNAVAILABLE", "Dataset unavailable", "The selected build has no readable fitting server-data bundle.");
+  const canonicalRoot = path.join(dataRoot, channel, buildId, "datasets", "fitting");
+  if (await directoryExists(canonicalRoot)) {
+    return { channel, buildId, fittingRoot: canonicalRoot, explicitBuild, legacyStorageFallback: false };
   }
 
-  return { channel, buildId, fittingRoot, explicitBuild, legacyStorageFallback: false };
+  const compatibilityRoot = path.join(dataRoot, channel, buildId, "api", "fitting");
+  if (await directoryExists(compatibilityRoot)) {
+    return { channel, buildId, fittingRoot: compatibilityRoot, explicitBuild, legacyStorageFallback: true };
+  }
+
+  const serverDataRoot = path.join(dataRoot, channel, buildId);
+  if (await directoryExists(serverDataRoot)) {
+    return { channel, buildId, fittingRoot: serverDataRoot, explicitBuild, legacyStorageFallback: false };
+  }
+
+  throw new FittingHttpError(503, "DATASET_UNAVAILABLE", "Dataset unavailable", "The selected build has no readable fitting server-data bundle.");
 }
