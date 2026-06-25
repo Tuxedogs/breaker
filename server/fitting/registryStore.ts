@@ -15,6 +15,7 @@ export const PUBLIC_REGISTRIES = [
   "ship_weapons.json",
   "vehicle_ammo.json",
   "shields.json",
+  "ship_armors.json",
   "power_plants.json",
   "coolers.json",
   "quantum_drives.json",

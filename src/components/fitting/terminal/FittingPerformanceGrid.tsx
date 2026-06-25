@@ -1,63 +1,67 @@
-import type { FittingCalculateResult } from "../../../lib/fitting/fittingApi";
+import { useEffect, useMemo, useState } from "react";
+import { getFittingComponent, type FittingCalculateResult, type FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
 import type { CombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
-import type { FittingShipSummary } from "../../../lib/fitting/fittingPortGrouping";
-import { formatNumber, formatSigned } from "../../../lib/fitting/fittingPortGrouping";
+import {
+  buildOffensiveGroups,
+  formatNumber,
+  summarizeGroupRows,
+  type FittingShipSummary,
+  type PortBreakdownRow,
+} from "../../../lib/fitting/fittingPortGrouping";
 import type { PipAssignment } from "../../../lib/fitting/fittingTerminalTypes";
-import FittingMetricPanel from "./FittingMetricPanel";
+import type { PipSystemPowerDraw } from "../../../lib/fitting/fittingPipPower";
 import PowerPipAssignment from "./PowerPipAssignment";
-import SurvivabilityPanel from "./SurvivabilityPanel";
+import DefensiveCapabilitiesCard from "./DefensiveCapabilitiesCard";
+import {
+  FittingStatCard,
+  FittingStatRow,
+  FittingStatSection,
+} from "./FittingStatCard";
+import { derivedNum, extractedNum } from "./fittingPerformanceHelpers";
 
-function derivedNum(result: FittingCalculateResult | null, category: string, key: string): number | null {
-  const categoryData = result?.categories?.[category as keyof NonNullable<FittingCalculateResult["categories"]>];
-  const value = categoryData?.derived?.[key];
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
+type FittingPerformanceGridProps = {
+  calculateResult: FittingCalculateResult | null;
+  shipPerformance: FittingShipSummary | null;
+  hullHP: number | null;
+  cargoCapacityScu: number | null;
+  portRows: PortBreakdownRow[];
+  combatAlpha: CombatAlphaBreakdown;
+  pipAssignment: PipAssignment;
+  systemDraws: PipSystemPowerDraw;
+  onPipChange: (category: keyof PipAssignment, value: number) => void;
+  onViewWeaponStats: () => void;
+};
 
-function extractedNum(result: FittingCalculateResult | null, category: string, key: string): number | null {
-  const categoryData = result?.categories?.[category as keyof NonNullable<FittingCalculateResult["categories"]>] as
-    | { extracted?: Record<string, unknown> }
-    | undefined;
-  const value = categoryData?.extracted?.[key];
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
-
-function alphaLabel(value: number | null | undefined, loading = false): string {
+function formatAlpha(value: number | null | undefined, loading = false): string {
   if (loading) return "…";
   if (typeof value === "number" && Number.isFinite(value)) return formatNumber(value);
   return "Not calculated yet";
 }
 
-type FittingPerformanceGridProps = {
-  calculateResult: FittingCalculateResult | null;
-  shipPerformance: FittingShipSummary | null;
-  combatAlpha: CombatAlphaBreakdown;
-  pipAssignment: PipAssignment;
-  onPipChange: (category: keyof PipAssignment, value: number) => void;
-  shieldThresholdPercent: number;
-  onThresholdChange: (value: number) => void;
-  onViewWeaponStats: () => void;
-};
+function sumNullable(values: Array<number | null | undefined>): number | null {
+  const nums = values.filter((value): value is number => typeof value === "number" && Number.isFinite(value));
+  if (nums.length === 0) return null;
+  return nums.reduce((sum, value) => sum + value, 0);
+}
 
 export default function FittingPerformanceGrid({
   calculateResult,
   shipPerformance,
+  hullHP,
+  cargoCapacityScu,
+  portRows,
   combatAlpha,
   pipAssignment,
+  systemDraws,
   onPipChange,
-  shieldThresholdPercent,
-  onThresholdChange,
   onViewWeaponStats,
 }: FittingPerformanceGridProps) {
-  const weaponAlpha = derivedNum(calculateResult, "weapons", "weaponAlphaTotal");
-  const weaponCount = derivedNum(calculateResult, "weapons", "weaponCount");
   const powerOut = derivedNum(calculateResult, "power", "totalPowerGenerated");
   const powerUsed = derivedNum(calculateResult, "power", "totalPowerRequired");
   const powerMargin = derivedNum(calculateResult, "power", "powerSurplus");
-  const coolOut = derivedNum(calculateResult, "cooling", "totalCoolingGenerated");
-  const coolUsed = derivedNum(calculateResult, "cooling", "totalCoolingRequired");
-  const coolMargin = derivedNum(calculateResult, "cooling", "coolingSurplus");
   const shieldHp = derivedNum(calculateResult, "shields", "totalShieldHP");
   const shieldRegen = derivedNum(calculateResult, "shields", "totalRegenRate");
+  const [mitigationByComponentId, setMitigationByComponentId] = useState<Record<string, FittingComponentMitigation | null>>({});
 
   const scmSpeed = shipPerformance?.scmSpeed ?? extractedNum(calculateResult, "performance", "scmSpeed");
   const maxSpeed = shipPerformance?.maxSpeed ?? extractedNum(calculateResult, "performance", "maxSpeed");
@@ -65,106 +69,194 @@ export default function FittingPerformanceGrid({
   const pitch = shipPerformance?.pitchRate ?? extractedNum(calculateResult, "performance", "pitchRate");
   const yaw = shipPerformance?.yawRate ?? extractedNum(calculateResult, "performance", "yawRate");
   const roll = shipPerformance?.rollRate ?? extractedNum(calculateResult, "performance", "rollRate");
+  const boostCapacity = extractedNum(calculateResult, "performance", "boostCapacity");
+  const boostRegen = extractedNum(calculateResult, "performance", "boostRegen");
+
+  const missilePayload = sumNullable([combatAlpha.missileAlpha, combatAlpha.torpedoAlpha]);
+
+  const mitigationComponentIds = useMemo(() => {
+    const ids = portRows
+      .filter((row) => {
+        const text = `${row.ruleCategory ?? ""} ${row.portCategory ?? ""} ${row.componentCategory ?? ""} ${row.portName ?? ""}`.toLowerCase();
+        return Boolean(row.equippedComponentKey) && (text.includes("shield") || text.includes("armor"));
+      })
+      .map((row) => row.equippedComponentKey!)
+      .filter((componentId, index, values) => values.indexOf(componentId) === index);
+    return ids;
+  }, [portRows]);
+
+  useEffect(() => {
+    if (mitigationComponentIds.length === 0) {
+      setMitigationByComponentId({});
+      return;
+    }
+
+    const controller = new AbortController();
+    void (async () => {
+      const next: Record<string, FittingComponentMitigation | null> = {};
+      for (const componentId of mitigationComponentIds) {
+        try {
+          const detail = await getFittingComponent(componentId, controller.signal);
+          if (controller.signal.aborted) return;
+          next[componentId] = detail.mitigation;
+        } catch {
+          if (controller.signal.aborted) return;
+          next[componentId] = null;
+        }
+      }
+      if (!controller.signal.aborted) setMitigationByComponentId(next);
+    })();
+
+    return () => controller.abort();
+  }, [mitigationComponentIds]);
+
+  const componentMitigations = useMemo(() => Object.values(mitigationByComponentId), [mitigationByComponentId]);
+  const shieldMitigations = useMemo(
+    () => componentMitigations.filter((entry): entry is Extract<FittingComponentMitigation, { kind: "shield" }> => entry?.kind === "shield"),
+    [componentMitigations],
+  );
+  const armorMitigations = useMemo(
+    () => componentMitigations.filter((entry): entry is Extract<FittingComponentMitigation, { kind: "armor" }> => entry?.kind === "armor"),
+    [componentMitigations],
+  );
+
+  const missileArmedCount = useMemo(() => {
+    const lookup = new Map(portRows.map((row) => [row.portId, row]));
+    const missileGroup = buildOffensiveGroups(portRows).find((group) => group.key === "missiles");
+    if (!missileGroup) return null;
+    const summarized = summarizeGroupRows(missileGroup.rows, "missiles", lookup);
+    const total = summarized.reduce((sum, row) => sum + row.quantity, 0);
+    return total > 0 ? total : null;
+  }, [portRows]);
+
+  const totalHp = sumNullable([shieldHp, hullHP]);
+  const marginHighlight = powerMargin != null
+    ? powerMargin >= 0 ? "good" as const : "bad" as const
+    : undefined;
+
+  const formatSpeed = (value: number | null) => (
+    value != null ? `${formatNumber(value)} m/s` : "Not calculated yet"
+  );
+
+  const pyrLine = [pitch, yaw, roll].every((value) => value != null)
+    ? `${formatNumber(pitch!)} / ${formatNumber(yaw!)} / ${formatNumber(roll!)} °/s`
+    : "Not calculated yet";
 
   return (
     <section className="fit-term-performance" aria-label="Fitting outcomes and ship performance">
-      <FittingMetricPanel
-        title="Combat"
+      <div className="fit-term-performance-pip">
+        <PowerPipAssignment
+          pipAssignment={pipAssignment}
+          systemDraws={systemDraws}
+          powerBudget={powerOut}
+          onPipChange={onPipChange}
+          reactorOutput={powerOut != null ? `${formatNumber(powerOut)} MW` : "Not calculated yet"}
+          totalDraw={powerUsed != null ? `${formatNumber(powerUsed)} MW` : "Not calculated yet"}
+          margin={powerMargin != null ? `${powerMargin >= 0 ? "+" : ""}${formatNumber(powerMargin)} MW` : "Not calculated yet"}
+          marginHighlight={marginHighlight}
+        />
+      </div>
+
+      <DefensiveCapabilitiesCard
+        shieldHp={shieldHp}
+        shieldRegen={shieldRegen}
+        hullHP={hullHP}
+        totalHp={totalHp}
+        shieldMitigations={shieldMitigations}
+        armorMitigations={armorMitigations}
+      />
+
+      <FittingStatCard
+        title="Offensive Capabilities"
         action={(
           <button type="button" className="fit-term-link-btn" onClick={onViewWeaponStats}>
-            View Full Weapon Stats
+            Weapon Stats
           </button>
         )}
       >
-        <dl className="fit-term-kv fit-term-kv--combat">
-          <div><dt>Total Equipped Alpha</dt><dd>{alphaLabel(weaponAlpha)}</dd></div>
-          <div><dt>Gun Alpha</dt><dd>{alphaLabel(combatAlpha.gunAlpha, combatAlpha.loading)}</dd></div>
-          <div><dt>Missile Alpha</dt><dd>{alphaLabel(combatAlpha.missileAlpha, combatAlpha.loading)}</dd></div>
-          <div><dt>Torpedo Alpha</dt><dd>{alphaLabel(combatAlpha.torpedoAlpha, combatAlpha.loading)}</dd></div>
-          <div><dt>Alpha by Damage Type</dt><dd className="fit-term-unavail">Requires fitting API</dd></div>
-          <div><dt>Equipped Weapon Count</dt><dd>{weaponCount != null ? formatNumber(weaponCount) : "Not calculated yet"}</dd></div>
-          <div><dt>Lock Time</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-        </dl>
-      </FittingMetricPanel>
+        <FittingStatRow
+          label="Pilot Alpha"
+          value={formatAlpha(combatAlpha.pilotAlpha, combatAlpha.loading)}
+          unavailable={combatAlpha.pilotAlpha == null && !combatAlpha.loading}
+          highlight={combatAlpha.pilotAlpha != null ? "accent" : undefined}
+        />
+        <FittingStatRow
+          label="Crew Alpha"
+          value={formatAlpha(combatAlpha.crewAlpha, combatAlpha.loading)}
+          unavailable={combatAlpha.crewAlpha == null && !combatAlpha.loading}
+        />
 
-      <PowerPipAssignment
-        pipAssignment={pipAssignment}
-        onPipChange={onPipChange}
-        reactorOutput={powerOut != null ? `${formatNumber(powerOut)} MW` : "Not calculated yet"}
-        totalDraw={powerUsed != null ? `${formatNumber(powerUsed)} MW` : "Not calculated yet"}
-        margin={powerMargin != null ? formatSigned(powerMargin, " MW") : "Not calculated yet"}
-      />
+        <FittingStatSection title="Missiles & Bombs">
+          <FittingStatRow
+            label="Total Payload Output"
+            value={missilePayload != null ? formatNumber(missilePayload) : "Not calculated yet"}
+            unit=" Dmg"
+            unavailable={missilePayload == null}
+            highlight={missilePayload != null ? "accent" : undefined}
+          />
+          <FittingStatRow
+            label="Armed Count"
+            value={missileArmedCount != null ? formatNumber(missileArmedCount) : "Not calculated yet"}
+            nested
+            unavailable={missileArmedCount == null}
+          />
+        </FittingStatSection>
 
-      <SurvivabilityPanel
-        shieldHp={shieldHp != null ? formatNumber(shieldHp) : "Not calculated yet"}
-        shieldRegen={shieldRegen != null ? `${formatNumber(shieldRegen)}/s` : "Not calculated yet"}
-        hullHp="Source data unavailable"
-        armorRating="Source data unavailable"
-        damageReduction="Source data unavailable"
-        thresholdPercent={shieldThresholdPercent}
-        onThresholdChange={onThresholdChange}
-      />
+        <FittingStatSection title="Storage & Cargo">
+          <FittingStatRow
+            label="Cargo Grid"
+            value={cargoCapacityScu != null ? formatNumber(cargoCapacityScu) : "Not available"}
+            unit=" SCU"
+            unavailable={cargoCapacityScu == null}
+            highlight={cargoCapacityScu != null ? "accent" : undefined}
+          />
+          <FittingStatRow label="Grid Dimensions" value="Requires fitting API" nested unavailable />
+          <FittingStatRow label="Storage" value="Not available" unavailable />
+          <FittingStatRow label="k µSCU" value="—" nested unavailable />
+        </FittingStatSection>
 
-      <FittingMetricPanel title="Resistances" badge="Unavailable">
-        <table className="fit-term-table">
-          <thead>
-            <tr><th>Type</th><th>Shields</th><th>Armor</th><th>EHP</th></tr>
-          </thead>
-          <tbody>
-            {["Energy", "Kinetic", "EMP", "Thermal"].map((type) => (
-              <tr key={type}>
-                <td>{type}</td>
-                <td colSpan={3} className="fit-term-unavail">Source data unavailable</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </FittingMetricPanel>
+        <FittingStatSection title="Fuel">
+          <FittingStatRow label="Hydrogen" value="Requires fitting API" unavailable />
+          <FittingStatRow label="Flight Time" value="—" nested unavailable />
+          <FittingStatRow label="Fuel Scoop Effectiveness" value="—" nested unavailable />
+          <FittingStatRow label="Quantum" value="Requires fitting API" unavailable />
+          <FittingStatRow label="Range" value="—" nested unavailable />
+          <FittingStatRow label="Cost to fill — Hydrogen" value="—" nested unavailable />
+          <FittingStatRow label="Cost to fill — Quantum" value="—" nested unavailable />
+        </FittingStatSection>
+      </FittingStatCard>
 
-      <FittingMetricPanel title="Signatures & Detection">
-        <dl className="fit-term-kv">
-          <div><dt>EM Emission</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>IR Emission</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>Max Cross Section</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>Radar Range</dt><dd className="fit-term-unavail">Requires fitting API</dd></div>
-          <div><dt>Lock Range</dt><dd className="fit-term-unavail">Requires fitting API</dd></div>
-        </dl>
-      </FittingMetricPanel>
+      <FittingStatCard title="Thruster Output">
+        <FittingStatSection title="Flight Performances">
+          <FittingStatRow
+            label="SCM / AB"
+            value={scmSpeed != null && boostSpeed != null
+              ? `${formatNumber(scmSpeed)} / ${formatNumber(boostSpeed)}`
+              : scmSpeed != null ? formatNumber(scmSpeed) : "Not calculated yet"}
+            unit={scmSpeed != null ? " m/s" : undefined}
+            unavailable={scmSpeed == null}
+          />
+          <FittingStatRow label="NAV" value={formatSpeed(maxSpeed)} unavailable={maxSpeed == null} />
+          <FittingStatRow label="Boost Ramp Time" value="Not calculated yet" unavailable />
+          <FittingStatRow label="P / Y / R" value={pyrLine} unavailable={pitch == null && yaw == null && roll == null} />
+          <FittingStatRow label="AB P / Y / R" value="Not calculated yet" unavailable />
+          {boostCapacity != null || boostRegen != null ? (
+            <FittingStatRow
+              label="Boost Capacity / Regen"
+              value={[boostCapacity, boostRegen].map((value) => value != null ? formatNumber(value) : "—").join(" / ")}
+              nested
+            />
+          ) : null}
+        </FittingStatSection>
 
-      <FittingMetricPanel title="Mobility" badge="Ship-level">
-        <dl className="fit-term-kv">
-          <div><dt>SCM Speed</dt><dd>{scmSpeed != null ? formatNumber(scmSpeed) : "Not calculated yet"}</dd></div>
-          <div><dt>NAV Speed</dt><dd>{maxSpeed != null ? formatNumber(maxSpeed) : "Not calculated yet"}</dd></div>
-          <div><dt>Boost Speed</dt><dd>{boostSpeed != null ? formatNumber(boostSpeed) : "Not calculated yet"}</dd></div>
-          <div><dt>Acceleration</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>Maneuvering</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-        </dl>
-        <table className="fit-term-table fit-term-table--pyr">
-          <thead>
-            <tr><th>Axis</th><th>Normal</th><th>Boosted</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Pitch</td><td>{pitch != null ? formatNumber(pitch) : "Not calculated yet"}</td><td className="fit-term-unavail">Source data unavailable</td></tr>
-            <tr><td>Yaw</td><td>{yaw != null ? formatNumber(yaw) : "Not calculated yet"}</td><td className="fit-term-unavail">Source data unavailable</td></tr>
-            <tr><td>Roll</td><td>{roll != null ? formatNumber(roll) : "Not calculated yet"}</td><td className="fit-term-unavail">Source data unavailable</td></tr>
-          </tbody>
-        </table>
-      </FittingMetricPanel>
-
-      <FittingMetricPanel title="Resources">
-        <dl className="fit-term-kv">
-          <div><dt>Power Output</dt><dd>{powerOut != null ? `${formatNumber(powerOut)} MW` : "Not calculated yet"}</dd></div>
-          <div><dt>Power Used</dt><dd>{powerUsed != null ? `${formatNumber(powerUsed)} MW` : "Not calculated yet"}</dd></div>
-          <div><dt>Power Margin</dt><dd>{powerMargin != null ? formatSigned(powerMargin, " MW") : "Not calculated yet"}</dd></div>
-          <div><dt>Cooling Output</dt><dd>{coolOut != null ? `${formatNumber(coolOut)} kW` : "Not calculated yet"}</dd></div>
-          <div><dt>Cooling Used</dt><dd>{coolUsed != null ? `${formatNumber(coolUsed)} kW` : "Not calculated yet"}</dd></div>
-          <div><dt>Cooling Margin</dt><dd>{coolMargin != null ? formatSigned(coolMargin, " kW") : "Not calculated yet"}</dd></div>
-          <div><dt>Fuel Capacity</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>Fuel Usage</dt><dd className="fit-term-unavail">Source data unavailable</dd></div>
-          <div><dt>Quantum Range</dt><dd className="fit-term-unavail">Requires fitting API</dd></div>
-          <div><dt>Quantum Fuel Time</dt><dd className="fit-term-unavail">Requires fitting API</dd></div>
-        </dl>
-      </FittingMetricPanel>
+        <FittingStatSection title="Accelerations">
+          <FittingStatRow label="Main" value="Not calculated yet" unavailable />
+          <FittingStatRow label="Retro" value="Not calculated yet" unavailable />
+          <FittingStatRow label="Up Strafe" value="Not calculated yet" unavailable />
+          <FittingStatRow label="Down Strafe" value="Not calculated yet" unavailable />
+          <FittingStatRow label="Lateral Strafe" value="Not calculated yet" unavailable />
+        </FittingStatSection>
+      </FittingStatCard>
     </section>
   );
 }

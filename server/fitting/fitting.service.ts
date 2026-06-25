@@ -9,6 +9,7 @@ const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
 const COMPONENT_FILES = [
   ["ship_weapons.json", "ship_weapon"],
   ["shields.json", "shield"],
+  ["ship_armors.json", "armor"],
   ["power_plants.json", "power_plant"],
   ["coolers.json", "cooler"],
   ["quantum_drives.json", "quantum_drive"],
@@ -25,6 +26,14 @@ function numberValue(value: unknown): number | null {
 
 function booleanValue(value: unknown): boolean {
   return value === true;
+}
+
+function objectValue(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
+}
+
+function arrayValue(value: unknown): unknown[] | null {
+  return Array.isArray(value) ? value : null;
 }
 
 function publicLabel(value: unknown): string | null {
@@ -120,6 +129,7 @@ export function componentType(row: Row, fallback: string): string {
     ship_weapon: "ship_weapon",
     weapon: "ship_weapon",
     shield: "shield",
+    armor: "armor",
     power_plant: "power_plant",
     cooler: "cooler",
     quantum_drive: "quantum_drive",
@@ -174,12 +184,97 @@ export function componentStats(row: Row): Record<string, number | null> {
     scanCooldownTime: "scanCooldownTime",
     signatureSensitivity: "signatureSensitivity",
     thrustCapacity: "thrustCapacity",
+    damageEnergy: "damageEnergy",
+    damagePhysical: "damagePhysical",
+    damageThermal: "damageThermal",
+    damageDistortion: "damageDistortion",
+    damageBiochemical: "damageBiochemical",
+    damageStun: "damageStun",
+    fireRateRpm: "fireRateRpm",
   };
   const stats: Record<string, number | null> = {};
   for (const [publicName, sourceName] of Object.entries(mapping)) {
     if (sourceName in row) stats[publicName] = numberValue(row[sourceName]);
   }
   return stats;
+}
+
+function shieldMitigation(row: Row): Record<string, unknown> {
+  return {
+    shieldHp: numberValue(row.shieldHP ?? row.maxShieldHealth),
+    maxShieldHealth: numberValue(row.maxShieldHealth),
+    maxShieldRegen: numberValue(row.maxShieldRegen),
+    damagedRegenDelay: numberValue(row.damagedRegenDelay),
+    shieldFaceCount: numberValue(row.shieldFaceCount),
+    resistanceByDamageType: objectValue(row.shieldResistanceByDamageType),
+    absorptionByDamageType: objectValue(row.shieldAbsorptionByDamageType),
+    regenByPowerPip: arrayValue(row.shieldRegenByPowerPip),
+    regenPowerFormula: text(row.shieldRegenPowerFormula),
+    regenPowerFormulaConfidence: text(row.shieldRegenPowerFormulaConfidence),
+  };
+}
+
+function armorMitigation(row: Row): Record<string, unknown> {
+  return {
+    health: numberValue(row.health),
+    basePenetrationReduction: numberValue(row.basePenetrationReduction),
+    damageMultiplierByDamageType: objectValue(row.armorDamageMultiplierByDamageType),
+    deflectionThresholdByDamageType: objectValue(row.armorDeflectionThresholdByDamageType),
+    penetrationAbsorptionByDamageType: objectValue(row.armorPenetrationAbsorptionByDamageType),
+    resistanceByDamageType: objectValue(row.armorResistanceByDamageType),
+  };
+}
+
+function componentMitigation(row: Row, fallbackType: string): Record<string, unknown> | null {
+  const type = componentType(row, fallbackType);
+  if (type === "shield") return { kind: "shield", ...shieldMitigation(row) };
+  if (type === "armor") return { kind: "armor", ...armorMitigation(row) };
+  const penetrationParams = objectValue(row.penetrationParams);
+  if (penetrationParams || "basePenetrationDistance" in row || "maxPenetrationThickness" in row || "ammoPenetration" in row) {
+    return {
+      kind: "weapon_projectile",
+      damage: {
+        physical: numberValue(row.damagePhysical),
+        energy: numberValue(row.damageEnergy),
+        distortion: numberValue(row.damageDistortion),
+        thermal: numberValue(row.damageThermal),
+        biochemical: numberValue(row.damageBiochemical),
+        stun: numberValue(row.damageStun),
+      },
+      ammoPenetration: numberValue(row.ammoPenetration),
+      basePenetrationDistance: numberValue(row.basePenetrationDistance),
+      maxPenetrationThickness: numberValue(row.maxPenetrationThickness),
+      penetrationParams,
+    };
+  }
+  return null;
+}
+
+function shipMitigation(row: Row): Record<string, unknown> {
+  return {
+    hullHp: numberValue(row.hullHP),
+    componentPenetrationDamageMultiplier: numberValue(row.componentPenetrationDamageMultiplier),
+    componentPenetrationDamageMultiplierProvenance: objectValue(row.componentPenetrationDamageMultiplierProvenance),
+    fusePenetrationDamageMultiplier: numberValue(row.fusePenetrationDamageMultiplier),
+    fusePenetrationDamageMultiplierProvenance: objectValue(row.fusePenetrationDamageMultiplierProvenance),
+  };
+}
+
+function ammoMitigation(row: Row): Record<string, unknown> {
+  return {
+    damage: {
+      physical: numberValue(row.damagePhysical),
+      energy: numberValue(row.damageEnergy),
+      distortion: numberValue(row.damageDistortion),
+      thermal: numberValue(row.damageThermal),
+      biochemical: numberValue(row.damageBiochemical),
+      stun: numberValue(row.damageStun),
+    },
+    ammoPenetration: numberValue(row.ammoPenetration),
+    basePenetrationDistance: numberValue(row.basePenetrationDistance),
+    maxPenetrationThickness: numberValue(row.maxPenetrationThickness),
+    penetrationParams: objectValue(row.penetrationParams),
+  };
 }
 
 function pagination(search: URLSearchParams, signatureInput: string): { limit: number; offset: number; signature: string } {
@@ -270,6 +365,8 @@ export async function getShip(selection: DatasetSelection, shipIdInput: string, 
     ...shipSummary(row),
     description: text(row.description),
     className: text(row.className),
+    hullHP: numberValue(row.hullHP),
+    mitigation: shipMitigation(row),
     performance: {
       scmSpeed: numberValue(performanceRow.scmSpeed),
       maxSpeed: numberValue(performanceRow.maxSpeed),
@@ -400,7 +497,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
   const classFilter = (search.get("class") ?? "").toLowerCase();
   const manufacturer = (search.get("manufacturer") ?? "").toLowerCase();
   if (sizeFilter !== null && (!Number.isInteger(Number(sizeFilter)) || Number(sizeFilter) < 0)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "size must be a non-negative integer.");
-  const allowedTypes = ["ship_weapon", "shield", "power_plant", "cooler", "quantum_drive", "radar", "thruster", "other"];
+  const allowedTypes = ["ship_weapon", "shield", "armor", "power_plant", "cooler", "quantum_drive", "radar", "thruster", "other"];
   if (typeFilter !== null && !allowedTypes.includes(typeFilter)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component type.");
   const sort = search.get("sort") ?? "displayName";
   if (!["displayName", "-displayName", "size", "-size", "grade", "-grade"].includes(sort)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component sort.");
@@ -423,7 +520,8 @@ export async function getComponent(selection: DatasetSelection, componentIdInput
   const componentId = requestedId(componentIdInput, "component");
   const found = (await componentRows(selection)).find(({ row }) => canonicalId(row.entityClass ?? row.componentKey ?? row.thrusterKey) === componentId);
   if (!found) throw new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No fitting component matched the supplied identifier.");
-  const data: Record<string, unknown> = { ...componentSummary(found.row, found.fallbackType), stats: componentStats(found.row) };
+  const mitigation = componentMitigation(found.row, found.fallbackType);
+  const data: Record<string, unknown> = { ...componentSummary(found.row, found.fallbackType), stats: componentStats(found.row), mitigation };
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(found.row);
   return { meta: await fittingApiMeta(selection), data };
 }
@@ -447,6 +545,7 @@ export async function getAmmo(selection: DatasetSelection, ammoIdInput: string, 
       biochemical: numberValue(row.damageBiochemical),
       stun: numberValue(row.damageStun),
     },
+    mitigation: ammoMitigation(row),
     confidence: confidence(row.confidence),
   };
   if (includeDiagnostics(search)) data.diagnostics = diagnostics(row);
