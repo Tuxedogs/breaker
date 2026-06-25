@@ -53,6 +53,7 @@ function isDynamicApiPath(pathname: string) {
   return dynamicApiPaths.includes(pathname)
     || isCraftingShapedApiPath(pathname)
     || pathname.startsWith("/api/fitting/")
+    || pathname.startsWith("/api/v1/fitting/")
     || pathname.startsWith("/api/missions/family/")
     || pathname.startsWith("/api/missions/families/")
     || pathname.startsWith("/api/missions/variant/")
@@ -127,13 +128,31 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
       return;
     }
 
+    if (url.startsWith("/api/v1/fitting/")) {
+      const pathname = url.split("?")[0] ?? url;
+      const fittingBody = (request.method === "POST" && (pathname.endsWith("/validate") || pathname.endsWith("/calculate"))) ? body : undefined;
+      const fittingResult = await handleFittingRoute(request.method ?? "GET", request.url ?? url, undefined, undefined, fittingBody);
+      if (!fittingResult) {
+        next();
+        return;
+      }
+      for (const [key, value] of Object.entries(fittingResult.headers ?? {})) response.setHeader(key, value);
+      if (fittingResult.status === 200 && fittingResult.headers?.etag && request.headers["if-none-match"] === fittingResult.headers.etag) {
+        response.statusCode = 304;
+        response.end();
+        return;
+      }
+      response.statusCode = fittingResult.status;
+      response.end(request.method === "HEAD" ? undefined : JSON.stringify(fittingResult.body));
+      return;
+    }
+
     const route = await handleUserInventoryRoute(request.method ?? "GET", url, request.headers, body)
       ?? (url === "/api/user/saved-blueprints"
       ? await handleSavedBlueprintsRoute(request.method ?? "GET", request.headers, body)
       : url === "/api/user/build-queue"
         ? await handleUserBuildQueueRoute(request.method ?? "GET", request.headers, body)
-        : await handleFittingRoute(request.method ?? "GET", request.url ?? url, body) ??
-          await handleMissionsRoute(request.method ?? "GET", request.url ?? url) ??
+        : await handleMissionsRoute(request.method ?? "GET", request.url ?? url) ??
           await handleRecommenderRoute(request.method ?? "GET", url, body) ??
           await handleBuildQueueRoute(request.method ?? "GET", url, body));
     if (!route) {

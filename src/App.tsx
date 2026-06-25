@@ -43,8 +43,6 @@ const IndustryBlueprintTrackerPage = lazy(() => import("./pages/industry/Bluepri
 const IndustryMissionBrowserPage = lazy(() => import("./pages/industry/MissionBrowserPage"));
 const IndustryRefineryPlannerPage = lazy(() => import("./pages/industry/RefineryPlannerPage"));
 
-const ENABLE_FITTING_UI = import.meta.env.VITE_ENABLE_FITTING_UI === "true";
-
 function RouteFallback() {
   return (
     <div className="flex min-h-[50vh] items-center justify-center px-4 text-center">
@@ -73,24 +71,7 @@ function RedirectLegacyDoctrineModule() {
   return <Navigate to={`/dashboard/doctrine/module/${location.pathname.split("/").pop() ?? ""}`} replace />;
 }
 
-function FittingWipPlaceholder() {
-  return (
-    <main className="flex min-h-[55vh] items-center justify-center px-6" aria-label="Fitting disabled">
-      <section className="max-w-xl rounded border border-slate-700 bg-slate-950/70 p-6 text-center">
-        <p className="base-card-kicker">Fitting WIP</p>
-        <h1 className="mt-2 text-xl font-semibold text-slate-100">
-          Fitting WIP: backend/API complete through Phase 5.3; UI paused.
-        </h1>
-        <p className="mt-3 text-sm text-slate-400">
-          The fitting interface is hidden from normal navigation while the broader API migration work is active.
-        </p>
-      </section>
-    </main>
-  );
-}
-
 function FittingRoute() {
-  if (!ENABLE_FITTING_UI) return <FittingWipPlaceholder />;
   return (
     <Suspense fallback={<RouteFallback />}>
       <FittingPage />
