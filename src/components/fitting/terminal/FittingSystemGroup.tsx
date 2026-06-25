@@ -1,10 +1,14 @@
-import type { NamedGroup } from "../../../lib/fitting/fittingPortGrouping";
-import { summarizeGroupRows } from "../../../lib/fitting/fittingPortGrouping";
+import {
+  summarizeGroupRows,
+  type NamedGroup,
+  type PortBreakdownRow,
+} from "../../../lib/fitting/fittingPortGrouping";
 import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import FittingComponentRow from "./FittingComponentRow";
 
 type FittingSystemGroupProps = {
   group: NamedGroup;
+  portLookup: Map<string, PortBreakdownRow>;
   selectedPortId: string | null;
   craftOverridePortIds: Set<string>;
   craftablePortIds: Set<string>;
@@ -15,6 +19,7 @@ type FittingSystemGroupProps = {
 
 export default function FittingSystemGroup({
   group,
+  portLookup,
   selectedPortId,
   craftOverridePortIds,
   craftablePortIds,
@@ -22,29 +27,34 @@ export default function FittingSystemGroup({
   onSelectPort,
   onCraftPort,
 }: FittingSystemGroupProps) {
-  const items = summarizeGroupRows(group.rows, group.key);
-  if (items.length === 0) return null;
+  if (group.rows.length === 0) return null;
+
+  const summaries = summarizeGroupRows(group.rows, group.key, portLookup);
 
   return (
     <section className="fit-term-group">
       <header className="fit-term-group-head">
-        <h2>{group.label}</h2>
-        <span>{items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+        <h3>{group.label}</h3>
+        <span>{summaries.reduce((total, entry) => total + entry.quantity, 0)}</span>
       </header>
       <div className="fit-term-group-rows">
-        {items.map((item) => {
-          const portId = item.portIds[0];
-          const componentId = item.rows[0]?.equippedComponentKey ?? null;
+        {summaries.map((summary) => {
+          const primaryPortId = summary.portIds[0];
+          const primaryRow = summary.rows[0];
+          const isActive = summary.portIds.includes(selectedPortId ?? "");
+          const hasCustom = summary.portIds.some((portId) => craftOverridePortIds.has(portId));
+          const craftable = summary.portIds.some((portId) => craftablePortIds.has(portId));
+
           return (
             <FittingComponentRow
-              key={item.key}
-              item={item}
-              active={item.portIds.includes(selectedPortId ?? "")}
-              hasCustomQuality={item.portIds.some((id) => craftOverridePortIds.has(id))}
-              craftable={item.portIds.some((id) => craftablePortIds.has(id))}
+              key={summary.key}
+              summary={summary}
+              active={isActive}
+              hasCustomQuality={hasCustom}
+              craftable={craftable}
               iconMode={iconMode}
-              onSelect={() => onSelectPort(portId, componentId)}
-              onCraftClick={() => onCraftPort(portId)}
+              onSelect={() => onSelectPort(primaryPortId, primaryRow.equippedComponentKey)}
+              onCraftClick={() => onCraftPort(primaryPortId)}
             />
           );
         })}
