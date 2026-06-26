@@ -2,7 +2,6 @@ import { useState } from 'react';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import {
   readFittingIconMode,
-  writeFittingIconMode,
   type FittingIconMode,
 } from '../../lib/fitting/fittingIconMode';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
@@ -20,7 +19,7 @@ function formatSummaryNumber(value: number): string {
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
-  const [iconMode, setIconMode] = useState<FittingIconMode>(() => readFittingIconMode());
+  const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
 
   const inventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const buildQueue = useLogisticsStore((s) => s.buildQueue);
@@ -68,21 +67,6 @@ export default function BuildQueuePage() {
                 <span className="bq-section-kicker">Crafting Operations</span>
                 <h1>Build Queue</h1>
               </div>
-              <label className="bq-icon-mode-select">
-                <span>Icon Mode</span>
-                <select
-                  value={iconMode}
-                  onChange={(event) => {
-                    const nextMode = event.target.value as FittingIconMode;
-                    setIconMode(nextMode);
-                    writeFittingIconMode(nextMode);
-                  }}
-                >
-                  <option value="auto">Auto</option>
-                  <option value="accent">Accent</option>
-                  <option value="mono">Mono</option>
-                </select>
-              </label>
               <div className="bq-stats" aria-label="Build queue summary">
                 <span className="bq-stat">
                   <em>Active Crafts</em>
