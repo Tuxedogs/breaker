@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import type { ApiMeta, Confidence, DatasetSelection } from "./fitting.types.ts";
-import { FittingHttpError } from "./fitting.types.ts";
-import { loadRegistry, PUBLIC_REGISTRIES, readRegistryHeader } from "./registryStore.ts";
+import type { ApiMeta, Confidence, DatasetSelection } from "./fitting.types.js";
+import { FittingHttpError } from "./fitting.types.js";
+import { loadRegistry, PUBLIC_REGISTRIES, readRegistryHeader } from "./registryStore.js";
 
 type Row = Record<string, unknown>;
 

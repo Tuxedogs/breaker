@@ -1,8 +1,8 @@
-import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId";
+import { AuthError, requireAuthenticatedUser } from "../auth/requireDiscordUserId.js";
 import {
   getBlueprintTrackerState,
   saveBlueprintTrackerState,
-} from "./blueprintTrackerService";
+} from "./blueprintTrackerService.js";
 
 type HeaderValue = string | string[] | undefined;
 type HeaderBag = Record<string, HeaderValue> | Headers;

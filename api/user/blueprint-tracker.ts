@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
-import { handleBlueprintTrackerRoute } from "../../src/server/user/blueprintTrackerRoute";
+import { handleBlueprintTrackerRoute } from "../../src/server/user/blueprintTrackerRoute.js";
 
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "GET" || request.method === "HEAD") return {};

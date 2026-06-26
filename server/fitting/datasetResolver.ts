@@ -1,7 +1,7 @@
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
-import type { Channel, DatasetSelection } from "./fitting.types.ts";
-import { FittingHttpError } from "./fitting.types.ts";
+import type { Channel, DatasetSelection } from "./fitting.types.js";
+import { FittingHttpError } from "./fitting.types.js";
 
 const BUILD_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
 

@@ -1,7 +1,7 @@
-import type { Confidence, DatasetSelection } from "./fitting.types.ts";
-import { FittingHttpError } from "./fitting.types.ts";
-import { canonicalId, componentStats, componentSummary, componentType } from "./fitting.service.ts";
-import { loadRegistry } from "./registryStore.ts";
+import type { Confidence, DatasetSelection } from "./fitting.types.js";
+import { FittingHttpError } from "./fitting.types.js";
+import { canonicalId, componentStats, componentSummary, componentType } from "./fitting.service.js";
+import { loadRegistry } from "./registryStore.js";
 
 type Row = Record<string, unknown>;
 
