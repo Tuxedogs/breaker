@@ -440,7 +440,7 @@ export default function MiningModule() {
 
               <div className="mdet-col">
                 {effectiveSelectedEntry ? (
-                  <LocationDetail entry={effectiveSelectedEntry} activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials} buildQueueMaterialKeys={materialFilterKeys} locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []} staticMiningIndex={staticMiningIndex} planetAssetMap={planetAssetMap} />
+                  <LocationDetail entry={effectiveSelectedEntry} activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials} buildQueueMaterialKeys={materialFilterKeys} locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []} staticMiningIndex={staticMiningIndex} />
                 ) : (
                   <div className="mdet-empty"><span>Select a location to view details</span></div>
                 )}
