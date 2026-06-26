@@ -1,7 +1,7 @@
 import { eq, sql } from "drizzle-orm";
 
-import { getDb } from "../../db/client";
-import { userSettings } from "../../db/schema";
+import { getDb } from "../../db/client.js";
+import { userSettings } from "../../db/schema.js";
 
 export type BlueprintTrackerState = {
   completedMissionIds: string[];

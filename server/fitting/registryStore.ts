@@ -1,7 +1,7 @@
 import { open, readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
-import type { DatasetSelection, RegistryEnvelope } from "./fitting.types.ts";
-import { FittingHttpError } from "./fitting.types.ts";
+import type { DatasetSelection, RegistryEnvelope } from "./fitting.types.js";
+import { FittingHttpError } from "./fitting.types.js";
 
 const registryCache = new Map<string, Promise<RegistryEnvelope<Record<string, unknown>>>>();
 const SHARDED_REGISTRIES = new Set<string>(["compatibility_rules.json"]);
