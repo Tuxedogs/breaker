@@ -17,8 +17,13 @@ type SourceIndex = {
   facets?: unknown;
 };
 
+type MaterialIdentityIndex = {
+  materials?: Array<{ materialKey?: unknown; sources?: unknown }>;
+};
+
 const sourcePath = path.resolve("public", "api", "crafting", "component_card_index.json");
 const blueprintsPath = path.resolve("public", "api", "crafting", "blueprints.json");
+const materialIdentityPath = path.resolve("public", "api", "crafting", "material_identity_index.json");
 const outputRoot = getComponentCardsRoot();
 const byIdRoot = path.join(outputRoot, "by-id");
 
@@ -72,6 +77,90 @@ function recordFileName(id: string): string {
 
 function asRecord(value: unknown): JsonRecord | null {
   return typeof value === "object" && value !== null && !Array.isArray(value) ? value as JsonRecord : null;
+}
+
+function hasFilterableMaterialSource(sources: unknown): boolean {
+  if (!Array.isArray(sources)) return false;
+  return sources.some((source) => {
+    const text = typeof source === "string" ? source.toLowerCase().replace(/\\/g, "/") : "";
+    return text.includes("/crafting/qualityquantization/")
+      || text.includes("/harvestable/")
+      || text.includes("/entities/scitem/carryables/")
+      || text.includes("/contracts/contracttemplates/");
+  });
+}
+
+function buildFilterableMaterialKeys(index: MaterialIdentityIndex): Set<string> {
+  const keys = new Set<string>();
+  for (const material of index.materials ?? []) {
+    const key = typeof material.materialKey === "string" ? material.materialKey.trim() : "";
+    if (key && hasFilterableMaterialSource(material.sources)) keys.add(key);
+  }
+  return keys;
+}
+
+function getMaterialKeyByFacetValue(records: JsonRecord[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const record of records) {
+    const materials = Array.isArray(record.materials) ? record.materials : [];
+    for (const rawMaterial of materials) {
+      const material = asRecord(rawMaterial);
+      if (!material) continue;
+      const materialKey = typeof material.materialKey === "string" ? material.materialKey.trim() : "";
+      if (!materialKey) continue;
+      const values = [material.costId, material.materialId, material.name]
+        .filter((value): value is string => typeof value === "string" && value.trim().length > 0);
+      for (const value of values) map.set(value, materialKey);
+    }
+  }
+  return map;
+}
+
+function isFilterableMaterialFacet(value: unknown, materialKeyByFacetValue: Map<string, string>, filterableMaterialKeys: Set<string>): boolean {
+  if (typeof value !== "string" || !value.trim()) return false;
+  const materialKey = materialKeyByFacetValue.get(value);
+  return Boolean(materialKey && filterableMaterialKeys.has(materialKey));
+}
+
+function filterRecordMaterialFacets(
+  facets: JsonRecord,
+  materialKeyByFacetValue: Map<string, string>,
+  filterableMaterialKeys: Set<string>,
+): JsonRecord {
+  const next = { ...facets };
+  if (Array.isArray(facets.materials)) {
+    const allowedNames = new Set<string>();
+    next.materials = facets.materials.filter((value) => {
+      const keep = isFilterableMaterialFacet(value, materialKeyByFacetValue, filterableMaterialKeys);
+      if (keep) {
+        const key = typeof value === "string" ? materialKeyByFacetValue.get(value) : null;
+        if (key) allowedNames.add(key);
+      }
+      return keep;
+    });
+    if (Array.isArray(facets.materialNames)) {
+      next.materialNames = facets.materialNames.filter((name) => (
+        typeof name === "string" && allowedNames.has(name.replace(/[^a-z0-9]+/g, ""))
+      ));
+    }
+  }
+  return next;
+}
+
+function filterFacetSummary(
+  facets: unknown,
+  materialKeyByFacetValue: Map<string, string>,
+  filterableMaterialKeys: Set<string>,
+): unknown {
+  const facetRecord = asRecord(facets);
+  if (!facetRecord || !Array.isArray(facetRecord.materials)) return facets;
+  return {
+    ...facetRecord,
+    materials: facetRecord.materials.filter((rawFacet) => {
+      const facet = asRecord(rawFacet);
+      return facet && isFilterableMaterialFacet(facet.value, materialKeyByFacetValue, filterableMaterialKeys);
+    }),
+  };
 }
 
 const BROWSE_GENERIC_STAT_FIELDS = ["mass", "health"] as const;
@@ -253,8 +342,14 @@ function toBrowseStats(record: JsonRecord): JsonRecord | undefined {
   return Object.keys(slim).length > 0 ? slim : undefined;
 }
 
-function toBrowseSlim(record: JsonRecord, weaponModifierBadges: Map<string, string[]>): JsonRecord {
-  const facets = asRecord(record.facets);
+function toBrowseSlim(
+  record: JsonRecord,
+  weaponModifierBadges: Map<string, string[]>,
+  materialKeyByFacetValue: Map<string, string>,
+  filterableMaterialKeys: Set<string>,
+): JsonRecord {
+  const rawFacets = asRecord(record.facets);
+  const facets = rawFacets ? filterRecordMaterialFacets(rawFacets, materialKeyByFacetValue, filterableMaterialKeys) : null;
   const card = asRecord(record.card);
   const sort = asRecord(record.sort);
 
@@ -324,9 +419,12 @@ async function writeJson(filePath: string, value: unknown): Promise<void> {
 
 const source = JSON.parse(await readFile(sourcePath, "utf8")) as SourceIndex;
 const blueprints = JSON.parse(await readFile(blueprintsPath, "utf8")) as BlueprintRecord[];
+const materialIdentityIndex = JSON.parse(await readFile(materialIdentityPath, "utf8")) as MaterialIdentityIndex;
 const weaponModifierBadges = buildWeaponModifierBadgeMap(blueprints);
+const filterableMaterialKeys = buildFilterableMaterialKeys(materialIdentityIndex);
 const warnings: string[] = [];
 const sourceRecords = Array.isArray(source.records) ? source.records : [];
+const materialKeyByFacetValue = getMaterialKeyByFacetValue(sourceRecords);
 
 if (sourceRecords.length === 0) {
   throw new Error(`No records found in ${sourcePath}`);
@@ -363,13 +461,18 @@ for (const [index, rawRecord] of sourceRecords.entries()) {
 
   const relativeFile = path.join("by-id", recordFileName(id)).replace(/\\/g, "/");
   recordFiles[id] = relativeFile;
-  const browseRecord = toBrowseSlim(rawRecord, weaponModifierBadges);
+  const browseRecord = toBrowseSlim(rawRecord, weaponModifierBadges, materialKeyByFacetValue, filterableMaterialKeys);
   const browseCard = asRecord(browseRecord.card);
+  const rawFacets = asRecord(rawRecord.facets);
   const shapedCard = {
     ...(asRecord(rawRecord.card) ?? {}),
     modifierLabels: Array.isArray(browseCard?.modifierLabels) ? browseCard.modifierLabels : [],
   };
-  const shapedRecord = { ...rawRecord, card: shapedCard };
+  const shapedRecord = {
+    ...rawRecord,
+    ...(rawFacets ? { facets: filterRecordMaterialFacets(rawFacets, materialKeyByFacetValue, filterableMaterialKeys) } : {}),
+    card: shapedCard,
+  };
   browseRecords.push(browseRecord);
 
   await writeJson(path.join(outputRoot, relativeFile), shapedRecord);
@@ -387,7 +490,7 @@ if (shapedRecordCount !== sourceTotal) {
 await writeJson(path.join(outputRoot, "facets.json"), {
   schemaVersion: 1,
   generatedAt: source.generatedAt ?? null,
-  facets: source.facets ?? {},
+  facets: filterFacetSummary(source.facets ?? {}, materialKeyByFacetValue, filterableMaterialKeys),
 });
 
 await writeJson(path.join(outputRoot, "browse.json"), {

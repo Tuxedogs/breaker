@@ -1873,6 +1873,28 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
+@media (min-width: 1181px) {
+  .bq-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .bq-main {
+    flex: 1 1 0;
+    min-height: 0;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .bq-workspace {
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
 @media (max-width: 1180px) {
   .bq-main {
     grid-template-columns: 1fr;
