@@ -106,7 +106,11 @@ async function tryServeScintelApiFile(
   return true;
 }
 
-function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer, "middlewares">, scintelApiRoot: string) {
+function installScintelApiMiddleware(
+  server: Pick<ViteDevServer | PreviewServer, "middlewares">,
+  scintelApiRoot: string,
+  fittingDataRoot: string,
+) {
   const middleware: Connect.NextHandleFunction = async (request, response, next) => {
     const url = request.url?.split("?")[0] ?? "";
     if (!isDynamicApiPath(url)) {
@@ -129,7 +133,9 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
     }
 
     if (url.startsWith("/api/v1/fitting/")) {
-      const fittingResult = await handleFittingRoute(request.method ?? "GET", request.url ?? url);
+      const pathname = url.split("?")[0] ?? url;
+      const fittingBody = (request.method === "POST" && (pathname.endsWith("/validate") || pathname.endsWith("/calculate"))) ? body : undefined;
+      const fittingResult = await handleFittingRoute(request.method ?? "GET", request.url ?? url, undefined, fittingDataRoot, fittingBody);
       if (!fittingResult) {
         next();
         return;
@@ -167,16 +173,17 @@ function installScintelApiMiddleware(server: Pick<ViteDevServer | PreviewServer,
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
+  const fittingDataRoot = path.resolve(process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? "D:\\scintel\\out");
 
   return {
     plugins: [
       {
         name: "scintel-recommender-api",
         configureServer(server) {
-          installScintelApiMiddleware(server, scintelApiRoot);
+          installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
         },
         configurePreviewServer(server) {
-          installScintelApiMiddleware(server, scintelApiRoot);
+          installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
         },
       },
       react(),

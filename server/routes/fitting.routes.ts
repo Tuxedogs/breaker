@@ -1,6 +1,8 @@
 import { createHash, randomUUID } from "node:crypto";
 import { getFittingDataRoot, resolveDataset } from "../fitting/datasetResolver.ts";
+import { calculateFittingLoadout, validateFittingLoadout } from "../fitting/fittingEngine.ts";
 import {
+  fittingApiMeta,
   getAmmo,
   getCalculations,
   getComponent,
@@ -16,7 +18,7 @@ import type { DatasetSelection, ProblemBody, RouteResult } from "../fitting/fitt
 import { FittingHttpError } from "../fitting/fitting.types.ts";
 
 const BASE_PATH = "/api/v1/fitting";
-const KNOWN_PATHS = [
+const READ_PATHS = [
   new RegExp(`^${BASE_PATH}/meta$`),
   new RegExp(`^${BASE_PATH}/ships$`),
   new RegExp(`^${BASE_PATH}/ships/[^/]+$`),
@@ -25,6 +27,10 @@ const KNOWN_PATHS = [
   new RegExp(`^${BASE_PATH}/components$`),
   new RegExp(`^${BASE_PATH}/components/[^/]+$`),
   new RegExp(`^${BASE_PATH}/ammo/[^/]+$`),
+];
+const POST_PATHS = [
+  `${BASE_PATH}/validate`,
+  `${BASE_PATH}/calculate`,
 ];
 
 const COMMON_QUERY = ["channel", "buildId"];
@@ -54,16 +60,20 @@ function problem(error: FittingHttpError, instance: string, requestId: string): 
   };
 }
 
-function responseHeaders(selection: DatasetSelection, body: unknown): Record<string, string> {
-  const etag = `W/"${createHash("sha256").update(JSON.stringify(body)).digest("base64url")}"`;
-  return {
+function responseHeaders(selection: DatasetSelection, body: unknown, cacheable = true): Record<string, string> {
+  const headers: Record<string, string> = {
     "content-type": "application/json; charset=utf-8",
-    "cache-control": selection.explicitBuild ? "public, max-age=3600, immutable" : "public, max-age=60, must-revalidate",
-    etag,
+    "cache-control": cacheable
+      ? selection.explicitBuild ? "public, max-age=3600, immutable" : "public, max-age=60, must-revalidate"
+      : "no-store",
     "x-scintel-channel": selection.channel,
     "x-scintel-build-id": selection.buildId,
     "x-scintel-api-version": "1",
   };
+  if (cacheable) {
+    headers.etag = `W/"${createHash("sha256").update(JSON.stringify(body)).digest("base64url")}"`;
+  }
+  return headers;
 }
 
 function errorResult(error: FittingHttpError, instance: string, requestId: string): RouteResult {
@@ -73,7 +83,7 @@ function errorResult(error: FittingHttpError, instance: string, requestId: strin
     headers: {
       "content-type": "application/problem+json; charset=utf-8",
       "cache-control": "no-store",
-      ...(error.status === 405 ? { allow: "GET, HEAD" } : {}),
+      ...(error.status === 405 ? { allow: POST_PATHS.includes(instance) ? "POST" : "GET, HEAD" } : {}),
     },
   };
 }
@@ -93,20 +103,39 @@ export async function handleFittingRoute(
   rawUrl: string,
   requestId: string = randomUUID(),
   dataRoot = getFittingDataRoot(),
+  requestBody?: unknown,
 ): Promise<RouteResult | null> {
   const url = new URL(rawUrl, "http://localhost");
   if (url.pathname !== BASE_PATH && !url.pathname.startsWith(`${BASE_PATH}/`)) return null;
 
-  if (!KNOWN_PATHS.some((pattern) => pattern.test(url.pathname))) {
+  const isPostRoute = POST_PATHS.includes(url.pathname);
+  const isReadRoute = READ_PATHS.some((pattern) => pattern.test(url.pathname));
+
+  if (!isPostRoute && !isReadRoute) {
     return errorResult(new FittingHttpError(404, "RESOURCE_NOT_FOUND", "Resource not found", "No fitting API route matched the requested path."), url.pathname, requestId);
   }
 
-  if (method !== "GET" && method !== "HEAD") {
+  if (isPostRoute && method !== "POST") {
+    return errorResult(new FittingHttpError(405, "METHOD_NOT_ALLOWED", "Method not allowed", "Only POST is supported for this route."), url.pathname, requestId);
+  }
+
+  if (isReadRoute && method !== "GET" && method !== "HEAD") {
     return errorResult(new FittingHttpError(405, "METHOD_NOT_ALLOWED", "Method not allowed", "Only GET and HEAD are supported."), url.pathname, requestId);
   }
 
   try {
     const selection = await resolveDataset(url.searchParams, dataRoot);
+    let bodyOut: unknown;
+
+    if (isPostRoute) {
+      const engineResult = url.pathname === `${BASE_PATH}/validate`
+        ? await validateFittingLoadout(selection, requestBody)
+        : await calculateFittingLoadout(selection, requestBody);
+      bodyOut = { meta: await fittingApiMeta(selection), ...(engineResult as Record<string, unknown>) };
+      const headers = responseHeaders(selection, bodyOut, false);
+      return { status: 200, body: bodyOut, headers };
+    }
+
     let body: unknown;
     let match: RegExpExecArray | null;
 

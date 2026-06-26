@@ -13,7 +13,6 @@ import {
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import type { CoveragePlan } from "../../../features/mining/coveragePlan";
-import type { PlanetAsset } from "../../../features/mining/planetAssets";
 
 import {
   buildDemandRows,
@@ -53,14 +52,12 @@ export function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
-  planetAssetMap: _planetAssetMap,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
-  planetAssetMap: Map<string, PlanetAsset> | null;
 }) {
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),

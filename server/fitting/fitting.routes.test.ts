@@ -41,7 +41,31 @@ async function fixtureRoot(): Promise<string> {
   records["stock_loadout_calculations.json"] = [{ shipKey: shipId, loadoutResolutionStatus: "resolved", componentCountsByType: { cooler: 1 }, categories: { power: { available: true, confidence: "high", unavailableReason: null, derived: { powerSurplus: 2 } } }, warnings: [], confidence: "high" }];
   records["compatible_items_by_port.json"] = [{ shipKey: shipId, ports: { "weapon/main": { portId: "weapon/main", compatibilityStatus: "known", compatibleComponentKeys: [componentId.replaceAll("-", "_")], portType: "Cooler", editable: true } } }];
   records["coolers.json"] = [{ entityClass: componentId, componentKey: componentId.replaceAll("-", "_"), name: "Test Cooler", displayName: "Test Cooler", componentType: "cooler", size: 1, coolingGenerated: 10, confidence: "high" }];
-  records["vehicle_ammo.json"] = [{ ammoParamsRecord: ammoId, ammoKey: ammoId.replaceAll("-", "_"), alphaDamageTotal: 10, damagePhysical: 10, confidence: "high" }];
+  records["shields.json"] = [{
+    entityClass: "22222222-2222-4222-8222-222222222222",
+    componentKey: "22222222-2222-4222-8222-222222222222",
+    name: "Test Shield",
+    displayName: "Test Shield",
+    componentType: "shield",
+    shieldHP: 100,
+    maxShieldRegen: 12,
+    shieldResistanceByDamageType: { physical: { min: 0, max: 0.25, confidence: "high", sourcePath: "shield/resistance" } },
+    shieldAbsorptionByDamageType: { physical: { min: 0, max: 0.45, confidence: "high", sourcePath: "shield/absorption" } },
+    confidence: "high",
+  }];
+  records["ship_armors.json"] = [{
+    entityClass: "33333333-3333-4333-8333-333333333333",
+    componentKey: "33333333-3333-4333-8333-333333333333",
+    name: "Test Armor",
+    displayName: "Test Armor",
+    componentType: "armor",
+    health: 250,
+    basePenetrationReduction: 1,
+    armorDeflectionThresholdByDamageType: { physical: { value: 9, confidence: "high", sourcePath: "armor/deflection" } },
+    armorResistanceByDamageType: { physical: { multiplier: 0.8, threshold: 0, damageCap: 0, confidence: "high", sourcePath: "armor/resistance" } },
+    confidence: "high",
+  }];
+  records["vehicle_ammo.json"] = [{ ammoParamsRecord: ammoId, ammoKey: ammoId.replaceAll("-", "_"), alphaDamageTotal: 10, damagePhysical: 10, basePenetrationDistance: 0.66, maxPenetrationThickness: 0.5, confidence: "high" }];
 
   await Promise.all(PUBLIC_REGISTRIES.map(async (name) => {
     await writeFile(path.join(fittingRoot, name), `${JSON.stringify(envelope(name.replace(/\.json$/, ""), records[name]), null, 2)}\n`, "utf8");
@@ -51,6 +75,35 @@ async function fixtureRoot(): Promise<string> {
 
 test("normalizes underscore UUID compatibility aliases", () => {
   assert.equal(canonicalId(componentId.replaceAll("-", "_")), componentId);
+});
+
+test("exposes shaped mitigation data without raw registry dumps", async () => {
+  const root = await fixtureRoot();
+  const query = "channel=LIVE&buildId=test-build";
+  try {
+    const meta = await handleFittingRoute("GET", `/api/v1/fitting/meta?${query}`, "test-request", root);
+    const registries = ((meta?.body as { data: { registries: Array<{ name: string }> } }).data.registries);
+    assert.ok(registries.some((entry) => entry.name === "ship_armors"));
+
+    const ship = await handleFittingRoute("GET", `/api/v1/fitting/ships/${shipId}?${query}`, "test-request", root);
+    assert.equal((ship?.body as { data: { mitigation: { hullHp: number | null } } }).data.mitigation.hullHp, null);
+    assert.equal(JSON.stringify(ship?.body).includes("sourceFile"), false);
+    assert.equal(JSON.stringify(ship?.body).includes(root), false);
+
+    const shield = await handleFittingRoute("GET", `/api/v1/fitting/components/22222222-2222-4222-8222-222222222222?${query}`, "test-request", root);
+    assert.equal((shield?.body as { data: { mitigation: { kind: string; resistanceByDamageType: { physical: { max: number } } } } }).data.mitigation.kind, "shield");
+    assert.equal((shield?.body as { data: { mitigation: { resistanceByDamageType: { physical: { max: number } } } } }).data.mitigation.resistanceByDamageType.physical.max, 0.25);
+    assert.equal(JSON.stringify(shield?.body).includes("sourceFile"), false);
+
+    const armor = await handleFittingRoute("GET", `/api/v1/fitting/components/33333333-3333-4333-8333-333333333333?${query}`, "test-request", root);
+    assert.equal((armor?.body as { data: { type: string; mitigation: { kind: string; deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.type, "armor");
+    assert.equal((armor?.body as { data: { mitigation: { deflectionThresholdByDamageType: { physical: { value: number } } } } }).data.mitigation.deflectionThresholdByDamageType.physical.value, 9);
+
+    const ammo = await handleFittingRoute("GET", `/api/v1/fitting/ammo/${ammoId}?${query}`, "test-request", root);
+    assert.equal((ammo?.body as { data: { mitigation: { basePenetrationDistance: number | null } } }).data.mitigation.basePenetrationDistance, 0.66);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("implements the ten read-only v1 fitting routes", async () => {
@@ -82,13 +135,48 @@ test("implements the ten read-only v1 fitting routes", async () => {
   }
 });
 
-test("keeps mutation and future calculate routes unavailable", async () => {
+test("keeps read routes read-only and supports POST validate/calculate", async () => {
   const known = await handleFittingRoute("POST", "/api/v1/fitting/ships", "test-request");
   assert.equal(known?.status, 405);
   assert.equal((known?.body as { code: string }).code, "METHOD_NOT_ALLOWED");
-  const future = await handleFittingRoute("POST", "/api/v1/fitting/calculate", "test-request");
-  assert.equal(future?.status, 404);
-  assert.equal((future?.body as { code: string }).code, "RESOURCE_NOT_FOUND");
+
+  const root = await fixtureRoot();
+  const loadoutPayload = {
+    shipId,
+    loadout: {
+      "weapon/main": componentId,
+      "unknown/port": null,
+    },
+    options: { compareToStock: false },
+  };
+  try {
+    const validate = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, loadoutPayload);
+    assert.equal(validate?.status, 200);
+    assert.equal((validate?.body as { data: { valid: boolean } }).data.valid, false);
+
+    const calculate = await handleFittingRoute("POST", "/api/v1/fitting/calculate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: shipId,
+      loadout: { "weapon/main": componentId },
+      options: { compareToStock: false },
+    });
+    assert.equal(calculate?.status, 200);
+    assert.equal((calculate?.body as { data: { scope: string } }).data.scope, "custom_loadout");
+
+    const invalidShip = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: "99999999-9999-4999-8999-999999999999",
+      loadout: {},
+    });
+    assert.equal(invalidShip?.status, 404);
+
+    const invalidItem = await handleFittingRoute("POST", "/api/v1/fitting/validate?channel=LIVE&buildId=test-build", "test-request", root, {
+      shipId: shipId,
+      loadout: { "weapon/main": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" },
+    });
+    assert.equal(invalidItem?.status, 200);
+    assert.equal((invalidItem?.body as { data: { unknownItemIds: unknown[] } }).data.unknownItemIds.length, 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });
 
 test("binds cursors to route filters and rejects unknown query parameters", async () => {
@@ -111,7 +199,7 @@ test("binds cursors to route filters and rejects unknown query parameters", asyn
   }
 });
 
-test("Vercel adapter supports GET, HEAD, ETag/304 and leaves POST routes absent", async () => {
+test("Vercel adapter supports GET, HEAD, ETag/304 and POST validate/calculate", async () => {
   const root = await fixtureRoot();
   const previousRoot = process.env.FITTING_DATA_ROOT;
   process.env.FITTING_DATA_ROOT = root;
@@ -134,10 +222,18 @@ test("Vercel adapter supports GET, HEAD, ETag/304 and leaves POST routes absent"
     assert.equal((await head.text()).length, 0);
     const notModified = await fetch(`${base}/ships?channel=LIVE&buildId=test-build&limit=1`, { headers: { "if-none-match": etag } });
     assert.equal(notModified.status, 304);
-    const validate = await fetch(`${base}/validate`, { method: "POST" });
-    assert.equal(validate.status, 404);
-    const calculate = await fetch(`${base}/calculate`, { method: "POST" });
-    assert.equal(calculate.status, 404);
+    const validate = await fetch(`${base}/validate?channel=LIVE&buildId=test-build`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ shipId, loadout: { "weapon/main": componentId.replaceAll("-", "_") }, options: { compareToStock: false } }),
+    });
+    assert.equal(validate.status, 200);
+    const calculate = await fetch(`${base}/calculate?channel=LIVE&buildId=test-build`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ shipId, loadout: { "weapon/main": componentId.replaceAll("-", "_") }, options: { compareToStock: false } }),
+    });
+    assert.equal(calculate.status, 200);
   } finally {
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     if (previousRoot === undefined) delete process.env.FITTING_DATA_ROOT;

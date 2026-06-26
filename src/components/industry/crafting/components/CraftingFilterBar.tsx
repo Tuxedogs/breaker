@@ -272,6 +272,9 @@ export default function CraftingFilterBar({
   const toolbarRef = useRef<HTMLDivElement>(null);
   const materialPickerRef = useRef<HTMLDivElement>(null);
   const materialDropdownRef = useRef<HTMLDivElement>(null);
+  const isMobileDrawerOpen = isMobileLayout && mobileFilterOpen;
+  const isDesktopFiltersOpen = !isMobileLayout && desktopFiltersExpanded;
+  const isMaterialPickerVisible = isDesktopFiltersOpen && materialPickerOpen;
 
   const updateMaterialDropdownPosition = useCallback(() => {
     const toolbar = toolbarRef.current;
@@ -286,7 +289,7 @@ export default function CraftingFilterBar({
   }, []);
 
   useEffect(() => {
-    if (!materialPickerOpen) return;
+    if (!isMaterialPickerVisible) return;
     function onPointerDown(e: PointerEvent) {
       const target = e.target as Node;
       if (
@@ -299,10 +302,10 @@ export default function CraftingFilterBar({
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, [materialPickerOpen]);
+  }, [isMaterialPickerVisible]);
 
   useEffect(() => {
-    if (!materialPickerOpen) return;
+    if (!isMaterialPickerVisible) return;
     updateMaterialDropdownPosition();
     window.addEventListener("resize", updateMaterialDropdownPosition);
     window.addEventListener("scroll", updateMaterialDropdownPosition, true);
@@ -310,7 +313,7 @@ export default function CraftingFilterBar({
       window.removeEventListener("resize", updateMaterialDropdownPosition);
       window.removeEventListener("scroll", updateMaterialDropdownPosition, true);
     };
-  }, [materialPickerOpen, updateMaterialDropdownPosition]);
+  }, [isMaterialPickerVisible, updateMaterialDropdownPosition]);
 
   useEffect(() => {
     const scrollRoot = toolbarRef.current?.closest(".component-results-browser");
@@ -322,30 +325,22 @@ export default function CraftingFilterBar({
   }, []);
 
   useEffect(() => {
-    if (!mobileFilterOpen) return;
+    if (!isMobileDrawerOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [mobileFilterOpen]);
+  }, [isMobileDrawerOpen]);
 
   useEffect(() => {
-    if (!isMobileLayout) setMobileFilterOpen(false);
-  }, [isMobileLayout]);
-
-  useEffect(() => {
-    if (!desktopFiltersExpanded) setMaterialPickerOpen(false);
-  }, [desktopFiltersExpanded]);
-
-  useEffect(() => {
-    if (!mobileFilterOpen) return;
+    if (!isMobileDrawerOpen) return;
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") setMobileFilterOpen(false);
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [mobileFilterOpen]);
+  }, [isMobileDrawerOpen]);
 
   const vehicleOptions = useMemo<FilterOption[]>(() => {
     const values = new Set<string>();
@@ -437,6 +432,7 @@ export default function CraftingFilterBar({
     () => materialOptions.filter((opt) => materialFilters.has(opt.value)),
     [materialOptions, materialFilters],
   );
+  const hasVehicleFilter = useMemo(() => hasExplicitVehicleFilter(searchParams), [searchParams]);
 
   const activeFilterTokens = useMemo<ActiveFilterToken[]>(() => {
     const tokens: ActiveFilterToken[] = [];
@@ -444,7 +440,7 @@ export default function CraftingFilterBar({
       const opt = fpsOptions.find((o) => o.value === v);
       if (opt) tokens.push({ value: v, label: opt.label, kind: "fps" });
     }
-    if (hasExplicitVehicleFilter(searchParams)) {
+    if (hasVehicleFilter) {
       for (const v of vehicleFilters) {
         const opt = vehicleOptions.find((o) => o.value === v);
         if (opt) tokens.push({ value: v, label: opt.label, kind: "vehicle" });
@@ -467,7 +463,7 @@ export default function CraftingFilterBar({
     }
     if (savedOnly) tokens.push({ value: "saved", label: "Bookmarked", kind: "saved" });
     return tokens;
-  }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, isDefaultState, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
+  }, [activeMaterialOptions, classFilters, classOptions, fpsFilters, fpsOptions, gradeFilters, gradeOptions, hasVehicleFilter, savedOnly, sizeFilters, sizeOptions, vehicleFilters, vehicleOptions]);
 
   function clearFilters() {
     applySearchParams(new URLSearchParams());
@@ -483,7 +479,7 @@ export default function CraftingFilterBar({
     if (token.kind === "saved") setSavedOnly(false);
   }
 
-  const mobileFilterDrawer = isMobileLayout && mobileFilterOpen ? createPortal(
+  const mobileFilterDrawer = isMobileDrawerOpen ? createPortal(
     <div
       className="crb-mobile-drawer-backdrop"
       role="presentation"
@@ -655,7 +651,7 @@ export default function CraftingFilterBar({
     document.body,
   ) : null;
 
-  const filtersExpanded = isMobileLayout ? mobileFilterOpen : desktopFiltersExpanded;
+  const filtersExpanded = isMobileLayout ? isMobileDrawerOpen : isDesktopFiltersOpen;
   const activeSummaryCount = advancedFilterCount + (savedOnly ? 1 : 0);
 
   return (
@@ -665,7 +661,7 @@ export default function CraftingFilterBar({
         "component-browser-toolbar",
         filtersExpanded ? "scintel-filter-shell--expanded" : "",
         toolbarScrolled ? "crb-toolbar--scrolled" : "",
-        mobileFilterOpen ? "crb-toolbar--drawer-open" : "",
+        isMobileDrawerOpen ? "crb-toolbar--drawer-open" : "",
       ].filter(Boolean).join(" ")}
       ref={toolbarRef}
     >
@@ -699,7 +695,10 @@ export default function CraftingFilterBar({
             aria-expanded={filtersExpanded}
             onClick={() => {
               if (isMobileLayout) setMobileFilterOpen((open) => !open);
-              else setDesktopFiltersExpanded((open) => !open);
+              else {
+                if (desktopFiltersExpanded) setMaterialPickerOpen(false);
+                setDesktopFiltersExpanded((open) => !open);
+              }
             }}
           >
             {filtersExpanded ? "Hide" : "Filters"}
@@ -745,10 +744,10 @@ export default function CraftingFilterBar({
             "crb-filters-btn",
             advancedFilterCount > 0 ? "crb-filters-btn--active" : "",
           ].filter(Boolean).join(" ")}
-          aria-expanded={mobileFilterOpen}
+          aria-expanded={isMobileDrawerOpen}
           onClick={() => setMobileFilterOpen((open) => !open)}
         >
-          {mobileFilterOpen ? "Hide" : "Filters"}
+          {isMobileDrawerOpen ? "Hide" : "Filters"}
           {activeSummaryCount > 0 ? (
             <span className="scintel-filter-toggle-count">{activeSummaryCount}</span>
           ) : null}
@@ -762,14 +761,14 @@ export default function CraftingFilterBar({
           <span className="crb-bookmarks-icon" aria-hidden="true">☆</span>
           Bookmarked
         </button>
-        {hasFilters && !mobileFilterOpen ? (
+        {hasFilters && !isMobileDrawerOpen ? (
           <button type="button" className="scintel-filter-clear" onClick={clearFilters}>
             Clear
           </button>
         ) : null}
       </div>
 
-      {!isMobileLayout && desktopFiltersExpanded ? (
+      {isDesktopFiltersOpen ? (
       <div className="scintel-filter-body">
       {/* ── Desktop: Category groups — Vehicle | FPS ── */}
       <div className="crb-row crb-row--categories crb-row--desktop-filters">
@@ -876,12 +875,12 @@ export default function CraftingFilterBar({
         <div className="crb-material-picker" ref={materialPickerRef}>
           <button
             type="button"
-            className={`crb-material-trigger${materialPickerOpen ? " crb-material-trigger--open" : ""}`}
+            className={`crb-material-trigger${isMaterialPickerVisible ? " crb-material-trigger--open" : ""}`}
             onClick={() => {
               updateMaterialDropdownPosition();
               setMaterialPickerOpen((v) => !v);
             }}
-            aria-expanded={materialPickerOpen}
+            aria-expanded={isMaterialPickerVisible}
           >
             {materialFilters.size > 0 ? `${materialFilters.size} selected` : "Choose Materials"}
             <span className="crb-material-chevron" aria-hidden="true">▾</span>
@@ -916,7 +915,7 @@ export default function CraftingFilterBar({
       ) : null}
 
       {/* ── Material picker dropdown (desktop expanded) ── */}
-      {materialPickerOpen && (
+      {isMaterialPickerVisible && (
         <div
           className="crb-material-dropdown crb-material-dropdown--toolbar"
           ref={materialDropdownRef}
