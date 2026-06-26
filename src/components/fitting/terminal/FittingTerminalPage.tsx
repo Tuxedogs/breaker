@@ -15,7 +15,7 @@ import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import { useFittingTerminalState } from "../../../lib/fitting/useFittingTerminalState";
 import { pipAssignmentFromDraws } from "../../../lib/fitting/fittingPipPower";
 import { usePipSystemPowerDraw } from "../../../lib/fitting/usePipSystemPowerDraw";
-import CraftQualityModal from "./CraftQualityModal";
+import CraftQualityDrawer from "./CraftQualityDrawer";
 import FittingPerformanceGrid from "./FittingPerformanceGrid";
 import FittingSystemsPanel from "./FittingSystemsPanel";
 import FittingTopNav from "./FittingTopNav";
@@ -128,6 +128,38 @@ export default function FittingTerminalPage({
     ? portRows.find((row) => row.portId === terminal.activeCraftPortId) ?? null
     : null;
 
+  const offensivePortIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const group of offensiveGroups) {
+      for (const row of group.rows) ids.add(row.portId);
+    }
+    return ids;
+  }, [offensiveGroups]);
+
+  const craftSide = activeCraftRow
+    ? offensivePortIds.has(activeCraftRow.portId) ? "left" : "right"
+    : null;
+
+  const handleCraftPort = (portId: string) => {
+    const row = portLookup.get(portId);
+    if (row) terminal.selectComponent(portId, row.equippedComponentKey ?? null);
+    terminal.toggleCraftPort(portId);
+  };
+
+  const craftDrawer = activeCraftRow && craftSide ? (
+    <CraftQualityDrawer
+      side={craftSide}
+      portRow={activeCraftRow}
+      existingOverride={terminal.craftOverrides[activeCraftRow.portId] ?? null}
+      onClose={() => terminal.setActiveCraftPortId(null)}
+      onApply={terminal.applyCraftOverride}
+      onReset={() => {
+        terminal.resetCraftOverride(activeCraftRow.portId);
+        terminal.setActiveCraftPortId(null);
+      }}
+    />
+  ) : null;
+
   useEffect(() => {
     pipSyncedShipRef.current = null;
   }, [shipId]);
@@ -156,18 +188,20 @@ export default function FittingTerminalPage({
 
       {terminal.activeTab === "overview" && !loading && (
         <div className="fit-term-body">
-          <div className="fit-term-col fit-term-col--left">
+          <div className={["fit-term-col", "fit-term-col--left", craftSide === "left" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
             <FittingSystemsPanel
               title="Offensive Systems"
               groups={offensiveGroups}
               portLookup={portLookup}
               selectedPortId={terminal.selectedPortId}
+              activeCraftPortId={terminal.activeCraftPortId}
               craftOverridePortIds={craftOverridePortIds}
               craftablePortIds={craftablePortIds}
               iconMode={iconMode}
               onSelectPort={terminal.selectComponent}
-              onCraftPort={terminal.setActiveCraftPortId}
+              onCraftPort={handleCraftPort}
             />
+            {craftSide === "left" ? craftDrawer : null}
           </div>
           <div className="fit-term-center">
             <ShipHeroPanel
@@ -179,17 +213,18 @@ export default function FittingTerminalPage({
               selectedMeta={selectedMeta}
             />
           </div>
-          <div className="fit-term-col fit-term-col--right">
+          <div className={["fit-term-col", "fit-term-col--right", craftSide === "right" ? "is-craft-open" : ""].filter(Boolean).join(" ")}>
             <FittingSystemsPanel
               title="Defensive Systems"
               groups={defensiveCoreGroups}
               portLookup={portLookup}
               selectedPortId={terminal.selectedPortId}
+              activeCraftPortId={terminal.activeCraftPortId}
               craftOverridePortIds={craftOverridePortIds}
               craftablePortIds={craftablePortIds}
               iconMode={iconMode}
               onSelectPort={terminal.selectComponent}
-              onCraftPort={terminal.setActiveCraftPortId}
+              onCraftPort={handleCraftPort}
               compact
             />
             <FittingSystemsPanel
@@ -197,11 +232,12 @@ export default function FittingTerminalPage({
               groups={supportGroups}
               portLookup={portLookup}
               selectedPortId={terminal.selectedPortId}
+              activeCraftPortId={terminal.activeCraftPortId}
               craftOverridePortIds={craftOverridePortIds}
               craftablePortIds={craftablePortIds}
               iconMode={iconMode}
               onSelectPort={terminal.selectComponent}
-              onCraftPort={terminal.setActiveCraftPortId}
+              onCraftPort={handleCraftPort}
               compact
             />
             <footer className="fit-term-col-foot">
@@ -214,6 +250,7 @@ export default function FittingTerminalPage({
               </div>
               <button type="button" className="fit-term-foot-btn">View Full Stats</button>
             </footer>
+            {craftSide === "right" ? craftDrawer : null}
           </div>
           <FittingPerformanceGrid
             calculateResult={calculateResult}
@@ -242,19 +279,6 @@ export default function FittingTerminalPage({
       {terminal.activeTab === "compare" && <PlaceholderTab label="Compare" />}
       {terminal.activeTab === "shopping-list" && <PlaceholderTab label="Shopping List" />}
       {terminal.activeTab === "damage-lab" && <PlaceholderTab label="Damage Lab" />}
-
-      {activeCraftRow && (
-        <CraftQualityModal
-          portRow={activeCraftRow}
-          existingOverride={terminal.craftOverrides[activeCraftRow.portId] ?? null}
-          onClose={() => terminal.setActiveCraftPortId(null)}
-          onApply={terminal.applyCraftOverride}
-          onReset={() => {
-            terminal.resetCraftOverride(activeCraftRow.portId);
-            terminal.setActiveCraftPortId(null);
-          }}
-        />
-      )}
     </div>
   );
 }

@@ -45,6 +45,10 @@ export function useFittingTerminalState(shipId: string | null) {
     setPipAssignment({ ...assignment });
   }, []);
 
+  const toggleCraftPort = useCallback((portId: string) => {
+    setActiveCraftPortId((current) => (current === portId ? null : portId));
+  }, []);
+
   const applyCraftOverride = useCallback((override: CraftQualityOverride) => {
     setCraftOverrides((current) => ({ ...current, [override.portId]: override }));
     setActiveCraftPortId(null);
@@ -71,6 +75,7 @@ export function useFittingTerminalState(shipId: string | null) {
     craftOverrides,
     activeCraftPortId,
     setActiveCraftPortId,
+    toggleCraftPort,
     applyCraftOverride,
     resetCraftOverride,
   };

@@ -34,6 +34,7 @@ type PowerPipAssignmentProps = {
   totalDraw: string;
   margin: string;
   marginHighlight?: "good" | "bad";
+  panelTitle?: string;
 };
 
 function formatMw(value: number): string {
@@ -77,6 +78,7 @@ export default function PowerPipAssignment({
   systemDraws,
   powerBudget,
   onPipChange,
+  panelTitle = "Power Assignment",
 }: PowerPipAssignmentProps) {
   const assignedTotal = sumPipAssignment(pipAssignment);
   const budget = powerBudget != null && Number.isFinite(powerBudget) ? powerBudget : null;
@@ -92,7 +94,7 @@ export default function PowerPipAssignment({
   const segmentStates = buildPipSegmentStates(pipAssignment, budget);
 
   return (
-    <FittingMetricPanel title="Power Assignment">
+    <FittingMetricPanel title={panelTitle}>
       <div className="fit-mfd">
         <div className="fit-mfd-board" role="group" aria-label="Power pip board">
           <div className="fit-mfd-output">

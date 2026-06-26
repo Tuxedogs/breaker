@@ -10,6 +10,7 @@ type FittingSystemGroupProps = {
   group: NamedGroup;
   portLookup: Map<string, PortBreakdownRow>;
   selectedPortId: string | null;
+  activeCraftPortId: string | null;
   craftOverridePortIds: Set<string>;
   craftablePortIds: Set<string>;
   iconMode: FittingIconMode;
@@ -21,6 +22,7 @@ export default function FittingSystemGroup({
   group,
   portLookup,
   selectedPortId,
+  activeCraftPortId,
   craftOverridePortIds,
   craftablePortIds,
   iconMode,
@@ -42,6 +44,7 @@ export default function FittingSystemGroup({
           const primaryPortId = summary.portIds[0];
           const primaryRow = summary.rows[0];
           const isActive = summary.portIds.includes(selectedPortId ?? "");
+          const craftOpen = summary.portIds.includes(activeCraftPortId ?? "");
           const hasCustom = summary.portIds.some((portId) => craftOverridePortIds.has(portId));
           const craftable = summary.portIds.some((portId) => craftablePortIds.has(portId));
 
@@ -50,6 +53,7 @@ export default function FittingSystemGroup({
               key={summary.key}
               summary={summary}
               active={isActive}
+              craftOpen={craftOpen}
               hasCustomQuality={hasCustom}
               craftable={craftable}
               iconMode={iconMode}

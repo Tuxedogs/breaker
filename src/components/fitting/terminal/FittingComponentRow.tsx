@@ -5,6 +5,7 @@ import type { SummarizedRow } from "../../../lib/fitting/fittingPortGrouping";
 type FittingComponentRowProps = {
   summary: SummarizedRow;
   active: boolean;
+  craftOpen: boolean;
   hasCustomQuality: boolean;
   craftable: boolean;
   iconMode: FittingIconMode;
@@ -28,6 +29,7 @@ function turretWeaponLine(summary: SummarizedRow): string {
 export default function FittingComponentRow({
   summary,
   active,
+  craftOpen,
   hasCustomQuality,
   craftable,
   iconMode,
@@ -44,7 +46,7 @@ export default function FittingComponentRow({
     <div
       role="button"
       tabIndex={0}
-      className={["fit-term-row", isTurretRow ? "fit-term-row--turret" : "", active ? "is-active" : ""].filter(Boolean).join(" ")}
+      className={["fit-term-row", isTurretRow ? "fit-term-row--turret" : "", active ? "is-active" : "", craftOpen ? "is-craft-open" : ""].filter(Boolean).join(" ")}
       onClick={onSelect}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -79,7 +81,7 @@ export default function FittingComponentRow({
               {craftable && (
                 <button
                   type="button"
-                  className="fit-term-craft-btn"
+                  className={["fit-term-craft-btn", craftOpen ? "is-active" : ""].filter(Boolean).join(" ")}
                   title="Tune crafted quality"
                   aria-label={`Tune crafted quality for ${summary.name}`}
                   onClick={(event) => {
@@ -100,7 +102,7 @@ export default function FittingComponentRow({
             {craftable && (
               <button
                 type="button"
-                className="fit-term-craft-btn"
+                className={["fit-term-craft-btn", craftOpen ? "is-active" : ""].filter(Boolean).join(" ")}
                 title="Tune crafted quality"
                 aria-label={`Tune crafted quality for ${summary.name}`}
                 onClick={(event) => {

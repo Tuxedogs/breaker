@@ -7,6 +7,7 @@ type FittingSystemsPanelProps = {
   groups: NamedGroup[];
   portLookup: Map<string, PortBreakdownRow>;
   selectedPortId: string | null;
+  activeCraftPortId: string | null;
   craftOverridePortIds: Set<string>;
   craftablePortIds: Set<string>;
   iconMode: FittingIconMode;
@@ -20,6 +21,7 @@ export default function FittingSystemsPanel({
   groups,
   portLookup,
   selectedPortId,
+  activeCraftPortId,
   craftOverridePortIds,
   craftablePortIds,
   iconMode,
@@ -45,6 +47,7 @@ export default function FittingSystemsPanel({
             group={group}
             portLookup={portLookup}
             selectedPortId={selectedPortId}
+            activeCraftPortId={activeCraftPortId}
             craftOverridePortIds={craftOverridePortIds}
             craftablePortIds={craftablePortIds}
             iconMode={iconMode}
