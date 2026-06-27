@@ -1833,19 +1833,7 @@ export default function MissionBrowserPage() {
   return (
     <div className="mb-page">
       <div className="mb-shell">
-        <header className="mb-header page-compact-header">
-          <div>
-            <span className="mb-kicker">Industry Intelligence</span>
-            <h1>Mission Browser</h1>
-            <p>Shaped mission registry from Foundry contract data. Raw identifiers stay in technical details.</p>
-          </div>
-          <div className="mb-summary">
-            <strong>{catalog?.summary.variantCount.toLocaleString() ?? "..."}</strong><span>variants</span>
-            <strong>{catalog?.summary.factionGroupCount.toLocaleString() ?? "..."}</strong><span>factions</span>
-            <strong>{catalog?.summary.reputationScopeGroupCount.toLocaleString() ?? "..."}</strong><span>scopes</span>
-            <strong>{catalog?.summary.archetypeGroupCount.toLocaleString() ?? "..."}</strong><span>archetypes</span>
-          </div>
-        </header>
+
 
         <section className="mb-controls" aria-label="Mission browser filters">
           <input type="search" value={query} onChange={(event) => setSearch(event.target.value)} placeholder="Search missions, providers, rewards, internal IDs..." />
