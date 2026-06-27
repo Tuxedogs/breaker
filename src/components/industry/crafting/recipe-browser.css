@@ -3836,10 +3836,6 @@
   min-height: clamp(188px, 182px + 1vw, 232px);
 }
 
-.component-result-card--weapon .component-result-card__hit {
-  grid-template-rows: auto auto auto 1fr auto;
-}
-
 .component-result-card--weapon .component-card-modifiers {
   margin-bottom: 2px;
 }
@@ -3877,7 +3873,6 @@
 
 .component-result-card__hit {
   display: grid;
-  grid-template-rows: auto auto auto auto 1fr auto auto;
   gap: var(--cd-row-gap, 8px);
   height: 100%;
   min-width: 0;
@@ -3902,6 +3897,10 @@
 .component-result-card__footer {
   justify-content: space-between;
   gap: 8px;
+}
+
+.component-result-card__hit .component-result-card__footer {
+  margin-top: auto;
 }
 
 .component-result-card__kind,
@@ -3996,6 +3995,8 @@
 .component-card-materials {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
   gap: 5px;
   min-width: 0;
 }
@@ -4028,6 +4029,8 @@
 .component-card-material {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
+  flex: 0 0 auto;
   max-width: 100%;
   min-height: clamp(20px, 19px + 0.2vw, 24px);
   padding: 0 6px;
