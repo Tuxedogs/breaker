@@ -72,7 +72,36 @@ const weightsByMode: Record<MiningRankingMode, { encounter: number; quality: num
 
 type FallbackReason =
   | { type: "status"; status: number }
-  | { type: "invalid-response"; status: number; contentType: string; detail: string; bodyPreview?: string };
+  | { type: "invalid-response"; status: number; contentType: string; detail: string; bodyPreview?: string }
+  | { type: "scorer-unavailable"; detail: string };
+
+function hasScorerUnavailableWarning(warnings: RecommenderWarning[]): boolean {
+  return warnings.some((warning) => {
+    if (warning.code === "api_file_unreadable") return true;
+    const text = `${warning.code} ${warning.message} ${warning.path ?? ""}`.toLowerCase();
+    return text.includes("enoent") || text.includes("unable to read api file");
+  });
+}
+
+function hasZeroScorerDiagnostics(response: RecommendationResponse): boolean {
+  const coverage = response.diagnostics?.materialCoverage ?? [];
+  if (coverage.length === 0) return true;
+  return coverage.every((entry) => entry.sourceCount === 0 && entry.candidateLocations.length === 0);
+}
+
+function shouldUseStaticFallbackForPostResponse(
+  response: RecommendationResponse,
+  demandCount: number,
+): boolean {
+  if (demandCount === 0) return false;
+  if (response.recommendations.length > 0) return false;
+  if (response.warnings.some((warning) => warning.code === "requirements_empty")) return false;
+
+  if (hasScorerUnavailableWarning(response.warnings)) return true;
+
+  return hasZeroScorerDiagnostics(response)
+    && response.warnings.some((warning) => warning.code === "api_field_missing");
+}
 
 function unique<T>(values: T[]): T[] {
   return [...new Set(values)];
@@ -106,6 +135,7 @@ function isValidRecommendationResponse(value: unknown): value is RecommendationR
 function formatFallbackReason(reason?: FallbackReason): string | null {
   if (!reason) return null;
   if (reason.type === "status") return `status ${reason.status}`;
+  if (reason.type === "scorer-unavailable") return reason.detail;
   return `${reason.detail} (${reason.status}, ${reason.contentType || "unknown content-type"})`;
 }
 
@@ -414,7 +444,7 @@ async function getFallbackMiningRecommendations(
   console.warn("Recommender POST unavailable, falling back to static indexes", {
     url,
     reason: formatFallbackReason(reason),
-    status: reason.status,
+    status: reason.type === "status" ? reason.status : undefined,
     bodyPreview: reason.type === "invalid-response" ? reason.bodyPreview : undefined,
   });
 
@@ -503,7 +533,15 @@ export async function getMiningRecommendations(
     throw new Error(`Recommender API failed with ${response.status}`);
   }
 
-  logRecommendationDiagnostic("post", parsedResponse, request.requiredMaterials.length);
+  const demandCount = request.requiredMaterials.length;
+  if (shouldUseStaticFallbackForPostResponse(parsedResponse, demandCount)) {
+    return getFallbackMiningRecommendations(request, url, {
+      type: "scorer-unavailable",
+      detail: "POST recommender returned no results because local Scintel scorer data is unavailable.",
+    });
+  }
+
+  logRecommendationDiagnostic("post", parsedResponse, demandCount);
   return parsedResponse;
 }
 
