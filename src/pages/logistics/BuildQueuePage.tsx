@@ -63,49 +63,6 @@ export default function BuildQueuePage() {
       <div className="bq-main">
         <div className="bq-workspace">
           <div className="bq-shell">
-            <header className="bq-stat-rail page-compact-header">
-              <div className="bq-stat-rail-title">
-                <span className="bq-section-kicker">Crafting Operations</span>
-                <h1>Build Queue</h1>
-              </div>
-              <label className="bq-icon-mode-select">
-                <span>Icon Mode</span>
-                <select
-                  value={iconMode}
-                  onChange={(event) => {
-                    const nextMode = event.target.value as FittingIconMode;
-                    setIconMode(nextMode);
-                    writeFittingIconMode(nextMode);
-                  }}
-                >
-                  <option value="auto">Auto</option>
-                  <option value="accent">Accent</option>
-                  <option value="mono">Mono</option>
-                </select>
-              </label>
-              <div className="bq-stats" aria-label="Build queue summary">
-                <span className="bq-stat">
-                  <em>Active Crafts</em>
-                  <strong>{activeBuildQueue.length}</strong>
-                </span>
-                <span className="bq-stat bq-stat--success">
-                  <em>Completed Crafts</em>
-                  <strong>{completedBuildQueue.length}</strong>
-                </span>
-                <span className="bq-stat bq-stat--alert">
-                  <em>Refined Shortfall</em>
-                  <strong>{formatSummaryNumber(queueLedger.summary.refinedShortfall)}</strong>
-                </span>
-                <span className="bq-stat bq-stat--success">
-                  <em>Reservable Lines</em>
-                  <strong>{queueLedger.summary.reservableLines}</strong>
-                </span>
-                <span className="bq-stat bq-stat--alert">
-                  <em>No Stock Lines</em>
-                  <strong>{queueLedger.summary.noStockLines}</strong>
-                </span>
-              </div>
-            </header>
 
             <div className="bq-queue-content">
               {categories.length === 0 && completedCategories.length === 0 ? (
