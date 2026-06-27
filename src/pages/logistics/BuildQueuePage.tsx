@@ -2,7 +2,6 @@ import { useState } from 'react';
 import BuildQueueGroup from '../../components/logistics/BuildQueueGroup';
 import {
   readFittingIconMode,
-  writeFittingIconMode,
   type FittingIconMode,
 } from '../../lib/fitting/fittingIconMode';
 import type { SourceStrategy } from '../../lib/logistics/inventory';
@@ -20,7 +19,7 @@ function formatSummaryNumber(value: number): string {
 
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>('minimize-splits');
-  const [iconMode, setIconMode] = useState<FittingIconMode>(() => readFittingIconMode());
+  const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
 
   const inventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const buildQueue = useLogisticsStore((s) => s.buildQueue);

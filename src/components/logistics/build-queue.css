@@ -24,9 +24,12 @@
   padding: 0;
   font-family: var(--font-primary);
   color: var(--bq-text);
-  min-height: 100vh;
-  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
   width: 100%;
+  overflow: hidden;
   background: #03070a;
 }
 
@@ -36,19 +39,24 @@
 
 .bq-main {
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  flex: 1 1 0;
+  min-height: 0;
   min-width: 0;
   padding: clamp(0.65rem, 1.2vw, 1rem);
   box-sizing: border-box;
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(280px, 1fr);
   gap: clamp(0.85rem, 1.2vw, 1.1rem);
-  align-items: start;
+  align-items: stretch;
+  overflow: hidden;
 }
 
 .bq-workspace {
   min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .bq-shell {
@@ -1873,24 +1881,10 @@
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (min-width: 1181px) {
-  .bq-page {
-    display: flex;
-    flex-direction: column;
+  .bq-ledger-panel {
+    align-self: stretch;
+    max-height: none;
     height: 100%;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  .bq-main {
-    flex: 1 1 0;
-    min-height: 0;
-    align-items: stretch;
-    overflow: hidden;
-  }
-
-  .bq-workspace {
-    min-height: 0;
-    overflow-y: auto;
   }
 }
 
@@ -1975,7 +1969,18 @@
 
 @media (max-width: 760px) {
   .bq-page {
+    height: auto;
+    overflow: visible;
     padding-bottom: calc(0.35rem + env(safe-area-inset-bottom));
+  }
+
+  .bq-main {
+    flex: none;
+    overflow: visible;
+  }
+
+  .bq-workspace {
+    overflow: visible;
   }
 
   .bq-item--mobile-touch {
@@ -2412,25 +2417,8 @@
 }
 
 @media (min-width: 2200px) {
-  .bq-page {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    min-height: 0;
-    overflow: hidden;
-  }
-
   .bq-main {
-    flex: 1 1 0;
-    min-height: 0;
     grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
-    align-items: stretch;
-    overflow: hidden;
-  }
-
-  .bq-workspace {
-    min-height: 0;
-    overflow-y: auto;
   }
 
   .bq-shortage-panel {
@@ -2443,9 +2431,6 @@
 
   .bq-ledger-panel {
     position: static;
-    max-height: none;
-    height: 100%;
-    overflow-y: auto;
   }
 }
 

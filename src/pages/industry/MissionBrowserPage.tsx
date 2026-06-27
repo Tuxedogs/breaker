@@ -20,6 +20,7 @@ import {
   type MissionVariantView,
 } from "@/lib/missionData";
 import "./mission-browser.css";
+import "@/components/industry/crafting/recipe-browser.css";
 
 const MAX_VISIBLE_VARIANTS = 8;
 const CONCEPTS_PER_PAGE = 12;
@@ -1690,11 +1691,7 @@ export default function MissionBrowserPage() {
   ];
 
   const {
-    visibleFullCategories,
-    visibleFactionViews,
-    visibleReputationGroups,
     visibleConceptCount,
-    groupedVariantCount,
     totalPages,
     currentPage,
     pagedFullCategories,
@@ -1751,11 +1748,7 @@ export default function MissionBrowserPage() {
     const pageConceptKeys = new Set(Array.from(projectionConceptKeys).slice((nextCurrentPage - 1) * CONCEPTS_PER_PAGE, nextCurrentPage * CONCEPTS_PER_PAGE));
 
     return {
-      visibleFullCategories: nextVisibleFullCategories,
-      visibleFactionViews: nextVisibleFactionViews,
-      visibleReputationGroups: nextVisibleReputationGroups,
       visibleConceptCount: nextVisibleConceptCount,
-      groupedVariantCount: Array.from(projectionConceptKeys).reduce((sum, conceptKey) => sum + (conceptsByKey.get(conceptKey)?.variantCount ?? 0), 0),
       totalPages: nextTotalPages,
       currentPage: nextCurrentPage,
       pagedFullCategories: nextVisibleFullCategories
@@ -1835,52 +1828,70 @@ export default function MissionBrowserPage() {
       <div className="mb-shell">
 
 
-        <section className="mb-controls" aria-label="Mission browser filters">
-          <input type="search" value={query} onChange={(event) => setSearch(event.target.value)} placeholder="Search missions, providers, rewards, internal IDs..." />
-          <select value={provider} onChange={(event) => selectProvider(event.target.value)}><option value="">All providers</option>{providers.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
-          <select value={missionType} onChange={(event) => setParam("type", event.target.value)}><option value="">All mission types</option>{missionTypes.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
-          <select value={reward} onChange={(event) => setParam("reward", event.target.value)}>
-            <option value="">All rewards</option>
-            {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.key === "credits-calculated" ? AUEC_REWARD_NOT_REPORTED : item.label}</option>)}
-          </select>
-          <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)}><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
-          <select value={status} onChange={(event) => setParam("status", event.target.value)}><option value="">All statuses</option>{statuses.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
-          <select value={confidence} onChange={(event) => setParam("confidence", event.target.value)}>
-            <option value="">All confidence</option>
-            {confidenceOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
-          </select>
-        </section>
-        <nav className="mb-view-selector" aria-label="Mission browser view">
-          {([
-            ["full", "Full"],
-            ["faction", "Faction"],
-            ["reputation", "Reputation"],
-          ] as Array<[BrowserView, string]>).map(([view, label]) => (
-            <button
-              type="button"
-              key={view}
-              className={activeView === view ? "is-active" : ""}
-              aria-pressed={activeView === view}
-              onClick={() => setParam("view", view)}
-            >
-              {label}
-            </button>
-          ))}
-        </nav>
-        <div className="mb-rep-legend" aria-label="Reputation path color legend">
-          {["Hauling", "Ship Combat", "Salvage", "Standing", "Bounty", "Courier", "Refuel"].map((item) => (
-            <span key={item} className={`mb-rep-badge ${repScopeClass(item)}`}>{item}</span>
-          ))}
+        <div className="mb-filter-toolbar">
+          <div className="mb-filter-shell scintel-filter-shell">
+            <div className="scintel-filter-header crb-row--search mb-filter-header">
+              <div className="scintel-filter-search">
+                <label className="component-browser-search mb-browser-search">
+                  <span className="craft-search-icon" aria-hidden="true">/</span>
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(event) => setSearch(event.target.value)}
+                    placeholder="Search missions, providers, rewards, internal IDs..."
+                    aria-label="Search missions"
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="scintel-filter-body">
+              <div className="crb-row mb-filter-row" aria-label="Mission browser filters">
+                <select value={provider} onChange={(event) => selectProvider(event.target.value)} aria-label="Filter by provider"><option value="">All providers</option>{providers.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+                <select value={missionType} onChange={(event) => setParam("type", event.target.value)} aria-label="Filter by mission type"><option value="">All mission types</option>{missionTypes.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+                <select value={reward} onChange={(event) => setParam("reward", event.target.value)} aria-label="Filter by reward">
+                  <option value="">All rewards</option>
+                  {rewardOptions.map((item) => <option key={item.key} value={item.key}>{item.key === "credits-calculated" ? AUEC_REWARD_NOT_REPORTED : item.label}</option>)}
+                </select>
+                <select value={repReward} onChange={(event) => setParam("repReward", event.target.value)} aria-label="Filter by reputation reward path"><option value="">All rep reward paths</option>{rewardedRepPaths.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+                <select value={status} onChange={(event) => setParam("status", event.target.value)} aria-label="Filter by status"><option value="">All statuses</option>{statuses.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}</select>
+                <select value={confidence} onChange={(event) => setParam("confidence", event.target.value)} aria-label="Filter by confidence">
+                  <option value="">All confidence</option>
+                  {confidenceOptions.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="mb-filter-meta">
+            <nav className="mb-view-selector crb-chip-group" aria-label="Mission browser view">
+              {([
+                ["full", "Full"],
+                ["faction", "Faction"],
+                ["reputation", "Reputation"],
+              ] as Array<[BrowserView, string]>).map(([view, label]) => (
+                <button
+                  type="button"
+                  key={view}
+                  className={`craft-frl-chip craft-frl-chip--sm${activeView === view ? " craft-frl-chip--active" : ""}`}
+                  aria-pressed={activeView === view}
+                  onClick={() => setParam("view", view)}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+            <div className="mb-rep-legend" aria-label="Reputation path color legend">
+              {["Hauling", "Ship Combat", "Salvage", "Standing", "Bounty", "Courier", "Refuel"].map((item) => (
+                <span key={item} className={`mb-rep-badge ${repScopeClass(item)}`}>{item}</span>
+              ))}
+            </div>
+          </div>
         </div>
 
         {loading && <div className="mb-state">Loading shaped mission registry...</div>}
         {error && <div className="mb-state is-error">{error}</div>}
         {!loading && !error && catalog && (
-          <main className="mb-family-list">
-            <div className="mb-result-count">
-              <span>{activeView === "full" ? `${visibleFullCategories.length} categories` : activeView === "faction" ? `${visibleFactionViews.length} factions` : `${visibleReputationGroups.length} factions`} / {visibleConceptCount} concepts / {groupedVariantCount} variants</span>
-              <span>{catalog.summary.reputationScopeResolvedCount} resolved scopes / {catalog.summary.reputationScopePartialCount} partial / {catalog.summary.reputationScopeUnresolvedCount} unresolved</span>
-            </div>
+          <div className="mb-results-shell">
+            <main className="mb-family-list">
 
             {activeView === "full" && pagedFullCategories.map((category) => {
               const categoryConcepts = category.conceptKeys.map((conceptKey) => conceptsByKey.get(conceptKey)).filter((concept): concept is MissionConceptView => Boolean(concept));
@@ -1983,8 +1994,9 @@ export default function MissionBrowserPage() {
               </section>
               );
             })}
+            </main>
             {visibleConceptCount > CONCEPTS_PER_PAGE && (
-              <div className="mb-pagination" aria-label="Mission concept pages">
+              <footer className="mb-pagination mb-results-footer" aria-label="Mission concept pages">
                 <span>
                   Showing {(currentPage - 1) * CONCEPTS_PER_PAGE + 1}-{Math.min(currentPage * CONCEPTS_PER_PAGE, visibleConceptCount)} of {visibleConceptCount} concepts
                 </span>
@@ -1993,9 +2005,9 @@ export default function MissionBrowserPage() {
                   <span>Page {currentPage} of {totalPages}</span>
                   <button type="button" disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>Next</button>
                 </nav>
-              </div>
+              </footer>
             )}
-          </main>
+          </div>
         )}
       </div>
       {selectedConcept && createPortal(

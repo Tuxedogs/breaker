@@ -865,12 +865,40 @@
   height: 0;
 }
 
+/*
+  Full-height industry tools manage their own scroll (see craft-page internal chain).
+  dash-content must not scroll here or nested flex min-height: 0 breaks.
+*/
 .dash-content:has(> .dash-content-frame > .craft-page),
 .dash-content:has(> .dash-content-frame > .mine-page),
 .dash-content:has(> .dash-content-frame > .bq-page),
 .dash-content:has(> .dash-content-frame > .rp-page),
 .dash-content:has(> .dash-content-frame > .mb-page) {
   overflow: hidden;
+}
+
+/* Mining / Build Queue use document-flow scroll on mobile; crafting keeps internal scroll. */
+@media (max-width: 760px) {
+  .dash-content:has(> .dash-content-frame > .mine-page),
+  .dash-content:has(> .dash-content-frame > .bq-page),
+  .dash-content:has(> .dash-content-frame > .mb-page) {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame,
+  .dash-content:has(> .dash-content-frame > .bq-page) > .dash-content-frame,
+  .dash-content:has(> .dash-content-frame > .mb-page) > .dash-content-frame {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .dash-content-frame > .mine-page,
+  .dash-content-frame > .bq-page,
+  .dash-content-frame > .mb-page {
+    flex: 1 0 auto;
+    height: auto;
+  }
 }
 
 .dash-content:has(> .dash-content-frame > .craft-page) > .dash-content-frame,
