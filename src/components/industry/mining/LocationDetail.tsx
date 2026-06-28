@@ -414,32 +414,32 @@ export function LocationDetail({
         </div>
       </div>
 
-      <div className="mdet-metric-row">
+      <div className="location-stat-chip-grid">
         {total > 0 && (
-          <div className="mdet-metric-card">
-            <div className="mdet-metric-label">COVERAGE<InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit." /></div>
-            <div className={`mdet-metric-val ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
+          <div className="location-stat-chip">
+            <div className="location-stat-label">COVERAGE<InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit." /></div>
+            <div className={`location-stat-value ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
           </div>
         )}
         {primaryRouteScore && (() => {
           const qd = buildQualityDisplay(primaryRouteScore.signals, primaryRouteScore.materialKey ?? primaryRouteScore.materialId ?? "");
           return qd.kind !== "none" ? (
-            <div className="mdet-metric-card">
-              <div className="mdet-metric-label">{qualityHeader}<InfoTip text={qualityTooltip} /></div>
-              <div className="mdet-metric-val">{qd.kind === "ignored" ? "N/A" : qd.label}</div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label">{qualityHeader}<InfoTip text={qualityTooltip} /></div>
+              <div className="location-stat-value">{qd.kind === "ignored" ? "N/A" : qd.label}</div>
             </div>
           ) : null;
         })()}
         {typeof encounterTierScore === "number" && Number.isFinite(encounterTierScore) && (
-          <div className="mdet-metric-card">
-            <div className="mdet-metric-label">ENCOUNTER TIER<InfoTip text="Bucketed encounter strength for covered selected materials only. Missing materials affect Coverage, not this tier." /></div>
-            <div className={`mdet-metric-val ${scoreToneClass(undefined, encounterTierScore)}`}>{formatEncounterTier(encounterTierScore)}</div>
+          <div className="location-stat-chip">
+            <div className="location-stat-label">ENCOUNTER TIER<InfoTip text="Bucketed encounter strength for covered selected materials only. Missing materials affect Coverage, not this tier." /></div>
+            <div className={`location-stat-value ${scoreToneClass(undefined, encounterTierScore)}`}>{formatEncounterTier(encounterTierScore)}</div>
           </div>
         )}
         {locationMethodMixItems.map((item) => (
-          <div key={`method-mix:${item.method}`} className="mdet-metric-card">
-            <div className="mdet-metric-label">{item.method.toUpperCase()}<InfoTip text="Location-wide mining method mix. This does not necessarily describe the selected material." /></div>
-            <div className={`mdet-metric-val ${methodBiasToneClass(item.share)}`} title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}>{formatPercent(item.share)}</div>
+          <div key={`method-mix:${item.method}`} className="location-stat-chip">
+            <div className="location-stat-label">{item.method.toUpperCase()}<InfoTip text="Location-wide mining method mix. This does not necessarily describe the selected material." /></div>
+            <div className={`location-stat-value ${methodBiasToneClass(item.share)}`} title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}>{formatPercent(item.share)}</div>
           </div>
         ))}
       </div>

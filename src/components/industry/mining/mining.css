@@ -1059,51 +1059,55 @@
   display: block;
 }
 
-/* Metric card row */
+/* Selected location stat chips */
 
-.mdet-metric-row {
+.location-stat-chip-grid {
   display: flex;
-  margin: 0.5rem;;
-  gap: 0.45rem;
   flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: flex-start;
 }
 
-.mdet-metric-card {
+.location-stat-chip {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
-  padding: 0.3rem 0.55rem;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 6px;
-  min-width: 5rem;
-  flex: 1;
+  gap: 0.14rem;
+  flex: 0 0 auto;
+  width: auto;
+  max-width: none;
+  min-width: unset;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.mdet-metric-card--wide {
-  flex: 2 1 16rem;
-}
-
-.mdet-metric-label {
+.location-stat-label {
   font-family: var(--font-primary);
-  font-size: 0.68rem;
-  letter-spacing: 0.07em;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   color: rgba(160, 180, 220, 0.62);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
-.mdet-metric-val {
+.location-stat-value {
   font-family: var(--font-primary);
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1;
   color: rgba(226, 232, 240, 0.9);
+  white-space: nowrap;
 }
 
-.mdet-metric-val.mloc-score--best { color: rgba(52, 211, 153, 0.9); }
-.mdet-metric-val.mloc-score--good { color: rgba(255, 190, 80, 0.9); }
-.mdet-metric-val.mloc-score--okay { color: rgba(251, 146, 60, 0.85); }
-.mdet-metric-val.mloc-score--poor { color: rgba(248, 113, 113, 0.8); }
+.location-stat-value.mloc-score--best { color: rgba(52, 211, 153, 0.9); }
+.location-stat-value.mloc-score--good { color: rgba(255, 190, 80, 0.9); }
+.location-stat-value.mloc-score--okay { color: rgba(251, 146, 60, 0.85); }
+.location-stat-value.mloc-score--poor { color: rgba(248, 113, 113, 0.8); }
 
 /* Nearby stations */
 
@@ -2703,14 +2707,8 @@
     overflow-x: hidden;
   }
 
-  /* Metric card row: allow wrapping on mobile */
-  .mdet-metric-row {
-    flex-wrap: wrap;
-  }
-
-  .mdet-metric-card {
-    min-width: calc(50% - 0.3rem);
-    flex: 1 1 calc(50% - 0.3rem);
+  .location-stat-chip-grid {
+    gap: 0.4rem;
   }
 
   .mdet-infotip {
@@ -2753,9 +2751,12 @@
     padding-inline: 0.45rem;
   }
 
-  .mdet-metric-card {
-    min-width: 100%;
-    flex-basis: 100%;
+  .location-stat-chip-grid {
+    gap: 0.35rem;
+  }
+
+  .location-stat-chip {
+    padding: 0.42rem 0.58rem;
   }
 }
 
@@ -3326,7 +3327,7 @@
   background: var(--cards-grey);
 }
 
-.mine-page--v2 .mdet-metric-card {
+.mine-page--v2 .location-stat-chip {
   background: rgba(12, 16, 22, 0.92);
 }
 
