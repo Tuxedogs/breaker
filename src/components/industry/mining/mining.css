@@ -1128,14 +1128,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(160, 180, 220, 0.3);
   background: transparent;
   color: rgba(160, 180, 220, 0.45);
-  font-size: 0.58rem;
+  font-size: 0.5rem;
   font-family: var(--font-primary);
   font-weight: 700;
   line-height: 1;
@@ -1148,25 +1148,14 @@
 }
 
 .mdet-infotip-wrap {
-  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
 }
 
-.mdet-infotip-wrap summary {
-  list-style: none;
-}
-
-.mdet-infotip-wrap summary::-webkit-details-marker {
-  display: none;
-}
-
 .mdet-infotip-popover {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 0.35rem);
   z-index: 20;
-  width: min(280px, 72vw);
+  position: fixed;
+  width: min(280px, calc(100vw - 1.5rem));
   max-height: 42dvh;
   overflow: auto;
   padding: 0.55rem 0.62rem;
@@ -1183,6 +1172,12 @@
 .mdet-infotip:hover {
   border-color: rgba(255, 153, 0, 0.45);
   color: rgba(255, 153, 0, 0.7);
+}
+
+.mdet-infotip[aria-expanded="true"] {
+  border-color: rgba(255, 153, 0, 0.5);
+  color: rgba(255, 190, 80, 0.86);
+  background: rgba(255, 153, 0, 0.08);
 }
 
 .mine-page :where(button, [role="button"], input, select):focus-visible {
@@ -1580,6 +1575,11 @@
   flex-direction: column;
 }
 
+.mdet-mobile-material-list,
+.mdet-mobile-missing-block {
+  display: none;
+}
+
 .mining-resource-index-table {
   width: 100%;
   border-collapse: collapse;
@@ -1680,6 +1680,91 @@
 .mining-source-badge--low      { color: rgba(251, 146, 60, 0.8);   background: rgba(251, 146, 60, 0.06);  border: 1px solid rgba(251, 146, 60, 0.15); }
 .mining-source-badge--missing  { color: rgba(248, 113, 113, 0.72); background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.13); }
 .mining-source-badge--none     { color: rgba(160, 180, 220, 0.38); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.07); }
+
+.mdet-mobile-material-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.78rem 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  background: rgba(10, 14, 22, 0.72);
+}
+
+.mdet-mobile-material-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.mdet-mobile-material-title {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mdet-mobile-material-title .mining-material-name-cell {
+  align-items: flex-start;
+}
+
+.mdet-mobile-material-title .mining-material-name-text {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  line-height: 1.05;
+}
+
+.mdet-mobile-material-method {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 153, 0, 0.14);
+  background: rgba(255, 153, 0, 0.06);
+  color: rgba(255, 190, 80, 0.82);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mdet-mobile-material-encounter {
+  display: flex;
+  align-items: center;
+}
+
+.mdet-mobile-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.mdet-mobile-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+  min-width: 0;
+  padding-top: 0.42rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mdet-mobile-stat-label {
+  font-family: var(--font-primary);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(160, 180, 220, 0.52);
+}
+
+.mdet-mobile-stat strong {
+  color: rgba(226, 232, 240, 0.9);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.05;
+  word-break: break-word;
+}
 
 /* ── Compact filter bar + tactical drawer ────────────────────────────────── */
 
@@ -2618,51 +2703,6 @@
     overflow-x: hidden;
   }
 
-  .mdet-mat-table,
-  .mining-resource-index-table,
-  .mdet-mat-table tbody,
-  .mining-resource-index-table tbody,
-  .mdet-mat-row,
-  .mining-resource-row {
-    display: block;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .mdet-mat-table thead,
-  .mining-resource-index-table thead {
-    display: none;
-  }
-
-  .mdet-mat-row,
-  .mining-resource-row {
-    padding: 0.52rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .mdet-mat-row td,
-  .mining-resource-row td {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.55rem;
-    width: 100%;
-    padding: 0.18rem 0;
-    font-size: 0.86rem;
-    line-height: 1.25;
-    text-align: right;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-
-  .mdet-mat-row td:first-child,
-  .mining-resource-row td:first-child {
-    justify-content: flex-start;
-    text-align: left;
-    font-size: 0.98rem;
-    font-weight: 800;
-  }
-
   /* Metric card row: allow wrapping on mobile */
   .mdet-metric-row {
     flex-wrap: wrap;
@@ -2674,17 +2714,32 @@
   }
 
   .mdet-infotip {
-    width: 44px;
-    height: 44px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .mining-resource-index-table {
+    display: none;
+  }
+
+  .mdet-mobile-material-list,
+  .mdet-mobile-missing-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .mdet-mobile-stat-grid {
+    grid-template-columns: 1fr;
   }
 
   .mdet-infotip-popover {
-    position: fixed;
-    left: 0.75rem;
+    left: 0.75rem !important;
     right: 0.75rem;
-    top: auto;
+    top: auto !important;
     bottom: 1rem;
     width: auto;
+    max-width: none !important;
     max-height: 46dvh;
   }
 }
@@ -2728,6 +2783,25 @@
   flex: 1 1 0;
   min-height: 0;
   overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .mine-page--v2,
+  .mine-body,
+  .mine-main,
+  .mconsole-layout,
+  .mlist-panel,
+  .mdet-col {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .mlist-items {
+    flex: 0 0 auto;
+    max-height: none;
+    overflow-y: visible;
+  }
 }
 
 /* Filter toolbar — uses shared crb-row / craft-frl-chip structure from recipe-browser.css */

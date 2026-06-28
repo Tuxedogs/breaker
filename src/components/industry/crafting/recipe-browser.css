@@ -3349,6 +3349,12 @@
   overflow: hidden;
 }
 
+.component-browser-body > .craft-detail-page {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .component-browser-results {
   display: flex;
   flex: 1 1 0;
@@ -4466,6 +4472,10 @@
   .component-results-browser {
     gap: 6px;
     padding: 6px 8px calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  .component-browser-body > .craft-detail-page {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
   }
 
   .component-browser-toolbar {

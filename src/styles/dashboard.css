@@ -877,7 +877,28 @@
   overflow: hidden;
 }
 
-/* Mining / Build Queue use document-flow scroll on mobile; crafting keeps internal scroll. */
+/* Mining / Build Queue use document-flow scroll on tablet/mobile. */
+@media (max-width: 1024px) {
+  .dash-content:has(> .dash-content-frame > .mine-page),
+  .dash-content:has(> .dash-content-frame > .bq-page) {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame,
+  .dash-content:has(> .dash-content-frame > .bq-page) > .dash-content-frame {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .dash-content-frame > .mine-page,
+  .dash-content-frame > .bq-page {
+    flex: 1 0 auto;
+    height: auto;
+  }
+}
+
+/* Mission browser uses document-flow scroll on smaller mobile widths. */
 @media (max-width: 760px) {
   .dash-content:has(> .dash-content-frame > .mine-page),
   .dash-content:has(> .dash-content-frame > .bq-page),

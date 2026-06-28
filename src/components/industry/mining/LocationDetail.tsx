@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import {
@@ -32,17 +33,213 @@ import {
   spawnTypeLabel,
   systemBadgeClass,
 } from "./miningFormatters";
-import type { ResourceRow } from "./miningTypes";
+import type { DemandRow, ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 
 export function InfoTip({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  const [desktopPosition, setDesktopPosition] = useState<{ top: number; left: number; maxWidth: number } | null>(null);
+  const wrapRef = useRef<HTMLSpanElement | null>(null);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+  const tooltipId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const updatePosition = () => {
+      if (!wrapRef.current || typeof window === "undefined") return;
+      if (window.innerWidth <= 760) {
+        setDesktopPosition(null);
+        return;
+      }
+      const triggerRect = wrapRef.current.getBoundingClientRect();
+      const popoverHeight = popoverRef.current?.offsetHeight ?? 120;
+      const viewportPadding = 12;
+      const gap = 8;
+      const maxWidth = Math.min(280, window.innerWidth - viewportPadding * 2);
+      const centeredLeft = triggerRect.left + triggerRect.width / 2 - maxWidth / 2;
+      const left = Math.min(
+        Math.max(viewportPadding, centeredLeft),
+        Math.max(viewportPadding, window.innerWidth - maxWidth - viewportPadding),
+      );
+      const placeBelow = triggerRect.bottom + gap + popoverHeight <= window.innerHeight - viewportPadding;
+      const top = placeBelow
+        ? Math.min(window.innerHeight - popoverHeight - viewportPadding, triggerRect.bottom + gap)
+        : Math.max(viewportPadding, triggerRect.top - popoverHeight - gap);
+      setDesktopPosition({ top, left, maxWidth });
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (wrapRef.current?.contains(target)) return;
+      if (popoverRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
+  const popover = open && typeof document !== "undefined"
+    ? createPortal(
+      <div
+        ref={popoverRef}
+        id={tooltipId}
+        className="mdet-infotip-popover mdet-infotip-popover--portal"
+        role="tooltip"
+        style={desktopPosition ? { top: `${desktopPosition.top}px`, left: `${desktopPosition.left}px`, maxWidth: `${desktopPosition.maxWidth}px` } : undefined}
+      >
+        {text}
+      </div>,
+      document.body,
+    )
+    : null;
+
   return (
-    <details className="mdet-infotip-wrap">
-      <summary className="mdet-infotip" aria-label={text}>?</summary>
-      <div className="mdet-infotip-popover">{text}</div>
-    </details>
+    <>
+      <span
+        ref={wrapRef}
+        className="mdet-infotip-wrap"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        <button
+          type="button"
+          className="mdet-infotip"
+          aria-label={text}
+          aria-describedby={open ? tooltipId : undefined}
+          aria-expanded={open}
+          onClick={() => setOpen((current) => !current)}
+          onFocus={() => setOpen(true)}
+          onBlur={(event) => {
+            const relatedTarget = event.relatedTarget as Node | null;
+            if (relatedTarget && wrapRef.current?.contains(relatedTarget)) return;
+            if (relatedTarget && popoverRef.current?.contains(relatedTarget)) return;
+            setOpen(false);
+          }}
+        >
+          ?
+        </button>
+      </span>
+      {popover}
+    </>
+  );
+}
+
+function MiningSourceBadge({
+  status,
+  densityLabel,
+  sourceWeight,
+  title,
+}: {
+  status: DemandRow["status"] | ResourceRow["status"];
+  densityLabel: string;
+  sourceWeight: number | undefined;
+  title?: string;
+}) {
+  return (
+    <span className={`mining-source-badge mining-source-badge--${status}`} title={title}>
+      {densityLabel}
+      {sourceWeight !== undefined && (
+        <span className="mdet-source-bar-wrap">
+          <span className="mdet-source-bar" style={{ width: `${Math.min(100, sourceWeight)}%` }} />
+        </span>
+      )}
+    </span>
+  );
+}
+
+function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
+  return (
+    <div className="mdet-mobile-stat">
+      <span className="mdet-mobile-stat-label">{label}</span>
+      <strong className={toneClass}>{value}</strong>
+    </div>
+  );
+}
+
+function MiningMobileMaterialCard({
+  row,
+  mode,
+  qualityHeader,
+}: {
+  row: DemandRow | ResourceRow;
+  mode: "demand" | "resource";
+  qualityHeader: string;
+}) {
+  const methodLabel = mode === "demand"
+    ? (row as DemandRow).coverage === "Missing"
+      ? "Missing"
+      : row.miningType
+    : row.miningType || "Unknown";
+  const primaryQualityLabel = mode === "demand"
+    ? (row as DemandRow).targetQualityChanceLabel
+    : (row as ResourceRow).qualityLabel;
+
+  return (
+    <article className={`mdet-mobile-material-card mining-resource-row--${row.status}`}>
+      <div className="mdet-mobile-material-head">
+        <div className="mdet-mobile-material-title">
+          <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={18} />
+        </div>
+        <span className="mdet-mobile-material-method">{methodLabel}</span>
+      </div>
+      <div className="mdet-mobile-material-encounter">
+        <MiningSourceBadge
+          status={row.status}
+          densityLabel={row.densityLabel}
+          sourceWeight={row.sourceWeight}
+          title={"sourceTitle" in row ? row.sourceTitle : undefined}
+        />
+      </div>
+      <div className="mdet-mobile-stat-grid">
+        <MiningMobileStat label={qualityHeader} value={primaryQualityLabel} />
+        <MiningMobileStat label="900+ Quality" value={row.quality900Label} />
+        <MiningMobileStat label="Composition / Yield" value={row.compositionLabel} />
+      </div>
+    </article>
+  );
+}
+
+function MiningMobileMaterialList({
+  rows,
+  mode,
+  qualityHeader,
+}: {
+  rows: Array<DemandRow | ResourceRow>;
+  mode: "demand" | "resource";
+  qualityHeader: string;
+}) {
+  return (
+    <div className="mdet-mobile-material-list">
+      {rows.map((row) => (
+        <MiningMobileMaterialCard
+          key={row.key}
+          row={row}
+          mode={mode}
+          qualityHeader={qualityHeader}
+        />
+      ))}
+    </div>
   );
 }
 
@@ -296,7 +493,7 @@ export function LocationDetail({
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
                   <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
-                  <td><span className={`mining-source-badge mining-source-badge--${row.status}`}>{row.densityLabel}{row.sourceWeight !== undefined && <span className="mdet-source-bar-wrap"><span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} /></span>}</span></td>
+                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
@@ -316,13 +513,25 @@ export function LocationDetail({
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
                   <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
-                  <td><span className={`mining-source-badge mining-source-badge--${row.status}`}>{row.densityLabel}{row.sourceWeight !== undefined && <span className="mdet-source-bar-wrap"><span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} /></span>}</span></td>
+                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <MiningMobileMaterialList rows={coveredDemandRows} mode="demand" qualityHeader={qualityHeader} />
+          {missingDemandRows.length > 0 && (
+            <div className="mdet-mobile-missing-block">
+              <button type="button" className="mining-missing-material-toggle" onClick={() => setShowMissingDemandRows((o) => !o)} aria-expanded={showMissingDemandRows}>
+                <span>{showMissingDemandRows ? "Hide" : "Show"} Missing Material</span>
+                <strong>{missingDemandRows.length}</strong>
+              </button>
+              {showMissingDemandRows && (
+                <MiningMobileMaterialList rows={missingDemandRows} mode="demand" qualityHeader={qualityHeader} />
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -352,7 +561,7 @@ export function LocationDetail({
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
                   <td className="mdet-mat-demand">{row.miningType || "Unknown"}</td>
-                  <td title={row.sourceTitle}><span className={`mining-source-badge mining-source-badge--${row.status}`}>{row.densityLabel}{row.sourceWeight !== undefined && <span className="mdet-source-bar-wrap"><span className="mdet-source-bar" style={{ width: `${Math.min(100, row.sourceWeight)}%` }} /></span>}</span></td>
+                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={row.sourceTitle} /></td>
                   <td className="mdet-mat-score">{row.qualityLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
@@ -360,6 +569,7 @@ export function LocationDetail({
               ))}
             </tbody>
           </table>
+          <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+ Quality" />
         </div>
       )}
     </div>

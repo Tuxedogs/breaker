@@ -626,6 +626,57 @@
   .logi-location-detail-head {
     display: grid;
   }
+
+  .logi-location-stack-table-wrap {
+    max-height: none;
+    overflow: visible;
+    contain: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .logi-inv-page {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  .logi-location-card-head,
+  .logi-location-detail-head,
+  .logi-location-detail-title-row,
+  .logi-location-card-badges,
+  .logi-location-material-card-title {
+    gap: 0.5rem;
+  }
+
+  .logi-location-card-badges,
+  .logi-location-detail-title-row,
+  .logi-location-material-card-title {
+    flex-wrap: wrap;
+  }
+
+  .logi-location-card-kicker,
+  .logi-location-material-card-title h3 {
+    max-width: none;
+    white-space: normal;
+  }
+
+  .logi-location-card-stack-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .logi-location-card-stack-qty,
+  .logi-location-card-stack-container {
+    white-space: normal;
+  }
+
+  .logi-location-card-stack-row > .logi-location-row-actions {
+    grid-column: auto;
+    justify-self: start;
+  }
+
+  .logi-location-row-actions {
+    flex-wrap: wrap;
+  }
 }
 
 
