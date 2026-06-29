@@ -112,8 +112,8 @@ export function LocationListItem({
           <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)} mlist-item-badge`}>
             {spawnTypeLabel(entry.spawnType)}
           </span>
+          <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
-        <StantonLagrangeChildrenSummary entry={entry} compact />
         <div className="mlist-item-bars">
           {demandBar !== null && (
             <div className="mlist-bar-row">

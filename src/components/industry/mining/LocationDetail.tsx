@@ -404,13 +404,13 @@ export function LocationDetail({
           <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
             {locationDisplayName}
           </div>
-          <StantonLagrangeChildrenSummary entry={entry} />
-          {!isLagrangeChildGroup && (
-            <div className="mdet-meta">
+          <div className="mdet-meta">
+            {!isLagrangeChildGroup && (
               <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
-              <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>{spawnTypeLabel(entry.spawnType)}</span>
-            </div>
-          )}
+            )}
+            <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>{spawnTypeLabel(entry.spawnType)}</span>
+            <StantonLagrangeChildrenSummary entry={entry} compact />
+          </div>
         </div>
       </div>
 
