@@ -403,9 +403,7 @@ export default function MiningModule() {
                     return (
                       <Fragment key={getLocationCardKey(entry)}>
                         <LocationListItem
-                          rank={displayedRankedLocations.findIndex((item) => item.locationKey === entry.locationKey) + 1}
                           entry={entry}
-                          coveragePlanLocation={plannedLocation}
                           selectedMaterials={materialFilterKeys}
                           buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
                           locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}

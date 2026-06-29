@@ -191,13 +191,13 @@ export function sourceStatus(sourceWeight: number | undefined): "strong" | "mode
 }
 
 export function qualityChanceHeader(hasBuildQueueTarget: boolean): string {
-  return hasBuildQueueTarget ? "Target Quality Chance" : "800+ Quality Chance";
+  return hasBuildQueueTarget ? "Target Quality Chance" : "800+";
 }
 
 export function qualityChanceTooltip(hasBuildQueueTarget: boolean): string {
   return hasBuildQueueTarget
-    ? "Chance that an encountered source meets the selected build queue quality requirement. This is not the chance to find the material."
-    : "Chance that an encountered source meets the default high-quality threshold. This is not the chance to find the material.";
+    ? "Chance that an encountered source meets 800+ quality. This is not the chance to find the material."
+    : "Chance that an encountered source meets 800+ quality. This is not the chance to find the material.";
 }
 
 export function queueScopeDescription(scope: MiningQueueScope, count: number, total: number): string {

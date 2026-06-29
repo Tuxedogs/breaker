@@ -4,7 +4,6 @@ import {
   getStaticLocationDisplayName,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
-import type { CoveragePlanLocation } from "../../../features/mining/coveragePlan";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
 import {
@@ -18,9 +17,7 @@ import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 export function LocationListItem({
-  rank,
   entry,
-  coveragePlanLocation,
   selectedMaterials,
   buildQueueMaterialKeys,
   locationMaterialKeys,
@@ -31,9 +28,7 @@ export function LocationListItem({
   onSelect,
   onToggleStar,
 }: {
-  rank: number;
   entry: PublicLocationEntry;
-  coveragePlanLocation?: CoveragePlanLocation;
   selectedMaterials: Set<string>;
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
@@ -81,7 +76,6 @@ export function LocationListItem({
       aria-pressed={selected}
       aria-label={`Select ${locationDisplayName} mining location`}
     >
-      <div className="mlist-item-rank">{rank}</div>
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (
           <img
@@ -99,11 +93,6 @@ export function LocationListItem({
           <span className="mlist-item-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
             {locationDisplayName}
           </span>
-          {coveragePlanLocation && (
-            <span className={`mlist-role-badge${coveragePlanLocation.role === "Optional Overlap" ? " mlist-role-badge--muted" : ""}`}>
-              {coveragePlanLocation.role}
-            </span>
-          )}
         </div>
         <div className="mlist-item-sub">
           {!isLagrangeChildGroup && (
@@ -124,7 +113,6 @@ export function LocationListItem({
                   style={{ width: `${demandBar}%` }}
                 />
               </div>
-              <span className="mlist-bar-val">{primaryCovered.length} / {totalRelevant}</span>
             </div>
           )}
         </div>
