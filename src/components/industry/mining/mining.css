@@ -602,13 +602,15 @@
 
 .mlist-item {
   display: grid;
-  grid-template-columns: 1.8rem 1.75rem minmax(0,1fr) 1.5rem;
+  position: relative;
+  grid-template-columns: 1.8rem 1.75rem minmax(0,1fr);
   gap: 0.34rem;
   align-items: start;
-  padding: 0.6rem 0.68rem 0.6rem 0.6rem;
+  padding: 0.7rem 0.72rem 0.6rem 0.6rem;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   cursor: pointer;
   touch-action: manipulation;
+  overflow: visible;
 }
 
 .mlist-item:last-child { border-bottom: none; }
@@ -672,6 +674,7 @@
   flex-direction: column;
   gap: 0.26rem;
   min-width: 0;
+  padding-right: 2.3rem;
 }
 
 .mlist-item-head {
@@ -1131,24 +1134,27 @@
 .mdet-infotip {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
+  justify-content: flex-start;
   padding: 0;
-  border-radius: 50%;
-  border: 1px solid rgba(160, 180, 220, 0.3);
+  border: none;
   background: transparent;
-  color: rgba(160, 180, 220, 0.45);
-  font-size: 0.5rem;
+  color: inherit;
+  font-size: inherit;
   font-family: var(--font-primary);
-  font-weight: 700;
-  line-height: 1;
+  font-weight: inherit;
+  line-height: inherit;
   cursor: help;
   flex-shrink: 0;
   vertical-align: middle;
-  margin-left: 0.2rem;
   user-select: none;
-  transition: border-color 0.15s, color 0.15s;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  transition: color 0.15s, text-decoration-color 0.15s;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(255, 153, 0, 0.26);
+  text-underline-offset: 0.18em;
 }
 
 .mdet-infotip-wrap {
@@ -1174,14 +1180,12 @@
 }
 
 .mdet-infotip:hover {
-  border-color: rgba(255, 153, 0, 0.45);
   color: rgba(255, 153, 0, 0.7);
 }
 
 .mdet-infotip[aria-expanded="true"] {
-  border-color: rgba(255, 153, 0, 0.5);
   color: rgba(255, 190, 80, 0.86);
-  background: rgba(255, 153, 0, 0.08);
+  text-decoration-color: rgba(255, 190, 80, 0.72);
 }
 
 .mine-page :where(button, [role="button"], input, select):focus-visible {
@@ -2711,11 +2715,6 @@
     gap: 0.4rem;
   }
 
-  .mdet-infotip {
-    width: 20px;
-    height: 20px;
-  }
-
   .mining-resource-index-table {
     display: none;
   }
@@ -3095,6 +3094,13 @@
   transition: background 0.14s, color 0.14s, box-shadow 0.14s;
 }
 
+.mining-scope-button__icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  opacity: 0.8;
+  transition: transform 0.16s ease, opacity 0.16s ease, fill 0.16s ease;
+}
+
 .mining-scope-button:first-child {
   border-left: 0;
 }
@@ -3104,14 +3110,53 @@
   color: rgba(255, 224, 170, 0.94);
 }
 
+.mining-scope-button:hover .mining-scope-button__icon {
+  opacity: 1;
+}
+
 .mining-scope-button--active {
   background: rgba(255, 153, 0, 0.12);
   color: rgba(255, 207, 116, 0.98);
   box-shadow: inset 0 -2px 0 rgba(255, 153, 0, 0.72);
 }
 
-.mining-scope-button--starred.mining-scope-button--active {
+.mining-scope-button--bookmark {
+  min-width: 40px;
+  padding: 0 10px;
+}
+
+.mining-scope-button--bookmark.mining-scope-button--active {
   color: rgba(251, 191, 36, 0.98);
+}
+
+.mining-scope-button--bookmark.mining-scope-button--active .mining-scope-button__icon {
+  opacity: 1;
+  fill: currentColor;
+}
+
+.mining-scope-button:focus-visible,
+.mloc-bookmark-btn:focus-visible {
+  outline: 2px solid rgba(255, 190, 80, 0.82);
+  outline-offset: 2px;
+}
+
+.mine-hover-tooltip {
+  position: fixed;
+  z-index: 380;
+  padding: 0.28rem 0.48rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 4px;
+  background: rgba(7, 11, 16, 0.96);
+  color: rgba(226, 232, 240, 0.94);
+  font-family: var(--font-primary);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  pointer-events: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
+  white-space: nowrap;
 }
 
 .mining-filter-drawer {
@@ -3161,10 +3206,10 @@
 /* Lightweight list/detail overrides — no blur, no cinematic layers */
 
 .mine-page--v2 .mlist-item {
-  grid-template-columns: 1.45rem 2rem minmax(0, 1fr) 1.75rem;
+  grid-template-columns: 1.45rem 2rem minmax(0, 1fr);
   gap: 0.42rem;
   align-items: center;
-  padding: 0.5rem 0.62rem 0.5rem 0.5rem;
+  padding: 0.66rem 0.7rem 0.5rem 0.5rem;
 }
 
 .mine-page--v2 .mlist-item--selected {
@@ -3210,41 +3255,54 @@
 }
 
 .mloc-bookmark-btn {
+  position: absolute;
+  top: -0.45rem;
+  right: 0.75rem;
+  z-index: 2;
   display: inline-grid;
-  width: 1.55rem;
-  height: 1.55rem;
+  width: 2rem;
+  height: 2.35rem;
   place-items: center;
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  border-radius: 4px;
-  background: #0c1015;
-  color: rgba(148, 163, 184, 0.55);
+  border: 0;
+  background: transparent;
+  color: rgba(148, 163, 184, 0.58);
   padding: 0;
   cursor: pointer;
+  box-shadow: none;
+  transition: transform 0.16s ease, color 0.16s ease, opacity 0.16s ease;
+  opacity: 0.78;
 }
 
 .mloc-bookmark-btn svg {
-  width: 0.82rem;
-  height: 0.82rem;
+  width: 1rem;
+  height: 1.3rem;
   fill: none;
   stroke: currentColor;
   stroke-linejoin: round;
   stroke-width: 1.8;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0));
+  transition: transform 0.16s ease, filter 0.16s ease, fill 0.16s ease, opacity 0.16s ease;
 }
 
 .mloc-bookmark-btn:hover {
-  border-color: rgba(255, 153, 0, 0.3);
-  color: rgba(255, 200, 90, 0.88);
+  color: rgba(255, 200, 90, 0.94);
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.mloc-bookmark-btn:hover svg {
+  transform: scale(1.05);
+  filter: drop-shadow(0 3px 8px rgba(255, 178, 26, 0.26));
 }
 
 .mloc-bookmark-btn.is-active {
-  border-color: rgba(220, 180, 93, 0.5);
-  background: rgba(220, 180, 93, 0.1);
   color: rgba(251, 191, 36, 0.95);
-  box-shadow: inset 0 0 0 1px rgba(220, 180, 93, 0.12);
+  opacity: 1;
 }
 
 .mloc-bookmark-btn.is-active svg {
   fill: currentColor;
+  filter: drop-shadow(0 4px 10px rgba(255, 190, 80, 0.24));
 }
 
 .mloc-system-badge,
@@ -3341,17 +3399,29 @@
     padding-inline: 0.45rem;
   }
 
-  .mining-filter-bar {
-    flex-wrap: wrap;
+  .scintel-filter-shell .mining-filter-bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "search actions"
+      "scope scope";
+    align-items: center;
+    gap: 0.38rem;
   }
 
-  .mining-filter-search {
-    flex-basis: calc(100% - 92px);
+  .scintel-filter-shell .mining-filter-bar .mining-filter-search {
+    grid-area: search;
+    min-width: 0;
   }
 
-  .mining-scope-switch {
+  .scintel-filter-shell .mining-filter-bar .mining-filter-actions {
+    grid-area: actions;
+  }
+
+  .scintel-filter-shell .mining-filter-bar .mining-scope-switch {
+    grid-area: scope;
     width: 100%;
-    order: 3;
+    order: initial;
   }
 
   .mining-scope-button {
@@ -3367,6 +3437,6 @@
   }
 
   .mine-page--v2 .mlist-item {
-    grid-template-columns: 1.35rem 2rem minmax(0, 1fr) 2rem;
+    grid-template-columns: 1.35rem 2rem minmax(0, 1fr);
   }
 }

@@ -14,14 +14,8 @@ import {
 } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
-
-function BookmarkIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 4h10v16l-5-3.2L7 20V4Z" />
-    </svg>
-  );
-}
+import MiningBookmarkIcon from "./MiningBookmarkIcon";
+import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 export function LocationListItem({
   rank,
@@ -66,6 +60,8 @@ export function LocationListItem({
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
+  const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
+
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -135,14 +131,17 @@ export function LocationListItem({
       </div>
       <button
         type="button"
+        ref={bookmarkTooltip.setTriggerRef}
         className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
         onClick={onToggleStar}
         aria-pressed={starred}
-        title={starred ? "Remove bookmark" : "Bookmark location"}
-        aria-label={starred ? "Remove bookmark" : "Bookmark location"}
+        aria-label={starred ? "Remove saved" : "Save"}
+        aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
+        {...bookmarkTooltip.triggerProps}
       >
-        <BookmarkIcon />
+        <MiningBookmarkIcon />
       </button>
+      {bookmarkTooltip.tooltip}
     </div>
   );
 }

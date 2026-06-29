@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { MINING_SYSTEM_FILTERS } from "./miningTypes";
+import MiningBookmarkIcon from "./MiningBookmarkIcon";
+import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 interface ResourceGroup {
   id: string;
@@ -62,6 +64,7 @@ export function MiningFilterBar({
   );
 
   const scopeIsDefault = !buildQueueSelectionActive && selectedMaterials.size === 0 && !showOnlyStarred;
+  const savedTooltip = useMiningHoverTooltip("Saved");
 
   const activeFilterChips = useMemo(() => {
     const chips: Array<{ key: string; label: string }> = [];
@@ -145,14 +148,18 @@ export function MiningFilterBar({
           </button>
           <button
             type="button"
-            className={`mining-scope-button mining-scope-button--starred${showOnlyStarred ? " mining-scope-button--active" : ""}`}
+            ref={savedTooltip.setTriggerRef}
+            className={`mining-scope-button mining-scope-button--bookmark${showOnlyStarred ? " mining-scope-button--active" : ""}`}
             aria-pressed={showOnlyStarred}
+            aria-label="Saved"
+            aria-describedby={savedTooltip.open ? savedTooltip.tooltipId : undefined}
             onClick={onToggleStarred}
+            {...savedTooltip.triggerProps}
           >
-            <span aria-hidden="true">☆</span>
-            Starred
+            <MiningBookmarkIcon className="mining-scope-button__icon" />
           </button>
         </div>
+        {savedTooltip.tooltip}
       </div>
 
       {expanded && (
