@@ -400,20 +400,35 @@ export default function MiningModule() {
                 <div className="mlist-items">
                   {listLocations.map((entry) => {
                     const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
+                    const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
                     return (
                       <Fragment key={getLocationCardKey(entry)}>
-                        <LocationListItem
-                          entry={entry}
-                          selectedMaterials={materialFilterKeys}
-                          buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
-                          locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                          staticMiningIndex={staticMiningIndex}
-                          planetAssetMap={planetAssetMap}
-                          starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
-                          selected={effectiveSelectedEntry?.locationKey === entry.locationKey}
-                          onSelect={() => setSelectedLocationKey(entry.locationKey)}
-                          onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
-                        />
+                        <div className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}>
+                          <LocationListItem
+                            entry={entry}
+                            selectedMaterials={materialFilterKeys}
+                            buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
+                            locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                            staticMiningIndex={staticMiningIndex}
+                            planetAssetMap={planetAssetMap}
+                            starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                            selected={isSelected}
+                            onSelect={() => setSelectedLocationKey(entry.locationKey)}
+                            onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
+                          />
+                          {isMobileViewport && isSelected && (
+                            <div className="mlist-inline-detail">
+                              <LocationDetail
+                                entry={entry}
+                                activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                                buildQueueMaterialKeys={materialFilterKeys}
+                                locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                                staticMiningIndex={staticMiningIndex}
+                                hideHeader
+                              />
+                            </div>
+                          )}
+                        </div>
                         {plannedLocation?.isCompletionLocation && <div className="mlist-stop-marker">Coverage complete above this line</div>}
                       </Fragment>
                     );
@@ -437,11 +452,11 @@ export default function MiningModule() {
               </div>
 
               <div className="mdet-col">
-                {effectiveSelectedEntry ? (
+                {!isMobileViewport && effectiveSelectedEntry ? (
                   <LocationDetail entry={effectiveSelectedEntry} activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials} buildQueueMaterialKeys={materialFilterKeys} locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []} staticMiningIndex={staticMiningIndex} />
-                ) : (
+                ) : !isMobileViewport ? (
                   <div className="mdet-empty"><span>Select a location to view details</span></div>
-                )}
+                ) : null}
               </div>
             </div>
               )}

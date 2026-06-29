@@ -144,6 +144,20 @@ function QualityPill({ quality }: { quality?: number | null }) {
   return <span className={`logi-quality-pill ${getQualityClass(quality)}`}>{quality}</span>;
 }
 
+function useIsMobileInventoryViewport() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const update = () => setIsMobile(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  return isMobile;
+}
+
 type InventoryMaterialGroupProps = {
   group: DrawerMaterialGroup;
   onEdit: (entry: InventoryEntry) => void;
@@ -192,12 +206,14 @@ type LocationCardProps = {
   group: LocationGroup;
   isSelected: boolean;
   onToggle: (locationId: string) => void;
+  detailId: string;
 };
 
 const InventoryLocationCard = memo(function InventoryLocationCard({
   group,
   isSelected,
   onToggle,
+  detailId,
 }: LocationCardProps) {
   return (
     <article className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}`}>
@@ -232,7 +248,7 @@ const InventoryLocationCard = memo(function InventoryLocationCard({
           className="logi-location-details-btn"
           onClick={() => onToggle(group.id)}
           aria-expanded={isSelected}
-          aria-controls="inventory-location-detail"
+          aria-controls={detailId}
         >
           {isSelected ? 'Collapse' : 'View Details'}
         </button>
@@ -370,6 +386,8 @@ type SelectedLocationDetailProps = {
   onRequestDelete: (entryId: string) => void;
   onDelete: (entryId: string) => void;
   onCancelDelete: () => void;
+  hideHeader?: boolean;
+  detailId?: string;
 };
 
 const SelectedLocationDetail = memo(function SelectedLocationDetail({
@@ -382,22 +400,30 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
   onRequestDelete,
   onDelete,
   onCancelDelete,
+  hideHeader = false,
+  detailId = 'inventory-location-detail',
 }: SelectedLocationDetailProps) {
   const pendingEntry = pendingDeleteEntryId
     ? selectedLocation.entries.find((entry) => entry.id === pendingDeleteEntryId)
     : undefined;
 
   return (
-    <section id="inventory-location-detail" className="logi-location-detail" aria-label={`${selectedLocation.name} inventory details`}>
-      <div className="logi-location-detail-head">
-        <div>
-          <div className="logi-location-detail-title-row">
-            <h2>{selectedLocation.name}</h2>
-            <span className="logi-location-active-badge">Active</span>
+    <section
+      id={detailId}
+      className={`logi-location-detail${hideHeader ? ' logi-location-detail--inline-mobile' : ''}`}
+      aria-label={`${selectedLocation.name} inventory details`}
+    >
+      {!hideHeader && (
+        <div className="logi-location-detail-head">
+          <div>
+            <div className="logi-location-detail-title-row">
+              <h2>{selectedLocation.name}</h2>
+              <span className="logi-location-active-badge">Active</span>
+            </div>
           </div>
+          <button type="button" className="logi-location-collapse-btn" onClick={() => onCollapse(selectedLocation.id)}>Collapse</button>
         </div>
-        <button type="button" className="logi-location-collapse-btn" onClick={() => onCollapse(selectedLocation.id)}>Collapse</button>
-      </div>
+      )}
 
 
       {drawerMaterialGroups.length > 0 ? (
@@ -448,6 +474,7 @@ export default function InventoryPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('cards');
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
   const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
+  const isMobileViewport = useIsMobileInventoryViewport();
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -774,17 +801,42 @@ export default function InventoryPage() {
       {viewMode === 'cards' ? (
         <>
           <div className="logi-location-card-grid">
-            {locationGroups.map((group) => (
-              <InventoryLocationCard
-                key={group.id}
-                group={group}
-                isSelected={selectedLocationId === group.id}
-                onToggle={toggleLocationDrawer}
-              />
-            ))}
+            {locationGroups.map((group) => {
+              const isSelected = selectedLocationId === group.id;
+              const detailId = `inventory-location-detail-${group.id}`;
+
+              return (
+                <div
+                  key={group.id}
+                  className={`logi-location-card-slot${isMobileViewport && isSelected ? ' logi-location-card-slot--expanded' : ''}`}
+                >
+                  <InventoryLocationCard
+                    group={group}
+                    isSelected={isSelected}
+                    onToggle={toggleLocationDrawer}
+                    detailId={detailId}
+                  />
+                  {isMobileViewport && isSelected && selectedLocation?.id === group.id ? (
+                    <SelectedLocationDetail
+                      selectedLocation={selectedLocation}
+                      drawerMaterialGroups={drawerMaterialGroups}
+                      pendingDeleteEntryId={pendingDeleteEntryId}
+                      materialById={materialById}
+                      onCollapse={toggleLocationDrawer}
+                      onEdit={handleEditDrawerEntry}
+                      onRequestDelete={handleRequestDrawerDelete}
+                      onDelete={handleDelete}
+                      onCancelDelete={handleCancelDrawerDelete}
+                      hideHeader
+                      detailId={detailId}
+                    />
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
 
-          {selectedLocation && (
+          {!isMobileViewport && selectedLocation && (
             <SelectedLocationDetail
               selectedLocation={selectedLocation}
               drawerMaterialGroups={drawerMaterialGroups}

@@ -7,8 +7,6 @@ import {
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
 import {
-  spawnTypeLabel,
-  spawnTypeBadgeClass,
   systemBadgeClass,
 } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
@@ -98,9 +96,6 @@ export function LocationListItem({
           {!isLagrangeChildGroup && (
             <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
-          <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)} mlist-item-badge`}>
-            {spawnTypeLabel(entry.spawnType)}
-          </span>
           <StantonLagrangeChildrenSummary entry={entry} compact />
         </div>
         <div className="mlist-item-bars">

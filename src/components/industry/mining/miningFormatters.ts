@@ -37,6 +37,22 @@ export function spawnTypeBadgeClass(spawnType: string): string {
   return "mloc-badge--mixed";
 }
 
+export function miningMethodBadge(value: string | null | undefined): { label: string; className: string } | null {
+  switch (displayMiningMethodLabel(value)) {
+    case "Asteroid":
+    case "Ship":
+    case "Surface Ship":
+      return { label: "Ship", className: "mloc-badge--ship" };
+    case "Vehicle":
+    case "Surface Vehicle":
+      return { label: "Vehicle", className: "mloc-badge--vehicle" };
+    case "Hand":
+      return { label: "Hand", className: "mloc-badge--hand" };
+    default:
+      return null;
+  }
+}
+
 export function systemBadgeClass(systemName: string): string {
   const s = systemName.trim().toLowerCase();
   if (s === "stanton") return "mloc-system-badge--stanton";
@@ -419,4 +435,3 @@ export function buildResourceRows(
     };
   });
 }
-

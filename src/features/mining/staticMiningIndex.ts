@@ -262,8 +262,7 @@ export function displayMiningMethod(value: string | null | undefined): string {
       return "Surface Ship";
     case "Space":
     case "Asteroid":
-    case "Space / Asteroid":
-      return "Space / Asteroid";
+      return "Space";
     case "Hand":
       return "Hand";
     default:

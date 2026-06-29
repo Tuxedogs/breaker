@@ -98,6 +98,17 @@
   align-items: start;
 }
 
+.logi-location-card-slot {
+  display: contents;
+}
+
+.logi-location-card-slot--expanded {
+  border: 1px solid rgba(45, 212, 191, 0.28);
+  border-radius: 12px;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
 .logi-location-card {
   position: relative;
   display: flex;
@@ -389,6 +400,10 @@
   overflow: hidden;
 }
 
+.logi-location-detail--inline-mobile {
+  margin-top: 0;
+}
+
 .logi-location-detail-head {
   display: flex;
   align-items: flex-start;
@@ -637,6 +652,48 @@
 @media (max-width: 760px) {
   .logi-inv-page {
     padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  .logi-location-card-slot {
+    display: grid;
+    gap: 0;
+  }
+
+  .logi-location-card-slot--expanded {
+    gap: 0;
+  }
+
+  .logi-location-card-slot--expanded .logi-location-card {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .logi-location-card-slot--expanded .logi-location-card-head,
+  .logi-location-card-slot--expanded .logi-location-card-actions,
+  .logi-location-card-slot--expanded .logi-location-stat-grid {
+    background: transparent;
+  }
+
+  .logi-location-detail--inline-mobile {
+    border: 0;
+    border-top: 1px solid rgba(148,163,184,0.08);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding-top: 0.08rem;
+  }
+
+  .logi-location-card-slot--expanded .logi-location-detail--inline-mobile .logi-location-stack-table-wrap {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .logi-location-card-slot--expanded .logi-location-detail--inline-mobile .logi-location-detail-empty {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
   }
 
   .logi-location-card-head,
