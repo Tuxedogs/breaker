@@ -1,15 +1,13 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import {
-  getStaticDensityScore,
   getStaticEncounterRankingRow,
   getStaticLocationAttemptedJoinKeys,
   getStaticLocationDisplayName,
   getStaticMaterialQualityRow,
   getStaticMethodBiasForLocation,
-  getStaticMaterialKey,
   getStaticResourcesForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
@@ -18,15 +16,9 @@ import type { CoveragePlan } from "../../../features/mining/coveragePlan";
 import {
   buildDemandRows,
   buildResourceRows,
-  buildQualityDisplay,
-  encounterSignalFromWeight,
-  formatEncounterTier,
   formatPercent,
   methodBiasToneClass,
   qualityChanceHeader,
-  qualityChanceTooltip,
-  qualitySourceFamilyDisplayLabel,
-  qualitySourceScopeDisplayLabel,
   resourceRowMaterialKey,
   scoreToneClass,
   spawnTypeBadgeClass,
@@ -38,7 +30,7 @@ import { MaterialNameCell } from "./MiningShared";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
 
-export function InfoTip({ text }: { text: string }) {
+export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [desktopPosition, setDesktopPosition] = useState<{ top: number; left: number; maxWidth: number } | null>(null);
   const wrapRef = useRef<HTMLSpanElement | null>(null);
@@ -137,12 +129,17 @@ export function InfoTip({ text }: { text: string }) {
             setOpen(false);
           }}
         >
-          ?
+          {children}
         </button>
       </span>
       {popover}
     </>
   );
+}
+
+function qualityProbabilityTooltip(qualityLabel: string) {
+  const qualityThreshold = qualityLabel.replace("+", "");
+  return `Probability that when you find a material, it is over ${qualityThreshold} quality.`;
 }
 
 function MiningSourceBadge({
@@ -266,7 +263,6 @@ export function LocationDetail({
   );
   const total = coveredBQ.length + missingBQ.length;
   const coveragePct = total > 0 ? Math.round((coveredBQ.length / total) * 100) : 0;
-  const primaryRouteScore = entry.routeScores?.[0] ?? null;
   const debugJoinLogKeyRef = useRef<string | null>(null);
 
   const staticResourceRows = useMemo(
@@ -289,32 +285,6 @@ export function LocationDetail({
     }
     return map;
   }, [activeDemandMaterials]);
-
-  const demandedStaticRowsForInsights = useMemo(
-    () => staticResourceRows.filter((row) => buildQueueMaterialKeys.has(getStaticMaterialKey(row))),
-    [buildQueueMaterialKeys, staticResourceRows],
-  );
-
-  const insights = useMemo(() => {
-    const list: Array<{ type: "positive" | "warning" | "neutral"; text: string }> = [];
-    const encounterWeights = demandedStaticRowsForInsights
-      .map((row) => getStaticDensityScore(row, staticMiningIndex))
-      .filter((w): w is number => typeof w === "number" && Number.isFinite(w));
-    const avg = encounterWeights.length > 0
-      ? encounterWeights.reduce((sum, w) => sum + w, 0) / encounterWeights.length
-      : undefined;
-    const signal = encounterSignalFromWeight(avg);
-    if (signal !== "Unknown") {
-      list.push({ type: avg !== undefined && avg < 60 ? "warning" : "positive", text: `${signal} average encounter tier for covered demand materials` });
-    }
-    if (entry.nearbyStations.length > 0) {
-      list.push({ type: "positive", text: `${entry.nearbyStations.length} nearby station${entry.nearbyStations.length > 1 ? "s" : ""} for refined ore delivery` });
-    }
-    if (missingBQ.length > 0) {
-      list.push({ type: "warning", text: `${missingBQ.length} demanded material${missingBQ.length > 1 ? "s" : ""} not covered at this location` });
-    }
-    return list;
-  }, [missingBQ, demandedStaticRowsForInsights, staticMiningIndex, entry.nearbyStations]);
 
   // Pure transform — no hooks inside
   const demandRows = useMemo(
@@ -366,11 +336,6 @@ export function LocationDetail({
   const hasBuildQueueTarget = buildQueueMaterialKeys.size > 0;
   const hasSelectedQualityTarget = activeDemandMaterials.some((m) => m.selectedQuality !== undefined);
   const qualityHeader = qualityChanceHeader(hasSelectedQualityTarget);
-  const primaryQualitySignals = primaryRouteScore?.signals;
-  const qualitySourceDetails = primaryQualitySignals?.qualitySourceScope
-    ? ` Source: ${qualitySourceScopeDisplayLabel(primaryQualitySignals.qualitySourceScope)}${primaryQualitySignals.qualitySourceFamily ? ` / ${qualitySourceFamilyDisplayLabel(primaryQualitySignals.qualitySourceFamily)}` : ""}.`
-    : "";
-  const qualityTooltip = `${qualityChanceTooltip(hasSelectedQualityTarget)}${qualitySourceDetails}`;
   const demandedMaterialKeys = useMemo(
     () => new Set(demandRows.map((row) => canonicalMiningMaterialKey(row.key))),
     [demandRows],
@@ -389,12 +354,13 @@ export function LocationDetail({
   }, [demandedMaterialKeys, hasBuildQueueTarget, resourceRows]);
 
   const materialProfileTitle = hasBuildQueueTarget ? "OTHER MATERIALS AT THIS LOCATION" : "MATERIAL PROFILE";
-  const coveredEncounterScores = demandRows
-    .filter((row) => row.coverage !== "Missing" && typeof row.sourceWeight === "number" && Number.isFinite(row.sourceWeight))
-    .map((row) => row.sourceWeight as number);
-  const encounterTierScore = coveredEncounterScores.length > 0
-    ? coveredEncounterScores.reduce((sum, s) => sum + s, 0) / coveredEncounterScores.length
-    : primaryRouteScore?.yieldRouteScore;
+  const selectedDemandMaterialCount = activeDemandMaterials.length;
+  const hasSingleDemandMaterial = selectedDemandMaterialCount === 1 && demandRows.length === 1;
+  const hasMultipleDemandMaterials = selectedDemandMaterialCount > 1;
+  const selectedDemandRow = hasSingleDemandMaterial ? demandRows[0] : null;
+  const singleDemandMethodLabel = selectedDemandRow?.coverage === "Missing"
+    ? "Missing"
+    : selectedDemandRow?.miningType || "Unknown";
 
   return (
     <div className="mdet-panel">
@@ -415,30 +381,54 @@ export function LocationDetail({
       </div>
 
       <div className="location-stat-chip-grid">
-        {total > 0 && (
+        {!hasMultipleDemandMaterials && total > 0 && (
           <div className="location-stat-chip">
-            <div className="location-stat-label">COVERAGE<InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit." /></div>
+            <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>
             <div className={`location-stat-value ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
           </div>
         )}
-        {primaryRouteScore && (() => {
-          const qd = buildQualityDisplay(primaryRouteScore.signals, primaryRouteScore.materialKey ?? primaryRouteScore.materialId ?? "");
-          return qd.kind !== "none" ? (
+
+        {hasMultipleDemandMaterials && (
+          <>
             <div className="location-stat-chip">
-              <div className="location-stat-label">{qualityHeader}<InfoTip text={qualityTooltip} /></div>
-              <div className="location-stat-value">{qd.kind === "ignored" ? "N/A" : qd.label}</div>
+              <div className="location-stat-label">COVERED</div>
+              <div className={`location-stat-value ${coveredBQ.length > 0 ? "mloc-score--best" : "mloc-score--poor"}`}>{coveredBQ.length}</div>
             </div>
-          ) : null;
-        })()}
-        {typeof encounterTierScore === "number" && Number.isFinite(encounterTierScore) && (
-          <div className="location-stat-chip">
-            <div className="location-stat-label">ENCOUNTER TIER<InfoTip text="Bucketed encounter strength for covered selected materials only. Missing materials affect Coverage, not this tier." /></div>
-            <div className={`location-stat-value ${scoreToneClass(undefined, encounterTierScore)}`}>{formatEncounterTier(encounterTierScore)}</div>
-          </div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label">MISSING</div>
+              <div className={`location-stat-value ${missingBQ.length > 0 ? "mloc-score--poor" : "mloc-score--best"}`}>{missingBQ.length}</div>
+            </div>
+          </>
         )}
+
+        {hasSingleDemandMaterial && selectedDemandRow && (
+          <>
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text="Mining method for the selected material at this location.">METHOD</InfoTip></div>
+              <div className="location-stat-value">{singleDemandMethodLabel}</div>
+            </div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text="Bucketed encounter strength for the selected material at this location.">ENCOUNTER TIER</InfoTip></div>
+              <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
+            </div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></div>
+              <div className="location-stat-value">{selectedDemandRow.targetQualityChanceLabel}</div>
+            </div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></div>
+              <div className="location-stat-value">{selectedDemandRow.quality900Label}</div>
+            </div>
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text="Average material composition inside an encountered source for the selected material. This is not encounter chance.">COMPOSITION / YIELD</InfoTip></div>
+              <div className="location-stat-value">{selectedDemandRow.compositionLabel}</div>
+            </div>
+          </>
+        )}
+
         {locationMethodMixItems.map((item) => (
           <div key={`method-mix:${item.method}`} className="location-stat-chip">
-            <div className="location-stat-label">{item.method.toUpperCase()}<InfoTip text="Location-wide mining method mix. This does not necessarily describe the selected material." /></div>
+            <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location.">{item.method.toUpperCase()}</InfoTip></div>
             <div className={`location-stat-value ${methodBiasToneClass(item.share)}`} title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}>{formatPercent(item.share)}</div>
           </div>
         ))}
@@ -453,26 +443,9 @@ export function LocationDetail({
         </div>
       )}
 
-      {insights.length > 0 && (
-        <div className="mdet-insights">
-          <div className="mdet-section-label">LOCATION INSIGHTS</div>
-          <div className="mdet-insights-list">
-            {insights.map((insight, i) => (
-              <div key={i} className={`mdet-insight mdet-insight--${insight.type}`}>
-                <span className="mdet-insight-icon">{insight.type === "positive" ? "+" : insight.type === "warning" ? "△" : "·"}</span>
-                <span className="mdet-insight-text">{insight.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
+  
       {demandRows.length > 0 && (
         <div className="mining-demand-breakdown">
-          <div className="mdet-section-label">
-            SELECTED MATERIAL COVERAGE
-            <span className="mdet-section-count">({demandRows.length} material{demandRows.length !== 1 ? "s" : ""})</span>
-          </div>
           <table className="mining-resource-index-table">
             <colgroup>
               <col className="mining-resource-col--material" /><col className="mining-resource-col--method" />
@@ -482,10 +455,10 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap">Encounter Tier<InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High." /></span></th>
-                <th><span className="mdet-th-wrap">{qualityHeader}<InfoTip text={qualityTooltip} /></span></th>
-                <th>900+ Quality</th>
-                <th><span className="mdet-th-wrap">Composition / Yield<InfoTip text="Average material composition inside an encountered source. This is not encounter chance." /></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition / Yield</InfoTip></span></th>
               </tr>
             </thead>
             <tbody>
@@ -550,10 +523,10 @@ export function LocationDetail({
             <thead>
               <tr>
                 <th>Material</th><th>Method</th>
-                <th><span className="mdet-th-wrap">Encounter Tier<InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High." /></span></th>
-                <th>800+ Quality</th>
-                <th>900+ Quality</th>
-                <th><span className="mdet-th-wrap">Composition / Yield<InfoTip text="Average material composition inside an encountered source. This is not encounter chance." /></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("800+")}>800+</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition / Yield</InfoTip></span></th>
               </tr>
             </thead>
             <tbody>
@@ -569,7 +542,7 @@ export function LocationDetail({
               ))}
             </tbody>
           </table>
-          <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+ Quality" />
+          <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" />
         </div>
       )}
     </div>
