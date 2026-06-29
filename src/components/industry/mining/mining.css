@@ -840,6 +840,18 @@
   text-transform: uppercase;
 }
 
+.mlist-inline-detail {
+  margin: -0.05rem 0.7rem 0.35rem;
+}
+
+.mlist-inline-stack--expanded {
+  margin: 0.18rem 0.55rem 0.35rem;
+  border: 1px solid rgba(255, 190, 80, 0.18);
+  border-radius: 0.7rem;
+  background: rgba(9, 14, 22, 0.92);
+  overflow: hidden;
+}
+
 /* ── Center: detail panel ─────────────────────── */
 
 .mdet-col {
@@ -878,6 +890,11 @@
   padding: 0.65rem 0.85rem;
   box-shadow: 0 10px 24px rgba(0,0,0,0.38), 0 3px 8px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.032);
   min-width: 0;
+}
+
+.mdet-panel--inline-mobile {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 /* Header */
@@ -1341,6 +1358,10 @@
   font-size: 0.78rem !important;
 }
 
+.mdet-mat-demand .mloc-badge {
+  vertical-align: middle;
+}
+
 .mdet-mat-score {
   font-weight: 600;
 }
@@ -1660,7 +1681,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-weight: 700;
@@ -1677,19 +1698,26 @@
 
 .mdet-mobile-material-card {
   display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.72rem 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  border-radius: 7px;
+  background: rgba(11, 15, 22, 0.82);
+}
+
+.mdet-mobile-material-main {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
   flex-direction: column;
-  gap: 0.55rem;
-  padding: 0.78rem 0.82rem;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 8px;
-  background: rgba(10, 14, 22, 0.72);
+  gap: 0.32rem;
 }
 
 .mdet-mobile-material-head {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.6rem;
+  align-items: center;
+  gap: 0.55rem;
 }
 
 .mdet-mobile-material-title {
@@ -1698,66 +1726,135 @@
 }
 
 .mdet-mobile-material-title .mining-material-name-cell {
-  align-items: flex-start;
+  align-items: center;
+  gap: 0.48rem;
 }
 
 .mdet-mobile-material-title .mining-material-name-text {
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  line-height: 1.05;
+  line-height: 1.04;
+  font-size: 1rem;
 }
 
-.mdet-mobile-material-method {
-  flex: 0 0 auto;
-  padding: 0.18rem 0.45rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 153, 0, 0.14);
-  background: rgba(255, 153, 0, 0.06);
-  color: rgba(255, 190, 80, 0.82);
-  font-family: var(--font-primary);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.mdet-mobile-material-encounter {
+.mdet-mobile-material-meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.34rem;
+}
+
+.mdet-mobile-source-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.2rem;
+  padding: 0.08rem 0.38rem;
+  border-radius: 999px;
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgba(170, 187, 212, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mdet-mobile-source-chip.mloc-badge {
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  padding: 0.08rem 0.38rem;
+}
+
+.mdet-mobile-status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.2rem;
+  padding: 0.08rem 0.36rem;
+  border-radius: 999px;
+  font-family: var(--font-primary);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(203, 213, 225, 0.72);
+}
+
+.mdet-mobile-status-pill--strong {
+  color: rgba(52, 211, 153, 0.88);
+  background: rgba(52, 211, 153, 0.08);
+  border-color: rgba(52, 211, 153, 0.18);
+}
+
+.mdet-mobile-status-pill--moderate {
+  color: rgba(255, 190, 80, 0.88);
+  background: rgba(255, 153, 0, 0.08);
+  border-color: rgba(255, 153, 0, 0.18);
+}
+
+.mdet-mobile-status-pill--low {
+  color: rgba(251, 146, 60, 0.84);
+  background: rgba(251, 146, 60, 0.08);
+  border-color: rgba(251, 146, 60, 0.16);
+}
+
+.mdet-mobile-status-pill--missing {
+  color: rgba(248, 113, 113, 0.78);
+  background: rgba(248, 113, 113, 0.07);
+  border-color: rgba(248, 113, 113, 0.16);
+}
+
+.mdet-mobile-status-pill--none {
+  color: rgba(148, 163, 184, 0.62);
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.07);
 }
 
 .mdet-mobile-stat-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.025);
 }
 
 .mdet-mobile-stat {
   display: flex;
   flex-direction: column;
-  gap: 0.16rem;
+  gap: 0.12rem;
   min-width: 0;
-  padding-top: 0.42rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.36rem 0.45rem 0.34rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mdet-mobile-stat:first-child {
+  border-left: 0;
 }
 
 .mdet-mobile-stat-label {
   font-family: var(--font-primary);
-  font-size: 0.6rem;
+  font-size: 0.54rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.52);
+  color: rgba(160, 180, 220, 0.5);
 }
 
 .mdet-mobile-stat strong {
   color: rgba(226, 232, 240, 0.9);
   font-family: var(--font-primary);
-  font-size: 1rem;
-  line-height: 1.05;
-  word-break: break-word;
+  font-size: 0.94rem;
+  line-height: 1;
+  word-break: keep-all;
+  white-space: nowrap;
 }
 
 /* ── Compact filter bar + tactical drawer ────────────────────────────────── */
@@ -2684,6 +2781,61 @@
     max-height: none;
   }
 
+  .mlist-inline-detail {
+    margin: 0;
+    padding: 0;
+  }
+
+  .mlist-inline-stack--expanded {
+    margin: 0.18rem 0.65rem 0.45rem;
+  }
+
+  .mlist-inline-stack--expanded .mlist-item {
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+    box-shadow: none;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .mlist-inline-stack--expanded .mlist-item--selected {
+    border-left: 0;
+    background: transparent;
+    padding-left: 0.7rem;
+  }
+
+  .mlist-inline-stack--expanded .mloc-bookmark-btn {
+    margin-right: 0;
+  }
+
+  .mlist-inline-stack--expanded .mlist-item--selected:hover,
+  .mlist-inline-stack--expanded .mlist-item:hover {
+    background: transparent;
+  }
+
+  .mlist-inline-stack--expanded .mdet-panel--inline-mobile {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.55rem 0.7rem 0.7rem;
+    gap: 0.7rem;
+  }
+
+  .mlist-inline-stack--expanded .location-stat-chip-grid {
+    padding-top: 0.1rem;
+  }
+
+  .mlist-inline-stack--expanded .mdet-panel--inline-mobile .mining-demand-breakdown,
+  .mlist-inline-stack--expanded .mdet-panel--inline-mobile .mining-resource-index,
+  .mlist-inline-stack--expanded .mdet-panel--inline-mobile .mdet-stations {
+    margin-left: 0;
+    margin-right: 0;
+    width:100%;
+  }
+
   /* Detail column: natural height, no internal scroll on mobile */
   .mdet-col {
     height: auto;
@@ -2709,11 +2861,47 @@
   .mdet-mobile-missing-block {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.45rem;
   }
 
-  .mdet-mobile-stat-grid {
-    grid-template-columns: 1fr;
+  .mdet-header {
+    gap: 0.5rem;
+    padding-bottom: 0.34rem;
+  }
+
+  .mdet-header-left {
+    gap: 0.16rem;
+  }
+
+  .mdet-label {
+    font-size: 0.64rem;
+  }
+
+  .mdet-name {
+    font-size: 1.22rem;
+    line-height: 1.04;
+  }
+
+  .mdet-meta {
+    gap: 0.32rem;
+  }
+
+  .location-stat-chip-grid {
+    gap: 0.32rem;
+  }
+
+  .location-stat-chip {
+    gap: 0.1rem;
+    padding: 0.34rem 0.5rem;
+    border-radius: 0.48rem;
+  }
+
+  .location-stat-label {
+    font-size: 0.5rem;
+  }
+
+  .location-stat-value {
+    font-size: 0.88rem;
   }
 
   .mdet-infotip-popover {
@@ -2734,6 +2922,33 @@
 
   .mining-filter-rail {
     padding-inline: 0.45rem;
+  }
+
+  .mdet-mobile-material-card {
+    padding: 0.66rem 0.72rem;
+    gap: 0.58rem;
+  }
+
+  .mdet-mobile-material-title .mining-material-name-text {
+    font-size: 0.94rem;
+  }
+
+  .mdet-mobile-source-chip,
+  .mdet-mobile-source-chip.mloc-badge,
+  .mdet-mobile-status-pill {
+    font-size: 0.54rem;
+  }
+
+  .mdet-mobile-stat {
+    padding-inline: 0.36rem;
+  }
+
+  .mdet-mobile-stat-label {
+    font-size: 0.5rem;
+  }
+
+  .mdet-mobile-stat strong {
+    font-size: 0.82rem;
   }
 
   .location-stat-chip-grid {
@@ -3210,12 +3425,11 @@
 }
 
 .mine-page--v2 .mlist-item-thumb {
-  width: 5rem;
-  height: 5rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #0c1015;
 }
 
 .mine-page--v2 .mlist-item-thumb-img {
@@ -3296,7 +3510,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-primary);
-  font-size: 0.58rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -3348,6 +3562,7 @@
   border: 1px solid rgba(45, 212, 191, 0.16);
 }
 
+.mloc-badge--vehicle,
 .mloc-badge--surface,
 .mloc-badge--mixed {
   color: rgba(203, 213, 225, 0.72);

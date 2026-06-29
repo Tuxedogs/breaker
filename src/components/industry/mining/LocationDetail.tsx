@@ -18,11 +18,10 @@ import {
   buildResourceRows,
   formatPercent,
   methodBiasToneClass,
+  miningMethodBadge,
   qualityChanceHeader,
   resourceRowMaterialKey,
   scoreToneClass,
-  spawnTypeBadgeClass,
-  spawnTypeLabel,
   systemBadgeClass,
 } from "./miningFormatters";
 import type { DemandRow, ResourceRow } from "./miningTypes";
@@ -165,12 +164,32 @@ function MiningSourceBadge({
   );
 }
 
+function MiningMethodDemandCell({ value }: { value: string | null | undefined }) {
+  const badge = miningMethodBadge(value);
+  if (badge) return <span className={`mloc-badge ${badge.className}`}>{badge.label}</span>;
+  return <span>{value || "Unknown"}</span>;
+}
+
 function MiningMobileStat({ label, value, toneClass }: { label: string; value: string; toneClass?: string }) {
   return (
     <div className="mdet-mobile-stat">
       <span className="mdet-mobile-stat-label">{label}</span>
       <strong className={toneClass}>{value}</strong>
     </div>
+  );
+}
+
+function MobileMaterialStatusPill({
+  label,
+  status,
+}: {
+  label: string;
+  status: DemandRow["status"] | ResourceRow["status"];
+}) {
+  return (
+    <span className={`mdet-mobile-status-pill mdet-mobile-status-pill--${status}`}>
+      {label}
+    </span>
   );
 }
 
@@ -183,35 +202,39 @@ function MiningMobileMaterialCard({
   mode: "demand" | "resource";
   qualityHeader: string;
 }) {
-  const methodLabel = mode === "demand"
+  const methodValue = mode === "demand"
     ? (row as DemandRow).coverage === "Missing"
       ? "Missing"
       : row.miningType
     : row.miningType || "Unknown";
+  const methodBadge = miningMethodBadge(methodValue);
+  const methodLabel = methodBadge?.label ?? (methodValue || "Unknown");
   const primaryQualityLabel = mode === "demand"
     ? (row as DemandRow).targetQualityChanceLabel
     : (row as ResourceRow).qualityLabel;
 
   return (
     <article className={`mdet-mobile-material-card mining-resource-row--${row.status}`}>
-      <div className="mdet-mobile-material-head">
-        <div className="mdet-mobile-material-title">
-          <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={18} />
+      <div className="mdet-mobile-material-main">
+        <div className="mdet-mobile-material-head">
+          <div className="mdet-mobile-material-title">
+            <MaterialNameCell name={row.name} miningMethod={row.miningType} iconSize={18} />
+          </div>
         </div>
-        <span className="mdet-mobile-material-method">{methodLabel}</span>
+        <div className="mdet-mobile-material-meta">
+          <span className={`mdet-mobile-source-chip${methodBadge ? ` mloc-badge ${methodBadge.className}` : ""}`}>
+            {methodLabel}
+          </span>
+          <MobileMaterialStatusPill label={row.densityLabel} status={row.status} />
+        </div>
       </div>
-      <div className="mdet-mobile-material-encounter">
-        <MiningSourceBadge
-          status={row.status}
-          densityLabel={row.densityLabel}
-          sourceWeight={row.sourceWeight}
-          title={"sourceTitle" in row ? row.sourceTitle : undefined}
-        />
-      </div>
-      <div className="mdet-mobile-stat-grid">
+      <div
+        className="mdet-mobile-stat-grid"
+        title={"sourceTitle" in row ? row.sourceTitle : undefined}
+      >
         <MiningMobileStat label={qualityHeader} value={primaryQualityLabel} />
         <MiningMobileStat label="900+ Quality" value={row.quality900Label} />
-        <MiningMobileStat label="Composition / Yield" value={row.compositionLabel} />
+        <MiningMobileStat label="Composition" value={row.compositionLabel} />
       </div>
     </article>
   );
@@ -246,12 +269,14 @@ export function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
+  hideHeader = false,
 }: {
   entry: PublicLocationEntry;
   activeDemandMaterials: RequiredMaterial[];
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
+  hideHeader?: boolean;
 }) {
   const coveredBQ = useMemo(
     () => locationMaterialKeys.filter((key) => buildQueueMaterialKeys.has(key)),
@@ -363,22 +388,23 @@ export function LocationDetail({
     : selectedDemandRow?.miningType || "Unknown";
 
   return (
-    <div className="mdet-panel">
-      <div className="mdet-header">
-        <div className="mdet-header-left">
-          <div className="mdet-label">SELECTED LOCATION</div>
-          <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
-            {locationDisplayName}
-          </div>
-          <div className="mdet-meta">
-            {!isLagrangeChildGroup && (
-              <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
-            )}
-            <span className={`mloc-badge ${spawnTypeBadgeClass(entry.spawnType)}`}>{spawnTypeLabel(entry.spawnType)}</span>
-            <StantonLagrangeChildrenSummary entry={entry} compact />
+    <div className={`mdet-panel${hideHeader ? " mdet-panel--inline-mobile" : ""}`}>
+      {!hideHeader && (
+        <div className="mdet-header">
+          <div className="mdet-header-left">
+            <div className="mdet-label">SELECTED LOCATION</div>
+            <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
+              {locationDisplayName}
+            </div>
+            <div className="mdet-meta">
+              {!isLagrangeChildGroup && (
+                <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
+              )}
+              <StantonLagrangeChildrenSummary entry={entry} compact />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="location-stat-chip-grid">
         {!hasMultipleDemandMaterials && total > 0 && (
@@ -458,14 +484,14 @@ export function LocationDetail({
                 <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition / Yield</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
               </tr>
             </thead>
             <tbody>
               {coveredDemandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
+                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
                   <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
@@ -485,7 +511,7 @@ export function LocationDetail({
               {showMissingDemandRows && missingDemandRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand">{row.coverage === "Missing" ? "Missing" : row.miningType}</td>
+                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
                   <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
                   <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
@@ -526,14 +552,14 @@ export function LocationDetail({
                 <th><span className="mdet-th-wrap"><InfoTip text="Bucketed encounter strength for this material at this location: Low, Medium, or High.">Encounter Tier</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("800+")}>800+</InfoTip></span></th>
                 <th><span className="mdet-th-wrap"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></span></th>
-                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition / Yield</InfoTip></span></th>
+                <th><span className="mdet-th-wrap"><InfoTip text="Average material composition inside an encountered source. This is not encounter chance.">Composition</InfoTip></span></th>
               </tr>
             </thead>
             <tbody>
               {otherLocationMaterialRows.map((row) => (
                 <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
                   <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand">{row.miningType || "Unknown"}</td>
+                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.miningType || "Unknown"} /></td>
                   <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} title={row.sourceTitle} /></td>
                   <td className="mdet-mat-score">{row.qualityLabel}</td>
                   <td className="mdet-mat-score">{row.quality900Label}</td>
