@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "3ed94567-f4fc-4e4d-b23f-3a202bbdf4b4|Redwind_RecoverCargo_Nyx",
   "variant": {
@@ -176,12 +176,176 @@
           "consideredPickup": true,
           "reason": "Contract prerequisite gates mission availability."
         }
-      ]
+      ],
+      "rawLocalities": [
+        {
+          "guid": "77ed5653-bd14-4952-b904-afd79faeef60",
+          "displayName": "Nyx Star",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/nyx/nyxstar.xml",
+          "system": "Nyx"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Nyx"
+        ],
+        "localityNames": [
+          "Nyx Star"
+        ],
+        "displayLabel": "Nyx",
+        "detailLabel": "Nyx Star",
+        "confidence": "exact"
+      }
     },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Nyx Star",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx Star",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "77ed5653-bd14-4952-b904-afd79faeef60"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "77ed5653-bd14-4952-b904-afd79faeef60",
+            "displayName": "Nyx Star",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/nyx/nyxstar.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx Star"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx Star",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "77ed5653-bd14-4952-b904-afd79faeef60",
+        "resolvedName": "Nyx Star",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "locations": [
       "Nyx Star"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
     "rewards": {
       "summary": [
         "Standing +150",

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
@@ -260,11 +260,197 @@
       "Sr. Security Contractor / 120,000 rep to Elite Security Contractor / 1,600,000 rep",
       "Security Trainee / 1 rep to Elite Security Contractor / 1,600,000 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 4, Stanton 3 +3 pool",
+    "pickupSummary": "Pickup: Stanton, Pyro",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 4, Stanton 3 +3",
+        "displayLabel": "Stanton, Pyro",
+        "detailDisplay": "Stanton, Pyro",
+        "systems": [
+          "Stanton",
+          "Pyro"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "939dad8b-a944-4baa-a6b7-163ec203adad",
+          "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "459badf3-af16-489e-9401-42b1ad5a1e9e"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "displayName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "displayName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "displayName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+            "displayName": "Pyro",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton",
+            "Pyro"
+          ],
+          "localityNames": [
+            "Stanton 2",
+            "Stanton 4",
+            "Stanton 3",
+            "Stanton 1",
+            "Region C",
+            "Pyro"
+          ],
+          "displayLabel": "Stanton, Pyro",
+          "detailLabel": "Stanton, Pyro",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location",
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+        "resolvedName": "Region C",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "459badf3-af16-489e-9401-42b1ad5a1e9e",
+        "resolvedName": "Pyro",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "lawful",
     "lawfulConfidence": "inferred",
@@ -277,6 +463,7 @@
       "Pyro"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved"
     ],
@@ -302,7 +489,7 @@
       "f26214ad-1cd7-44c7-a46a-ef18132abbb8",
       "ee57e39f-235b-4ff4-af5c-fe1e096b9545"
     ],
-    "searchText": "expel outlaws combat support: eckhartsecurity_datafacility_regionc_eliminateall eckhart security careercontract security mercenary +1 pickup: generated from stanton 2, stanton 4, stanton 3 +3 pool eckhart security, llc.\ncontracts & dispatch\n\ncontract type: clear location\napproval code = [approvalcode]\n\nfor immediate processing\n\nurgent request came in from associated science & development to provide combat support at [location]. apparently they have been attacked by outlaws and their security forces have been unable to handle it on their own. \n\nyou've been cleared to go on site and aide local security elements in taking out the outlaws, but asd reserves the right to restrict you from certain areas.\n\nthis is a confirmed combat op, so prepare accordingly.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. deal with and support forces high-risk bounty: hunt bounty: protect location repel raiders requesting help secure site security contractor reevaluation ca4f3b9d-d1ab-42d7-9790-2a05d7f22640 00913455-4019-4b7e-a5eb-347ad3d49740 920fe294-7e9d-435b-a475-1a5651eac16c 25440ea0-7b89-4926-aea2-69699bca35b3 3e525df0-ea80-4e44-b9f3-2eb476119f8b c61aa912-1e27-4a32-bf5c-c0d479aa6264 ec99f981-dac4-4f47-8177-855019bc438f 0b4c6e81-838a-4e0a-8ecd-7f2893095a8d 35327fed-283b-4b9b-9df6-031a1efe9423 63c605db-220f-40f1-b203-ab7852a070a1 1bc6de31-5c31-4e8b-ab76-7c0f5917eee9 d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4 e85277a9-8db7-4bc5-8621-2ae5b11086e6 1014bc9a-d852-42a4-8470-b988a59f1c03 9f45145a-4b5a-4145-b83c-41d78c8248b5 f26214ad-1cd7-44c7-a46a-ef18132abbb8 ee57e39f-235b-4ff4-af5c-fe1e096b9545 security +2,000 credits formula unresolved blueprint: eckhart security kill npc boss: fierell cascade, ultra flux, megaflux, c-788 cannon +3 security +500 security -50 134,500 uec affinity +250 security +0"
+    "searchText": "expel outlaws combat support: eckhartsecurity_datafacility_regionc_eliminateall eckhart security careercontract security mercenary +1 pickup: stanton, pyro eckhart security, llc.\ncontracts & dispatch\n\ncontract type: clear location\napproval code = [approvalcode]\n\nfor immediate processing\n\nurgent request came in from associated science & development to provide combat support at [location]. apparently they have been attacked by outlaws and their security forces have been unable to handle it on their own. \n\nyou've been cleared to go on site and aide local security elements in taking out the outlaws, but asd reserves the right to restrict you from certain areas.\n\nthis is a confirmed combat op, so prepare accordingly.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. deal with and support forces high-risk bounty: hunt bounty: protect location repel raiders requesting help secure site security contractor reevaluation ca4f3b9d-d1ab-42d7-9790-2a05d7f22640 00913455-4019-4b7e-a5eb-347ad3d49740 920fe294-7e9d-435b-a475-1a5651eac16c 25440ea0-7b89-4926-aea2-69699bca35b3 3e525df0-ea80-4e44-b9f3-2eb476119f8b c61aa912-1e27-4a32-bf5c-c0d479aa6264 ec99f981-dac4-4f47-8177-855019bc438f 0b4c6e81-838a-4e0a-8ecd-7f2893095a8d 35327fed-283b-4b9b-9df6-031a1efe9423 63c605db-220f-40f1-b203-ab7852a070a1 1bc6de31-5c31-4e8b-ab76-7c0f5917eee9 d9ae59ed-6d6a-444c-89b2-1ca527f8e7d4 e85277a9-8db7-4bc5-8621-2ae5b11086e6 1014bc9a-d852-42a4-8470-b988a59f1c03 9f45145a-4b5a-4145-b83c-41d78c8248b5 f26214ad-1cd7-44c7-a46a-ef18132abbb8 ee57e39f-235b-4ff4-af5c-fe1e096b9545 security +2,000 credits formula unresolved blueprint: eckhart security kill npc boss: fierell cascade, ultra flux, megaflux, c-788 cannon +3 security +500 security -50 134,500 uec affinity +250 security +0"
   },
   "groupSummary": {
     "familyKey": "95979a65-419a-4b7d-8dcf-34707187f99a|EckhartSecurity_KIllNPC",
@@ -534,7 +721,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 4, Stanton 3 +3 pool",
+    "pickupSummary": "Pickup: Stanton, Pyro",
     "pickupStatuses": [
       "generated_from_pool"
     ],

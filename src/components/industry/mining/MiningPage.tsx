@@ -8,7 +8,8 @@ import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../fe
 import { loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
 import "../crafting/recipe-browser.css";
-import { loadManifest, type PlanetAsset } from "../../../features/mining/planetAssets";
+import { loadManifest } from "../../../features/mining/planetAssets";
+import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { useLogisticsStore } from "../../../stores/logisticsStore";
 import { getQueueLedgerModel } from "../../../lib/logistics/queueLedger";
 import { buildResourceGroups } from "../shared/msbResourceGroups";
@@ -37,7 +38,10 @@ import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./minin
 import { useMiningLocations } from "./useMiningLocations";
 import { MiningFilterBar } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
-import { LocationDetail, CoveragePlanSummaryPanel } from "./LocationDetail";
+import { LocationDetail } from "./LocationDetail";
+
+const DEFAULT_VISIBLE_LOCATIONS = 12;
+const MIN_VISIBLE_ROUTE_LOCATIONS = 8;
 
 const debugMiningIdentity = Boolean(
   import.meta.env.DEV &&
@@ -240,7 +244,7 @@ export default function MiningModule() {
   const materialFilterKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : selectedMaterials, [buildQueueMaterials, buildQueueSelectionActive, selectedMaterials]);
 
   // All location filtering/ranking in one hook
-  const { locationMaterialKeysByLocationKey, displayRankedFilteredLocations, coveragePlan, unfilteredCoveragePlan, coveragePlanLocationByKey, selectedEntry } = useMiningLocations({
+  const { locationMaterialKeysByLocationKey, displayRankedFilteredLocations, coveragePlan, coveragePlanLocationByKey, selectedEntry } = useMiningLocations({
     locations,
     loadingState: state.status,
     selectedSystems,
@@ -261,8 +265,10 @@ export default function MiningModule() {
 
   const mobileQueueRouteLocations = useMemo(() => {
     if (!isMobileViewport || !buildQueueSelectionActive || !coveragePlan || showAllLocations) return null;
+    const neededCount = coveragePlan.locations.filter((location) => !location.isAfterCompletion).length;
+    const visibleCount = Math.min(coveragePlan.locations.length, Math.max(neededCount, MIN_VISIBLE_ROUTE_LOCATIONS));
     return coveragePlan.locations
-      .filter((location) => !location.isAfterCompletion)
+      .slice(0, visibleCount)
       .map((location) => location.entry);
   }, [buildQueueSelectionActive, coveragePlan, isMobileViewport, showAllLocations]);
 
@@ -271,7 +277,8 @@ export default function MiningModule() {
   const mobileHiddenAlternateCount = useMemo(() => {
     if (!isMobileViewport || !buildQueueSelectionActive || !coveragePlan || showAllLocations) return 0;
     const neededCount = coveragePlan.locations.filter((location) => !location.isAfterCompletion).length;
-    return Math.max(0, coveragePlan.locations.length - neededCount);
+    const visibleCount = Math.min(coveragePlan.locations.length, Math.max(neededCount, MIN_VISIBLE_ROUTE_LOCATIONS));
+    return Math.max(0, coveragePlan.locations.length - visibleCount);
   }, [buildQueueSelectionActive, coveragePlan, isMobileViewport, showAllLocations]);
 
   const searchFilteredLocations = useMemo(() => {
@@ -284,14 +291,19 @@ export default function MiningModule() {
 
   const listLocations = mobileQueueDemandSatisfied
     ? []
-    : showAllLocations ? searchFilteredLocations : searchFilteredLocations.slice(0, 12);
+    : showAllLocations ? searchFilteredLocations : searchFilteredLocations.slice(0, DEFAULT_VISIBLE_LOCATIONS);
+  const explicitSelectedEntry = useMemo(() => {
+    if (mobileQueueDemandSatisfied || !selectedLocationKey) return null;
+    return searchFilteredLocations.find((entry) => entry.locationKey === selectedLocationKey) ?? null;
+  }, [mobileQueueDemandSatisfied, searchFilteredLocations, selectedLocationKey]);
   const effectiveSelectedEntry = useMemo(() => {
     if (mobileQueueDemandSatisfied) return null;
+    if (isMobileViewport) return explicitSelectedEntry;
     if (selectedLocationKey) {
-      return searchFilteredLocations.find((entry) => entry.locationKey === selectedLocationKey) ?? searchFilteredLocations[0] ?? null;
+      return explicitSelectedEntry ?? searchFilteredLocations[0] ?? null;
     }
     return searchFilteredLocations[0] ?? selectedEntry;
-  }, [mobileQueueDemandSatisfied, searchFilteredLocations, selectedEntry, selectedLocationKey]);
+  }, [explicitSelectedEntry, isMobileViewport, mobileQueueDemandSatisfied, searchFilteredLocations, selectedEntry, selectedLocationKey]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -317,6 +329,13 @@ export default function MiningModule() {
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setSelectedMaterials(new Set());
     setSelectedSystems(new Set());
+  }
+  function toggleSelectedLocation(locationKey: string) {
+    if (!isMobileViewport) {
+      setSelectedLocationKey(locationKey);
+      return;
+    }
+    setSelectedLocationKey((current) => current === locationKey ? null : locationKey);
   }
 
   const hasActiveFilters = selectedSystems.size > 0
@@ -346,12 +365,11 @@ export default function MiningModule() {
                 onToggleStarred={() => planner.toggleShowOnlyStarred()}
                 onToggleMaterial={toggleMaterial}
                 onSearchChange={setLocationSearch}
+                isMobileViewport={isMobileViewport}
               />
             </aside>
 
             <div className="mine-main">
-              <CoveragePlanSummaryPanel plan={coveragePlan} unfilteredPlan={unfilteredCoveragePlan} />
-
               {mobileQueueDemandSatisfied ? (
                 <div className="mine-empty-state mine-empty-state--queue-covered">
                   <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
@@ -403,7 +421,9 @@ export default function MiningModule() {
                     const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
                     return (
                       <Fragment key={getLocationCardKey(entry)}>
-                        <div className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}>
+                        <div
+                          className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}
+                        >
                           <LocationListItem
                             entry={entry}
                             selectedMaterials={materialFilterKeys}
@@ -413,7 +433,7 @@ export default function MiningModule() {
                             planetAssetMap={planetAssetMap}
                             starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
                             selected={isSelected}
-                            onSelect={() => setSelectedLocationKey(entry.locationKey)}
+                            onSelect={() => toggleSelectedLocation(entry.locationKey)}
                             onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
                           />
                           {isMobileViewport && isSelected && (
@@ -443,7 +463,7 @@ export default function MiningModule() {
                       Show needed route
                     </button>
                   )}
-                  {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > 12 && (
+                  {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > DEFAULT_VISIBLE_LOCATIONS && (
                     <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
                       {showAllLocations ? "Show top 12 ↑" : `View all ${searchFilteredLocations.length} locations ↓`}
                     </button>

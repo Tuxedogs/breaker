@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_LingFamilyHauler",
@@ -52,11 +52,107 @@
       "CrimeStat limited to 2 or below",
       "Prerequisite mission or completion tag"
     ],
-    "pickupSummary": "Pickup: Generated from Stanton pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "a335e8b0-e551-4126-a213-5634d7d23511"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "a335e8b0-e551-4126-a213-5634d7d23511",
+            "displayName": "Stanton",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "a335e8b0-e551-4126-a213-5634d7d23511",
+        "resolvedName": "Stanton",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "unknown",
     "lawfulConfidence": "unknown",
@@ -64,6 +160,9 @@
       "Stanton"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -79,7 +178,7 @@
       "580bd456-16b1-4a34-9fbd-4539ff86b136",
       "d240de56-6036-4161-a5c5-5b19184bd866"
     ],
-    "searchText": "alliance aid alliance aid: medical cargo haul - large scale cleanair_bulk_medicalsupplies unknown provider priority hauling cargo pickup: generated from stanton pool hello,\n\nwith the ongoing emergency in levski, alliance aid needs all hands on deck to help transport enough medical supplies to save as many lives as possible. there's a large scale haul over at [location] ready to be brought to [destination].\n\nthis run needs a hauler with a ship that can hold [missionmaxscusize] cargo containers. you'll also need a handheld tractor beam to deal with the crates.    \n\nplease let me know if you can handle this for us.   \n\nsafe hauling,  \nreyes ling \ncargo logistics coordinator\nling family hauling\n\nling family hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. to ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. a delivery timer will be set for each haul. any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. all pick-ups and deliveries must be autoloaded or done at a freight elevator. alliance aid: medical cargo haul - medium scale alliance aid: medical cargo haul - small scale alliance aid: treatment cargo haul - large scale alliance aid: treatment cargo haul - medium scale alliance aid: treatment cargo haul - small scale 4e272039-cda4-437e-b6d9-f12091c7f269 43efcf76-dc0f-4ae7-a3dc-c65b2735c68e 07a20a9f-272a-4fcb-a3b1-e2987cf3e875 d3c1b1b3-7d53-48ed-abee-b7df9abeaeae 580bd456-16b1-4a34-9fbd-4539ff86b136 d240de56-6036-4161-a5c5-5b19184bd866 credits formula unresolved completion tag"
+    "searchText": "alliance aid alliance aid: medical cargo haul - large scale cleanair_bulk_medicalsupplies unknown provider priority hauling cargo pickup: stanton hello,\n\nwith the ongoing emergency in levski, alliance aid needs all hands on deck to help transport enough medical supplies to save as many lives as possible. there's a large scale haul over at [location] ready to be brought to [destination].\n\nthis run needs a hauler with a ship that can hold [missionmaxscusize] cargo containers. you'll also need a handheld tractor beam to deal with the crates.    \n\nplease let me know if you can handle this for us.   \n\nsafe hauling,  \nreyes ling \ncargo logistics coordinator\nling family hauling\n\nling family hauling knows it’s a dangerous and unpredictable universe and has established several protocols to protect both you and our client’s cargo. to ensure you aren’t punished for circumstances outside of your control, total payment will be prorated to the percentage of cargo successfully delivered. a delivery timer will be set for each haul. any cargo that remains undelivered upon its expiration will be flagged as stolen and treated as such. all pick-ups and deliveries must be autoloaded or done at a freight elevator. alliance aid: medical cargo haul - medium scale alliance aid: medical cargo haul - small scale alliance aid: treatment cargo haul - large scale alliance aid: treatment cargo haul - medium scale alliance aid: treatment cargo haul - small scale 4e272039-cda4-437e-b6d9-f12091c7f269 43efcf76-dc0f-4ae7-a3dc-c65b2735c68e 07a20a9f-272a-4fcb-a3b1-e2987cf3e875 d3c1b1b3-7d53-48ed-abee-b7df9abeaeae 580bd456-16b1-4a34-9fbd-4539ff86b136 d240de56-6036-4161-a5c5-5b19184bd866 credits formula unresolved completion tag"
   },
   "groupSummary": {
     "familyKey": "c3a826c8-368d-4a28-8487-162f70d61469|CleanAir_LingFamilyHauler",
@@ -112,7 +211,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Stanton pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],

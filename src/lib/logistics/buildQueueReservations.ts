@@ -17,6 +17,26 @@ export function getAllocationTotal(allocations: Pick<ReservedMaterialAllocation,
   return allocations.reduce((sum, allocation) => sum + Math.max(0, allocation.quantityReserved), 0);
 }
 
+export type QualityAllocationBreakdownEntry = {
+  quality: number;
+  quantity: number;
+};
+
+export function getQualityAllocationBreakdown(
+  allocations: Pick<ReservedMaterialAllocation, "quantityReserved" | "quality">[],
+): QualityAllocationBreakdownEntry[] {
+  const byQuality = new Map<number, number>();
+  for (const allocation of allocations) {
+    const quantity = Math.max(0, allocation.quantityReserved);
+    const quality = clampMaterialQuality(allocation.quality);
+    if (quantity <= 0 || quality === undefined) continue;
+    byQuality.set(quality, (byQuality.get(quality) ?? 0) + quantity);
+  }
+  return [...byQuality.entries()]
+    .map(([quality, quantity]) => ({ quality, quantity }))
+    .sort((a, b) => a.quality - b.quality);
+}
+
 export function getWeightedEffectiveQuality(
   allocations: Pick<ReservedMaterialAllocation, "quantityReserved" | "quality">[],
 ): number | undefined {

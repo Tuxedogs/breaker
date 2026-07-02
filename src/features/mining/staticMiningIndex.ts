@@ -572,26 +572,67 @@ function addMethodBiasRecord(items: StaticMethodBiasItem[], record: Record<strin
   for (const [method, share] of Object.entries(record)) addMethodBiasItem(items, method, share);
 }
 
+function getMethodBiasRecord(row: StaticLocationDistributionRow): Record<string, number> | undefined {
+  const records = [
+    row.methodShares,
+    row.miningMix,
+    row.classDistribution,
+    row.distribution,
+  ];
+  return records.find((record) =>
+    record && Object.values(record).some((share) => Number.isFinite(share) && share > 0)
+  );
+}
+
+function addMethodBiasRow(items: StaticMethodBiasItem[], row: StaticLocationDistributionRow): void {
+  const record = getMethodBiasRecord(row);
+  if (record) {
+    addMethodBiasRecord(items, record);
+    return;
+  }
+  addMethodBiasItem(
+    items,
+    row.resolvedMineableClass ?? row.mineableClass ?? row.miningMethod ?? row.method,
+    row.locationClassDistributionShare ?? row.distributionShare ?? row.share,
+  );
+}
+
+function getDistributionRowIdentity(row: StaticLocationDistributionRow): string {
+  return [
+    normalizeExact(row.systemKey ?? row.system),
+    normalizeExact(row.locationKey ?? row.location),
+    JSON.stringify(row.methodShares ?? null),
+    JSON.stringify(row.miningMix ?? null),
+    JSON.stringify(row.classDistribution ?? null),
+    JSON.stringify(row.distribution ?? null),
+    normalizeExact(row.resolvedMineableClass ?? row.mineableClass ?? row.miningMethod ?? row.method),
+    String(row.locationClassDistributionShare ?? row.distributionShare ?? row.share ?? ""),
+  ].join("::");
+}
+
 export function getStaticMethodBiasForLocation(entry: PublicLocationEntry, index: StaticMiningIndex | null | undefined): StaticMethodBiasItem[] {
   if (!index) return [];
-  const rows = getEntryJoinKeys(entry, index).flatMap((key) => index.distributionByLocationJoinKey.get(key) ?? []);
+  const rowsByIdentity = new Map<string, StaticLocationDistributionRow>();
+  for (const key of getEntryJoinKeys(entry, index)) {
+    for (const row of index.distributionByLocationJoinKey.get(key) ?? []) {
+      rowsByIdentity.set(getDistributionRowIdentity(row), row);
+    }
+  }
+  const rows = [...rowsByIdentity.values()];
   if (rows.length === 0) return [];
 
   const items: StaticMethodBiasItem[] = [];
   for (const row of rows) {
-    addMethodBiasRecord(items, row.methodShares);
-    addMethodBiasRecord(items, row.miningMix);
-    addMethodBiasRecord(items, row.classDistribution);
-    addMethodBiasRecord(items, row.distribution);
-    addMethodBiasItem(
-      items,
-      row.resolvedMineableClass ?? row.mineableClass ?? row.miningMethod ?? row.method,
-      row.locationClassDistributionShare ?? row.distributionShare ?? row.share,
-    );
+    addMethodBiasRow(items, row);
   }
 
-  return items
-    .filter((item) => item.share > 0)
+  const positiveItems = items.filter((item) => item.share > 0);
+  const totalShare = positiveItems.reduce((sum, item) => sum + item.share, 0);
+  const normalizedItems = totalShare > 1
+    ? positiveItems.map((item) => ({ ...item, share: item.share / totalShare }))
+    : positiveItems;
+
+  return normalizedItems
     .sort((left, right) => right.share - left.share);
 }
 

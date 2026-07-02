@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "18f50b34-8b12-42b4-b4d0-eaf22e8ae028|HeadHunters_Patrol_Stanton",
   "variant": {
@@ -247,8 +247,230 @@
           "consideredPickup": true,
           "reason": "Contract prerequisite gates mission availability."
         }
-      ]
+      ],
+      "rawLocalities": [
+        {
+          "guid": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+          "displayName": "Stanton 2",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton2/starmapobject.stanton2.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "35a9f8f5-8f80-4796-83db-7d7362baeb9a",
+          "displayName": "Stanton 3",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton3/starmapobject.stanton3.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "5a529db7-1a4e-45b0-bdcb-a5a0c7a7fc57",
+          "displayName": "Stanton 4",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton4/starmapobject.stanton4.xml",
+          "system": "Stanton"
+        },
+        {
+          "guid": "551af60b-7727-4936-acc7-763d25d7a1de",
+          "displayName": "Stanton 1",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton1/starmapobject.stanton1.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton 2",
+          "Stanton 3",
+          "Stanton 4",
+          "Stanton 1"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +1",
+        "confidence": "exact"
+      }
     },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +1",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton 2, Stanton 3, Stanton 4 +1",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+          "35a9f8f5-8f80-4796-83db-7d7362baeb9a",
+          "5a529db7-1a4e-45b0-bdcb-a5a0c7a7fc57",
+          "551af60b-7727-4936-acc7-763d25d7a1de"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+            "displayName": "Stanton 2",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton2/starmapobject.stanton2.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "35a9f8f5-8f80-4796-83db-7d7362baeb9a",
+            "displayName": "Stanton 3",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton3/starmapobject.stanton3.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "5a529db7-1a4e-45b0-bdcb-a5a0c7a7fc57",
+            "displayName": "Stanton 4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton4/starmapobject.stanton4.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "551af60b-7727-4936-acc7-763d25d7a1de",
+            "displayName": "Stanton 1",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton1/starmapobject.stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 2",
+            "Stanton 3",
+            "Stanton 4",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton 2, Stanton 3, Stanton 4 +1",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "InvisibleTimer_MissionLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "35a9f8f5-8f80-4796-83db-7d7362baeb9a",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "5a529db7-1a4e-45b0-bdcb-a5a0c7a7fc57",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "551af60b-7727-4936-acc7-763d25d7a1de",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "35a9f8f5-8f80-4796-83db-7d7362baeb9a",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "5a529db7-1a4e-45b0-bdcb-a5a0c7a7fc57",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "551af60b-7727-4936-acc7-763d25d7a1de",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
     "locations": [
       "Stanton 2",
       "Stanton 3",
@@ -256,6 +478,7 @@
       "Stanton 1"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "rewards": {
       "summary": [
         "Ship Combat Head Hunters +500",

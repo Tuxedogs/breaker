@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
@@ -136,11 +136,120 @@
       "Headhunters: Veteran Contractor Elite Contractor",
       "Headhunters: Head Contractor Elite Contractor"
     ],
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "MissionLocation_BP",
+          "Location",
+          "LocalSystem",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "MissionLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Location",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "unknown",
     "lawfulClassification": "unknown",
     "lawfulConfidence": "unknown",
@@ -148,6 +257,7 @@
       "Nyx"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved"
     ],
@@ -162,7 +272,7 @@
       "eb41f9dc-fa18-4d75-8fe4-66d5acd27910",
       "b5e32df0-1928-42da-896c-737f08b86f9c"
     ],
-    "searchText": "head hunters defend destructible entities nyx defend from mercs headhunters_defenddestructibleentities_nyx_veryhard unknown provider contract standing pickup: generated from nyx pool a band of hired guns has been sent to mess with our interests over at [location]. seems someone has been tipped off that if the [objects] there are destroyed that it will severely interrupt headhunter operations in the area. that's a problem i want you to fix.\n\nnot gonna lie, theses mercs are no joke. it'd be foolish to go it alone. that’s why you’ll need to be fully supplied and find some trustworthy friends to fly at your wing.\n\nthis op needs to go off without a hitch, so i’m offering the main contractor [scripamount] council scrip for a job well done. \n\nstows out. guard at all costs keep safe from upstarts protect from luggers secure from rivals stop gang from destroying 9cee381f-5638-48df-bffd-0be4600fa531 993af7d7-48b6-4312-92ff-d813d4eb3cb5 c0c71b98-64c3-4564-b74c-f1d97a3579fa d9b69130-1021-4d00-9178-ab800bcb3027 eb41f9dc-fa18-4d75-8fe4-66d5acd27910 b5e32df0-1928-42da-896c-737f08b86f9c standing +250 credits formula unresolved item reward: council scrip completion tag standing +300 standing +100 standing +150 standing +200"
+    "searchText": "head hunters defend destructible entities nyx defend from mercs headhunters_defenddestructibleentities_nyx_veryhard unknown provider contract standing pickup: nyx a band of hired guns has been sent to mess with our interests over at [location]. seems someone has been tipped off that if the [objects] there are destroyed that it will severely interrupt headhunter operations in the area. that's a problem i want you to fix.\n\nnot gonna lie, theses mercs are no joke. it'd be foolish to go it alone. that’s why you’ll need to be fully supplied and find some trustworthy friends to fly at your wing.\n\nthis op needs to go off without a hitch, so i’m offering the main contractor [scripamount] council scrip for a job well done. \n\nstows out. guard at all costs keep safe from upstarts protect from luggers secure from rivals stop gang from destroying 9cee381f-5638-48df-bffd-0be4600fa531 993af7d7-48b6-4312-92ff-d813d4eb3cb5 c0c71b98-64c3-4564-b74c-f1d97a3579fa d9b69130-1021-4d00-9178-ab800bcb3027 eb41f9dc-fa18-4d75-8fe4-66d5acd27910 b5e32df0-1928-42da-896c-737f08b86f9c standing +250 credits formula unresolved item reward: council scrip completion tag standing +300 standing +100 standing +150 standing +200"
   },
   "groupSummary": {
     "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Nyx",
@@ -273,7 +383,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],

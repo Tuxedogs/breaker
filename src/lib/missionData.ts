@@ -94,6 +94,74 @@ export type MissionPickupLocationView = {
     consideredPickup: boolean;
     reason: string;
   }>;
+  rawLocalities?: Array<{
+    guid: string;
+    displayName: string;
+    type?: string;
+    path?: string;
+    system?: string;
+  }>;
+  grouping?: {
+    systems: string[];
+    localityNames: string[];
+    displayLabel: string;
+    detailLabel: string;
+    confidence: "exact" | "generated_from_pool" | "system_scope" | "partial" | "unknown" | "unresolved";
+  };
+};
+
+export type MissionLocationRefView = {
+  role: "pickup" | "destination" | "objective";
+  rawType: string;
+  attr: string;
+  guidOrToken: string;
+  resolvedName?: string;
+  system?: string;
+  confidence: "resolved" | "inferred" | "token_only" | "unresolved";
+};
+
+export type MissionLocationRolesView = {
+  pickup: {
+    status: MissionPickupLocationView["status"];
+    displayName: string;
+    displayLabel: string;
+    detailDisplay: string;
+    systems: string[];
+    primarySystem?: string;
+    confidence: MissionPickupLocationView["confidence"];
+    sourceRole: MissionPickupLocationView["sourceRole"];
+    sourceRefs: string[];
+    unresolvedRefs: string[];
+    unresolvedLocationTokens: string[];
+    generatedFromPool: boolean;
+    systemScope: boolean;
+    rawLocalities: NonNullable<MissionPickupLocationView["rawLocalities"]>;
+    grouping: NonNullable<MissionPickupLocationView["grouping"]>;
+  };
+  destination: {
+    status: "unknown" | "unresolved";
+    displayName: string;
+    displayLabel: string;
+    systems: string[];
+    primarySystem?: string;
+    confidence: "low" | "unresolved";
+    sourceRefs: string[];
+    unresolvedRefs: string[];
+    sourceTextTokens: string[];
+    unresolved: boolean;
+  };
+  objective: {
+    status: "unknown" | "unresolved";
+    displayName: string;
+    displayLabel: string;
+    systems: string[];
+    primarySystem?: string;
+    confidence: "low" | "unresolved";
+    sourceRefs: string[];
+    unresolvedRefs: string[];
+    sourceTextTokens: string[];
+    unresolved: boolean;
+  };
 };
 
 export type MissionReputationScopeView = {
@@ -133,8 +201,11 @@ export type MissionVariantView = {
   prerequisiteSummary: string;
   prerequisites: MissionPrerequisiteView[];
   pickupLocation: MissionPickupLocationView;
+  locationRoles: MissionLocationRolesView;
+  locationRefs: MissionLocationRefView[];
   locations: string[];
   unresolvedLocationTokens: string[];
+  destinationTokens: string[];
   rewards: MissionRewardView;
   rewardedReputationPaths: MissionRewardedReputationPathView[];
   flags: string[];
@@ -188,11 +259,14 @@ export type MissionFamilyView = {
   pickupSummary: string;
   pickupStatuses: MissionPickupLocationView["status"][];
   pickupUnresolvedCount: number;
+  locationRoles: MissionLocationRolesView;
+  locationRefs: MissionLocationRefView[];
   crimeStatRequirement: "notRequired" | "required" | "bounded" | "unknown";
   lawfulClassification: "lawful" | "unlawful" | "unknown";
   lawfulConfidence: "explicit" | "inferred" | "unknown";
   locations: string[];
   unresolvedLocationTokens: string[];
+  destinationTokens: string[];
   confidenceFlags: string[];
   unresolvedReferences: string[];
   variantKeys: string[];

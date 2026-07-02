@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "5630371b-f3d7-4a0a-98a0-0b88766a0487|EckhartSecurity_EscortShips_Nyx",
@@ -292,11 +292,96 @@
       "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
       "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "lawful",
     "lawfulConfidence": "inferred",
@@ -304,6 +389,7 @@
       "Nyx"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -319,7 +405,7 @@
       "511b35e2-8dd8-46d7-9ee3-3bb173db4bb3",
       "740afbe2-c8a2-442e-b9dc-3261c33f0851"
     ],
-    "searchText": "eckhart security careercontract executive protection detail eckhartsecurity_escortships_nyx_easy eckhart security careercontract standing defend ship pickup: generated from nyx pool eckhart security, llc.\ncontracts & dispatch\n\ncontract type: escort ship\napproval code: = [approvalcode]\n\nfor immediate processing\n\na group of ships located at [location] are requesting an escort. if you accept, head to the location immediately and await instructions. the client claims that this escort is purely a precautionary measure, but that doesn’t mean you should drop your guard. expect some hostile forces and deal with them appropriately.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. experienced protection detail needed low risk protection detail protection detail needed. high risk. top tier operator needed vip client needs protection e9e78a81-40cb-4b48-a248-adc9edae977e 80d87b95-635f-426e-87fd-02038f115e61 0e553862-8699-40f6-9ff1-fca8e2fe0662 67d23e1e-b328-42b9-9d90-685a1f78ba39 511b35e2-8dd8-46d7-9ee3-3bb173db4bb3 740afbe2-c8a2-442e-b9dc-3261c33f0851 blueprint: eckhart security escort ships easy: shimmer, obscura, m3a cannon, m4a cannon +1 standing +100 credits formula unresolved item reward: mg scrip blueprint: eckhart security escort ships med: veil, sheut, suckerpunch cannon, suckerpunch-l cannon +1 standing +150 blueprint: eckhart security escort ships hard plus: havoc scattergun, hellion scattergun, predator scattergun, mirage +2 standing +250"
+    "searchText": "eckhart security careercontract executive protection detail eckhartsecurity_escortships_nyx_easy eckhart security careercontract standing defend ship pickup: nyx eckhart security, llc.\ncontracts & dispatch\n\ncontract type: escort ship\napproval code: = [approvalcode]\n\nfor immediate processing\n\na group of ships located at [location] are requesting an escort. if you accept, head to the location immediately and await instructions. the client claims that this escort is purely a precautionary measure, but that doesn’t mean you should drop your guard. expect some hostile forces and deal with them appropriately.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. experienced protection detail needed low risk protection detail protection detail needed. high risk. top tier operator needed vip client needs protection e9e78a81-40cb-4b48-a248-adc9edae977e 80d87b95-635f-426e-87fd-02038f115e61 0e553862-8699-40f6-9ff1-fca8e2fe0662 67d23e1e-b328-42b9-9d90-685a1f78ba39 511b35e2-8dd8-46d7-9ee3-3bb173db4bb3 740afbe2-c8a2-442e-b9dc-3261c33f0851 blueprint: eckhart security escort ships easy: shimmer, obscura, m3a cannon, m4a cannon +1 standing +100 credits formula unresolved item reward: mg scrip blueprint: eckhart security escort ships med: veil, sheut, suckerpunch cannon, suckerpunch-l cannon +1 standing +150 blueprint: eckhart security escort ships hard plus: havoc scattergun, hellion scattergun, predator scattergun, mirage +2 standing +250"
   },
   "groupSummary": {
     "familyKey": "5630371b-f3d7-4a0a-98a0-0b88766a0487|EckhartSecurity_EscortShips_Nyx",
@@ -586,7 +672,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],

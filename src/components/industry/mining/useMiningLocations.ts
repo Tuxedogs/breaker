@@ -19,7 +19,6 @@ export interface MiningLocationsResult {
   rankedFilteredLocations: PublicLocationEntry[];
   displayRankedFilteredLocations: PublicLocationEntry[];
   coveragePlan: CoveragePlan | null;
-  unfilteredCoveragePlan: CoveragePlan | null;
   coveragePlanLocationByKey: Map<string, CoveragePlanLocation>;
   selectedEntry: PublicLocationEntry | null;
 }
@@ -143,13 +142,6 @@ export function useMiningLocations({
     [activeBuildQueueDemandMaterials, buildQueueSelectionActive, coverageMode, coverageRankedFilteredLocations, locationMaterialKeysByLocationKey],
   );
 
-  const unfilteredCoveragePlan = useMemo(
-    () => buildQueueSelectionActive && activeBuildQueueDemandMaterials.length > 0
-      ? buildCoveragePlan({ mode: coverageMode, demandMaterials: activeBuildQueueDemandMaterials, locations, locationMaterialKeysByLocationKey })
-      : null,
-    [activeBuildQueueDemandMaterials, buildQueueSelectionActive, coverageMode, locations, locationMaterialKeysByLocationKey],
-  );
-
   const coveragePlanLocationByKey = useMemo(
     () => new Map((coveragePlan?.locations ?? []).map((l) => [l.entry.locationKey, l])),
     [coveragePlan],
@@ -186,7 +178,6 @@ export function useMiningLocations({
     rankedFilteredLocations,
     displayRankedFilteredLocations,
     coveragePlan,
-    unfilteredCoveragePlan,
     coveragePlanLocationByKey,
     selectedEntry,
   };

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton",
@@ -142,11 +142,161 @@
       "Sr. Contractor / 5,800 rep to Elite Contractor / 95,250 rep",
       "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +1",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "displayName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "displayName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "displayName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 2",
+            "Stanton 3",
+            "Stanton 4",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "unknown",
     "lawfulClassification": "unknown",
     "lawfulConfidence": "unknown",
@@ -157,6 +307,9 @@
       "Stanton 1"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -172,7 +325,7 @@
       "84476b48-109a-4871-b361-0ec3aa3a4d9d",
       "e18860a1-c82b-46cf-8e18-6e46110c2ad6"
     ],
-    "searchText": "headhunters careercontract finish the job headhunters_stanton_medium_recovercargo headhunters careercontract hauling cargo pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble efd928c9-d734-4c5b-934f-1403215252d2 1e9a81a9-4b5c-47b7-b144-7e9b199cea7e da02741b-c8b5-4528-b638-df1d71d0e9b5 470b8268-5416-4b72-afdd-8ec73b11bf11 84476b48-109a-4871-b361-0ec3aa3a4d9d e18860a1-c82b-46cf-8e18-6e46110c2ad6 hauling +150 credits formula unresolved hauling +200 hauling +50 hauling +100 hauling +300"
+    "searchText": "headhunters careercontract finish the job headhunters_stanton_medium_recovercargo headhunters careercontract hauling cargo pickup: stanton one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble efd928c9-d734-4c5b-934f-1403215252d2 1e9a81a9-4b5c-47b7-b144-7e9b199cea7e da02741b-c8b5-4528-b638-df1d71d0e9b5 470b8268-5416-4b72-afdd-8ec73b11bf11 84476b48-109a-4871-b361-0ec3aa3a4d9d e18860a1-c82b-46cf-8e18-6e46110c2ad6 hauling +150 credits formula unresolved hauling +200 hauling +50 hauling +100 hauling +300"
   },
   "groupSummary": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Stanton",
@@ -288,7 +441,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],

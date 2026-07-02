@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Nyx",
@@ -140,11 +140,107 @@
       "Jr. Contractor / 800 rep to Elite Contractor / 95,250 rep",
       "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unresolved",
+        "displayName": "Destination unresolved",
+        "displayLabel": "Destination unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Destination|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Destination|Address"
+        ],
+        "unresolved": true
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "destination",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Destination|Address",
+        "confidence": "token_only"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "unknown",
     "lawfulClassification": "unknown",
     "lawfulConfidence": "unknown",
@@ -152,6 +248,9 @@
       "Nyx"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [
+      "Destination|Address"
+    ],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -167,7 +266,7 @@
       "fa27d7cb-065b-4049-9a5d-12b2c8c22408",
       "fa6e1cd2-870f-4b37-89c2-abfa1331fb5b"
     ],
-    "searchText": "headhunters careercontract finish the job headhunters_nyx_medium_recovercargo headhunters careercontract hauling cargo pickup: generated from nyx pool one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble aa24ea9f-add6-419a-a9fb-3421a857ed0c a953a8b4-4cb7-4f11-94ce-c41a5408bdcf c0d7f644-ad7c-4a00-9bcb-56130d8aeb1c a368e5c8-9c12-45eb-a8bb-bb0799485ec5 fa27d7cb-065b-4049-9a5d-12b2c8c22408 fa6e1cd2-870f-4b37-89c2-abfa1331fb5b hauling +150 credits formula unresolved hauling +200 hauling +50 hauling +100 hauling +300"
+    "searchText": "headhunters careercontract finish the job headhunters_nyx_medium_recovercargo headhunters careercontract hauling cargo pickup: nyx one of our pilots was supposed to bring a shipment back to us, but seems like he got into some trouble over at [location]. either he got his brains blasted all over the cockpit, or freaked out and ditched his ship. for his sake, i hope it’s the first one so i don’t have the hunt this asshole down. what’s important right now is that our cargo’s just sitting out there.\n\nif you’ve got a heavy-duty tractor beam and a decent ship, can you head over there and get our stuff? chances are the assholes who attacked my pilot are still there, and i’m betting they’re pretty tough.\n\nif you get out alive, take the cargo to the freight elevator at [destination] and i’ll get you paid.\n\nstows out. getting what we deserve grab ‘n’ go jackpot taking what’s ours worth the trouble aa24ea9f-add6-419a-a9fb-3421a857ed0c a953a8b4-4cb7-4f11-94ce-c41a5408bdcf c0d7f644-ad7c-4a00-9bcb-56130d8aeb1c a368e5c8-9c12-45eb-a8bb-bb0799485ec5 fa27d7cb-065b-4049-9a5d-12b2c8c22408 fa6e1cd2-870f-4b37-89c2-abfa1331fb5b hauling +150 credits formula unresolved hauling +200 hauling +50 hauling +100 hauling +300"
   },
   "groupSummary": {
     "familyKey": "7f77d9f9-a697-4bf6-aabd-5e46bf380c6d|HeadHunters_RecoverCargo_Nyx",
@@ -283,7 +382,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],

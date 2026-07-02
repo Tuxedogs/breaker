@@ -72,7 +72,7 @@ export function LocationListItem({
       role="button"
       tabIndex={0}
       aria-pressed={selected}
-      aria-label={`Select ${locationDisplayName} mining location`}
+      aria-label={`${selected ? "Collapse" : "Select"} ${locationDisplayName} mining location`}
     >
       <div className="mlist-item-thumb" aria-hidden="true">
         {planetAsset ? (

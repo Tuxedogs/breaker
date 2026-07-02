@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "56dc3384-2ec1-45bb-bee1-b5085952202d|RoughAndReady_Handyman",
   "variants": [
@@ -144,14 +144,153 @@
             "consideredPickup": true,
             "reason": "Contract prerequisite gates mission availability."
           }
-        ]
+        ],
+        "rawLocalities": [
+          {
+            "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "displayName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+          },
+          {
+            "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "displayName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+          },
+          {
+            "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+            "displayName": "Rest Stop P6 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P2 L4",
+            "Rest Stop P3 LEO",
+            "Rest Stop P6 LEO"
+          ],
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "confidence": "exact"
+        }
       },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailDisplay": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+              "displayName": "Rest Stop P2 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+            },
+            {
+              "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+              "displayName": "Rest Stop P3 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+            },
+            {
+              "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+              "displayName": "Rest Stop P6 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P2 L4",
+              "Rest Stop P3 LEO",
+              "Rest Stop P6 LEO"
+            ],
+            "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+          "resolvedName": "Rest Stop P6 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        }
+      ],
       "locations": [
         "Rest Stop P2 L4",
         "Rest Stop P3 LEO",
         "Rest Stop P6 LEO"
       ],
       "unresolvedLocationTokens": [],
+      "destinationTokens": [],
       "rewards": {
         "summary": [
           "Credits formula unresolved"
@@ -341,14 +480,153 @@
             "consideredPickup": true,
             "reason": "Contract prerequisite gates mission availability."
           }
-        ]
+        ],
+        "rawLocalities": [
+          {
+            "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "displayName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+          },
+          {
+            "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "displayName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+          },
+          {
+            "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+            "displayName": "Rest Stop P6 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P2 L4",
+            "Rest Stop P3 LEO",
+            "Rest Stop P6 LEO"
+          ],
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "confidence": "exact"
+        }
       },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailDisplay": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+              "displayName": "Rest Stop P2 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+            },
+            {
+              "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+              "displayName": "Rest Stop P3 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+            },
+            {
+              "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+              "displayName": "Rest Stop P6 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P2 L4",
+              "Rest Stop P3 LEO",
+              "Rest Stop P6 LEO"
+            ],
+            "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+          "resolvedName": "Rest Stop P6 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        }
+      ],
       "locations": [
         "Rest Stop P2 L4",
         "Rest Stop P3 LEO",
         "Rest Stop P6 LEO"
       ],
       "unresolvedLocationTokens": [],
+      "destinationTokens": [],
       "rewards": {
         "summary": [
           "Credits formula unresolved"
@@ -538,14 +816,153 @@
             "consideredPickup": true,
             "reason": "Contract prerequisite gates mission availability."
           }
-        ]
+        ],
+        "rawLocalities": [
+          {
+            "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "displayName": "Rest Stop P2 L4",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+          },
+          {
+            "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "displayName": "Rest Stop P3 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+          },
+          {
+            "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+            "displayName": "Rest Stop P6 LEO",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+          }
+        ],
+        "grouping": {
+          "systems": [],
+          "localityNames": [
+            "Rest Stop P2 L4",
+            "Rest Stop P3 LEO",
+            "Rest Stop P6 LEO"
+          ],
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "confidence": "exact"
+        }
       },
+      "locationRoles": {
+        "pickup": {
+          "status": "exact",
+          "displayName": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "detailDisplay": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+          "systems": [],
+          "confidence": "high",
+          "sourceRole": "availability",
+          "sourceRefs": [
+            "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+            "28e220ba-ba74-42eb-bae5-382475eba65d",
+            "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea"
+          ],
+          "unresolvedRefs": [],
+          "unresolvedLocationTokens": [],
+          "generatedFromPool": false,
+          "systemScope": false,
+          "rawLocalities": [
+            {
+              "guid": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+              "displayName": "Rest Stop P2 L4",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p2_l4.xml"
+            },
+            {
+              "guid": "28e220ba-ba74-42eb-bae5-382475eba65d",
+              "displayName": "Rest Stop P3 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p3_leo.xml"
+            },
+            {
+              "guid": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+              "displayName": "Rest Stop P6 LEO",
+              "type": "StarMapObject",
+              "path": "libs/foundry/records/starmap/pu/station/reststop/rr_p6_leo.xml"
+            }
+          ],
+          "grouping": {
+            "systems": [],
+            "localityNames": [
+              "Rest Stop P2 L4",
+              "Rest Stop P3 LEO",
+              "Rest Stop P6 LEO"
+            ],
+            "displayLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "detailLabel": "Rest Stop P2 L4, Rest Stop P3 LEO, Rest Stop P6 LEO",
+            "confidence": "exact"
+          }
+        },
+        "destination": {
+          "status": "unknown",
+          "displayName": "Unknown destination",
+          "displayLabel": "Unknown destination",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        },
+        "objective": {
+          "status": "unknown",
+          "displayName": "Unknown objective location",
+          "displayLabel": "Unknown objective location",
+          "systems": [],
+          "confidence": "low",
+          "sourceRefs": [],
+          "unresolvedRefs": [],
+          "sourceTextTokens": [],
+          "unresolved": false
+        }
+      },
+      "locationRefs": [
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "07463f54-4ecd-4323-8a28-fb65b8a4ebca",
+          "resolvedName": "Rest Stop P2 L4",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "28e220ba-ba74-42eb-bae5-382475eba65d",
+          "resolvedName": "Rest Stop P3 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+          "resolvedName": "Rest Stop P6 LEO",
+          "confidence": "resolved"
+        },
+        {
+          "role": "pickup",
+          "rawType": "ContractPrerequisite_Location",
+          "attr": "locationAvailable",
+          "guidOrToken": "1c585a2e-73c4-4bc5-8922-e0b434b8c8ea",
+          "resolvedName": "Rest Stop P6 LEO",
+          "confidence": "resolved"
+        }
+      ],
       "locations": [
         "Rest Stop P2 L4",
         "Rest Stop P3 LEO",
         "Rest Stop P6 LEO"
       ],
       "unresolvedLocationTokens": [],
+      "destinationTokens": [],
       "rewards": {
         "summary": [
           "Credits formula unresolved"

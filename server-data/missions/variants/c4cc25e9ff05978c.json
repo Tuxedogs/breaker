@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "f4baf10a-43a4-4087-9bf5-f20c34a061d6|Crusader Tutorial",
   "variant": {
@@ -101,12 +101,107 @@
           "consideredPickup": true,
           "reason": "Contract prerequisite gates mission availability."
         }
-      ]
+      ],
+      "rawLocalities": [
+        {
+          "guid": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+          "displayName": "Stanton 2",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/system/stanton/stanton2/starmapobject.stanton2.xml",
+          "system": "Stanton"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Stanton"
+        ],
+        "localityNames": [
+          "Stanton 2"
+        ],
+        "displayLabel": "Stanton",
+        "detailLabel": "Stanton 2",
+        "confidence": "exact"
+      }
     },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Stanton 2",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton 2",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "c15033ab-2eb3-4d6d-b882-0cb336e67ed8"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+            "displayName": "Stanton 2",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/system/stanton/stanton2/starmapobject.stanton2.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 2"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton 2",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "c15033ab-2eb3-4d6d-b882-0cb336e67ed8",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      }
+    ],
     "locations": [
       "Stanton 2"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "rewards": {
       "summary": [
         "No credit reward extracted"

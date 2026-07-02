@@ -216,7 +216,7 @@ const InventoryLocationCard = memo(function InventoryLocationCard({
   detailId,
 }: LocationCardProps) {
   return (
-    <article className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}`}>
+    <article className={`logi-location-card${group.entries.length === 0 ? ' logi-location-card--empty' : ''}${isSelected ? ' logi-location-card--selected' : ''}`}>
       <div className="logi-location-card-head">
         <div>
           <div className="logi-location-card-kicker">{group.subtitle}</div>
@@ -699,6 +699,7 @@ export default function InventoryPage() {
 
   return (
     <div className="logi-page logi-inv-page">
+      <div className="logi-inv-content">
       <div className="logi-page-header logi-inv-header page-compact-header">
         <div>
           <div className="logi-breadcrumb">
@@ -867,6 +868,7 @@ export default function InventoryPage() {
           </div>
         </div>
       )}
+      </div>
 
       {panel && (
         <div className="logi-drawer-overlay" onClick={() => setPanel(null)} aria-hidden />

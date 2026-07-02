@@ -153,6 +153,71 @@ type PickupLocation = {
     consideredPickup: boolean;
     reason: string;
   }>;
+  rawLocalities?: Array<{
+    guid: string;
+    displayName: string;
+    type?: string;
+    path?: string;
+    system?: string;
+  }>;
+  grouping?: {
+    systems: string[];
+    localityNames: string[];
+    displayLabel: string;
+    detailLabel: string;
+    confidence: "exact" | "generated_from_pool" | "system_scope" | "partial" | "unknown" | "unresolved";
+  };
+};
+
+type LocationRoleStatus = "exact" | "generated_from_pool" | "system_scope" | "partial" | "unknown" | "unresolved";
+
+type LocationRefRole = "pickup" | "destination" | "objective";
+
+type LocationRef = {
+  role: LocationRefRole;
+  rawType: string;
+  attr: string;
+  guidOrToken: string;
+  resolvedName?: string;
+  system?: string;
+  confidence: "resolved" | "inferred" | "token_only" | "unresolved";
+};
+
+type PickupLocationRole = {
+  status: PickupLocation["status"];
+  displayName: string;
+  displayLabel: string;
+  detailDisplay: string;
+  systems: string[];
+  primarySystem?: string;
+  confidence: PickupLocation["confidence"];
+  sourceRole: PickupLocation["sourceRole"];
+  sourceRefs: string[];
+  unresolvedRefs: string[];
+  unresolvedLocationTokens: string[];
+  generatedFromPool: boolean;
+  systemScope: boolean;
+  rawLocalities: NonNullable<PickupLocation["rawLocalities"]>;
+  grouping: NonNullable<PickupLocation["grouping"]>;
+};
+
+type UnresolvedLocationRole = {
+  status: "unknown" | "unresolved";
+  displayName: string;
+  displayLabel: string;
+  systems: string[];
+  primarySystem?: string;
+  confidence: "low" | "unresolved";
+  sourceRefs: string[];
+  unresolvedRefs: string[];
+  sourceTextTokens: string[];
+  unresolved: boolean;
+};
+
+type MissionLocationRoles = {
+  pickup: PickupLocationRole;
+  destination: UnresolvedLocationRole;
+  objective: UnresolvedLocationRole;
 };
 
 type ReputationScope = {
@@ -268,8 +333,11 @@ type ShapedVariant = {
   prerequisiteSummary: string;
   prerequisites: ShapedPrerequisite[];
   pickupLocation: PickupLocation;
+  locationRoles: MissionLocationRoles;
+  locationRefs: LocationRef[];
   locations: string[];
   unresolvedLocationTokens: string[];
+  destinationTokens: string[];
   rewards: {
     summary: string[];
     blueprintRewards: string[];
@@ -334,11 +402,14 @@ type ShapedFamily = {
   pickupSummary: string;
   pickupStatuses: PickupLocation["status"][];
   pickupUnresolvedCount: number;
+  locationRoles: MissionLocationRoles;
+  locationRefs: LocationRef[];
   crimeStatRequirement: "notRequired" | "required" | "bounded" | "unknown";
   lawfulClassification: "lawful" | "unlawful" | "unknown";
   lawfulConfidence: "explicit" | "inferred" | "unknown";
   locations: string[];
   unresolvedLocationTokens: string[];
+  destinationTokens: string[];
   confidenceFlags: string[];
   unresolvedReferences: string[];
   variantKeys: string[];
@@ -999,6 +1070,263 @@ function systemFromRef(entry?: RefIndexEntry, fallbackText?: string): string | u
   if (found.length === 1) return found[0][0]!.toUpperCase() + found[0]!.slice(1);
   if (found.length > 1) return found.map((system) => system[0]!.toUpperCase() + system.slice(1)).join(", ");
   return undefined;
+}
+
+function structuredLocationRefs(mission: RawMission): Array<{
+  role: LocationRefRole;
+  rawType: string;
+  attr: string;
+  guidOrToken: string;
+}> {
+  return (mission.prerequisites ?? []).flatMap((item) => {
+    if (item.type === "ContractPrerequisite_Location") {
+      const guidOrToken = guidValue(rawValue(item.attributes, ["locationAvailable", "availableAt", "acceptedAt", "offerLocation"]));
+      return guidOrToken ? [{ role: "pickup" as const, rawType: item.type, attr: "locationAvailable", guidOrToken }] : [];
+    }
+    if (item.type === "ContractPrerequisite_Locality") {
+      const guidOrToken = guidValue(rawValue(item.attributes, ["localityAvailable", "availableAt", "acceptedAt"]));
+      return guidOrToken ? [{ role: "pickup" as const, rawType: item.type, attr: "localityAvailable", guidOrToken }] : [];
+    }
+    if (item.type === "ContractPrerequisite_LocationProperty") {
+      const keys = ["propertyVariableName", "propertyExtendedTextToken", "locationLevelType"] as const;
+      return keys.flatMap((key) => {
+        const guidOrToken = clean(rawValue(item.attributes, [key]));
+        return guidOrToken ? [{ role: "objective" as const, rawType: item.type, attr: key, guidOrToken }] : [];
+      });
+    }
+    return [];
+  });
+}
+
+function extractMissionPlaceholderTokens(mission: RawMission): string[] {
+  const text = [
+    mission.title,
+    mission.titleRaw,
+    mission.description,
+    mission.descriptionRaw,
+  ].filter(Boolean).join("\n");
+  const tokens = new Set<string>();
+  for (const match of text.matchAll(/~mission\(([^)]+)\)/gi)) {
+    const token = clean(match[1]);
+    if (token) tokens.add(token);
+  }
+  for (const match of text.matchAll(/\[([a-z0-9_]+)\]/gi)) {
+    const token = clean(match[1]);
+    if (token && /(destination|drop\s*off|dropoff|location)/i.test(token)) tokens.add(token);
+  }
+  return Array.from(tokens);
+}
+
+function classifyTextLocationTokens(tokens: string[]): { destinationTokens: string[]; objectiveTokens: string[] } {
+  const destinationTokens = unique(tokens.filter((token) => /destination|drop\s*off|dropoff|end/i.test(token)));
+  const objectiveTokens = unique(tokens.filter((token) => /location\d*|pickuplocation|dropofflocation/i.test(token)));
+  return { destinationTokens, objectiveTokens };
+}
+
+function resolvedPickupLocalities(pickup: PickupLocation): NonNullable<PickupLocation["rawLocalities"]> {
+  const refs = pickup.technicalRefs.filter((item) => item.consideredPickup && item.resolvedName);
+  return Array.from(new Map(refs.map((item) => [item.ref.toLowerCase(), {
+    guid: item.ref,
+    displayName: item.resolvedName!,
+    type: item.type,
+    path: item.path,
+    system: systemFromRef(undefined, `${item.resolvedName ?? ""} ${item.path ?? ""}`),
+  }])).values());
+}
+
+function normalizeSystemLabels(values: Array<string | undefined>): string[] {
+  const normalized: string[] = [];
+  for (const value of values) {
+    const text = clean(value);
+    if (!text) continue;
+    const found = Array.from(new Set(Array.from(text.matchAll(/\b(Stanton|Pyro|Nyx)\b/gi)).map((match) => {
+      const system = clean(match[1]);
+      return system ? `${system[0]!.toUpperCase()}${system.slice(1).toLowerCase()}` : undefined;
+    }).filter((system): system is string => Boolean(system))));
+    if (found.length) {
+      normalized.push(...found);
+      continue;
+    }
+    normalized.push(text);
+  }
+  return unique(normalized);
+}
+
+function pyroRegionLetter(value?: string): string | undefined {
+  const match = clean(value)?.match(/^Region\s+([A-Z])$/i);
+  if (!match) return undefined;
+  return match[1]!.toUpperCase();
+}
+
+function normalizePyroRegionPool(
+  systems: string[],
+  localityNames: string[],
+): { regionLabels: string[]; regionPoolLabel: string } | undefined {
+  if (systems.length !== 1 || systems[0] !== "Pyro") return undefined;
+  const filtered = localityNames
+    .map(clean)
+    .filter((value): value is string => Boolean(value))
+    .filter((value) => !/^Pyro(?:\s+system|\s+StarLocality)?$/i.test(value));
+  if (!filtered.length) return undefined;
+  const letters = filtered.map(pyroRegionLetter).filter((value): value is string => Boolean(value));
+  if (letters.length !== filtered.length) return undefined;
+  const sortedLetters = Array.from(new Set(letters)).sort((a, b) => a.localeCompare(b));
+  const regionLabels = sortedLetters.map((letter) => `Region ${letter}`);
+  const continuous = sortedLetters.every((letter, index) => index === 0 || letter.charCodeAt(0) === sortedLetters[index - 1]!.charCodeAt(0) + 1);
+  return {
+    regionLabels,
+    regionPoolLabel: continuous && sortedLetters.length > 1
+      ? `Region ${sortedLetters[0]}-${sortedLetters[sortedLetters.length - 1]}`
+      : regionLabels.join(", "),
+  };
+}
+
+function pickupDisplayLabel(pickup: PickupLocation, systems: string[], localityNames: string[]): string {
+  if (pickup.status === "unknown") return "Unknown pickup";
+  if (pickup.status === "unresolved") return "Pickup unresolved";
+  if (systems.length === 1) return systems[0]!;
+  if (systems.length > 1) return systems.join(", ");
+  if (pickup.status === "system_scope" && pickup.system) return pickup.system;
+  if (localityNames.length === 1) return localityNames[0]!;
+  return pickup.displayName || "Unknown pickup";
+}
+
+function pickupDetailLabel(pickup: PickupLocation, systems: string[], localityNames: string[]): string {
+  const pyroRegionPool = normalizePyroRegionPool(systems, localityNames);
+  if (pyroRegionPool) return `Generated region pool: ${pyroRegionPool.regionPoolLabel}`;
+  if (pickup.status === "generated_from_pool") {
+    const label = pickup.system ?? pickup.displayName;
+    return label ? `Generated pickup pool (${label})` : "Generated pickup pool";
+  }
+  if (pickup.status === "system_scope") {
+    if (pickup.regions?.length) return `${pickup.system ?? pickup.displayName} ${pickup.regions.join(", ").replace(/Region /g, "Region ")}`;
+    return pickup.displayName;
+  }
+  if (pickup.status === "unknown") return "Unknown pickup";
+  if (pickup.status === "unresolved") return "Pickup unresolved";
+  if (localityNames.length > 0) {
+    return localityNames.length > 3 ? `${localityNames.slice(0, 3).join(", ")} +${localityNames.length - 3}` : localityNames.join(", ");
+  }
+  return pickup.displayName;
+}
+
+function pickupGroupingDetailLabel(
+  pickup: PickupLocation,
+  systems: string[],
+  detailDisplay: string,
+  localityNames: string[],
+): string {
+  if (normalizePyroRegionPool(systems, localityNames)) return `${systems[0]} system`;
+  return detailDisplay;
+}
+
+function pickupGroupingConfidence(pickup: PickupLocation): NonNullable<PickupLocation["grouping"]>["confidence"] {
+  if (pickup.status === "exact") return "exact";
+  if (pickup.status === "generated_from_pool") return "generated_from_pool";
+  if (pickup.status === "system_scope") return "system_scope";
+  if (pickup.status === "unresolved") return "unresolved";
+  if (pickup.status === "unknown") return "unknown";
+  return "partial";
+}
+
+function buildPickupLocationRole(pickup: PickupLocation, unresolvedLocationTokens: string[]): PickupLocationRole {
+  const rawLocalities = resolvedPickupLocalities(pickup);
+  const systems = normalizeSystemLabels([
+    pickup.system,
+    ...rawLocalities.map((item) => item.system),
+  ]);
+  const rawLocalityNames = unique([
+    ...rawLocalities.map((item) => item.displayName),
+    ...pickup.possibleLocations,
+    ...(pickup.regions ?? []),
+  ]);
+  const pyroRegionPool = normalizePyroRegionPool(systems, rawLocalityNames);
+  const localityNames = pyroRegionPool?.regionLabels ?? rawLocalityNames;
+  const displayLabel = pickupDisplayLabel(pickup, systems, localityNames);
+  const detailDisplay = pickupDetailLabel(pickup, systems, localityNames);
+  return {
+    status: pickup.status,
+    displayName: pickup.displayName,
+    displayLabel,
+    detailDisplay,
+    systems,
+    primarySystem: systems[0],
+    confidence: pickup.confidence,
+    sourceRole: pickup.sourceRole,
+    sourceRefs: pickup.sourceRefs,
+    unresolvedRefs: pickup.unresolvedRefs,
+    unresolvedLocationTokens,
+    generatedFromPool: pickup.status === "generated_from_pool",
+    systemScope: pickup.status === "system_scope",
+    rawLocalities,
+    grouping: {
+      systems,
+      localityNames,
+      displayLabel,
+      detailLabel: pickupGroupingDetailLabel(pickup, systems, detailDisplay, localityNames),
+      confidence: pickupGroupingConfidence(pickup),
+    },
+  };
+}
+
+function buildUnresolvedLocationRole(
+  status: "unknown" | "unresolved",
+  displayName: string,
+  sourceRefs: string[],
+  unresolvedRefs: string[],
+  sourceTextTokens: string[],
+  confidence: "low" | "unresolved",
+  systems: string[] = [],
+): UnresolvedLocationRole {
+  return {
+    status,
+    displayName,
+    displayLabel: displayName,
+    systems,
+    primarySystem: systems[0],
+    confidence,
+    sourceRefs,
+    unresolvedRefs,
+    sourceTextTokens,
+    unresolved: status === "unresolved",
+  };
+}
+
+function buildLocationRefs(
+  mission: RawMission,
+  refMap: Map<string, RefIndexEntry>,
+  destinationTokens: string[],
+  objectiveTokens: string[],
+): LocationRef[] {
+  const refs = structuredLocationRefs(mission).map((item) => {
+    const entry = refMap.get(item.guidOrToken.toLowerCase());
+    return {
+      role: item.role,
+      rawType: item.rawType,
+      attr: item.attr,
+      guidOrToken: item.guidOrToken,
+      resolvedName: displayNameFromRef(entry),
+      system: systemFromRef(entry, item.guidOrToken),
+      confidence: entry ? (item.role === "objective" ? "inferred" : "resolved") : "unresolved",
+    } satisfies LocationRef;
+  });
+  const tokenRefs = [
+    ...destinationTokens.map((token) => ({
+      role: "destination" as const,
+      rawType: "mission_text_token",
+      attr: "sourceTextToken",
+      guidOrToken: token,
+      confidence: "token_only" as const,
+    })),
+    ...objectiveTokens.map((token) => ({
+      role: "objective" as const,
+      rawType: "mission_text_token",
+      attr: "sourceTextToken",
+      guidOrToken: token,
+      confidence: "token_only" as const,
+    })),
+  ];
+  return [...refs, ...tokenRefs];
 }
 
 function pickupDisplay(pickup: PickupLocation): string {
@@ -1706,7 +2034,42 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
     .flatMap((item) => [clean(item.raw?.token)]));
   const lawful = classifyLawful(mission);
   const prerequisiteSummary = unique(prerequisites.map((item) => item.label)).slice(0, 3).join("; ") || "No extracted prerequisites";
-  const pickupLocation = resolvePickupLocation(mission, refMap);
+  const placeholderTokens = extractMissionPlaceholderTokens(mission);
+  const { destinationTokens, objectiveTokens } = classifyTextLocationTokens(placeholderTokens);
+  const pickupLocationBase = resolvePickupLocation(mission, refMap);
+  const pickupRole = buildPickupLocationRole(pickupLocationBase, unresolvedLocationTokens);
+  const pickupLocation: PickupLocation = {
+    ...pickupLocationBase,
+    rawLocalities: pickupRole.rawLocalities,
+    grouping: pickupRole.grouping,
+  };
+  const locationRefs = buildLocationRefs(mission, refMap, destinationTokens, objectiveTokens);
+  const destinationRefValues = locationRefs.filter((item) => item.role === "destination");
+  const objectiveRefValues = locationRefs.filter((item) => item.role === "objective");
+  const locationRoles: MissionLocationRoles = {
+    pickup: pickupRole,
+    destination: destinationTokens.length
+      ? buildUnresolvedLocationRole(
+        "unresolved",
+        "Destination unresolved",
+        destinationRefValues.map((item) => item.guidOrToken),
+        [],
+        destinationTokens,
+        "unresolved",
+      )
+      : buildUnresolvedLocationRole("unknown", "Unknown destination", [], [], [], "low"),
+    objective: (objectiveTokens.length || locationRefs.some((item) => item.role === "objective" && item.confidence === "resolved"))
+      ? buildUnresolvedLocationRole(
+        objectiveTokens.length ? "unresolved" : "unknown",
+        objectiveTokens.length ? "Objective location unresolved" : "Objective location",
+        objectiveRefValues.map((item) => item.guidOrToken),
+        [],
+        objectiveTokens,
+        objectiveTokens.length ? "unresolved" : "low",
+        unique(objectiveRefValues.map((item) => item.system)),
+      )
+      : buildUnresolvedLocationRole("unknown", "Unknown objective location", [], [], [], "low"),
+  };
   const missionArchetype = classifyMissionArchetype(mission);
   const resolvedTitle = variantTitle(mission, missionArchetype, pickupLocation);
   const reputationScope = resolveReputationScope(mission, refMap, missionArchetype);
@@ -1765,8 +2128,11 @@ function shapeVariant(mission: RawMission, pools: Map<string, BlueprintPoolLooku
     prerequisiteSummary,
     prerequisites,
     pickupLocation,
+    locationRoles,
+    locationRefs,
     locations,
     unresolvedLocationTokens,
+    destinationTokens,
     rewards,
     rewardedReputationPaths,
     flags: missionFlags(mission),
@@ -1828,10 +2194,19 @@ function aggregateLawful(variants: ShapedVariant[]): Pick<ShapedFamily, "lawfulC
 
 function familyPickupSummary(variants: ShapedVariant[]): Pick<ShapedFamily, "pickupSummary" | "pickupStatuses" | "pickupUnresolvedCount"> {
   const pickups = variants.map((variant) => variant.pickupLocation);
+  const pickupRoles = variants.map((variant) => variant.locationRoles.pickup);
   const statuses = unique(pickups.map((pickup) => pickup.status)) as PickupLocation["status"][];
   const unresolved = pickups.filter((pickup) => pickup.status === "unknown" || pickup.status === "unresolved").length;
   const generated = pickups.filter((pickup) => pickup.status === "generated_from_pool");
   if (generated.length === pickups.length && generated.length > 0) {
+    const systems = unique(pickupRoles.map((role) => role.grouping.displayLabel).filter(Boolean));
+    if (systems.length === 1) {
+      return {
+        pickupSummary: `Pickup: ${systems[0]}`,
+        pickupStatuses: statuses,
+        pickupUnresolvedCount: unresolved,
+      };
+    }
     const names = unique(generated.map((pickup) => pickup.displayName));
     return {
       pickupSummary: `Pickup: Generated from ${names.length === 1 ? names[0] : `${names.slice(0, 2).join(", ")}${names.length > 2 ? ` +${names.length - 2}` : ""}`} pool`,
@@ -1851,6 +2226,87 @@ function familyPickupSummary(variants: ShapedVariant[]): Pick<ShapedFamily, "pic
     pickupSummary: unresolved ? `Pickup: unresolved for ${unresolved} variant${unresolved === 1 ? "" : "s"}` : "Pickup: unknown",
     pickupStatuses: statuses,
     pickupUnresolvedCount: unresolved,
+  };
+}
+
+function aggregateLocationRole(
+  roles: UnresolvedLocationRole[],
+  fallbackDisplayName: string,
+): UnresolvedLocationRole {
+  const unresolved = roles.some((role) => role.status === "unresolved");
+  const sourceRefs = unique(roles.flatMap((role) => role.sourceRefs));
+  const unresolvedRefs = unique(roles.flatMap((role) => role.unresolvedRefs));
+  const sourceTextTokens = unique(roles.flatMap((role) => role.sourceTextTokens));
+  const systems = unique(roles.flatMap((role) => role.systems));
+  return {
+    status: unresolved ? "unresolved" : "unknown",
+    displayName: unresolved ? fallbackDisplayName : `Unknown ${fallbackDisplayName.toLowerCase()}`,
+    displayLabel: unresolved ? fallbackDisplayName : `Unknown ${fallbackDisplayName.toLowerCase()}`,
+    systems,
+    primarySystem: systems[0],
+    confidence: unresolved ? "unresolved" : "low",
+    sourceRefs,
+    unresolvedRefs,
+    sourceTextTokens,
+    unresolved,
+  };
+}
+
+function aggregateFamilyPickupRole(variants: ShapedVariant[], pickupSummary: string): PickupLocationRole {
+  const pickupRoles = variants.map((variant) => variant.locationRoles.pickup);
+  const systems = normalizeSystemLabels(pickupRoles.flatMap((role) => role.grouping.systems));
+  const localityNames = unique(pickupRoles.flatMap((role) => role.grouping.localityNames));
+  const primarySystem = systems.length === 1 ? systems[0] : systems[0];
+  const displayLabel = systems.length === 1 ? systems[0]! : systems.length > 1 ? systems.slice(0, 3).join(", ") : pickupRoles[0]?.displayLabel ?? "Unknown pickup";
+  const detailDisplay = pickupSummary.replace(/^Pickup:\s*/i, "").trim() || displayLabel;
+  const statuses = unique(pickupRoles.map((role) => role.status));
+  const status = statuses.length === 1
+    ? statuses[0]!
+    : statuses.includes("unresolved")
+      ? "unresolved"
+      : statuses.includes("unknown")
+        ? "unknown"
+        : statuses.includes("system_scope")
+          ? "system_scope"
+          : statuses.includes("generated_from_pool")
+            ? "generated_from_pool"
+            : "exact";
+  return {
+    status,
+    displayName: pickupRoles[0]?.displayName ?? displayLabel,
+    displayLabel,
+    detailDisplay,
+    systems,
+    primarySystem,
+    confidence: pickupRoles.some((role) => role.confidence === "unresolved")
+      ? "unresolved"
+      : pickupRoles.some((role) => role.confidence === "partial")
+        ? "partial"
+        : pickupRoles.some((role) => role.confidence === "medium")
+          ? "medium"
+          : pickupRoles.some((role) => role.confidence === "high")
+            ? "high"
+            : "low",
+    sourceRole: pickupRoles[0]?.sourceRole ?? "unknown",
+    sourceRefs: unique(pickupRoles.flatMap((role) => role.sourceRefs)),
+    unresolvedRefs: unique(pickupRoles.flatMap((role) => role.unresolvedRefs)),
+    unresolvedLocationTokens: unique(variants.flatMap((variant) => variant.unresolvedLocationTokens)),
+    generatedFromPool: pickupRoles.every((role) => role.generatedFromPool),
+    systemScope: pickupRoles.every((role) => role.systemScope),
+    rawLocalities: Array.from(new Map(pickupRoles.flatMap((role) => role.rawLocalities).map((item) => [item.guid.toLowerCase(), item])).values()),
+    grouping: {
+      systems,
+      localityNames,
+      displayLabel,
+      detailLabel: detailDisplay,
+      confidence: statuses.length === 1
+        ? status
+        : statuses.includes("unresolved")
+          ? "unresolved"
+          : statuses.includes("unknown")
+            ? "unknown"
+            : "partial",
+    },
   };
 }
 
@@ -1949,6 +2405,15 @@ function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: 
   const resolvedTitle = resolveFamilyTitle(variants, rawRepresentative, provider, missionType);
   const lawful = aggregateLawful(variants);
   const pickup = familyPickupSummary(variants);
+  const locationRoles: MissionLocationRoles = {
+    pickup: aggregateFamilyPickupRole(variants, pickup.pickupSummary),
+    destination: aggregateLocationRole(variants.map((variant) => variant.locationRoles.destination), "Destination unresolved"),
+    objective: aggregateLocationRole(variants.map((variant) => variant.locationRoles.objective), "Objective location unresolved"),
+  };
+  const locationRefs = Array.from(
+    new Map(variants.flatMap((variant) => variant.locationRefs)
+      .map((item) => [JSON.stringify([item.role, item.rawType, item.attr, item.guidOrToken, item.resolvedName, item.system, item.confidence]), item])).values()
+  );
   const rewardedReputationPaths = Array.from(
     new Map(
       variants.flatMap((variant) => variant.rewardedReputationPaths)
@@ -1998,10 +2463,13 @@ function shapeFamily(familyKey: string, variants: ShapedVariant[], rawVariants: 
     reputationRequirement: unique(variants.map((variant) => variant.reputationRequirement)).join("; ") || undefined,
     prerequisiteRequirements: unique(variants.flatMap((variant) => variant.prerequisites.map((item) => item.label))).slice(0, 10),
     ...pickup,
+    locationRoles,
+    locationRefs,
     crimeStatRequirement: aggregateCrimeStat(variants),
     ...lawful,
     locations: unique(variants.flatMap((variant) => variant.locations)).slice(0, 8),
     unresolvedLocationTokens: unique(variants.flatMap((variant) => variant.unresolvedLocationTokens)).slice(0, 20),
+    destinationTokens: unique(variants.flatMap((variant) => variant.destinationTokens)).slice(0, 20),
     confidenceFlags,
     unresolvedReferences: unique(variants.flatMap((variant) => [
       ...variant.unresolvedLocationTokens,
@@ -2159,15 +2627,15 @@ function shapeConcepts(variants: ShapedVariant[]): MissionConcept[] {
         : "strong";
     const pickupMap = new Map<string, MissionConcept["pickupCoverage"][number]>();
     for (const variant of conceptVariants) {
-      const pickup = variant.pickupLocation;
-      const pickupKey = JSON.stringify([pickup.status, pickup.displayName, pickup.system, pickup.localityPool]);
+      const pickup = variant.locationRoles.pickup;
+      const pickupKey = JSON.stringify([pickup.status, pickup.displayLabel, pickup.primarySystem, pickup.grouping.displayLabel]);
       const existing = pickupMap.get(pickupKey);
       if (existing) existing.variantCount += 1;
       else pickupMap.set(pickupKey, {
         status: pickup.status,
-        displayName: pickup.displayName,
-        system: pickup.system,
-        localityPool: pickup.localityPool,
+        displayName: pickup.displayLabel,
+        system: pickup.primarySystem,
+        localityPool: pickup.grouping.detailLabel,
         variantCount: 1,
       });
     }
@@ -2360,9 +2828,9 @@ function buildFiltersMeta(families: ShapedFamily[], variants: ShapedVariant[], c
       { key: "items-unresolved", label: "Item reward unresolved", count: families.filter((family) => family.itemRewardStatus === "unresolved_entityClass" || family.itemRewardStatus === "weighted_unresolved").length, colorKey: "warning" },
     ].filter((option) => option.count > 0),
     pickupSystems: optionList(variants.map((variant) => ({
-      key: variant.pickupLocation.system ?? variant.pickupLocation.displayName,
-      label: variant.pickupLocation.system ?? variant.pickupLocation.displayName,
-      colorKey: variant.pickupLocation.status,
+      key: variant.locationRoles.pickup.grouping.displayLabel,
+      label: variant.locationRoles.pickup.grouping.displayLabel,
+      colorKey: variant.locationRoles.pickup.grouping.confidence,
     }))),
     confidenceStates: [
       { key: "unresolved", label: "Any unresolved", count: families.filter((family) => family.confidenceFlags.length > 0 || family.unresolvedReferences.length > 0).length, colorKey: "warning" },
@@ -2521,8 +2989,11 @@ const locations = variants.map((variant) => ({
   variantKey: variant.variantKey,
   familyKey: variant.familyKey,
   pickupLocation: variant.pickupLocation,
+  locationRoles: variant.locationRoles,
+  locationRefs: variant.locationRefs,
   locations: variant.locations,
   unresolvedLocationTokens: variant.unresolvedLocationTokens,
+  destinationTokens: variant.destinationTokens,
 }));
 
 const prerequisites = variants.map((variant) => ({
@@ -2594,7 +3065,7 @@ const report = {
   nonPickupObjectiveLocationsUnresolvedCount: variants.filter((variant) =>
     variant.unresolvedLocationTokens.some((token) => !variant.pickupLocation.sourceRefs.includes(token))
   ).length,
-  destinationDropoffUnresolvedCount: 0,
+  destinationDropoffUnresolvedCount: variants.filter((variant) => variant.locationRoles.destination.status === "unresolved").length,
   proceduralRegionUnresolvedCount: variants.filter((variant) =>
     variant.pickupLocation.technicalRefs.some((ref) => ref.role.includes("procedural") && !ref.consideredPickup)
   ).length,
@@ -2634,6 +3105,30 @@ const report = {
     "Location names are not invented; raw GUID tokens are retained for technical details.",
   ],
 };
+
+const locationNormalizationSamples = [
+  { label: "Hunt Some Heads", variantKey: "da845673-0334-4949-bb12-5ae363a54356" },
+  { label: "Ambush XenoThreat Strike Wing", variantKey: "817147a6-735b-45fb-95be-5962a7f11c95" },
+  { label: "Adaigo Pyro Region A Lawful Salvage Hard", variantKey: "22813e94-3e98-4237-8591-337ce65122a9" },
+  { label: "Additional Resources For Research", variantKey: "1136e707-15cb-49b9-9943-c3a2de91d3f2" },
+  { label: "Red Wind Seeking New Haulers", variantKey: "38f6b043-df4f-4904-a069-f4cbe42cc80c" },
+  { label: "Jorrit Dossier: Updated Power Usage Data", variantKey: "jorrit-dossier-updated-power-usage-data" },
+].map((sample) => {
+  const variant = variants.find((item) => item.variantKey === sample.variantKey || item.displayName === sample.label);
+  return {
+    label: sample.label,
+    variantKey: sample.variantKey,
+    found: Boolean(variant),
+    oldPickupLocation: variant?.pickupLocation,
+    newPickupRole: variant?.locationRoles.pickup,
+    destinationTokens: variant?.destinationTokens ?? [],
+    destinationRole: variant?.locationRoles.destination,
+    locationRefsCount: variant?.locationRefs.length ?? 0,
+    groupingDisplayLabel: variant?.locationRoles.pickup.grouping.displayLabel,
+  };
+});
+
+Object.assign(report, { locationNormalizationSamples });
 
 const conceptAssignments = new Map<string, string[]>();
 for (const concept of concepts) {

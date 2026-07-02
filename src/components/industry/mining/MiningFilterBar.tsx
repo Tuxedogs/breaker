@@ -29,6 +29,7 @@ export function MiningFilterBar({
   onToggleStarred,
   onToggleMaterial,
   onSearchChange,
+  isMobileViewport = false,
 }: {
   selectedSystems: Set<string>;
   selectedMaterials: Set<string>;
@@ -44,6 +45,7 @@ export function MiningFilterBar({
   onToggleStarred: () => void;
   onToggleMaterial: (id: string) => void;
   onSearchChange: (q: string) => void;
+  isMobileViewport?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const { shipAndHarvestable, vehicle, hand } = visibleResourceGroups;
@@ -77,6 +79,20 @@ export function MiningFilterBar({
     return chips;
   }, [allMaterialChips, buildQueueSelectionActive, selectedMaterials, selectedSystems, showOnlyStarred]);
 
+  function handleQueueScopeClick() {
+    onSelectBuildQueueMaterials();
+    if (isMobileViewport) setExpanded(!buildQueueSelectionActive);
+  }
+
+  function handleAllScopeClick() {
+    onClearAllFilters();
+    if (isMobileViewport) setExpanded(!scopeIsDefault);
+  }
+
+  const filterToggleLabel = isMobileViewport
+    ? `Filters${activeFilterCount > 0 ? ` · ${activeFilterCount} selected` : ""}`
+    : expanded ? "Hide" : "Filters";
+
   return (
     <div
       className={[
@@ -107,23 +123,25 @@ export function MiningFilterBar({
         </div>
 
         <div className="scintel-filter-actions mining-filter-actions">
-          {hasActiveFilters && !expanded && (
+          {hasActiveFilters && !isMobileViewport && !expanded && (
             <span className="scintel-filter-summary">{activeFilterCount} active</span>
           )}
           <button
             type="button"
             className="scintel-filter-toggle mining-filter-toggle"
             aria-expanded={expanded}
+            aria-label={`${expanded ? "Collapse" : "Expand"} mining filters`}
             onClick={() => setExpanded((open) => !open)}
           >
-            {expanded ? "Hide" : "Filters"}
-            {activeFilterCount > 0 && (
+            <span>{filterToggleLabel}</span>
+            {activeFilterCount > 0 && !isMobileViewport && (
               <span className="scintel-filter-toggle-count">{activeFilterCount}</span>
             )}
+            <span className={`mining-filter-toggle-chevron${expanded ? " is-expanded" : ""}`} aria-hidden="true">v</span>
           </button>
-          {hasActiveFilters && !expanded && (
+          {hasActiveFilters && (
             <button type="button" className="scintel-filter-clear" onClick={onClearAllFilters}>
-              Clear
+              Clear all
             </button>
           )}
         </div>
@@ -133,7 +151,8 @@ export function MiningFilterBar({
             type="button"
             className={`mining-scope-button mining-scope-button--queue${buildQueueSelectionActive ? " mining-scope-button--active" : ""}`}
             aria-pressed={buildQueueSelectionActive}
-            onClick={onSelectBuildQueueMaterials}
+            aria-expanded={isMobileViewport ? expanded : undefined}
+            onClick={handleQueueScopeClick}
           >
             Queue
             {buildQueueMaterials.size > 0 && <span className="mfr-chip-count">{buildQueueMaterials.size}</span>}
@@ -142,7 +161,8 @@ export function MiningFilterBar({
             type="button"
             className={`mining-scope-button${scopeIsDefault ? " mining-scope-button--active" : ""}`}
             aria-pressed={scopeIsDefault}
-            onClick={onClearAllFilters}
+            aria-expanded={isMobileViewport ? expanded : undefined}
+            onClick={handleAllScopeClick}
           >
             All
           </button>
@@ -198,7 +218,7 @@ export function MiningFilterBar({
             </div>
           )}
 
-          {activeFilterChips.length > 0 && (
+          {!isMobileViewport && activeFilterChips.length > 0 && (
             <div className="mining-filter-drawer-row">
               <span className="mining-filter-label">Active</span>
               <div className="mining-filter-active-chips mining-filter-active-chips--expanded" aria-label="Active filters">

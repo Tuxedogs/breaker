@@ -11,8 +11,6 @@ import {
   getStaticResourcesForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
-import type { CoveragePlan } from "../../../features/mining/coveragePlan";
-
 import {
   buildDemandRows,
   buildResourceRows,
@@ -322,9 +320,7 @@ export function LocationDetail({
     [entry, staticResourceRows, staticMiningIndex],
   );
 
-  const [showMissingDemandRows, setShowMissingDemandRows] = useState(false);
   const coveredDemandRows = useMemo(() => demandRows.filter((r) => r.status !== "missing"), [demandRows]);
-  const missingDemandRows = useMemo(() => demandRows.filter((r) => r.status === "missing"), [demandRows]);
 
   // Dev-mode logging
   useEffect(() => {
@@ -498,39 +494,9 @@ export function LocationDetail({
                   <td className="mdet-mat-score">{row.compositionLabel}</td>
                 </tr>
               ))}
-              {missingDemandRows.length > 0 && (
-                <tr className="mining-resource-row mining-resource-row--missing-toggle">
-                  <td colSpan={6}>
-                    <button type="button" className="mining-missing-material-toggle" onClick={() => setShowMissingDemandRows((o) => !o)} aria-expanded={showMissingDemandRows}>
-                      <span>{showMissingDemandRows ? "Hide" : "Show"} Missing Material</span>
-                      <strong>{missingDemandRows.length}</strong>
-                    </button>
-                  </td>
-                </tr>
-              )}
-              {showMissingDemandRows && missingDemandRows.map((row) => (
-                <tr key={row.key} className={`mining-resource-row mining-resource-row--${row.status}`}>
-                  <td className="mdet-mat-name"><MaterialNameCell name={row.name} miningMethod={row.miningType} /></td>
-                  <td className="mdet-mat-demand"><MiningMethodDemandCell value={row.coverage === "Missing" ? "Missing" : row.miningType} /></td>
-                  <td><MiningSourceBadge status={row.status} densityLabel={row.densityLabel} sourceWeight={row.sourceWeight} /></td>
-                  <td className="mdet-mat-score">{row.targetQualityChanceLabel}</td>
-                  <td className="mdet-mat-score">{row.compositionLabel}</td>
-                </tr>
-              ))}
             </tbody>
           </table>
           <MiningMobileMaterialList rows={coveredDemandRows} mode="demand" qualityHeader={qualityHeader} />
-          {missingDemandRows.length > 0 && (
-            <div className="mdet-mobile-missing-block">
-              <button type="button" className="mining-missing-material-toggle" onClick={() => setShowMissingDemandRows((o) => !o)} aria-expanded={showMissingDemandRows}>
-                <span>{showMissingDemandRows ? "Hide" : "Show"} Missing Material</span>
-                <strong>{missingDemandRows.length}</strong>
-              </button>
-              {showMissingDemandRows && (
-                <MiningMobileMaterialList rows={missingDemandRows} mode="demand" qualityHeader={qualityHeader} />
-              )}
-            </div>
-          )}
         </div>
       )}
 
@@ -571,46 +537,6 @@ export function LocationDetail({
           <MiningMobileMaterialList rows={otherLocationMaterialRows} mode="resource" qualityHeader="800+" />
         </div>
       )}
-    </div>
-  );
-}
-
-export function CoveragePlanSummaryPanel({ plan, unfilteredPlan }: { plan: CoveragePlan | null; unfilteredPlan: CoveragePlan | null }) {
-  if (!plan || plan.totalMaterials === 0) return null;
-  const missingCount = plan.totalMaterials - plan.coveredCount;
-  const filteredOutCount = unfilteredPlan ? Math.max(0, unfilteredPlan.coveredCount - plan.coveredCount) : 0;
-  const rareMissing = plan.materialRows.filter((r) => r.status === "missing" && r.candidateCount <= 2).slice(0, 3).map((r) => r.displayName);
-  const matrixRows = [...plan.materialRows]
-    .filter((r) => r.status !== "covered")
-    .sort((a, b) => Number(a.status === "covered") - Number(b.status === "covered") || a.candidateCount - b.candidateCount || a.displayName.localeCompare(b.displayName))
-    .slice(0, 12);
-  return (
-    <div className="mcoverage-summary" aria-label="Build queue coverage summary">
-      <div className="mcoverage-summary-main">
-        <div className="mcoverage-summary-label">Route Coverage</div>
-        <div className="mcoverage-summary-title">{plan.summary.headline}</div>
-      </div>
-      <details className="mcoverage-details">
-        <summary>Details</summary>
-        <div className="mcoverage-summary-detail">{plan.summary.detail}</div>
-        {rareMissing.length > 0 && <div className="mcoverage-warning">Scarce missing materials: {rareMissing.join(", ")}</div>}
-        {filteredOutCount > 0 && <div className="mcoverage-warning">Current filters hide coverage for {filteredOutCount} material{filteredOutCount === 1 ? "" : "s"}.</div>}
-        <div className="mcoverage-matrix" aria-label="Material coverage matrix">
-          <div className="mcoverage-metric"><span>Coverage</span><strong className={plan.coveredPct >= 100 ? "mloc-score--best" : plan.coveredPct > 0 ? "mloc-score--okay" : "mloc-score--poor"}>{plan.coveredPct}%</strong></div>
-          {plan.summary.completionText && <div className="mcoverage-metric"><span>Stop</span><strong>{plan.summary.completionText}</strong></div>}
-          {plan.summary.noSingleLocationText && <div className="mcoverage-metric"><span>Why Multiple</span><strong>{plan.summary.noSingleLocationText}</strong></div>}
-          {missingCount > 0 && <div className="mcoverage-metric mcoverage-metric--warn"><span>Remaining</span><strong>{missingCount}</strong></div>}
-          {matrixRows.map((row) => (
-            <div key={row.materialKey} className={`mcoverage-cell${row.status === "covered" ? " is-covered" : " is-missing"}`} title={`${row.displayName}: ${row.status === "covered" ? "covered" : "missing"} / ${row.candidateCount} candidate locations`}>
-              <span>{row.displayName}</span>
-              <strong>{row.status === "covered" ? "Covered" : "Missing"} / {row.candidateCount}</strong>
-            </div>
-          ))}
-          {plan.materialRows.length > matrixRows.length && (
-            <div className="mcoverage-cell mcoverage-cell--more"><span>More materials</span><strong>+{plan.materialRows.length - matrixRows.length}</strong></div>
-          )}
-        </div>
-      </details>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "4f2b574e-a045-491d-a761-105dcee4e935|InterSecDefenseSolutions_KillShip_Nyx",
@@ -225,11 +225,96 @@
       "Neutral / 0 rep to Elite Contractor / 95,250 rep",
       "Contractor / 2,200 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "lawful",
     "lawfulConfidence": "inferred",
@@ -237,6 +322,7 @@
       "Nyx"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -252,7 +338,7 @@
       "36431200-e22d-4161-a018-a544565f9e1a",
       "aabd440e-cbf5-4136-adcf-6b9ca783ac80"
     ],
-    "searchText": "intersec defense solutions mercenary eliminate vanduul ship intersec_bounty_nyx_super intersec defense solutions mercenary standing bounty pickup: generated from nyx pool mission specs\n\narea of operation: nyx system\nhostile forces: vanduul\nequipment specs: combat-rated ship\nbriefing: intersec requires the services of a skilled pilot who’s prepared to assist in taking down a dangerous vanduul target that has been involved in numerous attacks.\n\nvanduul incursions have been on the rise recently, posing not only a threat to the system of nyx, but the uee as a whole. it is imperative that these sightings are responded to in a swift and efficient manner. \n\nwe require you to fly to the last known sighting of the vanduul ship at [location] and eliminate them immediately.  \n\nvanduul pilots are highly skilled and extremely dangerous. engage the enemy immediately and do not hesitate – they will not show the same mercy.\n\ncompensation proportionate to the risk of the contract will be awarded.\n\nrespectfully,\ndeacon tobin\noperations manager\nintersec defense solutions\n\nthis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. all operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable. neutralize uee threat: neutralize vanduul target new defense contract: elimination preemptive strike on terrorist to be neutralized 7d0130fe-adf0-455f-a719-0b7f4cdc9334 d7e8b51c-fff5-4ef1-b262-149a9ec2892b e1a53689-3982-4566-8656-27e562ae218f 1850226f-16e3-4160-9172-698e5397ed18 36431200-e22d-4161-a018-a544565f9e1a aabd440e-cbf5-4136-adcf-6b9ca783ac80 blueprint: rdc generic: r97 shotgun, monde arms, monde core, monde legs +6 standing +300 credits formula unresolved standing +150 standing +250 standing +100 completion tag standing +200"
+    "searchText": "intersec defense solutions mercenary eliminate vanduul ship intersec_bounty_nyx_super intersec defense solutions mercenary standing bounty pickup: nyx mission specs\n\narea of operation: nyx system\nhostile forces: vanduul\nequipment specs: combat-rated ship\nbriefing: intersec requires the services of a skilled pilot who’s prepared to assist in taking down a dangerous vanduul target that has been involved in numerous attacks.\n\nvanduul incursions have been on the rise recently, posing not only a threat to the system of nyx, but the uee as a whole. it is imperative that these sightings are responded to in a swift and efficient manner. \n\nwe require you to fly to the last known sighting of the vanduul ship at [location] and eliminate them immediately.  \n\nvanduul pilots are highly skilled and extremely dangerous. engage the enemy immediately and do not hesitate – they will not show the same mercy.\n\ncompensation proportionate to the risk of the contract will be awarded.\n\nrespectfully,\ndeacon tobin\noperations manager\nintersec defense solutions\n\nthis communication consists of a non-binding offer that upon acceptance may be immediately terminated by either party without any given notice. all operations are conducted at the contractor’s own personal risk and must adhere to system law where applicable. neutralize uee threat: neutralize vanduul target new defense contract: elimination preemptive strike on terrorist to be neutralized 7d0130fe-adf0-455f-a719-0b7f4cdc9334 d7e8b51c-fff5-4ef1-b262-149a9ec2892b e1a53689-3982-4566-8656-27e562ae218f 1850226f-16e3-4160-9172-698e5397ed18 36431200-e22d-4161-a018-a544565f9e1a aabd440e-cbf5-4136-adcf-6b9ca783ac80 blueprint: rdc generic: r97 shotgun, monde arms, monde core, monde legs +6 standing +300 credits formula unresolved standing +150 standing +250 standing +100 completion tag standing +200"
   },
   "groupSummary": {
     "familyKey": "4f2b574e-a045-491d-a761-105dcee4e935|InterSecDefenseSolutions_KillShip_Nyx",
@@ -453,7 +539,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],

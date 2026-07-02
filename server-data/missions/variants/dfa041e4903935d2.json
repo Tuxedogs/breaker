@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "familyKey": "ef092d52-1a67-4502-a404-b322ca766f59|HighpointWildernessSpecialists_KillAnimals_Pyro",
   "variant": {
@@ -195,14 +195,205 @@
           "consideredPickup": true,
           "reason": "Contract prerequisite gates mission availability."
         }
-      ]
+      ],
+      "rawLocalities": [
+        {
+          "guid": "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+          "displayName": "Pyro 2 Outpost col m scrp indy 001",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro2_outpost_col_m_scrp_indy_001.xml",
+          "system": "Pyro"
+        },
+        {
+          "guid": "e386e0b4-58a0-4141-b112-f99bf801a430",
+          "displayName": "Pyro 3 Outpost col m hmstd indy 001",
+          "type": "StarMapObject",
+          "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_m_hmstd_indy_001.xml",
+          "system": "Pyro"
+        },
+        {
+          "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+          "displayName": "Region C",
+          "type": "MissionLocality",
+          "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+          "system": "Pyro"
+        }
+      ],
+      "grouping": {
+        "systems": [
+          "Pyro"
+        ],
+        "localityNames": [
+          "Pyro 2 Outpost col m scrp indy 001",
+          "Pyro 3 Outpost col m hmstd indy 001",
+          "Region C"
+        ],
+        "displayLabel": "Pyro",
+        "detailLabel": "Pyro 2 Outpost col m scrp indy 001, Pyro 3 Outpost col m hmstd indy 001, Region C",
+        "confidence": "exact"
+      }
     },
+    "locationRoles": {
+      "pickup": {
+        "status": "exact",
+        "displayName": "Pyro 2 Outpost col m scrp indy 001, Pyro 3 Outpost col m hmstd indy 001",
+        "displayLabel": "Pyro",
+        "detailDisplay": "Pyro 2 Outpost col m scrp indy 001, Pyro 3 Outpost col m hmstd indy 001, Region C",
+        "systems": [
+          "Pyro"
+        ],
+        "primarySystem": "Pyro",
+        "confidence": "high",
+        "sourceRole": "availability",
+        "sourceRefs": [
+          "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+          "e386e0b4-58a0-4141-b112-f99bf801a430"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": false,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+            "displayName": "Pyro 2 Outpost col m scrp indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro2_outpost_col_m_scrp_indy_001.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "e386e0b4-58a0-4141-b112-f99bf801a430",
+            "displayName": "Pyro 3 Outpost col m hmstd indy 001",
+            "type": "StarMapObject",
+            "path": "libs/foundry/records/starmap/pu/pyro3_outpost_col_m_hmstd_indy_001.xml",
+            "system": "Pyro"
+          },
+          {
+            "guid": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+            "displayName": "Region C",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/pyro_regions/regionc.xml",
+            "system": "Pyro"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Pyro"
+          ],
+          "localityNames": [
+            "Pyro 2 Outpost col m scrp indy 001",
+            "Pyro 3 Outpost col m hmstd indy 001",
+            "Region C"
+          ],
+          "displayLabel": "Pyro",
+          "detailLabel": "Pyro 2 Outpost col m scrp indy 001, Pyro 3 Outpost col m hmstd indy 001, Region C",
+          "confidence": "exact"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination",
+        "displayLabel": "Unknown destination",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unknown",
+        "displayName": "Unknown objective location",
+        "displayLabel": "Unknown objective location",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+        "resolvedName": "Pyro 2 Outpost col m scrp indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+        "resolvedName": "Pyro 2 Outpost col m scrp indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "15f00205-1b3a-49ec-9b21-d74b60cf2b86",
+        "resolvedName": "Pyro 2 Outpost col m scrp indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "e386e0b4-58a0-4141-b112-f99bf801a430",
+        "resolvedName": "Pyro 3 Outpost col m hmstd indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Location",
+        "attr": "locationAvailable",
+        "guidOrToken": "e386e0b4-58a0-4141-b112-f99bf801a430",
+        "resolvedName": "Pyro 3 Outpost col m hmstd indy 001",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+        "resolvedName": "Region C",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+        "resolvedName": "Region C",
+        "system": "Pyro",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "67cc750e-3e5f-47b2-9dd0-66662142c82f",
+        "resolvedName": "Region C",
+        "system": "Pyro",
+        "confidence": "resolved"
+      }
+    ],
     "locations": [
       "Pyro 2 Outpost col m scrp indy 001",
       "Pyro 3 Outpost col m hmstd indy 001",
       "Region C"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "rewards": {
       "summary": [
         "Standing +75",

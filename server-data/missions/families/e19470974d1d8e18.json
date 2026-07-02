@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "d7a3a10d-4825-48aa-8ac8-7275addc35a5|EckhartSecurity_DefendShip_Nyx",
@@ -225,11 +225,96 @@
       "Head Contractor / 38,000 rep to Elite Contractor / 95,250 rep",
       "Neutral / 0 rep to Elite Contractor / 95,250 rep"
     ],
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Nyx",
+        "displayLabel": "Nyx",
+        "detailDisplay": "Nyx",
+        "systems": [
+          "Nyx"
+        ],
+        "primarySystem": "Nyx",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "339a0c2f-18be-4a4b-9766-0b43763fb102"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+            "displayName": "Nyx",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/nyx.xml",
+            "system": "Nyx"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Nyx"
+          ],
+          "localityNames": [
+            "Nyx"
+          ],
+          "displayLabel": "Nyx",
+          "detailLabel": "Nyx",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "339a0c2f-18be-4a4b-9766-0b43763fb102",
+        "resolvedName": "Nyx",
+        "system": "Nyx",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "bounded",
     "lawfulClassification": "lawful",
     "lawfulConfidence": "inferred",
@@ -237,6 +322,7 @@
       "Nyx"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved",
       "Prerequisite unresolved"
@@ -252,7 +338,7 @@
       "a70f7768-8308-4b80-bb19-f9ceb00a4386",
       "34a577e6-134c-4d1d-8a6c-db3e6f20e10c"
     ],
-    "searchText": "eckhart security careercontract client needs combat support eckhart_nyx_vhrt_multidefendship eckhart security careercontract standing defend ship pickup: generated from nyx pool eckhart security, llc.\ncontracts & dispatch\n\ncontract type: defend ship\napproval code = [approvalcode]\n\nfor immediate processing\n\na longtime client needs combat support at [location] as fast as we can get it there. any chance you’re interested and available? \n\nthis client can hold their own in a dogfight, so they must be up against seriously skilled fighters to have put out this call. don’t make the mistake of heading there thinking that this is going to be easy. \n\npayment will be issued upon successful completion of contract.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. repel shattered blade ships request for ship support serious shattered blade attack shattered blade strike stop shattered blade attack da99eba1-7365-45dc-94e8-52dbcba867e7 144fa3e2-a2cd-421e-b9e8-17ea647729c1 6cda8854-d25d-4919-8d3e-c01a9c7009cb 6932a99c-6b2d-4144-b872-2a0222469a1c a70f7768-8308-4b80-bb19-f9ceb00a4386 34a577e6-134c-4d1d-8a6c-db3e6f20e10c blueprint: rdc generic: r97 shotgun, monde arms, monde core, monde legs +6 standing +250 credits formula unresolved standing +150 standing +100 standing +200 standing +300"
+    "searchText": "eckhart security careercontract client needs combat support eckhart_nyx_vhrt_multidefendship eckhart security careercontract standing defend ship pickup: nyx eckhart security, llc.\ncontracts & dispatch\n\ncontract type: defend ship\napproval code = [approvalcode]\n\nfor immediate processing\n\na longtime client needs combat support at [location] as fast as we can get it there. any chance you’re interested and available? \n\nthis client can hold their own in a dogfight, so they must be up against seriously skilled fighters to have put out this call. don’t make the mistake of heading there thinking that this is going to be easy. \n\npayment will be issued upon successful completion of contract.\n\nthis contract is non-negotiable.\n\nthis message may contain confidential, proprietary, privileged and/or private information. the information is intended to be for the use of the individual or entity designated above. repel shattered blade ships request for ship support serious shattered blade attack shattered blade strike stop shattered blade attack da99eba1-7365-45dc-94e8-52dbcba867e7 144fa3e2-a2cd-421e-b9e8-17ea647729c1 6cda8854-d25d-4919-8d3e-c01a9c7009cb 6932a99c-6b2d-4144-b872-2a0222469a1c a70f7768-8308-4b80-bb19-f9ceb00a4386 34a577e6-134c-4d1d-8a6c-db3e6f20e10c blueprint: rdc generic: r97 shotgun, monde arms, monde core, monde legs +6 standing +250 credits formula unresolved standing +150 standing +100 standing +200 standing +300"
   },
   "groupSummary": {
     "familyKey": "d7a3a10d-4825-48aa-8ac8-7275addc35a5|EckhartSecurity_DefendShip_Nyx",
@@ -452,7 +538,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Nyx pool",
+    "pickupSummary": "Pickup: Nyx",
     "pickupStatuses": [
       "generated_from_pool"
     ],

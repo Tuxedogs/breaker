@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-06-20T00:06:14.930Z",
+  "generatedAt": "2026-07-02T05:49:41.299Z",
   "sourceLatestModifiedAt": "2026-06-04T09:50:57.792588+00:00",
   "family": {
     "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Stanton",
@@ -138,11 +138,174 @@
       "Headhunters: Sr. Contractor Elite Contractor",
       "Headhunters: Veteran Contractor Elite Contractor"
     ],
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],
     "pickupUnresolvedCount": 0,
+    "locationRoles": {
+      "pickup": {
+        "status": "generated_from_pool",
+        "displayName": "Stanton 2, Stanton 3, Stanton 4 +1",
+        "displayLabel": "Stanton",
+        "detailDisplay": "Stanton",
+        "systems": [
+          "Stanton"
+        ],
+        "primarySystem": "Stanton",
+        "confidence": "medium",
+        "sourceRole": "locality_pool",
+        "sourceRefs": [
+          "478b2577-85d8-47cb-ba67-503aa645ad3c",
+          "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+          "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+          "939dad8b-a944-4baa-a6b7-163ec203adad"
+        ],
+        "unresolvedRefs": [],
+        "unresolvedLocationTokens": [],
+        "generatedFromPool": true,
+        "systemScope": false,
+        "rawLocalities": [
+          {
+            "guid": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+            "displayName": "Stanton 2",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton2.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+            "displayName": "Stanton 3",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton3.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+            "displayName": "Stanton 4",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton4.xml",
+            "system": "Stanton"
+          },
+          {
+            "guid": "939dad8b-a944-4baa-a6b7-163ec203adad",
+            "displayName": "Stanton 1",
+            "type": "MissionLocality",
+            "path": "libs/foundry/records/missiondata/pu_missionlocality/stanton1.xml",
+            "system": "Stanton"
+          }
+        ],
+        "grouping": {
+          "systems": [
+            "Stanton"
+          ],
+          "localityNames": [
+            "Stanton 2",
+            "Stanton 3",
+            "Stanton 4",
+            "Stanton 1"
+          ],
+          "displayLabel": "Stanton",
+          "detailLabel": "Stanton",
+          "confidence": "generated_from_pool"
+        }
+      },
+      "destination": {
+        "status": "unknown",
+        "displayName": "Unknown destination unresolved",
+        "displayLabel": "Unknown destination unresolved",
+        "systems": [],
+        "confidence": "low",
+        "sourceRefs": [],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [],
+        "unresolved": false
+      },
+      "objective": {
+        "status": "unresolved",
+        "displayName": "Objective location unresolved",
+        "displayLabel": "Objective location unresolved",
+        "systems": [],
+        "confidence": "unresolved",
+        "sourceRefs": [
+          "MissionLocation_BP",
+          "Location",
+          "LocalSystem",
+          "Location|Address"
+        ],
+        "unresolvedRefs": [],
+        "sourceTextTokens": [
+          "Location|Address"
+        ],
+        "unresolved": true
+      }
+    },
+    "locationRefs": [
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyVariableName",
+        "guidOrToken": "MissionLocation_BP",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "propertyExtendedTextToken",
+        "guidOrToken": "Location",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "ContractPrerequisite_LocationProperty",
+        "attr": "locationLevelType",
+        "guidOrToken": "LocalSystem",
+        "confidence": "unresolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "478b2577-85d8-47cb-ba67-503aa645ad3c",
+        "resolvedName": "Stanton 2",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "e6fd3dce-03ce-4321-a104-ffa16fc206cc",
+        "resolvedName": "Stanton 3",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "dbde2ad2-ef6c-420b-b30e-189a907fe94d",
+        "resolvedName": "Stanton 4",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "pickup",
+        "rawType": "ContractPrerequisite_Locality",
+        "attr": "localityAvailable",
+        "guidOrToken": "939dad8b-a944-4baa-a6b7-163ec203adad",
+        "resolvedName": "Stanton 1",
+        "system": "Stanton",
+        "confidence": "resolved"
+      },
+      {
+        "role": "objective",
+        "rawType": "mission_text_token",
+        "attr": "sourceTextToken",
+        "guidOrToken": "Location|Address",
+        "confidence": "token_only"
+      }
+    ],
     "crimeStatRequirement": "unknown",
     "lawfulClassification": "unknown",
     "lawfulConfidence": "unknown",
@@ -153,6 +316,7 @@
       "Stanton 1"
     ],
     "unresolvedLocationTokens": [],
+    "destinationTokens": [],
     "confidenceFlags": [
       "Reward data unresolved"
     ],
@@ -167,7 +331,7 @@
       "d3ad4444-5568-4c80-b41c-08cfd0d1495a",
       "bfe98ee6-1f93-423e-b93a-a6c3b38c3563"
     ],
-    "searchText": "head hunters defend destructible entities stanton defend from mercs headhunters_defenddestructibleentities_stanton_veryhard unknown provider contract standing pickup: generated from stanton 2, stanton 3, stanton 4 +1 pool a band of hired guns has been sent to mess with our interests over at [location]. seems someone has been tipped off that if the [objects] there are destroyed that it will severely interrupt headhunter operations in the area. that's a problem i want you to fix.\n\nnot gonna lie, theses mercs are no joke. it'd be foolish to go it alone. that’s why you’ll need to be fully supplied and find some trustworthy friends to fly at your wing.\n\nthis op needs to go off without a hitch, so i’m offering the main contractor [scripamount] council scrip for a job well done. \n\nstows out. guard at all costs keep safe from upstarts protect from luggers secure from rivals stop gang from destroying dd769a3b-a149-4284-af02-e889a300cd88 d571f6a8-58fc-4c90-a9f7-52dc18e266c8 b807dac7-97c8-46f7-9d8c-99a92433e9c2 6dad39a7-08f5-433c-9d0f-d5eb56f5b51e d3ad4444-5568-4c80-b41c-08cfd0d1495a bfe98ee6-1f93-423e-b93a-a6c3b38c3563 standing +250 credits formula unresolved item reward: council scrip completion tag standing +300 standing +100 standing +150 standing +200"
+    "searchText": "head hunters defend destructible entities stanton defend from mercs headhunters_defenddestructibleentities_stanton_veryhard unknown provider contract standing pickup: stanton a band of hired guns has been sent to mess with our interests over at [location]. seems someone has been tipped off that if the [objects] there are destroyed that it will severely interrupt headhunter operations in the area. that's a problem i want you to fix.\n\nnot gonna lie, theses mercs are no joke. it'd be foolish to go it alone. that’s why you’ll need to be fully supplied and find some trustworthy friends to fly at your wing.\n\nthis op needs to go off without a hitch, so i’m offering the main contractor [scripamount] council scrip for a job well done. \n\nstows out. guard at all costs keep safe from upstarts protect from luggers secure from rivals stop gang from destroying dd769a3b-a149-4284-af02-e889a300cd88 d571f6a8-58fc-4c90-a9f7-52dc18e266c8 b807dac7-97c8-46f7-9d8c-99a92433e9c2 6dad39a7-08f5-433c-9d0f-d5eb56f5b51e d3ad4444-5568-4c80-b41c-08cfd0d1495a bfe98ee6-1f93-423e-b93a-a6c3b38c3563 standing +250 credits formula unresolved item reward: council scrip completion tag standing +300 standing +100 standing +150 standing +200"
   },
   "groupSummary": {
     "familyKey": "cfd97e03-0be4-4e76-8488-67bf3b71f442|HeadHunters_DefendDestructibleEntities_Stanton",
@@ -278,7 +442,7 @@
     "creditRewardSummary": "Credits formula unresolved"
   },
   "pickupSummary": {
-    "pickupSummary": "Pickup: Generated from Stanton 2, Stanton 3, Stanton 4 +1 pool",
+    "pickupSummary": "Pickup: Stanton",
     "pickupStatuses": [
       "generated_from_pool"
     ],
