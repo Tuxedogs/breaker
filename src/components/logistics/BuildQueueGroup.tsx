@@ -13,7 +13,6 @@ import {
 } from '../../lib/logistics/inventory';
 import {
   allocationMatchesRequirement,
-  getAvailableQuantityForInventoryEntry,
   getBuildQueueMaterialNeedSummary,
   getMaterialReservationCoverage,
 } from '../../lib/logistics/selectors';
@@ -161,6 +160,26 @@ type RequirementReserveContext = {
   allocatedAmount: number;
 };
 
+type StackReservationAssignment = {
+  item: BuildQueueItem;
+  allocation: ReservedMaterialAllocation;
+  itemName: string;
+  requirementName?: string;
+  isCurrentItem: boolean;
+  isCurrentRequirement: boolean;
+};
+
+type PendingReassignment = {
+  stack: InventoryStack;
+  from: StackReservationAssignment;
+  quantity: number;
+  fromLabel: string;
+  toLabel: string;
+  targetItemId: string;
+  targetAllocation: ReservedMaterialAllocation;
+  targetExistingAllocation?: ReservedMaterialAllocation;
+};
+
 function createAllocation(
   itemId: string, requirementId: string, selectedQuality: number | undefined,
   unitType: RecipeInputTemplate['unitType'] | undefined, stack: InventoryStack,
@@ -183,6 +202,88 @@ function createAllocation(
     unitType,
     allowLowerQualityOverride,
   };
+}
+
+function getBuildQueueItemLabel(item: BuildQueueItem, recipes: RecipeTemplate[]): string {
+  return item.itemName ?? recipes.find((recipe) => recipe.id === item.recipeId)?.name ?? `Queue Item #${item.id}`;
+}
+
+function getRequirementLabel(
+  item: BuildQueueItem,
+  allocation: ReservedMaterialAllocation,
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+): string | undefined {
+  const inputs = item.materialRequirements?.length
+    ? item.materialRequirements
+    : recipeInputsByRecipeId[item.recipeId] ?? [];
+  const input = inputs.find((entry, index) => {
+    const requirementId = getRequirementLineKey(item, entry, index);
+    return requirementId === allocation.requirementId;
+  });
+  return input?.displayName ?? input?.materialName ?? allocation.materialName;
+}
+
+function getAssignmentLabel(assignment: StackReservationAssignment | undefined): string {
+  if (!assignment) return 'Reserved';
+  if (assignment.isCurrentRequirement) return 'Assigned here';
+  return assignment.requirementName ?? assignment.itemName ?? 'Reserved';
+}
+
+function getStackReservationAssignments(
+  stack: InventoryStack,
+  buildQueue: BuildQueueItem[],
+  recipes: RecipeTemplate[],
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+  currentItemId: string,
+  currentRequirementId: string,
+): StackReservationAssignment[] {
+  return buildQueue.flatMap((queueItem) =>
+    (queueItem.reservedAllocations ?? [])
+      .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.quantityReserved > 0)
+      .map((allocation) => {
+        const itemName = getBuildQueueItemLabel(queueItem, recipes);
+        return {
+          item: queueItem,
+          allocation,
+          itemName,
+          requirementName: getRequirementLabel(queueItem, allocation, recipeInputsByRecipeId),
+          isCurrentItem: queueItem.id === currentItemId,
+          isCurrentRequirement: queueItem.id === currentItemId && allocation.requirementId === currentRequirementId,
+        };
+      }),
+  );
+}
+
+function sortReservableStacks(
+  stacks: InventoryStack[],
+  buildQueue: BuildQueueItem[],
+  item: BuildQueueItem,
+  req: RequirementReserveContext,
+  recipes: RecipeTemplate[],
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+): InventoryStack[] {
+  const rankStack = (stack: InventoryStack) => {
+    const ownReserved = req.ownAllocations.some((allocation) => allocation.inventoryEntryId === stack.id && allocation.quantityReserved > 0);
+    const assignments = getStackReservationAssignments(stack, buildQueue, recipes, recipeInputsByRecipeId, item.id, req.requirementId);
+    const reservedElsewhere = assignments.some((assignment) => !assignment.isCurrentRequirement);
+    const available = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
+    const usableAvailable = available > 0 && !ownReserved && !reservedElsewhere;
+    let group = 5;
+    if (usableAvailable) group = 0;
+    else if (ownReserved) group = 3;
+    else if (reservedElsewhere) group = 4;
+    return { group, available };
+  };
+  return stacks.slice().sort((a, b) => {
+    const aRank = rankStack(a);
+    const bRank = rankStack(b);
+    return (
+      aRank.group - bRank.group ||
+      (b.quality ?? 0) - (a.quality ?? 0) ||
+      bRank.available - aRank.available ||
+      (a.location?.name ?? a.locationId ?? 'Unassigned stock').localeCompare(b.location?.name ?? b.locationId ?? 'Unassigned stock')
+    );
+  });
 }
 
 function getItemFulfillmentState(item: BuildQueueItem, inputs: RecipeInputTemplate[], inventory: InventoryEntry[]): 'complete' | 'partial' | 'missing' {
@@ -431,6 +532,17 @@ function WarningIcon() {
   );
 }
 
+function SwapIcon() {
+  return (
+    <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M7 7h11l-3-3" />
+      <path d="M18 7l-3 3" />
+      <path d="M17 17H6l3 3" />
+      <path d="M6 17l3-3" />
+    </svg>
+  );
+}
+
 function LocationPinIcon() {
   return (
     <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -673,6 +785,8 @@ export default function BuildQueueGroup({
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
+  const [pendingReassignment, setPendingReassignment] = useState<PendingReassignment | null>(null);
+  const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
 
@@ -691,6 +805,24 @@ export default function BuildQueueGroup({
 
   function toggleReserveDrawer(itemId: string, requirementKey: string, isOpen: boolean) {
     setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: isOpen ? undefined : { type: 'reserve', requirementKey } }));
+  }
+
+  function confirmPendingReassignment() {
+    if (!pendingReassignment) return;
+    const { from, quantity, targetAllocation, targetExistingAllocation } = pendingReassignment;
+    const previousQuantity = Math.max(0, from.allocation.quantityReserved - quantity);
+    onUpdateAllocationQuantity(from.item.id, from.allocation.id, previousQuantity);
+    if (targetExistingAllocation) {
+      onUpdateAllocationQuantity(
+        pendingReassignment.targetItemId,
+        targetExistingAllocation.id,
+        targetExistingAllocation.quantityReserved + quantity,
+      );
+    } else {
+      onToggleAllocation(pendingReassignment.targetItemId, targetAllocation);
+    }
+    setPendingReassignment(null);
+    setFocusedAssignmentItemId(null);
   }
 
   function cancelQualityEditor(itemId: string, editorKey: string) {
@@ -738,6 +870,33 @@ export default function BuildQueueGroup({
 
   return (
     <div className="bq-category">
+      {pendingReassignment ? (
+        <div className="bq-reassign-modal-backdrop" role="presentation" onMouseDown={() => setPendingReassignment(null)}>
+          <div
+            className="bq-reassign-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="bq-reassign-title"
+            onMouseDown={(event) => event.stopPropagation()}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') setPendingReassignment(null);
+            }}
+          >
+            <h3 id="bq-reassign-title">Reassign Allocation</h3>
+            <p>
+              This stock is currently assigned to {pendingReassignment.fromLabel}. Reassign it to {pendingReassignment.toLabel}?
+            </p>
+            <div className="bq-reassign-detail">
+              <span>{pendingReassignment.stack.location?.name ?? pendingReassignment.stack.locationId ?? 'Unassigned stock'}</span>
+              <strong>{formatQuantity(pendingReassignment.quantity, undefined)}</strong>
+            </div>
+            <div className="bq-reassign-actions">
+              <button type="button" className="bq-btn" onClick={() => setPendingReassignment(null)}>Cancel</button>
+              <button type="button" className="bq-btn bq-btn--confirm" onClick={confirmPendingReassignment}>Reassign</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
       {items.map((item) => {
         const recipe = getRecipeForQueueItem(item.recipeId, recipes);
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
@@ -813,14 +972,24 @@ export default function BuildQueueGroup({
             getInventoryStacks(inventory.filter((e) => e.materialId === materialKey && e.quantity > 0), materials, locations),
             strategy,
           );
-          const reservableStacks = allMaterialStacks
-            .filter((stack) => getAvailableQuantityForInventoryEntry(stack, buildQueue, item.id) > 0 || ownReservedByStack.has(stack.id))
-            .sort((a, b) => {
-              if (requirementSelectedQuality === undefined) return 0;
-              const aBelow = (a.quality ?? 0) < requirementSelectedQuality;
-              const bBelow = (b.quality ?? 0) < requirementSelectedQuality;
-              return Number(aBelow) - Number(bBelow);
-            });
+          const reserveContext: RequirementReserveContext = {
+            requirementId,
+            materialKey,
+            requirementSelectedQuality,
+            input,
+            material,
+            required,
+            ownAllocations,
+            allocatedAmount,
+          };
+          const reservableStacks = sortReservableStacks(
+            allMaterialStacks,
+            buildQueue,
+            item,
+            reserveContext,
+            recipes,
+            recipeInputsByRecipeId,
+          );
 
           return {
             input, materialKey, requirementId, groupKey, requirementCardKey, material, displayName, qualityBands,
@@ -877,8 +1046,10 @@ export default function BuildQueueGroup({
             className={[
               'bq-item',
               `bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`,
+              focusedAssignmentItemId === item.id ? 'bq-item--assignment-focus' : '',
               isMobileTouchLayout ? 'bq-item--mobile-touch' : '',
             ].filter(Boolean).join(' ')}
+            data-bq-item-id={item.id}
           >
 
             {/* ── Component header: summary | product visual | controls ── */}
@@ -1334,20 +1505,74 @@ export default function BuildQueueGroup({
                                       const effectiveQuantity = parsedDraft ?? reservedQuantity;
                                       const checked = effectiveQuantity > 0;
                                       const fillQuantity = getStackFillQuantity(reserveContext, stack, buildQueue, item.id);
-                                      const disabled = !checked && fillQuantity <= 0;
+                                      const assignments = getStackReservationAssignments(stack, buildQueue, recipes, recipeInputsByRecipeId, item.id, req.requirementId);
+                                      const currentAssignment = existingAllocation
+                                        ? assignments.find((assignment) => assignment.allocation.id === existingAllocation.id)
+                                        : undefined;
+                                      const otherAssignment = assignments.find((assignment) => !assignment.isCurrentRequirement);
+                                      const assignmentLabel = getAssignmentLabel(currentAssignment ?? otherAssignment);
+                                      const isAssignedHere = Boolean(currentAssignment);
+                                      const isReservedElsewhere = Boolean(otherAssignment);
+                                      const isZeroAvailable = availableAfterThisReservation <= 0 && !isAssignedHere;
+                                      const reservedDisplayQuantity = isAssignedHere
+                                        ? reservedQuantity
+                                        : assignments.reduce((sum, assignment) => sum + assignment.allocation.quantityReserved, 0);
+                                      const reassignQuantity = otherAssignment
+                                        ? Math.min(otherAssignment.allocation.quantityReserved, Math.max(0, req.required - req.allocatedAmount))
+                                        : 0;
+                                      const disabled = (!checked && fillQuantity <= 0) || (isReservedElsewhere && !isAssignedHere);
                                       const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
                                       const locationName = stack.location?.name ?? stack.locationId ?? 'Unassigned stock';
                                       const locationMeta = stack.location?.system ? `${stack.location.system} System` : stack.container;
-                                      const locationTitle = [locationName, stack.location?.system, stack.container].filter(Boolean).join(' - ');
+                                      const assignmentTitle = isAssignedHere || isReservedElsewhere ? assignmentLabel : undefined;
+                                      const locationTitle = [locationName, stack.location?.system, stack.container, assignmentTitle].filter(Boolean).join(' - ');
                                       const commitDraftValue = (rawValue: string) => {
+                                        if (isReservedElsewhere && !isAssignedHere) return;
                                         const parsed = parseDraftNumber(rawValue);
                                         const desired = parsed ?? 0;
                                         const clamped = Math.max(0, Math.min(desired, maxQuantity));
                                         applyStackQuantity(stack, clamped, allocationId);
                                       };
+                                      const beginReassignment = () => {
+                                        if (!otherAssignment || reassignQuantity <= 0) return;
+                                        const isBelowReassignTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
+                                        setPendingReassignment({
+                                          stack,
+                                          from: otherAssignment,
+                                          quantity: reassignQuantity,
+                                          fromLabel: getAssignmentLabel(otherAssignment),
+                                          toLabel: group.displayName,
+                                          targetItemId: item.id,
+                                          targetExistingAllocation: existingAllocation,
+                                          targetAllocation: createAllocation(
+                                            item.id,
+                                            req.requirementId,
+                                            req.requirementSelectedQuality,
+                                            req.input.unitType,
+                                            stack,
+                                            req.material?.name,
+                                            reassignQuantity,
+                                            isBelowReassignTarget,
+                                          ),
+                                        });
+                                      };
                                       return (
                                         <div key={stack.id} className="bq-reserve-stack-wrap">
-                                          <div className={`bq-reserve-stack-row${checked ? ' is-selected' : ''}${isBelowTarget ? ' bq-reserve-stack-row--below-target' : ''}`}>
+                                          <div
+                                            className={[
+                                              'bq-reserve-stack-row',
+                                              checked ? 'is-selected' : '',
+                                              isBelowTarget ? 'bq-reserve-stack-row--below-target' : '',
+                                              isAssignedHere ? 'bq-reserve-stack-row--assigned-here' : '',
+                                              isReservedElsewhere && !isAssignedHere ? 'bq-reserve-stack-row--reserved-elsewhere' : '',
+                                              isZeroAvailable ? 'bq-reserve-stack-row--zero-available' : '',
+                                            ].filter(Boolean).join(' ')}
+                                            title={assignmentTitle ? `Assigned to ${assignmentTitle}` : undefined}
+                                            onMouseEnter={() => setFocusedAssignmentItemId(otherAssignment?.item.id ?? null)}
+                                            onMouseLeave={() => setFocusedAssignmentItemId(null)}
+                                            onFocus={() => setFocusedAssignmentItemId(otherAssignment?.item.id ?? null)}
+                                            onBlur={() => setFocusedAssignmentItemId(null)}
+                                          >
                                             <span className="bq-reserve-col-select">
                                               <input
                                                 type="checkbox"
@@ -1380,7 +1605,8 @@ export default function BuildQueueGroup({
                                               {formatQuantity(availableAfterThisReservation, req.material)}
                                             </span>
                                             <span className={`bq-reserve-col-reserved ${materialTypeClass(req.material)}`}>
-                                              {formatQuantity(reservedQuantity, req.material)}
+                                              <strong>{formatQuantity(reservedDisplayQuantity, req.material)}</strong>
+                                              {assignmentTitle ? <em>{assignmentTitle}</em> : null}
                                             </span>
                                             <span className="bq-reserve-col-assign">
                                               <input
@@ -1389,6 +1615,7 @@ export default function BuildQueueGroup({
                                                 className="bq-reserve-amount-input"
                                                 value={draftValue}
                                                 placeholder="0"
+                                                disabled={isReservedElsewhere && !isAssignedHere}
                                                 aria-label={`Assign quantity for ${stack.location?.name ?? stack.locationId}`}
                                                 onChange={(event) => {
                                                   setReserveDrafts((prev) => ({ ...prev, [allocationId]: event.target.value }));
@@ -1401,14 +1628,28 @@ export default function BuildQueueGroup({
                                               />
                                             </span>
                                             <span className="bq-reserve-col-fill">
-                                              <button
-                                                type="button"
-                                                className="bq-reserve-quick-fill"
-                                                disabled={fillQuantity <= 0}
-                                                onClick={() => applyStackQuantity(stack, fillQuantity, allocationId)}
-                                              >
-                                                Fill
-                                              </button>
+                                              {isReservedElsewhere && !isAssignedHere ? (
+                                                <button
+                                                  type="button"
+                                                  className="bq-reserve-reassign"
+                                                  disabled={reassignQuantity <= 0}
+                                                  aria-label={`Reassign allocation from ${assignmentLabel} to ${group.displayName}`}
+                                                  title={reassignQuantity > 0 ? `Reassign allocation from ${assignmentLabel}` : 'Current requirement is already filled'}
+                                                  onClick={beginReassignment}
+                                                >
+                                                  <SwapIcon />
+                                                  <span>Reassign</span>
+                                                </button>
+                                              ) : (
+                                                <button
+                                                  type="button"
+                                                  className="bq-reserve-quick-fill"
+                                                  disabled={fillQuantity <= 0}
+                                                  onClick={() => applyStackQuantity(stack, fillQuantity, allocationId)}
+                                                >
+                                                  Fill
+                                                </button>
+                                              )}
                                             </span>
                                           </div>
                                         </div>
