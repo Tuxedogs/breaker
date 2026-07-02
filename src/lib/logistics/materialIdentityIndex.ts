@@ -6,9 +6,16 @@ const MATERIAL_IDENTITY_URL = "/api/crafting/material_identity_index.json";
 
 export interface MaterialIdentity {
   materialKey: string;
+  canonicalName?: string;
   displayName: string;
+  rawName?: string;
+  refinedName?: string;
+  commodityName?: string;
   materialForm: string;
   unitType: InventoryUnitType;
+  isRefinable?: boolean;
+  refinesToMaterialKey?: string | null;
+  aliases?: Record<string, string[]> | string[];
 }
 
 type MaterialIdentityPayload = {

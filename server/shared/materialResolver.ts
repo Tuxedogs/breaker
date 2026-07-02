@@ -16,6 +16,19 @@ export interface MaterialIdentityInput {
   unitType?: "unit" | "SCU" | "scu" | "cscu";
 }
 
+type MaterialIdentityIndexEntry = {
+  materialKey?: string;
+  canonicalName?: string;
+  displayName?: string;
+  rawName?: string;
+  refinedName?: string;
+  commodityName?: string;
+  unitType?: "unit" | "SCU" | "scu" | "cscu";
+  isRefinable?: boolean;
+  refinesToMaterialKey?: string | null;
+  aliases?: Record<string, string[]> | string[];
+};
+
 export interface ResolvedApiMaterial {
   materialKey: string;
   materialId: string;
@@ -124,6 +137,58 @@ async function loadPublicMaterialIndex(warnings: ApiWarning[]) {
   for (const [guid, id] of Object.entries(GUID_ALIASES)) {
     const material = index.get(normalizeToken(id));
     if (material) add(guid, material);
+  }
+
+  try {
+    const identityIndex = JSON.parse(await readFile(apiPaths.materialIdentityIndex, "utf8")) as {
+      materials?: MaterialIdentityIndexEntry[];
+    };
+    const sourceKeyByOutput = new Map<string, string>();
+    for (const identity of identityIndex.materials ?? []) {
+      if (identity.materialKey && identity.isRefinable && identity.refinesToMaterialKey) {
+        sourceKeyByOutput.set(identity.refinesToMaterialKey, identity.materialKey);
+      }
+    }
+    for (const identity of identityIndex.materials ?? []) {
+      if (!identity.materialKey) continue;
+      const sourceKey = sourceKeyByOutput.get(identity.materialKey);
+      const isRawSource = identity.materialKey.startsWith("raw");
+      if (sourceKey === "rawice" || (isRawSource && identity.materialKey !== "rawice")) continue;
+      const material = resolvedMaterial({
+        materialId: identity.materialKey,
+        materialName: identity.canonicalName ?? identity.rawName ?? identity.displayName ?? identity.materialKey,
+        unitType: identity.unitType === "unit" || identity.unitType === "SCU" || identity.unitType === "scu" || identity.unitType === "cscu"
+          ? identity.unitType
+          : undefined,
+      });
+      add(material.materialId, material);
+      add(material.materialName, material);
+    }
+    for (const identity of identityIndex.materials ?? []) {
+      const materialKey = identity.materialKey;
+      const material = index.get(normalizeToken(sourceKeyByOutput.get(materialKey ?? ""))) ??
+        index.get(normalizeToken(materialKey));
+      if (!material) continue;
+      add(identity.materialKey, material);
+      add(identity.canonicalName, material);
+      add(identity.displayName, material);
+      add(identity.rawName, material);
+      add(identity.refinedName, material);
+      add(identity.commodityName, material);
+      if (Array.isArray(identity.aliases)) {
+        for (const alias of identity.aliases) add(alias, material);
+      } else {
+        for (const values of Object.values(identity.aliases ?? {})) {
+          for (const alias of values) add(alias, material);
+        }
+      }
+    }
+  } catch (error) {
+    addWarning(warnings, {
+      code: "api_material_index_unreadable",
+      message: `Unable to load crafting material identity index for material aliases: ${error instanceof Error ? error.message : String(error)}`,
+      path: "public/api/crafting/material_identity_index.json",
+    });
   }
 
   return index;

@@ -1,6 +1,7 @@
 import type { MaterialTemplate } from "../../types/logistics";
 import type { RecipeInputTemplate } from "../../data/logistics/seed";
 import { getInventoryUnitLabel } from "./inventory";
+import type { MaterialIdentity } from "./materialIdentityIndex";
 
 export interface MaterialIdentityInput {
   materialKey?: string | null;
@@ -83,11 +84,46 @@ function addAlias(index: Map<string, MaterialTemplate>, alias: string | null | u
   if (key && !index.has(key)) index.set(key, material);
 }
 
-export function createMaterialResolver(materials: MaterialTemplate[]) {
+function addIdentityAliasValues(index: Map<string, MaterialTemplate>, aliases: MaterialIdentity["aliases"], material: MaterialTemplate) {
+  if (!aliases) return;
+  if (Array.isArray(aliases)) {
+    for (const alias of aliases) addAlias(index, alias, material);
+    return;
+  }
+  for (const values of Object.values(aliases)) {
+    for (const alias of values) addAlias(index, alias, material);
+  }
+}
+
+function identityMaterial(identity: MaterialIdentity, materialById: Map<string, MaterialTemplate>, sourceKeyByOutput: Map<string, string>) {
+  return materialById.get(identity.materialKey) ??
+    materialById.get(sourceKeyByOutput.get(identity.materialKey) ?? "") ??
+    undefined;
+}
+
+export function createMaterialResolver(materials: MaterialTemplate[], materialIdentities: MaterialIdentity[] = []) {
   const index = new Map<string, MaterialTemplate>();
+  const materialById = new Map(materials.map((material) => [material.id, material]));
   for (const material of materials) {
     addAlias(index, material.id, material);
     addAlias(index, material.name, material);
+  }
+  const sourceKeyByOutput = new Map<string, string>();
+  for (const identity of materialIdentities) {
+    if (identity.isRefinable && identity.refinesToMaterialKey && materialById.has(identity.materialKey)) {
+      sourceKeyByOutput.set(identity.refinesToMaterialKey, identity.materialKey);
+    }
+  }
+  for (const identity of materialIdentities) {
+    const material = identityMaterial(identity, materialById, sourceKeyByOutput);
+    if (!material) continue;
+    addAlias(index, identity.materialKey, material);
+    addAlias(index, identity.canonicalName, material);
+    addAlias(index, identity.displayName, material);
+    addAlias(index, identity.rawName, material);
+    addAlias(index, identity.refinedName, material);
+    addAlias(index, identity.commodityName, material);
+    addIdentityAliasValues(index, identity.aliases, material);
   }
   for (const [alias, materialId] of Object.entries(TEXT_ALIASES)) {
     const material = materials.find((entry) => entry.id === materialId);
