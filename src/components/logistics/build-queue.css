@@ -1715,6 +1715,11 @@
   box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.18), 0 0 18px rgba(124, 58, 237, 0.16);
 }
 
+.bq-item--reassign-destination {
+  outline: 1px solid rgba(0, 230, 210, 0.5);
+  box-shadow: 0 0 0 1px rgba(0, 230, 210, 0.16), 0 0 18px rgba(0, 230, 210, 0.14);
+}
+
 .bq-reassign-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -1726,53 +1731,74 @@
 }
 
 .bq-reassign-modal {
-  width: min(420px, 100%);
+  width: min(390px, 100%);
   border: 1px solid rgba(167, 139, 250, 0.34);
   border-radius: 8px;
   background: linear-gradient(180deg, rgba(5, 18, 31, 0.98), rgba(2, 10, 20, 0.98));
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 28px rgba(124, 58, 237, 0.12);
-  padding: 18px;
+  padding: 16px;
   color: var(--alloc-text-primary);
 }
 
 .bq-reassign-modal h3 {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
   color: rgba(237, 233, 254, 0.94);
   font-size: 18px;
   font-weight: 800;
 }
 
 .bq-reassign-modal p {
-  margin: 0;
+  margin: 12px 0 16px;
   color: var(--alloc-text-secondary);
   font-size: 14px;
   line-height: 1.45;
 }
 
-.bq-reassign-detail {
+.bq-reassign-transfer {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 14px 0 16px;
-  padding: 10px 12px;
-  border: 1px solid rgba(65, 132, 160, 0.22);
-  border-radius: 8px;
-  background: rgba(3, 18, 28, 0.72);
-  color: var(--alloc-text-secondary);
-}
-
-.bq-reassign-detail span {
-  min-width: 0;
-  display: flex;
-  justify-content: space-between;
+  grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
+  align-items: center;
   gap: 8px;
 }
 
-.bq-reassign-detail strong {
-  color: rgba(187, 247, 208, 0.88);
+.bq-reassign-owner {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  word-break: break-word;
+}
+
+.bq-reassign-owner--source {
+  border: 1px solid rgba(184, 92, 246, 0.52);
+  background: rgba(91, 33, 182, 0.16);
+  color: rgba(237, 233, 254, 0.95);
+}
+
+.bq-reassign-owner--destination {
+  border: 1px solid rgba(0, 230, 210, 0.46);
+  background: rgba(0, 230, 210, 0.1);
+  color: rgba(205, 252, 247, 0.95);
+}
+
+.bq-reassign-swap {
+  display: grid;
+  place-items: center;
+  color: var(--accent-cyan);
+}
+
+.bq-reassign-swap .bq-action-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .bq-reassign-actions {

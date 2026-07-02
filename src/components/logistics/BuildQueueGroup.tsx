@@ -176,10 +176,9 @@ type PendingReassignment = {
   stack: InventoryStack;
   from: StackReservationAssignment;
   quantity: number;
-  fromLabel: string;
-  toLabel: string;
+  sourceOwnerLabel: string;
+  destinationOwnerLabel: string;
   materialLabel: string;
-  availableQuantity: number;
   targetItemId: string;
   targetAllocation: ReservedMaterialAllocation;
   targetExistingAllocation?: ReservedMaterialAllocation;
@@ -209,9 +208,49 @@ function createAllocation(
   };
 }
 
-function getBuildQueueItemLabel(item: BuildQueueItem, recipes: RecipeTemplate[]): string {
+function cleanLabel(value: string | null | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed || undefined;
+}
+
+function getBuildQueueItemNumber(item: BuildQueueItem, buildQueue: BuildQueueItem[]): number | undefined {
+  const index = buildQueue.findIndex((entry) => entry.id === item.id);
+  return index >= 0 ? index + 1 : undefined;
+}
+
+function getBuildQueueItemLabel(
+  item: BuildQueueItem,
+  recipes: RecipeTemplate[],
+  buildQueue?: BuildQueueItem[],
+  fallback = 'another craft',
+): string {
   const recipeName = recipes.find((recipe) => recipe.id === item.recipeId)?.name;
-  return item.itemName ?? recipeName ?? (item.id ? `Queue item #${item.id}` : 'another craft');
+  const queueNumber = buildQueue ? getBuildQueueItemNumber(item, buildQueue) : undefined;
+  return (
+    cleanLabel(item.itemName) ??
+    cleanLabel(recipeName) ??
+    cleanLabel(item.itemId) ??
+    cleanLabel(item.blueprint_id) ??
+    (queueNumber ? `Queue item #${queueNumber}` : undefined) ??
+    fallback
+  );
+}
+
+function getSourceOwnerLabel(item: BuildQueueItem, recipes: RecipeTemplate[], buildQueue: BuildQueueItem[]): string {
+  return getBuildQueueItemLabel(item, recipes, buildQueue, 'another craft');
+}
+
+function getDestinationOwnerLabel(item: BuildQueueItem, recipes: RecipeTemplate[], buildQueue: BuildQueueItem[]): string {
+  const recipeName = recipes.find((recipe) => recipe.id === item.recipeId)?.name;
+  const queueNumber = getBuildQueueItemNumber(item, buildQueue);
+  return (
+    cleanLabel(item.itemName) ??
+    cleanLabel(recipeName) ??
+    cleanLabel(item.itemId) ??
+    cleanLabel(item.blueprint_id) ??
+    (queueNumber ? `selected queue item #${queueNumber}` : undefined) ??
+    'this craft'
+  );
 }
 
 function getRequirementLabel(
@@ -261,7 +300,7 @@ function getStackReservationAssignments(
     (queueItem.reservedAllocations ?? [])
       .filter((allocation) => allocation.inventoryEntryId === stack.id && allocation.quantityReserved > 0)
       .map((allocation) => {
-        const itemName = getBuildQueueItemLabel(queueItem, recipes);
+        const itemName = getSourceOwnerLabel(queueItem, recipes, buildQueue);
         return {
           item: queueItem,
           allocation,
@@ -817,11 +856,6 @@ export default function BuildQueueGroup({
     onAllocationOwnerHighlightChange?.(itemId);
   }, [onAllocationOwnerHighlightChange]);
 
-  useEffect(() => {
-    if (!pendingReassignment) return;
-    setAllocationOwnerHighlight(pendingReassignment.from.item.id);
-  }, [pendingReassignment, setAllocationOwnerHighlight]);
-
   useEffect(() => () => {
     onAllocationOwnerHighlightChange?.(null);
   }, [onAllocationOwnerHighlightChange]);
@@ -924,16 +958,16 @@ export default function BuildQueueGroup({
             }}
           >
             <h3 id="bq-reassign-title">Reassign Allocation</h3>
-            <p>
-              This {formatStackQuantity(pendingReassignment.quantity, pendingReassignment.stack)} {pendingReassignment.materialLabel} stock is currently assigned to {pendingReassignment.fromLabel}. Reassign it to {pendingReassignment.toLabel}?
-            </p>
-            <div className="bq-reassign-detail">
-              <span>Location: <strong>{pendingReassignment.stack.location?.name ?? pendingReassignment.stack.locationId ?? 'Unassigned stock'}</strong></span>
-              <span>Quality: <strong>{pendingReassignment.stack.quality ?? 'Unknown'}</strong></span>
-              <span>Available: <strong>{formatStackQuantity(pendingReassignment.availableQuantity, pendingReassignment.stack)}</strong></span>
-              <span>Reserved: <strong>{formatStackQuantity(pendingReassignment.quantity, pendingReassignment.stack)}</strong></span>
-              <span>Material: <strong>{pendingReassignment.materialLabel}</strong></span>
+            <div className="bq-reassign-transfer" aria-label={`${pendingReassignment.sourceOwnerLabel} to ${pendingReassignment.destinationOwnerLabel}`}>
+              <span className="bq-reassign-owner bq-reassign-owner--source">{pendingReassignment.sourceOwnerLabel}</span>
+              <span className="bq-reassign-swap" aria-hidden="true">
+                <SwapIcon />
+              </span>
+              <span className="bq-reassign-owner bq-reassign-owner--destination">{pendingReassignment.destinationOwnerLabel}</span>
             </div>
+            <p>
+              Move {formatStackQuantity(pendingReassignment.quantity, pendingReassignment.stack)} {pendingReassignment.materialLabel} from {pendingReassignment.sourceOwnerLabel} to {pendingReassignment.destinationOwnerLabel}?
+            </p>
             <div className="bq-reassign-actions">
               <button type="button" className="bq-btn" onClick={cancelPendingReassignment}>Cancel</button>
               <button type="button" className="bq-btn bq-btn--confirm" onClick={confirmPendingReassignment}>Reassign</button>
@@ -1091,6 +1125,7 @@ export default function BuildQueueGroup({
               'bq-item',
               `bq-item--${isCompletedCraft ? 'completed-craft' : fulfillment}`,
               focusedAssignmentItemId === item.id ? 'bq-item--assignment-focus' : '',
+              pendingReassignment?.targetItemId === item.id ? 'bq-item--reassign-destination' : '',
               isMobileTouchLayout ? 'bq-item--mobile-touch' : '',
             ].filter(Boolean).join(' ')}
             data-bq-item-id={item.id}
@@ -1586,10 +1621,9 @@ export default function BuildQueueGroup({
                                           stack,
                                           from: otherAssignment,
                                           quantity: reassignQuantity,
-                                          fromLabel: reassignSourceLabel,
-                                          toLabel: group.displayName,
+                                          sourceOwnerLabel: getSourceOwnerLabel(otherAssignment.item, recipes, buildQueue),
+                                          destinationOwnerLabel: getDestinationOwnerLabel(item, recipes, buildQueue),
                                           materialLabel: getStackMaterialLabel(stack),
-                                          availableQuantity: availableAfterThisReservation,
                                           targetItemId: item.id,
                                           targetExistingAllocation: existingAllocation,
                                           targetAllocation: createAllocation(
@@ -1687,7 +1721,7 @@ export default function BuildQueueGroup({
                                                   type="button"
                                                   className="bq-reserve-reassign"
                                                   disabled={reassignQuantity <= 0}
-                                                  aria-label={`Reassign allocation from ${reassignSourceLabel} to ${group.displayName}`}
+                                                  aria-label={`Reassign allocation from ${reassignSourceLabel} to ${getDestinationOwnerLabel(item, recipes, buildQueue)}`}
                                                   title={reassignQuantity > 0 ? `Reassign allocation from ${reassignSourceLabel}` : 'Current requirement is already filled'}
                                                   onClick={beginReassignment}
                                                 >
