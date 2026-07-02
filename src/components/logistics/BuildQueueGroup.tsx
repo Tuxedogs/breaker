@@ -520,6 +520,7 @@ function TargetQualityEditor({
   label,
   tone,
   isOpen,
+  inline,
   draftQuality,
   recipeTargetQuality,
   onOpen,
@@ -530,6 +531,7 @@ function TargetQualityEditor({
   label: string;
   tone: string;
   isOpen: boolean;
+  inline?: boolean;
   draftQuality: string;
   recipeTargetQuality: number;
   onOpen: () => void;
@@ -542,15 +544,24 @@ function TargetQualityEditor({
   const canApply = parseTargetQualityDraft(draftQuality) !== null;
 
   useEffect(() => {
+    if (inline) {
+      if (!isOpen) return;
+      const frame = window.requestAnimationFrame(() => {
+        inputRef.current?.focus({ preventScroll: true });
+      });
+      return () => window.cancelAnimationFrame(frame);
+    }
+    if (inline) return;
     if (!isOpen) return;
     const frame = window.requestAnimationFrame(() => {
       inputRef.current?.focus();
       inputRef.current?.select();
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [isOpen]);
+  }, [inline, isOpen]);
 
   useEffect(() => {
+    if (inline) return;
     if (!isOpen) return;
     const onPointerDown = (event: PointerEvent) => {
       if (rootRef.current?.contains(event.target as Node)) return;
@@ -558,26 +569,56 @@ function TargetQualityEditor({
     };
     document.addEventListener('pointerdown', onPointerDown);
     return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [isOpen, onCancel]);
+  }, [inline, isOpen, onCancel]);
 
   const setPreset = (value: number) => onDraftQualityChange(String(clampTargetQuality(value)));
+  const commitInline = () => {
+    if (canApply) onApply();
+    else onCancel();
+  };
 
   return (
-    <span className="bq-target-editor" ref={rootRef} data-bq-row-control="true">
-      <button
-        type="button"
-        className={`bq-target-quality bq-target-quality--${tone}${isOpen ? ' is-active' : ''}`}
-        aria-label="Edit target quality"
-        aria-expanded={isOpen}
-        onClick={(event) => {
-          event.stopPropagation();
-          onOpen();
-        }}
-      >
-        <span>{label}</span>
-        <EditIcon />
-      </button>
-      {isOpen ? (
+    <span className={`bq-target-editor${inline ? ' bq-target-editor--inline' : ''}`} ref={rootRef} data-bq-row-control="true">
+      {inline && isOpen ? (
+        <input
+          ref={inputRef}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          className={`bq-target-inline-input bq-target-inline-input--${tone}`}
+          value={draftQuality}
+          aria-label="Exact target quality"
+          data-bq-row-control="true"
+          onChange={(event) => onDraftQualityChange(normalizeTargetQualityDraft(event.target.value))}
+          onBlur={commitInline}
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              commitInline();
+            } else if (event.key === 'Escape') {
+              event.preventDefault();
+              onCancel();
+            }
+          }}
+        />
+      ) : (
+        <button
+          type="button"
+          className={`bq-target-quality bq-target-quality--${tone}${isOpen ? ' is-active' : ''}`}
+          aria-label="Edit target quality"
+          aria-expanded={isOpen}
+          onClick={(event) => {
+            event.stopPropagation();
+            onOpen();
+          }}
+        >
+          <span>{label}</span>
+          <EditIcon />
+        </button>
+      )}
+      {!inline && isOpen ? (
         <div
           className="bq-target-popover"
           role="dialog"
@@ -1041,6 +1082,7 @@ export default function BuildQueueGroup({
                               label={targetQualityLabel}
                               tone={targetQualityTone}
                               isOpen={qualityExpanded}
+                              inline={isMobileTouchLayout}
                               draftQuality={qualityDraft}
                               recipeTargetQuality={group.recipeTargetQuality}
                               onOpen={() => openQualityEditor(item.id, group.groupKey, targetEditorQuality)}
@@ -1110,6 +1152,7 @@ export default function BuildQueueGroup({
                           label={targetQualityLabel}
                           tone={targetQualityTone}
                           isOpen={qualityExpanded}
+                          inline={isMobileTouchLayout}
                           draftQuality={qualityDraft}
                           recipeTargetQuality={group.recipeTargetQuality}
                           onOpen={() => openQualityEditor(item.id, group.groupKey, targetEditorQuality)}

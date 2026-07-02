@@ -858,8 +858,49 @@
   overflow: visible;
 }
 
+.bq-target-editor--inline {
+  display: flex;
+  width: 50%;
+  min-width: 0;
+  max-width: 100%;
+}
+
 .bq-page .bq-mat-row > .bq-target-editor {
   overflow: visible;
+}
+
+.bq-target-inline-input {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid rgba(95, 114, 133, 0.28);
+  border-radius: 7px;
+  background: rgba(3, 18, 28, 0.54);
+  color: var(--alloc-text-primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-target-inline-input--purple {
+  border-color: rgba(184, 92, 246, 0.32);
+  background: rgba(91, 35, 140, 0.2);
+  color: var(--alloc-purple);
+}
+
+.bq-target-inline-input--blue {
+  border-color: rgba(77, 163, 255, 0.32);
+  background: rgba(20, 91, 160, 0.18);
+  color: var(--alloc-blue);
+}
+
+.bq-target-inline-input--cyan {
+  border-color: rgba(0, 230, 210, 0.28);
+  background: rgba(0, 230, 210, 0.08);
+  color: var(--alloc-cyan);
 }
 
 .bq-target-popover {
@@ -2539,6 +2580,10 @@
     margin-top: 0;
   }
 
+  .bq-mat-card-metrics .bq-target-quality-cell .bq-target-editor--inline {
+    margin-top: 0;
+  }
+
   .bq-mat-card-metrics .bq-avg-quality em {
     color: var(--alloc-text-secondary);
     font-size: 10px;
@@ -2588,6 +2633,12 @@
     padding: 0 8px;
     font-size: 13px;
     justify-content: flex-start;
+  }
+
+  .bq-target-inline-input {
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 13px;
   }
 
   .bq-target-popover {
