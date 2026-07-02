@@ -50,7 +50,7 @@ function useIsMobileTouchLayout() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const query = window.matchMedia('(max-width: 760px)');
+    const query = window.matchMedia('(max-width: 768px)');
     const update = () => setIsMobile(query.matches);
     update();
     query.addEventListener('change', update);
@@ -1058,31 +1058,34 @@ export default function BuildQueueGroup({
                             />
                           </span>
                           <span className={`bq-avg-quality bq-avg-quality--${averageQualityTone}`}>
-                            <span><i aria-hidden="true" />{averageQualityLabel}</span>
-                            <em>avg</em>
+                            <em>Avg Quality</em>
+                            <span>{averageQualityLabel}</span>
                             {averageBelowTarget ? <small>below target</small> : null}
                           </span>
-                          <span className={`bq-balance bq-balance--${balanceTone} ${materialTypeClass(group.material)}`}>
-                            <strong>{balanceTone === 'met' ? formatQuantity(0, group.material) : balanceLabel}</strong>
-                            <em>{balanceStateLabel}</em>
-                          </span>
+                        </div>
+                        <div className={`bq-mat-card-status bq-balance bq-balance--${balanceTone} ${materialTypeClass(group.material)}`}>
+                          <em>{balanceTone === 'short' ? 'Remaining' : balanceStateLabel}</em>
+                          <strong>{balanceTone === 'met' ? formatQuantity(0, group.material) : balanceLabel}</strong>
+                          {balanceTone === 'short' ? <span>short</span> : null}
                         </div>
                         {group.qualityBreakdown.length > 0 ? (
-                          <QualityAllocationChips
-                            breakdown={group.qualityBreakdown}
-                            material={group.material}
-                            qualityBands={qualityRequirement.qualityBands}
-                          />
+                          <div className="bq-mat-card-quality">
+                            <QualityAllocationChips
+                              breakdown={group.qualityBreakdown}
+                              material={group.material}
+                              qualityBands={qualityRequirement.qualityBands}
+                            />
+                          </div>
                         ) : (
                           <button
                             type="button"
-                            className="bq-quality-empty"
+                            className="bq-mat-card-quality bq-quality-empty"
                             onClick={(event) => {
                               event.stopPropagation();
                               openReserve();
                             }}
                           >
-                            &mdash;
+                            No allocation
                           </button>
                         )}
                       </div>

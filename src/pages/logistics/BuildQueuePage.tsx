@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { Link } from "react-router-dom";
 import BuildQueueGroup from "../../components/logistics/BuildQueueGroup";
 import BuildQueueCraftCard from "../../components/logistics/BuildQueueCraftCard";
@@ -10,7 +10,7 @@ import type { SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
-import type { BuildQueueItem } from "../../types/logistics";
+import type { BuildQueueItem, RecipeTemplate } from "../../types/logistics";
 
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
@@ -34,12 +34,39 @@ function sortQueueItems(items: BuildQueueItem[]) {
   );
 }
 
+function getQueueItemLabel(item: BuildQueueItem, recipes: RecipeTemplate[]) {
+  const recipe = recipes.find((entry) => entry.id === item.recipeId);
+  return item.itemName ?? recipe?.name ?? item.recipeId;
+}
+
+function useIsMobileQueueLayout() {
+  const [isMobile, setIsMobile] = useState(() => (
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 768px)").matches
+      : false
+  ));
+
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 768px)");
+    const handleChange = () => setIsMobile(query.matches);
+    handleChange();
+    query.addEventListener("change", handleChange);
+    return () => query.removeEventListener("change", handleChange);
+  }, []);
+
+  return isMobile;
+}
+
 export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>("minimize-splits");
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(false);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
+  const isMobileQueueLayout = useIsMobileQueueLayout();
+  const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
+  const suppressMobileSelectorTapRef = useRef(false);
 
   const inventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
   const buildQueue = useLogisticsStore((s) => s.buildQueue);
@@ -84,6 +111,46 @@ export default function BuildQueuePage() {
 
   const selectedRow = queueRows.find((row) => row.item.id === resolvedSelectedItemId) ?? null;
 
+  function handleMobileSelectorPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse") return;
+    mobileSelectorPointerRef.current = {
+      id: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+    };
+    suppressMobileSelectorTapRef.current = false;
+  }
+
+  function handleMobileSelectorPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const pointer = mobileSelectorPointerRef.current;
+    if (!pointer || pointer.id !== event.pointerId) return;
+
+    if (
+      Math.abs(event.clientX - pointer.startX) > 6 ||
+      Math.abs(event.clientY - pointer.startY) > 6
+    ) {
+      suppressMobileSelectorTapRef.current = true;
+    }
+  }
+
+  function handleMobileSelectorPointerEnd(event: ReactPointerEvent<HTMLDivElement>) {
+    const pointer = mobileSelectorPointerRef.current;
+    if (!pointer || pointer.id !== event.pointerId) return;
+
+    mobileSelectorPointerRef.current = null;
+
+    if (!suppressMobileSelectorTapRef.current) return;
+
+    window.setTimeout(() => {
+      suppressMobileSelectorTapRef.current = false;
+    }, 0);
+  }
+
+  function handleMobileSelectorClick(itemId: string) {
+    if (suppressMobileSelectorTapRef.current) return;
+    setSelectedItemId(itemId);
+  }
+
   return (
     <div className="bq-page">
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
@@ -114,26 +181,57 @@ export default function BuildQueuePage() {
             </div>
           </header>
 
-          <div className="bq-queue-list">
+          <div
+            className="bq-queue-list"
+            onPointerDown={handleMobileSelectorPointerDown}
+            onPointerMove={handleMobileSelectorPointerMove}
+            onPointerUp={handleMobileSelectorPointerEnd}
+            onPointerCancel={handleMobileSelectorPointerEnd}
+          >
             {queueRows.length === 0 ? (
               <div className="bq-empty-state">No builds queued yet.</div>
+            ) : isMobileQueueLayout ? (
+              queueRows.map((row, index) => {
+                const selected = row.item.id === resolvedSelectedItemId;
+                const itemLabel = getQueueItemLabel(row.item, recipes);
+                return (
+                  <button
+                    key={row.item.id}
+                    ref={(node) => {
+                      mobileSelectorRefs.current[row.item.id] = node;
+                    }}
+                    type="button"
+                    className={[
+                      "bq-queue-pill",
+                      selected ? "is-selected" : "",
+                      row.completed ? "is-complete" : "",
+                    ].filter(Boolean).join(" ")}
+                    aria-current={selected ? "true" : undefined}
+                    aria-label={`Select queue item ${index + 1}: ${itemLabel}`}
+                    onClick={() => handleMobileSelectorClick(row.item.id)}
+                  >
+                    <span className="bq-queue-pill-index">{index + 1}</span>
+                    <span className="bq-queue-pill-dot" aria-hidden="true" />
+                  </button>
+                );
+              })
             ) : queueRows.map((row, index) => (
-              <BuildQueueCraftCard
-                key={row.item.id}
-                index={index + 1}
-                item={row.item}
-                category={row.category}
-                recipes={recipes}
-                recipeInputsByRecipeId={recipeInputsByRecipeId}
-                inventory={inventoryEntries}
-                locations={locations}
-                materials={materials}
-                selected={row.item.id === resolvedSelectedItemId}
-                iconMode={iconMode}
-                onSelect={setSelectedItemId}
-                onQuantityChange={updateBuildQueueItemQuantity}
-              />
-            ))}
+                <BuildQueueCraftCard
+                  key={row.item.id}
+                  index={index + 1}
+                  item={row.item}
+                  category={row.category}
+                  recipes={recipes}
+                  recipeInputsByRecipeId={recipeInputsByRecipeId}
+                  inventory={inventoryEntries}
+                  locations={locations}
+                  materials={materials}
+                  selected={row.item.id === resolvedSelectedItemId}
+                  iconMode={iconMode}
+                  onSelect={setSelectedItemId}
+                  onQuantityChange={updateBuildQueueItemQuantity}
+                />
+              ))}
           </div>
 
           <footer className="bq-queue-col-foot">
