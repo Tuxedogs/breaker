@@ -69,6 +69,24 @@ const cases = [
     expectPath: "s3QuantumDrive_outline-accent",
   },
   {
+    label: "CF-337 Panther Repeater S3 accent",
+    input: { componentType: "ship_weapon", componentName: "CF-337 Panther Repeater", size: 3, preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "cfRepeaterS3_accent",
+  },
+  {
+    label: "C-788 Cannon S4 accent",
+    input: { componentType: "ship_weapon", componentName: "C-788 Cannon", size: 4, preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "c788S4_accent",
+  },
+  {
+    label: "S1 power plant auto mono",
+    input: { componentType: "powerplant", componentName: "Fierell Cascade", size: 1, preferredMode: "auto" as const },
+    expectMode: "mono",
+    expectPath: "powerPlantS1_mono",
+  },
+  {
     label: "Global accent override on cooler",
     input: { componentType: "cooler", componentName: "IcePlunge", size: 1, preferredMode: "accent" as const },
     expectMode: "mono",
@@ -95,26 +113,44 @@ const craftedCases = [
   {
     label: "Quadracell MX powerplant mono",
     input: { itemName: "Quadracell MX", category: "ship_part", preferredMode: "auto" as const },
-    expectMode: "placeholder",
-    expectPath: "powerplant.webp",
+    expectMode: "mono",
+    expectPath: "quadracellS3_mono",
   },
   {
-    label: "TS-2 quantum drive mono",
+    label: "Quadracell MT powerplant accent",
+    input: { itemName: "Quadracell MT", category: "ship_part", preferredMode: "accent" as const },
+    expectMode: "accent",
+    expectPath: "quadracellS2_accent",
+  },
+  {
+    label: "TS-2 quantum drive accent",
     input: { itemName: "TS-2", category: "ship_part", preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "s3QuantumDrive_outline-accent",
+  },
+  {
+    label: "A03 Sniper Rifle manifest accent",
+    input: { itemName: "A03 Sniper Rifle", category: "weapon", preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "a03Sniper_accent",
+  },
+  {
+    label: "P6-LR Sniper Rifle manifest mono",
+    input: { itemName: "P6-LR Sniper Rifle", category: "weapon", preferredMode: "auto" as const },
     expectMode: "mono",
-    expectPath: "s1QuantumDrive_outline-mono",
+    expectPath: "p6lrSniper_mono",
+  },
+  {
+    label: "Morozov-SH Core torso accent",
+    input: { itemName: "Morozov-SH Core", category: "armor", preferredMode: "auto" as const },
+    expectMode: "accent",
+    expectPath: "morozovTorso_outline",
   },
   {
     label: "VB80112 radar mono",
     input: { itemName: "VB80112", category: "ship_part", preferredMode: "auto" as const },
     expectMode: "placeholder",
     expectPath: "turret.webp",
-  },
-  {
-    label: "A03 Sniper Rifle accent",
-    input: { itemName: "A03 Sniper Rifle", category: "weapon", preferredMode: "auto" as const },
-    expectMode: "accent",
-    expectPath: "sniper_rifle.webp",
   },
 ] as const;
 

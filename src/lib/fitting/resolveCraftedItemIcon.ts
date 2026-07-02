@@ -44,6 +44,7 @@ function inferFpsWeaponIconKey(name: string): string | null {
 function inferSizeFromIdentifiers(...sources: Array<string | null | undefined>): number | null {
   for (const source of sources) {
     if (!source) continue;
+    if (/\bts-?2\b/i.test(source)) return 3;
     const sized = source.match(/(?:^|[_\s-])S0?(\d)(?:[_\s-]|$)/i);
     if (sized) {
       const parsed = Number.parseInt(sized[1], 10);
@@ -101,13 +102,26 @@ export function resolveCraftedItemIcon(input: ResolveCraftedItemIconInput): Reso
 
   const componentType = inferCraftedItemComponentType(componentName, input.category);
   const blueprintHints = (input.blueprintSources ?? []).flatMap((source) => [source.displayName, source.poolName, source.sourceFolder]);
+  const inferredPowerPlantSize = (() => {
+    const name = componentName.toLowerCase();
+    if (/\bmx\b/.test(name)) return 3;
+    if (/\bmt\b/.test(name)) return 2;
+    return null;
+  })();
   const componentSize = normalizeComponentSize(
-    input.size ?? inferSizeFromIdentifiers(componentName, input.itemId, ...blueprintHints),
+    input.size ?? inferredPowerPlantSize ?? inferSizeFromIdentifiers(componentName, input.itemId, ...blueprintHints),
     componentName,
   );
   const preferredMode = input.preferredMode ?? "auto";
 
-  if (componentType === "fps_weapon") {
+  const resolved = resolveFittingComponentIcon({
+    componentType,
+    componentName,
+    size: componentSize,
+    preferredMode,
+  });
+
+  if (resolved.confidence === "placeholder" && componentType === "fps_weapon") {
     const fpsIconKey = inferFpsWeaponIconKey(componentName);
     return {
       src: `/images/component-icons/${fpsIconKey}.webp`,
@@ -118,13 +132,6 @@ export function resolveCraftedItemIcon(input: ResolveCraftedItemIconInput): Reso
       componentSize,
     };
   }
-
-  const resolved = resolveFittingComponentIcon({
-    componentType,
-    componentName,
-    size: componentSize,
-    preferredMode,
-  });
 
   if (resolved.confidence === "placeholder" && componentType === "other") {
     return {

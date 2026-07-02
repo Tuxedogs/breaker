@@ -39,6 +39,7 @@ const CATEGORY_PLACEHOLDER: Record<string, string> = {
   quantumdrive: "/images/component-icons/quantum_drive.webp",
   power: "/images/component-icons/powerplant.webp",
   powerplant: "/images/component-icons/powerplant.webp",
+  armor: "/images/component-icons/medium_torso.webp",
   radar: "/images/component-icons/turret.webp",
   scanner: "/images/component-icons/turret.webp",
 };

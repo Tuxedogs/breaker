@@ -17,6 +17,8 @@ type ManifestShape = {
 
 const WEAPON_FAMILY_PATTERNS: Array<{ familyKey: string; pattern: RegExp }> = [
   { familyKey: "deadbolt", pattern: /\bdeadbolt\b/i },
+  { familyKey: "cf_repeater", pattern: /\bcf-\d{3}\b/i },
+  { familyKey: "c788", pattern: /\bc-?788\b/i },
 ];
 
 const CATEGORY_FALLBACK_KEYS: Record<string, string> = {
@@ -61,15 +63,20 @@ export function inferManifestEntryKey(input: {
     if (fromName && entries[fromName]) return fromName;
   }
 
+  const name = (input.componentName ?? "").toLowerCase();
+  if (name) {
+    for (const [key, entry] of Object.entries(entries)) {
+      const includes = entry.match?.displayNameIncludes ?? [];
+      if (includes.some((token) => name.includes(token.toLowerCase()))) return key;
+    }
+  }
+
   const categoryKey = CATEGORY_FALLBACK_KEYS[category];
   if (categoryKey && entries[categoryKey]) return categoryKey;
 
   for (const [key, entry] of Object.entries(entries)) {
     const categories = entry.match?.categories ?? [];
     if (categories.some((value) => normalizeComponentCategory(value) === category)) return key;
-    const includes = entry.match?.displayNameIncludes ?? [];
-    const name = (input.componentName ?? "").toLowerCase();
-    if (name && includes.some((token) => name.includes(token.toLowerCase()))) return key;
   }
 
   return null;
