@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
 
@@ -670,11 +670,42 @@ type MissionVariantDetailPayload = {
   variant: ShapedVariant;
 };
 
+type MissionShardManifest = {
+  schemaVersion: 1;
+  generatedAt: string;
+  sourceLatestModifiedAt: string;
+  familyFilesByFamilyId: Record<string, {
+    familyKey: string;
+    detailFile: string;
+    variantsFile: string;
+  }>;
+  variantFilesByMissionId: Record<string, {
+    missionId: string;
+    variantId: string;
+    familyId: string;
+    familyKey: string;
+    detailFile: string;
+    familyDetailFile: string;
+    familyVariantsFile: string;
+  }>;
+  variantFilesByVariantId: Record<string, {
+    missionId: string;
+    variantId: string;
+    familyId: string;
+    familyKey: string;
+    detailFile: string;
+    familyDetailFile: string;
+    familyVariantsFile: string;
+  }>;
+};
+
 const serverMissionSourceRoot = path.resolve("server-data", "missions", "source");
 const missionRoot = path.resolve("server-data", "missions");
 const familyRoot = path.join(missionRoot, "families");
 const familyVariantsRoot = path.join(missionRoot, "family-variants");
 const variantRoot = path.join(missionRoot, "variants");
+const maxMissionOutputBytes = 50 * 1024 * 1024;
+const legacyMissionOutputFiles = ["mission_locations.json", "mission_variants.json"] as const;
 async function resolveMissionSourceRoot(): Promise<string> {
   try {
     await readFile(path.join(serverMissionSourceRoot, "mission_contracts.json"), "utf8");
@@ -2864,6 +2895,50 @@ async function writeJsonAt(root: string, fileName: string, value: unknown): Prom
   await writeFile(path.join(root, fileName), `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+async function removeLegacyMissionOutputs(): Promise<void> {
+  await Promise.all(
+    legacyMissionOutputFiles.map((fileName) => rm(path.join(missionRoot, fileName), { force: true }))
+  );
+}
+
+async function collectMissionOutputJsonFiles(root: string): Promise<string[]> {
+  const entries = await readdir(root, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === "source") continue;
+      files.push(...await collectMissionOutputJsonFiles(fullPath));
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith(".json")) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+async function assertMissionOutputSizes(): Promise<void> {
+  const files = await collectMissionOutputJsonFiles(missionRoot);
+  const oversized: Array<{ filePath: string; size: number }> = [];
+
+  for (const filePath of files) {
+    const fileStat = await stat(filePath);
+    if (fileStat.size > maxMissionOutputBytes) {
+      oversized.push({ filePath, size: fileStat.size });
+    }
+  }
+
+  if (oversized.length === 0) return;
+
+  const details = oversized
+    .map(({ filePath, size }) => `- ${path.relative(process.cwd(), filePath)} (${(size / (1024 * 1024)).toFixed(2)} MB)`)
+    .join("\n");
+  throw new Error(`Mission shaped output exceeds ${maxMissionOutputBytes / (1024 * 1024)} MB:\n${details}`);
+}
+
 function payloadFileName(key: string): string {
   return `${createHash("sha256").update(key).digest("hex").slice(0, 16)}.json`;
 }
@@ -2947,6 +3022,43 @@ const shaped: ShapedCatalog = {
 const familiesByKey = Object.fromEntries(families.map((family) => [family.familyKey, family]));
 const conceptsByKey = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept]));
 const conceptFamilyVariantFiles = Object.fromEntries(concepts.map((concept) => [concept.conceptKey, concept.familyVariantFiles]));
+const shardManifest: MissionShardManifest = {
+  schemaVersion: 1,
+  generatedAt: shaped.generatedAt,
+  sourceLatestModifiedAt: shaped.sourceLatestModifiedAt,
+  familyFilesByFamilyId: Object.fromEntries(
+    families.map((family) => [family.familyKey, {
+      familyKey: family.familyKey,
+      detailFile: familyDetailFiles[family.familyKey]!,
+      variantsFile: familyVariantFiles[family.familyKey]!,
+    }])
+  ),
+  variantFilesByMissionId: Object.fromEntries(
+    catalog.records.map((mission) => {
+      const familyId = mission.familyId ?? mission.contractId;
+      return [mission.contractId, {
+        missionId: mission.contractId,
+        variantId: mission.contractId,
+        familyId,
+        familyKey: familyId,
+        detailFile: variantDetailFiles[mission.contractId]!,
+        familyDetailFile: familyDetailFiles[familyId]!,
+        familyVariantsFile: familyVariantFiles[familyId]!,
+      }];
+    })
+  ),
+  variantFilesByVariantId: Object.fromEntries(
+    variants.map((variant) => [variant.variantKey, {
+      missionId: variant.technical.contractId,
+      variantId: variant.variantKey,
+      familyId: variant.familyKey,
+      familyKey: variant.familyKey,
+      detailFile: variantDetailFiles[variant.variantKey]!,
+      familyDetailFile: familyDetailFiles[variant.familyKey]!,
+      familyVariantsFile: familyVariantFiles[variant.familyKey]!,
+    }])
+  ),
+};
 const browserIndex: MissionBrowserIndex = {
   schemaVersion: 1,
   generatedAt: shaped.generatedAt,
@@ -2983,17 +3095,6 @@ const rewards = variants.map((variant) => ({
   familyKey: variant.familyKey,
   rewards: variant.rewards,
   rewardedReputationPaths: variant.rewardedReputationPaths,
-}));
-
-const locations = variants.map((variant) => ({
-  variantKey: variant.variantKey,
-  familyKey: variant.familyKey,
-  pickupLocation: variant.pickupLocation,
-  locationRoles: variant.locationRoles,
-  locationRefs: variant.locationRefs,
-  locations: variant.locations,
-  unresolvedLocationTokens: variant.unresolvedLocationTokens,
-  destinationTokens: variant.destinationTokens,
 }));
 
 const prerequisites = variants.map((variant) => ({
@@ -3524,13 +3625,13 @@ await Promise.all([
   mkdir(familyVariantsRoot, { recursive: true }),
   mkdir(variantRoot, { recursive: true }),
 ]);
+await removeLegacyMissionOutputs();
 await Promise.all([
   writeJson("mission_browser_index.json", browserIndex),
+  writeJson("mission_shard_manifest.json", shardManifest),
   writeJson("mission_families.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: families }),
-  writeJson("mission_variants.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: variants }),
   writeJson("mission_browse_groups.json", { generatedAt: shaped.generatedAt, sourceLatestModifiedAt: shaped.sourceLatestModifiedAt, records: missionBrowseGroups }),
   writeJson("mission_rewards.json", { generatedAt: shaped.generatedAt, records: rewards }),
-  writeJson("mission_locations.json", { generatedAt: shaped.generatedAt, records: locations }),
   writeJson("mission_prerequisites.json", { generatedAt: shaped.generatedAt, records: prerequisites }),
   writeJson("mission_reputation.json", { generatedAt: shaped.generatedAt, records: reputation }),
   writeJson("mission_unresolved_refs.json", { generatedAt: shaped.generatedAt, records: unresolvedRefs }),
@@ -3612,5 +3713,6 @@ await Promise.all([
     return writeJsonAt(variantRoot, payloadFileName(variant.variantKey), payload);
   }),
 ]);
+await assertMissionOutputSizes();
 
 console.log(`Shaped ${families.length} mission families and ${variants.length} variants into server-data/missions.`);

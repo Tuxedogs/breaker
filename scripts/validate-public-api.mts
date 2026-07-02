@@ -19,6 +19,12 @@ const forbiddenFilePatterns = [
 ];
 const forbiddenDirectoryNames = new Set(["server", "scripts"]);
 const maxPublicMissionJsonBytes = 1 * 1024 * 1024;
+const serverMissionRoot = path.resolve("server-data", "missions");
+const maxServerMissionOutputJsonBytes = 50 * 1024 * 1024;
+const legacyMissionOutputFiles = new Set([
+  "mission_locations.json",
+  "mission_variants.json",
+]);
 
 async function walk(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -61,6 +67,60 @@ async function validatePublicMissionHygiene(): Promise<void> {
   }
 }
 
+async function walkServerMissionOutputs(directory: string): Promise<string[]> {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files: string[] = [];
+
+  for (const entry of entries) {
+    if (entry.name === "source") continue;
+
+    const fullPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await walkServerMissionOutputs(fullPath));
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith(".json")) {
+      files.push(fullPath);
+    }
+  }
+
+  return files;
+}
+
+async function validateServerMissionOutputs(): Promise<void> {
+  const files = await walkServerMissionOutputs(serverMissionRoot);
+  const oversized: Array<{ filePath: string; size: number }> = [];
+  const legacy: string[] = [];
+
+  for (const filePath of files) {
+    const fileName = path.basename(filePath);
+    const fileStat = await stat(filePath);
+
+    if (legacyMissionOutputFiles.has(fileName)) {
+      legacy.push(filePath);
+    }
+    if (fileStat.size > maxServerMissionOutputJsonBytes) {
+      oversized.push({ filePath, size: fileStat.size });
+    }
+  }
+
+  if (legacy.length > 0) {
+    console.error("Legacy mission monoliths must not be committed:");
+    for (const filePath of legacy) {
+      console.error(`- ${path.relative(process.cwd(), filePath)}`);
+    }
+    process.exit(1);
+  }
+
+  if (oversized.length > 0) {
+    console.error("server-data/missions shaped outputs exceed the 50 MB limit:");
+    for (const { filePath, size } of oversized) {
+      console.error(`- ${path.relative(process.cwd(), filePath)} (${size} bytes)`);
+    }
+    process.exit(1);
+  }
+}
+
 const offenders = await walk(publicApiRoot);
 
 if (offenders.length > 0) {
@@ -72,6 +132,7 @@ if (offenders.length > 0) {
 }
 
 await validatePublicMissionHygiene();
+await validateServerMissionOutputs();
 
 const missionCatalogPath = path.join(missionSourceRoot, "mission_contracts.json");
 const missionReportPath = path.join(missionSourceRoot, "mission_extraction_report.json");
@@ -144,6 +205,7 @@ if (
 
 console.log("public/api contract hygiene check passed.");
 console.log("public/api/missions runtime JSON guard passed.");
+console.log("server-data/missions output size guard passed.");
 console.log("server-data/missions source check passed.");
 console.log("server-data/missions browser index check passed.");
 console.log("server-data/crafting/blueprint-sources index check passed.");

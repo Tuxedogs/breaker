@@ -100,9 +100,37 @@ type MissionBrowserFilterOption = {
   colorKey?: string;
 };
 
+type MissionShardManifest = {
+  familyFilesByFamilyId?: Record<string, {
+    familyKey: string;
+    detailFile: string;
+    variantsFile: string;
+  }>;
+  variantFilesByMissionId?: Record<string, {
+    missionId: string;
+    variantId: string;
+    familyId: string;
+    familyKey: string;
+    detailFile: string;
+    familyDetailFile: string;
+    familyVariantsFile: string;
+  }>;
+  variantFilesByVariantId?: Record<string, {
+    missionId: string;
+    variantId: string;
+    familyId: string;
+    familyKey: string;
+    detailFile: string;
+    familyDetailFile: string;
+    familyVariantsFile: string;
+  }>;
+};
+
 const missionRoot = getMissionDataRoot();
 let browserIndexCache: Promise<MissionBrowserIndex> | null = null;
 let browserIndexModifiedAt = 0;
+let shardManifestCache: Promise<MissionShardManifest> | null = null;
+let shardManifestModifiedAt = 0;
 
 function parseRouteUrl(rawUrl: string): URL {
   return new URL(rawUrl, "http://localhost");
@@ -125,6 +153,16 @@ async function loadBrowserIndex(): Promise<MissionBrowserIndex> {
     browserIndexCache = readJson<MissionBrowserIndex>("mission_browser_index.json");
   }
   return browserIndexCache;
+}
+
+async function loadShardManifest(): Promise<MissionShardManifest> {
+  const manifestPath = path.join(missionRoot, "mission_shard_manifest.json");
+  const modifiedAt = (await stat(manifestPath)).mtimeMs;
+  if (!shardManifestCache || modifiedAt !== shardManifestModifiedAt) {
+    shardManifestModifiedAt = modifiedAt;
+    shardManifestCache = readJson<MissionShardManifest>("mission_shard_manifest.json");
+  }
+  return shardManifestCache;
 }
 
 function rewardMatches(family: MissionFamilyView, reward: string): boolean {
@@ -248,8 +286,8 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
   const familyVariantsMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)\/variants$/);
   if (familyVariantsMatch) {
     const familyKey = decodeURIComponent(familyVariantsMatch[1] ?? "");
-    const index = await loadBrowserIndex();
-    const file = index.familyVariantFiles?.[familyKey];
+    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const file = index.familyVariantFiles?.[familyKey] ?? manifest.familyFilesByFamilyId?.[familyKey]?.variantsFile;
     if (!file) return { status: 404, body: { error: "Mission family variants not found." } };
     return { status: 200, body: await readJson(file) };
   }
@@ -257,8 +295,8 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
   const familyMatch = pathName.match(/^\/api\/missions\/(?:family|families)\/([^/]+)$/);
   if (familyMatch) {
     const familyKey = decodeURIComponent(familyMatch[1] ?? "");
-    const index = await loadBrowserIndex();
-    const file = index.familyDetailFiles?.[familyKey];
+    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const file = index.familyDetailFiles?.[familyKey] ?? manifest.familyFilesByFamilyId?.[familyKey]?.detailFile;
     if (!file) return { status: 404, body: { error: "Mission family not found." } };
     return { status: 200, body: await readJson(file) };
   }
@@ -267,8 +305,9 @@ export async function handleMissionsRoute(method: string, rawUrl: string): Promi
     ?? pathName.match(/^\/api\/missions\/variants\/([^/]+)$/);
   if (variantMatch) {
     const variantKey = decodeURIComponent(variantMatch[1] ?? "");
-    const index = await loadBrowserIndex();
-    const file = index.variantDetailFiles?.[variantKey];
+    const [index, manifest] = await Promise.all([loadBrowserIndex(), loadShardManifest()]);
+    const manifestEntry = manifest.variantFilesByVariantId?.[variantKey] ?? manifest.variantFilesByMissionId?.[variantKey];
+    const file = index.variantDetailFiles?.[variantKey] ?? manifestEntry?.detailFile;
     if (!file) return { status: 404, body: { error: "Mission variant not found." } };
     return { status: 200, body: await readJson(file) };
   }
