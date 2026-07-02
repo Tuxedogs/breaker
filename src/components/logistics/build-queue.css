@@ -215,6 +215,22 @@
     inset 0 0 18px rgba(0, 230, 210, 0.045);
 }
 
+.bq-craft-card.allocation-owner-highlight,
+.bq-queue-pill.allocation-owner-highlight {
+  border-color: #B85CF6;
+  box-shadow:
+    0 0 0 1px rgba(184, 92, 246, 0.18),
+    0 0 18px rgba(184, 92, 246, 0.2);
+}
+
+.bq-craft-card.is-selected.allocation-owner-highlight,
+.bq-queue-pill.is-selected.allocation-owner-highlight {
+  border-color: #00E6D2;
+  box-shadow:
+    0 0 0 1px rgba(0, 230, 210, 0.2),
+    0 0 18px rgba(0, 230, 210, 0.18);
+}
+
 .bq-craft-card-index {
   padding-top: 2px;
   font-size: 12px;
@@ -1575,7 +1591,8 @@
 }
 
 .bq-reserve-stack-row--reserved-elsewhere:hover,
-.bq-reserve-stack-row--reserved-elsewhere:focus-within {
+.bq-reserve-stack-row--reserved-elsewhere:focus-within,
+.bq-reserve-stack-row--reserved-elsewhere.allocation-owner-highlight {
   background: rgba(76, 58, 116, 0.24);
   box-shadow: inset 2px 0 0 rgba(167, 139, 250, 0.5);
 }
@@ -1733,8 +1750,8 @@
 }
 
 .bq-reassign-detail {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 14px 0 16px;
   padding: 10px 12px;
@@ -1744,8 +1761,18 @@
   color: var(--alloc-text-secondary);
 }
 
+.bq-reassign-detail span {
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .bq-reassign-detail strong {
   color: rgba(187, 247, 208, 0.88);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bq-reassign-actions {

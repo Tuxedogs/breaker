@@ -3,11 +3,14 @@ import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplat
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
   formatQuantity,
+  formatInventoryQuantity,
   getBuildQueueItemInputs,
   getInventoryStacks,
   getRecipeForQueueItem,
   materialTypeClass,
   rarityClass,
+  resolveInventoryItemName,
+  resolveInventoryUnitType,
   type InventoryStack,
   type SourceStrategy,
 } from '../../lib/logistics/inventory';
@@ -175,6 +178,8 @@ type PendingReassignment = {
   quantity: number;
   fromLabel: string;
   toLabel: string;
+  materialLabel: string;
+  availableQuantity: number;
   targetItemId: string;
   targetAllocation: ReservedMaterialAllocation;
   targetExistingAllocation?: ReservedMaterialAllocation;
@@ -205,7 +210,8 @@ function createAllocation(
 }
 
 function getBuildQueueItemLabel(item: BuildQueueItem, recipes: RecipeTemplate[]): string {
-  return item.itemName ?? recipes.find((recipe) => recipe.id === item.recipeId)?.name ?? `Queue Item #${item.id}`;
+  const recipeName = recipes.find((recipe) => recipe.id === item.recipeId)?.name;
+  return item.itemName ?? recipeName ?? (item.id ? `Queue item #${item.id}` : 'another craft');
 }
 
 function getRequirementLabel(
@@ -226,7 +232,21 @@ function getRequirementLabel(
 function getAssignmentLabel(assignment: StackReservationAssignment | undefined): string {
   if (!assignment) return 'Reserved';
   if (assignment.isCurrentRequirement) return 'Assigned here';
-  return assignment.requirementName ?? assignment.itemName ?? 'Reserved';
+  return assignment.itemName ?? 'another craft';
+}
+
+function getAssignmentTooltip(assignment: StackReservationAssignment | undefined): string | undefined {
+  if (!assignment) return undefined;
+  if (assignment.isCurrentRequirement) return 'Assigned here';
+  return `Assigned to ${assignment.itemName ?? 'another craft'}`;
+}
+
+function getStackMaterialLabel(stack: InventoryStack): string {
+  return resolveInventoryItemName(stack, stack.material);
+}
+
+function formatStackQuantity(quantity: number, stack: InventoryStack): string {
+  return formatInventoryQuantity(quantity, resolveInventoryUnitType(stack, stack.material));
 }
 
 function getStackReservationAssignments(
@@ -623,6 +643,7 @@ interface Props {
   onToggleAllocation: (buildQueueItemId: string, allocation: ReservedMaterialAllocation) => void;
   onUpdateAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
+  onAllocationOwnerHighlightChange?: (itemId: string | null) => void;
   iconMode: FittingIconMode;
 }
 
@@ -780,6 +801,7 @@ export default function BuildQueueGroup({
   category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
   materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
+  onAllocationOwnerHighlightChange,
   iconMode,
 }: Props) {
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
@@ -789,6 +811,20 @@ export default function BuildQueueGroup({
   const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
+
+  const setAllocationOwnerHighlight = useCallback((itemId: string | null) => {
+    setFocusedAssignmentItemId(itemId);
+    onAllocationOwnerHighlightChange?.(itemId);
+  }, [onAllocationOwnerHighlightChange]);
+
+  useEffect(() => {
+    if (!pendingReassignment) return;
+    setAllocationOwnerHighlight(pendingReassignment.from.item.id);
+  }, [pendingReassignment, setAllocationOwnerHighlight]);
+
+  useEffect(() => () => {
+    onAllocationOwnerHighlightChange?.(null);
+  }, [onAllocationOwnerHighlightChange]);
 
   function openQualityEditor(itemId: string, editorKey: string, selectedQuality: number | undefined) {
     const alreadyOpen =
@@ -822,7 +858,12 @@ export default function BuildQueueGroup({
       onToggleAllocation(pendingReassignment.targetItemId, targetAllocation);
     }
     setPendingReassignment(null);
-    setFocusedAssignmentItemId(null);
+    setAllocationOwnerHighlight(null);
+  }
+
+  function cancelPendingReassignment() {
+    setPendingReassignment(null);
+    setAllocationOwnerHighlight(null);
   }
 
   function cancelQualityEditor(itemId: string, editorKey: string) {
@@ -871,7 +912,7 @@ export default function BuildQueueGroup({
   return (
     <div className="bq-category">
       {pendingReassignment ? (
-        <div className="bq-reassign-modal-backdrop" role="presentation" onMouseDown={() => setPendingReassignment(null)}>
+        <div className="bq-reassign-modal-backdrop" role="presentation" onMouseDown={cancelPendingReassignment}>
           <div
             className="bq-reassign-modal"
             role="dialog"
@@ -879,19 +920,22 @@ export default function BuildQueueGroup({
             aria-labelledby="bq-reassign-title"
             onMouseDown={(event) => event.stopPropagation()}
             onKeyDown={(event) => {
-              if (event.key === 'Escape') setPendingReassignment(null);
+              if (event.key === 'Escape') cancelPendingReassignment();
             }}
           >
             <h3 id="bq-reassign-title">Reassign Allocation</h3>
             <p>
-              This stock is currently assigned to {pendingReassignment.fromLabel}. Reassign it to {pendingReassignment.toLabel}?
+              This {formatStackQuantity(pendingReassignment.quantity, pendingReassignment.stack)} {pendingReassignment.materialLabel} stock is currently assigned to {pendingReassignment.fromLabel}. Reassign it to {pendingReassignment.toLabel}?
             </p>
             <div className="bq-reassign-detail">
-              <span>{pendingReassignment.stack.location?.name ?? pendingReassignment.stack.locationId ?? 'Unassigned stock'}</span>
-              <strong>{formatQuantity(pendingReassignment.quantity, undefined)}</strong>
+              <span>Location: <strong>{pendingReassignment.stack.location?.name ?? pendingReassignment.stack.locationId ?? 'Unassigned stock'}</strong></span>
+              <span>Quality: <strong>{pendingReassignment.stack.quality ?? 'Unknown'}</strong></span>
+              <span>Available: <strong>{formatStackQuantity(pendingReassignment.availableQuantity, pendingReassignment.stack)}</strong></span>
+              <span>Reserved: <strong>{formatStackQuantity(pendingReassignment.quantity, pendingReassignment.stack)}</strong></span>
+              <span>Material: <strong>{pendingReassignment.materialLabel}</strong></span>
             </div>
             <div className="bq-reassign-actions">
-              <button type="button" className="bq-btn" onClick={() => setPendingReassignment(null)}>Cancel</button>
+              <button type="button" className="bq-btn" onClick={cancelPendingReassignment}>Cancel</button>
               <button type="button" className="bq-btn bq-btn--confirm" onClick={confirmPendingReassignment}>Reassign</button>
             </div>
           </div>
@@ -1510,7 +1554,9 @@ export default function BuildQueueGroup({
                                         ? assignments.find((assignment) => assignment.allocation.id === existingAllocation.id)
                                         : undefined;
                                       const otherAssignment = assignments.find((assignment) => !assignment.isCurrentRequirement);
-                                      const assignmentLabel = getAssignmentLabel(currentAssignment ?? otherAssignment);
+                                      const ownerAssignment = currentAssignment ?? otherAssignment;
+                                      const assignmentLabel = ownerAssignment ? getAssignmentLabel(ownerAssignment) : undefined;
+                                      const reassignSourceLabel = getAssignmentLabel(otherAssignment);
                                       const isAssignedHere = Boolean(currentAssignment);
                                       const isReservedElsewhere = Boolean(otherAssignment);
                                       const isZeroAvailable = availableAfterThisReservation <= 0 && !isAssignedHere;
@@ -1524,8 +1570,8 @@ export default function BuildQueueGroup({
                                       const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
                                       const locationName = stack.location?.name ?? stack.locationId ?? 'Unassigned stock';
                                       const locationMeta = stack.location?.system ? `${stack.location.system} System` : stack.container;
-                                      const assignmentTitle = isAssignedHere || isReservedElsewhere ? assignmentLabel : undefined;
-                                      const locationTitle = [locationName, stack.location?.system, stack.container, assignmentTitle].filter(Boolean).join(' - ');
+                                      const assignmentTitle = getAssignmentTooltip(ownerAssignment);
+                                      const locationTitle = [locationName, stack.location?.system, stack.container].filter(Boolean).join(' - ');
                                       const commitDraftValue = (rawValue: string) => {
                                         if (isReservedElsewhere && !isAssignedHere) return;
                                         const parsed = parseDraftNumber(rawValue);
@@ -1540,8 +1586,10 @@ export default function BuildQueueGroup({
                                           stack,
                                           from: otherAssignment,
                                           quantity: reassignQuantity,
-                                          fromLabel: getAssignmentLabel(otherAssignment),
+                                          fromLabel: reassignSourceLabel,
                                           toLabel: group.displayName,
+                                          materialLabel: getStackMaterialLabel(stack),
+                                          availableQuantity: availableAfterThisReservation,
                                           targetItemId: item.id,
                                           targetExistingAllocation: existingAllocation,
                                           targetAllocation: createAllocation(
@@ -1555,6 +1603,7 @@ export default function BuildQueueGroup({
                                             isBelowReassignTarget,
                                           ),
                                         });
+                                        setAllocationOwnerHighlight(otherAssignment.item.id);
                                       };
                                       return (
                                         <div key={stack.id} className="bq-reserve-stack-wrap">
@@ -1565,13 +1614,18 @@ export default function BuildQueueGroup({
                                               isBelowTarget ? 'bq-reserve-stack-row--below-target' : '',
                                               isAssignedHere ? 'bq-reserve-stack-row--assigned-here' : '',
                                               isReservedElsewhere && !isAssignedHere ? 'bq-reserve-stack-row--reserved-elsewhere' : '',
+                                              otherAssignment?.item.id === focusedAssignmentItemId ? 'allocation-owner-highlight' : '',
                                               isZeroAvailable ? 'bq-reserve-stack-row--zero-available' : '',
                                             ].filter(Boolean).join(' ')}
-                                            title={assignmentTitle ? `Assigned to ${assignmentTitle}` : undefined}
-                                            onMouseEnter={() => setFocusedAssignmentItemId(otherAssignment?.item.id ?? null)}
-                                            onMouseLeave={() => setFocusedAssignmentItemId(null)}
-                                            onFocus={() => setFocusedAssignmentItemId(otherAssignment?.item.id ?? null)}
-                                            onBlur={() => setFocusedAssignmentItemId(null)}
+                                            title={assignmentTitle}
+                                            onMouseEnter={() => setAllocationOwnerHighlight(otherAssignment?.item.id ?? null)}
+                                            onMouseLeave={() => {
+                                              if (!pendingReassignment) setAllocationOwnerHighlight(null);
+                                            }}
+                                            onFocus={() => setAllocationOwnerHighlight(otherAssignment?.item.id ?? null)}
+                                            onBlur={() => {
+                                              if (!pendingReassignment) setAllocationOwnerHighlight(null);
+                                            }}
                                           >
                                             <span className="bq-reserve-col-select">
                                               <input
@@ -1589,7 +1643,7 @@ export default function BuildQueueGroup({
                                                 }}
                                               />
                                             </span>
-                                            <span className="bq-reserve-col-location" title={locationTitle || undefined}>
+                                            <span className="bq-reserve-col-location" title={assignmentTitle ? undefined : locationTitle || undefined}>
                                               <span className="bq-reserve-location-icon">
                                                 <LocationPinIcon />
                                               </span>
@@ -1606,7 +1660,7 @@ export default function BuildQueueGroup({
                                             </span>
                                             <span className={`bq-reserve-col-reserved ${materialTypeClass(req.material)}`}>
                                               <strong>{formatQuantity(reservedDisplayQuantity, req.material)}</strong>
-                                              {assignmentTitle ? <em>{assignmentTitle}</em> : null}
+                                              {assignmentLabel ? <em>{assignmentLabel}</em> : null}
                                             </span>
                                             <span className="bq-reserve-col-assign">
                                               <input
@@ -1633,8 +1687,8 @@ export default function BuildQueueGroup({
                                                   type="button"
                                                   className="bq-reserve-reassign"
                                                   disabled={reassignQuantity <= 0}
-                                                  aria-label={`Reassign allocation from ${assignmentLabel} to ${group.displayName}`}
-                                                  title={reassignQuantity > 0 ? `Reassign allocation from ${assignmentLabel}` : 'Current requirement is already filled'}
+                                                  aria-label={`Reassign allocation from ${reassignSourceLabel} to ${group.displayName}`}
+                                                  title={reassignQuantity > 0 ? `Reassign allocation from ${reassignSourceLabel}` : 'Current requirement is already filled'}
                                                   onClick={beginReassignment}
                                                 >
                                                   <SwapIcon />

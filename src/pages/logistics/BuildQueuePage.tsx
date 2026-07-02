@@ -61,6 +61,7 @@ export default function BuildQueuePage() {
   const [sourceStrategy] = useState<SourceStrategy>("minimize-splits");
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(false);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
   const isMobileQueueLayout = useIsMobileQueueLayout();
@@ -204,6 +205,7 @@ export default function BuildQueuePage() {
                     className={[
                       "bq-queue-pill",
                       selected ? "is-selected" : "",
+                      row.item.id === allocationOwnerHighlightId ? "allocation-owner-highlight" : "",
                       row.completed ? "is-complete" : "",
                     ].filter(Boolean).join(" ")}
                     aria-current={selected ? "true" : undefined}
@@ -227,6 +229,7 @@ export default function BuildQueuePage() {
                   locations={locations}
                   materials={materials}
                   selected={row.item.id === resolvedSelectedItemId}
+                  highlighted={row.item.id === allocationOwnerHighlightId}
                   iconMode={iconMode}
                   onSelect={setSelectedItemId}
                   onQuantityChange={updateBuildQueueItemQuantity}
@@ -262,6 +265,7 @@ export default function BuildQueuePage() {
               onToggleAllocation={toggleBuildQueueAllocation}
               onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
               onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
+              onAllocationOwnerHighlightChange={setAllocationOwnerHighlightId}
               iconMode={iconMode}
             />
             </div>

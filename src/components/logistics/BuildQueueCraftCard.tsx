@@ -58,6 +58,7 @@ interface Props {
   locations: InventoryLocation[];
   materials: MaterialTemplate[];
   selected: boolean;
+  highlighted?: boolean;
   iconMode: FittingIconMode;
   onSelect: (id: string) => void;
   onQuantityChange: (id: string, quantity: number) => void;
@@ -71,6 +72,7 @@ export default function BuildQueueCraftCard({
   recipeInputsByRecipeId,
   inventory,
   selected,
+  highlighted = false,
   iconMode,
   onSelect,
   onQuantityChange,
@@ -93,6 +95,7 @@ export default function BuildQueueCraftCard({
       className={[
         "bq-craft-card",
         selected ? "is-selected" : "",
+        highlighted ? "allocation-owner-highlight" : "",
         `bq-craft-card--${statusClass}`,
       ].filter(Boolean).join(" ")}
       onClick={() => onSelect(item.id)}
