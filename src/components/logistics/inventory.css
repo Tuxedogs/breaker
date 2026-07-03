@@ -1569,8 +1569,206 @@
 }
 
 .logi-inv-page .logi-drawer {
-  border-left: 1px solid var(--panel-border);
+  inset: 32px 16px auto;
+  width: min(640px, calc(100vw - 32px));
+  max-width: min(640px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  margin: auto;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+  box-shadow:
+    0 24px 72px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  overflow: hidden;
+}
+
+.logi-inv-page .logi-drawer-overlay {
+  background: rgba(1, 8, 13, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.logi-inv-page .logi-entry-modal {
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.logi-inv-page .logi-entry-modal.logi-drawer--open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.logi-inv-page .logi-entry-modal .logi-entry-panel {
+  height: auto;
+  max-height: calc(100vh - 64px);
+  padding: 18px 20px 20px;
+  background: var(--panel-bg);
+  scrollbar-color: rgba(0, 230, 210, 0.18) transparent;
+}
+
+.logi-inv-page .logi-entry-panel-header {
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-page .logi-entry-panel-heading {
+  display: grid;
+  gap: 4px;
+}
+
+.logi-inv-page .logi-entry-panel-title {
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.logi-inv-page .logi-entry-panel-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.logi-inv-page .logi-panel-close-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
   background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+}
+
+.logi-inv-page .logi-panel-close-btn:hover {
+  border-color: rgba(0, 230, 210, 0.34);
+  background: rgba(0, 230, 210, 0.06);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-page .logi-entry-panel-body {
+  display: grid;
+  gap: 0;
+}
+
+.logi-inv-page .logi-form-field {
+  margin-bottom: 14px;
+}
+
+.logi-inv-page .logi-form-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.logi-inv-page .logi-form-input,
+.logi-inv-page .logi-form-select {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.logi-inv-page .logi-form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.logi-inv-page .logi-form-input:focus,
+.logi-inv-page .logi-form-select:focus {
+  border-color: rgba(0, 230, 210, 0.34);
+}
+
+.logi-inv-page .logi-form-input--selected,
+.logi-inv-page .logi-form-select:disabled {
+  border-color: rgba(65, 132, 160, 0.3);
+}
+
+.logi-inv-page .logi-form-input--error {
+  border-color: rgba(255, 92, 92, 0.42);
+}
+
+.logi-inv-page .logi-form-hint {
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.logi-inv-page .logi-form-hint--value {
+  color: var(--accent-cyan);
+}
+
+.logi-inv-page .logi-form-error {
+  color: var(--danger);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.logi-inv-page .logi-form-row-pair {
+  gap: 12px;
+}
+
+.logi-inv-page .logi-inv-segmented {
+  border-color: var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+}
+
+.logi-inv-page .logi-inv-segmented-btn {
+  min-height: 38px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.logi-inv-page .logi-inv-segmented-btn--active {
+  background: rgba(184, 92, 246, 0.16);
+  color: #e9deff;
+}
+
+.logi-inv-page .logi-location-suggestions {
+  background: var(--panel-bg);
+  border-color: var(--panel-border);
+  border-radius: 10px;
+}
+
+.logi-inv-page .logi-entry-panel-actions {
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-page .logi-entry-panel-actions .logi-btn-primary,
+.logi-inv-page .logi-entry-panel-actions .logi-btn-ghost {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 8px;
+}
+
+.logi-inv-page .logi-entry-panel-actions .logi-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.logi-inv-page .logi-entry-panel-actions .logi-inventory-add-success,
+.logi-inv-page .logi-entry-panel-actions .logi-inventory-add-error {
+  width: 100%;
 }
 
 .logi-inv-page :where(button, input, select):focus-visible {
@@ -1872,6 +2070,39 @@
   .logi-inv-page {
     padding: 12px;
     padding-bottom: calc(5.25rem + env(safe-area-inset-bottom));
+  }
+
+  .logi-inv-page .logi-drawer {
+    inset: auto 0 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 88vh;
+    border-radius: 18px 18px 0 0;
+    transform: translateY(100%);
+  }
+
+  .logi-inv-page .logi-drawer.logi-drawer--open {
+    transform: translateY(0);
+  }
+
+  .logi-inv-page .logi-entry-modal .logi-entry-panel {
+    max-height: 88vh;
+    padding: 16px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .logi-inv-page .logi-entry-panel-actions {
+    position: sticky;
+    bottom: 0;
+    margin: 0 -16px calc(-12px - env(safe-area-inset-bottom));
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(4, 19, 29, 0.96);
+    backdrop-filter: blur(10px);
+  }
+
+  .logi-inv-page .logi-entry-panel-actions .logi-btn-ghost,
+  .logi-inv-page .logi-entry-panel-actions .logi-btn-primary {
+    flex: 1 1 0;
+    justify-content: center;
   }
 
   .logi-location-card-slot--expanded {

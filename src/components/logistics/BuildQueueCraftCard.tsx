@@ -42,12 +42,6 @@ function getStatusLabel(item: BuildQueueItem, fulfillment: "complete" | "partial
   return "Missing";
 }
 
-function getLocationHint(item: BuildQueueItem): string {
-  const source = item.blueprintSources?.[0];
-  if (!source) return "Blueprint source unknown";
-  return source.sourceFolder?.trim() || source.displayName;
-}
-
 interface Props {
   index: number;
   item: BuildQueueItem;
@@ -102,55 +96,56 @@ export default function BuildQueueCraftCard({
       aria-current={selected ? "true" : undefined}
     >
       <span className="bq-craft-card-index">{index}</span>
-      <span className="bq-craft-card-thumb" aria-hidden="true">
-        <BuildQueueProductIcon item={item} recipe={recipe} preferredMode={iconMode} layout="desktop" alt="" />
-      </span>
-      <span className="bq-craft-card-body">
-        <span className="bq-craft-card-cat">{CATEGORY_LABELS[category] ?? category}</span>
-        <span className="bq-craft-card-name">{itemName}</span>
-        <span className="bq-craft-card-location">{getLocationHint(item)}</span>
-        <span className="bq-craft-card-foot">
-          <span className={`bq-craft-card-status bq-craft-card-status--${statusClass}`}>{statusLabel}</span>
-          <span className="bq-qty bq-qty--compact" data-bq-row-control="true">
-            <button
-              type="button"
-              className="bq-qty-btn"
-              disabled={item.quantity <= 1}
-              onClick={(event) => {
-                event.stopPropagation();
-                onQuantityChange(item.id, item.quantity - 1);
-              }}
-              aria-label="Decrease quantity"
-            >
-              −
-            </button>
-            <span className="bq-qty-val">{item.quantity}</span>
-            <button
-              type="button"
-              className="bq-qty-btn"
-              onClick={(event) => {
-                event.stopPropagation();
-                onQuantityChange(item.id, item.quantity + 1);
-              }}
-              aria-label="Increase quantity"
-            >
-              +
-            </button>
-          </span>
+      <span className="bq-craft-card-icon-col">
+        <span className="bq-craft-card-thumb" aria-hidden="true">
+          <BuildQueueProductIcon item={item} recipe={recipe} preferredMode={iconMode} layout="desktop" alt="" />
+        </span>
+        <span className="bq-qty bq-qty--compact" data-bq-row-control="true">
+          <button
+            type="button"
+            className="bq-qty-btn"
+            disabled={item.quantity <= 1}
+            onClick={(event) => {
+              event.stopPropagation();
+              onQuantityChange(item.id, item.quantity - 1);
+            }}
+            aria-label="Decrease quantity"
+          >
+            −
+          </button>
+          <span className="bq-qty-val">{item.quantity}</span>
+          <button
+            type="button"
+            className="bq-qty-btn"
+            onClick={(event) => {
+              event.stopPropagation();
+              onQuantityChange(item.id, item.quantity + 1);
+            }}
+            aria-label="Increase quantity"
+          >
+            +
+          </button>
         </span>
       </span>
-      <span className="bq-craft-card-ring" aria-label={`${progress}% progress`}>
-        <svg viewBox="0 0 36 36" aria-hidden="true">
-          <circle className="bq-craft-card-ring-track" cx="18" cy="18" r="15.5" />
-          <circle
-            className="bq-craft-card-ring-fill"
-            cx="18"
-            cy="18"
-            r="15.5"
-            style={{ strokeDasharray: `${progress} 100` }}
-          />
-        </svg>
-        <span>{progress}%</span>
+      <span className="bq-craft-card-main">
+        <span className="bq-craft-card-cat">{CATEGORY_LABELS[category] ?? category}</span>
+        <span className="bq-craft-card-name">{itemName}</span>
+      </span>
+      <span className="bq-craft-card-progress-col">
+        <span className="bq-craft-card-ring" aria-label={`${progress}% progress`}>
+          <svg viewBox="0 0 36 36" aria-hidden="true">
+            <circle className="bq-craft-card-ring-track" cx="18" cy="18" r="15.5" />
+            <circle
+              className="bq-craft-card-ring-fill"
+              cx="18"
+              cy="18"
+              r="15.5"
+              style={{ strokeDasharray: `${progress} 100` }}
+            />
+          </svg>
+          <span>{progress}%</span>
+        </span>
+        <span className={`bq-craft-card-status bq-craft-card-status--${statusClass}`}>{statusLabel}</span>
       </span>
     </button>
   );

@@ -30,6 +30,10 @@ import {
   resolveInventoryItemName,
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
+import {
+  mergeCanonicalInventoryLocations,
+  remapInventoryEntryLocationIds,
+} from "../lib/logistics/inventoryLocationOptions";
 import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
 import type {
   BuildQueueItem,
@@ -116,13 +120,8 @@ function getMaterialTemplate(materialId: string | undefined, materials: Material
   return materials.find((material) => material.id === materialId);
 }
 
-function mergeInventoryLocationSeeds(seedLocations: InventoryLocation[], persistedLocations: InventoryLocation[] | undefined): InventoryLocation[] {
-  if (!persistedLocations?.length) return seedLocations;
-  const seedIds = new Set(seedLocations.map((location) => location.id));
-  const extraLocations = persistedLocations.filter((location) =>
-    !seedIds.has(location.id) && location.category?.toLowerCase() !== "moon"
-  );
-  return [...seedLocations, ...extraLocations];
+function mergeInventoryLocationSeeds(_seedLocations: InventoryLocation[], persistedLocations: InventoryLocation[] | undefined): InventoryLocation[] {
+  return mergeCanonicalInventoryLocations(persistedLocations?.length ? persistedLocations : undefined).locations;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -723,10 +722,17 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       replaceOnlineState: (onlineState) => {
-        set((state) => ({
-          locations: onlineState.locations.length ? onlineState.locations : state.locations,
+        set((state) => {
+          const mergedLocations = mergeCanonicalInventoryLocations(
+            onlineState.locations.length ? onlineState.locations : state.locations,
+          );
+          return {
+          locations: mergedLocations.locations,
           inventoryEntries: repairInventoryEntryIds(
-            onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+            remapInventoryEntryLocationIds(
+              onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+              mergedLocations.locationIdRemap,
+            ),
           ),
           buildQueue: onlineState.buildQueue.map((item) => ({
             ...item,
@@ -734,7 +740,8 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             allowLowerQuality: item.allowLowerQuality === true,
             status: item.status ?? "queued",
           })),
-        }));
+        };
+        });
       },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
         set((state) => {

@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 
-import {
-  initialBuildQueue,
-  initialInventoryEntries,
-  inventoryLocations,
-} from "../../data/logistics/seed";
+import { canonicalInventoryLocations } from "../../data/logistics/inventoryLocationCatalog";
+import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { getOnlineSyncStatus, getUserRemoteMigratedAtKey, setOnlineSyncStatus } from "../../lib/onlineSyncStatus";
 import {
@@ -19,7 +16,7 @@ import { setBuildQueueAccessToken } from "../../lib/userBuildQueuePersistence";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../../types/logistics";
 
-const seedLocationIds = new Set(inventoryLocations.map((location) => location.id));
+const seedLocationIds = new Set(canonicalInventoryLocations.map((location) => location.id));
 const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
 const seedBuildQueueIds = new Set(initialBuildQueue.map((item) => item.id));
 

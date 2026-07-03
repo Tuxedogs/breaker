@@ -62,7 +62,7 @@ export default function BuildQueuePage() {
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
-  const [summaryCollapsed, setSummaryCollapsed] = useState(false);
+  const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});

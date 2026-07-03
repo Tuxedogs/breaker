@@ -25,6 +25,7 @@ export default function QueueLedger({
   const refinedLines = ledger.refinedShortfallLines.slice(0, LIST_LIMIT);
   const rawLines = ledger.rawOreRequirementLines.slice(0, LIST_LIMIT);
   const noStockPreview = noStockLines.slice(0, LIST_LIMIT);
+  const hasShortfall = ledger.summary.refinedShortfall > 0 || ledger.summary.noStockLines > 0;
 
   if (collapsed) {
     return (
@@ -35,7 +36,9 @@ export default function QueueLedger({
           onClick={onToggleCollapse}
           aria-label="Expand queue summary"
         >
-          «
+          <span className="bq-summary-reopen-icon" aria-hidden="true" />
+          <span className="bq-summary-reopen-label">Queue Summary</span>
+          {hasShortfall ? <span className="bq-summary-reopen-alert" aria-label="Shortfall exists" /> : null}
         </button>
       </aside>
     );
@@ -45,8 +48,9 @@ export default function QueueLedger({
     <aside className="bq-summary-col" aria-label="Queue summary">
       <header className="bq-summary-head">
         <h2>Queue Summary</h2>
-        <button type="button" className="bq-summary-collapse" onClick={onToggleCollapse}>
-          Collapse «
+        <button type="button" className="bq-summary-collapse" onClick={onToggleCollapse} aria-label="Collapse queue summary">
+          <span className="bq-summary-collapse-icon" aria-hidden="true" />
+          <span>Collapse</span>
         </button>
       </header>
 

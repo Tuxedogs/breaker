@@ -1,6 +1,10 @@
 import { useMemo, useState } from 'react';
 import { createInventoryEntryDraft } from '../../stores/logisticsStore';
-import { formatEntryQuantity } from '../../lib/logistics/inventory';
+import { formatEntryQuantity, getInventoryUnitLabel } from '../../lib/logistics/inventory';
+import {
+  buildInventoryLocationLookup,
+  resolveInventoryLocationByInput,
+} from '../../lib/logistics/inventoryLocationOptions';
 import { type MaterialIdentity, useMaterialIdentityIndex } from '../../lib/logistics/materialIdentityIndex';
 import type {
   InventoryCatalogSource,
@@ -19,7 +23,6 @@ interface Props {
   onCancel: () => void;
 }
 
-// Default unitType per itemKind
 const KIND_DEFAULT_UNIT: Record<InventoryItemKind, InventoryUnitType> = {
   material: 'scu',
   ore: 'scu',
@@ -34,7 +37,6 @@ const KIND_DEFAULT_UNIT: Record<InventoryItemKind, InventoryUnitType> = {
   unknown: 'unit',
 };
 
-// Derive unit from catalog material, falling back to kind default
 function resolveUnitFromMaterial(mat: MaterialTemplate | undefined, kind: InventoryItemKind): InventoryUnitType {
   if (!mat) return KIND_DEFAULT_UNIT[kind];
   if (mat.materialType === 'ore' || mat.materialType === 'refined') return 'scu';
@@ -70,21 +72,17 @@ function createNewInventoryId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
-// ─── Single-entry draft state ─────────────────────────────────────────────────
-
 interface DraftState {
-  // catalog lookup (legacy materialId path)
   catalogMode: 'catalog' | 'manual';
-  materialId: string;      // only used when catalogMode === 'catalog'
+  materialId: string;
   mineableForm: MineableFormChoice;
-  // manual / generalized
   itemName: string;
   itemKind: InventoryItemKind;
   unitType: InventoryUnitType;
   quantity: string;
   quality: string;
   locationId: string;
-  locationSearch: string;  // text field value for location typeahead
+  locationSearch: string;
   container: string;
   notes: string;
 }
@@ -121,7 +119,7 @@ function initBlankDraft(): DraftState {
     mineableForm: '',
     itemName: '',
     itemKind: 'ore',
-    unitType: KIND_DEFAULT_UNIT['ore'],
+    unitType: 'scu',
     quantity: '',
     quality: '',
     locationId: '',
@@ -131,13 +129,12 @@ function initBlankDraft(): DraftState {
   };
 }
 
-// ─── Location Typeahead ───────────────────────────────────────────────────────
-
 interface LocationTypeaheadProps {
   locations: InventoryLocation[];
   locationId: string;
   locationSearch: string;
   open: boolean;
+  inputClassName?: string;
   onSearchChange: (search: string) => void;
   onSelect: (id: string, name: string) => void;
   onOpen: () => void;
@@ -280,36 +277,40 @@ function buildLocationSuggestionGroups(locations: InventoryLocation[], query: st
 }
 
 function LocationTypeahead({
-  locations, locationId, locationSearch, open,
-  onSearchChange, onSelect, onOpen, onClose,
+  locations,
+  locationId,
+  locationSearch,
+  open,
+  inputClassName,
+  onSearchChange,
+  onSelect,
+  onOpen,
+  onClose,
 }: LocationTypeaheadProps) {
   const groupedSuggestions = useMemo(
     () => buildLocationSuggestionGroups(locations, locationSearch),
     [locations, locationSearch],
   );
   const hasSuggestions = groupedSuggestions.some((group) => group.categories.some((category) => category.locations.length > 0));
-
   const selectedName = locationId ? locations.find((l) => l.id === locationId)?.name : undefined;
 
   return (
-    <div className="logi-form-field">
+    <>
       <label htmlFor="inv-location-search" className="logi-form-label">Location</label>
       <div className="logi-location-typeahead">
         <input
           id="inv-location-search"
           type="text"
-          className={`logi-form-input${locationId ? ' logi-form-input--selected' : ''}`}
+          className={inputClassName ?? `logi-form-input${locationId ? ' logi-form-input--selected' : ''}`}
           value={locationSearch}
           onChange={(e) => onSearchChange(e.target.value)}
           onFocus={onOpen}
           onBlur={() => setTimeout(onClose, 150)}
-          placeholder="Search or type location…"
+          placeholder="Search or type location..."
           autoComplete="off"
         />
-        {locationId && selectedName && (
-          <span className="logi-form-hint logi-form-hint--value">{selectedName}</span>
-        )}
-        {open && hasSuggestions && (
+        {locationId && selectedName ? <span className="logi-form-hint logi-form-hint--value">{selectedName}</span> : null}
+        {open && hasSuggestions ? (
           <ul className="logi-location-suggestions" role="listbox">
             {groupedSuggestions.map((systemGroup) => (
               <li key={systemGroup.system} className="logi-location-suggestion-system" aria-disabled="true">
@@ -338,32 +339,30 @@ function LocationTypeahead({
               </li>
             ))}
           </ul>
-        )}
-        {open && !hasSuggestions && locationSearch.trim() && (
+        ) : null}
+        {open && !hasSuggestions && locationSearch.trim() ? (
           <div className="logi-location-suggestions logi-location-suggestions--empty">
-            No matching locations — add one in Locations first
+            No matching locations. Add one in Locations first.
           </div>
-        )}
+        ) : null}
       </div>
-    </div>
+    </>
   );
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function InventoryEntryPanel({ entry, materials, locations, onSave, onCancel }: Props) {
   const isNew = entry === null;
-
   const materialIdentities = useMaterialIdentityIndex();
-  const [draft, setDraft] = useState<DraftState>(() =>
+  const [draft, setDraft] = useState<DraftState>(() => (
     entry
       ? initDraftFromEntry(entry, materials, locations)
-      : initBlankDraft(),
-  );
+      : initBlankDraft()
+  ));
   const [locationOpen, setLocationOpen] = useState(false);
   const [clearLocationOnNextFocus, setClearLocationOnNextFocus] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [hasTriedSave, setHasTriedSave] = useState(false);
 
   const identityByLookup = useMemo(() => {
     const lookup = new Map<string, MaterialIdentity>();
@@ -396,7 +395,8 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   }, [materialByLookup, materialIdentities]);
 
   function patch(updates: Partial<DraftState>) {
-    setDraft((d) => ({ ...d, ...updates }));
+    if (hasTriedSave) setHasTriedSave(false);
+    setDraft((current) => ({ ...current, ...updates }));
   }
 
   function findMineableIdentity(itemName: string): ResolvedMineable | undefined {
@@ -422,7 +422,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         materialId: '',
         mineableForm: '',
         itemKind: 'manual',
-        unitType: 'unit',
+        unitType: draft.unitType,
       };
     }
     const { identity, material } = resolved;
@@ -439,9 +439,38 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     };
   }
 
+  const selectedMineable = findMineableIdentity(draft.itemName);
+  const selectedMaterial = selectedMineable?.material;
+  const selectedIsKnownMineable = isKnownMineable(selectedMaterial);
+  const selectedIsRefinableScu = isRefinableScuMineable(selectedMaterial, selectedMineable?.identity);
+  const knownUnitType = selectedIsRefinableScu ? 'scu' : resolveUnitFromMaterial(selectedMaterial, draft.itemKind);
+  const isUnitLocked = selectedIsKnownMineable;
+  const derivedUnitType: InventoryUnitType = isUnitLocked ? knownUnitType : draft.unitType;
+  const qty = parseFloat(draft.quantity);
+  const quantityPreview = Number.isNaN(qty) || qty <= 0
+    ? null
+    : derivedUnitType === 'scu'
+      ? `${qty} SCU`
+      : `x${qty}`;
+
+  const locationLookup = useMemo(() => buildInventoryLocationLookup(locations), [locations]);
+
+  const resolvedLocationId = (() => {
+    if (draft.locationId) return draft.locationId;
+    const search = draft.locationSearch.trim();
+    if (!search) return '';
+    const resolved = resolveInventoryLocationByInput(search, locationLookup);
+    if (resolved) return resolved.id;
+    const matches = locations.filter((location) => location.name.toLowerCase() === search.toLowerCase());
+    return matches.length === 1 ? matches[0].id : '';
+  })();
+
+  const resolvedLocationName = resolvedLocationId
+    ? locations.find((location) => location.id === resolvedLocationId)?.name ?? ''
+    : '';
+
   function buildEntry(overrideId?: string): InventoryEntry | null {
-    const qty = parseFloat(draft.quantity);
-    if (isNaN(qty) || qty <= 0) return null;
+    if (Number.isNaN(qty) || qty <= 0) return null;
     if (!resolvedLocationId) return null;
 
     const resolvedMineable = findMineableIdentity(draft.itemName);
@@ -452,7 +481,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         id: overrideId ?? entry?.id ?? createNewInventoryId(),
         itemName: customName,
         itemKind: 'manual',
-        unitType: 'unit',
+        unitType: derivedUnitType,
         catalogSource: 'manual',
         quality: parseOptionalQuality(draft.quality),
         quantity: qty,
@@ -466,13 +495,14 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
 
     if (!isRefinableScuMineable(resolvedMineable.material, resolvedMineable.identity)) {
       const resolvedItemName = resolvedMineable.identity?.displayName ?? resolvedMineable.material.name;
+      const derivedKind = deriveKindFromMaterial(resolvedMineable.material);
       return createInventoryEntryDraft({
         id: overrideId ?? entry?.id ?? createNewInventoryId(),
         materialId: resolvedMineable.material.id,
         materialType: resolvedMineable.material.materialType,
         itemName: resolvedItemName,
-        itemKind: deriveKindFromMaterial(resolvedMineable.material),
-        unitType: resolveUnitFromMaterial(resolvedMineable.material, deriveKindFromMaterial(resolvedMineable.material)),
+        itemKind: derivedKind,
+        unitType: resolveUnitFromMaterial(resolvedMineable.material, derivedKind),
         catalogSource: 'api',
         quality: parseOptionalQuality(draft.quality),
         quantity: qty,
@@ -511,14 +541,14 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   }
 
   function handleSave() {
+    setHasTriedSave(true);
     setErrorMessage('');
     const built = buildEntry();
     if (!built) {
-      const qty = parseFloat(draft.quantity);
       const resolvedMineable = findMineableIdentity(draft.itemName);
       const message = !draft.itemName.trim()
         ? 'Enter an item name.'
-        : isNaN(qty) || qty <= 0
+        : Number.isNaN(qty) || qty <= 0
           ? 'Enter a quantity greater than zero.'
           : !resolvedLocationId
             ? 'Choose a known inventory location.'
@@ -528,6 +558,7 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
       setErrorMessage(message);
       return;
     }
+
     onSave([built]);
     if (isNew) {
       const locationName = locations.find((location) => location.id === built.locationId)?.name;
@@ -547,9 +578,10 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         itemKind: 'manual',
         quantity: '',
         quality: '',
-        unitType: 'unit',
+        unitType: 'scu',
       }));
       setClearLocationOnNextFocus(false);
+      setHasTriedSave(false);
     }
   }
 
@@ -561,36 +593,23 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
     setLocationOpen(true);
   }
 
-  const selectedMineable = findMineableIdentity(draft.itemName);
-  const selectedMaterial = selectedMineable?.material;
-  const selectedIsKnownMineable = isKnownMineable(selectedMaterial);
-  const selectedIsRefinableScu = isRefinableScuMineable(selectedMaterial, selectedMineable?.identity);
-  const derivedUnitType: InventoryUnitType = selectedIsRefinableScu ? 'scu' : resolveUnitFromMaterial(selectedMaterial, draft.itemKind);
-  const qty = parseFloat(draft.quantity);
-  const quantityPreview = isNaN(qty) || qty <= 0
-    ? null
-    : derivedUnitType === 'scu'
-      ? `${qty} SCU`
-      : `×${qty}`;
-
-  // Resolve locationId: exact pick, or single-match from search text
-  const resolvedLocationId = (() => {
-    if (draft.locationId) return draft.locationId;
-    const q = draft.locationSearch.trim().toLowerCase();
-    if (!q) return '';
-    const matches = locations.filter((l) => l.name.toLowerCase() === q);
-    return matches.length === 1 ? matches[0].id : '';
-  })();
-
   const canSave = useMemo(() => {
-    const q = parseFloat(draft.quantity);
-    if (isNaN(q) || q <= 0) return false;
+    if (Number.isNaN(qty) || qty <= 0) return false;
     if (!resolvedLocationId) return false;
     if (!draft.itemName.trim()) return false;
     if (!selectedIsKnownMineable) return true;
     if (!selectedIsRefinableScu) return true;
     return Boolean(deriveInventoryKindFromForm(draft.mineableForm));
-  }, [draft.itemName, draft.mineableForm, draft.quantity, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
+  }, [draft.itemName, draft.mineableForm, qty, resolvedLocationId, selectedIsKnownMineable, selectedIsRefinableScu]);
+
+  const fieldErrors = {
+    itemName: !draft.itemName.trim() ? 'Enter an item name.' : '',
+    mineableForm: selectedIsRefinableScu && !deriveInventoryKindFromForm(draft.mineableForm)
+      ? 'Choose Raw or Refined for this known mineable.'
+      : '',
+    quantity: Number.isNaN(qty) || qty <= 0 ? 'Enter a quantity greater than zero.' : '',
+    location: !resolvedLocationId ? 'Choose a known inventory location.' : '',
+  };
 
   const itemHint = !draft.itemName.trim()
     ? 'Search known mineables or type a custom item name.'
@@ -605,7 +624,10 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
   return (
     <div className="logi-entry-panel">
       <div className="logi-entry-panel-header">
-        <span className="logi-entry-panel-title">{isNew ? 'Add Inventory Item' : 'Edit Inventory Item'}</span>
+        <div className="logi-entry-panel-heading">
+          <span className="logi-entry-panel-title">{isNew ? 'Add Inventory Item' : 'Edit Inventory Item'}</span>
+          {isNew ? <p className="logi-entry-panel-subtitle">Add a material stack to your inventory.</p> : null}
+        </div>
         <button type="button" className="logi-panel-close-btn" onClick={onCancel} aria-label="Close panel">
           <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="14" height="14">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -613,156 +635,182 @@ export default function InventoryEntryPanel({ entry, materials, locations, onSav
         </button>
       </div>
 
-      <div className="logi-form-field">
-        <label htmlFor="inv-item-name" className="logi-form-label">Item Name</label>
-        <input
-          id="inv-item-name"
-          type="text"
-          list="inv-known-items"
-          className={`logi-form-input${draft.materialId ? ' logi-form-input--selected' : ''}`}
-          value={draft.itemName}
-          onChange={(event) => {
-            patch(resolveKnownItem(event.target.value));
-            setSuccessMessage('');
-            setErrorMessage('');
-          }}
-          onBlur={(event) => patch(resolveKnownItem(event.target.value))}
-          placeholder="Search mineable material..."
-          autoFocus={isNew}
-        />
-        <datalist id="inv-known-items">
-          {mineableIdentities.map(({ identity }) => (
-            <option key={identity.materialKey} value={identity.displayName} />
-          ))}
-        </datalist>
-        <span className="logi-form-hint">
-          {itemHint}
-        </span>
-      </div>
-
-      {selectedIsRefinableScu && (
+      <div className="logi-entry-panel-body">
         <div className="logi-form-field">
-          <span className="logi-form-label">Raw / Refined</span>
-          <div className="logi-inv-segmented" role="group" aria-label="Raw or refined material">
-            <button
-              type="button"
-              className={`logi-inv-segmented-btn${draft.mineableForm === 'raw' ? ' logi-inv-segmented-btn--active' : ''}`}
-              onClick={() => patch({ mineableForm: 'raw', itemKind: 'ore', unitType: 'scu' })}
-            >
-              Raw
-            </button>
-            <button
-              type="button"
-              className={`logi-inv-segmented-btn${draft.mineableForm === 'refined' ? ' logi-inv-segmented-btn--active' : ''}`}
-              onClick={() => patch({ mineableForm: 'refined', itemKind: 'material', unitType: 'scu' })}
-            >
-              Refined
-            </button>
+          <label htmlFor="inv-item-name" className="logi-form-label">Material</label>
+          <input
+            id="inv-item-name"
+            type="text"
+            list="inv-known-items"
+            className={`logi-form-input${draft.materialId ? ' logi-form-input--selected' : ''}${hasTriedSave && fieldErrors.itemName ? ' logi-form-input--error' : ''}`}
+            value={draft.itemName}
+            onChange={(event) => {
+              patch(resolveKnownItem(event.target.value));
+              setSuccessMessage('');
+              setErrorMessage('');
+            }}
+            onBlur={(event) => patch(resolveKnownItem(event.target.value))}
+            placeholder="Search mineable material..."
+            autoFocus={isNew}
+          />
+          <datalist id="inv-known-items">
+            {mineableIdentities.map(({ identity }) => (
+              <option key={identity.materialKey} value={identity.displayName} />
+            ))}
+          </datalist>
+          <span className="logi-form-hint">{itemHint}</span>
+          {hasTriedSave && fieldErrors.itemName ? <span className="logi-form-error">{fieldErrors.itemName}</span> : null}
+        </div>
+
+        {selectedIsRefinableScu ? (
+          <div className="logi-form-field">
+            <span className="logi-form-label">Raw / Refined</span>
+            <div className="logi-inv-segmented" role="group" aria-label="Raw or refined material">
+              <button
+                type="button"
+                className={`logi-inv-segmented-btn${draft.mineableForm === 'raw' ? ' logi-inv-segmented-btn--active' : ''}`}
+                onClick={() => patch({ mineableForm: 'raw', itemKind: 'ore', unitType: 'scu' })}
+              >
+                Raw
+              </button>
+              <button
+                type="button"
+                className={`logi-inv-segmented-btn${draft.mineableForm === 'refined' ? ' logi-inv-segmented-btn--active' : ''}`}
+                onClick={() => patch({ mineableForm: 'refined', itemKind: 'material', unitType: 'scu' })}
+              >
+                Refined
+              </button>
+            </div>
+            {hasTriedSave && fieldErrors.mineableForm ? <span className="logi-form-error">{fieldErrors.mineableForm}</span> : null}
+          </div>
+        ) : null}
+
+        <div className="logi-form-row-pair">
+          <div className="logi-form-field">
+            <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0-1000)</span></label>
+            <input
+              id="inv-quality"
+              type="number"
+              className="logi-form-input"
+              value={draft.quality}
+              onChange={(e) => patch({ quality: e.target.value })}
+              placeholder="Optional"
+              min="0"
+              max="1000"
+              step="1"
+            />
+            <span className="logi-form-hint">Blank means no quality.</span>
+          </div>
+          <div className="logi-form-field">
+            <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
+            <input
+              id="inv-quantity"
+              type="number"
+              className={`logi-form-input${hasTriedSave && fieldErrors.quantity ? ' logi-form-input--error' : ''}`}
+              value={draft.quantity}
+              onChange={(e) => patch({ quantity: e.target.value })}
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+            />
+            <span className={`logi-form-hint${quantityPreview ? ' logi-form-hint--value' : ''}`}>{quantityPreview ?? 'Required.'}</span>
+            {hasTriedSave && fieldErrors.quantity ? <span className="logi-form-error">{fieldErrors.quantity}</span> : null}
           </div>
         </div>
-      )}
 
-      {/* Quality + Quantity */}
-      <div className="logi-form-row-pair">
-        <div className="logi-form-field">
-          <label htmlFor="inv-quality" className="logi-form-label">Quality <span className="logi-form-label-sub">(0-1000)</span></label>
-          <input
-            id="inv-quality"
-            type="number"
-            className="logi-form-input"
-            value={draft.quality}
-            onChange={(e) => patch({ quality: e.target.value })}
-            placeholder="Optional"
-            min="0"
-            max="1000"
-            step="1"
-          />
-          <span className="logi-form-hint">Blank shows no accent</span>
+        <div className="logi-form-row-pair logi-form-row-pair--unit-location">
+          <div className="logi-form-field">
+            <label htmlFor="inv-unit" className="logi-form-label">Unit</label>
+            <select
+              id="inv-unit"
+              className="logi-form-select"
+              value={derivedUnitType}
+              onChange={(event) => patch({ unitType: event.target.value as InventoryUnitType })}
+              disabled={isUnitLocked}
+            >
+              <option value="scu">SCU</option>
+              <option value="unit">unit</option>
+            </select>
+            <span className="logi-form-hint">
+              {isUnitLocked
+                ? `Known material unit fixed to ${getInventoryUnitLabel({ unitType: derivedUnitType } as InventoryEntry)}.`
+                : 'Select how this stack is stored.'}
+            </span>
+          </div>
+
+          <div className="logi-form-field">
+            <LocationTypeahead
+              locations={locations}
+              locationId={draft.locationId}
+              locationSearch={draft.locationSearch}
+              open={locationOpen}
+              inputClassName={`logi-form-input${draft.locationId ? ' logi-form-input--selected' : ''}${hasTriedSave && fieldErrors.location ? ' logi-form-input--error' : ''}`}
+              onSearchChange={(search) => {
+                patch({ locationSearch: search, locationId: '' });
+                setClearLocationOnNextFocus(false);
+                setLocationOpen(true);
+              }}
+              onSelect={(id, name) => {
+                patch({ locationId: id, locationSearch: name });
+                setClearLocationOnNextFocus(false);
+                setLocationOpen(false);
+              }}
+              onOpen={handleLocationFocus}
+              onClose={() => setLocationOpen(false)}
+            />
+            {resolvedLocationName && resolvedLocationName !== draft.locationSearch.trim() ? (
+              <span className="logi-form-hint logi-form-hint--value">Stored as {resolvedLocationName}.</span>
+            ) : null}
+            {hasTriedSave && fieldErrors.location ? <span className="logi-form-error">{fieldErrors.location}</span> : null}
+          </div>
         </div>
+
         <div className="logi-form-field">
-          <label htmlFor="inv-quantity" className="logi-form-label">Quantity</label>
+          <label htmlFor="inv-container" className="logi-form-label">Container <span className="logi-form-label-sub">(optional)</span></label>
           <input
-            id="inv-quantity"
-            type="number"
+            id="inv-container"
+            type="text"
             className="logi-form-input"
-            value={draft.quantity}
-            onChange={(e) => patch({ quantity: e.target.value })}
-            placeholder="0.00"
-            min="0"
-            step="0.01"
+            value={draft.container}
+            onChange={(e) => patch({ container: e.target.value })}
+            placeholder="Box A, Hold 3, Storage Unit..."
           />
-          {quantityPreview && (
-            <span className="logi-form-hint logi-form-hint--value">{quantityPreview}</span>
-          )}
         </div>
-      </div>
 
-      {/* Location — typeahead */}
-      <LocationTypeahead
-        locations={locations}
-        locationId={draft.locationId}
-        locationSearch={draft.locationSearch}
-        open={locationOpen}
-        onSearchChange={(search) => {
-          patch({ locationSearch: search, locationId: '' });
-          setClearLocationOnNextFocus(false);
-          setLocationOpen(true);
-        }}
-        onSelect={(id, name) => {
-          patch({ locationId: id, locationSearch: name });
-          setClearLocationOnNextFocus(false);
-          setLocationOpen(false);
-        }}
-        onOpen={handleLocationFocus}
-        onClose={() => setLocationOpen(false)}
-      />
-
-      {/* Container */}
-      <div className="logi-form-field">
-        <label htmlFor="inv-container" className="logi-form-label">Container <span className="logi-form-label-sub">(optional)</span></label>
-        <input
-          id="inv-container"
-          type="text"
-          className="logi-form-input"
-          value={draft.container}
-          onChange={(e) => patch({ container: e.target.value })}
-          placeholder="Box A, Hold 3, Storage Unit…"
-        />
-      </div>
-
-      {/* Notes */}
-      <div className="logi-form-field">
-        <label htmlFor="inv-notes" className="logi-form-label">Notes <span className="logi-form-label-sub">(optional)</span></label>
-        <input
-          id="inv-notes"
-          type="text"
-          className="logi-form-input"
-          value={draft.notes}
-          onChange={(e) => patch({ notes: e.target.value })}
-          placeholder="e.g. from PvP loot, mission reward…"
-        />
+        <div className="logi-form-field">
+          <label htmlFor="inv-notes" className="logi-form-label">Notes <span className="logi-form-label-sub">(optional)</span></label>
+          <input
+            id="inv-notes"
+            type="text"
+            className="logi-form-input"
+            value={draft.notes}
+            onChange={(e) => patch({ notes: e.target.value })}
+            placeholder="e.g. from PvP loot, mission reward..."
+          />
+        </div>
       </div>
 
       <div className="logi-entry-panel-actions">
-        {successMessage && (
+        {successMessage ? (
           <div className="logi-inventory-add-success" role="status" aria-live="polite">
             {successMessage}
           </div>
-        )}
-        {errorMessage && (
+        ) : null}
+        {errorMessage ? (
           <div className="logi-inventory-add-error" role="alert">
             {errorMessage}
           </div>
-        )}
+        ) : null}
+        <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
         <button
           type="button"
           className="logi-btn-primary"
           onClick={handleSave}
           aria-disabled={!canSave}
+          disabled={!canSave}
         >
           {isNew ? 'Add to Inventory' : 'Save Changes'}
         </button>
-        <button type="button" className="logi-btn-ghost" onClick={onCancel}>Cancel</button>
       </div>
     </div>
   );

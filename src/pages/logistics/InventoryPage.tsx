@@ -11,6 +11,11 @@ import {
   resolveInventoryItemName,
   resolveInventoryUnitType,
 } from '../../lib/logistics/inventory';
+import {
+  buildInventoryLocationLookup,
+  normalizeInventoryLocationLookup,
+  resolveInventoryLocationByInput,
+} from '../../lib/logistics/inventoryLocationOptions';
 import { useMaterialIdentityIndex, type MaterialIdentity } from '../../lib/logistics/materialIdentityIndex';
 import { createMaterialResolver } from '../../lib/logistics/materialResolver';
 import '../../components/logistics/logistics.css';
@@ -212,7 +217,7 @@ function getQualityClass(quality: number | null | undefined): string {
 }
 
 function normalizeLookup(value: string): string {
-  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+  return normalizeInventoryLocationLookup(value);
 }
 
 function createNewInventoryId(): string {
@@ -311,12 +316,7 @@ function resolveCsvUnit(value: string): { unitType?: InventoryUnitType; label?: 
 }
 
 function buildLocationLookup(locations: InventoryLocation[]): Map<string, InventoryLocation> {
-  const lookup = new Map<string, InventoryLocation>();
-  for (const location of locations) {
-    lookup.set(normalizeLookup(location.id), location);
-    lookup.set(normalizeLookup(location.name), location);
-  }
-  return lookup;
+  return buildInventoryLocationLookup(locations);
 }
 
 function getImportStackKey(row: Pick<CsvPreviewRow, 'materialId' | 'materialName' | 'quality' | 'locationId' | 'locationName' | 'unitType' | 'container'>): string {
@@ -373,7 +373,9 @@ function validateCsvRows(
     const resolvedMaterial = materialNameInput ? resolveMaterial({ materialName: materialNameInput, displayName: materialNameInput }) : null;
     const material = resolvedMaterial?.material;
     const refinedName = material ? getMatchedRefinedName(materialNameInput, material, materialIdentities, sourceKeyByOutput) : undefined;
-    const location = locationNameInput ? locationLookup.get(normalizeLookup(locationNameInput)) : undefined;
+    const location = locationNameInput
+      ? resolveInventoryLocationByInput(locationNameInput, locationLookup)
+      : undefined;
     const quantity = Number.parseFloat(row.quantityInput);
     const quality = row.qualityInput.trim() ? Number.parseFloat(row.qualityInput) : undefined;
     const unit = resolveCsvUnit(row.unitInput);
@@ -565,8 +567,10 @@ function CsvImportModal({
     const locationLookup = buildLocationLookup(locations);
     const resolveLocationId = (row: CsvPreviewRow) => {
       if (row.locationId) return row.locationId;
+      const resolved = resolveInventoryLocationByInput(row.locationName, locationLookup);
+      if (resolved) return resolved.id;
       const key = normalizeLookup(row.locationName);
-      const existing = locationLookup.get(key) ?? newLocations.get(key);
+      const existing = newLocations.get(key);
       if (existing) return existing.id;
       const location: InventoryLocation = {
         id: createNewLocationId(row.locationName),
@@ -1066,6 +1070,17 @@ export default function InventoryPage() {
   const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
   const isMobileViewport = useIsMobileInventoryViewport();
 
+  useEffect(() => {
+    if (!panel) return undefined;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setPanel(null);
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [panel]);
+
   function handleSort(key: SortKey) {
     if (key === sortKey) {
       setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
@@ -1468,7 +1483,7 @@ export default function InventoryPage() {
       {panel && (
         <div className="logi-drawer-overlay" onClick={() => setPanel(null)} aria-hidden />
       )}
-      <div className={`logi-drawer${panel ? ' logi-drawer--open' : ''}`} role="dialog" aria-modal aria-label={panel?.mode === 'edit' ? 'Edit Stack' : 'Add Stack'}>
+      <div className={`logi-drawer logi-entry-modal${panel ? ' logi-drawer--open' : ''}`} role="dialog" aria-modal aria-label={panel?.mode === 'edit' ? 'Edit Inventory Item' : 'Add Inventory Item'}>
         {panel && (
           <InventoryEntryPanel
             key={panel.mode === 'edit' ? panel.entry.id : 'new'}
