@@ -168,7 +168,6 @@ export function MiningFilterBar({
           </button>
           <button
             type="button"
-            ref={savedTooltip.setTriggerRef}
             className={`mining-scope-button mining-scope-button--bookmark${showOnlyStarred ? " mining-scope-button--active" : ""}`}
             aria-pressed={showOnlyStarred}
             aria-label="Saved"

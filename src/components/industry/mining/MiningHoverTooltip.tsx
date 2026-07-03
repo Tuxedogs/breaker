@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type FocusEvent,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 import { createPortal } from "react-dom";
 
 type TooltipAlign = "center" | "end";
@@ -13,11 +22,11 @@ export function useMiningHoverTooltip(
   const delayMs = options?.delayMs ?? 560;
   const align = options?.align ?? "center";
   const tooltipId = useId();
-  const triggerRef = useRef<HTMLElement | null>(null);
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
   const openTimerRef = useRef<number | null>(null);
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
+  const [triggerElement, setTriggerElement] = useState<HTMLElement | null>(null);
+  const [tooltipElement, setTooltipElement] = useState<HTMLDivElement | null>(null);
 
   const clearOpenTimer = useCallback(() => {
     if (openTimerRef.current !== null && typeof window !== "undefined") {
@@ -48,13 +57,12 @@ export function useMiningHoverTooltip(
   useEffect(() => () => clearOpenTimer(), [clearOpenTimer]);
 
   useEffect(() => {
-    if (!open || typeof window === "undefined") return;
+    if (!open || !triggerElement || typeof window === "undefined") return;
 
     const updatePosition = () => {
-      if (!triggerRef.current) return;
-      const rect = triggerRef.current.getBoundingClientRect();
-      const tooltipWidth = tooltipRef.current?.offsetWidth ?? 96;
-      const tooltipHeight = tooltipRef.current?.offsetHeight ?? 30;
+      const rect = triggerElement.getBoundingClientRect();
+      const tooltipWidth = tooltipElement?.offsetWidth ?? 96;
+      const tooltipHeight = tooltipElement?.offsetHeight ?? 30;
       const gutter = 10;
       const padding = 12;
       const unclampedLeft = align === "end"
@@ -78,12 +86,12 @@ export function useMiningHoverTooltip(
       window.removeEventListener("resize", updatePosition);
       window.removeEventListener("scroll", updatePosition, true);
     };
-  }, [align, open]);
+  }, [align, open, tooltipElement, triggerElement]);
 
   const tooltip = open && typeof document !== "undefined" && position
     ? createPortal(
       <div
-        ref={tooltipRef}
+        ref={setTooltipElement}
         id={tooltipId}
         className="mine-hover-tooltip"
         role="tooltip"
@@ -99,13 +107,16 @@ export function useMiningHoverTooltip(
     open,
     tooltipId,
     tooltip,
-    setTriggerRef: useCallback((node: HTMLElement | null) => {
-      triggerRef.current = node;
-    }, []),
     triggerProps: {
-      onMouseEnter: scheduleOpen,
+      onMouseEnter: (event: MouseEvent<HTMLElement>) => {
+        setTriggerElement(event.currentTarget);
+        scheduleOpen();
+      },
       onMouseLeave: closeTooltip,
-      onFocus: openTooltip,
+      onFocus: (event: FocusEvent<HTMLElement>) => {
+        setTriggerElement(event.currentTarget);
+        openTooltip();
+      },
       onBlur: closeTooltip,
       onKeyDown: (event: KeyboardEvent<HTMLElement>) => {
         if (event.key === "Escape") closeTooltip();

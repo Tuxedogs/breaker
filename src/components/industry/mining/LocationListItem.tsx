@@ -114,7 +114,6 @@ export function LocationListItem({
       </div>
       <button
         type="button"
-        ref={bookmarkTooltip.setTriggerRef}
         className={`mloc-bookmark-btn${starred ? " is-active" : ""}`}
         onClick={onToggleStar}
         aria-pressed={starred}
