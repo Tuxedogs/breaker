@@ -2,11 +2,13 @@ import { useMemo, type KeyboardEvent, type MouseEvent } from "react";
 import type { PublicLocationEntry } from "../../../features/mining/types";
 import {
   getStaticLocationDisplayName,
+  getStaticMethodBiasForLocation,
   type StaticMiningIndex,
 } from "../../../features/mining/staticMiningIndex";
 import type { PlanetAsset } from "../../../features/mining/planetAssets";
 import { getPlanetAsset } from "../../../features/mining/planetAssets";
 import {
+  miningMethodBadge,
   systemBadgeClass,
 } from "./miningFormatters";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
@@ -54,6 +56,10 @@ export function LocationListItem({
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
   const planetAsset = getPlanetAsset(planetAssetMap, locationDisplayName) ?? getPlanetAsset(planetAssetMap, entry.locationName);
   const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
+  const methodMixItems = useMemo(
+    () => getStaticMethodBiasForLocation(entry, staticMiningIndex).filter((item) => item.share > 0),
+    [entry, staticMiningIndex],
+  );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -97,6 +103,18 @@ export function LocationListItem({
             <span className={`mloc-system-badge ${systemBadgeClass(entry.systemName)}`}>{entry.systemName}</span>
           )}
           <StantonLagrangeChildrenSummary entry={entry} compact />
+        </div>
+        <div className="mlist-method-row" aria-label="Mining methods available">
+          {methodMixItems.length > 0 ? methodMixItems.map((item) => {
+            const badge = miningMethodBadge(item.method);
+            return (
+              <span key={`${entry.locationKey}:method:${item.method}`} className={`mloc-badge ${badge?.className ?? "mloc-badge--mixed"}`}>
+                {badge?.label ?? item.method}
+              </span>
+            );
+          }) : (
+            <span className={`mloc-badge mloc-badge--mixed`}>{entry.locationKind || entry.spawnType}</span>
+          )}
         </div>
         <div className="mlist-item-bars">
           {demandBar !== null && (

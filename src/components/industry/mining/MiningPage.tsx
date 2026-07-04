@@ -29,6 +29,7 @@ import {
   writeStoredSidebarState,
   queueScopeMatches,
   type LoadState,
+  type MiningEncounterTier,
   type MiningQueueScope,
   type MiningRankingMode,
   type MiningSidebarState,
@@ -89,7 +90,8 @@ export default function MiningModule() {
     return new Set(canonical);
   });
   const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set(initialSidebarState.systems));
-  const [selectedMiningTypes] = useState<Set<string>>(() => new Set(initialSidebarState.miningTypes));
+  const [selectedMiningTypes, setSelectedMiningTypes] = useState<Set<string>>(() => new Set(initialSidebarState.miningTypes));
+  const [selectedEncounterTiers, setSelectedEncounterTiers] = useState<Set<MiningEncounterTier>>(() => new Set(initialSidebarState.encounterTiers ?? []));
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
@@ -143,7 +145,7 @@ export default function MiningModule() {
     if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
     queueMicrotask(() => setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])));
   }, [buildQueueMaterials, buildQueueMaterialsKey, buildQueueSelectionActive]);
-  useEffect(() => { writeStoredSidebarState<MiningSidebarState>(MINING_FILTER_STORAGE_KEY, { buildQueueActive: buildQueueSelectionActive, systems: [...selectedSystems], miningTypes: [...selectedMiningTypes], resources: [...selectedMaterials] }); }, [buildQueueSelectionActive, selectedMaterials, selectedMiningTypes, selectedSystems]);
+  useEffect(() => { writeStoredSidebarState<MiningSidebarState>(MINING_FILTER_STORAGE_KEY, { buildQueueActive: buildQueueSelectionActive, systems: [...selectedSystems], miningTypes: [...selectedMiningTypes], encounterTiers: [...selectedEncounterTiers], resources: [...selectedMaterials] }); }, [buildQueueSelectionActive, selectedEncounterTiers, selectedMaterials, selectedMiningTypes, selectedSystems]);
 
   const activeBuildQueueMaterialKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : new Set<string>(), [buildQueueMaterials, buildQueueSelectionActive]);
   const activeBuildQueueDemandMaterials = useMemo(() => buildQueueSelectionActive ? miningRequiredMaterials : [], [buildQueueSelectionActive, miningRequiredMaterials]);
@@ -249,6 +251,7 @@ export default function MiningModule() {
     loadingState: state.status,
     selectedSystems,
     selectedMiningTypes,
+    selectedEncounterTiers,
     materialFilterKeys,
     activeBuildQueueMaterialKeys,
     activeBuildQueueDemandMaterials,
@@ -311,7 +314,7 @@ export default function MiningModule() {
       setLocationSearch("");
       setShowAllLocations(false);
     });
-  }, [selectedMaterials, selectedSystems, selectedMiningTypes, buildQueueSelectionActive]);
+  }, [selectedEncounterTiers, selectedMaterials, selectedSystems, selectedMiningTypes, buildQueueSelectionActive]);
 
   // Filter handlers
   function toggleMaterial(id: string) {
@@ -321,6 +324,12 @@ export default function MiningModule() {
   function toggleSystem(sys: string) {
     setSelectedSystems((prev) => { const next = new Set(prev); if (next.has(sys)) next.delete(sys); else next.add(sys); return next; });
   }
+  function toggleMiningType(type: string) {
+    setSelectedMiningTypes((prev) => { const next = new Set(prev); if (next.has(type)) next.delete(type); else next.add(type); return next; });
+  }
+  function toggleEncounterTier(tier: MiningEncounterTier) {
+    setSelectedEncounterTiers((prev) => { const next = new Set(prev); if (next.has(tier)) next.delete(tier); else next.add(tier); return next; });
+  }
   function selectBuildQueueMaterials() {
     setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setQueueScope("all-shortfalls"); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
   }
@@ -329,6 +338,8 @@ export default function MiningModule() {
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setSelectedMaterials(new Set());
     setSelectedSystems(new Set());
+    setSelectedMiningTypes(new Set());
+    setSelectedEncounterTiers(new Set());
   }
   function toggleSelectedLocation(locationKey: string) {
     if (!isMobileViewport) {
@@ -341,8 +352,19 @@ export default function MiningModule() {
   const hasActiveFilters = selectedSystems.size > 0
     || selectedMaterials.size > 0
     || selectedMiningTypes.size > 0
+    || selectedEncounterTiers.size > 0
     || buildQueueSelectionActive
     || planner.filters.showOnlyStarred;
+
+  const systemContextName = selectedSystems.size === 1 ? [...selectedSystems][0] : selectedSystems.size > 1 ? "Multiple Systems" : "All Systems";
+  const systemContextLocations = searchFilteredLocations.length;
+  const systemContextMaterials = useMemo(() => {
+    const keys = new Set<string>();
+    for (const entry of searchFilteredLocations) {
+      for (const key of locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []) keys.add(key);
+    }
+    return keys.size;
+  }, [locationMaterialKeysByLocationKey, searchFilteredLocations]);
 
   return (
     <div className="mine-page mine-page--v2">
@@ -353,6 +375,8 @@ export default function MiningModule() {
               <MiningFilterBar
                 selectedSystems={selectedSystems}
                 selectedMaterials={selectedMaterials}
+                selectedMiningTypes={selectedMiningTypes}
+                selectedEncounterTiers={selectedEncounterTiers}
                 buildQueueSelectionActive={buildQueueSelectionActive}
                 buildQueueMaterials={buildQueueMaterials}
                 showOnlyStarred={planner.filters.showOnlyStarred}
@@ -360,6 +384,8 @@ export default function MiningModule() {
                 hasActiveFilters={hasActiveFilters}
                 searchQuery={locationSearch}
                 onToggleSystem={toggleSystem}
+                onToggleMiningType={toggleMiningType}
+                onToggleEncounterTier={toggleEncounterTier}
                 onClearAllFilters={clearAllFilters}
                 onSelectBuildQueueMaterials={selectBuildQueueMaterials}
                 onToggleStarred={() => planner.toggleShowOnlyStarred()}
@@ -370,6 +396,17 @@ export default function MiningModule() {
             </aside>
 
             <div className="mine-main">
+              <section className="mine-system-context" aria-label="Selected mining system context">
+                <div>
+                  <span className="mine-system-context__eyebrow">Browse System</span>
+                  <h1>{systemContextName}</h1>
+                </div>
+                <div className="mine-system-context__meta">
+                  <span>{systemContextLocations} mining location{systemContextLocations === 1 ? "" : "s"}</span>
+                  <span>{systemContextMaterials} material{systemContextMaterials === 1 ? "" : "s"}</span>
+                  <span>{selectedMaterials.size > 0 ? "Ranked by selected materials" : "Browse all indexed locations"}</span>
+                </div>
+              </section>
               {mobileQueueDemandSatisfied ? (
                 <div className="mine-empty-state mine-empty-state--queue-covered">
                   <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
@@ -382,7 +419,7 @@ export default function MiningModule() {
                 <div className="mconsole-layout">
               <div className="mlist-panel">
                 <div className="mlist-header">
-                  <span className="mlist-header-label">RECOMMENDED LOCATIONS</span>
+                  <span className="mlist-header-label">Mining Locations</span>
                   <span className="mlist-header-count">{searchFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
@@ -390,11 +427,11 @@ export default function MiningModule() {
                     <div className="mlist-mode-hint">
                       <span className="mlist-mode-hint-label">
                         {selectedMaterials.size > 0
-                          ? `Ranked by match across ${selectedMaterials.size} selected material${selectedMaterials.size === 1 ? "" : "s"}`
-                          : "All locations — select materials above to rank by coverage"}
+                          ? "Ranked by selected material coverage"
+                          : "All locations in current browse context"}
                       </span>
                       {selectedMaterials.size === 0 && (
-                        <span className="mlist-mode-hint-tip">Use Ship / Vehicle / Hand filters to find where specific ores spawn</span>
+                        <span className="mlist-mode-hint-tip">Click a planet, moon, or location to view its material profile</span>
                       )}
                     </div>
                   )}
@@ -444,6 +481,9 @@ export default function MiningModule() {
                                 buildQueueMaterialKeys={materialFilterKeys}
                                 locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
                                 staticMiningIndex={staticMiningIndex}
+                                planetAssetMap={planetAssetMap}
+                                starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                                onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
                                 hideHeader
                               />
                             </div>
@@ -473,7 +513,16 @@ export default function MiningModule() {
 
               <div className="mdet-col">
                 {!isMobileViewport && effectiveSelectedEntry ? (
-                  <LocationDetail entry={effectiveSelectedEntry} activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials} buildQueueMaterialKeys={materialFilterKeys} locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []} staticMiningIndex={staticMiningIndex} />
+                  <LocationDetail
+                    entry={effectiveSelectedEntry}
+                    activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                    buildQueueMaterialKeys={materialFilterKeys}
+                    locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
+                    staticMiningIndex={staticMiningIndex}
+                    planetAssetMap={planetAssetMap}
+                    starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
+                    onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
+                  />
                 ) : !isMobileViewport ? (
                   <div className="mdet-empty"><span>Select a location to view details</span></div>
                 ) : null}

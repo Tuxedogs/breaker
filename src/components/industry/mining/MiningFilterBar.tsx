@@ -1,5 +1,10 @@
-import { useMemo, useState } from "react";
-import { MINING_SYSTEM_FILTERS } from "./miningTypes";
+import { useMemo } from "react";
+import {
+  MINING_ENCOUNTER_TIER_FILTERS,
+  MINING_METHOD_FILTERS,
+  MINING_SYSTEM_FILTERS,
+  type MiningEncounterTier,
+} from "./miningTypes";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
@@ -17,6 +22,8 @@ interface ResourceGroups {
 export function MiningFilterBar({
   selectedSystems,
   selectedMaterials,
+  selectedMiningTypes,
+  selectedEncounterTiers,
   buildQueueSelectionActive,
   buildQueueMaterials,
   showOnlyStarred,
@@ -24,6 +31,8 @@ export function MiningFilterBar({
   hasActiveFilters,
   searchQuery,
   onToggleSystem,
+  onToggleMiningType,
+  onToggleEncounterTier,
   onClearAllFilters,
   onSelectBuildQueueMaterials,
   onToggleStarred,
@@ -33,6 +42,8 @@ export function MiningFilterBar({
 }: {
   selectedSystems: Set<string>;
   selectedMaterials: Set<string>;
+  selectedMiningTypes: Set<string>;
+  selectedEncounterTiers: Set<MiningEncounterTier>;
   buildQueueSelectionActive: boolean;
   buildQueueMaterials: Set<string>;
   showOnlyStarred: boolean;
@@ -40,6 +51,8 @@ export function MiningFilterBar({
   hasActiveFilters: boolean;
   searchQuery: string;
   onToggleSystem: (sys: string) => void;
+  onToggleMiningType: (type: string) => void;
+  onToggleEncounterTier: (tier: MiningEncounterTier) => void;
   onClearAllFilters: () => void;
   onSelectBuildQueueMaterials: () => void;
   onToggleStarred: () => void;
@@ -47,7 +60,6 @@ export function MiningFilterBar({
   onSearchChange: (q: string) => void;
   isMobileViewport?: boolean;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const { shipAndHarvestable, vehicle, hand } = visibleResourceGroups;
   const handFiltered = hand.filter((c) => c.label.trim().toLowerCase() !== "pure carinite");
 
@@ -60,38 +72,19 @@ export function MiningFilterBar({
     () =>
       selectedSystems.size
       + selectedMaterials.size
+      + selectedMiningTypes.size
+      + selectedEncounterTiers.size
       + (showOnlyStarred ? 1 : 0)
       + (buildQueueSelectionActive ? 1 : 0),
-    [buildQueueSelectionActive, selectedMaterials.size, selectedSystems.size, showOnlyStarred],
+    [buildQueueSelectionActive, selectedEncounterTiers.size, selectedMaterials.size, selectedMiningTypes.size, selectedSystems.size, showOnlyStarred],
   );
 
-  const scopeIsDefault = !buildQueueSelectionActive && selectedMaterials.size === 0 && !showOnlyStarred;
+  const scopeIsDefault = !buildQueueSelectionActive
+    && selectedMaterials.size === 0
+    && selectedMiningTypes.size === 0
+    && selectedEncounterTiers.size === 0
+    && !showOnlyStarred;
   const savedTooltip = useMiningHoverTooltip("Saved");
-
-  const activeFilterChips = useMemo(() => {
-    const chips: Array<{ key: string; label: string }> = [];
-    if (buildQueueSelectionActive) chips.push({ key: "scope:queue", label: "Queue" });
-    if (showOnlyStarred) chips.push({ key: "scope:starred", label: "Starred" });
-    for (const sys of [...selectedSystems].sort()) chips.push({ key: `system:${sys}`, label: sys });
-    for (const chip of allMaterialChips) {
-      if (selectedMaterials.has(chip.id)) chips.push({ key: `material:${chip.id}`, label: chip.label });
-    }
-    return chips;
-  }, [allMaterialChips, buildQueueSelectionActive, selectedMaterials, selectedSystems, showOnlyStarred]);
-
-  function handleQueueScopeClick() {
-    onSelectBuildQueueMaterials();
-    if (isMobileViewport) setExpanded(!buildQueueSelectionActive);
-  }
-
-  function handleAllScopeClick() {
-    onClearAllFilters();
-    if (isMobileViewport) setExpanded(!scopeIsDefault);
-  }
-
-  const filterToggleLabel = isMobileViewport
-    ? `Filters${activeFilterCount > 0 ? ` · ${activeFilterCount} selected` : ""}`
-    : expanded ? "Hide" : "Filters";
 
   return (
     <div
@@ -99,8 +92,6 @@ export function MiningFilterBar({
         "scintel-filter-shell",
         "mining-filter-compact",
         buildQueueSelectionActive ? "scintel-filter-shell--queue mining-filter-compact--queue" : "",
-        expanded ? "scintel-filter-shell--expanded" : "",
-        expanded ? "mining-filter-compact--expanded" : "",
       ].filter(Boolean).join(" ")}
     >
       <div className="scintel-filter-header mining-filter-bar">
@@ -111,34 +102,21 @@ export function MiningFilterBar({
               type="search"
               className="mfp-search-input"
               aria-label="Search mining locations"
-              placeholder="Search locations..."
+              placeholder={isMobileViewport ? "Search locations..." : "Search locations, planets, moons, materials..."}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
             />
             {searchQuery && (
-              <button type="button" className="mfp-search-clear" onClick={() => onSearchChange("")} aria-label="Clear search">×</button>
+              <button type="button" className="mfp-search-clear" onClick={() => onSearchChange("")} aria-label="Clear search">x</button>
             )}
             {!searchQuery && <span className="crb-search-slash" aria-hidden="true">/</span>}
           </label>
         </div>
 
         <div className="scintel-filter-actions mining-filter-actions">
-          {hasActiveFilters && !isMobileViewport && !expanded && (
+          {hasActiveFilters && !isMobileViewport && (
             <span className="scintel-filter-summary">{activeFilterCount} active</span>
           )}
-          <button
-            type="button"
-            className="scintel-filter-toggle mining-filter-toggle"
-            aria-expanded={expanded}
-            aria-label={`${expanded ? "Collapse" : "Expand"} mining filters`}
-            onClick={() => setExpanded((open) => !open)}
-          >
-            <span>{filterToggleLabel}</span>
-            {activeFilterCount > 0 && !isMobileViewport && (
-              <span className="scintel-filter-toggle-count">{activeFilterCount}</span>
-            )}
-            <span className={`mining-filter-toggle-chevron${expanded ? " is-expanded" : ""}`} aria-hidden="true">v</span>
-          </button>
           {hasActiveFilters && (
             <button type="button" className="scintel-filter-clear" onClick={onClearAllFilters}>
               Clear all
@@ -151,8 +129,7 @@ export function MiningFilterBar({
             type="button"
             className={`mining-scope-button mining-scope-button--queue${buildQueueSelectionActive ? " mining-scope-button--active" : ""}`}
             aria-pressed={buildQueueSelectionActive}
-            aria-expanded={isMobileViewport ? expanded : undefined}
-            onClick={handleQueueScopeClick}
+            onClick={onSelectBuildQueueMaterials}
           >
             Queue
             {buildQueueMaterials.size > 0 && <span className="mfr-chip-count">{buildQueueMaterials.size}</span>}
@@ -161,8 +138,7 @@ export function MiningFilterBar({
             type="button"
             className={`mining-scope-button${scopeIsDefault ? " mining-scope-button--active" : ""}`}
             aria-pressed={scopeIsDefault}
-            aria-expanded={isMobileViewport ? expanded : undefined}
-            onClick={handleAllScopeClick}
+            onClick={onClearAllFilters}
           >
             All
           </button>
@@ -181,54 +157,77 @@ export function MiningFilterBar({
         {savedTooltip.tooltip}
       </div>
 
-      {expanded && (
-        <div className="scintel-filter-body mining-filter-drawer">
-          <div className="mining-filter-drawer-row">
-            <span className="mining-filter-label">System</span>
-            <div className="mining-filter-chips" role="group" aria-label="System filters">
-              {MINING_SYSTEM_FILTERS.map((sys) => (
+      <div className="scintel-filter-body mining-filter-drawer">
+        <div className="mining-filter-drawer-row mining-filter-drawer-row--systems">
+          <span className="mining-filter-label">System</span>
+          <div className="mining-filter-chips" role="group" aria-label="System filters">
+            {MINING_SYSTEM_FILTERS.map((sys) => (
+              <button
+                key={sys}
+                type="button"
+                className={`mining-filter-chip mining-filter-chip--system${selectedSystems.has(sys) ? " is-active" : ""}`}
+                aria-pressed={selectedSystems.has(sys)}
+                onClick={() => onToggleSystem(sys)}
+              >
+                {sys}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {allMaterialChips.length > 0 && (
+          <div className="mining-filter-drawer-row mining-filter-drawer-row--materials">
+            <span className="mining-filter-label">Materials</span>
+            <div className="mining-filter-chips mining-filter-chips--wrap" role="group" aria-label="Material filters">
+              {allMaterialChips.map((chip) => (
                 <button
-                  key={sys}
+                  key={chip.id}
                   type="button"
-                  className={`craft-frl-chip craft-frl-chip--sm${selectedSystems.has(sys) ? " craft-frl-chip--active" : ""}`}
-                  onClick={() => onToggleSystem(sys)}
+                  className={`mining-filter-chip mining-filter-chip--material${selectedMaterials.has(chip.id) ? " is-active" : ""}`}
+                  aria-pressed={selectedMaterials.has(chip.id)}
+                  onClick={() => onToggleMaterial(chip.id)}
                 >
-                  {sys}
+                  {chip.label}
                 </button>
               ))}
             </div>
           </div>
+        )}
 
-          {allMaterialChips.length > 0 && (
-            <div className="mining-filter-drawer-row mining-filter-drawer-row--materials">
-              <span className="mining-filter-label">Type</span>
-              <div className="mining-filter-chips mining-filter-chips--wrap" role="group" aria-label="Material filters">
-                {allMaterialChips.map((chip) => (
-                  <button
-                    key={chip.id}
-                    type="button"
-                    className={`craft-frl-chip craft-frl-chip--sm${selectedMaterials.has(chip.id) ? " craft-frl-chip--active" : ""}`}
-                    onClick={() => onToggleMaterial(chip.id)}
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {!isMobileViewport && activeFilterChips.length > 0 && (
-            <div className="mining-filter-drawer-row">
-              <span className="mining-filter-label">Active</span>
-              <div className="mining-filter-active-chips mining-filter-active-chips--expanded" aria-label="Active filters">
-                {activeFilterChips.map((chip) => (
-                  <span key={chip.key} className="mining-filter-active-chip">{chip.label}</span>
-                ))}
-              </div>
-            </div>
-          )}
+        <div className="mining-filter-drawer-row">
+          <span className="mining-filter-label">Method</span>
+          <div className="mining-filter-chips" role="group" aria-label="Mining method filters">
+            {MINING_METHOD_FILTERS.map((method) => (
+              <button
+                key={method.value}
+                type="button"
+                className={`mining-filter-chip mining-filter-chip--method mining-filter-chip--method-${method.value.toLowerCase().replace(/\s+/g, "-")}${selectedMiningTypes.has(method.value) ? " is-active" : ""}`}
+                aria-pressed={selectedMiningTypes.has(method.value)}
+                onClick={() => onToggleMiningType(method.value)}
+              >
+                {method.label}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
+
+        <div className="mining-filter-drawer-row">
+          <span className="mining-filter-label">Encounter Tier</span>
+          <div className="mining-filter-chips" role="group" aria-label="Encounter tier filters">
+            {MINING_ENCOUNTER_TIER_FILTERS.map((tier) => (
+              <button
+                key={tier}
+                type="button"
+                className={`mining-filter-chip mining-filter-chip--tier mining-filter-chip--tier-${tier.toLowerCase()}${selectedEncounterTiers.has(tier) ? " is-active" : ""}`}
+                aria-pressed={selectedEncounterTiers.has(tier)}
+                onClick={() => onToggleEncounterTier(tier)}
+              >
+                {tier}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

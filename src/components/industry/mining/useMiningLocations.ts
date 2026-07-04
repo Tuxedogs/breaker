@@ -2,12 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { buildCoveragePlan, type CoveragePlan, type CoveragePlanLocation, type MiningCoverageMode } from "../../../features/mining/coveragePlan";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
-import { getStaticLocationMaterialKeys, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
+import {
+  getStaticDensityScore,
+  getStaticLocationMaterialKeys,
+  getStaticResourcesForLocation,
+  type StaticMiningIndex,
+} from "../../../features/mining/staticMiningIndex";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 import type { MaterialTemplate } from "../../../types/logistics";
 import { compareLocationsByRecommendationScore, demandWeightedLocationScore, diversifyLocationsByMaterials } from "./miningScoring";
-import { miningTypeFromSpawn, targetabilityLabel } from "./miningFormatters";
-import type { MiningRankingMode } from "./miningTypes";
+import { encounterSignalFromWeight, miningTypeFromSpawn, targetabilityLabel } from "./miningFormatters";
+import type { MiningEncounterTier, MiningRankingMode } from "./miningTypes";
 import type { useMiningPlannerState } from "../../../features/mining/useMiningPlannerState";
 
 type UseMiningPlannerStateReturn = ReturnType<typeof useMiningPlannerState>;
@@ -28,6 +33,7 @@ export function useMiningLocations({
   loadingState,
   selectedSystems,
   selectedMiningTypes,
+  selectedEncounterTiers,
   materialFilterKeys,
   activeBuildQueueMaterialKeys,
   activeBuildQueueDemandMaterials,
@@ -45,6 +51,7 @@ export function useMiningLocations({
   loadingState: string;
   selectedSystems: Set<string>;
   selectedMiningTypes: Set<string>;
+  selectedEncounterTiers: Set<MiningEncounterTier>;
   materialFilterKeys: Set<string>;
   activeBuildQueueMaterialKeys: Set<string>;
   activeBuildQueueDemandMaterials: RequiredMaterial[];
@@ -97,16 +104,31 @@ export function useMiningLocations({
     return map;
   }, [locations, locationMaterialKeysByLocationKey, materialKeyByDisplayName, staticMiningIndex]);
 
+  const encounterTiersByLocationKey = useMemo(() => {
+    const map = new Map<string, Set<MiningEncounterTier>>();
+    for (const location of locations) {
+      const tiers = new Set<MiningEncounterTier>();
+      for (const row of getStaticResourcesForLocation(location, staticMiningIndex)) {
+        tiers.add(encounterSignalFromWeight(getStaticDensityScore(row, staticMiningIndex)) as MiningEncounterTier);
+      }
+      map.set(location.locationKey, tiers);
+    }
+    return map;
+  }, [locations, staticMiningIndex]);
+
   const filteredLocations = useMemo(() => {
     let result = locations;
     if (selectedSystems.size > 0) result = result.filter((l) => selectedSystems.has(l.systemName));
     if (selectedMiningTypes.size > 0) result = result.filter((l) => selectedMiningTypes.has(miningTypeFromSpawn(l.spawnType)));
+    if (selectedEncounterTiers.size > 0) result = result.filter((l) =>
+      [...(encounterTiersByLocationKey.get(l.locationKey) ?? [])].some((tier) => selectedEncounterTiers.has(tier))
+    );
     if (materialFilterKeys.size > 0) result = result.filter((l) =>
       (indexedMaterialKeysByLocationKey.get(l.locationKey) ?? []).some((key) => materialFilterKeys.has(key))
     );
     if (showOnlyStarred) result = result.filter((l) => isFavoriteLocation({ system: l.systemName, location: l.locationName, spawnType: l.spawnType }));
     return [...result].sort(compareLocationsByRecommendationScore);
-  }, [locations, selectedSystems, selectedMiningTypes, materialFilterKeys, indexedMaterialKeysByLocationKey, showOnlyStarred, isFavoriteLocation]);
+  }, [locations, selectedSystems, selectedMiningTypes, selectedEncounterTiers, encounterTiersByLocationKey, materialFilterKeys, indexedMaterialKeysByLocationKey, showOnlyStarred, isFavoriteLocation]);
 
   const activeDiversityMaterialKeys = buildQueueSelectionActive
     ? activeBuildQueueMaterialKeys

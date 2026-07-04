@@ -1,6 +1,7 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import type { PublicLocationEntry, RequiredMaterial } from "../../../features/mining/types";
+import { getPlanetAsset, type PlanetAsset } from "../../../features/mining/planetAssets";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
 import {
   getStaticEncounterRankingRow,
@@ -24,8 +25,10 @@ import {
 } from "./miningFormatters";
 import type { DemandRow, ResourceRow } from "./miningTypes";
 import { MaterialNameCell } from "./MiningShared";
+import MiningBookmarkIcon from "./MiningBookmarkIcon";
 import StantonLagrangeChildrenSummary from "./StantonLagrangeChildrenSummary";
 import { hasStantonLagrangeChildren } from "./stantonLagrangeChildren";
+import { useMiningHoverTooltip } from "./MiningHoverTooltip";
 
 export function InfoTip({ text, children }: { text: string; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -267,6 +270,9 @@ export function LocationDetail({
   buildQueueMaterialKeys,
   locationMaterialKeys,
   staticMiningIndex,
+  planetAssetMap,
+  starred,
+  onToggleStar,
   hideHeader = false,
 }: {
   entry: PublicLocationEntry;
@@ -274,6 +280,9 @@ export function LocationDetail({
   buildQueueMaterialKeys: Set<string>;
   locationMaterialKeys: string[];
   staticMiningIndex: StaticMiningIndex | null;
+  planetAssetMap?: Map<string, PlanetAsset> | null;
+  starred?: boolean;
+  onToggleStar?: (e: MouseEvent<HTMLButtonElement>) => void;
   hideHeader?: boolean;
 }) {
   const coveredBQ = useMemo(
@@ -348,6 +357,8 @@ export function LocationDetail({
 
   const locationDisplayName = getStaticLocationDisplayName(entry, staticMiningIndex);
   const isLagrangeChildGroup = hasStantonLagrangeChildren(entry);
+  const planetAsset = getPlanetAsset(planetAssetMap ?? null, locationDisplayName) ?? getPlanetAsset(planetAssetMap ?? null, entry.locationName);
+  const bookmarkTooltip = useMiningHoverTooltip(starred ? "Remove saved" : "Save", { align: "end" });
   const locationMethodMixItems = useMemo(
     () => getStaticMethodBiasForLocation(entry, staticMiningIndex)
       .filter((item) => Number.isFinite(item.share) && item.share > 0)
@@ -387,8 +398,20 @@ export function LocationDetail({
     <div className={`mdet-panel${hideHeader ? " mdet-panel--inline-mobile" : ""}`}>
       {!hideHeader && (
         <div className="mdet-header">
+          <div className="mdet-thumb" aria-hidden="true">
+            {planetAsset ? (
+              <img
+                src={planetAsset.main}
+                srcSet={`${planetAsset.main2x} 2x`}
+                alt=""
+                className="mdet-thumb-img"
+              />
+            ) : (
+              <span className="mdet-thumb-name">{locationDisplayName.slice(0, 2).toUpperCase()}</span>
+            )}
+          </div>
           <div className="mdet-header-left">
-            <div className="mdet-label">SELECTED LOCATION</div>
+            <div className="mdet-label">Location Profile</div>
             <div className="mdet-name" title={locationDisplayName !== entry.locationName ? `Raw key: ${entry.locationName}` : undefined}>
               {locationDisplayName}
             </div>
@@ -399,6 +422,22 @@ export function LocationDetail({
               <StantonLagrangeChildrenSummary entry={entry} compact />
             </div>
           </div>
+          {onToggleStar && (
+            <>
+              <button
+                type="button"
+                className={`mloc-bookmark-btn mdet-bookmark-btn${starred ? " is-active" : ""}`}
+                onClick={onToggleStar}
+                aria-pressed={starred}
+                aria-label={starred ? "Remove saved" : "Save"}
+                aria-describedby={bookmarkTooltip.open ? bookmarkTooltip.tooltipId : undefined}
+                {...bookmarkTooltip.triggerProps}
+              >
+                <MiningBookmarkIcon />
+              </button>
+              {bookmarkTooltip.tooltip}
+            </>
+          )}
         </div>
       )}
 

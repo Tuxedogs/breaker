@@ -4,11 +4,13 @@ import type { QueueLedgerLine } from "../../../lib/logistics/queueLedger";
 
 export type MiningRankingMode = "quality" | "quantity" | "balanced";
 export type MiningQueueScope = "all-shortfalls" | "critical-missing" | "refinable-only" | "partial-stock";
+export type MiningEncounterTier = "Low" | "Medium" | "High" | "Unknown";
 
 export type MiningSidebarState = {
   buildQueueActive: boolean;
   systems: string[];
   miningTypes: string[];
+  encounterTiers?: MiningEncounterTier[];
   resources: string[];
 };
 
@@ -16,6 +18,7 @@ export const EMPTY_MINING_SIDEBAR_STATE: MiningSidebarState = {
   buildQueueActive: false,
   systems: [],
   miningTypes: [],
+  encounterTiers: [],
   resources: [],
 };
 
@@ -38,6 +41,12 @@ export const MINING_QUEUE_SCOPES: Array<{ value: MiningQueueScope; label: string
   { value: "partial-stock", label: "Partial Stock" },
 ];
 export const MINING_SYSTEM_FILTERS = ["Stanton", "Nyx", "Pyro"];
+export const MINING_METHOD_FILTERS = [
+  { value: "Hand", label: "Hand" },
+  { value: "Ship", label: "Surface Ship" },
+  { value: "Ground Vehicle", label: "Vehicle" },
+];
+export const MINING_ENCOUNTER_TIER_FILTERS: MiningEncounterTier[] = ["Low", "Medium", "High"];
 
 export type LoadState =
   | { status: "loading"; data?: RecommendationResponse }
