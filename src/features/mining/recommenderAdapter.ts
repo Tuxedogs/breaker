@@ -499,6 +499,12 @@ export async function getMiningRecommendations(
   request: MiningRecommendationRequest,
   signal?: AbortSignal,
 ): Promise<RecommendationResponse> {
+  if (request.requiredMaterials.length === 0) {
+    // Browse mode has no demand input; use the static location index directly
+    // so the Mining page still receives the full system/location collection.
+    return getStaticMiningRecommendations(request);
+  }
+
   const url = apiUrl("/api/recommender/recommendations");
 
   // No Vercel recommender route exists in production yet; dev/preview still POSTs via Vite middleware.

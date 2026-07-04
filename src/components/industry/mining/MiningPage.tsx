@@ -305,6 +305,10 @@ export default function MiningModule() {
   }, [buildQueueSelectionActive, coveragePlan, isMobileViewport, showAllLocations]);
 
   const displayedRankedLocations = mobileQueueRouteLocations ?? displayRankedFilteredLocations;
+  const systemLocations = useMemo(
+    () => locations.filter((entry) => entry.systemName === selectedSystemName),
+    [locations, selectedSystemName],
+  );
   const mobileQueueDemandSatisfied = isMobileViewport && buildQueueSelectionActive && activeBuildQueueDemandMaterials.length === 0;
   const mobileHiddenAlternateCount = useMemo(() => {
     if (!isMobileViewport || !buildQueueSelectionActive || !coveragePlan || showAllLocations) return 0;
@@ -321,6 +325,13 @@ export default function MiningModule() {
     );
   }, [displayedRankedLocations, locationSearch]);
   const hasMaterialFilters = materialFilterKeys.size > 0;
+  const hasOptionalFiltersActive = hasMaterialFilters
+    || selectedMiningTypes.size > 0
+    || selectedEncounterTiers.size > 0
+    || buildQueueSelectionActive
+    || planner.filters.showOnlyStarred
+    || locationSearch.trim().length > 0;
+  const selectedSystemHasLocations = systemLocations.length > 0;
   const noResultsMessage = locationSearch.trim()
     ? `No locations match "${locationSearch.trim()}".`
     : planner.filters.showOnlyStarred
@@ -347,7 +358,6 @@ export default function MiningModule() {
 
   useEffect(() => {
     queueMicrotask(() => {
-      setLocationSearch("");
       setShowAllLocations(false);
     });
   }, [selectedEncounterTiers, selectedMaterials, selectedSystemName, selectedMiningTypes, buildQueueSelectionActive]);
@@ -400,28 +410,34 @@ export default function MiningModule() {
     || locationSearch.trim().length > 0;
 
   const systemContextName = selectedSystemName;
-  const systemContextLocations = searchFilteredLocations.length;
+  const systemContextLocations = systemLocations.length;
   const systemContextMaterials = useMemo(() => {
     const keys = new Set<string>();
-    for (const entry of searchFilteredLocations) {
+    for (const entry of systemLocations) {
       for (const key of locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []) keys.add(key);
     }
     return keys.size;
-  }, [locationMaterialKeysByLocationKey, searchFilteredLocations]);
+  }, [locationMaterialKeysByLocationKey, systemLocations]);
   const systemContextMethods = useMemo(() => {
     const methods = new Set<string>();
-    for (const entry of searchFilteredLocations) {
+    for (const entry of systemLocations) {
       for (const item of getStaticMethodBiasForLocation(entry, staticMiningIndex)) {
         if (item.share > 0) methods.add(item.method);
       }
     }
     return methods.size;
-  }, [searchFilteredLocations, staticMiningIndex]);
+  }, [staticMiningIndex, systemLocations]);
   const systemDescription = SYSTEM_DESCRIPTIONS[systemContextName] ?? "Indexed mining locations and material profiles for this system.";
   const orderedSystemFilters = useMemo(
     () => availableSystems.length > 0 ? availableSystems : SYSTEM_SELECTOR_ORDER.filter((system) => MINING_SYSTEM_FILTERS.includes(system)),
     [availableSystems],
   );
+  const shouldShowFilteredNoResults = selectedSystemHasLocations && hasOptionalFiltersActive && searchFilteredLocations.length === 0;
+  const emptyStateMessage = shouldShowFilteredNoResults
+    ? noResultsMessage
+    : selectedSystemHasLocations
+      ? "No locations available to display."
+      : `No indexed mining locations are available for ${systemContextName}.`;
 
   return (
     <div className="mine-page mine-page--v2">
@@ -521,8 +537,10 @@ export default function MiningModule() {
                         </div>
                       ) : listLocations.length === 0 ? (
                         <div className="mine-empty-state">
-                          <p className="mine-empty-text">{noResultsMessage}</p>
-                          <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
+                          <p className="mine-empty-text">{emptyStateMessage}</p>
+                          {shouldShowFilteredNoResults && (
+                            <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
+                          )}
                         </div>
                       ) : listLocations.map((entry) => {
                         const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
@@ -595,7 +613,7 @@ export default function MiningModule() {
                         onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
                       />
                     ) : !isMobileViewport ? (
-                      <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? noResultsMessage : "Select a location to view details"}</span></div>
+                      <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
                     ) : null}
                   </div>
             </div>
