@@ -2797,6 +2797,32 @@
   overflow: hidden;
 }
 
+.mining-shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "controls"
+    "sidebar"
+    "detail";
+  gap: 0.65rem;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+.mining-shell > .scintel-filter-shell {
+  grid-area: controls;
+}
+
+.mining-shell > .mlist-panel {
+  grid-area: sidebar;
+}
+
+.mining-shell > .mdet-col,
+.mining-shell > .mine-empty-state {
+  grid-area: detail;
+}
+
 .mine-filter-aside {
   width: 100%;
 }
@@ -3553,6 +3579,26 @@
   border-bottom: 1px solid var(--panel-border-soft);
 }
 
+@media (min-width: 1181px) {
+  .mine-page--v2 .mining-filter-bar {
+    grid-template-columns: minmax(0, 1fr) minmax(520px, 760px) auto auto;
+  }
+
+  .mine-page--v2 .mining-filter-search {
+    grid-column: 2;
+  }
+
+  .mine-page--v2 .mining-filter-actions {
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  .mine-page--v2 .mining-scope-switch {
+    grid-column: 4;
+    justify-self: end;
+  }
+}
+
 .mine-page--v2 .mining-browser-search {
   min-height: 42px;
   border-color: var(--panel-border);
@@ -3705,6 +3751,34 @@
   grid-template-columns: clamp(300px, 20vw, 380px) minmax(720px, 1fr);
   gap: 16px;
   align-items: stretch;
+}
+
+.mine-page--v2 .mining-shell {
+  gap: 16px;
+}
+
+@media (min-width: 901px) {
+  .mine-page--v2 .mining-shell {
+    grid-template-columns: clamp(280px, 28vw, 340px) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      "sidebar controls"
+      "sidebar detail";
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .mine-page--v2 .mining-shell > .mlist-panel,
+  .mine-page--v2 .mining-shell > .mdet-col {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
+@media (min-width: 1181px) {
+  .mine-page--v2 .mining-shell {
+    grid-template-columns: clamp(300px, 20vw, 380px) minmax(720px, 1fr);
+  }
 }
 
 .mine-page--v2 .mine-main {
@@ -4075,6 +4149,10 @@
   .mine-page--v2 .mconsole-layout {
     grid-template-columns: minmax(280px, 34vw) minmax(0, 1fr);
   }
+
+  .mine-page--v2 .mining-filter-bar {
+    grid-template-columns: minmax(320px, 1fr) auto auto;
+  }
 }
 
 @media (max-width: 900px) {
@@ -4094,6 +4172,15 @@
 
   .mine-page--v2 .mconsole-layout {
     grid-template-columns: 1fr;
+  }
+
+  .mine-page--v2 .mining-shell {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "controls"
+      "sidebar"
+      "detail";
+    overflow: visible;
   }
 
   .mine-system-context {
