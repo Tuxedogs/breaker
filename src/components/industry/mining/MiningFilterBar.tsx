@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import {
   MINING_ENCOUNTER_TIER_FILTERS,
   MINING_METHOD_FILTERS,
-  MINING_SYSTEM_FILTERS,
   type MiningEncounterTier,
 } from "./miningTypes";
 import MiningBookmarkIcon from "./MiningBookmarkIcon";
@@ -20,7 +19,6 @@ interface ResourceGroups {
 }
 
 export function MiningFilterBar({
-  selectedSystems,
   selectedMaterials,
   selectedMiningTypes,
   selectedEncounterTiers,
@@ -30,7 +28,6 @@ export function MiningFilterBar({
   visibleResourceGroups,
   hasActiveFilters,
   searchQuery,
-  onToggleSystem,
   onToggleMiningType,
   onToggleEncounterTier,
   onClearAllFilters,
@@ -40,7 +37,6 @@ export function MiningFilterBar({
   onSearchChange,
   isMobileViewport = false,
 }: {
-  selectedSystems: Set<string>;
   selectedMaterials: Set<string>;
   selectedMiningTypes: Set<string>;
   selectedEncounterTiers: Set<MiningEncounterTier>;
@@ -50,7 +46,6 @@ export function MiningFilterBar({
   visibleResourceGroups: ResourceGroups;
   hasActiveFilters: boolean;
   searchQuery: string;
-  onToggleSystem: (sys: string) => void;
   onToggleMiningType: (type: string) => void;
   onToggleEncounterTier: (tier: MiningEncounterTier) => void;
   onClearAllFilters: () => void;
@@ -70,20 +65,14 @@ export function MiningFilterBar({
 
   const activeFilterCount = useMemo(
     () =>
-      selectedSystems.size
-      + selectedMaterials.size
+      selectedMaterials.size
       + selectedMiningTypes.size
       + selectedEncounterTiers.size
       + (showOnlyStarred ? 1 : 0)
       + (buildQueueSelectionActive ? 1 : 0),
-    [buildQueueSelectionActive, selectedEncounterTiers.size, selectedMaterials.size, selectedMiningTypes.size, selectedSystems.size, showOnlyStarred],
+    [buildQueueSelectionActive, selectedEncounterTiers.size, selectedMaterials.size, selectedMiningTypes.size, showOnlyStarred],
   );
 
-  const scopeIsDefault = !buildQueueSelectionActive
-    && selectedMaterials.size === 0
-    && selectedMiningTypes.size === 0
-    && selectedEncounterTiers.size === 0
-    && !showOnlyStarred;
   const savedTooltip = useMiningHoverTooltip("Saved");
 
   return (
@@ -114,7 +103,7 @@ export function MiningFilterBar({
         </div>
 
         <div className="scintel-filter-actions mining-filter-actions">
-          {hasActiveFilters && !isMobileViewport && (
+          {hasActiveFilters && !isMobileViewport && activeFilterCount > 0 && (
             <span className="scintel-filter-summary">{activeFilterCount} active</span>
           )}
           {hasActiveFilters && (
@@ -136,14 +125,6 @@ export function MiningFilterBar({
           </button>
           <button
             type="button"
-            className={`mining-scope-button${scopeIsDefault ? " mining-scope-button--active" : ""}`}
-            aria-pressed={scopeIsDefault}
-            onClick={onClearAllFilters}
-          >
-            All
-          </button>
-          <button
-            type="button"
             className={`mining-scope-button mining-scope-button--bookmark${showOnlyStarred ? " mining-scope-button--active" : ""}`}
             aria-pressed={showOnlyStarred}
             aria-label="Saved"
@@ -158,23 +139,6 @@ export function MiningFilterBar({
       </div>
 
       <div className="scintel-filter-body mining-filter-drawer">
-        <div className="mining-filter-drawer-row mining-filter-drawer-row--systems">
-          <span className="mining-filter-label">System</span>
-          <div className="mining-filter-chips" role="group" aria-label="System filters">
-            {MINING_SYSTEM_FILTERS.map((sys) => (
-              <button
-                key={sys}
-                type="button"
-                className={`mining-filter-chip mining-filter-chip--system${selectedSystems.has(sys) ? " is-active" : ""}`}
-                aria-pressed={selectedSystems.has(sys)}
-                onClick={() => onToggleSystem(sys)}
-              >
-                {sys}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {allMaterialChips.length > 0 && (
           <div className="mining-filter-drawer-row mining-filter-drawer-row--materials">
             <span className="mining-filter-label">Materials</span>

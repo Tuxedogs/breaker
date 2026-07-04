@@ -5,7 +5,7 @@ import { useMiningPlannerState } from "../../../features/mining/useMiningPlanner
 import { loadStantonLagrangeChildrenData } from "../../../features/locations/stantonLagrangeChildren";
 import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
-import { loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
+import { getStaticMethodBiasForLocation, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
 import "../crafting/recipe-browser.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
@@ -21,6 +21,7 @@ import {
   MINING_QUEUE_FOCUS_STORAGE_KEY,
   MINING_QUEUE_SCOPE_STORAGE_KEY,
   MINING_RANKING_MODE_STORAGE_KEY,
+  MINING_SYSTEM_FILTERS,
   readStoredCoverageMode,
   readStoredQueueFocus,
   readStoredQueueScope,
@@ -43,6 +44,13 @@ import { LocationDetail } from "./LocationDetail";
 
 const DEFAULT_VISIBLE_LOCATIONS = 12;
 const MIN_VISIBLE_ROUTE_LOCATIONS = 8;
+const DEFAULT_MINING_SYSTEM = "Stanton";
+const SYSTEM_SELECTOR_ORDER = ["Stanton", "Pyro", "Nyx"];
+const SYSTEM_DESCRIPTIONS: Record<string, string> = {
+  Stanton: "The Federation's economic and industrial core. Rich in minerals and diverse geological compositions.",
+  Pyro: "A volatile frontier system with harsh worlds, sparse infrastructure, and high-value mineral routes.",
+  Nyx: "A remote system of rugged worlds and hidden belts, favored by careful surveyors and small crews.",
+};
 
 const debugMiningIdentity = Boolean(
   import.meta.env.DEV &&
@@ -89,7 +97,7 @@ export default function MiningModule() {
       .map((r) => r.key);
     return new Set(canonical);
   });
-  const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set(initialSidebarState.systems));
+  const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set(initialSidebarState.systems.length > 0 ? initialSidebarState.systems : [DEFAULT_MINING_SYSTEM]));
   const [selectedMiningTypes, setSelectedMiningTypes] = useState<Set<string>>(() => new Set(initialSidebarState.miningTypes));
   const [selectedEncounterTiers, setSelectedEncounterTiers] = useState<Set<MiningEncounterTier>>(() => new Set(initialSidebarState.encounterTiers ?? []));
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
@@ -322,7 +330,7 @@ export default function MiningModule() {
     setSelectedMaterials((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); if (next.size === 0) setBuildQueueSelectionActive(false); return next; });
   }
   function toggleSystem(sys: string) {
-    setSelectedSystems((prev) => { const next = new Set(prev); if (next.has(sys)) next.delete(sys); else next.add(sys); return next; });
+    setSelectedSystems(new Set([sys]));
   }
   function toggleMiningType(type: string) {
     setSelectedMiningTypes((prev) => { const next = new Set(prev); if (next.has(type)) next.delete(type); else next.add(type); return next; });
@@ -337,7 +345,7 @@ export default function MiningModule() {
     setBuildQueueSelectionActive(false);
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setSelectedMaterials(new Set());
-    setSelectedSystems(new Set());
+    setSelectedSystems(new Set([DEFAULT_MINING_SYSTEM]));
     setSelectedMiningTypes(new Set());
     setSelectedEncounterTiers(new Set());
   }
@@ -356,7 +364,7 @@ export default function MiningModule() {
     || buildQueueSelectionActive
     || planner.filters.showOnlyStarred;
 
-  const systemContextName = selectedSystems.size === 1 ? [...selectedSystems][0] : selectedSystems.size > 1 ? "Multiple Systems" : "All Systems";
+  const systemContextName = selectedSystems.size === 1 ? [...selectedSystems][0] : DEFAULT_MINING_SYSTEM;
   const systemContextLocations = searchFilteredLocations.length;
   const systemContextMaterials = useMemo(() => {
     const keys = new Set<string>();
@@ -365,6 +373,20 @@ export default function MiningModule() {
     }
     return keys.size;
   }, [locationMaterialKeysByLocationKey, searchFilteredLocations]);
+  const systemContextMethods = useMemo(() => {
+    const methods = new Set<string>();
+    for (const entry of searchFilteredLocations) {
+      for (const item of getStaticMethodBiasForLocation(entry, staticMiningIndex)) {
+        if (item.share > 0) methods.add(item.method);
+      }
+    }
+    return methods.size;
+  }, [searchFilteredLocations, staticMiningIndex]);
+  const systemDescription = SYSTEM_DESCRIPTIONS[systemContextName] ?? "Indexed mining locations and material profiles for this system.";
+  const orderedSystemFilters = useMemo(
+    () => SYSTEM_SELECTOR_ORDER.filter((system) => MINING_SYSTEM_FILTERS.includes(system)),
+    [],
+  );
 
   return (
     <div className="mine-page mine-page--v2">
@@ -373,7 +395,6 @@ export default function MiningModule() {
           <div className="mine-body">
             <aside className="mine-filter-aside">
               <MiningFilterBar
-                selectedSystems={selectedSystems}
                 selectedMaterials={selectedMaterials}
                 selectedMiningTypes={selectedMiningTypes}
                 selectedEncounterTiers={selectedEncounterTiers}
@@ -383,7 +404,6 @@ export default function MiningModule() {
                 visibleResourceGroups={visibleResourceGroups}
                 hasActiveFilters={hasActiveFilters}
                 searchQuery={locationSearch}
-                onToggleSystem={toggleSystem}
                 onToggleMiningType={toggleMiningType}
                 onToggleEncounterTier={toggleEncounterTier}
                 onClearAllFilters={clearAllFilters}
@@ -396,17 +416,6 @@ export default function MiningModule() {
             </aside>
 
             <div className="mine-main">
-              <section className="mine-system-context" aria-label="Selected mining system context">
-                <div>
-                  <span className="mine-system-context__eyebrow">Browse System</span>
-                  <h1>{systemContextName}</h1>
-                </div>
-                <div className="mine-system-context__meta">
-                  <span>{systemContextLocations} mining location{systemContextLocations === 1 ? "" : "s"}</span>
-                  <span>{systemContextMaterials} material{systemContextMaterials === 1 ? "" : "s"}</span>
-                  <span>{selectedMaterials.size > 0 ? "Ranked by selected materials" : "Browse all indexed locations"}</span>
-                </div>
-              </section>
               {mobileQueueDemandSatisfied ? (
                 <div className="mine-empty-state mine-empty-state--queue-covered">
                   <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
@@ -414,25 +423,56 @@ export default function MiningModule() {
               ) : searchFilteredLocations.length === 0 ? (
                 <div className="mine-empty-state">
                   <p className="mine-empty-text">{locationSearch ? `No locations match "${locationSearch}".` : planner.filters.showOnlyStarred ? "No bookmarked locations. Bookmark a location from the list." : "No locations match the current filters."}</p>
+                  <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
                 </div>
               ) : (
                 <div className="mconsole-layout">
               <div className="mlist-panel">
+                <div className="mine-browse-header">
+                  <h1>Mining Locations</h1>
+                  <p>Explore systems, locations and mineral compositions.</p>
+                </div>
+                <div className="mine-browse-section">
+                  <span className="mine-browse-section-label">System</span>
+                  <div className="mine-system-selector" role="group" aria-label="System filters">
+                    {orderedSystemFilters.map((sys) => (
+                      <button
+                        key={sys}
+                        type="button"
+                        className={`mine-system-button${selectedSystems.has(sys) ? " is-active" : ""}`}
+                        aria-pressed={selectedSystems.has(sys)}
+                        onClick={() => toggleSystem(sys)}
+                      >
+                        {sys}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <section className="mine-system-card" aria-label="Browse System">
+                  <div className="mine-system-card-main">
+                    <div className={`mine-system-emblem mine-system-emblem--${systemContextName.toLowerCase()}`} aria-hidden="true">
+                      <span>{systemContextName.slice(0, 1)}</span>
+                    </div>
+                    <div>
+                      <span className="mine-system-card-label">Browse System</span>
+                      <h2>{systemContextName}</h2>
+                      <p>{systemDescription}</p>
+                    </div>
+                  </div>
+                  <div className="mine-system-stats">
+                    <span><strong>{systemContextLocations}</strong> Locations</span>
+                    <span><strong>{systemContextMaterials}</strong> Materials</span>
+                    <span><strong>{systemContextMethods}</strong> Methods</span>
+                  </div>
+                </section>
                 <div className="mlist-header">
-                  <span className="mlist-header-label">Mining Locations</span>
+                  <span className="mlist-header-label">All Locations</span>
                   <span className="mlist-header-count">{searchFilteredLocations.length}</span>
                 </div>
                 <div className="mlist-header-rank">
                   {!buildQueueSelectionActive && (
                     <div className="mlist-mode-hint">
-                      <span className="mlist-mode-hint-label">
-                        {selectedMaterials.size > 0
-                          ? "Ranked by selected material coverage"
-                          : "All locations in current browse context"}
-                      </span>
-                      {selectedMaterials.size === 0 && (
-                        <span className="mlist-mode-hint-tip">Click a planet, moon, or location to view its material profile</span>
-                      )}
+                      <span className="mlist-mode-hint-tip">Click a location to view details</span>
                     </div>
                   )}
                   {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
@@ -505,7 +545,7 @@ export default function MiningModule() {
                   )}
                   {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > DEFAULT_VISIBLE_LOCATIONS && (
                     <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
-                      {showAllLocations ? "Show top 12 ↑" : `View all ${searchFilteredLocations.length} locations ↓`}
+                      {showAllLocations ? "Show top 12" : `View all ${searchFilteredLocations.length} locations`}
                     </button>
                   )}
                 </div>

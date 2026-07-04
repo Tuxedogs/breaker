@@ -3548,8 +3548,8 @@
   display: grid;
   grid-template-columns: minmax(320px, 1fr) auto auto;
   gap: 12px;
-  min-height: 58px;
-  padding: 10px 14px;
+  min-height: 50px;
+  padding: 8px 14px;
   border-bottom: 1px solid var(--panel-border-soft);
 }
 
@@ -3562,8 +3562,8 @@
 
 .mine-page--v2 .mining-filter-drawer {
   display: grid;
-  gap: 10px 14px;
-  padding: 12px 14px 14px;
+  gap: 8px 14px;
+  padding: 10px 14px 12px;
   background: rgba(3, 18, 28, 0.72);
   border-top: 0;
 }
@@ -3589,8 +3589,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
-  padding: 0 13px;
+  min-height: 30px;
+  padding: 0 12px;
   border: 1px solid var(--panel-border-soft);
   border-radius: 6px;
   background: rgba(5, 26, 40, 0.7);
@@ -3704,6 +3704,184 @@
 .mine-page--v2 .mconsole-layout {
   grid-template-columns: clamp(300px, 20vw, 380px) minmax(720px, 1fr);
   gap: 16px;
+  align-items: stretch;
+}
+
+.mine-page--v2 .mine-main {
+  gap: 0;
+}
+
+.mine-page--v2 .mine-empty-state {
+  min-height: 280px;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg);
+}
+
+.mine-browse-header {
+  padding: 12px 14px 10px;
+}
+
+.mine-browse-header h1 {
+  margin: 0;
+  color: var(--accent-cyan);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mine-browse-header p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.mine-browse-section {
+  padding: 0 14px 12px;
+  border-bottom: 1px solid var(--panel-border-soft);
+}
+
+.mine-browse-section-label,
+.mine-system-card-label {
+  display: block;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.mine-system-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mine-system-button {
+  min-height: 32px;
+  border: 1px solid var(--panel-border-soft);
+  border-radius: 6px;
+  background: var(--panel-row-bg);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color 0.14s, background 0.14s, color 0.14s;
+}
+
+.mine-system-button:hover,
+.mine-system-button.is-active {
+  border-color: rgba(0, 230, 210, 0.68);
+  background: rgba(0, 230, 210, 0.11);
+  color: var(--accent-cyan);
+}
+
+.mine-system-card {
+  margin: 12px 8px;
+  border: 1px solid var(--panel-border-soft);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(4, 19, 29, 0.92), rgba(5, 26, 40, 0.72));
+  overflow: hidden;
+}
+
+.mine-system-card-main {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+}
+
+.mine-system-emblem {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: 1px solid rgba(0, 230, 210, 0.28);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0, 230, 210, 0.22), rgba(0, 230, 210, 0.04) 42%, transparent 64%),
+    rgba(2, 12, 20, 0.86);
+  color: var(--accent-cyan);
+  font-family: var(--font-primary);
+  font-size: 1.45rem;
+  font-weight: 850;
+  box-shadow: inset 0 0 24px rgba(0, 230, 210, 0.08);
+}
+
+.mine-system-emblem--pyro {
+  border-color: rgba(255, 184, 77, 0.3);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 128, 32, 0.2), rgba(255, 184, 77, 0.04) 42%, transparent 64%),
+    rgba(2, 12, 20, 0.86);
+  color: var(--warning);
+}
+
+.mine-system-emblem--nyx {
+  border-color: rgba(184, 92, 246, 0.3);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(184, 92, 246, 0.2), rgba(184, 92, 246, 0.04) 42%, transparent 64%),
+    rgba(2, 12, 20, 0.86);
+  color: var(--accent-purple);
+}
+
+.mine-system-card h2 {
+  margin: 5px 0 0;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.mine-system-card p {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.78rem;
+  line-height: 1.36;
+}
+
+.mine-system-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--panel-border-soft);
+}
+
+.mine-system-stats span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 8px;
+  border-left: 1px solid var(--panel-border-soft);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.64rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.mine-system-stats span:first-child {
+  border-left: 0;
+}
+
+.mine-system-stats strong {
+  color: var(--text-primary);
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .mine-page--v2 .mlist-panel,
