@@ -22,6 +22,49 @@ export interface StackAllocation {
   quantity: number;
 }
 
+type InventoryLocationDisplayInput =
+  | Pick<InventoryLocation, 'name' | 'system'>
+  | Pick<InventoryEntry, 'locationId' | 'container'> & { location?: Pick<InventoryLocation, 'name' | 'system'> | undefined }
+  | null
+  | undefined;
+
+function getLocationDisplayValue(value: string | null | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed || undefined;
+}
+
+function isLocationDisplayRecord(input: InventoryLocationDisplayInput): input is Pick<InventoryLocation, 'name' | 'system'> {
+  return Boolean(input) && !('location' in (input as object)) && ('name' in (input as object) || 'system' in (input as object));
+}
+
+function getDisplayLocation(input: InventoryLocationDisplayInput): Pick<InventoryLocation, 'name' | 'system'> | undefined {
+  if (!input) return undefined;
+  if ('location' in input) return input.location;
+  if (isLocationDisplayRecord(input)) return input;
+  return undefined;
+}
+
+function getDisplayLocationId(input: InventoryLocationDisplayInput): string | undefined {
+  if (!input || !('locationId' in input)) return undefined;
+  return getLocationDisplayValue(input.locationId);
+}
+
+export function formatInventoryLocationLabel(input: InventoryLocationDisplayInput): string {
+  const location = getDisplayLocation(input);
+  const locationName = getLocationDisplayValue(location?.name);
+  if (locationName) return locationName;
+  if (getDisplayLocationId(input)) return 'Unknown location';
+  return 'Unassigned stock';
+}
+
+export function formatInventoryLocationMetaLabel(input: InventoryLocationDisplayInput): string | undefined {
+  const location = getDisplayLocation(input);
+  const system = getLocationDisplayValue(location?.system);
+  if (system) return `${system} System`;
+  if (!input || !('container' in input)) return undefined;
+  return getLocationDisplayValue(input.container);
+}
+
 export function getLegacyMaterialItemKind(material: MaterialTemplate | undefined): InventoryItemKind {
   if (!material) return 'unknown';
   if (material.id === 'rawice') return 'ice';
@@ -210,7 +253,7 @@ export function allocateMaterialFromStacks(
   const sorted = stacks.sort((a, b) => {
     if (strategy === 'highest-quality') return (b.quality ?? 0) - (a.quality ?? 0) || b.quantity - a.quantity;
     if (strategy === 'minimize-splits') return b.quantity - a.quantity || (b.quality ?? 0) - (a.quality ?? 0);
-    return (a.location?.name ?? a.locationId ?? '').localeCompare(b.location?.name ?? b.locationId ?? '') || b.quantity - a.quantity;
+    return formatInventoryLocationLabel(a).localeCompare(formatInventoryLocationLabel(b)) || b.quantity - a.quantity;
   });
 
   const allocations: StackAllocation[] = [];

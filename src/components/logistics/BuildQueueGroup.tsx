@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate, RecipeTemplate, ReservedMaterialAllocation } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
 import {
+  formatInventoryLocationLabel,
+  formatInventoryLocationMetaLabel,
   formatQuantity,
   formatInventoryQuantity,
   getBuildQueueItemInputs,
@@ -140,7 +142,7 @@ function sortStacks(stacks: InventoryStack[], strategy: SourceStrategy): Invento
   return stacks.slice().sort((a, b) => {
     if (strategy === 'highest-quality') return (b.quality ?? 0) - (a.quality ?? 0) || b.quantity - a.quantity;
     if (strategy === 'minimize-splits') return b.quantity - a.quantity || (b.quality ?? 0) - (a.quality ?? 0);
-    return (a.location?.name ?? a.locationId ?? '').localeCompare(b.location?.name ?? b.locationId ?? '') || b.quantity - a.quantity;
+    return formatInventoryLocationLabel(a).localeCompare(formatInventoryLocationLabel(b)) || b.quantity - a.quantity;
   });
 }
 
@@ -340,7 +342,7 @@ function sortReservableStacks(
       aRank.group - bRank.group ||
       (b.quality ?? 0) - (a.quality ?? 0) ||
       bRank.available - aRank.available ||
-      (a.location?.name ?? a.locationId ?? 'Unassigned stock').localeCompare(b.location?.name ?? b.locationId ?? 'Unassigned stock')
+      formatInventoryLocationLabel(a).localeCompare(formatInventoryLocationLabel(b))
     );
   });
 }
@@ -1603,10 +1605,10 @@ export default function BuildQueueGroup({
                                         : 0;
                                       const disabled = (!checked && fillQuantity <= 0) || (isReservedElsewhere && !isAssignedHere);
                                       const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
-                                      const locationName = stack.location?.name ?? stack.locationId ?? 'Unassigned stock';
-                                      const locationMeta = stack.location?.system ? `${stack.location.system} System` : stack.container;
+                                      const locationName = formatInventoryLocationLabel(stack);
+                                      const locationMeta = formatInventoryLocationMetaLabel(stack);
                                       const assignmentTitle = getAssignmentTooltip(ownerAssignment);
-                                      const locationTitle = [locationName, stack.location?.system, stack.container].filter(Boolean).join(' - ');
+                                      const locationTitle = [locationName, locationMeta].filter(Boolean).join(' - ');
                                       const commitDraftValue = (rawValue: string) => {
                                         if (isReservedElsewhere && !isAssignedHere) return;
                                         const parsed = parseDraftNumber(rawValue);
@@ -1667,7 +1669,7 @@ export default function BuildQueueGroup({
                                                 className="bq-stack-cb"
                                                 checked={checked}
                                                 disabled={disabled}
-                                                aria-label={`Reserve ${stack.location?.name ?? stack.locationId}`}
+                                                aria-label={`Reserve ${locationName}`}
                                                 onChange={() => {
                                                   if (checked) {
                                                     applyStackQuantity(stack, 0, allocationId);
@@ -1704,7 +1706,7 @@ export default function BuildQueueGroup({
                                                 value={draftValue}
                                                 placeholder="0"
                                                 disabled={isReservedElsewhere && !isAssignedHere}
-                                                aria-label={`Assign quantity for ${stack.location?.name ?? stack.locationId}`}
+                                                aria-label={`Assign quantity for ${locationName}`}
                                                 onChange={(event) => {
                                                   setReserveDrafts((prev) => ({ ...prev, [allocationId]: event.target.value }));
                                                 }}
