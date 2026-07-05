@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import {
   getWeightedAverageQuality,
   solveBuildQueueAllocation,
+  solveBuildQueueCraftAllocation,
   type AllocationSolverLot,
 } from "../../src/lib/logistics/buildQueueAllocationSolver";
 
@@ -12,10 +13,11 @@ function lot(
   quality: number,
   availableScu: number,
   locationName = "Area 18",
+  materialId = "laranite",
 ): AllocationSolverLot {
   return {
     lotId: id,
-    materialId: "laranite",
+    materialId,
     quality,
     availableScu,
     locationId: `loc-${id}`,
@@ -115,5 +117,62 @@ describe("buildQueueAllocationSolver", () => {
       { quality: 600, scu: 2 },
     ]);
     assert.equal(average, 500);
+  });
+});
+
+describe("solveBuildQueueCraftAllocation", () => {
+  it("solves multiple underfilled requirements and skips complete ones", () => {
+    const plan = solveBuildQueueCraftAllocation([
+      {
+        requirementId: "req-a",
+        materialId: "laranite",
+        materialName: "Laranite",
+        requiredScu: 4,
+        targetQuality: 500,
+        existingAllocations: [{ lotId: "existing-a", quality: 600, allocatedScu: 4 }],
+        candidateLots: [lot("box-a", 600, 2)],
+      },
+      {
+        requirementId: "req-b",
+        materialId: "bexalite",
+        materialName: "Bexalite",
+        requiredScu: 3,
+        existingAllocations: [],
+        candidateLots: [lot("box-b", 500, 2, "Hurston", "bexalite"), lot("box-c", 500, 2, "Area 18", "bexalite")],
+      },
+    ]);
+
+    assert.equal(plan.materials[0]?.status, "complete");
+    assert.equal(plan.materials[1]?.totalProposedScu, 3);
+    assert.equal(plan.materials[1]?.proposedLots.at(-1)?.proposedScu, 1);
+    assert.equal(plan.hasProposedLots, true);
+  });
+
+  it("does not double-allocate the same lot across requirements", () => {
+    const sharedLot = lot("shared-box", 700, 4, "Shared");
+    const plan = solveBuildQueueCraftAllocation([
+      {
+        requirementId: "req-a",
+        materialId: "laranite",
+        materialName: "Laranite",
+        requiredScu: 3,
+        existingAllocations: [],
+        candidateLots: [sharedLot],
+      },
+      {
+        requirementId: "req-b",
+        materialId: "bexalite",
+        materialName: "Bexalite",
+        requiredScu: 2,
+        existingAllocations: [],
+        candidateLots: [{ ...sharedLot, materialId: "bexalite" }],
+      },
+    ]);
+
+    const totalProposedOnShared = plan.materials
+      .flatMap((material) => material.proposedLots)
+      .filter((entry) => entry.lotId === "shared-box")
+      .reduce((sum, entry) => sum + entry.proposedScu, 0);
+    assert.equal(totalProposedOnShared, 4);
   });
 });

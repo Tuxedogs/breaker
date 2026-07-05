@@ -36,6 +36,8 @@ export interface ProposedLotAllocation {
 
 export interface AllocationSolverPlan {
   materialId: string;
+  materialName?: string;
+  requirementId?: string;
   requiredScu: number;
   alreadyAllocatedScu: number;
   remainingNeedScu: number;
@@ -47,6 +49,38 @@ export interface AllocationSolverPlan {
   meetsQuantity: boolean;
   meetsTargetQuality: boolean;
   warnings: string[];
+}
+
+export type MaterialAllocationPlanStatus =
+  | "ready"
+  | "complete"
+  | "quantity-short"
+  | "quality-short"
+  | "no-inventory";
+
+export interface AllocationSolverMaterialPlan extends AllocationSolverPlan {
+  materialName: string;
+  requirementId: string;
+  status: MaterialAllocationPlanStatus;
+}
+
+export interface CraftAllocationSolverPlan {
+  materials: AllocationSolverMaterialPlan[];
+  hasProposedLots: boolean;
+  hasWarnings: boolean;
+  allComplete: boolean;
+  noUsableInventory: boolean;
+  warnings: string[];
+}
+
+export interface CraftAllocationRequirementInput {
+  requirementId: string;
+  materialId: string;
+  materialName: string;
+  requiredScu: number;
+  targetQuality?: number;
+  existingAllocations: AllocationSolverExistingAllocation[];
+  candidateLots: AllocationSolverLot[];
 }
 
 type QualityScuEntry = { quality?: number; scu: number };
@@ -337,6 +371,74 @@ export function solveBuildQueueAllocation(
 
   const bestPlan = candidatePlans.reduce((best, plan) => (comparePlans(plan, best) > 0 ? plan : best));
   return bestPlan;
+}
+
+function getMaterialAllocationPlanStatus(
+  plan: AllocationSolverPlan,
+  usableCandidateCount: number,
+): MaterialAllocationPlanStatus {
+  if (plan.remainingNeedScu <= ALLOCATION_SOLVER_SCU_EPSILON) return "complete";
+  if (plan.proposedLots.length === 0 && usableCandidateCount === 0) return "no-inventory";
+  if (!plan.meetsQuantity) return "quantity-short";
+  if (!plan.meetsTargetQuality) return "quality-short";
+  return "ready";
+}
+
+export function solveBuildQueueCraftAllocation(
+  requirements: CraftAllocationRequirementInput[],
+): CraftAllocationSolverPlan {
+  const pendingProposedByLot = new Map<string, number>();
+  const materials: AllocationSolverMaterialPlan[] = [];
+  const globalWarnings: string[] = [];
+
+  for (const requirement of requirements) {
+    const adjustedLots = requirement.candidateLots
+      .map((lot) => ({
+        ...lot,
+        availableScu: roundScu(Math.max(0, lot.availableScu - (pendingProposedByLot.get(lot.lotId) ?? 0))),
+      }))
+      .filter((lot) => lot.availableScu > ALLOCATION_SOLVER_SCU_EPSILON);
+
+    const plan = solveBuildQueueAllocation(
+      {
+        materialId: requirement.materialId,
+        requiredScu: requirement.requiredScu,
+        targetQuality: requirement.targetQuality,
+        existingAllocations: requirement.existingAllocations,
+      },
+      adjustedLots,
+    );
+
+    const materialPlan: AllocationSolverMaterialPlan = {
+      ...plan,
+      materialName: requirement.materialName,
+      requirementId: requirement.requirementId,
+      status: getMaterialAllocationPlanStatus(plan, adjustedLots.length),
+    };
+
+    for (const proposedLot of plan.proposedLots) {
+      pendingProposedByLot.set(
+        proposedLot.lotId,
+        roundScu((pendingProposedByLot.get(proposedLot.lotId) ?? 0) + proposedLot.proposedScu),
+      );
+    }
+
+    materials.push(materialPlan);
+  }
+
+  const underfilled = materials.filter((material) => material.remainingNeedScu > ALLOCATION_SOLVER_SCU_EPSILON);
+  if (underfilled.length > 0 && underfilled.every((material) => material.status === "no-inventory")) {
+    globalWarnings.push("No usable inventory lots are available for the remaining material requirements.");
+  }
+
+  return {
+    materials,
+    hasProposedLots: materials.some((material) => material.proposedLots.length > 0),
+    hasWarnings: materials.some((material) => material.warnings.length > 0 || material.status !== "ready" && material.status !== "complete"),
+    allComplete: materials.every((material) => material.status === "complete"),
+    noUsableInventory: underfilled.length > 0 && underfilled.every((material) => material.status === "no-inventory"),
+    warnings: globalWarnings,
+  };
 }
 
 export function buildSolverLotsFromInventoryStacks(

@@ -31,9 +31,11 @@ import {
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
 import {
-  solveBuildQueueAllocation,
+  solveBuildQueueCraftAllocation,
   type AllocationSolverLot,
   type AllocationSolverPlan,
+  type CraftAllocationRequirementInput,
+  type CraftAllocationSolverPlan,
 } from '../../lib/logistics/buildQueueAllocationSolver';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
@@ -493,6 +495,30 @@ function buildSolverCandidateLots(
   });
 }
 
+function applyCraftAllocationSolverPlan(
+  item: BuildQueueItem,
+  buildQueue: BuildQueueItem[],
+  craftPlan: CraftAllocationSolverPlan,
+  requirementContexts: Map<string, { req: RequirementReserveContext; stacksById: Map<string, InventoryStack> }>,
+  onToggleAllocation: Props['onToggleAllocation'],
+  onUpdateAllocationQuantity: Props['onUpdateAllocationQuantity'],
+): void {
+  for (const materialPlan of craftPlan.materials) {
+    if (materialPlan.proposedLots.length === 0) continue;
+    const context = requirementContexts.get(materialPlan.requirementId);
+    if (!context) continue;
+    applyAllocationSolverPlan(
+      item,
+      buildQueue,
+      context.req,
+      materialPlan,
+      context.stacksById,
+      onToggleAllocation,
+      onUpdateAllocationQuantity,
+    );
+  }
+}
+
 function applyAllocationSolverPlan(
   item: BuildQueueItem,
   buildQueue: BuildQueueItem[],
@@ -716,81 +742,160 @@ function SolveIcon() {
   );
 }
 
-function AllocationSolverPreview({
+function getMaterialPlanStatusLabel(status: CraftAllocationSolverPlan['materials'][number]['status']): string {
+  switch (status) {
+    case 'complete':
+      return 'Complete';
+    case 'ready':
+      return 'Ready to reserve';
+    case 'quantity-short':
+      return 'Quantity short';
+    case 'quality-short':
+      return 'Target not met';
+    case 'no-inventory':
+      return 'No usable inventory';
+    default:
+      return status;
+  }
+}
+
+function CraftAllocationSolverPreview({
   plan,
-  material,
+  itemName,
+  materials,
   onApply,
-  onDismiss,
+  onCancel,
 }: {
-  plan: AllocationSolverPlan;
-  material: MaterialTemplate | undefined;
+  plan: CraftAllocationSolverPlan;
+  itemName: string;
+  materials: MaterialTemplate[];
   onApply: () => void;
-  onDismiss: () => void;
+  onCancel: () => void;
 }) {
-  const projectedQualityLabel = plan.projectedAverageQuality !== undefined
-    ? formatDecimal(plan.projectedAverageQuality)
-    : '—';
+  const actionableMaterials = plan.materials.filter((material) => material.proposedLots.length > 0);
+  const getMaterial = (materialId: string) => materials.find((entry) => entry.id === materialId);
 
   return (
-    <div className="bq-solve-preview">
-      <div className="bq-solve-preview-head">
-        <span className="bq-solve-preview-title">Proposed allocation</span>
-        <button type="button" className="bq-btn bq-btn--compact" onClick={onDismiss}>Dismiss</button>
-      </div>
-
-      <div className="bq-solve-preview-metrics">
-        <span>
-          Projected avg quality <strong>{projectedQualityLabel}</strong>
-        </span>
-        <span className={plan.meetsTargetQuality ? 'bq-solve-status--met' : 'bq-solve-status--warn'}>
-          Target {plan.targetQuality ?? 'any'}: {plan.meetsTargetQuality ? 'Met' : 'Not met'}
-        </span>
-        <span className={plan.meetsQuantity ? 'bq-solve-status--met' : 'bq-solve-status--short'}>
-          {formatQuantity(plan.projectedTotalAllocatedScu, material)} / {formatQuantity(plan.requiredScu, material)}
-        </span>
-      </div>
-
-      {plan.warnings.length > 0 ? (
-        <ul className="bq-solve-preview-warnings">
-          {plan.warnings.map((warning) => (
-            <li key={warning}>
-              <WarningIcon />
-              <span>{warning}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      {plan.proposedLots.length > 0 ? (
-        <div className="bq-solve-preview-lots">
-          <div className="bq-solve-preview-lots-head" aria-hidden="true">
-            <span>Location</span>
-            <span>Quality</span>
-            <span>Proposed</span>
+    <div className="bq-solve-modal-backdrop" role="presentation" onMouseDown={onCancel}>
+      <div
+        className="bq-solve-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="bq-solve-modal-title"
+        onMouseDown={(event) => event.stopPropagation()}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') onCancel();
+        }}
+      >
+        <div className="bq-solve-modal-head">
+          <div>
+            <h3 id="bq-solve-modal-title">Auto Reserve Preview</h3>
+            <p className="bq-solve-modal-subtitle">{itemName}</p>
           </div>
-          {plan.proposedLots.map((proposedLot) => (
-            <div key={proposedLot.lotId} className="bq-solve-preview-lot-row">
-              <span className="bq-solve-preview-location" title={proposedLot.locationName}>
-                {proposedLot.locationName}
-              </span>
-              <span className="bq-solve-preview-quality">{proposedLot.quality ?? '—'}</span>
-              <span className="bq-solve-preview-scu">{formatQuantity(proposedLot.proposedScu, material)}</span>
-            </div>
-          ))}
+          <button type="button" className="bq-btn bq-btn--compact" onClick={onCancel}>Cancel</button>
         </div>
-      ) : (
-        <div className="bq-empty-inline">No additional lots needed.</div>
-      )}
 
-      <div className="bq-solve-preview-actions">
-        <button
-          type="button"
-          className="bq-btn bq-btn--confirm"
-          disabled={plan.proposedLots.length === 0}
-          onClick={onApply}
-        >
-          Apply plan
-        </button>
+        {plan.warnings.length > 0 ? (
+          <ul className="bq-solve-preview-warnings bq-solve-preview-warnings--modal">
+            {plan.warnings.map((warning) => (
+              <li key={warning}>
+                <WarningIcon />
+                <span>{warning}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <div className="bq-solve-modal-body">
+          {plan.materials.map((materialPlan) => {
+            const material = getMaterial(materialPlan.materialId);
+            const projectedQualityLabel = materialPlan.projectedAverageQuality !== undefined
+              ? formatDecimal(materialPlan.projectedAverageQuality)
+              : '—';
+
+            return (
+              <section
+                key={materialPlan.requirementId}
+                className={[
+                  'bq-solve-material',
+                  `bq-solve-material--${materialPlan.status}`,
+                ].join(' ')}
+              >
+                <div className="bq-solve-material-head">
+                  <div>
+                    <strong>{materialPlan.materialName}</strong>
+                    <span className={`bq-solve-material-status bq-solve-material-status--${materialPlan.status}`}>
+                      {getMaterialPlanStatusLabel(materialPlan.status)}
+                    </span>
+                  </div>
+                  <div className="bq-solve-material-metrics">
+                    <span>{formatQuantity(materialPlan.alreadyAllocatedScu, material)} allocated</span>
+                    <span>{formatQuantity(materialPlan.totalProposedScu, material)} proposed</span>
+                    <span>{formatQuantity(materialPlan.requiredScu, material)} required</span>
+                  </div>
+                </div>
+
+                <div className="bq-solve-preview-metrics bq-solve-preview-metrics--material">
+                  <span>
+                    Projected avg <strong>{projectedQualityLabel}</strong>
+                  </span>
+                  <span className={materialPlan.meetsTargetQuality ? 'bq-solve-status--met' : 'bq-solve-status--warn'}>
+                    Target {materialPlan.targetQuality ?? 'any'}: {materialPlan.meetsTargetQuality ? 'Met' : 'Not met'}
+                  </span>
+                  <span className={materialPlan.meetsQuantity ? 'bq-solve-status--met' : 'bq-solve-status--short'}>
+                    {formatQuantity(materialPlan.projectedTotalAllocatedScu, material)} / {formatQuantity(materialPlan.requiredScu, material)}
+                  </span>
+                </div>
+
+                {materialPlan.warnings.length > 0 ? (
+                  <ul className="bq-solve-preview-warnings">
+                    {materialPlan.warnings.map((warning) => (
+                      <li key={warning}>
+                        <WarningIcon />
+                        <span>{warning}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {materialPlan.proposedLots.length > 0 ? (
+                  <div className="bq-solve-preview-lots">
+                    <div className="bq-solve-preview-lots-head" aria-hidden="true">
+                      <span>Location</span>
+                      <span>Quality</span>
+                      <span>Proposed</span>
+                    </div>
+                    {materialPlan.proposedLots.map((proposedLot) => (
+                      <div key={proposedLot.lotId} className="bq-solve-preview-lot-row">
+                        <span className="bq-solve-preview-location" title={proposedLot.locationName}>
+                          {proposedLot.locationName}
+                        </span>
+                        <span className="bq-solve-preview-quality">{proposedLot.quality ?? '—'}</span>
+                        <span className="bq-solve-preview-scu">{formatQuantity(proposedLot.proposedScu, material)}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : materialPlan.status === 'complete' ? (
+                  <div className="bq-empty-inline">Already fully allocated.</div>
+                ) : (
+                  <div className="bq-empty-inline">No lots proposed for this material.</div>
+                )}
+              </section>
+            );
+          })}
+        </div>
+
+        <div className="bq-solve-modal-actions">
+          <button type="button" className="bq-btn" onClick={onCancel}>Cancel</button>
+          <button
+            type="button"
+            className="bq-btn bq-btn--confirm"
+            disabled={actionableMaterials.length === 0}
+            onClick={onApply}
+          >
+            Reserve These
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -1023,11 +1128,11 @@ export default function BuildQueueGroup({
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [pendingReassignment, setPendingReassignment] = useState<PendingReassignment | null>(null);
-  const [pendingSolverPlan, setPendingSolverPlan] = useState<{
+  const [pendingCraftSolverPlan, setPendingCraftSolverPlan] = useState<{
     itemId: string;
-    requirementKey: string;
-    plan: AllocationSolverPlan;
+    plan: CraftAllocationSolverPlan;
   } | null>(null);
+  const [solverPlanning, setSolverPlanning] = useState(false);
   const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
@@ -1295,6 +1400,102 @@ export default function BuildQueueGroup({
           };
         });
 
+        const craftSolverRequirementContexts = new Map(
+          materialRequirementRows.map((row) => {
+            const reserveContext: RequirementReserveContext = {
+              requirementId: row.requirementId,
+              materialKey: row.materialKey,
+              requirementSelectedQuality: row.requirementSelectedQuality,
+              input: row.input,
+              material: row.material,
+              required: row.required,
+              ownAllocations: row.ownAllocations,
+              allocatedAmount: row.allocatedAmount,
+            };
+            return [
+              row.requirementId,
+              {
+                req: reserveContext,
+                stacksById: new Map(row.allMaterialStacks.map((stack) => [stack.id, stack])),
+              },
+            ] as const;
+          }),
+        );
+
+        const craftSolverRequirements: CraftAllocationRequirementInput[] = materialRequirementRows.map((row) => {
+          const reserveContext = craftSolverRequirementContexts.get(row.requirementId)?.req;
+          if (!reserveContext) {
+            return {
+              requirementId: row.requirementId,
+              materialId: row.materialKey,
+              materialName: row.displayName,
+              requiredScu: row.required,
+              targetQuality: row.requirementSelectedQuality,
+              existingAllocations: row.ownAllocations.map((allocation) => ({
+                lotId: allocation.inventoryEntryId,
+                quality: allocation.quality,
+                allocatedScu: allocation.quantityReserved,
+              })),
+              candidateLots: [],
+            };
+          }
+          return {
+            requirementId: row.requirementId,
+            materialId: row.materialKey,
+            materialName: row.displayName,
+            requiredScu: row.required,
+            targetQuality: row.requirementSelectedQuality,
+            existingAllocations: row.ownAllocations.map((allocation) => ({
+              lotId: allocation.inventoryEntryId,
+              quality: allocation.quality,
+              allocatedScu: allocation.quantityReserved,
+            })),
+            candidateLots: buildSolverCandidateLots(
+              row.allMaterialStacks,
+              buildQueue,
+              item,
+              reserveContext,
+              recipes,
+              recipeInputsByRecipeId,
+            ),
+          };
+        });
+
+        const allRequirementsComplete = materialRequirementRows.every(
+          (row) => row.remainingRequired <= SCU_QUANTITY_EPSILON,
+        );
+        const autoReserveDisabled =
+          !hasMaterialInputs ||
+          isCompletedCraft ||
+          allRequirementsComplete;
+        const autoReserveTitle = allRequirementsComplete
+          ? 'All material requirements are already fully allocated'
+          : isCompletedCraft
+            ? 'Completed crafts cannot be auto-reserved'
+            : 'Propose inventory lots for all underfilled materials';
+
+        const runCraftSolver = () => {
+          setSolverPlanning(true);
+          window.requestAnimationFrame(() => {
+            const plan = solveBuildQueueCraftAllocation(craftSolverRequirements);
+            setPendingCraftSolverPlan({ itemId: item.id, plan });
+            setSolverPlanning(false);
+          });
+        };
+
+        const applyCraftSolverPlan = () => {
+          if (!pendingCraftSolverPlan || pendingCraftSolverPlan.itemId !== item.id) return;
+          applyCraftAllocationSolverPlan(
+            item,
+            buildQueue,
+            pendingCraftSolverPlan.plan,
+            craftSolverRequirementContexts,
+            onToggleAllocation,
+            onUpdateAllocationQuantity,
+          );
+          setPendingCraftSolverPlan(null);
+        };
+
         const blueprintLabel = blueprintSources.length === 0
           ? 'Unknown blueprint'
           : blueprintSources.map((s) => s.displayName).join(', ');
@@ -1390,9 +1591,28 @@ export default function BuildQueueGroup({
               {/* Material table */}
               {hasMaterialInputs ? (
               <section className="bq-materials-section">
-                {isMobileTouchLayout ? (
-                  <h3 className="bq-materials-section-label">Required Materials</h3>
-                ) : null}
+                <div className="bq-materials-section-header">
+                  <div className="bq-materials-section-heading">
+                    <h3 className="bq-materials-section-title">Material Allocation</h3>
+                    <p className="bq-materials-section-summary">
+                      {summaryMetrics.coveredCount}/{inputs.length} covered
+                      {summaryMetrics.totalShortfall > 0
+                        ? ` · ${formatQuantity(summaryMetrics.totalShortfall, undefined)} short`
+                        : ''}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="bq-auto-reserve-btn"
+                    disabled={autoReserveDisabled || solverPlanning}
+                    aria-label={`Auto reserve inventory for ${itemName}`}
+                    title={autoReserveTitle}
+                    onClick={runCraftSolver}
+                  >
+                    <SolveIcon />
+                    <span>{solverPlanning ? 'Planning…' : 'Auto Reserve'}</span>
+                  </button>
+                </div>
               <div className="bq-mat-table">
                 {!isMobileTouchLayout ? (
                 <div className="bq-mat-head" aria-hidden="true">
@@ -1703,86 +1923,16 @@ export default function BuildQueueGroup({
                                 onUpdateAllocationQuantity,
                               );
                             };
-                            const solverCandidateLots = buildSolverCandidateLots(
-                              req.allMaterialStacks,
-                              buildQueue,
-                              item,
-                              reserveContext,
-                              recipes,
-                              recipeInputsByRecipeId,
-                            );
-                            const solverPreviewOpen =
-                              pendingSolverPlan?.itemId === item.id &&
-                              pendingSolverPlan.requirementKey === req.requirementCardKey;
-                            const runSolver = () => {
-                              const plan = solveBuildQueueAllocation(
-                                {
-                                  materialId: req.materialKey,
-                                  requiredScu: req.required,
-                                  targetQuality: req.requirementSelectedQuality,
-                                  existingAllocations: req.ownAllocations.map((allocation) => ({
-                                    lotId: allocation.inventoryEntryId,
-                                    quality: allocation.quality,
-                                    allocatedScu: allocation.quantityReserved,
-                                  })),
-                                },
-                                solverCandidateLots,
-                              );
-                              setPendingSolverPlan({
-                                itemId: item.id,
-                                requirementKey: req.requirementCardKey,
-                                plan,
-                              });
-                            };
-                            const applySolverPlan = () => {
-                              if (!solverPreviewOpen || !pendingSolverPlan) return;
-                              const stacksById = new Map(req.allMaterialStacks.map((stack) => [stack.id, stack]));
-                              applyAllocationSolverPlan(
-                                item,
-                                buildQueue,
-                                reserveContext,
-                                pendingSolverPlan.plan,
-                                stacksById,
-                                onToggleAllocation,
-                                onUpdateAllocationQuantity,
-                              );
-                              setPendingSolverPlan(null);
-                            };
-
                             return (
                               <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
-                                <div className="bq-reserve-req-head">
-                                  {group.requirements.length > 1 ? (
-                                    <>
-                                      <span>{req.displayName}</span>
-                                      <span className={`bq-reserve-status bq-reserve-status--${req.remainingRequired > 0 ? 'short' : req.allocatedAmount > req.required ? 'over' : 'met'}`}>
-                                        {formatQuantity(req.allocatedAmount, req.material)} / {formatQuantity(req.required, req.material)}
-                                      </span>
-                                    </>
-                                  ) : (
-                                    <span className="bq-reserve-req-head-spacer" aria-hidden="true" />
-                                  )}
-                                  <button
-                                    type="button"
-                                    className="bq-btn bq-btn--solve"
-                                    disabled={req.remainingRequired <= SCU_QUANTITY_EPSILON || solverCandidateLots.length === 0}
-                                    aria-label={`Auto reserve inventory for ${req.displayName}`}
-                                    title="Propose inventory lots to reserve"
-                                    onClick={runSolver}
-                                  >
-                                    <SolveIcon />
-                                    <span>Auto reserve</span>
-                                  </button>
-                                </div>
-
-                                {solverPreviewOpen && pendingSolverPlan ? (
-                                  <AllocationSolverPreview
-                                    plan={pendingSolverPlan.plan}
-                                    material={req.material}
-                                    onApply={applySolverPlan}
-                                    onDismiss={() => setPendingSolverPlan(null)}
-                                  />
-                                ) : null}
+                                {group.requirements.length > 1 && (
+                                  <div className="bq-reserve-req-head">
+                                    <span>{req.displayName}</span>
+                                    <span className={`bq-reserve-status bq-reserve-status--${req.remainingRequired > 0 ? 'short' : req.allocatedAmount > req.required ? 'over' : 'met'}`}>
+                                      {formatQuantity(req.allocatedAmount, req.material)} / {formatQuantity(req.required, req.material)}
+                                    </span>
+                                  </div>
+                                )}
 
                                 {req.reservableStacks.length > 0 ? (
                                   <>
@@ -1959,6 +2109,16 @@ export default function BuildQueueGroup({
             ) : null}
 
             </div>{/* bq-item-body */}
+
+            {pendingCraftSolverPlan?.itemId === item.id ? (
+              <CraftAllocationSolverPreview
+                plan={pendingCraftSolverPlan.plan}
+                itemName={itemName}
+                materials={materials}
+                onApply={applyCraftSolverPlan}
+                onCancel={() => setPendingCraftSolverPlan(null)}
+              />
+            ) : null}
           </article>
         );
       })}
