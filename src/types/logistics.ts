@@ -82,11 +82,20 @@ export interface InventoryEntry {
   quality?: number;
   qualityBand?: number;
   quantity: number;
+  boxSize?: number | null;
   locationId?: string;
   container?: string;
   notes?: string;
   source?: string;
   sourceHistory?: string[];
+  inventoryStatus?: "active" | "replaced";
+  importSourceType?: string;
+  importBatchId?: string;
+  importRowNumber?: number;
+  importLotIndex?: number;
+  importLotCount?: number;
+  replacedByImportBatchId?: string;
+  replacedAt?: string;
   workOrderId?: string;
   workOrderIds?: string[];
   accentTier?: RarityTier;
@@ -135,6 +144,7 @@ export interface ReservedMaterialAllocation {
   quality?: number;
   qualityBand?: number;
   rarity: RarityInfo;
+  boxSize?: number | null;
   locationId?: string;
   container?: string;
 }

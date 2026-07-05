@@ -12,7 +12,7 @@ import MaterialDemandAnalytics from "./components/MaterialDemandAnalytics";
 import { getModifiersAtQuality } from "./utils/qualityModifiers";
 import { getMaterialQualityKey } from "./utils/materialQuality";
 import { clampQuality } from "./utils/qualityBands";
-import { getInventoryUnitLabel } from "../../../lib/logistics/inventory";
+import { getActiveInventoryEntries, getInventoryUnitLabel } from "../../../lib/logistics/inventory";
 import { createMaterialResolver } from "../../../lib/logistics/materialResolver";
 
 // Heavy data — lazy so the crafting chunk doesn't bloat the main bundle
@@ -60,7 +60,8 @@ export default function CraftingModule() {
   const { componentCards, loading: cardsLoading, error: cardsError } = useCraftingContext();
 
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
-  const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const allInventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
   const registerCraftingRecipe = useLogisticsStore((state) => state.registerCraftingRecipe);
   const addBuildQueueItem = useLogisticsStore((state) => state.addBuildQueueItem);

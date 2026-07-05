@@ -21,6 +21,10 @@ function normalize(s: string): string {
 }
 
 const LOCATION_ASSET_ALIASES: Record<string, string> = {
+  aaronhalo: "aaronhalo",
+  keeger: "keegerbelt",
+  keegerbelt: "keegerbelt",
+  nyxkeegerbelt: "keegerbelt",
   pyroi: "pyro1",
   pyrovbvatra: "vatra",
   pyrovcaadir: "adir",

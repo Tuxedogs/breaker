@@ -22,6 +22,14 @@ export interface StackAllocation {
   quantity: number;
 }
 
+export function isActiveInventoryEntry(entry: InventoryEntry): boolean {
+  return entry.inventoryStatus !== 'replaced';
+}
+
+export function getActiveInventoryEntries(entries: InventoryEntry[]): InventoryEntry[] {
+  return entries.filter(isActiveInventoryEntry);
+}
+
 type InventoryLocationDisplayInput =
   | Pick<InventoryLocation, 'name' | 'system'>
   | Pick<InventoryEntry, 'locationId' | 'container'> & { location?: Pick<InventoryLocation, 'name' | 'system'> | undefined }

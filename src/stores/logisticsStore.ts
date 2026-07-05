@@ -71,6 +71,13 @@ interface LogisticsStoreState {
   updateLocation: (location: InventoryLocation) => void;
   deleteLocation: (id: string) => void;
   addInventoryEntries: (entries: InventoryEntry[]) => void;
+  applyInventoryImportBatch: (input: {
+    batchId: string;
+    additions: InventoryEntry[];
+    replaceEntryIds?: string[];
+    locations?: InventoryLocation[];
+  }) => void;
+  undoInventoryImportBatch: (batchId: string) => void;
   updateInventoryEntry: (entry: InventoryEntry) => void;
   deleteInventoryEntry: (id: string) => void;
   registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
@@ -175,8 +182,27 @@ function isInventoryCatalogSource(value: unknown): value is InventoryCatalogSour
   return value === "api" || value === "seed" || value === "manual" || value === "unknown";
 }
 
+function isInventoryStatus(value: unknown): value is InventoryEntry["inventoryStatus"] {
+  return value === "active" || value === "replaced";
+}
+
 function isBuildStatus(value: unknown): value is BuildQueueItem["status"] {
   return value === "queued" || value === "active" || value === "paused" || value === "complete";
+}
+
+function getInventoryLotKey(entry: InventoryEntry): string {
+  const importParts = [
+    entry.importSourceType ?? "",
+    entry.importBatchId ?? "",
+    entry.importRowNumber ?? "",
+    entry.importLotIndex ?? "",
+    entry.replacedByImportBatchId ?? "",
+  ];
+  const hasImportLot = importParts.some((value) => value !== "");
+  return [
+    hasImportLot ? importParts.join(":") : "",
+    entry.boxSize ?? "",
+  ].join("|");
 }
 
 function coercePersistedRecipeInput(value: unknown, materials: MaterialTemplate[]): RecipeInputTemplate | null {
@@ -231,6 +257,7 @@ function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllo
     quality: isNumber(value.quality) ? value.quality : undefined,
     qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
     rarity: rarityCatalog[value.rarity.tier],
+    boxSize: isNumber(value.boxSize) ? value.boxSize : value.boxSize === null ? null : undefined,
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : undefined,
   };
@@ -313,6 +340,8 @@ function getInventoryStackKey(entry: InventoryEntry): string {
     entry.locationId ?? "",
     entry.container ?? "",
     entry.quality ?? "__none",
+    entry.inventoryStatus ?? "active",
+    getInventoryLotKey(entry),
   ].join("|");
 }
 
@@ -411,11 +440,20 @@ function coercePersistedInventoryEntry(value: unknown, materials: MaterialTempla
     quality: isNumber(value.quality) ? value.quality : undefined,
     qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
     quantity: value.quantity,
+    boxSize: isNumber(value.boxSize) ? value.boxSize : value.boxSize === null ? null : undefined,
     locationId: isString(value.locationId) ? value.locationId : undefined,
     container: isString(value.container) ? value.container : isString(value.containerName) ? value.containerName : undefined,
     notes: isString(value.notes) ? value.notes : undefined,
     source: isString(value.source) ? value.source : undefined,
     sourceHistory: Array.isArray(value.sourceHistory) ? value.sourceHistory.filter(isString) : undefined,
+    inventoryStatus: isInventoryStatus(value.inventoryStatus) ? value.inventoryStatus : undefined,
+    importSourceType: isString(value.importSourceType) ? value.importSourceType : undefined,
+    importBatchId: isString(value.importBatchId) ? value.importBatchId : undefined,
+    importRowNumber: isNumber(value.importRowNumber) ? Math.trunc(value.importRowNumber) : undefined,
+    importLotIndex: isNumber(value.importLotIndex) ? Math.trunc(value.importLotIndex) : undefined,
+    importLotCount: isNumber(value.importLotCount) ? Math.trunc(value.importLotCount) : undefined,
+    replacedByImportBatchId: isString(value.replacedByImportBatchId) ? value.replacedByImportBatchId : undefined,
+    replacedAt: isString(value.replacedAt) ? value.replacedAt : undefined,
     workOrderId: isString(value.workOrderId) ? value.workOrderId : undefined,
     workOrderIds: Array.isArray(value.workOrderIds) ? value.workOrderIds.filter(isString) : undefined,
     accentTier: isRarityTier(value.accentTier) ? value.accentTier : undefined,
@@ -519,6 +557,7 @@ function createValidatedAllocation(
     quality: inventoryEntry.quality,
     qualityBand: inventoryEntry.qualityBand,
     rarity: normalizeRarity(inventoryEntry.rarity, rarityCatalog.common),
+    boxSize: inventoryEntry.boxSize,
     locationId: inventoryEntry.locationId,
     container: inventoryEntry.container,
   };
@@ -637,7 +676,8 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
               getInventoryMergeKey(current) === getInventoryMergeKey(normalized) &&
               (current.locationId ?? "") === (normalized.locationId ?? "") &&
               (current.container ?? "") === (normalized.container ?? "") &&
-              (current.quality ?? "__none") === (normalized.quality ?? "__none")
+              (current.quality ?? "__none") === (normalized.quality ?? "__none") &&
+              getInventoryLotKey(current) === getInventoryLotKey(normalized)
             );
             if (existingIdx === -1) return [...inventory, normalized];
 
@@ -669,6 +709,80 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
               persistOnlineInventoryStack(saved, location)?.catch((error: unknown) => logOnlinePersistenceFailure("add inventory stack", error));
             }
           }
+          return { inventoryEntries };
+        });
+      },
+      applyInventoryImportBatch: ({ batchId, additions, replaceEntryIds = [], locations = [] }) => {
+        set((state) => {
+          const now = new Date().toISOString();
+          const replaceIds = new Set(replaceEntryIds);
+          const nextLocations = locations.reduce<InventoryLocation[]>((current, location) => (
+            current.some((entry) => entry.id === location.id) ? current : [...current, location]
+          ), state.locations);
+          const markedExisting = state.inventoryEntries.map((entry) =>
+            replaceIds.has(entry.id)
+              ? normalizeInventoryEntry({
+                  ...entry,
+                  inventoryStatus: "replaced",
+                  replacedByImportBatchId: batchId,
+                  replacedAt: now,
+                  updatedAt: now,
+                }, state.materialTemplates, entry.createdAt)
+              : entry,
+          );
+          const normalizedAdditions = additions.map((entry) => normalizeInventoryEntry({
+            ...entry,
+            inventoryStatus: "active",
+            importBatchId: batchId,
+          }, state.materialTemplates));
+          const inventoryEntries = repairInventoryEntryIds([...markedExisting, ...normalizedAdditions]);
+
+          for (const entry of inventoryEntries) {
+            if (!replaceIds.has(entry.id) && entry.importBatchId !== batchId) continue;
+            const location = nextLocations.find((candidate) => candidate.id === entry.locationId);
+            persistOnlineInventoryStack(entry, location)?.catch((error: unknown) => logOnlinePersistenceFailure("apply inventory import", error));
+          }
+          for (const location of locations) {
+            persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("add import location", error));
+          }
+
+          return {
+            locations: nextLocations,
+            inventoryEntries,
+          };
+        });
+      },
+      undoInventoryImportBatch: (batchId) => {
+        set((state) => {
+          const restored: InventoryEntry[] = [];
+          const removedImportedIds = new Set<string>();
+          const inventoryEntries = state.inventoryEntries.flatMap((entry) => {
+            if (entry.importBatchId === batchId && entry.importSourceType === "inventory_csv") {
+              removedImportedIds.add(entry.id);
+              return [];
+            }
+            if (entry.replacedByImportBatchId === batchId) {
+              const next = normalizeInventoryEntry({
+                ...entry,
+                inventoryStatus: "active",
+                replacedByImportBatchId: undefined,
+                replacedAt: undefined,
+                updatedAt: new Date().toISOString(),
+              }, state.materialTemplates, entry.createdAt);
+              restored.push(next);
+              return [next];
+            }
+            return [entry];
+          });
+
+          for (const id of removedImportedIds) {
+            persistOnlineInventoryStackDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("undo imported inventory stack", error));
+          }
+          for (const entry of restored) {
+            const location = state.locations.find((candidate) => candidate.id === entry.locationId);
+            persistOnlineInventoryStack(entry, location)?.catch((error: unknown) => logOnlinePersistenceFailure("restore inventory stack", error));
+          }
+
           return { inventoryEntries };
         });
       },
@@ -1089,11 +1203,20 @@ export function createInventoryEntryDraft(
     quality,
     qualityBand,
     quantity: input.quantity,
+    boxSize: input.boxSize,
     locationId: input.locationId,
     container: input.container,
     notes: input.notes,
     source: input.source,
     sourceHistory: input.sourceHistory,
+    inventoryStatus: input.inventoryStatus,
+    importSourceType: input.importSourceType,
+    importBatchId: input.importBatchId,
+    importRowNumber: input.importRowNumber,
+    importLotIndex: input.importLotIndex,
+    importLotCount: input.importLotCount,
+    replacedByImportBatchId: input.replacedByImportBatchId,
+    replacedAt: input.replacedAt,
     workOrderId: input.workOrderId,
     workOrderIds: input.workOrderIds,
     accentTier: quality !== undefined ? rarity.tier : input.accentTier,

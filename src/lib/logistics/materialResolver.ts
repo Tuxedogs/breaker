@@ -73,6 +73,8 @@ const TEXT_ALIASES: Record<string, string> = {
   rawice: "rawice",
   pressurizedice: "rawice",
   carinitepure: "carinite-pure",
+  savrillium: "savrilium",
+  savrilium: "savrilium",
 };
 
 function normalizeToken(value: string | null | undefined): string {

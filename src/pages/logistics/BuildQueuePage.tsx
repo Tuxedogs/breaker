@@ -6,7 +6,7 @@ import {
   readFittingIconMode,
   type FittingIconMode,
 } from "../../lib/fitting/fittingIconMode";
-import type { SourceStrategy } from "../../lib/logistics/inventory";
+import { getActiveInventoryEntries, type SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
@@ -69,7 +69,8 @@ export default function BuildQueuePage() {
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
   const suppressMobileSelectorTapRef = useRef(false);
 
-  const inventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
+  const allInventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
+  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const buildQueue = useLogisticsStore((s) => s.buildQueue);
   const locations = useLogisticsStore((s) => s.locations);
   const materials = useLogisticsStore((s) => s.materialTemplates);

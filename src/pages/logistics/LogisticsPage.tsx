@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import '../../components/logistics/logistics.css';
 import { useLogisticsStore } from '../../stores/logisticsStore';
-import { getInventoryUnitLabel } from '../../lib/logistics/inventory';
+import { getActiveInventoryEntries, getInventoryUnitLabel } from '../../lib/logistics/inventory';
 import { getBuildQueueShortageSummary } from '../../lib/logistics/selectors';
 
 export default function LogisticsPage() {
-  const inventoryEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const inventoryEntries = getActiveInventoryEntries(useLogisticsStore((state) => state.inventoryEntries));
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const materialTemplates = useLogisticsStore((state) => state.materialTemplates);
   const recipeTemplates = useLogisticsStore((state) => state.recipeTemplates);

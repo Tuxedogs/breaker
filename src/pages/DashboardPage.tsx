@@ -8,6 +8,7 @@ import { buildRecommendationRequest, getMiningRecommendations } from "../feature
 import type { PublicLocationEntry, RequiredMaterial } from "../features/mining/types";
 import {
   formatInventoryQuantity,
+  getActiveInventoryEntries,
   getBuildQueueItemInputs,
   getGlobalTopQualityMaterials,
   resolveInventoryItemName,
@@ -195,7 +196,8 @@ function toRequiredMaterials(lines: QueueLedgerLine[]): RequiredMaterial[] {
 }
 
 export default function DashboardPage() {
-  const { inventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
+  const { inventoryEntries: allInventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
+  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const userStats = deriveUserDashStats(inventoryEntries, materialTemplates as LogisticsMaterialTemplate[]);
   const [miningState, setMiningState] = useState<{ status: "idle" | "loading" | "loaded" | "error"; data: PublicLocationEntry[] }>({
     status: "idle",
@@ -555,7 +557,8 @@ export default function DashboardPage() {
 }
 
 function QuickInventoryPanel() {
-  const inventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
+  const allInventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
+  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
   const materialTemplates = useLogisticsStore((store) => store.materialTemplates);
   const uniqueItems = new Set(inventoryEntries.map((entry) => entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id)).size;
   const topEntry = inventoryEntries.slice().sort((a, b) => b.quantity - a.quantity)[0];

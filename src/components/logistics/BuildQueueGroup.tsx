@@ -203,6 +203,7 @@ function createAllocation(
     quality: stack.quality,
     qualityBand: stack.qualityBand,
     rarity: stack.rarity,
+    boxSize: stack.boxSize,
     locationId: stack.locationId,
     container: stack.container,
     unitType,

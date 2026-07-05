@@ -117,19 +117,16 @@ function stackMergeKey(input: UnknownRecord, locationId: string | null) {
     locationId ?? "",
     asString(input.container) ?? "",
     asNumber(input.quality)?.toString() ?? "",
+    asNumber(input.boxSize)?.toString() ?? "",
+    asString(input.importSourceType) ?? "",
+    asString(input.importBatchId) ?? "",
+    asNumber(input.importRowNumber)?.toString() ?? "",
+    asNumber(input.importLotIndex)?.toString() ?? "",
   ].join("|").toLowerCase();
 }
 
-function rowStackMergeKey(row: {
-  materialId: string | null;
-  catalogItemId: string | null;
-  itemName: string;
-  itemKind: string | null;
-  unitType: string | null;
-  locationId: string | null;
-  container: string | null;
-  quality: string | null;
-}) {
+function rowStackMergeKey(row: typeof inventoryStacks.$inferSelect) {
+  const original = asJsonObject(asJsonObject(row.snapshot).original);
   return [
     row.materialId ?? "",
     row.catalogItemId ?? "",
@@ -139,6 +136,11 @@ function rowStackMergeKey(row: {
     row.locationId ?? "",
     row.container ?? "",
     row.quality === null ? "" : Number(row.quality).toString(),
+    asNumber(original.boxSize)?.toString() ?? "",
+    asString(original.importSourceType) ?? "",
+    asString(original.importBatchId) ?? "",
+    asNumber(original.importRowNumber)?.toString() ?? "",
+    asNumber(original.importLotIndex)?.toString() ?? "",
   ].join("|").toLowerCase();
 }
 

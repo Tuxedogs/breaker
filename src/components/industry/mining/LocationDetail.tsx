@@ -421,6 +421,21 @@ export function LocationDetail({
               )}
               <StantonLagrangeChildrenSummary entry={entry} compact />
             </div>
+            {locationMethodMixItems.length > 0 && (
+              <div className="location-method-stat-grid">
+                {locationMethodMixItems.map((item) => (
+                  <div key={`method-mix:${item.method}`} className="location-stat-chip location-method-stat-chip">
+                    <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location.">{item.method.toUpperCase()}</InfoTip></div>
+                    <div
+                      className={`location-stat-value ${methodBiasToneClass(item.share)}`}
+                      title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}
+                    >
+                      {formatPercent(item.share)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           {onToggleStar && (
             <>
@@ -441,59 +456,54 @@ export function LocationDetail({
         </div>
       )}
 
-      <div className="location-stat-chip-grid">
-        {!hasMultipleDemandMaterials && total > 0 && (
-          <div className="location-stat-chip">
-            <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>
-            <div className={`location-stat-value ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
-          </div>
-        )}
+      {((!hasMultipleDemandMaterials && total > 0) || hasMultipleDemandMaterials || hasSingleDemandMaterial) && (
+        <div className="location-stat-chip-grid">
+          {!hasMultipleDemandMaterials && total > 0 && (
+            <div className="location-stat-chip">
+              <div className="location-stat-label"><InfoTip text="Selected material coverage is tracked separately from Fit. Missing materials do not lower Encounter Tier or covered-material Fit.">COVERAGE</InfoTip></div>
+              <div className={`location-stat-value ${coveragePct === 100 ? "mloc-score--best" : coveragePct > 0 ? "mloc-score--okay" : "mloc-score--poor"}`}>{coveredBQ.length} / {total}</div>
+            </div>
+          )}
 
-        {hasMultipleDemandMaterials && (
-          <>
-            <div className="location-stat-chip">
-              <div className="location-stat-label">COVERED</div>
-              <div className={`location-stat-value ${coveredBQ.length > 0 ? "mloc-score--best" : "mloc-score--poor"}`}>{coveredBQ.length}</div>
-            </div>
-            <div className="location-stat-chip">
-              <div className="location-stat-label">MISSING</div>
-              <div className={`location-stat-value ${missingBQ.length > 0 ? "mloc-score--poor" : "mloc-score--best"}`}>{missingBQ.length}</div>
-            </div>
-          </>
-        )}
+          {hasMultipleDemandMaterials && (
+            <>
+              <div className="location-stat-chip">
+                <div className="location-stat-label">COVERED</div>
+                <div className={`location-stat-value ${coveredBQ.length > 0 ? "mloc-score--best" : "mloc-score--poor"}`}>{coveredBQ.length}</div>
+              </div>
+              <div className="location-stat-chip">
+                <div className="location-stat-label">MISSING</div>
+                <div className={`location-stat-value ${missingBQ.length > 0 ? "mloc-score--poor" : "mloc-score--best"}`}>{missingBQ.length}</div>
+              </div>
+            </>
+          )}
 
-        {hasSingleDemandMaterial && selectedDemandRow && (
-          <>
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text="Mining method for the selected material at this location.">METHOD</InfoTip></div>
-              <div className="location-stat-value">{singleDemandMethodLabel}</div>
-            </div>
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text="Bucketed encounter strength for the selected material at this location.">ENCOUNTER TIER</InfoTip></div>
-              <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
-            </div>
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></div>
-              <div className="location-stat-value">{selectedDemandRow.targetQualityChanceLabel}</div>
-            </div>
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></div>
-              <div className="location-stat-value">{selectedDemandRow.quality900Label}</div>
-            </div>
-            <div className="location-stat-chip">
-              <div className="location-stat-label"><InfoTip text="Average material composition inside an encountered source for the selected material. This is not encounter chance.">COMPOSITION / YIELD</InfoTip></div>
-              <div className="location-stat-value">{selectedDemandRow.compositionLabel}</div>
-            </div>
-          </>
-        )}
-
-        {locationMethodMixItems.map((item) => (
-          <div key={`method-mix:${item.method}`} className="location-stat-chip">
-            <div className="location-stat-label"><InfoTip text="Location-wide mining method distribution at this location.">{item.method.toUpperCase()}</InfoTip></div>
-            <div className={`location-stat-value ${methodBiasToneClass(item.share)}`} title={`Location Method Mix: ${item.method} ${formatPercent(item.share)}`}>{formatPercent(item.share)}</div>
-          </div>
-        ))}
-      </div>
+          {hasSingleDemandMaterial && selectedDemandRow && (
+            <>
+              <div className="location-stat-chip">
+                <div className="location-stat-label"><InfoTip text="Mining method for the selected material at this location.">METHOD</InfoTip></div>
+                <div className="location-stat-value">{singleDemandMethodLabel}</div>
+              </div>
+              <div className="location-stat-chip">
+                <div className="location-stat-label"><InfoTip text="Bucketed encounter strength for the selected material at this location.">ENCOUNTER TIER</InfoTip></div>
+                <div className={`location-stat-value ${scoreToneClass(undefined, selectedDemandRow.sourceWeight)}`}>{selectedDemandRow.densityLabel}</div>
+              </div>
+              <div className="location-stat-chip">
+                <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip(qualityHeader)}>{qualityHeader}</InfoTip></div>
+                <div className="location-stat-value">{selectedDemandRow.targetQualityChanceLabel}</div>
+              </div>
+              <div className="location-stat-chip">
+                <div className="location-stat-label"><InfoTip text={qualityProbabilityTooltip("900+")}>900+</InfoTip></div>
+                <div className="location-stat-value">{selectedDemandRow.quality900Label}</div>
+              </div>
+              <div className="location-stat-chip">
+                <div className="location-stat-label"><InfoTip text="Average material composition inside an encountered source for the selected material. This is not encounter chance.">COMPOSITION / YIELD</InfoTip></div>
+                <div className="location-stat-value">{selectedDemandRow.compositionLabel}</div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {entry.nearbyStations.length > 0 && (
         <div className="mdet-stations">

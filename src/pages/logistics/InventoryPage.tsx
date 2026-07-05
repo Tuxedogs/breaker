@@ -1,13 +1,14 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { createInventoryEntryDraft, useLogisticsStore } from '../../stores/logisticsStore';
-import type { InventoryEntry, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
+import type { BuildQueueItem, InventoryEntry, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import MaterialIcon from '../../components/logistics/MaterialIcon';
 import {
   formatEntryQuantity,
   formatInventoryQuantity,
+  getActiveInventoryEntries,
   resolveInventoryItemName,
   resolveInventoryUnitType,
 } from '../../lib/logistics/inventory';
@@ -24,7 +25,7 @@ import '../../components/logistics/inventory.css';
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
 type UnknownRecord = Record<string, unknown>;
-type ImportMode = 'add' | 'replace_matching' | 'replace_locations';
+type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_locations' | 'replace_all';
 
 const WINDOW_GROUP_SIZE = 4;
 const WINDOW_STACK_CHUNK_SIZE = 25;
@@ -74,6 +75,7 @@ type CsvParsedRow = {
   quantityInput: string;
   unitInput: string;
   qualityInput: string;
+  boxSizeInput: string;
   locationInput: string;
   container: string;
   notes: string;
@@ -89,6 +91,7 @@ type CsvPreviewRow = {
   materialName: string;
   materialId?: string;
   quantity: number;
+  boxSize: number | null;
   unitType: InventoryUnitType;
   unitLabel: string;
   quality?: number;
@@ -96,16 +99,39 @@ type CsvPreviewRow = {
   locationId?: string;
   container: string;
   notes?: string;
+  generatedLotIndex?: number;
+  generatedLotCount?: number;
+  generatedQuantitiesLabel?: string;
   errors: string[];
   warnings: string[];
 };
 
+type CsvLotTotal = {
+  key: string;
+  materialName: string;
+  quality?: number;
+  unitType: InventoryUnitType;
+  locationName: string;
+  quantity: number;
+  lots: number;
+};
+
 type CsvImportResult = {
+  batchId: string;
   imported: number;
-  updated: number;
+  replaced: number;
   skipped: number;
   locationsUpdated: number;
   materialsUpdated: number;
+  undone?: boolean;
+};
+
+type CsvReplacementPreview = {
+  entry: InventoryEntry;
+  materialName: string;
+  locationName: string;
+  reservedQuantity: number;
+  reservedBy: string[];
 };
 
 const CSV_MAX_ROWS = 1000;
@@ -124,6 +150,9 @@ const CSV_COLUMN_ALIASES: Record<string, CsvTextColumn> = {
   type: 'unitInput',
   quality: 'qualityInput',
   q: 'qualityInput',
+  box_size: 'boxSizeInput',
+  'box size': 'boxSizeInput',
+  boxsize: 'boxSizeInput',
   location: 'locationInput',
   station: 'locationInput',
   city: 'locationInput',
@@ -291,6 +320,7 @@ function normalizeCsvRawRows(rawRows: CsvRawRow[]): CsvParsedRow[] {
       quantityInput: '',
       unitInput: '',
       qualityInput: '',
+      boxSizeInput: '',
       locationInput: '',
       container: '',
       notes: '',
@@ -306,27 +336,135 @@ function normalizeCsvRawRows(rawRows: CsvRawRow[]): CsvParsedRow[] {
   });
 }
 
-function resolveCsvUnit(value: string): { unitType?: InventoryUnitType; label?: string; warning?: string } {
+function resolveCsvUnit(value: string): { unitType?: InventoryUnitType; label?: string; multiplier: number; warning?: string } {
   const normalized = value.trim().toLowerCase();
-  if (!normalized) return {};
-  if (normalized === 'scu' || normalized === 'cscu') return { unitType: 'scu', label: normalized === 'cscu' ? 'cSCU' : 'SCU' };
-  if (normalized === 'unit') return { unitType: 'unit', label: 'unit' };
-  if (normalized === 'units') return { unitType: 'unit', label: 'unit', warning: 'Unit normalized from "units" to "unit".' };
-  return {};
+  if (!normalized) return { multiplier: 1 };
+  if (normalized === 'scu') return { unitType: 'scu', label: 'SCU', multiplier: 1 };
+  if (normalized === 'cscu') return { unitType: 'scu', label: 'SCU', multiplier: 0.01, warning: 'cSCU converted to SCU.' };
+  if (normalized === 'unit') return { unitType: 'unit', label: 'unit', multiplier: 1 };
+  if (normalized === 'units') return { unitType: 'unit', label: 'unit', multiplier: 1, warning: 'Unit normalized from "units" to "unit".' };
+  return { multiplier: 1 };
+}
+
+function parseCsvNumber(value: string): number | null {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function parseCsvInteger(value: string): number | null {
+  const parsed = parseCsvNumber(value);
+  return parsed !== null && Number.isInteger(parsed) ? parsed : null;
+}
+
+function roundCsvQuantity(value: number): number {
+  return Math.round((value + Number.EPSILON) * 1_000_000) / 1_000_000;
+}
+
+function formatCsvNumber(value: number): string {
+  return roundCsvQuantity(value).toFixed(6).replace(/\.?0+$/, '');
+}
+
+function splitCsvLots(quantity: number, boxSize: number | null, unitType: InventoryUnitType | undefined): number[] {
+  if (unitType !== 'scu' || boxSize === null || quantity <= boxSize) return [quantity];
+  const fullLots = Math.floor(quantity / boxSize);
+  const lots = Array.from({ length: fullLots }, () => boxSize);
+  const remainder = roundCsvQuantity(quantity - (fullLots * boxSize));
+  if (remainder > 0) lots.push(remainder);
+  return lots.length ? lots : [quantity];
+}
+
+function summarizeCsvLots(rows: CsvPreviewRow[]): CsvLotTotal[] {
+  const totals = new Map<string, CsvLotTotal>();
+  for (const row of rows) {
+    if (row.errors.length) continue;
+    const key = [
+      row.materialId ?? normalizeLookup(row.materialName),
+      row.quality ?? '__none',
+      row.unitType,
+      row.locationId ?? normalizeLookup(row.locationName),
+    ].join('|');
+    const existing = totals.get(key);
+    if (existing) {
+      existing.quantity = roundCsvQuantity(existing.quantity + row.quantity);
+      existing.lots += 1;
+    } else {
+      totals.set(key, {
+        key,
+        materialName: row.materialName,
+        quality: row.quality,
+        unitType: row.unitType,
+        locationName: row.locationName,
+        quantity: row.quantity,
+        lots: 1,
+      });
+    }
+  }
+  return Array.from(totals.values()).sort((a, b) =>
+    a.materialName.localeCompare(b.materialName) ||
+    (b.quality ?? -1) - (a.quality ?? -1) ||
+    a.locationName.localeCompare(b.locationName)
+  );
+}
+
+function getCsvMaterialLocationPairs(rows: CsvPreviewRow[]): Set<string> {
+  return new Set(rows
+    .filter((row) => !row.errors.length && row.materialId && row.locationId)
+    .map((row) => `${row.materialId}|${row.locationId}`));
+}
+
+function getReservedInventoryMap(buildQueue: BuildQueueItem[]): Map<string, { quantity: number; owners: Set<string> }> {
+  const reserved = new Map<string, { quantity: number; owners: Set<string> }>();
+  for (const item of buildQueue) {
+    if (item.status === 'complete') continue;
+    const owner = item.itemName ?? item.recipeId;
+    for (const allocation of item.reservedAllocations ?? []) {
+      if (allocation.quantityReserved <= 0) continue;
+      const current = reserved.get(allocation.inventoryEntryId) ?? { quantity: 0, owners: new Set<string>() };
+      current.quantity += allocation.quantityReserved;
+      current.owners.add(owner);
+      reserved.set(allocation.inventoryEntryId, current);
+    }
+  }
+  return reserved;
+}
+
+function buildReplacementPreview(
+  mode: ImportMode,
+  validRows: CsvPreviewRow[],
+  entries: InventoryEntry[],
+  locations: InventoryLocation[],
+  materialById: Map<string, MaterialTemplate>,
+  buildQueue: BuildQueueItem[],
+): CsvReplacementPreview[] {
+  if (mode === 'append') return [];
+  const activeEntries = getActiveInventoryEntries(entries);
+  const reserved = getReservedInventoryMap(buildQueue);
+  const locationIds = new Set(validRows.map((row) => row.locationId).filter((id): id is string => Boolean(id)));
+  const materialLocationPairs = getCsvMaterialLocationPairs(validRows);
+  const targets = activeEntries.filter((entry) => {
+    if (mode === 'replace_all') return true;
+    if (!entry.locationId) return false;
+    if (mode === 'replace_locations') return locationIds.has(entry.locationId);
+    if (!entry.materialId) return false;
+    return materialLocationPairs.has(`${entry.materialId}|${entry.locationId}`);
+  });
+  return targets.map((entry) => {
+    const material = entry.materialId ? materialById.get(entry.materialId) : undefined;
+    const reserve = reserved.get(entry.id);
+    return {
+      entry,
+      materialName: resolveInventoryItemName(entry, material),
+      locationName: entry.locationId ? locations.find((location) => location.id === entry.locationId)?.name ?? 'Unknown location' : 'Unassigned stock',
+      reservedQuantity: reserve?.quantity ?? 0,
+      reservedBy: Array.from(reserve?.owners ?? []),
+    };
+  }).sort((a, b) => a.locationName.localeCompare(b.locationName) || a.materialName.localeCompare(b.materialName));
 }
 
 function buildLocationLookup(locations: InventoryLocation[]): Map<string, InventoryLocation> {
   return buildInventoryLocationLookup(locations);
-}
-
-function getImportStackKey(row: Pick<CsvPreviewRow, 'materialId' | 'materialName' | 'quality' | 'locationId' | 'locationName' | 'unitType' | 'container'>): string {
-  return [
-    row.materialId ?? normalizeLookup(row.materialName),
-    row.quality ?? '__none',
-    row.locationId ?? normalizeLookup(row.locationName),
-    row.unitType,
-    row.container.trim().toLowerCase(),
-  ].join('|');
 }
 
 function getIdentityMaterialId(identity: MaterialIdentity, sourceKeyByOutput: Map<string, string>): string {
@@ -365,7 +503,7 @@ function validateCsvRows(
   const resolveMaterial = createMaterialResolver(materials, materialIdentities);
   const sourceKeyByOutput = buildSourceKeyByOutput(materialIdentities, materials);
   const locationLookup = buildLocationLookup(locations);
-  const previewRows = rows.map<CsvPreviewRow>((row) => {
+  return rows.flatMap<CsvPreviewRow>((row) => {
     const errors: string[] = [];
     const warnings: string[] = [];
     const materialNameInput = row.materialInput.trim();
@@ -376,9 +514,17 @@ function validateCsvRows(
     const location = locationNameInput
       ? resolveInventoryLocationByInput(locationNameInput, locationLookup)
       : undefined;
-    const quantity = Number.parseFloat(row.quantityInput);
-    const quality = row.qualityInput.trim() ? Number.parseFloat(row.qualityInput) : undefined;
     const unit = resolveCsvUnit(row.unitInput);
+    const parsedQuantity = parseCsvNumber(row.quantityInput);
+    const parsedQuality = parseCsvInteger(row.qualityInput);
+    const parsedBoxSize = parseCsvNumber(row.boxSizeInput);
+    const quantity = parsedQuantity === null ? 0 : roundCsvQuantity(parsedQuantity * unit.multiplier);
+    const boxSize = !row.boxSizeInput.trim() || unit.unitType === 'unit'
+      ? null
+      : parsedBoxSize === null
+        ? null
+        : roundCsvQuantity(parsedBoxSize * unit.multiplier);
+    const quality = parsedQuality ?? undefined;
 
     if (!materialNameInput) errors.push('Missing material.');
     else if (!material) errors.push('Unknown material.');
@@ -389,26 +535,32 @@ function validateCsvRows(
     }
 
     if (!row.quantityInput.trim()) errors.push('Missing quantity.');
-    else if (!Number.isFinite(quantity) || quantity <= 0) errors.push('Invalid quantity.');
+    else if (parsedQuantity === null || parsedQuantity <= 0) errors.push('Invalid quantity.');
 
     if (!row.unitInput.trim()) errors.push('Missing unit.');
     else if (!unit.unitType) errors.push('Unsupported unit.');
     else if (unit.warning) warnings.push(unit.warning);
 
-    if (quality !== undefined && (!Number.isFinite(quality) || quality < 0 || quality > 1000)) errors.push('Invalid quality.');
-    if (quality === undefined) warnings.push('Quality missing.');
+    if (!row.qualityInput.trim()) errors.push('Missing quality.');
+    else if (parsedQuality === null || parsedQuality < 0 || parsedQuality > 1000) errors.push('Invalid quality.');
+
+    if (row.boxSizeInput.trim()) {
+      if (unit.unitType === 'unit') warnings.push('Box size ignored for unit rows.');
+      else if (parsedBoxSize === null || parsedBoxSize <= 0) errors.push('Invalid box size.');
+    }
 
     if (!locationNameInput) errors.push('Missing location.');
     else if (!location) warnings.push('New location will be created.');
     else if (location.name !== locationNameInput) warnings.push(`Location name normalized to ${location.name}.`);
 
-    return {
+    const baseRow: CsvPreviewRow = {
       id: `csv-row-${row.rowNumber}`,
       rowNumbers: [row.rowNumber],
       status: errors.length ? 'error' : warnings.length ? 'warning' : 'valid',
       materialName: refinedName ?? material?.name ?? materialNameInput,
       materialId: material?.id,
-      quantity: Number.isFinite(quantity) ? quantity : 0,
+      quantity,
+      boxSize,
       unitType: unit.unitType ?? 'unit',
       unitLabel: unit.label ?? row.unitInput.trim(),
       quality,
@@ -419,35 +571,27 @@ function validateCsvRows(
       errors,
       warnings,
     };
-  });
 
-  const combined: CsvPreviewRow[] = [];
-  const indexByKey = new Map<string, number>();
-  for (const row of previewRows) {
-    if (row.errors.length) {
-      combined.push(row);
-      continue;
-    }
-    const key = getImportStackKey(row);
-    const existingIndex = indexByKey.get(key);
-    if (existingIndex === undefined) {
-      indexByKey.set(key, combined.length);
-      combined.push(row);
-      continue;
-    }
-    const existing = combined[existingIndex];
-    combined[existingIndex] = {
-      ...existing,
-      rowNumbers: [...existing.rowNumbers, ...row.rowNumbers],
-      quantity: existing.quantity + row.quantity,
-      warnings: Array.from(new Set([...existing.warnings, ...row.warnings, 'Duplicate row combined.'])),
-      status: 'warning',
-    };
-  }
-  return combined;
+    if (errors.length) return [baseRow];
+
+    const lots = splitCsvLots(quantity, boxSize, unit.unitType);
+    const generatedQuantitiesLabel = lots.map(formatCsvNumber).join(' + ');
+    return lots.map((lotQuantity, index) => {
+      return {
+        ...baseRow,
+        id: `csv-row-${row.rowNumber}-lot-${index + 1}`,
+        quantity: lotQuantity,
+        status: warnings.length ? 'warning' : 'valid',
+        generatedLotIndex: index + 1,
+        generatedLotCount: lots.length,
+        generatedQuantitiesLabel,
+        warnings,
+      };
+    });
+  });
 }
 
-function buildInventoryEntryFromPreviewRow(row: CsvPreviewRow, locationId: string): InventoryEntry {
+function buildInventoryEntryFromPreviewRow(row: CsvPreviewRow, locationId: string, importBatchId: string): InventoryEntry {
   return createInventoryEntryDraft({
     id: createNewInventoryId(),
     materialId: row.materialId,
@@ -458,56 +602,52 @@ function buildInventoryEntryFromPreviewRow(row: CsvPreviewRow, locationId: strin
     catalogSource: 'api',
     quality: row.quality,
     quantity: row.quantity,
+    boxSize: row.boxSize,
     locationId,
     container: row.container || undefined,
     notes: row.notes,
     source: 'csv_import',
     sourceHistory: ['csv_import'],
+    importSourceType: 'inventory_csv',
+    importBatchId,
+    importRowNumber: row.rowNumbers[0],
+    importLotIndex: row.generatedLotIndex,
+    importLotCount: row.generatedLotCount,
   });
-}
-
-function existingEntryMatchesImportRow(
-  entry: InventoryEntry,
-  row: CsvPreviewRow,
-  materialById: Map<string, MaterialTemplate>,
-  locationId: string,
-): boolean {
-  const material = entry.materialId ? materialById.get(entry.materialId) : undefined;
-  return (entry.materialId ?? normalizeLookup(resolveInventoryItemName(entry, material))) === (row.materialId ?? normalizeLookup(row.materialName)) &&
-    (entry.quality ?? undefined) === row.quality &&
-    (entry.locationId ?? '') === locationId &&
-    resolveInventoryUnitType(entry, material) === row.unitType &&
-    (entry.container ?? '') === row.container;
 }
 
 type CsvImportModalProps = {
   entries: InventoryEntry[];
+  buildQueue: BuildQueueItem[];
   materials: MaterialTemplate[];
   locations: InventoryLocation[];
   materialById: Map<string, MaterialTemplate>;
   onClose: () => void;
-  onAddLocations: (locations: InventoryLocation[]) => void;
-  onAddEntries: (entries: InventoryEntry[]) => void;
-  onUpdateEntry: (entry: InventoryEntry) => void;
-  onDeleteEntry: (id: string) => void;
+  onApplyBatch: (input: {
+    batchId: string;
+    additions: InventoryEntry[];
+    replaceEntryIds?: string[];
+    locations?: InventoryLocation[];
+  }) => void;
+  onUndoBatch: (batchId: string) => void;
 };
 
 function CsvImportModal({
   entries,
+  buildQueue,
   materials,
   locations,
   materialById,
   onClose,
-  onAddLocations,
-  onAddEntries,
-  onUpdateEntry,
-  onDeleteEntry,
+  onApplyBatch,
+  onUndoBatch,
 }: CsvImportModalProps) {
   const materialIdentities = useMaterialIdentityIndex();
   const [fileName, setFileName] = useState('');
   const [rows, setRows] = useState<CsvPreviewRow[]>([]);
+  const [originalRowCount, setOriginalRowCount] = useState(0);
   const [parseError, setParseError] = useState('');
-  const [mode, setMode] = useState<ImportMode>('add');
+  const [mode, setMode] = useState<ImportMode>('append');
   const [confirmWarnings, setConfirmWarnings] = useState(false);
   const [confirmReplaceLocations, setConfirmReplaceLocations] = useState(false);
   const [result, setResult] = useState<CsvImportResult | null>(null);
@@ -517,16 +657,21 @@ function CsvImportModal({
   const errorCount = rows.filter((row) => row.errors.length).length;
   const affectedLocations = new Set(validRows.map((row) => row.locationName)).size;
   const affectedMaterials = new Set(validRows.map((row) => row.materialName)).size;
+  const lotTotals = summarizeCsvLots(rows);
+  const replacementPreview = buildReplacementPreview(mode, validRows, entries, locations, materialById, buildQueue);
+  const replacementConflicts = replacementPreview.filter((row) => row.reservedQuantity > 0);
   const canImport = validRows.length > 0 &&
     errorCount === 0 &&
     (warningCount === 0 || confirmWarnings) &&
-    (mode !== 'replace_locations' || confirmReplaceLocations);
+    replacementConflicts.length === 0 &&
+    ((mode !== 'replace_locations' && mode !== 'replace_all') || confirmReplaceLocations);
 
   function handleFile(file: File | undefined) {
     setResult(null);
     setConfirmWarnings(false);
     setConfirmReplaceLocations(false);
     setRows([]);
+    setOriginalRowCount(0);
     setParseError('');
     if (!file) return;
     if (!file.name.toLowerCase().endsWith('.csv') && file.type !== 'text/csv') {
@@ -541,6 +686,7 @@ function CsvImportModal({
           setParseError(`CSV imports are limited to ${CSV_MAX_ROWS} rows.`);
           return;
         }
+        setOriginalRowCount(parsed.length);
         setRows(validateCsvRows(parsed, materials, materialIdentities, locations));
       })
       .catch(() => setParseError('CSV file could not be read.'));
@@ -548,9 +694,9 @@ function CsvImportModal({
 
   function downloadTemplate() {
     const content = [
-      'material,quantity,unit,quality,location,container,notes',
-      'Stileron,1.6,SCU,905,Levksi,Box A,Example refined stack',
-      'Aphorite,11,unit,11,Levksi,,Example unit stack',
+      'NAME,QUANTITY,UNIT,QUALITY,BOX_SIZE,LOCATION',
+      'Beryl,3.4,SCU,860,1,Levski',
+      'Feynmaline,39,UNIT,965,,Levski',
     ].join('\n');
     const blob = new Blob([content], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -563,6 +709,7 @@ function CsvImportModal({
 
   function handleImport() {
     if (!canImport) return;
+    const importBatchId = `csv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
     const newLocations = new Map<string, InventoryLocation>();
     const locationLookup = buildLocationLookup(locations);
     const resolveLocationId = (row: CsvPreviewRow) => {
@@ -583,46 +730,29 @@ function CsvImportModal({
     };
 
     const additions: InventoryEntry[] = [];
-    let updated = 0;
     const touchedLocationIds = new Set<string>();
     const touchedMaterials = new Set<string>();
-
-    if (mode === 'replace_locations') {
-      const locationIds = new Set(validRows.map(resolveLocationId));
-      for (const entry of entries) {
-        if (entry.locationId && locationIds.has(entry.locationId)) onDeleteEntry(entry.id);
-      }
-    }
 
     for (const row of validRows) {
       const locationId = resolveLocationId(row);
       touchedLocationIds.add(locationId);
       touchedMaterials.add(row.materialId ?? row.materialName);
-
-      if (mode === 'replace_matching') {
-        const existing = entries.find((entry) => existingEntryMatchesImportRow(entry, row, materialById, locationId));
-        if (existing) {
-          onUpdateEntry({
-            ...existing,
-            quantity: row.quantity,
-            notes: row.notes ?? existing.notes,
-            updatedAt: new Date().toISOString(),
-          });
-          updated += 1;
-          continue;
-        }
-      }
-
-      additions.push(buildInventoryEntryFromPreviewRow(row, locationId));
+      additions.push(buildInventoryEntryFromPreviewRow(row, locationId, importBatchId));
     }
 
     const createdLocations = Array.from(newLocations.values());
-    if (createdLocations.length) onAddLocations(createdLocations);
-    if (additions.length) onAddEntries(additions);
+    const replaceEntryIds = replacementPreview.map((row) => row.entry.id);
+    onApplyBatch({
+      batchId: importBatchId,
+      additions,
+      replaceEntryIds,
+      locations: createdLocations,
+    });
     setResult({
+      batchId: importBatchId,
       imported: additions.length,
-      updated,
-      skipped: rows.length - validRows.length,
+      replaced: replaceEntryIds.length,
+      skipped: errorCount,
       locationsUpdated: touchedLocationIds.size,
       materialsUpdated: touchedMaterials.size,
     });
@@ -651,22 +781,69 @@ function CsvImportModal({
           </label>
           <button type="button" className="logi-btn-ghost" onClick={downloadTemplate}>Download CSV Template</button>
           <select className="logi-select" value={mode} onChange={(event) => setMode(event.target.value as ImportMode)} aria-label="CSV import mode">
-            <option value="add">Add to existing inventory</option>
-            <option value="replace_matching">Replace matching stacks</option>
+            <option value="append">Append</option>
+            <option value="replace_matching_materials_location">Replace matching materials/location</option>
             <option value="replace_locations">Replace location inventory</option>
+            <option value="replace_all">Replace all inventory</option>
           </select>
         </div>
 
         {parseError && <div className="logi-csv-error" role="alert">{parseError}</div>}
 
         <div className="logi-csv-summary">
-          <div><span>Total rows</span><strong>{rows.length}</strong></div>
-          <div><span>Valid rows</span><strong>{validRows.length}</strong></div>
+          <div><span>Input rows</span><strong>{originalRowCount}</strong></div>
+          <div><span>Generated lots</span><strong>{validRows.length}</strong></div>
           <div><span>Warnings</span><strong>{warningCount}</strong></div>
           <div><span>Errors</span><strong>{errorCount}</strong></div>
           <div><span>Locations</span><strong>{affectedLocations}</strong></div>
           <div><span>Materials</span><strong>{affectedMaterials}</strong></div>
         </div>
+
+        {lotTotals.length > 0 && (
+          <div className="logi-csv-summary" aria-label="CSV totals by material quality unit and location">
+            {lotTotals.slice(0, 12).map((total) => (
+              <div key={total.key}>
+                <span>{total.materialName} / {total.quality ?? '-'} / {total.unitType} / {total.locationName}</span>
+                <strong>{formatCsvNumber(total.quantity)} ({total.lots})</strong>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {replacementPreview.length > 0 && (
+          <div className="logi-csv-table-wrap">
+            <table className="logi-csv-table">
+              <thead>
+                <tr>
+                  <th>Replace</th>
+                  <th>Material</th>
+                  <th>Quantity</th>
+                  <th>Quality</th>
+                  <th>Location</th>
+                  <th>Reserved</th>
+                </tr>
+              </thead>
+              <tbody>
+                {replacementPreview.map((row) => (
+                  <tr key={row.entry.id} className={row.reservedQuantity > 0 ? 'logi-csv-row--error' : undefined}>
+                    <td>{row.entry.id}</td>
+                    <td>{row.materialName}</td>
+                    <td>{formatCsvNumber(row.entry.quantity)}</td>
+                    <td>{row.entry.quality ?? '-'}</td>
+                    <td>{row.locationName}</td>
+                    <td>{row.reservedQuantity > 0 ? `${formatCsvNumber(row.reservedQuantity)} by ${row.reservedBy.join(', ')}` : '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {replacementConflicts.length > 0 && (
+          <div className="logi-csv-error" role="alert">
+            Import blocked: {replacementConflicts.length} matching active lot{replacementConflicts.length === 1 ? '' : 's'} are reserved by Build Queue.
+          </div>
+        )}
 
         {rows.length > 0 && (
           <div className="logi-csv-table-wrap">
@@ -674,10 +851,13 @@ function CsvImportModal({
               <thead>
                 <tr>
                   <th>Status</th>
+                  <th>Input Row</th>
+                  <th>Lot</th>
                   <th>Material</th>
                   <th>Quantity</th>
                   <th>Unit</th>
                   <th>Quality</th>
+                  <th>Box</th>
                   <th>Location</th>
                   <th>Container</th>
                   <th>Issue / action</th>
@@ -687,13 +867,16 @@ function CsvImportModal({
                 {rows.map((row) => (
                   <tr key={row.id} className={`logi-csv-row--${row.status}`}>
                     <td>{row.status}</td>
+                    <td>{row.rowNumbers.join(', ')}</td>
+                    <td>{row.generatedLotIndex && row.generatedLotCount ? `${row.generatedLotIndex}/${row.generatedLotCount}` : '-'}</td>
                     <td>{row.materialName || '-'}</td>
-                    <td>{row.quantity || '-'}</td>
+                    <td>{row.quantity ? formatCsvNumber(row.quantity) : '-'}</td>
                     <td>{row.unitLabel || '-'}</td>
                     <td>{row.quality ?? '-'}</td>
+                    <td>{row.boxSize == null ? '-' : formatCsvNumber(row.boxSize)}</td>
                     <td>{row.locationName || '-'}</td>
                     <td>{row.container || '-'}</td>
-                    <td>{[...row.errors, ...row.warnings].join(' ') || `Rows ${row.rowNumbers.join(', ')}`}</td>
+                    <td>{[...row.errors, ...row.warnings].join(' ') || (row.generatedQuantitiesLabel ? `Generated: ${row.generatedQuantitiesLabel}` : `Rows ${row.rowNumbers.join(', ')}`)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -708,17 +891,30 @@ function CsvImportModal({
               Confirm warning rows
             </label>
           )}
-          {mode === 'replace_locations' && (
+          {(mode === 'replace_locations' || mode === 'replace_all') && (
             <label>
               <input type="checkbox" checked={confirmReplaceLocations} onChange={(event) => setConfirmReplaceLocations(event.target.checked)} />
-              Confirm replacing inventory at CSV locations
+              Confirm replacing {mode === 'replace_all' ? 'all active inventory' : 'inventory at CSV locations'}
             </label>
           )}
         </div>
 
         {result && (
           <div className="logi-csv-result" role="status">
-            Imported {result.imported} stack{result.imported === 1 ? '' : 's'} / updated {result.updated} / skipped {result.skipped}. {result.locationsUpdated} location{result.locationsUpdated === 1 ? '' : 's'} and {result.materialsUpdated} material{result.materialsUpdated === 1 ? '' : 's'} updated.
+            Imported {result.imported} lot{result.imported === 1 ? '' : 's'} / replaced {result.replaced} / skipped {result.skipped}. {result.locationsUpdated} location{result.locationsUpdated === 1 ? '' : 's'} and {result.materialsUpdated} material{result.materialsUpdated === 1 ? '' : 's'} updated.
+            {!result.undone && (
+              <button
+                type="button"
+                className="logi-btn-ghost"
+                onClick={() => {
+                  onUndoBatch(result.batchId);
+                  setResult({ ...result, undone: true });
+                }}
+              >
+                Undo import
+              </button>
+            )}
+            {result.undone && <span> Undo complete.</span>}
           </div>
         )}
 
@@ -1050,12 +1246,15 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
 export default function InventoryPage() {
   const [searchParams] = useSearchParams();
   const entries = useLogisticsStore((state) => state.inventoryEntries);
+  const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const locations = useLogisticsStore((state) => state.locations);
-  const addLocation = useLogisticsStore((state) => state.addLocation);
   const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
+  const applyInventoryImportBatch = useLogisticsStore((state) => state.applyInventoryImportBatch);
+  const undoInventoryImportBatch = useLogisticsStore((state) => state.undoInventoryImportBatch);
   const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
+  const buildQueue = useLogisticsStore((state) => state.buildQueue);
 
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [csvImportOpen, setCsvImportOpen] = useState(false);
@@ -1094,7 +1293,7 @@ export default function InventoryPage() {
   const locationById = useMemo(() => new Map(locations.map((location) => [location.id, location])), [locations]);
 
   const filtered = useMemo(() => {
-    const data = entries.filter((e) => {
+    const data = activeEntries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
       if (locationFilter && getEntryLocationId(e) !== locationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
@@ -1138,11 +1337,11 @@ export default function InventoryPage() {
     });
 
     return data;
-  }, [entries, materialById, locationById, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
+  }, [activeEntries, materialById, locationById, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
 
   const unassignedCount = useMemo(
-    () => entries.filter((entry) => getEntryLocationId(entry) === '__unassigned__').length,
-    [entries],
+    () => activeEntries.filter((entry) => getEntryLocationId(entry) === '__unassigned__').length,
+    [activeEntries],
   );
 
   const locationGroups = useMemo<LocationGroup[]>(() => {
@@ -1294,10 +1493,6 @@ export default function InventoryPage() {
     // In new mode, keep the drawer open so users can add multiple stacks quickly.
   }
 
-  const handleAddImportLocations = useCallback((nextLocations: InventoryLocation[]) => {
-    nextLocations.forEach(addLocation);
-  }, [addLocation]);
-
   const handleDelete = useCallback((id: string) => {
     deleteInventoryEntry(id);
     setPendingDeleteEntryId(null);
@@ -1406,7 +1601,7 @@ export default function InventoryPage() {
           <button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')}>List View</button>
         </div>
 
-        <span className="logi-filter-count">{filtered.length} of {entries.length}</span>
+        <span className="logi-filter-count">{filtered.length} of {activeEntries.length}</span>
       </div>
 
       {viewMode === 'cards' ? (
@@ -1498,14 +1693,13 @@ export default function InventoryPage() {
       {csvImportOpen && (
         <CsvImportModal
           entries={entries}
+          buildQueue={buildQueue}
           materials={materials}
           locations={locations}
           materialById={materialById}
           onClose={() => setCsvImportOpen(false)}
-          onAddLocations={handleAddImportLocations}
-          onAddEntries={addInventoryEntries}
-          onUpdateEntry={updateInventoryEntry}
-          onDeleteEntry={handleDelete}
+          onApplyBatch={applyInventoryImportBatch}
+          onUndoBatch={undoInventoryImportBatch}
         />
       )}
     </div>
