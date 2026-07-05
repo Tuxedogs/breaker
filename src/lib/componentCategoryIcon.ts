@@ -1,6 +1,29 @@
 import type { ComponentCardIndexRecord } from "./componentCardIndex";
 import { resolveFittingComponentIcon } from "./fitting/resolveFittingComponentIcon";
 
+const VEHICLE_TYPE_TO_COMPONENT_TYPE: Record<string, string> = {
+  weaponGun: "ship_weapon",
+  radar: "radar",
+  powerplant: "powerplant",
+  cooler: "cooler",
+  shield: "shield",
+  quantumdrive: "quantum_drive",
+};
+
+function resolveManifestIconUrl(
+  componentType: string,
+  name: string,
+  size?: unknown,
+): string | null {
+  const resolved = resolveFittingComponentIcon({
+    componentType,
+    componentName: name,
+    size,
+  });
+  if (resolved.confidence === "placeholder") return null;
+  return resolved.src;
+}
+
 // Maps a component record to its fallback icon filename (no extension).
 // Icons live at /images/component-icons/<key>.webp
 // Source: D:\scintel-icon-workbench
@@ -85,12 +108,17 @@ export function getComponentCategoryIcon(record: ComponentCardIndexRecord): stri
 }
 
 export function getComponentCategoryIconUrl(record: ComponentCardIndexRecord): string | null {
-  if (record.kind === "vehicle" && record.type === "quantumdrive") {
-    return resolveFittingComponentIcon({
-      componentType: "quantum_drive",
-      componentName: record.name,
-      size: record.size,
-    }).src;
+  if (record.kind === "vehicle") {
+    const componentType = VEHICLE_TYPE_TO_COMPONENT_TYPE[record.type];
+    if (componentType) {
+      const manifestUrl = resolveManifestIconUrl(componentType, record.name, record.size);
+      if (manifestUrl) return manifestUrl;
+    }
+  }
+
+  if (record.kind === "fps" && record.type === "weapons") {
+    const manifestUrl = resolveManifestIconUrl("fps_weapon", record.name, record.size);
+    if (manifestUrl) return manifestUrl;
   }
 
   const key = getComponentCategoryIcon(record);

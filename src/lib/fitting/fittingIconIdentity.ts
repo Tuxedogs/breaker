@@ -30,6 +30,8 @@ const CATEGORY_FALLBACK_KEYS: Record<string, string> = {
   quantumdrive: "quantum_drive",
   power: "power_plant",
   powerplant: "power_plant",
+  radar: "radar",
+  scanner: "radar",
 };
 
 export function normalizeComponentCategory(category: string | null | undefined): string {
