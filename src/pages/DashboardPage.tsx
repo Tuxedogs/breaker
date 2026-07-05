@@ -110,6 +110,17 @@ function LocationIcon({ type }: { type: string }) {
   );
 }
 
+function getMiningRecReason(rec: PublicLocationEntry): string {
+  if (rec.requiredMaterials && rec.requiredMaterials.length > 0) return "Needed for active build";
+  return "Shortage material";
+}
+
+function getMiningRecQuality(rec: PublicLocationEntry): string | null {
+  const quality = rec.requiredMaterials?.[0]?.selectedQuality ?? rec.routeScores?.[0]?.selectedQuality;
+  if (quality == null || !Number.isFinite(quality)) return null;
+  return `Q${formatDashNumber(quality)}`;
+}
+
 function formatDashNumber(value: number): string {
   if (!Number.isFinite(value)) return "0";
   const rounded = Math.round(value * 100) / 100;
@@ -231,6 +242,19 @@ export default function DashboardPage() {
     ? `/logistics/inventory?location=${encodeURIComponent(topRecordedInventoryLocation.id)}`
     : "/logistics/inventory";
   const shortageRows = queueLedger.refinedShortfallLines.slice(0, 5);
+  const reserveSummary = queueLedger.summary;
+  const qualityTargetCount = useMemo(
+    () => activeQueueItems.filter((item) => item.finalProductQualityBand != null && item.allowLowerQuality !== true).length,
+    [activeQueueItems],
+  );
+  const avgQueueProgress = useMemo(() => {
+    const progresses = activeQueueItems
+      .map((item) => getQueueItemProgress(item, inventoryEntries, recipeInputTemplates))
+      .filter((progress): progress is number => progress !== null);
+    if (progresses.length === 0) return null;
+    return Math.round(progresses.reduce((sum, value) => sum + value, 0) / progresses.length);
+  }, [activeQueueItems, inventoryEntries, recipeInputTemplates]);
+  const topVolumeMaterial = userStats.top3Volume[0];
   const miningRequiredMaterials = useMemo(
     () => toRequiredMaterials(
       queueLedger.rawOreRequirementLines.length > 0 ? queueLedger.rawOreRequirementLines : queueLedger.refinedShortfallLines
@@ -240,6 +264,7 @@ export default function DashboardPage() {
   const displayedMiningState = miningRequiredMaterials.length === 0
     ? { status: "idle" as const, data: [] as PublicLocationEntry[] }
     : miningState;
+  const topMiningRec = displayedMiningState.data[0];
 
   useEffect(() => {
     if (miningRequiredMaterials.length === 0) return;
@@ -270,33 +295,82 @@ export default function DashboardPage() {
     <div className="dash-content-grid">
       <div className="dash-main-col">
         <section className="dash-hero" aria-label="Welcome">
-          <div className="dash-hero-content">
-            <p className="dash-hero-kicker">Welcome to Scintel</p>
-            <h1 className="dash-hero-title">Parse screenshots<br />keep track of your loot.</h1>
-            <p className="dash-hero-subtitle">Track inventory, queue builds, and prioritize<br />the materials that matter next.</p>
-            <Link to="/dashboard/doctrine/armor-threshold" className="dash-hero-cta">
-              Explore Tools
-              <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="dash-hero-cta-arrow">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-          <div className="dash-hero-controls" aria-hidden>
-            <div className="dash-hero-dot active" />
-            <div className="dash-hero-dot" />
-            <div className="dash-hero-dot" />
-          </div>
-          <div className="dash-hero-nav" aria-hidden>
-            <button type="button" className="dash-hero-nav-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <button type="button" className="dash-hero-nav-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
+          <div className="dash-hero-inner">
+            <div className="dash-hero-content">
+              <p className="dash-hero-kicker">Welcome to Scintel</p>
+              <h1 className="dash-hero-title">Plan crafts. Reserve materials. Mine smarter.</h1>
+              <p className="dash-hero-subtitle">
+                Track inventory, auto-reserve build materials, and surface the shortages that matter next.
+              </p>
+              <div className="dash-hero-actions">
+                <Link to="/logistics/build-queue" className="dash-hero-cta dash-hero-cta--primary">
+                  Review Build Queue
+                  <ArrowRight size={14} />
+                </Link>
+                <Link to="/logistics/inventory" className="dash-hero-cta dash-hero-cta--secondary">
+                  View Inventory
+                </Link>
+              </div>
+            </div>
+
+            <div className="dash-hero-workflow" aria-label="Operations snapshot">
+              <Link to="/logistics/inventory" className="dash-hero-mini dash-hero-mini--inventory">
+                <span className="dash-hero-mini-label">Inventory</span>
+                <span className="dash-hero-mini-value dash-tabnum">
+                  {userStats.totalVolume > 0
+                    ? (userStats.totalVolumeUnit === "x"
+                      ? `x${userStats.totalVolume}`
+                      : `${userStats.totalVolume} SCU`)
+                    : "—"}
+                </span>
+                <span className="dash-hero-mini-meta">
+                  {topVolumeMaterial ? `Top: ${topVolumeMaterial.name}` : `${inventoryEntries.length} records`}
+                </span>
+              </Link>
+
+              <Link to="/logistics/build-queue" className="dash-hero-mini dash-hero-mini--reserve">
+                <span className="dash-hero-mini-label">Auto Reserve</span>
+                <span className="dash-hero-mini-value dash-tabnum">
+                  {reserveSummary.reservableLines > 0 ? reserveSummary.reservableLines : "—"}
+                  <small> ready</small>
+                </span>
+                <span className="dash-hero-mini-meta">
+                  {queueLedger.refinedShortfallLines.length > 0
+                    ? `${queueLedger.refinedShortfallLines.length} shortfall${queueLedger.refinedShortfallLines.length === 1 ? "" : "s"}`
+                    : qualityTargetCount > 0
+                      ? `${qualityTargetCount} quality target${qualityTargetCount === 1 ? "" : "s"}`
+                      : "No shortages"}
+                </span>
+              </Link>
+
+              <Link to="/logistics/build-queue" className="dash-hero-mini dash-hero-mini--queue">
+                <span className="dash-hero-mini-label">Build Queue</span>
+                <span className="dash-hero-mini-value dash-tabnum">
+                  {activeQueueItems.length}
+                  <small> active</small>
+                </span>
+                <span className="dash-hero-mini-meta">
+                  {avgQueueProgress != null ? `${avgQueueProgress}% materials covered` : `${buildQueue.length} queued`}
+                </span>
+              </Link>
+
+              <Link to="/industry/mining" className="dash-hero-mini dash-hero-mini--mining">
+                <span className="dash-hero-mini-label">Mining</span>
+                <span className="dash-hero-mini-value dash-hero-mini-value--truncate">
+                  {topMiningRec
+                    ? (topMiningRec.requiredMaterials?.[0]?.displayName ?? topMiningRec.materials[0] ?? "Route ready")
+                    : (displayedMiningState.status === "loading" ? "Loading…" : "—")}
+                </span>
+                <span className="dash-hero-mini-meta dash-hero-mini-meta--truncate">
+                  {topMiningRec
+                    ? [
+                        `${topMiningRec.systemName} / ${topMiningRec.locationName}`,
+                        getMiningRecQuality(topMiningRec),
+                      ].filter(Boolean).join(" · ")
+                    : "No shortage routes"}
+                </span>
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -394,6 +468,12 @@ export default function DashboardPage() {
             <div className="dash-card-body dash-inventory-body">
               {topQualityMaterials.length > 0 ? (
                 <div className="dash-inventory-quality-list">
+                  <div className="dash-inventory-quality-head" aria-hidden>
+                    <span>Material</span>
+                    <span>Location</span>
+                    <span>Amount</span>
+                    <span>Quality</span>
+                  </div>
                   {topQualityMaterials.map(({ entry, material }) => {
                     const itemName = resolveInventoryItemName(entry, material);
                     const locationId = entry.locationId ?? "__unassigned__";
@@ -409,12 +489,14 @@ export default function DashboardPage() {
                           materialState={material?.materialType === "refined" ? "refined" : "raw"}
                           size={18}
                         />
-                        <span className="dash-inventory-quality-main">
-                          <strong>{itemName}</strong>
-                          <small>{locationName}</small>
+                        <span className="dash-inventory-quality-name">{itemName}</span>
+                        <span className="dash-inventory-quality-loc">{locationName}</span>
+                        <span className="dash-inventory-quality-qty dash-tabnum">
+                          {formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material))}
                         </span>
-                        <span className="dash-inventory-quality-qty">{formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material))}</span>
-                        <span className="dash-inventory-quality-value" style={{ color: entry.rarity.colorHex }}>Q{entry.quality}</span>
+                        <span className="dash-inventory-quality-value dash-tabnum" style={{ color: entry.rarity.colorHex }}>
+                          Q{entry.quality}
+                        </span>
                         <ArrowRight />
                       </Link>
                     );
@@ -424,11 +506,51 @@ export default function DashboardPage() {
                 <div className="dash-empty-state">{inventoryEntries.length > 0 ? "No material quality recorded" : "No inventory recorded"}</div>
               )}
             </div>
-            {topRecordedInventoryLocation && (
-              <div className="dash-card-footer">
-                <Link to={inventoryOverviewTarget} className="dash-card-footer-link">Go to Inventory <ArrowRight /></Link>
+            <div className="dash-card-footer">
+              <Link to={inventoryOverviewTarget} className="dash-card-footer-link">Go to Inventory <ArrowRight /></Link>
+            </div>
+          </article>
+
+          <article className="dash-card" aria-label="Auto reserve readiness">
+            <div className="dash-card-header"><span className="dash-card-title">Auto Reserve</span></div>
+            <div className="dash-card-body dash-reserve-body">
+              <div className="dash-reserve-metrics">
+                <div className="dash-reserve-metric dash-reserve-metric--ready">
+                  <span className="dash-reserve-metric-label">Ready to reserve</span>
+                  <span className="dash-reserve-metric-value dash-tabnum">{reserveSummary.reservableLines}</span>
+                  <span className="dash-reserve-metric-hint">materials with stock</span>
+                </div>
+                <div className="dash-reserve-metric dash-reserve-metric--short">
+                  <span className="dash-reserve-metric-label">Shortfalls</span>
+                  <span className="dash-reserve-metric-value dash-tabnum">{queueLedger.refinedShortfallLines.length}</span>
+                  <span className="dash-reserve-metric-hint">{reserveSummary.noStockLines} with no stock</span>
+                </div>
+                <div className="dash-reserve-metric dash-reserve-metric--warn">
+                  <span className="dash-reserve-metric-label">Quality targets</span>
+                  <span className="dash-reserve-metric-value dash-tabnum">{qualityTargetCount}</span>
+                  <span className="dash-reserve-metric-hint">active builds locked</span>
+                </div>
               </div>
-            )}
+              {shortageRows.length > 0 && (
+                <ul className="dash-reserve-preview" role="list">
+                  {shortageRows.slice(0, 3).map((row) => (
+                    <li key={row.materialKey} className="dash-reserve-preview-row">
+                      <MaterialIcon materialName={row.displayName} size={16} />
+                      <span className="dash-reserve-preview-name">{row.displayName}</span>
+                      <span className={`dash-reserve-preview-status ${row.totalAvailableEquivalent > 0 ? "dash-reserve-preview-status--partial" : "dash-reserve-preview-status--missing"}`}>
+                        {row.totalAvailableEquivalent > 0 ? "Partial" : "Missing"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {shortageRows.length === 0 && (
+                <div className="dash-empty-state">Queue materials are covered</div>
+              )}
+            </div>
+            <div className="dash-card-footer">
+              <Link to="/logistics/build-queue" className="dash-card-footer-link">Open Auto Reserve <ArrowRight /></Link>
+            </div>
           </article>
 
           <article className="dash-card" aria-label="Material shortages">
@@ -449,7 +571,7 @@ export default function DashboardPage() {
                       <td><div className="dash-mat-cell"><MaterialIcon materialName={row.displayName} size={18} />{row.displayName}</div></td>
                       <td>{formatInventoryQuantity(row.totalAvailableEquivalent, row.unitType === "unit" ? "unit" : "scu")}</td>
                       <td>{formatInventoryQuantity(row.grossRequired, row.unitType === "unit" ? "unit" : "scu")}</td>
-                      <td><span className="dash-shortage-badge">{formatInventoryQuantity(row.netMissingRefined, row.unitType === "unit" ? "unit" : "scu")}</span></td>
+                      <td><span className="dash-shortage-badge dash-tabnum">{formatInventoryQuantity(row.netMissingRefined, row.unitType === "unit" ? "unit" : "scu")}</span></td>
                     </tr>
                   ))}
                   {shortageRows.length === 0 && (
@@ -504,18 +626,24 @@ export default function DashboardPage() {
       </div>
 
       <aside className="dash-right-col" aria-label="System panels">
-        <QuickInventoryPanel />
+        <QuickInventoryPanel
+          entryCount={inventoryEntries.length}
+          uniqueItems={new Set(inventoryEntries.map((entry) => entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id)).size}
+          totalVolume={userStats.totalVolume}
+          totalVolumeUnit={userStats.totalVolumeUnit}
+          topMaterialName={topVolumeMaterial?.name ?? null}
+        />
         {ENABLE_FITTING_UI && <FittingLaunchPanel />}
 
-        <div className="dash-panel">
-          <div className="dash-panel-header"><span className="dash-panel-title">Primary Locations</span></div>
-          <div className="dash-panel-body">
+        <div className="dash-card dash-card--rail">
+          <div className="dash-card-header"><span className="dash-card-title">Primary Locations</span></div>
+          <div className="dash-card-body dash-card-body--compact">
             <ul className="dash-locations-list" role="list">
               {primaryLocations.map((loc) => (
                 <li key={loc.id} className="dash-location-row">
                   <LocationIcon type={loc.type} />
                   <span className="dash-location-name">{loc.name}</span>
-                  <span className="dash-location-scu">{formatLocationQuantity(loc)}</span>
+                  <span className="dash-location-scu dash-tabnum">{formatLocationQuantity(loc)}</span>
                 </li>
               ))}
               {primaryLocations.length === 0 && <li className="dash-empty-state">No records yet</li>}
@@ -523,32 +651,32 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dash-panel">
-          <div className="dash-panel-header"><span className="dash-panel-title">Mining Recommendations</span></div>
-          <div className="dash-panel-body">
-            <ul className="dash-updates-list" role="list">
-              {displayedMiningState.data.map((rec) => (
-                <li key={rec.locationKey} className="dash-update-item">
-                  <div className="dash-update-thumb" aria-hidden>
-                    <svg viewBox="0 0 20 14" width="24" height="17" fill="none">
-                      <rect width="20" height="14" rx="2" fill="rgba(255,154,32,0.12)" />
-                      <path d="M10 7l-3 4h6zM10 3v1M6 5l.7.7M14 5l-.7.7" stroke="#ff9d00" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.85" />
-                    </svg>
-                  </div>
-                  <div className="dash-update-info">
-                    <div className="dash-update-title">{rec.requiredMaterials?.[0]?.displayName ?? rec.materials[0] ?? "Mining route"}</div>
-                    <div className="dash-update-desc">{rec.systemName} / {rec.locationName}</div>
-                    <div className="dash-update-date dash-rec-reason">{rec.routeTargetabilityLabel ?? `${Math.round(rec.score)} route score`}</div>
-                  </div>
-                </li>
-              ))}
+        <div className="dash-card dash-card--rail">
+          <div className="dash-card-header"><span className="dash-card-title">Mining Recommendations</span></div>
+          <div className="dash-card-body dash-card-body--compact">
+            <ul className="dash-mining-list" role="list">
+              {displayedMiningState.data.map((rec) => {
+                const materialName = rec.requiredMaterials?.[0]?.displayName ?? rec.materials[0] ?? "Mining route";
+                const qualityLabel = getMiningRecQuality(rec);
+                return (
+                  <li key={rec.locationKey} className="dash-mining-item">
+                    <div className="dash-mining-item-head">
+                      <MaterialIcon materialName={materialName} size={16} />
+                      <span className="dash-mining-material">{materialName}</span>
+                      {qualityLabel && <span className="dash-mining-quality dash-tabnum">{qualityLabel}</span>}
+                    </div>
+                    <div className="dash-mining-location">{rec.systemName} / {rec.locationName}</div>
+                    <div className="dash-mining-reason">{getMiningRecReason(rec)}</div>
+                  </li>
+                );
+              })}
               {displayedMiningState.data.length === 0 && (
                 <li className="dash-empty-state">{displayedMiningState.status === "loading" ? "Loading recommendations" : "No queue shortages to route"}</li>
               )}
             </ul>
           </div>
-          <div className="dash-panel-footer">
-            <Link to="/industry/mining" className="dash-panel-link">View Mining <ArrowRight size={10} /></Link>
+          <div className="dash-card-footer">
+            <Link to="/industry/mining" className="dash-card-footer-link">View Mining <ArrowRight /></Link>
           </div>
         </div>
       </aside>
@@ -556,31 +684,47 @@ export default function DashboardPage() {
   );
 }
 
-function QuickInventoryPanel() {
-  const allInventoryEntries = useLogisticsStore((store) => store.inventoryEntries);
-  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
-  const materialTemplates = useLogisticsStore((store) => store.materialTemplates);
-  const uniqueItems = new Set(inventoryEntries.map((entry) => entry.materialId ?? entry.catalogItemId ?? entry.itemName ?? entry.id)).size;
-  const topEntry = inventoryEntries.slice().sort((a, b) => b.quantity - a.quantity)[0];
-  const topMaterial = topEntry ? materialTemplates.find((material) => material.id === topEntry.materialId) : undefined;
-
+function QuickInventoryPanel({
+  entryCount,
+  uniqueItems,
+  totalVolume,
+  totalVolumeUnit,
+  topMaterialName,
+}: {
+  entryCount: number;
+  uniqueItems: number;
+  totalVolume: number;
+  totalVolumeUnit: "SCU" | "x";
+  topMaterialName: string | null;
+}) {
   return (
-    <div className="dash-panel">
-      <div className="dash-panel-header"><span className="dash-panel-title">Quick Inventory</span></div>
-      <div className="dash-panel-body">
-        <p className="dash-panel-desc">
-          {inventoryEntries.length > 0
-            ? `${inventoryEntries.length} records across ${uniqueItems} inventory items${topEntry ? `, led by ${resolveInventoryItemName(topEntry, topMaterial)}` : ""}.`
-            : "No inventory records yet."}
-        </p>
-        <div className="dash-qinv-actions">
-          <Link to="/logistics/inventory" className="dash-qinv-btn">
-            <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
-              <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
-            </svg>
-            View Inventory
-          </Link>
+    <div className="dash-card dash-card--rail">
+      <div className="dash-card-header"><span className="dash-card-title">Quick Inventory</span></div>
+      <div className="dash-card-body dash-card-body--compact">
+        <div className="dash-qinv-stats">
+          <div className="dash-qinv-stat">
+            <span className="dash-qinv-stat-label">Records</span>
+            <span className="dash-qinv-stat-value dash-tabnum">{entryCount > 0 ? entryCount : "—"}</span>
+          </div>
+          <div className="dash-qinv-stat">
+            <span className="dash-qinv-stat-label">Items</span>
+            <span className="dash-qinv-stat-value dash-tabnum">{uniqueItems > 0 ? uniqueItems : "—"}</span>
+          </div>
+          <div className="dash-qinv-stat dash-qinv-stat--wide">
+            <span className="dash-qinv-stat-label">Total volume</span>
+            <span className="dash-qinv-stat-value dash-tabnum">
+              {totalVolume > 0
+                ? (totalVolumeUnit === "x" ? `x${totalVolume}` : `${totalVolume} SCU`)
+                : "—"}
+            </span>
+          </div>
         </div>
+        {topMaterialName && (
+          <p className="dash-qinv-lead">Led by <strong>{topMaterialName}</strong></p>
+        )}
+      </div>
+      <div className="dash-card-footer">
+        <Link to="/logistics/inventory" className="dash-card-footer-link">View Inventory <ArrowRight /></Link>
       </div>
     </div>
   );
