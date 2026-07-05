@@ -30,6 +30,18 @@ import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
+
+type InventoryUndoAction =
+  | { kind: 'delete'; entries: InventoryEntry[] }
+  | { kind: 'transfer'; moves: Array<{ snapshot: InventoryEntry; fromLocationId: string }> }
+  | { kind: 'add'; entryIds: string[] }
+  | { kind: 'import'; batchId: string };
+
+type InventoryUndoLedgerEntry = {
+  id: string;
+  label: string;
+  action: InventoryUndoAction;
+};
 type UnknownRecord = Record<string, unknown>;
 type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_locations' | 'replace_all';
 
@@ -111,16 +123,6 @@ type CsvPreviewRow = {
   generatedQuantitiesLabel?: string;
   errors: string[];
   warnings: string[];
-};
-
-type CsvLotTotal = {
-  key: string;
-  materialName: string;
-  quality?: number;
-  unitType: InventoryUnitType;
-  locationName: string;
-  quantity: number;
-  lots: number;
 };
 
 type CsvImportResult = {
@@ -429,39 +431,6 @@ function splitCsvLots(quantity: number, boxSize: number | null, unitType: Invent
   return lots.length ? lots : [quantity];
 }
 
-function summarizeCsvLots(rows: CsvPreviewRow[]): CsvLotTotal[] {
-  const totals = new Map<string, CsvLotTotal>();
-  for (const row of rows) {
-    if (row.errors.length) continue;
-    const key = [
-      row.materialId ?? normalizeLookup(row.materialName),
-      row.quality ?? '__none',
-      row.unitType,
-      row.locationId ?? normalizeLookup(row.locationName),
-    ].join('|');
-    const existing = totals.get(key);
-    if (existing) {
-      existing.quantity = roundCsvQuantity(existing.quantity + row.quantity);
-      existing.lots += 1;
-    } else {
-      totals.set(key, {
-        key,
-        materialName: row.materialName,
-        quality: row.quality,
-        unitType: row.unitType,
-        locationName: row.locationName,
-        quantity: row.quantity,
-        lots: 1,
-      });
-    }
-  }
-  return Array.from(totals.values()).sort((a, b) =>
-    a.materialName.localeCompare(b.materialName) ||
-    (b.quality ?? -1) - (a.quality ?? -1) ||
-    a.locationName.localeCompare(b.locationName)
-  );
-}
-
 function getCsvMaterialLocationPairs(rows: CsvPreviewRow[]): Set<string> {
   return new Set(rows
     .filter((row) => !row.errors.length && row.materialId && row.locationId)
@@ -684,6 +653,7 @@ type CsvImportModalProps = {
     locations?: InventoryLocation[];
   }) => void;
   onUndoBatch: (batchId: string) => void;
+  onImportTracked?: (batchId: string, importedCount: number) => void;
   initialMode: ImportMode;
   onModeChange: (mode: ImportMode) => void;
   freshnessBlockReason: string | null;
@@ -698,6 +668,7 @@ function CsvImportModal({
   onClose,
   onApplyBatch,
   onUndoBatch,
+  onImportTracked,
   initialMode,
   onModeChange,
   freshnessBlockReason,
@@ -717,7 +688,6 @@ function CsvImportModal({
   const errorCount = rows.filter((row) => row.errors.length).length;
   const affectedLocations = new Set(validRows.map((row) => row.locationName)).size;
   const affectedMaterials = new Set(validRows.map((row) => row.materialName)).size;
-  const lotTotals = summarizeCsvLots(rows);
   const replacementPreview = buildReplacementPreview(mode, validRows, entries, locations, materialById, buildQueue);
   const replacementConflicts = replacementPreview.filter((row) => row.reservedQuantity > 0);
   const destructiveImport = mode !== 'append';
@@ -811,6 +781,7 @@ function CsvImportModal({
       replaceEntryIds,
       locations: createdLocations,
     });
+    onImportTracked?.(importBatchId, additions.length);
     setResult({
       batchId: importBatchId,
       imported: additions.length,
@@ -821,6 +792,18 @@ function CsvImportModal({
     });
   }
 
+  function resetImportFlow() {
+    setResult(null);
+    setFileName('');
+    setRows([]);
+    setOriginalRowCount(0);
+    setParseError('');
+    setConfirmWarnings(false);
+    setConfirmReplaceLocations(false);
+  }
+
+  const importComplete = result != null;
+
   return (
     <>
       <div className="logi-drawer-overlay" onClick={onClose} aria-hidden />
@@ -828,7 +811,7 @@ function CsvImportModal({
         <div className="logi-csv-modal-head">
           <div>
             <span className="logi-csv-kicker">Inventory Import</span>
-            <h2>Import CSV</h2>
+            <h2>{importComplete ? 'Import Complete' : 'Import CSV'}</h2>
           </div>
           <button type="button" className="logi-panel-close-btn" onClick={onClose} aria-label="Close import">
             <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="14" height="14">
@@ -837,166 +820,201 @@ function CsvImportModal({
           </button>
         </div>
 
-        <div className="logi-csv-controls">
-          <label className="logi-csv-file">
-            <span>{fileName || 'Select CSV file'}</span>
-            <input type="file" accept=".csv,text/csv" onChange={(event) => handleFile(event.target.files?.[0])} />
-          </label>
-          <button type="button" className="logi-btn-ghost" onClick={downloadTemplate}>Download CSV Template</button>
-          <select
-            className="logi-select"
-            value={mode}
-            onChange={(event) => {
-              const nextMode = event.target.value as ImportMode;
-              setMode(nextMode);
-              onModeChange(nextMode);
-            }}
-            aria-label="CSV import mode"
-          >
-            <option value="append">Append</option>
-            <option value="replace_matching_materials_location">Replace matching materials/location</option>
-            <option value="replace_locations">Replace location inventory</option>
-            <option value="replace_all">Replace all inventory</option>
-          </select>
-        </div>
-
-        {parseError && <div className="logi-csv-error" role="alert">{parseError}</div>}
-
-        <div className="logi-csv-summary">
-          <div><span>Input rows</span><strong>{originalRowCount}</strong></div>
-          <div><span>Generated lots</span><strong>{validRows.length}</strong></div>
-          <div><span>Warnings</span><strong>{warningCount}</strong></div>
-          <div><span>Errors</span><strong>{errorCount}</strong></div>
-          <div><span>Locations</span><strong>{affectedLocations}</strong></div>
-          <div><span>Materials</span><strong>{affectedMaterials}</strong></div>
-        </div>
-
-        {lotTotals.length > 0 && (
-          <div className="logi-csv-summary" aria-label="CSV totals by material quality unit and location">
-            {lotTotals.slice(0, 12).map((total) => (
-              <div key={total.key}>
-                <span>{total.materialName} / {total.quality ?? '-'} / {total.unitType} / {total.locationName}</span>
-                <strong>{formatCsvNumber(total.quantity)} ({total.lots})</strong>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {replacementPreview.length > 0 && (
-          <div className="logi-csv-table-wrap">
-            <table className="logi-csv-table">
-              <thead>
-                <tr>
-                  <th>Replace</th>
-                  <th>Material</th>
-                  <th>Quantity</th>
-                  <th>Quality</th>
-                  <th>Location</th>
-                  <th>Reserved</th>
-                </tr>
-              </thead>
-              <tbody>
-                {replacementPreview.map((row) => (
-                  <tr key={row.entry.id} className={row.reservedQuantity > 0 ? 'logi-csv-row--error' : undefined}>
-                    <td>{row.entry.id}</td>
-                    <td>{row.materialName}</td>
-                    <td>{formatCsvNumber(row.entry.quantity)}</td>
-                    <td>{row.entry.quality ?? '-'}</td>
-                    <td>{row.locationName}</td>
-                    <td>{row.reservedQuantity > 0 ? `${formatCsvNumber(row.reservedQuantity)} by ${row.reservedBy.join(', ')}` : '-'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {replacementConflicts.length > 0 && (
-          <div className="logi-csv-error" role="alert">
-            Import blocked: {replacementConflicts.length} matching active lot{replacementConflicts.length === 1 ? '' : 's'} are reserved by Build Queue.
-          </div>
-        )}
-
-        {importFreshnessBlock && (
-          <div className="logi-csv-error" role="alert">{importFreshnessBlock}</div>
-        )}
-
-        {rows.length > 0 && (
-          <div className="logi-csv-table-wrap">
-            <table className="logi-csv-table">
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Input Row</th>
-                  <th>Lot</th>
-                  <th>Material</th>
-                  <th>Quantity</th>
-                  <th>Unit</th>
-                  <th>Quality</th>
-                  <th>Box</th>
-                  <th>Location</th>
-                  <th>Container</th>
-                  <th>Issue / action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr key={row.id} className={`logi-csv-row--${row.status}`}>
-                    <td>{row.status}</td>
-                    <td>{row.rowNumbers.join(', ')}</td>
-                    <td>{row.generatedLotIndex && row.generatedLotCount ? `${row.generatedLotIndex}/${row.generatedLotCount}` : '-'}</td>
-                    <td>{row.materialName || '-'}</td>
-                    <td>{row.quantity ? formatCsvNumber(row.quantity) : '-'}</td>
-                    <td>{row.unitLabel || '-'}</td>
-                    <td>{row.quality ?? '-'}</td>
-                    <td>{row.boxSize == null ? '-' : formatCsvNumber(row.boxSize)}</td>
-                    <td>{row.locationName || '-'}</td>
-                    <td>{row.container || '-'}</td>
-                    <td>{[...row.errors, ...row.warnings].join(' ') || (row.generatedQuantitiesLabel ? `Generated: ${row.generatedQuantitiesLabel}` : `Rows ${row.rowNumbers.join(', ')}`)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        <div className="logi-csv-confirm">
-          {warningCount > 0 && (
-            <label>
-              <input type="checkbox" checked={confirmWarnings} onChange={(event) => setConfirmWarnings(event.target.checked)} />
-              Confirm warning rows
-            </label>
-          )}
-          {(mode === 'replace_locations' || mode === 'replace_all') && (
-            <label>
-              <input type="checkbox" checked={confirmReplaceLocations} onChange={(event) => setConfirmReplaceLocations(event.target.checked)} />
-              Confirm replacing {mode === 'replace_all' ? 'all active inventory' : 'inventory at CSV locations'}
-            </label>
-          )}
-        </div>
-
-        {result && (
-          <div className="logi-csv-result" role="status">
-            Imported {result.imported} lot{result.imported === 1 ? '' : 's'} / replaced {result.replaced} / skipped {result.skipped}. {result.locationsUpdated} location{result.locationsUpdated === 1 ? '' : 's'} and {result.materialsUpdated} material{result.materialsUpdated === 1 ? '' : 's'} updated.
-            {!result.undone && (
-              <button
-                type="button"
-                className="logi-btn-ghost"
-                onClick={() => {
-                  onUndoBatch(result.batchId);
-                  setResult({ ...result, undone: true });
-                }}
-              >
-                Undo import
-              </button>
+        {importComplete ? (
+          <div className="logi-csv-success" role="status">
+            {result.undone ? (
+              <>
+                <p className="logi-csv-success-lead">Import undone</p>
+                <p className="logi-csv-success-detail">
+                  The imported lots from this batch were removed. Your inventory is back to its prior state.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="logi-csv-success-lead">Inventory updated</p>
+                <p className="logi-csv-success-detail">
+                  Imported {result.imported} lot{result.imported === 1 ? '' : 's'}
+                  {result.replaced > 0 ? `, replaced ${result.replaced}` : ''}
+                  {result.skipped > 0 ? `, skipped ${result.skipped}` : ''}.
+                  {' '}
+                  {result.locationsUpdated} location{result.locationsUpdated === 1 ? '' : 's'} and{' '}
+                  {result.materialsUpdated} material{result.materialsUpdated === 1 ? '' : 's'} updated.
+                </p>
+              </>
             )}
-            {result.undone && <span> Undo complete.</span>}
+            <div className="logi-csv-success-stats">
+              <div><span>Imported lots</span><strong>{result.imported}</strong></div>
+              <div><span>Replaced</span><strong>{result.replaced}</strong></div>
+              <div><span>Locations</span><strong>{result.locationsUpdated}</strong></div>
+              <div><span>Materials</span><strong>{result.materialsUpdated}</strong></div>
+            </div>
+            <p className="logi-csv-success-hint">
+              {result.undone
+                ? 'You can import another CSV or close this dialog to continue working.'
+                : 'Review your inventory list, import another file, or undo this batch if something looks wrong.'}
+            </p>
+          </div>
+        ) : (
+          <div className="logi-csv-modal-body">
+            <div className="logi-csv-controls">
+              <label className="logi-csv-file">
+                <span>{fileName || 'Select CSV file'}</span>
+                <input type="file" accept=".csv,text/csv" onChange={(event) => handleFile(event.target.files?.[0])} />
+              </label>
+              <button type="button" className="logi-btn-ghost" onClick={downloadTemplate}>Download CSV Template</button>
+              <select
+                className="logi-select"
+                value={mode}
+                onChange={(event) => {
+                  const nextMode = event.target.value as ImportMode;
+                  setMode(nextMode);
+                  onModeChange(nextMode);
+                }}
+                aria-label="CSV import mode"
+              >
+                <option value="append">Append</option>
+                <option value="replace_matching_materials_location">Replace matching materials/location</option>
+                <option value="replace_locations">Replace location inventory</option>
+                <option value="replace_all">Replace all inventory</option>
+              </select>
+            </div>
+
+            {parseError && <div className="logi-csv-error" role="alert">{parseError}</div>}
+
+            <div className="logi-csv-summary">
+              <div><span>Input rows</span><strong>{originalRowCount}</strong></div>
+              <div><span>Generated lots</span><strong>{validRows.length}</strong></div>
+              <div><span>Warnings</span><strong>{warningCount}</strong></div>
+              <div><span>Errors</span><strong>{errorCount}</strong></div>
+              <div><span>Locations</span><strong>{affectedLocations}</strong></div>
+              <div><span>Materials</span><strong>{affectedMaterials}</strong></div>
+            </div>
+
+            {replacementConflicts.length > 0 && (
+              <div className="logi-csv-error" role="alert">
+                Import blocked: {replacementConflicts.length} matching active lot{replacementConflicts.length === 1 ? '' : 's'} are reserved by Build Queue.
+              </div>
+            )}
+
+            {importFreshnessBlock && (
+              <div className="logi-csv-error" role="alert">{importFreshnessBlock}</div>
+            )}
+
+            {(replacementPreview.length > 0 || rows.length > 0) && (
+              <div className="logi-csv-scroll" tabIndex={0} aria-label="CSV preview">
+                {replacementPreview.length > 0 && (
+                  <div className="logi-csv-table-wrap">
+                    <table className="logi-csv-table">
+                      <thead>
+                        <tr>
+                          <th>Replace</th>
+                          <th>Material</th>
+                          <th>Quantity</th>
+                          <th>Quality</th>
+                          <th>Location</th>
+                          <th>Reserved</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {replacementPreview.map((row) => (
+                          <tr key={row.entry.id} className={row.reservedQuantity > 0 ? 'logi-csv-row--error' : undefined}>
+                            <td>{row.entry.id}</td>
+                            <td>{row.materialName}</td>
+                            <td>{formatCsvNumber(row.entry.quantity)}</td>
+                            <td>{row.entry.quality ?? '-'}</td>
+                            <td>{row.locationName}</td>
+                            <td>{row.reservedQuantity > 0 ? `${formatCsvNumber(row.reservedQuantity)} by ${row.reservedBy.join(', ')}` : '-'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {rows.length > 0 && (
+                  <div className="logi-csv-table-wrap">
+                    <table className="logi-csv-table">
+                      <thead>
+                        <tr>
+                          <th>Status</th>
+                          <th>Input Row</th>
+                          <th>Lot</th>
+                          <th>Material</th>
+                          <th>Quantity</th>
+                          <th>Unit</th>
+                          <th>Quality</th>
+                          <th>Box</th>
+                          <th>Location</th>
+                          <th>Container</th>
+                          <th>Issue / action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rows.map((row) => (
+                          <tr key={row.id} className={`logi-csv-row--${row.status}`}>
+                            <td>{row.status}</td>
+                            <td>{row.rowNumbers.join(', ')}</td>
+                            <td>{row.generatedLotIndex && row.generatedLotCount ? `${row.generatedLotIndex}/${row.generatedLotCount}` : '-'}</td>
+                            <td>{row.materialName || '-'}</td>
+                            <td>{row.quantity ? formatCsvNumber(row.quantity) : '-'}</td>
+                            <td>{row.unitLabel || '-'}</td>
+                            <td>{row.quality ?? '-'}</td>
+                            <td>{row.boxSize == null ? '-' : formatCsvNumber(row.boxSize)}</td>
+                            <td>{row.locationName || '-'}</td>
+                            <td>{row.container || '-'}</td>
+                            <td>{[...row.errors, ...row.warnings].join(' ') || (row.generatedQuantitiesLabel ? `Generated: ${row.generatedQuantitiesLabel}` : `Rows ${row.rowNumbers.join(', ')}`)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
-        <div className="logi-csv-actions">
-          <button type="button" className="logi-btn-primary" onClick={handleImport} disabled={!canImport} aria-disabled={!canImport}>Confirm Import</button>
-          <button type="button" className="logi-btn-ghost" onClick={onClose}>Cancel</button>
+        <div className="logi-csv-modal-foot">
+          {importComplete ? (
+            <div className="logi-csv-actions logi-csv-actions--success">
+              <button type="button" className="logi-btn-primary" onClick={onClose}>Done</button>
+              <button type="button" className="logi-btn-ghost" onClick={onClose}>Review inventory</button>
+              <button type="button" className="logi-btn-ghost" onClick={resetImportFlow}>Import another CSV</button>
+              {!result.undone && (
+                <button
+                  type="button"
+                  className="logi-btn-ghost logi-csv-btn-danger"
+                  onClick={() => {
+                    onUndoBatch(result.batchId);
+                    setResult({ ...result, undone: true });
+                  }}
+                >
+                  Undo import
+                </button>
+              )}
+            </div>
+          ) : (
+            <>
+              <div className="logi-csv-confirm">
+                {warningCount > 0 && (
+                  <label>
+                    <input type="checkbox" checked={confirmWarnings} onChange={(event) => setConfirmWarnings(event.target.checked)} />
+                    Confirm warning rows
+                  </label>
+                )}
+                {(mode === 'replace_locations' || mode === 'replace_all') && (
+                  <label>
+                    <input type="checkbox" checked={confirmReplaceLocations} onChange={(event) => setConfirmReplaceLocations(event.target.checked)} />
+                    Confirm replacing {mode === 'replace_all' ? 'all active inventory' : 'inventory at CSV locations'}
+                  </label>
+                )}
+              </div>
+              <div className="logi-csv-actions">
+                <button type="button" className="logi-btn-primary" onClick={handleImport} disabled={!canImport} aria-disabled={!canImport}>Confirm Import</button>
+                <button type="button" className="logi-btn-ghost" onClick={onClose}>Cancel</button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
@@ -1022,13 +1040,58 @@ function useIsMobileInventoryViewport() {
   return isMobile;
 }
 
+function ManageSelectIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+      <path d="M9 11l3 3L22 4" />
+      <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    </svg>
+  );
+}
+
+function RowActionIcon({ kind }: { kind: 'edit' | 'delete' | 'transfer' }) {
+  if (kind === 'edit') {
+    return (
+      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+      </svg>
+    );
+  }
+  if (kind === 'delete') {
+    return (
+      <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+        <path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6" />
+      </svg>
+    );
+  }
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+      <path d="M5 12h14M12 5l7 7-7 7" />
+    </svg>
+  );
+}
+
 type InventoryMaterialGroupProps = {
   group: DrawerMaterialGroup;
+  manageMode: boolean;
+  selectedIds: Set<string>;
+  singleSelectedId: string | null;
+  onToggleSelect: (entryId: string) => void;
   onEdit: (entry: InventoryEntry) => void;
-  onRequestDelete: (entryId: string) => void;
+  onQuickDelete: () => void;
+  onQuickTransfer: () => void;
 };
 
-const InventoryMaterialCard = memo(function InventoryMaterialCard({ group, onEdit, onRequestDelete }: InventoryMaterialGroupProps) {
+const InventoryMaterialCard = memo(function InventoryMaterialCard({
+  group,
+  manageMode,
+  selectedIds,
+  singleSelectedId,
+  onToggleSelect,
+  onEdit,
+  onQuickDelete,
+  onQuickTransfer,
+}: InventoryMaterialGroupProps) {
   return (
     <article className="logi-location-material-card">
       <div className="logi-location-material-card-head">
@@ -1049,18 +1112,57 @@ const InventoryMaterialCard = memo(function InventoryMaterialCard({ group, onEdi
       </div>
 
       <div className="logi-location-material-card-rows">
-        {group.entries.map((row) => (
-          <div key={row.id} className="logi-location-card-stack-row">
-            <QualityPill quality={row.entry.quality} />
-            <span className="logi-location-card-stack-qty">{row.quantityLabel}</span>
-            {row.containerLabel !== '-' && <span className="logi-location-card-stack-container">{row.containerLabel}</span>}
-            {group.kindLabels.length > 1 && <span className={`logi-location-kind logi-location-kind--${row.kind}`}>{row.kindLabel}</span>}
-            <span className="logi-location-row-actions">
-              <button type="button" onClick={() => onEdit(row.entry)}>Edit</button>
-              <button type="button" className="is-delete" onClick={() => onRequestDelete(row.id)}>Delete</button>
-            </span>
-          </div>
-        ))}
+        {group.entries.map((row) => {
+          const isSelected = selectedIds.has(row.id);
+          const showQuickActions = manageMode && singleSelectedId === row.id;
+          return (
+            <div
+              key={row.id}
+              className={`logi-location-card-stack-row${manageMode ? ' logi-inv-row--selectable' : ''}${isSelected ? ' logi-inv-row--selected' : ''}`}
+              onClick={manageMode ? () => onToggleSelect(row.id) : undefined}
+              onDoubleClick={!manageMode ? () => onEdit(row.entry) : undefined}
+              onKeyDown={manageMode ? (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  onToggleSelect(row.id);
+                }
+              } : undefined}
+              tabIndex={manageMode ? 0 : undefined}
+              role={manageMode ? 'checkbox' : undefined}
+              aria-checked={manageMode ? isSelected : undefined}
+              aria-label={manageMode ? `Select ${row.materialName} stack` : undefined}
+            >
+              {manageMode && (
+                <input
+                  type="checkbox"
+                  className="logi-inv-row-checkbox"
+                  checked={isSelected}
+                  onChange={() => onToggleSelect(row.id)}
+                  onClick={(event) => event.stopPropagation()}
+                  tabIndex={-1}
+                  aria-hidden
+                />
+              )}
+              <QualityPill quality={row.entry.quality} />
+              <span className="logi-location-card-stack-qty">{row.quantityLabel}</span>
+              {row.containerLabel !== '-' && <span className="logi-location-card-stack-container">{row.containerLabel}</span>}
+              {group.kindLabels.length > 1 && <span className={`logi-location-kind logi-location-kind--${row.kind}`}>{row.kindLabel}</span>}
+              {showQuickActions && (
+                <span className="logi-location-row-actions">
+                  <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onEdit(row.entry); }} aria-label={`Edit ${row.materialName}`}>
+                    <RowActionIcon kind="edit" />
+                  </button>
+                  <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onQuickTransfer(); }} aria-label={`Transfer ${row.materialName}`}>
+                    <RowActionIcon kind="transfer" />
+                  </button>
+                  <button type="button" className="logi-inv-row-icon-btn is-delete" onClick={(event) => { event.stopPropagation(); onQuickDelete(); }} aria-label={`Delete ${row.materialName}`}>
+                    <RowActionIcon kind="delete" />
+                  </button>
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </article>
   );
@@ -1156,16 +1258,26 @@ type WindowedGroupBlockProps = {
   groups: DrawerMaterialGroup[];
   root: HTMLDivElement | null;
   initiallyVisible: boolean;
+  manageMode: boolean;
+  selectedIds: Set<string>;
+  singleSelectedId: string | null;
+  onToggleSelect: (entryId: string) => void;
   onEdit: (entry: InventoryEntry) => void;
-  onRequestDelete: (entryId: string) => void;
+  onQuickDelete: () => void;
+  onQuickTransfer: () => void;
 };
 
 const WindowedGroupBlock = memo(function WindowedGroupBlock({
   groups,
   root,
   initiallyVisible,
+  manageMode,
+  selectedIds,
+  singleSelectedId,
+  onToggleSelect,
   onEdit,
-  onRequestDelete,
+  onQuickDelete,
+  onQuickTransfer,
 }: WindowedGroupBlockProps) {
   const blockRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(initiallyVisible || typeof IntersectionObserver === 'undefined');
@@ -1201,7 +1313,17 @@ const WindowedGroupBlock = memo(function WindowedGroupBlock({
       style={!isVisible ? { minHeight: measuredHeight ?? estimatedHeight } : undefined}
     >
       {isVisible && groups.map((group) => (
-        <InventoryMaterialCard key={group.id} group={group} onEdit={onEdit} onRequestDelete={onRequestDelete} />
+        <InventoryMaterialCard
+          key={group.id}
+          group={group}
+          manageMode={manageMode}
+          selectedIds={selectedIds}
+          singleSelectedId={singleSelectedId}
+          onToggleSelect={onToggleSelect}
+          onEdit={onEdit}
+          onQuickDelete={onQuickDelete}
+          onQuickTransfer={onQuickTransfer}
+        />
       ))}
     </div>
   );
@@ -1209,14 +1331,24 @@ const WindowedGroupBlock = memo(function WindowedGroupBlock({
 
 type WindowedMaterialGroupsProps = {
   groups: DrawerMaterialGroup[];
+  manageMode: boolean;
+  selectedIds: Set<string>;
+  singleSelectedId: string | null;
+  onToggleSelect: (entryId: string) => void;
   onEdit: (entry: InventoryEntry) => void;
-  onRequestDelete: (entryId: string) => void;
+  onQuickDelete: () => void;
+  onQuickTransfer: () => void;
 };
 
 const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
   groups,
+  manageMode,
+  selectedIds,
+  singleSelectedId,
+  onToggleSelect,
   onEdit,
-  onRequestDelete,
+  onQuickDelete,
+  onQuickTransfer,
 }: WindowedMaterialGroupsProps) {
   const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
   const blocks = useMemo(() => chunkGroups(splitLargeMaterialGroups(groups)), [groups]);
@@ -1232,24 +1364,130 @@ const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
           groups={block}
           root={scrollRoot}
           initiallyVisible={index === 0}
+          manageMode={manageMode}
+          selectedIds={selectedIds}
+          singleSelectedId={singleSelectedId}
+          onToggleSelect={onToggleSelect}
           onEdit={onEdit}
-          onRequestDelete={onRequestDelete}
+          onQuickDelete={onQuickDelete}
+          onQuickTransfer={onQuickTransfer}
         />
       ))}
     </div>
   );
 });
 
+function InventoryBulkDeleteDialog({
+  count,
+  onConfirm,
+  onCancel,
+}: {
+  count: number;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <>
+      <div className="logi-inv-modal-overlay" onClick={onCancel} aria-hidden />
+      <div className="logi-inv-modal logi-inv-modal--danger" role="alertdialog" aria-modal="true" aria-labelledby="inv-delete-title" aria-describedby="inv-delete-desc">
+        <div className="logi-inv-modal-head">
+          <h2 id="inv-delete-title">Delete selected items?</h2>
+        </div>
+        <div className="logi-inv-modal-body">
+          <p id="inv-delete-desc">
+            {count === 1
+              ? 'You are about to delete the selected item from your inventory.'
+              : `You are about to delete ${count} selected items from your inventory.`}
+          </p>
+        </div>
+        <div className="logi-inv-modal-foot">
+          <button type="button" className="logi-inv-modal-btn logi-inv-modal-btn--ghost" onClick={onCancel}>Cancel</button>
+          <button type="button" className="logi-inv-modal-btn logi-inv-modal-btn--danger" onClick={onConfirm}>Delete items</button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function InventoryTransferDialog({
+  selectedCount,
+  sourceLocationId,
+  locations,
+  onConfirm,
+  onCancel,
+}: {
+  selectedCount: number;
+  sourceLocationId: string;
+  locations: InventoryLocation[];
+  onConfirm: (targetLocationId: string) => void;
+  onCancel: () => void;
+}) {
+  const sourceName = locations.find((location) => location.id === sourceLocationId)?.name ?? 'this location';
+  const transferTargets = useMemo(
+    () => locations.filter((location) => location.id !== sourceLocationId),
+    [locations, sourceLocationId],
+  );
+  const [transferTargetId, setTransferTargetId] = useState('');
+  const resolvedTargetId = transferTargetId || transferTargets[0]?.id || '';
+
+  return (
+    <>
+      <div className="logi-inv-modal-overlay" onClick={onCancel} aria-hidden />
+      <div className="logi-inv-modal" role="dialog" aria-modal="true" aria-labelledby="inv-transfer-title" aria-describedby="inv-transfer-desc">
+        <div className="logi-inv-modal-head">
+          <h2 id="inv-transfer-title">Transfer stacks</h2>
+        </div>
+        <div className="logi-inv-modal-body">
+          <p id="inv-transfer-desc">
+            Move {selectedCount} selected stack{selectedCount === 1 ? '' : 's'} from <strong>{sourceName}</strong> to:
+          </p>
+          <label className="logi-inv-modal-field">
+            <span className="logi-inv-modal-label">Target location</span>
+            <select
+              className="logi-select logi-inv-modal-select"
+              value={resolvedTargetId}
+              onChange={(event) => setTransferTargetId(event.target.value)}
+              aria-label="Target location"
+            >
+              {transferTargets.length === 0 ? (
+                <option value="">No other locations available</option>
+              ) : (
+                transferTargets.map((location) => (
+                  <option key={location.id} value={location.id}>{location.name}</option>
+                ))
+              )}
+            </select>
+          </label>
+        </div>
+        <div className="logi-inv-modal-foot">
+          <button type="button" className="logi-inv-modal-btn logi-inv-modal-btn--ghost" onClick={onCancel}>Cancel</button>
+          <button
+            type="button"
+            className="logi-inv-modal-btn logi-inv-modal-btn--primary"
+            disabled={!resolvedTargetId}
+            onClick={() => onConfirm(resolvedTargetId)}
+          >
+            Transfer
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
 type SelectedLocationDetailProps = {
   selectedLocation: LocationGroup;
   drawerMaterialGroups: DrawerMaterialGroup[];
-  pendingDeleteEntryId: string | null;
-  materialById: Map<string, MaterialTemplate>;
+  manageMode: boolean;
+  selectedEntryIds: Set<string>;
   onCollapse: (locationId: string) => void;
+  onToggleManageMode: () => void;
+  onToggleSelect: (entryId: string) => void;
+  onClearSelection: () => void;
+  onExitManageMode: () => void;
   onEdit: (entry: InventoryEntry) => void;
-  onRequestDelete: (entryId: string) => void;
-  onDelete: (entryId: string) => void;
-  onCancelDelete: () => void;
+  onBulkDeleteRequest: () => void;
+  onTransferRequest: () => void;
   hideHeader?: boolean;
   detailId?: string;
 };
@@ -1257,19 +1495,21 @@ type SelectedLocationDetailProps = {
 const SelectedLocationDetail = memo(function SelectedLocationDetail({
   selectedLocation,
   drawerMaterialGroups,
-  pendingDeleteEntryId,
-  materialById,
+  manageMode,
+  selectedEntryIds,
   onCollapse,
+  onToggleManageMode,
+  onToggleSelect,
+  onClearSelection,
+  onExitManageMode,
   onEdit,
-  onRequestDelete,
-  onDelete,
-  onCancelDelete,
+  onBulkDeleteRequest,
+  onTransferRequest,
   hideHeader = false,
   detailId = 'inventory-location-detail',
 }: SelectedLocationDetailProps) {
-  const pendingEntry = pendingDeleteEntryId
-    ? selectedLocation.entries.find((entry) => entry.id === pendingDeleteEntryId)
-    : undefined;
+  const selectedCount = selectedEntryIds.size;
+  const singleSelectedId = selectedCount === 1 ? Array.from(selectedEntryIds)[0] : null;
 
   return (
     <section
@@ -1282,6 +1522,16 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
           <div>
             <div className="logi-location-detail-title-row">
               <h2>{selectedLocation.name}</h2>
+              <button
+                type="button"
+                className={`logi-inv-manage-btn${manageMode ? ' is-active' : ''}`}
+                onClick={onToggleManageMode}
+                title={manageMode ? 'Exit manage mode' : 'Manage inventory'}
+                aria-label={manageMode ? 'Exit manage mode' : 'Manage inventory'}
+                aria-pressed={manageMode}
+              >
+                <ManageSelectIcon />
+              </button>
               <span className="logi-location-active-badge">Active</span>
             </div>
           </div>
@@ -1289,29 +1539,49 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
         </div>
       )}
 
+      {hideHeader && (
+        <div className="logi-location-detail-head logi-location-detail-head--inline-manage">
+          <button
+            type="button"
+            className={`logi-inv-manage-btn${manageMode ? ' is-active' : ''}`}
+            onClick={onToggleManageMode}
+            title={manageMode ? 'Exit manage mode' : 'Manage inventory'}
+            aria-label={manageMode ? 'Exit manage mode' : 'Manage inventory'}
+            aria-pressed={manageMode}
+          >
+            <ManageSelectIcon />
+            <span>{manageMode ? 'Managing' : 'Select items'}</span>
+          </button>
+        </div>
+      )}
+
+      {manageMode && (
+        <div className="logi-inv-manage-toolbar" role="toolbar" aria-label="Inventory selection actions">
+          <span className="logi-inv-manage-count">{selectedCount} selected</span>
+          <button type="button" disabled={selectedCount === 0} onClick={onTransferRequest}>Transfer</button>
+          <button type="button" className="is-delete" disabled={selectedCount === 0} onClick={onBulkDeleteRequest}>Delete</button>
+          <button type="button" disabled={selectedCount === 0} onClick={onClearSelection}>Clear selection</button>
+          <button type="button" onClick={onExitManageMode}>Done</button>
+        </div>
+      )}
 
       {drawerMaterialGroups.length > 0 ? (
-        <WindowedMaterialGroups groups={drawerMaterialGroups} onEdit={onEdit} onRequestDelete={onRequestDelete} />
+        <WindowedMaterialGroups
+          groups={drawerMaterialGroups}
+          manageMode={manageMode}
+          selectedIds={selectedEntryIds}
+          singleSelectedId={singleSelectedId}
+          onToggleSelect={onToggleSelect}
+          onEdit={onEdit}
+          onQuickDelete={onBulkDeleteRequest}
+          onQuickTransfer={onTransferRequest}
+        />
       ) : (
         <div className="logi-location-stack-table-wrap logi-location-stack-table-wrap--cards">
           <div className="logi-location-detail-empty">
             {selectedLocation.id === '__unassigned__'
               ? 'No stacks without assigned location.'
               : 'No stacks recorded at this location.'}
-          </div>
-        </div>
-      )}
-
-      {pendingEntry && (
-        <div className="logi-location-delete-confirm" role="alertdialog" aria-modal="false" aria-label="Confirm inventory deletion">
-          <div className="logi-location-delete-panel">
-            <span className="logi-location-delete-kicker">Are you sure?</span>
-            <strong>{resolveInventoryItemName(pendingEntry, pendingEntry.materialId ? materialById.get(pendingEntry.materialId) : undefined)}</strong>
-            <p>This inventory item will be deleted from {selectedLocation.name}.</p>
-            <div className="logi-location-delete-actions">
-              <button type="button" className="logi-location-delete-yes" onClick={() => onDelete(pendingEntry.id)}>Yes</button>
-              <button type="button" onClick={onCancelDelete}>Cancel</button>
-            </div>
           </div>
         </div>
       )}
@@ -1351,7 +1621,11 @@ export default function InventoryPage() {
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(() => inventoryUi.sortDir);
   const [viewMode, setViewMode] = useState<ViewMode>(() => inventoryUi.viewMode);
   const [selectedLocationId, setSelectedLocationId] = useState<string | null>(() => inventoryUi.selectedLocationId);
-  const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
+  const [manageLocationId, setManageLocationId] = useState<string | null>(null);
+  const [selectedEntryIds, setSelectedEntryIds] = useState<Set<string>>(() => new Set());
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [transferOpen, setTransferOpen] = useState(false);
+  const [undoLedger, setUndoLedger] = useState<InventoryUndoLedgerEntry | null>(null);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
   const [, setSyncLabelTick] = useState(0);
   const isMobileViewport = useIsMobileInventoryViewport();
@@ -1634,20 +1908,163 @@ export default function InventoryPage() {
 
   const toggleLocationDrawer = useCallback((locationId: string) => {
     setSelectedLocationId((current) => current === locationId ? null : locationId);
-    setPendingDeleteEntryId(null);
+    setManageLocationId(null);
+    setSelectedEntryIds(new Set());
+    setBulkDeleteOpen(false);
+    setTransferOpen(false);
   }, []);
+
+  const exitManageMode = useCallback(() => {
+    setManageLocationId(null);
+    setSelectedEntryIds(new Set());
+    setBulkDeleteOpen(false);
+    setTransferOpen(false);
+  }, []);
+
+  const toggleManageMode = useCallback((locationId: string) => {
+    setManageLocationId((current) => {
+      if (current === locationId) {
+        setSelectedEntryIds(new Set());
+        setBulkDeleteOpen(false);
+        setTransferOpen(false);
+        return null;
+      }
+      setSelectedEntryIds(new Set());
+      setBulkDeleteOpen(false);
+      setTransferOpen(false);
+      return locationId;
+    });
+  }, []);
+
+  const toggleEntrySelection = useCallback((entryId: string) => {
+    setSelectedEntryIds((current) => {
+      const next = new Set(current);
+      if (next.has(entryId)) next.delete(entryId);
+      else next.add(entryId);
+      return next;
+    });
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    setSelectedEntryIds(new Set());
+    setBulkDeleteOpen(false);
+    setTransferOpen(false);
+  }, []);
+
+  const pushUndoLedger = useCallback((entry: InventoryUndoLedgerEntry) => {
+    setUndoLedger(entry);
+  }, []);
+
+  const performUndo = useCallback(() => {
+    if (!undoLedger) return;
+    const action = undoLedger.action;
+    if (action.kind === 'delete') {
+      addInventoryEntries(action.entries);
+    } else if (action.kind === 'transfer') {
+      for (const move of action.moves) {
+        updateInventoryEntry({
+          ...move.snapshot,
+          locationId: move.fromLocationId,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    } else if (action.kind === 'add') {
+      for (const id of action.entryIds) {
+        deleteInventoryEntry(id);
+      }
+    } else if (action.kind === 'import') {
+      undoInventoryImportBatch(action.batchId);
+    }
+    setUndoLedger(null);
+    setSelectedEntryIds(new Set());
+    setBulkDeleteOpen(false);
+    setTransferOpen(false);
+  }, [addInventoryEntries, deleteInventoryEntry, undoInventoryImportBatch, undoLedger, updateInventoryEntry]);
 
   const handleEditDrawerEntry = useCallback((entry: InventoryEntry) => {
     setPanel({ mode: 'edit', entry });
   }, []);
 
-  const handleRequestDrawerDelete = useCallback((entryId: string) => {
-    setPendingDeleteEntryId(entryId);
+  const handleBulkDeleteRequest = useCallback(() => {
+    if (selectedEntryIds.size === 0) return;
+    setTransferOpen(false);
+    setBulkDeleteOpen(true);
+  }, [selectedEntryIds.size]);
+
+  const handleBulkDeleteCancel = useCallback(() => {
+    setBulkDeleteOpen(false);
   }, []);
 
-  const handleCancelDrawerDelete = useCallback(() => {
-    setPendingDeleteEntryId(null);
+  const handleBulkDeleteConfirm = useCallback(() => {
+    if (freshnessBlockReason) {
+      setInventoryGuardMessage(freshnessBlockReason);
+      return;
+    }
+    const ids = Array.from(selectedEntryIds);
+    const snapshots = ids
+      .map((id) => entries.find((entry) => entry.id === id))
+      .filter((entry): entry is InventoryEntry => Boolean(entry));
+    if (!snapshots.length) {
+      setBulkDeleteOpen(false);
+      setSelectedEntryIds(new Set());
+      return;
+    }
+    for (const id of ids) {
+      deleteInventoryEntry(id);
+    }
+    pushUndoLedger({
+      id: createNewInventoryId(),
+      label: `Deleted ${snapshots.length} stack${snapshots.length === 1 ? '' : 's'}`,
+      action: { kind: 'delete', entries: snapshots },
+    });
+    setInventoryGuardMessage('');
+    setBulkDeleteOpen(false);
+    setSelectedEntryIds(new Set());
+    setPanel((current) => (
+      current?.mode === 'edit' && ids.includes(current.entry.id) ? null : current
+    ));
+  }, [deleteInventoryEntry, entries, freshnessBlockReason, pushUndoLedger, selectedEntryIds]);
+
+  const handleTransferRequest = useCallback(() => {
+    if (selectedEntryIds.size === 0) return;
+    setBulkDeleteOpen(false);
+    setTransferOpen(true);
+  }, [selectedEntryIds.size]);
+
+  const handleTransferCancel = useCallback(() => {
+    setTransferOpen(false);
   }, []);
+
+  const handleTransferConfirm = useCallback((targetLocationId: string) => {
+    if (!manageLocationId || !targetLocationId || targetLocationId === manageLocationId) return;
+    if (freshnessBlockReason) {
+      setInventoryGuardMessage(freshnessBlockReason);
+      return;
+    }
+    const ids = Array.from(selectedEntryIds);
+    const moves: Array<{ snapshot: InventoryEntry; fromLocationId: string }> = [];
+    for (const id of ids) {
+      const snapshot = entries.find((entry) => entry.id === id);
+      if (!snapshot) continue;
+      moves.push({ snapshot, fromLocationId: manageLocationId });
+      updateInventoryEntry({
+        ...snapshot,
+        locationId: targetLocationId,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+    if (moves.length) {
+      const targetName = locations.find((location) => location.id === targetLocationId)?.name ?? 'location';
+      pushUndoLedger({
+        id: createNewInventoryId(),
+        label: `Transferred ${moves.length} stack${moves.length === 1 ? '' : 's'} to ${targetName}`,
+        action: { kind: 'transfer', moves },
+      });
+    }
+    setInventoryGuardMessage('');
+    setTransferOpen(false);
+    setSelectedEntryIds(new Set());
+  }, [entries, freshnessBlockReason, locations, manageLocationId, pushUndoLedger, selectedEntryIds, updateInventoryEntry]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
@@ -1657,23 +2074,23 @@ export default function InventoryPage() {
       return;
     }
     updates.forEach(updateInventoryEntry);
-    if (additions.length > 0) addInventoryEntries(additions);
+    if (additions.length > 0) {
+      addInventoryEntries(additions);
+      pushUndoLedger({
+        id: createNewInventoryId(),
+        label: `Added ${additions.length} stack${additions.length === 1 ? '' : 's'}`,
+        action: { kind: 'add', entryIds: additions.map((entry) => entry.id) },
+      });
+    }
     setInventoryGuardMessage('');
 
     if (panel?.mode === 'edit') setPanel(null);
     // In new mode, keep the drawer open so users can add multiple stacks quickly.
   }
 
-  const handleDelete = useCallback((id: string) => {
-    if (freshnessBlockReason) {
-      setInventoryGuardMessage(freshnessBlockReason);
-      return;
-    }
-    deleteInventoryEntry(id);
-    setInventoryGuardMessage('');
-    setPendingDeleteEntryId(null);
-    setPanel((current) => current?.mode === 'edit' && current.entry.id === id ? null : current);
-  }, [deleteInventoryEntry, freshnessBlockReason]);
+  const listManageLocationId = manageLocationId ?? (effectiveLocationFilter || null);
+  const listManageMode = viewMode === 'list' && manageLocationId !== null && Boolean(effectiveLocationFilter);
+  const listSingleSelectedId = selectedEntryIds.size === 1 ? Array.from(selectedEntryIds)[0] : null;
 
   const editingEntry = panel?.mode === 'edit' ? panel.entry : null;
 
@@ -1691,6 +2108,11 @@ export default function InventoryPage() {
           <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
         </div>
         <div className="logi-inv-header-actions">
+          {undoLedger && (
+            <button type="button" className="logi-inv-undo-btn" onClick={performUndo}>
+              Undo: {undoLedger.label}
+            </button>
+          )}
           <button
             type="button"
             className={`logi-inv-sync-status logi-inv-sync-status--${syncTone}`}
@@ -1795,7 +2217,31 @@ export default function InventoryPage() {
         </div>
 
         <span className="logi-filter-count">{filtered.length} of {activeEntries.length}</span>
+
+        {viewMode === 'list' && effectiveLocationFilter && (
+          <button
+            type="button"
+            className={`logi-inv-manage-btn logi-inv-manage-btn--filter${listManageMode ? ' is-active' : ''}`}
+            onClick={() => toggleManageMode(effectiveLocationFilter)}
+            title={listManageMode ? 'Exit manage mode' : 'Select items'}
+            aria-label={listManageMode ? 'Exit manage mode' : 'Select items'}
+            aria-pressed={listManageMode}
+          >
+            <ManageSelectIcon />
+            <span>{listManageMode ? 'Managing' : 'Select items'}</span>
+          </button>
+        )}
       </div>
+
+      {viewMode === 'list' && listManageMode && (
+        <div className="logi-inv-manage-toolbar logi-inv-manage-toolbar--list" role="toolbar" aria-label="Inventory selection actions">
+          <span className="logi-inv-manage-count">{selectedEntryIds.size} selected</span>
+          <button type="button" disabled={selectedEntryIds.size === 0} onClick={handleTransferRequest}>Transfer</button>
+          <button type="button" className="is-delete" disabled={selectedEntryIds.size === 0} onClick={handleBulkDeleteRequest}>Delete</button>
+          <button type="button" disabled={selectedEntryIds.size === 0} onClick={clearSelection}>Clear selection</button>
+          <button type="button" onClick={exitManageMode}>Done</button>
+        </div>
+      )}
 
       {viewMode === 'cards' ? (
         <>
@@ -1819,13 +2265,16 @@ export default function InventoryPage() {
                     <SelectedLocationDetail
                       selectedLocation={selectedLocation}
                       drawerMaterialGroups={drawerMaterialGroups}
-                      pendingDeleteEntryId={pendingDeleteEntryId}
-                      materialById={materialById}
+                      manageMode={manageLocationId === selectedLocation.id}
+                      selectedEntryIds={selectedEntryIds}
                       onCollapse={toggleLocationDrawer}
+                      onToggleManageMode={() => toggleManageMode(selectedLocation.id)}
+                      onToggleSelect={toggleEntrySelection}
+                      onClearSelection={clearSelection}
+                      onExitManageMode={exitManageMode}
                       onEdit={handleEditDrawerEntry}
-                      onRequestDelete={handleRequestDrawerDelete}
-                      onDelete={handleDelete}
-                      onCancelDelete={handleCancelDrawerDelete}
+                      onBulkDeleteRequest={handleBulkDeleteRequest}
+                      onTransferRequest={handleTransferRequest}
                       hideHeader
                       detailId={detailId}
                     />
@@ -1839,13 +2288,16 @@ export default function InventoryPage() {
             <SelectedLocationDetail
               selectedLocation={selectedLocation}
               drawerMaterialGroups={drawerMaterialGroups}
-              pendingDeleteEntryId={pendingDeleteEntryId}
-              materialById={materialById}
+              manageMode={manageLocationId === selectedLocation.id}
+              selectedEntryIds={selectedEntryIds}
               onCollapse={toggleLocationDrawer}
+              onToggleManageMode={() => toggleManageMode(selectedLocation.id)}
+              onToggleSelect={toggleEntrySelection}
+              onClearSelection={clearSelection}
+              onExitManageMode={exitManageMode}
               onEdit={handleEditDrawerEntry}
-              onRequestDelete={handleRequestDrawerDelete}
-              onDelete={handleDelete}
-              onCancelDelete={handleCancelDrawerDelete}
+              onBulkDeleteRequest={handleBulkDeleteRequest}
+              onTransferRequest={handleTransferRequest}
             />
           )}
 
@@ -1861,12 +2313,36 @@ export default function InventoryPage() {
               sortDir={sortDir}
               onSort={handleSort}
               onEdit={(entry) => setPanel({ mode: 'edit', entry })}
-              onDelete={handleDelete}
+              manageMode={listManageMode}
+              manageLocationId={listManageLocationId}
+              selectedEntryIds={selectedEntryIds}
+              onToggleSelect={toggleEntrySelection}
+              singleSelectedId={listSingleSelectedId}
+              onQuickDelete={handleBulkDeleteRequest}
+              onQuickTransfer={handleTransferRequest}
             />
           </div>
         </div>
       )}
       </div>
+
+      {bulkDeleteOpen && (
+        <InventoryBulkDeleteDialog
+          count={selectedEntryIds.size}
+          onConfirm={handleBulkDeleteConfirm}
+          onCancel={handleBulkDeleteCancel}
+        />
+      )}
+
+      {transferOpen && manageLocationId && (
+        <InventoryTransferDialog
+          selectedCount={selectedEntryIds.size}
+          sourceLocationId={manageLocationId}
+          locations={locations}
+          onConfirm={handleTransferConfirm}
+          onCancel={handleTransferCancel}
+        />
+      )}
 
       {panel && (
         <div className="logi-drawer-overlay" onClick={() => setPanel(null)} aria-hidden />
@@ -1893,6 +2369,13 @@ export default function InventoryPage() {
           onClose={() => setCsvImportOpen(false)}
           onApplyBatch={applyInventoryImportBatch}
           onUndoBatch={undoInventoryImportBatch}
+          onImportTracked={(batchId, importedCount) => {
+            pushUndoLedger({
+              id: batchId,
+              label: `Imported ${importedCount} lot${importedCount === 1 ? '' : 's'}`,
+              action: { kind: 'import', batchId },
+            });
+          }}
           initialMode={inventoryUi.lastImportMode}
           onModeChange={(mode) => setInventoryUi({ lastImportMode: mode })}
           freshnessBlockReason={freshnessBlockReason}

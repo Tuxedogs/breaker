@@ -789,6 +789,356 @@
 }
 
 
+.logi-inv-page .logi-location-card-stack-row.logi-inv-row--selectable {
+  cursor: pointer;
+}
+
+.logi-inv-page .logi-location-card-stack-row.logi-inv-row--selected,
+.logi-inv-page .logi-table tbody tr.logi-inv-row--selected td {
+  background: rgba(0, 230, 210, 0.08);
+  box-shadow: inset 2px 0 0 rgba(0, 230, 210, 0.72);
+}
+
+.logi-inv-page .logi-inv-row-checkbox {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--accent-cyan);
+  cursor: pointer;
+}
+
+.logi-inv-manage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(65, 132, 160, 0.24);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logi-inv-manage-btn:hover,
+.logi-inv-manage-btn.is-active {
+  border-color: rgba(0, 230, 210, 0.36);
+  background: rgba(0, 230, 210, 0.08);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-manage-btn--filter {
+  flex: 0 0 auto;
+}
+
+.logi-inv-manage-toolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 24;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 230, 210, 0.28);
+  border-radius: 10px;
+  background: rgba(4, 19, 29, 0.94);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.logi-inv-manage-toolbar--list {
+  top: 12px;
+  margin-top: 0;
+}
+
+.logi-inv-manage-count {
+  margin-right: 4px;
+  color: var(--accent-cyan);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.logi-inv-manage-toolbar button {
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logi-inv-manage-toolbar button:hover:not(:disabled) {
+  border-color: rgba(0, 230, 210, 0.34);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-manage-toolbar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.logi-inv-manage-toolbar button.is-delete {
+  border-color: rgba(255, 92, 92, 0.28);
+  color: var(--danger);
+}
+
+.logi-inv-manage-toolbar button.is-delete:hover:not(:disabled) {
+  border-color: rgba(255, 92, 92, 0.42);
+  background: rgba(255, 92, 92, 0.08);
+}
+
+.logi-inv-undo-btn {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 184, 77, 0.55);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(255, 184, 77, 0.24), rgba(255, 140, 0, 0.16));
+  color: #ffe8b0;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px rgba(255, 184, 77, 0.22);
+  cursor: pointer;
+  animation: logi-inv-undo-pulse 1.8s ease-in-out infinite;
+}
+
+.logi-inv-undo-btn:hover {
+  border-color: rgba(255, 210, 120, 0.72);
+  color: #fff4d6;
+}
+
+@keyframes logi-inv-undo-pulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(255, 184, 77, 0.18); }
+  50% { box-shadow: 0 0 24px rgba(255, 184, 77, 0.34); }
+}
+
+.logi-inv-row-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(65, 132, 160, 0.24);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.logi-inv-row-icon-btn:hover {
+  border-color: rgba(0, 230, 210, 0.34);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-row-icon-btn.is-delete {
+  border-color: rgba(255, 92, 92, 0.24);
+  color: var(--danger);
+}
+
+.logi-inv-transfer-panel {
+  text-align: left;
+}
+
+.logi-inv-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 205;
+  background: rgba(1, 8, 13, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.logi-inv-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 206;
+  display: flex;
+  flex-direction: column;
+  width: min(calc(100vw - 32px), 420px);
+  max-height: min(calc(100vh - 32px), 520px);
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  background: var(--panel-bg);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.logi-inv-modal--danger {
+  border-color: rgba(255, 92, 92, 0.28);
+}
+
+.logi-inv-modal-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-modal-head h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.logi-inv-modal--danger .logi-inv-modal-head h2 {
+  color: #ffb4b4;
+}
+
+.logi-inv-modal-body {
+  padding: 14px 18px 8px;
+  overflow: auto;
+}
+
+.logi-inv-modal-body p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.logi-inv-modal-body p strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.logi-inv-modal-field {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.logi-inv-modal-label {
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.logi-inv-modal-select {
+  width: 100%;
+  min-height: 38px;
+}
+
+.logi-inv-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-modal-btn {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.logi-inv-modal-btn--ghost:hover {
+  border-color: rgba(0, 230, 210, 0.34);
+  background: rgba(0, 230, 210, 0.06);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-modal-btn--danger {
+  border-color: rgba(255, 92, 92, 0.38);
+  background: rgba(255, 92, 92, 0.14);
+  color: #ffb4b4;
+}
+
+.logi-inv-modal-btn--danger:hover {
+  border-color: rgba(255, 92, 92, 0.52);
+  background: rgba(255, 92, 92, 0.22);
+}
+
+.logi-inv-modal-btn--primary {
+  border-color: rgba(0, 230, 210, 0.38);
+  background: rgba(0, 230, 210, 0.12);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-modal-btn--primary:hover:not(:disabled) {
+  border-color: rgba(0, 230, 210, 0.52);
+  background: rgba(0, 230, 210, 0.2);
+}
+
+.logi-inv-modal-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.logi-inv-table-select-col {
+  width: 34px;
+}
+
+.logi-location-detail-head--inline-manage {
+  padding: 0 0 10px;
+  border-bottom: 0;
+}
+
+.logi-inv-page .logi-location-card-stack-row:has(.logi-inv-row-checkbox) {
+  grid-template-columns: auto auto minmax(58px, auto) minmax(0, 1fr) auto auto;
+}
+
+@media (max-width: 760px) {
+  .logi-inv-manage-toolbar {
+    top: max(8px, env(safe-area-inset-top));
+    gap: 6px;
+  }
+
+  .logi-inv-manage-toolbar button {
+    flex: 1 1 calc(50% - 6px);
+  }
+
+  .logi-inv-modal-foot {
+    flex-direction: column-reverse;
+  }
+
+  .logi-inv-modal-foot .logi-inv-modal-btn {
+    width: 100%;
+  }
+}
+
 /* ── Mining-theme tone correction: muted console surfaces, no candy gradients ── */
 .logi-inv-page .logi-location-card {
   background-image: linear-gradient(180deg, rgba(10, 16, 26, 0.94), rgba(5, 9, 16, 0.985));
@@ -1832,24 +2182,58 @@
   position: fixed;
   inset: 5vh 4vw auto;
   z-index: 201;
+  width: calc(100% - 8vw);
   max-height: 90vh;
-  display: grid;
+  height: min(90vh, 920px);
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   padding: 14px;
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   background: var(--panel-bg);
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.025);
-  overflow: auto;
+  overflow: hidden;
 }
 
 .logi-csv-modal-head {
+  flex-shrink: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--panel-border-soft);
+}
+
+.logi-csv-modal-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.logi-csv-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: var(--panel-bg-deep);
+}
+
+.logi-csv-modal-foot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-border-soft);
 }
 
 .logi-csv-modal-head h2 {
@@ -1875,6 +2259,7 @@
 .logi-csv-controls,
 .logi-csv-actions,
 .logi-csv-confirm {
+  flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1916,6 +2301,7 @@
 }
 
 .logi-csv-summary {
+  flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(90px, 1fr));
   gap: 8px;
@@ -1950,11 +2336,13 @@
 }
 
 .logi-csv-table-wrap {
-  max-height: 45vh;
-  overflow: auto;
-  border: 1px solid var(--panel-border);
-  border-radius: 10px;
-  background: var(--panel-bg-deep);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.logi-csv-table-wrap + .logi-csv-table-wrap {
+  border-top: 1px solid var(--panel-border);
 }
 
 .logi-csv-table {
@@ -2002,26 +2390,110 @@
 }
 
 .logi-csv-row--error td:first-child,
-.logi-csv-row--error td:last-child,
-.logi-csv-error {
+.logi-csv-row--error td:last-child {
   color: var(--danger);
 }
 
-.logi-csv-error,
-.logi-csv-result {
+.logi-csv-error {
+  flex-shrink: 0;
   padding: 9px 10px;
   border: 1px solid rgba(255, 92, 92, 0.24);
   border-radius: 8px;
   background: rgba(255, 92, 92, 0.06);
+  color: var(--danger);
   font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 700;
 }
 
-.logi-csv-result {
-  border-color: rgba(0, 230, 210, 0.25);
-  background: rgba(0, 230, 210, 0.06);
+.logi-csv-success {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+.logi-csv-success-lead {
+  margin: 0;
   color: var(--accent-cyan);
+  font-family: var(--font-primary);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.logi-csv-success-detail {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.logi-csv-success-hint {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.logi-csv-success-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(90px, 1fr));
+  gap: 8px;
+  width: min(100%, 560px);
+}
+
+.logi-csv-success-stats div {
+  padding: 10px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+}
+
+.logi-csv-success-stats span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.logi-csv-success-stats strong {
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.logi-csv-btn-danger {
+  border-color: rgba(255, 92, 92, 0.28);
+  color: var(--danger);
+}
+
+.logi-csv-btn-danger:hover {
+  border-color: rgba(255, 92, 92, 0.42);
+  background: rgba(255, 92, 92, 0.08);
+  color: var(--danger);
+}
+
+.logi-csv-actions--success {
+  justify-content: center;
 }
 
 .logi-csv-confirm label {
@@ -2071,10 +2543,16 @@
 
   .logi-csv-modal {
     inset: 12px;
+    width: calc(100% - 24px);
     max-height: calc(100vh - 24px);
+    height: calc(100vh - 24px);
   }
 
   .logi-csv-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .logi-csv-success-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
