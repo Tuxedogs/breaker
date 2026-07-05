@@ -8,9 +8,9 @@ import type {
   RarityInfo,
   RarityTier,
   RecipeTemplate,
-} from "../../types/logistics";
-import type { QualityModifier } from "../../components/industry/crafting/utils/craftingTypes";
-import type { QualityBand } from "../../components/industry/crafting/utils/qualityBands";
+} from "../../types/logistics.js";
+import type { QualityModifier } from "../../components/industry/crafting/utils/craftingTypes.js";
+import type { QualityBand } from "../../components/industry/crafting/utils/qualityBands.js";
 
 export interface RecipeInputTemplate {
   /** Stable line-level id for editing duplicate material contributors independently. */

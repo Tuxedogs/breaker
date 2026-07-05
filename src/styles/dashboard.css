@@ -873,8 +873,10 @@
 .dash-content:has(> .dash-content-frame > .mine-page),
 .dash-content:has(> .dash-content-frame > .bq-page),
 .dash-content:has(> .dash-content-frame > .rp-page),
-.dash-content:has(> .dash-content-frame > .mb-page) {
+.dash-content:has(> .dash-content-frame > .mb-page),
+.dash-content:has(> .dash-content-frame > .fit-page) {
   overflow: hidden;
+  padding-bottom: 0;
 }
 
 /* Mining / Build Queue use document-flow scroll on tablet/mobile. */
@@ -926,7 +928,8 @@
 .dash-content:has(> .dash-content-frame > .mine-page) > .dash-content-frame,
 .dash-content:has(> .dash-content-frame > .bq-page) > .dash-content-frame,
 .dash-content:has(> .dash-content-frame > .rp-page) > .dash-content-frame,
-.dash-content:has(> .dash-content-frame > .mb-page) > .dash-content-frame {
+.dash-content:has(> .dash-content-frame > .mb-page) > .dash-content-frame,
+.dash-content:has(> .dash-content-frame > .fit-page) > .dash-content-frame {
   height: 100%;
   min-height: 0;
 }
@@ -934,7 +937,8 @@
 .dash-content-frame > .mine-page,
 .dash-content-frame > .bq-page,
 .dash-content-frame > .rp-page,
-.dash-content-frame > .mb-page {
+.dash-content-frame > .mb-page,
+.dash-content-frame > .fit-page {
   flex: 1 1 0;
   min-height: 0;
   height: 0;

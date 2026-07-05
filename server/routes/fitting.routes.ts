@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
-import { getFittingDataRoot, resolveDataset } from "../fitting/datasetResolver.ts";
-import { calculateFittingLoadout, validateFittingLoadout } from "../fitting/fittingEngine.ts";
+import { getFittingDataRoot, resolveDataset } from "../fitting/datasetResolver.js";
+import { calculateFittingLoadout, validateFittingLoadout } from "../fitting/fittingEngine.js";
 import {
   fittingApiMeta,
   getAmmo,
@@ -13,9 +13,9 @@ import {
   listCompatibleComponents,
   listComponents,
   listShips,
-} from "../fitting/fitting.service.ts";
-import type { DatasetSelection, ProblemBody, RouteResult } from "../fitting/fitting.types.ts";
-import { FittingHttpError } from "../fitting/fitting.types.ts";
+} from "../fitting/fitting.service.js";
+import type { DatasetSelection, ProblemBody, RouteResult } from "../fitting/fitting.types.js";
+import { FittingHttpError } from "../fitting/fitting.types.js";
 
 const BASE_PATH = "/api/v1/fitting";
 const READ_PATHS = [
