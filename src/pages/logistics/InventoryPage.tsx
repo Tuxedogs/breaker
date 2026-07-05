@@ -13,12 +13,18 @@ import {
   resolveInventoryUnitType,
 } from '../../lib/logistics/inventory';
 import {
+  getInventoryFreshnessBlockReason,
+  INVENTORY_FRESHNESS_MS,
+} from '../../lib/logistics/inventoryFreshness';
+import {
   buildInventoryLocationLookup,
   normalizeInventoryLocationLookup,
   resolveInventoryLocationByInput,
 } from '../../lib/logistics/inventoryLocationOptions';
+import { useAuthSession } from '../../lib/auth/useAuthSession';
 import { useMaterialIdentityIndex, type MaterialIdentity } from '../../lib/logistics/materialIdentityIndex';
 import { createMaterialResolver } from '../../lib/logistics/materialResolver';
+import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
@@ -29,6 +35,7 @@ type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_lo
 
 const WINDOW_GROUP_SIZE = 4;
 const WINDOW_STACK_CHUNK_SIZE = 25;
+const INVENTORY_SYNC_FAILED_LABEL = 'Sync failed, retry';
 
 type LocationGroup = {
   id: string;
@@ -256,6 +263,45 @@ function createNewInventoryId(): string {
 function createNewLocationId(name: string): string {
   const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
   return `import-${slug || 'location'}-${Date.now().toString(36)}`;
+}
+
+function isInventoryFetchStale(lastFetchedAt?: string): boolean {
+  if (!lastFetchedAt) return true;
+  const fetchedAt = Date.parse(lastFetchedAt);
+  return !Number.isFinite(fetchedAt) || Date.now() - fetchedAt > INVENTORY_FRESHNESS_MS;
+}
+
+function formatInventorySyncLabel(sync: {
+  isFetching: boolean;
+  isSyncing: boolean;
+  lastFetchedAt?: string;
+  syncError?: string;
+  hasUnsyncedChanges: boolean;
+  hasFetchedServerInventory: boolean;
+}): string {
+  if (sync.isFetching && !sync.hasFetchedServerInventory) return 'Loading inventory';
+  if (sync.isSyncing) return 'Syncing';
+  if (sync.hasUnsyncedChanges) return 'Unsynced changes';
+  if (sync.syncError) return INVENTORY_SYNC_FAILED_LABEL;
+  if (!sync.hasFetchedServerInventory || !sync.lastFetchedAt) return 'Loading inventory';
+
+  const ageMs = Date.now() - Date.parse(sync.lastFetchedAt);
+  if (!Number.isFinite(ageMs) || ageMs < 0 || ageMs < 60_000) return 'Synced just now';
+  const minutes = Math.max(1, Math.floor(ageMs / 60_000));
+  return `Synced ${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+}
+
+function getInventorySyncTone(sync: {
+  isFetching: boolean;
+  isSyncing: boolean;
+  syncError?: string;
+  hasUnsyncedChanges: boolean;
+  hasFetchedServerInventory: boolean;
+}): 'loading' | 'synced' | 'warning' | 'error' {
+  if (sync.syncError) return 'error';
+  if (sync.hasUnsyncedChanges) return 'warning';
+  if (sync.isFetching || sync.isSyncing || !sync.hasFetchedServerInventory) return 'loading';
+  return 'synced';
 }
 
 function parseCsvText(text: string): string[][] {
@@ -630,6 +676,9 @@ type CsvImportModalProps = {
     locations?: InventoryLocation[];
   }) => void;
   onUndoBatch: (batchId: string) => void;
+  initialMode: ImportMode;
+  onModeChange: (mode: ImportMode) => void;
+  freshnessBlockReason: string | null;
 };
 
 function CsvImportModal({
@@ -641,13 +690,16 @@ function CsvImportModal({
   onClose,
   onApplyBatch,
   onUndoBatch,
+  initialMode,
+  onModeChange,
+  freshnessBlockReason,
 }: CsvImportModalProps) {
   const materialIdentities = useMaterialIdentityIndex();
   const [fileName, setFileName] = useState('');
   const [rows, setRows] = useState<CsvPreviewRow[]>([]);
   const [originalRowCount, setOriginalRowCount] = useState(0);
   const [parseError, setParseError] = useState('');
-  const [mode, setMode] = useState<ImportMode>('append');
+  const [mode, setMode] = useState<ImportMode>(initialMode);
   const [confirmWarnings, setConfirmWarnings] = useState(false);
   const [confirmReplaceLocations, setConfirmReplaceLocations] = useState(false);
   const [result, setResult] = useState<CsvImportResult | null>(null);
@@ -660,10 +712,13 @@ function CsvImportModal({
   const lotTotals = summarizeCsvLots(rows);
   const replacementPreview = buildReplacementPreview(mode, validRows, entries, locations, materialById, buildQueue);
   const replacementConflicts = replacementPreview.filter((row) => row.reservedQuantity > 0);
+  const destructiveImport = mode !== 'append';
+  const importFreshnessBlock = destructiveImport ? freshnessBlockReason : null;
   const canImport = validRows.length > 0 &&
     errorCount === 0 &&
     (warningCount === 0 || confirmWarnings) &&
     replacementConflicts.length === 0 &&
+    !importFreshnessBlock &&
     ((mode !== 'replace_locations' && mode !== 'replace_all') || confirmReplaceLocations);
 
   function handleFile(file: File | undefined) {
@@ -780,7 +835,16 @@ function CsvImportModal({
             <input type="file" accept=".csv,text/csv" onChange={(event) => handleFile(event.target.files?.[0])} />
           </label>
           <button type="button" className="logi-btn-ghost" onClick={downloadTemplate}>Download CSV Template</button>
-          <select className="logi-select" value={mode} onChange={(event) => setMode(event.target.value as ImportMode)} aria-label="CSV import mode">
+          <select
+            className="logi-select"
+            value={mode}
+            onChange={(event) => {
+              const nextMode = event.target.value as ImportMode;
+              setMode(nextMode);
+              onModeChange(nextMode);
+            }}
+            aria-label="CSV import mode"
+          >
             <option value="append">Append</option>
             <option value="replace_matching_materials_location">Replace matching materials/location</option>
             <option value="replace_locations">Replace location inventory</option>
@@ -843,6 +907,10 @@ function CsvImportModal({
           <div className="logi-csv-error" role="alert">
             Import blocked: {replacementConflicts.length} matching active lot{replacementConflicts.length === 1 ? '' : 's'} are reserved by Build Queue.
           </div>
+        )}
+
+        {importFreshnessBlock && (
+          <div className="logi-csv-error" role="alert">{importFreshnessBlock}</div>
         )}
 
         {rows.length > 0 && (
@@ -1245,29 +1313,130 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
 
 export default function InventoryPage() {
   const [searchParams] = useSearchParams();
+  const { session, loading: authLoading } = useAuthSession();
+  const accessToken = session?.access_token ?? null;
   const entries = useLogisticsStore((state) => state.inventoryEntries);
   const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
   const materials = useLogisticsStore((state) => state.materialTemplates);
   const locations = useLogisticsStore((state) => state.locations);
+  const inventoryUi = useLogisticsStore((state) => state.inventoryUi);
+  const inventorySync = useLogisticsStore((state) => state.inventorySync);
+  const setInventoryUi = useLogisticsStore((state) => state.setInventoryUi);
+  const setInventorySync = useLogisticsStore((state) => state.setInventorySync);
   const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
   const applyInventoryImportBatch = useLogisticsStore((state) => state.applyInventoryImportBatch);
   const undoInventoryImportBatch = useLogisticsStore((state) => state.undoInventoryImportBatch);
   const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
+  const replaceOnlineState = useLogisticsStore((state) => state.replaceOnlineState);
+  const queryLocationId = searchParams.get('location') ?? '';
 
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [csvImportOpen, setCsvImportOpen] = useState(false);
-  const [search, setSearch] = useState('');
-  const [materialFilter, setMaterialFilter] = useState('');
-  const [locationFilter, setLocationFilter] = useState(() => searchParams.get('location') ?? '');
-  const [qualityMin, setQualityMin] = useState(0);
-  const [sortKey, setSortKey] = useState<SortKey>('quality');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
-  const [viewMode, setViewMode] = useState<ViewMode>('cards');
-  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+  const [search, setSearch] = useState(() => inventoryUi.searchQuery);
+  const [materialFilter, setMaterialFilter] = useState(() => inventoryUi.materialFilter);
+  const [locationFilter, setLocationFilter] = useState(() => queryLocationId || inventoryUi.locationFilter);
+  const [qualityMin, setQualityMin] = useState(() => inventoryUi.qualityMin);
+  const [sortKey, setSortKey] = useState<SortKey>(() => inventoryUi.sortKey);
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>(() => inventoryUi.sortDir);
+  const [viewMode, setViewMode] = useState<ViewMode>(() => inventoryUi.viewMode);
+  const [selectedLocationId, setSelectedLocationId] = useState<string | null>(() => inventoryUi.selectedLocationId);
   const [pendingDeleteEntryId, setPendingDeleteEntryId] = useState<string | null>(null);
+  const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
+  const [, setSyncLabelTick] = useState(0);
   const isMobileViewport = useIsMobileInventoryViewport();
+  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync);
+  const syncLabel = formatInventorySyncLabel(inventorySync);
+  const syncTone = getInventorySyncTone(inventorySync);
+
+  const refreshInventoryFromServer = useCallback(async () => {
+    if (authLoading) return;
+    if (!accessToken) {
+      setInventorySync({
+        isFetching: false,
+        hasFetchedServerInventory: false,
+        syncError: 'Sign in to sync inventory.',
+      });
+      return;
+    }
+
+    setInventorySync({ isFetching: true, syncError: undefined });
+    try {
+      const remote = await fetchOnlinePersistenceState(accessToken);
+      replaceOnlineState({
+        locations: remote.locations,
+        inventoryEntries: remote.inventoryEntries,
+        buildQueue: remote.buildQueue,
+      });
+    } catch (error) {
+      setInventorySync({
+        isFetching: false,
+        syncError: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }, [accessToken, authLoading, replaceOnlineState, setInventorySync]);
+
+  useEffect(() => {
+    if (authLoading) return;
+    void refreshInventoryFromServer();
+  }, [authLoading, refreshInventoryFromServer]);
+
+  useEffect(() => {
+    setSearch(inventoryUi.searchQuery);
+    setMaterialFilter(inventoryUi.materialFilter);
+    setLocationFilter(queryLocationId || inventoryUi.locationFilter);
+    setQualityMin(inventoryUi.qualityMin);
+    setSortKey(inventoryUi.sortKey);
+    setSortDir(inventoryUi.sortDir);
+    setViewMode(inventoryUi.viewMode);
+    setSelectedLocationId(inventoryUi.selectedLocationId);
+  }, [inventoryUi, queryLocationId]);
+
+  useEffect(() => {
+    setInventoryUi({
+      selectedLocationId,
+      searchQuery: search,
+      materialFilter,
+      locationFilter,
+      qualityMin,
+      sortKey,
+      sortDir,
+      viewMode,
+    });
+  }, [
+    locationFilter,
+    materialFilter,
+    qualityMin,
+    search,
+    selectedLocationId,
+    setInventoryUi,
+    sortDir,
+    sortKey,
+    viewMode,
+  ]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setSyncLabelTick((tick) => tick + 1), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    function refreshIfVisibleAndStale() {
+      if (document.visibilityState !== 'visible') return;
+      if (!isInventoryFetchStale(useLogisticsStore.getState().inventorySync.lastFetchedAt)) return;
+      void refreshInventoryFromServer();
+    }
+
+    window.addEventListener('focus', refreshIfVisibleAndStale);
+    window.addEventListener('online', refreshIfVisibleAndStale);
+    document.addEventListener('visibilitychange', refreshIfVisibleAndStale);
+    return () => {
+      window.removeEventListener('focus', refreshIfVisibleAndStale);
+      window.removeEventListener('online', refreshIfVisibleAndStale);
+      document.removeEventListener('visibilitychange', refreshIfVisibleAndStale);
+    };
+  }, [refreshInventoryFromServer]);
 
   useEffect(() => {
     if (!panel) return undefined;
@@ -1484,20 +1653,29 @@ export default function InventoryPage() {
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
-    updatedEntries
-      .filter((updated) => entries.some((entry) => entry.id === updated.id))
-      .forEach(updateInventoryEntry);
+    const updates = updatedEntries.filter((updated) => entries.some((entry) => entry.id === updated.id));
+    if (updates.length > 0 && freshnessBlockReason) {
+      setInventoryGuardMessage(freshnessBlockReason);
+      return;
+    }
+    updates.forEach(updateInventoryEntry);
     if (additions.length > 0) addInventoryEntries(additions);
+    setInventoryGuardMessage('');
 
     if (panel?.mode === 'edit') setPanel(null);
     // In new mode, keep the drawer open so users can add multiple stacks quickly.
   }
 
   const handleDelete = useCallback((id: string) => {
+    if (freshnessBlockReason) {
+      setInventoryGuardMessage(freshnessBlockReason);
+      return;
+    }
     deleteInventoryEntry(id);
+    setInventoryGuardMessage('');
     setPendingDeleteEntryId(null);
     setPanel((current) => current?.mode === 'edit' && current.entry.id === id ? null : current);
-  }, [deleteInventoryEntry]);
+  }, [deleteInventoryEntry, freshnessBlockReason]);
 
   const editingEntry = panel?.mode === 'edit' ? panel.entry : null;
 
@@ -1515,6 +1693,19 @@ export default function InventoryPage() {
           <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
         </div>
         <div className="logi-inv-header-actions">
+          <button
+            type="button"
+            className={`logi-inv-sync-status logi-inv-sync-status--${syncTone}`}
+            onClick={() => {
+              if (inventorySync.syncError || !inventorySync.hasFetchedServerInventory) {
+                void refreshInventoryFromServer();
+              }
+            }}
+            disabled={inventorySync.isFetching}
+            aria-label="Inventory sync status"
+          >
+            {syncLabel}
+          </button>
           <button
             type="button"
             className="logi-btn-secondary"
@@ -1539,6 +1730,10 @@ export default function InventoryPage() {
           </button>
         </div>
       </div>
+
+      {inventoryGuardMessage && (
+        <div className="logi-inv-sync-alert" role="alert">{inventoryGuardMessage}</div>
+      )}
 
       <div className="logi-filter-bar logi-inv-filter-bar">
         <div className="logi-search-wrap">
@@ -1700,6 +1895,9 @@ export default function InventoryPage() {
           onClose={() => setCsvImportOpen(false)}
           onApplyBatch={applyInventoryImportBatch}
           onUndoBatch={undoInventoryImportBatch}
+          initialMode={inventoryUi.lastImportMode}
+          onModeChange={(mode) => setInventoryUi({ lastImportMode: mode })}
+          freshnessBlockReason={freshnessBlockReason}
         />
       )}
     </div>

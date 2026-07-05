@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
   initialBuildQueue,
-  initialInventoryEntries,
   inventoryLocations,
   itemTemplates,
   materialTemplates,
@@ -37,11 +36,8 @@ import {
 import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
 import type {
   BuildQueueItem,
-  InventoryCatalogSource,
   InventoryEntry,
-  InventoryItemKind,
   InventoryLocation,
-  InventoryUnitType,
   ItemTemplate,
   MaterialTemplate,
   OwnedItem,
@@ -50,7 +46,56 @@ import type {
   ReservedMaterialAllocation,
 } from "../types/logistics";
 
-const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
+export interface InventoryUiState {
+  selectedLocationId: string | null;
+  searchQuery: string;
+  materialFilter: string;
+  locationFilter: string;
+  qualityMin: number;
+  sortKey: "quality" | "quantity" | "material" | "location";
+  sortDir: "asc" | "desc";
+  viewMode: "cards" | "list";
+  lastImportMode: "append" | "replace_matching_materials_location" | "replace_locations" | "replace_all";
+  expandedCards: string[];
+  expandedQualityRows: string[];
+  viewDensity: "compact" | "comfortable";
+}
+
+export interface InventorySyncState {
+  isFetching: boolean;
+  isSyncing: boolean;
+  lastFetchedAt?: string;
+  lastSyncedAt?: string;
+  syncError?: string;
+  hasUnsyncedChanges: boolean;
+  pendingMutationCount: number;
+  hasHydratedPersist: boolean;
+  hasFetchedServerInventory: boolean;
+}
+
+const defaultInventoryUi: InventoryUiState = {
+  selectedLocationId: null,
+  searchQuery: "",
+  materialFilter: "",
+  locationFilter: "",
+  qualityMin: 0,
+  sortKey: "quality",
+  sortDir: "desc",
+  viewMode: "cards",
+  lastImportMode: "append",
+  expandedCards: [],
+  expandedQualityRows: [],
+  viewDensity: "compact",
+};
+
+const defaultInventorySync: InventorySyncState = {
+  isFetching: false,
+  isSyncing: false,
+  hasUnsyncedChanges: false,
+  pendingMutationCount: 0,
+  hasHydratedPersist: false,
+  hasFetchedServerInventory: false,
+};
 
 export interface CraftingRecipeRegistration {
   recipeId: string;
@@ -66,7 +111,11 @@ interface LogisticsStoreState {
   recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
   locations: InventoryLocation[];
   inventoryEntries: InventoryEntry[];
+  inventoryUi: InventoryUiState;
+  inventorySync: InventorySyncState;
   buildQueue: BuildQueueItem[];
+  setInventoryUi: (patch: Partial<InventoryUiState>) => void;
+  setInventorySync: (patch: Partial<InventorySyncState>) => void;
   addLocation: (location: InventoryLocation) => void;
   updateLocation: (location: InventoryLocation) => void;
   deleteLocation: (id: string) => void;
@@ -110,6 +159,14 @@ interface LogisticsStoreState {
   resetLogisticsState: () => void;
 }
 
+type LogisticsSet = (
+  partial:
+    | Partial<LogisticsStoreState>
+    | LogisticsStoreState
+    | ((state: LogisticsStoreState) => Partial<LogisticsStoreState> | LogisticsStoreState),
+  replace?: false,
+) => void;
+
 const LOGISTICS_STORAGE_KEY = "sc_logistics_state_v1";
 const LEGACY_LOGISTICS_STORAGE_KEY = "moonbreaker-logistics-v1";
 
@@ -125,10 +182,6 @@ function migrateLegacyLogisticsStorage() {
 function getMaterialTemplate(materialId: string | undefined, materials: MaterialTemplate[]): MaterialTemplate | undefined {
   if (!materialId) return undefined;
   return materials.find((material) => material.id === materialId);
-}
-
-function mergeInventoryLocationSeeds(_seedLocations: InventoryLocation[], persistedLocations: InventoryLocation[] | undefined): InventoryLocation[] {
-  return mergeCanonicalInventoryLocations(persistedLocations?.length ? persistedLocations : undefined).locations;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -154,40 +207,51 @@ function isRarityTier(value: unknown): value is keyof typeof rarityCatalog {
   );
 }
 
-function isMaterialType(value: unknown): value is MaterialTemplate["materialType"] {
-  return value === "ore" || value === "refined" || value === "raw" || value === "special";
+function isInventoryUiSortKey(value: unknown): value is InventoryUiState["sortKey"] {
+  return value === "quality" || value === "quantity" || value === "material" || value === "location";
 }
 
-function isInventoryItemKind(value: unknown): value is InventoryItemKind {
-  return (
-    value === "material" ||
-    value === "ore" ||
-    value === "refined" ||
-    value === "raw_mineable" ||
-    value === "ice" ||
-    value === "fps_weapon" ||
-    value === "fps_armor" ||
-    value === "vehicle_component" ||
-    value === "crafted_item" ||
-    value === "manual" ||
-    value === "unknown"
-  );
+function isInventoryUiSortDir(value: unknown): value is InventoryUiState["sortDir"] {
+  return value === "asc" || value === "desc";
 }
 
-function isInventoryUnitType(value: unknown): value is InventoryUnitType {
-  return value === "scu" || value === "unit";
+function isInventoryUiViewMode(value: unknown): value is InventoryUiState["viewMode"] {
+  return value === "cards" || value === "list";
 }
 
-function isInventoryCatalogSource(value: unknown): value is InventoryCatalogSource {
-  return value === "api" || value === "seed" || value === "manual" || value === "unknown";
+function isInventoryUiImportMode(value: unknown): value is InventoryUiState["lastImportMode"] {
+  return value === "append" ||
+    value === "replace_matching_materials_location" ||
+    value === "replace_locations" ||
+    value === "replace_all";
 }
 
-function isInventoryStatus(value: unknown): value is InventoryEntry["inventoryStatus"] {
-  return value === "active" || value === "replaced";
+function coerceStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter(isString) : [];
 }
 
-function isBuildStatus(value: unknown): value is BuildQueueItem["status"] {
-  return value === "queued" || value === "active" || value === "paused" || value === "complete";
+function coerceInventoryUi(value: unknown): InventoryUiState {
+  const record = isRecord(value) ? value : {};
+  return {
+    ...defaultInventoryUi,
+    selectedLocationId: isString(record.selectedLocationId) ? record.selectedLocationId : null,
+    searchQuery: isString(record.searchQuery) ? record.searchQuery : defaultInventoryUi.searchQuery,
+    materialFilter: isString(record.materialFilter) ? record.materialFilter : defaultInventoryUi.materialFilter,
+    locationFilter: isString(record.locationFilter) ? record.locationFilter : defaultInventoryUi.locationFilter,
+    qualityMin: isNumber(record.qualityMin) ? record.qualityMin : defaultInventoryUi.qualityMin,
+    sortKey: isInventoryUiSortKey(record.sortKey) ? record.sortKey : defaultInventoryUi.sortKey,
+    sortDir: isInventoryUiSortDir(record.sortDir) ? record.sortDir : defaultInventoryUi.sortDir,
+    viewMode: isInventoryUiViewMode(record.viewMode) ? record.viewMode : defaultInventoryUi.viewMode,
+    lastImportMode: isInventoryUiImportMode(record.lastImportMode) ? record.lastImportMode : defaultInventoryUi.lastImportMode,
+    expandedCards: coerceStringArray(record.expandedCards),
+    expandedQualityRows: coerceStringArray(record.expandedQualityRows),
+    viewDensity: record.viewDensity === "comfortable" ? "comfortable" : defaultInventoryUi.viewDensity,
+  };
+}
+
+function readPersistedInventoryUi(persisted: unknown): InventoryUiState {
+  if (!isRecord(persisted)) return defaultInventoryUi;
+  return coerceInventoryUi(persisted.inventoryUi ?? persisted);
 }
 
 function getInventoryLotKey(entry: InventoryEntry): string {
@@ -203,78 +267,6 @@ function getInventoryLotKey(entry: InventoryEntry): string {
     hasImportLot ? importParts.join(":") : "",
     entry.boxSize ?? "",
   ].join("|");
-}
-
-function coercePersistedRecipeInput(value: unknown, materials: MaterialTemplate[]): RecipeInputTemplate | null {
-  if (!isRecord(value) || !isNumber(value.quantity)) return null;
-  const materialId =
-    isString(value.materialId) ? value.materialId :
-    isString(value.materialKey) ? value.materialKey :
-    isString(value.rawName) ? value.rawName :
-    isString(value.materialName) ? value.materialName :
-    isString(value.displayName) ? value.displayName :
-    "";
-  if (!materialId) return null;
-  return normalizeRecipeInputTemplate({
-    ...value,
-    materialId,
-    materialKey: isString(value.materialKey) ? value.materialKey : undefined,
-    requirementId: isString(value.requirementId) ? value.requirementId : undefined,
-    costId: isString(value.costId) ? value.costId : undefined,
-    materialGuid: isString(value.materialGuid) ? value.materialGuid : isString(value.costId) ? value.costId : undefined,
-    materialName: isString(value.materialName) ? value.materialName : undefined,
-    displayName: isString(value.displayName) ? value.displayName : undefined,
-    rawName: isString(value.rawName) ? value.rawName : undefined,
-    sourceName: isString(value.sourceName) ? value.sourceName : undefined,
-    sourceType: isString(value.sourceType) ? value.sourceType : undefined,
-    quantity: value.quantity,
-  } as RecipeInputTemplate, materials);
-}
-
-function coercePersistedReservedAllocation(value: unknown): ReservedMaterialAllocation | null {
-  if (
-    !isRecord(value) ||
-    !isString(value.id) ||
-    !isString(value.materialId) ||
-    !isString(value.inventoryEntryId) ||
-    !isNumber(value.quantityReserved) ||
-    !isRecord(value.rarity) ||
-    !isRarityTier(value.rarity.tier)
-  ) {
-    return null;
-  }
-
-  return {
-    id: value.id,
-    materialId: value.materialId,
-    inventoryEntryId: value.inventoryEntryId,
-    quantityReserved: Math.max(0, value.quantityReserved),
-    requirementId: isString(value.requirementId) ? value.requirementId : undefined,
-    selectedQuality: isNumber(value.selectedQuality) ? value.selectedQuality : undefined,
-    allowLowerQualityOverride: value.allowLowerQualityOverride === true,
-    unitType: isString(value.unitType) ? value.unitType as ReservedMaterialAllocation["unitType"] : undefined,
-    materialName: isString(value.materialName) ? value.materialName : undefined,
-    quality: isNumber(value.quality) ? value.quality : undefined,
-    qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
-    rarity: rarityCatalog[value.rarity.tier],
-    boxSize: isNumber(value.boxSize) ? value.boxSize : value.boxSize === null ? null : undefined,
-    locationId: isString(value.locationId) ? value.locationId : undefined,
-    container: isString(value.container) ? value.container : undefined,
-  };
-}
-
-function coercePersistedBlueprintSource(value: unknown): NonNullable<BuildQueueItem["blueprintSources"]>[number] | null {
-  if (!isRecord(value)) return null;
-  const displayName = isString(value.displayName) ? value.displayName : undefined;
-  if (!displayName) return null;
-
-  return {
-    poolName: isString(value.poolName) ? value.poolName : undefined,
-    poolGuid: isString(value.poolGuid) ? value.poolGuid : undefined,
-    sourceFolder: isString(value.sourceFolder) ? value.sourceFolder : undefined,
-    displayName,
-    weight: isNumber(value.weight) ? value.weight : undefined,
-  };
 }
 
 export function getRarityForBand(qualityBand?: number): RarityInfo {
@@ -403,113 +395,6 @@ export function repairInventoryEntryIds(entries: InventoryEntry[]): InventoryEnt
   return repaired;
 }
 
-function coercePersistedLocation(value: unknown): InventoryLocation | null {
-  if (!isRecord(value) || !isString(value.id) || !isString(value.name)) return null;
-  return {
-    id: value.id,
-    name: value.name,
-    category: isString(value.category) ? value.category : undefined,
-    system: isString(value.system) ? value.system : undefined,
-    type: (value.type === "station" || value.type === "city" || value.type === "outpost" || value.type === "ship")
-      ? (value.type as InventoryLocation["type"]) : undefined,
-  };
-}
-
-function coercePersistedInventoryEntry(value: unknown, materials: MaterialTemplate[]): InventoryEntry | null {
-  if (!isRecord(value) || !isString(value.id) || !isNumber(value.quantity)) {
-    return null;
-  }
-  const materialId = isString(value.materialId) ? value.materialId : undefined;
-  const itemName = isString(value.itemName) ? value.itemName : isString(value.materialName) ? value.materialName : undefined;
-  const catalogItemId = isString(value.catalogItemId) ? value.catalogItemId : materialId;
-  if (!materialId && !itemName && !catalogItemId) return null;
-
-  const material = getMaterialTemplate(materialId, materials);
-  const materialType = material?.materialType ?? (isMaterialType(value.materialType) ? value.materialType : "special");
-  const entry: InventoryEntry = {
-    id: value.id,
-    materialId,
-    materialName: isString(value.materialName) ? value.materialName : undefined,
-    materialType,
-    catalogItemId,
-    catalogSource: isInventoryCatalogSource(value.catalogSource) ? value.catalogSource : undefined,
-    itemName,
-    itemKind: isInventoryItemKind(value.itemKind) ? value.itemKind : undefined,
-    category: isString(value.category) ? value.category : undefined,
-    unitType: isInventoryUnitType(value.unitType) ? value.unitType : undefined,
-    quality: isNumber(value.quality) ? value.quality : undefined,
-    qualityBand: isNumber(value.qualityBand) ? value.qualityBand : undefined,
-    quantity: value.quantity,
-    boxSize: isNumber(value.boxSize) ? value.boxSize : value.boxSize === null ? null : undefined,
-    locationId: isString(value.locationId) ? value.locationId : undefined,
-    container: isString(value.container) ? value.container : isString(value.containerName) ? value.containerName : undefined,
-    notes: isString(value.notes) ? value.notes : undefined,
-    source: isString(value.source) ? value.source : undefined,
-    sourceHistory: Array.isArray(value.sourceHistory) ? value.sourceHistory.filter(isString) : undefined,
-    inventoryStatus: isInventoryStatus(value.inventoryStatus) ? value.inventoryStatus : undefined,
-    importSourceType: isString(value.importSourceType) ? value.importSourceType : undefined,
-    importBatchId: isString(value.importBatchId) ? value.importBatchId : undefined,
-    importRowNumber: isNumber(value.importRowNumber) ? Math.trunc(value.importRowNumber) : undefined,
-    importLotIndex: isNumber(value.importLotIndex) ? Math.trunc(value.importLotIndex) : undefined,
-    importLotCount: isNumber(value.importLotCount) ? Math.trunc(value.importLotCount) : undefined,
-    replacedByImportBatchId: isString(value.replacedByImportBatchId) ? value.replacedByImportBatchId : undefined,
-    replacedAt: isString(value.replacedAt) ? value.replacedAt : undefined,
-    workOrderId: isString(value.workOrderId) ? value.workOrderId : undefined,
-    workOrderIds: Array.isArray(value.workOrderIds) ? value.workOrderIds.filter(isString) : undefined,
-    accentTier: isRarityTier(value.accentTier) ? value.accentTier : undefined,
-    rarity: isRecord(value.rarity) && isRarityTier(value.rarity.tier)
-      ? rarityCatalog[value.rarity.tier]
-      : rarityCatalog.common,
-    createdAt: isString(value.createdAt) ? value.createdAt : new Date().toISOString(),
-    updatedAt: isString(value.updatedAt) ? value.updatedAt : new Date().toISOString(),
-  };
-
-  return normalizeInventoryEntry(entry, materials);
-}
-
-function coercePersistedBuildQueueItem(value: unknown, materials: MaterialTemplate[]): BuildQueueItem | null {
-  if (!isRecord(value) || !isString(value.id) || !isString(value.recipeId) || !isNumber(value.quantity)) {
-    return null;
-  }
-
-  return {
-    id: value.id,
-    recipeId: value.recipeId,
-    blueprint_id: isString(value.blueprint_id) ? value.blueprint_id : undefined,
-    itemId: isString(value.itemId) ? value.itemId : undefined,
-    itemName: isString(value.itemName) ? value.itemName : undefined,
-    finalProductQualityBand: isNumber(value.finalProductQualityBand) ? value.finalProductQualityBand : undefined,
-    finalProductQualityAverage: isNumber(value.finalProductQualityAverage) ? value.finalProductQualityAverage : undefined,
-    finalProductRarity: isString(value.finalProductRarity) ? value.finalProductRarity : undefined,
-    quantity: value.quantity,
-    allowLowerQuality: value.allowLowerQuality === true,
-    priority: isNumber(value.priority) ? value.priority : undefined,
-    priorityActive: typeof value.priorityActive === "boolean" ? value.priorityActive : undefined,
-    status: isBuildStatus(value.status) ? value.status : undefined,
-    reservedAllocations: Array.isArray(value.reservedAllocations)
-      ? value.reservedAllocations
-          .map(coercePersistedReservedAllocation)
-          .filter((allocation): allocation is ReservedMaterialAllocation => allocation !== null)
-      : undefined,
-    materialRequirements: Array.isArray(value.materialRequirements)
-      ? value.materialRequirements
-          .map((input) => coercePersistedRecipeInput(input, materials))
-          .filter((input): input is RecipeInputTemplate => input !== null)
-      : undefined,
-    blueprintSources: Array.isArray(value.blueprintSources)
-      ? value.blueprintSources
-          .map(coercePersistedBlueprintSource)
-          .filter((source): source is NonNullable<BuildQueueItem["blueprintSources"]>[number] => source !== null)
-      : undefined,
-  };
-}
-
-function getPersistedArray(persisted: unknown, key: string): unknown[] | undefined {
-  if (!isRecord(persisted)) return undefined;
-  const value = persisted[key];
-  return Array.isArray(value) ? value : undefined;
-}
-
 function getReservedQuantityForStack(
   buildQueue: BuildQueueItem[],
   inventoryEntryId: string,
@@ -632,6 +517,63 @@ function persistQueueSnapshot(action: string, item: BuildQueueItem) {
   persistBuildQueueItem(item)?.catch((error: unknown) => logBuildQueuePersistenceFailure(action, error));
 }
 
+function trackInventoryMutation(
+  set: LogisticsSet,
+  request: Promise<unknown> | null,
+  action: string,
+) {
+  if (!request) {
+    set((state: LogisticsStoreState) => ({
+      inventorySync: {
+        ...state.inventorySync,
+        hasUnsyncedChanges: true,
+        syncError: "Inventory changes are pending until sign-in/server sync is available.",
+      },
+    }));
+    return;
+  }
+  set((state: LogisticsStoreState) => ({
+    inventorySync: {
+      ...state.inventorySync,
+      isSyncing: true,
+      hasUnsyncedChanges: true,
+      pendingMutationCount: state.inventorySync.pendingMutationCount + 1,
+      syncError: undefined,
+    },
+  }));
+  request
+    .then(() => {
+      set((state: LogisticsStoreState) => {
+        const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+        return {
+          inventorySync: {
+            ...state.inventorySync,
+            isSyncing: pendingMutationCount > 0,
+            hasUnsyncedChanges: pendingMutationCount > 0,
+            pendingMutationCount,
+            lastSyncedAt: new Date().toISOString(),
+            syncError: undefined,
+          },
+        };
+      });
+    })
+    .catch((error: unknown) => {
+      logOnlinePersistenceFailure(action, error);
+      set((state: LogisticsStoreState) => {
+        const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
+        return {
+          inventorySync: {
+            ...state.inventorySync,
+            isSyncing: pendingMutationCount > 0,
+            hasUnsyncedChanges: true,
+            pendingMutationCount,
+            syncError: error instanceof Error ? error.message : String(error),
+          },
+        };
+      });
+    });
+}
+
 migrateLegacyLogisticsStorage();
 
 export const useLogisticsStore = create<LogisticsStoreState>()(
@@ -643,17 +585,25 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       recipeInputTemplates,
       locations: inventoryLocations,
       inventoryEntries: [],
+      inventoryUi: defaultInventoryUi,
+      inventorySync: defaultInventorySync,
       buildQueue: initialBuildQueue,
+      setInventoryUi: (patch) => {
+        set((state) => ({ inventoryUi: { ...state.inventoryUi, ...patch } }));
+      },
+      setInventorySync: (patch) => {
+        set((state) => ({ inventorySync: { ...state.inventorySync, ...patch } }));
+      },
       addLocation: (location) => {
-        persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("add location", error));
+        trackInventoryMutation(set, persistOnlineInventoryLocation(location), "add location");
         set((state) => ({ locations: [...state.locations, location] }));
       },
       updateLocation: (location) => {
-        persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("update location", error));
+        trackInventoryMutation(set, persistOnlineInventoryLocation(location), "update location");
         set((state) => ({ locations: state.locations.map((l) => l.id === location.id ? location : l) }));
       },
       deleteLocation: (id) => {
-        persistOnlineInventoryLocationDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("delete location", error));
+        trackInventoryMutation(set, persistOnlineInventoryLocationDelete(id), "delete location");
         set((state) => ({ locations: state.locations.filter((l) => l.id !== id) }));
       },
       addInventoryEntries: (entries) => {
@@ -706,7 +656,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             const saved = inventoryEntries.find((entry) => getInventoryStackKey(entry) === getInventoryStackKey(incoming));
             if (saved) {
               const location = state.locations.find((entry) => entry.id === saved.locationId);
-              persistOnlineInventoryStack(saved, location)?.catch((error: unknown) => logOnlinePersistenceFailure("add inventory stack", error));
+              trackInventoryMutation(set, persistOnlineInventoryStack(saved, location), "add inventory stack");
             }
           }
           return { inventoryEntries };
@@ -740,10 +690,10 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           for (const entry of inventoryEntries) {
             if (!replaceIds.has(entry.id) && entry.importBatchId !== batchId) continue;
             const location = nextLocations.find((candidate) => candidate.id === entry.locationId);
-            persistOnlineInventoryStack(entry, location)?.catch((error: unknown) => logOnlinePersistenceFailure("apply inventory import", error));
+            trackInventoryMutation(set, persistOnlineInventoryStack(entry, location), "apply inventory import");
           }
           for (const location of locations) {
-            persistOnlineInventoryLocation(location)?.catch((error: unknown) => logOnlinePersistenceFailure("add import location", error));
+            trackInventoryMutation(set, persistOnlineInventoryLocation(location), "add import location");
           }
 
           return {
@@ -776,11 +726,11 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           });
 
           for (const id of removedImportedIds) {
-            persistOnlineInventoryStackDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("undo imported inventory stack", error));
+            trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "undo imported inventory stack");
           }
           for (const entry of restored) {
             const location = state.locations.find((candidate) => candidate.id === entry.locationId);
-            persistOnlineInventoryStack(entry, location)?.catch((error: unknown) => logOnlinePersistenceFailure("restore inventory stack", error));
+            trackInventoryMutation(set, persistOnlineInventoryStack(entry, location), "restore inventory stack");
           }
 
           return { inventoryEntries };
@@ -794,7 +744,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
           );
           const location = state.locations.find((entry) => entry.id === normalized.locationId);
-          persistOnlineInventoryStack(normalized, location)?.catch((error: unknown) => logOnlinePersistenceFailure("update inventory stack", error));
+          trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
           return { inventoryEntries: state.inventoryEntries.map((current) =>
             current.id === entry.id
               ? normalized
@@ -803,7 +753,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       deleteInventoryEntry: (id) => {
-        persistOnlineInventoryStackDelete(id)?.catch((error: unknown) => logOnlinePersistenceFailure("delete inventory stack", error));
+        trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "delete inventory stack");
         set((state) => ({
           inventoryEntries: state.inventoryEntries.filter((entry) => entry.id !== id),
         }));
@@ -837,24 +787,36 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       },
       replaceOnlineState: (onlineState) => {
         set((state) => {
+          const now = new Date().toISOString();
           const mergedLocations = mergeCanonicalInventoryLocations(
             onlineState.locations.length ? onlineState.locations : state.locations,
           );
           return {
-          locations: mergedLocations.locations,
-          inventoryEntries: repairInventoryEntryIds(
-            remapInventoryEntryLocationIds(
-              onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
-              mergedLocations.locationIdRemap,
+            locations: mergedLocations.locations,
+            inventoryEntries: repairInventoryEntryIds(
+              remapInventoryEntryLocationIds(
+                onlineState.inventoryEntries.map((entry) => normalizeInventoryEntry(entry, state.materialTemplates)),
+                mergedLocations.locationIdRemap,
+              ),
             ),
-          ),
-          buildQueue: onlineState.buildQueue.map((item) => ({
-            ...item,
-            quantity: Math.max(1, Math.trunc(item.quantity)),
-            allowLowerQuality: item.allowLowerQuality === true,
-            status: item.status ?? "queued",
-          })),
-        };
+            buildQueue: onlineState.buildQueue.map((item) => ({
+              ...item,
+              quantity: Math.max(1, Math.trunc(item.quantity)),
+              allowLowerQuality: item.allowLowerQuality === true,
+              status: item.status ?? "queued",
+            })),
+            inventorySync: {
+              ...state.inventorySync,
+              isFetching: false,
+              isSyncing: false,
+              lastFetchedAt: now,
+              lastSyncedAt: now,
+              syncError: undefined,
+              hasUnsyncedChanges: false,
+              pendingMutationCount: 0,
+              hasFetchedServerInventory: true,
+            },
+          };
         });
       },
       addBuildQueueItem: (recipeId, quantity = 1, snapshot) => {
@@ -1102,79 +1064,47 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         });
       },
       resetLogisticsState: () => {
-        set({
+        set((state) => ({
           materialTemplates,
           itemTemplates,
           recipeTemplates,
           recipeInputTemplates,
           locations: inventoryLocations,
           inventoryEntries: [],
+          inventorySync: {
+            ...defaultInventorySync,
+            hasHydratedPersist: state.inventorySync.hasHydratedPersist,
+          },
           buildQueue: initialBuildQueue,
-        });
+        }));
       },
     }),
     {
       name: LOGISTICS_STORAGE_KEY,
-      version: 2,
+      version: 3,
       partialize: (state) => ({
-        inventoryEntries: state.inventoryEntries,
-        buildQueue: state.buildQueue,
-        locations: state.locations,
-        recipeTemplates: state.recipeTemplates,
-        recipeInputTemplates: state.recipeInputTemplates,
+        inventoryUi: state.inventoryUi,
+      }),
+      migrate: (persisted) => ({
+        inventoryUi: readPersistedInventoryUi(persisted),
       }),
       merge: (persisted, current) => {
-        const persistedInventory = getPersistedArray(persisted, "inventoryEntries");
-        const persistedBuildQueue = getPersistedArray(persisted, "buildQueue");
-        const persistedLocations = getPersistedArray(persisted, "locations");
-        const persistedRecipes = getPersistedArray(persisted, "recipeTemplates");
-        const persistedInputs = isRecord(persisted) ? persisted["recipeInputTemplates"] : undefined;
-
-        const inventoryEntries = persistedInventory
-          ? repairInventoryEntryIds(
-              persistedInventory
-                .map((entry) => coercePersistedInventoryEntry(entry, current.materialTemplates))
-                .filter((entry): entry is InventoryEntry => entry !== null && !seedInventoryEntryIds.has(entry.id)),
-            )
-          : undefined;
-        const buildQueue = persistedBuildQueue
-          ?.map((item) => coercePersistedBuildQueueItem(item, current.materialTemplates))
-          .filter((item): item is BuildQueueItem => item !== null);
-        const locations = persistedLocations
-          ?.map(coercePersistedLocation)
-          .filter((l): l is InventoryLocation => l !== null);
-
+        const inventoryUi = readPersistedInventoryUi(persisted);
         // Merge persisted recipe templates over seed — seed entries win for known IDs
-        const seedRecipeIds = new Set(current.recipeTemplates.map((r) => r.id));
-        const extraRecipes: RecipeTemplate[] = Array.isArray(persistedRecipes)
-          ? persistedRecipes.filter(
-              (r): r is RecipeTemplate =>
-                isRecord(r) && isString(r.id) && isString(r.name) && !seedRecipeIds.has(r.id as string),
-            )
-          : [];
-        const mergedRecipes = [...current.recipeTemplates, ...extraRecipes];
-
-        const mergedInputs: Record<string, RecipeInputTemplate[]> = { ...current.recipeInputTemplates };
-        if (isRecord(persistedInputs)) {
-          for (const [recipeId, inputs] of Object.entries(persistedInputs)) {
-            if (seedRecipeIds.has(recipeId)) continue;
-            if (Array.isArray(inputs)) {
-              const coerced = inputs
-                .map((input) => coercePersistedRecipeInput(input, current.materialTemplates))
-                .filter((input): input is RecipeInputTemplate => input !== null);
-              if (coerced.length) mergedInputs[recipeId] = coerced;
-            }
-          }
-        }
-
         return {
           ...current,
-          inventoryEntries: inventoryEntries ?? current.inventoryEntries,
-          buildQueue: buildQueue ?? current.buildQueue,
-          locations: mergeInventoryLocationSeeds(current.locations, locations),
-          recipeTemplates: mergedRecipes,
-          recipeInputTemplates: mergedInputs,
+          inventoryEntries: [],
+          buildQueue: current.buildQueue.map((item) => ({ ...item, reservedAllocations: [] })),
+          locations: mergeCanonicalInventoryLocations(undefined).locations,
+          inventoryUi,
+          inventorySync: {
+            ...current.inventorySync,
+            hasFetchedServerInventory: false,
+          },
         };
+      },
+      onRehydrateStorage: () => (state) => {
+        state?.setInventorySync({ hasHydratedPersist: true });
       },
     },
   ),

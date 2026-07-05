@@ -6,6 +6,7 @@ import {
   readFittingIconMode,
   type FittingIconMode,
 } from "../../lib/fitting/fittingIconMode";
+import { getInventoryFreshnessBlockReason } from "../../lib/logistics/inventoryFreshness";
 import { getActiveInventoryEntries, type SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { useLogisticsStore } from "../../stores/logisticsStore";
@@ -64,6 +65,7 @@ export default function BuildQueuePage() {
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
+  const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
@@ -76,6 +78,7 @@ export default function BuildQueuePage() {
   const materials = useLogisticsStore((s) => s.materialTemplates);
   const recipes = useLogisticsStore((s) => s.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((s) => s.recipeInputTemplates);
+  const inventorySync = useLogisticsStore((s) => s.inventorySync);
   const updateBuildQueueItemQuantity = useLogisticsStore((s) => s.updateBuildQueueItemQuantity);
   const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
@@ -86,6 +89,7 @@ export default function BuildQueuePage() {
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
+  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync);
 
   const queueRows = useMemo(() => {
     const rows: QueueRow[] = [];
@@ -153,8 +157,20 @@ export default function BuildQueuePage() {
     setSelectedItemId(itemId);
   }
 
+  function handleStatusChange(id: string, status: NonNullable<BuildQueueItem["status"]>) {
+    if (status === "complete" && freshnessBlockReason) {
+      setInventoryGuardMessage(freshnessBlockReason);
+      return;
+    }
+    setInventoryGuardMessage("");
+    updateBuildQueueItemStatus(id, status);
+  }
+
   return (
     <div className="bq-page">
+      {inventoryGuardMessage ? (
+        <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
+      ) : null}
       <div className={`bq-layout${summaryCollapsed ? " bq-layout--summary-collapsed" : ""}`}>
         <aside className="bq-queue-col" aria-label="Build queue list">
           <header className="bq-queue-col-head">
@@ -261,7 +277,7 @@ export default function BuildQueuePage() {
               onQuantityChange={updateBuildQueueItemQuantity}
               onAllowLowerQualityChange={updateBuildQueueItemAllowLowerQuality}
               onMaterialRequirementChange={updateBuildQueueMaterialRequirement}
-              onStatusChange={updateBuildQueueItemStatus}
+              onStatusChange={handleStatusChange}
               onRemove={removeBuildQueueItem}
               onToggleAllocation={toggleBuildQueueAllocation}
               onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
