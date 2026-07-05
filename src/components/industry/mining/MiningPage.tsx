@@ -5,7 +5,7 @@ import { useMiningPlannerState } from "../../../features/mining/useMiningPlanner
 import { loadStantonLagrangeChildrenData } from "../../../features/locations/stantonLagrangeChildren";
 import type { RequiredMaterial } from "../../../features/mining/types";
 import { canonicalMiningMaterial, canonicalMiningMaterialKey } from "../../../features/mining/materialIdentity";
-import { getStaticMethodBiasForLocation, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
+import { getStaticLocationMaterialKeys, loadStaticMiningIndex, type StaticMiningIndex } from "../../../features/mining/staticMiningIndex";
 import "./mining.css";
 import "../crafting/recipe-browser.css";
 import { loadManifest } from "../../../features/mining/planetAssets";
@@ -38,45 +38,44 @@ import {
 import { isIndexableMiningResource } from "./miningScoring";
 import { getLocationCardKey, buildQueueFocusLabel, materialKeyOf } from "./miningFormatters";
 import { useMiningLocations } from "./useMiningLocations";
-import { MiningFilterBar } from "./MiningFilterBar";
+import { MiningFilterBar, MiningScopeActions } from "./MiningFilterBar";
 import { LocationListItem } from "./LocationListItem";
 import { LocationDetail } from "./LocationDetail";
 
 const DEFAULT_VISIBLE_LOCATIONS = 12;
 const MIN_VISIBLE_ROUTE_LOCATIONS = 8;
-const DEFAULT_MINING_SYSTEM = "Stanton";
 const SYSTEM_SELECTOR_ORDER = ["Stanton", "Pyro", "Nyx"];
-const SYSTEM_DESCRIPTIONS: Record<string, string> = {
-  Stanton: "The Federation's economic and industrial core. Rich in minerals and diverse geological compositions.",
-  Pyro: "A volatile frontier system with harsh worlds, sparse infrastructure, and high-value mineral routes.",
-  Nyx: "A remote system of rugged worlds and hidden belts, favored by careful surveyors and small crews.",
-};
-
+const DORMANT_MINING_TYPE_FILTERS = new Set<string>();
+const DORMANT_ENCOUNTER_TIER_FILTERS = new Set<MiningEncounterTier>();
 const debugMiningIdentity = Boolean(
   import.meta.env.DEV &&
   typeof localStorage !== "undefined" &&
   localStorage.getItem("debug:mining-materials") === "1"
 );
 
-function useIsMobileMiningViewport() {
+function useMediaQuery(queryText: string) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const query = window.matchMedia("(max-width: 760px)");
+    const query = window.matchMedia(queryText);
     const update = () => setIsMobile(query.matches);
     update();
     query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
-  }, []);
+  }, [queryText]);
 
   return isMobile;
 }
 
-function resolveMiningSystemSelection(candidate: string | null | undefined, availableSystems: string[]): string {
+function useIsMobileMiningViewport() {
+  return useMediaQuery("(max-width: 760px)");
+}
+
+function resolveMiningSystemSelection(candidate: string | null | undefined, availableSystems: string[]): string | null {
   const cleaned = (candidate ?? "").trim();
   const usableSystems = availableSystems.filter((system) => system.trim().length > 0);
   if (cleaned && cleaned.toLowerCase() !== "all" && usableSystems.includes(cleaned)) return cleaned;
-  return usableSystems.includes(DEFAULT_MINING_SYSTEM) ? DEFAULT_MINING_SYSTEM : usableSystems[0] ?? DEFAULT_MINING_SYSTEM;
+  return null;
 }
 
 export default function MiningModule() {
@@ -104,9 +103,7 @@ export default function MiningModule() {
       .map((r) => r.key);
     return new Set(canonical);
   });
-  const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set([resolveMiningSystemSelection(initialSidebarState.systems[0], MINING_SYSTEM_FILTERS)]));
-  const [selectedMiningTypes, setSelectedMiningTypes] = useState<Set<string>>(() => new Set(initialSidebarState.miningTypes));
-  const [selectedEncounterTiers, setSelectedEncounterTiers] = useState<Set<MiningEncounterTier>>(() => new Set(initialSidebarState.encounterTiers ?? []));
+  const [selectedSystems, setSelectedSystems] = useState<Set<string>>(() => new Set());
   const [selectedLocationKey, setSelectedLocationKey] = useState<string | null>(null);
   const [showAllLocations, setShowAllLocations] = useState(false);
   const [locationSearch, setLocationSearch] = useState("");
@@ -160,7 +157,7 @@ export default function MiningModule() {
     if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return;
     queueMicrotask(() => setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])));
   }, [buildQueueMaterials, buildQueueMaterialsKey, buildQueueSelectionActive]);
-  useEffect(() => { writeStoredSidebarState<MiningSidebarState>(MINING_FILTER_STORAGE_KEY, { buildQueueActive: buildQueueSelectionActive, systems: [...selectedSystems], miningTypes: [...selectedMiningTypes], encounterTiers: [...selectedEncounterTiers], resources: [...selectedMaterials] }); }, [buildQueueSelectionActive, selectedEncounterTiers, selectedMaterials, selectedMiningTypes, selectedSystems]);
+  useEffect(() => { writeStoredSidebarState<MiningSidebarState>(MINING_FILTER_STORAGE_KEY, { buildQueueActive: buildQueueSelectionActive, systems: [...selectedSystems], miningTypes: [], encounterTiers: [], resources: [...selectedMaterials] }); }, [buildQueueSelectionActive, selectedMaterials, selectedSystems]);
 
   const activeBuildQueueMaterialKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : new Set<string>(), [buildQueueMaterials, buildQueueSelectionActive]);
   const activeBuildQueueDemandMaterials = useMemo(() => buildQueueSelectionActive ? miningRequiredMaterials : [], [buildQueueSelectionActive, miningRequiredMaterials]);
@@ -206,13 +203,6 @@ export default function MiningModule() {
       return cleaned.size === prev.size && [...cleaned].every((key) => prev.has(key)) ? prev : cleaned;
     }));
   }, [materialOptionByKey]);
-
-  const resourceGroups = useMemo(() => buildResourceGroups(allMaterialResources), [allMaterialResources]);
-  const visibleResourceGroups = useMemo(() => {
-    if (!buildQueueSelectionActive || buildQueueMaterials.size === 0) return resourceGroups;
-    const keep = <T extends { id: string }>(chips: T[]) => chips.filter((c) => buildQueueMaterials.has(c.id));
-    return { shipAndHarvestable: keep(resourceGroups.shipAndHarvestable), vehicle: keep(resourceGroups.vehicle), hand: keep(resourceGroups.hand) };
-  }, [buildQueueMaterials, buildQueueSelectionActive, resourceGroups]);
 
   const sidebarOnlyMaterials = useMemo<RequiredMaterial[]>(() => {
     const bqKeys = new Set(miningRequiredMaterials.map(materialKeyOf));
@@ -264,24 +254,68 @@ export default function MiningModule() {
     return [...ordered, ...remaining];
   }, [locations]);
   const selectedSystemName = resolveMiningSystemSelection([...selectedSystems][0], availableSystems);
-  const requiredSelectedSystems = useMemo(() => new Set([selectedSystemName]), [selectedSystemName]);
+  const activeSelectedSystems = useMemo(() => selectedSystemName ? new Set([selectedSystemName]) : new Set<string>(), [selectedSystemName]);
 
   useEffect(() => {
-    if (availableSystems.length === 0) return;
-    if (selectedSystems.size === 1 && selectedSystems.has(selectedSystemName)) return;
-    queueMicrotask(() => setSelectedSystems(new Set([selectedSystemName])));
-  }, [availableSystems, selectedSystemName, selectedSystems]);
+    if (selectedSystems.size === 0) return;
+    if (selectedSystemName && selectedSystems.size === 1 && selectedSystems.has(selectedSystemName)) return;
+    queueMicrotask(() => setSelectedSystems(selectedSystemName ? new Set([selectedSystemName]) : new Set()));
+  }, [selectedSystemName, selectedSystems]);
+
+  const availableMaterialKeysForSelectedSystem = useMemo(() => {
+    if (!selectedSystemName) return null;
+    const keys = new Set<string>();
+    for (const location of locations) {
+      if (location.systemName !== selectedSystemName) continue;
+      for (const key of getStaticLocationMaterialKeys(location, staticMiningIndex)) keys.add(key);
+      for (const resource of location.indexedResources ?? []) {
+        const canonical = canonicalMiningMaterial({
+          materialId: resource.materialId,
+          materialName: resource.materialName,
+          displayName: resource.materialName,
+        });
+        if (!canonical.unresolvedUuid) keys.add(canonical.key);
+      }
+    }
+    return keys;
+  }, [locations, selectedSystemName, staticMiningIndex]);
+
+  useEffect(() => {
+    if (!availableMaterialKeysForSelectedSystem) return;
+    setSelectedMaterials((prev) => {
+      const next = new Set([...prev].filter((key) => availableMaterialKeysForSelectedSystem.has(key)));
+      return next.size === prev.size ? prev : next;
+    });
+  }, [availableMaterialKeysForSelectedSystem, selectedSystemName]);
+
+  const resourceGroups = useMemo(() => buildResourceGroups(allMaterialResources), [allMaterialResources]);
+  const visibleResourceGroups = useMemo(() => {
+    if (!availableMaterialKeysForSelectedSystem) return resourceGroups;
+    const markAvailability = <T extends { id: string }>(chips: T[]) => chips.map((chip) => ({
+      ...chip,
+      disabled: !availableMaterialKeysForSelectedSystem.has(chip.id),
+    }));
+    return {
+      shipAndHarvestable: markAvailability(resourceGroups.shipAndHarvestable),
+      vehicle: markAvailability(resourceGroups.vehicle),
+      hand: markAvailability(resourceGroups.hand),
+    };
+  }, [availableMaterialKeysForSelectedSystem, resourceGroups]);
 
   const materialFilterKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : selectedMaterials, [buildQueueMaterials, buildQueueSelectionActive, selectedMaterials]);
+  const effectiveMaterialFilterKeys = useMemo(() => {
+    if (!availableMaterialKeysForSelectedSystem) return materialFilterKeys;
+    return new Set([...materialFilterKeys].filter((key) => availableMaterialKeysForSelectedSystem.has(key)));
+  }, [availableMaterialKeysForSelectedSystem, materialFilterKeys]);
 
   // All location filtering/ranking in one hook
   const { locationMaterialKeysByLocationKey, displayRankedFilteredLocations, coveragePlan, coveragePlanLocationByKey, selectedEntry } = useMiningLocations({
     locations,
     loadingState: state.status,
-    selectedSystems: requiredSelectedSystems,
-    selectedMiningTypes,
-    selectedEncounterTiers,
-    materialFilterKeys,
+    selectedSystems: activeSelectedSystems,
+    selectedMiningTypes: DORMANT_MINING_TYPE_FILTERS,
+    selectedEncounterTiers: DORMANT_ENCOUNTER_TIER_FILTERS,
+    materialFilterKeys: effectiveMaterialFilterKeys,
     activeBuildQueueMaterialKeys,
     activeBuildQueueDemandMaterials,
     sidebarOnlyMaterials,
@@ -306,7 +340,7 @@ export default function MiningModule() {
 
   const displayedRankedLocations = mobileQueueRouteLocations ?? displayRankedFilteredLocations;
   const systemLocations = useMemo(
-    () => locations.filter((entry) => entry.systemName === selectedSystemName),
+    () => selectedSystemName ? locations.filter((entry) => entry.systemName === selectedSystemName) : locations,
     [locations, selectedSystemName],
   );
   const mobileQueueDemandSatisfied = isMobileViewport && buildQueueSelectionActive && activeBuildQueueDemandMaterials.length === 0;
@@ -324,10 +358,8 @@ export default function MiningModule() {
       (e) => e.locationName.toLowerCase().includes(q) || e.systemName.toLowerCase().includes(q)
     );
   }, [displayedRankedLocations, locationSearch]);
-  const hasMaterialFilters = materialFilterKeys.size > 0;
+  const hasMaterialFilters = effectiveMaterialFilterKeys.size > 0;
   const hasOptionalFiltersActive = hasMaterialFilters
-    || selectedMiningTypes.size > 0
-    || selectedEncounterTiers.size > 0
     || buildQueueSelectionActive
     || planner.filters.showOnlyStarred
     || locationSearch.trim().length > 0;
@@ -360,7 +392,7 @@ export default function MiningModule() {
     queueMicrotask(() => {
       setShowAllLocations(false);
     });
-  }, [selectedEncounterTiers, selectedMaterials, selectedSystemName, selectedMiningTypes, buildQueueSelectionActive]);
+  }, [selectedMaterials, selectedSystemName, buildQueueSelectionActive]);
 
   useEffect(() => {
     if (!selectedLocationKey) return;
@@ -371,16 +403,15 @@ export default function MiningModule() {
   // Filter handlers
   function toggleMaterial(id: string) {
     const key = canonicalMiningMaterialKey(id);
+    if (availableMaterialKeysForSelectedSystem && !availableMaterialKeysForSelectedSystem.has(key)) return;
     setSelectedMaterials((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); if (next.size === 0) setBuildQueueSelectionActive(false); return next; });
   }
   function toggleSystem(sys: string) {
-    setSelectedSystems(new Set([resolveMiningSystemSelection(sys, availableSystems)]));
-  }
-  function toggleMiningType(type: string) {
-    setSelectedMiningTypes((prev) => { const next = new Set(prev); if (next.has(type)) next.delete(type); else next.add(type); return next; });
-  }
-  function toggleEncounterTier(tier: MiningEncounterTier) {
-    setSelectedEncounterTiers((prev) => { const next = new Set(prev); if (next.has(tier)) next.delete(tier); else next.add(tier); return next; });
+    setSelectedSystems((prev) => {
+      const selected = resolveMiningSystemSelection(sys, availableSystems);
+      if (!selected || prev.has(selected)) return new Set();
+      return new Set([selected]);
+    });
   }
   function selectBuildQueueMaterials() {
     setBuildQueueSelectionActive((active) => { if (active) return false; if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred(); setQueueScope("all-shortfalls"); setSelectedMaterials((prev) => new Set([...prev, ...buildQueueMaterials])); return true; });
@@ -390,9 +421,7 @@ export default function MiningModule() {
     if (planner.filters.showOnlyStarred) planner.toggleShowOnlyStarred();
     setLocationSearch("");
     setSelectedMaterials(new Set());
-    setSelectedSystems(new Set([selectedSystemName]));
-    setSelectedMiningTypes(new Set());
-    setSelectedEncounterTiers(new Set());
+    setSelectedSystems(new Set());
   }
   function toggleSelectedLocation(locationKey: string) {
     if (!isMobileViewport) {
@@ -402,32 +431,6 @@ export default function MiningModule() {
     setSelectedLocationKey((current) => current === locationKey ? null : locationKey);
   }
 
-  const hasActiveFilters = selectedMaterials.size > 0
-    || selectedMiningTypes.size > 0
-    || selectedEncounterTiers.size > 0
-    || buildQueueSelectionActive
-    || planner.filters.showOnlyStarred
-    || locationSearch.trim().length > 0;
-
-  const systemContextName = selectedSystemName;
-  const systemContextLocations = systemLocations.length;
-  const systemContextMaterials = useMemo(() => {
-    const keys = new Set<string>();
-    for (const entry of systemLocations) {
-      for (const key of locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []) keys.add(key);
-    }
-    return keys.size;
-  }, [locationMaterialKeysByLocationKey, systemLocations]);
-  const systemContextMethods = useMemo(() => {
-    const methods = new Set<string>();
-    for (const entry of systemLocations) {
-      for (const item of getStaticMethodBiasForLocation(entry, staticMiningIndex)) {
-        if (item.share > 0) methods.add(item.method);
-      }
-    }
-    return methods.size;
-  }, [staticMiningIndex, systemLocations]);
-  const systemDescription = SYSTEM_DESCRIPTIONS[systemContextName] ?? "Indexed mining locations and material profiles for this system.";
   const orderedSystemFilters = useMemo(
     () => availableSystems.length > 0 ? availableSystems : SYSTEM_SELECTOR_ORDER.filter((system) => MINING_SYSTEM_FILTERS.includes(system)),
     [availableSystems],
@@ -437,7 +440,9 @@ export default function MiningModule() {
     ? noResultsMessage
     : selectedSystemHasLocations
       ? "No locations available to display."
-      : `No indexed mining locations are available for ${systemContextName}.`;
+      : selectedSystemName
+        ? `No indexed mining locations are available for ${selectedSystemName}.`
+        : "No indexed mining locations are available.";
 
   return (
     <div className="mine-page mine-page--v2">
@@ -445,177 +450,156 @@ export default function MiningModule() {
         <>
           <div className="mine-body">
             <div className="mining-shell">
-              <MiningFilterBar
-                selectedMaterials={selectedMaterials}
-                selectedMiningTypes={selectedMiningTypes}
-                selectedEncounterTiers={selectedEncounterTiers}
-                buildQueueSelectionActive={buildQueueSelectionActive}
-                buildQueueMaterials={buildQueueMaterials}
-                showOnlyStarred={planner.filters.showOnlyStarred}
-                visibleResourceGroups={visibleResourceGroups}
-                hasActiveFilters={hasActiveFilters}
-                searchQuery={locationSearch}
-                onToggleMiningType={toggleMiningType}
-                onToggleEncounterTier={toggleEncounterTier}
-                onClearAllFilters={clearAllFilters}
-                onSelectBuildQueueMaterials={selectBuildQueueMaterials}
-                onToggleStarred={() => planner.toggleShowOnlyStarred()}
-                onToggleMaterial={toggleMaterial}
-                onSearchChange={setLocationSearch}
-                isMobileViewport={isMobileViewport}
-              />
-
-                  <div className="mlist-panel">
-                    <div className="mine-browse-header">
-                      <h1>Mining Locations</h1>
-                      <p>Explore systems, locations and mineral compositions.</p>
-                    </div>
-                    <div className="mine-browse-section">
-                      <span className="mine-browse-section-label">System</span>
-                      <div className="mine-system-selector" role="group" aria-label="System filters">
-                        {orderedSystemFilters.map((sys) => (
-                          <button
-                            key={sys}
-                            type="button"
-                            className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
-                            aria-pressed={selectedSystemName === sys}
-                            onClick={() => toggleSystem(sys)}
-                          >
-                            {sys}
-                          </button>
+              <aside className="mlist-panel mining-left-rail">
+                <div className="mine-browse-header">
+                  <div className="mine-browse-header-copy">
+                    <h1>Mining Locations</h1>
+                    <p>Explore systems, locations and mineral compositions.</p>
+                  </div>
+                  <MiningScopeActions
+                    buildQueueSelectionActive={buildQueueSelectionActive}
+                    buildQueueMaterials={buildQueueMaterials}
+                    showOnlyStarred={planner.filters.showOnlyStarred}
+                    onSelectBuildQueueMaterials={selectBuildQueueMaterials}
+                    onToggleStarred={() => planner.toggleShowOnlyStarred()}
+                  />
+                </div>
+                <div className="mine-browse-section">
+                  <span className="mine-browse-section-label">System</span>
+                  <div className="mine-system-selector" role="group" aria-label="System filters">
+                    {orderedSystemFilters.map((sys) => (
+                      <button
+                        key={sys}
+                        type="button"
+                        className={`mine-system-button${selectedSystemName === sys ? " is-active" : ""}`}
+                        aria-pressed={selectedSystemName === sys}
+                        onClick={() => toggleSystem(sys)}
+                      >
+                        {sys}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <MiningFilterBar
+                  selectedMaterials={selectedMaterials}
+                  visibleResourceGroups={visibleResourceGroups}
+                  onToggleMaterial={toggleMaterial}
+                />
+                <div className="mlist-browser-section">
+                  <div className="mlist-header">
+                    <span className="mlist-header-label">All Locations</span>
+                    <span className="mlist-header-count">{searchFilteredLocations.length}</span>
+                  </div>
+                  <div className="mlist-header-rank">
+                    {!buildQueueSelectionActive && (
+                      <div className="mlist-mode-hint">
+                        <span className="mlist-mode-hint-tip">Click a location to view details</span>
+                      </div>
+                    )}
+                    {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
+                      <label className="mlist-focus-control">
+                        <span>Priority Focus</span>
+                        <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)}>
+                          <option value="">All queue items</option>
+                          {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
+                        </select>
+                      </label>
+                    )}
+                    {buildQueueSelectionActive && (
+                      <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
+                        {MINING_COVERAGE_MODES.map((mode) => (
+                          <button key={mode.value} type="button" className={`mlist-rank-btn${coverageMode === mode.value ? " is-active" : ""}`} aria-pressed={coverageMode === mode.value} onClick={() => setCoverageMode(mode.value)}>{mode.label}</button>
                         ))}
                       </div>
-                    </div>
-                    <section className="mine-system-card" aria-label="Browse System">
-                      <div className="mine-system-card-main">
-                        <div className={`mine-system-emblem mine-system-emblem--${systemContextName.toLowerCase()}`} aria-hidden="true">
-                          <span>{systemContextName.slice(0, 1)}</span>
-                        </div>
-                        <div>
-                          <span className="mine-system-card-label">Browse System</span>
-                          <h2>{systemContextName}</h2>
-                          <p>{systemDescription}</p>
-                        </div>
-                      </div>
-                      <div className="mine-system-stats">
-                        <span><strong>{systemContextLocations}</strong> Locations</span>
-                        <span><strong>{systemContextMaterials}</strong> Materials</span>
-                        <span><strong>{systemContextMethods}</strong> Methods</span>
-                      </div>
-                    </section>
-                    <div className="mlist-header">
-                      <span className="mlist-header-label">All Locations</span>
-                      <span className="mlist-header-count">{searchFilteredLocations.length}</span>
-                    </div>
-                    <div className="mlist-header-rank">
-                      {!buildQueueSelectionActive && (
-                        <div className="mlist-mode-hint">
-                          <span className="mlist-mode-hint-tip">Click a location to view details</span>
-                        </div>
-                      )}
-                      {buildQueueSelectionActive && queueFocusOptions.length > 0 && (
-                        <label className="mlist-focus-control">
-                          <span>Priority Focus</span>
-                          <select value={queueFocusItemId} onChange={(e) => setQueueFocusItemId(e.target.value)}>
-                            <option value="">All queue items</option>
-                            {queueFocusOptions.map((item) => <option key={item.id} value={item.id}>{buildQueueFocusLabel(item)}</option>)}
-                          </select>
-                        </label>
-                      )}
-                      {buildQueueSelectionActive && (
-                        <div className="mlist-rank-toggle" role="group" aria-label="Coverage mode">
-                          {MINING_COVERAGE_MODES.map((mode) => (
-                            <button key={mode.value} type="button" className={`mlist-rank-btn${coverageMode === mode.value ? " is-active" : ""}`} aria-pressed={coverageMode === mode.value} onClick={() => setCoverageMode(mode.value)}>{mode.label}</button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                    <div className="mlist-items">
-                      {mobileQueueDemandSatisfied ? (
-                        <div className="mine-empty-state mine-empty-state--queue-covered">
-                          <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
-                        </div>
-                      ) : listLocations.length === 0 ? (
-                        <div className="mine-empty-state">
-                          <p className="mine-empty-text">{emptyStateMessage}</p>
-                          {shouldShowFilteredNoResults && (
-                            <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
-                          )}
-                        </div>
-                      ) : listLocations.map((entry) => {
-                        const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
-                        const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
-                        return (
-                          <Fragment key={getLocationCardKey(entry)}>
-                            <div
-                              className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}
-                            >
-                              <LocationListItem
-                                entry={entry}
-                                selectedMaterials={materialFilterKeys}
-                                buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
-                                locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                                staticMiningIndex={staticMiningIndex}
-                                planetAssetMap={planetAssetMap}
-                                starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
-                                selected={isSelected}
-                                onSelect={() => toggleSelectedLocation(entry.locationKey)}
-                                onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
-                              />
-                              {isMobileViewport && isSelected && (
-                                <div className="mlist-inline-detail">
-                                  <LocationDetail
-                                    entry={entry}
-                                    activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
-                                    buildQueueMaterialKeys={materialFilterKeys}
-                                    locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
-                                    staticMiningIndex={staticMiningIndex}
-                                    planetAssetMap={planetAssetMap}
-                                    starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
-                                    onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
-                                    hideHeader
-                                  />
-                                </div>
-                              )}
-                            </div>
-                            {plannedLocation?.isCompletionLocation && <div className="mlist-stop-marker">Coverage complete above this line</div>}
-                          </Fragment>
-                        );
-                      })}
-                      {mobileHiddenAlternateCount > 0 && (
-                        <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(true)}>
-                          Show {mobileHiddenAlternateCount} alternates
-                        </button>
-                      )}
-                      {showAllLocations && isMobileViewport && buildQueueSelectionActive && coveragePlan && (
-                        <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(false)}>
-                          Show needed route
-                        </button>
-                      )}
-                      {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > DEFAULT_VISIBLE_LOCATIONS && (
-                        <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
-                          {showAllLocations ? "Show top 12" : `View all ${searchFilteredLocations.length} locations`}
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
+                  <div className="mlist-items">
+                    {mobileQueueDemandSatisfied ? (
+                      <div className="mine-empty-state mine-empty-state--queue-covered">
+                        <p className="mine-empty-text">Inventory covers the current queue shortfalls. No mining route needed.</p>
+                      </div>
+                    ) : listLocations.length === 0 ? (
+                      <div className="mine-empty-state">
+                        <p className="mine-empty-text">{emptyStateMessage}</p>
+                        {shouldShowFilteredNoResults && (
+                          <button type="button" className="mlist-view-all-btn" onClick={clearAllFilters}>Clear filters</button>
+                        )}
+                      </div>
+                    ) : listLocations.map((entry) => {
+                      const plannedLocation = coveragePlanLocationByKey.get(entry.locationKey);
+                      const isSelected = effectiveSelectedEntry?.locationKey === entry.locationKey;
+                      return (
+                        <Fragment key={getLocationCardKey(entry)}>
+                          <div
+                            className={isMobileViewport && isSelected ? 'mlist-inline-stack mlist-inline-stack--expanded' : undefined}
+                          >
+                            <LocationListItem
+                              entry={entry}
+                              selectedMaterials={effectiveMaterialFilterKeys}
+                              buildQueueMaterialKeys={activeBuildQueueMaterialKeys}
+                              locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                              staticMiningIndex={staticMiningIndex}
+                              planetAssetMap={planetAssetMap}
+                              starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                              selected={isSelected}
+                              onSelect={() => toggleSelectedLocation(entry.locationKey)}
+                              onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
+                            />
+                            {isMobileViewport && isSelected && (
+                              <div className="mlist-inline-detail">
+                                <LocationDetail
+                                  entry={entry}
+                                  activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                                    buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                                  locationMaterialKeys={locationMaterialKeysByLocationKey.get(entry.locationKey) ?? []}
+                                  staticMiningIndex={staticMiningIndex}
+                                  planetAssetMap={planetAssetMap}
+                                  starred={planner.isFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType })}
+                                  onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: entry.systemName, location: entry.locationName, spawnType: entry.spawnType }); }}
+                                  hideHeader
+                                />
+                              </div>
+                            )}
+                          </div>
+                          {plannedLocation?.isCompletionLocation && <div className="mlist-stop-marker">Coverage complete above this line</div>}
+                        </Fragment>
+                      );
+                    })}
+                    {mobileHiddenAlternateCount > 0 && (
+                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(true)}>
+                        Show {mobileHiddenAlternateCount} alternates
+                      </button>
+                    )}
+                    {showAllLocations && isMobileViewport && buildQueueSelectionActive && coveragePlan && (
+                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations(false)}>
+                        Show needed route
+                      </button>
+                    )}
+                    {(!isMobileViewport || !buildQueueSelectionActive || !coveragePlan) && searchFilteredLocations.length > DEFAULT_VISIBLE_LOCATIONS && (
+                      <button type="button" className="mlist-view-all-btn" onClick={() => setShowAllLocations((p) => !p)}>
+                        {showAllLocations ? "Show top 12" : `View all ${searchFilteredLocations.length} locations`}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </aside>
 
-                  <div className="mdet-col">
-                    {!isMobileViewport && effectiveSelectedEntry ? (
-                      <LocationDetail
-                        entry={effectiveSelectedEntry}
-                        activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
-                        buildQueueMaterialKeys={materialFilterKeys}
-                        locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
-                        staticMiningIndex={staticMiningIndex}
-                        planetAssetMap={planetAssetMap}
-                        starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
-                        onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
-                      />
-                    ) : !isMobileViewport ? (
-                      <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
-                    ) : null}
-                  </div>
+              <div className="mdet-col mining-detail-column">
+                {!isMobileViewport && effectiveSelectedEntry ? (
+                  <LocationDetail
+                    entry={effectiveSelectedEntry}
+                    activeDemandMaterials={buildQueueSelectionActive ? activeBuildQueueDemandMaterials : sidebarOnlyMaterials}
+                    buildQueueMaterialKeys={effectiveMaterialFilterKeys}
+                    locationMaterialKeys={locationMaterialKeysByLocationKey.get(effectiveSelectedEntry.locationKey) ?? []}
+                    staticMiningIndex={staticMiningIndex}
+                    planetAssetMap={planetAssetMap}
+                    starred={planner.isFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType })}
+                    onToggleStar={(e) => { e.stopPropagation(); planner.toggleFavorite({ system: effectiveSelectedEntry.systemName, location: effectiveSelectedEntry.locationName, spawnType: effectiveSelectedEntry.spawnType }); }}
+                  />
+                ) : !isMobileViewport ? (
+                  <div className="mdet-empty"><span>{mobileQueueDemandSatisfied ? "Inventory covers the current queue shortfalls. No mining route needed." : searchFilteredLocations.length === 0 ? emptyStateMessage : "Select a location to view details"}</span></div>
+                ) : null}
+              </div>
             </div>
           </div>
         </>
