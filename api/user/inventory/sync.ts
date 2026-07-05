@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleUserInventoryRoute } from "../../../src/server/user/inventoryRoute.js";
+
 async function readBody(request: IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
   for await (const chunk of request) chunks.push(Buffer.from(chunk));
@@ -21,7 +23,6 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   try {
-    const { handleUserInventoryRoute } = await import("../../../src/server/user/inventoryRoute.js");
     const result = await handleUserInventoryRoute(
       request.method ?? "PUT",
       "/api/user/inventory/sync",
@@ -36,6 +37,9 @@ export default async function handler(request: IncomingMessage, response: Server
     console.error("[api/user/inventory/sync] Unhandled route error.", error);
     response.statusCode = 500;
     response.setHeader("content-type", "application/json");
-    response.end(JSON.stringify({ error: "Inventory sync request failed." }));
+    response.end(JSON.stringify({
+      error: "Inventory sync request failed.",
+      detail: error instanceof Error ? error.message : String(error),
+    }));
   }
 }

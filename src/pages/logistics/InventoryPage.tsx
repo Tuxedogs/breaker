@@ -15,12 +15,15 @@ import {
 } from '../../lib/logistics/inventory';
 import {
   getInventoryFreshnessBlockReason,
-  INVENTORY_FRESHNESS_MS,
+  isInventoryServerFetchStale,
 } from '../../lib/logistics/inventoryFreshness';
 import {
   buildInventorySyncBeginPatch,
   createInventorySyncRequestId,
   logInventorySyncDev,
+  markInventoryFetchFinished,
+  markInventoryFetchStarted,
+  shouldSkipInventoryFetch,
 } from '../../lib/logistics/inventorySyncLifecycle';
 import {
   buildInventoryLocationLookup,
@@ -275,12 +278,6 @@ function createCsvImportBatchId(): string {
 function createNewLocationId(name: string): string {
   const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
   return `import-${slug || 'location'}-${Date.now().toString(36)}`;
-}
-
-function isInventoryFetchStale(lastFetchedAt?: string): boolean {
-  if (!lastFetchedAt) return true;
-  const fetchedAt = Date.parse(lastFetchedAt);
-  return !Number.isFinite(fetchedAt) || Date.now() - fetchedAt > INVENTORY_FRESHNESS_MS;
 }
 
 function formatInventorySyncLabel(sync: {
@@ -653,7 +650,7 @@ type CsvImportModalProps = {
     additions: InventoryEntry[];
     replaceEntryIds?: string[];
     locations?: InventoryLocation[];
-  }) => void;
+  }) => Promise<void>;
   onUndoBatch: (batchId: string) => void;
   onImportTracked?: (batchId: string, importedCount: number) => void;
   initialMode: ImportMode;
@@ -692,8 +689,7 @@ function CsvImportModal({
   const affectedMaterials = new Set(validRows.map((row) => row.materialName)).size;
   const replacementPreview = buildReplacementPreview(mode, validRows, entries, locations, materialById, buildQueue);
   const replacementConflicts = replacementPreview.filter((row) => row.reservedQuantity > 0);
-  const destructiveImport = mode !== 'append';
-  const importFreshnessBlock = destructiveImport ? freshnessBlockReason : null;
+  const importFreshnessBlock = freshnessBlockReason;
   const canImport = validRows.length > 0 &&
     errorCount === 0 &&
     (warningCount === 0 || confirmWarnings) &&
@@ -742,7 +738,7 @@ function CsvImportModal({
     URL.revokeObjectURL(url);
   }
 
-  function handleImport() {
+  async function handleImport() {
     if (!canImport) return;
     const importBatchId = createCsvImportBatchId();
     const newLocations = new Map<string, InventoryLocation>();
@@ -777,12 +773,17 @@ function CsvImportModal({
 
     const createdLocations = Array.from(newLocations.values());
     const replaceEntryIds = replacementPreview.map((row) => row.entry.id);
-    onApplyBatch({
-      batchId: importBatchId,
-      additions,
-      replaceEntryIds,
-      locations: createdLocations,
-    });
+    try {
+      await onApplyBatch({
+        batchId: importBatchId,
+        additions,
+        replaceEntryIds,
+        locations: createdLocations,
+      });
+    } catch (error) {
+      setParseError(error instanceof Error ? error.message : String(error));
+      return;
+    }
     onImportTracked?.(importBatchId, additions.length);
     setResult({
       batchId: importBatchId,
@@ -1595,6 +1596,15 @@ export default function InventoryPage() {
       return;
     }
 
+    const sync = useLogisticsStore.getState().inventorySync;
+    if (shouldSkipInventoryFetch({
+      caller: "inventory-page-manual-retry",
+      isStale: isInventoryServerFetchStale(sync),
+      allowWhileFresh: true,
+    })) {
+      return;
+    }
+
     const requestId = createInventorySyncRequestId();
     setInventorySync(buildInventorySyncBeginPatch(requestId, authenticatedUserId));
     logInventorySyncDev("sync requested", {
@@ -1603,6 +1613,7 @@ export default function InventoryPage() {
     });
 
     try {
+      markInventoryFetchStarted();
       const remote = await fetchOnlinePersistenceState(accessToken);
       const currentSync = useLogisticsStore.getState().inventorySync;
       if (currentSync.activeRequestId !== requestId) {
@@ -1629,6 +1640,8 @@ export default function InventoryPage() {
         requestId,
         message: error instanceof Error ? error.message : String(error),
       });
+    } finally {
+      markInventoryFetchFinished();
     }
   }, [
     accessToken,
@@ -1675,23 +1688,6 @@ export default function InventoryPage() {
     const timer = window.setInterval(() => setSyncLabelTick((tick) => tick + 1), 30_000);
     return () => window.clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    function refreshIfVisibleAndStale() {
-      if (document.visibilityState !== 'visible') return;
-      if (!isInventoryFetchStale(useLogisticsStore.getState().inventorySync.lastFetchedAt)) return;
-      void refreshInventoryFromServer();
-    }
-
-    window.addEventListener('focus', refreshIfVisibleAndStale);
-    window.addEventListener('online', refreshIfVisibleAndStale);
-    document.addEventListener('visibilitychange', refreshIfVisibleAndStale);
-    return () => {
-      window.removeEventListener('focus', refreshIfVisibleAndStale);
-      window.removeEventListener('online', refreshIfVisibleAndStale);
-      document.removeEventListener('visibilitychange', refreshIfVisibleAndStale);
-    };
-  }, [refreshInventoryFromServer]);
 
   useEffect(() => {
     if (!panel) return undefined;

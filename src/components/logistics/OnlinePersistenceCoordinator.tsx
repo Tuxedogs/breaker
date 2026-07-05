@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { canonicalInventoryLocations } from "../../data/logistics/inventoryLocationCatalog";
 import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
+import { isInventoryServerFetchStale } from "../../lib/logistics/inventoryFreshness";
 import { getOnlineSyncStatus, getUserRemoteMigratedAtKey, setOnlineSyncStatus } from "../../lib/onlineSyncStatus";
 import {
   buildInventorySyncBeginPatch,
@@ -11,8 +12,11 @@ import {
   createInventorySyncRequestId,
   hasMeaningfulLocalInventoryPayload,
   logInventorySyncDev,
+  markInventoryFetchFinished,
+  markInventoryFetchStarted,
   shouldAllowLocalToServerMigrationUpload,
   shouldClearAuthenticatedLogisticsForUser,
+  shouldSkipInventoryFetch,
 } from "../../lib/logistics/inventorySyncLifecycle";
 import {
   fetchOnlinePersistenceState,
@@ -95,9 +99,9 @@ export default function OnlinePersistenceCoordinator() {
 
   useEffect(() => {
     if (loading) return;
-    setBuildQueueAccessToken(accessToken);
-    setOnlinePersistenceAccessToken(accessToken);
     if (!accessToken) {
+      setBuildQueueAccessToken(null);
+      setOnlinePersistenceAccessToken(null, null);
       const { inventorySync, clearAuthenticatedLogisticsData, setInventorySync } = useLogisticsStore.getState();
       clearAuthenticatedLogisticsData();
       setInventorySync(buildSignedOutInventorySyncPatch(inventorySync.hasHydratedPersist));
@@ -108,6 +112,9 @@ export default function OnlinePersistenceCoordinator() {
     const userId = session?.user.id;
     if (!userId) return;
     const authenticatedUserId = userId;
+
+    setBuildQueueAccessToken(accessToken);
+    setOnlinePersistenceAccessToken(accessToken, authenticatedUserId);
 
     const store = useLogisticsStore.getState();
     const previousUserId = store.inventorySync.loadedForUserId;
@@ -144,6 +151,21 @@ export default function OnlinePersistenceCoordinator() {
       });
     }
 
+    async function loadRemoteInventory(caller: string, allowWhileFresh = false): Promise<OnlinePersistenceState | null> {
+      const sync = useLogisticsStore.getState().inventorySync;
+      const isStale = isInventoryServerFetchStale(sync);
+      if (shouldSkipInventoryFetch({ caller, isStale, allowWhileFresh })) {
+        return null;
+      }
+
+      markInventoryFetchStarted();
+      try {
+        return await fetchOnlinePersistenceState(token);
+      } finally {
+        markInventoryFetchFinished();
+      }
+    }
+
     async function refreshRemoteState() {
       if (!hydrated || cancelled) return;
       if (isOnlinePersistenceMutationInFlight() || refreshInFlight) {
@@ -160,8 +182,8 @@ export default function OnlinePersistenceCoordinator() {
       logInventorySyncDev("coordinator refresh requested", { requestId, userId: authenticatedUserId });
 
       try {
-        const remote = await fetchOnlinePersistenceState(token);
-        if (cancelled) return;
+        const remote = await loadRemoteInventory("coordinator-refresh");
+        if (cancelled || !remote) return;
         if (isOnlinePersistenceMutationInFlight()) {
           refreshAgain = true;
           scheduleRefresh();
@@ -196,6 +218,11 @@ export default function OnlinePersistenceCoordinator() {
     }
 
     function scheduleRefresh() {
+      const sync = useLogisticsStore.getState().inventorySync;
+      if (!isInventoryServerFetchStale(sync)) {
+        logInventorySyncDev("refresh skipped", { reason: "fresh" });
+        return;
+      }
       if (refreshTimer !== null) window.clearTimeout(refreshTimer);
       refreshTimer = window.setTimeout(() => {
         refreshTimer = null;
@@ -209,6 +236,10 @@ export default function OnlinePersistenceCoordinator() {
 
     function handlePageShow(event: PageTransitionEvent) {
       if (event.persisted) scheduleRefresh();
+    }
+
+    function handleWindowFocus() {
+      scheduleRefresh();
     }
 
     async function waitForPendingMutations() {
@@ -232,13 +263,13 @@ export default function OnlinePersistenceCoordinator() {
       logInventorySyncDev("coordinator hydrate requested", { requestId, userId: authenticatedUserId });
 
       try {
-        let remote = await fetchOnlinePersistenceState(token);
-        if (cancelled) return;
+        let remote = await loadRemoteInventory("coordinator-hydrate", true);
+        if (cancelled || !remote) return;
         if (isOnlinePersistenceMutationInFlight()) {
           await waitForPendingMutations();
           if (cancelled) return;
-          remote = await fetchOnlinePersistenceState(token);
-          if (cancelled) return;
+          remote = await loadRemoteInventory("coordinator-hydrate-retry", true);
+          if (cancelled || !remote) return;
         }
 
         const userMigratedAtKey = getUserRemoteMigratedAtKey(authenticatedUserId);
@@ -297,20 +328,20 @@ export default function OnlinePersistenceCoordinator() {
         });
       } finally {
         hydrated = true;
+        window.addEventListener("focus", handleWindowFocus);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("pageshow", handlePageShow);
       }
     }
 
     void hydrate();
-    window.addEventListener("focus", scheduleRefresh);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("pageshow", handlePageShow);
 
     return () => {
       cancelled = true;
       hydrated = false;
       setBuildQueueAccessToken(null);
-      setOnlinePersistenceAccessToken(null);
-      window.removeEventListener("focus", scheduleRefresh);
+      setOnlinePersistenceAccessToken(null, null);
+      window.removeEventListener("focus", handleWindowFocus);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("pageshow", handlePageShow);
       if (refreshTimer !== null) window.clearTimeout(refreshTimer);

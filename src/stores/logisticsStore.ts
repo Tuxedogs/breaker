@@ -34,13 +34,25 @@ import {
   remapInventoryEntryLocationIds,
 } from "../lib/logistics/inventoryLocationOptions";
 import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
+import { getInventoryMutationBlockReason } from "../lib/logistics/inventoryFreshness";
+import {
+  hasInventoryImportSyncPayload,
+  revertInventoryImportBatchLocalState,
+  type InventoryImportBatchSnapshot,
+} from "../lib/logistics/inventoryImportBatch";
 import {
   backupLegacyInventoryPayload,
   buildInventorySyncFailurePatch,
   buildInventorySyncSuccessPatch,
   isInventorySyncRequestCurrent,
+  logInventorySyncDev,
   type InventorySyncStatus,
 } from "../lib/logistics/inventorySyncLifecycle";
+import {
+  getOnlinePersistenceAuth,
+  runOnlinePersistenceMutation,
+  syncOnlinePersistenceState,
+} from "../lib/userOnlinePersistence";
 import type {
   BuildQueueItem,
   InventoryEntry,
@@ -141,7 +153,7 @@ interface LogisticsStoreState {
     additions: InventoryEntry[];
     replaceEntryIds?: string[];
     locations?: InventoryLocation[];
-  }) => void;
+  }) => Promise<void>;
   undoInventoryImportBatch: (batchId: string) => void;
   updateInventoryEntry: (entry: InventoryEntry) => void;
   updateInventoryEntryAsync: (entry: InventoryEntry) => Promise<void>;
@@ -571,11 +583,31 @@ function persistQueueSnapshot(action: string, item: BuildQueueItem) {
   persistBuildQueueItem(item)?.catch((error: unknown) => logBuildQueuePersistenceFailure(action, error));
 }
 
+function getInventoryMutationBlockReasonFromState(
+  state: Pick<LogisticsStoreState, "inventorySync">,
+): string | null {
+  const auth = getOnlinePersistenceAuth();
+  return getInventoryMutationBlockReason(
+    state.inventorySync,
+    auth.userId,
+    {
+      hasAccessToken: Boolean(auth.accessToken),
+      hasHydratedPersist: state.inventorySync.hasHydratedPersist,
+    },
+  );
+}
+
 function trackInventoryMutation(
   set: LogisticsSet,
+  get: () => LogisticsStoreState,
   request: Promise<unknown> | null,
   action: string,
 ): Promise<void> {
+  const blockReason = getInventoryMutationBlockReasonFromState(get());
+  if (blockReason) {
+    logInventorySyncDev("mutation blocked", { action, reason: blockReason });
+    return Promise.reject(new Error(blockReason));
+  }
   if (!request) {
     set((state: LogisticsStoreState) => ({
       inventorySync: {
@@ -621,12 +653,24 @@ function trackInventoryMutation(
             isSyncing: pendingMutationCount > 0,
             hasUnsyncedChanges: true,
             pendingMutationCount,
+            status: "error",
             syncError: error instanceof Error ? error.message : String(error),
           },
         };
       });
       throw error instanceof Error ? error : new Error(String(error));
     });
+}
+
+function fireAndForgetInventoryMutation(
+  set: LogisticsSet,
+  get: () => LogisticsStoreState,
+  request: Promise<unknown> | null,
+  action: string,
+): void {
+  void trackInventoryMutation(set, get, request, action).catch((error: unknown) => {
+    logOnlinePersistenceFailure(action, error);
+  });
 }
 
 migrateLegacyLogisticsStorage();
@@ -650,15 +694,15 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         set((state) => ({ inventorySync: { ...state.inventorySync, ...patch } }));
       },
       addLocation: (location) => {
-        trackInventoryMutation(set, persistOnlineInventoryLocation(location), "add location");
+        fireAndForgetInventoryMutation(set, get, persistOnlineInventoryLocation(location), "add location");
         set((state) => ({ locations: [...state.locations, location] }));
       },
       updateLocation: (location) => {
-        trackInventoryMutation(set, persistOnlineInventoryLocation(location), "update location");
+        fireAndForgetInventoryMutation(set, get, persistOnlineInventoryLocation(location), "update location");
         set((state) => ({ locations: state.locations.map((l) => l.id === location.id ? location : l) }));
       },
       deleteLocation: (id) => {
-        trackInventoryMutation(set, persistOnlineInventoryLocationDelete(id), "delete location");
+        fireAndForgetInventoryMutation(set, get, persistOnlineInventoryLocationDelete(id), "delete location");
         set((state) => ({ locations: state.locations.filter((l) => l.id !== id) }));
       },
       addInventoryEntries: (entries) => {
@@ -711,51 +755,85 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             const saved = inventoryEntries.find((entry) => getInventoryStackKey(entry) === getInventoryStackKey(incoming));
             if (saved) {
               const location = state.locations.find((entry) => entry.id === saved.locationId);
-              trackInventoryMutation(set, persistOnlineInventoryStack(saved, location), "add inventory stack");
+              fireAndForgetInventoryMutation(set, get, persistOnlineInventoryStack(saved, location), "add inventory stack");
             }
           }
           return { inventoryEntries };
         });
       },
-      applyInventoryImportBatch: ({ batchId, additions, replaceEntryIds = [], locations = [] }) => {
-        set((state) => {
-          const now = new Date().toISOString();
-          const replaceIds = new Set(replaceEntryIds);
-          const nextLocations = locations.reduce<InventoryLocation[]>((current, location) => (
-            current.some((entry) => entry.id === location.id) ? current : [...current, location]
-          ), state.locations);
-          const markedExisting = state.inventoryEntries.map((entry) =>
-            replaceIds.has(entry.id)
-              ? normalizeInventoryEntry({
-                  ...entry,
-                  inventoryStatus: "replaced",
-                  replacedByImportBatchId: batchId,
-                  replacedAt: now,
-                  updatedAt: now,
-                }, state.materialTemplates, entry.createdAt)
-              : entry,
-          );
-          const normalizedAdditions = additions.map((entry) => normalizeInventoryEntry({
-            ...entry,
-            inventoryStatus: "active",
-            importBatchId: batchId,
-          }, state.materialTemplates));
-          const inventoryEntries = repairInventoryEntryIds([...markedExisting, ...normalizedAdditions]);
+      applyInventoryImportBatch: async ({ batchId, additions, replaceEntryIds = [], locations = [] }) => {
+        const state = get();
+        const blockReason = getInventoryMutationBlockReasonFromState(state);
+        if (blockReason) {
+          logInventorySyncDev("applyInventoryImportBatch blocked", {
+            reason: blockReason,
+            batchId,
+            additionCount: additions.length,
+            replaceCount: replaceEntryIds.length,
+          });
+          throw new Error(blockReason);
+        }
 
-          for (const entry of inventoryEntries) {
-            if (!replaceIds.has(entry.id) && entry.importBatchId !== batchId) continue;
-            const location = nextLocations.find((candidate) => candidate.id === entry.locationId);
-            trackInventoryMutation(set, persistOnlineInventoryStack(entry, location), "apply inventory import");
-          }
-          for (const location of locations) {
-            trackInventoryMutation(set, persistOnlineInventoryLocation(location), "add import location");
-          }
+        const snapshot: InventoryImportBatchSnapshot = {
+          locations: state.locations,
+          inventoryEntries: state.inventoryEntries,
+        };
+        const now = new Date().toISOString();
+        const replaceIds = new Set(replaceEntryIds);
+        const nextLocations = locations.reduce<InventoryLocation[]>((current, location) => (
+          current.some((entry) => entry.id === location.id) ? current : [...current, location]
+        ), state.locations);
+        const markedExisting = state.inventoryEntries.map((entry) =>
+          replaceIds.has(entry.id)
+            ? normalizeInventoryEntry({
+                ...entry,
+                inventoryStatus: "replaced",
+                replacedByImportBatchId: batchId,
+                replacedAt: now,
+                updatedAt: now,
+              }, state.materialTemplates, entry.createdAt)
+            : entry,
+        );
+        const normalizedAdditions = additions.map((entry) => normalizeInventoryEntry({
+          ...entry,
+          inventoryStatus: "active",
+          importBatchId: batchId,
+        }, state.materialTemplates));
+        const inventoryEntries = repairInventoryEntryIds([...markedExisting, ...normalizedAdditions]);
+        const stacksToSync = inventoryEntries.filter(
+          (entry) => replaceIds.has(entry.id) || entry.importBatchId === batchId,
+        );
 
-          return {
-            locations: nextLocations,
-            inventoryEntries,
-          };
+        if (!hasInventoryImportSyncPayload(locations, stacksToSync)) {
+          throw new Error("Import batch produced no syncable inventory rows.");
+        }
+
+        set({
+          locations: nextLocations,
+          inventoryEntries,
         });
+
+        const { accessToken } = getOnlinePersistenceAuth();
+        try {
+          await trackInventoryMutation(
+            set,
+            get,
+            accessToken
+              ? runOnlinePersistenceMutation(() => syncOnlinePersistenceState(accessToken, {
+                  locations: locations.length > 0 ? locations : undefined,
+                  inventoryEntries: stacksToSync,
+                }))
+              : null,
+            "apply inventory import",
+          );
+        } catch (error) {
+          set(revertInventoryImportBatchLocalState(snapshot));
+          logInventorySyncDev("applyInventoryImportBatch rolled back", {
+            batchId,
+            message: error instanceof Error ? error.message : String(error),
+          });
+          throw error instanceof Error ? error : new Error(String(error));
+        }
       },
       undoInventoryImportBatch: (batchId) => {
         set((state) => {
@@ -781,11 +859,11 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           });
 
           for (const id of removedImportedIds) {
-            trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "undo imported inventory stack");
+            fireAndForgetInventoryMutation(set, get, persistOnlineInventoryStackDelete(id), "undo imported inventory stack");
           }
           for (const entry of restored) {
             const location = state.locations.find((candidate) => candidate.id === entry.locationId);
-            trackInventoryMutation(set, persistOnlineInventoryStack(entry, location), "restore inventory stack");
+            fireAndForgetInventoryMutation(set, get, persistOnlineInventoryStack(entry, location), "restore inventory stack");
           }
 
           return { inventoryEntries };
@@ -799,7 +877,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
           );
           const location = state.locations.find((entry) => entry.id === normalized.locationId);
-          void trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
+          fireAndForgetInventoryMutation(set, get, persistOnlineInventoryStack(normalized, location), "update inventory stack");
           return { inventoryEntries: state.inventoryEntries.map((current) =>
             current.id === entry.id
               ? normalized
@@ -815,7 +893,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
         );
         const location = state.locations.find((candidate) => candidate.id === normalized.locationId);
-        await trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
+        await trackInventoryMutation(set, get, persistOnlineInventoryStack(normalized, location), "update inventory stack");
         set((currentState) => ({
           inventoryEntries: currentState.inventoryEntries.map((current) =>
             current.id === entry.id ? normalized : current,
@@ -859,6 +937,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           const location = state.locations.find((candidate) => candidate.id === move.updated.locationId);
           return trackInventoryMutation(
             set,
+            get,
             persistOnlineInventoryStack(move.updated, location),
             "transfer inventory stack",
           );
@@ -874,7 +953,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
         };
       },
       deleteInventoryEntry: (id) => {
-        void trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "delete inventory stack");
+        fireAndForgetInventoryMutation(set, get, persistOnlineInventoryStackDelete(id), "delete inventory stack");
         set((state) => ({
           inventoryEntries: state.inventoryEntries.filter((entry) => entry.id !== id),
         }));

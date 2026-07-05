@@ -10,7 +10,18 @@ const INVENTORY_LOCATIONS_URL = "/api/user/inventory/locations";
 
 let onlineMutationCount = 0;
 let currentOnlineAccessToken: string | null = null;
+let currentOnlineUserId: string | null = null;
 let onlineMutationTail: Promise<void> = Promise.resolve();
+
+export function getOnlinePersistenceAuth(): {
+  accessToken: string | null;
+  userId: string | null;
+} {
+  return {
+    accessToken: currentOnlineAccessToken,
+    userId: currentOnlineUserId,
+  };
+}
 
 export type OnlinePersistenceState = {
   locations: InventoryLocation[];
@@ -43,6 +54,13 @@ async function parseUserJsonResponse<T>(response: Response, options: JsonParseOp
   const data = await parseJsonResponse<Record<string, unknown>>(response, options);
   if (!response.ok) {
     const message = typeof data?.error === "string" ? data.error : `Request failed: ${response.status}`;
+    if (import.meta.env.DEV) {
+      console.warn("[inventory-sync] request failed", {
+        label: options.label,
+        status: response.status,
+        error: message,
+      });
+    }
     throw new Error(message);
   }
   return data as T;
@@ -67,6 +85,13 @@ export async function syncOnlinePersistenceState(
   payload: OnlinePersistencePayload,
 ): Promise<OnlinePersistenceState> {
   const url = apiUrl(INVENTORY_SYNC_URL);
+  if (import.meta.env.DEV) {
+    console.info("[inventory-sync] PUT /api/user/inventory/sync", {
+      locationCount: payload.locations?.length ?? 0,
+      inventoryEntryCount: payload.inventoryEntries?.length ?? 0,
+      buildQueueCount: payload.buildQueue?.length ?? 0,
+    });
+  }
   const response = await fetch(url, {
     method: "PUT",
     headers: {
@@ -85,8 +110,9 @@ export function isOnlinePersistenceMutationInFlight() {
   return onlineMutationCount > 0;
 }
 
-export function setOnlinePersistenceAccessToken(accessToken: string | null) {
+export function setOnlinePersistenceAccessToken(accessToken: string | null, userId: string | null = null) {
   currentOnlineAccessToken = accessToken;
+  currentOnlineUserId = accessToken ? userId : null;
 }
 
 function applySyncFromMutationResult(result: unknown) {

@@ -12,6 +12,35 @@ export type InventoryOnlinePayload = {
 };
 
 let nextInventorySyncRequestId = 1;
+let inventoryFetchInFlight = false;
+
+export function isInventoryFetchInFlight(): boolean {
+  return inventoryFetchInFlight;
+}
+
+export function markInventoryFetchStarted(): void {
+  inventoryFetchInFlight = true;
+}
+
+export function markInventoryFetchFinished(): void {
+  inventoryFetchInFlight = false;
+}
+
+export function shouldSkipInventoryFetch(input: {
+  caller: string;
+  isStale: boolean;
+  allowWhileFresh?: boolean;
+}): boolean {
+  if (inventoryFetchInFlight) {
+    logInventorySyncDev("fetch skipped", { caller: input.caller, reason: "in-flight" });
+    return true;
+  }
+  if (!input.isStale && !input.allowWhileFresh) {
+    logInventorySyncDev("fetch skipped", { caller: input.caller, reason: "fresh" });
+    return true;
+  }
+  return false;
+}
 
 export function createInventorySyncRequestId(): number {
   nextInventorySyncRequestId += 1;
