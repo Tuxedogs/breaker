@@ -30,6 +30,11 @@ import {
   getWeightedEffectiveQuality,
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
+import {
+  solveBuildQueueAllocation,
+  type AllocationSolverLot,
+  type AllocationSolverPlan,
+} from '../../lib/logistics/buildQueueAllocationSolver';
 import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { apiUrl } from '../../lib/apiUrl';
@@ -445,10 +450,10 @@ function clampTargetQuality(value: number): number {
   return Math.max(1, Math.min(1000, Math.round(value)));
 }
 
-function parseDraftNumber(value: string): number | null {
-  if (value.trim() === '' || value === '.' || value === '0.') return null;
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
+const SCU_QUANTITY_EPSILON = 1e-6;
+
+function isPartialLotAllocation(reservedQuantity: number, lotQuantity: number): boolean {
+  return reservedQuantity > SCU_QUANTITY_EPSILON && lotQuantity - reservedQuantity > SCU_QUANTITY_EPSILON;
 }
 
 function parseTargetQualityDraft(value: string): number | null {
@@ -460,6 +465,94 @@ function parseTargetQualityDraft(value: string): number | null {
 
 function normalizeTargetQualityDraft(value: string): string {
   return value.replace(/\D/g, '');
+}
+
+function buildSolverCandidateLots(
+  stacks: InventoryStack[],
+  buildQueue: BuildQueueItem[],
+  item: BuildQueueItem,
+  req: RequirementReserveContext,
+  recipes: RecipeTemplate[],
+  recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>,
+): AllocationSolverLot[] {
+  return stacks.flatMap((stack) => {
+    if (!stack.materialId) return [];
+    const assignments = getStackReservationAssignments(stack, buildQueue, recipes, recipeInputsByRecipeId, item.id, req.requirementId);
+    const reservedElsewhere = assignments.some((assignment) => !assignment.isCurrentRequirement);
+    if (reservedElsewhere) return [];
+    const availableScu = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
+    if (availableScu <= SCU_QUANTITY_EPSILON) return [];
+    return [{
+      lotId: stack.id,
+      materialId: stack.materialId,
+      quality: stack.quality,
+      availableScu,
+      locationId: stack.locationId,
+      locationName: formatInventoryLocationLabel(stack),
+    }];
+  });
+}
+
+function applyAllocationSolverPlan(
+  item: BuildQueueItem,
+  buildQueue: BuildQueueItem[],
+  req: RequirementReserveContext,
+  plan: AllocationSolverPlan,
+  stacksById: Map<string, InventoryStack>,
+  onToggleAllocation: Props['onToggleAllocation'],
+  onUpdateAllocationQuantity: Props['onUpdateAllocationQuantity'],
+): void {
+  let runningAllocatedAmount = req.allocatedAmount;
+  let runningAllocations = req.ownAllocations;
+
+  for (const proposed of plan.proposedLots) {
+    const stack = stacksById.get(proposed.lotId);
+    if (!stack) continue;
+
+    const existingAllocation = runningAllocations.find((allocation) => allocation.inventoryEntryId === proposed.lotId);
+    const desiredQuantity = Math.round(((existingAllocation?.quantityReserved ?? 0) + proposed.proposedScu) * 100) / 100;
+    const adjustedReq: RequirementReserveContext = {
+      ...req,
+      allocatedAmount: runningAllocatedAmount,
+      ownAllocations: runningAllocations,
+    };
+    const previousQuantity = existingAllocation?.quantityReserved ?? 0;
+
+    commitStackReservation(
+      item,
+      buildQueue,
+      adjustedReq,
+      stack,
+      desiredQuantity,
+      onToggleAllocation,
+      onUpdateAllocationQuantity,
+    );
+
+    const appliedDelta = Math.max(0, desiredQuantity - previousQuantity);
+    runningAllocatedAmount += appliedDelta;
+    if (existingAllocation) {
+      runningAllocations = runningAllocations.map((allocation) =>
+        allocation.inventoryEntryId === proposed.lotId
+          ? { ...allocation, quantityReserved: desiredQuantity }
+          : allocation,
+      );
+    } else if (appliedDelta > 0) {
+      const isBelowTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
+      runningAllocations = [
+        ...runningAllocations,
+        createAllocation(
+          item.id,
+          req.requirementId,
+          req.requirementSelectedQuality,
+          req.input.unitType,
+          stack,
+          req.material?.name,
+          desiredQuantity,
+          isBelowTarget,
+        ),
+      ];
+    }
+  }
 }
 
 function commitStackReservation(
@@ -611,6 +704,95 @@ function ChevronIcon({ open }: { open: boolean }) {
     <svg className={`bq-action-icon bq-action-icon--chevron${open ? ' is-open' : ''}`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="m6 9 6 6 6-6" />
     </svg>
+  );
+}
+
+function SolveIcon() {
+  return (
+    <svg className="bq-action-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 3 9.5 8.5 4 11l5.5 2.5L12 19l2.5-5.5L20 11l-5.5-2.5L12 3Z" />
+      <path d="M5 19h3M16 19h3" />
+    </svg>
+  );
+}
+
+function AllocationSolverPreview({
+  plan,
+  material,
+  onApply,
+  onDismiss,
+}: {
+  plan: AllocationSolverPlan;
+  material: MaterialTemplate | undefined;
+  onApply: () => void;
+  onDismiss: () => void;
+}) {
+  const projectedQualityLabel = plan.projectedAverageQuality !== undefined
+    ? formatDecimal(plan.projectedAverageQuality)
+    : '—';
+
+  return (
+    <div className="bq-solve-preview">
+      <div className="bq-solve-preview-head">
+        <span className="bq-solve-preview-title">Proposed allocation</span>
+        <button type="button" className="bq-btn bq-btn--compact" onClick={onDismiss}>Dismiss</button>
+      </div>
+
+      <div className="bq-solve-preview-metrics">
+        <span>
+          Projected avg quality <strong>{projectedQualityLabel}</strong>
+        </span>
+        <span className={plan.meetsTargetQuality ? 'bq-solve-status--met' : 'bq-solve-status--warn'}>
+          Target {plan.targetQuality ?? 'any'}: {plan.meetsTargetQuality ? 'Met' : 'Not met'}
+        </span>
+        <span className={plan.meetsQuantity ? 'bq-solve-status--met' : 'bq-solve-status--short'}>
+          {formatQuantity(plan.projectedTotalAllocatedScu, material)} / {formatQuantity(plan.requiredScu, material)}
+        </span>
+      </div>
+
+      {plan.warnings.length > 0 ? (
+        <ul className="bq-solve-preview-warnings">
+          {plan.warnings.map((warning) => (
+            <li key={warning}>
+              <WarningIcon />
+              <span>{warning}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {plan.proposedLots.length > 0 ? (
+        <div className="bq-solve-preview-lots">
+          <div className="bq-solve-preview-lots-head" aria-hidden="true">
+            <span>Location</span>
+            <span>Quality</span>
+            <span>Proposed</span>
+          </div>
+          {plan.proposedLots.map((proposedLot) => (
+            <div key={proposedLot.lotId} className="bq-solve-preview-lot-row">
+              <span className="bq-solve-preview-location" title={proposedLot.locationName}>
+                {proposedLot.locationName}
+              </span>
+              <span className="bq-solve-preview-quality">{proposedLot.quality ?? '—'}</span>
+              <span className="bq-solve-preview-scu">{formatQuantity(proposedLot.proposedScu, material)}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bq-empty-inline">No additional lots needed.</div>
+      )}
+
+      <div className="bq-solve-preview-actions">
+        <button
+          type="button"
+          className="bq-btn bq-btn--confirm"
+          disabled={plan.proposedLots.length === 0}
+          onClick={onApply}
+        >
+          Apply plan
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -840,8 +1022,12 @@ export default function BuildQueueGroup({
 }: Props) {
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
-  const [reserveDrafts, setReserveDrafts] = useState<Record<string, string>>({});
   const [pendingReassignment, setPendingReassignment] = useState<PendingReassignment | null>(null);
+  const [pendingSolverPlan, setPendingSolverPlan] = useState<{
+    itemId: string;
+    requirementKey: string;
+    plan: AllocationSolverPlan;
+  } | null>(null);
   const [focusedAssignmentItemId, setFocusedAssignmentItemId] = useState<string | null>(null);
   const isMobileTouchLayout = useIsMobileTouchLayout();
   const { getBandsForMaterial: getQuantizedBands } = useBQQuantization();
@@ -1256,15 +1442,6 @@ export default function BuildQueueGroup({
                     group.requirements.forEach((req) => {
                       req.ownAllocations.forEach((allocation) => onToggleAllocation(item.id, allocation));
                     });
-                    setReserveDrafts((prev) => {
-                      const next = { ...prev };
-                      group.requirements.forEach((req) => {
-                        req.reservableStacks.forEach((stack) => {
-                          delete next[getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack)];
-                        });
-                      });
-                      return next;
-                    });
                   };
                   const openReserve = () => toggleReserveDrawer(item.id, group.groupKey, reserveExpanded);
                   return (
@@ -1515,16 +1692,7 @@ export default function BuildQueueGroup({
                               ownAllocations: req.ownAllocations,
                               allocatedAmount: req.allocatedAmount,
                             };
-                            const getDraftAllocationValue = (allocationId: string, reservedQuantity: number) =>
-                              reserveDrafts[allocationId] ?? (reservedQuantity > 0 ? String(reservedQuantity) : '');
-                            const clearReserveDraft = (allocationId: string) => {
-                              setReserveDrafts((prev) => {
-                                const next = { ...prev };
-                                delete next[allocationId];
-                                return next;
-                              });
-                            };
-                            const applyStackQuantity = (stack: InventoryStack, desiredQuantity: number, allocationId: string) => {
+                            const applyStackQuantity = (stack: InventoryStack, desiredQuantity: number) => {
                               commitStackReservation(
                                 item,
                                 buildQueue,
@@ -1534,28 +1702,87 @@ export default function BuildQueueGroup({
                                 onToggleAllocation,
                                 onUpdateAllocationQuantity,
                               );
-                              clearReserveDraft(allocationId);
                             };
-                            const cancelReserve = () => {
-                              setActiveDrawersByItem((prev) => ({ ...prev, [item.id]: undefined }));
-                              setReserveDrafts((prev) => {
-                                const next = { ...prev };
-                                for (const stack of req.reservableStacks) {
-                                  delete next[getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack)];
-                                }
-                                return next;
+                            const solverCandidateLots = buildSolverCandidateLots(
+                              req.allMaterialStacks,
+                              buildQueue,
+                              item,
+                              reserveContext,
+                              recipes,
+                              recipeInputsByRecipeId,
+                            );
+                            const solverPreviewOpen =
+                              pendingSolverPlan?.itemId === item.id &&
+                              pendingSolverPlan.requirementKey === req.requirementCardKey;
+                            const runSolver = () => {
+                              const plan = solveBuildQueueAllocation(
+                                {
+                                  materialId: req.materialKey,
+                                  requiredScu: req.required,
+                                  targetQuality: req.requirementSelectedQuality,
+                                  existingAllocations: req.ownAllocations.map((allocation) => ({
+                                    lotId: allocation.inventoryEntryId,
+                                    quality: allocation.quality,
+                                    allocatedScu: allocation.quantityReserved,
+                                  })),
+                                },
+                                solverCandidateLots,
+                              );
+                              setPendingSolverPlan({
+                                itemId: item.id,
+                                requirementKey: req.requirementCardKey,
+                                plan,
                               });
                             };
+                            const applySolverPlan = () => {
+                              if (!solverPreviewOpen || !pendingSolverPlan) return;
+                              const stacksById = new Map(req.allMaterialStacks.map((stack) => [stack.id, stack]));
+                              applyAllocationSolverPlan(
+                                item,
+                                buildQueue,
+                                reserveContext,
+                                pendingSolverPlan.plan,
+                                stacksById,
+                                onToggleAllocation,
+                                onUpdateAllocationQuantity,
+                              );
+                              setPendingSolverPlan(null);
+                            };
+
                             return (
                               <div key={`${req.requirementCardKey}:reserve`} className="bq-reserve-req">
-                                {group.requirements.length > 1 && (
-                                  <div className="bq-reserve-req-head">
-                                    <span>{req.displayName}</span>
-                                    <span className={`bq-reserve-status bq-reserve-status--${req.remainingRequired > 0 ? 'short' : req.allocatedAmount > req.required ? 'over' : 'met'}`}>
-                                      {formatQuantity(req.allocatedAmount, req.material)} / {formatQuantity(req.required, req.material)}
-                                    </span>
-                                  </div>
-                                )}
+                                <div className="bq-reserve-req-head">
+                                  {group.requirements.length > 1 ? (
+                                    <>
+                                      <span>{req.displayName}</span>
+                                      <span className={`bq-reserve-status bq-reserve-status--${req.remainingRequired > 0 ? 'short' : req.allocatedAmount > req.required ? 'over' : 'met'}`}>
+                                        {formatQuantity(req.allocatedAmount, req.material)} / {formatQuantity(req.required, req.material)}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <span className="bq-reserve-req-head-spacer" aria-hidden="true" />
+                                  )}
+                                  <button
+                                    type="button"
+                                    className="bq-btn bq-btn--solve"
+                                    disabled={req.remainingRequired <= SCU_QUANTITY_EPSILON || solverCandidateLots.length === 0}
+                                    aria-label={`Auto reserve inventory for ${req.displayName}`}
+                                    title="Propose inventory lots to reserve"
+                                    onClick={runSolver}
+                                  >
+                                    <SolveIcon />
+                                    <span>Auto reserve</span>
+                                  </button>
+                                </div>
+
+                                {solverPreviewOpen && pendingSolverPlan ? (
+                                  <AllocationSolverPreview
+                                    plan={pendingSolverPlan.plan}
+                                    material={req.material}
+                                    onApply={applySolverPlan}
+                                    onDismiss={() => setPendingSolverPlan(null)}
+                                  />
+                                ) : null}
 
                                 {req.reservableStacks.length > 0 ? (
                                   <>
@@ -1565,19 +1792,13 @@ export default function BuildQueueGroup({
                                       <span className="bq-reserve-col-quality">Quality</span>
                                       <span className="bq-reserve-col-available">Available</span>
                                       <span className="bq-reserve-col-reserved">Reserved</span>
-                                      <span className="bq-reserve-col-assign">Assign</span>
-                                      <span className="bq-reserve-col-fill" />
+                                      <span className="bq-reserve-col-assign">Assigned</span>
                                     </div>
                                     {req.reservableStacks.map((stack) => {
                                       const existingAllocation = req.ownAllocations.find((allocation) => allocation.inventoryEntryId === stack.id);
                                       const reservedQuantity = existingAllocation?.quantityReserved ?? 0;
                                       const availableAfterThisReservation = getLotAvailableAmountAfterReservations(stack, buildQueue, item.id, req.ownAllocations);
-                                      const maxQuantity = Math.max(0, reservedQuantity + availableAfterThisReservation);
-                                      const allocationId = getAllocationId(item.id, req.requirementId, req.materialKey, req.requirementSelectedQuality, req.input.unitType, stack);
-                                      const draftValue = getDraftAllocationValue(allocationId, reservedQuantity);
-                                      const parsedDraft = parseDraftNumber(draftValue);
-                                      const effectiveQuantity = parsedDraft ?? reservedQuantity;
-                                      const checked = effectiveQuantity > 0;
+                                      const checked = reservedQuantity > 0;
                                       const fillQuantity = getStackFillQuantity(reserveContext, stack, buildQueue, item.id);
                                       const assignments = getStackReservationAssignments(stack, buildQueue, recipes, recipeInputsByRecipeId, item.id, req.requirementId);
                                       const currentAssignment = existingAllocation
@@ -1588,6 +1809,10 @@ export default function BuildQueueGroup({
                                       const assignmentLabel = ownerAssignment ? getAssignmentLabel(ownerAssignment) : undefined;
                                       const reassignSourceLabel = getAssignmentLabel(otherAssignment);
                                       const isAssignedHere = Boolean(currentAssignment);
+                                      const isPartialAssignment = isAssignedHere && isPartialLotAllocation(reservedQuantity, stack.quantity);
+                                      const remainderQuantity = isPartialAssignment
+                                        ? Math.max(0, stack.quantity - reservedQuantity)
+                                        : 0;
                                       const isReservedElsewhere = Boolean(otherAssignment);
                                       const isZeroAvailable = availableAfterThisReservation <= 0 && !isAssignedHere;
                                       const reservedDisplayQuantity = isAssignedHere
@@ -1602,13 +1827,6 @@ export default function BuildQueueGroup({
                                       const locationMeta = formatInventoryLocationMetaLabel(stack);
                                       const assignmentTitle = getAssignmentTooltip(ownerAssignment);
                                       const locationTitle = [locationName, locationMeta].filter(Boolean).join(' - ');
-                                      const commitDraftValue = (rawValue: string) => {
-                                        if (isReservedElsewhere && !isAssignedHere) return;
-                                        const parsed = parseDraftNumber(rawValue);
-                                        const desired = parsed ?? 0;
-                                        const clamped = Math.max(0, Math.min(desired, maxQuantity));
-                                        applyStackQuantity(stack, clamped, allocationId);
-                                      };
                                       const beginReassignment = () => {
                                         if (!otherAssignment || reassignQuantity <= 0) return;
                                         const isBelowReassignTarget = req.requirementSelectedQuality !== undefined && (stack.quality ?? 0) < req.requirementSelectedQuality;
@@ -1665,9 +1883,9 @@ export default function BuildQueueGroup({
                                                 aria-label={`Reserve ${locationName}`}
                                                 onChange={() => {
                                                   if (checked) {
-                                                    applyStackQuantity(stack, 0, allocationId);
+                                                    applyStackQuantity(stack, 0);
                                                   } else {
-                                                    applyStackQuantity(stack, fillQuantity, allocationId);
+                                                    applyStackQuantity(stack, fillQuantity);
                                                   }
                                                 }}
                                               />
@@ -1692,25 +1910,6 @@ export default function BuildQueueGroup({
                                               {assignmentLabel ? <em>{assignmentLabel}</em> : null}
                                             </span>
                                             <span className="bq-reserve-col-assign">
-                                              <input
-                                                type="text"
-                                                inputMode="decimal"
-                                                className="bq-reserve-amount-input"
-                                                value={draftValue}
-                                                placeholder="0"
-                                                disabled={isReservedElsewhere && !isAssignedHere}
-                                                aria-label={`Assign quantity for ${locationName}`}
-                                                onChange={(event) => {
-                                                  setReserveDrafts((prev) => ({ ...prev, [allocationId]: event.target.value }));
-                                                }}
-                                                onBlur={() => commitDraftValue(draftValue)}
-                                                onKeyDown={(event) => {
-                                                  if (event.key === 'Enter') commitDraftValue(draftValue);
-                                                  if (event.key === 'Escape') cancelReserve();
-                                                }}
-                                              />
-                                            </span>
-                                            <span className="bq-reserve-col-fill">
                                               {isReservedElsewhere && !isAssignedHere ? (
                                                 <button
                                                   type="button"
@@ -1723,15 +1922,20 @@ export default function BuildQueueGroup({
                                                   <SwapIcon />
                                                   <span>Reassign</span>
                                                 </button>
-                                              ) : (
-                                                <button
-                                                  type="button"
-                                                  className="bq-reserve-quick-fill"
-                                                  disabled={fillQuantity <= 0}
-                                                  onClick={() => applyStackQuantity(stack, fillQuantity, allocationId)}
+                                              ) : isAssignedHere && reservedQuantity > 0 ? (
+                                                <span
+                                                  className={[
+                                                    'bq-reserve-assigned-display',
+                                                    isPartialAssignment ? 'bq-reserve-assigned-display--partial' : '',
+                                                  ].filter(Boolean).join(' ')}
                                                 >
-                                                  Fill
-                                                </button>
+                                                  <strong>{formatQuantity(reservedQuantity, req.material)}</strong>
+                                                  {isPartialAssignment ? (
+                                                    <em>{formatQuantity(remainderQuantity, req.material)} left</em>
+                                                  ) : null}
+                                                </span>
+                                              ) : (
+                                                <span className="bq-reserve-assigned-display bq-reserve-assigned-display--empty">—</span>
                                               )}
                                             </span>
                                           </div>

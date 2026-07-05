@@ -1574,23 +1574,6 @@
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
-.bq-reserve-amount-input {
-  width: 100%;
-  min-height: 34px;
-  border: 1px solid rgba(65, 132, 160, 0.28);
-  border-radius: 8px;
-  background: rgba(1, 8, 18, 0.78);
-  color: var(--alloc-text-primary);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  padding: 0 42px 0 10px;
-}
-
-.bq-reserve-amount-input:disabled { opacity: 0.42; }
-
-.bq-reserve-quick-fill,
 .bq-reserve-reassign {
   min-width: 62px;
   min-height: 34px;
@@ -1623,13 +1606,11 @@
   stroke-width: 2.2;
 }
 
-.bq-reserve-quick-fill:hover:not(:disabled),
 .bq-reserve-reassign:hover:not(:disabled) {
   border-color: rgba(74, 222, 128, 0.22);
   color: rgba(187, 247, 208, 0.86);
 }
 
-.bq-reserve-quick-fill:disabled,
 .bq-reserve-reassign:disabled {
   opacity: 0.38;
   cursor: not-allowed;
@@ -1643,10 +1624,147 @@
   margin-top: 14px;
 }
 
+.bq-btn--solve {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 10px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.bq-btn--solve .bq-action-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.bq-btn--compact {
+  min-height: 28px;
+  padding: 2px 10px;
+  font-size: 11px;
+}
+
+.bq-solve-preview {
+  margin: 10px 0 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 153, 0, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(24, 29, 33, 0.96) 0%, rgba(16, 20, 23, 0.98) 100%);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.bq-solve-preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bq-solve-preview-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bq-amber, #ffb347);
+}
+
+.bq-solve-preview-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--alloc-text-secondary);
+}
+
+.bq-solve-preview-metrics strong {
+  color: var(--alloc-text-primary);
+}
+
+.bq-solve-status--met { color: var(--alloc-success); }
+.bq-solve-status--warn { color: var(--bq-amber, #ffb347); }
+.bq-solve-status--short { color: var(--alloc-danger); }
+
+.bq-solve-preview-warnings {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.bq-solve-preview-warnings li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--bq-amber, #ffb347);
+}
+
+.bq-solve-preview-warnings .bq-action-icon {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.bq-solve-preview-lots {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.bq-solve-preview-lots-head,
+.bq-solve-preview-lot-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 2fr) minmax(64px, 0.6fr) minmax(88px, 0.7fr);
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.bq-solve-preview-lots-head {
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(65, 132, 160, 0.2);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--alloc-text-secondary);
+}
+
+.bq-solve-preview-location {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-solve-preview-quality {
+  text-align: right;
+}
+
+.bq-solve-preview-scu {
+  text-align: right;
+  color: var(--alloc-text-primary);
+}
+
+.bq-solve-preview-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bq-reserve-req-head-spacer {
+  flex: 1;
+}
+
 .bq-reserve-stack-head,
 .bq-reserve-stack-row {
   display: grid;
-  grid-template-columns: 26px minmax(170px, 2fr) minmax(70px, 0.6fr) minmax(86px, 0.72fr) minmax(104px, 0.78fr) minmax(118px, 1fr) minmax(92px, 0.64fr);
+  grid-template-columns: 26px minmax(170px, 2fr) minmax(70px, 0.6fr) minmax(86px, 0.72fr) minmax(104px, 0.78fr) minmax(130px, 1.1fr);
   align-items: center;
   gap: 10px;
   font-size: 13px;
@@ -1796,21 +1914,46 @@
   color: rgba(216, 180, 254, 0.78);
 }
 .bq-reserve-col-assign {
-  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: right;
 }
-.bq-reserve-col-assign::after {
-  content: "SCU";
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+
+.bq-reserve-assigned-display {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
   color: var(--alloc-text-secondary);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  pointer-events: none;
+  font-variant-numeric: tabular-nums;
 }
-.bq-reserve-col-assign .bq-reserve-amount-input { width: 100%; }
-.bq-reserve-col-fill { display: flex; justify-content: flex-end; }
+
+.bq-reserve-assigned-display strong {
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+}
+
+.bq-reserve-assigned-display em {
+  color: rgba(148, 163, 184, 0.82);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.bq-reserve-assigned-display--partial strong {
+  color: rgba(74, 222, 128, 0.92);
+  text-shadow: 0 0 10px rgba(34, 211, 122, 0.18);
+}
+
+.bq-reserve-assigned-display--empty {
+  color: rgba(148, 163, 184, 0.42);
+  font-weight: 600;
+}
 
 .bq-item--assignment-focus {
   outline: 1px solid rgba(167, 139, 250, 0.52);
@@ -2131,9 +2274,10 @@
 
 .bq-reserve-req-head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 0.65rem;
-  margin-bottom: 0.14rem;
+  margin-bottom: 0.5rem;
   color: var(--bq-sub);
   font-size: 0.6rem;
 }
@@ -2449,8 +2593,7 @@
   .bq-reserve-col-quality,
   .bq-reserve-col-available,
   .bq-reserve-col-reserved,
-  .bq-reserve-col-assign,
-  .bq-reserve-col-fill {
+  .bq-reserve-col-assign {
     grid-column: 2;
     text-align: left;
   }
@@ -3015,22 +3158,19 @@
   }
 
   .bq-reserve-col-assign {
-    grid-column: 1 / 4;
-  }
-
-  .bq-reserve-col-fill {
-    grid-column: 4;
+    grid-column: 1 / -1;
     justify-content: stretch;
+    text-align: left;
   }
 
-  .bq-reserve-amount-input,
-  .bq-reserve-quick-fill,
+  .bq-reserve-assigned-display {
+    width: 100%;
+    justify-items: start;
+    text-align: left;
+  }
+
   .bq-reserve-reassign {
     min-height: 38px;
-  }
-
-  .bq-reserve-quick-fill,
-  .bq-reserve-reassign {
     width: 100%;
     min-width: 0;
   }
