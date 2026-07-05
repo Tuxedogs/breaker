@@ -34,6 +34,13 @@ import {
   remapInventoryEntryLocationIds,
 } from "../lib/logistics/inventoryLocationOptions";
 import { clampMaterialQuality, getRequirementLineKey } from "../lib/logistics/buildQueueReservations";
+import {
+  backupLegacyInventoryPayload,
+  buildInventorySyncFailurePatch,
+  buildInventorySyncSuccessPatch,
+  isInventorySyncRequestCurrent,
+  type InventorySyncStatus,
+} from "../lib/logistics/inventorySyncLifecycle";
 import type {
   BuildQueueItem,
   InventoryEntry,
@@ -62,8 +69,13 @@ export interface InventoryUiState {
 }
 
 export interface InventorySyncState {
+  status: InventorySyncStatus;
   isFetching: boolean;
   isSyncing: boolean;
+  loadedForUserId: string | null;
+  lastSuccessfulSyncAt: number | null;
+  lastFailedSyncAt?: number;
+  activeRequestId: number;
   lastFetchedAt?: string;
   lastSyncedAt?: string;
   syncError?: string;
@@ -89,8 +101,12 @@ const defaultInventoryUi: InventoryUiState = {
 };
 
 const defaultInventorySync: InventorySyncState = {
+  status: "idle",
   isFetching: false,
   isSyncing: false,
+  loadedForUserId: null,
+  lastSuccessfulSyncAt: null,
+  activeRequestId: 0,
   hasUnsyncedChanges: false,
   pendingMutationCount: 0,
   hasHydratedPersist: false,
@@ -145,11 +161,22 @@ interface LogisticsStoreState {
       recipeInputTemplates: Record<string, RecipeInputTemplate[]>;
     },
   ) => void;
-  replaceOnlineState: (state: {
-    locations: InventoryLocation[];
-    inventoryEntries: InventoryEntry[];
-    buildQueue: BuildQueueItem[];
-  }) => void;
+  replaceOnlineState: (
+    state: {
+      locations: InventoryLocation[];
+      inventoryEntries: InventoryEntry[];
+      buildQueue: BuildQueueItem[];
+    },
+    options?: {
+      userId?: string;
+      requestId?: number;
+    },
+  ) => void;
+  applyInventorySyncFailure: (
+    requestId: number,
+    userId: string | null,
+    error: unknown,
+  ) => void;
   addBuildQueueItem: (recipeId: string, quantity?: number, snapshot?: Partial<Pick<BuildQueueItem, "blueprint_id" | "itemId" | "itemName" | "finalProductQualityBand" | "finalProductQualityAverage" | "finalProductRarity" | "materialRequirements" | "blueprintSources">>) => void;
   updateBuildQueueItemStatus: (id: string, status: NonNullable<BuildQueueItem["status"]>) => void;
   updateBuildQueueItemPriority: (id: string, priority: number) => void;
@@ -164,6 +191,7 @@ interface LogisticsStoreState {
   updateBuildQueueAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   clearBuildQueueItemAllocations: (buildQueueItemId: string) => void;
   clearStaleBuildQueueItemAllocations: (buildQueueItemId: string) => void;
+  clearAuthenticatedLogisticsData: () => void;
   resetLogisticsState: () => void;
 }
 
@@ -177,6 +205,24 @@ type LogisticsSet = (
 
 const LOGISTICS_STORAGE_KEY = "sc_logistics_state_v1";
 const LEGACY_LOGISTICS_STORAGE_KEY = "moonbreaker-logistics-v1";
+
+function buildAuthenticatedLogisticsClearUpdate(
+  state: Pick<LogisticsStoreState, "inventoryUi" | "buildQueue">,
+): Pick<LogisticsStoreState, "inventoryEntries" | "locations" | "buildQueue" | "inventoryUi"> {
+  return {
+    inventoryEntries: [],
+    locations: mergeCanonicalInventoryLocations(undefined).locations,
+    buildQueue: initialBuildQueue.map((item) => ({ ...item, reservedAllocations: [] })),
+    inventoryUi: {
+      ...state.inventoryUi,
+      selectedLocationId: null,
+      expandedCards: [],
+      expandedQualityRows: [],
+    },
+  };
+}
+
+export { buildAuthenticatedLogisticsClearUpdate };
 
 function migrateLegacyLogisticsStorage() {
   if (typeof window === "undefined") return;
@@ -860,11 +906,28 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           };
         });
       },
-      replaceOnlineState: (onlineState) => {
+      replaceOnlineState: (onlineState, options) => {
         set((state) => {
-          const now = new Date().toISOString();
+          const requestId = options?.requestId;
+          if (
+            requestId !== undefined &&
+            !isInventorySyncRequestCurrent(state.inventorySync, requestId)
+          ) {
+            return {};
+          }
+
+          const nowMs = Date.now();
+          const userId = options?.userId ?? state.inventorySync.loadedForUserId;
+          if (!userId) {
+            return {};
+          }
           const mergedLocations = mergeCanonicalInventoryLocations(
             onlineState.locations.length ? onlineState.locations : state.locations,
+          );
+          const successPatch = buildInventorySyncSuccessPatch(
+            requestId ?? state.inventorySync.activeRequestId,
+            userId,
+            nowMs,
           );
           return {
             locations: mergedLocations.locations,
@@ -882,14 +945,21 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             })),
             inventorySync: {
               ...state.inventorySync,
-              isFetching: false,
-              isSyncing: false,
-              lastFetchedAt: now,
-              lastSyncedAt: now,
-              syncError: undefined,
-              hasUnsyncedChanges: false,
-              pendingMutationCount: 0,
-              hasFetchedServerInventory: true,
+              ...successPatch,
+              loadedForUserId: userId,
+            },
+          };
+        });
+      },
+      applyInventorySyncFailure: (requestId, userId, error) => {
+        set((state) => {
+          if (!isInventorySyncRequestCurrent(state.inventorySync, requestId)) {
+            return {};
+          }
+          return {
+            inventorySync: {
+              ...state.inventorySync,
+              ...buildInventorySyncFailurePatch(requestId, userId, error),
             },
           };
         });
@@ -1138,6 +1208,9 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           return { buildQueue };
         });
       },
+      clearAuthenticatedLogisticsData: () => {
+        set((state) => buildAuthenticatedLogisticsClearUpdate(state));
+      },
       resetLogisticsState: () => {
         set((state) => ({
           materialTemplates,
@@ -1160,9 +1233,21 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
       partialize: (state) => ({
         inventoryUi: state.inventoryUi,
       }),
-      migrate: (persisted) => ({
-        inventoryUi: readPersistedInventoryUi(persisted),
-      }),
+      migrate: (persisted, version) => {
+        backupLegacyInventoryPayload(persisted);
+        if (import.meta.env.DEV) {
+          const record = isRecord(persisted) ? persisted : {};
+          console.info("[inventory-sync] migration backup checked", {
+            fromVersion: version,
+            inventoryEntryCount: Array.isArray(record.inventoryEntries) ? record.inventoryEntries.length : 0,
+            locationCount: Array.isArray(record.locations) ? record.locations.length : 0,
+            buildQueueCount: Array.isArray(record.buildQueue) ? record.buildQueue.length : 0,
+          });
+        }
+        return {
+          inventoryUi: readPersistedInventoryUi(persisted),
+        };
+      },
       merge: (persisted, current) => {
         const inventoryUi = readPersistedInventoryUi(persisted);
         // Merge persisted recipe templates over seed — seed entries win for known IDs
@@ -1178,8 +1263,14 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           },
         };
       },
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state, error) => {
+        if (error && import.meta.env.DEV) {
+          console.warn("[inventory-sync] persist rehydrate failed", error);
+        }
         state?.setInventorySync({ hasHydratedPersist: true });
+        if (import.meta.env.DEV) {
+          console.info("[inventory-sync] hydration complete");
+        }
       },
     },
   ),

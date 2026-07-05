@@ -9,6 +9,7 @@ import {
 import { getInventoryFreshnessBlockReason } from "../../lib/logistics/inventoryFreshness";
 import { getActiveInventoryEntries, type SourceStrategy } from "../../lib/logistics/inventory";
 import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
+import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
 import type { BuildQueueItem, RecipeTemplate } from "../../types/logistics";
@@ -59,6 +60,8 @@ function useIsMobileQueueLayout() {
 }
 
 export default function BuildQueuePage() {
+  const { user } = useAuthSession();
+  const authenticatedUserId = user?.id ?? null;
   const [sourceStrategy] = useState<SourceStrategy>("minimize-splits");
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -78,7 +81,7 @@ export default function BuildQueuePage() {
   const materials = useLogisticsStore((s) => s.materialTemplates);
   const recipes = useLogisticsStore((s) => s.recipeTemplates);
   const recipeInputsByRecipeId = useLogisticsStore((s) => s.recipeInputTemplates);
-  const inventorySync = useLogisticsStore((s) => s.inventorySync);
+  const inventorySync = useLogisticsStore((state) => state.inventorySync);
   const updateBuildQueueItemQuantity = useLogisticsStore((s) => s.updateBuildQueueItemQuantity);
   const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
   const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
@@ -89,7 +92,7 @@ export default function BuildQueuePage() {
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
-  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync);
+  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
 
   const queueRows = useMemo(() => {
     const rows: QueueRow[] = [];

@@ -18,6 +18,11 @@ import {
   INVENTORY_FRESHNESS_MS,
 } from '../../lib/logistics/inventoryFreshness';
 import {
+  buildInventorySyncBeginPatch,
+  createInventorySyncRequestId,
+  logInventorySyncDev,
+} from '../../lib/logistics/inventorySyncLifecycle';
+import {
   buildInventoryLocationLookup,
   normalizeInventoryLocationLookup,
   resolveInventoryLocationByInput,
@@ -1521,8 +1526,9 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
 
 export default function InventoryPage() {
   const [searchParams] = useSearchParams();
-  const { session, loading: authLoading } = useAuthSession();
+  const { session, loading: authLoading, user } = useAuthSession();
   const accessToken = session?.access_token ?? null;
+  const authenticatedUserId = user?.id ?? null;
   const entries = useLogisticsStore((state) => state.inventoryEntries);
   const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
   const materials = useLogisticsStore((state) => state.materialTemplates);
@@ -1540,6 +1546,7 @@ export default function InventoryPage() {
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const replaceOnlineState = useLogisticsStore((state) => state.replaceOnlineState);
+  const applyInventorySyncFailure = useLogisticsStore((state) => state.applyInventorySyncFailure);
   const queryLocationId = searchParams.get('location') ?? '';
 
   const [panel, setPanel] = useState<PanelState | null>(null);
@@ -1562,41 +1569,84 @@ export default function InventoryPage() {
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
   const [, setSyncLabelTick] = useState(0);
   const isMobileViewport = useIsMobileInventoryViewport();
-  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync);
+  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
   const syncLabel = formatInventorySyncLabel(inventorySync);
   const syncTone = getInventorySyncTone(inventorySync);
 
   const refreshInventoryFromServer = useCallback(async () => {
-    if (authLoading) return;
-    if (!accessToken) {
+    if (authLoading) {
+      logInventorySyncDev("sync skipped", { reason: "auth-loading" });
+      return;
+    }
+    if (!inventorySync.hasHydratedPersist) {
+      logInventorySyncDev("sync skipped", { reason: "persist-not-hydrated" });
+      return;
+    }
+    if (!accessToken || !authenticatedUserId) {
       setInventorySync({
         isFetching: false,
+        status: "idle",
         hasFetchedServerInventory: false,
+        loadedForUserId: null,
+        lastSuccessfulSyncAt: null,
         syncError: 'Sign in to sync inventory.',
       });
+      logInventorySyncDev("sync skipped", { reason: "missing-auth" });
       return;
     }
 
-    setInventorySync({ isFetching: true, syncError: undefined });
+    const requestId = createInventorySyncRequestId();
+    setInventorySync(buildInventorySyncBeginPatch(requestId, authenticatedUserId));
+    logInventorySyncDev("sync requested", {
+      requestId,
+      userId: authenticatedUserId,
+    });
+
     try {
       const remote = await fetchOnlinePersistenceState(accessToken);
+      const currentSync = useLogisticsStore.getState().inventorySync;
+      if (currentSync.activeRequestId !== requestId) {
+        logInventorySyncDev("sync ignored", { requestId, reason: "stale-request" });
+        return;
+      }
+      logInventorySyncDev("sync success", {
+        requestId,
+        locationCount: remote.locations.length,
+        inventoryEntryCount: remote.inventoryEntries.length,
+        buildQueueCount: remote.buildQueue.length,
+      });
       replaceOnlineState({
         locations: remote.locations,
         inventoryEntries: remote.inventoryEntries,
         buildQueue: remote.buildQueue,
+      }, {
+        userId: authenticatedUserId,
+        requestId,
       });
     } catch (error) {
-      setInventorySync({
-        isFetching: false,
-        syncError: error instanceof Error ? error.message : String(error),
+      applyInventorySyncFailure(requestId, authenticatedUserId, error);
+      logInventorySyncDev("sync failure", {
+        requestId,
+        message: error instanceof Error ? error.message : String(error),
       });
     }
-  }, [accessToken, authLoading, replaceOnlineState, setInventorySync]);
+  }, [
+    accessToken,
+    authenticatedUserId,
+    applyInventorySyncFailure,
+    authLoading,
+    inventorySync.hasHydratedPersist,
+    replaceOnlineState,
+    setInventorySync,
+  ]);
 
   useEffect(() => {
-    if (authLoading) return;
-    void refreshInventoryFromServer();
-  }, [authLoading, refreshInventoryFromServer]);
+    if (authLoading || !inventorySync.hasHydratedPersist) return;
+    logInventorySyncDev("page ready", {
+      reason: "initial-load-owned-by-coordinator",
+      userId: authenticatedUserId,
+    });
+  }, [authLoading, authenticatedUserId, inventorySync.hasHydratedPersist]);
 
   useEffect(() => {
     setInventoryUi({
