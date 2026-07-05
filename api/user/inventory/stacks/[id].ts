@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleUserInventoryRoute } from "../../../../src/server/user/inventoryRoute.js";
+
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "DELETE") return {};
 
@@ -29,7 +31,6 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   try {
-    const { handleUserInventoryRoute } = await import("../../../../src/server/user/inventoryRoute.js");
     const stackId = getStackId(request);
     const result = await handleUserInventoryRoute(
       request.method ?? "PATCH",

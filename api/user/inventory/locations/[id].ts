@@ -1,8 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleUserInventoryRoute } from "../../../../src/server/user/inventoryRoute.js";
+
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
   try {
-    const { handleUserInventoryRoute } = await import("../../../../src/server/user/inventoryRoute.js");
     const pathname = (request.url ?? "").split("?")[0] ?? "";
     const locationId = decodeURIComponent(pathname.split("/").pop() ?? "");
     const result = await handleUserInventoryRoute(

@@ -1,5 +1,10 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { logUnhandledRouteError, unhandledRouteErrorBody } from "../lib/routeError.js";
+import { handleUserInventoryRoute } from "../../src/server/user/inventoryRoute.js";
+
+const ROUTE = "/api/user/inventory";
+
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "GET" || request.method === "HEAD") return {};
 
@@ -16,6 +21,7 @@ function sendJson(response: ServerResponse, status: number, body: unknown) {
 }
 
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
+  const method = request.method ?? "GET";
   let body: unknown;
 
   try {
@@ -27,10 +33,9 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   try {
-    const { handleUserInventoryRoute } = await import("../../src/server/user/inventoryRoute.js");
     const result = await handleUserInventoryRoute(
-      request.method ?? "GET",
-      "/api/user/inventory",
+      method,
+      ROUTE,
       request.headers,
       body,
     );
@@ -39,7 +44,7 @@ export default async function handler(request: IncomingMessage, response: Server
     if (result?.status === 405) response.setHeader("allow", "GET");
     response.end(JSON.stringify(result?.body ?? { error: "Not found." }));
   } catch (error) {
-    console.error("[api/user/inventory] Unhandled route error.", error);
-    sendJson(response, 500, { error: "Inventory request failed." });
+    logUnhandledRouteError(ROUTE, method, error);
+    sendJson(response, 500, unhandledRouteErrorBody(error, "Inventory request failed."));
   }
 }

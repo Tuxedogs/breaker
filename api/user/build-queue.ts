@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleUserBuildQueueRoute } from "../../src/server/user/buildQueueRoute.js";
+
 async function readBody(request: IncomingMessage): Promise<unknown> {
   if (request.method === "GET" || request.method === "HEAD") return {};
 
@@ -23,7 +25,6 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   try {
-    const { handleUserBuildQueueRoute } = await import("../../src/server/user/buildQueueRoute.js");
     const result = await handleUserBuildQueueRoute(
       request.method ?? "GET",
       request.headers,

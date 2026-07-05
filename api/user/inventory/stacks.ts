@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 
+import { handleUserInventoryRoute } from "../../../src/server/user/inventoryRoute.js";
+
 async function readBody(request: IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
   for await (const chunk of request) chunks.push(Buffer.from(chunk));
@@ -21,7 +23,6 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   try {
-    const { handleUserInventoryRoute } = await import("../../../src/server/user/inventoryRoute.js");
     const result = await handleUserInventoryRoute(
       request.method ?? "POST",
       "/api/user/inventory/stacks",
