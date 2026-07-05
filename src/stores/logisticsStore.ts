@@ -128,6 +128,14 @@ interface LogisticsStoreState {
   }) => void;
   undoInventoryImportBatch: (batchId: string) => void;
   updateInventoryEntry: (entry: InventoryEntry) => void;
+  updateInventoryEntryAsync: (entry: InventoryEntry) => Promise<void>;
+  transferInventoryStacksAsync: (input: {
+    entryIds: string[];
+    sourceLocationId: string;
+    targetLocationId: string;
+  }) => Promise<{
+    moves: Array<{ snapshot: InventoryEntry; fromLocationId: string }>;
+  }>;
   deleteInventoryEntry: (id: string) => void;
   registerCraftingRecipe: (registration: CraftingRecipeRegistration) => void;
   replaceBuildQueueFromRemote: (
@@ -521,7 +529,7 @@ function trackInventoryMutation(
   set: LogisticsSet,
   request: Promise<unknown> | null,
   action: string,
-) {
+): Promise<void> {
   if (!request) {
     set((state: LogisticsStoreState) => ({
       inventorySync: {
@@ -530,7 +538,7 @@ function trackInventoryMutation(
         syncError: "Inventory changes are pending until sign-in/server sync is available.",
       },
     }));
-    return;
+    return Promise.resolve();
   }
   set((state: LogisticsStoreState) => ({
     inventorySync: {
@@ -541,7 +549,7 @@ function trackInventoryMutation(
       syncError: undefined,
     },
   }));
-  request
+  return request
     .then(() => {
       set((state: LogisticsStoreState) => {
         const pendingMutationCount = Math.max(0, state.inventorySync.pendingMutationCount - 1);
@@ -571,6 +579,7 @@ function trackInventoryMutation(
           },
         };
       });
+      throw error instanceof Error ? error : new Error(String(error));
     });
 }
 
@@ -578,7 +587,7 @@ migrateLegacyLogisticsStorage();
 
 export const useLogisticsStore = create<LogisticsStoreState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       materialTemplates,
       itemTemplates,
       recipeTemplates,
@@ -744,7 +753,7 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
             state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
           );
           const location = state.locations.find((entry) => entry.id === normalized.locationId);
-          trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
+          void trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
           return { inventoryEntries: state.inventoryEntries.map((current) =>
             current.id === entry.id
               ? normalized
@@ -752,8 +761,74 @@ export const useLogisticsStore = create<LogisticsStoreState>()(
           ) };
         });
       },
+      updateInventoryEntryAsync: async (entry) => {
+        const state = get();
+        const normalized = normalizeInventoryEntry(
+          entry,
+          state.materialTemplates,
+          state.inventoryEntries.find((current) => current.id === entry.id)?.createdAt,
+        );
+        const location = state.locations.find((candidate) => candidate.id === normalized.locationId);
+        await trackInventoryMutation(set, persistOnlineInventoryStack(normalized, location), "update inventory stack");
+        set((currentState) => ({
+          inventoryEntries: currentState.inventoryEntries.map((current) =>
+            current.id === entry.id ? normalized : current,
+          ),
+        }));
+      },
+      transferInventoryStacksAsync: async ({ entryIds, sourceLocationId, targetLocationId }) => {
+        if (targetLocationId === sourceLocationId) {
+          throw new Error("Source and target location must be different.");
+        }
+
+        const state = get();
+        const plannedMoves: Array<{
+          snapshot: InventoryEntry;
+          fromLocationId: string;
+          updated: InventoryEntry;
+        }> = [];
+
+        for (const id of entryIds) {
+          const snapshot = state.inventoryEntries.find((entry) => entry.id === id);
+          if (!snapshot) {
+            throw new Error("One or more selected stacks are no longer in your inventory.");
+          }
+          const fromLocationId = snapshot.locationId ?? "__unassigned__";
+          if (fromLocationId !== sourceLocationId) {
+            throw new Error("One or more selected stacks are no longer at the source location.");
+          }
+          const updated = normalizeInventoryEntry({
+            ...snapshot,
+            locationId: targetLocationId,
+            updatedAt: new Date().toISOString(),
+          }, state.materialTemplates, snapshot.createdAt);
+          plannedMoves.push({ snapshot, fromLocationId: sourceLocationId, updated });
+        }
+
+        if (!plannedMoves.length) {
+          throw new Error("No valid stacks selected for transfer.");
+        }
+
+        await Promise.all(plannedMoves.map((move) => {
+          const location = state.locations.find((candidate) => candidate.id === move.updated.locationId);
+          return trackInventoryMutation(
+            set,
+            persistOnlineInventoryStack(move.updated, location),
+            "transfer inventory stack",
+          );
+        }));
+
+        const updatedById = new Map(plannedMoves.map((move) => [move.updated.id, move.updated]));
+        set((currentState) => ({
+          inventoryEntries: currentState.inventoryEntries.map((entry) => updatedById.get(entry.id) ?? entry),
+        }));
+
+        return {
+          moves: plannedMoves.map(({ snapshot, fromLocationId }) => ({ snapshot, fromLocationId })),
+        };
+      },
       deleteInventoryEntry: (id) => {
-        trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "delete inventory stack");
+        void trackInventoryMutation(set, persistOnlineInventoryStackDelete(id), "delete inventory stack");
         set((state) => ({
           inventoryEntries: state.inventoryEntries.filter((entry) => entry.id !== id),
         }));

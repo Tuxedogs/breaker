@@ -46,6 +46,7 @@ import {
   type QualityBand,
 } from "../utils/qualityBands";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import {
   buildComponentCardSchema,
@@ -620,6 +621,22 @@ function dedupeRecipeVariants(recipes: ComponentRecipe[], baseName: string): Com
   }
 
   return deduped;
+}
+
+function getEffectChipToneClass(property: string): string {
+  if (property.includes("Health") || property.includes("Shield") || property.includes("Resistance")) {
+    return "craft-detail-effect-chip--vitality";
+  }
+  if (
+    property.includes("Damage")
+    || property.includes("DPS")
+    || property.includes("RateOfFire")
+    || property.includes("Speed")
+    || property.includes("Range")
+  ) {
+    return "craft-detail-effect-chip--performance";
+  }
+  return "craft-detail-effect-chip--neutral";
 }
 
 function getImpactClass(impact: "good" | "bad" | "neutral"): string {
@@ -1651,7 +1668,10 @@ function DetailMaterialQualityRow({
           );
 
           return (
-            <span key={`${m.slot}:${m.property}:${i}`} className="craft-detail-effect-chip">
+            <span
+              key={`${m.slot}:${m.property}:${i}`}
+              className={`craft-detail-effect-chip ${getEffectChipToneClass(m.property)}`}
+            >
               <span>{formatModifierStatName(m.property)}</span>
               <strong className={getImpactClass(impact)}>{display.modifier}</strong>
             </span>
@@ -1916,6 +1936,231 @@ function buildModifiedDetailStatRows(
   }
 
   return rows;
+}
+
+const WEAPON_PERFORMANCE_EXCLUDED_LABELS = new Set(
+  ["Size", "Grade", "Class", "Craft Time", "Weapon Type", "Damage Type"].map(normalizeDetailStatLabel),
+);
+
+type WeaponStatSubclusterDefinition = {
+  title: string;
+  labels: string[];
+};
+
+type WeaponStatGroupDefinition =
+  | { title: string; kind: "flat"; labels: string[] }
+  | { title: string; kind: "nested"; subclusters: WeaponStatSubclusterDefinition[] };
+
+const WEAPON_PERFORMANCE_STAT_GROUPS: WeaponStatGroupDefinition[] = [
+  {
+    title: "Ballistics / Damage",
+    kind: "nested",
+    subclusters: [
+      {
+        title: "Damage Output",
+        labels: [
+          "Alpha Damage",
+          "Physical Damage",
+          "Energy Damage",
+          "Distortion Damage",
+          "Thermal Damage",
+          "Biochemical Damage",
+          "Stun Damage",
+          "Fire Rate",
+          "DPS",
+          "Ammo Capacity",
+          "Ammo Cost Per Shot",
+          "Charge Time",
+        ],
+      },
+      {
+        title: "Projectile",
+        labels: [
+          "Projectile Speed",
+          "Projectile Range / Max Travel",
+          "Stated Range",
+          "Hard Range",
+          "Damage Falloff Start",
+          "Damage Falloff Range",
+          "Damage Falloff Max",
+        ],
+      },
+      {
+        title: "Penetration",
+        labels: ["Penetration", "Penetration Distance"],
+      },
+    ],
+  },
+  {
+    title: "Thermal / Power",
+    kind: "flat",
+    labels: [
+      "Heat Per Shot",
+      "Heat Generation",
+      "Heat Capacity",
+      "Cooling Rate",
+      "Wear Per Shot",
+      "Power",
+      "Coolant",
+    ],
+  },
+  {
+    title: "Signature / Detection",
+    kind: "flat",
+    labels: [
+      "Online EM",
+      "Online IR",
+      "Firing EM",
+      "Firing IR",
+      "EM Signature",
+      "IR Signature",
+      "Distortion Maximum",
+    ],
+  },
+  {
+    title: "Durability / Physical",
+    kind: "flat",
+    labels: ["Component HP", "Health", "Mass"],
+  },
+];
+
+type WeaponStatSubcluster = {
+  title: string;
+  stats: DetailStatRow[];
+};
+
+type WeaponStatGroup =
+  | { title: string; kind: "flat"; stats: DetailStatRow[] }
+  | { title: string; kind: "nested"; subclusters: WeaponStatSubcluster[] };
+
+function normalizeWeaponPerformanceDisplayStats(stats: DetailStatRow[]): DetailStatRow[] {
+  const healthKey = normalizeDetailStatLabel("Health");
+  const componentHpKey = normalizeDetailStatLabel("Component HP");
+  const healthRow = stats.find((row) => normalizeDetailStatLabel(row.label) === healthKey);
+
+  if (!healthRow) return stats;
+
+  return stats
+    .filter((row) => normalizeDetailStatLabel(row.label) !== componentHpKey)
+    .map((row) =>
+      normalizeDetailStatLabel(row.label) === healthKey
+        ? { ...healthRow, label: "Component HP" }
+        : row,
+    );
+}
+
+function collectWeaponGroupStats(
+  labels: string[],
+  rowByLabel: Map<string, DetailStatRow>,
+  used: Set<string>,
+): DetailStatRow[] {
+  return labels.flatMap((label) => {
+    const key = normalizeDetailStatLabel(label);
+    if (used.has(key)) return [];
+    const row = rowByLabel.get(key);
+    if (!row) return [];
+    used.add(key);
+    return [row];
+  });
+}
+
+function groupWeaponPerformanceStats(stats: DetailStatRow[]): WeaponStatGroup[] {
+  const displayStats = stats.filter(
+    (row) => !WEAPON_PERFORMANCE_EXCLUDED_LABELS.has(normalizeDetailStatLabel(row.label)),
+  );
+  const rowByLabel = new Map(
+    displayStats.map((row) => [normalizeDetailStatLabel(row.label), row] as const),
+  );
+  const used = new Set<string>();
+  const groups: WeaponStatGroup[] = [];
+
+  for (const definition of WEAPON_PERFORMANCE_STAT_GROUPS) {
+    if (definition.kind === "nested") {
+      const subclusters = definition.subclusters
+        .map((subcluster) => ({
+          title: subcluster.title,
+          stats: collectWeaponGroupStats(subcluster.labels, rowByLabel, used),
+        }))
+        .filter((subcluster) => subcluster.stats.length > 0);
+
+      if (subclusters.length > 0) {
+        groups.push({ title: definition.title, kind: "nested", subclusters });
+      }
+      continue;
+    }
+
+    const groupStats = collectWeaponGroupStats(definition.labels, rowByLabel, used);
+    if (groupStats.length > 0) {
+      groups.push({ title: definition.title, kind: "flat", stats: groupStats });
+    }
+  }
+
+  const remaining = displayStats.filter((row) => {
+    const key = normalizeDetailStatLabel(row.label);
+    if (used.has(key)) return false;
+    used.add(key);
+    return true;
+  });
+
+  if (remaining.length > 0) {
+    groups.push({ title: "Additional", kind: "flat", stats: remaining });
+  }
+
+  return groups;
+}
+
+function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
+  return (
+    <span className="craft-detail-stat-row craft-stat-row stat-row">
+      <span className="craft-stat-label">{stat.label}</span>
+      <strong className="craft-stat-value">
+        <span className={`craft-detail-stat-value ${stat.valueImpactClass ?? ""}`}>{stat.value}</span>
+        {stat.modifier && (
+          <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
+            ({stat.modifier.value})
+          </span>
+        )}
+      </strong>
+    </span>
+  );
+}
+
+function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
+  const groups = groupWeaponPerformanceStats(normalizeWeaponPerformanceDisplayStats(stats));
+
+  return (
+    <div className="weapon-performance-groups">
+      {groups.map((group) => (
+        <section
+          key={group.title}
+          className={`stat-group${group.kind === "nested" ? " stat-group--nested" : ""}`}
+          aria-label={group.title}
+        >
+          <div className="stat-group-title">{group.title}</div>
+          {group.kind === "nested" ? (
+            <div className="stat-group-body">
+              {group.subclusters.map((subcluster) => (
+                <div key={subcluster.title} className="stat-subcluster">
+                  <div className="stat-subcluster-title">{subcluster.title}</div>
+                  <div className="stat-group-grid">
+                    {subcluster.stats.map((stat) => (
+                      <DetailStatRowItem key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="stat-group-grid">
+              {group.stats.map((stat) => (
+                <DetailStatRowItem key={`${group.title}:${stat.label}`} stat={stat} />
+              ))}
+            </div>
+          )}
+        </section>
+      ))}
+    </div>
+  );
 }
 
 type DetailGraphPoint = {
@@ -2396,21 +2641,15 @@ function ItemSummaryPanel({
         {modifiedStats.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
             <div className="craft-summary-section-label">{statsSectionLabel}</div>
-            <div className="craft-detail-stat-list">
-              {modifiedStats.map((stat) => (
-                <span key={`${stat.label}:${stat.value}`} className="craft-detail-stat-row">
-                  <span>{stat.label}</span>
-                  <strong>
-                    <span className={`craft-detail-stat-value ${stat.valueImpactClass ?? ""}`}>{stat.value}</span>
-                    {stat.modifier && (
-                      <span className={`craft-detail-stat-modifier ${stat.modifier.impactClass}`}>
-                        ({stat.modifier.value})
-                      </span>
-                    )}
-                  </strong>
-                </span>
-              ))}
-            </div>
+            {componentCardRecord?.type === "weaponGun" ? (
+              <WeaponPerformanceStatGroups stats={modifiedStats} />
+            ) : (
+              <div className="craft-detail-stat-list craft-stat-grid">
+                {modifiedStats.map((stat) => (
+                  <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -2564,23 +2803,24 @@ function CraftingOverviewPanel({
     finalProductQuality.averageBand ?? finalProductQuality.band;
 
   return (
-    <div className="craft-detail-overview-strip">
+    <div className="craft-detail-overview-cards">
       {formatCraftTime(recipe.craft_time_seconds) && (
-        <span>
-          <span>Craft Time</span>
-          <strong>{formatCraftTime(recipe.craft_time_seconds)}</strong>
-        </span>
+        <article className="craft-detail-overview-card">
+          <span className="craft-detail-overview-card-label">Craft Time</span>
+          <strong className="craft-detail-overview-card-value">{formatCraftTime(recipe.craft_time_seconds)}</strong>
+        </article>
       )}
-      <span>
-        <span>Resulting Quality</span>
-        <strong className={`craft-detail-band-pill ${componentRarityClass}`}>
+      <article className="craft-detail-overview-card">
+        <span className="craft-detail-overview-card-label">Resulting Quality</span>
+        <strong className={`craft-detail-overview-card-value craft-detail-band-pill ${componentRarityClass}`}>
           {formatCompactNumber(displayFinalProductQuality)}
         </strong>
-      </span>
-      <span>
-        <span>Materials</span>
-        <strong>{recipe.materials.length} required</strong>
-      </span>
+      </article>
+      <article className="craft-detail-overview-card">
+        <span className="craft-detail-overview-card-label">Materials Required</span>
+        <strong className="craft-detail-overview-card-value">{recipe.materials.length}</strong>
+        <span className="craft-detail-overview-card-sub">ingredients</span>
+      </article>
     </div>
   );
 }
@@ -2638,17 +2878,32 @@ function EstimatedEffectsPanel({
               row.modifierMode,
             );
             const impactClass = getImpactClass(getModifierImpact(row.property, row.totalValue));
-            const effectValue = display.total
-              ? `${display.total} (${formatModifierDifference(display)})`
-              : formatContributionValue(row.totalValue, row.modifierMode);
-
             return (
               <div key={getTotalModifierKey(row.property, row.modifierMode)} className="craft-detail-effect-row">
                 <span className="craft-detail-effect-stat">{formatProperty(row.property)}</span>
-                <strong className={impactClass}>{effectValue}</strong>
+                <div className="craft-detail-effect-values">
+                  {display.total ? (
+                    <strong className="craft-detail-effect-total">{display.total}</strong>
+                  ) : (
+                    <strong className={`craft-detail-effect-total ${impactClass}`}>
+                      {formatContributionValue(row.totalValue, row.modifierMode)}
+                    </strong>
+                  )}
+                  {display.total && (
+                    <span className={`craft-detail-effect-delta ${impactClass}`}>
+                      {formatModifierDifference(display)}
+                    </span>
+                  )}
+                </div>
                 {row.contributions.length > 0 && (
                   <span className="craft-detail-effect-sources">
-                    {row.contributions.map((c) => `${c.materialName} ${formatContributionValue(c.value, row.modifierMode)}`).join(" / ")}
+                    {row.contributions.map((c, index) => (
+                      <span key={`${c.materialName}:${index}`} className="craft-detail-effect-source">
+                        {index > 0 && <span className="craft-detail-effect-source-sep" aria-hidden="true">·</span>}
+                        <span>{c.materialName}</span>
+                        <strong>{formatContributionValue(c.value, row.modifierMode)}</strong>
+                      </span>
+                    ))}
                   </span>
                 )}
               </div>
@@ -2877,19 +3132,34 @@ function RecipeDrawer({
     selectedRecipe.grade ? `Grade ${selectedRecipe.grade}` : null,
     selectedRecipe.class,
   ].filter((value): value is string => Boolean(value));
+  const heroCraftTime = formatCraftTime(
+    selectedComponentCard?.craftTimeSeconds ?? selectedRecipe.craft_time_seconds ?? 0,
+  );
   const heroTypeLabel =
     selectedComponentCard?.typeLabel ??
     buildComponentCardSchema(selectedRecipe).typeLabel;
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
+  const heroIconUrl = selectedComponentCard ? getComponentCategoryIconUrl(selectedComponentCard) : null;
 
   return (
     <div className="craft-detail-stage craft-detail-shell">
-      <header className="craft-detail-header page-compact-header">
-        <div className="craft-detail-hero-left">
-          <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
-            Back to Results
-          </Link>
-          <div className="craft-detail-visual-panel">
+      <Link className="craft-summary-queue-link craft-detail-back-link" to={backTo}>
+        Back to Results
+      </Link>
+
+      <header className="craft-detail-hero page-compact-header">
+        <div className="craft-detail-hero-card">
+          {heroIconUrl ? (
+            <img
+              src={heroIconUrl}
+              alt=""
+              aria-hidden="true"
+              className="craft-detail-hero-icon"
+            />
+          ) : (
+            <span className="craft-detail-hero-icon craft-detail-hero-icon--fallback" aria-hidden="true" />
+          )}
+          <div className="craft-detail-hero-card-copy">
             <span className="craft-detail-visual-kind">{heroTypeLabel}</span>
             <strong>{displayName}</strong>
             <span className={`craft-detail-band-pill ${componentRarityClass}`}>
@@ -2907,6 +3177,11 @@ function RecipeDrawer({
             {heroMeta.map((value) => (
               <span key={value} className="craft-badge craft-badge--neutral">{value}</span>
             ))}
+            {heroCraftTime && (
+              <span className="craft-badge craft-badge--neutral craft-badge--craft-time">
+                Craft {heroCraftTime}
+              </span>
+            )}
           </div>
           {selectedComponentCard?.description && (
             <p className="craft-item-description">
@@ -2944,7 +3219,7 @@ function RecipeDrawer({
         </div>
       </header>
 
-      <div className="craft-detail-workspace">
+      <div className="craft-detail-workspace craft-detail-grid">
         <ItemSummaryPanel
           recipe={selectedRecipe}
           componentCardRecord={selectedComponentCard}

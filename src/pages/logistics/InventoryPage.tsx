@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { createInventoryEntryDraft, useLogisticsStore } from '../../stores/logisticsStore';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
+import InventoryTransferDialog from '../../components/logistics/InventoryTransferDialog';
 import InventoryEntryPanel from '../../components/logistics/InventoryEntryPanel';
 import MaterialIcon from '../../components/logistics/MaterialIcon';
 import {
@@ -25,6 +26,7 @@ import { useAuthSession } from '../../lib/auth/useAuthSession';
 import { useMaterialIdentityIndex, type MaterialIdentity } from '../../lib/logistics/materialIdentityIndex';
 import { createMaterialResolver } from '../../lib/logistics/materialResolver';
 import { fetchOnlinePersistenceState } from '../../lib/userOnlinePersistence';
+import QualityTierBadge from '../../components/shared/QualityTierBadge';
 import '../../components/logistics/logistics.css';
 import '../../components/logistics/inventory.css';
 
@@ -41,6 +43,10 @@ type InventoryUndoLedgerEntry = {
   id: string;
   label: string;
   action: InventoryUndoAction;
+};
+
+type InventorySuccessNotice = {
+  message: string;
 };
 type UnknownRecord = Record<string, unknown>;
 type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_locations' | 'replace_all';
@@ -243,15 +249,6 @@ function getEntryKind(entry: InventoryEntry, material: unknown): 'ore' | 'refine
   if (raw.includes('ore') || raw.includes('raw') || raw.includes('mining') || raw.includes('mineable')) return 'ore';
   if (raw.includes('personal') || raw.includes('custom')) return 'personal';
   return 'unknown';
-}
-
-function getQualityClass(quality: number | null | undefined): string {
-  if (quality == null || !Number.isFinite(quality)) return '';
-  if (quality >= 950) return 'logi-quality--legendary';
-  if (quality >= 900) return 'logi-quality--premium';
-  if (quality >= 800) return 'logi-quality--strong';
-  if (quality >= 650) return 'logi-quality--mid';
-  return 'logi-quality--low';
 }
 
 function normalizeLookup(value: string): string {
@@ -921,7 +918,7 @@ function CsvImportModal({
                             <td>{row.entry.id}</td>
                             <td>{row.materialName}</td>
                             <td>{formatCsvNumber(row.entry.quantity)}</td>
-                            <td>{row.entry.quality ?? '-'}</td>
+                            <td><QualityTierBadge quality={row.entry.quality} qualityBand={row.entry.qualityBand} /></td>
                             <td>{row.locationName}</td>
                             <td>{row.reservedQuantity > 0 ? `${formatCsvNumber(row.reservedQuantity)} by ${row.reservedBy.join(', ')}` : '-'}</td>
                           </tr>
@@ -958,7 +955,7 @@ function CsvImportModal({
                             <td>{row.materialName || '-'}</td>
                             <td>{row.quantity ? formatCsvNumber(row.quantity) : '-'}</td>
                             <td>{row.unitLabel || '-'}</td>
-                            <td>{row.quality ?? '-'}</td>
+                            <td><QualityTierBadge quality={row.quality} /></td>
                             <td>{row.boxSize == null ? '-' : formatCsvNumber(row.boxSize)}</td>
                             <td>{row.locationName || '-'}</td>
                             <td>{row.container || '-'}</td>
@@ -1021,9 +1018,8 @@ function CsvImportModal({
   );
 }
 
-function QualityPill({ quality }: { quality?: number | null }) {
-  if (quality == null || !Number.isFinite(quality)) return <span className="logi-quality-pill logi-quality-pill--empty">—</span>;
-  return <span className={`logi-quality-pill ${getQualityClass(quality)}`}>{quality}</span>;
+function QualityPill({ quality, qualityBand }: { quality?: number | null; qualityBand?: number | null }) {
+  return <QualityTierBadge quality={quality} qualityBand={qualityBand} />;
 }
 
 function useIsMobileInventoryViewport() {
@@ -1143,7 +1139,7 @@ const InventoryMaterialCard = memo(function InventoryMaterialCard({
                   aria-hidden
                 />
               )}
-              <QualityPill quality={row.entry.quality} />
+              <QualityPill quality={row.entry.quality} qualityBand={row.entry.qualityBand} />
               <span className="logi-location-card-stack-qty">{row.quantityLabel}</span>
               {row.containerLabel !== '-' && <span className="logi-location-card-stack-container">{row.containerLabel}</span>}
               {group.kindLabels.length > 1 && <span className={`logi-location-kind logi-location-kind--${row.kind}`}>{row.kindLabel}</span>}
@@ -1409,72 +1405,6 @@ function InventoryBulkDeleteDialog({
   );
 }
 
-function InventoryTransferDialog({
-  selectedCount,
-  sourceLocationId,
-  locations,
-  onConfirm,
-  onCancel,
-}: {
-  selectedCount: number;
-  sourceLocationId: string;
-  locations: InventoryLocation[];
-  onConfirm: (targetLocationId: string) => void;
-  onCancel: () => void;
-}) {
-  const sourceName = locations.find((location) => location.id === sourceLocationId)?.name ?? 'this location';
-  const transferTargets = useMemo(
-    () => locations.filter((location) => location.id !== sourceLocationId),
-    [locations, sourceLocationId],
-  );
-  const [transferTargetId, setTransferTargetId] = useState('');
-  const resolvedTargetId = transferTargetId || transferTargets[0]?.id || '';
-
-  return (
-    <>
-      <div className="logi-inv-modal-overlay" onClick={onCancel} aria-hidden />
-      <div className="logi-inv-modal" role="dialog" aria-modal="true" aria-labelledby="inv-transfer-title" aria-describedby="inv-transfer-desc">
-        <div className="logi-inv-modal-head">
-          <h2 id="inv-transfer-title">Transfer stacks</h2>
-        </div>
-        <div className="logi-inv-modal-body">
-          <p id="inv-transfer-desc">
-            Move {selectedCount} selected stack{selectedCount === 1 ? '' : 's'} from <strong>{sourceName}</strong> to:
-          </p>
-          <label className="logi-inv-modal-field">
-            <span className="logi-inv-modal-label">Target location</span>
-            <select
-              className="logi-select logi-inv-modal-select"
-              value={resolvedTargetId}
-              onChange={(event) => setTransferTargetId(event.target.value)}
-              aria-label="Target location"
-            >
-              {transferTargets.length === 0 ? (
-                <option value="">No other locations available</option>
-              ) : (
-                transferTargets.map((location) => (
-                  <option key={location.id} value={location.id}>{location.name}</option>
-                ))
-              )}
-            </select>
-          </label>
-        </div>
-        <div className="logi-inv-modal-foot">
-          <button type="button" className="logi-inv-modal-btn logi-inv-modal-btn--ghost" onClick={onCancel}>Cancel</button>
-          <button
-            type="button"
-            className="logi-inv-modal-btn logi-inv-modal-btn--primary"
-            disabled={!resolvedTargetId}
-            onClick={() => onConfirm(resolvedTargetId)}
-          >
-            Transfer
-          </button>
-        </div>
-      </div>
-    </>
-  );
-}
-
 type SelectedLocationDetailProps = {
   selectedLocation: LocationGroup;
   drawerMaterialGroups: DrawerMaterialGroup[];
@@ -1605,6 +1535,8 @@ export default function InventoryPage() {
   const applyInventoryImportBatch = useLogisticsStore((state) => state.applyInventoryImportBatch);
   const undoInventoryImportBatch = useLogisticsStore((state) => state.undoInventoryImportBatch);
   const updateInventoryEntry = useLogisticsStore((state) => state.updateInventoryEntry);
+  const updateInventoryEntryAsync = useLogisticsStore((state) => state.updateInventoryEntryAsync);
+  const transferInventoryStacksAsync = useLogisticsStore((state) => state.transferInventoryStacksAsync);
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
   const buildQueue = useLogisticsStore((state) => state.buildQueue);
   const replaceOnlineState = useLogisticsStore((state) => state.replaceOnlineState);
@@ -1626,6 +1558,7 @@ export default function InventoryPage() {
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
   const [undoLedger, setUndoLedger] = useState<InventoryUndoLedgerEntry | null>(null);
+  const [successNotice, setSuccessNotice] = useState<InventorySuccessNotice | null>(null);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
   const [, setSyncLabelTick] = useState(0);
   const isMobileViewport = useIsMobileInventoryViewport();
@@ -1955,31 +1888,36 @@ export default function InventoryPage() {
     setUndoLedger(entry);
   }, []);
 
-  const performUndo = useCallback(() => {
+  const performUndo = useCallback(async () => {
     if (!undoLedger) return;
     const action = undoLedger.action;
-    if (action.kind === 'delete') {
-      addInventoryEntries(action.entries);
-    } else if (action.kind === 'transfer') {
-      for (const move of action.moves) {
-        updateInventoryEntry({
-          ...move.snapshot,
-          locationId: move.fromLocationId,
-          updatedAt: new Date().toISOString(),
-        });
+    try {
+      if (action.kind === 'delete') {
+        addInventoryEntries(action.entries);
+      } else if (action.kind === 'transfer') {
+        for (const move of action.moves) {
+          await updateInventoryEntryAsync({
+            ...move.snapshot,
+            locationId: move.fromLocationId,
+            updatedAt: new Date().toISOString(),
+          });
+        }
+      } else if (action.kind === 'add') {
+        for (const id of action.entryIds) {
+          deleteInventoryEntry(id);
+        }
+      } else if (action.kind === 'import') {
+        undoInventoryImportBatch(action.batchId);
       }
-    } else if (action.kind === 'add') {
-      for (const id of action.entryIds) {
-        deleteInventoryEntry(id);
-      }
-    } else if (action.kind === 'import') {
-      undoInventoryImportBatch(action.batchId);
+      setUndoLedger(null);
+      setSuccessNotice(null);
+      setSelectedEntryIds(new Set());
+      setBulkDeleteOpen(false);
+      setTransferOpen(false);
+    } catch (error) {
+      setInventoryGuardMessage(error instanceof Error ? error.message : String(error));
     }
-    setUndoLedger(null);
-    setSelectedEntryIds(new Set());
-    setBulkDeleteOpen(false);
-    setTransferOpen(false);
-  }, [addInventoryEntries, deleteInventoryEntry, undoInventoryImportBatch, undoLedger, updateInventoryEntry]);
+  }, [addInventoryEntries, deleteInventoryEntry, undoInventoryImportBatch, undoLedger, updateInventoryEntryAsync]);
 
   const handleEditDrawerEntry = useCallback((entry: InventoryEntry) => {
     setPanel({ mode: 'edit', entry });
@@ -2035,36 +1973,47 @@ export default function InventoryPage() {
     setTransferOpen(false);
   }, []);
 
-  const handleTransferConfirm = useCallback((targetLocationId: string) => {
-    if (!manageLocationId || !targetLocationId || targetLocationId === manageLocationId) return;
+  const handleTransferConfirm = useCallback(async (targetLocationId: string) => {
+    if (!manageLocationId) {
+      throw new Error('No source location selected.');
+    }
+    if (targetLocationId === manageLocationId) {
+      throw new Error('Source and target location must be different.');
+    }
+    if (selectedEntryIds.size === 0) {
+      throw new Error('No stacks selected for transfer.');
+    }
     if (freshnessBlockReason) {
-      setInventoryGuardMessage(freshnessBlockReason);
-      return;
+      throw new Error(freshnessBlockReason);
     }
-    const ids = Array.from(selectedEntryIds);
-    const moves: Array<{ snapshot: InventoryEntry; fromLocationId: string }> = [];
-    for (const id of ids) {
-      const snapshot = entries.find((entry) => entry.id === id);
-      if (!snapshot) continue;
-      moves.push({ snapshot, fromLocationId: manageLocationId });
-      updateInventoryEntry({
-        ...snapshot,
-        locationId: targetLocationId,
-        updatedAt: new Date().toISOString(),
-      });
-    }
-    if (moves.length) {
-      const targetName = locations.find((location) => location.id === targetLocationId)?.name ?? 'location';
-      pushUndoLedger({
-        id: createNewInventoryId(),
-        label: `Transferred ${moves.length} stack${moves.length === 1 ? '' : 's'} to ${targetName}`,
-        action: { kind: 'transfer', moves },
-      });
-    }
+
+    const sourceName = locations.find((location) => location.id === manageLocationId)?.name ?? 'source location';
+    const targetName = locations.find((location) => location.id === targetLocationId)?.name ?? 'target location';
+    const { moves } = await transferInventoryStacksAsync({
+      entryIds: Array.from(selectedEntryIds),
+      sourceLocationId: manageLocationId,
+      targetLocationId,
+    });
+
+    pushUndoLedger({
+      id: createNewInventoryId(),
+      label: `Transfer to ${targetName}`,
+      action: { kind: 'transfer', moves },
+    });
+    setSuccessNotice({
+      message: `Transferred ${moves.length} lot${moves.length === 1 ? '' : 's'} from ${sourceName} to ${targetName}.`,
+    });
     setInventoryGuardMessage('');
     setTransferOpen(false);
     setSelectedEntryIds(new Set());
-  }, [entries, freshnessBlockReason, locations, manageLocationId, pushUndoLedger, selectedEntryIds, updateInventoryEntry]);
+  }, [
+    freshnessBlockReason,
+    locations,
+    manageLocationId,
+    pushUndoLedger,
+    selectedEntryIds,
+    transferInventoryStacksAsync,
+  ]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
@@ -2108,11 +2057,20 @@ export default function InventoryPage() {
           <p className="logi-page-subtitle">Quality-aware stock visibility.</p>
         </div>
         <div className="logi-inv-header-actions">
-          {undoLedger && (
-            <button type="button" className="logi-inv-undo-btn" onClick={performUndo}>
+          {successNotice ? (
+            <div className="logi-inv-success-banner" role="status">
+              <span>{successNotice.message}</span>
+              {undoLedger ? (
+                <button type="button" className="logi-inv-undo-btn logi-inv-undo-btn--inline" onClick={() => void performUndo()}>
+                  Undo
+                </button>
+              ) : null}
+            </div>
+          ) : undoLedger ? (
+            <button type="button" className="logi-inv-undo-btn" onClick={() => void performUndo()}>
               Undo: {undoLedger.label}
             </button>
-          )}
+          ) : null}
           <button
             type="button"
             className={`logi-inv-sync-status logi-inv-sync-status--${syncTone}`}
@@ -2336,7 +2294,10 @@ export default function InventoryPage() {
 
       {transferOpen && manageLocationId && (
         <InventoryTransferDialog
-          selectedCount={selectedEntryIds.size}
+          key={manageLocationId}
+          selectedEntryIds={selectedEntryIds}
+          entries={entries}
+          materials={materials}
           sourceLocationId={manageLocationId}
           locations={locations}
           onConfirm={handleTransferConfirm}

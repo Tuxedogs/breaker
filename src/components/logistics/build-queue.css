@@ -1429,9 +1429,10 @@
 }
 
 .bq-badge--quality {
-  border-color: var(--logi-rarity-accent-border, rgba(148, 163, 184, 0.14));
-  background: var(--logi-rarity-accent-bg, rgba(255, 255, 255, 0.02));
-  color: var(--logi-rarity-accent, rgba(226, 232, 240, 0.8));
+  border-color: var(--craft-value-tier-border, rgba(148, 163, 184, 0.14));
+  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.02));
+  color: var(--craft-value-tier-color, rgba(226, 232, 240, 0.8));
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 .bq-badge--neutral { color: rgba(148, 163, 184, 0.82); }
@@ -1757,7 +1758,12 @@
   font-weight: 500;
 }
 
-.bq-reserve-col-quality { color: var(--alloc-blue); font-size: 16px; font-weight: 800; }
+.bq-reserve-col-quality {
+  color: var(--craft-value-tier-color, var(--alloc-blue));
+  font-size: 16px;
+  font-weight: 800;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
+}
 .bq-reserve-col-available,
 .bq-reserve-col-reserved { text-align: right; color: var(--alloc-text-secondary); }
 .bq-reserve-col-available {
@@ -1919,12 +1925,16 @@
   min-height: 46px;
   padding: 6px 8px;
   border-radius: 8px;
+  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.16));
+  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.035));
+  color: var(--craft-value-tier-color, rgba(226, 232, 240, 0.84));
   font: inherit;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0;
   white-space: nowrap;
   opacity: 1;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 .bq-quality-chip strong {
@@ -1946,30 +1956,6 @@
   font-style: normal;
   font-weight: 600;
   line-height: 1;
-}
-
-.bq-quality-chip--blue {
-  border: 1px solid rgba(77, 163, 255, 0.35);
-  background: rgba(20, 91, 160, 0.3);
-  color: var(--alloc-blue);
-}
-
-.bq-quality-chip--purple {
-  border: 1px solid rgba(184, 92, 246, 0.35);
-  background: rgba(91, 35, 140, 0.36);
-  color: var(--alloc-purple);
-}
-
-.bq-quality-chip--cyan {
-  border: 1px solid rgba(0, 230, 210, 0.32);
-  background: rgba(0, 230, 210, 0.12);
-  color: var(--alloc-cyan);
-}
-
-.bq-quality-chip--low {
-  border: 1px solid rgba(240, 184, 75, 0.28);
-  background: rgba(143, 106, 38, 0.18);
-  color: #f0b84b;
 }
 
 .bq-stats-breakdown {

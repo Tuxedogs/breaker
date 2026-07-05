@@ -13,6 +13,7 @@ import type {
   PanelRegion,
 } from "../../lib/logistics/refineryOcr";
 import type { MaterialTemplate } from "../../types/logistics";
+import QualityTierBadge from "../../components/shared/QualityTierBadge";
 
 // ── Draft row types ───────────────────────────────────────────────────────────
 
@@ -1216,7 +1217,7 @@ export default function RefineryImportPage() {
                       {section.rows.map((row, j) => (
                         <div key={j} className="logi-refimport-lightbox-row">
                           <span className="logi-refimport-lightbox-name">{row.name}</span>
-                          <span className="logi-refimport-lightbox-val">{row.quality}</span>
+                          <QualityTierBadge quality={row.quality} className="logi-refimport-lightbox-quality" />
                           <span className="logi-refimport-lightbox-val">{row.qty} {row.unit}</span>
                         </div>
                       ))}
@@ -1678,17 +1679,20 @@ function WorkOrderReviewCard({
                           Observed {row.qualityObserved} -&gt; Band {row.qualityBand}
                         </div>
                       )}
-                      <input
-                        type="number"
-                        className="logi-refimport-num"
-                        min={0}
-                        max={1000}
-                        value={row.editedQuality}
-                        onChange={(e) =>
-                          onUpdate(rowIdx, { editedQuality: Math.max(0, Math.min(1000, parseInt(e.target.value, 10) || 0)) })
-                        }
-                        aria-label="Quality"
-                      />
+                      <div className="ri-quality-edit">
+                        <QualityTierBadge quality={row.editedQuality} qualityBand={row.qualityBand} />
+                        <input
+                          type="number"
+                          className="logi-refimport-num"
+                          min={0}
+                          max={1000}
+                          value={row.editedQuality}
+                          onChange={(e) =>
+                            onUpdate(rowIdx, { editedQuality: Math.max(0, Math.min(1000, parseInt(e.target.value, 10) || 0)) })
+                          }
+                          aria-label="Quality"
+                        />
+                      </div>
                     </td>
                     <td>
                       <input

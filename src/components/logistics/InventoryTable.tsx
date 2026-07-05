@@ -3,7 +3,7 @@ import type { InventoryEntry, InventoryLocation, MaterialTemplate } from '../../
 import {
   formatEntryQuantity,
   materialTypeClass,
-  rarityClass,
+  qualityBadgeClass,
   resolveInventoryItemKind,
   resolveInventoryItemName,
 } from '../../lib/logistics/inventory';
@@ -203,7 +203,7 @@ export default function InventoryTable({
                     {TYPE_LABELS[typeKey] ?? typeKey}
                   </span>
                 </td>
-                <td><span className={`logi-quality-pill ${rarityClass(entry.quality === undefined ? undefined : entry.rarity)}`}>{entry.quality ?? '—'}</span></td>
+                <td><span className={`logi-quality-pill ${qualityBadgeClass(entry)}`}>{entry.quality ?? '—'}</span></td>
                 <td className={`logi-qty-cell ${materialTypeClass(material, entry.materialType)}`}>{formatEntryQuantity(entry, material)}</td>
                 <td>{location?.name ?? <span className="logi-muted-cell">—</span>}</td>
                 <td className="logi-muted-cell">{entry.container ?? '—'}</td>

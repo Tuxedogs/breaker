@@ -35,7 +35,9 @@ export function getBandEffectiveQuality(bands: QualityBand[], bandIndex: number)
   return clampQuality(Number(bands[safeIndex]?.mappedValue ?? 500));
 }
 
-export function rarityFromBandIndex(bandNumber: number | null | undefined): Extract<RarityTier, "common" | "rare" | "epic" | "legendary"> {
+export type QualityTier = Extract<RarityTier, "common" | "rare" | "epic" | "legendary">;
+
+export function getQualityTierFromBand(bandNumber: number | null | undefined): QualityTier {
   if (!Number.isFinite(bandNumber)) return "common";
   const band = Math.trunc(Number(bandNumber));
   if (band >= 7 && band <= 8) return "legendary";
@@ -45,8 +47,32 @@ export function rarityFromBandIndex(bandNumber: number | null | undefined): Extr
   return "common";
 }
 
+export function rarityFromBandIndex(bandNumber: number | null | undefined): QualityTier {
+  return getQualityTierFromBand(bandNumber);
+}
+
 export function rarityClassFromBandIndex(bandNumber: number | null | undefined): string {
-  return `craft-value-tier--${rarityFromBandIndex(bandNumber)}`;
+  return `craft-value-tier--${getQualityTierFromBand(bandNumber)}`;
+}
+
+export function resolveQualityBandNumber(
+  quality: number | null | undefined,
+  qualityBand?: number | null,
+  bands: QualityBand[] = FALLBACK_QUALITY_BANDS,
+): number | null {
+  if (qualityBand != null && Number.isFinite(qualityBand)) {
+    return Math.max(1, Math.min(8, Math.trunc(qualityBand)));
+  }
+  if (quality == null || !Number.isFinite(quality)) return null;
+  return findNearestBandForQuality(bands, quality) + 1;
+}
+
+export function qualityTierClassFromQuality(
+  quality: number | null | undefined,
+  qualityBand?: number | null,
+  bands?: QualityBand[],
+): string {
+  return rarityClassFromBandIndex(resolveQualityBandNumber(quality, qualityBand, bands));
 }
 
 export function findNearestBandForQuality(bands: QualityBand[], value: number): number {

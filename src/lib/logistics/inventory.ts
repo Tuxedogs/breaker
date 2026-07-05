@@ -9,6 +9,7 @@ import type {
   RecipeTemplate,
 } from '../../types/logistics';
 import type { RecipeInputTemplate } from '../../data/logistics/seed';
+import { qualityTierClassFromQuality } from '../../components/industry/crafting/utils/qualityBands';
 
 export type SourceStrategy = 'nearest' | 'highest-quality' | 'minimize-splits';
 
@@ -155,8 +156,21 @@ export function materialTypeClass(material: MaterialTemplate | undefined, fallba
   return `logi-material-type--${material?.materialType ?? fallback ?? 'special'}`;
 }
 
+const QUALITY_TIER_CLASS: Record<string, string> = {
+  common: 'craft-value-tier--common',
+  rare: 'craft-value-tier--rare',
+  epic: 'craft-value-tier--epic',
+  legendary: 'craft-value-tier--legendary',
+  uncommon: 'craft-value-tier--common',
+  quantanium: 'craft-value-tier--legendary',
+};
+
 export function rarityClass(rarity: RarityInfo | undefined): string {
-  return `logi-rarity--${rarity?.tier ?? 'common'}`;
+  return QUALITY_TIER_CLASS[rarity?.tier ?? 'common'] ?? 'craft-value-tier--common';
+}
+
+export function qualityBadgeClass(entry: Pick<InventoryEntry, 'quality' | 'qualityBand'>): string {
+  return qualityTierClassFromQuality(entry.quality, entry.qualityBand);
 }
 
 export function getInventoryStacks(

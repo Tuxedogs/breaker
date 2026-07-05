@@ -4,6 +4,8 @@
    Uses same dark palette and fonts as dashboard.
    ────────────────────────────────────────────── */
 
+@import "../../styles/craft-value-tier.css";
+
 /* ── Page shell ───────────────────────────────── */
 
 .logi-page {
@@ -1018,12 +1020,13 @@
   min-height: 24px;
   padding: 0.05rem 0.34rem;
   border-radius: 3px;
-  border: 1px solid var(--logi-rarity-accent-border, rgba(var(--rarity-common-rgb), 0.22));
-  background: var(--logi-rarity-accent-bg, rgba(var(--rarity-common-rgb), 0.09));
-  color: var(--logi-rarity-accent, var(--rarity-common));
+  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.16));
+  background: var(--craft-value-tier-bg, rgba(255, 255, 255, 0.035));
+  color: var(--craft-value-tier-color, rgba(216, 226, 245, 0.8));
   font-family: var(--font-primary);
   font-size: 0.85rem;
   font-weight: bolder;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 /* Void Navy color pass: shared Logistics shells and cards only */

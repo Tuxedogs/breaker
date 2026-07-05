@@ -10,7 +10,7 @@ import {
   getInventoryStacks,
   getRecipeForQueueItem,
   materialTypeClass,
-  rarityClass,
+  qualityBadgeClass,
   resolveInventoryItemName,
   resolveInventoryUnitType,
   type InventoryStack,
@@ -30,7 +30,7 @@ import {
   getWeightedEffectiveQuality,
   type QualityAllocationBreakdownEntry,
 } from '../../lib/logistics/buildQueueReservations';
-import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
+import { FALLBACK_QUALITY_BANDS, findNearestBandForQuality, getBandEffectiveQuality, rarityClassFromBandIndex, rarityFromBandIndex, type QualityBand } from '../industry/crafting/utils/qualityBands';
 import { getModifiersAtQuality } from '../industry/crafting/utils/qualityModifiers';
 import { apiUrl } from '../../lib/apiUrl';
 import { parseJsonResponse } from '../../lib/safeJson';
@@ -425,13 +425,6 @@ function getTargetQualityTone(value: number | undefined): string {
   return 'low';
 }
 
-function getQualityChipTone(value: number): string {
-  if (value >= 900) return 'purple';
-  if (value >= 800) return 'blue';
-  if (value >= 700) return 'cyan';
-  return 'low';
-}
-
 function getQualityValueFromBand(band: QualityBand | undefined): number | null {
   if (!band) return null;
   const value = Number(band.mappedValue ?? band.start);
@@ -540,12 +533,11 @@ function QualityAllocationChips({
     <div className="bq-quality-chips">
       {breakdown.map(({ quality, quantity }) => {
         const bandIndex = qualityBands ? findNearestBandForQuality(qualityBands, quality) : 0;
-        const rarity = rarityFromBandIndex(bandIndex + 1);
         const percent = totalQuantity > 0 ? Math.round((quantity / totalQuantity) * 100) : 0;
         return (
           <span
             key={quality}
-            className={`bq-quality-chip bq-quality-chip--${getQualityChipTone(quality)} bq-badge bq-badge--quality logi-rarity--${rarity}`}
+            className={`bq-quality-chip bq-badge bq-badge--quality ${rarityClassFromBandIndex(bandIndex + 1)}`}
             title={`Quality ${quality}`}
           >
             <strong>{quality}</strong>
@@ -1151,7 +1143,7 @@ export default function BuildQueueGroup({
                   <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
                     {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
                   </span>
-                  <span className={`bq-badge bq-badge--quality logi-rarity--${qualitySummary.rarity}`} title={qualitySummary.title}>
+                  <span className={`bq-badge bq-badge--quality craft-value-tier--${qualitySummary.rarity}`} title={qualitySummary.title}>
                     {qualitySummary.label}
                   </span>
                   {showRecipeUnmappedBadge ? (
@@ -1689,7 +1681,7 @@ export default function BuildQueueGroup({
                                                 {locationMeta ? <em>{locationMeta}</em> : null}
                                               </span>
                                             </span>
-                                            <span className={`bq-reserve-col-quality ${rarityClass(stack.rarity)}`}>
+                                            <span className={`bq-reserve-col-quality ${qualityBadgeClass(stack)}`}>
                                               {stack.quality ?? '—'}
                                             </span>
                                             <span className={`bq-reserve-col-available ${materialTypeClass(req.material)}`}>

@@ -410,36 +410,22 @@
   min-width: 46px;
   padding: 0.18rem 0.34rem;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.12);
-  color: rgba(160,180,220,0.64);
-  background: rgba(2,6,23,0.42);
+  border: 1px solid var(--craft-value-tier-border, rgba(148, 163, 184, 0.16));
+  color: var(--craft-value-tier-color, rgba(160, 180, 220, 0.64));
+  background: var(--craft-value-tier-bg, rgba(2, 6, 23, 0.42));
   font-family: var(--font-primary);
   font-size: 0.76rem;
   letter-spacing: 0.06em;
   white-space: nowrap;
-}
-
-.logi-quality-pill.logi-quality--legendary,
-.logi-quality-pill.logi-quality--premium {
-  color: #ffe2a8;
-  border-color: rgba(246,199,111,0.32);
-  background: rgba(246,199,111,0.08);
-}
-
-.logi-quality-pill.logi-quality--strong {
-  color: #b8ffe1;
-  border-color: rgba(86,240,178,0.24);
-  background: rgba(86,240,178,0.07);
-}
-
-.logi-quality-pill.logi-quality--mid {
-  color: rgba(211,204,255,0.9);
-  border-color: rgba(167,139,250,0.22);
-  background: rgba(167,139,250,0.07);
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
 .logi-quality-pill--empty {
   opacity: 0.52;
+  color: rgba(160, 180, 220, 0.64);
+  border-color: rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.42);
+  text-shadow: none;
 }
 
 .logi-location-detail {
@@ -1046,17 +1032,251 @@
   text-transform: uppercase;
 }
 
-.logi-inv-modal-select {
+.logi-inv-modal--transfer {
+  overflow: visible;
+}
+
+.logi-inv-modal--transfer .logi-inv-modal-body {
+  overflow: visible;
+}
+
+.logi-inv-transfer-lead {
+  margin: 0 0 12px;
+}
+
+.logi-inv-transfer-summary {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-border-soft);
+  border-radius: 10px;
+  background: rgba(3, 18, 28, 0.42);
+  display: grid;
+  gap: 6px;
+}
+
+.logi-inv-transfer-summary li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.logi-inv-transfer-summary-material {
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-inv-transfer-summary-qty {
+  color: var(--accent-cyan);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.logi-inv-transfer-summary-more {
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.logi-inv-transfer-picker {
+  position: relative;
+  display: grid;
+  gap: 6px;
+}
+
+.logi-inv-transfer-picker-input {
   width: 100%;
   min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  background: var(--panel-bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.logi-inv-transfer-picker-input:focus {
+  outline: none;
+  border-color: rgba(0, 230, 210, 0.38);
+  box-shadow: 0 0 0 1px rgba(0, 230, 210, 0.18);
+}
+
+.logi-inv-transfer-picker-input.is-selected {
+  border-color: rgba(0, 230, 210, 0.34);
+}
+
+.logi-inv-transfer-picker-selected {
+  margin: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.logi-inv-transfer-picker-selected strong {
+  color: var(--accent-cyan);
+  font-weight: 800;
+}
+
+.logi-inv-transfer-picker-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 12;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: var(--panel-bg-deep);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.42);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 230, 210, 0.18) transparent;
+}
+
+.logi-inv-transfer-picker-empty {
+  padding: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.logi-inv-transfer-picker-group + .logi-inv-transfer-picker-group {
+  border-top: 1px solid rgba(65, 132, 160, 0.16);
+}
+
+.logi-inv-transfer-picker-group-label {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 12px 6px;
+  background: rgba(4, 19, 29, 0.96);
+  color: var(--accent-purple);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.logi-inv-transfer-picker-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.logi-inv-transfer-picker-option:hover,
+.logi-inv-transfer-picker-option.is-highlighted {
+  background: rgba(0, 230, 210, 0.08);
+}
+
+.logi-inv-transfer-picker-option.is-selected {
+  background: rgba(91, 35, 140, 0.22);
+}
+
+.logi-inv-transfer-picker-option-name {
+  min-width: 0;
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logi-inv-transfer-picker-option-meta {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.logi-inv-table-select-col {
+  width: 34px;
 }
 
 .logi-inv-modal-foot {
+  display: grid;
+  gap: 10px;
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-modal-foot-actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  padding: 14px 18px 16px;
-  border-top: 1px solid var(--panel-border-soft);
+}
+
+.logi-inv-modal-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 92, 92, 0.28);
+  border-radius: 8px;
+  background: rgba(255, 92, 92, 0.08);
+  color: #ffb4b4;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.logi-inv-success-banner {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid rgba(34, 211, 122, 0.42);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(34, 211, 122, 0.18), rgba(16, 120, 72, 0.14));
+  color: #b9ffe0;
+  box-shadow: 0 0 20px rgba(34, 211, 122, 0.16);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.logi-inv-success-banner span {
+  color: #dcffef;
+}
+
+.logi-inv-undo-btn--inline {
+  min-height: 30px;
+  padding: 0 12px;
+  animation: none;
+  box-shadow: none;
 }
 
 .logi-inv-modal-btn {
@@ -1130,11 +1350,11 @@
     flex: 1 1 calc(50% - 6px);
   }
 
-  .logi-inv-modal-foot {
+  .logi-inv-modal-foot-actions {
     flex-direction: column-reverse;
   }
 
-  .logi-inv-modal-foot .logi-inv-modal-btn {
+  .logi-inv-modal-foot-actions .logi-inv-modal-btn {
     width: 100%;
   }
 }
@@ -1167,23 +1387,14 @@
 }
 
 .logi-location-stat-grid div,
-.logi-quality-pill {
-  background-color: rgba(2, 6, 23, 0.34);
+.logi-quality-pill:not(.logi-quality-pill--empty) {
+  background-color: var(--craft-value-tier-bg, rgba(2, 6, 23, 0.34));
 }
 
 .logi-inv-view-toggle button.is-active {
   color: rgba(221,214,254,0.96);
   background: rgba(167,139,250,0.09);
   box-shadow: inset 0 0 0 1px rgba(167,139,250,0.26);
-}
-
-.logi-quality-pill.logi-quality--legendary,
-.logi-quality-pill.logi-quality--premium {
-  background: rgba(251, 191, 36, 0.075);
-}
-
-.logi-quality-pill.logi-quality--strong {
-  background: rgba(52, 211, 153, 0.06);
 }
 
 .logi-location-card h2 {
@@ -1738,46 +1949,23 @@
   min-height: 24px;
   justify-content: center;
   padding: 0 7px;
-  border: 1px solid rgba(95, 114, 133, 0.28);
+  border: 1px solid var(--craft-value-tier-border, rgba(95, 114, 133, 0.28));
   border-radius: 7px;
-  background: rgba(3, 18, 28, 0.54);
-  color: var(--text-secondary);
+  background: var(--craft-value-tier-bg, rgba(3, 18, 28, 0.54));
+  color: var(--craft-value-tier-color, var(--text-secondary));
   font-family: var(--font-primary);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px var(--craft-value-tier-glow, transparent);
 }
 
-.logi-inv-page .logi-quality-pill.logi-quality--legendary,
-.logi-inv-page .logi-quality-pill.logi-quality--premium,
-.logi-inv-page .logi-quality-pill.logi-rarity--legendary,
-.logi-inv-page .logi-quality-pill.logi-rarity--epic {
-  border-color: rgba(184, 92, 246, 0.35);
-  background: rgba(91, 35, 140, 0.3);
-  color: var(--accent-purple);
-}
-
-.logi-inv-page .logi-quality-pill.logi-quality--strong,
-.logi-inv-page .logi-quality-pill.logi-rarity--rare {
-  border-color: rgba(77, 163, 255, 0.35);
-  background: rgba(20, 91, 160, 0.28);
-  color: var(--accent-blue);
-}
-
-.logi-inv-page .logi-quality-pill.logi-quality--mid,
-.logi-inv-page .logi-quality-pill.logi-rarity--uncommon {
-  border-color: rgba(255, 184, 77, 0.26);
-  background: rgba(143, 106, 38, 0.16);
-  color: var(--warning);
-}
-
-.logi-inv-page .logi-quality-pill.logi-quality--low,
-.logi-inv-page .logi-quality-pill.logi-rarity--common,
 .logi-inv-page .logi-quality-pill--empty {
   border-color: rgba(95, 114, 133, 0.24);
   background: rgba(3, 18, 28, 0.42);
   color: var(--text-muted);
+  text-shadow: none;
 }
 
 .logi-inv-page .logi-location-card-stack-qty {
