@@ -161,6 +161,8 @@ export function isInventorySyncRequestCurrent(
   return sync.activeRequestId === requestId;
 }
 
+export const SESSION_EXPIRED_SYNC_MESSAGE = "Session expired. Please sign in again.";
+
 export function buildSignedOutInventorySyncPatch(
   hasHydratedPersist: boolean,
 ): Partial<InventorySyncState> {
@@ -176,6 +178,15 @@ export function buildSignedOutInventorySyncPatch(
     hasUnsyncedChanges: false,
     pendingMutationCount: 0,
     hasHydratedPersist,
+  };
+}
+
+export function buildSessionExpiredInventorySyncPatch(
+  hasHydratedPersist: boolean,
+): Partial<InventorySyncState> {
+  return {
+    ...buildSignedOutInventorySyncPatch(hasHydratedPersist),
+    syncError: SESSION_EXPIRED_SYNC_MESSAGE,
   };
 }
 

@@ -1,4 +1,6 @@
 import type { BuildQueueItem, InventoryEntry, InventoryLocation } from "../types/logistics";
+import { isAuthRecoveryFailed } from "./auth/authRecoveryState";
+import { SESSION_EXPIRED_SYNC_MESSAGE } from "./logistics/inventorySyncLifecycle";
 import { apiUrl } from "./apiUrl";
 import { setOnlineSyncStatus } from "./onlineSyncStatus";
 import { parseJsonResponse, type JsonParseOptions } from "./safeJson";
@@ -67,6 +69,9 @@ async function parseUserJsonResponse<T>(response: Response, options: JsonParseOp
 }
 
 export async function fetchOnlinePersistenceState(accessToken: string): Promise<OnlinePersistenceState> {
+  if (!accessToken.trim() || isAuthRecoveryFailed()) {
+    throw new Error(SESSION_EXPIRED_SYNC_MESSAGE);
+  }
   const url = apiUrl(INVENTORY_URL);
   const response = await fetch(url, {
     headers: authHeaders(accessToken),
@@ -84,6 +89,9 @@ export async function syncOnlinePersistenceState(
   accessToken: string,
   payload: OnlinePersistencePayload,
 ): Promise<OnlinePersistenceState> {
+  if (!accessToken.trim() || isAuthRecoveryFailed()) {
+    throw new Error(SESSION_EXPIRED_SYNC_MESSAGE);
+  }
   const url = apiUrl(INVENTORY_SYNC_URL);
   if (import.meta.env.DEV) {
     console.info("[inventory-sync] PUT /api/user/inventory/sync", {

@@ -1,18 +1,26 @@
 import { createContext, createElement, useContext, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
+import { handleInvalidRefreshToken } from "./authSessionRecovery";
+import {
+  isAuthRecoveryFailed,
+  isInvalidRefreshTokenError,
+  resetAuthRecoveryFailed,
+} from "./authRecoveryState";
 import { getSupabaseClient, hasSupabaseAuthStorageKey, hasSupabaseConfig } from "../supabaseClient";
 
 interface AuthSessionState {
   session: Session | null;
   user: User | null;
   loading: boolean;
+  sessionExpired: boolean;
 }
 
 const unauthenticatedState: AuthSessionState = {
   session: null,
   user: null,
   loading: false,
+  sessionExpired: false,
 };
 
 const AuthSessionContext = createContext<AuthSessionState | null>(null);
@@ -29,20 +37,33 @@ function hasAccessTokenHash() {
 }
 
 async function getSessionWithRetry(shouldRetry: boolean) {
+  if (isAuthRecoveryFailed()) {
+    return { session: null as Session | null, sessionExpired: true };
+  }
+
   const supabase = getSupabaseClient();
   let lastSession: Session | null = null;
+  const delays = shouldRetry ? sessionRetryDelays : [0];
 
-  for (const delay of shouldRetry ? sessionRetryDelays : [0]) {
+  for (const delay of delays) {
     if (delay > 0) {
       await wait(delay);
     }
 
-    const { data } = await supabase.auth.getSession();
+    const { data, error } = await supabase.auth.getSession();
+    if (error && isInvalidRefreshTokenError(error)) {
+      await handleInvalidRefreshToken("getSession");
+      return { session: null, sessionExpired: true };
+    }
+    if (error && import.meta.env.DEV) {
+      console.warn("[auth] getSession error", error.message);
+    }
+
     lastSession = data.session;
     if (lastSession) break;
   }
 
-  return lastSession;
+  return { session: lastSession, sessionExpired: false };
 }
 
 function logAuthStateSnapshot(source: string, session: Session | null) {
@@ -66,6 +87,7 @@ function useAuthSessionState(): AuthSessionState {
     session: null,
     user: null,
     loading: hasSupabaseConfig(),
+    sessionExpired: false,
   });
 
   useEffect(() => {
@@ -76,21 +98,34 @@ function useAuthSessionState(): AuthSessionState {
     const supabase = getSupabaseClient();
     let mounted = true;
 
+    function setUnauthenticated(sessionExpired: boolean) {
+      if (!mounted) return;
+      setState({
+        ...unauthenticatedState,
+        sessionExpired,
+      });
+    }
+
     function refreshSession(source: string) {
-      getSessionWithRetry(hasAccessTokenHash()).then((session) => {
+      getSessionWithRetry(hasAccessTokenHash()).then(({ session, sessionExpired }) => {
         if (!mounted) return;
         logAuthStateSnapshot(source, session);
         setState({
           session,
           user: session?.user ?? null,
           loading: false,
+          sessionExpired,
         });
-      }).catch((error: unknown) => {
+      }).catch(async (error: unknown) => {
+        if (isInvalidRefreshTokenError(error)) {
+          await handleInvalidRefreshToken("getSessionCatch");
+          setUnauthenticated(true);
+          return;
+        }
         if (import.meta.env.DEV) {
           console.warn("[auth] getSession failed", error instanceof Error ? error.message : String(error));
         }
-        if (!mounted) return;
-        setState(unauthenticatedState);
+        setUnauthenticated(false);
       });
     }
 
@@ -98,19 +133,56 @@ function useAuthSessionState(): AuthSessionState {
 
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!mounted) return;
+
+      if (event === "SIGNED_IN" && session) {
+        resetAuthRecoveryFailed();
+        logAuthStateSnapshot(`onAuthStateChange:${event}`, session);
+        setState({
+          session,
+          user: session.user,
+          loading: false,
+          sessionExpired: false,
+        });
+        return;
+      }
+
+      if (event === "SIGNED_OUT") {
+        logAuthStateSnapshot(`onAuthStateChange:${event}`, session);
+        setState({
+          session: null,
+          user: null,
+          loading: false,
+          sessionExpired: isAuthRecoveryFailed(),
+        });
+        return;
+      }
+
       logAuthStateSnapshot(`onAuthStateChange:${event}`, session);
       setState({
         session,
         user: session?.user ?? null,
         loading: false,
+        sessionExpired: isAuthRecoveryFailed(),
       });
     });
+
     const handleAuthSessionRefresh = () => refreshSession("callbackRefresh");
     window.addEventListener(authSessionRefreshEvent, handleAuthSessionRefresh);
+
+    function handleUnhandledRejection(event: PromiseRejectionEvent) {
+      if (!isInvalidRefreshTokenError(event.reason)) return;
+      event.preventDefault();
+      void handleInvalidRefreshToken("unhandledRejection").then(() => {
+        setUnauthenticated(true);
+      });
+    }
+
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
       mounted = false;
       window.removeEventListener(authSessionRefreshEvent, handleAuthSessionRefresh);
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
       authListener.subscription.unsubscribe();
     };
   }, []);

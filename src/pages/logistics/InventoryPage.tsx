@@ -23,8 +23,10 @@ import {
   logInventorySyncDev,
   markInventoryFetchFinished,
   markInventoryFetchStarted,
+  SESSION_EXPIRED_SYNC_MESSAGE,
   shouldSkipInventoryFetch,
 } from '../../lib/logistics/inventorySyncLifecycle';
+import { isAuthRecoveryFailed } from '../../lib/auth/authSessionRecovery';
 import {
   buildInventoryLocationLookup,
   normalizeInventoryLocationLookup,
@@ -291,6 +293,7 @@ function formatInventorySyncLabel(sync: {
   if (sync.isFetching && !sync.hasFetchedServerInventory) return 'Loading inventory';
   if (sync.isSyncing) return 'Syncing';
   if (sync.hasUnsyncedChanges) return 'Unsynced changes';
+  if (sync.syncError === SESSION_EXPIRED_SYNC_MESSAGE) return sync.syncError;
   if (sync.syncError) return INVENTORY_SYNC_FAILED_LABEL;
   if (!sync.hasFetchedServerInventory || !sync.lastFetchedAt) return 'Loading inventory';
 
@@ -1583,14 +1586,16 @@ export default function InventoryPage() {
       logInventorySyncDev("sync skipped", { reason: "persist-not-hydrated" });
       return;
     }
-    if (!accessToken || !authenticatedUserId) {
+    if (!accessToken || !authenticatedUserId || isAuthRecoveryFailed()) {
       setInventorySync({
         isFetching: false,
         status: "idle",
         hasFetchedServerInventory: false,
         loadedForUserId: null,
         lastSuccessfulSyncAt: null,
-        syncError: 'Sign in to sync inventory.',
+        syncError: isAuthRecoveryFailed()
+          ? SESSION_EXPIRED_SYNC_MESSAGE
+          : 'Sign in to sync inventory.',
       });
       logInventorySyncDev("sync skipped", { reason: "missing-auth" });
       return;

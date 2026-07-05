@@ -2,13 +2,13 @@ import { useEffect } from "react";
 
 import { canonicalInventoryLocations } from "../../data/logistics/inventoryLocationCatalog";
 import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed";
+import { applyAuthenticatedAuthClearedState, isAuthRecoveryFailed } from "../../lib/auth/authSessionRecovery";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { isInventoryServerFetchStale } from "../../lib/logistics/inventoryFreshness";
 import { getOnlineSyncStatus, getUserRemoteMigratedAtKey, setOnlineSyncStatus } from "../../lib/onlineSyncStatus";
 import {
   buildInventorySyncBeginPatch,
   buildPendingUserSwitchInventorySyncPatch,
-  buildSignedOutInventorySyncPatch,
   createInventorySyncRequestId,
   hasMeaningfulLocalInventoryPayload,
   logInventorySyncDev,
@@ -100,14 +100,15 @@ export default function OnlinePersistenceCoordinator() {
   useEffect(() => {
     if (loading) return;
     if (!accessToken) {
-      setBuildQueueAccessToken(null);
-      setOnlinePersistenceAccessToken(null, null);
-      const { inventorySync, clearAuthenticatedLogisticsData, setInventorySync } = useLogisticsStore.getState();
-      clearAuthenticatedLogisticsData();
-      setInventorySync(buildSignedOutInventorySyncPatch(inventorySync.hasHydratedPersist));
-      logInventorySyncDev("auth cleared", { reason: "signed-out", clearedVisibleData: true });
+      if (isAuthRecoveryFailed()) {
+        setBuildQueueAccessToken(null);
+        setOnlinePersistenceAccessToken(null, null);
+        return;
+      }
+      applyAuthenticatedAuthClearedState("signed-out");
       return;
     }
+    if (isAuthRecoveryFailed()) return;
     const token = accessToken;
     const userId = session?.user.id;
     if (!userId) return;
