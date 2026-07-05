@@ -1,8 +1,31 @@
 import { and, eq, sql } from "drizzle-orm";
 
-import { initialBuildQueue, initialInventoryEntries } from "../../data/logistics/seed.js";
 import { getDb } from "../../db/client.js";
 import { buildQueueItems, inventoryLocations, inventoryStacks, userSettings } from "../../db/schema.js";
+
+const seedInventoryEntryIds = new Set([
+  "inv-1",
+  "inv-2",
+  "inv-3",
+  "inv-4",
+  "inv-5",
+  "inv-6",
+  "inv-7",
+  "inv-8",
+  "inv-9",
+  "inv-10",
+  "inv-11",
+  "inv-12",
+]);
+
+const seedBuildQueueIds = new Set([
+  "bq-1",
+  "bq-2",
+  "bq-3",
+  "bq-4",
+  "bq-5",
+  "bq-6",
+]);
 
 type UnknownRecord = Record<string, unknown>;
 
@@ -60,9 +83,6 @@ function getSnapshotLocalId(value: unknown): string | null {
   const snapshot = asJsonObject(value);
   return asString(snapshot.localId);
 }
-
-const seedInventoryEntryIds = new Set(initialInventoryEntries.map((entry) => entry.id));
-const seedBuildQueueIds = new Set(initialBuildQueue.map((item) => item.id));
 
 function isSeedInventoryPayload(input: UnknownRecord) {
   const id = asString(input.id);
