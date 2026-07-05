@@ -260,6 +260,14 @@ function createNewInventoryId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
+function createCsvImportBatchId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `csv-${crypto.randomUUID()}`;
+  }
+
+  return `csv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
 function createNewLocationId(name: string): string {
   const slug = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
   return `import-${slug || 'location'}-${Date.now().toString(36)}`;
@@ -764,7 +772,7 @@ function CsvImportModal({
 
   function handleImport() {
     if (!canImport) return;
-    const importBatchId = `csv-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    const importBatchId = createCsvImportBatchId();
     const newLocations = new Map<string, InventoryLocation>();
     const locationLookup = buildLocationLookup(locations);
     const resolveLocationId = (row: CsvPreviewRow) => {
@@ -1336,7 +1344,8 @@ export default function InventoryPage() {
   const [csvImportOpen, setCsvImportOpen] = useState(false);
   const [search, setSearch] = useState(() => inventoryUi.searchQuery);
   const [materialFilter, setMaterialFilter] = useState(() => inventoryUi.materialFilter);
-  const [locationFilter, setLocationFilter] = useState(() => queryLocationId || inventoryUi.locationFilter);
+  const [locationFilter, setLocationFilter] = useState(() => inventoryUi.locationFilter);
+  const effectiveLocationFilter = queryLocationId || locationFilter;
   const [qualityMin, setQualityMin] = useState(() => inventoryUi.qualityMin);
   const [sortKey, setSortKey] = useState<SortKey>(() => inventoryUi.sortKey);
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>(() => inventoryUi.sortDir);
@@ -1381,17 +1390,6 @@ export default function InventoryPage() {
     if (authLoading) return;
     void refreshInventoryFromServer();
   }, [authLoading, refreshInventoryFromServer]);
-
-  useEffect(() => {
-    setSearch(inventoryUi.searchQuery);
-    setMaterialFilter(inventoryUi.materialFilter);
-    setLocationFilter(queryLocationId || inventoryUi.locationFilter);
-    setQualityMin(inventoryUi.qualityMin);
-    setSortKey(inventoryUi.sortKey);
-    setSortDir(inventoryUi.sortDir);
-    setViewMode(inventoryUi.viewMode);
-    setSelectedLocationId(inventoryUi.selectedLocationId);
-  }, [inventoryUi, queryLocationId]);
 
   useEffect(() => {
     setInventoryUi({
@@ -1464,7 +1462,7 @@ export default function InventoryPage() {
   const filtered = useMemo(() => {
     const data = activeEntries.filter((e) => {
       if (materialFilter && toRecord(e).materialId !== materialFilter) return false;
-      if (locationFilter && getEntryLocationId(e) !== locationFilter) return false;
+      if (effectiveLocationFilter && getEntryLocationId(e) !== effectiveLocationFilter) return false;
       if (qualityMin > 0 && (e.quality ?? 0) < qualityMin) return false;
       if (search) {
         const mat = e.materialId ? materialById.get(e.materialId) : undefined;
@@ -1506,7 +1504,7 @@ export default function InventoryPage() {
     });
 
     return data;
-  }, [activeEntries, materialById, locationById, search, materialFilter, locationFilter, qualityMin, sortKey, sortDir]);
+  }, [activeEntries, effectiveLocationFilter, materialById, locationById, materialFilter, qualityMin, search, sortDir, sortKey]);
 
   const unassignedCount = useMemo(
     () => activeEntries.filter((entry) => getEntryLocationId(entry) === '__unassigned__').length,
@@ -1765,7 +1763,7 @@ export default function InventoryPage() {
 
         <select
           className="logi-select"
-          value={locationFilter}
+          value={effectiveLocationFilter}
           onChange={(e) => setLocationFilter(e.target.value)}
           aria-label="Filter by location"
         >

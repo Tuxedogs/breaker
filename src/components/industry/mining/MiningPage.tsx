@@ -280,13 +280,10 @@ export default function MiningModule() {
     return keys;
   }, [locations, selectedSystemName, staticMiningIndex]);
 
-  useEffect(() => {
-    if (!availableMaterialKeysForSelectedSystem) return;
-    setSelectedMaterials((prev) => {
-      const next = new Set([...prev].filter((key) => availableMaterialKeysForSelectedSystem.has(key)));
-      return next.size === prev.size ? prev : next;
-    });
-  }, [availableMaterialKeysForSelectedSystem, selectedSystemName]);
+  const effectiveSelectedMaterials = useMemo(() => {
+    if (!availableMaterialKeysForSelectedSystem) return selectedMaterials;
+    return new Set([...selectedMaterials].filter((key) => availableMaterialKeysForSelectedSystem.has(key)));
+  }, [availableMaterialKeysForSelectedSystem, selectedMaterials]);
 
   const resourceGroups = useMemo(() => buildResourceGroups(allMaterialResources), [allMaterialResources]);
   const visibleResourceGroups = useMemo(() => {
@@ -302,7 +299,7 @@ export default function MiningModule() {
     };
   }, [availableMaterialKeysForSelectedSystem, resourceGroups]);
 
-  const materialFilterKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : selectedMaterials, [buildQueueMaterials, buildQueueSelectionActive, selectedMaterials]);
+  const materialFilterKeys = useMemo(() => buildQueueSelectionActive ? buildQueueMaterials : effectiveSelectedMaterials, [buildQueueMaterials, buildQueueSelectionActive, effectiveSelectedMaterials]);
   const effectiveMaterialFilterKeys = useMemo(() => {
     if (!availableMaterialKeysForSelectedSystem) return materialFilterKeys;
     return new Set([...materialFilterKeys].filter((key) => availableMaterialKeysForSelectedSystem.has(key)));
@@ -392,7 +389,7 @@ export default function MiningModule() {
     queueMicrotask(() => {
       setShowAllLocations(false);
     });
-  }, [selectedMaterials, selectedSystemName, buildQueueSelectionActive]);
+  }, [effectiveSelectedMaterials, selectedSystemName, buildQueueSelectionActive]);
 
   useEffect(() => {
     if (!selectedLocationKey) return;
@@ -481,7 +478,7 @@ export default function MiningModule() {
                   </div>
                 </div>
                 <MiningFilterBar
-                  selectedMaterials={selectedMaterials}
+                  selectedMaterials={effectiveSelectedMaterials}
                   visibleResourceGroups={visibleResourceGroups}
                   onToggleMaterial={toggleMaterial}
                 />
