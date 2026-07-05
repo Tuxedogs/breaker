@@ -63,7 +63,78 @@ type ImportMode = 'append' | 'replace_matching_materials_location' | 'replace_lo
 
 const WINDOW_GROUP_SIZE = 4;
 const WINDOW_STACK_CHUNK_SIZE = 25;
+const QUALITY_GROUP_BOX_PREVIEW = 4;
 const INVENTORY_SYNC_FAILED_LABEL = 'Sync failed, retry';
+
+type ReservedLotInfo = { quantity: number; owners: Set<string> };
+
+type QualityLotGroup = {
+  quality: number | null;
+  qualityBand?: number | null;
+  kind: DrawerEntryRow['kind'];
+  kindLabel: string;
+  totalQuantity: number;
+  unitType: 'scu' | 'unit';
+  totalLabel: string;
+  boxCount: number;
+  lots: Array<DrawerEntryRow & { originalIndex: number }>;
+};
+
+function groupLotsByQuality(
+  rows: DrawerEntryRow[],
+  unitType: 'scu' | 'unit',
+  separateByKind: boolean,
+): QualityLotGroup[] {
+  const groupMap = new Map<string, QualityLotGroup>();
+  const groupOrder: string[] = [];
+
+  rows.forEach((row, originalIndex) => {
+    const qualityKey = row.entry.quality ?? 'none';
+    const kindKey = separateByKind ? row.kind : 'all';
+    const key = `${qualityKey}:${kindKey}`;
+    const existing = groupMap.get(key);
+
+    if (existing) {
+      existing.totalQuantity += row.entry.quantity;
+      existing.boxCount += 1;
+      existing.lots.push({ ...row, originalIndex });
+      return;
+    }
+
+    groupOrder.push(key);
+    groupMap.set(key, {
+      quality: row.entry.quality ?? null,
+      qualityBand: row.entry.qualityBand,
+      kind: row.kind,
+      kindLabel: row.kindLabel,
+      totalQuantity: row.entry.quantity,
+      unitType,
+      totalLabel: '',
+      boxCount: 1,
+      lots: [{ ...row, originalIndex }],
+    });
+  });
+
+  const groups = groupOrder.map((key) => {
+    const group = groupMap.get(key)!;
+    group.lots.sort((a, b) => {
+      const quantityDiff = b.entry.quantity - a.entry.quantity;
+      if (quantityDiff !== 0) return quantityDiff;
+      return a.originalIndex - b.originalIndex;
+    });
+    group.totalLabel = formatInventoryQuantity(group.totalQuantity, group.unitType);
+    return group;
+  });
+
+  return groups.sort((a, b) => (b.quality ?? -1) - (a.quality ?? -1));
+}
+
+function estimateQualityGroupHeight(group: QualityLotGroup): number {
+  const previewCount = Math.min(QUALITY_GROUP_BOX_PREVIEW, group.lots.length);
+  const tileRows = Math.ceil(previewCount / 4);
+  const expandControl = group.lots.length > QUALITY_GROUP_BOX_PREVIEW ? 24 : 0;
+  return 34 + tileRows * 52 + expandControl;
+}
 
 type LocationGroup = {
   id: string;
@@ -1054,6 +1125,15 @@ function ManageSelectIcon() {
   );
 }
 
+function CargoBoxIcon() {
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+      <path d="M4 8.5 12 4l8 4.5v7L12 20l-8-4.5v-7Z" />
+      <path d="M12 12v8M4 8.5 12 13l8-4.5" />
+    </svg>
+  );
+}
+
 function RowActionIcon({ kind }: { kind: 'edit' | 'delete' | 'transfer' }) {
   if (kind === 'edit') {
     return (
@@ -1076,7 +1156,180 @@ function RowActionIcon({ kind }: { kind: 'edit' | 'delete' | 'transfer' }) {
   );
 }
 
-type InventoryMaterialGroupProps = {
+type InventoryLotReserveProps = {
+  reservedByLotId: Map<string, ReservedLotInfo>;
+};
+
+type InventoryBoxTileProps = InventoryLotReserveProps & {
+  row: DrawerEntryRow;
+  manageMode: boolean;
+  isSelected: boolean;
+  showQuickActions: boolean;
+  onToggleSelect: (entryId: string) => void;
+  onEdit: (entry: InventoryEntry) => void;
+  onQuickDelete: () => void;
+  onQuickTransfer: () => void;
+};
+
+const InventoryBoxTile = memo(function InventoryBoxTile({
+  row,
+  manageMode,
+  isSelected,
+  showQuickActions,
+  reservedByLotId,
+  onToggleSelect,
+  onEdit,
+  onQuickDelete,
+  onQuickTransfer,
+}: InventoryBoxTileProps) {
+  const reserve = reservedByLotId.get(row.id);
+  const reservedQuantity = reserve?.quantity ?? 0;
+  const isReserved = reservedQuantity > 0;
+  const isFullyReserved = isReserved && reservedQuantity >= row.entry.quantity;
+  const reserveTitle = isReserved
+    ? `Reserved ${formatInventoryQuantity(reservedQuantity, resolveInventoryUnitType(row.entry))}${reserve?.owners.size ? ` by ${Array.from(reserve.owners).join(', ')}` : ''}`
+    : undefined;
+
+  return (
+    <div
+      className={[
+        'logi-inv-box-tile',
+        manageMode ? 'logi-inv-row--selectable' : '',
+        isSelected ? 'logi-inv-row--selected' : '',
+        isReserved ? 'logi-inv-box-tile--reserved' : '',
+        isFullyReserved ? 'logi-inv-box-tile--unavailable' : '',
+      ].filter(Boolean).join(' ')}
+      onClick={manageMode ? () => onToggleSelect(row.id) : undefined}
+      onDoubleClick={!manageMode ? () => onEdit(row.entry) : undefined}
+      onKeyDown={manageMode ? (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onToggleSelect(row.id);
+        }
+      } : undefined}
+      tabIndex={manageMode ? 0 : undefined}
+      role={manageMode ? 'checkbox' : undefined}
+      aria-checked={manageMode ? isSelected : undefined}
+      aria-label={manageMode ? `Select ${row.materialName} box ${row.quantityLabel}` : `${row.materialName} box ${row.quantityLabel}`}
+      title={reserveTitle}
+    >
+      {manageMode && (
+        <input
+          type="checkbox"
+          className="logi-inv-box-tile-checkbox logi-inv-row-checkbox"
+          checked={isSelected}
+          onChange={() => onToggleSelect(row.id)}
+          onClick={(event) => event.stopPropagation()}
+          tabIndex={-1}
+          aria-hidden
+        />
+      )}
+      <span className="logi-inv-box-tile-body">
+        <span className="logi-inv-box-tile-icon" aria-hidden>
+          <CargoBoxIcon />
+        </span>
+        <span className="logi-inv-box-tile-qty">{row.quantityLabel}</span>
+      </span>
+      {isReserved && <span className="logi-inv-box-tile-reserve-dot" aria-hidden />}
+      {showQuickActions && (
+        <span className="logi-inv-box-tile-actions">
+          <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onEdit(row.entry); }} aria-label={`Edit ${row.materialName}`}>
+            <RowActionIcon kind="edit" />
+          </button>
+          <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onQuickTransfer(); }} aria-label={`Transfer ${row.materialName}`}>
+            <RowActionIcon kind="transfer" />
+          </button>
+          <button type="button" className="logi-inv-row-icon-btn is-delete" onClick={(event) => { event.stopPropagation(); onQuickDelete(); }} aria-label={`Delete ${row.materialName}`}>
+            <RowActionIcon kind="delete" />
+          </button>
+        </span>
+      )}
+    </div>
+  );
+});
+
+type InventoryQualityGroupSectionProps = InventoryLotReserveProps & {
+  qualityGroup: QualityLotGroup;
+  showKindLabel: boolean;
+  manageMode: boolean;
+  selectedIds: Set<string>;
+  singleSelectedId: string | null;
+  onToggleSelect: (entryId: string) => void;
+  onEdit: (entry: InventoryEntry) => void;
+  onQuickDelete: () => void;
+  onQuickTransfer: () => void;
+};
+
+const InventoryQualityGroupSection = memo(function InventoryQualityGroupSection({
+  qualityGroup,
+  showKindLabel,
+  manageMode,
+  selectedIds,
+  singleSelectedId,
+  reservedByLotId,
+  onToggleSelect,
+  onEdit,
+  onQuickDelete,
+  onQuickTransfer,
+}: InventoryQualityGroupSectionProps) {
+  const [expanded, setExpanded] = useState(false);
+  const hiddenCount = Math.max(0, qualityGroup.lots.length - QUALITY_GROUP_BOX_PREVIEW);
+  const visibleLots = expanded ? qualityGroup.lots : qualityGroup.lots.slice(0, QUALITY_GROUP_BOX_PREVIEW);
+  const boxCountLabel = `${qualityGroup.boxCount} ${qualityGroup.boxCount === 1 ? 'box' : 'boxes'}`;
+
+  return (
+    <section className="logi-inv-quality-group" aria-label={`Quality ${qualityGroup.quality ?? 'unknown'} group`}>
+      <div className="logi-inv-quality-group-head">
+        <QualityPill quality={qualityGroup.quality} qualityBand={qualityGroup.qualityBand} />
+        <span className="logi-inv-quality-group-total">{qualityGroup.totalLabel}</span>
+        <span className="logi-inv-quality-group-count">{boxCountLabel}</span>
+        {showKindLabel && (
+          <span className={`logi-location-kind logi-location-kind--${qualityGroup.kind}`}>{qualityGroup.kindLabel}</span>
+        )}
+      </div>
+
+      <div className="logi-inv-box-tile-grid">
+        {visibleLots.map((row) => (
+          <InventoryBoxTile
+            key={row.id}
+            row={row}
+            manageMode={manageMode}
+            isSelected={selectedIds.has(row.id)}
+            showQuickActions={manageMode && singleSelectedId === row.id}
+            reservedByLotId={reservedByLotId}
+            onToggleSelect={onToggleSelect}
+            onEdit={onEdit}
+            onQuickDelete={onQuickDelete}
+            onQuickTransfer={onQuickTransfer}
+          />
+        ))}
+      </div>
+
+      {hiddenCount > 0 && !expanded && (
+        <button
+          type="button"
+          className="logi-inv-quality-group-expand"
+          onClick={() => setExpanded(true)}
+          aria-expanded={false}
+        >
+          +{hiddenCount} more
+        </button>
+      )}
+      {expanded && hiddenCount > 0 && (
+        <button
+          type="button"
+          className="logi-inv-quality-group-expand"
+          onClick={() => setExpanded(false)}
+          aria-expanded
+        >
+          Show less
+        </button>
+      )}
+    </section>
+  );
+});
+
+type InventoryMaterialGroupProps = InventoryLotReserveProps & {
   group: DrawerMaterialGroup;
   manageMode: boolean;
   selectedIds: Set<string>;
@@ -1092,11 +1345,18 @@ const InventoryMaterialCard = memo(function InventoryMaterialCard({
   manageMode,
   selectedIds,
   singleSelectedId,
+  reservedByLotId,
   onToggleSelect,
   onEdit,
   onQuickDelete,
   onQuickTransfer,
 }: InventoryMaterialGroupProps) {
+  const separateByKind = group.kindLabels.length > 1;
+  const qualityGroups = useMemo(
+    () => groupLotsByQuality(group.entries, group.unitType, separateByKind),
+    [group.entries, group.unitType, separateByKind],
+  );
+
   return (
     <article className="logi-location-material-card">
       <div className="logi-location-material-card-head">
@@ -1116,58 +1376,22 @@ const InventoryMaterialCard = memo(function InventoryMaterialCard({
         </div>
       </div>
 
-      <div className="logi-location-material-card-rows">
-        {group.entries.map((row) => {
-          const isSelected = selectedIds.has(row.id);
-          const showQuickActions = manageMode && singleSelectedId === row.id;
-          return (
-            <div
-              key={row.id}
-              className={`logi-location-card-stack-row${manageMode ? ' logi-inv-row--selectable' : ''}${isSelected ? ' logi-inv-row--selected' : ''}`}
-              onClick={manageMode ? () => onToggleSelect(row.id) : undefined}
-              onDoubleClick={!manageMode ? () => onEdit(row.entry) : undefined}
-              onKeyDown={manageMode ? (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  onToggleSelect(row.id);
-                }
-              } : undefined}
-              tabIndex={manageMode ? 0 : undefined}
-              role={manageMode ? 'checkbox' : undefined}
-              aria-checked={manageMode ? isSelected : undefined}
-              aria-label={manageMode ? `Select ${row.materialName} stack` : undefined}
-            >
-              {manageMode && (
-                <input
-                  type="checkbox"
-                  className="logi-inv-row-checkbox"
-                  checked={isSelected}
-                  onChange={() => onToggleSelect(row.id)}
-                  onClick={(event) => event.stopPropagation()}
-                  tabIndex={-1}
-                  aria-hidden
-                />
-              )}
-              <QualityPill quality={row.entry.quality} qualityBand={row.entry.qualityBand} />
-              <span className="logi-location-card-stack-qty">{row.quantityLabel}</span>
-              {row.containerLabel !== '-' && <span className="logi-location-card-stack-container">{row.containerLabel}</span>}
-              {group.kindLabels.length > 1 && <span className={`logi-location-kind logi-location-kind--${row.kind}`}>{row.kindLabel}</span>}
-              {showQuickActions && (
-                <span className="logi-location-row-actions">
-                  <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onEdit(row.entry); }} aria-label={`Edit ${row.materialName}`}>
-                    <RowActionIcon kind="edit" />
-                  </button>
-                  <button type="button" className="logi-inv-row-icon-btn" onClick={(event) => { event.stopPropagation(); onQuickTransfer(); }} aria-label={`Transfer ${row.materialName}`}>
-                    <RowActionIcon kind="transfer" />
-                  </button>
-                  <button type="button" className="logi-inv-row-icon-btn is-delete" onClick={(event) => { event.stopPropagation(); onQuickDelete(); }} aria-label={`Delete ${row.materialName}`}>
-                    <RowActionIcon kind="delete" />
-                  </button>
-                </span>
-              )}
-            </div>
-          );
-        })}
+      <div className="logi-location-material-card-groups">
+        {qualityGroups.map((qualityGroup) => (
+          <InventoryQualityGroupSection
+            key={`${qualityGroup.quality ?? 'none'}:${qualityGroup.kind}`}
+            qualityGroup={qualityGroup}
+            showKindLabel={separateByKind}
+            manageMode={manageMode}
+            selectedIds={selectedIds}
+            singleSelectedId={singleSelectedId}
+            reservedByLotId={reservedByLotId}
+            onToggleSelect={onToggleSelect}
+            onEdit={onEdit}
+            onQuickDelete={onQuickDelete}
+            onQuickTransfer={onQuickTransfer}
+          />
+        ))}
       </div>
     </article>
   );
@@ -1253,13 +1477,14 @@ function chunkGroups(groups: DrawerMaterialGroup[]): DrawerMaterialGroup[][] {
 }
 
 function estimateWindowHeight(groups: DrawerMaterialGroup[]): number {
-  return groups.reduce(
-    (height, group) => height + 178 + group.entries.length * 31,
-    0,
-  );
+  return groups.reduce((height, group) => {
+    const qualityGroups = groupLotsByQuality(group.entries, group.unitType, group.kindLabels.length > 1);
+    const groupsHeight = qualityGroups.reduce((sum, qualityGroup) => sum + estimateQualityGroupHeight(qualityGroup), 0);
+    return height + 178 + groupsHeight;
+  }, 0);
 }
 
-type WindowedGroupBlockProps = {
+type WindowedGroupBlockProps = InventoryLotReserveProps & {
   groups: DrawerMaterialGroup[];
   root: HTMLDivElement | null;
   initiallyVisible: boolean;
@@ -1279,6 +1504,7 @@ const WindowedGroupBlock = memo(function WindowedGroupBlock({
   manageMode,
   selectedIds,
   singleSelectedId,
+  reservedByLotId,
   onToggleSelect,
   onEdit,
   onQuickDelete,
@@ -1324,6 +1550,7 @@ const WindowedGroupBlock = memo(function WindowedGroupBlock({
           manageMode={manageMode}
           selectedIds={selectedIds}
           singleSelectedId={singleSelectedId}
+          reservedByLotId={reservedByLotId}
           onToggleSelect={onToggleSelect}
           onEdit={onEdit}
           onQuickDelete={onQuickDelete}
@@ -1334,7 +1561,7 @@ const WindowedGroupBlock = memo(function WindowedGroupBlock({
   );
 });
 
-type WindowedMaterialGroupsProps = {
+type WindowedMaterialGroupsProps = InventoryLotReserveProps & {
   groups: DrawerMaterialGroup[];
   manageMode: boolean;
   selectedIds: Set<string>;
@@ -1350,6 +1577,7 @@ const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
   manageMode,
   selectedIds,
   singleSelectedId,
+  reservedByLotId,
   onToggleSelect,
   onEdit,
   onQuickDelete,
@@ -1372,6 +1600,7 @@ const WindowedMaterialGroups = memo(function WindowedMaterialGroups({
           manageMode={manageMode}
           selectedIds={selectedIds}
           singleSelectedId={singleSelectedId}
+          reservedByLotId={reservedByLotId}
           onToggleSelect={onToggleSelect}
           onEdit={onEdit}
           onQuickDelete={onQuickDelete}
@@ -1414,7 +1643,7 @@ function InventoryBulkDeleteDialog({
   );
 }
 
-type SelectedLocationDetailProps = {
+type SelectedLocationDetailProps = InventoryLotReserveProps & {
   selectedLocation: LocationGroup;
   drawerMaterialGroups: DrawerMaterialGroup[];
   manageMode: boolean;
@@ -1436,6 +1665,7 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
   drawerMaterialGroups,
   manageMode,
   selectedEntryIds,
+  reservedByLotId,
   onCollapse,
   onToggleManageMode,
   onToggleSelect,
@@ -1510,6 +1740,7 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
           manageMode={manageMode}
           selectedIds={selectedEntryIds}
           singleSelectedId={singleSelectedId}
+          reservedByLotId={reservedByLotId}
           onToggleSelect={onToggleSelect}
           onEdit={onEdit}
           onQuickDelete={onBulkDeleteRequest}
@@ -1889,6 +2120,8 @@ export default function InventoryPage() {
       totalLabel: formatInventoryQuantity(group.total, group.unitType),
     }));
   }, [drawerRows, materialById]);
+
+  const reservedByLotId = useMemo(() => getReservedInventoryMap(buildQueue), [buildQueue]);
 
   const toggleLocationDrawer = useCallback((locationId: string) => {
     setSelectedLocationId((current) => current === locationId ? null : locationId);
@@ -2276,6 +2509,7 @@ export default function InventoryPage() {
                       drawerMaterialGroups={drawerMaterialGroups}
                       manageMode={manageLocationId === selectedLocation.id}
                       selectedEntryIds={selectedEntryIds}
+                      reservedByLotId={reservedByLotId}
                       onCollapse={toggleLocationDrawer}
                       onToggleManageMode={() => toggleManageMode(selectedLocation.id)}
                       onToggleSelect={toggleEntrySelection}
@@ -2299,6 +2533,7 @@ export default function InventoryPage() {
               drawerMaterialGroups={drawerMaterialGroups}
               manageMode={manageLocationId === selectedLocation.id}
               selectedEntryIds={selectedEntryIds}
+              reservedByLotId={reservedByLotId}
               onCollapse={toggleLocationDrawer}
               onToggleManageMode={() => toggleManageMode(selectedLocation.id)}
               onToggleSelect={toggleEntrySelection}

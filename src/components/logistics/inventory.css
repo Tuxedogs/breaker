@@ -566,6 +566,162 @@
   display: grid;
 }
 
+.logi-location-material-card-groups {
+  display: grid;
+}
+
+.logi-inv-quality-group {
+  border-top: 1px solid rgba(148, 163, 184, 0.055);
+}
+
+.logi-inv-quality-group:first-child {
+  border-top: 0;
+}
+
+.logi-inv-quality-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  padding: 0.38rem 0.52rem 0.28rem;
+}
+
+.logi-inv-quality-group-total {
+  color: rgba(231, 237, 255, 0.76);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.logi-inv-quality-group-count {
+  color: rgba(160, 180, 220, 0.52);
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.logi-inv-quality-group-expand {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.22rem 0.52rem 0.38rem;
+  border: 0;
+  background: transparent;
+  color: rgba(0, 230, 210, 0.72);
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logi-inv-quality-group-expand:hover {
+  color: rgba(0, 230, 210, 0.92);
+}
+
+.logi-inv-box-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  padding: 0 0.52rem 0.42rem;
+}
+
+.logi-inv-box-tile {
+  position: relative;
+  min-width: 0;
+  min-height: 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 4px 5px;
+  border: 1px solid rgba(65, 132, 160, 0.18);
+  border-radius: 5px;
+  background: rgba(3, 14, 22, 0.62);
+  color: rgba(199, 210, 230, 0.72);
+  font-family: var(--font-primary);
+  transition: border-color 120ms ease, background 120ms ease;
+}
+
+.logi-inv-box-tile:hover {
+  border-color: rgba(65, 132, 160, 0.32);
+  background: rgba(5, 18, 28, 0.78);
+}
+
+.logi-inv-box-tile-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.logi-inv-box-tile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 230, 210, 0.58);
+}
+
+.logi-inv-box-tile-qty {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(231, 237, 255, 0.82);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.logi-inv-box-tile-checkbox {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+}
+
+.logi-inv-box-tile-reserve-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 196, 86, 0.92);
+  box-shadow: 0 0 6px rgba(255, 196, 86, 0.45);
+}
+
+.logi-inv-box-tile--reserved {
+  border-color: rgba(255, 196, 86, 0.28);
+}
+
+.logi-inv-box-tile--unavailable {
+  opacity: 0.62;
+  border-color: rgba(255, 92, 92, 0.24);
+  background: rgba(24, 8, 10, 0.52);
+}
+
+.logi-inv-box-tile-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  margin-top: 3px;
+}
+
+.logi-inv-box-tile-actions .logi-inv-row-icon-btn {
+  min-height: 22px;
+  padding: 0.15rem 0.28rem;
+}
+
 .logi-location-card-stack-row {
   min-width: 0;
   min-height: 32px;
@@ -772,6 +928,10 @@
   .logi-location-row-actions {
     flex-wrap: wrap;
   }
+
+  .logi-inv-box-tile-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 
@@ -779,8 +939,13 @@
   cursor: pointer;
 }
 
+.logi-inv-page .logi-inv-box-tile.logi-inv-row--selectable {
+  cursor: pointer;
+}
+
 .logi-inv-page .logi-location-card-stack-row.logi-inv-row--selected,
-.logi-inv-page .logi-table tbody tr.logi-inv-row--selected td {
+.logi-inv-page .logi-table tbody tr.logi-inv-row--selected td,
+.logi-inv-page .logi-inv-box-tile.logi-inv-row--selected {
   background: rgba(0, 230, 210, 0.08);
   box-shadow: inset 2px 0 0 rgba(0, 230, 210, 0.72);
 }
@@ -1927,6 +2092,70 @@
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.logi-inv-page .logi-location-material-card-groups {
+  display: grid;
+}
+
+.logi-inv-page .logi-inv-quality-group {
+  border-top: 1px solid rgba(65, 132, 160, 0.14);
+}
+
+.logi-inv-page .logi-inv-quality-group-head {
+  gap: 6px 8px;
+  padding: 8px 12px 6px;
+}
+
+.logi-inv-page .logi-inv-quality-group-total {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.logi-inv-page .logi-inv-quality-group-count {
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.logi-inv-page .logi-inv-quality-group-expand {
+  padding: 0 12px 8px;
+  color: var(--accent-cyan);
+  font-size: 11px;
+}
+
+.logi-inv-page .logi-inv-box-tile-grid {
+  gap: 8px;
+  padding: 0 12px 10px;
+}
+
+.logi-inv-page .logi-inv-box-tile {
+  min-height: 48px;
+  border-color: rgba(65, 132, 160, 0.22);
+  border-radius: 6px;
+  background: rgba(3, 18, 28, 0.54);
+}
+
+.logi-inv-page .logi-inv-box-tile:hover {
+  border-color: rgba(0, 230, 210, 0.28);
+  background: rgba(3, 18, 28, 0.72);
+}
+
+.logi-inv-page .logi-inv-box-tile-icon {
+  color: rgba(0, 230, 210, 0.62);
+}
+
+.logi-inv-page .logi-inv-box-tile-qty {
+  color: var(--text-primary);
+  font-size: 10px;
+}
+
+.logi-inv-page .logi-inv-box-tile--reserved {
+  border-color: rgba(255, 196, 86, 0.32);
+}
+
+.logi-inv-page .logi-inv-box-tile--unavailable {
+  border-color: rgba(255, 92, 92, 0.28);
 }
 
 .logi-inv-page .logi-location-card-stack-row {
