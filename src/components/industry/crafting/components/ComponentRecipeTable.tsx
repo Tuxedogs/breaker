@@ -48,10 +48,19 @@ import {
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
+import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
+import {
+  buildDetailStatRowsFromFitting,
+  buildSecondaryStatsFromFitting,
+  getFittingDpsBases,
+  getFittingModifierBaseValue,
+  isFittingWeaponPerformanceType,
+} from "@/lib/fitting/fittingStatProjection";
+import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import {
   buildComponentCardSchema,
   buildComponentCardSchemaFromIndex,
-  buildShipWeaponDetailStatRows,
   formatCraftTime,
   type ComponentCardMetric,
 } from "../utils/componentCardSchema";
@@ -700,55 +709,13 @@ function formatModifierStatName(property: string): string {
   return labels[property] ?? formatProperty(property);
 }
 
-function readNumericPath(source: unknown, path: string[]): number | undefined {
-  let current = source;
-  for (const key of path) {
-    if (!current || typeof current !== "object" || !(key in current)) return undefined;
-    current = (current as Record<string, unknown>)[key];
-  }
-  return typeof current === "number" && Number.isFinite(current) ? current : undefined;
-}
-
-function getBaseStatValue(
-  recipe: ComponentRecipe,
+// Modifier base values for Crafting Detail come exclusively from the fitting API.
+// When fitting has no base for a property, UI shows modifier-only or unavailable — never recipe.baseStats.
+function getCraftingModifierBaseValue(
+  fittingDetail: FittingComponentDetail | null | undefined,
   property: string,
 ): number | undefined {
-  const baseStats = recipe.baseStats;
-  if (!baseStats) return undefined;
-
-  const statPaths: Record<string, string[]> = {
-    GPP_Health_MaxHealth: ["health"],
-    GPP_Shield_MaxHealth: ["resources", "generation", "Shield"],
-    GPP_ItemResource_PowerGeneration: ["resources", "generation", "Power"],
-    GPP_ItemResource_CoolantGeneration: ["resources", "generation", "Coolant"],
-    GPP_Quantum_FuelRequirement: ["resources", "consumption", "QuantumFuel"],
-  };
-
-  const directPath = statPaths[property];
-  if (directPath) return readNumericPath(baseStats, directPath);
-
-  if (property === "GPP_Weapon_Damage") {
-    return (
-      readNumericPath(baseStats, ["weapon", "damage"]) ??
-      readNumericPath(baseStats, ["damage"])
-    );
-  }
-
-  if (property === "GPP_Weapon_FireRate") {
-    return (
-      readNumericPath(baseStats, ["weapon", "fireRate"]) ??
-      readNumericPath(baseStats, ["fireRate"])
-    );
-  }
-
-  if (property === "GPP_Weapon_ReloadSpeed") {
-    return (
-      readNumericPath(baseStats, ["weapon", "reloadSpeed"]) ??
-      readNumericPath(baseStats, ["reloadSpeed"])
-    );
-  }
-
-  return undefined;
+  return getFittingModifierBaseValue(fittingDetail, property);
 }
 
 function applyModifierToBase(baseValue: number, modifierValue: number, modifierMode?: string): number {
@@ -1139,15 +1106,15 @@ export function UnmatchedModifierGroups({
 }
 
 function OverallModifierGroup({
-  recipe,
   modifiers,
   quality,
   rarityClass,
+  fittingDetail,
 }: {
-  recipe: ComponentRecipe;
   modifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   quality?: number;
   rarityClass: string;
+  fittingDetail?: FittingComponentDetail | null;
 }) {
   if (modifiers.length === 0) return null;
 
@@ -1188,7 +1155,7 @@ function OverallModifierGroup({
       ) : (
         <div className="craft-drawer-modifier-list">
           {getModifiersAtQuality(modifiers, quality).map((m, i) => {
-            const baseValue = getBaseStatValue(recipe, m.property);
+            const baseValue = getCraftingModifierBaseValue(fittingDetail, m.property);
 
             return (
               <div key={i} className="craft-drawer-modifier-row">
@@ -1288,19 +1255,19 @@ function useMaterialQualityModel({
 }
 
 export function MaterialQualityRow({
-  recipe,
   mat,
   bandIndex,
   onBandChange,
   getBandsForMaterial,
   totalModifiers,
+  fittingDetail,
 }: {
-  recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
   totalModifiers: TotalModifierRow[];
+  fittingDetail?: FittingComponentDetail | null;
 }) {
   const {
     bands,
@@ -1332,9 +1299,9 @@ export function MaterialQualityRow({
   const [expandedModifierRows, setExpandedModifierRows] = useState<Set<string>>(() => new Set());
   const [hasTouchedModifierRows, setHasTouchedModifierRows] = useState(false);
   const defaultExpandedRowKey = useMemo(() => {
-    const firstExpandable = atQuality.find((m) => getBaseStatValue(recipe, m.property) !== undefined);
+    const firstExpandable = atQuality.find((m) => getCraftingModifierBaseValue(fittingDetail, m.property) !== undefined);
     return firstExpandable ? `${firstExpandable.slot}||${firstExpandable.property}` : null;
-  }, [atQuality, recipe]);
+  }, [atQuality, fittingDetail]);
   const toggleModifierRow = useCallback((rowKey: string) => {
     setHasTouchedModifierRows(true);
     setExpandedModifierRows((prev) => {
@@ -1446,7 +1413,7 @@ export function MaterialQualityRow({
             const impact = getModifierImpact(m.property, m.value);
             const display = formatMaterialModifierDisplay(
               m.property,
-              getBaseStatValue(recipe, m.property),
+              getCraftingModifierBaseValue(fittingDetail, m.property),
               m.value,
               m.modifierMode,
             );
@@ -1454,7 +1421,7 @@ export function MaterialQualityRow({
             const totalDisplay = totalRow
               ? formatMaterialModifierDisplay(
                   totalRow.property,
-                  getBaseStatValue(recipe, totalRow.property),
+                  getCraftingModifierBaseValue(fittingDetail, totalRow.property),
                   totalRow.totalValue,
                   totalRow.modifierMode,
                 )
@@ -1543,17 +1510,17 @@ export function MaterialQualityRow({
 }
 
 function DetailMaterialQualityRow({
-  recipe,
   mat,
   bandIndex,
   onBandChange,
   getBandsForMaterial,
+  fittingDetail,
 }: {
-  recipe: ComponentRecipe;
   mat: ComponentRecipe["materials"][number];
   bandIndex: number;
   onBandChange: (bandIndex: number) => void;
   getBandsForMaterial: (materialName: string) => QualityBand[];
+  fittingDetail?: FittingComponentDetail | null;
 }) {
   const {
     materialName,
@@ -1662,7 +1629,7 @@ function DetailMaterialQualityRow({
           const impact = getModifierImpact(m.property, m.value);
           const display = formatMaterialModifierDisplay(
             m.property,
-            getBaseStatValue(recipe, m.property),
+            getCraftingModifierBaseValue(fittingDetail, m.property),
             m.value,
             m.modifierMode,
           );
@@ -1690,68 +1657,11 @@ function formatContributionValue(value: number, modifierMode?: string): string {
   return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
 
-function formatIndexNumber(value: unknown, suffix = ""): string | null {
-  const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
-  if (!Number.isFinite(number)) return null;
-  return `${number.toLocaleString("en-US", { maximumFractionDigits: number >= 100 ? 0 : 2 })}${suffix}`;
-}
-
-function formatIndexToken(value: unknown): string | null {
-  if (typeof value !== "string" || !value.trim()) return null;
-  return value
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-function formatIndexDamageDrop(stats: Record<string, unknown>): string | null {
-  const minDistance = formatIndexNumber(stats.damageDropMinDistance, "m");
-  const perMeter = formatIndexNumber(stats.damageDropPerMeter, "/m");
-  const minDamage = formatIndexNumber(stats.damageDropMinDamage);
-  const parts = [
-    minDistance ? `after ${minDistance}` : null,
-    perMeter,
-    minDamage ? `floor ${minDamage}` : null,
-  ].filter((value): value is string => Boolean(value));
-  return parts.length > 0 ? parts.join(" / ") : null;
-}
-
 function getIndexStatsObject(record: ComponentCardIndexRecord | undefined, key: string): Record<string, unknown> | null {
   const stats = record?.stats as unknown;
   if (!isRecord(stats)) return null;
   const value = stats[key];
   return isRecord(value) ? value : null;
-}
-
-function buildDetailStatRows(record: ComponentCardIndexRecord | undefined): ComponentCardMetric[] {
-  if (!record) return [];
-
-  if (record.type === "ammo") {
-    const ammo = getIndexStatsObject(record, "fpsAmmo");
-    if (!ammo) return [];
-    const rows: ComponentCardMetric[] = [];
-    const push = (label: string, value: string | null) => {
-      if (value) rows.push({ label, value });
-    };
-    push("Ammo Class", formatIndexToken(ammo.ammoClass));
-    push("Compatible Weapon Class", formatIndexToken(ammo.compatibleWeaponClass));
-    push("Compatible Weapon Family", formatIndexToken(ammo.compatibleWeaponFamily));
-    push("Magazine Capacity", formatIndexNumber(ammo.magazineCapacity, " Cap"));
-    push("Alpha Damage", formatIndexNumber(ammo.alphaDamageTotal));
-    const range = getRangeBoundary(ammo);
-    push(range.label, range.value !== undefined ? formatIndexNumber(range.value, "m") : null);
-    push("Projectile Speed", formatIndexNumber(ammo.projectileSpeed, " m/s"));
-    push("Damage Drop", formatIndexDamageDrop(ammo));
-    push("Penetration", formatIndexNumber(ammo.penetrationBaseDistance, "m"));
-    return rows;
-  }
-
-  if (record.type === "weaponGun") {
-    return buildShipWeaponDetailStatRows(record);
-  }
-
-  return buildComponentCardSchemaFromIndex(record, { preserveDisplayName: true }).familyStats;
 }
 
 type DetailStatModifier = {
@@ -1802,41 +1712,13 @@ function getModifierStatBinding(property: string): ModifierStatBinding {
   };
 }
 
-function getIndexedModifierBaseValue(
-  record: ComponentCardIndexRecord | undefined,
-  property: string,
-): number | undefined {
-  const binding = getModifierStatBinding(property);
-  if (binding.statKeys.length === 0) return undefined;
-
-  const groups = binding.statGroups ?? ["fpsWeapon", "fpsAmmo", "shipWeapon"];
-  const statGroups = groups.map((g) => getIndexStatsObject(record, g));
-
-  for (const stats of statGroups) {
-    if (!stats) continue;
-    for (const key of binding.statKeys) {
-      const value = readIndexNumber(stats, key);
-      if (value !== undefined) return value;
-    }
-  }
-
-  return undefined;
-}
-
 function buildDpsModifierDisplay(
-  record: ComponentCardIndexRecord | undefined,
+  fittingDetail: FittingComponentDetail | null | undefined,
   totalModifiers: TotalModifierRow[],
 ): DetailStatModifier | undefined {
-  const weapon =
-    getIndexStatsObject(record, "fpsWeapon") ??
-    getIndexStatsObject(record, "shipWeapon");
-  if (!weapon) return undefined;
-
-  const baseDps = readIndexNumber(weapon, "dps");
+  const { dps: baseDps, alphaDamage: baseDamage, fireRateRpm: baseFireRate } = getFittingDpsBases(fittingDetail);
   if (baseDps === undefined || baseDps <= 0) return undefined;
 
-  const baseDamage = readIndexNumber(weapon, "alphaDamageTotal");
-  const baseFireRate = readIndexNumber(weapon, "fireRateRpm");
   let scale = 1;
 
   const damageModifier = getTotalModifierForProperty(totalModifiers, "GPP_Weapon_Damage");
@@ -1871,8 +1753,7 @@ function buildDpsModifierDisplay(
 }
 
 function buildModifiedDetailStatRows(
-  recipe: ComponentRecipe,
-  record: ComponentCardIndexRecord | undefined,
+  fittingDetail: FittingComponentDetail | null | undefined,
   stats: ComponentCardMetric[],
   totalModifiers: TotalModifierRow[],
 ): DetailStatRow[] {
@@ -1883,9 +1764,7 @@ function buildModifiedDetailStatRows(
 
   for (const modifier of totalModifiers) {
     const binding = getModifierStatBinding(modifier.property);
-    const baseValue =
-      getIndexedModifierBaseValue(record, modifier.property) ??
-      getBaseStatValue(recipe, modifier.property);
+    const baseValue = getCraftingModifierBaseValue(fittingDetail, modifier.property);
     const display = formatMaterialModifierDisplay(
       modifier.property,
       baseValue,
@@ -1927,7 +1806,7 @@ function buildModifiedDetailStatRows(
   }
 
   const dpsIndex = rowIndexByLabel.get(normalizeDetailStatLabel("DPS"));
-  const dpsModifier = dpsIndex !== undefined ? buildDpsModifierDisplay(record, totalModifiers) : undefined;
+  const dpsModifier = dpsIndex !== undefined ? buildDpsModifierDisplay(fittingDetail, totalModifiers) : undefined;
   if (dpsIndex !== undefined && dpsModifier) {
     rows[dpsIndex] = {
       ...rows[dpsIndex],
@@ -2599,11 +2478,19 @@ function DetailGraphPanel({ data }: { data: DetailGraphData }) {
 function ItemSummaryPanel({
   recipe,
   componentCardRecord,
+  fittingDetail,
+  fittingStatsLoading,
+  fittingStatsMissing,
+  fittingStatsError,
   totalModifiers,
   p6lrReference,
 }: {
   recipe: ComponentRecipe;
   componentCardRecord?: ComponentCardIndexRecord;
+  fittingDetail?: FittingComponentDetail | null;
+  fittingStatsLoading?: boolean;
+  fittingStatsMissing?: boolean;
+  fittingStatsError?: string | null;
   totalModifiers: TotalModifierRow[];
   p6lrReference?: P6LRReference;
 }) {
@@ -2619,19 +2506,18 @@ function ItemSummaryPanel({
         { label: "Craft Time", value: formatCraftTime(componentCardRecord.craftTimeSeconds) },
       ].filter((row) => Boolean(row.value))
     : [];
-  const stats = buildDetailStatRows(componentCardRecord);
-  const modifiedStats = buildModifiedDetailStatRows(recipe, componentCardRecord, stats, totalModifiers);
-  const secondaryStats = componentCardRecord?.type === "weaponGun"
-    ? []
-    : componentCardRecord
-      ? buildComponentCardSchemaFromIndex(componentCardRecord, { preserveDisplayName: true }).genericStats
-      : [];
-  const statsSectionLabel = componentCardRecord?.type === "weaponGun"
+  const stats = fittingDetail ? buildDetailStatRowsFromFitting(fittingDetail) : [];
+  const modifiedStats = buildModifiedDetailStatRows(fittingDetail, stats, totalModifiers);
+  const secondaryStats = fittingDetail ? buildSecondaryStatsFromFitting(fittingDetail) : [];
+  const statsSectionLabel = fittingDetail && isFittingWeaponPerformanceType(fittingDetail)
     ? "Weapon Performance"
-    : `${componentCardRecord?.typeLabel ?? schema.typeLabel} Stats`;
+    : `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? schema.typeLabel} Stats`;
   const graphData =
     buildAmmoPerformanceGraph(componentCardRecord, totalModifiers) ??
     buildArmorDamageTakenGraph(componentCardRecord, p6lrReference);
+  const showFittingUnavailable = Boolean(
+    fittingStatsMissing || fittingStatsError || (fittingStatsLoading && !fittingDetail),
+  );
 
   return (
     <section className="craft-detail-summary-section" aria-label="Selected item summary">
@@ -2641,7 +2527,7 @@ function ItemSummaryPanel({
         {modifiedStats.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
             <div className="craft-summary-section-label">{statsSectionLabel}</div>
-            {componentCardRecord?.type === "weaponGun" ? (
+            {fittingDetail && isFittingWeaponPerformanceType(fittingDetail) ? (
               <WeaponPerformanceStatGroups stats={modifiedStats} />
             ) : (
               <div className="craft-detail-stat-list craft-stat-grid">
@@ -2651,6 +2537,14 @@ function ItemSummaryPanel({
               </div>
             )}
           </div>
+        )}
+
+        {showFittingUnavailable && modifiedStats.length === 0 && (
+          <p className="craft-detail-stat-unavailable">
+            {fittingStatsLoading
+              ? "Loading fitting stats..."
+              : fittingStatsError ?? "Fitting stats unavailable for this item."}
+          </p>
         )}
 
         {graphData ? (
@@ -2843,15 +2737,13 @@ function MaterialRequirementsTable({ children }: { children: ReactNode }) {
 }
 
 function EstimatedEffectsPanel({
-  recipe,
-  componentCardRecord,
+  fittingDetail,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
   finalProductQuality,
 }: {
-  recipe: ComponentRecipe;
-  componentCardRecord?: ComponentCardIndexRecord;
+  fittingDetail?: FittingComponentDetail | null;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
@@ -2868,9 +2760,7 @@ function EstimatedEffectsPanel({
       {hasMaterialModifiers && (
         <div className="craft-detail-effects-list">
           {totalModifiers.map((row) => {
-            const baseValue =
-              getIndexedModifierBaseValue(componentCardRecord, row.property) ??
-              getBaseStatValue(recipe, row.property);
+            const baseValue = getCraftingModifierBaseValue(fittingDetail, row.property);
             const display = formatMaterialModifierDisplay(
               row.property,
               baseValue,
@@ -2914,10 +2804,10 @@ function EstimatedEffectsPanel({
       {hasOverallModifiers && (
         <div className="craft-summary-overall-mods">
           <OverallModifierGroup
-            recipe={recipe}
             modifiers={overallModifiers}
             quality={overallQualitySource}
             rarityClass={componentRarityClass}
+            fittingDetail={fittingDetail}
           />
         </div>
       )}
@@ -2927,7 +2817,7 @@ function EstimatedEffectsPanel({
 
 function RightCraftingPanel({
   recipe,
-  componentCardRecord,
+  fittingDetail,
   totalModifiers,
   overallModifiers,
   overallQualitySource,
@@ -2935,7 +2825,7 @@ function RightCraftingPanel({
   children,
 }: {
   recipe: ComponentRecipe;
-  componentCardRecord?: ComponentCardIndexRecord;
+  fittingDetail?: FittingComponentDetail | null;
   totalModifiers: TotalModifierRow[];
   overallModifiers: NonNullable<ComponentRecipe["overallQualityModifiers"]>;
   overallQualitySource: number | undefined;
@@ -2955,8 +2845,7 @@ function RightCraftingPanel({
         <MaterialRequirementsTable>{children}</MaterialRequirementsTable>
       </section>
       <EstimatedEffectsPanel
-        recipe={recipe}
-        componentCardRecord={componentCardRecord}
+        fittingDetail={fittingDetail}
         totalModifiers={totalModifiers}
         overallModifiers={overallModifiers}
         overallQualitySource={overallQualitySource}
@@ -3084,6 +2973,20 @@ function RecipeDrawer({
       cancelled = true;
     };
   }, [componentCards, selectedRecipe.blueprint_id]);
+
+  const entityClassResolution = useMemo(
+    () => resolveEntityClassForCraftingItem({
+      recipe: selectedRecipe,
+      cardBridge: selectedComponentCard,
+    }),
+    [selectedRecipe, selectedComponentCard],
+  );
+  const {
+    detail: fittingDetail,
+    loading: fittingStatsLoading,
+    error: fittingStatsError,
+    missing: fittingStatsMissing,
+  } = useFittingComponentStats(entityClassResolution.entityClass);
 
   const totalModifiers = useMemo(
     () => computeTotalModifiers(selectedRecipe, getBandsForMaterial, getBandIndex),
@@ -3223,6 +3126,10 @@ function RecipeDrawer({
         <ItemSummaryPanel
           recipe={selectedRecipe}
           componentCardRecord={selectedComponentCard}
+          fittingDetail={fittingDetail}
+          fittingStatsLoading={fittingStatsLoading}
+          fittingStatsMissing={fittingStatsMissing}
+          fittingStatsError={fittingStatsError}
           totalModifiers={totalModifiers}
           p6lrReference={p6lrReference}
         />
@@ -3260,7 +3167,7 @@ function RecipeDrawer({
 
         <RightCraftingPanel
           recipe={selectedRecipe}
-          componentCardRecord={selectedComponentCard}
+          fittingDetail={fittingDetail}
           totalModifiers={totalModifiers}
           overallModifiers={overallModifiers}
           overallQualitySource={overallQualitySource}
@@ -3277,9 +3184,9 @@ function RecipeDrawer({
             return (
               <DetailMaterialQualityRow
                 key={`${mat.slot}:${key}`}
-                recipe={selectedRecipe}
                 mat={mat}
                 bandIndex={getBandIndex(key)}
+                fittingDetail={fittingDetail}
                 onBandChange={(bandIndex) =>
                   setMaterialQualities((prev) => ({
                     ...prev,

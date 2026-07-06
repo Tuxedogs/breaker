@@ -12,7 +12,7 @@ import {
   deriveFinalProductQuality,
 } from "../../industry/crafting/utils/recipeQuality";
 import type { ComponentRecipe } from "../../industry/crafting/utils/craftingTypes";
-import { getFittingComponent } from "../../../lib/fitting/fittingApi";
+import { getFittingComponent, type FittingComponentDetail } from "../../../lib/fitting/fittingApi";
 import { getCraftingItemByBlueprintGuid } from "../../../lib/craftingData";
 import type { CraftQualityOverride } from "../../../lib/fitting/fittingTerminalTypes";
 import type { PortBreakdownRow } from "../../../lib/fitting/fittingPortGrouping";
@@ -61,7 +61,7 @@ export default function CraftQualityDrawer({
   onReset,
 }: CraftQualityDrawerProps) {
   const [recipe, setRecipe] = useState<ComponentRecipe | null>(null);
-  const [baseStats, setBaseStats] = useState<Record<string, number | null>>({});
+  const [fittingDetail, setFittingDetail] = useState<FittingComponentDetail | null>(null);
   const [quantByMaterial, setQuantByMaterial] = useState<Map<string, MaterialQuantization>>(new Map());
   const [materialQualities, setMaterialQualities] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -90,7 +90,7 @@ export default function CraftQualityDrawer({
           return;
         }
         setRecipe(craftRecipe);
-        setBaseStats(componentDetail.stats);
+        setFittingDetail(componentDetail);
         const quantRows = Array.isArray(quantizationRaw) ? quantizationRaw as MaterialQuantization[] : [];
         const quantMap = new Map<string, MaterialQuantization>();
         for (const row of quantRows) {
@@ -180,12 +180,12 @@ export default function CraftQualityDrawer({
                   return (
                     <MaterialQualityRow
                       key={key}
-                      recipe={recipe}
                       mat={material}
                       bandIndex={getBandIndex(key)}
                       onBandChange={(next) => setMaterialQualities((current) => ({ ...current, [key]: next }))}
                       getBandsForMaterial={getBandsForMaterial}
                       totalModifiers={totalModifiers}
+                      fittingDetail={fittingDetail}
                     />
                   );
                 })
@@ -210,9 +210,9 @@ export default function CraftQualityDrawer({
 
             <section className="fit-term-craft-drawer-section">
               <h3>Live Preview</h3>
-              {Object.keys(baseStats).length > 0 ? (
+              {fittingDetail && Object.keys(fittingDetail.stats).length > 0 ? (
                 <dl className="fit-term-kv fit-term-kv--compact">
-                  {Object.entries(baseStats).slice(0, 6).map(([key, value]) => (
+                  {Object.entries(fittingDetail.stats).slice(0, 6).map(([key, value]) => (
                     <div key={key}>
                       <dt>{key}</dt>
                       <dd>{value != null ? String(value) : "—"}</dd>
