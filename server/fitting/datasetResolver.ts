@@ -45,9 +45,13 @@ function currentIdFromPayload(payload: Record<string, unknown>, channel: Channel
   return typeof value === "string" && value.length > 0 ? value : null;
 }
 
+function parseJsonPayload(raw: string): Record<string, unknown> {
+  return JSON.parse(raw.replace(/^\uFEFF/, "")) as Record<string, unknown>;
+}
+
 async function currentBuildId(dataRoot: string, channel: Channel): Promise<string | null> {
   try {
-    const payload = JSON.parse(await readFile(path.join(dataRoot, "current.json"), "utf8")) as Record<string, unknown>;
+    const payload = parseJsonPayload(await readFile(path.join(dataRoot, "current.json"), "utf8"));
     return currentIdFromPayload(payload, channel);
   } catch {
     return null;
