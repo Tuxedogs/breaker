@@ -1,5 +1,4 @@
-import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
-import { buildComponentCardSchemaFromIndex } from "../industry/crafting/utils/componentCardSchema";
+import type { FittingComponentDetail, FittingComponentMitigation, DamageTypeMap } from "@/lib/fitting/fittingApi";
 
 export type BuildQueueStatGroup = {
   id: string;
@@ -7,111 +6,193 @@ export type BuildQueueStatGroup = {
   rows: { label: string; value: string }[];
 };
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function getStatsObject(record: ComponentCardIndexRecord, key: string): Record<string, unknown> | null {
-  const stats = record.stats as unknown;
-  if (!isRecord(stats)) return null;
-  const value = stats[key];
-  return isRecord(value) ? value : null;
-}
-
-function asNumber(value: unknown): number | null {
-  const number = typeof value === "number" ? value : typeof value === "string" ? Number(value) : Number.NaN;
-  return Number.isFinite(number) ? number : null;
+function readFinite(value: number | null | undefined): number | undefined {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
 function formatNumber(value: number): string {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: value >= 100 ? 0 : 2 }).format(value);
 }
 
-function formatCompact(value: unknown, suffix = ""): string | null {
-  const number = asNumber(value);
-  if (number === null) return null;
+function formatCompact(value: number | null | undefined, suffix = ""): string | null {
+  const number = readFinite(value ?? undefined);
+  if (number === undefined) return null;
   return `${formatNumber(number)}${suffix}`;
 }
 
-function formatRange(value: unknown, suffix = ""): string | null {
-  if (!isRecord(value)) return null;
-  const min = asNumber(value.min);
-  const max = asNumber(value.max);
-  if (min === null || max === null) return null;
-  return min === max ? `${formatNumber(min)}${suffix}` : `${formatNumber(min)}-${formatNumber(max)}${suffix}`;
+function titleCase(value: string): string {
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function formatPair(minValue: unknown, maxValue: unknown, suffix = ""): string | null {
-  const min = asNumber(minValue);
-  const max = asNumber(maxValue);
-  if (min === null && max === null) return null;
-  if (min !== null && max !== null && min !== max) return `${formatNumber(min)}-${formatNumber(max)}${suffix}`;
-  return `${formatNumber(max ?? min ?? 0)}${suffix}`;
+function formatComponentType(detail: FittingComponentDetail): string {
+  const base = titleCase(detail.type);
+  return detail.subtype ? `${base} · ${titleCase(detail.subtype)}` : base;
+}
+
+function formatDamageTypeMap(map: DamageTypeMap | null | undefined): string | null {
+  if (!map) return null;
+  const parts = Object.entries(map)
+    .map(([type, entry]) => {
+      if (!entry) return null;
+      const value = readFinite(entry.value ?? undefined);
+      const min = readFinite(entry.min ?? undefined);
+      const max = readFinite(entry.max ?? undefined);
+      if (value !== undefined) return `${titleCase(type)} ${formatNumber(value)}`;
+      if (min !== undefined && max !== undefined) {
+        return min === max
+          ? `${titleCase(type)} ${formatNumber(min)}`
+          : `${titleCase(type)} ${formatNumber(min)}-${formatNumber(max)}`;
+      }
+      return null;
+    })
+    .filter((part): part is string => Boolean(part));
+  return parts.length > 0 ? parts.join("; ") : null;
 }
 
 function pushRow(rows: { label: string; value: string }[], label: string, value: string | null) {
   if (value) rows.push({ label, value });
 }
 
-function buildShieldGroups(record: ComponentCardIndexRecord): BuildQueueStatGroup[] {
-  const shield = getStatsObject(record, "shield");
-  const generic = getStatsObject(record, "generic");
-  const defense: { label: string; value: string }[] = [];
-  const signatures: { label: string; value: string }[] = [];
-  const powerHeat: { label: string; value: string }[] = [];
-  const specifications: { label: string; value: string }[] = [];
-  const additional: { label: string; value: string }[] = [];
-
-  pushRow(defense, "Health", formatCompact(generic?.health));
-  pushRow(defense, "Shield HP", formatCompact(shield?.maxShieldHealth));
-  pushRow(defense, "Regen Delay", formatCompact(shield?.damageRegenDelay, "s"));
-  pushRow(defense, "Regen Rate", formatCompact(shield?.regenRate, "/s"));
-  pushRow(defense, "Physical Resistance", formatRange(shield?.physicalResistance));
-  pushRow(defense, "Energy Absorption", formatRange(shield?.physicalAbsorption));
-  pushRow(defense, "Distortion Resistance", formatRange(shield?.distortionResistance));
-
-  pushRow(signatures, "EM Signature", formatCompact(generic?.onlineEmSignature ?? generic?.emSignature));
-  pushRow(signatures, "IR Signature", formatCompact(generic?.onlineIrSignature ?? generic?.irSignature));
-
-  pushRow(powerHeat, "Power Draw", formatPair(shield?.powerUsageMin, shield?.powerUsageMax));
-  pushRow(powerHeat, "Heat Generation", formatCompact(generic?.heatGeneration));
-
-  if (record.size !== null) pushRow(specifications, "Size", `S${record.size}`);
-  pushRow(specifications, "Class", record.class ? record.class : null);
-  pushRow(specifications, "Grade", record.grade);
-  pushRow(specifications, "Integrity", formatCompact(generic?.integrity));
-  pushRow(specifications, "Mass", formatCompact(generic?.mass));
-  pushRow(specifications, "Volume", formatCompact(generic?.volume));
-
-  pushRow(additional, "Coverage", formatCompact(shield?.coverage));
-  pushRow(additional, "Shield Type", typeof shield?.shieldType === "string" ? shield.shieldType : null);
-  pushRow(additional, "Recharge Mode", typeof shield?.rechargeType === "string" ? shield.rechargeType : null);
-  pushRow(additional, "Facing", typeof shield?.facing === "string" ? shield.facing : null);
-  pushRow(additional, "Mount", typeof shield?.mount === "string" ? shield.mount : null);
-
-  return [
-    { id: "defense", label: "Defense", rows: defense },
-    { id: "signatures", label: "Signatures", rows: signatures },
-    { id: "power", label: "Power & Heat", rows: powerHeat },
-    { id: "specs", label: "Specifications", rows: specifications },
-    { id: "additional", label: "Additional", rows: additional },
-  ].filter((group) => group.rows.length > 0);
+function groupIfRows(id: string, label: string, rows: { label: string; value: string }[]): BuildQueueStatGroup | null {
+  return rows.length > 0 ? { id, label, rows } : null;
 }
 
-export function buildQueueStatGroups(record: ComponentCardIndexRecord | undefined): BuildQueueStatGroup[] {
-  if (!record) return [];
+function buildIdentityGroup(detail: FittingComponentDetail): BuildQueueStatGroup | null {
+  const rows: { label: string; value: string }[] = [];
+  pushRow(rows, "Component Type", formatComponentType(detail));
+  pushRow(rows, "Display Name", detail.displayName?.trim() || null);
+  if (detail.size !== null) pushRow(rows, "Size", `S${detail.size}`);
+  pushRow(rows, "Grade", detail.grade);
+  pushRow(rows, "Class", detail.class ? titleCase(detail.class) : null);
+  pushRow(rows, "Manufacturer", detail.manufacturer);
+  return groupIfRows("identity", "Identity", rows);
+}
 
-  if (record.type === "shield") {
-    return buildShieldGroups(record);
+function buildPerformanceRows(
+  detail: FittingComponentDetail,
+  mitigation: FittingComponentMitigation | null,
+): { label: string; value: string }[] {
+  const { stats } = detail;
+  const rows: { label: string; value: string }[] = [];
+
+  if (detail.type === "ship_weapon") {
+    pushRow(rows, "Alpha Damage", formatCompact(stats.alphaDamage));
+    pushRow(rows, "Fire Rate", formatCompact(stats.fireRateRpm, " rpm"));
+    pushRow(rows, "DPS", formatCompact(stats.dps));
+    pushRow(rows, "Projectile Speed", formatCompact(stats.projectileSpeed, " m/s"));
+    pushRow(rows, "Projectile Range", formatCompact(stats.calculatedRange, "m"));
+    pushRow(rows, "Ammo Capacity", formatCompact(stats.ammoCapacity));
+    pushRow(rows, "Physical Damage", formatCompact(stats.damagePhysical));
+    pushRow(rows, "Energy Damage", formatCompact(stats.damageEnergy));
+    pushRow(rows, "Distortion Damage", formatCompact(stats.damageDistortion));
+    pushRow(rows, "Thermal Damage", formatCompact(stats.damageThermal));
+    if (mitigation?.kind === "weapon_projectile") {
+      pushRow(rows, "Penetration Distance", formatCompact(mitigation.basePenetrationDistance, "m"));
+      pushRow(rows, "Ammo Penetration", formatCompact(mitigation.ammoPenetration));
+    }
+    return rows;
   }
 
-  const schema = buildComponentCardSchemaFromIndex(record, { preserveDisplayName: true });
-  const combined = [...schema.meta, ...schema.genericStats, ...schema.familyStats];
-  if (combined.length === 0) return [];
+  if (detail.type === "shield" && mitigation?.kind === "shield") {
+    pushRow(rows, "Shield HP", formatCompact(stats.shieldHp ?? mitigation.shieldHp ?? mitigation.maxShieldHealth));
+    pushRow(rows, "Regen Rate", formatCompact(stats.regenRate ?? mitigation.maxShieldRegen, "/s"));
+    pushRow(rows, "Regen Delay", formatCompact(mitigation.damagedRegenDelay, "s"));
+    pushRow(rows, "Physical Resistance", formatDamageTypeMap(mitigation.resistanceByDamageType));
+    pushRow(rows, "Energy Absorption", formatDamageTypeMap(mitigation.absorptionByDamageType));
+    return rows;
+  }
 
-  return [{
-    id: "stats",
-    label: `${record.typeLabel} Stats`,
-    rows: combined.map((row) => ({ label: row.label, value: row.value })),
-  }];
+  if (detail.type === "power_plant") {
+    pushRow(rows, "Power Generation", formatCompact(stats.powerGenerated));
+    return rows;
+  }
+
+  if (detail.type === "cooler") {
+    pushRow(rows, "Coolant Generation", formatCompact(stats.coolingGenerated));
+    return rows;
+  }
+
+  if (detail.type === "quantum_drive") {
+    pushRow(rows, "Quantum Speed", formatCompact(stats.quantumSpeed));
+    pushRow(rows, "Spool Time", formatCompact(stats.spoolTime, "s"));
+    pushRow(rows, "Cooldown", formatCompact(stats.quantumCooldown, "s"));
+    pushRow(rows, "Fuel Rate", formatCompact(stats.fuelRate));
+    return rows;
+  }
+
+  if (detail.type === "radar") {
+    pushRow(rows, "Detection Range", formatCompact(stats.detectionRange));
+    pushRow(rows, "Scan Range", formatCompact(stats.scanRange));
+    pushRow(rows, "Scan Rate", formatCompact(stats.scanRate));
+    pushRow(rows, "Scan Cooldown", formatCompact(stats.scanCooldownTime, "s"));
+    pushRow(rows, "Signature Sensitivity", formatCompact(stats.signatureSensitivity));
+    return rows;
+  }
+
+  pushRow(rows, "Alpha Damage", formatCompact(stats.alphaDamage));
+  pushRow(rows, "Thrust Capacity", formatCompact(stats.thrustCapacity));
+  return rows;
+}
+
+function buildPowerCoolingGroup(detail: FittingComponentDetail): BuildQueueStatGroup | null {
+  const { stats } = detail;
+  const rows: { label: string; value: string }[] = [];
+  pushRow(rows, "Power Draw", formatCompact(stats.powerDraw));
+  pushRow(rows, "Power Generation", formatCompact(stats.powerGenerated));
+  pushRow(rows, "Cooling Draw", formatCompact(stats.coolingDraw));
+  pushRow(rows, "Coolant Generation", formatCompact(stats.coolingGenerated));
+  pushRow(rows, "Heat Generation", formatCompact(stats.heatGenerated));
+  return groupIfRows("power-cooling", "Power & Cooling", rows);
+}
+
+function buildSignaturesGroup(detail: FittingComponentDetail): BuildQueueStatGroup | null {
+  const { stats } = detail;
+  const rows: { label: string; value: string }[] = [];
+  pushRow(rows, "EM Signature", formatCompact(stats.electromagneticEmission));
+  pushRow(rows, "IR Signature", formatCompact(stats.infraredEmission));
+  return groupIfRows("signatures", "Signatures", rows);
+}
+
+function buildDurabilityGroup(detail: FittingComponentDetail): BuildQueueStatGroup | null {
+  const { stats, mitigation } = detail;
+  const rows: { label: string; value: string }[] = [];
+  pushRow(rows, "Component HP", formatCompact(stats.health));
+  if (mitigation?.kind === "armor") {
+    pushRow(rows, "Armor HP", formatCompact(mitigation.health));
+  }
+  pushRow(rows, "Mass", formatCompact(stats.mass));
+  pushRow(rows, "Volume", formatCompact(stats.volume));
+  return groupIfRows("durability", "Durability", rows);
+}
+
+export function buildBuildQueueFittingStatGroups(
+  detail: FittingComponentDetail | null | undefined,
+): BuildQueueStatGroup[] {
+  if (!detail) return [];
+
+  const groups: BuildQueueStatGroup[] = [];
+  const identity = buildIdentityGroup(detail);
+  if (identity) groups.push(identity);
+
+  const performance = groupIfRows(
+    "performance",
+    "Performance",
+    buildPerformanceRows(detail, detail.mitigation),
+  );
+  if (performance) groups.push(performance);
+
+  const powerCooling = buildPowerCoolingGroup(detail);
+  if (powerCooling) groups.push(powerCooling);
+
+  const signatures = buildSignaturesGroup(detail);
+  if (signatures) groups.push(signatures);
+
+  const durability = buildDurabilityGroup(detail);
+  if (durability) groups.push(durability);
+
+  return groups;
 }

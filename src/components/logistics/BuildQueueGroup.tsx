@@ -44,6 +44,7 @@ import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
+import BuildQueueStatsBreakdown from './BuildQueueStatsBreakdown';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -1587,6 +1588,11 @@ export default function BuildQueueGroup({
                   <span className="bq-coverage-short">{formatQuantity(summaryMetrics.totalShortfall, undefined)} short</span>
                 )}
               </div>
+
+              <BuildQueueStatsBreakdown
+                blueprintId={item.blueprint_id}
+                recipeId={item.recipeId}
+              />
 
               {/* Material table */}
               {hasMaterialInputs ? (
