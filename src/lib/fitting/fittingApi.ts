@@ -14,12 +14,11 @@ type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
 
-const FITTING_BUILD_ID = "4.8.184.2887-12061511";
-const FITTING_BUILD_QUERY = `channel=LIVE&buildId=${encodeURIComponent(FITTING_BUILD_ID)}`;
+const FITTING_CHANNEL_QUERY = "channel=LIVE";
 
 function withFittingBuild(path: string): string {
   const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}${FITTING_BUILD_QUERY}`;
+  return `${path}${separator}${FITTING_CHANNEL_QUERY}`;
 }
 
 type DamageType = "physical" | "energy" | "distortion" | "thermal" | "biochemical" | "stun";
