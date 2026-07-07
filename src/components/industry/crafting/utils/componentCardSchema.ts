@@ -24,6 +24,7 @@ export type ComponentCardMaterialPreview = {
 export type ComponentCardSchema = {
   id: string;
   displayName: string;
+  variantLabel?: string | null;
   typeLabel: string;
   kindLabel: string;
   categoryLabel?: string;
@@ -266,13 +267,14 @@ function readBrowseCardMetadata(record: ComponentCardIndexRecord): {
 /** Browse metadata only — no component-card stat payload. Stats come from fitting API. */
 export function buildComponentCardBrowseMetadataFromIndex(
   record: ComponentCardIndexRecord,
-  options?: { displayName?: string },
+  options?: { displayName?: string; variantLabel?: string | null },
 ): ComponentCardSchema {
   const { modifierLabels, materialsPreview } = readBrowseCardMetadata(record);
 
   return {
     id: record.id,
     displayName: options?.displayName ?? record.name,
+    variantLabel: options?.variantLabel ?? record.variantLabel ?? record.variantName ?? null,
     typeLabel: record.typeLabel,
     kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: record.category === record.kind ? undefined : record.category,
@@ -483,6 +485,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
 export function buildComponentCardSchema(
   recipe: ComponentRecipe,
   familyVariantCounts: Map<string, number> = new Map(),
+  options?: { displayName?: string; variantLabel?: string | null },
 ): ComponentCardSchema {
   const meta: ComponentCardMetric[] = [];
   const craftTime = formatCraftTime(recipe.craft_time_seconds);
@@ -494,7 +497,8 @@ export function buildComponentCardSchema(
 
   return {
     id: recipe.blueprint_id,
-    displayName: getCardDisplayName(recipe),
+    displayName: options?.displayName ?? getCardDisplayName(recipe),
+    variantLabel: options?.variantLabel ?? null,
     typeLabel: getCardTypeLabel(recipe),
     kindLabel: recipe.item_kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: asDisplay(recipe.category) ?? undefined,

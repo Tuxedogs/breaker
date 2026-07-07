@@ -2,6 +2,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getComponentCardsRoot } from "../server/config/componentCardsRoot.ts";
+import {
+  createComponentCardIdentityContext,
+  enrichComponentCardRecord,
+} from "./component-card-fitting-identity.mts";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -30,6 +34,10 @@ const byIdRoot = path.join(outputRoot, "by-id");
 type BlueprintRecord = {
   blueprintGuid?: unknown;
   componentType?: unknown;
+  entityClass?: unknown;
+  entityClassPath?: unknown;
+  blueprintName?: unknown;
+  displayName?: unknown;
   qualityModifiers?: Array<{ gameplayProperty?: unknown }> | null;
 };
 
@@ -406,6 +414,7 @@ function toBrowseSlim(
   if (record.family !== undefined) slim.family = record.family;
   if (record.familyKey !== undefined) slim.familyKey = record.familyKey;
   if (record.variantName !== undefined) slim.variantName = record.variantName;
+  if (record.variantLabel !== undefined) slim.variantLabel = record.variantLabel;
   if (record.manufacturer !== undefined) slim.manufacturer = record.manufacturer;
 
   if (Object.keys(slimFacets).length > 0) slim.facets = slimFacets;
@@ -424,6 +433,23 @@ const source = JSON.parse(await readFile(sourcePath, "utf8")) as SourceIndex;
 const blueprints = JSON.parse(await readFile(blueprintsPath, "utf8")) as BlueprintRecord[];
 const materialIdentityIndex = JSON.parse(await readFile(materialIdentityPath, "utf8")) as MaterialIdentityIndex;
 const weaponModifierBadges = buildWeaponModifierBadgeMap(blueprints);
+const blueprintsById = new Map(
+  blueprints
+    .map((blueprint) => {
+      const id = normalizeId(blueprint.blueprintGuid);
+      return id ? [id, blueprint] as const : null;
+    })
+    .filter((entry): entry is readonly [string, BlueprintRecord] => entry !== null),
+);
+const fittingIdentityContext = createComponentCardIdentityContext(
+  path.resolve("server-data", "fitting"),
+  blueprints.map((blueprint) => ({
+    entityClass: blueprint.entityClass,
+    entityClassPath: blueprint.entityClassPath,
+    blueprintName: blueprint.blueprintName,
+    displayName: blueprint.displayName,
+  })),
+);
 const filterableMaterialKeys = buildFilterableMaterialKeys(materialIdentityIndex);
 const warnings: string[] = [];
 const sourceRecords = Array.isArray(source.records) ? source.records : [];
@@ -464,16 +490,17 @@ for (const [index, rawRecord] of sourceRecords.entries()) {
 
   const relativeFile = path.join("by-id", recordFileName(id)).replace(/\\/g, "/");
   recordFiles[id] = relativeFile;
-  const browseRecord = toBrowseSlim(rawRecord, weaponModifierBadges, materialKeyByFacetValue, filterableMaterialKeys);
+  const identityRecord = enrichComponentCardRecord(rawRecord, fittingIdentityContext, blueprintsById.get(id));
+  const browseRecord = toBrowseSlim(identityRecord, weaponModifierBadges, materialKeyByFacetValue, filterableMaterialKeys);
   const browseCard = asRecord(browseRecord.card);
-  const rawFacets = asRecord(rawRecord.facets);
   const shapedCard = {
-    ...(asRecord(rawRecord.card) ?? {}),
+    ...(asRecord(identityRecord.card) ?? {}),
     modifierLabels: Array.isArray(browseCard?.modifierLabels) ? browseCard.modifierLabels : [],
   };
+  const shapedFacets = asRecord(identityRecord.facets);
   const shapedRecord = {
-    ...rawRecord,
-    ...(rawFacets ? { facets: filterRecordMaterialFacets(rawFacets, materialKeyByFacetValue, filterableMaterialKeys) } : {}),
+    ...identityRecord,
+    ...(shapedFacets ? { facets: filterRecordMaterialFacets(shapedFacets, materialKeyByFacetValue, filterableMaterialKeys) } : {}),
     card: shapedCard,
   };
   browseRecords.push(browseRecord);

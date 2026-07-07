@@ -49,6 +49,7 @@ import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import { resolveCraftingCardTitle } from "@/lib/crafting/resolveCraftingDisplayName";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
   buildFittingIdentityMetricRows,
@@ -2972,7 +2973,6 @@ function RecipeDrawer({
     }))
     .filter((pool) => pool.displayName.trim().length > 0 && !/^unknown|n\/a$/i.test(pool.displayName.trim()));
 
-  const displayName = getRecipeDisplayName(selectedRecipe);
   const browseComponentCard = findBrowseComponentCard(componentCards, selectedRecipe.blueprint_id);
   const [selectedComponentCard, setSelectedComponentCard] = useState<ComponentCardIndexRecord | undefined>(
     browseComponentCard ?? undefined,
@@ -3015,6 +3015,15 @@ function RecipeDrawer({
     error: fittingStatsError,
     missing: fittingStatsMissing,
   } = useFittingComponentStats(entityClassResolution.entityClass);
+
+  const displayName = useMemo(
+    () => resolveCraftingCardTitle({
+      fittingDetail,
+      recipe: selectedRecipe,
+      card: selectedComponentCard,
+    }),
+    [fittingDetail, selectedRecipe, selectedComponentCard],
+  );
 
   const totalModifiers = useMemo(
     () => computeTotalModifiers(selectedRecipe, getBandsForMaterial, getBandIndex),

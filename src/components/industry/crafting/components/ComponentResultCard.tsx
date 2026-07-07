@@ -9,6 +9,7 @@ import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import { resolveCraftingDisplayName, resolveCraftingCardTitle, resolveCraftingVariantLabel } from "@/lib/crafting/resolveCraftingDisplayName";
 import {
   buildBrowseStatPreviewFromFitting,
   inferPrimaryShipWeaponDamageType,
@@ -63,8 +64,13 @@ export default function ComponentResultCard({
   const isFpsItem = record?.kind === "fps";
   const entityClass = useMemo(() => {
     if (!record || isFpsItem) return null;
-    return resolveEntityClassForCraftingItem({ cardBridge: record }).entityClass;
-  }, [record, isFpsItem]);
+    return resolveEntityClassForCraftingItem({
+      recipe: recipe
+        ? { blueprint_id: recipe.blueprint_id, output_entityClass: recipe.output_entityClass }
+        : undefined,
+      cardBridge: record,
+    }).entityClass;
+  }, [record, recipe, isFpsItem]);
 
   const {
     detail: fittingDetail,
@@ -72,6 +78,33 @@ export default function ComponentResultCard({
     missing: fittingStatsMissing,
     error: fittingStatsError,
   } = useFittingComponentStats(isFpsItem ? null : entityClass);
+
+  const resolvedDisplayName = useMemo(
+    () => resolveCraftingDisplayName({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
+
+  const resolvedCardTitle = useMemo(
+    () => resolveCraftingCardTitle({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
+
+  const resolvedVariantLabel = useMemo(
+    () => resolveCraftingVariantLabel({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
 
   const weaponPresentation = record?.type === "weaponGun"
     ? buildShipWeaponBrowsePresentation(
@@ -82,9 +115,13 @@ export default function ComponentResultCard({
 
   const schema = record
     ? buildComponentCardBrowseMetadataFromIndex(record, {
-      displayName: weaponPresentation?.displayName,
+      displayName: weaponPresentation?.displayName ?? resolvedDisplayName,
+      variantLabel: resolvedVariantLabel,
     })
-    : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
+    : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts, {
+      displayName: resolvedDisplayName,
+      variantLabel: resolvedVariantLabel,
+    });
 
   const meta = Array.isArray(schema.meta) ? schema.meta : [];
   const modifierLabels = Array.isArray(schema.modifierLabels) ? schema.modifierLabels : [];
@@ -129,7 +166,7 @@ export default function ComponentResultCard({
       >
         {isShipWeapon ? (
           <div className="component-result-card__title-row">
-            <h3 className="component-result-card__title">{schema.displayName}</h3>
+            <h3 className="component-result-card__title">{weaponPresentation?.displayName ?? resolvedCardTitle}</h3>
             {iconUrl ? (
               <img
                 src={iconUrl}
@@ -157,7 +194,7 @@ export default function ComponentResultCard({
               )}
             </span>
 
-            <h3 className="component-result-card__title">{schema.displayName}</h3>
+            <h3 className="component-result-card__title">{resolvedCardTitle}</h3>
           </>
         )}
 
