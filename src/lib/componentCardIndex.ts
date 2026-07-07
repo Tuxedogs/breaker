@@ -57,6 +57,7 @@ export type ComponentCardIndexRecord = {
   familyKey?: string | null;
   variants?: string[];
   variantName?: string | null;
+  variantLabel?: string | null;
   entityClass?: string | null;
   craftTimeSeconds: number;
   materials?: ComponentCardIndexMaterial[];

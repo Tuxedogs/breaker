@@ -24,6 +24,7 @@ export type ComponentCardMaterialPreview = {
 export type ComponentCardSchema = {
   id: string;
   displayName: string;
+  variantLabel?: string | null;
   typeLabel: string;
   kindLabel: string;
   categoryLabel?: string;
@@ -234,6 +235,57 @@ function getFamilyStats(recipe: ComponentRecipe, familyVariantCounts: Map<string
   return stats.filter((stat) => stat.value).slice(0, 4);
 }
 
+function readBrowseCardMetadata(record: ComponentCardIndexRecord): {
+  modifierLabels: string[];
+  materialsPreview: ComponentCardSchema["materialsPreview"];
+} {
+  const card: Record<string, unknown> = isRecord(record.card) ? record.card : {};
+  const modifierLabels = Array.isArray(card.modifierLabels)
+    ? (card.modifierLabels as unknown[]).filter((label): label is string => typeof label === "string")
+    : Array.isArray(card.badges)
+      ? (card.badges as unknown[]).filter((label): label is string => typeof label === "string")
+      : [];
+  const materialsPreview: unknown[] = Array.isArray(card.materialsPreview) ? card.materialsPreview : [];
+
+  return {
+    modifierLabels,
+    materialsPreview: materialsPreview
+      .filter(isRecord)
+      .map((material, index) => ({
+        slot: `${index}`,
+        cost_id: `${record.id}:${index}:${material.name}`,
+        material_name: typeof material.name === "string" ? material.name : "Unknown Material",
+        quantity: typeof material.unit === "string" && material.unit
+          ? `${String(material.quantity ?? "")} ${material.unit}`
+          : typeof material.quantity === "number" || typeof material.quantity === "string"
+            ? material.quantity
+            : "",
+      })),
+  };
+}
+
+/** Browse metadata only — no component-card stat payload. Stats come from fitting API. */
+export function buildComponentCardBrowseMetadataFromIndex(
+  record: ComponentCardIndexRecord,
+  options?: { displayName?: string; variantLabel?: string | null },
+): ComponentCardSchema {
+  const { modifierLabels, materialsPreview } = readBrowseCardMetadata(record);
+
+  return {
+    id: record.id,
+    displayName: options?.displayName ?? record.name,
+    variantLabel: options?.variantLabel ?? record.variantLabel ?? record.variantName ?? null,
+    typeLabel: record.typeLabel,
+    kindLabel: record.kind === "fps" ? "FPS" : "Vehicle",
+    categoryLabel: record.category === record.kind ? undefined : record.category,
+    meta: getIndexMeta(record),
+    genericStats: [],
+    familyStats: [],
+    modifierLabels,
+    materialsPreview,
+  };
+}
+
 function getModifierLabels(recipe: ComponentRecipe): string[] {
   const allowModifierLabels =
     recipe.item_kind === "fps" ||
@@ -433,6 +485,7 @@ function getIndexFamilyStats(record: ComponentCardIndexRecord): ComponentCardMet
 export function buildComponentCardSchema(
   recipe: ComponentRecipe,
   familyVariantCounts: Map<string, number> = new Map(),
+  options?: { displayName?: string; variantLabel?: string | null },
 ): ComponentCardSchema {
   const meta: ComponentCardMetric[] = [];
   const craftTime = formatCraftTime(recipe.craft_time_seconds);
@@ -444,7 +497,8 @@ export function buildComponentCardSchema(
 
   return {
     id: recipe.blueprint_id,
-    displayName: getCardDisplayName(recipe),
+    displayName: options?.displayName ?? getCardDisplayName(recipe),
+    variantLabel: options?.variantLabel ?? null,
     typeLabel: getCardTypeLabel(recipe),
     kindLabel: recipe.item_kind === "fps" ? "FPS" : "Vehicle",
     categoryLabel: asDisplay(recipe.category) ?? undefined,

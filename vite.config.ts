@@ -173,7 +173,9 @@ function installScintelApiMiddleware(
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const scintelApiRoot = path.resolve(process.env.SCINTEL_API_ROOT ?? env.SCINTEL_API_ROOT ?? "D:\\scintel\\api");
-  const fittingDataRoot = path.resolve(process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? "D:\\scintel\\out");
+  const fittingDataRoot = path.resolve(
+    process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? path.join(process.cwd(), "server-data", "fitting"),
+  );
 
   return {
     plugins: [

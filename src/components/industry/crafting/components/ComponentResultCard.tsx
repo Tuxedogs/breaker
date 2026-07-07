@@ -1,10 +1,24 @@
+import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type { ComponentRecipe } from "../utils/craftingTypes";
-import { buildComponentCardSchema, buildComponentCardSchemaFromIndex } from "../utils/componentCardSchema";
+import {
+  buildComponentCardBrowseMetadataFromIndex,
+  buildComponentCardSchema,
+} from "../utils/componentCardSchema";
 import type { ComponentCardSchema } from "../utils/componentCardSchema";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { getComponentCategoryIconUrl } from "@/lib/componentCategoryIcon";
-import { getShipWeaponBadgeClassName } from "../utils/shipWeaponCardDisplay";
+import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import { resolveCraftingDisplayName, resolveCraftingCardTitle, resolveCraftingVariantLabel } from "@/lib/crafting/resolveCraftingDisplayName";
+import {
+  buildBrowseStatPreviewFromFitting,
+  inferPrimaryShipWeaponDamageType,
+} from "@/lib/fitting/fittingStatProjection";
+import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
+import {
+  buildShipWeaponBrowsePresentation,
+  getShipWeaponBadgeClassName,
+} from "../utils/shipWeaponCardDisplay";
 
 function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
   return (
@@ -47,15 +61,98 @@ export default function ComponentResultCard({
   familyVariantCounts?: Map<string, number>;
   variantCount?: number;
 }) {
+  const isFpsItem = record?.kind === "fps";
+  const entityClass = useMemo(() => {
+    if (!record || isFpsItem) return null;
+    return resolveEntityClassForCraftingItem({
+      recipe: recipe
+        ? { blueprint_id: recipe.blueprint_id, output_entityClass: recipe.output_entityClass }
+        : undefined,
+      cardBridge: record,
+    }).entityClass;
+  }, [record, recipe, isFpsItem]);
+
+  const {
+    detail: fittingDetail,
+    loading: fittingStatsLoading,
+    missing: fittingStatsMissing,
+    error: fittingStatsError,
+  } = useFittingComponentStats(isFpsItem ? null : entityClass);
+
+  const resolvedDisplayName = useMemo(
+    () => resolveCraftingDisplayName({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
+
+  const resolvedCardTitle = useMemo(
+    () => resolveCraftingCardTitle({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
+
+  const resolvedVariantLabel = useMemo(
+    () => resolveCraftingVariantLabel({
+      fittingDetail,
+      recipe,
+      card: record,
+    }),
+    [fittingDetail, recipe, record],
+  );
+
+  const weaponPresentation = record?.type === "weaponGun"
+    ? buildShipWeaponBrowsePresentation(
+      record,
+      inferPrimaryShipWeaponDamageType(fittingDetail),
+    )
+    : null;
+
   const schema = record
-    ? buildComponentCardSchemaFromIndex(record)
-    : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts);
+    ? buildComponentCardBrowseMetadataFromIndex(record, {
+      displayName: weaponPresentation?.displayName ?? resolvedDisplayName,
+      variantLabel: resolvedVariantLabel,
+    })
+    : buildComponentCardSchema(recipe as ComponentRecipe, familyVariantCounts, {
+      displayName: resolvedDisplayName,
+      variantLabel: resolvedVariantLabel,
+    });
+
   const meta = Array.isArray(schema.meta) ? schema.meta : [];
-  const familyStats = Array.isArray(schema.familyStats) ? schema.familyStats : [];
-  const genericStats = Array.isArray(schema.genericStats) ? schema.genericStats : [];
-  const classificationBadges = Array.isArray(schema.classificationBadges) ? schema.classificationBadges : [];
   const modifierLabels = Array.isArray(schema.modifierLabels) ? schema.modifierLabels : [];
-  const visibleStats = [...familyStats, ...genericStats].slice(0, 5);
+  const classificationBadges = weaponPresentation?.badges ?? [];
+
+  const visibleStats = useMemo(() => {
+    if (isFpsItem || !fittingDetail) return [];
+    return buildBrowseStatPreviewFromFitting(fittingDetail);
+  }, [isFpsItem, fittingDetail]);
+
+  const showStatUnavailable = useMemo(() => {
+    if (!record || fittingStatsLoading) return false;
+    if (isFpsItem) return true;
+    if (!entityClass || fittingStatsMissing || fittingStatsError) return true;
+    if (fittingDetail && visibleStats.length === 0) return true;
+    return false;
+  }, [
+    record,
+    fittingStatsLoading,
+    isFpsItem,
+    entityClass,
+    fittingStatsMissing,
+    fittingStatsError,
+    fittingDetail,
+    visibleStats.length,
+  ]);
+
+  const statUnavailableMessage = isFpsItem
+    ? "Fitting stats unsupported"
+    : "Fitting stats unavailable";
+
   const iconUrl = record ? getComponentCategoryIconUrl(record) : null;
   const isShipWeapon = record?.type === "weaponGun" || recipe?.component_type === "weaponGun";
   const location = useLocation();
@@ -69,7 +166,7 @@ export default function ComponentResultCard({
       >
         {isShipWeapon ? (
           <div className="component-result-card__title-row">
-            <h3 className="component-result-card__title">{schema.displayName}</h3>
+            <h3 className="component-result-card__title">{weaponPresentation?.displayName ?? resolvedCardTitle}</h3>
             {iconUrl ? (
               <img
                 src={iconUrl}
@@ -97,7 +194,7 @@ export default function ComponentResultCard({
               )}
             </span>
 
-            <h3 className="component-result-card__title">{schema.displayName}</h3>
+            <h3 className="component-result-card__title">{resolvedCardTitle}</h3>
           </>
         )}
 
@@ -124,6 +221,12 @@ export default function ComponentResultCard({
               <MetricRow key={`${metric.label}:${metric.value}`} metric={metric} />
             ))}
           </div>
+        )}
+
+        {showStatUnavailable && (
+          <p className="component-card-stat-unavailable craft-muted" aria-label="Stat preview unavailable">
+            {statUnavailableMessage}
+          </p>
         )}
 
         {classificationBadges.length > 0 && (

@@ -8,6 +8,10 @@ type Row = Record<string, unknown>;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const COMPONENT_FILES = [
   ["ship_weapons.json", "ship_weapon"],
+  ["mining_lasers.json", "mining_laser"],
+  ["salvage_heads.json", "salvage_head"],
+  ["salvage_modifiers.json", "salvage_modifier"],
+  ["fuel_nozzles.json", "fuel_nozzle"],
   ["shields.json", "shield"],
   ["ship_armors.json", "armor"],
   ["power_plants.json", "power_plant"],
@@ -135,6 +139,13 @@ export function componentType(row: Row, fallback: string): string {
     quantum_drive: "quantum_drive",
     radar: "radar",
     thruster: "thruster",
+    mining_laser: "mining_laser",
+    weaponmining: "mining_laser",
+    salvage_head: "salvage_head",
+    salvagehead: "salvage_head",
+    salvage_modifier: "salvage_modifier",
+    salvagemodifier: "salvage_modifier",
+    fuel_nozzle: "fuel_nozzle",
   };
   return aliases[raw] ?? "other";
 }
@@ -191,6 +202,49 @@ export function componentStats(row: Row): Record<string, number | null> {
     damageBiochemical: "damageBiochemical",
     damageStun: "damageStun",
     fireRateRpm: "fireRateRpm",
+    heatPerShot: "heatPerShot",
+    heatCapacity: "heatCapacity",
+    overheatTemperature: "overheatTemperature",
+    cooldownRate: "cooldownRate",
+    powerUsage: "powerUsage",
+    maxPenetrationThickness: "maxPenetrationThickness",
+    distortionResistance: "distortionResistance",
+    crossSection: "crossSection",
+    radarEmission: "radarEmission",
+    miningPower: "miningPower",
+    extractionPower: "extractionPower",
+    instabilityModifier: "instabilityModifier",
+    resistanceModifier: "resistanceModifier",
+    fractureWindowSize: "fractureWindowSize",
+    optimalChargeRate: "optimalChargeRate",
+    laserRange: "laserRange",
+    beamRange: "beamRange",
+    heatPerSecond: "heatPerSecond",
+    wearPerSecond: "wearPerSecond",
+    powerUsageMin: "powerUsageMin",
+    powerUsageMax: "powerUsageMax",
+    throttleMinimum: "throttleMinimum",
+    hullScrapingSpeedMultiplier: "hullScrapingSpeedMultiplier",
+    hullScrapingRadiusMultiplier: "hullScrapingRadiusMultiplier",
+    hullScrapingEfficiencyMultiplier: "hullScrapingEfficiencyMultiplier",
+    hullScrapingSpeedModifier: "hullScrapingSpeedModifier",
+    hullScrapingRadiusModifier: "hullScrapingRadiusModifier",
+    hullScrapingEfficiencyModifier: "hullScrapingEfficiencyModifier",
+    materialEfficiency: "materialEfficiency",
+    maxHealthRepairRate: "maxHealthRepairRate",
+    maxDamageMapRepairRate: "maxDamageMapRepairRate",
+    tractorMinForce: "tractorMinForce",
+    tractorMaxForce: "tractorMaxForce",
+    tractorMinDistance: "tractorMinDistance",
+    tractorMaxDistance: "tractorMaxDistance",
+    tractorFullStrengthDistance: "tractorFullStrengthDistance",
+    tractorMaxVolume: "tractorMaxVolume",
+    fuelTransferRate: "fuelTransferRate",
+    quantumFuelTransferRate: "quantumFuelTransferRate",
+    captureRadius: "captureRadius",
+    distortionMaximum: "distortionMaximum",
+    onlineEmSignature: "onlineEmSignature",
+    onlineIrSignature: "onlineIrSignature",
   };
   const stats: Record<string, number | null> = {};
   for (const [publicName, sourceName] of Object.entries(mapping)) {
@@ -497,7 +551,7 @@ export async function listComponents(selection: DatasetSelection, search: URLSea
   const classFilter = (search.get("class") ?? "").toLowerCase();
   const manufacturer = (search.get("manufacturer") ?? "").toLowerCase();
   if (sizeFilter !== null && (!Number.isInteger(Number(sizeFilter)) || Number(sizeFilter) < 0)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "size must be a non-negative integer.");
-  const allowedTypes = ["ship_weapon", "shield", "armor", "power_plant", "cooler", "quantum_drive", "radar", "thruster", "other"];
+  const allowedTypes = ["ship_weapon", "mining_laser", "salvage_head", "salvage_modifier", "fuel_nozzle", "shield", "armor", "power_plant", "cooler", "quantum_drive", "radar", "thruster", "other"];
   if (typeFilter !== null && !allowedTypes.includes(typeFilter)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component type.");
   const sort = search.get("sort") ?? "displayName";
   if (!["displayName", "-displayName", "size", "-size", "grade", "-grade"].includes(sort)) throw new FittingHttpError(400, "INVALID_REQUEST", "Invalid request", "Unsupported component sort.");

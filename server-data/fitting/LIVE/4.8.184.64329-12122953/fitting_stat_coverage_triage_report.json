@@ -1,0 +1,1305 @@
+{
+  "buildId": "legacy-live-sandbox",
+  "channel": "LIVE",
+  "confidence": "medium",
+  "coolingDemandFindings": {
+    "calculationConsumerBug": false,
+    "extractedButNotConsumed": "Component power/cooling demand fields are present for non-weapon modeled components and consumed by stock cooling summaries.",
+    "linkedRecordNotResolved": {
+      "missing_cooling_fields": {
+        "coolantUsage": 1938,
+        "coolingDraw": 1938,
+        "coolingRequired": 1938
+      },
+      "missing_performance_fields": {
+        "boostSpeedForward": 12,
+        "maxSpeed": 12,
+        "pitchRate": 12,
+        "rollRate": 12,
+        "scmSpeed": 12,
+        "yawRate": 12
+      },
+      "missing_power_fields": {
+        "minimumPowerRequired": 73,
+        "powerDraw": 73,
+        "powerInputMinimum": 73,
+        "powerUsage": 73
+      },
+      "missing_quantum_fields": {
+        "fuelRate": 290
+      },
+      "missing_radar_fields": {
+        "detectionRange": 326,
+        "scanRate": 326
+      },
+      "missing_weapon_fields": {
+        "alphaDamageTotal": 5
+      }
+    },
+    "sourceFieldAbsent": "Weapon coolant demand remains null where no direct Coolant consumption delta exists."
+  },
+  "dpsFireRatePolicy": {
+    "dps": "not_modeled_by_choice; never calculated from alpha damage or guessed cadence.",
+    "fireRateRpm": "extracted from SWeaponActionFire*Params@fireRate when positive; null for continuous beam weapons."
+  },
+  "externalSourceUse": {
+    "communityData": false,
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "families": {
+    "coolers": {
+      "expectedFields": [
+        "coolingGenerated",
+        "powerUsage",
+        "thermalEqualizationRate"
+      ],
+      "fieldCoverage": {
+        "coolingGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        },
+        "powerUsage": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        },
+        "thermalEqualizationRate": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 81
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "coolingGenerated",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 81,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "powerUsage",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 81,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "thermalEqualizationRate",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 81,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        }
+      ],
+      "totalRecords": 81
+    },
+    "power_plants": {
+      "expectedFields": [
+        "powerGenerated",
+        "coolantUsage",
+        "heatGenerated"
+      ],
+      "fieldCoverage": {
+        "coolantUsage": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "heatGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        },
+        "powerGenerated": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 83
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "powerGenerated",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 83,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "coolantUsage",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 83,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "heatGenerated",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 83,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        }
+      ],
+      "totalRecords": 83
+    },
+    "quantum_drives": {
+      "expectedFields": [
+        "quantumSpeed",
+        "quantumAccel",
+        "spoolTime",
+        "calibrationTime",
+        "quantumCooldown",
+        "fuelRate",
+        "rangeEfficiency"
+      ],
+      "fieldCoverage": {
+        "calibrationTime": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 63
+        },
+        "fuelRate": {
+          "coveragePct": 0.0,
+          "missing": 63,
+          "present": 0
+        },
+        "quantumAccel": {
+          "coveragePct": 0.0,
+          "missing": 63,
+          "present": 0
+        },
+        "quantumCooldown": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 63
+        },
+        "quantumSpeed": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 63
+        },
+        "rangeEfficiency": {
+          "coveragePct": 0.0,
+          "missing": 63,
+          "present": 0
+        },
+        "spoolTime": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 63
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemQuantumDriveParams/params@driveSpeed"
+          ],
+          "field": "quantumSpeed",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 63,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemQuantumDriveParams/params@stageOneAccelRate",
+            "SCItemQuantumDriveParams/params@stageTwoAccelRate"
+          ],
+          "field": "quantumAccel",
+          "missingCount": 63,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Stage-specific acceleration fields are extracted separately; do not collapse them into ambiguous quantumAccel."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemQuantumDriveParams/params@spoolUpTime"
+          ],
+          "field": "spoolTime",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 63,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemQuantumDriveParams/params@calibrationRate",
+            "SCItemQuantumDriveParams/params@minCalibrationRequirement",
+            "SCItemQuantumDriveParams/params@maxCalibrationRequirement",
+            "SCItemQuantumDriveParams/params@calibrationDelayInSeconds"
+          ],
+          "field": "calibrationTime",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 63,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "quantumCooldown",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 63,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "@fuelRate",
+            "@FuelRate",
+            "@fuelRequirement"
+          ],
+          "field": "fuelRate",
+          "missingCount": 63,
+          "missingReason": "source_field_absent",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null until a direct fuel rate field is identified."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "ItemResourceComponentParams/states/ItemResourceState/powerRanges/*@registerRange"
+          ],
+          "field": "rangeEfficiency",
+          "missingCount": 63,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Do not map power registerRange to quantum range efficiency."
+        }
+      ],
+      "totalRecords": 63
+    },
+    "radars": {
+      "expectedFields": [
+        "detectionRange",
+        "scanRange",
+        "scanRate",
+        "scanCooldownTime",
+        "signatureSensitivity",
+        "aimAssistMinAssignmentDistance",
+        "aimAssistMaxAssignmentDistance"
+      ],
+      "fieldCoverage": {
+        "aimAssistMaxAssignmentDistance": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "aimAssistMinAssignmentDistance": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "detectionRange": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "scanCooldownTime": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        },
+        "scanRange": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "scanRate": {
+          "coveragePct": 0.0,
+          "missing": 76,
+          "present": 0
+        },
+        "signatureSensitivity": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 76
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarComponentParams/aimAssist@distanceMinAssignment",
+            "SCItemRadarComponentParams/aimAssist@distanceMaxAssignment"
+          ],
+          "field": "detectionRange",
+          "missingCount": 76,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null; aim-assist firing-solution distances are not detection range."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarComponentParams/aimAssist@distanceMinAssignment",
+            "SCItemRadarComponentParams/aimAssist@distanceMaxAssignment"
+          ],
+          "field": "scanRange",
+          "missingCount": 76,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null; aim-assist firing-solution distances are not scan range."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarComponentParams/pingProperties@cooldownTime"
+          ],
+          "field": "scanRate",
+          "missingCount": 76,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null; cooldown is not a scan-rate value."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "scanCooldownTime",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 76,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarSignatureDetection@sensitivity"
+          ],
+          "field": "signatureSensitivity",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 76,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarComponentParams/aimAssist@distanceMinAssignment"
+          ],
+          "field": "aimAssistMinAssignmentDistance",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 76,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SCItemRadarComponentParams/aimAssist@distanceMaxAssignment"
+          ],
+          "field": "aimAssistMaxAssignmentDistance",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 76,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        }
+      ],
+      "totalRecords": 76
+    },
+    "shields": {
+      "expectedFields": [
+        "shieldHP",
+        "regenRate",
+        "damagedRegenDelay",
+        "downedRegenDelay"
+      ],
+      "fieldCoverage": {
+        "damagedRegenDelay": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 73
+        },
+        "downedRegenDelay": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 73
+        },
+        "regenRate": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 73
+        },
+        "shieldHP": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 73
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "shieldHP",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 73,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SLegacyShieldGeneratorMisfireParams@regenReductionRatio"
+          ],
+          "field": "regenRate",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 73,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damagedRegenDelay",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 73,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "downedRegenDelay",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 73,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        }
+      ],
+      "totalRecords": 73
+    },
+    "ship_weapons": {
+      "expectedFields": [
+        "damagePhysical",
+        "damageEnergy",
+        "damageDistortion",
+        "damageThermal",
+        "damageBiochemical",
+        "damageStun",
+        "alphaDamageTotal",
+        "fireRateRpm",
+        "dps",
+        "projectileSpeed",
+        "projectileLifetime",
+        "calculatedRange",
+        "spreadMin",
+        "spreadMax",
+        "coolingDraw",
+        "coolantUsage"
+      ],
+      "fieldCoverage": {
+        "alphaDamageTotal": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "calculatedRange": {
+          "coveragePct": 98.41,
+          "missing": 3,
+          "present": 186
+        },
+        "coolantUsage": {
+          "coveragePct": 0.0,
+          "missing": 189,
+          "present": 0
+        },
+        "coolingDraw": {
+          "coveragePct": 0.0,
+          "missing": 189,
+          "present": 0
+        },
+        "damageBiochemical": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "damageDistortion": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "damageEnergy": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "damagePhysical": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "damageStun": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "damageThermal": {
+          "coveragePct": 95.77,
+          "missing": 8,
+          "present": 181
+        },
+        "dps": {
+          "coveragePct": 0.0,
+          "missing": 189,
+          "present": 0
+        },
+        "fireRateRpm": {
+          "coveragePct": 97.35,
+          "missing": 5,
+          "present": 184
+        },
+        "projectileLifetime": {
+          "coveragePct": 98.41,
+          "missing": 3,
+          "present": 186
+        },
+        "projectileSpeed": {
+          "coveragePct": 98.41,
+          "missing": 3,
+          "present": 186
+        },
+        "spreadMax": {
+          "coveragePct": 0.0,
+          "missing": 189,
+          "present": 0
+        },
+        "spreadMin": {
+          "coveragePct": 0.0,
+          "missing": 189,
+          "present": 0
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damagePhysical",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageEnergy",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageDistortion",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageThermal",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageBiochemical",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageStun",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "alphaDamageTotal",
+          "missingCount": 8,
+          "missingReason": "source_field_absent",
+          "presentCount": 181,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SWeaponActionFireSingleParams@fireRate",
+            "SWeaponActionFireRapidParams@fireRate",
+            "SWeaponActionFireBurstParams@fireRate"
+          ],
+          "field": "fireRateRpm",
+          "missingCount": 5,
+          "missingReason": "source_field_absent",
+          "presentCount": 184,
+          "recommendedFixOrDeferral": "Promoted from SWeaponActionFire*Params@fireRate when positive. Continuous beam weapons legitimately lack RPM."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "alphaDamageTotal",
+            "SWeaponActionFireSingleParams@fireRate"
+          ],
+          "field": "dps",
+          "missingCount": 189,
+          "missingReason": "not_modeled_by_choice",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Do not calculate DPS from alpha damage or cadence."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "projectileSpeed",
+          "missingCount": 3,
+          "missingReason": "source_field_absent",
+          "presentCount": 186,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "projectileLifetime",
+          "missingCount": 3,
+          "missingReason": "source_field_absent",
+          "presentCount": 186,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "calculatedRange",
+          "missingCount": 3,
+          "missingReason": "source_field_absent",
+          "presentCount": 186,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SWeaponActionFireSingleParams/spreadParams@min",
+            "weapon power-state spreadModifier@minMultiplier"
+          ],
+          "field": "spreadMin",
+          "missingCount": 189,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Do not promote until fire-mode selection and modifier semantics are modeled."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "SWeaponActionFireSingleParams/spreadParams@max",
+            "weapon power-state spreadModifier@maxMultiplier"
+          ],
+          "field": "spreadMax",
+          "missingCount": 189,
+          "missingReason": "field_found_but_uncertain_mapping",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Do not promote until fire-mode selection and modifier semantics are modeled."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "ItemResourceDeltaConsumption/consumption[@resource='Coolant']"
+          ],
+          "field": "coolingDraw",
+          "missingCount": 189,
+          "missingReason": "source_field_absent",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null unless a direct coolant demand field is found."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "ItemResourceDeltaConsumption/consumption[@resource='Coolant']"
+          ],
+          "field": "coolantUsage",
+          "missingCount": 189,
+          "missingReason": "source_field_absent",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Keep null unless a direct coolant demand field is found."
+        }
+      ],
+      "totalRecords": 189
+    },
+    "vehicle_ammo": {
+      "expectedFields": [
+        "damagePhysical",
+        "damageEnergy",
+        "damageDistortion",
+        "damageThermal",
+        "damageBiochemical",
+        "damageStun",
+        "alphaDamageTotal",
+        "projectileSpeed",
+        "projectileLifetime",
+        "calculatedRange",
+        "maxPenetrationThickness",
+        "basePenetrationDistance",
+        "spreadMin",
+        "spreadMax"
+      ],
+      "fieldCoverage": {
+        "alphaDamageTotal": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "basePenetrationDistance": {
+          "coveragePct": 96.57,
+          "missing": 6,
+          "present": 169
+        },
+        "calculatedRange": {
+          "coveragePct": 98.29,
+          "missing": 3,
+          "present": 172
+        },
+        "damageBiochemical": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "damageDistortion": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "damageEnergy": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "damagePhysical": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "damageStun": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "damageThermal": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "maxPenetrationThickness": {
+          "coveragePct": 94.29,
+          "missing": 10,
+          "present": 165
+        },
+        "projectileLifetime": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 175
+        },
+        "projectileSpeed": {
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 175
+        },
+        "spreadMax": {
+          "coveragePct": 0.0,
+          "missing": 175,
+          "present": 0
+        },
+        "spreadMin": {
+          "coveragePct": 0.0,
+          "missing": 175,
+          "present": 0
+        }
+      },
+      "fields": [
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damagePhysical",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageEnergy",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageDistortion",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageThermal",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageBiochemical",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "damageStun",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "alphaDamageTotal",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "projectileSpeed",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 175,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "projectileLifetime",
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 175,
+          "recommendedFixOrDeferral": "Extracted with current generator."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "calculatedRange",
+          "missingCount": 3,
+          "missingReason": "source_field_absent",
+          "presentCount": 172,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "maxPenetrationThickness",
+          "missingCount": 10,
+          "missingReason": "source_field_absent",
+          "presentCount": 165,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [],
+          "field": "basePenetrationDistance",
+          "missingCount": 6,
+          "missingReason": "source_field_absent",
+          "presentCount": 169,
+          "recommendedFixOrDeferral": "No clear source field found in this triage pass."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "AmmoParams spreadMin/spreadMax"
+          ],
+          "field": "spreadMin",
+          "missingCount": 175,
+          "missingReason": "source_field_absent",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Scatter/spread appears on weapon fire-mode records, not vehicle ammo records."
+        },
+        {
+          "candidateSourcePathsInspected": [
+            "AmmoParams spreadMin/spreadMax"
+          ],
+          "field": "spreadMax",
+          "missingCount": 175,
+          "missingReason": "source_field_absent",
+          "presentCount": 0,
+          "recommendedFixOrDeferral": "Scatter/spread appears on weapon fire-mode records, not vehicle ammo records."
+        }
+      ],
+      "totalRecords": 175
+    }
+  },
+  "foundryNativePercent": 100,
+  "generatedAt": "2026-07-07T01:13:34Z",
+  "generator": "scripts/fitting/build_fitting_registries.py",
+  "generatorModule": "scripts/fitting/reports/stat_coverage_triage.py",
+  "missingReasonCounts": {
+    "field_found_but_uncertain_mapping": 732,
+    "not_modeled_by_choice": 189,
+    "source_field_absent": 950
+  },
+  "radarAimAssistPolicy": {
+    "extractedFields": [
+      "aimAssistMinAssignmentDistance",
+      "aimAssistMaxAssignmentDistance"
+    ],
+    "interpretation": "Observed gameplay context only: min assignment is firing-solution distance at minimum radar power; max assignment is firing-solution distance at maximum radar power.",
+    "notMappedTo": [
+      "detectionRange",
+      "scanRange"
+    ],
+    "notModeled": "No interpolation or power-allocation scaling formula is inferred."
+  },
+  "recommendedNextPrompt": "Proceed to Phase 4 fitting-aware diff support if remaining gaps are source-absent/uncertain/not modeled by choice; continue stat extraction repair only if high-value direct source fields are identified.",
+  "registry": "fitting_stat_coverage_triage_report",
+  "registryHygiene": {
+    "classificationCounts": {
+      "fittable_candidate": 622,
+      "internal_or_placeholder": 119,
+      "special_capital": 25,
+      "template": 40
+    },
+    "examples": [
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "c31a291a_5194_4eb0_a2cb_61a73c9af5a4",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_eclipse.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "1578b810_9e39_4e6a_92ca_00d7f16d0afa",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_reclaimer.xml"
+      },
+      {
+        "classification": "template",
+        "componentKey": "7629bbf0_ba3e_4659_a33e_a938e58158c4",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_template.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "e3f09e0c_909b_4c0c_bcc6_bc4750122594",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_vanguard.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "e4e2ad33_008b_42b4_b790_be63d6e2f0f1",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_vanguard_harbinger.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "443252d0_295e_40b3_9502_b5ebe166d809",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_vanguard_hoplite.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "4a07a7bf_bc94_4f41_9a0b_7ee58fb7c008",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_aegs_vanguard_sentinel.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "2c99ef3c_d73a_4539_beac_6765b6254773",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_arrow.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "b1666cb9_386b_444e_a22f_061958078379",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_asgard.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "4735a555_aab0_465b_88b9_73a639253b2d",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_ballista.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "df022e28_9394_45f5_aa23_a38dd92391f5",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_carrack.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "a9ab7b2c_31cf_43cd_aac8_070990724592",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_centurion.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "23b24ec8_28e1_43cc_aaf3_d5ba15089558",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_fc7r.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "8ff61bc9_33dc_4fd7_95d4_17390a52c702",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_hawk.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "2a4871cf_1b60_4979_9c47_1801f10855bb",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_hurricane.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "85e284ec_96ea_4de7_930a_2db6099585b3",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_lightning_f8.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "e087882e_e595_4be9_9453_010962e20fbc",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_paladin.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "f6088b00_f889_4a7a_bd44_1f41f6ae9012",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_spartan.xml"
+      },
+      {
+        "classification": "template",
+        "componentKey": "e6dbfc8a_724b_4f82_9c54_6b476c5a6298",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_template.xml"
+      },
+      {
+        "classification": "internal_or_placeholder",
+        "componentKey": "98d07eb3_d5c5_4725_babc_525deb952d8e",
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "sourceFile": "entities/scitem/ships/armor/armr_anvl_terrapin.xml"
+      }
+    ],
+    "recommendation": "Do not delete in this phase. Add future filtering only after source-supported player-facing/fittable flags are identified."
+  },
+  "schemaVersion": 1,
+  "sourceClassification": "derived from Foundry XML, generated fitting registries, and scoped triage diagnostics",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourcePathAudits": {
+    "beamWeapons": [
+      "No beam-specific non-ammo damage path promoted in this pass"
+    ],
+    "coolingDemand": [
+      "ItemResourceDelta consumption[@resource='Coolant'] absent for ship weapons in current modeled extraction"
+    ],
+    "quantumDrive": [
+      "SCItemQuantumDriveParams/params@driveSpeed",
+      "params@spoolUpTime",
+      "params@cooldownTime",
+      "params@stageOneAccelRate",
+      "params@stageTwoAccelRate",
+      "params@calibrationRate"
+    ],
+    "radar": [
+      "SCItemRadarSignatureDetection@sensitivity",
+      "pingProperties@cooldownTime",
+      "aimAssist@distanceMinAssignment",
+      "aimAssist@distanceMaxAssignment"
+    ],
+    "scatterSpread": [
+      "SWeaponActionFireSingleParams/spreadParams exists but requires fire-mode semantics before promotion"
+    ],
+    "shieldRegeneration": [
+      "SLegacyShieldGeneratorMisfireParams@regenReductionRatio rejected as normal regenRate"
+    ],
+    "weaponAmmo": [
+      "AmmoParams/DamageInfo damage fields",
+      "BulletProjectileParams@speed/lifetime",
+      "pierceabilityParams@maxPenetrationThickness",
+      "penetrationParams@basePenetrationDistance"
+    ]
+  },
+  "sourceRoot": "D:\\scintel\\data\\libs\\foundry\\records",
+  "spotChecks": [
+    {
+      "componentKey": "51bf9a6e_0ad7_49d2_8d41_d1d5e69669e6",
+      "diagnosis": "regenReductionRatio exists only under misfire params; normal regenRate remains unresolved.",
+      "displayName": "5CA 'Akura'",
+      "family": "shields",
+      "label": "shield_regen_diagnosis",
+      "name": "SHLD_BEHR_S03_5CA_SCItem",
+      "sourceFile": "entities/scitem/ships/shieldgenerator/shld_behr_s03_5ca_scitem.xml",
+      "values": {
+        "damagedRegenDelay": 6.05,
+        "downedRegenDelay": 12.1,
+        "regenRate": 19000,
+        "shieldHP": 100000
+      }
+    },
+    {
+      "componentKey": "d8c217a9_531a_4b02_90bc_3cb48f169149",
+      "diagnosis": "driveSpeed/spoolUpTime/cooldown extracted; fuelRate remains source_field_absent.",
+      "displayName": "<= PLACEHOLDER =>",
+      "family": "quantum_drives",
+      "label": "quantum_drive_core_fields",
+      "name": "QDRV_AEGS_S04_Javelin_SCItem",
+      "sourceFile": "entities/scitem/ships/quantumdrive/qdrv_aegs_s04_javelin_scitem.xml",
+      "values": {
+        "fuelRate": null,
+        "quantumCooldown": 32,
+        "quantumSpeed": 876000000,
+        "quantumStageOneAccelRate": 376000,
+        "quantumStageTwoAccelRate": 11200000,
+        "spoolTime": 9
+      }
+    },
+    {
+      "componentKey": "816aa854_7615_4add_a2ca_2d39ada7fea7",
+      "diagnosis": "Normal projectile alpha/range/penetration remain source-supported; fireRateRpm is extracted from SWeaponActionFire*Params@fireRate. DPS is still not calculated.",
+      "displayName": "'WAR' Cannon",
+      "family": "ship_weapons",
+      "label": "normal_projectile_weapon",
+      "name": "VNCL_NeutronCannon_S5",
+      "sourceFile": "entities/scitem/ships/weapons/vncl_neutroncannon_s5.xml",
+      "values": {
+        "alphaDamageTotal": 567,
+        "basePenetrationDistance": 2.4,
+        "calculatedRange": 2502.417,
+        "dps": null,
+        "fireRateRpm": 200,
+        "maxPenetrationThickness": 0.5,
+        "projectileLifetime": 3.53,
+        "projectileSpeed": 708.9
+      }
+    },
+    {
+      "componentKey": "9fd3b3be_5653_413f_ba8f_0959a0adda89",
+      "diagnosis": "Beam audit is name-based triage; continuous beams lack @fireRate and keep fireRateRpm null.",
+      "displayName": "Exodus-10 Laser Beam",
+      "family": "ship_weapons",
+      "label": "beam_weapon_damage",
+      "name": "HRST_LaserBeam_Bespoke",
+      "sourceFile": "entities/scitem/ships/weapons/hrst_laserbeam_bespoke.xml",
+      "values": {
+        "alphaDamageTotal": null,
+        "ammoParamsRecord": "b92725e5-e98c-4cf4-a9bd-48d2c8415973",
+        "damageDistortion": null,
+        "damageEnergy": null,
+        "dps": null,
+        "fireRateRpm": null
+      }
+    },
+    {
+      "componentKey": "2e0a3446_23e2_447b_8f1c_2b01516ca396",
+      "diagnosis": "Spread candidates live on weapon fire-mode spreadParams/modifiers; not promoted without fire-mode semantics.",
+      "displayName": "Absolution Distortion Scattergun",
+      "family": "ship_weapons",
+      "label": "scattergun_spread",
+      "name": "PRAR_DistortionScatterGun_S5",
+      "sourceFile": "entities/scitem/ships/weapons/prar_distortionscattergun_s5.xml",
+      "values": {
+        "alphaDamageTotal": 90,
+        "ammoParamsRecord": "6f48e75d-1082-4604-9903-0eb16b9b7406",
+        "spreadMax": null,
+        "spreadMin": null
+      }
+    },
+    {
+      "componentKey": "c818ab50_4350_42dc_b285_388adec321ec",
+      "diagnosis": "Aim-assist distances extracted separately; detection/scan range remain null.",
+      "displayName": "<= PLACEHOLDER =>",
+      "family": "radars",
+      "label": "radar_aim_assist",
+      "name": "RADR_AntiPersonnel_Turret",
+      "sourceFile": "entities/scitem/ships/radar/radr_antipersonnel_turret.xml",
+      "values": {
+        "aimAssistMaxAssignmentDistance": 632.5,
+        "aimAssistMinAssignmentDistance": 630,
+        "detectionRange": null,
+        "scanCooldownTime": 0,
+        "scanRange": null,
+        "signatureSensitivity": 1,
+        "signatureSensitivityAggregation": "max"
+      }
+    },
+    {
+      "componentKey": "1f5be5de_b5ea_42c7_879f_289c4bf64f19",
+      "diagnosis": null,
+      "displayName": "<= PLACEHOLDER =>",
+      "family": "coolers",
+      "label": "cooler_supply",
+      "name": "COOL_AEGS_S04_Javelin_SCItem",
+      "sourceFile": "entities/scitem/ships/cooler/cool_aegs_s04_javelin_scitem.xml",
+      "values": {
+        "coolingGenerated": 74,
+        "powerUsage": 6,
+        "thermalEqualizationRate": 3.75
+      }
+    },
+    {
+      "componentKey": "f330457d_df9b_4421_a522_45b407a735a7",
+      "diagnosis": null,
+      "displayName": "<= PLACEHOLDER =>",
+      "family": "power_plants",
+      "label": "power_plant_supply",
+      "name": "POWR_PyroOutpost",
+      "sourceFile": "entities/scitem/ships/powerplant/powr_pyrooutpost.xml",
+      "values": {
+        "coolantUsage": 0,
+        "heatGenerated": 0.72,
+        "powerGenerated": 10000
+      }
+    },
+    {
+      "componentKey": "c31a291a_5194_4eb0_a2cb_61a73c9af5a4",
+      "diagnosis": "Reported for future filtering; not deleted in Phase 3.5A.",
+      "displayName": "<= PLACEHOLDER =>",
+      "family": "components",
+      "label": "placeholder_or_internal_component",
+      "name": "ARMR_AEGS_Eclipse",
+      "sourceFile": "entities/scitem/ships/armor/armr_aegs_eclipse.xml",
+      "values": {
+        "attachSize": 1,
+        "componentType": "armor",
+        "displayName": "<= PLACEHOLDER =>",
+        "size": 1
+      }
+    },
+    {
+      "componentKey": "031a120e_db07_4100_8071_50346731964b",
+      "diagnosis": null,
+      "displayName": null,
+      "family": "vehicle_ammo",
+      "label": "vehicle_ammo_penetration",
+      "name": null,
+      "sourceFile": "ammoparams/vehicle/behr_pdc_ballisticgatling_s1_ammo.xml",
+      "values": {
+        "alphaDamageTotal": 18,
+        "basePenetrationDistance": 0.66,
+        "calculatedRange": 1998.0,
+        "maxPenetrationThickness": 0.5,
+        "projectileLifetime": 1.48,
+        "projectileSpeed": 1350
+      }
+    }
+  ]
+}

@@ -4,6 +4,8 @@ import ComponentResultCard from "./ComponentResultCard";
 import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import { prefetchFittingComponents } from "@/lib/fitting/useFittingComponentStats";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -148,6 +150,14 @@ export default function ComponentResultsBrowser({
     () => groupedRecords.slice(pageStart, pageStart + resultsPerPage),
     [groupedRecords, pageStart, resultsPerPage],
   );
+
+  useEffect(() => {
+    const entityClasses = pageRecords
+      .filter((record) => record.kind === "vehicle")
+      .map((record) => resolveEntityClassForCraftingItem({ cardBridge: record }).entityClass)
+      .filter((value): value is string => Boolean(value));
+    prefetchFittingComponents(entityClasses);
+  }, [pageRecords]);
 
   if (loading) {
     return (
