@@ -238,10 +238,37 @@ export async function calculateFittingLoadout(request: FittingLoadoutRequest, si
   return (await writeJson<DetailResponse<FittingCalculateResult>>(withFittingBuild("/api/v1/fitting/calculate"), request, signal)).data;
 }
 
-async function readResponse<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(apiUrl(path), { signal });
-  if (!response.ok) throw new Error(`Fitting API request failed: ${response.status}`);
-  return response.json() as Promise<T>;
+async function readResponse<T>(
+  path: string,
+  signal?: AbortSignal,
+  forceReload = false,
+  resolveCached?: () => T | null | undefined,
+): Promise<T> {
+  const response = await fetch(apiUrl(path), {
+    signal,
+    cache: forceReload ? "no-store" : "default",
+  });
+
+  if (response.status === 304) {
+    const cached = resolveCached?.();
+    if (cached != null) return cached;
+    if (!forceReload) return readResponse<T>(path, signal, true, resolveCached);
+    throw new Error("Fitting API returned 304 without a response body");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Fitting API request failed: ${response.status}`);
+  }
+
+  const raw = await response.text();
+  if (!raw.trim()) {
+    const cached = resolveCached?.();
+    if (cached != null) return cached;
+    if (!forceReload) return readResponse<T>(path, signal, true, resolveCached);
+    throw new Error("Fitting API returned an empty response body");
+  }
+
+  return JSON.parse(raw) as T;
 }
 
 async function readAllPages<T>(path: string, signal?: AbortSignal): Promise<T[]> {
@@ -336,9 +363,38 @@ export type FittingComponentDetail = FittingComponentSummary & {
   mitigation: FittingComponentMitigation | null;
 };
 
-export async function getFittingComponent(componentId: string, signal?: AbortSignal): Promise<FittingComponentDetail> {
-  return (await readResponse<DetailResponse<FittingComponentDetail>>(
-    withFittingBuild(`/api/v1/fitting/components/${encodeURIComponent(componentId)}`),
-    signal,
-  )).data;
+export async function getFittingComponent(
+  componentId: string,
+  signal?: AbortSignal,
+  resolveDetailCached?: () => FittingComponentDetail | null | undefined,
+): Promise<FittingComponentDetail> {
+  const resolveResponseCached = resolveDetailCached
+    ? (): DetailResponse<FittingComponentDetail> | null => {
+      const detail = resolveDetailCached();
+      if (!detail) return null;
+      return {
+        meta: {
+          apiVersion: "1",
+          artifactSchemaVersion: 0,
+          channel: "LIVE",
+          buildId: "",
+          generatedAt: "",
+        },
+        data: detail,
+      };
+    }
+    : undefined;
+
+  try {
+    return (await readResponse<DetailResponse<FittingComponentDetail>>(
+      withFittingBuild(`/api/v1/fitting/components/${encodeURIComponent(componentId)}`),
+      signal,
+      false,
+      resolveResponseCached,
+    )).data;
+  } catch (error) {
+    const cached = resolveDetailCached?.();
+    if (cached) return cached;
+    throw error;
+  }
 }

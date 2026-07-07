@@ -221,6 +221,11 @@ function buildGenericStatRows(detail: FittingComponentDetail): ComponentCardMetr
   return rows;
 }
 
+/** Path A: general fitting-backed base stats for Crafting Detail / item summary. */
+export function buildItemSummaryDetailStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  return buildDetailStatRowsFromFitting(detail);
+}
+
 export function buildDetailStatRowsFromFitting(detail: FittingComponentDetail): ComponentCardMetric[] {
   switch (detail.type) {
     case "ship_weapon":
@@ -285,6 +290,14 @@ export function inferPrimaryShipWeaponDamageType(
   return best?.name ?? null;
 }
 
+export function buildFittingIdentityMetricRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const rows: ComponentCardMetric[] = [];
+  if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);
+  pushMetric(rows, "Grade", detail.grade);
+  pushMetric(rows, "Class", detail.class ? titleCase(detail.class) : null);
+  return rows;
+}
+
 export function buildSecondaryStatsFromFitting(detail: FittingComponentDetail): ComponentCardMetric[] {
   if (detail.type === "ship_weapon") return [];
   const rows: ComponentCardMetric[] = [];
@@ -292,6 +305,18 @@ export function buildSecondaryStatsFromFitting(detail: FittingComponentDetail): 
   pushMetric(rows, "Mass", formatCompactNumber(detail.stats.mass));
   pushMetric(rows, "Volume", formatCompactNumber(detail.stats.volume));
   return rows;
+}
+
+export function normalizeModifierDetailStatLabel(label: string): string {
+  return label.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+/** Modifier stat labels that should attach to a fitting-projected row with a different label. */
+export function modifierDetailStatLabelKeys(label: string): string[] {
+  const normalized = normalizeModifierDetailStatLabel(label);
+  const keys = [normalized];
+  if (normalized === "health") keys.push("componenthp");
+  return keys;
 }
 
 export function isFittingWeaponPerformanceType(detail: FittingComponentDetail): boolean {

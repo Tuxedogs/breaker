@@ -8,11 +8,22 @@ function cacheKey(entityClass: string): string {
   return entityClass.trim().toLowerCase();
 }
 
+export function isAbortError(error: unknown): boolean {
+  if (error instanceof DOMException && error.name === "AbortError") return true;
+  if (error instanceof Error && error.name === "AbortError") return true;
+  if (error instanceof Error && /NS_BINDING_ABORTED|aborted/i.test(error.message)) return true;
+  return false;
+}
+
 function isNotFoundError(error: unknown): boolean {
   return error instanceof Error && error.message.includes("404");
 }
 
-function loadFittingComponent(entityClass: string, signal?: AbortSignal): Promise<FittingComponentDetail> {
+function readResolvedCache(entityClass: string): FittingComponentDetail | null {
+  return resolvedCache.get(cacheKey(entityClass)) ?? null;
+}
+
+function loadFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
   const key = cacheKey(entityClass);
   const cached = resolvedCache.get(key);
   if (cached) return Promise.resolve(cached);
@@ -20,7 +31,7 @@ function loadFittingComponent(entityClass: string, signal?: AbortSignal): Promis
   const inflight = inflightCache.get(key);
   if (inflight) return inflight;
 
-  const promise = getFittingComponent(entityClass, signal)
+  const promise = getFittingComponent(entityClass, undefined, () => readResolvedCache(entityClass))
     .then((detail) => {
       resolvedCache.set(key, detail);
       inflightCache.delete(key);
@@ -28,6 +39,8 @@ function loadFittingComponent(entityClass: string, signal?: AbortSignal): Promis
     })
     .catch((error) => {
       inflightCache.delete(key);
+      const resolved = resolvedCache.get(key);
+      if (resolved) return resolved;
       throw error;
     });
 
@@ -41,7 +54,9 @@ export function prefetchFittingComponents(entityClasses: readonly string[]): voi
     if (!normalized) continue;
     const key = cacheKey(normalized);
     if (resolvedCache.has(key) || inflightCache.has(key)) continue;
-    loadFittingComponent(normalized).catch(() => undefined);
+    loadFittingComponent(normalized).catch((error) => {
+      if (isAbortError(error)) return;
+    });
   }
 }
 
@@ -84,35 +99,49 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
       return;
     }
 
-    const cached = resolvedCache.get(cacheKey(normalizedEntityClass));
+    let cancelled = false;
+    const key = cacheKey(normalizedEntityClass);
+
+    const applyCached = (cached: FittingComponentDetail) => {
+      setDetail(cached);
+      setLoading(false);
+      setError(null);
+      setMissing(false);
+    };
+
+    const cached = resolvedCache.get(key);
     if (cached) {
       queueMicrotask(() => {
-        setDetail(cached);
-        setLoading(false);
-        setError(null);
-        setMissing(false);
+        if (cancelled) return;
+        applyCached(cached);
       });
-      return;
+      return () => {
+        cancelled = true;
+      };
     }
 
-    const controller = new AbortController();
     queueMicrotask(() => {
-      if (controller.signal.aborted) return;
+      if (cancelled) return;
       setLoading(true);
       setError(null);
       setMissing(false);
       setDetail(null);
     });
 
-    loadFittingComponent(normalizedEntityClass, controller.signal)
+    loadFittingComponent(normalizedEntityClass)
       .then((result) => {
-        if (!controller.signal.aborted) {
-          setDetail(result);
-          setLoading(false);
-        }
+        if (cancelled) return;
+        applyCached(result);
       })
       .catch((fetchError: unknown) => {
-        if (controller.signal.aborted) return;
+        if (cancelled || isAbortError(fetchError)) return;
+
+        const resolved = resolvedCache.get(key);
+        if (resolved) {
+          applyCached(resolved);
+          return;
+        }
+
         if (isNotFoundError(fetchError)) {
           setMissing(true);
           setDetail(null);
@@ -124,7 +153,9 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
         setLoading(false);
       });
 
-    return () => controller.abort();
+    return () => {
+      cancelled = true;
+    };
   }, [normalizedEntityClass]);
 
   return { detail, loading, error, missing };

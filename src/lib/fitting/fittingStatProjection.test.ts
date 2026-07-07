@@ -3,8 +3,11 @@ import test from "node:test";
 import {
   buildBrowseStatPreviewFromFitting,
   buildDetailStatRowsFromFitting,
+  buildFittingIdentityMetricRows,
+  buildItemSummaryDetailStatRows,
   getFittingModifierBaseValue,
   inferPrimaryShipWeaponDamageType,
+  modifierDetailStatLabelKeys,
 } from "./fittingStatProjection.ts";
 import type { FittingComponentDetail } from "./fittingApi.ts";
 
@@ -130,4 +133,31 @@ test("getFittingModifierBaseValue maps shield hp from mitigation", () => {
   };
 
   assert.equal(getFittingModifierBaseValue(detail, "GPP_Shield_MaxHealth"), 100000);
+});
+
+test("buildItemSummaryDetailStatRows mirrors buildDetailStatRowsFromFitting", () => {
+  const detail = coolerDetail();
+  const summaryRows = buildItemSummaryDetailStatRows(detail);
+  const detailRows = buildDetailStatRowsFromFitting(detail);
+  assert.deepEqual(summaryRows, detailRows);
+  assert.ok(summaryRows.some((row) => row.label === "Coolant Generation"));
+  assert.ok(summaryRows.some((row) => row.label === "Mass"));
+});
+
+test("buildFittingIdentityMetricRows projects size grade class from fitting", () => {
+  const rows = buildFittingIdentityMetricRows({
+    ...coolerDetail(),
+    size: 2,
+    grade: "B",
+    class: "civilian",
+  });
+  assert.deepEqual(rows, [
+    { label: "Size", value: "S2" },
+    { label: "Grade", value: "B" },
+    { label: "Class", value: "Civilian" },
+  ]);
+});
+
+test("modifierDetailStatLabelKeys maps Health to Component HP", () => {
+  assert.deepEqual(modifierDetailStatLabelKeys("Health"), ["health", "componenthp"]);
 });

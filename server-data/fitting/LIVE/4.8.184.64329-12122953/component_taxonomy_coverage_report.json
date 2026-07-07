@@ -1,0 +1,776 @@
+{
+  "buildId": "4.8.184.64329-12122953",
+  "candidateSourcePathsRejected": [
+    {
+      "path": "AttachDef@Class",
+      "reason": "Not present on modeled fitting component XML records; localized Class: lines are the authoritative source."
+    },
+    {
+      "path": "arbitrary XML @Class search",
+      "reason": "Can match unrelated engine/schema fields and is not the player-facing component taxonomy."
+    },
+    {
+      "path": "display name/manufacturer/name inference",
+      "reason": "Taxonomy must come from Foundry XML and localization text, not guessed labels."
+    },
+    {
+      "path": "external community data",
+      "reason": "Phase 3.4B source boundary forbids Erkul, SPViewer, spreadsheets, wikis, and manual seed files."
+    }
+  ],
+  "channel": "LIVE",
+  "confidence": "high",
+  "externalSourceUse": {
+    "erkul": false,
+    "manualSeeds": false,
+    "spviewer": false
+  },
+  "fallbackReason": null,
+  "fallbackSource": null,
+  "fallbackUsed": false,
+  "families": {
+    "armor": {
+      "attachSize": {
+        "null": 0,
+        "populated": 207
+      },
+      "class": {
+        "null": 207,
+        "populated": 0
+      },
+      "classSourceDistribution": {
+        "not_found": 207
+      },
+      "componentSubTypeDistribution": {
+        "Heavy": 1,
+        "Light": 4,
+        "Medium": 202
+      },
+      "grade": {
+        "null": 0,
+        "populated": 207
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 207
+      },
+      "numericGradeNoLongerExposedCount": 207,
+      "rawClass": {
+        "null": 207,
+        "populated": 0
+      },
+      "rawComponentSubTypeDistribution": {
+        "Heavy": 1,
+        "Light": 4,
+        "Medium": 202
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 207
+      },
+      "size": {
+        "null": 0,
+        "populated": 207
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 207,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 207
+      },
+      "totalRecords": 207,
+      "undefinedRawSubtypeCount": 0
+    },
+    "cooler": {
+      "attachSize": {
+        "null": 0,
+        "populated": 81
+      },
+      "class": {
+        "null": 9,
+        "populated": 72
+      },
+      "classSourceDistribution": {
+        "AttachDef.Localization.Description->global.ini:Class": 72,
+        "not_found": 9
+      },
+      "componentSubTypeDistribution": {
+        "null": 81
+      },
+      "grade": {
+        "null": 0,
+        "populated": 81
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 12,
+        "AttachDef.Localization.Description->global.ini:Grade": 69
+      },
+      "numericGradeNoLongerExposedCount": 81,
+      "rawClass": {
+        "null": 9,
+        "populated": 72
+      },
+      "rawComponentSubTypeDistribution": {
+        "UNDEFINED": 81
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 81
+      },
+      "size": {
+        "null": 0,
+        "populated": 81
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 9,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 12,
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype": 81
+      },
+      "totalRecords": 81,
+      "undefinedRawSubtypeCount": 81
+    },
+    "power_plant": {
+      "attachSize": {
+        "null": 0,
+        "populated": 83
+      },
+      "class": {
+        "null": 9,
+        "populated": 74
+      },
+      "classSourceDistribution": {
+        "AttachDef.Localization.Description->global.ini:Class": 74,
+        "not_found": 9
+      },
+      "componentSubTypeDistribution": {
+        "Power": 83
+      },
+      "grade": {
+        "null": 0,
+        "populated": 83
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 11,
+        "AttachDef.Localization.Description->global.ini:Grade": 72
+      },
+      "numericGradeNoLongerExposedCount": 83,
+      "rawClass": {
+        "null": 9,
+        "populated": 74
+      },
+      "rawComponentSubTypeDistribution": {
+        "Power": 83
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 83
+      },
+      "size": {
+        "null": 0,
+        "populated": 83
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 9,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 11
+      },
+      "totalRecords": 83,
+      "undefinedRawSubtypeCount": 0
+    },
+    "quantum_drive": {
+      "attachSize": {
+        "null": 0,
+        "populated": 63
+      },
+      "class": {
+        "null": 7,
+        "populated": 56
+      },
+      "classSourceDistribution": {
+        "AttachDef.Localization.Description->global.ini:Class": 56,
+        "not_found": 7
+      },
+      "componentSubTypeDistribution": {
+        "null": 63
+      },
+      "grade": {
+        "null": 0,
+        "populated": 63
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 8,
+        "AttachDef.Localization.Description->global.ini:Grade": 55
+      },
+      "numericGradeNoLongerExposedCount": 63,
+      "rawClass": {
+        "null": 7,
+        "populated": 56
+      },
+      "rawComponentSubTypeDistribution": {
+        "UNDEFINED": 63
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 63
+      },
+      "size": {
+        "null": 0,
+        "populated": 63
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 7,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 8,
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype": 63
+      },
+      "totalRecords": 63,
+      "undefinedRawSubtypeCount": 63
+    },
+    "radar": {
+      "attachSize": {
+        "null": 0,
+        "populated": 76
+      },
+      "class": {
+        "null": 18,
+        "populated": 58
+      },
+      "classSourceDistribution": {
+        "AttachDef.Localization.Description->global.ini:Class": 58,
+        "not_found": 18
+      },
+      "componentSubTypeDistribution": {
+        "MidRangeRadar": 76
+      },
+      "grade": {
+        "null": 0,
+        "populated": 76
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 18,
+        "AttachDef.Localization.Description->global.ini:Grade": 58
+      },
+      "numericGradeNoLongerExposedCount": 76,
+      "rawClass": {
+        "null": 18,
+        "populated": 58
+      },
+      "rawComponentSubTypeDistribution": {
+        "MidRangeRadar": 76
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 76
+      },
+      "size": {
+        "null": 0,
+        "populated": 76
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 18,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 18
+      },
+      "totalRecords": 76,
+      "undefinedRawSubtypeCount": 0
+    },
+    "shield": {
+      "attachSize": {
+        "null": 0,
+        "populated": 73
+      },
+      "class": {
+        "null": 9,
+        "populated": 64
+      },
+      "classSourceDistribution": {
+        "AttachDef.Localization.Description->global.ini:Class": 64,
+        "not_found": 9
+      },
+      "componentSubTypeDistribution": {
+        "null": 73
+      },
+      "grade": {
+        "null": 0,
+        "populated": 73
+      },
+      "gradeSourceDistribution": {
+        "AttachDef.Grade:legacyGradeEnumMap": 12,
+        "AttachDef.Localization.Description->global.ini:Grade": 61
+      },
+      "numericGradeNoLongerExposedCount": 73,
+      "rawClass": {
+        "null": 9,
+        "populated": 64
+      },
+      "rawComponentSubTypeDistribution": {
+        "UNDEFINED": 73
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 73
+      },
+      "size": {
+        "null": 0,
+        "populated": 73
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 9,
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping": 12,
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype": 73
+      },
+      "totalRecords": 73,
+      "undefinedRawSubtypeCount": 73
+    },
+    "ship_weapon": {
+      "attachSize": {
+        "null": 0,
+        "populated": 189
+      },
+      "class": {
+        "null": 189,
+        "populated": 0
+      },
+      "classSourceDistribution": {
+        "not_found": 189
+      },
+      "componentSubTypeDistribution": {
+        "Gun": 179,
+        "NoseMounted": 1,
+        "Rocket": 9
+      },
+      "grade": {
+        "null": 189,
+        "populated": 0
+      },
+      "gradeSourceDistribution": {
+        "not_found": 189
+      },
+      "numericGradeNoLongerExposedCount": 189,
+      "rawClass": {
+        "null": 189,
+        "populated": 0
+      },
+      "rawComponentSubTypeDistribution": {
+        "Gun": 179,
+        "NoseMounted": 1,
+        "Rocket": 9
+      },
+      "rawGrade": {
+        "null": 0,
+        "populated": 189
+      },
+      "size": {
+        "null": 0,
+        "populated": 189
+      },
+      "taxonomyWarningDistribution": {
+        "class absent: no localized Class: line found in AttachDef description": 189,
+        "grade absent: no localized Grade: line or proven AttachDef.Grade enum mapping": 189
+      },
+      "totalRecords": 189,
+      "undefinedRawSubtypeCount": 0
+    }
+  },
+  "foundryNativePercent": 100,
+  "generatorModule": "scripts/fitting/components/component_taxonomy.py",
+  "registry": "component_taxonomy_coverage_report",
+  "schemaVersion": 1,
+  "sourceClassification": "derived from Foundry XML AttachDef and localized descriptions",
+  "sourceKind": "derivedSemanticRegistry",
+  "sourcePathsUsed": [
+    "AttachDef@Size",
+    "AttachDef@Grade",
+    "AttachDef@SubType",
+    "AttachDef/Localization@Description",
+    "global.ini localized AttachDef description",
+    "localized description line Grade:",
+    "localized description line Class:"
+  ],
+  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.8.184.64329-12122953\\foundry\\records",
+  "spotCheckExamples": [
+    {
+      "attachSize": 3,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "51bf9a6e_0ad7_49d2_8d41_d1d5e69669e6",
+      "componentSubType": null,
+      "displayName": "5CA 'Akura'",
+      "entityClass": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
+      "family": "shield",
+      "grade": "C",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "SHLD_BEHR_S03_5CA_SCItem",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "3",
+      "size": 3,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 3,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "6534d6d3_85dc_4c29_aa3d_80cab37c4fa5",
+      "componentSubType": null,
+      "displayName": "6CA 'Bila'",
+      "entityClass": "6534d6d3-85dc-4c29-aa3d-80cab37c4fa5",
+      "family": "shield",
+      "grade": "B",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "SHLD_BEHR_S03_6CA_SCItem",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "2",
+      "size": 3,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 3,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "9bf5b169_b3cb_4c34_bbad_6faf1bfc2e29",
+      "componentSubType": null,
+      "displayName": "7CA 'Nargun'",
+      "entityClass": "9bf5b169-b3cb-4c34-bbad-6faf1bfc2e29",
+      "family": "shield",
+      "grade": "A",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "SHLD_BEHR_S03_7CA_SCItem",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "1",
+      "size": 3,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "5b43f372_4049_458d_b583_74a9e1918921",
+      "componentSubType": "Medium",
+      "displayName": "<= PLACEHOLDER =>",
+      "entityClass": "5b43f372-4049-458d-b583-74a9e1918921",
+      "family": "armor",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "Guardian",
+      "rawClass": null,
+      "rawComponentSubType": "Medium",
+      "rawGrade": "1",
+      "size": 1,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "2de33b34_afaf_40ec_ab30_0a5039946866",
+      "componentSubType": null,
+      "displayName": "HEX",
+      "entityClass": "2de33b34-afaf-40ec-ab30-0a5039946866",
+      "family": "shield",
+      "grade": "B",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "HEX",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "2",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Industrial",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "624e6c75_afd8_4606_a10e_45d12cb3c882",
+      "componentSubType": null,
+      "displayName": "Bulwark",
+      "entityClass": "624e6c75-afd8-4606-a10e-45d12cb3c882",
+      "family": "shield",
+      "grade": "C",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "Bulwark",
+      "rawClass": "Industrial",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "3",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "6be9c02c_ff32_483f_a6f8_d984dcb97c40",
+      "componentSubType": null,
+      "displayName": "WEB",
+      "entityClass": "6be9c02c-ff32-483f-a6f8-d984dcb97c40",
+      "family": "shield",
+      "grade": "C",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "WEB",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "3",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Industrial",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "b1454c7b_859d_4e78_9429_e05391242ca7",
+      "componentSubType": null,
+      "displayName": "Steward",
+      "entityClass": "b1454c7b-859d-4e78-9429-e05391242ca7",
+      "family": "shield",
+      "grade": "D",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "Steward",
+      "rawClass": "Industrial",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "4",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "4323ef0d_778f_4e8f_89e8_bbe3d33f5f08",
+      "componentSubType": null,
+      "displayName": "INK",
+      "entityClass": "4323ef0d-778f-4e8f-89e8-bbe3d33f5f08",
+      "family": "shield",
+      "grade": "D",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "INK",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "4",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Competition",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "0eae2a8c_8bc9_4b32_af70_a06e667b0165",
+      "componentSubType": null,
+      "displayName": "Jaghte",
+      "entityClass": "0eae2a8c-8bc9-4b32-af70-a06e667b0165",
+      "family": "shield",
+      "grade": "B",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "Jaghte",
+      "rawClass": "Competition",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "2",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Competition",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "d0669062_2e64_41d4_beb2_d510588ca593",
+      "componentSubType": null,
+      "displayName": "Targa",
+      "entityClass": "d0669062-2e64-41d4-beb2-d510588ca593",
+      "family": "shield",
+      "grade": "C",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "Targa",
+      "rawClass": "Competition",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "3",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": "Competition",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "b64ab3f3_4b44_418c_a438_57a04a1cf1b2",
+      "componentSubType": null,
+      "displayName": "Falco",
+      "entityClass": "b64ab3f3-4b44-418c-a438-57a04a1cf1b2",
+      "family": "shield",
+      "grade": "D",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "Falco",
+      "rawClass": "Competition",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "4",
+      "size": 1,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 5,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "816aa854_7615_4add_a2ca_2d39ada7fea7",
+      "componentSubType": "Gun",
+      "displayName": "'WAR' Cannon",
+      "entityClass": "816aa854-7615-4add-a2ca-2d39ada7fea7",
+      "family": "ship_weapon",
+      "grade": null,
+      "gradeSource": "not_found",
+      "identifier": "one ship weapon",
+      "rawClass": null,
+      "rawComponentSubType": "Gun",
+      "rawGrade": "1",
+      "size": 5,
+      "taxonomyWarnings": [
+        "grade absent: no localized Grade: line or proven AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description"
+      ]
+    },
+    {
+      "attachSize": 1,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "8fa4aa51_ff08_4728_ae08_64861ab3daf9",
+      "componentSubType": "Medium",
+      "displayName": "300i Ship Armor",
+      "entityClass": "8fa4aa51-ff08-4728-ae08-64861ab3daf9",
+      "family": "armor",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "one armor",
+      "rawClass": null,
+      "rawComponentSubType": "Medium",
+      "rawGrade": "1",
+      "size": 1,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description"
+      ]
+    },
+    {
+      "attachSize": 3,
+      "class": "Civilian",
+      "classSource": "AttachDef.Localization.Description->global.ini:Class",
+      "componentKey": "51bf9a6e_0ad7_49d2_8d41_d1d5e69669e6",
+      "componentSubType": null,
+      "displayName": "5CA 'Akura'",
+      "entityClass": "51bf9a6e-0ad7-49d2-8d41-d1d5e69669e6",
+      "family": "shield",
+      "grade": "C",
+      "gradeSource": "AttachDef.Localization.Description->global.ini:Grade",
+      "identifier": "one shield",
+      "rawClass": "Civilian",
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "3",
+      "size": 3,
+      "taxonomyWarnings": [
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 0,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "f330457d_df9b_4421_a522_45b407a735a7",
+      "componentSubType": "Power",
+      "displayName": "<= PLACEHOLDER =>",
+      "entityClass": "f330457d-df9b-4421-a522-45b407a735a7",
+      "family": "power_plant",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "one power plant",
+      "rawClass": null,
+      "rawComponentSubType": "Power",
+      "rawGrade": "1",
+      "size": 0,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description"
+      ]
+    },
+    {
+      "attachSize": 4,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "1f5be5de_b5ea_42c7_879f_289c4bf64f19",
+      "componentSubType": null,
+      "displayName": "<= PLACEHOLDER =>",
+      "entityClass": "1f5be5de-b5ea-42c7-879f-289c4bf64f19",
+      "family": "cooler",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "one cooler",
+      "rawClass": null,
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "1",
+      "size": 4,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description",
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 4,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "d8c217a9_531a_4b02_90bc_3cb48f169149",
+      "componentSubType": null,
+      "displayName": "<= PLACEHOLDER =>",
+      "entityClass": "d8c217a9-531a-4b02-90bc-3cb48f169149",
+      "family": "quantum_drive",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "one quantum drive",
+      "rawClass": null,
+      "rawComponentSubType": "UNDEFINED",
+      "rawGrade": "1",
+      "size": 4,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description",
+        "raw AttachDef.SubType 'UNDEFINED' is not meaningful player-facing subtype"
+      ]
+    },
+    {
+      "attachSize": 0,
+      "class": null,
+      "classSource": "not_found",
+      "componentKey": "c818ab50_4350_42dc_b285_388adec321ec",
+      "componentSubType": "MidRangeRadar",
+      "displayName": "<= PLACEHOLDER =>",
+      "entityClass": "c818ab50-4350-42dc-b285-388adec321ec",
+      "family": "radar",
+      "grade": "A",
+      "gradeSource": "AttachDef.Grade:legacyGradeEnumMap",
+      "identifier": "one radar",
+      "rawClass": null,
+      "rawComponentSubType": "MidRangeRadar",
+      "rawGrade": "1",
+      "size": 0,
+      "taxonomyWarnings": [
+        "localized Grade: line missing; normalized grade used proven legacy AttachDef.Grade enum mapping",
+        "class absent: no localized Class: line found in AttachDef description"
+      ]
+    }
+  ]
+}

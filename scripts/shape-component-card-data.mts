@@ -397,6 +397,9 @@ function toBrowseSlim(
     searchText: record.searchText,
   };
 
+  const entityClass = normalizeId(record.entityClass);
+  if (entityClass) slim.entityClass = entityClass;
+
   const browseStats = toBrowseStats(record);
   if (browseStats) slim.stats = browseStats;
 

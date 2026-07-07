@@ -14,6 +14,8 @@ type ComponentCardsIndex = {
 type BrowsePayload = {
   records?: Array<{
     id?: string;
+    kind?: string;
+    entityClass?: string;
     facets?: { materials?: string[]; materialNames?: string[] };
     card?: { modifierLabels?: unknown };
   }>;
@@ -67,6 +69,20 @@ if (Object.keys(recordFiles).length !== shapedCount) {
 }
 if (!facets.facets || typeof facets.facets !== "object") {
   throw new Error("facets.json is missing facets payload.");
+}
+
+const browseEntityClassCount = browseRecords.filter((record) => typeof record.entityClass === "string" && record.entityClass.trim()).length;
+const vehicleEntityClassCount = browseRecords.filter(
+  (record) => record.kind === "vehicle" && typeof record.entityClass === "string" && record.entityClass.trim(),
+).length;
+const vehicleRecordCount = browseRecords.filter((record) => record.kind === "vehicle").length;
+if (vehicleEntityClassCount !== vehicleRecordCount) {
+  throw new Error(
+    `Expected ${vehicleRecordCount} vehicle browse records with entityClass, found ${vehicleEntityClassCount}.`,
+  );
+}
+if (browseEntityClassCount < vehicleRecordCount) {
+  throw new Error(`Expected at least ${vehicleRecordCount} browse records with entityClass, found ${browseEntityClassCount}.`);
 }
 
 function hasFilterableMaterialSource(sources: unknown): boolean {
@@ -243,4 +259,5 @@ for (const excluded of [...excludedNonMaterialInputs.values()].slice(0, 20)) {
 console.log(`Unresolved ingredient classifications: ${unresolvedIngredientClassifications.size}`);
 console.log(`Insulative Liner present in material facets: ${linerInMaterialFacets ? "yes" : "no"}`);
 console.log(`Insulative Liner recipe requirement rows: ${linerRequirementCount}`);
-console.log(`Sample id: ${sampleId}`);
+console.log(`Browse entityClass count: ${browseEntityClassCount}`);
+console.log(`Vehicle entityClass count: ${vehicleEntityClassCount}/${vehicleRecordCount}`);

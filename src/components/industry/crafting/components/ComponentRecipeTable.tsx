@@ -51,11 +51,13 @@ import { resolveComponentCardById } from "@/lib/componentCardIndexApi";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
-  buildDetailStatRowsFromFitting,
+  buildFittingIdentityMetricRows,
+  buildItemSummaryDetailStatRows,
   buildSecondaryStatsFromFitting,
   getFittingDpsBases,
   getFittingModifierBaseValue,
   isFittingWeaponPerformanceType,
+  modifierDetailStatLabelKeys,
 } from "@/lib/fitting/fittingStatProjection";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import {
@@ -1705,6 +1707,17 @@ function normalizeDetailStatLabel(label: string): string {
   return label.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+function findDetailStatRowIndex(
+  rowIndexByLabel: Map<string, number>,
+  label: string,
+): number | undefined {
+  for (const key of modifierDetailStatLabelKeys(label)) {
+    const index = rowIndexByLabel.get(key);
+    if (index !== undefined) return index;
+  }
+  return undefined;
+}
+
 function getModifierStatBinding(property: string): ModifierStatBinding {
   return MODIFIER_STAT_BINDINGS[property] ?? {
     label: formatModifierStatName(property),
@@ -1777,7 +1790,7 @@ function buildModifiedDetailStatRows(
       value: formatModifierDifference(display),
       impactClass,
     };
-    const existingIndex = rowIndexByLabel.get(normalizeDetailStatLabel(binding.label));
+    const existingIndex = findDetailStatRowIndex(rowIndexByLabel, binding.label);
 
     if (existingIndex !== undefined && baseValue !== undefined) {
       rows[existingIndex] = {
@@ -2005,7 +2018,18 @@ function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
 }
 
 function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
-  const groups = groupWeaponPerformanceStats(normalizeWeaponPerformanceDisplayStats(stats));
+  const normalizedStats = normalizeWeaponPerformanceDisplayStats(stats);
+  const groups = groupWeaponPerformanceStats(normalizedStats);
+
+  if (groups.length === 0 && normalizedStats.length > 0) {
+    return (
+      <div className="craft-detail-stat-list craft-stat-grid">
+        {normalizedStats.map((stat) => (
+          <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="weapon-performance-groups">
@@ -2506,9 +2530,14 @@ function ItemSummaryPanel({
         { label: "Craft Time", value: formatCraftTime(componentCardRecord.craftTimeSeconds) },
       ].filter((row) => Boolean(row.value))
     : [];
-  const stats = fittingDetail ? buildDetailStatRowsFromFitting(fittingDetail) : [];
-  const modifiedStats = buildModifiedDetailStatRows(fittingDetail, stats, totalModifiers);
+  const baseStatRows = fittingDetail ? buildItemSummaryDetailStatRows(fittingDetail) : [];
+  const displayStatRows = buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
+  const fittingIdentityRows = fittingDetail ? buildFittingIdentityMetricRows(fittingDetail) : [];
   const secondaryStats = fittingDetail ? buildSecondaryStatsFromFitting(fittingDetail) : [];
+  const detailMetaRows = [...identityRows, ...fittingIdentityRows, ...secondaryStats].filter(
+    (row, index, rows) =>
+      rows.findIndex((candidate) => normalizeDetailStatLabel(candidate.label) === normalizeDetailStatLabel(row.label)) === index,
+  );
   const statsSectionLabel = fittingDetail && isFittingWeaponPerformanceType(fittingDetail)
     ? "Weapon Performance"
     : `${fittingDetail?.type ?? componentCardRecord?.typeLabel ?? schema.typeLabel} Stats`;
@@ -2524,14 +2553,14 @@ function ItemSummaryPanel({
       <div className="craft-summary-section-label">Item Summary</div>
       <div className="craft-detail-summary-content">
 
-        {modifiedStats.length > 0 && (
+        {displayStatRows.length > 0 && (
           <div className="craft-summary-section craft-detail-stat-panel">
             <div className="craft-summary-section-label">{statsSectionLabel}</div>
             {fittingDetail && isFittingWeaponPerformanceType(fittingDetail) ? (
-              <WeaponPerformanceStatGroups stats={modifiedStats} />
+              <WeaponPerformanceStatGroups stats={displayStatRows} />
             ) : (
               <div className="craft-detail-stat-list craft-stat-grid">
-                {modifiedStats.map((stat) => (
+                {displayStatRows.map((stat) => (
                   <DetailStatRowItem key={`${stat.label}:${stat.value}`} stat={stat} />
                 ))}
               </div>
@@ -2539,7 +2568,7 @@ function ItemSummaryPanel({
           </div>
         )}
 
-        {showFittingUnavailable && modifiedStats.length === 0 && (
+        {showFittingUnavailable && displayStatRows.length === 0 && (
           <p className="craft-detail-stat-unavailable">
             {fittingStatsLoading
               ? "Loading fitting stats..."
@@ -2549,11 +2578,11 @@ function ItemSummaryPanel({
 
         {graphData ? (
           <DetailGraphPanel data={graphData} />
-        ) : (identityRows.length > 0 || secondaryStats.length > 0) && (
+        ) : detailMetaRows.length > 0 && (
         <div className="craft-summary-section craft-detail-secondary-panel">
           <div className="craft-summary-section-label">Details</div>
           <div className="craft-detail-meta-list craft-detail-meta-list--dense">
-            {[...identityRows, ...secondaryStats].map((stat) => (
+            {detailMetaRows.map((stat) => (
               <span key={`${stat.label}:${stat.value}`}>
                 <span>{stat.label}</span>
                 <strong>{stat.value}</strong>
