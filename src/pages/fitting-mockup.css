@@ -15,10 +15,10 @@
   --mock-text: #ecf0f5;
   --mock-muted: #8aa3b8;
   --mock-label: #b8c8d4;
-  --mock-rail-w: 16.5rem;
-  --mock-fs-xs: 11px;
-  --mock-fs-sm: 12px;
-  --mock-fs-base: 13px;
+  --mock-rail-w: 20.5rem;
+  --mock-fs-xs: 0.7rem;
+  --mock-fs-sm: 1rem;
+  --mock-fs-base: 0.8125rem;
 
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
@@ -255,7 +255,7 @@
 
 .fit-mock-group-head h3 {
   margin: 0;
-  font-size: 9px;
+  font-size: var(--mock-fs-xs);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -351,7 +351,7 @@
 }
 
 .fit-mock-row-slot {
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -888,8 +888,8 @@
 
 .fit-mock-readout-block-title {
   margin: 0.5rem 0 0.25rem;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 650;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--mock-cyan-label);
@@ -924,15 +924,15 @@
 
 .fit-mock-readout-label {
   color: var(--mock-label);
-  font-weight: 600;
-  font-size: 11px;
+  font-weight: 450;
+  font-size: 0.9rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .fit-mock-readout-value {
-  font-size: 12px;
+  font-size: 0.85rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -946,8 +946,8 @@
 
 .fit-mock-readout-row.is-muted .fit-mock-readout-value {
   color: var(--mock-muted);
-  font-weight: 600;
-  font-size: 10px;
+  font-weight: 550;
+  font-size: 0.8rem;
 }
 
 /* Ship canvas — Gladius hero render */
@@ -1085,7 +1085,7 @@
   display: grid;
   grid-template-columns: 1.28fr 1.12fr 0.92fr 0.62fr;
   min-height: 0;
-  max-height: 5.875rem;
+  max-height: 9.875rem;
   border-radius: 3px;
   overflow: hidden;
   background: linear-gradient(180deg, rgba(10, 24, 36, 0.94), rgba(6, 14, 22, 0.97));
@@ -1173,7 +1173,7 @@
 
 .fit-mock-ribbon-hero-label {
   display: block;
-  font-size: 9px;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1183,7 +1183,7 @@
 
 .fit-mock-ribbon-hero-value {
   display: block;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1.05;
   color: #fff4d6;
@@ -1229,7 +1229,8 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
   gap: 0.35rem;
-  font-size: 11px;
+  font-size: 0.8rem;
+  font-weight: 450;
   line-height: 1.25;
 }
 
@@ -1272,7 +1273,7 @@
 
 .fit-mock-ribbon-hero {
   display: block;
-  font-size: 0.95rem;
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.05;
   color: #e8fbff;
