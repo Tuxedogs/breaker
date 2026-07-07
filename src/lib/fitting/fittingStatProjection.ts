@@ -34,6 +34,41 @@ function pushMetric(metrics: ComponentCardMetric[], label: string, value: string
   if (value) metrics.push({ label, value });
 }
 
+function pushNonZeroMetric(
+  metrics: ComponentCardMetric[],
+  label: string,
+  value: number | null | undefined,
+  suffix = "",
+): void {
+  const number = readFinite(value ?? undefined);
+  if (number === undefined || number === 0) return;
+  pushMetric(metrics, label, formatCompactNumber(number, suffix));
+}
+
+function readWeaponPenetration(
+  stats: FittingComponentStats,
+  mitigation: FittingComponentMitigation | null,
+): number | undefined {
+  if (mitigation?.kind === "weapon_projectile") {
+    const ammoPenetration = readFinite(mitigation.ammoPenetration ?? undefined);
+    if (ammoPenetration !== undefined) return ammoPenetration;
+    const thickness = readFinite(mitigation.maxPenetrationThickness ?? undefined);
+    if (thickness !== undefined) return thickness;
+  }
+  return readFinite(stats.maxPenetrationThickness ?? undefined);
+}
+
+function readWeaponPenetrationDistance(
+  mitigation: FittingComponentMitigation | null,
+): number | undefined {
+  if (mitigation?.kind !== "weapon_projectile") return undefined;
+  return readFinite(mitigation.basePenetrationDistance ?? undefined);
+}
+
+function readWeaponPower(stats: FittingComponentStats): number | undefined {
+  return readFinite(stats.powerDraw ?? stats.powerUsage ?? undefined);
+}
+
 function formatDamageTypeMap(map: DamageTypeMap | null | undefined): string | null {
   if (!map) return null;
   const parts = Object.entries(map)
@@ -99,33 +134,27 @@ function buildWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetri
   const { stats, mitigation } = detail;
   const rows: ComponentCardMetric[] = [];
 
-  if (detail.size !== null) pushMetric(rows, "Size", `S${detail.size}`);
-  pushMetric(rows, "Grade", detail.grade);
-  pushMetric(rows, "Class", detail.class ? titleCase(detail.class) : null);
   pushMetric(rows, "Alpha Damage", formatCompactNumber(stats.alphaDamage));
+  pushNonZeroMetric(rows, "Physical Damage", stats.damagePhysical);
+  pushNonZeroMetric(rows, "Energy Damage", stats.damageEnergy);
+  pushNonZeroMetric(rows, "Distortion Damage", stats.damageDistortion);
+  pushNonZeroMetric(rows, "Thermal Damage", stats.damageThermal);
+  pushNonZeroMetric(rows, "Biochemical Damage", stats.damageBiochemical);
+  pushNonZeroMetric(rows, "Stun Damage", stats.damageStun);
   pushMetric(rows, "Fire Rate", formatCompactNumber(stats.fireRateRpm, " rpm"));
-  pushMetric(rows, "DPS", formatCompactNumber(stats.dps));
+  pushMetric(rows, "Ammo Capacity", formatCompactNumber(stats.ammoCapacity));
   pushMetric(rows, "Projectile Speed", formatCompactNumber(stats.projectileSpeed, " m/s"));
   pushMetric(rows, "Projectile Range / Max Travel", formatCompactNumber(stats.calculatedRange, "m"));
-  pushMetric(rows, "Ammo Capacity", formatCompactNumber(stats.ammoCapacity));
-  pushMetric(rows, "Physical Damage", formatCompactNumber(stats.damagePhysical));
-  pushMetric(rows, "Energy Damage", formatCompactNumber(stats.damageEnergy));
-  pushMetric(rows, "Distortion Damage", formatCompactNumber(stats.damageDistortion));
-  pushMetric(rows, "Thermal Damage", formatCompactNumber(stats.damageThermal));
-  pushMetric(rows, "Biochemical Damage", formatCompactNumber(stats.damageBiochemical));
-  pushMetric(rows, "Stun Damage", formatCompactNumber(stats.damageStun));
-  pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw));
-  pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw));
-  pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated));
+  pushMetric(rows, "Penetration", formatCompactNumber(readWeaponPenetration(stats, mitigation)));
+  pushMetric(rows, "Penetration Distance", formatCompactNumber(readWeaponPenetrationDistance(mitigation), "m"));
+  pushMetric(rows, "Heat Per Shot", formatCompactNumber(stats.heatPerShot));
+  pushMetric(rows, "Cooling Rate", formatCompactNumber(stats.cooldownRate));
+  pushMetric(rows, "Power", formatCompactNumber(readWeaponPower(stats)));
   pushMetric(rows, "Online EM", formatCompactNumber(stats.electromagneticEmission));
-  pushMetric(rows, "Online IR", formatCompactNumber(stats.infraredEmission));
+  pushMetric(rows, "EM Signature", formatCompactNumber(stats.crossSection ?? stats.radarEmission));
+  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionResistance));
   pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
-
-  if (mitigation?.kind === "weapon_projectile") {
-    pushMetric(rows, "Penetration Distance", formatCompactNumber(mitigation.basePenetrationDistance, "m"));
-    pushMetric(rows, "Ammo Penetration", formatCompactNumber(mitigation.ammoPenetration));
-  }
 
   return rows;
 }
@@ -202,6 +231,85 @@ function buildRadarStatRows(detail: FittingComponentDetail): ComponentCardMetric
   return rows;
 }
 
+function formatPowerPair(min: number | null | undefined, max: number | null | undefined): string | null {
+  const minValue = readFinite(min ?? undefined);
+  const maxValue = readFinite(max ?? undefined);
+  if (minValue === undefined && maxValue === undefined) return null;
+  if (minValue !== undefined && maxValue !== undefined && minValue !== maxValue) {
+    return `${formatNumber(minValue)} - ${formatNumber(maxValue)}`;
+  }
+  return formatCompactNumber(maxValue ?? minValue);
+}
+
+function buildUtilityStatTail(stats: FittingComponentStats): ComponentCardMetric[] {
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Power", formatPowerPair(stats.powerUsageMin, stats.powerUsageMax ?? stats.powerDraw ?? stats.powerUsage));
+  pushMetric(rows, "Power Draw", formatCompactNumber(stats.powerDraw ?? stats.powerUsage));
+  pushMetric(rows, "Cooling Draw", formatCompactNumber(stats.coolingDraw));
+  pushMetric(rows, "Heat Generation", formatCompactNumber(stats.heatGenerated ?? stats.heatPerSecond));
+  pushMetric(rows, "Online EM", formatCompactNumber(stats.onlineEmSignature ?? stats.electromagneticEmission));
+  pushMetric(rows, "Online IR", formatCompactNumber(stats.onlineIrSignature ?? stats.infraredEmission));
+  pushMetric(rows, "EM Signature", formatCompactNumber(stats.electromagneticEmission));
+  pushMetric(rows, "IR Signature", formatCompactNumber(stats.infraredEmission));
+  pushMetric(rows, "Distortion Maximum", formatCompactNumber(stats.distortionMaximum));
+  pushMetric(rows, "Component HP", formatCompactNumber(stats.health));
+  pushMetric(rows, "Mass", formatCompactNumber(stats.mass));
+  return rows;
+}
+
+function buildMiningLaserStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const { stats } = detail;
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Mining Power", formatCompactNumber(stats.miningPower));
+  pushMetric(rows, "Extraction Power", formatCompactNumber(stats.extractionPower));
+  pushMetric(rows, "Instability Modifier", formatCompactNumber(stats.instabilityModifier));
+  pushMetric(rows, "Resistance Modifier", formatCompactNumber(stats.resistanceModifier));
+  pushMetric(rows, "Fracture Window", formatCompactNumber(stats.fractureWindowSize));
+  pushMetric(rows, "Laser Range", formatCompactNumber(stats.laserRange, "m"));
+  pushMetric(rows, "Beam Range", formatCompactNumber(stats.beamRange, "m"));
+  pushMetric(rows, "Throttle Minimum", formatCompactNumber(stats.throttleMinimum));
+  pushMetric(rows, "Wear Rate", formatCompactNumber(stats.wearPerSecond));
+  rows.push(...buildUtilityStatTail(stats));
+  return rows;
+}
+
+function buildSalvageHeadStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const { stats } = detail;
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Material Efficiency", formatCompactNumber(stats.materialEfficiency));
+  pushMetric(rows, "Max Health Repair Rate", formatCompactNumber(stats.maxHealthRepairRate));
+  pushMetric(rows, "Max Damage Map Repair Rate", formatCompactNumber(stats.maxDamageMapRepairRate));
+  pushMetric(rows, "Tractor Max Force", formatCompactNumber(stats.tractorMaxForce));
+  pushMetric(rows, "Tractor Max Distance", formatCompactNumber(stats.tractorMaxDistance, "m"));
+  pushMetric(rows, "Tractor Full Strength Distance", formatCompactNumber(stats.tractorFullStrengthDistance, "m"));
+  pushMetric(rows, "Beam Range", formatCompactNumber(stats.beamRange, "m"));
+  rows.push(...buildUtilityStatTail(stats));
+  return rows;
+}
+
+function buildSalvageModifierStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const { stats } = detail;
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Hull Scraping Speed Modifier", formatCompactNumber(stats.hullScrapingSpeedModifier ?? stats.hullScrapingSpeedMultiplier));
+  pushMetric(rows, "Hull Scraping Radius Modifier", formatCompactNumber(stats.hullScrapingRadiusModifier ?? stats.hullScrapingRadiusMultiplier));
+  pushMetric(rows, "Hull Scraping Efficiency Modifier", formatCompactNumber(stats.hullScrapingEfficiencyModifier ?? stats.hullScrapingEfficiencyMultiplier));
+  pushMetric(rows, "Tractor Max Force", formatCompactNumber(stats.tractorMaxForce));
+  pushMetric(rows, "Tractor Max Distance", formatCompactNumber(stats.tractorMaxDistance, "m"));
+  pushMetric(rows, "Beam Range", formatCompactNumber(stats.beamRange, "m"));
+  rows.push(...buildUtilityStatTail(stats));
+  return rows;
+}
+
+function buildFuelNozzleStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const { stats } = detail;
+  const rows: ComponentCardMetric[] = [];
+  pushMetric(rows, "Fuel Transfer Rate", formatCompactNumber(stats.fuelTransferRate));
+  pushMetric(rows, "Quantum Fuel Transfer Rate", formatCompactNumber(stats.quantumFuelTransferRate));
+  pushMetric(rows, "Capture Radius", formatCompactNumber(stats.captureRadius, "m"));
+  rows.push(...buildUtilityStatTail(stats));
+  return rows;
+}
+
 function buildGenericStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
   const { stats } = detail;
   const rows: ComponentCardMetric[] = [];
@@ -240,6 +348,14 @@ export function buildDetailStatRowsFromFitting(detail: FittingComponentDetail): 
       return buildQuantumStatRows(detail);
     case "radar":
       return buildRadarStatRows(detail);
+    case "mining_laser":
+      return buildMiningLaserStatRows(detail);
+    case "salvage_head":
+      return buildSalvageHeadStatRows(detail);
+    case "salvage_modifier":
+      return buildSalvageModifierStatRows(detail);
+    case "fuel_nozzle":
+      return buildFuelNozzleStatRows(detail);
     default:
       return buildGenericStatRows(detail);
   }
@@ -299,7 +415,7 @@ export function buildFittingIdentityMetricRows(detail: FittingComponentDetail): 
 }
 
 export function buildSecondaryStatsFromFitting(detail: FittingComponentDetail): ComponentCardMetric[] {
-  if (detail.type === "ship_weapon") return [];
+  if (detail.type === "ship_weapon" || detail.type === "mining_laser" || detail.type === "salvage_head" || detail.type === "salvage_modifier" || detail.type === "fuel_nozzle") return [];
   const rows: ComponentCardMetric[] = [];
   pushMetric(rows, "Component HP", formatCompactNumber(detail.stats.health));
   pushMetric(rows, "Mass", formatCompactNumber(detail.stats.mass));

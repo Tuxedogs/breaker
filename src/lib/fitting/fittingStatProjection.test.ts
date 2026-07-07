@@ -53,6 +53,7 @@ test("buildDetailStatRowsFromFitting omits null fitting fields", () => {
     type: "ship_weapon",
     stats: {
       alphaDamage: 567,
+      damageEnergy: 567,
       fireRateRpm: null,
       dps: null,
       projectileSpeed: 1200,
@@ -78,9 +79,70 @@ test("buildDetailStatRowsFromFitting omits null fitting fields", () => {
 
   const labels = rows.map((row) => row.label);
   assert.ok(labels.includes("Alpha Damage"));
+  assert.ok(labels.includes("Energy Damage"));
   assert.ok(labels.includes("Projectile Speed"));
+  assert.ok(labels.includes("Penetration Distance"));
+  assert.equal(labels.includes("Physical Damage"), false);
   assert.equal(labels.includes("Fire Rate"), false);
   assert.equal(labels.includes("DPS"), false);
+  assert.equal(labels.includes("Distortion Damage"), false);
+});
+
+test("buildDetailStatRowsFromFitting projects live weapon stat labels and grouping fields", () => {
+  const rows = buildDetailStatRowsFromFitting({
+    ...coolerDetail(),
+    type: "ship_weapon",
+    stats: {
+      alphaDamage: 72.99,
+      damagePhysical: 72.99,
+      damageEnergy: 0,
+      damageDistortion: 0,
+      damageThermal: 0,
+      damageBiochemical: 0,
+      damageStun: 0,
+      fireRateRpm: 750,
+      ammoCapacity: 1200,
+      projectileSpeed: 1196,
+      calculatedRange: 2702.96,
+      heatPerShot: 2.4,
+      cooldownRate: null,
+      powerDraw: 0.1,
+      maxPenetrationThickness: 0.5,
+      health: 850,
+      mass: 192,
+    },
+    mitigation: {
+      kind: "weapon_projectile",
+      damage: {
+        physical: 72.99,
+        energy: 0,
+        distortion: 0,
+        thermal: 0,
+        biochemical: 0,
+        stun: 0,
+      },
+      ammoPenetration: null,
+      basePenetrationDistance: 2.64,
+      maxPenetrationThickness: 0.5,
+      penetrationParams: null,
+    },
+  });
+
+  const labels = rows.map((row) => row.label);
+  assert.deepEqual(labels, [
+    "Alpha Damage",
+    "Physical Damage",
+    "Fire Rate",
+    "Ammo Capacity",
+    "Projectile Speed",
+    "Projectile Range / Max Travel",
+    "Penetration",
+    "Penetration Distance",
+    "Heat Per Shot",
+    "Power",
+    "Component HP",
+    "Mass",
+  ]);
 });
 
 test("buildBrowseStatPreviewFromFitting omits meta duplicate labels", () => {

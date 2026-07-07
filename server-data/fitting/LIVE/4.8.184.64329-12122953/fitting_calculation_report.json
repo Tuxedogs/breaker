@@ -1,26 +1,29 @@
 {
-  "buildId": "4.8.184.64329-12122953",
+  "buildId": "legacy-live-sandbox",
   "calculationSummary": {
     "componentCountsByType": {
-      "armor": 315,
       "cooler": 577,
+      "fuel_nozzle": 8,
+      "mining_laser": 12,
       "power_plant": 433,
       "quantum_drive": 290,
       "radar": 326,
+      "salvage_head": 28,
+      "salvage_modifier": 54,
       "shield": 613,
       "ship_weapon": 1829
     },
-    "totalMissingDefaultComponents": 2104,
-    "totalResolvedDefaultComponents": 4383,
+    "totalMissingDefaultComponents": 320,
+    "totalResolvedDefaultComponents": 4170,
     "totalShips": 329,
-    "totalUnresolvedDefaultComponents": 93
+    "totalUnresolvedDefaultComponents": 0
   },
   "channel": "LIVE",
   "commonMissingFields": {
     "missing_cooling_fields": {
-      "coolantUsage": 2151,
-      "coolingDraw": 2151,
-      "coolingRequired": 2151
+      "coolantUsage": 1938,
+      "coolingDraw": 1938,
+      "coolingRequired": 1938
     },
     "missing_performance_fields": {
       "boostSpeedForward": 12,
@@ -31,10 +34,10 @@
       "yawRate": 12
     },
     "missing_power_fields": {
-      "minimumPowerRequired": 326,
-      "powerDraw": 326,
-      "powerInputMinimum": 326,
-      "powerUsage": 326
+      "minimumPowerRequired": 73,
+      "powerDraw": 73,
+      "powerInputMinimum": 73,
+      "powerUsage": 73
     },
     "missing_quantum_fields": {
       "fuelRate": 290
@@ -62,7 +65,7 @@
   "fallbackSource": null,
   "fallbackUsed": false,
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-06T06:30:52Z",
+  "generatedAt": "2026-07-07T01:13:34Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/calculations/calculation_validation.py",
   "knownLimitations": [
@@ -78,32 +81,31 @@
   "recommendedNextPhase": "Proceed to fitting-aware LIVE/PTU diff support after validating stock calculation coverage.",
   "schemaVersion": 1,
   "shipsWithCoolingCalculations": 323,
-  "shipsWithFullyResolvedModeledStockLoadouts": 7,
-  "shipsWithMissingDefaults": 319,
+  "shipsWithFullyResolvedModeledStockLoadouts": 245,
+  "shipsWithMissingDefaults": 81,
   "shipsWithPerformanceSummaries": 317,
   "shipsWithPowerCalculations": 323,
   "shipsWithQuantumCalculations": 290,
   "shipsWithRadarCalculations": 320,
   "shipsWithShieldCalculations": 311,
-  "shipsWithUnresolvedDefaults": 43,
+  "shipsWithUnresolvedDefaults": 0,
   "shipsWithWeaponCalculations": 310,
   "sourceClassification": "derived from another new semantic registry",
   "sourceKind": "derivedSemanticRegistry",
-  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.8.184.64329-12122953\\foundry\\records",
+  "sourceRoot": "D:\\scintel\\data\\libs\\foundry\\records",
   "totalShipsProcessed": 329,
   "unresolvedRefsSummary": {
     "byKind": {
-      "calculation_missing_default": 2104,
+      "calculation_missing_default": 320,
       "calculation_performance_flight_controller_record_unresolved": 9,
       "calculation_performance_flight_controller_ref_missing": 3,
-      "calculation_unresolved_default_ref": 93,
-      "missing_cooling_fields": 2151,
+      "missing_cooling_fields": 1938,
       "missing_performance_fields": 12,
-      "missing_power_fields": 326,
+      "missing_power_fields": 73,
       "missing_quantum_fields": 290,
       "missing_radar_fields": 326,
       "missing_weapon_fields": 5
     },
-    "total": 5319
+    "total": 2976
   }
 }

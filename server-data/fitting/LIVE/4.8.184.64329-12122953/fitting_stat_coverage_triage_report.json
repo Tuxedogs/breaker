@@ -1,5 +1,5 @@
 {
-  "buildId": "4.8.184.64329-12122953",
+  "buildId": "legacy-live-sandbox",
   "channel": "LIVE",
   "confidence": "medium",
   "coolingDemandFindings": {
@@ -7,9 +7,9 @@
     "extractedButNotConsumed": "Component power/cooling demand fields are present for non-weapon modeled components and consumed by stock cooling summaries.",
     "linkedRecordNotResolved": {
       "missing_cooling_fields": {
-        "coolantUsage": 2151,
-        "coolingDraw": 2151,
-        "coolingRequired": 2151
+        "coolantUsage": 1938,
+        "coolingDraw": 1938,
+        "coolingRequired": 1938
       },
       "missing_performance_fields": {
         "boostSpeedForward": 12,
@@ -20,10 +20,10 @@
         "yawRate": 12
       },
       "missing_power_fields": {
-        "minimumPowerRequired": 326,
-        "powerDraw": 326,
-        "powerInputMinimum": 326,
-        "powerUsage": 326
+        "minimumPowerRequired": 73,
+        "powerDraw": 73,
+        "powerInputMinimum": 73,
+        "powerUsage": 73
       },
       "missing_quantum_fields": {
         "fuelRate": 290
@@ -40,7 +40,7 @@
   },
   "dpsFireRatePolicy": {
     "dps": "not_modeled_by_choice; never calculated from alpha damage or guessed cadence.",
-    "fireRateRpm": "unavailable_by_source_design unless a direct authoritative modeled field and fire-mode semantics are selected."
+    "fireRateRpm": "extracted from SWeaponActionFire*Params@fireRate when positive; null for continuous beam weapons."
   },
   "externalSourceUse": {
     "communityData": false,
@@ -166,9 +166,9 @@
       ],
       "fieldCoverage": {
         "calibrationTime": {
-          "coveragePct": 0.0,
-          "missing": 63,
-          "present": 0
+          "coveragePct": 100.0,
+          "missing": 0,
+          "present": 63
         },
         "fuelRate": {
           "coveragePct": 0.0,
@@ -241,10 +241,10 @@
             "SCItemQuantumDriveParams/params@calibrationDelayInSeconds"
           ],
           "field": "calibrationTime",
-          "missingCount": 63,
-          "missingReason": "field_found_but_uncertain_mapping",
-          "presentCount": 0,
-          "recommendedFixOrDeferral": "Calibration inputs are extracted; do not infer a final calibrationTime formula."
+          "missingCount": 0,
+          "missingReason": null,
+          "presentCount": 63,
+          "recommendedFixOrDeferral": "Extracted with current generator."
         },
         {
           "candidateSourcePathsInspected": [],
@@ -543,9 +543,9 @@
           "present": 0
         },
         "fireRateRpm": {
-          "coveragePct": 0.0,
-          "missing": 189,
-          "present": 0
+          "coveragePct": 97.35,
+          "missing": 5,
+          "present": 184
         },
         "projectileLifetime": {
           "coveragePct": 98.41,
@@ -628,13 +628,14 @@
         {
           "candidateSourcePathsInspected": [
             "SWeaponActionFireSingleParams@fireRate",
-            "weapon state modifiers fireRate/fireRateMultiplier"
+            "SWeaponActionFireRapidParams@fireRate",
+            "SWeaponActionFireBurstParams@fireRate"
           ],
           "field": "fireRateRpm",
-          "missingCount": 189,
-          "missingReason": "unavailable_by_source_design",
-          "presentCount": 0,
-          "recommendedFixOrDeferral": "Do not promote to fireRateRpm; cadence source semantics and mode selection are not modeled in Phase 3.5A."
+          "missingCount": 5,
+          "missingReason": "source_field_absent",
+          "presentCount": 184,
+          "recommendedFixOrDeferral": "Promoted from SWeaponActionFire*Params@fireRate when positive. Continuous beam weapons legitimately lack RPM."
         },
         {
           "candidateSourcePathsInspected": [
@@ -927,14 +928,13 @@
     }
   },
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-06T06:30:52Z",
+  "generatedAt": "2026-07-07T01:13:34Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/reports/stat_coverage_triage.py",
   "missingReasonCounts": {
-    "field_found_but_uncertain_mapping": 795,
+    "field_found_but_uncertain_mapping": 732,
     "not_modeled_by_choice": 189,
-    "source_field_absent": 945,
-    "unavailable_by_source_design": 189
+    "source_field_absent": 950
   },
   "radarAimAssistPolicy": {
     "extractedFields": [
@@ -952,7 +952,7 @@
   "registry": "fitting_stat_coverage_triage_report",
   "registryHygiene": {
     "classificationCounts": {
-      "fittable_candidate": 588,
+      "fittable_candidate": 622,
       "internal_or_placeholder": 119,
       "special_capital": 25,
       "template": 40
@@ -1138,7 +1138,7 @@
       "penetrationParams@basePenetrationDistance"
     ]
   },
-  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.8.184.64329-12122953\\foundry\\records",
+  "sourceRoot": "D:\\scintel\\data\\libs\\foundry\\records",
   "spotChecks": [
     {
       "componentKey": "51bf9a6e_0ad7_49d2_8d41_d1d5e69669e6",
@@ -1174,7 +1174,7 @@
     },
     {
       "componentKey": "816aa854_7615_4add_a2ca_2d39ada7fea7",
-      "diagnosis": "Normal projectile alpha/range/penetration remain source-supported; DPS/fire rate intentionally not modeled.",
+      "diagnosis": "Normal projectile alpha/range/penetration remain source-supported; fireRateRpm is extracted from SWeaponActionFire*Params@fireRate. DPS is still not calculated.",
       "displayName": "'WAR' Cannon",
       "family": "ship_weapons",
       "label": "normal_projectile_weapon",
@@ -1185,7 +1185,7 @@
         "basePenetrationDistance": 2.4,
         "calculatedRange": 2502.417,
         "dps": null,
-        "fireRateRpm": null,
+        "fireRateRpm": 200,
         "maxPenetrationThickness": 0.5,
         "projectileLifetime": 3.53,
         "projectileSpeed": 708.9
@@ -1193,7 +1193,7 @@
     },
     {
       "componentKey": "9fd3b3be_5653_413f_ba8f_0959a0adda89",
-      "diagnosis": "Beam audit is name-based triage; no beam-specific non-ammo damage path is promoted.",
+      "diagnosis": "Beam audit is name-based triage; continuous beams lack @fireRate and keep fireRateRpm null.",
       "displayName": "Exodus-10 Laser Beam",
       "family": "ship_weapons",
       "label": "beam_weapon_damage",

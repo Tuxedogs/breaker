@@ -1,5 +1,5 @@
 {
-  "buildId": "4.8.184.64329-12122953",
+  "buildId": "legacy-live-sandbox",
   "channel": "LIVE",
   "confidence": "high",
   "confidenceSummary": {
@@ -15,17 +15,15 @@
   "fallbackSource": null,
   "fallbackUsed": false,
   "foundryNativePercent": 100,
-  "generatedAt": "2026-07-06T06:30:44Z",
+  "generatedAt": "2026-07-07T01:13:28Z",
   "generator": "scripts/fitting/build_fitting_registries.py",
   "generatorModule": "scripts/fitting/components/quantum_drive_registry.py",
   "legacyApiRoot": null,
-  "localizationFallbackReason": "Nearby channel localization was not found; using legacy LIVE data localization.",
-  "localizationFallbackUsed": true,
+  "localizationFallbackReason": null,
+  "localizationFallbackUsed": false,
   "localizationPath": "D:\\scintel\\data\\Data\\Localization\\english\\global.ini",
-  "localizationSourceKind": "legacyLiveDataLocalizationFallback",
-  "localizationWarnings": [
-    "Nearby channel localization was not found; using legacy LIVE data localization."
-  ],
+  "localizationSourceKind": "nearbyChannelLocalization",
+  "localizationWarnings": [],
   "recordCount": 63,
   "records": [
     {
@@ -42,8 +40,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -159,6 +163,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0613,
       "quantumSpeed": 876000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -183,7 +188,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 54500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_AEGS_S04_Javelin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -282,8 +294,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_S01_Template/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -399,6 +417,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 1,
       "quantumSpeed": 231000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -423,7 +442,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 15000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_S01_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -522,8 +548,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_S02_Template/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -639,6 +671,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 1,
       "quantumSpeed": 282000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -663,7 +696,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 22500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_S02_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -762,8 +802,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_S03_Template/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -879,6 +925,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 1,
       "quantumSpeed": 344000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -903,7 +950,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 30000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_S03_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -1002,8 +1056,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_S04_Template/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -1119,6 +1179,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 1,
       "quantumSpeed": 419000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -1143,7 +1204,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 37500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_S04_Template/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -1242,8 +1310,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -1359,6 +1433,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.036064,
       "quantumSpeed": 383000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -1383,7 +1458,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 44600,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S03_Agni_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -1480,8 +1562,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -1597,6 +1685,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.009156,
       "quantumSpeed": 242000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -1621,7 +1710,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S02_Aither_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -1718,8 +1814,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -1835,6 +1937,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0613,
       "quantumSpeed": 512000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -1859,7 +1962,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 41300,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ORIG_S04_890J_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -1957,8 +2067,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -2074,6 +2190,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.007546,
       "quantumSpeed": 231000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -2098,7 +2215,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S01_Atlas_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -2195,8 +2319,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -2312,6 +2442,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.13524,
       "quantumSpeed": 339000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -2336,7 +2467,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 33800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S03_Balandin_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -2433,8 +2571,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -2550,6 +2694,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01862,
       "quantumSpeed": 190000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -2574,7 +2719,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S01_Beacon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -2671,8 +2823,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -2788,6 +2946,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.00654,
       "quantumSpeed": 262000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -2812,7 +2971,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 34700,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S02_Bolon_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -2909,8 +3075,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -3026,6 +3198,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01962,
       "quantumSpeed": 205000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -3050,7 +3223,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 12500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S02_Bolt_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -3147,8 +3327,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -3264,6 +3450,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.011368,
       "quantumSpeed": 198000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -3288,7 +3475,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S01_Burst_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -3385,8 +3579,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -3502,6 +3702,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.011227,
       "quantumSpeed": 168000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -3526,7 +3727,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S02_Cascade_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -3623,8 +3831,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -3740,6 +3954,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.005488,
       "quantumSpeed": 257000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -3764,7 +3979,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 24800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S01_Colossus_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -3861,8 +4083,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -3978,6 +4206,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02071,
       "quantumSpeed": 231000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -4002,7 +4231,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 26300,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S02_Crossfield_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -4099,8 +4335,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -4216,6 +4458,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01666,
       "quantumSpeed": 140000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -4240,7 +4483,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 7500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S01_Drift_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -4337,8 +4587,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -4454,6 +4710,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.066332,
       "quantumSpeed": 205000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -4478,7 +4735,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 30000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S03_Drifter_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -4575,8 +4839,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -4692,6 +4962,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.049588,
       "quantumSpeed": 205000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -4716,7 +4987,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S03_Echo_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -4813,8 +5091,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -4930,6 +5214,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.009114,
       "quantumSpeed": 165000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -4954,7 +5239,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S01_Eos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -5051,8 +5343,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -5168,6 +5466,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.049588,
       "quantumSpeed": 344000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -5192,7 +5491,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S03_Erebos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -5289,8 +5595,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -5406,6 +5718,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0098,
       "quantumSpeed": 165000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -5430,7 +5743,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 15000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S01_Expedition_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -5527,8 +5847,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -5644,6 +5970,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.070196,
       "quantumSpeed": 246000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -5668,7 +5995,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S03_Fissure_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -5765,8 +6099,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -5882,6 +6222,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.012644,
       "quantumSpeed": 242000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -5906,7 +6247,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S02_Flash_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -6003,8 +6351,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -6120,6 +6474,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.010094,
       "quantumSpeed": 138000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -6144,7 +6499,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S01_Flood_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -6241,8 +6603,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Competition",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -6358,6 +6726,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.00588,
       "quantumSpeed": 168000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -6382,7 +6751,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 21600,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ACAS_S01_FoxFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -6479,8 +6855,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -6596,6 +6978,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0613,
       "quantumSpeed": 718000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -6620,7 +7003,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 41300,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S04_Idris_TEMP/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -6719,8 +7109,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -6836,6 +7232,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0058,
       "quantumSpeed": 215000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -6860,7 +7257,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 24800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S01_Goliath_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -6957,8 +7361,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -7074,6 +7484,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.008393,
       "quantumSpeed": 282000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -7098,7 +7509,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S02_Hemera_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -7195,8 +7613,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -7312,6 +7736,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.006104,
       "quantumSpeed": 314000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -7336,7 +7761,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 34700,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S02_Huracan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -7433,8 +7865,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -7550,6 +7988,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.008232,
       "quantumSpeed": 198000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -7574,7 +8013,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S01_Hyperion_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -7671,8 +8117,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -7788,6 +8240,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.074704,
       "quantumSpeed": 295000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -7812,7 +8265,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S03_Impulse_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -7909,8 +8369,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -8026,6 +8492,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.03864,
       "quantumSpeed": 319000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -8050,7 +8517,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 44600,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S03_Kama_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -8147,8 +8621,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -8264,6 +8744,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.010137,
       "quantumSpeed": 201000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -8288,7 +8769,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S02_Khaos_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -8385,8 +8873,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Competition",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -8502,6 +8996,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0049,
       "quantumSpeed": 140000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -8526,7 +9021,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 21600,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ACAS_S01_LightFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -8623,8 +9125,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_S04_VNCL_Mauler/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": null,
       "classConfidence": "low",
       "classSource": "not_found",
@@ -8740,6 +9248,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0613,
       "quantumSpeed": 500000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -8764,7 +9273,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 49900,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_S04_VNCL_Mauler/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -8863,8 +9379,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -8980,6 +9502,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.059892,
       "quantumSpeed": 246000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -9004,7 +9527,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S03_Metis_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -9101,8 +9631,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -9218,6 +9754,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01853,
       "quantumSpeed": 171000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -9242,7 +9779,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 12500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S02_Nova_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -9339,8 +9883,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -9456,6 +10006,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0109,
       "quantumSpeed": 201000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -9480,7 +10031,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 22500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S02_Odyssey_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -9577,8 +10135,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -9694,6 +10258,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.12236,
       "quantumSpeed": 282000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -9718,7 +10283,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 33800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S03_Pontes_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -9815,8 +10387,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -9932,6 +10510,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.011227,
       "quantumSpeed": 168000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -9956,7 +10535,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 22500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S02_Quest_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -10053,8 +10639,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -10170,6 +10762,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.06118,
       "quantumSpeed": 295000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -10194,7 +10787,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 30000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S03_Ranger_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -10291,8 +10891,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -10408,6 +11014,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.010682,
       "quantumSpeed": 165000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -10432,7 +11039,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S01_Rush_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -10529,8 +11143,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -10646,6 +11266,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02058,
       "quantumSpeed": 228000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -10670,7 +11291,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S01_Siren_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -10767,8 +11395,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -10884,6 +11518,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.010355,
       "quantumSpeed": 242000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -10908,7 +11543,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 22500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S02_Sojourn_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -11005,8 +11647,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Competition",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -11122,6 +11770,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.00545,
       "quantumSpeed": 171000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -11146,7 +11795,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 32400,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ACAS_S02_SparkFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -11243,8 +11899,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -11360,6 +12022,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01862,
       "quantumSpeed": 196000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -11384,7 +12047,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 7500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S01_Spectre_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -11481,8 +12151,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -11598,6 +12274,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02071,
       "quantumSpeed": 240000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -11622,7 +12299,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 12500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S02_Spicule_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -11719,8 +12403,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Competition",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -11836,6 +12526,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.00654,
       "quantumSpeed": 205000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -11860,7 +12551,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 32400,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ACAS_S02_SunFire_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -11957,8 +12655,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -12074,6 +12778,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.14168,
       "quantumSpeed": 395000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -12098,7 +12803,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 33800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S03_TS2_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -12195,8 +12907,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -12312,6 +13030,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.011881,
       "quantumSpeed": 201000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -12336,7 +13055,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 27000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_ARCC_S02_Torrent_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -12433,8 +13159,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -12550,6 +13282,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.054096,
       "quantumSpeed": 295000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -12574,7 +13307,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 36000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RSI_S03_Tyche_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -12671,8 +13411,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -12788,6 +13534,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02156,
       "quantumSpeed": 266000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -12812,7 +13559,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 18800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S01_VK00_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -12909,8 +13663,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -13026,6 +13786,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.039928,
       "quantumSpeed": 266000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -13050,7 +13811,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 44600,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S03_Vesta_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -13147,8 +13915,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -13264,6 +14038,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.009114,
       "quantumSpeed": 198000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -13288,7 +14063,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 15000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S01_Voyage_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -13385,8 +14167,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -13502,6 +14290,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.006076,
       "quantumSpeed": 179000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -13526,7 +14315,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 24800,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S01_Vulcan_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -13623,8 +14419,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -13740,6 +14542,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.0644,
       "quantumSpeed": 246000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -13764,7 +14567,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 30000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S03_Wanderer_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -13861,8 +14671,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Civilian",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -13978,6 +14794,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.010094,
       "quantumSpeed": 138000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -14002,7 +14819,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 15000,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_TARS_S01_Wayfare_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -14099,8 +14923,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -14216,6 +15046,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02398,
       "quantumSpeed": 324000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -14240,7 +15071,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 26300,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S02_XL1_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -14337,8 +15175,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Industrial",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -14454,6 +15298,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.006758,
       "quantumSpeed": 218000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -14478,7 +15323,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 34700,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_JUST_S02_Yaluk_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -14575,8 +15427,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Military",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -14692,6 +15550,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.02289,
       "quantumSpeed": 278000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -14716,7 +15575,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 26300,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_WETK_S02_Yeager_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -14813,8 +15679,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "calibrationTime": null,
-      "calibrationTimeProvenance": null,
+      "calibrationTime": 11.5,
+      "calibrationTimeProvenance": {
+        "attribute": "derivedCalibrationTime",
+        "confidence": "medium",
+        "sourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/SCItemQuantumDriveParams/params@derived(calibrationDelayInSeconds + maxCalibrationRequirement / calibrationRate)",
+        "unitConfidence": "medium",
+        "unitUnknown": true
+      },
       "class": "Stealth",
       "classConfidence": "high",
       "classSource": "AttachDef.Localization.Description->global.ini:Class",
@@ -14930,6 +15802,7 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
+      "quantumFuelRequirement": 0.01764,
       "quantumSpeed": 168000000,
       "quantumSpeedProvenance": {
         "attribute": "driveSpeed",
@@ -14954,7 +15827,14 @@
         "unitConfidence": "medium",
         "unitUnknown": true
       },
-      "radarEmission": null,
+      "radarEmission": 7500,
+      "radarEmissionProvenance": {
+        "attribute": "nominalSignature",
+        "confidence": "low",
+        "sourcePath": "QDRV_RACO_S01_Zephyr_SCItem/Components/ItemResourceComponentParams/states/ItemResourceState/signatureParams/EMSignature",
+        "unitConfidence": "low",
+        "unitUnknown": true
+      },
       "rangeEfficiency": null,
       "rangeEfficiencyProvenance": null,
       "rawCandidateFields": {
@@ -15041,9 +15921,9 @@
   "registry": "quantum_drives",
   "schemaVersion": 1,
   "sourceClassification": "Foundry-native from D:\\scintel\\data\\libs\\foundry\\records",
-  "sourceConfidence": "high",
+  "sourceConfidence": "medium",
   "sourceKind": "foundryNative",
-  "sourceRoot": "D:\\scintel\\out\\LIVE\\4.8.184.64329-12122953\\foundry\\records",
+  "sourceRoot": "D:\\scintel\\data\\libs\\foundry\\records",
   "unresolvedRefsSummary": {
     "byKind": {},
     "total": 0

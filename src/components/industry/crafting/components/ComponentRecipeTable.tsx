@@ -1859,7 +1859,6 @@ const WEAPON_PERFORMANCE_STAT_GROUPS: WeaponStatGroupDefinition[] = [
           "Biochemical Damage",
           "Stun Damage",
           "Fire Rate",
-          "DPS",
           "Ammo Capacity",
           "Ammo Cost Per Shot",
           "Charge Time",
