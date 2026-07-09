@@ -49,6 +49,9 @@ export type PortBreakdownRow = {
   componentCategory: string | null;
   componentManufacturer: string | null;
   componentSize: number | null;
+  portExactSize: number | null;
+  portMinSize: number | null;
+  portMaxSize: number | null;
   componentSubtype: string | null;
   compatibilityStatus: string | null;
   editable: boolean;
@@ -202,7 +205,10 @@ export function adaptLoadout(
       equippedComponentName: null,
       componentCategory: null,
       componentManufacturer: null,
-      componentSize: port.size?.exact ?? port.size?.max ?? null,
+      componentSize: port.size?.exact ?? port.size?.max ?? port.size?.min ?? null,
+      portExactSize: port.size?.exact ?? null,
+      portMinSize: port.size?.min ?? null,
+      portMaxSize: port.size?.max ?? null,
       componentSubtype: port.subtype,
       compatibilityStatus: loadoutStatus(entry, port),
       editable: port.editable,
@@ -393,7 +399,23 @@ function findTurretRoot(row: PortBreakdownRow, lookup: Map<string, PortBreakdown
   for (const entry of chain) {
     if (isTurretRootPort(entry)) root = entry;
   }
-  return root;
+  if (root) return root;
+
+  let parentId = row.parentPortId;
+  const visited = new Set<string>([row.portId]);
+  while (parentId && !visited.has(parentId)) {
+    visited.add(parentId);
+    const synthetic: PortBreakdownRow = lookup.get(parentId) ?? {
+      ...row,
+      portId: parentId,
+      portName: null,
+      parentPortId: parentId.includes("/") ? parentId.split("/").slice(0, -1).join("/") : null,
+    };
+    if (isTurretRootPort(synthetic)) return synthetic;
+    parentId = synthetic.parentPortId;
+  }
+
+  return null;
 }
 
 function turretGroupKeyForRoot(root: PortBreakdownRow): "remote-turrets" | "manned-turrets" | null {
@@ -553,13 +575,101 @@ function toSummarizedRow(row: PortBreakdownRow, groupKey?: string): SummarizedRo
 function turretKindLabel(groupKey: string): string {
   if (groupKey === "remote-turrets") return "Remote Turret";
   if (groupKey === "manned-turrets") return "Manned Turret";
-  return "Turret";
+  return "Weapon Turret";
+}
+
+function turretRootSegment(portId: string): string {
+  const topLevel = portId.split("/")[0] ?? portId;
+  return topLevel.replace(/^hardpoint_turret_/, "").toLowerCase();
+}
+
+export function deriveTurretPositionPhrase(portId: string): string | null {
+  const segment = turretRootSegment(portId);
+  if (!segment) return null;
+
+  const parts: string[] = [];
+  if (/^back|^rear/.test(segment)) parts.push("Rear");
+  else if (/^front/.test(segment)) parts.push("Front");
+  else if (/nose/.test(segment)) parts.push("Nose");
+
+  if (/topleft|top_left/.test(segment)) parts.push("Top Left");
+  else if (/topright|top_right/.test(segment)) parts.push("Top Right");
+  else if (/top/.test(segment)) parts.push("Top");
+  else if (/bottom/.test(segment)) parts.push("Bottom");
+
+  if (parts.length === 0) {
+    if (/left/.test(segment) && !segment.includes("turret_left")) parts.push("Left");
+    if (/right/.test(segment) && !segment.includes("turret_right")) parts.push("Right");
+  }
+
+  if (parts.length === 0) return null;
+  if (parts[0] === "Rear" && parts.length === 2) return parts[1]!;
+  return parts.join(" ");
+}
+
+export function deriveTurretDisplayLabel(
+  rootPortId: string,
+  groupKey: string,
+  index: number,
+): string {
+  const kind = turretKindLabel(groupKey);
+  const position = deriveTurretPositionPhrase(rootPortId);
+  if (position) return `${position} ${kind}`;
+  return `${kind} ${index}`;
 }
 
 export function resolveTurretPortId(row: PortBreakdownRow, lookup: Map<string, PortBreakdownRow>): string {
   const root = findTurretRoot(row, lookup);
   if (root) return root.portId;
   return row.parentPortId ?? row.portId;
+}
+
+/** Stable key for grouping weapon ports with equivalent compatibility rules. */
+export function portCompatibilitySignature(row: PortBreakdownRow): string {
+  return [
+    row.portExactSize ?? "",
+    row.portMinSize ?? "",
+    row.portMaxSize ?? "",
+    row.componentSize ?? "",
+    row.portType ?? "",
+    row.portSubtype ?? "",
+    row.portCategory ?? "",
+    row.ruleCategory ?? "",
+    row.editable ? "1" : "0",
+    row.locked ? "1" : "0",
+    row.bespoke ? "1" : "0",
+    row.equippedComponentKey ?? "",
+    row.compatibilityStatus ?? "",
+  ].join("|");
+}
+
+function summarizeEquivalentPortRows(
+  key: string,
+  groupRows: PortBreakdownRow[],
+  options: {
+    groupKey?: string;
+    turretLabel?: string | null;
+  } = {},
+): SummarizedRow {
+  const first = groupRows[0];
+  const uniqueNames = [...new Set(groupRows.map((row) => row.equippedComponentName).filter(Boolean))];
+  const weaponName = uniqueNames.length === 1
+    ? (uniqueNames[0] ?? first.equippedComponentName ?? first.portName ?? first.portId)
+    : "Mixed weapons";
+
+  return {
+    key,
+    portIds: groupRows.map((row) => row.portId),
+    quantity: groupRows.length,
+    size: first.componentSize,
+    name: weaponName,
+    type: first.componentSubtype ?? categoryLabel(first.componentCategory ?? first.ruleCategory),
+    manufacturer: first.componentManufacturer,
+    controlMode: inferControlMode(first),
+    confidenceNote: options.groupKey === "installed-weapons" ? "Classification uncertain" : null,
+    turretLabel: options.turretLabel ?? null,
+    rows: groupRows,
+  };
 }
 
 function summarizeTurretHardpointRows(
@@ -573,23 +683,36 @@ function summarizeTurretHardpointRows(
     byTurret.set(turretPortId, [...(byTurret.get(turretPortId) ?? []), row]);
   }
 
-  return [...byTurret.entries()].map(([turretPortId, weaponRows]) => {
-    const first = weaponRows[0];
-    const weaponName = first.equippedComponentName ?? first.portName ?? first.portId;
-    return {
-      key: turretPortId,
-      portIds: weaponRows.map((entry) => entry.portId),
-      quantity: weaponRows.length,
-      size: first.componentSize,
-      name: weaponName,
-      type: first.componentSubtype ?? categoryLabel(first.componentCategory ?? first.ruleCategory),
-      manufacturer: first.componentManufacturer,
-      controlMode: inferControlMode(first),
-      confidenceNote: null,
-      turretLabel: turretKindLabel(groupKey),
-      rows: weaponRows,
-    };
-  });
+  const sortedTurretIds = [...byTurret.keys()].sort((left, right) => left.localeCompare(right));
+  const turretIndexById = new Map(sortedTurretIds.map((portId, index) => [portId, index + 1]));
+  const summaries: SummarizedRow[] = [];
+
+  for (const turretPortId of sortedTurretIds) {
+    const weaponRows = byTurret.get(turretPortId) ?? [];
+    const turretLabel = deriveTurretDisplayLabel(
+      turretPortId,
+      groupKey,
+      turretIndexById.get(turretPortId) ?? 1,
+    );
+    const bySignature = new Map<string, PortBreakdownRow[]>();
+
+    for (const row of weaponRows) {
+      const signature = portCompatibilitySignature(row);
+      bySignature.set(signature, [...(bySignature.get(signature) ?? []), row]);
+    }
+
+    const sortedSignatures = [...bySignature.keys()].sort((left, right) => left.localeCompare(right));
+    for (const signature of sortedSignatures) {
+      const groupRows = bySignature.get(signature) ?? [];
+      summaries.push(summarizeEquivalentPortRows(
+        `${turretPortId}::${signature}`,
+        groupRows,
+        { groupKey, turretLabel },
+      ));
+    }
+  }
+
+  return summaries;
 }
 
 export function summarizeGroupRows(
@@ -610,26 +733,12 @@ export function summarizeGroupRows(
 
   const grouped = new Map<string, PortBreakdownRow[]>();
   for (const row of rows) {
-    const label = row.equippedComponentName ?? row.portName ?? row.portId;
-    const key = `${label}|${row.componentSize ?? ""}|${row.componentSubtype ?? ""}`;
+    const key = portCompatibilitySignature(row);
     grouped.set(key, [...(grouped.get(key) ?? []), row]);
   }
-  return [...grouped.entries()].map(([key, groupRows]) => {
-    const first = groupRows[0];
-    return {
-      key,
-      portIds: groupRows.map((row) => row.portId),
-      quantity: groupRows.length,
-      size: first.componentSize,
-      name: first.equippedComponentName ?? first.portName ?? first.portId,
-      type: first.componentSubtype ?? categoryLabel(first.componentCategory ?? first.ruleCategory),
-      manufacturer: first.componentManufacturer,
-      controlMode: inferControlMode(first),
-      confidenceNote: groupKey === "installed-weapons" ? "Classification uncertain" : null,
-      turretLabel: null,
-      rows: groupRows,
-    };
-  });
+  return [...grouped.entries()].map(([key, groupRows]) => (
+    summarizeEquivalentPortRows(key, groupRows, { groupKey })
+  ));
 }
 
 export function getWeaponRows(rows: PortBreakdownRow[]): PortBreakdownRow[] {

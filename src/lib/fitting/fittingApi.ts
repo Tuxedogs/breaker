@@ -406,6 +406,56 @@ export type FittingComponentDetail = FittingComponentSummary & {
   mitigation: FittingComponentMitigation | null;
 };
 
+export type FittingPortConstraint = {
+  type: string | null;
+  subtype: string | null;
+  minSize: number | null;
+  maxSize: number | null;
+  exactSize: number | null;
+  bespoke: boolean;
+  editable: boolean;
+};
+
+export type FittingCompatibleComponentsResult = {
+  shipId: string;
+  portId: string;
+  status: "known" | "unknown" | "none";
+  constraint: FittingPortConstraint;
+  components: FittingComponentSummary[];
+};
+
+export async function listCompatibleComponents(
+  shipId: string,
+  portId: string,
+  signal?: AbortSignal,
+): Promise<FittingCompatibleComponentsResult> {
+  const components: FittingComponentSummary[] = [];
+  let cursor: string | null = null;
+  let result: FittingCompatibleComponentsResult | null = null;
+
+  for (let pageNumber = 0; pageNumber < 100; pageNumber += 1) {
+    const cursorQuery: string = cursor ? `&cursor=${encodeURIComponent(cursor)}` : "";
+    const response: DetailResponse<Omit<FittingCompatibleComponentsResult, "components"> & { components: FittingComponentSummary[] }> & { page: Page } = await readResponse(
+      withFittingBuild(
+        `/api/v1/fitting/ships/${encodeURIComponent(shipId)}/ports/${encodeURIComponent(portId)}/compatible-components?limit=200${cursorQuery}`,
+      ),
+      signal,
+    );
+    if (!result) {
+      result = { ...response.data, components: [] };
+    }
+    components.push(...response.data.components);
+    cursor = response.page.nextCursor;
+    if (!cursor) break;
+  }
+
+  if (!result) {
+    throw new Error("No compatibility data returned.");
+  }
+
+  return { ...result, components };
+}
+
 export async function getFittingComponent(
   componentId: string,
   signal?: AbortSignal,
