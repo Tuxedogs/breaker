@@ -902,32 +902,8 @@ function CraftAllocationSolverPreview({
   );
 }
 
-function getItemQualitySummary(item: BuildQueueItem, inputs: RecipeInputTemplate[]) {
-  const finalProductQuality = item.finalProductQuality;
-  const snapshotAverage = Number(item.finalProductQualityAverage ?? finalProductQuality?.averageBand ?? finalProductQuality?.average ?? finalProductQuality?.quality);
-  const snapshotBand = Number(item.finalProductQualityBand ?? finalProductQuality?.band);
 
-  if (Number.isFinite(snapshotAverage)) {
-    const bandForRarity = Number.isFinite(snapshotBand) ? snapshotBand : Math.max(1, Math.min(8, Math.floor(snapshotAverage)));
-    return {
-      label: `Band ${formatDecimal(snapshotAverage)}`,
-      rarity: rarityFromBandIndex(bandForRarity),
-      title: `Final product quality ${formatDecimal(snapshotAverage)}`,
-    };
-  }
-
-  const bands = inputs.map((input) => {
-    const qualityBands = input.qualityBands?.length ? input.qualityBands : FALLBACK_QUALITY_BANDS;
-    const bandIndex = getSavedBandIndex(input, qualityBands) ?? findNearestBandForQuality(qualityBands, input.selectedQuality ?? 500);
-    return bandIndex + 1;
-  });
-  const average = bands.length ? bands.reduce((s, b) => s + b, 0) / bands.length : 1;
-  return {
-    label: `Band ${formatDecimal(average)}`,
-    rarity: rarityFromBandIndex(Math.max(1, Math.min(8, Math.floor(average)))),
-    title: `Average selected material band ${formatDecimal(average)}`,
-  };
-}
+// ─── Group ───────────────────────────────────────────────────────────────────
 
 const CATEGORY_LABELS: Record<string, string> = {
   component: 'Component',
@@ -949,6 +925,7 @@ type BuildQueueSummaryMetrics = { coveredCount: number; totalShortfall: number }
 
 interface Props {
   category: string;
+  itemTypeLabel?: string;
   items: BuildQueueItem[];
   recipes: RecipeTemplate[];
   recipeInputsByRecipeId: Record<string, RecipeInputTemplate[]>;
@@ -1120,7 +1097,7 @@ function TargetQualityEditor({
 // ─── Group ───────────────────────────────────────────────────────────────────
 
 export default function BuildQueueGroup({
-  category, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
+  category, itemTypeLabel, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
   materials, locations, strategy, onQuantityChange,
   onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
   onAllocationOwnerHighlightChange,
@@ -1267,11 +1244,10 @@ export default function BuildQueueGroup({
         const itemName = item.itemName ?? recipe?.name ?? item.recipeId;
         const inputs = getBuildQueueItemInputs(item, recipeInputsByRecipeId);
         const hasMaterialInputs = inputs.length > 0;
-        const showRecipeUnmappedBadge = !hasMaterialInputs && item.status !== 'complete';
         const isCompletedCraft = item.status === 'complete';
         const blueprintSources = item.blueprintSources ?? [];
         const fulfillment = getItemFulfillmentState(item, inputs, inventory);
-        const qualitySummary = getItemQualitySummary(item, inputs);
+        const readableType = itemTypeLabel ?? CATEGORY_LABELS[category] ?? category;
 
         const summaryMetrics = inputs.reduce<BuildQueueSummaryMetrics>((metrics, input, inputIndex) => {
           const materialKey = input.materialKey ?? input.materialId;
@@ -1516,36 +1492,52 @@ export default function BuildQueueGroup({
 
             {/* ── Component header: summary | product visual | controls ── */}
             <div className="bq-item-sidebar bq-item-header">
-              <div className="bq-item-summary">
-                <div className="bq-item-name-block">
-                  <div className="bq-item-name-top">
-                    <span className="bq-item-cat">{CATEGORY_LABELS[category] ?? category}</span>
+              <div className="bq-item-controls">
+                <div className="bq-item-actions">
+                  <div className="bq-qty">
+                    <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={isCompletedCraft || item.quantity <= 1} aria-label="Decrease quantity">-</button>
+                    <span className="bq-qty-val">{item.quantity}x</span>
+                    <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} disabled={isCompletedCraft} aria-label="Increase quantity">+</button>
                   </div>
-                  <h2 className="bq-item-name">{itemName}</h2>
+
+                  <div className="bq-btn-row">
+                    <button
+                      type="button"
+                      className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
+                      onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
+                      aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
+                    >
+                      {isCompletedCraft ? 'Reopen' : 'Complete'}
+                    </button>
+                    <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
+                  </div>
                 </div>
 
-                <div className="bq-item-badges">
-                  {isCompletedCraft && (
-                    <span className="bq-badge bq-badge--complete">Completed Craft</span>
-                  )}
-                  <span className={`bq-badge bq-badge--${fulfillment === 'complete' ? 'covered' : fulfillment}`}>
-                    {fulfillment === 'complete' ? 'Covered' : fulfillment === 'partial' ? 'Partial' : 'Missing'}
-                  </span>
-                  <span className={`bq-badge bq-badge--quality craft-value-tier--${qualitySummary.rarity}`} title={qualitySummary.title}>
-                    {qualitySummary.label}
-                  </span>
-                  {showRecipeUnmappedBadge ? (
-                    <span className="bq-badge bq-badge--neutral" title="Material requirements are unavailable until this craft is linked to a recipe.">
-                      Recipe not mapped
-                    </span>
-                  ) : null}
+                <div className="bq-item-meta">
                   <span className="bq-item-blueprint" title={blueprintLabel}>
                     {blueprintLabel}
                   </span>
                 </div>
               </div>
 
-              <div className="bq-item-visual" aria-hidden="true">
+              <div className="bq-item-summary">
+                <div className="bq-item-name-block">
+                  <div className="bq-item-name-top">
+                    <span className="bq-item-cat">{readableType}</span>
+                  </div>
+                  <h2 className="bq-item-name">{itemName}</h2>
+                </div>
+              </div>
+
+              <div className="bq-item-stats">
+                <BuildQueueStatsBreakdown
+                  blueprintId={item.blueprint_id}
+                  item={item}
+                  inputs={inputs}
+                />
+              </div>
+
+              <div className="bq-item-visual bq-item-visual--quiet" aria-hidden="true">
                 <BuildQueueProductIcon
                   item={item}
                   recipe={recipe}
@@ -1554,29 +1546,9 @@ export default function BuildQueueGroup({
                   alt={itemName}
                 />
               </div>
-
-              <div className="bq-item-controls">
-                <div className="bq-qty">
-                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity - 1)} disabled={item.quantity <= 1} aria-label="Decrease quantity">−</button>
-                  <span className="bq-qty-val">{item.quantity}×</span>
-                  <button type="button" className="bq-qty-btn" onClick={() => onQuantityChange(item.id, item.quantity + 1)} aria-label="Increase quantity">+</button>
-                </div>
-          
-                <div className="bq-btn-row">
-                  <button
-                    type="button"
-                    className={`bq-btn${isCompletedCraft ? '' : ' bq-btn--confirm'}`}
-                    onClick={() => onStatusChange(item.id, isCompletedCraft ? 'queued' : 'complete')}
-                    aria-label={isCompletedCraft ? `Move ${itemName} back to build queue` : `Complete ${itemName}`}
-                  >
-                    {isCompletedCraft ? 'Reopen' : 'Complete'}
-                  </button>
-                  <button type="button" className="bq-btn bq-btn--danger" onClick={() => onRemove(item.id)} aria-label={`Remove ${itemName}`}>Remove</button>
-                </div>
-              </div>
             </div>
 
-            {/* ── Right body ── */}
+            {/* Right body */}
             <div className="bq-item-body">
               {/* Coverage bar */}
               <div className="bq-coverage" aria-label={`${itemName} material coverage`}>
@@ -1588,11 +1560,6 @@ export default function BuildQueueGroup({
                   <span className="bq-coverage-short">{formatQuantity(summaryMetrics.totalShortfall, undefined)} short</span>
                 )}
               </div>
-
-              <BuildQueueStatsBreakdown
-                blueprintId={item.blueprint_id}
-                recipeId={item.recipeId}
-              />
 
               {/* Material table */}
               {hasMaterialInputs ? (
@@ -2131,3 +2098,7 @@ export default function BuildQueueGroup({
     </div>
   );
 }
+
+
+
+

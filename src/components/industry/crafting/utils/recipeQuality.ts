@@ -121,6 +121,47 @@ export function deriveFinalProductQuality(
   };
 }
 
+export function computeTotalModifiersFromQualities(
+  recipe: ComponentRecipe,
+  materialQualities: Record<string, number>,
+): TotalModifierRow[] {
+  const map = new Map<string, TotalModifierRow>();
+
+  for (const [inputIndex, mat] of recipe.materials.entries()) {
+    const modifiers = mat.qualityModifiers ?? [];
+    if (modifiers.length === 0) continue;
+
+    const key = getMaterialQualityKey(recipe, mat, inputIndex);
+    const quality = materialQualities[key];
+    if (quality === undefined) continue;
+
+    const atQuality = getModifiersAtQuality(modifiers, quality);
+
+    for (const m of atQuality) {
+      const rowKey = getTotalModifierKey(m.property, m.modifierMode);
+      const existing = map.get(rowKey);
+
+      if (!existing) {
+        map.set(rowKey, {
+          property: m.property,
+          totalValue: m.value,
+          modifierMode: m.modifierMode,
+          contributions: [{ materialName: getMaterialName(mat), value: m.value }],
+        });
+      } else {
+        if (m.modifierMode === "integerAdditive") {
+          existing.totalValue += m.value;
+        } else {
+          existing.totalValue = ((1 + existing.totalValue / 100) * (1 + m.value / 100) - 1) * 100;
+        }
+        existing.contributions.push({ materialName: getMaterialName(mat), value: m.value });
+      }
+    }
+  }
+
+  return Array.from(map.values());
+}
+
 export function buildSelectedQualitySnapshot(
   recipe: ComponentRecipe,
   materialQualities: Record<string, number>,

@@ -180,6 +180,43 @@
 
 .bq-add-craft-option:hover { background: rgba(40, 255, 210, 0.08); color: var(--bq-cyan); }
 
+.bq-queue-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.bq-queue-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 8px;
+  background: rgba(8, 14, 20, 0.55);
+  color: var(--bq-dim);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bq-queue-tab.is-active {
+  border-color: rgba(255, 153, 0, 0.34);
+  background: rgba(255, 153, 0, 0.08);
+  color: var(--bq-text);
+  box-shadow: 0 0 16px rgba(255, 153, 0, 0.08);
+}
+
+.bq-queue-tab-count {
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.82;
+}
+
 .bq-queue-list {
   min-height: 0;
   overflow-y: auto;
@@ -204,13 +241,13 @@
 /* Craft cards — left queue rail */
 .bq-craft-card {
   display: grid;
-  grid-template-columns: 24px minmax(52px, 80px) minmax(0, 1fr) minmax(52px, max-content);
+  grid-template-columns: 24px minmax(0, 1fr) 54px;
   grid-template-rows: minmax(0, 1fr);
-  column-gap: 10px;
+  column-gap: 12px;
   align-items: center;
   width: 100%;
-  min-height: 108px;
-  padding: 12px;
+  min-height: 82px;
+  padding: 10px 12px;
   border: 1px solid rgba(65, 132, 160, 0.22);
   background: #051A28;
   border-radius: 10px;
@@ -261,46 +298,20 @@
   font-variant-numeric: tabular-nums;
 }
 
-.bq-craft-card-icon-col,
 .bq-craft-card-progress-col {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   justify-items: center;
   align-content: center;
   min-width: 0;
-}
-
-.bq-craft-card-icon-col {
-  grid-column: 2;
-}
-
-.bq-craft-card-progress-col {
-  grid-column: 4;
-}
-
-.bq-craft-card-thumb {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
-  background: var(--panel-bg-deep);
-  box-shadow: inset 0 0 0 1px rgba(65, 132, 160, 0.18);
-}
-
-.bq-craft-card-thumb .bq-product-icon--desktop.bq-product-icon--component,
-.bq-craft-card-thumb .bq-product-icon--desktop.bq-product-icon--weapon {
-  width: 44px;
-  height: 44px;
-  max-width: 44px;
-  max-height: 44px;
+  grid-column: 3;
 }
 
 .bq-craft-card-main {
-  grid-column: 3;
+  grid-column: 2;
   align-self: center;
   display: grid;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -316,17 +327,19 @@
 
 .bq-craft-card-name {
   font-size: 14px;
-  line-height: 1.2;
+  line-height: 1.15;
   font-weight: 700;
   color: #E6F2FF;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .bq-craft-card-status {
   display: inline-flex;
   align-items: center;
+  justify-self: start;
   min-height: 18px;
   padding: 2px 6px;
   border: 1px solid rgba(148, 163, 184, 0.14);
@@ -354,29 +367,10 @@
   color: var(--danger);
 }
 
-.bq-craft-card .bq-qty--compact {
-  height: 30px;
-  border-color: #0E2A36;
-  background: #03121C;
-}
-
-.bq-craft-card .bq-qty--compact .bq-qty-btn {
-  width: 26px;
-  height: 28px;
-  font-size: 0.82rem;
-}
-
-.bq-craft-card .bq-qty--compact .bq-qty-val {
-  min-width: 1.55rem;
-  height: 28px;
-  line-height: 28px;
-  font-size: 0.72rem;
-}
-
 .bq-craft-card-ring {
   position: relative;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
 }
@@ -461,12 +455,12 @@
 }
 
 .bq-center-shell .bq-item-header {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  grid-template-areas:
-    "visual summary summary"
-    "visual controls controls";
-  gap: 12px 16px;
+  display: grid;
+  grid-template-columns: minmax(220px, auto) minmax(220px, 0.85fr) minmax(280px, 1.2fr) auto;
+  grid-template-areas: "controls summary stats visual";
+  gap: 0.5rem 0.7rem;
   align-items: start;
+  min-width: 0;
 }
 
 .bq-center-shell .bq-item-visual {
@@ -474,17 +468,13 @@
   border-left: 0;
   padding: 0;
   background: transparent;
-  align-self: center;
+  align-self: stretch;
 }
 
 .bq-center-shell .bq-item-summary { grid-area: summary; }
 
 .bq-center-shell .bq-item-controls {
   grid-area: controls;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
   margin-top: 0;
 }
 
@@ -623,12 +613,10 @@
 
 .bq-item-header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "summary visual"
-    "controls controls";
-  gap: 0.45rem 0.55rem;
-  align-items: stretch;
+  grid-template-columns: minmax(220px, auto) minmax(220px, 0.85fr) minmax(280px, 1.2fr) auto;
+  grid-template-areas: "controls summary stats visual";
+  gap: 0.5rem 0.7rem;
+  align-items: start;
   min-width: 0;
 }
 
@@ -636,30 +624,54 @@
   grid-area: summary;
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+.bq-item-stats {
+  grid-area: stats;
+  display: grid;
+  align-content: start;
   gap: 0.42rem;
   min-width: 0;
+  padding: 0.15rem 0 0;
 }
 
 .bq-item-visual {
   grid-area: visual;
   display: flex;
   align-items: center;
-  justify-content: center;
-  align-self: center;
+  justify-content: flex-end;
+  align-self: stretch;
   min-width: 4.5rem;
-  padding: 0.2rem 0.1rem 0.2rem 0.35rem;
-  border-left: 1px solid rgba(137, 161, 176, 0.12);
-  background:
-    radial-gradient(120% 95% at 100% 50%, rgba(94, 234, 212, 0.07), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent);
+  padding: 0.1rem 0 0.1rem 0.25rem;
+}
+
+.bq-item-visual--quiet {
+  opacity: 0.42;
+  filter: saturate(0.72);
+  pointer-events: none;
 }
 
 .bq-item-controls {
   grid-area: controls;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  margin-top: auto;
+  align-items: flex-start;
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.bq-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.42rem;
+  min-width: 0;
+}
+
+.bq-item-meta {
+  display: flex;
+  min-width: 0;
 }
 
 .bq-item-name-block { min-width: 0; }
@@ -696,7 +708,8 @@
 }
 
 .bq-item-blueprint {
-  flex-basis: 100%;
+  display: block;
+  min-width: 0;
   font-size: 0.72rem;
   color: var(--bq-cyan);
   white-space: nowrap;
@@ -1598,7 +1611,7 @@
 .logi-rarity--common { --logi-rarity-accent: var(--rarity-common); --logi-rarity-accent-border: rgba(var(--rarity-common-rgb), 0.26); --logi-rarity-accent-bg: rgba(var(--rarity-common-rgb), 0.1); color: var(--rarity-common); }
 .logi-rarity--quantanium { --logi-rarity-accent: var(--rarity-quantanium); --logi-rarity-accent-border: rgba(var(--rarity-quantanium-rgb), 0.32); --logi-rarity-accent-bg: rgba(var(--rarity-quantanium-rgb), 0.1); color: var(--rarity-quantanium); }
 
-.bq-product-icon { pointer-events: none; user-select: none; object-fit: contain; }
+.bq-product-icon { pointer-events: none; user-select: none; object-fit: contain; opacity: 0.9; }
 .bq-product-icon--desktop.bq-product-icon--component { width: clamp(5rem, 7vw, 7rem); height: clamp(5rem, 7vw, 7rem); max-width: 7rem; max-height: 7rem; }
 .bq-product-icon--desktop.bq-product-icon--weapon { width: clamp(6.5rem, 8vw, 8.5rem); height: clamp(6.5rem, 8vw, 8.5rem); max-width: 8.5rem; max-height: 8.5rem; }
 .bq-product-icon--mobile.bq-product-icon--component,
@@ -2301,85 +2314,107 @@
   line-height: 1;
 }
 
-.bq-stats-breakdown {
-  margin: 0.55rem 0.55rem 0.65rem;
-  border: 1px solid var(--bq-edge-soft);
+.bq-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 6px;
+  min-width: 0;
+}
+
+.bq-stat-tile {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 6px;
-  background: rgba(4, 10, 14, 0.55);
-  padding: 0.65rem 0.75rem;
+  background: linear-gradient(180deg, rgba(24, 29, 33, 0.72) 0%, rgba(16, 20, 23, 0.82) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-.bq-stats-breakdown-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.55rem;
-}
-
-.bq-stats-breakdown-head h3 {
-  margin: 0;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--bq-amber);
-}
-
-.bq-stats-breakdown-link {
-  font-size: 0.68rem;
+.bq-stat-tile-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--alloc-text-muted);
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bq-cyan);
-  text-decoration: none;
+}
+
+.bq-stat-tile-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.35rem;
+  min-width: 0;
+  color: var(--bq-text);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.bq-stat-tile-delta {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.bq-stats-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(116px, 1fr));
+  gap: 6px;
+  min-width: 0;
 }
 
 .bq-stats-breakdown-empty {
   margin: 0;
-  color: var(--bq-sub);
-  font-size: 0.78rem;
-}
-
-.bq-stats-breakdown-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.55rem 0.85rem;
-}
-
-.bq-stats-breakdown-group h4 {
-  margin: 0 0 0.35rem;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: var(--bq-dim);
-}
-
-.bq-stats-breakdown-rows {
-  margin: 0;
-  display: grid;
-  gap: 0.18rem;
-}
-
-.bq-stats-breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.45rem;
-  font-size: 0.74rem;
-}
-
-.bq-stats-breakdown-row dt {
-  margin: 0;
-  color: var(--bq-sub);
-  font-weight: 600;
-}
-
-.bq-stats-breakdown-row dd {
-  margin: 0;
-  color: var(--bq-text);
+  font-size: 0.72rem;
   font-weight: 700;
-  text-align: right;
+}
+
+.bq-stat-chip {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(65, 132, 160, 0.18);
+  border-radius: 8px;
+  background: rgba(3, 18, 28, 0.46);
+}
+
+.bq-stat-chip-group,
+.bq-stat-chip-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-stat-chip-group {
+  color: var(--alloc-text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bq-stat-chip-label {
+  color: var(--alloc-text-secondary);
+  font-size: 11px;
+}
+
+.bq-stat-chip-value {
+  min-width: 0;
+  margin: 0;
+  color: var(--alloc-text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .bq-reserve-panel-label {
@@ -2741,16 +2776,18 @@
 
   .bq-queue-col { max-height: 240px; }
 
-  .bq-center-shell .bq-item-header {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "visual"
+.bq-center-shell .bq-item-header {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+      "controls"
       "summary"
-      "controls";
+      "stats"
+      "visual";
   }
 
   .bq-center-shell .bq-item-visual {
-    justify-self: start;
+    justify-self: end;
+    align-self: start;
     border-left: 0;
     padding: 0;
   }
@@ -2970,17 +3007,18 @@
   }
 
   .bq-center-shell .bq-item-header {
-    grid-template-columns: 64px minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 64px;
     grid-template-areas:
-      "visual summary"
-      "controls controls";
+      "controls visual"
+      "summary summary"
+      "stats stats";
     gap: 10px 12px;
-    align-items: center;
+    align-items: start;
   }
 
   .bq-center-shell .bq-item-visual {
-    justify-self: center;
-    align-self: center;
+    justify-self: end;
+    align-self: start;
     min-width: 0;
   }
 
@@ -3011,6 +3049,10 @@
     min-width: 0;
   }
 
+  .bq-item-stats {
+    padding-top: 0;
+  }
+
   .bq-item-blueprint {
     display: block;
     width: 100%;
@@ -3021,10 +3063,13 @@
 
   .bq-center-shell .bq-item-controls {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 8px;
+  }
+
+  .bq-item-actions {
+    width: 100%;
   }
 
   .bq-center-shell .bq-item-controls .bq-qty-btn,
@@ -3044,6 +3089,7 @@
 
   .bq-btn-row {
     gap: 6px;
+    flex-wrap: wrap;
   }
 
   .bq-btn {
@@ -3389,3 +3435,10 @@
     display: none;
   }
 }
+
+
+
+
+
+
+

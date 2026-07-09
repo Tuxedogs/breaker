@@ -13,7 +13,8 @@ import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
 import type { BuildQueueItem, RecipeTemplate } from "../../types/logistics";
-
+import { getCraftingItems } from "../../lib/craftingData";
+import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
 
@@ -24,11 +25,7 @@ function formatSummaryNumber(value: number): string {
   return value.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
-type QueueRow = {
-  item: BuildQueueItem;
-  category: string;
-  completed: boolean;
-};
+type QueueTab = "active" | "completed";
 
 function sortQueueItems(items: BuildQueueItem[]) {
   return items.slice().sort(
@@ -69,6 +66,8 @@ export default function BuildQueuePage() {
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState("");
+  const [queueTab, setQueueTab] = useState<QueueTab>("active");
+  const [typeLabelByBlueprintId, setTypeLabelByBlueprintId] = useState<Record<string, string>>({});
   const isMobileQueueLayout = useIsMobileQueueLayout();
   const mobileSelectorRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const mobileSelectorPointerRef = useRef<{ id: number; startX: number; startY: number } | null>(null);
@@ -94,32 +93,53 @@ export default function BuildQueuePage() {
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
   const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
 
-  const queueRows = useMemo(() => {
-    const rows: QueueRow[] = [];
-    const active = sortQueueItems(buildQueue.filter((item) => item.status !== "complete"));
-    const completed = sortQueueItems(buildQueue.filter((item) => item.status === "complete"));
-
-    for (const item of active) {
-      const recipe = recipes.find((entry) => entry.id === item.recipeId);
-      rows.push({ item, category: recipe?.category ?? "other", completed: false });
+  useEffect(() => {
+    const blueprintIds = [...new Set(
+      buildQueue.map((item) => item.blueprint_id).filter((id): id is string => Boolean(id?.trim())),
+    )];
+    if (blueprintIds.length === 0) {
+      setTypeLabelByBlueprintId({});
+      return;
     }
-    for (const item of completed) {
-      const recipe = recipes.find((entry) => entry.id === item.recipeId);
-      rows.push({ item, category: recipe?.category ?? "other", completed: true });
-    }
-    return rows;
-  }, [buildQueue, recipes]);
 
+    let cancelled = false;
+    getCraftingItems().then((items) => {
+      if (cancelled) return;
+      const next: Record<string, string> = {};
+      for (const blueprintId of blueprintIds) {
+        const recipe = items.find((entry) => entry.blueprint_id === blueprintId);
+        if (recipe) next[blueprintId] = formatBuildQueueItemTypeLabel(recipe);
+      }
+      setTypeLabelByBlueprintId(next);
+    });
+
+    return () => { cancelled = true; };
+  }, [buildQueue]);
+
+  const activeRows = useMemo(
+    () => sortQueueItems(buildQueue.filter((item) => item.status !== "complete")).map((item) => ({ item })),
+    [buildQueue],
+  );
+  const completedRows = useMemo(
+    () => sortQueueItems(buildQueue.filter((item) => item.status === "complete")).map((item) => ({ item })),
+    [buildQueue],
+  );
+  const visibleRows = queueTab === "active" ? activeRows : completedRows;
   const resolvedSelectedItemId = useMemo(() => {
-    if (queueRows.length === 0) return null;
-    if (selectedItemId && queueRows.some((row) => row.item.id === selectedItemId)) {
+    if (visibleRows.length === 0) return null;
+    if (selectedItemId && visibleRows.some((row) => row.item.id === selectedItemId)) {
       return selectedItemId;
     }
-    return queueRows[0]?.item.id ?? null;
-  }, [queueRows, selectedItemId]);
+    return visibleRows[0]?.item.id ?? null;
+  }, [visibleRows, selectedItemId]);
 
-  const selectedRow = queueRows.find((row) => row.item.id === resolvedSelectedItemId) ?? null;
+  const selectedRow = visibleRows.find((row) => row.item.id === resolvedSelectedItemId) ?? null;
 
+  function getItemTypeLabel(item: BuildQueueItem): string | undefined {
+    const blueprintId = item.blueprint_id?.trim();
+    if (!blueprintId) return undefined;
+    return typeLabelByBlueprintId[blueprintId];
+  }
   function handleMobileSelectorPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (event.pointerType === "mouse") return;
     mobileSelectorPointerRef.current = {
@@ -167,8 +187,11 @@ export default function BuildQueuePage() {
     }
     setInventoryGuardMessage("");
     updateBuildQueueItemStatus(id, status);
+    if (status === "complete") {
+      setQueueTab("completed");
+      setSelectedItemId(id);
+    }
   }
-
   return (
     <div className="bq-page">
       {inventoryGuardMessage ? (
@@ -178,9 +201,8 @@ export default function BuildQueuePage() {
         <aside className="bq-queue-col" aria-label="Build queue list">
           <header className="bq-queue-col-head">
             <span className="bq-queue-col-title">
-              Queue <em>({queueRows.length}/{MAX_QUEUE_SLOTS})</em>
-            </span>
-            <div className="bq-add-craft-wrap">
+              Queue <em>({activeRows.length}/{MAX_QUEUE_SLOTS})</em>
+            </span>            <div className="bq-add-craft-wrap">
               <button
                 type="button"
                 className="bq-add-craft-btn"
@@ -202,18 +224,39 @@ export default function BuildQueuePage() {
             </div>
           </header>
 
-          <div
-            className="bq-queue-list"
+          <div className="bq-queue-tabs" role="tablist" aria-label="Queue sections">
+            <button
+              type="button"
+              role="tab"
+              className={`bq-queue-tab${queueTab === "active" ? " is-active" : ""}`}
+              aria-selected={queueTab === "active"}
+              onClick={() => setQueueTab("active")}
+            >
+              Active <span className="bq-queue-tab-count">{activeRows.length}</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              className={`bq-queue-tab${queueTab === "completed" ? " is-active" : ""}`}
+              aria-selected={queueTab === "completed"}
+              onClick={() => setQueueTab("completed")}
+            >
+              Completed <span className="bq-queue-tab-count">{completedRows.length}</span>
+            </button>
+          </div>
+
+          <div            className="bq-queue-list"
             onPointerDown={handleMobileSelectorPointerDown}
             onPointerMove={handleMobileSelectorPointerMove}
             onPointerUp={handleMobileSelectorPointerEnd}
             onPointerCancel={handleMobileSelectorPointerEnd}
           >
-            {queueRows.length === 0 ? (
-              <div className="bq-empty-state">No builds queued yet.</div>
+            {visibleRows.length === 0 ? (
+              <div className="bq-empty-state">
+                {queueTab === "active" ? "No builds queued yet." : "No completed crafts yet."}
+              </div>
             ) : isMobileQueueLayout ? (
-              queueRows.map((row, index) => {
-                const selected = row.item.id === resolvedSelectedItemId;
+              visibleRows.map((row, index) => {                const selected = row.item.id === resolvedSelectedItemId;
                 const itemLabel = getQueueItemLabel(row.item, recipes);
                 return (
                   <button
@@ -226,8 +269,7 @@ export default function BuildQueuePage() {
                       "bq-queue-pill",
                       selected ? "is-selected" : "",
                       row.item.id === allocationOwnerHighlightId ? "allocation-owner-highlight" : "",
-                      row.completed ? "is-complete" : "",
-                    ].filter(Boolean).join(" ")}
+                      row.item.status === "complete" ? "is-complete" : "",                    ].filter(Boolean).join(" ")}
                     aria-current={selected ? "true" : undefined}
                     aria-label={`Select queue item ${index + 1}: ${itemLabel}`}
                     onClick={() => handleMobileSelectorClick(row.item.id)}
@@ -237,25 +279,20 @@ export default function BuildQueuePage() {
                   </button>
                 );
               })
-            ) : queueRows.map((row, index) => (
+            ) : visibleRows.map((row, index) => (
                 <BuildQueueCraftCard
                   key={row.item.id}
                   index={index + 1}
                   item={row.item}
-                  category={row.category}
+                  itemTypeLabel={getItemTypeLabel(row.item)}
                   recipes={recipes}
                   recipeInputsByRecipeId={recipeInputsByRecipeId}
                   inventory={inventoryEntries}
-                  locations={locations}
-                  materials={materials}
                   selected={row.item.id === resolvedSelectedItemId}
                   highlighted={row.item.id === allocationOwnerHighlightId}
-                  iconMode={iconMode}
                   onSelect={setSelectedItemId}
-                  onQuantityChange={updateBuildQueueItemQuantity}
                 />
-              ))}
-          </div>
+              ))}          </div>
 
           <footer className="bq-queue-col-foot">
             <Link className="bq-add-another-btn" to="/industry/crafting">
@@ -268,9 +305,9 @@ export default function BuildQueuePage() {
           {selectedRow ? (
             <div className="bq-center-shell">
             <BuildQueueGroup
-              category={selectedRow.category}
-              items={[selectedRow.item]}
-              recipes={recipes}
+              category={recipes.find((entry) => entry.id === selectedRow.item.recipeId)?.category ?? "other"}
+              itemTypeLabel={getItemTypeLabel(selectedRow.item)}
+              items={[selectedRow.item]}              recipes={recipes}
               recipeInputsByRecipeId={recipeInputsByRecipeId}
               buildQueue={buildQueue}
               inventory={inventoryEntries}
@@ -304,3 +341,5 @@ export default function BuildQueuePage() {
     </div>
   );
 }
+
+
