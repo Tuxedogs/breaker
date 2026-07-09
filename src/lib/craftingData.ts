@@ -5,11 +5,17 @@ import type {
 } from "../components/industry/crafting/utils/craftingTypes";
 import { apiUrl } from "./apiUrl";
 import { parseJsonResponse } from "./safeJson";
+import {
+  getBlueprintRecordsFromApi,
+  getFPSBlueprintRecordsFromApi,
+} from "./craftingRecipesApi";
+import {
+  getCraftedPropertiesFromApi,
+  getQualityQuantizationFromApi,
+} from "./craftingReferenceApi";
 
 const BLUEPRINTS_URL = "/api/crafting/blueprints.json";
 const FPS_BLUEPRINTS_URL = "/api/crafting/fps/fps_blueprints.json";
-const CRAFTED_PROPERTIES_URL = "/api/crafting/crafted_properties.json";
-const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
 
 interface ApiMaterialRecord {
   slot?: string | null;
@@ -328,12 +334,30 @@ function normalizeBlueprint(item: BlueprintRecord): ComponentRecipe {
 }
 
 export function getBlueprintRecords(): Promise<BlueprintRecord[]> {
-  blueprintsPromise ??= fetchJsonArray<BlueprintRecord>(BLUEPRINTS_URL);
+  blueprintsPromise ??= (async () => {
+    try {
+      return await getBlueprintRecordsFromApi();
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn("[crafting-data] vehicle recipe API failed; falling back to static JSON.", error);
+      }
+      return fetchJsonArray<BlueprintRecord>(BLUEPRINTS_URL);
+    }
+  })();
   return blueprintsPromise;
 }
 
 export function getFPSBlueprintRecords(): Promise<FpsBlueprintRecord[]> {
-  fpsBlueprintsPromise ??= fetchJsonArray<FpsBlueprintRecord>(FPS_BLUEPRINTS_URL);
+  fpsBlueprintsPromise ??= (async () => {
+    try {
+      return await getFPSBlueprintRecordsFromApi();
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.warn("[crafting-data] fps recipe API failed; falling back to static JSON.", error);
+      }
+      return fetchJsonArray<FpsBlueprintRecord>(FPS_BLUEPRINTS_URL);
+    }
+  })();
   return fpsBlueprintsPromise;
 }
 
@@ -417,14 +441,12 @@ export function getVehicleComponents(): Promise<BlueprintRecord[]> {
 }
 
 export function getCraftedProperties(): Promise<CraftedPropertyRecord[]> {
-  craftedPropertiesPromise ??= fetchJsonArray<CraftedPropertyRecord>(CRAFTED_PROPERTIES_URL);
+  craftedPropertiesPromise ??= getCraftedPropertiesFromApi();
   return craftedPropertiesPromise;
 }
 
 export function getQualityQuantization(): Promise<QualityQuantizationRecord[]> {
-  qualityQuantizationPromise ??= fetchJsonArray<QualityQuantizationRecord>(
-    QUALITY_QUANTIZATION_URL
-  );
+  qualityQuantizationPromise ??= getQualityQuantizationFromApi();
   return qualityQuantizationPromise;
 }
 

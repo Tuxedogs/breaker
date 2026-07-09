@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "NN-15 Cannon",
+    "nameSource": "localization_item_name",
+    "componentType": "weaponGun",
+    "size": "3",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "de0d3594-9f18-42c0-8a90-6edd723d80f8",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+    "baseStats": {
+      "mass": 200,
+      "health": 850,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.6,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 40,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 341,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutroncannon_s3.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "8739a357-7649-4498-8ada-b423d51aff37",
+    "blueprintName": "BP_CRAFT_MXOX_NeutronCannon_S3",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/weapons/$templates/ballistic/bp_craft_mxox_neutroncannon_s3.xml",
+    "entityClass": "231fd67b-49a6-40e9-8eef-20268cfc0b2c",
+    "craftTimeSeconds": 1680,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "titanium",
+        "materialName": "Titanium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+        "quantity": "1.16",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "WIRING",
+        "costType": "resource",
+        "materialKey": "copper",
+        "materialName": "Copper",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+        "quantity": "0.46",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "RADIATOR",
+        "costType": "resource",
+        "materialKey": "lindinium",
+        "materialName": "Lindinium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "392b4dca-449a-4d4d-8fef-beab024d9ee7",
+        "quantity": "0.23",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "WIRING",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "RADIATOR",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_HeadHuntersMercenaryShipRegionC",
+        "poolGuid": "de417e15-2936-497a-8f90-7a52eb2eb12a",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Head Hunters Mercenary Ship Region C"
+      }
+    ]
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Attrition-3 Repeater",
+    "nameSource": "localization_item_name",
+    "componentType": "weaponGun",
+    "size": "3",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "ee8b7bb3-d420-435c-924f-561e67e64588",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+    "baseStats": {
+      "mass": 150,
+      "health": 1024,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.6,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 27.2,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 278,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/hrst_laserrepeater_s3.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "626da3a0-dc9c-49bd-ad97-497239675894",
+    "blueprintName": "BP_CRAFT_HRST_LaserRepeater_S3",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/weapons/laser/repeater/bp_craft_hrst_laserrepeater_s3.xml",
+    "entityClass": "c526f686-a3da-48fa-b9c3-d58fb8e31dc5",
+    "craftTimeSeconds": 1680,
+    "materials": [
+      {
+        "slot": "REINFORCED FRAME",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "1.16",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "EMITTER",
+        "costType": "item",
+        "materialKey": "hadanite",
+        "materialName": "Hadanite",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "125dd723-95ad-488d-830f-62c954445ca1",
+        "quantity": "23",
+        "unitType": "unit",
+        "minQuality": "1"
+      },
+      {
+        "slot": "THERMAL SINK",
+        "costType": "resource",
+        "materialKey": "pressurizedice",
+        "materialName": "Pressurized Ice",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f9f3251a-8e48-408a-b957-f1e3d5d3e213",
+        "quantity": "0.46",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "REINFORCED FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "EMITTER",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "THERMAL SINK",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_IDSRecoverEncryptedDataVgear",
+        "poolGuid": "1817df4b-2d1c-4735-872d-cb471cf07201",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "IDS Recover Encrypted Data Vgear"
+      }
+    ]
+  }
+}

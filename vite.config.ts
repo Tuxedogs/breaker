@@ -45,8 +45,26 @@ function isComponentCardsApiPath(pathname: string) {
     || /^\/api\/crafting\/component-cards\/[^/]+$/.test(pathname);
 }
 
+function isCraftingRecipesApiPath(pathname: string) {
+  return pathname === "/api/crafting/recipes/index"
+    || pathname === "/api/crafting/recipes/catalog/vehicle"
+    || pathname === "/api/crafting/recipes/catalog/fps"
+    || pathname === "/api/crafting/recipes/batch"
+    || /^\/api\/crafting\/recipes\/[^/]+$/.test(pathname);
+}
+
+function isCraftingReferenceApiPath(pathname: string) {
+  return pathname === "/api/crafting/reference/crafted-properties"
+    || pathname === "/api/crafting/reference/quality-quantization"
+    || pathname === "/api/crafting/reference/material-quality-quantization"
+    || pathname === "/api/crafting/reference/material-identity";
+}
+
 function isCraftingShapedApiPath(pathname: string) {
-  return isCraftingBlueprintSourcesApiPath(pathname) || isComponentCardsApiPath(pathname);
+  return isCraftingBlueprintSourcesApiPath(pathname)
+    || isComponentCardsApiPath(pathname)
+    || isCraftingRecipesApiPath(pathname)
+    || isCraftingReferenceApiPath(pathname);
 }
 
 function isDynamicApiPath(pathname: string) {

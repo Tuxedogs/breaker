@@ -1,5 +1,4 @@
-import { apiUrl } from "../apiUrl";
-import { parseJsonResponse } from "../safeJson";
+import { getQualityQuantizationFromApi } from "../craftingReferenceApi";
 
 export type QualityBand = {
   start: number;
@@ -15,21 +14,11 @@ export type QualityQuantizationRecord = {
   bands: QualityBand[];
 };
 
-const QUALITY_QUANTIZATION_URL = "/api/crafting/quality_quantization.json";
 let records: QualityQuantizationRecord[] = [];
 let loadPromise: Promise<QualityQuantizationRecord[]> | null = null;
 
 export async function loadQualityQuantizationRecords(): Promise<QualityQuantizationRecord[]> {
-  const url = apiUrl(QUALITY_QUANTIZATION_URL);
-  loadPromise ??= fetch(url)
-    .then(async (response) => {
-      const data = await parseJsonResponse<QualityQuantizationRecord[]>(response, {
-        label: "quality quantization",
-        url,
-      });
-      if (!response.ok) throw new Error(`Failed to load quality quantization: ${response.status}`);
-      return data;
-    })
+  loadPromise ??= getQualityQuantizationFromApi()
     .then((loadedRecords) => {
       records = loadedRecords;
       return records;

@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Bolide",
+    "nameSource": "localization_item_name",
+    "componentType": "powerplant",
+    "size": "2",
+    "gradeRaw": "2",
+    "grade": "B",
+    "gradeSource": "AttachDef.Grade",
+    "class": "military",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "cf4a74bf-eb2c-462a-9b78-f7f2724c31d2",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+    "baseStats": {
+      "mass": 740,
+      "health": 860,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.7,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 66.2,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 9900,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 7500,
+        "decayRate": 500,
+        "decayDelay": 3,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s02_bolide_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "8601e542-8c86-4504-981f-aaf24f3b5fd2",
+    "blueprintName": "BP_CRAFT_POWR_AEGS_S02_Bolide_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/powerplant/bp_craft_powr_aegs_s02_bolide_scitem.xml",
+    "entityClass": "22ca3ca2-1bdc-48a7-8689-a0f8259a5441",
+    "craftTimeSeconds": 1230,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "lindinium",
+        "materialName": "Lindinium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "392b4dca-449a-4d4d-8fef-beab024d9ee7",
+        "quantity": "1.22",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "costType": "resource",
+        "materialKey": "beryl",
+        "materialName": "Beryl",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "93c8b7df-d6ac-4b4f-a115-b0e3afc238b8",
+        "quantity": "0.5",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "STATOR CORES",
+        "costType": "resource",
+        "materialKey": "ouratite",
+        "materialName": "Ouratite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "quantity": "0.85",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "0",
+        "endQuality": "249",
+        "modifierStart": "-2",
+        "modifierEnd": "-2",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "250",
+        "endQuality": "499",
+        "modifierStart": "-1",
+        "modifierEnd": "-1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "500",
+        "endQuality": "699",
+        "modifierStart": "0",
+        "modifierEnd": "0",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "700",
+        "endQuality": "899",
+        "modifierStart": "1",
+        "modifierEnd": "1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "900",
+        "endQuality": "1000",
+        "modifierStart": "2",
+        "modifierEnd": "2",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "0",
+        "endQuality": "399",
+        "modifierStart": "-1",
+        "modifierEnd": "-1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "400",
+        "endQuality": "899",
+        "modifierStart": "0",
+        "modifierEnd": "0",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "900",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_ASD3Vgear",
+        "poolGuid": "9b457916-07e2-49bd-b4c0-52ac963508c9",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "ASD3Vgear"
+      }
+    ]
+  }
+}

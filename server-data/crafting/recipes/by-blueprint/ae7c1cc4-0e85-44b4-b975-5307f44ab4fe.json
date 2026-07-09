@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Bolt",
+    "nameSource": "blueprintGuid",
+    "componentType": "quantumdrive",
+    "size": "2",
+    "gradeRaw": "2",
+    "grade": "B",
+    "gradeSource": "AttachDef.Grade",
+    "class": "stealth",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "57432775-b421-45cc-8616-ac2d35018193",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+    "baseStats": {
+      "mass": 270,
+      "health": 400,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 57.3,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 12500,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 3400,
+        "decayRate": 226.6667,
+        "decayDelay": 3,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_raco_s02_bolt_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "ae7c1cc4-0e85-44b4-b975-5307f44ab4fe",
+    "blueprintName": "BP_CRAFT_QDRV_RACO_S02_Bolt_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/quantumdrive/size2/bp_craft_qdrv_raco_s02_bolt_scitem.xml",
+    "entityClass": "d6dac840-51e4-4872-b731-2072f3bcfda9",
+    "craftTimeSeconds": 1200,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "1.24",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "0.5",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "costType": "resource",
+        "materialKey": "ouratite",
+        "materialName": "Ouratite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "quantity": "0.5",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "gameplayProperty": "GPP_Quantum_Speed",
+        "gameplayPropertyId": "7ab22dc9-6687-41ab-aebd-4dd5486be458",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "gameplayProperty": "GPP_Quantum_Speed",
+        "gameplayPropertyId": "7ab22dc9-6687-41ab-aebd-4dd5486be458",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "gameplayProperty": "GPP_Quantum_FuelRequirement",
+        "gameplayPropertyId": "de5beef5-91cb-49f1-b4f5-82f957dcd569",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "1.2",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "gameplayProperty": "GPP_Quantum_FuelRequirement",
+        "gameplayPropertyId": "de5beef5-91cb-49f1-b4f5-82f957dcd569",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "0.8",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "-20.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_LingHard",
+        "poolGuid": "8e69e4bd-3b6a-42a0-8b8b-808eede34d29",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Ling Hard"
+      }
+    ]
+  }
+}

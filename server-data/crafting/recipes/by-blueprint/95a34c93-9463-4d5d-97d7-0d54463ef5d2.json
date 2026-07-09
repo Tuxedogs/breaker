@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Hemera",
+    "nameSource": "localization_item_name",
+    "componentType": "quantumdrive",
+    "size": "2",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": "civilian",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "093e6eba-93fa-4dad-b3dd-38966934e34e",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+    "baseStats": {
+      "mass": 630,
+      "health": 540,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 46.7,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 27000,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 4550,
+        "decayRate": 303.3333,
+        "decayDelay": 3,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/quantumdrive/qdrv_rsi_s02_hemera_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "95a34c93-9463-4d5d-97d7-0d54463ef5d2",
+    "blueprintName": "BP_CRAFT_QDRV_RSI_S02_Hemera_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/quantumdrive/size2/bp_craft_qdrv_rsi_s02_hemera_scitem.xml",
+    "entityClass": "3bd1502d-f593-456f-a3a9-14fec5b8c1a5",
+    "craftTimeSeconds": 1140,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "torite",
+        "materialName": "Torite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "75b37a54-45c9-4f27-ac09-9830f092dd86",
+        "quantity": "1.24",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "0.5",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "costType": "resource",
+        "materialKey": "bexalite",
+        "materialName": "Bexalite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "999e3149-fd10-49ac-914f-8911e61c6122",
+        "quantity": "0.5",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "gameplayProperty": "GPP_Quantum_Speed",
+        "gameplayPropertyId": "7ab22dc9-6687-41ab-aebd-4dd5486be458",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "INJECTOR NOZZLES",
+        "gameplayProperty": "GPP_Quantum_Speed",
+        "gameplayPropertyId": "7ab22dc9-6687-41ab-aebd-4dd5486be458",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "gameplayProperty": "GPP_Quantum_FuelRequirement",
+        "gameplayPropertyId": "de5beef5-91cb-49f1-b4f5-82f957dcd569",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "1.2",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CONTAINMENT MATRIX",
+        "gameplayProperty": "GPP_Quantum_FuelRequirement",
+        "gameplayPropertyId": "de5beef5-91cb-49f1-b4f5-82f957dcd569",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "0.8",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "-20.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

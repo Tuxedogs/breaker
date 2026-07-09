@@ -84,7 +84,7 @@ import {
 export type { FinalProductQuality } from "../utils/recipeQuality";
 
 const NO_VALUE = "__none__";
-const QUALITY_QUANTIZATION_URL = "/api/crafting/material_quality_quantization.json";
+import { CRAFTING_REFERENCE_API_URLS } from "@/lib/craftingReferenceApi";
 const RECIPE_FILTER_STORAGE_KEY = "scintel:recipe:msb-sidebar:v1";
 const RECIPE_BOOKMARK_STORAGE_KEY = "scintel:recipe:bookmarks:v1";
 const MISSION_BOOKMARK_STORAGE_KEY = "scintel:recipe:mission-bookmarks:v1";
@@ -816,8 +816,8 @@ function useQualityQuantization() {
 
     async function load() {
       try {
-        const res = await fetch(apiUrl(QUALITY_QUANTIZATION_URL));
-        const url = apiUrl(QUALITY_QUANTIZATION_URL);
+        const url = apiUrl(CRAFTING_REFERENCE_API_URLS.materialQualityQuantization);
+        const res = await fetch(url);
 
         const json = await parseJsonResponse<MaterialQuantization[]>(res, {
           label: "crafting material quantization",
@@ -825,7 +825,7 @@ function useQualityQuantization() {
         });
         if (!res.ok) {
           throw new Error(
-            `Failed to load ${QUALITY_QUANTIZATION_URL}: ${res.status}`,
+            `Failed to load ${CRAFTING_REFERENCE_API_URLS.materialQualityQuantization}: ${res.status}`,
           );
         }
 

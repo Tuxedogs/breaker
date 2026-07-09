@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Surveyor-Lite",
+    "nameSource": "localization_item_name",
+    "componentType": "radar",
+    "size": "1",
+    "gradeRaw": "3",
+    "grade": "C",
+    "gradeSource": "AttachDef.Grade",
+    "class": "industrial",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "8af71a8a-7da0-4e31-afc7-648fc916e387",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+    "baseStats": {
+      "mass": 200,
+      "health": 650,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 30.7,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 1800,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 2400,
+        "decayRate": 253,
+        "decayDelay": 1.28,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_chco_s01_surveyorlite.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "86654362-5907-4139-a706-8ba6dcfd207f",
+    "blueprintName": "BP_CRAFT_RADR_CHCO_S01_SurveyorLite",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/radar/bp_craft_radr_chco_s01_surveyorlite.xml",
+    "entityClass": "87008b2d-438a-4091-8ae4-303be47190d8",
+    "craftTimeSeconds": 540,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "0.28",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "costType": "resource",
+        "materialKey": "laranite",
+        "materialName": "Laranite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_ShubinRank0to1",
+        "poolGuid": "253e9697-5605-4732-b4fa-56af7a3dc140",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Shubin Rank 0to 1"
+      }
+    ]
+  }
+}

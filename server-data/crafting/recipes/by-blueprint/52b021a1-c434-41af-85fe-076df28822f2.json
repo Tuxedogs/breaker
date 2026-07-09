@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Industrial TEMPLATE",
+    "nameSource": "blueprintGuid",
+    "componentType": "dockingCollar",
+    "size": "2",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "b28a5c61-63a4-478b-8047-5fba545d5b8a",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+    "baseStats": {
+      "mass": 200,
+      "health": 9000,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 120,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/refueling/nozzle/nozzle_fuelgiver_misc_nozzlestandard.xml",
+        "node": "IRSignature"
+      }
+    },
+    "blueprintGuid": "52b021a1-c434-41af-85fe-076df28822f2",
+    "blueprintName": "BP_CraftNozzle_S0_Industrial_TEMPLATE",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/refuelling/nozzle/bp_craftnozzle_s0_industrial_template.xml",
+    "entityClass": "8b1915bf-22ce-473d-9c1d-727423d59c0e",
+    "craftTimeSeconds": 230,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "titanium",
+        "materialName": "Titanium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+        "quantity": "0.8",
+        "unitType": "scu",
+        "minQuality": "0"
+      },
+      {
+        "slot": "MAIN VALVE",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "0.2",
+        "unitType": "scu",
+        "minQuality": "0"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

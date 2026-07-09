@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "AD4B Ballistic Gatling",
+    "nameSource": "localization_item_name",
+    "componentType": "weaponGun",
+    "size": "4",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "65a5d887-3b21-4046-a718-6912c0c7c3be",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+    "baseStats": {
+      "mass": 375,
+      "health": 1650,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.6,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 37,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 36,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/behr_ballisticgatling_s4.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "1727fc8f-e31c-4d66-9670-084aadb15955",
+    "blueprintName": "BP_CRAFT_BEHR_BallisticGatling_S4",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/weapons/ballistic/gatling/bp_craft_behr_ballisticgatling_s4.xml",
+    "entityClass": "e4afc8b4-da61-4efb-af7e-f003d9900d96",
+    "craftTimeSeconds": 2940,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "2.08",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "DRIVE MOTOR",
+        "costType": "resource",
+        "materialKey": "ouratite",
+        "materialName": "Ouratite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "quantity": "0.21",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "BARRELS",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "1.25",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "DRIVE MOTOR",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "BARRELS",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_PyroHeadhuntersHard",
+        "poolGuid": "9cc0425d-5101-4f8a-a89d-6d483466829e",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Pyro Headhunters Hard"
+      }
+    ]
+  }
+}

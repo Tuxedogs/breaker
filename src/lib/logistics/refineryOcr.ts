@@ -18,6 +18,7 @@ interface QualityQuantizationRecord {
 }
 
 const QUALITY_QUANTIZATION_URL_CANDIDATES = [
+  "/api/crafting/reference/quality-quantization",
   "/api/crafting/quality_quantization",
   "/api/crafting/quality_quantization.json",
 ];

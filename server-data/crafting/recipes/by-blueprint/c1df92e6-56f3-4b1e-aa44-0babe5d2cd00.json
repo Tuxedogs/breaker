@@ -1,0 +1,303 @@
+{
+  "schemaVersion": 1,
+  "kind": "fps",
+  "record": {
+    "id": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00",
+    "displayName": "ORC-mkV Core",
+    "nameSource": "entity_displayName_localization",
+    "entityClass": "0368d9db-58d5-48ea-8a1b-5d646c4ad66a",
+    "entityClassSource": "creation.entityClass",
+    "blueprintGuid": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00",
+    "blueprintName": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/fpsgear/armour/combat/medium/bp_craft_cds_legacy_armor_medium_core_01_01_02.xml",
+    "recordPath": "libs/foundry/records/crafting/blueprints/crafting/fpsgear/armour/combat/medium/bp_craft_cds_legacy_armor_medium_core_01_01_02.xml",
+    "category": "35b0267e-cce0-46cc-a3ec-250271fe2ef3",
+    "blueprintNameRaw": "@LOC_PLACEHOLDER",
+    "craftTimeSeconds": 180,
+    "materials": [
+      {
+        "lineId": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00:0:0:989f9b73-f636-4f35-a81d-579dcbe3f0ab:804e9acc-c3a5-4787-b2b1-c898e5198f92",
+        "slot": "ARMOURED CARAPACE",
+        "slotDebugName": "ARMOURED CARAPACE",
+        "slotDisplayName": "Armoured Carapace",
+        "slotDisplayNameRaw": "@crafting_ui_slotname_armouredcarapace",
+        "costType": "resource",
+        "materialId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "materialKey": "ouratite",
+        "materialName": "Ouratite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "resolvedNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "resourceGuid": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "quantity": "0.05",
+        "unit": "scu",
+        "unitType": "scu",
+        "quantityRaw": {
+          "standardCargoUnits": "0.05"
+        },
+        "minQuality": "0",
+        "slotCount": "1",
+        "sourceRef": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "sourcePath": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+        "modifiers": [
+          {
+            "gameplayPropertyId": "804e9acc-c3a5-4787-b2b1-c898e5198f92",
+            "gameplayProperty": "GPP_Armor_DamageMitigation",
+            "displayName": "Damage Mitigation",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "0",
+                "endQuality": "1000",
+                "modifierAtStart": "0.85",
+                "modifierAtEnd": "1.15"
+              }
+            ],
+            "rangeErrors": []
+          }
+        ]
+      },
+      {
+        "lineId": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00:1:0:fde0cd65-8827-4b23-804d-cc8845dfa7ac:69143912-ee80-43e9-8862-e1745f0f0b9f+6c186289-6db8-4820-a367-5292f4ea1c61",
+        "slot": "INSULATIVE LINER",
+        "slotDebugName": "INSULATIVE LINER",
+        "slotDisplayName": "Insulative Liner",
+        "slotDisplayNameRaw": "@crafting_ui_slotname_insulativeliner",
+        "costType": "resource",
+        "materialId": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "materialKey": "insulativelinermaterial",
+        "materialName": "Insulative Liner Material",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "resolvedNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "resourceGuid": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "quantity": "0.02",
+        "unit": "scu",
+        "unitType": "scu",
+        "quantityRaw": {
+          "standardCargoUnits": "0.02"
+        },
+        "minQuality": "0",
+        "slotCount": "1",
+        "sourceRef": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "sourcePath": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+        "modifiers": [
+          {
+            "gameplayPropertyId": "69143912-ee80-43e9-8862-e1745f0f0b9f",
+            "gameplayProperty": "GPP_Armor_TemperatureMin",
+            "displayName": "GPP_Armor_TemperatureMin",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "500",
+                "endQuality": "1000",
+                "modifierAtStart": "1",
+                "modifierAtEnd": "1.2"
+              }
+            ],
+            "rangeErrors": []
+          },
+          {
+            "gameplayPropertyId": "6c186289-6db8-4820-a367-5292f4ea1c61",
+            "gameplayProperty": "GPP_Armor_TemperatureMax",
+            "displayName": "GPP_Armor_TemperatureMax",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "500",
+                "endQuality": "1000",
+                "modifierAtStart": "1",
+                "modifierAtEnd": "1.2"
+              }
+            ],
+            "rangeErrors": []
+          }
+        ]
+      }
+    ],
+    "materialRequirements": [
+      {
+        "lineId": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00:0:0:989f9b73-f636-4f35-a81d-579dcbe3f0ab:804e9acc-c3a5-4787-b2b1-c898e5198f92",
+        "slot": "ARMOURED CARAPACE",
+        "slotDebugName": "ARMOURED CARAPACE",
+        "slotDisplayName": "Armoured Carapace",
+        "slotDisplayNameRaw": "@crafting_ui_slotname_armouredcarapace",
+        "costType": "resource",
+        "materialId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "materialKey": "ouratite",
+        "materialName": "Ouratite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "resolvedNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "resourceGuid": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "quantity": "0.05",
+        "unit": "scu",
+        "unitType": "scu",
+        "quantityRaw": {
+          "standardCargoUnits": "0.05"
+        },
+        "minQuality": "0",
+        "slotCount": "1",
+        "sourceRef": "989f9b73-f636-4f35-a81d-579dcbe3f0ab",
+        "sourcePath": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+        "modifiers": [
+          {
+            "gameplayPropertyId": "804e9acc-c3a5-4787-b2b1-c898e5198f92",
+            "gameplayProperty": "GPP_Armor_DamageMitigation",
+            "displayName": "Damage Mitigation",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "0",
+                "endQuality": "1000",
+                "modifierAtStart": "0.85",
+                "modifierAtEnd": "1.15"
+              }
+            ],
+            "rangeErrors": []
+          }
+        ]
+      },
+      {
+        "lineId": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00:1:0:fde0cd65-8827-4b23-804d-cc8845dfa7ac:69143912-ee80-43e9-8862-e1745f0f0b9f+6c186289-6db8-4820-a367-5292f4ea1c61",
+        "slot": "INSULATIVE LINER",
+        "slotDebugName": "INSULATIVE LINER",
+        "slotDisplayName": "Insulative Liner",
+        "slotDisplayNameRaw": "@crafting_ui_slotname_insulativeliner",
+        "costType": "resource",
+        "materialId": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "materialKey": "insulativelinermaterial",
+        "materialName": "Insulative Liner Material",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "resolvedNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "resourceGuid": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "quantity": "0.02",
+        "unit": "scu",
+        "unitType": "scu",
+        "quantityRaw": {
+          "standardCargoUnits": "0.02"
+        },
+        "minQuality": "0",
+        "slotCount": "1",
+        "sourceRef": "fde0cd65-8827-4b23-804d-cc8845dfa7ac",
+        "sourcePath": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+        "modifiers": [
+          {
+            "gameplayPropertyId": "69143912-ee80-43e9-8862-e1745f0f0b9f",
+            "gameplayProperty": "GPP_Armor_TemperatureMin",
+            "displayName": "GPP_Armor_TemperatureMin",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "500",
+                "endQuality": "1000",
+                "modifierAtStart": "1",
+                "modifierAtEnd": "1.2"
+              }
+            ],
+            "rangeErrors": []
+          },
+          {
+            "gameplayPropertyId": "6c186289-6db8-4820-a367-5292f4ea1c61",
+            "gameplayProperty": "GPP_Armor_TemperatureMax",
+            "displayName": "GPP_Armor_TemperatureMax",
+            "valueRanges": [
+              {
+                "type": "Linear",
+                "startQuality": "500",
+                "endQuality": "1000",
+                "modifierAtStart": "1",
+                "modifierAtEnd": "1.2"
+              }
+            ],
+            "rangeErrors": []
+          }
+        ]
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "ARMOURED CARAPACE",
+        "slotDisplayName": "Armoured Carapace",
+        "gameplayProperty": "GPP_Armor_DamageMitigation",
+        "gameplayPropertyId": "804e9acc-c3a5-4787-b2b1-c898e5198f92",
+        "displayName": "Damage Mitigation",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.85",
+        "modifierEnd": "1.15",
+        "modifierMode": "multiplier",
+        "rangeType": "Linear",
+        "modifierStartPercent": "-15.0",
+        "modifierEndPercent": "15.0"
+      },
+      {
+        "slot": "INSULATIVE LINER",
+        "slotDisplayName": "Insulative Liner",
+        "gameplayProperty": "GPP_Armor_TemperatureMin",
+        "gameplayPropertyId": "69143912-ee80-43e9-8862-e1745f0f0b9f",
+        "displayName": "GPP_Armor_TemperatureMin",
+        "startQuality": "500",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "INSULATIVE LINER",
+        "slotDisplayName": "Insulative Liner",
+        "gameplayProperty": "GPP_Armor_TemperatureMax",
+        "gameplayPropertyId": "6c186289-6db8-4820-a367-5292f4ea1c61",
+        "displayName": "GPP_Armor_TemperatureMax",
+        "startQuality": "500",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "parseWarnings": [
+      "blueprintName is @LOC_PLACEHOLDER"
+    ],
+    "source": {
+      "file": "D:\\scintel\\data\\libs\\foundry\\records\\crafting\\blueprints\\crafting\\fpsgear\\armour\\combat\\medium\\bp_craft_cds_legacy_armor_medium_core_01_01_02.xml",
+      "recordsRoot": "D:\\scintel\\data\\libs\\foundry\\records",
+      "relativeToFpsRoot": "armour/combat/medium/bp_craft_cds_legacy_armor_medium_core_01_01_02.xml",
+      "recordType": "CraftingBlueprintRecord.BP_CRAFT_cds_legacy_armor_medium_core_01_01_02",
+      "team": "Unknown"
+    },
+    "fpsCategory": "armor",
+    "sourceBranch": "armour",
+    "sourceRelativePath": "armour/combat/medium/bp_craft_cds_legacy_armor_medium_core_01_01_02.xml",
+    "armorFamily": "combat",
+    "armorWeight": "medium",
+    "armorSlot": "torso",
+    "familyKey": "fps_armor:medium-torso:orc-mkv-core",
+    "familyDisplayName": "ORC-mkV Core",
+    "baseName": "ORC-mkV Core",
+    "variantName": "Default",
+    "variantRole": "default",
+    "isVariant": false,
+    "variantGroupSource": "exact_name_default",
+    "variantConfidence": 0.86,
+    "outputItemId": "0368d9db-58d5-48ea-8a1b-5d646c4ad66a",
+    "outputDisplayName": "ORC-mkV Core",
+    "recipeId": "c1df92e6-56f3-4b1e-aa44-0babe5d2cd00",
+    "blueprintSourcePath": "libs/foundry/records/crafting/blueprints/crafting/fpsgear/armour/combat/medium/bp_craft_cds_legacy_armor_medium_core_01_01_02.xml"
+  }
+}

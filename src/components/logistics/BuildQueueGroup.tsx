@@ -74,7 +74,7 @@ function useIsMobileTouchLayout() {
 
 // ─── Quantization ────────────────────────────────────────────────────────────
 
-const MATERIAL_QUANTIZATION_URL = '/api/crafting/material_quality_quantization.json';
+import { CRAFTING_REFERENCE_API_URLS } from '../../lib/craftingReferenceApi';
 
 type BQMaterialQuantization = {
   materialKey?: string;
@@ -97,14 +97,14 @@ function useBQQuantization() {
 
   useEffect(() => {
     let cancelled = false;
-    const url = apiUrl(MATERIAL_QUANTIZATION_URL);
+    const url = apiUrl(CRAFTING_REFERENCE_API_URLS.materialQualityQuantization);
     fetch(url)
       .then(async (r) => {
         const data = await parseJsonResponse<BQMaterialQuantization[]>(r, {
           label: 'build queue material quantization',
           url,
         });
-        if (!r.ok) throw new Error(`${MATERIAL_QUANTIZATION_URL} ${r.status}`);
+        if (!r.ok) throw new Error(`${CRAFTING_REFERENCE_API_URLS.materialQualityQuantization} ${r.status}`);
         return data;
       })
       .then((data) => {
@@ -119,7 +119,7 @@ function useBQQuantization() {
         setByKey(map);
       })
       .catch((err) => {
-        if (import.meta.env.DEV) console.warn('[quality] failed to load material_quality_quantization.json', err);
+        if (import.meta.env.DEV) console.warn('[quality] failed to load material quality quantization', err);
       });
     return () => { cancelled = true; };
   }, []);

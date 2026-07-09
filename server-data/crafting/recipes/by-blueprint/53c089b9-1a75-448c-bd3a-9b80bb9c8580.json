@@ -1,0 +1,249 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Trenta",
+    "nameSource": "localization_item_name",
+    "componentType": "shield",
+    "size": "2",
+    "gradeRaw": "3",
+    "grade": "C",
+    "gradeSource": "AttachDef.Grade",
+    "class": "competition",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "435366d8-8b47-4cbc-b0cf-688a95a0847d",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+    "baseStats": {
+      "mass": 150,
+      "health": 220,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.9,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.9,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "resources": {
+        "consumption": {
+          "Power": 3
+        },
+        "generation": {
+          "Shield": 1216
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 70,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 1230,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 1900,
+        "decayRate": 126.6667,
+        "decayDelay": 3,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "resources": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "ItemResourceComponentParams"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/shieldgenerator/shld_yorm_s02_trenta_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "53c089b9-1a75-448c-bd3a-9b80bb9c8580",
+    "blueprintName": "BP_CRAFT_SHLD_YORM_S02_Trenta_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/shield/bp_craft_shld_yorm_s02_trenta_scitem.xml",
+    "entityClass": "33c31f29-03e7-4a23-a26c-5d625d48c1bc",
+    "craftTimeSeconds": 630,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "0.42",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "FIELD ARRAY",
+        "costType": "resource",
+        "materialKey": "laranite",
+        "materialName": "Laranite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+        "quantity": "0.68",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "FREQUENCY CONTROLLER",
+        "costType": "item",
+        "materialKey": "glacosite",
+        "materialName": "Glacosite",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "ae6d8d74-04fa-4d21-9991-4232f8eb2cfe",
+        "quantity": "58",
+        "unitType": "unit",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "FIELD ARRAY",
+        "gameplayProperty": "GPP_Shield_MaxHealth",
+        "gameplayPropertyId": "d1a48b92-56b6-4094-8765-7efa72ed3ceb",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.9",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "FIELD ARRAY",
+        "gameplayProperty": "GPP_Shield_MaxHealth",
+        "gameplayPropertyId": "d1a48b92-56b6-4094-8765-7efa72ed3ceb",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "FREQUENCY CONTROLLER",
+        "gameplayProperty": "GPP_Shield_MaxHealth",
+        "gameplayPropertyId": "d1a48b92-56b6-4094-8765-7efa72ed3ceb",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.9",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "FREQUENCY CONTROLLER",
+        "gameplayProperty": "GPP_Shield_MaxHealth",
+        "gameplayPropertyId": "d1a48b92-56b6-4094-8765-7efa72ed3ceb",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "10.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

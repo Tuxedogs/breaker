@@ -2,6 +2,8 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 
 import { handleComponentCardsRoute } from "./componentCards.routes.js";
 import { handleCraftingBlueprintSourcesRoute } from "./craftingBlueprintSources.routes.js";
+import { handleCraftingRecipesRoute } from "./craftingRecipes.routes.js";
+import { handleCraftingReferenceRoute } from "./craftingReference.routes.js";
 
 function sendJson(
   response: ServerResponse,
@@ -50,6 +52,23 @@ export async function runCraftingBlueprintSourcesApiHandler(
         componentCardsResult.body,
         componentCardsResult.status === 405 ? { allow: "GET" } : undefined,
       );
+      return;
+    }
+
+    const recipesResult = await handleCraftingRecipesRoute(method, rawUrl, body);
+    if (recipesResult) {
+      sendJson(
+        response,
+        recipesResult.status,
+        recipesResult.body,
+        recipesResult.status === 405 ? { allow: "GET, POST" } : undefined,
+      );
+      return;
+    }
+
+    const referenceResult = await handleCraftingReferenceRoute(method, rawUrl);
+    if (referenceResult) {
+      sendJson(response, referenceResult.status, referenceResult.body);
       return;
     }
 

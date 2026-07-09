@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 import type { InventoryUnitType } from "../../types/logistics";
-
-const MATERIAL_IDENTITY_URL = "/api/crafting/material_identity_index.json";
+import { getMaterialIdentityIndexFromApi } from "@/lib/craftingReferenceApi";
 
 export interface MaterialIdentity {
   materialKey: string;
@@ -17,10 +16,6 @@ export interface MaterialIdentity {
   refinesToMaterialKey?: string | null;
   aliases?: Record<string, string[]> | string[];
 }
-
-type MaterialIdentityPayload = {
-  materials?: unknown;
-};
 
 let cachedMaterials: MaterialIdentity[] | null = null;
 let loadPromise: Promise<MaterialIdentity[]> | null = null;
@@ -38,10 +33,8 @@ function loadMaterialIdentities(): Promise<MaterialIdentity[]> {
   if (cachedMaterials) return Promise.resolve(cachedMaterials);
   if (loadPromise) return loadPromise;
 
-  loadPromise = fetch(MATERIAL_IDENTITY_URL)
-    .then(async (response) => {
-      if (!response.ok) throw new Error(`${MATERIAL_IDENTITY_URL} ${response.status}`);
-      const payload = await response.json() as MaterialIdentityPayload;
+  loadPromise = getMaterialIdentityIndexFromApi()
+    .then((payload) => {
       const materials = Array.isArray(payload.materials) ? payload.materials.filter(isMaterialIdentity) : [];
       cachedMaterials = materials;
       return materials;

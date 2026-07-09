@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Omnisky III Cannon",
+    "nameSource": "localization_item_name",
+    "componentType": "weaponGun",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "eccba58a-f6d9-42e8-95c6-d0a65763e583",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+    "baseStats": {
+      "mass": 144,
+      "health": 550,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.6,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 14.1,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 446,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/amrs_lasercannon_s1.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "280f47b7-8434-410c-b854-380768fdccec",
+    "blueprintName": "BP_CRAFT_AMRS_LaserCannon_S1",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/weapons/laser/cannon/bp_craft_amrs_lasercannon_s1.xml",
+    "entityClass": "26838ca7-418a-47d2-8429-7339ebbb8993",
+    "craftTimeSeconds": 540,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "0.36",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "EMITTER",
+        "costType": "item",
+        "materialKey": "hadanite",
+        "materialName": "Hadanite",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "125dd723-95ad-488d-830f-62c954445ca1",
+        "quantity": "7",
+        "unitType": "unit",
+        "minQuality": "1"
+      },
+      {
+        "slot": "APERTURE IRIS",
+        "costType": "item",
+        "materialKey": "dolivine",
+        "materialName": "Dolivine",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "20094ded-ad04-46a3-b734-9e37aa3154b3",
+        "quantity": "7",
+        "unitType": "unit",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "EMITTER",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "APERTURE IRIS",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_FullStrikeOnStationB",
+        "poolGuid": "fb2a7d3e-8e67-4567-a08f-409d88cccc8a",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Full Strike On Station B"
+      }
+    ]
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "NDB-30 Repeater",
+    "nameSource": "localization_item_name",
+    "componentType": "weaponGun",
+    "size": "3",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "de0d3594-9f18-42c0-8a90-6edd723d80f8",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+    "baseStats": {
+      "mass": 100,
+      "health": 1024,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 0.6,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 34,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 230,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/mxox_neutronrepeater_s3.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "3604eb86-8850-41de-8c50-279268401355",
+    "blueprintName": "BP_CRAFT_MXOX_NeutronRepeater_S3",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/weapons/$templates/ballistic/bp_craft_mxox_neutronrepeater_s3.xml",
+    "entityClass": "2f9fad1d-f591-4e69-ae64-af5ba0a883f7",
+    "craftTimeSeconds": 1680,
+    "materials": [
+      {
+        "slot": "REINFORCED FRAME",
+        "costType": "resource",
+        "materialKey": "titanium",
+        "materialName": "Titanium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+        "quantity": "1.16",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "ELECTRONICS",
+        "costType": "resource",
+        "materialKey": "gold",
+        "materialName": "Gold",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "21825507-7923-4683-9bf3-9cfe316940e3",
+        "quantity": "0.4",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "RADIATOR",
+        "costType": "resource",
+        "materialKey": "lindinium",
+        "materialName": "Lindinium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "392b4dca-449a-4d4d-8fef-beab024d9ee7",
+        "quantity": "0.23",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "REINFORCED FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "ELECTRONICS",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "RADIATOR",
+        "gameplayProperty": "GPP_Weapon_Damage",
+        "gameplayPropertyId": "cfc129ce-488a-46f2-92f7-9272cd0cfdfb",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_Xenothreat2_100_03",
+        "poolGuid": "1bcdf005-1192-4b2f-b8c1-86e48e084f97",
+        "sourceFolder": "xenothreat2rewards",
+        "weight": 1,
+        "displayName": "Xenothreat 2 100 03"
+      }
+    ]
+  }
+}

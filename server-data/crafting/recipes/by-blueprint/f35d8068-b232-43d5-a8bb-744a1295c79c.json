@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Medium",
+    "nameSource": "blueprintGuid",
+    "componentType": "salvageModifier",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "819545f4-18af-49a6-814e-ca4fd08f56e5",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml",
+    "baseStats": {
+      "mass": 0.1
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/utility/salvage/salvagemodifiers/salvage_modifier_scraper_salvation_medium.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      }
+    },
+    "blueprintGuid": "f35d8068-b232-43d5-a8bb-744a1295c79c",
+    "blueprintName": "BP_CRAFT_Salvage_Modifier_Scraper_Salvation_Medium",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/salvage/bp_craft_salvage_modifier_scraper_salvation_medium.xml",
+    "entityClass": "089f7dc6-8ff1-415b-832d-7a96b92afdfc",
+    "craftTimeSeconds": 240,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.04",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "WIRING",
+        "costType": "resource",
+        "materialKey": "copper",
+        "materialName": "Copper",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "a789f57a-e12b-4bcd-8132-e0c03d84fc89",
+        "quantity": "0.04",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "OCULAR ENHANCER",
+        "costType": "item",
+        "materialKey": "sadaryx",
+        "materialName": "Sadaryx",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "51b456cd-e73e-42a8-b36e-0bf6fbe29ce6",
+        "quantity": "4",
+        "unitType": "unit",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Efficiency",
+        "gameplayPropertyId": "8ac31287-5024-4f5c-b214-64d361543c53",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.8",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Radius",
+        "gameplayPropertyId": "a16e33d1-73b0-46cb-a579-84ebc81c3b00",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Speed",
+        "gameplayPropertyId": "30f1ce44-3b3c-4610-a20d-1815a46b69ec",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "WIRING",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Radius",
+        "gameplayPropertyId": "a16e33d1-73b0-46cb-a579-84ebc81c3b00",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      },
+      {
+        "slot": "WIRING",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Speed",
+        "gameplayPropertyId": "30f1ce44-3b3c-4610-a20d-1815a46b69ec",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "OCULAR ENHANCER",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Radius",
+        "gameplayPropertyId": "a16e33d1-73b0-46cb-a579-84ebc81c3b00",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "OCULAR ENHANCER",
+        "gameplayProperty": "GPP_Weapon_HullScraping_Speed",
+        "gameplayPropertyId": "30f1ce44-3b3c-4610-a20d-1815a46b69ec",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.95",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_AdagioResourceGatheringShipSalvage",
+        "poolGuid": "16a99583-68a3-4f0e-b03c-87d70f6172dc",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Adagio Resource Gathering Ship Salvage"
+      }
+    ]
+  }
+}

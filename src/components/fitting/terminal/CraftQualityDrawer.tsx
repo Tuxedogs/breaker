@@ -14,6 +14,7 @@ import {
 import type { ComponentRecipe } from "../../industry/crafting/utils/craftingTypes";
 import { getFittingComponent, type FittingComponentDetail } from "../../../lib/fitting/fittingApi";
 import { getCraftingItemByBlueprintGuid } from "../../../lib/craftingData";
+import { getMaterialQualityQuantizationFromApi } from "../../../lib/craftingReferenceApi";
 import type { CraftQualityOverride } from "../../../lib/fitting/fittingTerminalTypes";
 import type { PortBreakdownRow } from "../../../lib/fitting/fittingPortGrouping";
 import "../../../components/industry/crafting/recipe-browser.css";
@@ -80,7 +81,7 @@ export default function CraftQualityDrawer({
     Promise.all([
       getCraftingItemByBlueprintGuid(componentId),
       getFittingComponent(componentId, controller.signal),
-      fetch("/api/crafting/material_quality_quantization.json").then((response) => response.json()),
+      getMaterialQualityQuantizationFromApi(),
     ])
       .then(([craftRecipe, componentDetail, quantizationRaw]) => {
         if (controller.signal.aborted) return;

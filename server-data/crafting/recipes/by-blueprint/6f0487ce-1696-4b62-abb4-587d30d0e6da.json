@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Nozzle Fast",
+    "nameSource": "blueprintGuid",
+    "componentType": "dockingCollar",
+    "size": "1",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "819545f4-18af-49a6-814e-ca4fd08f56e5",
+    "entityClassPath": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+    "baseStats": {
+      "mass": 250,
+      "health": 7140,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 120,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/fuel_nozzle_grin_nozzlefast.xml",
+        "node": "IRSignature"
+      }
+    },
+    "blueprintGuid": "6f0487ce-1696-4b62-abb4-587d30d0e6da",
+    "blueprintName": "BP_CRAFT_Nozzle_FuelGiver_GRIN_NozzleFast",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/refuelling/nozzle/bp_craft_nozzle_fuelgiver_grin_nozzlefast.xml",
+    "entityClass": "d5456c35-a30b-4e13-bae2-b5609a43909a",
+    "craftTimeSeconds": 230,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.8",
+        "unitType": "scu",
+        "minQuality": "0"
+      },
+      {
+        "slot": "MAIN VALVE",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "0.2",
+        "unitType": "scu",
+        "minQuality": "0"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_FuelNozzle",
+        "poolGuid": "819a9851-9c2e-4a24-872b-b860331d32d0",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Fuel Nozzle"
+      }
+    ]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "CNOU Pioneer",
+    "nameSource": "blueprintGuid",
+    "componentType": "cooler",
+    "size": "4",
+    "class": null,
+    "classSource": "not_found",
+    "blueprintGuid": "d7f3ad24-fca7-4393-b026-f55675cfe820",
+    "blueprintName": "BP_CRAFT_COOL_S04_CNOU_Pioneer",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/cooler/bp_craft_cool_s04_cnou_pioneer.xml",
+    "entityClass": "3cf6753c-d69c-4980-a45e-724151407096",
+    "craftTimeSeconds": 1020,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "tungsten",
+        "materialName": "Tungsten",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "60f116f4-c02a-45b2-9ded-333747795124",
+        "quantity": "5.25",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "COOLANT",
+        "costType": "resource",
+        "materialKey": "pressurizedice",
+        "materialName": "Pressurized Ice",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f9f3251a-8e48-408a-b957-f1e3d5d3e213",
+        "quantity": "5.25",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "3.15",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "COOLANT",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.85",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-15.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "COOLANT",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.15",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "15.0"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.95",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

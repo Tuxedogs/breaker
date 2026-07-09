@@ -1,0 +1,251 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Regulus",
+    "nameSource": "localization_item_name",
+    "componentType": "powerplant",
+    "size": "1",
+    "gradeRaw": "3",
+    "grade": "C",
+    "gradeSource": "AttachDef.Grade",
+    "class": "military",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "cf4a74bf-eb2c-462a-9b78-f7f2724c31d2",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+    "baseStats": {
+      "mass": 250,
+      "health": 270,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.85,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.7,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 41.6,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 7920,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 4100,
+        "decayRate": 273.3333,
+        "decayDelay": 1.5,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/powerplant/powr_aegs_s01_regulus_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "92f7d7b2-9b64-4258-8b33-f56c49bd3c6b",
+    "blueprintName": "BP_CRAFT_POWR_AEGS_S01_Regulus_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/powerplant/bp_craft_powr_aegs_s01_regulus_scitem.xml",
+    "entityClass": "688aab9c-bc62-4774-be7d-065dee7e2187",
+    "craftTimeSeconds": 840,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "borase",
+        "materialName": "Borase",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+        "quantity": "0.35",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "costType": "resource",
+        "materialKey": "laranite",
+        "materialName": "Laranite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+        "quantity": "0.14",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "STATOR CORES",
+        "costType": "resource",
+        "materialKey": "taranite",
+        "materialName": "Taranite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "06cafea0-49fe-4dce-b0f0-dc583316c66d",
+        "quantity": "0.24",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "0",
+        "endQuality": "399",
+        "modifierStart": "-1",
+        "modifierEnd": "-1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "400",
+        "endQuality": "899",
+        "modifierStart": "0",
+        "modifierEnd": "0",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "VOLTAGE REGULATOR",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "900",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "0",
+        "endQuality": "399",
+        "modifierStart": "-1",
+        "modifierEnd": "-1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "400",
+        "endQuality": "899",
+        "modifierStart": "0",
+        "modifierEnd": "0",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      },
+      {
+        "slot": "STATOR CORES",
+        "gameplayProperty": "GPP_ItemResource_PowerGeneration",
+        "gameplayPropertyId": "d01a2751-f605-42a7-97b2-ce0b8322e172",
+        "startQuality": "900",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1",
+        "modifierMode": "integerAdditive",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_LinearIntegerAdditive"
+      }
+    ],
+    "rewardPools": []
+  }
+}

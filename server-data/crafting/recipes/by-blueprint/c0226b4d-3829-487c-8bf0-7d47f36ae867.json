@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Polaris",
+    "nameSource": "blueprintGuid",
+    "componentType": "radar",
+    "size": "4",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "093e6eba-93fa-4dad-b3dd-38966934e34e",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+    "baseStats": {
+      "mass": 14000,
+      "health": 5000,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 288,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 4000,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 11000,
+        "decayRate": 900,
+        "decayDelay": 5,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_rsi_s04_polaris.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "c0226b4d-3829-487c-8bf0-7d47f36ae867",
+    "blueprintName": "BP_CRAFT_RADR_RSI_S04_Polaris",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/radar/bp_craft_radr_rsi_s04_polaris.xml",
+    "entityClass": "a39d0aa5-f1af-49fb-aad0-0c1cde0f133f",
+    "craftTimeSeconds": 90,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "borase",
+        "materialName": "Borase",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "33bff393-42f1-4f70-85a1-71e695ed2a5a",
+        "quantity": "5.3",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "costType": "resource",
+        "materialKey": "bexalite",
+        "materialName": "Bexalite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "999e3149-fd10-49ac-914f-8911e61c6122",
+        "quantity": "2.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "costType": "resource",
+        "materialKey": "stileron",
+        "materialName": "Stileron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "8cd317a3-df9b-4315-8ac3-0f1fca42dfd4",
+        "quantity": "2.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Ecouter",
+    "nameSource": "localization_item_name",
+    "componentType": "radar",
+    "size": "1",
+    "gradeRaw": "3",
+    "grade": "C",
+    "gradeSource": "AttachDef.Grade",
+    "class": "military",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "3909dad3-eab3-4da7-9d90-74d7064d5900",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+    "baseStats": {
+      "mass": 120,
+      "health": 600,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 30.7,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 1800,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 4485,
+        "decayRate": 220,
+        "decayDelay": 1.73,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/radar/radr_grnp_s01_ecouter.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "278d8ed0-3a60-4e31-b8ad-3f53d37be067",
+    "blueprintName": "BP_CRAFT_RADR_GRNP_S01_Ecouter",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/radar/bp_craft_radr_grnp_s01_ecouter.xml",
+    "entityClass": "b0ccd135-4424-417c-95e4-594a88d9b72f",
+    "craftTimeSeconds": 600,
+    "materials": [
+      {
+        "slot": "CASE",
+        "costType": "resource",
+        "materialKey": "titanium",
+        "materialName": "Titanium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "07570c9f-fdf6-4bca-a56b-c42809ec0e01",
+        "quantity": "0.28",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "costType": "resource",
+        "materialKey": "laranite",
+        "materialName": "Laranite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "7f4599b0-a2b2-4178-8c7e-13292054ab20",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "costType": "resource",
+        "materialKey": "gold",
+        "materialName": "Gold",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "21825507-7923-4683-9bf3-9cfe316940e3",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "CASE",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "TRANSMITTER",
+        "gameplayProperty": "GPP_Radar_MinAimAssistDistance",
+        "gameplayPropertyId": "a89e5659-e184-4d95-acec-5be747608212",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SIGNAL PROCESSOR",
+        "gameplayProperty": "GPP_Radar_MaxAimAssistDistance",
+        "gameplayPropertyId": "ede03349-4696-4812-a09c-d597f982d410",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      }
+    ],
+    "rewardPools": []
+  }
+}

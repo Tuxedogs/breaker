@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "Utility 1",
+    "nameSource": "blueprintGuid",
+    "componentType": "tractorbeam",
+    "size": "2",
+    "gradeRaw": "1",
+    "grade": "A",
+    "gradeSource": "AttachDef.Grade",
+    "class": null,
+    "classSource": "not_found",
+    "manufacturerGuid": "819545f4-18af-49a6-814e-ca4fd08f56e5",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+    "baseStats": {
+      "mass": 90,
+      "health": 1050,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 0,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 120,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 0,
+        "decayRate": 0.15
+      },
+      "distortion": {
+        "maximum": 500000,
+        "decayRate": 500000,
+        "decayDelay": 0,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/weapons/wep_tractorbeam_s2_utility_1.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "39e6a987-6b8f-4a75-95da-945522219147",
+    "blueprintName": "BP_CRAFT_WEP_TractorBeam_S2_Utility_1",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/tractorbeam/bp_craft_wep_tractorbeam_s2_utility_1.xml",
+    "entityClass": "39d9b779-561f-42c2-9e6d-a832ed37a303",
+    "craftTimeSeconds": 420,
+    "materials": [
+      {
+        "slot": "FRAME",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.64",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "FOCUS ZONE PLATE",
+        "costType": "resource",
+        "materialKey": "agricium",
+        "materialName": "Agricium",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "dc6fbcbb-5990-4ed5-82ee-93152dab7845",
+        "quantity": "0.26",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "APETURE IRIS",
+        "costType": "item",
+        "materialKey": "dolivine",
+        "materialName": "Dolivine",
+        "materialForm": "gem",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingItemEntityGuid",
+        "costId": "20094ded-ad04-46a3-b734-9e37aa3154b3",
+        "quantity": "13",
+        "unitType": "unit",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.8",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Weapon_Tractor_FullStrengthDist",
+        "gameplayPropertyId": "1bb618c4-db0e-4a59-a34d-0f515ae7aec4",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "FRAME",
+        "gameplayProperty": "GPP_Weapon_Tractor_MaxDist",
+        "gameplayPropertyId": "2d957da0-9f3a-4e21-9c2a-dd1e5e4123f8",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "FOCUS ZONE PLATE",
+        "gameplayProperty": "GPP_Weapon_Tractor_Force",
+        "gameplayPropertyId": "d84a7196-e6da-41bb-9224-e3abadc83163",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.8",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "FOCUS ZONE PLATE",
+        "gameplayProperty": "GPP_Weapon_Tractor_FullStrengthDist",
+        "gameplayPropertyId": "1bb618c4-db0e-4a59-a34d-0f515ae7aec4",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      },
+      {
+        "slot": "APETURE IRIS",
+        "gameplayProperty": "GPP_Weapon_Tractor_MaxVolume",
+        "gameplayPropertyId": "254b0e0c-9688-4f45-badb-46851eaed25b",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.8",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "APETURE IRIS",
+        "gameplayProperty": "GPP_Weapon_Tractor_MaxDist",
+        "gameplayPropertyId": "2d957da0-9f3a-4e21-9c2a-dd1e5e4123f8",
+        "startQuality": "0",
+        "endQuality": "1000",
+        "modifierStart": "0.9",
+        "modifierEnd": "1.1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-10.0",
+        "modifierEndPercent": "10.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_RedWind",
+        "poolGuid": "5406fc34-0f96-4d22-ae59-84307ada0288",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Red Wind"
+      }
+    ]
+  }
+}

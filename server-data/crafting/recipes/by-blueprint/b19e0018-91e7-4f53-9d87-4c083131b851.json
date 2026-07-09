@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "kind": "vehicle",
+  "record": {
+    "displayName": "FlashFreeze",
+    "nameSource": "localization_item_name",
+    "componentType": "cooler",
+    "size": "1",
+    "gradeRaw": "2",
+    "grade": "B",
+    "gradeSource": "AttachDef.Grade",
+    "class": "civilian",
+    "classSource": "AttachDef.Localization.Description->global.ini:Class",
+    "manufacturerGuid": "60d0f346-0c22-4869-81d3-1168b526a258",
+    "entityClassPath": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+    "baseStats": {
+      "mass": 130,
+      "health": 150,
+      "damageResistances": {
+        "physical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.9,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "energy": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.9,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "distortion": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "thermal": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 0.1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "biochemical": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        },
+        "stun": {
+          "ignoreMeleeDamage": 1,
+          "multiplier": 1,
+          "threshold": 0,
+          "damageCap": 0
+        }
+      },
+      "resources": {
+        "consumption": {
+          "Power": 2
+        },
+        "generation": {
+          "Coolant": 26
+        }
+      },
+      "selfRepair": {
+        "maxRepairCount": 1,
+        "timeToRepair": 30.9,
+        "healthRatio": 0.2
+      },
+      "emSignature": {
+        "nominalSignature": 750,
+        "decayRate": 0.15
+      },
+      "irSignature": {
+        "nominalSignature": 4000,
+        "decayRate": 0.5
+      },
+      "distortion": {
+        "maximum": 2200,
+        "decayRate": 146.6667,
+        "decayDelay": 1.5,
+        "warningRatio": 0.75
+      }
+    },
+    "statSources": {
+      "mass": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "SEntityRigidPhysicsControllerParams",
+        "attribute": "Mass"
+      },
+      "health": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "SHealthComponentParams",
+        "attribute": "Health"
+      },
+      "damageResistances": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "SHealthComponentParams/DamageResistances"
+      },
+      "resources": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "ItemResourceComponentParams"
+      },
+      "selfRepair": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "ItemResourceComponentParams/selfRepair"
+      },
+      "emSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "EMSignature"
+      },
+      "irSignature": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "IRSignature"
+      },
+      "distortion": {
+        "path": "libs/foundry/records/entities/scitem/ships/cooler/cool_lplt_s01_flashfreeze_scitem.xml",
+        "node": "SDistortionParams"
+      }
+    },
+    "blueprintGuid": "b19e0018-91e7-4f53-9d87-4c083131b851",
+    "blueprintName": "BP_CRAFT_COOL_LPLT_S01_FlashFreeze_SCItem",
+    "blueprintPath": "libs/foundry/records/crafting/blueprints/crafting/vehiclegear/cooler/bp_craft_cool_lplt_s01_flashfreeze_scitem.xml",
+    "entityClass": "96860a78-4b34-4888-93a5-12efb259a5ff",
+    "craftTimeSeconds": 510,
+    "materials": [
+      {
+        "slot": "SHELL",
+        "costType": "resource",
+        "materialKey": "torite",
+        "materialName": "Torite",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "75b37a54-45c9-4f27-ac09-9830f092dd86",
+        "quantity": "0.16",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "COOLANT",
+        "costType": "resource",
+        "materialKey": "pressurizedice",
+        "materialName": "Pressurized Ice",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f9f3251a-8e48-408a-b957-f1e3d5d3e213",
+        "quantity": "0.16",
+        "unitType": "scu",
+        "minQuality": "1"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "costType": "resource",
+        "materialKey": "iron",
+        "materialName": "Iron",
+        "materialForm": "refined",
+        "materialNameSource": "material_identity_index",
+        "guidRole": "craftingResourceGuid",
+        "costId": "f386a33c-ac9a-400a-a7b8-fe1fc7c8d270",
+        "quantity": "0.1",
+        "unitType": "scu",
+        "minQuality": "1"
+      }
+    ],
+    "qualityModifiers": [
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.8",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-20.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "SHELL",
+        "gameplayProperty": "GPP_Health_MaxHealth",
+        "gameplayPropertyId": "93a49e68-01cf-4d7e-b995-8224466a9982",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.2",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "20.0"
+      },
+      {
+        "slot": "COOLANT",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.85",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-15.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "COOLANT",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.15",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "15.0"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "0",
+        "endQuality": "500",
+        "modifierStart": "0.95",
+        "modifierEnd": "1",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "-5.0",
+        "modifierEndPercent": "0.0"
+      },
+      {
+        "slot": "PUMP IMPELLER",
+        "gameplayProperty": "GPP_ItemResource_CoolantGeneration",
+        "gameplayPropertyId": "31e2f3b5-7fb3-41c2-b2d9-7a97adf9f7fe",
+        "startQuality": "501",
+        "endQuality": "1000",
+        "modifierStart": "1",
+        "modifierEnd": "1.05",
+        "modifierMode": "multiplier",
+        "rangeType": "CraftingGameplayPropertyModifierValueRange_Linear",
+        "modifierStartPercent": "0.0",
+        "modifierEndPercent": "5.0"
+      }
+    ],
+    "rewardPools": [
+      {
+        "poolName": "BlueprintPoolRecord.BP_REWARDS_NyxHeadhuntersEasy",
+        "poolGuid": "ed0b8aaa-eec6-4c72-b9e7-b0b48ab5e135",
+        "sourceFolder": "48blueprints",
+        "weight": 1,
+        "displayName": "Nyx Headhunters Easy"
+      }
+    ]
+  }
+}
