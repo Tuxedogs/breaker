@@ -128,17 +128,27 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
 
   if (hasStats) {
     return (
-      <div className="bq-stats-strip" aria-label="Component stats">
-        {displayStatRows.map((stat) => (
-          <StatTile key={`${stat.label}:${stat.value}`} stat={stat} />
-        ))}
+      <div className="bq-stats-panel" aria-label="Component stats">
+        <div className="bq-stats-strip">
+          {displayStatRows.map((stat) => (
+            <StatTile key={`${stat.label}:${stat.value}`} stat={stat} />
+          ))}
+        </div>
       </div>
     );
   }
 
   if (statsLoading) {
-    return <p className="bq-stats-breakdown-empty">Loading stats...</p>;
+    return (
+      <div className="bq-stats-panel bq-stats-panel--empty">
+        <p className="bq-stats-breakdown-empty">Loading stats...</p>
+      </div>
+    );
   }
 
-  return <p className="bq-stats-breakdown-empty">Stats unavailable</p>;
+  return (
+    <div className="bq-stats-panel bq-stats-panel--empty">
+      <p className="bq-stats-breakdown-empty">Stats unavailable</p>
+    </div>
+  );
 }
