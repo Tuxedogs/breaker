@@ -94,14 +94,22 @@
   min-height: 121px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 12px;
-  padding: 5px;
+  gap: 10px;
+  padding: 10px;
   border: 1px solid var(--panel-border);
   border-radius: 12px;
   background: var(--panel-bg);
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.bq-queue-col-body {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
 }
 
 .bq-queue-col-head {
@@ -124,6 +132,7 @@
 .bq-queue-col-title em {
   font-style: normal;
   color: var(--text-secondary);
+  margin-left: 0.35rem;
 }
 
 .bq-add-craft-wrap { position: relative; }
@@ -183,8 +192,12 @@
 .bq-queue-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 0;
+  flex: 0 0 auto;
+  padding: 3px;
+  border: 1px solid rgba(65, 132, 160, 0.2);
+  border-radius: 9px;
+  background: rgba(3, 18, 28, 0.72);
 }
 
 .bq-queue-tab {
@@ -193,38 +206,70 @@
   justify-content: center;
   gap: 6px;
   min-height: 30px;
-  padding: 0 10px;
-  border: 1px solid rgba(148, 163, 184, 0.14);
-  border-radius: 8px;
-  background: rgba(8, 14, 20, 0.55);
-  color: var(--bq-dim);
-  font-size: 0.68rem;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.bq-queue-tab-label {
+  line-height: 1;
 }
 
 .bq-queue-tab.is-active {
-  border-color: rgba(255, 153, 0, 0.34);
-  background: rgba(255, 153, 0, 0.08);
-  color: var(--bq-text);
-  box-shadow: 0 0 16px rgba(255, 153, 0, 0.08);
+  background: rgba(0, 230, 210, 0.1);
+  color: var(--text-primary);
+  box-shadow:
+    0 0 0 1px rgba(0, 230, 210, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.bq-queue-tab:not(.is-active):hover {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .bq-queue-tab-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
   color: inherit;
+  font-size: 10px;
+  font-weight: 800;
   font-variant-numeric: tabular-nums;
-  opacity: 0.82;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.bq-queue-tab.is-active .bq-queue-tab-count {
+  background: rgba(0, 230, 210, 0.16);
+  color: var(--accent-cyan);
 }
 
 .bq-queue-list {
+  flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   display: grid;
-  gap: 10px;
+  gap: 8px;
   align-content: start;
-  padding: 2px 3px 4px 2px;
+  padding: 1px 2px 2px 1px;
 }
 
 .bq-queue-col-foot { padding-top: 0; }
@@ -241,20 +286,24 @@
 /* Craft cards — left queue rail */
 .bq-craft-card {
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) 54px;
+  grid-template-columns: 22px minmax(0, 1fr) 48px;
   grid-template-rows: minmax(0, 1fr);
-  column-gap: 12px;
+  column-gap: 10px;
   align-items: center;
   width: 100%;
-  min-height: 82px;
-  padding: 10px 12px;
+  min-height: 72px;
+  padding: 9px 10px;
   border: 1px solid rgba(65, 132, 160, 0.22);
   background: #051A28;
-  border-radius: 10px;
+  border-radius: 9px;
   color: inherit;
   text-align: left;
   cursor: pointer;
   overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .bq-craft-card:hover {
@@ -269,6 +318,33 @@
     0 0 0 1px rgba(0, 230, 210, 0.13),
     0 0 22px rgba(0, 230, 210, 0.1),
     inset 0 0 18px rgba(0, 230, 210, 0.045);
+}
+
+.bq-craft-card--done {
+  border-color: rgba(34, 211, 122, 0.18);
+  background: rgba(5, 26, 40, 0.72);
+  opacity: 0.88;
+}
+
+.bq-craft-card--done:hover {
+  opacity: 1;
+  border-color: rgba(34, 211, 122, 0.28);
+}
+
+.bq-craft-card--done.is-selected {
+  border-color: rgba(34, 211, 122, 0.42);
+  background: rgba(8, 32, 28, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 122, 0.14),
+    0 0 18px rgba(34, 211, 122, 0.1);
+}
+
+.bq-craft-card--done .bq-craft-card-ring-fill {
+  stroke: var(--success);
+}
+
+.bq-craft-card--done .bq-craft-card-ring > span {
+  color: var(--success);
 }
 
 .bq-craft-card.allocation-owner-highlight,
@@ -369,8 +445,8 @@
 
 .bq-craft-card-ring {
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
 }
@@ -2871,7 +2947,7 @@
 
   .bq-queue-col {
     order: 1;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: 8px;
     max-height: none;
     padding: 8px;
@@ -2879,6 +2955,12 @@
     box-shadow: none;
     overflow: visible;
     overflow-anchor: none;
+  }
+
+  .bq-queue-col-body {
+    min-height: 0;
+    gap: 6px;
+    overflow: visible;
   }
 
   .bq-queue-col-head {
@@ -2902,6 +2984,7 @@
   }
 
   .bq-queue-list {
+    flex: 0 0 auto;
     display: flex;
     align-items: flex-start;
     gap: 8px;

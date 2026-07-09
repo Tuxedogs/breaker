@@ -201,8 +201,9 @@ export default function BuildQueuePage() {
         <aside className="bq-queue-col" aria-label="Build queue list">
           <header className="bq-queue-col-head">
             <span className="bq-queue-col-title">
-              Queue <em>({activeRows.length}/{MAX_QUEUE_SLOTS})</em>
-            </span>            <div className="bq-add-craft-wrap">
+              Build Queue <em>{activeRows.length}/{MAX_QUEUE_SLOTS}</em>
+            </span>
+            <div className="bq-add-craft-wrap">
               <button
                 type="button"
                 className="bq-add-craft-btn"
@@ -224,33 +225,37 @@ export default function BuildQueuePage() {
             </div>
           </header>
 
-          <div className="bq-queue-tabs" role="tablist" aria-label="Queue sections">
-            <button
-              type="button"
-              role="tab"
-              className={`bq-queue-tab${queueTab === "active" ? " is-active" : ""}`}
-              aria-selected={queueTab === "active"}
-              onClick={() => setQueueTab("active")}
-            >
-              Active <span className="bq-queue-tab-count">{activeRows.length}</span>
-            </button>
-            <button
-              type="button"
-              role="tab"
-              className={`bq-queue-tab${queueTab === "completed" ? " is-active" : ""}`}
-              aria-selected={queueTab === "completed"}
-              onClick={() => setQueueTab("completed")}
-            >
-              Completed <span className="bq-queue-tab-count">{completedRows.length}</span>
-            </button>
-          </div>
+          <div className="bq-queue-col-body">
+            <div className="bq-queue-tabs" role="tablist" aria-label="Queue sections">
+              <button
+                type="button"
+                role="tab"
+                className={`bq-queue-tab${queueTab === "active" ? " is-active" : ""}`}
+                aria-selected={queueTab === "active"}
+                onClick={() => setQueueTab("active")}
+              >
+                <span className="bq-queue-tab-label">Active</span>
+                <span className="bq-queue-tab-count">{activeRows.length}</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                className={`bq-queue-tab${queueTab === "completed" ? " is-active" : ""}`}
+                aria-selected={queueTab === "completed"}
+                onClick={() => setQueueTab("completed")}
+              >
+                <span className="bq-queue-tab-label">Completed</span>
+                <span className="bq-queue-tab-count">{completedRows.length}</span>
+              </button>
+            </div>
 
-          <div            className="bq-queue-list"
-            onPointerDown={handleMobileSelectorPointerDown}
-            onPointerMove={handleMobileSelectorPointerMove}
-            onPointerUp={handleMobileSelectorPointerEnd}
-            onPointerCancel={handleMobileSelectorPointerEnd}
-          >
+            <div
+              className="bq-queue-list"
+              onPointerDown={handleMobileSelectorPointerDown}
+              onPointerMove={handleMobileSelectorPointerMove}
+              onPointerUp={handleMobileSelectorPointerEnd}
+              onPointerCancel={handleMobileSelectorPointerEnd}
+            >
             {visibleRows.length === 0 ? (
               <div className="bq-empty-state">
                 {queueTab === "active" ? "No builds queued yet." : "No completed crafts yet."}
@@ -292,7 +297,9 @@ export default function BuildQueuePage() {
                   highlighted={row.item.id === allocationOwnerHighlightId}
                   onSelect={setSelectedItemId}
                 />
-              ))}          </div>
+              ))}
+            </div>
+          </div>
 
           <footer className="bq-queue-col-foot">
             <Link className="bq-add-another-btn" to="/industry/crafting">

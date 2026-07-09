@@ -69,7 +69,8 @@ export default function BuildQueueCraftCard({
   const fulfillment = getItemFulfillmentState(item, inputs, inventory);
   const progress = getBuildQueueItemProgress(item, inventory, recipeInputsByRecipeId) ?? 0;
   const statusLabel = getStatusLabel(item, fulfillment);
-  const statusClass = item.status === "complete"
+  const isCraftComplete = item.status === "complete";
+  const statusClass = isCraftComplete
     ? "ready"
     : fulfillment === "complete"
       ? "ready"
@@ -85,6 +86,7 @@ export default function BuildQueueCraftCard({
         "bq-craft-card",
         selected ? "is-selected" : "",
         highlighted ? "allocation-owner-highlight" : "",
+        isCraftComplete ? "bq-craft-card--done" : "",
         `bq-craft-card--${statusClass}`,
       ].filter(Boolean).join(" ")}
       onClick={() => onSelect(item.id)}
