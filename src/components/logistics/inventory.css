@@ -3013,6 +3013,85 @@
   }
 }
 
+/* ── 2K readability (2560×1440) ── */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .logi-inv-page {
+    --inv-text-xs: 12px;
+    --inv-text-sm: 13px;
+    --inv-text-md: 14px;
+    --inv-text-lg: 15px;
+    padding: 22px 26px;
+  }
+
+  .logi-inv-page .logi-inv-layout {
+    max-width: min(1880px, 100%);
+  }
+
+  .logi-inv-page .logi-location-stack-table-wrap--cards,
+  .logi-inv-page .logi-location-window-block--cards {
+    max-width: min(2280px, 100%);
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
+  }
+
+  .logi-inv-page .logi-location-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 18px;
+  }
+
+  .logi-inv-sync-status {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+    padding: 0 12px;
+  }
+
+  .logi-inv-quality-group-head {
+    font-size: var(--app-text-title-sm);
+  }
+
+  .logi-inv-quality-group-total {
+    font-size: var(--app-text-stat);
+  }
+
+  .logi-inv-quality-group-count,
+  .logi-inv-manage-count {
+    font-size: var(--app-text-chip);
+  }
+
+  .logi-inv-box-tile-qty {
+    font-size: var(--app-text-title-sm);
+  }
+
+  .logi-inv-manage-btn,
+  .logi-inv-manage-toolbar button,
+  .logi-inv-undo-btn {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .logi-inv-row-icon-btn {
+    width: var(--app-action-size);
+    height: var(--app-action-size);
+  }
+
+  .logi-inv-view-toggle button {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .logi-inv-modal-head h2 {
+    font-size: var(--app-text-title);
+  }
+
+  .logi-inv-modal-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  .logi-inv-modal-body p {
+    font-size: var(--app-text-body);
+  }
+}
+
 @media (max-width: 760px) {
   .logi-inv-page {
     padding: 12px;

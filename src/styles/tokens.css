@@ -149,14 +149,29 @@
   --cards-grey: var(--bg-card);
   --cards-toplayer: var(--bg-panel);
 
-  /* 2k / 1440p+ readability tokens (stronger floors) */
-  --app-text-body: clamp(14px, 0.85rem + 0.15vw, 15.5px);
-  --app-text-meta: clamp(12.5px, 0.78rem + 0.12vw, 14px);
-  --app-text-label: clamp(12px, 0.75rem + 0.1vw, 13.5px);
-  --app-text-chip: clamp(12px, 0.75rem + 0.1vw, 13.5px);
-  --app-text-title-sm: clamp(15px, 0.92rem + 0.18vw, 17px);
-  --app-text-title: clamp(16px, 0.98rem + 0.2vw, 18px);
-  --app-text-page-title: clamp(20px, 1.15rem + 0.25vw, 24px);
+  /* Density / readability tokens — 1080p base; bumped at 2K breakpoint */
+  --app-text-body: 14px;
+  --app-text-meta: 12.5px;
+  --app-text-label: 12px;
+  --app-text-chip: 12px;
+  --app-text-title-sm: 15px;
+  --app-text-title: 16px;
+  --app-text-page-title: 20px;
+  --app-text-stat: 17px;
+  --app-text-kicker: 11px;
+
+  --app-control-height: 34px;
+  --app-input-height: 36px;
+  --app-chip-height: 30px;
+  --app-row-height: 38px;
+  --app-table-text: 13.5px;
+  --app-table-header: 11px;
+  --app-card-padding: 12px;
+  --app-panel-gap: 10px;
+  --app-icon-sm: 14px;
+  --app-icon-md: 18px;
+  --app-action-size: 32px;
+  --app-content-max: none;
 
   /* Ship component category colors
      Used in map legend (--legend-accent) and sub-target trainer.
@@ -227,6 +242,34 @@ a {
 :where(button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 2px solid rgba(245, 158, 11, 0.72);
   outline-offset: 2px;
+}
+
+/* 2K / 1440p desktop readability layer */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  :root {
+    --app-text-body: 15.5px;
+    --app-text-meta: 13.5px;
+    --app-text-label: 12.5px;
+    --app-text-chip: 13px;
+    --app-text-title-sm: 17px;
+    --app-text-title: 18px;
+    --app-text-page-title: 22px;
+    --app-text-stat: 19px;
+    --app-text-kicker: 12px;
+
+    --app-control-height: 38px;
+    --app-input-height: 40px;
+    --app-chip-height: 34px;
+    --app-row-height: 42px;
+    --app-table-text: 15px;
+    --app-table-header: 12.5px;
+    --app-card-padding: 14px;
+    --app-panel-gap: 12px;
+    --app-icon-sm: 16px;
+    --app-icon-md: 20px;
+    --app-action-size: 36px;
+    --app-content-max: 2280px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

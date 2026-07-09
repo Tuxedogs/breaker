@@ -2394,7 +2394,7 @@
 
 /* ── 4K / ultra-wide: max-width cap + centering ── */
 
-@media (min-width: 1800px) {
+@media (min-width: 1800px) and (min-height: 1000px) {
   .mconsole-layout {
     grid-template-columns: clamp(280px, 16vw, 360px) minmax(0, 1fr);
     gap: 1rem;
@@ -2402,6 +2402,51 @@
 
   .mining-filter-rail {
     padding: 0.5rem 1rem;
+  }
+
+  .mine-page--v2 {
+    font-size: var(--app-text-body);
+  }
+
+  .mine-page--v2 .mining-filter-chip {
+    min-height: var(--app-chip-height);
+    padding: 2px 10px;
+    font-size: var(--app-text-chip);
+  }
+
+  .mine-page--v2 .mlist-item {
+    min-height: var(--app-row-height);
+  }
+
+  .mine-page--v2 .mlist-item-name {
+    font-size: var(--app-text-body);
+  }
+
+  .mine-page--v2 .mdet-name {
+    font-size: var(--app-text-title);
+  }
+
+  .mine-page--v2 .location-stat-value,
+  .mine-page--v2 .location-method-stat-chip .location-stat-value {
+    font-size: var(--app-text-stat);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mine-page--v2 .location-stat-label,
+  .mine-page--v2 .location-method-stat-chip .location-stat-label,
+  .mine-page--v2 .mdet-section-label,
+  .mine-page--v2 .mlist-header-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  .mine-page--v2 .mining-resource-index-table thead th {
+    font-size: var(--app-table-header);
+  }
+
+  .mine-page--v2 .mining-resource-row td {
+    font-size: var(--app-table-text);
+    padding-block: 0.55rem;
+    font-variant-numeric: tabular-nums;
   }
 }
 

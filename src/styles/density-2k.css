@@ -1,0 +1,243 @@
+/* ──────────────────────────────────────────────
+   2K Readability Density Layer
+   Breakpoint: min-width 1800px AND min-height 1000px
+   Tokens: :root vars in tokens.css (--app-text-*,
+   --app-control-height, --app-row-height, etc.)
+
+   COVERED NAMESPACES (this file — shared controls)
+   ─────────────────────────────────────────────
+   .dash-page          tabular nums (typography → dashboard.css)
+   .logi-page          buttons, search, tables, forms
+   .logi-inv-page      same as .logi-page
+   .clog-*             carrier logistics panels/controls
+   .scintel-filter-*   shared filter shell
+   .page-compact-header shared page headers
+   .sdock-*            SignatureDock overlay (dashboard shell)
+
+   PAGE-LOCAL 2K BLOCKS (isolated namespaces — do not duplicate here)
+   ─────────────────────────────────────────────
+   dashboard.css       .dash-page stats, cards, sidebar
+   inventory.css       .logi-inv-page grids, quality groups
+   build-queue.css     .bq-page queue rail, materials, reserve
+   recipe-browser.css  .craft-page / .craft-detail-* detail stage
+   crafting.css        .craft-page detail panels (legacy paths)
+   mining.css          .mine-page--v2 chips, lists, resource table
+   fitting-terminal.css .fit-page.fit-term-page --fit-type-* scale
+   mission-browser.css .mb-page filters, dossier, cards
+   carrier-logistics.css .clog-* layout width tweaks
+
+   NOT YET COVERED (audit 2026-07 — add page-local blocks if needed)
+   ─────────────────────────────────────────────
+   .bt-page            Blueprint Tracker (lazy-loaded)
+   fitting.css         legacy fitting page (prefer fitting-terminal.css)
+   blueprint-tracker.css
+   refinery-import.css / refinery-planner.css
+   components.css      global ARES/misc (mostly decorative kickers)
+   SignatureDock.css   base px sizes; 2K bump in this file
+
+   RULE: hardcoded px/rem with !important bypass :root tokens.
+   Page-local @media blocks must override those selectors explicitly.
+   ────────────────────────────────────────────── */
+
+@media (min-width: 1800px) and (min-height: 1000px) {
+  /* Tabular numerics for stat grids and tables */
+  :where(
+    .logi-table,
+    .bq-page,
+    .mb-page,
+    .mine-page--v2,
+    .craft-page,
+    .craft-detail-stage,
+    .fit-page
+  ) :is(
+    td,
+    th,
+    .logi-qty-cell,
+    .bq-qty-val,
+    .bq-qty-cell,
+    .bq-stat-val,
+    .craft-stat-value,
+    .craft-detail-stat-value,
+    .craft-detail-material-required,
+    .craft-detail-quality-value,
+    .logi-stat-value,
+    [class*="stat-value"],
+    [class*="qty"]
+  ) {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Shared Scintel filter shell */
+  .scintel-filter-header {
+    min-height: calc(var(--app-input-height) + 10px);
+    padding: 8px 16px;
+  }
+
+  .scintel-filter-summary {
+    font-size: var(--app-text-kicker);
+  }
+
+  .scintel-filter-toggle {
+    min-height: var(--app-control-height);
+    padding: 0 14px;
+    font-size: var(--app-text-chip);
+  }
+
+  .scintel-filter-row {
+    padding: 10px 16px;
+    min-height: calc(var(--app-control-height) + 6px);
+  }
+
+  /* Shared logistics controls */
+  :where(.logi-page, .logi-inv-page) .logi-btn-primary,
+  :where(.logi-page, .logi-inv-page) .logi-btn-secondary,
+  :where(.logi-page, .logi-inv-page) .logi-btn-ghost {
+    min-height: var(--app-control-height);
+    padding-inline: 1rem;
+    font-size: var(--app-text-body);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-search-wrap {
+    min-height: var(--app-input-height);
+    padding: 0 0.85rem;
+    max-width: 340px;
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-search-input,
+  :where(.logi-page, .logi-inv-page) .logi-select {
+    font-size: var(--app-text-body);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-select {
+    min-height: var(--app-input-height);
+    padding: 0 0.75rem;
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-table th {
+    font-size: var(--app-table-header);
+    padding-bottom: 0.55rem;
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-table td {
+    font-size: var(--app-table-text);
+    padding: 0.62rem 0.85rem;
+    min-height: var(--app-row-height);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-qty-cell {
+    font-size: var(--app-text-meta);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-action-btn {
+    width: var(--app-action-size);
+    height: var(--app-action-size);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-form-input,
+  :where(.logi-page, .logi-inv-page) .logi-form-select {
+    min-height: var(--app-input-height);
+    font-size: var(--app-text-body);
+  }
+
+  :where(.logi-page, .logi-inv-page) .logi-form-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  /* Carrier logistics (.clog-*) */
+  .clog-layout {
+    font-size: var(--app-text-body);
+  }
+
+  .clog-panel {
+    padding: var(--app-card-padding) calc(var(--app-card-padding) + 2px);
+  }
+
+  .clog-panel-title,
+  .clog-field-label,
+  .clog-room-stat-label,
+  .clog-inline-card-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  .clog-select,
+  .clog-number-input {
+    min-height: var(--app-input-height);
+    font-size: var(--app-text-body);
+    padding: 0.35rem 0.55rem;
+  }
+
+  .clog-toggle-btn,
+  .clog-quick-btn {
+    min-height: var(--app-chip-height);
+    font-size: var(--app-text-chip);
+    padding: 0.3rem 0.45rem;
+  }
+
+  .clog-inline-card-value,
+  .clog-room-stat-value,
+  .clog-loadout-pct,
+  .clog-room-label {
+    font-size: var(--app-text-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .clog-loadout-row {
+    min-height: var(--app-row-height);
+  }
+
+  .clog-loadout-name {
+    font-size: var(--app-text-body);
+  }
+
+  .clog-crate-chip {
+    min-height: var(--app-chip-height);
+    font-size: var(--app-text-chip);
+  }
+
+  /* Dashboard hub */
+  .dash-page :is(.dash-stat-value, .dash-bq-qty, td, th) {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* SignatureDock — dashboard overlay */
+  .sdock-panel {
+    font-size: var(--app-text-body);
+  }
+
+  .sdock-title {
+    font-size: var(--app-text-chip);
+  }
+
+  .sdock-ctrl-btn {
+    min-height: var(--app-chip-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .sdock-search-input {
+    min-height: var(--app-input-height);
+    font-size: var(--app-text-body);
+  }
+
+  .sdock-table thead th {
+    font-size: var(--app-table-header);
+  }
+
+  .sdock-table td,
+  .sdock-val-chip {
+    font-size: var(--app-text-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Compact page headers */
+  .page-compact-header .page-kicker {
+    font-size: var(--app-text-kicker);
+  }
+
+  .page-compact-header .page-stats {
+    font-size: var(--app-text-label);
+  }
+
+  .page-compact-header .page-stats strong {
+    font-size: var(--app-text-title-sm);
+  }
+}

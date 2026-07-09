@@ -5436,22 +5436,120 @@
 }
 
 /* ── 2K / wide-screen density boost ── */
-@media (min-width: 1800px) {
+@media (min-width: 1800px) and (min-height: 1000px) {
   :where(.craft-page, .craft-planner-shell) {
-    --cd-font-xs:   0.74rem;
-    --cd-font-sm:   0.84rem;
-    --cd-font-md:   0.96rem;
-    --cd-font-lg:   1.12rem;
-    --cd-font-xl:   1.22rem;
-    --cd-font-title: 1.44rem;
+    --cd-font-xs:   0.78rem;
+    --cd-font-sm:   0.88rem;
+    --cd-font-md:   1rem;
+    --cd-font-lg:   1.14rem;
+    --cd-font-xl:   1.26rem;
+    --cd-font-title: 1.5rem;
     --cd-chip-h:    34px;
-    --cd-control-h: 42px;
+    --cd-control-h: 40px;
     --cd-row-gap:   8px;
-    --cd-card-pad: 8px;
-    --cd-grid-gap:  6px;
-    --cd-icon-sm: 55px;
-    --cd-stat-val:  1.02rem;
-    --cd-mat-name:  1.32rem;
+    --cd-card-pad:  13px;
+    --cd-grid-gap:  12px;
+    --cd-icon-sm:   60px;
+    --cd-stat-val:  1.06rem;
+    --cd-mat-name:  1.36rem;
+  }
+
+  /* Craft detail — hardcoded px rules bypass cd-* tokens */
+  .craft-detail-stage {
+    padding: 1rem 1rem 1rem 1.1rem;
+    gap: 18px;
+  }
+
+  .craft-detail-back-link {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .craft-detail-title {
+    font-size: clamp(1.5rem, 1.35rem + 0.35vw, 1.95rem);
+  }
+
+  .craft-detail-meta,
+  .craft-detail-meta-list span span {
+    font-size: var(--app-text-meta);
+  }
+
+  .craft-detail-hero .craft-summary-action-btn {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .craft-detail-hero-card-copy > strong {
+    font-size: var(--app-text-body);
+  }
+
+  .craft-detail-material-table-head,
+  .craft-detail-material-slot {
+    font-size: var(--app-text-kicker) !important;
+  }
+
+  .craft-detail-material-row {
+    min-height: var(--app-row-height);
+  }
+
+  .craft-detail-material-id strong {
+    font-size: var(--app-text-body);
+  }
+
+  .craft-detail-material-required,
+  .craft-detail-quality-value {
+    font-size: var(--app-text-body);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .craft-detail-band-pill {
+    min-height: 24px;
+    font-size: var(--app-text-chip) !important;
+  }
+
+  .craft-modifier-label,
+  .craft-detail-crafting-panel .craft-material-card.craft-matq-card .craft-modifier-label.craft-matq-mod-prop {
+    font-size: var(--app-text-body) !important;
+  }
+
+  .craft-modifier-value,
+  .craft-detail-crafting-panel .craft-material-card.craft-matq-card .craft-matq-stat-number,
+  .craft-detail-stat-value {
+    font-size: var(--app-text-title-sm) !important;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .craft-modifier-hint {
+    font-size: var(--app-text-kicker);
+  }
+
+  .craft-summary-mod-prop,
+  .craft-summary-mod-val {
+    font-size: var(--app-text-body);
+  }
+
+  .craft-summary-action-btn {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .craft-variant-row {
+    height: var(--cd-chip-h);
+    font-size: var(--cd-font-md);
+  }
+
+  .craft-quality-readout {
+    font-size: var(--app-text-body);
+    min-height: var(--app-chip-height);
+  }
+
+  /* Recipe browser card grid (not detail) */
+  .component-results-browser .craft-result-name {
+    font-size: var(--cd-font-lg);
+  }
+
+  .component-results-browser .craft-result-sub {
+    font-size: var(--app-text-meta);
   }
 }
 

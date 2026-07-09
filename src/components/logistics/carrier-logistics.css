@@ -757,3 +757,14 @@
     padding-left: 0;
   }
 }
+
+/* ── 2K readability (2560×1440) — mirrors density-2k .clog-* rules ── */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .clog-top-row {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .clog-bottom-row {
+    grid-template-columns: 1fr 420px;
+  }
+}

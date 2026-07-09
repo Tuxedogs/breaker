@@ -1455,19 +1455,50 @@
 
 /* Responsive */
 
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .fit-page.fit-term-page {
+    --fit-type-micro: 12px;
+    --fit-type-2xs: 13px;
+    --fit-type-xs: 14px;
+    --fit-type-sm: 15px;
+    --fit-type-base: 16px;
+    --fit-type-md: 17px;
+    --fit-type-lg: 18px;
+    --fit-type-xl: 19px;
+    --fit-type-body: 16px;
+    --fit-type-hero: 1.35rem;
+    --fit-type-ship-title: 1.55rem;
+  }
+
+  .fit-term-tab {
+    min-height: var(--app-control-height);
+    padding: 0 1rem;
+  }
+
+  .fit-term-slot-row,
+  .fit-term-drawer-row {
+    min-height: var(--app-row-height);
+  }
+
+  .fit-stat-card {
+    padding: var(--app-card-padding);
+  }
+}
+
+/* Legacy ultra-wide alias — same 2K layer */
 @media (min-width: 2560px) {
   .fit-page.fit-term-page {
-    --fit-type-micro: clamp(12px, 0.76rem, 14px);
-    --fit-type-2xs: clamp(13px, 0.82rem, 15px);
-    --fit-type-xs: clamp(14px, 0.88rem, 16px);
-    --fit-type-sm: clamp(15px, 0.92rem, 17px);
-    --fit-type-base: clamp(15.5px, 0.96rem, 17.5px);
-    --fit-type-md: clamp(16px, 1rem, 18px);
-    --fit-type-lg: clamp(17px, 1.06rem, 19px);
-    --fit-type-xl: clamp(18px, 1.12rem, 20px);
-    --fit-type-body: clamp(16px, 0.98rem, 18px);
-    --fit-type-hero: clamp(1.25rem, 1.15rem + 0.25vw, 1.45rem);
-    --fit-type-ship-title: clamp(1.35rem, 1.2rem + 0.6vw, 1.85rem);
+    --fit-type-micro: 12px;
+    --fit-type-2xs: 13px;
+    --fit-type-xs: 14px;
+    --fit-type-sm: 15px;
+    --fit-type-base: 16px;
+    --fit-type-md: 17px;
+    --fit-type-lg: 18px;
+    --fit-type-xl: 19px;
+    --fit-type-body: 16px;
+    --fit-type-hero: 1.35rem;
+    --fit-type-ship-title: 1.55rem;
   }
 }
 

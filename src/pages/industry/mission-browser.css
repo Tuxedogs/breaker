@@ -125,6 +125,67 @@
   flex-shrink: 0;
 }
 
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .mb-page {
+    font-size: var(--app-text-body);
+  }
+
+  .mb-shell {
+    width: min(2320px, 100%);
+    max-width: 2320px;
+  }
+
+  .mb-header h1 {
+    font-size: clamp(30px, 1.8vw, 34px);
+  }
+
+  .mb-filter-header {
+    min-height: calc(var(--app-input-height) + 10px);
+  }
+
+  .mb-filter-row select {
+    height: var(--app-input-height);
+    font-size: var(--app-text-body);
+  }
+
+  .mission-group-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  }
+
+  /* Mission browser locks many rules at 11–13px !important — bump at 2K */
+  .mb-page .mb-badge,
+  .mb-page .mission-card-matches .mb-badge {
+    min-height: var(--app-chip-height);
+    font-size: var(--app-text-chip) !important;
+  }
+
+  .mb-page :is(
+    .mb-section-tabs a,
+    .mission-variant-tabs__list strong,
+    .mb-inline-heading,
+    .mb-family-technical dt,
+    .mission-dossier-inline-control button,
+    .mission-dossier-variant-row__main strong
+  ) {
+    font-size: var(--app-text-body) !important;
+    min-height: var(--app-control-height);
+  }
+
+  .mb-page :is(
+    .mb-kicker,
+    .mb-summary,
+    .mb-group-header span,
+    .mb-group-header small,
+    .mission-category-lane__header small,
+    .mission-dossier-inline-control > span,
+    .mission-dossier-reward-status span,
+    .mb-summary-grid span,
+    .mb-reward-metric span
+  ) {
+    font-size: var(--app-text-meta) !important;
+  }
+}
+
 @media (min-width: 2200px) {
   .mb-page {
     padding: clamp(18px, 1.5vw, 28px) clamp(12px, 2vw, 32px) clamp(24px, 2vw, 36px);

@@ -3603,8 +3603,133 @@
   }
 }
 
+/* ── 2K readability (2560×1440) ── */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .bq-page {
+    --bq-font-xs: 12px;
+    --bq-font-sm: 13px;
+    --bq-font-md: 14px;
+    --bq-font-lg: 16px;
+    --bq-control-h: 38px;
+    --bq-qty-btn: 34px;
+    --bq-row-h: 44px;
+  }
 
+  .bq-inventory-sync-alert {
+    font-size: var(--app-text-body);
+    padding: 10px 12px;
+  }
 
+  .bq-queue-col-title {
+    font-size: var(--app-text-chip);
+  }
+
+  .bq-add-craft-btn,
+  .bq-add-another-btn {
+    min-height: var(--app-control-height);
+    font-size: var(--app-text-chip);
+    padding: 0 14px;
+  }
+
+  .bq-queue-tab {
+    min-height: var(--app-chip-height);
+    font-size: var(--app-text-chip);
+  }
+
+  .bq-craft-card {
+    min-height: var(--bq-row-h);
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .bq-craft-card-index {
+    font-size: var(--app-text-chip);
+  }
+
+  .bq-craft-card-cat {
+    font-size: var(--app-text-kicker);
+  }
+
+  .bq-craft-card-name {
+    font-size: var(--app-text-title-sm);
+  }
+
+  .bq-craft-card-status {
+    min-height: 22px;
+    padding: 2px 8px;
+    font-size: var(--app-text-kicker);
+  }
+
+  .bq-craft-card-ring {
+    width: 46px;
+    height: 46px;
+  }
+
+  .bq-craft-card-ring > span,
+  .bq-craft-card-ring--hero > span {
+    font-size: var(--app-text-chip) !important;
+  }
+
+  .bq-materials-section-title {
+    font-size: var(--app-text-title-sm);
+  }
+
+  .bq-materials-section-summary,
+  .bq-mat-name > span:not(.bq-material-name-cell) {
+    font-size: var(--app-text-body);
+  }
+
+  .bq-badge {
+    min-height: 24px;
+    padding: 0 0.45rem;
+    font-size: var(--app-text-chip);
+  }
+
+  .bq-qty-btn,
+  .bq-qty-val,
+  .bq-qty--compact .bq-qty-btn,
+  .bq-qty--compact .bq-qty-val {
+    width: var(--bq-qty-btn);
+    height: var(--bq-qty-btn);
+    line-height: var(--bq-qty-btn);
+    font-size: var(--app-text-body);
+  }
+
+  .bq-qty--compact .bq-qty-val {
+    min-width: 2.2rem;
+  }
+
+  .bq-btn {
+    min-height: var(--app-control-height);
+    padding: 0 14px;
+    font-size: var(--app-text-chip);
+  }
+
+  .bq-ledger-line,
+  .bq-mat-row {
+    min-height: var(--bq-row-h);
+    font-size: var(--app-text-body);
+  }
+
+  .bq-qty-cell {
+    font-size: var(--app-text-body);
+  }
+
+  .bq-stats-panel .bq-stat-tile-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  .bq-stats-panel .bq-stat-tile-value,
+  .bq-stats-panel .bq-stat-chip-value {
+    font-size: var(--app-text-stat);
+  }
+
+  .bq-reserve-stack-head,
+  .bq-reserve-stack-row {
+    min-height: var(--bq-row-h);
+    font-size: var(--app-text-body);
+  }
+}
 
 
 

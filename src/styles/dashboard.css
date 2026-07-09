@@ -2987,3 +2987,70 @@
   letter-spacing: 0.06em;
   color: rgba(160, 180, 220, 0.45);
 }
+
+/* ── 2K readability (2560×1440) ── */
+@media (min-width: 1800px) and (min-height: 1000px) {
+  .dash-page {
+    font-size: var(--app-text-body);
+  }
+
+  .dash-main-col {
+    max-width: min(var(--app-content-max), 100%);
+  }
+
+  .dash-sidebar-item {
+    min-height: var(--app-row-height);
+    font-size: var(--app-text-body);
+    padding: 0.42rem 0.7rem;
+  }
+
+  .dash-sidebar-section-label {
+    font-size: var(--app-text-kicker);
+  }
+
+  .dash-stat-label,
+  .dash-card-title {
+    font-size: var(--app-text-kicker);
+  }
+
+  .dash-stat-value {
+    font-size: var(--app-text-stat);
+  }
+
+  .dash-stat-sublabel,
+  .dash-stat-unit,
+  .dash-card-meta {
+    font-size: var(--app-text-label);
+  }
+
+  .dash-panel-title {
+    font-size: var(--app-text-chip);
+  }
+
+  .dash-panel-desc,
+  .dash-update-desc,
+  .dash-bq-name {
+    font-size: var(--app-text-body);
+  }
+
+  .dash-bq-qty,
+  .dash-bq-pct,
+  .dash-bq-queued,
+  .dash-update-date {
+    font-size: var(--app-text-meta);
+  }
+
+  .dash-card-body,
+  .dash-stat-card {
+    padding: var(--app-card-padding) calc(var(--app-card-padding) + 2px);
+  }
+
+  .dash-stat-icon-wrap {
+    width: var(--app-action-size);
+    height: var(--app-action-size);
+  }
+
+  .dash-empty-state {
+    font-size: var(--app-text-meta);
+  }
+}
