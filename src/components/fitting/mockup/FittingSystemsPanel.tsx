@@ -5,6 +5,7 @@ type FittingSystemsPanelProps = {
   title: string;
   groups: SystemsGroupView[];
   emptyMessage?: string;
+  className?: string;
   onSelectRow: (id: string) => void;
 };
 
@@ -12,10 +13,11 @@ export default function FittingSystemsPanel({
   title,
   groups,
   emptyMessage,
+  className,
   onSelectRow,
 }: FittingSystemsPanelProps) {
   return (
-    <aside className="fm-panel">
+    <aside className={["fm-panel", className].filter(Boolean).join(" ")}>
       <header className="fm-panel-head">
         <h2>{title}</h2>
       </header>

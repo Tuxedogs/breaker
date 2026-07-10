@@ -67,37 +67,35 @@ export default function FittingMockupShell({
       {errorMessage ? <div className="fm-error">{errorMessage}</div> : null}
       {debugNode}
 
-      <div className="fm-body">
-        <FittingRail />
+      <FittingRail />
 
+      <FittingSystemsPanel
+        className="fm-offense-panel"
+        title="Offensive Systems"
+        groups={offensiveGroups}
+        emptyMessage={offensiveEmptyMessage}
+        onSelectRow={onSelectOffensiveRow}
+      />
+
+      <FittingHero
+        asset={heroAsset}
+        inspect={heroInspect}
+        onExitInspect={onExitInspect}
+        onViewDetails={onViewHeroDetails}
+        selectorDrawer={selectorDrawer}
+      />
+
+      <div className="fm-right-col">
         <FittingSystemsPanel
-          title="Offensive Systems"
-          groups={offensiveGroups}
-          emptyMessage={offensiveEmptyMessage}
-          onSelectRow={onSelectOffensiveRow}
+          title="Defensive Systems"
+          groups={defensiveGroups}
+          emptyMessage={defensiveEmptyMessage}
+          onSelectRow={onSelectDefensiveRow}
         />
-
-        <main className="fm-workspace">
-          <FittingHero
-            asset={heroAsset}
-            inspect={heroInspect}
-            onExitInspect={onExitInspect}
-            onViewDetails={onViewHeroDetails}
-            selectorDrawer={selectorDrawer}
-          />
-          <FittingStatsGrid cards={statCards} onCardAction={onStatCardAction} />
-        </main>
-
-        <div className="fm-right-col">
-          <FittingSystemsPanel
-            title="Defensive Systems"
-            groups={defensiveGroups}
-            emptyMessage={defensiveEmptyMessage}
-            onSelectRow={onSelectDefensiveRow}
-          />
-          <FittingResourcesPanel summary={resourceSummary} selectedDetail={selectedDetail} />
-        </div>
+        <FittingResourcesPanel summary={resourceSummary} selectedDetail={selectedDetail} />
       </div>
+
+      <FittingStatsGrid cards={statCards} onCardAction={onStatCardAction} />
     </div>
   );
 }

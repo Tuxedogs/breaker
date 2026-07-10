@@ -13,13 +13,15 @@
   --fm-danger: #d86b7d;
   --fm-orange: #c98a45;
   --fm-purple: #9b7fd4;
-  --fm-head-h: 4.5rem;
-  --fm-rail-w: 4rem;
-  --fm-left-w: 20rem;
-  --fm-right-w: 24.375rem;
+  --fm-head-h: 72px;
+  --fm-rail-w: 64px;
+  --fm-left-w: 320px;
+  --fm-right-w: 390px;
+  --fm-top-row-h: minmax(0, 520px);
+  --fm-stats-row-h: minmax(320px, 1fr);
   --fm-workspace-gap: 10px;
   --fm-stats-min-h: 320px;
-  --fm-gap: 0.62rem;
+  --fm-gap: 10px;
   --mock-type-micro: 11px;
   --mock-type-2xs: 12px;
   --mock-type-xs: 13px;
@@ -28,12 +30,14 @@
   --fit-border: rgba(255, 255, 255, 0.07);
 
   display: grid;
-  grid-template-rows: var(--fm-head-h) minmax(0, 1fr);
+  grid-template-columns: var(--fm-rail-w) var(--fm-left-w) minmax(0, 1fr) var(--fm-right-w);
+  grid-template-rows: var(--fm-head-h) var(--fm-top-row-h) var(--fm-stats-row-h);
+  position: relative;
   width: 100%;
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  padding: 0.42rem 0.5rem 0.48rem;
+  padding: 0;
   gap: var(--fm-gap);
   color: var(--fm-text);
   font-family: var(--font-primary, "Rajdhani", system-ui, sans-serif);
@@ -50,12 +54,15 @@
 /* ── Top bar ── */
 
 .fm-topbar {
+  grid-column: 1 / -1;
+  grid-row: 1;
   display: grid;
   grid-template-columns: minmax(12rem, 18rem) minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
-  min-height: var(--fm-head-h);
-  padding: 0 0.2rem;
+  min-height: 0;
+  height: var(--fm-head-h);
+  padding: 0 0.5rem;
   border-bottom: 1px solid var(--fm-border);
   background: linear-gradient(180deg, rgba(8, 11, 14, 0.92), rgba(5, 8, 10, 0.72));
 }
@@ -136,37 +143,57 @@
   color: var(--fm-orange); text-align: right;
 }
 
-/* ── Body grid ── */
+/* ── Shell grid placement ── */
 
-.fm-body {
-  display: grid;
-  grid-template-columns: var(--fm-rail-w) var(--fm-left-w) minmax(0, 1fr) var(--fm-right-w);
-  gap: var(--fm-gap);
+.fm-rail {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   min-height: 0;
-  align-items: stretch;
+  overflow: hidden;
+  padding: 0.2rem 0;
+}
+
+.fm-offense-panel {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 0;
   overflow: hidden;
 }
 
-.fm-body > .fm-panel {
-  min-height: 0;
-  overflow: hidden;
-}
-
-.fm-workspace {
-  display: grid;
-  grid-template-rows: minmax(420px, 58%) minmax(var(--fm-stats-min-h), 1fr);
-  gap: var(--fm-workspace-gap);
+.fm-hero {
+  grid-column: 3;
+  grid-row: 2;
   min-height: 0;
   min-width: 0;
+  height: 100%;
+  display: flex;
   overflow: hidden;
 }
 
 .fm-right-col {
+  grid-column: 4;
+  grid-row: 2 / 4;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   min-height: 0;
   overflow: hidden;
   gap: 0;
+}
+
+.fm-stats-grid {
+  grid-column: 1 / 4;
+  grid-row: 3;
+  min-height: var(--fm-stats-min-h);
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1.05fr 1.35fr 1.15fr 1fr 1fr;
+  gap: var(--fm-workspace-gap);
+  align-items: stretch;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .fm-right-col > .fm-panel {
@@ -176,13 +203,22 @@
 }
 
 .fm-error {
-  margin: 0 0.2rem; padding: 0.45rem 0.55rem; border: 1px solid rgba(216, 107, 125, 0.28);
-  background: rgba(216, 107, 125, 0.06); border-radius: 4px; color: var(--fm-muted); font-size: var(--mock-type-sm);
+  position: absolute;
+  top: calc(var(--fm-head-h) + var(--fm-gap));
+  left: 0.5rem;
+  right: 0.5rem;
+  z-index: 20;
+  margin: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid rgba(216, 107, 125, 0.28);
+  background: rgba(216, 107, 125, 0.06);
+  border-radius: 4px;
+  color: var(--fm-muted);
+  font-size: var(--mock-type-sm);
 }
 
 /* ── Icon rail ── */
 
-.fm-rail { display: flex; flex-direction: column; gap: 0.35rem; min-height: 0; padding: 0.2rem 0; }
 .fm-rail-btn {
   display: grid; place-items: center; width: 100%; aspect-ratio: 1; max-height: 2.65rem;
   border: 1px solid transparent; border-radius: 3px; background: rgba(5, 8, 10, 0.55);
@@ -273,7 +309,6 @@
 
 /* ── Hero ── */
 
-.fm-hero { min-height: 0; height: 100%; display: flex; }
 .fm-hero-stage {
   position: relative; flex: 1; min-height: 0; overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 4px; background: #07090c;
@@ -382,17 +417,6 @@
 .fm-drawer-installed { display: block; font-size: var(--mock-type-micro); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fm-good); }
 
 /* ── Stats grid ── */
-
-.fm-stats-grid {
-  min-height: var(--fm-stats-min-h);
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1.05fr 1.28fr 1.08fr 1.08fr 1.08fr;
-  gap: var(--fm-workspace-gap);
-  align-items: stretch;
-  min-width: 0;
-  overflow: hidden;
-}
 
 .fm-stat-card {
   display: flex;
@@ -591,10 +615,8 @@
 @media (min-width: 1800px) and (min-height: 1000px) {
   .fm-shell {
     --fm-stats-min-h: 340px;
+    --fm-stats-row-h: minmax(340px, 1fr);
     --fm-workspace-gap: 12px;
-  }
-  .fm-workspace {
-    grid-template-rows: minmax(440px, 57%) minmax(340px, 1fr);
   }
   .fm-hero-ship-img { max-width: 96%; max-height: 92%; }
   .fit-mock-pip-stack { width: 1.35rem; height: 6.75rem; }
@@ -605,16 +627,24 @@
 }
 
 @media (max-width: 900px) {
-  .fm-shell { grid-template-rows: auto minmax(0, 1fr); height: auto; max-height: none; min-height: 100vh; overflow: auto; }
-  .fm-body {
+  .fm-shell {
     grid-template-columns: 1fr;
-    grid-template-areas: "rail" "offense" "workspace" "defense";
+    grid-template-rows: auto auto auto auto auto auto;
+    height: auto;
+    max-height: none;
+    min-height: 100vh;
+    overflow: auto;
   }
-  .fm-rail { grid-area: rail; flex-direction: row; overflow-x: auto; }
-  .fm-body > .fm-panel { grid-area: offense; }
-  .fm-workspace { grid-area: workspace; min-height: 22rem; grid-template-rows: minmax(16rem, 58%) minmax(18rem, 1fr); }
-  .fm-right-col { grid-area: defense; }
-  .fm-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fm-topbar { grid-column: 1; grid-row: auto; height: auto; min-height: var(--fm-head-h); }
+  .fm-rail { grid-column: 1; grid-row: auto; flex-direction: row; overflow-x: auto; }
+  .fm-offense-panel { grid-column: 1; grid-row: auto; }
+  .fm-hero { grid-column: 1; grid-row: auto; min-height: 22rem; }
+  .fm-right-col { grid-column: 1; grid-row: auto; }
+  .fm-stats-grid {
+    grid-column: 1;
+    grid-row: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .fm-topbar { grid-template-columns: 1fr; gap: 0.45rem; }
 }
 
