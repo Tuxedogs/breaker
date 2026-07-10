@@ -3739,6 +3739,10 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
 }
 
+.recipe-browser-toolbarShell {
+  z-index: 30;
+}
+
 /* ── Generic row band ── */
 .crb-row {
   display: flex;
@@ -4588,7 +4592,63 @@
   }
 
   .component-browser-toolbar.scintel-filter-shell--expanded .scintel-filter-header {
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .component-browser-toolbar .recipe-browser-filterDrawer {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    margin-top: 0;
+    border-radius: 0 0 12px 12px;
+    transform-origin: top center;
+    animation: recipe-browser-drawer-in 0.16s ease-out;
+  }
+
+  @keyframes recipe-browser-drawer-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .component-browser-toolbar .crb-material-picker--toolbar {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .component-browser-toolbar .crb-material-trigger--toolbar {
+    min-height: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    background: var(--panel-bg-deep);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  .component-browser-toolbar .crb-material-trigger--toolbar:hover,
+  .component-browser-toolbar .crb-material-trigger--toolbar.crb-material-trigger--open {
+    border-color: rgba(0, 230, 210, 0.34);
+    background: rgba(0, 230, 210, 0.055);
+    color: var(--accent-cyan);
+  }
+
+  .component-browser-toolbar .crb-material-trigger--toolbar.crb-material-trigger--active {
+    border-color: rgba(255, 184, 77, 0.44);
+    background: rgba(255, 184, 77, 0.08);
+    color: var(--warning);
   }
 
   .component-browser-toolbar .scintel-filter-search {
@@ -4725,13 +4785,19 @@
   .component-browser-toolbar .scintel-filter-body {
     display: grid;
     gap: 10px;
-    margin-top: 8px;
     padding: 12px 14px;
     border: 1px solid var(--panel-border);
     border-radius: 12px;
     background: var(--panel-bg);
     box-shadow:
       0 12px 28px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.025);
+  }
+
+  .component-browser-toolbar .recipe-browser-filterDrawer {
+    box-shadow:
+      0 16px 36px rgba(0, 0, 0, 0.42),
+      0 0 24px rgba(0, 230, 210, 0.06),
       inset 0 1px 0 rgba(255, 255, 255, 0.025);
   }
 

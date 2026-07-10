@@ -23,8 +23,8 @@ export const mockupOffensiveGroupLabels: Record<string, string> = {
   "remote-turrets": "Remote Turrets",
   "manned-turrets": "Manned Turrets",
   "installed-weapons": "Gimbals & Mounts",
-  missiles: "Missiles / Bombs / Racks",
-  torpedoes: "Missiles / Bombs / Racks",
+  missiles: "Missiles",
+  torpedoes: "Missiles",
   "emp-qed": "EMP / QED",
   "tractor-mining-salvage": "Tractor / Mining / Salvage",
 };

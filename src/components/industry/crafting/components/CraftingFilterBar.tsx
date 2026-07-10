@@ -274,7 +274,7 @@ export default function CraftingFilterBar({
   const materialDropdownRef = useRef<HTMLDivElement>(null);
   const isMobileDrawerOpen = isMobileLayout && mobileFilterOpen;
   const isDesktopFiltersOpen = !isMobileLayout && desktopFiltersExpanded;
-  const isMaterialPickerVisible = isDesktopFiltersOpen && materialPickerOpen;
+  const isMaterialPickerVisible = !isMobileLayout && materialPickerOpen;
 
   const updateMaterialDropdownPosition = useCallback(() => {
     const toolbar = toolbarRef.current;
@@ -659,6 +659,7 @@ export default function CraftingFilterBar({
       className={[
         "scintel-filter-shell",
         "component-browser-toolbar",
+        "recipe-browser-toolbarShell",
         filtersExpanded ? "scintel-filter-shell--expanded" : "",
         toolbarScrolled ? "crb-toolbar--scrolled" : "",
         isMobileDrawerOpen ? "crb-toolbar--drawer-open" : "",
@@ -682,6 +683,22 @@ export default function CraftingFilterBar({
           </label>
         </div>
         <div className="scintel-filter-actions">
+          {!isMobileLayout && materialOptions.length > 0 ? (
+            <div className="crb-material-picker crb-material-picker--toolbar" ref={materialPickerRef}>
+              <button
+                type="button"
+                className={`crb-material-trigger crb-material-trigger--toolbar${isMaterialPickerVisible ? " crb-material-trigger--open" : ""}${materialFilters.size > 0 ? " crb-material-trigger--active" : ""}`}
+                onClick={() => {
+                  updateMaterialDropdownPosition();
+                  setMaterialPickerOpen((open) => !open);
+                }}
+                aria-expanded={isMaterialPickerVisible}
+              >
+                {materialFilters.size > 0 ? `${materialFilters.size} selected` : "Materials"}
+                <span className="crb-material-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          ) : null}
           {hasFilters && !filtersExpanded && !isMobileLayout ? (
             <span className="scintel-filter-summary">{activeSummaryCount} active</span>
           ) : null}
@@ -695,10 +712,7 @@ export default function CraftingFilterBar({
             aria-expanded={filtersExpanded}
             onClick={() => {
               if (isMobileLayout) setMobileFilterOpen((open) => !open);
-              else {
-                if (desktopFiltersExpanded) setMaterialPickerOpen(false);
-                setDesktopFiltersExpanded((open) => !open);
-              }
+              else setDesktopFiltersExpanded((open) => !open);
             }}
           >
             {filtersExpanded ? "Hide" : "Filters"}
@@ -769,7 +783,7 @@ export default function CraftingFilterBar({
       </div>
 
       {isDesktopFiltersOpen ? (
-      <div className="scintel-filter-body">
+      <div className="scintel-filter-body recipe-browser-filterDrawer">
       {/* ── Desktop: Category groups — Vehicle | FPS ── */}
       <div className="crb-row crb-row--categories crb-row--desktop-filters">
         <div className="crb-category-group crb-category-group--vehicle">
@@ -809,7 +823,7 @@ export default function CraftingFilterBar({
         </div>
       </div>
 
-      {/* ── Desktop: Contextual facets (vehicle only) + Materials ── */}
+      {/* ── Desktop: Contextual facets (vehicle only) ── */}
       <div className="crb-row crb-row--facets crb-row--desktop-filters">
         {showVehicleFacets && sizeOptions.length > 0 && (
           <div className="crb-facet-group crb-facet-group--size">
@@ -868,25 +882,6 @@ export default function CraftingFilterBar({
             {(sizeOptions.length > 0 || gradeOptions.length > 0) && <span className="crb-section-divider" aria-hidden="true" />}
           </div>
         )}
-
-        <div className="crb-facet-group crb-facet-group--materials">
-        <span className="crb-section-label crb-section-label--muted">Materials</span>
-        <span className="crb-section-divider" aria-hidden="true" />
-        <div className="crb-material-picker" ref={materialPickerRef}>
-          <button
-            type="button"
-            className={`crb-material-trigger${isMaterialPickerVisible ? " crb-material-trigger--open" : ""}`}
-            onClick={() => {
-              updateMaterialDropdownPosition();
-              setMaterialPickerOpen((v) => !v);
-            }}
-            aria-expanded={isMaterialPickerVisible}
-          >
-            {materialFilters.size > 0 ? `${materialFilters.size} selected` : "Choose Materials"}
-            <span className="crb-material-chevron" aria-hidden="true">▾</span>
-          </button>
-        </div>
-        </div>
       </div>
 
       {hasFilters && (
@@ -914,7 +909,7 @@ export default function CraftingFilterBar({
       </div>
       ) : null}
 
-      {/* ── Material picker dropdown (desktop expanded) ── */}
+      {/* ── Material picker dropdown (desktop toolbar) ── */}
       {isMaterialPickerVisible && (
         <div
           className="crb-material-dropdown crb-material-dropdown--toolbar"

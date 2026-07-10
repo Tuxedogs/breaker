@@ -29,6 +29,7 @@ import {
   type FittingShipSummary,
   type PortBreakdownRow,
 } from "./fittingPortGrouping";
+import { FITTING_MOCKUP_POLARIS_SHIP_KEY } from "./mockup/fittingMockupShipResolve";
 
 type LoadState<T> = {
   status: "idle" | "loading" | "loaded" | "error";
@@ -86,7 +87,7 @@ export type FittingMockupLoadoutState = {
 
 export function useFittingMockupLoadout(initialShipKey?: string | null): FittingMockupLoadoutState {
   const [shipsState, setShipsState] = useState<LoadState<FittingShipSummary[]>>(emptyLoad);
-  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(initialShipKey ?? null);
+  const [selectedShipKey, setSelectedShipKey] = useState<string | null>(initialShipKey ?? FITTING_MOCKUP_POLARIS_SHIP_KEY);
   const [shipState, setShipState] = useState<LoadState<FittingShipDetail>>(emptyLoad);
   const [basePortRows, setBasePortRows] = useState<PortBreakdownRow[]>([]);
   const [stockLoadoutMap, setStockLoadoutMap] = useState<Record<string, string | null>>({});
@@ -106,7 +107,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
         if (controller.signal.aborted) return;
         const ships = records.filter(isDisplayableFittingShip).map(adaptShipSummary);
         setShipsState({ status: "loaded", data: ships });
-        setSelectedShipKey((current) => current ?? ships[0]?.shipKey ?? null);
+        setSelectedShipKey((current) => current ?? FITTING_MOCKUP_POLARIS_SHIP_KEY);
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipsState({ status: "error", data: null });

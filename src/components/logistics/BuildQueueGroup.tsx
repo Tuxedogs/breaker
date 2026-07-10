@@ -45,6 +45,7 @@ import { parseJsonResponse } from '../../lib/safeJson';
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
 import BuildQueueStatsBreakdown from './BuildQueueStatsBreakdown';
+import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -996,6 +997,7 @@ interface Props {
   onUpdateAllocationQuantity: (buildQueueItemId: string, allocationId: string, quantity: number) => void;
   onClearStaleAllocations: (buildQueueItemId: string) => void;
   onAllocationOwnerHighlightChange?: (itemId: string | null) => void;
+  onQuickAddInventory: (entries: InventoryEntry[]) => void;
   iconMode: FittingIconMode;
 }
 
@@ -1152,11 +1154,13 @@ function TargetQualityEditor({
 export default function BuildQueueGroup({
   category, itemTypeLabel, items, recipes, recipeInputsByRecipeId, buildQueue, inventory,
   materials, locations, strategy, onQuantityChange,
-  onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity, onClearStaleAllocations,
+  onMaterialRequirementChange, onStatusChange, onRemove, onToggleAllocation, onUpdateAllocationQuantity,   onClearStaleAllocations,
   onAllocationOwnerHighlightChange,
+  onQuickAddInventory,
   iconMode,
 }: Props) {
   const [activeDrawersByItem, setActiveDrawersByItem] = useState<Record<string, BuildQueueActiveDrawer | undefined>>({});
+  const [quickAddTarget, setQuickAddTarget] = useState<InventoryQuickAddTarget | null>(null);
   const [qualityDrafts, setQualityDrafts] = useState<Record<string, string>>({});
   const [pendingReassignment, setPendingReassignment] = useState<PendingReassignment | null>(null);
   const [pendingCraftSolverPlan, setPendingCraftSolverPlan] = useState<{
@@ -1192,6 +1196,19 @@ export default function BuildQueueGroup({
 
   function toggleReserveDrawer(itemId: string, requirementKey: string, isOpen: boolean) {
     setActiveDrawersByItem((prev) => ({ ...prev, [itemId]: isOpen ? undefined : { type: 'reserve', requirementKey } }));
+  }
+
+  function openQuickAdd(materialId: string, displayName: string, material: MaterialTemplate | undefined) {
+    setQuickAddTarget({ materialId, displayName, material });
+  }
+
+  function closeQuickAdd() {
+    setQuickAddTarget(null);
+  }
+
+  function handleQuickAddSave(entries: InventoryEntry[]) {
+    onQuickAddInventory(entries);
+    closeQuickAdd();
   }
 
   function confirmPendingReassignment() {
@@ -1262,6 +1279,15 @@ export default function BuildQueueGroup({
 
   return (
     <div className="bq-category">
+      {quickAddTarget ? (
+        <InventoryAddModal
+          target={quickAddTarget}
+          materials={materials}
+          locations={locations}
+          onSave={handleQuickAddSave}
+          onCancel={closeQuickAdd}
+        />
+      ) : null}
       {pendingReassignment ? (
         <div className="bq-reassign-modal-backdrop" role="presentation" onMouseDown={cancelPendingReassignment}>
           <div
@@ -1713,13 +1739,16 @@ export default function BuildQueueGroup({
                           <div className="bq-mat-actions" data-bq-row-control="true">
                             <button
                               type="button"
-                              className={`bq-icon-action bq-icon-action--reserve${reserveExpanded ? ' is-active' : ''}`}
-                              aria-label={`${reserveExpanded ? 'Hide' : 'Adjust'} allocations for ${group.displayName}`}
-                              aria-expanded={reserveExpanded}
+                              className={`bq-icon-action bq-icon-action--add${quickAddTarget?.materialId === (group.material?.id ?? group.requirements[0]?.materialKey) && quickAddTarget?.displayName === group.displayName ? ' is-active' : ''}`}
+                              aria-label={`Add inventory for ${group.displayName}`}
                               data-bq-row-control="true"
                               onClick={(event) => {
                                 event.stopPropagation();
-                                openReserve();
+                                openQuickAdd(
+                                  group.material?.id ?? group.requirements[0]?.materialKey ?? '',
+                                  group.displayName,
+                                  group.material,
+                                );
                               }}
                             >
                               <PlusIcon />
@@ -1866,13 +1895,16 @@ export default function BuildQueueGroup({
                         <div className="bq-mat-actions" data-bq-row-control="true">
                           <button
                             type="button"
-                            className={`bq-icon-action bq-icon-action--reserve${reserveExpanded ? ' is-active' : ''}`}
-                            aria-label={`${reserveExpanded ? 'Hide' : 'Adjust'} allocations for ${group.displayName}`}
-                            aria-expanded={reserveExpanded}
+                            className={`bq-icon-action bq-icon-action--add${quickAddTarget?.materialId === (group.material?.id ?? group.requirements[0]?.materialKey) && quickAddTarget?.displayName === group.displayName ? ' is-active' : ''}`}
+                            aria-label={`Add inventory for ${group.displayName}`}
                             data-bq-row-control="true"
                             onClick={(event) => {
                               event.stopPropagation();
-                              openReserve();
+                              openQuickAdd(
+                                group.material?.id ?? group.requirements[0]?.materialKey ?? '',
+                                group.displayName,
+                                group.material,
+                              );
                             }}
                           >
                             <PlusIcon />

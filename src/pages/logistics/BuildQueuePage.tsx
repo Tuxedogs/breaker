@@ -89,6 +89,7 @@ export default function BuildQueuePage() {
   const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
   const updateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
   const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
+  const addInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
   const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
@@ -191,6 +192,11 @@ export default function BuildQueuePage() {
       setQueueTab("completed");
       setSelectedItemId(id);
     }
+  }
+
+  function handleQuickAddInventory(entries: Parameters<typeof addInventoryEntries>[0]) {
+    addInventoryEntries(entries);
+    setInventoryGuardMessage("");
   }
   return (
     <div className="bq-page">
@@ -330,6 +336,7 @@ export default function BuildQueuePage() {
               onUpdateAllocationQuantity={updateBuildQueueAllocationQuantity}
               onClearStaleAllocations={clearStaleBuildQueueItemAllocations}
               onAllocationOwnerHighlightChange={setAllocationOwnerHighlightId}
+              onQuickAddInventory={handleQuickAddInventory}
               iconMode={iconMode}
             />
             </div>

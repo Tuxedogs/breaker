@@ -528,6 +528,10 @@ export function buildDefensiveGroups(rows: PortBreakdownRow[]): NamedGroup[] {
 const TURRET_WEAPON_GROUP_KEYS = new Set(["remote-turrets", "manned-turrets"]);
 const INDIVIDUAL_ROW_GROUP_KEYS = new Set([
   ...defensiveGroupDefs.map((def) => def.key),
+  "pilot-weapons",
+  "installed-weapons",
+  "missiles",
+  "torpedoes",
   "emp-qed",
   "tractor-mining-salvage",
 ]);
