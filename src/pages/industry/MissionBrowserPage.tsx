@@ -978,11 +978,20 @@ function playerFacingChance(value?: string): string | undefined {
   return value?.replace(/\s+-\s+(?=1 of \d+)/i, " · ");
 }
 
-function BlueprintRewardGroups({ groups, compact = false }: { groups: BlueprintRewardGroupView[]; compact?: boolean }) {
+function BlueprintRewardGroups({
+  groups,
+  compact = false,
+  dossier = false,
+}: {
+  groups: BlueprintRewardGroupView[];
+  compact?: boolean;
+  dossier?: boolean;
+}) {
   if (!groups.length) return <p className="mb-empty-note">No blueprint rewards reported.</p>;
   const visibleGroups = groups.slice(0, compact ? 3 : groups.length);
+  const itemLimit = compact ? 4 : 12;
   return (
-    <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}`}>
+    <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}${dossier ? " is-dossier" : ""}`}>
       {visibleGroups.map((group) => (
         <section className="mb-blueprint-group" key={group.poolGuid ?? group.poolName}>
           <header>
@@ -992,13 +1001,17 @@ function BlueprintRewardGroups({ groups, compact = false }: { groups: BlueprintR
           <div className="mb-blueprint-list">
             {group.rewards.length > 0 ? (
               <>
-                {group.rewards.slice(0, compact ? 4 : 12).map((reward) => (
+                {group.rewards.slice(0, itemLimit).map((reward) => (
                   <div className="mb-blueprint-item" key={reward.blueprintGuid ?? reward.displayName}>
                     <span>{reward.displayName}</span>
                     <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, playerFacingChance(reward.chanceLabel)].filter(Boolean).join(" / ") || "Blueprint"}</small>
                   </div>
                 ))}
-                {group.rewards.length > (compact ? 4 : 12) && <div className="mb-blueprint-more">+{group.rewards.length - (compact ? 4 : 12)} more</div>}
+                {group.rewards.length > itemLimit && (
+                  <button type="button" className="mb-blueprint-more is-action-row" disabled aria-label={`${group.rewards.length - itemLimit} more blueprint rewards not shown`}>
+                    +{group.rewards.length - itemLimit} more
+                  </button>
+                )}
               </>
             ) : (
               <div className="mb-blueprint-unresolved">Blueprint reward pool unresolved</div>
@@ -1006,7 +1019,11 @@ function BlueprintRewardGroups({ groups, compact = false }: { groups: BlueprintR
           </div>
         </section>
       ))}
-      {groups.length > visibleGroups.length && <div className="mb-blueprint-more">+{groups.length - visibleGroups.length} more reward pools</div>}
+      {groups.length > visibleGroups.length && (
+        <button type="button" className="mb-blueprint-more is-action-row" disabled aria-label={`${groups.length - visibleGroups.length} more reward pools not shown`}>
+          +{groups.length - visibleGroups.length} more reward pools
+        </button>
+      )}
     </div>
   );
 }
@@ -1016,76 +1033,6 @@ function pickupPrimaryName(pickup: MissionVariantView["pickupLocation"]): string
   if (grouping?.displayLabel) return grouping.displayLabel;
   if (grouping?.detailLabel) return grouping.detailLabel;
   return pickup.specificPickup || pickup.displayName || pickup.localityPool || pickup.system || "Pickup unresolved";
-}
-
-function pickupContextBadges(pickup: MissionVariantView["pickupLocation"]): string[] {
-  const primary = pickupPrimaryName(pickup);
-  return playerFacingLocations([
-    pickup.localityPool,
-    pickup.parentLocation,
-    ...(pickup.regions ?? []),
-    pickup.system,
-  ]).filter((value) => value !== primary);
-}
-
-function hasMeaningfulStandingRequirement(value: string): boolean {
-  return Boolean(value) && !/^(no extracted|unknown|unresolved)/i.test(value);
-}
-
-function dossierPickupHeadline(variant: MissionVariantView): string {
-  const system = variant.locationRoles?.pickup?.primarySystem ?? variant.pickupLocation.system;
-  if (system) return `${system} system`;
-  return pickupPrimaryName(variant.pickupLocation);
-}
-
-function dossierPickupContextLine(variant: MissionVariantView): string | undefined {
-  const headline = normalizedText(dossierPickupHeadline(variant));
-  return playerFacingLocations([
-    variant.locationRoles?.pickup?.grouping?.detailLabel,
-    variant.locationRoles?.pickup?.detailDisplay,
-    variant.pickupLocation.localityPool,
-    variant.pickupLocation.parentLocation,
-    variant.pickupLocation.displayName,
-  ]).find((value) => normalizedText(value) !== headline);
-}
-
-function uniqueTextLine(parts: Array<string | undefined>): string {
-  const seen = new Set<string>();
-  return parts
-    .map((part) => part?.trim())
-    .filter((part): part is string => {
-      if (!part) return false;
-      const key = normalizedText(part);
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .join(" \u00b7 ");
-}
-
-function dossierPickupSupportLine(variant: MissionVariantView): string {
-  const pickup = variant.pickupLocation;
-  if (pickup.status === "generated_from_pool" || pickup.status === "system_scope") {
-    return "Generated pickup pool \u00b7 exact region unresolved";
-  }
-  if (pickup.status === "system_only") return "Specific pickup unresolved";
-  if (pickup.status === "unknown" || pickup.status === "unresolved") return "Location context unresolved";
-  return uniqueTextLine([dossierPickupContextLine(variant), ...pickupContextBadges(pickup)]) || pickupDetail(pickup);
-}
-
-function standingRequirementParts(value?: string): string[] {
-  if (!value) return [];
-  return value
-    .split("/")
-    .map((part) => part.trim().replace(/\s+to\s+/i, " \u2192 "))
-    .filter(Boolean);
-}
-
-function creditRewardSupportLine(reward: MissionRewardView): string {
-  if (playerFacingCreditReward(reward) !== AUEC_REWARD_NOT_REPORTED) {
-    return "Reported payout";
-  }
-  return "Reward payout unresolved";
 }
 
 function dossierVariantDetailLabel(variant: MissionVariantView, groupLabel: string): string {
@@ -1102,18 +1049,11 @@ function dossierVariantDetailLabel(variant: MissionVariantView, groupLabel: stri
     ?? (normalizedText(primary) !== groupKey ? primary : "Location varies");
 }
 
-function dossierVariantSupportLine(variant: MissionVariantView, repeatedTitle: boolean): string {
-  const parts = [
-    !repeatedTitle ? variant.displayName : undefined,
-    variantDifficulty(variant) !== "Varies" ? variantDifficulty(variant) : undefined,
-    playerFacingCreditReward(variant.rewards),
-  ].filter(Boolean);
-  return parts.join(" / ");
-}
-
-function statusBadgeForContractor(concept: MissionConceptView, representative: MissionVariantView): string | undefined {
-  if (concept.factionDisplayName && concept.factionDisplayName !== representative.provider) return concept.factionDisplayName;
-  if (representative.faction && representative.faction !== representative.provider) return representative.faction;
+function dossierVariantRewardHint(variant: MissionVariantView): string | undefined {
+  const credit = playerFacingCreditReward(variant.rewards);
+  if (credit !== AUEC_REWARD_NOT_REPORTED) return credit;
+  const poolCount = variant.rewards.blueprintRewardGroups.length;
+  if (poolCount > 0) return `${poolCount} blueprint pool${poolCount === 1 ? "" : "s"}`;
   return undefined;
 }
 
@@ -1127,83 +1067,29 @@ function repOutcomeLabel(value?: number): string {
   return `${value >= 0 ? "+" : ""}${value.toLocaleString()} REP`;
 }
 
-function DossierOperationalSummary({
-  concept,
-  representative,
-  blueprintGroups,
-}: {
-  concept: MissionConceptView;
-  representative: MissionVariantView;
-  blueprintGroups: BlueprintRewardGroupView[];
-}) {
-  const contractorStatus = statusBadgeForContractor(concept, representative);
-  const standingRequirement = hasMeaningfulStandingRequirement(representative.standingRequirement)
-    ? representative.standingRequirement
-    : undefined;
-  const contractorSupport = uniqueTextLine([
-    shortRepScope(concept.reputationScope.displayName),
-    contractorStatus,
-  ]);
-  const requirementSupport = uniqueTextLine([
-    lawfulLabel(representative),
-    ...standingRequirementParts(standingRequirement),
-  ]);
-  const blueprintPoolCountLabel = `${blueprintGroups.length} pool${blueprintGroups.length === 1 ? "" : "s"}`;
-  const blueprintPoolPartial = blueprintGroups.some((group) => group.rewards.length === 0);
-  return (
-    <section className="mission-dossier-summary-strip" aria-label="Operational summary">
-      <div className="mission-dossier-summary-card is-location">
-        <span>Pickup Location</span>
-        <strong title={pickupDetail(representative.pickupLocation)}>{dossierPickupHeadline(representative)}</strong>
-        <p className="mission-dossier-summary-card__support">{dossierPickupSupportLine(representative)}</p>
-      </div>
-      <div className="mission-dossier-summary-card">
-        <span>Contractor</span>
-        <strong>{representative.provider || concept.factionDisplayName}</strong>
-        <p className="mission-dossier-summary-card__support">{contractorSupport || "Contractor scope unresolved"}</p>
-      </div>
-      <div className="mission-dossier-summary-card is-requirement">
-        <span>Requirement / Restriction</span>
-        <strong>{crimeStatLabel(representative.crimeStatRequirement)}</strong>
-        <p className="mission-dossier-summary-card__support">{requirementSupport}</p>
-      </div>
-      <div className="mission-dossier-summary-card">
-        <span>aUEC Reward Status</span>
-        <strong>{playerFacingCreditReward(representative.rewards)}</strong>
-        <p className="mission-dossier-summary-card__support">{creditRewardSupportLine(representative.rewards)}</p>
-      </div>
-      <div className="mission-dossier-summary-card is-blueprint">
-        <span>Blueprint Pool Status</span>
-        <strong>{blueprintGroups.length ? "Possible blueprint rewards" : "No blueprint rewards reported"}</strong>
-        <p className="mission-dossier-summary-card__support">
-          <span className={`mission-dossier-summary-card__stat${blueprintGroups.length > 0 ? " is-blueprint" : ""}`}>{blueprintPoolCountLabel}</span>
-          {blueprintPoolPartial && <span>Pool items partial</span>}
-        </p>
-      </div>
-    </section>
-  );
-}
-
 function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
   const itemRewards = variant.rewards.itemRewards ?? [];
+  const creditReward = playerFacingCreditReward(variant.rewards);
+  const creditUnresolved = creditReward === AUEC_REWARD_NOT_REPORTED;
   return (
-    <section className="mission-dossier-card mission-dossier-rewards-card">
+    <section className="mission-dossier-card mission-dossier-rewards-card is-compact">
       <div className="mission-dossier-card__heading">
         <h3>Rewards</h3>
       </div>
-      <div className="mission-dossier-section">
+      <div className="mission-dossier-section mission-dossier-rewards-reputation">
         <h4 className="mb-inline-heading">Reputation Impact</h4>
         <DossierReputationRewards paths={variant.rewardedReputationPaths} />
       </div>
-      <div className="mission-dossier-section mission-dossier-reward-status">
+      <div className={`mission-dossier-reward-status${creditUnresolved ? " is-muted" : ""}`}>
         <span>aUEC Reward</span>
-        <strong>{playerFacingCreditReward(variant.rewards)}</strong>
-        <p className="mission-dossier-card__support">
-          {variant.rewards.creditStatus === "fixed" ? "Reported payout." : "Not reliably reported in current data."}
-        </p>
+        {creditUnresolved ? (
+          <p className="mission-dossier-reward-muted">{creditReward}</p>
+        ) : (
+          <strong>{creditReward}</strong>
+        )}
       </div>
       {itemRewards.length > 0 && (
-        <div className="mission-dossier-section">
+        <div className="mission-dossier-section mission-dossier-item-rewards">
           <h4 className="mb-inline-heading">Item Rewards</h4>
           <BadgeList values={itemRewards.map((reward) => [reward.amount, reward.displayName ?? reward.entityClass ?? "Item reward"].filter(Boolean).join(" x "))} fallback="No item rewards reported" max={6} />
         </div>
@@ -1214,12 +1100,12 @@ function DossierRewardsCard({ variant }: { variant: MissionVariantView }) {
 
 function DossierBlueprintCard({ groups }: { groups: BlueprintRewardGroupView[] }) {
   return (
-    <section className="mission-dossier-card mission-dossier-blueprint-card">
+    <section className="mission-dossier-card mission-dossier-blueprint-panel">
       <div className="mission-dossier-card__heading">
         <h3>Blueprint Pool</h3>
         <span>{groups.length ? `${groups.length} reward pool${groups.length === 1 ? "" : "s"}` : "Pool unresolved"}</span>
       </div>
-      <BlueprintRewardGroups groups={groups} compact />
+      <BlueprintRewardGroups groups={groups} compact dossier />
     </section>
   );
 }
@@ -1239,23 +1125,22 @@ function DossierVariantList({
     return groups;
   }, new Map<string, MissionVariantView[]>()).entries())
     .sort((a, b) => variantRegionSortOrder(a[0]) - variantRegionSortOrder(b[0]) || a[0].localeCompare(b[0])), [variants]);
-  const repeatedTitle = useMemo(() => new Set(variants.map((variant) => normalizedText(variant.displayName))).size <= 1, [variants]);
   return (
     <section className="mission-dossier-card mission-dossier-variants-card">
       <div className="mission-dossier-card__heading">
         <h3>{`Variants (${variants.length})`}</h3>
-        <span>Grouped by system</span>
       </div>
       <div className="mission-dossier-variant-list">
         {groupedVariants.map(([region, groupVariants]) => (
           <div className="mission-dossier-variant-region" key={region}>
-            <div className="mission-dossier-variant-region__header">
-              <strong>{region}</strong>
-              <span>{groupVariants.length} variant{groupVariants.length === 1 ? "" : "s"}</span>
-            </div>
+            {groupedVariants.length > 1 && (
+              <div className="mission-dossier-variant-region__header">
+                <strong>{region}</strong>
+              </div>
+            )}
             {groupVariants.map((variant, index) => {
               const isSelected = variant.variantKey === selectedVariantKey;
-              const locationBadges = pickupContextBadges(variant.pickupLocation);
+              const rewardHint = dossierVariantRewardHint(variant);
               return (
                 <button
                   type="button"
@@ -1267,11 +1152,8 @@ function DossierVariantList({
                   <span className="mission-dossier-variant-row__index">{index + 1}</span>
                   <span className="mission-dossier-variant-row__main">
                     <strong>{dossierVariantDetailLabel(variant, region)}</strong>
-                    <small>{dossierVariantSupportLine(variant, repeatedTitle)}</small>
                   </span>
-                  <span className="mission-dossier-variant-row__badges">
-                    {locationBadges.slice(0, 3).map((value) => <Badge key={value} tone={locationSystemTone(variant.pickupLocation.system)}>{value}</Badge>)}
-                  </span>
+                  {rewardHint && <span className="mission-dossier-variant-row__status">{rewardHint}</span>}
                   <span className="mission-dossier-variant-row__chevron" aria-hidden="true">&gt;</span>
                 </button>
               );
@@ -1329,9 +1211,9 @@ function DossierBody({
             <p className="mb-empty-note">Mission briefing not reported.</p>
           )}
         </section>
-        <div className="mission-dossier-middle-column">
-          <DossierRewardsCard variant={selectedVariant} />
+        <div className="mission-dossier-side-column">
           <DossierBlueprintCard groups={blueprintGroups} />
+          <DossierRewardsCard variant={selectedVariant} />
         </div>
         <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
       </div>
@@ -1764,8 +1646,7 @@ function ConceptDetail({
       </header>
       {representative && (
         <section className="mission-dossier-panel">
-          <DossierOperationalSummary concept={concept} representative={representative} blueprintGroups={blueprintGroups} />
-          {poolVariesWithoutRegion && <p className="mb-empty-note">Blueprint pool varies by generated locality; exact region mapping unresolved.</p>}
+          {poolVariesWithoutRegion && <p className="mb-empty-note mission-dossier-panel-note">Blueprint pool varies by generated locality; exact region mapping unresolved.</p>}
           <DossierBody
             key={selectedAvailability?.[0]}
             variants={selectedVariants}
