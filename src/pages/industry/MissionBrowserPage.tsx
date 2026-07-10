@@ -978,6 +978,8 @@ function playerFacingChance(value?: string): string | undefined {
   return value?.replace(/\s+-\s+(?=1 of \d+)/i, " · ");
 }
 
+const DOSSIER_BLUEPRINT_VISIBLE_COUNT = 5;
+
 function BlueprintRewardGroups({
   groups,
   compact = false,
@@ -987,39 +989,71 @@ function BlueprintRewardGroups({
   compact?: boolean;
   dossier?: boolean;
 }) {
+  const [expandedPools, setExpandedPools] = useState<Set<string>>(() => new Set());
+
   if (!groups.length) return <p className="mb-empty-note">No blueprint rewards reported.</p>;
-  const visibleGroups = groups.slice(0, compact ? 3 : groups.length);
-  const itemLimit = compact ? 4 : 12;
+
+  const visibleGroups = dossier ? groups : groups.slice(0, compact ? 3 : groups.length);
+  const itemLimit = dossier ? DOSSIER_BLUEPRINT_VISIBLE_COUNT : compact ? 4 : 12;
+
+  const togglePoolExpanded = (poolKey: string) => {
+    setExpandedPools((current) => {
+      const next = new Set(current);
+      if (next.has(poolKey)) next.delete(poolKey);
+      else next.add(poolKey);
+      return next;
+    });
+  };
+
   return (
     <div className={`mb-blueprint-groups${compact ? " is-compact" : ""}${dossier ? " is-dossier" : ""}`}>
-      {visibleGroups.map((group) => (
-        <section className="mb-blueprint-group" key={group.poolGuid ?? group.poolName}>
-          <header>
-            <strong>{group.poolName}</strong>
-            <span>{playerFacingChance(group.chanceLabel) ?? "Chance not reported"}</span>
-          </header>
-          <div className="mb-blueprint-list">
-            {group.rewards.length > 0 ? (
-              <>
-                {group.rewards.slice(0, itemLimit).map((reward) => (
-                  <div className="mb-blueprint-item" key={reward.blueprintGuid ?? reward.displayName}>
-                    <span>{reward.displayName}</span>
-                    <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, playerFacingChance(reward.chanceLabel)].filter(Boolean).join(" / ") || "Blueprint"}</small>
-                  </div>
-                ))}
-                {group.rewards.length > itemLimit && (
-                  <button type="button" className="mb-blueprint-more is-action-row" disabled aria-label={`${group.rewards.length - itemLimit} more blueprint rewards not shown`}>
-                    +{group.rewards.length - itemLimit} more
-                  </button>
-                )}
-              </>
-            ) : (
-              <div className="mb-blueprint-unresolved">Blueprint reward pool unresolved</div>
-            )}
-          </div>
-        </section>
-      ))}
-      {groups.length > visibleGroups.length && (
+      {visibleGroups.map((group) => {
+        const poolKey = group.poolGuid ?? group.poolName;
+        const isExpanded = dossier && expandedPools.has(poolKey);
+        const visibleRewards = dossier
+          ? (isExpanded ? group.rewards : group.rewards.slice(0, itemLimit))
+          : group.rewards.slice(0, itemLimit);
+        const hiddenCount = group.rewards.length - itemLimit;
+
+        return (
+          <section className="mb-blueprint-group" key={poolKey}>
+            <header>
+              <strong>{group.poolName}</strong>
+              <span>{playerFacingChance(group.chanceLabel) ?? "Chance not reported"}</span>
+            </header>
+            <div className="mb-blueprint-list">
+              {group.rewards.length > 0 ? (
+                <>
+                  {visibleRewards.map((reward) => (
+                    <div className="mb-blueprint-item" key={reward.blueprintGuid ?? reward.displayName}>
+                      <span>{reward.displayName}</span>
+                      <small>{[reward.componentType, reward.size ? `S${reward.size}` : undefined, reward.grade ? `Grade ${reward.grade}` : undefined, playerFacingChance(reward.chanceLabel)].filter(Boolean).join(" / ") || "Blueprint"}</small>
+                    </div>
+                  ))}
+                  {dossier && hiddenCount > 0 && (
+                    <button
+                      type="button"
+                      className="mb-blueprint-more is-action-row"
+                      aria-expanded={isExpanded}
+                      onClick={() => togglePoolExpanded(poolKey)}
+                    >
+                      {isExpanded ? "Show fewer" : `+${hiddenCount} more`}
+                    </button>
+                  )}
+                  {!dossier && group.rewards.length > itemLimit && (
+                    <button type="button" className="mb-blueprint-more is-action-row" disabled aria-label={`${group.rewards.length - itemLimit} more blueprint rewards not shown`}>
+                      +{group.rewards.length - itemLimit} more
+                    </button>
+                  )}
+                </>
+              ) : (
+                <div className="mb-blueprint-unresolved">Blueprint reward pool unresolved</div>
+              )}
+            </div>
+          </section>
+        );
+      })}
+      {!dossier && groups.length > visibleGroups.length && (
         <button type="button" className="mb-blueprint-more is-action-row" disabled aria-label={`${groups.length - visibleGroups.length} more reward pools not shown`}>
           +{groups.length - visibleGroups.length} more reward pools
         </button>
@@ -1130,7 +1164,7 @@ function DossierVariantList({
       <div className="mission-dossier-card__heading">
         <h3>{`Variants (${variants.length})`}</h3>
       </div>
-      <div className="mission-dossier-variant-list">
+      <div className={`mission-dossier-variant-list${variants.length > 5 ? " is-scrollable" : ""}`}>
         {groupedVariants.map(([region, groupVariants]) => (
           <div className="mission-dossier-variant-region" key={region}>
             {groupedVariants.length > 1 && (
@@ -1211,11 +1245,11 @@ function DossierBody({
             <p className="mb-empty-note">Mission briefing not reported.</p>
           )}
         </section>
-        <div className="mission-dossier-side-column">
-          <DossierBlueprintCard groups={blueprintGroups} />
+        <DossierBlueprintCard groups={blueprintGroups} />
+        <div className="mission-dossier-right-rail">
+          <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
           <DossierRewardsCard variant={selectedVariant} />
         </div>
-        <DossierVariantList variants={variants} selectedVariantKey={selectedVariant.variantKey} onSelect={onSelectVariant} />
       </div>
       <DossierFooter variant={selectedVariant} blueprintGroups={blueprintGroups} />
     </>
