@@ -9,19 +9,19 @@
 /* ── Page shell ───────────────────────────────── */
 
 .craft-page {
-  --craft-accent: #8bd6cc;
-  --craft-accent-soft: rgba(45, 212, 191, 0.095);
-  --craft-accent-muted: rgba(139, 214, 204, 0.72);
-  --craft-accent-border: rgba(72, 187, 170, 0.22);
-  --craft-accent-border-strong: rgba(72, 187, 170, 0.34);
+  --craft-accent: #6bb8ae;
+  --craft-accent-soft: rgba(77, 184, 168, 0.07);
+  --craft-accent-muted: rgba(169, 186, 208, 0.78);
+  --craft-accent-border: rgba(72, 187, 170, 0.16);
+  --craft-accent-border-strong: rgba(72, 187, 170, 0.26);
   --craft-accent-bg: rgba(12, 48, 48, 0.24);
-  --craft-accent-glow: rgba(45, 212, 191, 0.09);
-  --craft-positive: #8ee6d9;
-  --craft-positive-soft: rgba(94, 234, 212, 0.1);
-  --craft-positive-muted: rgba(142, 230, 217, 0.68);
-  --craft-positive-border: rgba(94, 234, 212, 0.2);
+  --craft-accent-glow: rgba(77, 184, 168, 0.06);
+  --craft-positive: #6ec4b6;
+  --craft-positive-soft: rgba(77, 184, 168, 0.08);
+  --craft-positive-muted: rgba(110, 196, 182, 0.7);
+  --craft-positive-border: rgba(77, 184, 168, 0.16);
   --craft-positive-bg: rgba(45, 212, 191, 0.075);
-  --craft-positive-glow: rgba(94, 234, 212, 0.08);
+  --craft-positive-glow: rgba(77, 184, 168, 0.05);
   --craft-negative: #fb7185;
   --craft-negative-muted: rgba(251, 113, 133, 0.16);
 }
@@ -32,7 +32,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* ── Breadcrumb ───────────────────────────────── */
@@ -43,13 +43,13 @@
   gap: 0.35rem;
   font-family: var(--font-primary);
   font-size: var(--cd-font-xs, 0.58rem);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.35);
+  color: rgba(169, 186, 208, 0.55);
   margin-bottom: 0.3rem;
 }
 
-.craft-breadcrumb-root { color: rgba(160, 180, 220, 0.4); }
+.craft-breadcrumb-root { color: rgba(169, 186, 208, 0.62); }
 .craft-breadcrumb-sep { opacity: 0.35; }
 .craft-breadcrumb-active { color: var(--craft-accent-muted); }
 
@@ -60,14 +60,14 @@
   font-size: var(--cd-font-xl, 1rem);
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #e7edff;
+  color: #edf7ff;
   margin: 0;
 }
 
 .craft-page-subtitle {
   font-family: var(--font-primary);
   font-size: var(--cd-font-md, 0.78rem);
-  color: rgba(160, 180, 220, 0.45);
+  color: rgba(169, 186, 208, 0.68);
   margin-top: 0.18rem;
 }
 
@@ -81,7 +81,7 @@
 
 .craft-stat {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   padding: 0.55rem 0.9rem;
   min-width: 80px;
@@ -95,9 +95,9 @@
 .craft-stat-label {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   margin-bottom: 0.2rem;
 }
 
@@ -105,7 +105,7 @@
   font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 700;
-  color: #e7edff;
+  color: #edf7ff;
 }
 
 .craft-stat-value--alert { color: #f87171; }
@@ -115,7 +115,7 @@
 .craft-tab-bar {
   display: flex;
   gap: 0.35rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
   padding-bottom: 0.25rem;
   flex-wrap: wrap;
 }
@@ -132,7 +132,7 @@
   text-transform: uppercase;
   color: rgba(190, 204, 232, 0.62);
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 6px;
   cursor: pointer;
   transition: color 0.12s, border-color 0.12s;
@@ -191,7 +191,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.7rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
   background: rgba(0, 0, 0, 0.14);
 }
 
@@ -199,7 +199,7 @@
   font-family: var(--font-display);
   font-size: 14px !important;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--craft-accent-muted);
 }
@@ -213,7 +213,7 @@
 .craft-count {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  color: rgba(160, 180, 220, 0.35);
+  color: rgba(169, 186, 208, 0.55);
 }
 
 /* ── Filter bar ───────────────────────────────── */
@@ -223,7 +223,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.7rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
   flex-wrap: wrap;
 }
 
@@ -238,7 +238,7 @@
   left: 0.6rem;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(160, 180, 220, 0.3);
+  color: rgba(169, 186, 208, 0.5);
   pointer-events: none;
 }
 
@@ -246,7 +246,7 @@
   width: 100%;
   padding: 0.38rem 0.7rem 0.38rem 2rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 4px;
   font-family: var(--font-primary);
   font-size: var(--cd-font-md, 0.82rem);
@@ -265,7 +265,7 @@
 .craft-select {
   padding: 0.38rem 0.65rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 4px;
   font-family: var(--font-primary);
   font-size: var(--cd-font-md, 0.82rem);
@@ -295,10 +295,10 @@
   text-align: left;
   font-family: var(--font-primary);
   font-size: 13px !important;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  color: rgba(169, 186, 208, 0.62);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.045);
   white-space: nowrap;
 }
 
@@ -338,7 +338,7 @@
 
 .craft-cell-name {
   font-weight: 500;
-  color: #e7edff;
+  color: #edf7ff;
   max-width: 280px;
 }
 
@@ -355,7 +355,7 @@
 
 .craft-cell-subdued {
   font-size: 14px !important;
-  color: rgba(160, 180, 220, 0.45);
+  color: rgba(169, 186, 208, 0.68);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -390,7 +390,7 @@
 .craft-badge--ctype {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(200, 215, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
 }
 
 .craft-badge--neutral {
@@ -451,7 +451,7 @@
   color: var(--craft-negative);
 }
 
-.craft-muted { color: rgba(160, 180, 220, 0.4); }
+.craft-muted { color: rgba(169, 186, 208, 0.62); }
 
 /* ── Buttons ──────────────────────────────────── */
 
@@ -502,7 +502,7 @@
   width: 22px;
   height: 22px;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 3px;
   color: rgba(248, 113, 113, 0.5);
   font-size: 1rem;
@@ -524,7 +524,7 @@
   width: 22px;
   height: 22px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 3px;
   color: rgba(160, 180, 220, 0.7);
   font-size: 14px !important;
@@ -538,7 +538,7 @@
 .craft-qty-value {
   font-family: var(--font-primary);
   font-size: 14px !important;
-  color: #e7edff;
+  color: #edf7ff;
   min-width: 24px;
   text-align: center;
 }
@@ -558,7 +558,7 @@
   gap: 0.3rem;
   padding: 0.2rem 0.55rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 4px;
   font-family: var(--font-primary);
   font-size: 13px !important;
@@ -600,7 +600,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.6rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
   gap: 0.75rem;
 }
 
@@ -613,7 +613,7 @@
   font-family: var(--font-primary);
   font-size: 14px !important;
   font-weight: 500;
-  color: #e7edff;
+  color: #edf7ff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -686,7 +686,7 @@
 .craft-empty-state {
   padding: 2rem 1rem;
   text-align: center;
-  color: rgba(160, 180, 220, 0.3);
+  color: rgba(169, 186, 208, 0.5);
   font-family: var(--font-primary);
   font-size: 14px !important;
   font-style: italic;
@@ -703,7 +703,7 @@
 
 .craft-analytics-card {
   background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -712,10 +712,10 @@
   padding: 0.55rem 0.85rem;
   font-family: var(--font-primary);
   font-size: 13px !important;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(167, 139, 250, 0.65);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .craft-bar-track {
@@ -756,7 +756,7 @@
 .craft-wip-desc {
   font-family: var(--font-primary);
   font-size: 14px !important;
-  color: rgba(160, 180, 220, 0.35);
+  color: rgba(169, 186, 208, 0.55);
   line-height: 1.5;
 }
 
@@ -774,11 +774,11 @@
 .craft-drawer-col-title {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(167, 139, 250, 0.7);
   padding-bottom: 0.35rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .craft-drawer-col-title--secondary {
@@ -960,13 +960,13 @@
 .craft-drawer-source-detail {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
 }
 
 .craft-drawer-empty {
   font-family: var(--font-primary);
   font-size: 0.74rem;
-  color: rgba(160, 180, 220, 0.3);
+  color: rgba(169, 186, 208, 0.5);
   font-style: italic;
   padding: 0.3rem 0;
 }
@@ -980,13 +980,13 @@
   margin-top: 0.75rem;
   padding: 0.22rem 0.5rem;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 3px;
   font-family: var(--font-primary);
   font-size: 13px !important;
   letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.35);
+  color: rgba(169, 186, 208, 0.55);
   cursor: pointer;
   transition: color 0.12s, border-color 0.12s;
 }
@@ -1047,7 +1047,7 @@
 .craft-pagination-info {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   white-space: nowrap;
 }
 
@@ -1060,7 +1060,7 @@
 .craft-page-btn {
   padding: 0.28rem 0.6rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 3px;
   font-family: var(--font-primary);
   font-size: 0.68rem;
@@ -1150,7 +1150,7 @@
   align-items: center;
   gap: 0.3rem;
   padding-bottom: 0.25rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
   margin-bottom: 0.15rem;
   flex-wrap: wrap;
 }
@@ -1188,7 +1188,7 @@
 .craft-mod-range {
   font-family: var(--font-primary);
   font-size: 13px !important;
-  color: rgba(160, 180, 220, 0.45);
+  color: rgba(169, 186, 208, 0.68);
   flex-shrink: 0;
 }
 
@@ -1200,7 +1200,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem 0.85rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .craft-recipe-header-left { display: flex; flex-direction: column; gap: 0.2rem; }
@@ -1211,21 +1211,21 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #e7edff;
+  color: #edf7ff;
   margin: 0;
 }
 
 .craft-recipe-subtitle {
   font-family: var(--font-primary);
   font-size: 14px !important;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   margin: 0;
 }
 
 .craft-recipe-count {
   font-family: var(--font-primary);
   font-size: 0.68rem;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   white-space: nowrap;
   padding-top: 0.15rem;
 }
@@ -1242,7 +1242,7 @@
   gap: 0.35rem;
   padding: 0.34rem 0.65rem;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 4px;
   font-family: var(--font-primary);
   font-size: 0.79rem;
@@ -1336,13 +1336,13 @@
   gap: 0.3rem;
   padding: 0.34rem 0.65rem;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.055);
   border-radius: 4px;
   font-family: var(--font-primary);
   font-size: 13px !important;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   cursor: pointer;
   white-space: nowrap;
   transition: color 0.12s, border-color 0.12s;
@@ -1374,9 +1374,9 @@
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 4px;
-  color: rgba(160, 180, 220, 0.35);
+  color: rgba(169, 186, 208, 0.55);
 }
 
 .craft-name-info {
@@ -1390,7 +1390,7 @@
   font-family: var(--font-primary);
   font-size: 14px !important;
   font-weight: 500;
-  color: #e7edff;
+  color: #edf7ff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1399,7 +1399,7 @@
 .craft-name-sub {
   font-family: var(--font-primary);
   font-size: 0.71rem;
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1716,7 +1716,7 @@
   padding: 0 6px;
   font-family: var(--font-primary);
   font-size: 9px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(202, 216, 226, 0.78);
   border: 1px solid rgba(202, 216, 226, 0.78);
@@ -1761,9 +1761,9 @@
 .craft-matq-quality-label {
   font-family: var(--font-primary);
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(160, 180, 220, 0.45);
+  color: rgba(169, 186, 208, 0.68);
 }
 
 
@@ -1800,7 +1800,7 @@
   font-family: var(--font-primary);
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: rgba(160, 180, 220, 0.42);
 }
@@ -2063,7 +2063,7 @@
 
 .craft-summary-head {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.035);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -2141,7 +2141,7 @@
   flex-direction: column;
   gap: 6px;
   padding: 7px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .craft-summary-mod-row:last-child {
@@ -2251,7 +2251,7 @@
   margin-bottom: 5px;
   font-family: var(--font-primary);
   font-size: 9px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(140, 160, 200, 0.38);
 }
@@ -2284,7 +2284,7 @@
   font-family: var(--font-primary);
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
@@ -2516,7 +2516,7 @@
 }
 
 .craft-recipe-results .craft-cell-subdued {
-  color: rgba(160, 180, 220, 0.4);
+  color: rgba(169, 186, 208, 0.62);
   font-weight: 600;
 }
 
@@ -2573,14 +2573,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.55rem 0.7rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   background: rgba(255, 255, 255, 0.02);
 }
 
 .msb-sidebar-title {
   font-family: var(--font-primary);
   font-size: 0.58rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(142, 174, 184, 0.58);
 }

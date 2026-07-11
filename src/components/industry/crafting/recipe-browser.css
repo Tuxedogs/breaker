@@ -28,9 +28,9 @@
   --craft-orange-dim:    rgba(255, 178, 26, 0.1);
   --craft-orange-border: var(--border-active-color);
 
-  --craft-text:          #f5f3e8;
-  --craft-muted:         #d2d2d2;
-  --craft-faint:         #6f756b;
+  --craft-text:          #edf7ff;
+  --craft-muted:         #a9bad0;
+  --craft-faint:         #7a8fa3;
 
   --craft-good:          var(--void-accent-teal);
   --craft-bad:           #ff4d4f;
@@ -63,7 +63,7 @@
   --craft-orange-glow:      var(--void-accent-amber-glow);
 
   --craft-teal:             var(--craft-good);
-  --craft-teal-soft:        rgba(67, 255, 208, 0.18);
+  --craft-teal-soft:        rgba(77, 184, 168, 0.12);
 
   --craft-text-main:        var(--craft-text);
   --craft-text-muted:       var(--craft-muted);
@@ -487,10 +487,10 @@
   height: 28px;
   min-width: 0;
   padding: 0 0.52rem;
-  border: 1px solid rgba(148, 163, 184, 0.13);
+  border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 3px;
-  background: rgba(255, 255, 255, 0.025);
-  color: rgba(148, 163, 184, 0.58);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(169, 186, 208, 0.72);
   font-family: var(--font-primary);
   font-size: 0.75rem;
   letter-spacing: 0.01em;
@@ -890,14 +890,14 @@
   padding: 0.58rem 0.78rem 0.7rem;
 
   background: var(--bg-card);
-  border: var(--border-panel);
+  border: var(--border-soft);
   border-radius: 6px;
-  box-shadow: var(--shadow-card);
+  box-shadow: none;
   transition: border-color 0.12s ease, box-shadow 0.12s ease;
 }
 .craft-material-card:hover {
   border-color: var(--border-hover-color);
-  box-shadow: var(--shadow-panel);
+  box-shadow: none;
 }
 
 .craft-material-card-head {
@@ -920,16 +920,16 @@
 
   border-radius: 4px;
   color: var(--craft-muted);
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .craft-material-name { min-width: 0; overflow: hidden;
   font-size: var(--cd-mat-name, 1.2rem); font-weight: 600;
-  line-height: 1; text-overflow: ellipsis;
+  line-height: 1.2; text-overflow: ellipsis;
   white-space: nowrap; color: var(--craft-text); }
 .craft-quality-readout { display: inline-flex; align-items: center; gap: 5px; flex: 0 0 auto; padding: 4px 7px; border: 1px solid var(--craft-orange-border); border-radius: 4px; color: var(--void-accent-amber); background: rgba(255, 153, 0, 0.055); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; }
 
@@ -941,10 +941,10 @@
 .craft-quality-rail-wrap { position: relative; height: 38px; }
 .craft-quality-input { position: absolute; inset: 0; z-index: 5; width: 100%; height: 30px; margin: 0; opacity: 0; cursor: pointer; }
 .craft-quality-rail { position: absolute; width: 100%; left: 0; right: 0; top: 15px; height: 3px; background: rgba(255, 255, 255, 0.1); }
-.craft-quality-rail-fill { position: absolute; left: var(--band-one-pct, 0%); top: 0; bottom: 0; width: var(--fill-pct, 0%); background: var(--void-accent-amber); box-shadow: 0 0 12px var(--void-accent-amber-glow); }
+.craft-quality-rail-fill { position: absolute; left: var(--band-one-pct, 0%); top: 0; bottom: 0; width: var(--fill-pct, 0%); background: var(--void-accent-amber); box-shadow: 0 0 8px var(--void-accent-amber-glow); }
 .craft-quality-marker { position: absolute; top: -8px; width: 24px; height: 28px; padding: 0; transform: translateX(-50%); border: 0; background: transparent; cursor: pointer; }
 .craft-quality-marker-line { position: absolute; left: 50%; top: 4px; width: 2px; height: 10px; transform: translateX(-50%); background: rgba(255, 255, 255, 0.28); }
-.craft-quality-marker.is-active .craft-quality-marker-line { top: 0; height: 19px; width: 3px; background: var(--void-accent-amber); box-shadow: 0 0 18px var(--void-accent-amber-glow); }
+.craft-quality-marker.is-active .craft-quality-marker-line { top: 0; height: 19px; width: 3px; background: var(--void-accent-amber); box-shadow: 0 0 10px var(--void-accent-amber-glow); }
 .craft-quality-marker-value { position: absolute; top: 25px; left: 50%; transform: translateX(-50%); color: var(--craft-faint); font-size: 10px; font-weight: 800; }
 .craft-quality-marker.is-active .craft-quality-marker-value { color: var(--craft-tier, var(--craft-orange)); }
 .craft-quality-marker[data-edge="start"] .craft-quality-marker-value { left: 0; transform: none; }
@@ -1068,12 +1068,12 @@
   align-items: center;
   gap: 4px;
   margin-bottom: 0;
-  color: var(--void-text-dim);
-  font-size: var(--cd-font-xs, 0.62rem);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
+  color: var(--void-text-muted);
+  font-size: var(--cd-font-sm, 0.72rem);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: none;
   opacity: 1;
 }
 
@@ -1113,7 +1113,7 @@
 .stat-modifier,
 .craft-stat-modifier {
   color: var(--void-accent-teal);
-  text-shadow: 0 0 10px rgba(78, 224, 189, 0.18);
+  text-shadow: 0 0 6px rgba(77, 184, 168, 0.1);
 }
 
 .stat-total,
@@ -1199,12 +1199,12 @@
 .craft-summary-stat-label,
 .craft-summary-total-modifier span,
 .craft-summary-mod-breakdown-label {
-  color: var(--void-text-dim);
-  font-size: clamp(8px, 7px + 0.12vw, 10px);
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  text-transform: uppercase;
+  color: var(--void-text-muted);
+  font-size: clamp(10px, 9px + 0.14vw, 12px);
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: none;
 }
 .craft-summary-stat-number {
   display: inline-flex;
@@ -1301,15 +1301,15 @@
   font-size: 12px;
   font-weight: 900;
   line-height: 1;
-  text-shadow: 0 0 10px rgba(78, 224, 189, 0.18);
+  text-shadow: 0 0 6px rgba(77, 184, 168, 0.1);
 }
-.craft-summary-section--grow::before { content: "Blueprint"; display: block; margin-bottom: 7px; color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
-.craft-summary-section-label { margin-bottom: 7px; color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.16em; text-transform: uppercase; }
+.craft-summary-section--grow::before { content: "Blueprint"; display: block; margin-bottom: 7px; color: var(--craft-orange); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.craft-summary-section-label { margin-bottom: 7px; color: var(--craft-orange); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .craft-summary-empty { border: 1px solid rgba(148,163,184,0.08); border-radius: 4px; padding: 10px; color: var(--craft-muted); font-size: 12px; font-style: italic; }
 .craft-summary-empty--compact { padding: 7px 8px; font-size: 11px; line-height: 1.2; }
 .craft-blueprint-source-list { display: flex; flex-direction: column; gap: 6px; }
 .craft-blueprint-source { border: 1px solid rgba(148,163,184,0.1); border-radius: 5px; padding: 8px 10px; background: rgba(255,255,255,0.028); }
-.craft-blueprint-source-tag { color: var(--craft-orange); font-size: 9px; font-weight: 900; letter-spacing: 0.14em; text-transform: uppercase; }
+.craft-blueprint-source-tag { color: var(--craft-orange); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .craft-blueprint-source-name { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--craft-text); }
 .craft-summary-mission-section { padding-top: 8px; }
 .craft-mission-source-list {
@@ -2078,12 +2078,12 @@
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  color: var(--void-text-dim);
+  color: var(--void-text-muted);
   font-size: 13px !important;
-  font-weight: 700;
-  letter-spacing: 0.10em;
+  font-weight: 650;
+  letter-spacing: 0.04em;
   margin-bottom: 2px;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .craft-page .craft-material-card.craft-matq-card .craft-matq-stat-percent {
@@ -2150,21 +2150,21 @@
 }
 
 .craft-detail-stage.craft-detail-shell {
-  --panel-bg: #04131D;
-  --panel-bg-deep: #03121C;
-  --panel-row-bg: #051A28;
-  --panel-row-hover: #081E2C;
-  --panel-border: #0E2A36;
-  --panel-border-soft: rgba(65, 132, 160, 0.22);
-  --accent-cyan: #00E6D2;
+  --panel-bg: var(--ui-panel-bg, #04131d);
+  --panel-bg-deep: var(--ui-panel-bg-deep, #03121c);
+  --panel-row-bg: var(--ui-panel-row, #051a28);
+  --panel-row-hover: var(--ui-panel-row-hover, #081e2c);
+  --panel-border: var(--ui-panel-border, rgba(65, 132, 160, 0.16));
+  --panel-border-soft: var(--ui-panel-border-soft, rgba(65, 132, 160, 0.14));
+  --accent-cyan: var(--ui-accent-cyan, #4db8b0);
   --accent-blue: #4DA3FF;
   --accent-purple: #B85CF6;
   --warning: #FFB84D;
   --danger: #FF5C5C;
   --success: #22D37A;
-  --text-primary: #E6F2FF;
-  --text-secondary: #8FA3B8;
-  --text-muted: #5F7285;
+  --text-primary: var(--ui-text-primary, #edf7ff);
+  --text-secondary: var(--ui-text-secondary, #a9bad0);
+  --text-muted: var(--ui-text-muted, #7a8fa3);
 
   display: flex;
   flex-direction: column;
@@ -2177,7 +2177,7 @@
   padding: 14px;
   overflow: visible;
   background:
-    radial-gradient(circle at 14% 0%, rgba(0, 230, 210, 0.045), transparent 34%),
+    radial-gradient(circle at 14% 0%, rgba(77, 184, 168, 0.045), transparent 34%),
     linear-gradient(180deg, var(--panel-bg) 0%, var(--panel-bg-deep) 100%);
   border: 1px solid var(--panel-border);
   border-radius: 12px;
@@ -2270,7 +2270,7 @@
 .craft-detail-hero-icon--fallback {
   display: block;
   background:
-    radial-gradient(circle at 50% 30%, rgba(0, 230, 210, 0.12), transparent 55%),
+    radial-gradient(circle at 50% 30%, rgba(77, 184, 168, 0.12), transparent 55%),
     rgba(0, 0, 0, 0.32);
 }
 
@@ -2902,8 +2902,8 @@
 }
 
 .craft-detail-effect-chip--vitality {
-  border-color: rgba(0, 230, 210, 0.24);
-  background: rgba(0, 230, 210, 0.06);
+  border-color: rgba(77, 184, 168, 0.24);
+  background: rgba(77, 184, 168, 0.06);
 }
 
 .craft-detail-effect-chip--vitality strong.craft-ok {
@@ -3312,7 +3312,7 @@
 }
 
 .craft-detail-hero-chips .craft-badge--craft-time {
-  border-color: rgba(0, 230, 210, 0.22);
+  border-color: rgba(77, 184, 168, 0.22);
   color: var(--text-secondary);
 }
 
@@ -3651,21 +3651,21 @@
    ========================================================================== */
 
 .component-results-browser {
-  --panel-bg: #04131D;
-  --panel-bg-deep: #03121C;
-  --panel-row-bg: #051A28;
-  --panel-row-hover: #081E2C;
-  --panel-border: #0E2A36;
-  --panel-border-soft: rgba(65, 132, 160, 0.22);
-  --accent-cyan: #00E6D2;
+  --panel-bg: var(--ui-panel-bg, #04131d);
+  --panel-bg-deep: var(--ui-panel-bg-deep, #03121c);
+  --panel-row-bg: var(--ui-panel-row, #051a28);
+  --panel-row-hover: var(--ui-panel-row-hover, #081e2c);
+  --panel-border: var(--ui-panel-border, rgba(65, 132, 160, 0.16));
+  --panel-border-soft: var(--ui-panel-border-soft, rgba(65, 132, 160, 0.14));
+  --accent-cyan: var(--ui-accent-cyan, #4db8b0);
   --accent-blue: #4DA3FF;
   --accent-purple: #B85CF6;
   --warning: #FFB84D;
   --danger: #FF5C5C;
   --success: #22D37A;
-  --text-primary: #E6F2FF;
-  --text-secondary: #8FA3B8;
-  --text-muted: #5F7285;
+  --text-primary: var(--ui-text-primary, #edf7ff);
+  --text-secondary: var(--ui-text-secondary, #a9bad0);
+  --text-muted: var(--ui-text-muted, #7a8fa3);
 
   gap: 12px;
   width: 100%;
@@ -4210,11 +4210,11 @@
 }
 
 .component-result-card:hover {
-  border-color: rgba(0, 230, 210, 0.28);
+  border-color: rgba(77, 184, 168, 0.22);
   background: var(--panel-row-hover);
   box-shadow:
     0 10px 22px rgba(0, 0, 0, 0.24),
-    0 0 0 1px rgba(0, 230, 210, 0.06);
+    0 0 0 1px rgba(77, 184, 168, 0.04);
 }
 
 .component-result-card--weapon .component-card-modifiers {
@@ -4306,7 +4306,7 @@
   color: var(--text-primary);
   font-size: var(--cd-font-title, 1.18rem);
   font-weight: 850;
-  line-height: 1.15;
+  line-height: 1.25;
   letter-spacing: 0;
   overflow-wrap: break-word;
   word-break: normal;
@@ -4434,13 +4434,13 @@
   max-width: 100%;
   min-height: clamp(20px, 19px + 0.2vw, 24px);
   padding: 0 6px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.12);
   border-radius: 4px;
-  background: rgba(15, 23, 42, 0.42);
+  background: rgba(15, 23, 42, 0.28);
   color: var(--craft-muted);
-  font-size: var(--cd-font-xs, 0.66rem);
-  font-weight: 800;
-  line-height: 1;
+  font-size: var(--cd-font-sm, 0.72rem);
+  font-weight: 700;
+  line-height: 1.2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4640,8 +4640,8 @@
 
   .component-browser-toolbar .crb-material-trigger--toolbar:hover,
   .component-browser-toolbar .crb-material-trigger--toolbar.crb-material-trigger--open {
-    border-color: rgba(0, 230, 210, 0.34);
-    background: rgba(0, 230, 210, 0.055);
+    border-color: rgba(77, 184, 168, 0.34);
+    background: rgba(77, 184, 168, 0.055);
     color: var(--accent-cyan);
   }
 
@@ -4668,9 +4668,9 @@
   }
 
   .component-browser-toolbar .component-browser-search:focus-within {
-    border-color: rgba(0, 230, 210, 0.42);
+    border-color: rgba(77, 184, 168, 0.42);
     box-shadow:
-      0 0 0 1px rgba(0, 230, 210, 0.08),
+      0 0 0 1px rgba(77, 184, 168, 0.05),
       inset 0 1px 2px rgba(0, 0, 0, 0.32);
   }
 
@@ -4723,8 +4723,8 @@
 
   .component-browser-toolbar .scintel-filter-toggle:hover,
   .component-browser-toolbar .crb-bookmarks-btn:hover {
-    border-color: rgba(0, 230, 210, 0.34);
-    background: rgba(0, 230, 210, 0.055);
+    border-color: rgba(77, 184, 168, 0.34);
+    background: rgba(77, 184, 168, 0.055);
     color: var(--accent-cyan);
   }
 
@@ -4797,7 +4797,7 @@
   .component-browser-toolbar .recipe-browser-filterDrawer {
     box-shadow:
       0 16px 36px rgba(0, 0, 0, 0.42),
-      0 0 24px rgba(0, 230, 210, 0.06),
+      0 0 14px rgba(77, 184, 168, 0.04),
       inset 0 1px 0 rgba(255, 255, 255, 0.025);
   }
 
@@ -4914,8 +4914,8 @@
   }
 
   .component-browser-toolbar .craft-frl-chip:hover {
-    border-color: rgba(0, 230, 210, 0.32);
-    background: rgba(0, 230, 210, 0.055);
+    border-color: rgba(77, 184, 168, 0.32);
+    background: rgba(77, 184, 168, 0.055);
     color: var(--text-primary);
   }
 
@@ -4946,8 +4946,8 @@
 
   .component-browser-toolbar .crb-material-trigger:hover,
   .component-browser-toolbar .crb-material-trigger--open {
-    border-color: rgba(0, 230, 210, 0.34);
-    background: rgba(0, 230, 210, 0.055);
+    border-color: rgba(77, 184, 168, 0.34);
+    background: rgba(77, 184, 168, 0.055);
     color: var(--accent-cyan);
   }
 
@@ -4967,8 +4967,8 @@
   }
 
   .component-browser-toolbar .crb-token--material {
-    border-color: rgba(0, 230, 210, 0.32);
-    background: rgba(0, 230, 210, 0.08);
+    border-color: rgba(77, 184, 168, 0.32);
+    background: rgba(77, 184, 168, 0.08);
     color: var(--accent-cyan);
   }
 
@@ -5007,8 +5007,8 @@
 
   .component-browser-toolbar .crb-material-option:hover,
   .component-browser-toolbar .crb-material-option--active {
-    border-color: rgba(0, 230, 210, 0.36);
-    background: rgba(0, 230, 210, 0.08);
+    border-color: rgba(77, 184, 168, 0.36);
+    background: rgba(77, 184, 168, 0.08);
     color: var(--accent-cyan);
   }
 
@@ -5061,8 +5061,8 @@
 }
 
 .component-browser-pager .craft-frl-clear:hover:not(:disabled) {
-  border-color: rgba(0, 230, 210, 0.3);
-  background: rgba(0, 230, 210, 0.055);
+  border-color: rgba(77, 184, 168, 0.3);
+  background: rgba(77, 184, 168, 0.055);
   color: var(--accent-cyan);
 }
 
