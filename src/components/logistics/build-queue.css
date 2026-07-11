@@ -535,7 +535,7 @@
   grid-template-columns: minmax(200px, 228px) minmax(0, 1fr) auto;
   grid-template-areas: "identity stats visual";
   gap: 12px 14px;
-  align-items: center;
+  align-items: start;
   min-width: 0;
 }
 
@@ -543,9 +543,9 @@
 
 .bq-center-shell .bq-item-stats {
   grid-area: stats;
-  justify-self: start;
-  width: fit-content;
-  max-width: min(100%, 500px);
+  justify-self: stretch;
+  width: 100%;
+  max-width: min(100%, 520px);
   min-height: 0;
 }
 
@@ -554,7 +554,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: center;
+  align-self: start;
   justify-self: end;
   flex: 0 0 auto;
   width: clamp(96px, 9vw, 116px);
@@ -582,7 +582,7 @@
 }
 
 .bq-center-shell .bq-stats-panel {
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
   min-height: 0;
   padding: 8px 10px;
@@ -594,10 +594,10 @@
 }
 
 .bq-center-shell .bq-stats-strip {
-  width: max-content;
+  width: 100%;
   max-width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(92px, auto));
-  gap: 6px 8px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px 10px;
 }
 
 .bq-center-shell .bq-item-body {
@@ -3890,6 +3890,12 @@
   .bq-reserve-stack-row {
     min-height: var(--bq-row-h);
     font-size: var(--app-text-body);
+  }
+}
+
+@media (min-width: 2400px) {
+  .bq-center-shell .bq-item-stats {
+    max-width: min(100%, 660px);
   }
 }
 
