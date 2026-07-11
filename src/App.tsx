@@ -16,6 +16,7 @@ const DoctrineLibraryPage = lazy(() => import("./pages/DoctrineLibraryPage"));
 const DoctrineModulePage = lazy(() => import("./pages/DoctrineModulePage"));
 const LogisticsPage = lazy(() => import("./pages/logistics/LogisticsPage"));
 const InventoryPage = lazy(() => import("./pages/logistics/InventoryPage"));
+const InventoryFixturePage = lazy(() => import("./pages/logistics/InventoryFixturePage"));
 const RefineryImportPage = lazy(() => import("./pages/logistics/RefineryImportPage"));
 const BuildQueuePage = lazy(() => import("./pages/logistics/BuildQueuePage"));
 const CarrierLogisticsPage = lazy(() => import("./pages/logistics/CarrierLogisticsPage"));
@@ -145,6 +146,12 @@ export default function App() {
           path="logistics/inventory"
           element={<Suspense fallback={<RouteFallback />}><InventoryPage /></Suspense>}
         />
+        {import.meta.env.DEV ? (
+          <Route
+            path="logistics/inventory/__fixture/layout"
+            element={<Suspense fallback={<RouteFallback />}><InventoryFixturePage /></Suspense>}
+          />
+        ) : null}
         <Route
           path="logistics/inventory/refinery-import"
           element={<Suspense fallback={<RouteFallback />}><RefineryImportPage /></Suspense>}

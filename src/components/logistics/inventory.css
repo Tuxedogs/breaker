@@ -494,9 +494,11 @@
 
 .logi-location-stack-table-wrap--cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-  gap: 0.55rem;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
   padding-top: 0.65rem;
+  align-items: start;
 }
 
 .logi-location-window-block {
@@ -506,8 +508,10 @@
 .logi-location-window-block--cards {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
-  gap: 0.55rem;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.75rem;
+  align-items: start;
 }
 
 .logi-location-material-card {
@@ -2051,11 +2055,19 @@
 
 .logi-inv-page .logi-location-stack-table-wrap--cards,
 .logi-inv-page .logi-location-window-block--cards {
-  grid-template-columns: repeat(3, minmax(300px, 1fr));
-  gap: 12px;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.logi-inv-page .logi-location-stack-table-wrap--cards {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .logi-inv-page .logi-location-material-card {
+  width: 100%;
+  max-width: 460px;
   border: 1px solid var(--panel-border-soft);
   border-radius: 10px;
   background: var(--panel-row-bg);
@@ -2932,9 +2944,8 @@
 }
 
 @media (max-width: 1320px) {
-  .logi-inv-page .logi-location-stack-table-wrap--cards,
   .logi-inv-page .logi-location-window-block--cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
@@ -2952,10 +2963,13 @@
     margin: 0;
   }
 
-  .logi-inv-page .logi-location-card-grid,
+  .logi-inv-page .logi-location-card-grid {
+    grid-template-columns: 1fr;
+  }
+
   .logi-inv-page .logi-location-stack-table-wrap--cards,
   .logi-inv-page .logi-location-window-block--cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .logi-csv-modal {
@@ -2992,7 +3006,11 @@
 
   .logi-inv-page .logi-location-stack-table-wrap--cards,
   .logi-inv-page .logi-location-window-block--cards {
-    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .logi-inv-page .logi-location-stack-table-wrap--cards {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -3003,9 +3021,14 @@
 
   .logi-inv-page .logi-location-stack-table-wrap--cards,
   .logi-inv-page .logi-location-window-block--cards {
-    max-width: 2112px;
+    width: 100%;
+    max-width: none;
     margin-right: auto;
-    grid-template-columns: repeat(4, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .logi-inv-page .logi-location-stack-table-wrap--cards {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .logi-inv-page .logi-inv-layout {
@@ -3029,9 +3052,14 @@
 
   .logi-inv-page .logi-location-stack-table-wrap--cards,
   .logi-inv-page .logi-location-window-block--cards {
-    max-width: min(2280px, 100%);
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 18px;
+    width: 100%;
+    max-width: none;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .logi-inv-page .logi-location-stack-table-wrap--cards {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .logi-inv-page .logi-location-card-grid {

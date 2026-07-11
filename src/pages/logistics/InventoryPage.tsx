@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { createInventoryEntryDraft, useLogisticsStore } from '../../stores/logisticsStore';
+import { createInventoryEntryDraft, type InventorySyncState, type InventoryUiState, useLogisticsStore } from '../../stores/logisticsStore';
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, InventoryUnitType, MaterialTemplate } from '../../types/logistics';
 import InventoryTable, { type SortKey } from '../../components/logistics/InventoryTable';
 import InventoryTransferDialog from '../../components/logistics/InventoryTransferDialog';
@@ -42,6 +42,15 @@ import '../../components/logistics/inventory.css';
 
 type PanelState = { mode: 'new' } | { mode: 'edit'; entry: InventoryEntry };
 type ViewMode = 'cards' | 'list';
+
+export type InventoryPageFixture = {
+  entries: InventoryEntry[];
+  locations: InventoryLocation[];
+  materials: MaterialTemplate[];
+  buildQueue?: BuildQueueItem[];
+  selectedLocationId: string;
+  inventoryUi?: Partial<InventoryUiState>;
+};
 
 type InventoryUndoAction =
   | { kind: 'delete'; entries: InventoryEntry[] }
@@ -1759,17 +1768,45 @@ const SelectedLocationDetail = memo(function SelectedLocationDetail({
   );
 });
 
-export default function InventoryPage() {
+export default function InventoryPage({ fixture }: { fixture?: InventoryPageFixture } = {}) {
+  const isFixture = fixture !== undefined;
   const [searchParams] = useSearchParams();
   const { session, loading: authLoading, user } = useAuthSession();
   const accessToken = session?.access_token ?? null;
   const authenticatedUserId = user?.id ?? null;
-  const entries = useLogisticsStore((state) => state.inventoryEntries);
+  const storeEntries = useLogisticsStore((state) => state.inventoryEntries);
+  const entries = fixture?.entries ?? storeEntries;
   const activeEntries = useMemo(() => getActiveInventoryEntries(entries), [entries]);
-  const materials = useLogisticsStore((state) => state.materialTemplates);
-  const locations = useLogisticsStore((state) => state.locations);
-  const inventoryUi = useLogisticsStore((state) => state.inventoryUi);
-  const inventorySync = useLogisticsStore((state) => state.inventorySync);
+  const storeMaterials = useLogisticsStore((state) => state.materialTemplates);
+  const materials = fixture?.materials ?? storeMaterials;
+  const storeLocations = useLogisticsStore((state) => state.locations);
+  const locations = fixture?.locations ?? storeLocations;
+  const storeInventoryUi = useLogisticsStore((state) => state.inventoryUi);
+  const inventoryUi = fixture
+    ? {
+        ...storeInventoryUi,
+        viewMode: 'cards' as const,
+        ...fixture.inventoryUi,
+        selectedLocationId: fixture.selectedLocationId,
+      }
+    : storeInventoryUi;
+  const storeInventorySync = useLogisticsStore((state) => state.inventorySync);
+  const inventorySync: InventorySyncState = fixture
+    ? {
+        ...storeInventorySync,
+        status: 'idle',
+        isFetching: false,
+        isSyncing: false,
+        loadedForUserId: null,
+        lastSuccessfulSyncAt: null,
+        activeRequestId: 0,
+        syncError: undefined,
+        hasUnsyncedChanges: false,
+        pendingMutationCount: 0,
+        hasHydratedPersist: true,
+        hasFetchedServerInventory: true,
+      }
+    : storeInventorySync;
   const setInventoryUi = useLogisticsStore((state) => state.setInventoryUi);
   const setInventorySync = useLogisticsStore((state) => state.setInventorySync);
   const addInventoryEntries = useLogisticsStore((state) => state.addInventoryEntries);
@@ -1779,10 +1816,11 @@ export default function InventoryPage() {
   const updateInventoryEntryAsync = useLogisticsStore((state) => state.updateInventoryEntryAsync);
   const transferInventoryStacksAsync = useLogisticsStore((state) => state.transferInventoryStacksAsync);
   const deleteInventoryEntry = useLogisticsStore((state) => state.deleteInventoryEntry);
-  const buildQueue = useLogisticsStore((state) => state.buildQueue);
+  const storeBuildQueue = useLogisticsStore((state) => state.buildQueue);
+  const buildQueue = fixture?.buildQueue ?? storeBuildQueue;
   const replaceOnlineState = useLogisticsStore((state) => state.replaceOnlineState);
   const applyInventorySyncFailure = useLogisticsStore((state) => state.applyInventorySyncFailure);
-  const queryLocationId = searchParams.get('location') ?? '';
+  const queryLocationId = isFixture ? '' : searchParams.get('location') ?? '';
 
   const [panel, setPanel] = useState<PanelState | null>(null);
   const [csvImportOpen, setCsvImportOpen] = useState(false);
@@ -1804,7 +1842,9 @@ export default function InventoryPage() {
   const [inventoryGuardMessage, setInventoryGuardMessage] = useState('');
   const [, setSyncLabelTick] = useState(0);
   const isMobileViewport = useIsMobileInventoryViewport();
-  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
+  const freshnessBlockReason = isFixture
+    ? 'Inventory fixture is read-only.'
+    : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
   const syncLabel = formatInventorySyncLabel(inventorySync);
   const syncTone = getInventorySyncTone(inventorySync);
 
@@ -1898,6 +1938,7 @@ export default function InventoryPage() {
   }, [authLoading, authenticatedUserId, inventorySync.hasHydratedPersist]);
 
   useEffect(() => {
+    if (isFixture) return;
     setInventoryUi({
       selectedLocationId,
       searchQuery: search,
@@ -1918,6 +1959,7 @@ export default function InventoryPage() {
     sortDir,
     sortKey,
     viewMode,
+    isFixture,
   ]);
 
   useEffect(() => {
@@ -2173,6 +2215,7 @@ export default function InventoryPage() {
   }, []);
 
   const performUndo = useCallback(async () => {
+    if (isFixture) return;
     if (!undoLedger) return;
     const action = undoLedger.action;
     try {
@@ -2201,7 +2244,7 @@ export default function InventoryPage() {
     } catch (error) {
       setInventoryGuardMessage(error instanceof Error ? error.message : String(error));
     }
-  }, [addInventoryEntries, deleteInventoryEntry, undoInventoryImportBatch, undoLedger, updateInventoryEntryAsync]);
+  }, [addInventoryEntries, deleteInventoryEntry, isFixture, undoInventoryImportBatch, undoLedger, updateInventoryEntryAsync]);
 
   const handleEditDrawerEntry = useCallback((entry: InventoryEntry) => {
     setPanel({ mode: 'edit', entry });
@@ -2218,6 +2261,7 @@ export default function InventoryPage() {
   }, []);
 
   const handleBulkDeleteConfirm = useCallback(() => {
+    if (isFixture) return;
     if (freshnessBlockReason) {
       setInventoryGuardMessage(freshnessBlockReason);
       return;
@@ -2245,7 +2289,7 @@ export default function InventoryPage() {
     setPanel((current) => (
       current?.mode === 'edit' && ids.includes(current.entry.id) ? null : current
     ));
-  }, [deleteInventoryEntry, entries, freshnessBlockReason, pushUndoLedger, selectedEntryIds]);
+  }, [deleteInventoryEntry, entries, freshnessBlockReason, isFixture, pushUndoLedger, selectedEntryIds]);
 
   const handleTransferRequest = useCallback(() => {
     if (selectedEntryIds.size === 0) return;
@@ -2258,6 +2302,9 @@ export default function InventoryPage() {
   }, []);
 
   const handleTransferConfirm = useCallback(async (targetLocationId: string) => {
+    if (isFixture) {
+      throw new Error('Inventory fixture is read-only.');
+    }
     if (!manageLocationId) {
       throw new Error('No source location selected.');
     }
@@ -2297,9 +2344,14 @@ export default function InventoryPage() {
     pushUndoLedger,
     selectedEntryIds,
     transferInventoryStacksAsync,
+    isFixture,
   ]);
 
   function handleSave(updatedEntries: InventoryEntry[]) {
+    if (isFixture) {
+      setPanel(null);
+      return;
+    }
     const additions = updatedEntries.filter((updated) => !entries.some((entry) => entry.id === updated.id));
     const updates = updatedEntries.filter((updated) => entries.some((entry) => entry.id === updated.id));
     if (updates.length > 0 && freshnessBlockReason) {
@@ -2328,7 +2380,7 @@ export default function InventoryPage() {
   const editingEntry = panel?.mode === 'edit' ? panel.entry : null;
 
   return (
-    <div className="logi-page logi-inv-page">
+    <div className="logi-page logi-inv-page" data-inventory-fixture={isFixture ? 'layout' : undefined}>
       <div className="logi-inv-content">
       <div className="logi-page-header logi-inv-header page-compact-header">
         <div>
@@ -2359,11 +2411,12 @@ export default function InventoryPage() {
             type="button"
             className={`logi-inv-sync-status logi-inv-sync-status--${syncTone}`}
             onClick={() => {
+              if (isFixture) return;
               if (inventorySync.syncError || !inventorySync.hasFetchedServerInventory) {
                 void refreshInventoryFromServer();
               }
             }}
-            disabled={inventorySync.isFetching}
+            disabled={isFixture || inventorySync.isFetching}
             aria-label="Inventory sync status"
           >
             {syncLabel}
@@ -2372,6 +2425,7 @@ export default function InventoryPage() {
             type="button"
             className="logi-btn-secondary"
             onClick={() => setCsvImportOpen(true)}
+            disabled={isFixture}
           >
             <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -2384,6 +2438,7 @@ export default function InventoryPage() {
             type="button"
             className="logi-btn-primary"
             onClick={() => setPanel({ mode: 'new' })}
+            disabled={isFixture}
           >
             <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
               <path d="M12 5v14M5 12h14" />
