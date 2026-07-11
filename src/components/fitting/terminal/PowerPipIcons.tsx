@@ -1,8 +1,10 @@
 import type { PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
-import SystemIcon, { pipCategoryToSystemIconKind, type SystemIconKind } from "./SystemIcon";
+import SystemIcon, { type SystemIconKind } from "./SystemIcon";
 
-export type { SystemIconKind };
-export { SystemIcon, pipCategoryToSystemIconKind };
+function pipCategoryToSystemIconKind(category: PipCategory): SystemIconKind {
+  if (category === "cooler1" || category === "cooler2") return "cooler";
+  return category;
+}
 
 type PowerPipIconProps = {
   category: PipCategory;

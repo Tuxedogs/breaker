@@ -1,5 +1,4 @@
 import type { FittingComponentSummary } from "../../../lib/fitting/fittingApi";
-import { getFittingSlotIcon } from "../../../lib/fitting/getFittingSlotIcon";
 
 type CompactStat = { label: string; value: string };
 
@@ -102,12 +101,4 @@ export default function FittingSelectorDrawer({
       ) : null}
     </aside>
   );
-}
-
-export function drawerItemIcon(component: FittingComponentSummary, itemKind: "weapon" | "component"): string {
-  return getFittingSlotIcon({
-    slotKind: itemKind === "weapon" ? "weapon hardpoint" : "component slot",
-    componentType: component.type,
-    itemType: component.subtype,
-  });
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import PowerPipIcon from "../terminal/PowerPipIcons";
 import { resolvePowerChannelLabel } from "../../../lib/fitting/mockup/resolvePowerChannelLabel";
 import type { PipAssignment, PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
+import { INITIAL_MOCK_PIP_ASSIGNMENT, sumMockPipAssignment } from "./mockPipAssignment";
 
 const MOCK_PIP_TOTAL = 18;
 const MOCK_PIP_SEGMENT_COUNT = 8;
@@ -21,18 +22,6 @@ const MOCK_PIP_COLUMNS: MockPipColumnDef[] = [
   { key: "cooler2", min: 0 },
 ];
 
-const INITIAL_MOCK_PIP_ASSIGNMENT: PipAssignment = {
-  weapons: 4,
-  engines: 2,
-  quantum: 3,
-  radar: 2,
-  lifeSupport: 2,
-  cooler1: 2,
-  cooler2: 2,
-};
-
-export { INITIAL_MOCK_PIP_ASSIGNMENT };
-
 type PipStackPart =
   | { kind: "segment"; slot: number }
   | { kind: "merged"; minSlots: number };
@@ -50,10 +39,6 @@ const EMPTY_OVER_BY_CHANNEL: OverByChannel = {
   cooler1: 0,
   cooler2: 0,
 };
-
-export function sumMockPipAssignment(assignment: PipAssignment): number {
-  return Object.values(assignment).reduce((sum, value) => sum + value, 0);
-}
 
 function sumOverByChannel(overByChannel: OverByChannel): number {
   return Object.values(overByChannel).reduce((sum, value) => sum + value, 0);
@@ -88,7 +73,7 @@ function reconcileOverByChannel(
 
   const assignedTotal = sumMockPipAssignment(assignment);
   const targetOver = Math.max(0, assignedTotal - budget);
-  let currentOver = sumOverByChannel(next);
+  const currentOver = sumOverByChannel(next);
 
   if (currentOver > targetOver) {
     let toRelease = currentOver - targetOver;
@@ -269,18 +254,20 @@ export default function MockPowerPipHud({
 
   // Load-time / budget-change reconcile when no fresh action history for the new excess.
   useEffect(() => {
-    setState((current) => {
-      const reconciled = reconcileOverByChannel(
-        current.assignment,
-        current.overByChannel,
-        budget,
-        lastChangedChannelRef.current,
-      );
-      if (sumOverByChannel(reconciled) === sumOverByChannel(current.overByChannel)
-        && MOCK_PIP_COLUMNS.every(({ key }) => reconciled[key] === current.overByChannel[key])) {
-        return current;
-      }
-      return { ...current, overByChannel: reconciled };
+    queueMicrotask(() => {
+      setState((current) => {
+        const reconciled = reconcileOverByChannel(
+          current.assignment,
+          current.overByChannel,
+          budget,
+          lastChangedChannelRef.current,
+        );
+        if (sumOverByChannel(reconciled) === sumOverByChannel(current.overByChannel)
+          && MOCK_PIP_COLUMNS.every(({ key }) => reconciled[key] === current.overByChannel[key])) {
+          return current;
+        }
+        return { ...current, overByChannel: reconciled };
+      });
     });
   }, [budget]);
 

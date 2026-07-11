@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { HeroInspectView, ShipHeroAssetView } from "../../../lib/fitting/mockup/fittingMockupViewTypes";
 
 function ShipHeroSilhouette() {
@@ -37,10 +37,12 @@ export default function FittingHero({
   selectorDrawer,
 }: FittingHeroProps) {
   const [candidateIndex, setCandidateIndex] = useState(0);
+  const [candidates, setCandidates] = useState(asset.candidates);
 
-  useEffect(() => {
+  if (asset.candidates !== candidates) {
+    setCandidates(asset.candidates);
     setCandidateIndex(0);
-  }, [asset.candidates]);
+  }
 
   const activeCandidate = asset.candidates[candidateIndex] ?? null;
 

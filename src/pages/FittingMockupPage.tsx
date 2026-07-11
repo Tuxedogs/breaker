@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import FittingMockupShell from "../components/fitting/mockup/FittingMockupShell";
-import FittingSelectorDrawer, { drawerItemIcon } from "../components/fitting/mockup/FittingSelectorDrawer";
+import FittingSelectorDrawer from "../components/fitting/mockup/FittingSelectorDrawer";
 import PowerCardContent from "../components/fitting/mockup/PowerCardContent";
 import {
   getFittingComponent,
@@ -9,6 +9,7 @@ import {
   type FittingComponentMitigation,
   type FittingComponentSummary,
 } from "../lib/fitting/fittingApi";
+import { getFittingSlotIcon } from "../lib/fitting/getFittingSlotIcon";
 import {
   buildFittingCompatDebugSnapshot,
   isFittingCompatDebugEnabled,
@@ -132,6 +133,32 @@ function itemPrimaryStats(component: FittingComponentSummary, detail: FittingCom
   return parts.slice(0, 3);
 }
 
+function drawerItemIcon(component: FittingComponentSummary, itemKind: "weapon" | "component"): string {
+  return getFittingSlotIcon({
+    slotKind: itemKind === "weapon" ? "weapon hardpoint" : "component slot",
+    componentType: component.type,
+    itemType: component.subtype,
+  });
+}
+
+function DetailStatRow({
+  label,
+  value,
+  tone = "default",
+  nested = false,
+}: {
+  label: string;
+  value: string;
+  tone?: "default" | "accent" | "muted";
+  nested?: boolean;
+}) {
+  return (
+    <div className={["fm-detail-row", nested ? "is-nested" : "", tone !== "default" ? `is-${tone}` : ""].filter(Boolean).join(" ")}>
+      <span>{label}</span><span>{value}</span>
+    </div>
+  );
+}
+
 function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDetail | null; loading: boolean }) {
   const stats = detail?.stats;
   if (loading) {
@@ -150,36 +177,31 @@ function ComponentStatsDrawer({ detail, loading }: { detail: FittingComponentDet
   }
 
   const damageType = stats ? inferDamageType(stats) : null;
-  const Row = ({ label, value, tone = "default", nested = false }: { label: string; value: string; tone?: "default" | "accent" | "muted"; nested?: boolean }) => (
-    <div className={["fm-detail-row", nested ? "is-nested" : "", tone !== "default" ? `is-${tone}` : ""].filter(Boolean).join(" ")}>
-      <span>{label}</span><span>{value}</span>
-    </div>
-  );
 
   return (
     <div className="fm-detail-drawer">
       <section className="fm-detail-section">
         <h4>Damage</h4>
-        <Row label="Alpha Strike" value={statText(stats?.alphaDamage)} tone="accent" />
-        <Row label="Sustained DPS" value={statText(resolveDrawerWeaponDps(stats))} tone={resolveDrawerWeaponDps(stats) == null ? "muted" : "default"} nested />
-        <Row label="Damage Type" value={damageType ?? "Not calculated yet"} nested />
+        <DetailStatRow label="Alpha Strike" value={statText(stats?.alphaDamage)} tone="accent" />
+        <DetailStatRow label="Sustained DPS" value={statText(resolveDrawerWeaponDps(stats))} tone={resolveDrawerWeaponDps(stats) == null ? "muted" : "default"} nested />
+        <DetailStatRow label="Damage Type" value={damageType ?? "Not calculated yet"} nested />
       </section>
       <section className="fm-detail-section">
         <h4>Projectile</h4>
-        <Row label="Velocity" value={statText(stats?.projectileSpeed, " m/s")} tone="accent" />
-        <Row label="Range" value={statText(stats?.calculatedRange, " m")} tone={stats?.calculatedRange == null ? "muted" : "default"} nested />
+        <DetailStatRow label="Velocity" value={statText(stats?.projectileSpeed, " m/s")} tone="accent" />
+        <DetailStatRow label="Range" value={statText(stats?.calculatedRange, " m")} tone={stats?.calculatedRange == null ? "muted" : "default"} nested />
       </section>
       <section className="fm-detail-section">
         <h4>Power / Signature</h4>
-        <Row label="Power Draw" value={statText(stats?.powerDraw, " MW")} tone={stats?.powerDraw == null ? "muted" : "default"} />
-        <Row label="EM Signature" value={statText(stats?.electromagneticEmission)} tone="muted" nested />
+        <DetailStatRow label="Power Draw" value={statText(stats?.powerDraw, " MW")} tone={stats?.powerDraw == null ? "muted" : "default"} />
+        <DetailStatRow label="EM Signature" value={statText(stats?.electromagneticEmission)} tone="muted" nested />
       </section>
       <section className="fm-detail-section">
         <h4>Compatibility</h4>
-        <Row label="Type" value={categoryLabel(detail.type)} />
-        <Row label="Size" value={detail.size != null ? String(detail.size) : "—"} nested />
-        <Row label="Manufacturer" value={detail.manufacturer ?? "—"} nested />
-        <Row label="Grade / Class" value={[detail.grade, detail.class].filter(Boolean).join(" / ") || "—"} nested />
+        <DetailStatRow label="Type" value={categoryLabel(detail.type)} />
+        <DetailStatRow label="Size" value={detail.size != null ? String(detail.size) : "—"} nested />
+        <DetailStatRow label="Manufacturer" value={detail.manufacturer ?? "—"} nested />
+        <DetailStatRow label="Grade / Class" value={[detail.grade, detail.class].filter(Boolean).join(" / ") || "—"} nested />
       </section>
     </div>
   );
@@ -204,13 +226,18 @@ export default function FittingMockupPage() {
   const compatDebugEnabled = isFittingCompatDebugEnabled(searchParams);
 
   const loadout = useFittingMockupLoadout(initialShipKey);
+  const {
+    ships: loadoutShips,
+    selectedShipKey: loadoutSelectedShipKey,
+    selectShip: loadoutSelectShip,
+  } = loadout;
   const combatStats = useFittingMockupCombatStats(loadout.portRows);
 
   useEffect(() => {
-    if (!loadout.ships.length || !queryShip || isFittingShipGuid(queryShip)) return;
-    const resolved = resolveMockupShipKey(queryShip, loadout.ships);
-    if (resolved !== loadout.selectedShipKey) loadout.selectShip(resolved);
-  }, [loadout.ships, loadout.selectedShipKey, loadout.selectShip, queryShip]);
+    if (!loadoutShips.length || !queryShip || isFittingShipGuid(queryShip)) return;
+    const resolved = resolveMockupShipKey(queryShip, loadoutShips);
+    if (resolved !== loadoutSelectedShipKey) loadoutSelectShip(resolved);
+  }, [loadoutShips, loadoutSelectedShipKey, loadoutSelectShip, queryShip]);
 
   const offensiveDisplaySelections = useMemo(
     () => buildMockupOffensiveDisplayGroups(loadout.portRows).flatMap((group) => group.selections),

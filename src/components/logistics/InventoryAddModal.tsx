@@ -209,17 +209,18 @@ export default function InventoryAddModal({
   })();
 
   useEffect(() => {
-    const parsedCount = Math.max(1, Math.min(24, parseInt(boxCount, 10) || 1));
-    setBoxQuantities((current) => resizeBoxQuantities(current, parsedCount));
-  }, [boxCount]);
-
-  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onCancel();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [onCancel]);
+
+  function handleBoxCountChange(nextValue: string) {
+    setBoxCount(nextValue);
+    const parsedCount = Math.max(1, Math.min(24, parseInt(nextValue, 10) || 1));
+    setBoxQuantities((current) => resizeBoxQuantities(current, parsedCount));
+  }
 
   function buildEntries(): InventoryEntry[] | null {
     if (!material || !resolvedLocationId) return null;
@@ -356,7 +357,7 @@ export default function InventoryAddModal({
                 max={24}
                 step={1}
                 value={boxCount}
-                onChange={(event) => setBoxCount(event.target.value)}
+                onChange={(event) => handleBoxCountChange(event.target.value)}
               />
             </div>
             <div className="logi-form-field">

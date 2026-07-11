@@ -1,5 +1,4 @@
 import type { ComponentType, SVGProps } from "react";
-import type { PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
 import EnginesIcon from "@/assets/icons/sc-system/sc-system-engines.svg?react";
 import WeaponsIcon from "@/assets/icons/sc-system/sc-system-weapons.svg?react";
 import QuantumIcon from "@/assets/icons/sc-system/sc-system-quantum.svg?react";
@@ -24,11 +23,6 @@ const SYSTEM_ICONS: Record<SystemIconKind, ComponentType<SVGProps<SVGSVGElement>
   radar: RadarIcon,
   cooler: CoolerIcon,
 };
-
-export function pipCategoryToSystemIconKind(category: PipCategory): SystemIconKind {
-  if (category === "cooler1" || category === "cooler2") return "cooler";
-  return category;
-}
 
 type SystemIconProps = {
   kind: SystemIconKind;

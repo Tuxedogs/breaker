@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 import type { FittingCalculateResult } from "../../../lib/fitting/fittingApi";
 import { derivedNum } from "../../../components/fitting/terminal/fittingPerformanceHelpers";
 import { buildPowerCardHeaderView } from "../../../lib/fitting/mockup/buildPowerCardViews";
-import MockPowerPipHud, { INITIAL_MOCK_PIP_ASSIGNMENT, sumMockPipAssignment } from "./MockPowerPipHud";
+import MockPowerPipHud from "./MockPowerPipHud";
+import { INITIAL_MOCK_PIP_ASSIGNMENT, sumMockPipAssignment } from "./mockPipAssignment";
 import PowerStatusHeader from "./PowerStatusHeader";
 
 type PowerCardContentProps = {

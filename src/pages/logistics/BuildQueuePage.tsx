@@ -98,12 +98,16 @@ export default function BuildQueuePage() {
     const blueprintIds = [...new Set(
       buildQueue.map((item) => item.blueprint_id).filter((id): id is string => Boolean(id?.trim())),
     )];
-    if (blueprintIds.length === 0) {
-      setTypeLabelByBlueprintId({});
-      return;
-    }
 
     let cancelled = false;
+
+    if (blueprintIds.length === 0) {
+      queueMicrotask(() => {
+        if (!cancelled) setTypeLabelByBlueprintId({});
+      });
+      return () => { cancelled = true; };
+    }
+
     getCraftingItems().then((items) => {
       if (cancelled) return;
       const next: Record<string, string> = {};

@@ -135,11 +135,13 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
 
   useEffect(() => {
     if (ships.length === 0) return;
-    setSelectedShipKey((current) => {
-      if (current && ships.some((ship) => ship.shipKey === current)) return current;
-      if (initialShipKey && ships.some((ship) => ship.shipKey === initialShipKey)) return initialShipKey;
-      const gladius = ships.find((ship) => ship.name.toLowerCase().includes("gladius"));
-      return gladius?.shipKey ?? ships[0]?.shipKey ?? null;
+    queueMicrotask(() => {
+      setSelectedShipKey((current) => {
+        if (current && ships.some((ship) => ship.shipKey === current)) return current;
+        if (initialShipKey && ships.some((ship) => ship.shipKey === initialShipKey)) return initialShipKey;
+        const gladius = ships.find((ship) => ship.name.toLowerCase().includes("gladius"));
+        return gladius?.shipKey ?? ships[0]?.shipKey ?? null;
+      });
     });
   }, [initialShipKey, ships]);
 

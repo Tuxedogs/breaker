@@ -77,13 +77,15 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     return () => { cancelled = true; };
   }, [blueprintId]);
 
-  const recipeBridge: RecipeBridge | null = recipe
-    ? {
-      blueprint_id: recipe.blueprint_id,
-      output_entityClass: recipe.output_entityClass,
-      item_kind: recipe.item_kind,
-    }
-    : null;
+  const recipeBridge = useMemo<RecipeBridge | null>(() => (
+    recipe
+      ? {
+        blueprint_id: recipe.blueprint_id,
+        output_entityClass: recipe.output_entityClass,
+        item_kind: recipe.item_kind,
+      }
+      : null
+  ), [recipe]);
 
   const isFpsItem = recipeBridge?.item_kind === "fps" || cardBridge?.kind === "fps";
 
