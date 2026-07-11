@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import PowerPipIcon from "../terminal/PowerPipIcons";
 import { resolvePowerChannelLabel } from "../../../lib/fitting/mockup/resolvePowerChannelLabel";
 import type { PipAssignment, PipCategory } from "../../../lib/fitting/fittingTerminalTypes";
@@ -39,8 +39,24 @@ type PipStackPart =
 
 type PipUnitState = "on" | "over";
 
+type OverByChannel = Record<PipCategory, number>;
+
+const EMPTY_OVER_BY_CHANNEL: OverByChannel = {
+  weapons: 0,
+  engines: 0,
+  quantum: 0,
+  radar: 0,
+  lifeSupport: 0,
+  cooler1: 0,
+  cooler2: 0,
+};
+
 export function sumMockPipAssignment(assignment: PipAssignment): number {
   return Object.values(assignment).reduce((sum, value) => sum + value, 0);
+}
+
+function sumOverByChannel(overByChannel: OverByChannel): number {
+  return Object.values(overByChannel).reduce((sum, value) => sum + value, 0);
 }
 
 function buildPipStackParts(min: number, segmentCount: number): PipStackPart[] {
@@ -58,20 +74,105 @@ function buildPipStackParts(min: number, segmentCount: number): PipStackPart[] {
   return parts;
 }
 
-function buildPipUnitStates(assignment: PipAssignment, budget: number | null): Map<string, PipUnitState> {
-  let remaining = budget != null && Number.isFinite(budget) ? budget : Number.POSITIVE_INFINITY;
+/** Clamp per-channel over counts to assignment levels, then match target excess. */
+function reconcileOverByChannel(
+  assignment: PipAssignment,
+  previous: OverByChannel,
+  budget: number,
+  preferredChannel: PipCategory | null,
+): OverByChannel {
+  const next: OverByChannel = { ...EMPTY_OVER_BY_CHANNEL };
+  for (const { key } of MOCK_PIP_COLUMNS) {
+    next[key] = Math.max(0, Math.min(previous[key], assignment[key]));
+  }
+
+  const assignedTotal = sumMockPipAssignment(assignment);
+  const targetOver = Math.max(0, assignedTotal - budget);
+  let currentOver = sumOverByChannel(next);
+
+  if (currentOver > targetOver) {
+    let toRelease = currentOver - targetOver;
+    const releaseOrder = preferredChannel
+      ? [
+          ...MOCK_PIP_COLUMNS.map((column) => column.key).filter((key) => key !== preferredChannel),
+          preferredChannel,
+        ]
+      : MOCK_PIP_COLUMNS.map((column) => column.key);
+
+    for (const key of releaseOrder) {
+      if (toRelease <= 0) break;
+      const release = Math.min(next[key], toRelease);
+      next[key] -= release;
+      toRelease -= release;
+    }
+    return next;
+  }
+
+  if (currentOver < targetOver) {
+    let toAssign = targetOver - currentOver;
+    const assignOrder = preferredChannel
+      ? [
+          preferredChannel,
+          ...MOCK_PIP_COLUMNS.map((column) => column.key).filter((key) => key !== preferredChannel),
+        ]
+      : MOCK_PIP_COLUMNS.map((column) => column.key);
+
+    for (const key of assignOrder) {
+      if (toAssign <= 0) break;
+      const room = assignment[key] - next[key];
+      if (room <= 0) continue;
+      const add = Math.min(room, toAssign);
+      next[key] += add;
+      toAssign -= add;
+    }
+  }
+
+  return next;
+}
+
+/**
+ * Mark unit states from per-channel over counts.
+ * Within a channel, covered (blue) pips fill from the bottom; over (red) sit on top.
+ */
+function buildPipUnitStates(assignment: PipAssignment, overByChannel: OverByChannel): Map<string, PipUnitState> {
   const result = new Map<string, PipUnitState>();
 
   for (const { key } of MOCK_PIP_COLUMNS) {
     const level = assignment[key];
+    const over = Math.max(0, Math.min(overByChannel[key], level));
+    const covered = level - over;
     for (let fromBottom = 0; fromBottom < level; fromBottom += 1) {
-      const state: PipUnitState = remaining > 0 ? "on" : "over";
-      if (remaining > 0) remaining -= 1;
-      result.set(`${key}:${fromBottom}`, state);
+      result.set(`${key}:${fromBottom}`, fromBottom < covered ? "on" : "over");
     }
   }
 
   return result;
+}
+
+function applyLevelChangeOver(
+  previousAssignment: PipAssignment,
+  category: PipCategory,
+  nextLevel: number,
+  previousOver: OverByChannel,
+  budget: number,
+): OverByChannel {
+  const prevLevel = previousAssignment[category];
+  const delta = nextLevel - prevLevel;
+  const nextOver: OverByChannel = { ...previousOver };
+
+  if (delta > 0) {
+    const remainingBefore = budget - sumMockPipAssignment(previousAssignment);
+    const coveredAdds = Math.max(0, Math.min(delta, remainingBefore));
+    const overAdds = delta - coveredAdds;
+    nextOver[category] = previousOver[category] + overAdds;
+  } else if (delta < 0) {
+    const removed = -delta;
+    const overRemoved = Math.min(previousOver[category], removed);
+    nextOver[category] = previousOver[category] - overRemoved;
+  }
+
+  const nextAssignment = { ...previousAssignment, [category]: nextLevel };
+  return reconcileOverByChannel(nextAssignment, nextOver, budget, category);
 }
 
 function pipUnitState(
@@ -135,33 +236,68 @@ type MockPowerPipHudProps = {
   onAssignmentChange?: (assignment: PipAssignment) => void;
 };
 
+type PipHudState = {
+  assignment: PipAssignment;
+  overByChannel: OverByChannel;
+};
+
 export default function MockPowerPipHud({
   hideOutputFooter = false,
   powerBudget = MOCK_PIP_TOTAL,
   onAssignmentChange,
 }: MockPowerPipHudProps) {
-  const [assignment, setAssignment] = useState<PipAssignment>(INITIAL_MOCK_PIP_ASSIGNMENT);
+  const [state, setState] = useState<PipHudState>({
+    assignment: INITIAL_MOCK_PIP_ASSIGNMENT,
+    overByChannel: EMPTY_OVER_BY_CHANNEL,
+  });
   const [activeColumn, setActiveColumn] = useState<PipCategory | null>(null);
+  const lastChangedChannelRef = useRef<PipCategory | null>(null);
+  const { assignment, overByChannel } = state;
   const assignedTotal = sumMockPipAssignment(assignment);
   const budget = powerBudget != null && Number.isFinite(powerBudget) ? Math.round(powerBudget) : MOCK_PIP_TOTAL;
   const remaining = budget - assignedTotal;
   const overBudget = remaining < 0;
 
   const unitStates = useMemo(
-    () => buildPipUnitStates(assignment, budget),
-    [assignment, budget],
+    () => buildPipUnitStates(assignment, overByChannel),
+    [assignment, overByChannel],
   );
 
   useEffect(() => {
     onAssignmentChange?.(assignment);
   }, [assignment, onAssignmentChange]);
 
-  const setCategoryLevel = (category: PipCategory, nextLevel: number) => {
-    setAssignment((current) => {
-      const clamped = Math.max(0, Math.min(MOCK_PIP_SEGMENT_COUNT, nextLevel));
-      return { ...current, [category]: clamped };
+  // Load-time / budget-change reconcile when no fresh action history for the new excess.
+  useEffect(() => {
+    setState((current) => {
+      const reconciled = reconcileOverByChannel(
+        current.assignment,
+        current.overByChannel,
+        budget,
+        lastChangedChannelRef.current,
+      );
+      if (sumOverByChannel(reconciled) === sumOverByChannel(current.overByChannel)
+        && MOCK_PIP_COLUMNS.every(({ key }) => reconciled[key] === current.overByChannel[key])) {
+        return current;
+      }
+      return { ...current, overByChannel: reconciled };
     });
+  }, [budget]);
+
+  const setCategoryLevel = (category: PipCategory, nextLevel: number) => {
+    const clamped = Math.max(0, Math.min(MOCK_PIP_SEGMENT_COUNT, nextLevel));
+    lastChangedChannelRef.current = category;
     setActiveColumn(category);
+    setState((current) => ({
+      assignment: { ...current.assignment, [category]: clamped },
+      overByChannel: applyLevelChangeOver(
+        current.assignment,
+        category,
+        clamped,
+        current.overByChannel,
+        budget,
+      ),
+    }));
   };
 
   const handleSegmentClick = (category: PipCategory, slotFromBottom: number, min: number) => {
