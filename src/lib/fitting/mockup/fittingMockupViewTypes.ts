@@ -62,6 +62,24 @@ export type StatSectionView = {
   thresholdReadout?: ThresholdReadoutView;
 };
 
+export type PowerOutputView = {
+  open: number | null;
+  total: number | null;
+  overBudget: boolean;
+};
+
+export type PowerCoolingBarView = {
+  label: string;
+  fillPct: number;
+  unavailable: boolean;
+  overCapacity: boolean;
+};
+
+export type PowerCardHeaderView = {
+  output: PowerOutputView;
+  cooling: PowerCoolingBarView;
+};
+
 export type StatCardView = {
   key: string;
   title: string;
@@ -69,6 +87,8 @@ export type StatCardView = {
   actionDisabled?: boolean;
   rows?: StatRowView[];
   sections?: StatSectionView[];
+  powerHeader?: PowerCardHeaderView;
+  content?: ReactNode;
   footer?: ReactNode;
 };
 

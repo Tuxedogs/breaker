@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import FittingMockupShell from "../components/fitting/mockup/FittingMockupShell";
 import FittingSelectorDrawer, { drawerItemIcon } from "../components/fitting/mockup/FittingSelectorDrawer";
-import MockPowerPipHud from "../components/fitting/mockup/MockPowerPipHud";
+import PowerCardContent from "../components/fitting/mockup/PowerCardContent";
 import {
   getFittingComponent,
   type FittingComponentDetail,
@@ -499,10 +499,8 @@ export default function FittingMockupPage() {
     combatStats,
     armorMitigations,
     shieldMitigations,
-    powerPipsFooter: (
-      <div className="fit-mock-pips fit-mock-pips--card" aria-label="Power Management">
-        <MockPowerPipHud />
-      </div>
+    powerCardContent: (
+      <PowerCardContent calculateResult={loadout.calculateResult} />
     ),
   }).map((card) => (
     card.key === "performance"

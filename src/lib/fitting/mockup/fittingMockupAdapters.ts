@@ -253,11 +253,11 @@ export type MockupComputedStatsInput = {
   combatStats: MockupCombatStats;
   armorMitigations: Array<Extract<FittingComponentMitigation, { kind: "armor" }>>;
   shieldMitigations: Array<Extract<FittingComponentMitigation, { kind: "shield" }>>;
-  powerPipsFooter: ReactNode;
+  powerCardContent: ReactNode;
 };
 
 export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] {
-  const { loadout, combatStats, armorMitigations, shieldMitigations, powerPipsFooter } = input;
+  const { loadout, combatStats, armorMitigations, shieldMitigations, powerCardContent } = input;
   const ship = loadout.shipDetail?.ship;
   const calculateResult = loadout.calculateResult;
 
@@ -284,13 +284,6 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
   const formatRate = (value: number | null, suffix = " °/s") => (
     value != null ? `${formatNumber(value)}${suffix}` : "Not calculated yet"
   );
-
-  const powerProduced = derivedNum(calculateResult, "power", "totalPowerGenerated");
-  const powerRequired = derivedNum(calculateResult, "power", "totalPowerRequired");
-  const powerMarginMw = powerProduced != null && powerRequired != null ? powerProduced - powerRequired : null;
-  const powerMarginPct = powerProduced != null && powerRequired != null && powerProduced > 0
-    ? Math.round(((powerProduced - powerRequired) / powerProduced) * 100)
-    : null;
 
   const sustainedDps = sumNullableDps(combatStats.pilotDps, combatStats.turretDps, combatStats.crewDps);
   const burstAlpha = sumNullableDps(combatStats.pilotAlpha, combatStats.turretAlpha, combatStats.crewAlpha);
@@ -326,17 +319,8 @@ export function buildStatCards(input: MockupComputedStatsInput): StatCardView[] 
     },
     {
       key: "power",
-      title: "Power Assignment",
-      rows: [
-        { label: "Reactor Output", value: valueOrUnavailable(powerProduced, " MW") },
-        { label: "Total Draw", value: valueOrUnavailable(powerRequired, " MW") },
-        {
-          label: "Margin",
-          value: formatResourceMargin(powerMarginMw, powerMarginPct),
-          tone: powerMarginPct != null && powerMarginPct >= 0 ? "accent" : "default",
-        },
-      ],
-      footer: powerPipsFooter,
+      title: "",
+      content: powerCardContent,
     },
     {
       key: "survivability",

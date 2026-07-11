@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import type { StatCardView, StatRowView, StatSectionView } from "../../../lib/fitting/mockup/fittingMockupViewTypes";
+import PowerStatusHeader from "./PowerStatusHeader";
 
 function StatRow({ row }: { row: StatRowView }) {
   return (
@@ -79,6 +80,21 @@ type FittingStatCardProps = {
 };
 
 export default function FittingStatCard({ card, onAction }: FittingStatCardProps) {
+  if (card.key === "power") {
+    return (
+      <article className="fm-stat-card is-power">
+        <div className="fm-stat-card-body">
+          {card.content ?? (
+            <>
+              {card.powerHeader ? <PowerStatusHeader header={card.powerHeader} /> : null}
+              {card.footer ? <div className="fm-stat-card-footer">{card.footer}</div> : null}
+            </>
+          )}
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className={["fm-stat-card", card.key === "power" ? "is-power" : ""].filter(Boolean).join(" ")}>
       <header className="fm-stat-card-head">
