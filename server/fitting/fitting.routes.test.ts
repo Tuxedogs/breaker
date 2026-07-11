@@ -4,6 +4,7 @@ import { createServer } from "node:http";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
+import fittingVercelHandler from "../../api/v1/fitting/[...path].ts";
 import { canonicalId } from "./fitting.service.ts";
 import { PUBLIC_REGISTRIES } from "./registryStore.ts";
 import { handleFittingRoute } from "../routes/fitting.routes.ts";
@@ -234,6 +235,49 @@ test("Vercel adapter supports GET, HEAD, ETag/304 and POST validate/calculate", 
       body: JSON.stringify({ shipId, loadout: { "weapon/main": componentId.replaceAll("-", "_") }, options: { compareToStock: false } }),
     });
     assert.equal(calculate.status, 200);
+  } finally {
+    await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+    if (previousRoot === undefined) delete process.env.FITTING_DATA_ROOT;
+    else process.env.FITTING_DATA_ROOT = previousRoot;
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("Vercel catch-all adapter removes only the internal path query parameter", async () => {
+  const root = await fixtureRoot();
+  const previousRoot = process.env.FITTING_DATA_ROOT;
+  process.env.FITTING_DATA_ROOT = root;
+  const server = createServer((request, response) => void fittingVercelHandler(request, response));
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  try {
+    const address = server.address();
+    assert.ok(address && typeof address === "object");
+    const base = `http://127.0.0.1:${address.port}/api/v1/fitting`;
+    const routes = [
+      `${base}/meta?channel=LIVE&path=meta`,
+      `${base}/ships?channel=LIVE&buildId=test-build&limit=1&path=ships`,
+      `${base}/components?channel=LIVE&buildId=test-build&limit=1&path=components`,
+      `${base}/components/${componentId}?channel=LIVE&buildId=test-build&path=components/${componentId}`,
+      `${base}/ships/${shipId}/hardpoints?channel=LIVE&buildId=test-build&format=flat&path=ships/${shipId}/hardpoints`,
+      `${base}/ships/${shipId}/loadout?channel=LIVE&buildId=test-build&include=diagnostics&path=ships/${shipId}/loadout`,
+    ];
+
+    for (const route of routes) {
+      const response = await fetch(route);
+      assert.equal(response.status, 200, route);
+      assert.equal(response.headers.get("content-type"), "application/json; charset=utf-8");
+    }
+
+    const missing = await fetch(`${base}/components/00000000-0000-4000-8000-000000000000?channel=LIVE&buildId=test-build&path=components/00000000-0000-4000-8000-000000000000`);
+    assert.equal(missing.status, 404);
+    assert.equal(missing.headers.get("content-type"), "application/problem+json; charset=utf-8");
+
+    const unsupported = await fetch(`${base}/ships?channel=LIVE&buildId=test-build&limit=1&raw=true&path=ships`);
+    assert.equal(unsupported.status, 400);
+    assert.equal(unsupported.headers.get("content-type"), "application/problem+json; charset=utf-8");
+    const problem = await unsupported.json() as { detail: string; errors: Array<{ path: string }> };
+    assert.equal(problem.detail, "Unsupported query parameter: raw.");
+    assert.equal(problem.errors[0]?.path, "query.raw");
   } finally {
     await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
     if (previousRoot === undefined) delete process.env.FITTING_DATA_ROOT;
