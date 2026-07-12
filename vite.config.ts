@@ -194,13 +194,19 @@ export default defineConfig(({ mode }) => {
   const fittingDataRoot = path.resolve(
     process.env.FITTING_DATA_ROOT ?? env.FITTING_DATA_ROOT ?? path.join(process.cwd(), "server-data", "fitting"),
   );
+  const useLocalApi = process.env.SCINTEL_LOCAL_API === "1" || env.SCINTEL_LOCAL_API === "1";
 
   return {
     plugins: [
       {
         name: "scintel-recommender-api",
-        // Dev uses server.proxy → https://www.scintel.app (see server.proxy below).
-        // Preview keeps local API middleware for offline/local data.
+        // Normal `npm run dev` proxies /api → https://www.scintel.app.
+        // SCINTEL_LOCAL_API=1 (Playwright / offline fixtures) serves crafting + fitting from local server-data.
+        configureServer(server) {
+          if (useLocalApi) {
+            installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
+          }
+        },
         configurePreviewServer(server) {
           installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
         },
@@ -217,17 +223,21 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "./src"),
       },
     },
-    server: {
-      proxy: {
-        "/api": {
-          target: "https://www.scintel.app",
-          changeOrigin: true,
-          secure: true,
-          // Strip Domain so Set-Cookie works on localhost during auth flows.
-          cookieDomainRewrite: "",
+    server: useLocalApi
+      ? {
+        // Local fixture/test servers must not fall through to production APIs.
+      }
+      : {
+        proxy: {
+          "/api": {
+            target: "https://www.scintel.app",
+            changeOrigin: true,
+            secure: true,
+            // Strip Domain so Set-Cookie works on localhost during auth flows.
+            cookieDomainRewrite: "",
+          },
         },
       },
-    },
     build: {
       chunkSizeWarningLimit: 900,
     },

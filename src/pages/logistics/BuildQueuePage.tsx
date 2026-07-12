@@ -12,13 +12,16 @@ import { getQueueLedgerModel } from "../../lib/logistics/queueLedger";
 import { useAuthSession } from "../../lib/auth/useAuthSession";
 import { useLogisticsStore } from "../../stores/logisticsStore";
 import QueueLedger from "../../components/logistics/QueueLedger";
-import type { BuildQueueItem, RecipeTemplate } from "../../types/logistics";
+import type { BuildQueueItem, RecipeTemplate, ReservedMaterialAllocation } from "../../types/logistics";
 import { getCraftingItems } from "../../lib/craftingData";
 import { formatBuildQueueItemTypeLabel } from "../../lib/logistics/buildQueueItemLabel";
+import type { RecipeInputTemplate } from "../../data/logistics/seed";
+import type { BuildQueuePageFixture } from "./buildQueueStatsFixture";
 import "../../components/logistics/logistics.css";
 import "../../components/logistics/build-queue.css";
 
 const MAX_QUEUE_SLOTS = 12;
+const FIXTURE_READ_ONLY_MESSAGE = "Build Queue fixture is read-only.";
 
 function formatSummaryNumber(value: number): string {
   if (!Number.isFinite(value)) return "0";
@@ -56,12 +59,13 @@ function useIsMobileQueueLayout() {
   return isMobile;
 }
 
-export default function BuildQueuePage() {
+export default function BuildQueuePage({ fixture }: { fixture?: BuildQueuePageFixture } = {}) {
+  const isFixture = fixture !== undefined;
   const { user } = useAuthSession();
-  const authenticatedUserId = user?.id ?? null;
+  const authenticatedUserId = isFixture ? null : (user?.id ?? null);
   const [sourceStrategy] = useState<SourceStrategy>("minimize-splits");
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(fixture?.selectedItemId ?? null);
   const [allocationOwnerHighlightId, setAllocationOwnerHighlightId] = useState<string | null>(null);
   const [summaryCollapsed, setSummaryCollapsed] = useState(true);
   const [addCraftOpen, setAddCraftOpen] = useState(false);
@@ -74,25 +78,62 @@ export default function BuildQueuePage() {
   const suppressMobileSelectorTapRef = useRef(false);
 
   const allInventoryEntries = useLogisticsStore((s) => s.inventoryEntries);
-  const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
-  const buildQueue = useLogisticsStore((s) => s.buildQueue);
-  const locations = useLogisticsStore((s) => s.locations);
-  const materials = useLogisticsStore((s) => s.materialTemplates);
-  const recipes = useLogisticsStore((s) => s.recipeTemplates);
-  const recipeInputsByRecipeId = useLogisticsStore((s) => s.recipeInputTemplates);
+  const storeInventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
+  const storeBuildQueue = useLogisticsStore((s) => s.buildQueue);
+  const storeLocations = useLogisticsStore((s) => s.locations);
+  const storeMaterials = useLogisticsStore((s) => s.materialTemplates);
+  const storeRecipes = useLogisticsStore((s) => s.recipeTemplates);
+  const storeRecipeInputsByRecipeId = useLogisticsStore((s) => s.recipeInputTemplates);
   const inventorySync = useLogisticsStore((state) => state.inventorySync);
-  const updateBuildQueueItemQuantity = useLogisticsStore((s) => s.updateBuildQueueItemQuantity);
-  const updateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
-  const updateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
-  const updateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
-  const removeBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
-  const toggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
-  const updateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
-  const clearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
-  const addInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
+  const storeUpdateBuildQueueItemQuantity = useLogisticsStore((s) => s.updateBuildQueueItemQuantity);
+  const storeUpdateBuildQueueItemAllowLowerQuality = useLogisticsStore((s) => s.updateBuildQueueItemAllowLowerQuality);
+  const storeUpdateBuildQueueMaterialRequirement = useLogisticsStore((s) => s.updateBuildQueueMaterialRequirement);
+  const storeUpdateBuildQueueItemStatus = useLogisticsStore((s) => s.updateBuildQueueItemStatus);
+  const storeRemoveBuildQueueItem = useLogisticsStore((s) => s.removeBuildQueueItem);
+  const storeToggleBuildQueueAllocation = useLogisticsStore((s) => s.toggleBuildQueueAllocation);
+  const storeUpdateBuildQueueAllocationQuantity = useLogisticsStore((s) => s.updateBuildQueueAllocationQuantity);
+  const storeClearStaleBuildQueueItemAllocations = useLogisticsStore((s) => s.clearStaleBuildQueueItemAllocations);
+  const storeAddInventoryEntries = useLogisticsStore((s) => s.addInventoryEntries);
+
+  const inventoryEntries = fixture?.inventoryEntries ?? storeInventoryEntries;
+  const buildQueue = fixture?.buildQueue ?? storeBuildQueue;
+  const locations = fixture?.locations ?? storeLocations;
+  const materials = fixture?.materials ?? storeMaterials;
+  const recipes = fixture?.recipes ?? storeRecipes;
+  const recipeInputsByRecipeId = fixture?.recipeInputsByRecipeId ?? storeRecipeInputsByRecipeId;
+
+  const updateBuildQueueItemQuantity = isFixture
+    ? ((_id: string, _quantity: number) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeUpdateBuildQueueItemQuantity;
+  const updateBuildQueueItemAllowLowerQuality = isFixture
+    ? ((_id: string, _allowLowerQuality: boolean) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeUpdateBuildQueueItemAllowLowerQuality;
+  const updateBuildQueueMaterialRequirement = isFixture
+    ? ((_id: string, _requirementId: string, _input: RecipeInputTemplate) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeUpdateBuildQueueMaterialRequirement;
+  const updateBuildQueueItemStatus = isFixture
+    ? ((_id: string, _status: NonNullable<BuildQueueItem["status"]>) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeUpdateBuildQueueItemStatus;
+  const removeBuildQueueItem = isFixture
+    ? ((_id: string) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeRemoveBuildQueueItem;
+  const toggleBuildQueueAllocation = isFixture
+    ? ((_id: string, _allocation: ReservedMaterialAllocation) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeToggleBuildQueueAllocation;
+  const updateBuildQueueAllocationQuantity = isFixture
+    ? ((_id: string, _allocationId: string, _quantity: number) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeUpdateBuildQueueAllocationQuantity;
+  const clearStaleBuildQueueItemAllocations = isFixture
+    ? ((_id: string) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeClearStaleBuildQueueItemAllocations;
+  const addInventoryEntries = isFixture
+    ? ((_entries: Parameters<typeof storeAddInventoryEntries>[0]) => { setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE); })
+    : storeAddInventoryEntries;
 
   const queueLedger = getQueueLedgerModel({ buildQueue, inventoryEntries, materials, recipeInputsByRecipeId });
-  const freshnessBlockReason = getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
+  const freshnessBlockReason = isFixture
+    ? FIXTURE_READ_ONLY_MESSAGE
+    : getInventoryFreshnessBlockReason(inventorySync, authenticatedUserId);
 
   useEffect(() => {
     const blueprintIds = [...new Set(
@@ -186,6 +227,10 @@ export default function BuildQueuePage() {
   }
 
   function handleStatusChange(id: string, status: NonNullable<BuildQueueItem["status"]>) {
+    if (isFixture) {
+      setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
+      return;
+    }
     if (status === "complete" && freshnessBlockReason) {
       setInventoryGuardMessage(freshnessBlockReason);
       return;
@@ -199,11 +244,15 @@ export default function BuildQueuePage() {
   }
 
   function handleQuickAddInventory(entries: Parameters<typeof addInventoryEntries>[0]) {
+    if (isFixture) {
+      setInventoryGuardMessage(FIXTURE_READ_ONLY_MESSAGE);
+      return;
+    }
     addInventoryEntries(entries);
     setInventoryGuardMessage("");
   }
   return (
-    <div className="bq-page">
+    <div className="bq-page" data-bq-fixture={isFixture ? "stats" : undefined}>
       {inventoryGuardMessage ? (
         <div className="bq-inventory-sync-alert" role="alert">{inventoryGuardMessage}</div>
       ) : null}

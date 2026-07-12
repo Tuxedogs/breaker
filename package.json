@@ -8,6 +8,7 @@
         "build": "tsc -b && vite build",
         "lint": "eslint .",
         "ui:inventory": "playwright test --config=playwright.inventory.config.ts",
+        "ui:build-queue": "playwright test --config=playwright.build-queue.config.ts",
         "content:check": "node --import tsx scripts/validate-content.mts",
         "api:check": "node --import tsx scripts/validate-public-api.mts",
         "fitting:test": "node --import tsx --test server/fitting/fitting.routes.test.ts src/lib/crafting/resolveEntityClass.test.ts src/lib/crafting/resolveCraftingDisplayName.test.ts src/lib/fitting/fittingStatProjection.test.ts src/components/logistics/buildQueueStatsGroups.test.ts",
