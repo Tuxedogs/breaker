@@ -44,7 +44,7 @@ import { parseJsonResponse } from '../../lib/safeJson';
 
 import MaterialIcon from './MaterialIcon';
 import { BuildQueueProductIcon } from './BuildQueueProductIcon';
-import BuildQueueStatsBreakdown from './BuildQueueStatsBreakdown';
+import { BuildQueueCraftOverview, BuildQueueCraftStatistics, BuildQueueStatsProvider } from './BuildQueueStatsBreakdown';
 import InventoryAddModal, { type InventoryQuickAddTarget } from './InventoryAddModal';
 import type { FittingIconMode } from '../../lib/fitting/fittingIconMode';
 
@@ -1572,7 +1572,8 @@ export default function BuildQueueGroup({
             data-bq-item-id={item.id}
           >
 
-            {/* ── Craft header: identity | stats | artwork ── */}
+            <BuildQueueStatsProvider blueprintId={item.blueprint_id} item={item} inputs={inputs}>
+            {/* ── Craft header: identity | stock overview | artwork ── */}
             <div className="bq-item-sidebar bq-item-header">
               <div className="bq-item-identity">
                 <div className="bq-item-name-block">
@@ -1619,11 +1620,7 @@ export default function BuildQueueGroup({
               </div>
 
               <div className="bq-item-stats">
-                <BuildQueueStatsBreakdown
-                  blueprintId={item.blueprint_id}
-                  item={item}
-                  inputs={inputs}
-                />
+                <BuildQueueCraftOverview />
               </div>
 
               <div className="bq-item-visual" aria-hidden="true">
@@ -1636,6 +1633,8 @@ export default function BuildQueueGroup({
                 />
               </div>
             </div>
+
+            <BuildQueueCraftStatistics />
 
             {/* Right body */}
             <div className="bq-item-body">
@@ -2175,6 +2174,7 @@ export default function BuildQueueGroup({
                 onCancel={() => setPendingCraftSolverPlan(null)}
               />
             ) : null}
+            </BuildQueueStatsProvider>
           </article>
         );
       })}

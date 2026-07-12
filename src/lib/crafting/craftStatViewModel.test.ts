@@ -94,6 +94,11 @@ function shieldRecipe(): ComponentRecipe {
 }
 
 function findComparisonRow(model: ReturnType<typeof buildCraftStatViewModel>, label: string): CraftStatComparisonRowView | undefined {
+  for (const group of model.comparisonGroups) {
+    const row = group.rows.find((entry) => entry.label === label);
+    if (row) return row;
+  }
+
   for (const group of model.groups) {
     if (group.kind === "flat" && group.comparisonRows) {
       const row = group.comparisonRows.find((entry) => entry.label === label);

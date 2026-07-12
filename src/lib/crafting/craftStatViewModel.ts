@@ -5,11 +5,13 @@ import {
   formatMaterialModifierDisplay,
   getCraftingImpactClass,
   getCraftingModifierBaseValue,
+  getModifierStatBindingLabel,
   normalizeDetailStatLabel,
   type DetailStatRow,
 } from "./craftingDetailStats";
 import {
   buildDetailStatGroups,
+  findDetailStatGroupTitle,
   type DetailStatGroup,
 } from "./detailStatGroups";
 import type { ComponentRecipe } from "../../components/industry/crafting/utils/craftingTypes";
@@ -42,6 +44,7 @@ export type CraftStatComparisonRowView = {
   statId: string;
   groupId: string;
   label: string;
+  unit: string;
   benefitDirection: CraftStatBenefitDirection;
   baseValue: string;
   target: CraftStatComparisonColumnView;
@@ -69,6 +72,21 @@ export type CraftStatGroupView =
   | { title: string; kind: "nested"; subclusters: CraftStatSubclusterView[] }
   | { title: string; kind: "matrix"; columns: string[]; rows: { label: string; values: string[] }[] };
 
+export type CraftStatOverviewStatView = {
+  label: string;
+  value: string;
+};
+
+export type CraftStatOverviewGroupView = {
+  title: string;
+  stats: CraftStatOverviewStatView[];
+};
+
+export type CraftStatComparisonGroupView = {
+  title: string;
+  rows: CraftStatComparisonRowView[];
+};
+
 /**
  * Source-agnostic craft stats view model.
  * Consumers must not care whether `detail` came from fitting API, fixtures, or card fallback.
@@ -77,6 +95,9 @@ export type CraftStatViewModel = {
   category: string;
   title: string;
   identity: CraftStatIdentityBadge[];
+  overviewGroups: CraftStatOverviewGroupView[];
+  comparisonGroups: CraftStatComparisonGroupView[];
+  /** @deprecated Use overviewGroups + comparisonGroups */
   groups: CraftStatGroupView[];
   status: "ready" | "loading" | "unavailable";
   unavailableReason?: string;
@@ -85,6 +106,42 @@ export type CraftStatViewModel = {
 type ModifiablePropertyRef = {
   property: string;
   modifierMode?: string;
+};
+
+const STAT_UNIT_BY_LABEL: Record<string, string> = {
+  quantumspeed: "km/s",
+  spooltime: "s",
+  cooldown: "s",
+  fuelrate: "L/s",
+  quantumfuelreq: "L/s",
+  powerdraw: "MW",
+  coolingdraw: "MW",
+  heatgeneration: "HP/s",
+  power: "MW",
+  coolant: "MW",
+  powergeneration: "MW",
+  coolantgeneration: "MW",
+  emsignature: "m",
+  irsignature: "m",
+  onlineem: "m",
+  onlineir: "m",
+  componenthp: "HP",
+  health: "HP",
+  shieldhp: "HP",
+  mass: "kg",
+  volume: "L",
+  alphadamage: "DMG",
+  firerate: "RPM",
+  regenrate: "HP/s",
+};
+
+const PROPERTY_GROUP_FALLBACKS: Record<string, string> = {
+  GPP_Quantum_: "Quantum Travel",
+  GPP_ItemResource_: "Output",
+  GPP_Shield_: "Shield Performance",
+  GPP_Weapon_: "Ballistics / Damage",
+  GPP_Health_: "Durability / Physical",
+  GPP_Radar_: "Radar Performance",
 };
 
 function titleCase(value: string): string {
@@ -131,6 +188,10 @@ function getBenefitDirection(property: string): CraftStatBenefitDirection {
   if (direction === "higher") return "higher-is-better";
   if (direction === "lower") return "lower-is-better";
   return "neutral";
+}
+
+function getStatUnit(label: string): string {
+  return STAT_UNIT_BY_LABEL[normalizeDetailStatLabel(label)] ?? "-";
 }
 
 function collectRecipeModifiableProperties(recipe: ComponentRecipe): ModifiablePropertyRef[] {
@@ -222,21 +283,26 @@ function buildComparisonColumn(
   };
 }
 
-function getModifierBindingLabel(property: string): string {
-  const bindings: Record<string, string> = {
-    GPP_Weapon_Damage: "Alpha Damage",
-    GPP_Weapon_FireRate: "Fire Rate",
-    GPP_Weapon_Spread: "Spread",
-    GPP_Shield_MaxHealth: "Shield HP",
-    GPP_Health_MaxHealth: "Health",
-    GPP_ItemResource_PowerGeneration: "Power Generation",
-    GPP_ItemResource_CoolantGeneration: "Coolant Generation",
-    GPP_Quantum_FuelRequirement: "Quantum Fuel Req.",
-    GPP_Quantum_Speed: "Quantum Speed",
-    GPP_Radar_MaxAimAssistDistance: "Aim Assist Max Range",
-    GPP_Radar_MinAimAssistDistance: "Aim Assist Min Range",
-  };
-  return bindings[property] ?? property.replace(/^GPP_/, "").replace(/_/g, " ");
+function resolveComparisonGroupTitle(
+  detail: FittingComponentDetail,
+  property: string,
+  label: string,
+): string {
+  const fromLabel = findDetailStatGroupTitle(detail, label);
+  if (fromLabel) return fromLabel;
+
+  for (const [prefix, groupTitle] of Object.entries(PROPERTY_GROUP_FALLBACKS)) {
+    if (property.startsWith(prefix)) return groupTitle;
+  }
+
+  if (detail.type === "fps_armor") return "Durability / Physical";
+  if (detail.type === "fps_weapon" || detail.type === "ship_weapon") return "Ballistics / Damage";
+  if (detail.type === "cooler" || detail.type === "power_plant") return "Output";
+  if (detail.type === "quantum_drive") return "Quantum Travel";
+  if (detail.type === "shield") return "Shield Performance";
+  if (detail.type === "radar") return "Radar Performance";
+
+  return "Power & Thermal";
 }
 
 function buildComparisonRows(input: {
@@ -261,14 +327,16 @@ function buildComparisonRows(input: {
     const baseDisplay = baseValue !== undefined
       ? formatMaterialModifierDisplay(entry.property, baseValue, 0, entry.modifierMode).base ?? "-"
       : "-";
-    const label = getModifierBindingLabel(entry.property);
+    const label = getModifierStatBindingLabel(entry.property);
     const targetValue = getModifierTotal(targetModifiers, entry.property, entry.modifierMode);
     const allocationValue = getModifierTotal(allocationModifiers, entry.property, entry.modifierMode);
+    const groupTitle = resolveComparisonGroupTitle(detail, entry.property, label);
 
     return {
       statId: getTotalModifierKey(entry.property, entry.modifierMode),
-      groupId: normalizeDetailStatLabel(label),
+      groupId: normalizeDetailStatLabel(groupTitle),
       label,
+      unit: getStatUnit(label),
       benefitDirection: getBenefitDirection(entry.property),
       baseValue: baseDisplay,
       target: buildComparisonColumn(
@@ -289,6 +357,69 @@ function buildComparisonRows(input: {
       ),
     };
   });
+}
+
+function buildOverviewGroups(
+  detailGroups: DetailStatGroup[],
+  baseRows: DetailStatRow[],
+): CraftStatOverviewGroupView[] {
+  const baseByLabel = new Map(
+    baseRows.map((row) => [normalizeDetailStatLabel(row.label), row.value] as const),
+  );
+
+  const overviewGroups: CraftStatOverviewGroupView[] = [];
+
+  for (const group of detailGroups) {
+    if (group.kind === "matrix") continue;
+    if (group.title === "Additional") continue;
+
+    if (group.kind === "nested") {
+      const stats = group.subclusters.flatMap((subcluster) =>
+        subcluster.stats.map((stat) => ({
+          label: stat.label,
+          value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
+        })),
+      );
+      if (stats.length > 0) overviewGroups.push({ title: group.title, stats });
+      continue;
+    }
+
+    const stats = group.stats.map((stat) => ({
+      label: stat.label,
+      value: baseByLabel.get(normalizeDetailStatLabel(stat.label)) ?? stat.value,
+    }));
+    if (stats.length > 0) overviewGroups.push({ title: group.title, stats });
+  }
+
+  return overviewGroups;
+}
+
+function buildComparisonGroups(
+  comparisonRows: CraftStatComparisonRowView[],
+  detail: FittingComponentDetail,
+): CraftStatComparisonGroupView[] {
+  const groupOrder: string[] = [];
+  const rowsByGroup = new Map<string, CraftStatComparisonRowView[]>();
+  const seenStatIds = new Set<string>();
+
+  for (const row of comparisonRows) {
+    if (seenStatIds.has(row.statId)) continue;
+    seenStatIds.add(row.statId);
+
+    const title = resolveComparisonGroupTitle(detail, row.statId, row.label);
+    if (!rowsByGroup.has(title)) {
+      groupOrder.push(title);
+      rowsByGroup.set(title, []);
+    }
+    rowsByGroup.get(title)?.push(row);
+  }
+
+  return groupOrder
+    .map((title) => ({
+      title,
+      rows: rowsByGroup.get(title) ?? [],
+    }))
+    .filter((group) => group.rows.length > 0);
 }
 
 function splitStatsForComparison(
@@ -353,18 +484,7 @@ function attachComparisonRows(
     };
   });
 
-  const remaining = [...comparisonByLabel.values()].filter((row) => !used.has(row.statId));
-  if (remaining.length === 0) return mapped;
-
-  return [
-    ...mapped,
-    {
-      title: "Material Modifiers",
-      kind: "flat" as const,
-      stats: [],
-      comparisonRows: remaining,
-    },
-  ];
+  return mapped;
 }
 
 function statsSectionTitle(detail: FittingComponentDetail): string {
@@ -405,6 +525,8 @@ export function buildCraftStatViewModel(input: {
       category: "unknown",
       title: "Component Stats",
       identity: [],
+      overviewGroups: [],
+      comparisonGroups: [],
       groups: [],
       status: "loading",
     };
@@ -415,6 +537,8 @@ export function buildCraftStatViewModel(input: {
       category: detail?.type ?? "unknown",
       title: "Component Stats",
       identity: detail ? buildIdentityBadges(detail) : [],
+      overviewGroups: [],
+      comparisonGroups: [],
       groups: [],
       status: "unavailable",
       unavailableReason: error ?? (missing ? "Stats unavailable" : "Stats unavailable"),
@@ -433,18 +557,22 @@ export function buildCraftStatViewModel(input: {
     : [];
 
   const comparisonByLabel = new Map(
-    comparisonRows.map((row) => [row.groupId, row] as const),
+    comparisonRows.map((row) => [normalizeDetailStatLabel(row.label), row] as const),
   );
   const baseRows = buildItemSummaryDetailStatRows(detail);
   const displayRows = buildModifiedDetailStatRows(detail, baseRows, allocationModifiers);
   const detailGroups = buildDetailStatGroups(detail, displayRows);
   const groups = attachComparisonRows(detailGroups, comparisonByLabel);
+  const overviewGroups = buildOverviewGroups(detailGroups, baseRows);
+  const comparisonGroups = buildComparisonGroups(comparisonRows, detail);
 
-  if (groups.length === 0) {
+  if (overviewGroups.length === 0 && comparisonGroups.length === 0 && groups.length === 0) {
     return {
       category: detail.type,
       title: statsSectionTitle(detail),
       identity: buildIdentityBadges(detail),
+      overviewGroups: [],
+      comparisonGroups: [],
       groups: [],
       status: "unavailable",
       unavailableReason: "Stats unavailable",
@@ -455,6 +583,8 @@ export function buildCraftStatViewModel(input: {
     category: detail.type,
     title: statsSectionTitle(detail),
     identity: buildIdentityBadges(detail),
+    overviewGroups,
+    comparisonGroups,
     groups,
     status: "ready",
   };

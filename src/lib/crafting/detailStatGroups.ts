@@ -337,6 +337,46 @@ function groupsFromDefinitions(
   return groups;
 }
 
+const COMPARISON_LABEL_ALIASES: Record<string, string> = {
+  quantumfuelreq: "fuelrate",
+  health: "componenthp",
+  powergeneration: "powergeneration",
+  coolantgeneration: "coolantgeneration",
+  aimassistmaxrange: "detectionrange",
+  aimassistminrange: "detectionrange",
+};
+
+export function findDetailStatGroupTitle(
+  detail: FittingComponentDetail,
+  label: string,
+): string | null {
+  const normalized = normalizeDetailStatLabel(label);
+  const aliasKey = COMPARISON_LABEL_ALIASES[normalized];
+  const candidates = aliasKey
+    ? [normalized, aliasKey]
+    : [normalized];
+  const definitions = definitionsForDetail(detail);
+
+  for (const candidate of candidates) {
+    for (const definition of definitions) {
+      if (definition.kind === "nested") {
+        for (const subcluster of definition.subclusters) {
+          if (subcluster.labels.some((entry) => normalizeDetailStatLabel(entry) === candidate)) {
+            return definition.title;
+          }
+        }
+        continue;
+      }
+
+      if (definition.labels.some((entry) => normalizeDetailStatLabel(entry) === candidate)) {
+        return definition.title;
+      }
+    }
+  }
+
+  return null;
+}
+
 function definitionsForDetail(detail: FittingComponentDetail): DetailStatGroupDefinition[] {
   switch (detail.type) {
     case "ship_weapon":

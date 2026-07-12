@@ -1,8 +1,6 @@
 import type {
   CraftStatComparisonColumnView,
   CraftStatComparisonRowView,
-  CraftStatGroupView,
-  CraftStatValueView,
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
 
@@ -14,7 +12,9 @@ function ComparisonDelta({
   if (column.state !== "ready") return null;
 
   const delta = column.percentDelta ?? column.absoluteDelta;
-  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+  if (!delta) {
+    return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+  }
 
   return (
     <span className={`bq-stat-compare-delta ${column.impactClass ?? "bq-stat-compare-delta--neutral"}`}>
@@ -44,6 +44,16 @@ function ComparisonColumn({
   );
 }
 
+function DirectionIndicator({ direction }: { direction: CraftStatComparisonRowView["benefitDirection"] }) {
+  if (direction === "higher-is-better") {
+    return <span className="bq-stat-direction bq-stat-direction--higher">↑ higher is better</span>;
+  }
+  if (direction === "lower-is-better") {
+    return <span className="bq-stat-direction bq-stat-direction--lower">↓ lower is better</span>;
+  }
+  return <span className="bq-stat-direction bq-stat-direction--neutral">— neutral</span>;
+}
+
 function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
   if (rows.length === 0) return null;
 
@@ -51,9 +61,11 @@ function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
     <div className="bq-stat-compare" role="table" aria-label="Base target allocation comparison">
       <div className="bq-stat-compare-head" role="row">
         <span role="columnheader">Stat</span>
+        <span role="columnheader">Unit</span>
         <span role="columnheader">Base</span>
         <span role="columnheader">Target</span>
         <span role="columnheader">Allocation</span>
+        <span role="columnheader">Direction</span>
       </div>
       {rows.map((row) => (
         <div
@@ -63,6 +75,7 @@ function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
           data-bq-benefit-direction={row.benefitDirection}
         >
           <span className="bq-stat-compare-label" role="rowheader">{row.label}</span>
+          <span className="bq-stat-compare-unit" role="cell">{row.unit}</span>
           <strong className="bq-stat-compare-base" role="cell">{row.baseValue}</strong>
           <span className="bq-stat-compare-target" role="cell">
             <ComparisonColumn column={row.target} />
@@ -70,106 +83,37 @@ function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
           <span className="bq-stat-compare-allocation" role="cell">
             <ComparisonColumn column={row.allocation} />
           </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function StatValueRow({ stat }: { stat: CraftStatValueView }) {
-  return (
-    <span className="bq-detail-stat-row">
-      <span className="bq-detail-stat-label">{stat.label}</span>
-      <strong className="bq-detail-stat-value">
-        <span>{stat.projectedValue}</span>
-        {stat.delta ? (
-          <span className={`bq-detail-stat-delta ${stat.impactClass ?? ""}`}>
-            ({stat.delta})
+          <span className="bq-stat-compare-direction" role="cell">
+            <DirectionIndicator direction={row.benefitDirection} />
           </span>
-        ) : null}
-      </strong>
-      {stat.baseValue ? (
-        <span className="bq-detail-stat-base">Base {stat.baseValue}</span>
-      ) : null}
-    </span>
-  );
-}
-
-function StatMatrix({ group }: { group: Extract<CraftStatGroupView, { kind: "matrix" }> }) {
-  return (
-    <div className="bq-stat-matrix" role="table" aria-label={group.title}>
-      <div className="bq-stat-matrix-head" role="row">
-        <span role="columnheader">Type</span>
-        {group.columns.map((column) => (
-          <span key={column} role="columnheader">{column}</span>
-        ))}
-      </div>
-      {group.rows.map((row) => (
-        <div key={row.label} className="bq-stat-matrix-row" role="row">
-          <span role="rowheader">{row.label}</span>
-          {row.values.map((value, index) => (
-            <strong key={`${row.label}:${group.columns[index] ?? index}`} role="cell">{value}</strong>
-          ))}
         </div>
       ))}
     </div>
   );
 }
 
-function StatGroup({ group }: { group: CraftStatGroupView }) {
+function StatsLegend() {
   return (
-    <section className={`bq-stat-group bq-stat-group--${group.kind}`} aria-label={group.title}>
-      <div className="bq-stat-group-title">{group.title}</div>
-      {group.kind === "nested" ? (
-        <div className="bq-stat-group-body">
-          {group.subclusters.map((subcluster) => (
-            <div key={subcluster.title} className="bq-stat-subcluster">
-              <div className="bq-stat-subcluster-title">{subcluster.title}</div>
-              {subcluster.comparisonRows ? <ComparisonTable rows={subcluster.comparisonRows} /> : null}
-              {subcluster.stats.length > 0 ? (
-                <div className="bq-stat-group-grid">
-                  {subcluster.stats.map((stat) => (
-                    <StatValueRow key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          ))}
-        </div>
-      ) : group.kind === "matrix" ? (
-        <StatMatrix group={group} />
-      ) : (
-        <>
-          {group.comparisonRows ? <ComparisonTable rows={group.comparisonRows} /> : null}
-          {group.stats.length > 0 ? (
-            <div className="bq-stat-group-grid">
-              {group.stats.map((stat) => (
-                <StatValueRow key={`${group.title}:${stat.label}`} stat={stat} />
-              ))}
-            </div>
-          ) : null}
-        </>
-      )}
-    </section>
+    <div className="bq-stat-legend" aria-label="Comparison color legend">
+      <span className="bq-stat-legend-item bq-stat-legend-item--benefit">+ Beneficial</span>
+      <span className="bq-stat-legend-item bq-stat-legend-item--harm">+ Harmful</span>
+      <span className="bq-stat-legend-item bq-stat-legend-item--neutral">+ Neutral</span>
+    </div>
   );
 }
 
-/**
- * Pure renderer for Build Queue selected-craft stats.
- * Accepts only a normalized view model — no knowledge of fixtures, APIs, or caches.
- */
-export default function BuildQueueCraftStatsPanel({ model }: { model: CraftStatViewModel }) {
+export function BuildQueueCraftOverviewPanel({ model }: { model: CraftStatViewModel }) {
   if (model.status === "loading") {
     return (
-      <div className="bq-stats-panel bq-stats-panel--empty" data-bq-stats-status="loading">
+      <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="loading">
         <p className="bq-stats-breakdown-empty">Loading stats...</p>
       </div>
     );
   }
 
-  if (model.status !== "ready" || model.groups.length === 0) {
+  if (model.status !== "ready") {
     return (
-      <div className="bq-stats-panel bq-stats-panel--empty" data-bq-stats-status="unavailable">
+      <div className="bq-stats-overview bq-stats-panel--empty" data-bq-stats-status="unavailable">
         <p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Stats unavailable"}</p>
       </div>
     );
@@ -177,10 +121,10 @@ export default function BuildQueueCraftStatsPanel({ model }: { model: CraftStatV
 
   return (
     <div
-      className="bq-stats-panel"
+      className="bq-stats-overview"
       data-bq-stats-status="ready"
       data-bq-stats-category={model.category}
-      aria-label={model.title}
+      aria-label="Component stock overview"
     >
       {model.identity.length > 0 ? (
         <div className="bq-stats-meta" aria-label="Component identity">
@@ -192,11 +136,75 @@ export default function BuildQueueCraftStatsPanel({ model }: { model: CraftStatV
           ))}
         </div>
       ) : null}
-      <div className="bq-stat-groups">
-        {model.groups.map((group) => (
-          <StatGroup key={group.title} group={group} />
+      {model.overviewGroups.length > 0 ? (
+        <div className="bq-stats-overview-groups">
+          {model.overviewGroups.map((group) => (
+            <section key={group.title} className="bq-stats-overview-group" aria-label={group.title}>
+              <div className="bq-stats-overview-group-title">{group.title}</div>
+              <div className="bq-stats-overview-grid">
+                {group.stats.map((stat) => (
+                  <div key={`${group.title}:${stat.label}`} className="bq-stats-overview-stat">
+                    <span className="bq-stats-overview-stat-label">{stat.label}</span>
+                    <strong className="bq-stats-overview-stat-value">{stat.value}</strong>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <p className="bq-stats-breakdown-empty">No stock stats available</p>
+      )}
+    </div>
+  );
+}
+
+export function BuildQueueCraftStatisticsPanel({ model }: { model: CraftStatViewModel }) {
+  if (model.status === "loading") {
+    return (
+      <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="loading">
+        <p className="bq-stats-breakdown-empty">Loading component statistics...</p>
+      </section>
+    );
+  }
+
+  if (model.status !== "ready" || model.comparisonGroups.length === 0) {
+    return (
+      <section className="bq-component-statistics bq-component-statistics--empty" data-bq-stats-status="unavailable">
+        <p className="bq-stats-breakdown-empty">{model.unavailableReason ?? "Component statistics unavailable"}</p>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      className="bq-component-statistics"
+      data-bq-stats-status="ready"
+      data-bq-stats-category={model.category}
+      aria-label="Component statistics"
+    >
+      <header className="bq-component-statistics-header">
+        <h3 className="bq-component-statistics-title">Component Statistics</h3>
+        <StatsLegend />
+      </header>
+      <div className="bq-component-statistics-body">
+        {model.comparisonGroups.map((group) => (
+          <div key={group.title} className="bq-stat-compare-group">
+            <div className="bq-stat-compare-group-title">{group.title}</div>
+            <ComparisonTable rows={group.rows} />
+          </div>
         ))}
       </div>
-    </div>
+    </section>
+  );
+}
+
+/** @deprecated Use BuildQueueCraftOverviewPanel or BuildQueueCraftStatisticsPanel */
+export default function BuildQueueCraftStatsPanel({ model }: { model: CraftStatViewModel }) {
+  return (
+    <>
+      <BuildQueueCraftOverviewPanel model={model} />
+      <BuildQueueCraftStatisticsPanel model={model} />
+    </>
   );
 }

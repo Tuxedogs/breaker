@@ -7,7 +7,7 @@ import {
   FIXTURE_ITEM_IDS,
 } from "../../src/pages/logistics/buildQueueStatsFixture";
 
-const screenshotDir = path.resolve(process.cwd(), "artifacts/bq-craft-header/gate4");
+const screenshotDir = path.resolve(process.cwd(), "artifacts/bq-craft-header/gate6");
 
 const fixtureItems = [
   { id: FIXTURE_ITEM_IDS.fr66, name: "FR-66", expectGroupedStats: true },
@@ -51,20 +51,15 @@ function installFailureGuards(page: Page) {
 }
 
 async function selectFixtureItem(page: Page, itemId: string, itemName: string) {
-  const card = page.locator(`[data-bq-item-id="${itemId}"]`).or(
-    page.locator(".bq-craft-card").filter({ hasText: itemName }),
-  );
-  // Queue list cards do not carry data-bq-item-id; selected craft body does.
   const listCard = page.locator(".bq-craft-card").filter({ hasText: itemName }).first();
   await expect(listCard).toBeVisible();
   await listCard.click();
   await expect(page.locator(".bq-item-name")).toHaveText(itemName);
-  await expect(page.locator(".bq-item-stats .bq-stats-panel")).toBeVisible();
-  void card;
+  await expect(page.locator(".bq-item-stats .bq-stats-overview")).toBeVisible();
 }
 
 test.describe("Build Queue stats fixture", () => {
-  test("renders real Build Queue components for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
+  test("renders overview header + component statistics card for FR-66, AD5B, FPS weapon, and FPS armor", async ({ page }) => {
     const failures = installFailureGuards(page);
     await mkdir(screenshotDir, { recursive: true });
 
@@ -86,11 +81,13 @@ test.describe("Build Queue stats fixture", () => {
 
         if (item.expectGroupedStats) {
           await expect(page.locator('.bq-item-stats [data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
-          await expect(page.locator(".bq-item-stats .bq-stat-group").first()).toBeVisible();
           await expect(page.locator(".bq-item-stats .bq-stats-meta")).toBeVisible();
-          await expect(page.locator(".bq-item-stats .bq-stat-compare").first()).toBeVisible();
+          await expect(page.locator(".bq-item-stats .bq-stats-overview-group").first()).toBeVisible();
+          await expect(page.locator(".bq-item-stats .bq-stat-compare")).toHaveCount(0);
+          await expect(page.locator('.bq-component-statistics[data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
+          await expect(page.locator(".bq-component-statistics .bq-stat-compare").first()).toBeVisible();
         } else {
-          await expect(page.locator(".bq-item-stats .bq-stats-panel")).toBeVisible();
+          await expect(page.locator(".bq-item-stats .bq-stats-overview")).toBeVisible();
         }
 
         await page.screenshot({
