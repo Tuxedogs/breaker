@@ -8,7 +8,7 @@
 | Gate | Status | Notes |
 |------|--------|-------|
 | Gate 1 — branch review + merge | In progress | Core 3 commits review PASS; validation pending `ui:build-queue` browser install |
-| Gate 2 — BQ UI hotfix | Blocked on Gate 1 | Prior pass `3b3c88381` insufficient (stretched groups / stranded art remain) |
+| Gate 2 — BQ UI hotfix | **PASS** | Three-region header + compact stat groups; see commit below |
 | Gate 3 — independent UI verify | Not started | Fresh agent, clean checkout |
 | Architecture phases | HOLD | Awaiting post-UI plan approval |
 
@@ -88,3 +88,32 @@
 8. Remove unnecessary full-catalog loading  
 
 **Do not start until UI Gate 3 passes and user explicitly approves this plan.**
+
+## Gate 2 — UI hotfix (integration/bq-stats-ui-hotfix)
+
+| Field | Value |
+|-------|-------|
+| Agent | Gate2 UI hotfix (Composer 2.5, GPT 5.5 fallback) |
+| Branch | `integration/bq-stats-ui-hotfix` |
+| Commit | `f2b471869` |
+| Files | `BuildQueueCraftStatsPanel.tsx`, `BuildQueueGroup.tsx`, `build-queue.css` (stat panel + selected-craft header only) |
+| Screenshots | `artifacts/bq-craft-header/2026-07-12/` |
+
+### Changes
+- Flattened selected-craft header to three grid regions: identity/actions | grouped stats | compact artwork (120–168px).
+- Removed `bq-item-dossier` wrapper that stranded artwork and created disconnected nested boxes.
+- Aligned stat groups with Crafting Detail compact pattern: 2-col `bq-stat-group-grid`, card-style stat rows, `align-items: start`, matrix full-width.
+- Stopped `bq-item-body` flex growth to eliminate viewport void above Material Allocation.
+- Panel hides meaningless zero deltas at render time.
+
+### Validation
+
+| Command | Result |
+|---------|--------|
+| `npm run ui:build-queue` | PASS — 1 (FR-66, AD5B, FPS weapon, FPS armor @ 1920×1080 + 2560×1440) |
+| `npm run fitting:test` | PASS — 34 |
+| `npm run build` | PASS |
+
+### Residual risks
+- Very wide matrix groups (shield resistance) still span full stats width by design.
+- Mobile stacks identity + visual on one row; stats below — verify on device if Gate 3 flags spacing.

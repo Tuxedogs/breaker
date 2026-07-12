@@ -4,13 +4,21 @@ import type {
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
 
+function shouldShowDelta(delta?: string): boolean {
+  if (!delta) return false;
+  const normalized = delta.replace(/[()\s,+%]/g, "");
+  if (!normalized) return false;
+  const numeric = Number.parseFloat(normalized);
+  return !Number.isFinite(numeric) || Math.abs(numeric) >= 0.005;
+}
+
 function StatValueRow({ stat }: { stat: CraftStatValueView }) {
   return (
     <span className="bq-detail-stat-row">
       <span className="bq-detail-stat-label">{stat.label}</span>
       <strong className="bq-detail-stat-value">
         <span className={stat.valueImpactClass ?? ""}>{stat.projectedValue}</span>
-        {stat.delta ? (
+        {shouldShowDelta(stat.delta) ? (
           <span className={`bq-detail-stat-delta ${stat.impactClass ?? ""}`}>
             ({stat.delta})
           </span>
@@ -53,7 +61,7 @@ function StatGroup({ group }: { group: CraftStatGroupView }) {
           {group.subclusters.map((subcluster) => (
             <div key={subcluster.title} className="bq-stat-subcluster">
               <div className="bq-stat-subcluster-title">{subcluster.title}</div>
-              <div className="bq-stat-row-grid">
+              <div className="bq-stat-group-grid">
                 {subcluster.stats.map((stat) => (
                   <StatValueRow key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
                 ))}
@@ -64,7 +72,7 @@ function StatGroup({ group }: { group: CraftStatGroupView }) {
       ) : group.kind === "matrix" ? (
         <StatMatrix group={group} />
       ) : (
-        <div className="bq-stat-row-grid">
+        <div className="bq-stat-group-grid">
           {group.stats.map((stat) => (
             <StatValueRow key={`${group.title}:${stat.label}`} stat={stat} />
           ))}

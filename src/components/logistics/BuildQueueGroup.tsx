@@ -1572,7 +1572,7 @@ export default function BuildQueueGroup({
             data-bq-item-id={item.id}
           >
 
-            {/* ── Craft header: identity | stats | icon ── */}
+            {/* ── Craft header: identity | stats | artwork ── */}
             <div className="bq-item-sidebar bq-item-header">
               <div className="bq-item-identity">
                 <div className="bq-item-name-block">
@@ -1618,24 +1618,22 @@ export default function BuildQueueGroup({
                 </div>
               </div>
 
-              <div className="bq-item-dossier">
-                <div className="bq-item-stats">
-                  <BuildQueueStatsBreakdown
-                    blueprintId={item.blueprint_id}
-                    item={item}
-                    inputs={inputs}
-                  />
-                </div>
+              <div className="bq-item-stats">
+                <BuildQueueStatsBreakdown
+                  blueprintId={item.blueprint_id}
+                  item={item}
+                  inputs={inputs}
+                />
+              </div>
 
-                <div className="bq-item-visual" aria-hidden="true">
-                  <BuildQueueProductIcon
-                    item={item}
-                    recipe={recipe}
-                    preferredMode={iconMode}
-                    layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
-                    alt={itemName}
-                  />
-                </div>
+              <div className="bq-item-visual" aria-hidden="true">
+                <BuildQueueProductIcon
+                  item={item}
+                  recipe={recipe}
+                  preferredMode={iconMode}
+                  layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
+                  alt={itemName}
+                />
               </div>
             </div>
 
