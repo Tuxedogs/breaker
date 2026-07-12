@@ -1618,22 +1618,24 @@ export default function BuildQueueGroup({
                 </div>
               </div>
 
-              <div className="bq-item-stats">
-                <BuildQueueStatsBreakdown
-                  blueprintId={item.blueprint_id}
-                  item={item}
-                  inputs={inputs}
-                />
-              </div>
+              <div className="bq-item-dossier">
+                <div className="bq-item-stats">
+                  <BuildQueueStatsBreakdown
+                    blueprintId={item.blueprint_id}
+                    item={item}
+                    inputs={inputs}
+                  />
+                </div>
 
-              <div className="bq-item-visual" aria-hidden="true">
-                <BuildQueueProductIcon
-                  item={item}
-                  recipe={recipe}
-                  preferredMode={iconMode}
-                  layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
-                  alt={itemName}
-                />
+                <div className="bq-item-visual" aria-hidden="true">
+                  <BuildQueueProductIcon
+                    item={item}
+                    recipe={recipe}
+                    preferredMode={iconMode}
+                    layout={isMobileTouchLayout ? 'mobile' : 'desktop'}
+                    alt={itemName}
+                  />
+                </div>
               </div>
             </div>
 
