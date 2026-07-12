@@ -197,6 +197,9 @@ export default defineConfig(({ mode }) => {
   const useLocalApi = process.env.SCINTEL_LOCAL_API === "1" || env.SCINTEL_LOCAL_API === "1";
 
   return {
+    define: {
+      "import.meta.env.VITE_FIXTURES_ENABLED": JSON.stringify(mode === "fixtures" || env.VITE_FIXTURES_ENABLED === "1"),
+    },
     plugins: [
       {
         name: "scintel-recommender-api",
