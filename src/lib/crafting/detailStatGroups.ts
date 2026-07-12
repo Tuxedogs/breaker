@@ -172,7 +172,34 @@ const TOOL_STAT_GROUPS: DetailStatGroupDefinition[] = [
   { title: "Durability / Physical", kind: "flat", labels: ["Component HP", "Health", "Mass", "Volume"] },
 ];
 
-const MATRIX_SOURCE_LABELS = new Set(["Physical Resistance", "Energy Absorption"].map(normalizeDetailStatLabel));
+const FPS_ARMOR_STAT_GROUPS: DetailStatGroupDefinition[] = [
+  {
+    title: "Identity",
+    kind: "flat",
+    labels: ["Armor Slot", "Armor Weight"],
+  },
+  {
+    title: "Environment",
+    kind: "flat",
+    labels: ["Temp Range", "Temp Min", "Temp Max", "Radiation Dissipation", "Storage"],
+  },
+  {
+    title: "Durability / Physical",
+    kind: "flat",
+    labels: ["Mass", "Health"],
+  },
+];
+
+const MATRIX_SOURCE_LABELS = new Set([
+  "Physical Resistance",
+  "Energy Absorption",
+  "Physical Res",
+  "Energy Res",
+  "Distortion Res",
+  "Thermal Res",
+  "Biochemical Res",
+  "Stun Res",
+].map(normalizeDetailStatLabel));
 const DAMAGE_TYPE_ORDER = ["physical", "energy", "distortion", "thermal", "biochemical", "stun"] as const;
 
 export function normalizeDetailStatLabel(label: string): string {
@@ -231,6 +258,23 @@ function buildShieldMitigationMatrix(detail: FittingComponentDetail): DetailStat
 
   if (rows.length === 0) return null;
   return { title: "Resistance / Absorption", kind: "matrix", columns: ["Resistance", "Absorption"], rows };
+}
+
+function buildArmorResistanceMatrix(detail: FittingComponentDetail): DetailStatGroup | null {
+  if (detail.mitigation?.kind !== "armor") return null;
+
+  const resistance = detail.mitigation.resistanceByDamageType;
+  const rows = DAMAGE_TYPE_ORDER.flatMap<DetailStatMatrixRow>((type) => {
+    const resistanceValue = formatDamageTypeValue(resistance?.[type]);
+    if (!resistanceValue) return [];
+    return [{
+      label: titleCase(type),
+      values: [resistanceValue],
+    }];
+  });
+
+  if (rows.length === 0) return null;
+  return { title: "Damage Taken Multipliers", kind: "matrix", columns: ["Multiplier"], rows };
 }
 
 export function normalizeWeaponPerformanceDisplayStats(stats: DetailStatRow[]): DetailStatRow[] {
@@ -296,7 +340,10 @@ function groupsFromDefinitions(
 function definitionsForDetail(detail: FittingComponentDetail): DetailStatGroupDefinition[] {
   switch (detail.type) {
     case "ship_weapon":
+    case "fps_weapon":
       return WEAPON_PERFORMANCE_STAT_GROUPS;
+    case "fps_armor":
+      return FPS_ARMOR_STAT_GROUPS;
     case "shield":
       return SHIELD_STAT_GROUPS;
     case "cooler":
@@ -337,11 +384,11 @@ export function buildDetailStatGroups(
   detail: FittingComponentDetail,
   stats: DetailStatRow[],
 ): DetailStatGroup[] {
-  if (detail.type === "ship_weapon") return groupWeaponPerformanceStats(stats);
+  if (detail.type === "ship_weapon" || detail.type === "fps_weapon") {
+    return groupWeaponPerformanceStats(stats);
+  }
 
-  const displayStats = detail.type === "ship_weapon"
-    ? normalizeWeaponPerformanceDisplayStats(stats)
-    : stats.filter((row) => !DETAIL_META_LABELS.has(normalizeDetailStatLabel(row.label)));
+  const displayStats = stats.filter((row) => !DETAIL_META_LABELS.has(normalizeDetailStatLabel(row.label)));
   const rowByLabel = new Map(displayStats.map((row) => [normalizeDetailStatLabel(row.label), row] as const));
   const used = new Set<string>();
   const groups: DetailStatGroup[] = [];
@@ -350,6 +397,15 @@ export function buildDetailStatGroups(
   if (detail.type === "shield") {
     groups.push(...groupsFromDefinitions(definitions.slice(0, 1), rowByLabel, used));
     const matrix = buildShieldMitigationMatrix(detail);
+    if (matrix) {
+      groups.push(matrix);
+      for (const key of MATRIX_SOURCE_LABELS) used.add(key);
+    }
+    groups.push(...groupsFromDefinitions(definitions.slice(1), rowByLabel, used));
+  } else if (detail.type === "fps_armor") {
+    const identity = groupsFromDefinitions(definitions.slice(0, 1), rowByLabel, used);
+    groups.push(...identity);
+    const matrix = buildArmorResistanceMatrix(detail);
     if (matrix) {
       groups.push(matrix);
       for (const key of MATRIX_SOURCE_LABELS) used.add(key);
@@ -367,6 +423,5 @@ export function buildDetailStatGroups(
   });
 
   if (remaining.length > 0) groups.push({ title: "Additional", kind: "flat", stats: remaining });
-
   return groups;
 }

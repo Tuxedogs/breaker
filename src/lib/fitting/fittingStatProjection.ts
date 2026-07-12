@@ -5,6 +5,7 @@ import type {
   FittingComponentMitigation,
   FittingComponentStats,
 } from "./fittingApi";
+import { getFpsArmorCardExtras } from "../crafting/fpsComponentCardDetail";
 
 function readFinite(value: number | null | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
@@ -310,6 +311,49 @@ function buildFuelNozzleStatRows(detail: FittingComponentDetail): ComponentCardM
   return rows;
 }
 
+function buildFpsWeaponStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const rows = buildWeaponStatRows(detail);
+  pushMetric(rows, "DPS", formatCompactNumber(detail.stats.dps));
+  pushMetric(rows, "Wear Per Shot", formatCompactNumber(detail.stats.wearPerSecond));
+  if (detail.subtype) pushMetric(rows, "Weapon Class", titleCase(detail.subtype));
+  if (detail.class) pushMetric(rows, "Fire Mode", titleCase(detail.class));
+  return rows;
+}
+
+function buildFpsArmorStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
+  const rows: ComponentCardMetric[] = [];
+  const mitigation = detail.mitigation?.kind === "armor" ? detail.mitigation : null;
+  const extras = getFpsArmorCardExtras(detail);
+  const resistance = mitigation?.resistanceByDamageType;
+
+  if (detail.subtype) pushMetric(rows, "Armor Slot", titleCase(detail.subtype));
+  if (detail.class) pushMetric(rows, "Armor Weight", titleCase(detail.class));
+
+  pushMetric(rows, "Physical Res", formatCompactNumber(resistance?.physical?.value ?? null));
+  pushMetric(rows, "Energy Res", formatCompactNumber(resistance?.energy?.value ?? null));
+  pushMetric(rows, "Distortion Res", formatCompactNumber(resistance?.distortion?.value ?? null));
+  pushMetric(rows, "Thermal Res", formatCompactNumber(resistance?.thermal?.value ?? null));
+  pushMetric(rows, "Biochemical Res", formatCompactNumber(resistance?.biochemical?.value ?? null));
+  pushMetric(rows, "Stun Res", formatCompactNumber(resistance?.stun?.value ?? null));
+
+  const tempMin = extras?.temperatureMin ?? null;
+  const tempMax = extras?.temperatureMax ?? null;
+  if (tempMin !== null && tempMax !== null) {
+    pushMetric(rows, "Temp Range", `${formatNumber(tempMin)} - ${formatNumber(tempMax)} C`);
+  } else if (tempMin !== null) {
+    pushMetric(rows, "Temp Min", formatCompactNumber(tempMin, " C"));
+  } else if (tempMax !== null) {
+    pushMetric(rows, "Temp Max", formatCompactNumber(tempMax, " C"));
+  }
+
+  pushMetric(rows, "Radiation Dissipation", formatCompactNumber(extras?.radiationDissipation ?? null, " REM/s"));
+  pushMetric(rows, "Storage", formatCompactNumber(extras?.storageCapacity ?? null, " microSCU"));
+  pushMetric(rows, "Mass", formatCompactNumber(detail.stats.mass));
+  pushMetric(rows, "Health", formatCompactNumber(detail.stats.health));
+
+  return rows;
+}
+
 function buildGenericStatRows(detail: FittingComponentDetail): ComponentCardMetric[] {
   const { stats } = detail;
   const rows: ComponentCardMetric[] = [];
@@ -338,6 +382,10 @@ export function buildDetailStatRowsFromFitting(detail: FittingComponentDetail): 
   switch (detail.type) {
     case "ship_weapon":
       return buildWeaponStatRows(detail);
+    case "fps_weapon":
+      return buildFpsWeaponStatRows(detail);
+    case "fps_armor":
+      return buildFpsArmorStatRows(detail);
     case "shield":
       return buildShieldStatRows(detail);
     case "cooler":

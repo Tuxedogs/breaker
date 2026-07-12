@@ -4,6 +4,7 @@ import { fetchComponentCardById } from "@/lib/componentCardIndexApi";
 import type { ComponentRecipe } from "@/components/industry/crafting/utils/craftingTypes";
 import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
+import { buildFittingDetailFromFpsComponentCard } from "@/lib/crafting/fpsComponentCardDetail";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import { buildItemSummaryDetailStatRows } from "@/lib/fitting/fittingStatProjection";
 import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
@@ -26,7 +27,6 @@ interface Props {
   inputs: RecipeInputTemplate[];
 }
 
-type CardBridge = Pick<ComponentCardIndexRecord, "id" | "entityClass" | "kind">;
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
 
 function titleCase(value: string): string {
@@ -38,12 +38,25 @@ function titleCase(value: string): string {
 }
 
 function buildIdentityBadges(detail: FittingComponentDetail): { label: string; value: string }[] {
-  return [
+  const badges: { label: string; value: string }[] = [
     detail.size !== null ? { label: "Size", value: `S${detail.size}` } : null,
     detail.grade ? { label: "Grade", value: detail.grade } : null,
-    detail.class ? { label: "Class", value: titleCase(detail.class) } : null,
+    detail.type === "fps_weapon" && detail.subtype
+      ? { label: "Weapon Class", value: titleCase(detail.subtype) }
+      : null,
+    detail.type === "fps_armor" && detail.subtype
+      ? { label: "Armor Slot", value: titleCase(detail.subtype) }
+      : null,
+    detail.type === "fps_armor" && detail.class
+      ? { label: "Armor Weight", value: titleCase(detail.class) }
+      : null,
+    detail.type !== "fps_weapon" && detail.type !== "fps_armor" && detail.class
+      ? { label: "Class", value: titleCase(detail.class) }
+      : null,
     detail.manufacturer ? { label: "Maker", value: detail.manufacturer } : null,
   ].filter((badge): badge is { label: string; value: string } => Boolean(badge));
+
+  return badges;
 }
 
 function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
@@ -117,7 +130,7 @@ function StatGroup({ group }: { group: DetailStatGroup }) {
 }
 
 export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: Props) {
-  const [cardBridge, setCardBridge] = useState<CardBridge | null>(null);
+  const [componentCard, setComponentCard] = useState<ComponentCardIndexRecord | null>(null);
   const [recipe, setRecipe] = useState<ComponentRecipe | null>(null);
   const [bridgeLoading, setBridgeLoading] = useState(Boolean(blueprintId?.trim()));
 
@@ -125,7 +138,7 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     const normalizedBlueprintId = blueprintId?.trim();
     if (!normalizedBlueprintId) {
       queueMicrotask(() => {
-        setCardBridge(null);
+        setComponentCard(null);
         setRecipe(null);
         setBridgeLoading(false);
       });
@@ -143,7 +156,7 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     ])
       .then(([card, loadedRecipe]) => {
         if (cancelled) return;
-        setCardBridge(card ? { id: card.id, entityClass: card.entityClass, kind: card.kind } : null);
+        setComponentCard(card);
         setRecipe(loadedRecipe);
       })
       .finally(() => {
@@ -163,7 +176,13 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
       : null
   ), [recipe]);
 
-  const isFpsItem = recipeBridge?.item_kind === "fps" || cardBridge?.kind === "fps";
+  const isFpsItem = recipeBridge?.item_kind === "fps" || componentCard?.kind === "fps";
+
+  const cardBridge = useMemo(() => (
+    componentCard
+      ? { id: componentCard.id, entityClass: componentCard.entityClass, kind: componentCard.kind }
+      : null
+  ), [componentCard]);
 
   const entityClass = useMemo(() => {
     if (isFpsItem || !blueprintId?.trim()) return null;
@@ -174,11 +193,18 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
   }, [blueprintId, cardBridge, isFpsItem, recipeBridge]);
 
   const {
-    detail: fittingDetail,
+    detail: fittingApiDetail,
     loading: fittingStatsLoading,
     missing: fittingStatsMissing,
     error: fittingStatsError,
   } = useFittingComponentStats(isFpsItem ? null : entityClass);
+
+  const fpsCardDetail = useMemo(
+    () => (isFpsItem ? buildFittingDetailFromFpsComponentCard(componentCard) : null),
+    [componentCard, isFpsItem],
+  );
+
+  const fittingDetail = isFpsItem ? fpsCardDetail : fittingApiDetail;
 
   const allocatedQualities = useMemo(
     () => (recipe ? buildAllocatedMaterialQualities(item, recipe, inputs) : {}),
@@ -206,12 +232,11 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     [fittingDetail],
   );
 
-  const statsLoading = bridgeLoading || fittingStatsLoading;
+  const statsLoading = bridgeLoading || (!isFpsItem && fittingStatsLoading);
   const hasStats = !statsLoading
-    && !isFpsItem
-    && Boolean(entityClass)
-    && !fittingStatsMissing
-    && !fittingStatsError
+    && Boolean(fittingDetail)
+    && !(isFpsItem ? false : fittingStatsMissing)
+    && !(isFpsItem ? false : fittingStatsError)
     && statGroups.length > 0;
 
   if (hasStats) {

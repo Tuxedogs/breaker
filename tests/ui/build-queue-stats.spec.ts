@@ -12,8 +12,8 @@ const screenshotDir = path.resolve(process.cwd(), "test-results", "build-queue-s
 const fixtureItems = [
   { id: FIXTURE_ITEM_IDS.fr66, name: "FR-66", expectGroupedStats: true },
   { id: FIXTURE_ITEM_IDS.ad5b, name: "AD5B Ballistic Gatling", expectGroupedStats: true },
-  { id: FIXTURE_ITEM_IDS.fpsWeapon, name: 'P6-LR "Archangel" Sniper Rifle', expectGroupedStats: false },
-  { id: FIXTURE_ITEM_IDS.fpsArmor, name: "ADP-mk4 Arms Woodland", expectGroupedStats: false },
+  { id: FIXTURE_ITEM_IDS.fpsWeapon, name: 'P6-LR "Archangel" Sniper Rifle', expectGroupedStats: true },
+  { id: FIXTURE_ITEM_IDS.fpsArmor, name: "ADP-mk4 Arms Woodland", expectGroupedStats: true },
 ] as const;
 
 function isIgnorableUrl(url: string): boolean {
@@ -88,7 +88,6 @@ test.describe("Build Queue stats fixture", () => {
           await expect(page.locator(".bq-item-stats .bq-stat-groups")).toBeVisible({ timeout: 60_000 });
           await expect(page.locator(".bq-item-stats .bq-stat-group").first()).toBeVisible();
         } else {
-          // Phase 1: FPS stats still empty until Phase 2 repair; panel must still mount.
           await expect(page.locator(".bq-item-stats .bq-stats-panel")).toBeVisible();
         }
 
