@@ -85,8 +85,9 @@ test.describe("Build Queue stats fixture", () => {
         await expect(page.locator(".bq-mat-table")).toBeVisible();
 
         if (item.expectGroupedStats) {
-          await expect(page.locator(".bq-item-stats .bq-stat-groups")).toBeVisible({ timeout: 60_000 });
+          await expect(page.locator('.bq-item-stats [data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
           await expect(page.locator(".bq-item-stats .bq-stat-group").first()).toBeVisible();
+          await expect(page.locator(".bq-item-stats .bq-stats-meta")).toBeVisible();
         } else {
           await expect(page.locator(".bq-item-stats .bq-stats-panel")).toBeVisible();
         }

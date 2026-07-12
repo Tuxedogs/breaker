@@ -1,13 +1,10 @@
 import type { FittingComponentDetail } from "../../lib/fitting/fittingApi";
-import { buildItemSummaryDetailStatRows } from "../../lib/fitting/fittingStatProjection";
-import { buildDetailStatGroups, type DetailStatGroup } from "../../lib/crafting/detailStatGroups";
-import type { DetailStatRow } from "../../lib/crafting/craftingDetailStats";
+import { buildCraftStatViewModel, type CraftStatGroupView } from "../../lib/crafting/craftStatViewModel";
 
-export type BuildQueueStatGroup = DetailStatGroup;
+export type BuildQueueStatGroup = CraftStatGroupView;
 
 export function buildBuildQueueFittingStatGroups(
   detail: FittingComponentDetail | null | undefined,
 ): BuildQueueStatGroup[] {
-  if (!detail) return [];
-  return buildDetailStatGroups(detail, buildItemSummaryDetailStatRows(detail) as DetailStatRow[]);
+  return buildCraftStatViewModel({ detail }).groups;
 }

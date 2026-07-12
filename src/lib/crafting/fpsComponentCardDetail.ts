@@ -9,13 +9,13 @@
  * This module normalizes those card stats into `FittingComponentDetail` so the shared
  * projection → modifier → grouping pipeline can render FPS items without inventing fields.
  */
-import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
+import type { ComponentCardIndexRecord } from "../componentCardIndex";
 import type {
   DamageTypeMap,
   FittingComponentDetail,
   FittingComponentMitigation,
   FittingComponentStats,
-} from "@/lib/fitting/fittingApi";
+} from "../fitting/fittingApi";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -34,9 +34,10 @@ function readString(value: unknown): string | null {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function getStatsObject(record: ComponentCardIndexRecord, key: string): Record<string, unknown> | null {
-  if (!isRecord(record.stats)) return null;
-  const value = record.stats[key];
+function getStatsObject(record: ComponentCardIndexRecord, key: "fpsWeapon" | "fpsArmor"): Record<string, unknown> | null {
+  const stats = record.stats as unknown;
+  if (!isRecord(stats)) return null;
+  const value = stats[key];
   return isRecord(value) ? value : null;
 }
 

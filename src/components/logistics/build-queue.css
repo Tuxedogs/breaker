@@ -544,9 +544,11 @@
 .bq-center-shell .bq-item-stats {
   grid-area: stats;
   justify-self: stretch;
+  align-self: start;
   width: 100%;
   max-width: min(100%, 760px);
   min-height: 0;
+  height: fit-content;
 }
 
 .bq-center-shell .bq-item-visual {
@@ -585,6 +587,8 @@
   width: 100%;
   max-width: 100%;
   min-height: 0;
+  height: auto;
+  align-self: start;
   padding: 10px;
 }
 
@@ -2689,9 +2693,9 @@
   min-width: 0;
   max-width: 100%;
   padding: 3px 7px;
-  border: 1px solid rgba(184, 92, 246, 0.22);
+  border: 1px solid var(--panel-border-soft);
   border-radius: 5px;
-  background: rgba(91, 35, 140, 0.16);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--alloc-text-secondary);
   font-size: 10px;
   font-weight: 700;
@@ -2707,10 +2711,20 @@
 .bq-stats-meta-badge strong {
   min-width: 0;
   overflow: hidden;
-  color: rgba(231, 216, 255, 0.96);
+  color: var(--bq-text);
   font-weight: 800;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.bq-detail-stat-delta.craft-ok,
+.bq-detail-stat-value .craft-ok {
+  color: #3dcca8;
+}
+
+.bq-detail-stat-delta.craft-shortage,
+.bq-detail-stat-value .craft-shortage {
+  color: #e86a6a;
 }
 
 .bq-stat-groups {

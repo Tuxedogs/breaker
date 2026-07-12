@@ -5,19 +5,11 @@ import type { ComponentRecipe } from "@/components/industry/crafting/utils/craft
 import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import { buildFittingDetailFromFpsComponentCard } from "@/lib/crafting/fpsComponentCardDetail";
+import { buildCraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
-import { buildItemSummaryDetailStatRows } from "@/lib/fitting/fittingStatProjection";
-import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
-import {
-  buildModifiedDetailStatRows,
-  type DetailStatRow,
-} from "@/lib/crafting/craftingDetailStats";
-import {
-  buildDetailStatGroups,
-  type DetailStatGroup,
-} from "@/lib/crafting/detailStatGroups";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
 import { buildAllocatedMaterialQualities } from "@/lib/logistics/buildQueueCraftStats";
+import BuildQueueCraftStatsPanel from "./BuildQueueCraftStatsPanel";
 import type { BuildQueueItem } from "@/types/logistics";
 import type { RecipeInputTemplate } from "@/data/logistics/seed";
 
@@ -28,106 +20,6 @@ interface Props {
 }
 
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
-
-function titleCase(value: string): string {
-  return value
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .replace(/\b\w/g, (char) => char.toUpperCase());
-}
-
-function buildIdentityBadges(detail: FittingComponentDetail): { label: string; value: string }[] {
-  const badges: { label: string; value: string }[] = [
-    detail.size !== null ? { label: "Size", value: `S${detail.size}` } : null,
-    detail.grade ? { label: "Grade", value: detail.grade } : null,
-    detail.type === "fps_weapon" && detail.subtype
-      ? { label: "Weapon Class", value: titleCase(detail.subtype) }
-      : null,
-    detail.type === "fps_armor" && detail.subtype
-      ? { label: "Armor Slot", value: titleCase(detail.subtype) }
-      : null,
-    detail.type === "fps_armor" && detail.class
-      ? { label: "Armor Weight", value: titleCase(detail.class) }
-      : null,
-    detail.type !== "fps_weapon" && detail.type !== "fps_armor" && detail.class
-      ? { label: "Class", value: titleCase(detail.class) }
-      : null,
-    detail.manufacturer ? { label: "Maker", value: detail.manufacturer } : null,
-  ].filter((badge): badge is { label: string; value: string } => Boolean(badge));
-
-  return badges;
-}
-
-function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
-  return (
-    <span className="bq-detail-stat-row">
-      <span className="bq-detail-stat-label">{stat.label}</span>
-      <strong className="bq-detail-stat-value">
-        <span className={stat.valueImpactClass ?? ""}>{stat.value}</span>
-        {stat.modifier ? (
-          <span className={`bq-detail-stat-delta ${stat.modifier.impactClass}`}>
-            ({stat.modifier.value})
-          </span>
-        ) : null}
-      </strong>
-      {stat.modifier?.base ? (
-        <span className="bq-detail-stat-base">Base {stat.modifier.base}</span>
-      ) : null}
-    </span>
-  );
-}
-
-function StatMatrix({ group }: { group: Extract<DetailStatGroup, { kind: "matrix" }> }) {
-  return (
-    <div className="bq-stat-matrix" role="table" aria-label={group.title}>
-      <div className="bq-stat-matrix-head" role="row">
-        <span role="columnheader">Type</span>
-        {group.columns.map((column) => (
-          <span key={column} role="columnheader">{column}</span>
-        ))}
-      </div>
-      {group.rows.map((row) => (
-        <div key={row.label} className="bq-stat-matrix-row" role="row">
-          <span role="rowheader">{row.label}</span>
-          {row.values.map((value, index) => (
-            <strong key={`${row.label}:${group.columns[index] ?? index}`} role="cell">{value}</strong>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function StatGroup({ group }: { group: DetailStatGroup }) {
-  return (
-    <section className={`bq-stat-group bq-stat-group--${group.kind}`} aria-label={group.title}>
-      <div className="bq-stat-group-title">{group.title}</div>
-      {group.kind === "nested" ? (
-        <div className="bq-stat-group-body">
-          {group.subclusters.map((subcluster) => (
-            <div key={subcluster.title} className="bq-stat-subcluster">
-              <div className="bq-stat-subcluster-title">{subcluster.title}</div>
-              <div className="bq-stat-row-grid">
-                {subcluster.stats.map((stat) => (
-                  <DetailStatRowItem key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : group.kind === "matrix" ? (
-        <StatMatrix group={group} />
-      ) : (
-        <div className="bq-stat-row-grid">
-          {group.stats.map((stat) => (
-            <DetailStatRowItem key={`${group.title}:${stat.label}`} stat={stat} />
-          ))}
-        </div>
-      )}
-    </section>
-  );
-}
 
 export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: Props) {
   const [componentCard, setComponentCard] = useState<ComponentCardIndexRecord | null>(null);
@@ -216,62 +108,22 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     [recipe, allocatedQualities],
   );
 
-  const displayStatRows = useMemo<DetailStatRow[]>(() => {
-    if (!fittingDetail) return [];
-    const baseStatRows = buildItemSummaryDetailStatRows(fittingDetail);
-    return buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
-  }, [fittingDetail, totalModifiers]);
+  const model = useMemo(() => buildCraftStatViewModel({
+    detail: fittingDetail,
+    totalModifiers,
+    loading: bridgeLoading || (!isFpsItem && fittingStatsLoading),
+    missing: isFpsItem ? !fpsCardDetail && !bridgeLoading : fittingStatsMissing,
+    error: isFpsItem ? null : fittingStatsError,
+  }), [
+    bridgeLoading,
+    fittingDetail,
+    fittingStatsError,
+    fittingStatsLoading,
+    fittingStatsMissing,
+    fpsCardDetail,
+    isFpsItem,
+    totalModifiers,
+  ]);
 
-  const statGroups = useMemo(
-    () => (fittingDetail ? buildDetailStatGroups(fittingDetail, displayStatRows) : []),
-    [displayStatRows, fittingDetail],
-  );
-
-  const identityBadges = useMemo(
-    () => (fittingDetail ? buildIdentityBadges(fittingDetail) : []),
-    [fittingDetail],
-  );
-
-  const statsLoading = bridgeLoading || (!isFpsItem && fittingStatsLoading);
-  const hasStats = !statsLoading
-    && Boolean(fittingDetail)
-    && !(isFpsItem ? false : fittingStatsMissing)
-    && !(isFpsItem ? false : fittingStatsError)
-    && statGroups.length > 0;
-
-  if (hasStats) {
-    return (
-      <div className="bq-stats-panel" aria-label="Component stats">
-        {identityBadges.length > 0 ? (
-          <div className="bq-stats-meta" aria-label="Component identity">
-            {identityBadges.map((badge) => (
-              <span key={`${badge.label}:${badge.value}`} className="bq-stats-meta-badge">
-                <span>{badge.label}</span>
-                <strong>{badge.value}</strong>
-              </span>
-            ))}
-          </div>
-        ) : null}
-        <div className="bq-stat-groups">
-          {statGroups.map((group) => (
-            <StatGroup key={group.title} group={group} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (statsLoading) {
-    return (
-      <div className="bq-stats-panel bq-stats-panel--empty">
-        <p className="bq-stats-breakdown-empty">Loading stats...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bq-stats-panel bq-stats-panel--empty">
-      <p className="bq-stats-breakdown-empty">Stats unavailable</p>
-    </div>
-  );
+  return <BuildQueueCraftStatsPanel model={model} />;
 }
