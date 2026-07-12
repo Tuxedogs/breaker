@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { fetchComponentCardById } from "@/lib/componentCardIndexApi";
 import type { ComponentRecipe } from "@/components/industry/crafting/utils/craftingTypes";
 import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import { buildFittingDetailFromFpsComponentCard } from "@/lib/crafting/fpsComponentCardDetail";
-import { buildCraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
+import { buildCraftStatViewModel, type CraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
 import {
@@ -14,7 +14,10 @@ import {
   hasConfiguredTargetQualities,
   hasMaterialAllocations,
 } from "@/lib/logistics/buildQueueCraftStats";
-import BuildQueueCraftStatsPanel from "./BuildQueueCraftStatsPanel";
+import {
+  BuildQueueCraftOverviewPanel,
+  BuildQueueCraftStatisticsPanel,
+} from "./BuildQueueCraftStatsPanel";
 import type { BuildQueueItem } from "@/types/logistics";
 import type { RecipeInputTemplate } from "@/data/logistics/seed";
 
@@ -26,7 +29,9 @@ interface Props {
 
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
 
-export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: Props) {
+const BuildQueueStatsContext = createContext<CraftStatViewModel | null>(null);
+
+function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStatViewModel {
   const [componentCard, setComponentCard] = useState<ComponentCardIndexRecord | null>(null);
   const [recipe, setRecipe] = useState<ComponentRecipe | null>(null);
   const [bridgeLoading, setBridgeLoading] = useState(Boolean(blueprintId?.trim()));
@@ -133,7 +138,7 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     [item, recipe, inputs],
   );
 
-  const model = useMemo(() => buildCraftStatViewModel({
+  return useMemo(() => buildCraftStatViewModel({
     detail: fittingDetail,
     recipe,
     targetModifiers,
@@ -157,6 +162,37 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     targetConfigured,
     targetModifiers,
   ]);
+}
 
-  return <BuildQueueCraftStatsPanel model={model} />;
+export function BuildQueueStatsProvider({ blueprintId, item, inputs, children }: Props & { children: ReactNode }) {
+  const model = useBuildQueueStatModel({ blueprintId, item, inputs });
+  return (
+    <BuildQueueStatsContext.Provider value={model}>
+      {children}
+    </BuildQueueStatsContext.Provider>
+  );
+}
+
+function useBuildQueueStatsContext(): CraftStatViewModel {
+  const model = useContext(BuildQueueStatsContext);
+  if (!model) {
+    throw new Error("BuildQueue stats components must be used within BuildQueueStatsProvider");
+  }
+  return model;
+}
+
+export function BuildQueueCraftOverview() {
+  const model = useBuildQueueStatsContext();
+  return <BuildQueueCraftOverviewPanel model={model} />;
+}
+
+export function BuildQueueCraftStatistics() {
+  const model = useBuildQueueStatsContext();
+  return <BuildQueueCraftStatisticsPanel model={model} />;
+}
+
+/** @deprecated Use BuildQueueStatsProvider + BuildQueueCraftOverview/Statistics */
+export default function BuildQueueStatsBreakdown(props: Props) {
+  const model = useBuildQueueStatModel(props);
+  return <BuildQueueCraftOverviewPanel model={model} />;
 }

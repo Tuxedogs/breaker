@@ -82,6 +82,10 @@ export function formatCraftingContributionValue(value: number, modifierMode?: st
   return `${value >= 0 ? "+" : ""}${value.toFixed(1)}%`;
 }
 
+export function getModifierStatBindingLabel(property: string): string {
+  return MODIFIER_STAT_BINDINGS[property]?.label ?? formatProperty(property);
+}
+
 export function formatModifierStatName(property: string): string {
   const labels: Record<string, string> = {
     GPP_Health_MaxHealth: "HP",

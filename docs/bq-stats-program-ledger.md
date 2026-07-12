@@ -11,6 +11,7 @@
 | Gate 2 — BQ UI hotfix | **PASS** | Three-region header + compact stat groups; see commit below |
 | Gate 3 — independent UI verify | Not started | Fresh agent, clean checkout |
 | Gate 4 — Base / Target / Allocation | **PASS** | Dense comparison table per stat group; see commit below |
+| Gate 6 — Corrective layout | **PASS** | Overview header + full-width Component Statistics card; see commit below |
 | Architecture phases | HOLD | Awaiting post-UI plan approval |
 
 ## Repository snapshot (Gate 1 start)
@@ -152,3 +153,39 @@
 - Comparison rows without a matching detail-stat label land in fallback "Material Modifiers" group.
 - Global target/allocation empty states apply per-column; per-material partial target is not surfaced separately.
 - `!important` used only inside `.bq-stats-panel` to neutralize inherited rarity classes.
+
+## Gate 6 — Corrective layout: overview + Component Statistics card (bq-stats-layout-correction)
+
+| Field | Value |
+|-------|-------|
+| Agent | Gate 6 corrective UI |
+| Branch | `bq-stats-layout-correction` |
+| Base | `origin/main` @ `e32b4f983` |
+| Worktree | `D:/Moonbreaker-bq-stats-layout` |
+| Approved mockup | `artifacts/bq-craft-header/mockup/approved-component-statistics.png` |
+
+### Verdict
+REJECT prior header-embedded comparison on visual grounds. Restructured selected-craft workspace into three stacked sections: compact overview header (stock only) → full-width Component Statistics card → Material Allocation.
+
+### Changes
+- Split `craftStatViewModel` into `overviewGroups` (base stock) and `comparisonGroups` (Base/Target/Allocation); fixed property→category assignment via `findDetailStatGroupTitle` + prefix fallbacks; removed "Material Modifiers" dump group.
+- Added `BuildQueueStatsProvider` + `BuildQueueCraftOverview` / `BuildQueueCraftStatistics`; comparison table moved out of header into `.bq-component-statistics` with Unit + Direction columns and readable desktop type.
+- Updated `BuildQueueGroup` DOM: header = identity | stock overview | artwork (140–180px); statistics card full-width above materials.
+- Scoped comparison CSS to `.bq-component-statistics`; overview uses compact 4-column stock groups in header.
+
+### Validation
+
+| Command | Result |
+|---------|--------|
+| `npm run fitting:test` | PASS — 42 |
+| `npm run ui:build-queue` | PASS — 1 (FR-66, AD5B, FPS weapon, FPS armor @ 1920×1080 + 2560×1440) |
+| `npm run build` | PASS |
+
+### Screenshots
+`artifacts/bq-craft-header/gate6/` — FR-66, AD5B, FPS weapon, FPS armor @ 1920 + 2560 (8 files). QD/cooler/PP not in stats fixture; use FR-66 (shield) + AD5B (weapon) as ship-component coverage.
+
+### Residual risks
+- Stat unit column uses label-based lookup; unknown stats show `-`.
+- FPS armor may have empty comparison groups when recipe has no quality modifiers.
+- Overview still omits matrix groups (resistance tables) by design — those remain statistics-only when modifiable.
+- Architecture phases remain HOLD.
