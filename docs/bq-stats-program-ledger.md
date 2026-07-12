@@ -1,0 +1,90 @@
+# Build Queue Stats / Fitting Performance — Project Ledger
+
+**Program owner:** TPM / integration (this chat)  
+**Baseline:** Corrected architecture audit (do not re-audit). No fitting API migration authorized until UI Gate 3 passes + explicit plan approval.
+
+## Gate status
+
+| Gate | Status | Notes |
+|------|--------|-------|
+| Gate 1 — branch review + merge | In progress | Core 3 commits review PASS; validation pending `ui:build-queue` browser install |
+| Gate 2 — BQ UI hotfix | Blocked on Gate 1 | Prior pass `3b3c88381` insufficient (stretched groups / stranded art remain) |
+| Gate 3 — independent UI verify | Not started | Fresh agent, clean checkout |
+| Architecture phases | HOLD | Awaiting post-UI plan approval |
+
+## Repository snapshot (Gate 1 start)
+
+| Field | Value |
+|-------|-------|
+| Workspace | `D:/Moonbreaker` |
+| Current branch | `bq-stats-local-fixture` |
+| Tip SHA | `5c270745458048cb3db460fc38568348164ac6b7` |
+| Working tree | Clean (no uncommitted user work to stash) |
+| `main` / `origin/main` | `3b3c88381` — already contains fixture + FPS + view-model + prior UI pass |
+| Tip vs main | +1 commit: artifact screenshots only (`5c2707454`) |
+
+## Completed implementation commits (reported)
+
+| SHA | Agent / author | Scope | Result |
+|-----|----------------|-------|--------|
+| `e72ce9c5d` | prior | DEV fixture + `ui:build-queue` | Review PASS |
+| `9a2ffcc16` | prior | FPS card fallback → shared projection | Review PASS |
+| `231ab9464` | prior | `craftStatViewModel` + pure panel | Review PASS |
+
+## Extra commits already on `main` (not in original 3)
+
+| SHA | Scope | Integration note |
+|-----|-------|------------------|
+| `026198909` | Recipe browser filters / zero-effect modifiers | **Out of BQ-stats scope** — already on `main`; do not expand Gate 2 to touch |
+| `3b3c88381` | Compact dossier CSS/layout attempt | **Insufficient** vs Gate 2 visual criteria; Gate 2 must rework |
+| `5c2707454` | Before/after screenshots under `artifacts/bq-craft-header/` | Evidence only |
+
+## Gate 1 review checklist
+
+| Criterion | Result |
+|-----------|--------|
+| Fixture route gated by `import.meta.env.DEV` | PASS (`App.tsx` + `BuildQueueFixturePage`) |
+| `SCINTEL_LOCAL_API=1` local-only (no prod proxy) | PASS (`vite.config.ts`, Playwright config) |
+| FPS from `stats.fpsWeapon` / `stats.fpsArmor` | PASS (`fpsComponentCardDetail.ts`) |
+| No fabricated FPS values | PASS (card field normalization only) |
+| No duplicated modifier formulas | PASS (reuses `buildModifiedDetailStatRows` / existing quality utils) |
+| Ship fitting projections unchanged | PASS (tests assert QD/cooler/PP/shield/weapon) |
+| `craftStatViewModel` category-aware, transport-independent | PASS |
+| `BuildQueueCraftStatsPanel` does not fetch | PASS (props = view model only) |
+| Base / projected / delta available | PASS |
+| Example components not hardcoded as universal contract | PASS (dynamic `buildDetailStatGroups`) |
+| Unrelated pages/calcs in core 3 commits | PASS |
+| Unrelated pages in full tip | FAIL note: `026198909` recipe browser (already on main) |
+
+## Validation (Gate 1)
+
+| Command | Result |
+|---------|--------|
+| `npm run fitting:test` | PASS — 34 |
+| `npm run build` | PASS |
+| `npm run ui:build-queue` | BLOCKED — Playwright Chromium missing in sandbox; install pending approval |
+
+## Integration branch plan
+
+- Create: `integration/bq-stats-ui-hotfix` from `bq-stats-local-fixture` tip (`5c2707454`) so screenshots + mainline baseline are present.
+- Merge status: pending after `ui:build-queue` green (or documented env exception + merge with residual risk).
+
+## File ownership (upcoming)
+
+| Phase | Agent | Owns | Must not touch |
+|-------|-------|------|----------------|
+| Gate 2 | UI 5.5 Medium | `BuildQueueCraftStatsPanel`, selected-craft header, `build-queue.css`, tightly related BQ layout | fitting API/hooks/cache, projections, modifiers, reservations, solver, unrelated pages |
+| Gate 3 | Fresh verifier | Read-only verify + tests | Authoring UI |
+
+## Architecture sequence (PROPOSAL ONLY — not authorized)
+
+1. Pin static fitting reads to channel + buildId  
+2. Unify resolved + in-flight caching  
+3. Route all fitting consumers through shared store  
+4. Eliminate Fitting terminal duplicate/remount waterfalls  
+5. Bounded batch / chunk loading  
+6. Persisted patch-static caching  
+7. Route-level readiness boundaries  
+8. Remove unnecessary full-catalog loading  
+
+**Do not start until UI Gate 3 passes and user explicitly approves this plan.**
