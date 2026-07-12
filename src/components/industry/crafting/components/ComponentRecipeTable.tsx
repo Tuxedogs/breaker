@@ -14,6 +14,8 @@ import {
   getModifiersAtQuality,
   summariseUnmatchedModifiers,
   formatProperty,
+  filterEffectiveModifiersAtQuality,
+  hasEffectiveModifierValue,
 } from "../utils/qualityModifiers";
 import { getMaterialQualityKey } from "../utils/materialQuality";
 import {
@@ -998,6 +1000,13 @@ function OverallModifierGroup({
 }) {
   if (modifiers.length === 0) return null;
 
+  const modifiersAtQuality =
+    quality === undefined
+      ? []
+      : filterEffectiveModifiersAtQuality(getModifiersAtQuality(modifiers, quality));
+
+  if (quality !== undefined && modifiersAtQuality.length === 0) return null;
+
   return (
     <div className="craft-mod-group craft-mod-group--general">
       <div className="craft-mod-group-header">
@@ -1034,7 +1043,7 @@ function OverallModifierGroup({
         </div>
       ) : (
         <div className="craft-drawer-modifier-list">
-          {getModifiersAtQuality(modifiers, quality).map((m, i) => {
+          {modifiersAtQuality.map((m, i) => {
             const baseValue = getCraftingModifierBaseValue(fittingDetail, m.property);
 
             return (
@@ -1077,7 +1086,9 @@ function useMaterialQualityModel({
   const quality = getEffectiveQualityFromBands(bands, safeBandIndex);
   const selectedQualityTierClass = rarityClassFromBandIndex(bandNumber);
   const atQuality = useMemo(() => {
-    const mods = getModifiersAtQuality(mat.qualityModifiers ?? [], quality);
+    const mods = filterEffectiveModifiersAtQuality(
+      getModifiersAtQuality(mat.qualityModifiers ?? [], quality),
+    );
     return [...mods].sort((a, b) => {
       const order = (p: string) =>
         p === "WeaponRecoilKick" ? 0 : p === "WeaponRecoilSmoothness" ? 1 : 2;
@@ -2313,8 +2324,26 @@ function EstimatedEffectsPanel({
   overallQualitySource: number | undefined;
   finalProductQuality: FinalProductQuality;
 }) {
-  const hasMaterialModifiers = totalModifiers.length > 0;
-  const hasOverallModifiers = overallModifiers.length > 0;
+  const visibleTotalModifiers = useMemo(
+    () =>
+      totalModifiers
+        .filter((row) => hasEffectiveModifierValue(row.totalValue, row.modifierMode))
+        .map((row) => ({
+          ...row,
+          contributions: row.contributions.filter((c) =>
+            hasEffectiveModifierValue(c.value, row.modifierMode),
+          ),
+        })),
+    [totalModifiers],
+  );
+  const hasMaterialModifiers = visibleTotalModifiers.length > 0;
+  const hasOverallModifiers = useMemo(() => {
+    if (overallModifiers.length === 0) return false;
+    if (overallQualitySource === undefined) return true;
+    return filterEffectiveModifiersAtQuality(
+      getModifiersAtQuality(overallModifiers, overallQualitySource),
+    ).length > 0;
+  }, [overallModifiers, overallQualitySource]);
   const componentRarityClass = rarityClassFromBandIndex(finalProductQuality.band);
   if (!hasMaterialModifiers && !hasOverallModifiers) return null;
 
@@ -2323,7 +2352,7 @@ function EstimatedEffectsPanel({
       <div className="craft-summary-section-label">Estimated Effects</div>
       {hasMaterialModifiers && (
         <div className="craft-detail-effects-list">
-          {totalModifiers.map((row) => {
+          {visibleTotalModifiers.map((row) => {
             const baseValue = getCraftingModifierBaseValue(fittingDetail, row.property);
             const display = formatMaterialModifierDisplay(
               row.property,
@@ -2455,7 +2484,16 @@ function RecipeDrawer({
     getBandsForMaterial,
   } = useQualityQuantization();
   const location = useLocation();
-  const backTo = `/industry/crafting${location.search}`;
+  const fromState =
+    typeof location.state === "object"
+    && location.state !== null
+    && "from" in location.state
+    && typeof (location.state as { from?: unknown }).from === "string"
+      ? (location.state as { from: string }).from
+      : null;
+  const backTo = fromState && fromState.startsWith("/industry/crafting")
+    ? fromState
+    : `/industry/crafting${location.search}`;
 
   const initialSelectedRecipeId = groupRecipes.some((item) => item.blueprint_id === initialRecipeId)
     ? initialRecipeId

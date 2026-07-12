@@ -103,11 +103,14 @@ export function filterRecipeBrowserRecords(
       if (record.kind === "fps") {
         if (fpsFilters.size > 0) {
           if (!fpsFilters.has(record.type ?? "")) return false;
-        } else if (vehicleFilters.size > 0 || isDefaultState || !hasTextSearch) {
+        } else if (!hasTextSearch) {
+          // Hide FPS in default/vehicle browse; text search includes FPS matches.
           return false;
         }
       } else {
-        if (fpsFilters.size > 0) return false;
+        // Text search may return both vehicle and FPS hits; only mutually exclude
+        // vehicle rows when an FPS filter is set and there is no search query.
+        if (fpsFilters.size > 0 && !hasTextSearch) return false;
         if (vehicleFilters.size > 0) {
           const type = record.type ?? "";
           const utilityMatch = vehicleFilters.has("__utility__") && UTILITY_TYPES.has(type);

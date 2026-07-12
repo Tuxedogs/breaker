@@ -81,6 +81,28 @@ export function formatProperty(raw: string): string {
   return raw.replace(/^GPP_/, "").replace(/_/g, " ");
 }
 
+/** True when a modifier value should be shown (non-zero at display precision). */
+export function hasEffectiveModifierValue(
+  value: number | null | undefined,
+  modifierMode?: string,
+): boolean {
+  if (value == null || Number.isNaN(value)) return false;
+
+  if (modifierMode === "integerAdditive") {
+    return Math.round(value) !== 0;
+  }
+
+  const rounded = Math.round(value * 10) / 10;
+  const normalized = Object.is(rounded, -0) ? 0 : rounded;
+  return normalized !== 0;
+}
+
+export function filterEffectiveModifiersAtQuality(
+  modifiers: ModifierAtQuality[],
+): ModifierAtQuality[] {
+  return modifiers.filter((m) => hasEffectiveModifierValue(m.value, m.modifierMode));
+}
+
 export function formatModifierAtQuality(m: ModifierAtQuality): string {
   if (m.modifierMode === "integerAdditive") {
     const v = Math.round(m.value);

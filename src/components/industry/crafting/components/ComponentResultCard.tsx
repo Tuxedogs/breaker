@@ -161,7 +161,10 @@ export default function ComponentResultCard({
     <article className={`component-result-card${isShipWeapon ? " component-result-card--weapon" : ""}`}>
       <Link
         className="component-result-card__hit"
-        to={`/industry/crafting/${schema.id}`}
+        to={{
+          pathname: `/industry/crafting/${schema.id}`,
+          search: location.search,
+        }}
         state={{ from: location.pathname + location.search }}
       >
         {isShipWeapon ? (
