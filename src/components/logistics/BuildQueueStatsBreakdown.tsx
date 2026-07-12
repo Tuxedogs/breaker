@@ -8,7 +8,12 @@ import { buildFittingDetailFromFpsComponentCard } from "@/lib/crafting/fpsCompon
 import { buildCraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
-import { buildAllocatedMaterialQualities } from "@/lib/logistics/buildQueueCraftStats";
+import {
+  buildAllocatedMaterialQualities,
+  buildTargetMaterialQualities,
+  hasConfiguredTargetQualities,
+  hasMaterialAllocations,
+} from "@/lib/logistics/buildQueueCraftStats";
 import BuildQueueCraftStatsPanel from "./BuildQueueCraftStatsPanel";
 import type { BuildQueueItem } from "@/types/logistics";
 import type { RecipeInputTemplate } from "@/data/logistics/seed";
@@ -98,23 +103,49 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
 
   const fittingDetail = isFpsItem ? fpsCardDetail : fittingApiDetail;
 
+  const targetQualities = useMemo(
+    () => (recipe ? buildTargetMaterialQualities(item, recipe, inputs) : {}),
+    [item, recipe, inputs],
+  );
+
   const allocatedQualities = useMemo(
     () => (recipe ? buildAllocatedMaterialQualities(item, recipe, inputs) : {}),
     [item, recipe, inputs],
   );
 
-  const totalModifiers = useMemo(
+  const targetModifiers = useMemo(
+    () => (recipe ? computeTotalModifiersFromQualities(recipe, targetQualities) : []),
+    [recipe, targetQualities],
+  );
+
+  const allocationModifiers = useMemo(
     () => (recipe ? computeTotalModifiersFromQualities(recipe, allocatedQualities) : []),
     [recipe, allocatedQualities],
   );
 
+  const targetConfigured = useMemo(
+    () => (recipe ? hasConfiguredTargetQualities(recipe, inputs) : false),
+    [recipe, inputs],
+  );
+
+  const allocationConfigured = useMemo(
+    () => (recipe ? hasMaterialAllocations(item, recipe, inputs) : false),
+    [item, recipe, inputs],
+  );
+
   const model = useMemo(() => buildCraftStatViewModel({
     detail: fittingDetail,
-    totalModifiers,
+    recipe,
+    targetModifiers,
+    allocationModifiers,
+    targetConfigured,
+    allocationConfigured,
     loading: bridgeLoading || (!isFpsItem && fittingStatsLoading),
     missing: isFpsItem ? !fpsCardDetail && !bridgeLoading : fittingStatsMissing,
     error: isFpsItem ? null : fittingStatsError,
   }), [
+    allocationConfigured,
+    allocationModifiers,
     bridgeLoading,
     fittingDetail,
     fittingStatsError,
@@ -122,7 +153,9 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     fittingStatsMissing,
     fpsCardDetail,
     isFpsItem,
-    totalModifiers,
+    recipe,
+    targetConfigured,
+    targetModifiers,
   ]);
 
   return <BuildQueueCraftStatsPanel model={model} />;

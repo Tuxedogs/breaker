@@ -10,6 +10,7 @@
 | Gate 1 — branch review + merge | In progress | Core 3 commits review PASS; validation pending `ui:build-queue` browser install |
 | Gate 2 — BQ UI hotfix | **PASS** | Three-region header + compact stat groups; see commit below |
 | Gate 3 — independent UI verify | Not started | Fresh agent, clean checkout |
+| Gate 4 — Base / Target / Allocation | **PASS** | Dense comparison table per stat group; see commit below |
 | Architecture phases | HOLD | Awaiting post-UI plan approval |
 
 ## Repository snapshot (Gate 1 start)
@@ -117,3 +118,37 @@
 ### Residual risks
 - Very wide matrix groups (shield resistance) still span full stats width by design.
 - Mobile stacks identity + visual on one row; stats below — verify on device if Gate 3 flags spacing.
+
+## Gate 4 — Base / Target / Allocation comparison (bq-stats-base-target-allocation)
+
+| Field | Value |
+|-------|-------|
+| Agent | Gate 4 implementation |
+| Branch | `bq-stats-base-target-allocation` |
+| Base | `1d6790574` |
+| Worktree | `D:/Moonbreaker-bq-stats-gate4` |
+
+### Changes
+- Extended `craftStatViewModel` with comparison rows: stable stat ID, benefit direction, base/target/allocation values, deltas, and explicit `not_set` / `no_allocation` / `ready` states.
+- Added `buildTargetMaterialQualities` + allocation/target presence helpers in `buildQueueCraftStats.ts`; wired target and allocation modifiers through `BuildQueueStatsBreakdown`.
+- Refactored `BuildQueueCraftStatsPanel` to dense `Stat | Base | Target | Allocation` table per group; removed Gate-2 zero-delta hiding for comparison rows.
+- Scoped comparison CSS + neutralized quality-band coloring inside `.bq-stats-panel` only.
+
+### Validation
+
+| Command | Result |
+|---------|--------|
+| `npm run fitting:test` | PASS — 42 |
+| `npm run ui:build-queue` | PASS — 1 (FR-66, AD5B, FPS weapon, FPS armor @ 1920×1080 + 2560×1440) |
+| `npm run build` | PASS |
+
+### Ambiguous benefit-direction GPP properties (no `PROPERTY_DIRECTION` entry)
+- `GPP_Weapon_HullScraping_Efficiency`, `GPP_Weapon_HullScraping_Radius`, `GPP_Weapon_HullScraping_Speed`
+- `GPP_Weapon_Tractor_Force`, `GPP_Weapon_Tractor_FullStrengthDist`, `GPP_Weapon_Tractor_MaxDist`, `GPP_Weapon_Tractor_MaxVolume`
+- `GPP_Radar_MaxAimAssistDistance`, `GPP_Radar_MinAimAssistDistance`
+- Any other recipe-only modifier property not listed in `propertyMeta.ts`
+
+### Residual risks
+- Comparison rows without a matching detail-stat label land in fallback "Material Modifiers" group.
+- Global target/allocation empty states apply per-column; per-material partial target is not surfaced separately.
+- `!important` used only inside `.bq-stats-panel` to neutralize inherited rarity classes.

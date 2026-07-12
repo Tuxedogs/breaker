@@ -2747,6 +2747,114 @@
   color: #e86a6a;
 }
 
+.bq-stats-panel .bq-stat-compare {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+.bq-stats-panel .bq-stat-compare-head,
+.bq-stats-panel .bq-stat-compare-row {
+  display: grid;
+  grid-template-columns: minmax(72px, 1.1fr) minmax(52px, 0.8fr) minmax(88px, 1fr) minmax(88px, 1fr);
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(65, 132, 160, 0.12);
+}
+
+.bq-stats-panel .bq-stat-compare-row:last-child {
+  border-bottom: 0;
+}
+
+.bq-stats-panel .bq-stat-compare-head {
+  color: var(--alloc-text-muted);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.bq-stats-panel .bq-stat-compare-label {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--alloc-text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bq-stats-panel .bq-stat-compare-base,
+.bq-stats-panel .bq-stat-compare-value {
+  color: var(--alloc-text-primary);
+  font-size: 11px;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.bq-stats-panel .bq-stat-compare-cell {
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 0;
+  width: 100%;
+}
+
+.bq-stats-panel .bq-stat-compare-target,
+.bq-stats-panel .bq-stat-compare-allocation {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.bq-stats-panel .bq-stat-compare-delta {
+  font-size: 9px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.bq-stats-panel .bq-stat-compare-delta.craft-ok {
+  color: #3dcca8;
+}
+
+.bq-stats-panel .bq-stat-compare-delta.craft-shortage {
+  color: #e86a6a;
+}
+
+.bq-stats-panel .bq-stat-compare-delta--neutral {
+  color: var(--alloc-text-muted);
+}
+
+.bq-stats-panel .bq-stat-compare-empty {
+  color: var(--alloc-text-muted);
+  font-size: 10px;
+  font-style: italic;
+  font-weight: 650;
+  line-height: 1.15;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.bq-stats-panel [class*="logi-rarity--"],
+.bq-stats-panel [class*="rarity-"],
+.bq-stats-panel [class*="quality-band"] {
+  color: var(--alloc-text-primary) !important;
+  border-color: rgba(65, 132, 160, 0.16) !important;
+  background: transparent !important;
+  --logi-rarity-accent: var(--alloc-text-primary);
+  --logi-rarity-accent-border: rgba(65, 132, 160, 0.16);
+  --logi-rarity-accent-bg: transparent;
+}
+
 .bq-stat-groups {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

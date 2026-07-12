@@ -1,15 +1,79 @@
 import type {
+  CraftStatComparisonColumnView,
+  CraftStatComparisonRowView,
   CraftStatGroupView,
   CraftStatValueView,
   CraftStatViewModel,
 } from "../../lib/crafting/craftStatViewModel";
 
-function shouldShowDelta(delta?: string): boolean {
-  if (!delta) return false;
-  const normalized = delta.replace(/[()\s,+%]/g, "");
-  if (!normalized) return false;
-  const numeric = Number.parseFloat(normalized);
-  return !Number.isFinite(numeric) || Math.abs(numeric) >= 0.005;
+function ComparisonDelta({
+  column,
+}: {
+  column: CraftStatComparisonColumnView;
+}) {
+  if (column.state !== "ready") return null;
+
+  const delta = column.percentDelta ?? column.absoluteDelta;
+  if (!delta) return <span className="bq-stat-compare-delta bq-stat-compare-delta--neutral">0%</span>;
+
+  return (
+    <span className={`bq-stat-compare-delta ${column.impactClass ?? "bq-stat-compare-delta--neutral"}`}>
+      {delta}
+    </span>
+  );
+}
+
+function ComparisonColumn({
+  column,
+}: {
+  column: CraftStatComparisonColumnView;
+}) {
+  if (column.state !== "ready") {
+    return (
+      <span className="bq-stat-compare-empty" data-bq-stat-state={column.state}>
+        {column.emptyLabel ?? column.value}
+      </span>
+    );
+  }
+
+  return (
+    <span className="bq-stat-compare-cell">
+      <strong className="bq-stat-compare-value">{column.value}</strong>
+      <ComparisonDelta column={column} />
+    </span>
+  );
+}
+
+function ComparisonTable({ rows }: { rows: CraftStatComparisonRowView[] }) {
+  if (rows.length === 0) return null;
+
+  return (
+    <div className="bq-stat-compare" role="table" aria-label="Base target allocation comparison">
+      <div className="bq-stat-compare-head" role="row">
+        <span role="columnheader">Stat</span>
+        <span role="columnheader">Base</span>
+        <span role="columnheader">Target</span>
+        <span role="columnheader">Allocation</span>
+      </div>
+      {rows.map((row) => (
+        <div
+          key={row.statId}
+          className="bq-stat-compare-row"
+          role="row"
+          data-bq-benefit-direction={row.benefitDirection}
+        >
+          <span className="bq-stat-compare-label" role="rowheader">{row.label}</span>
+          <strong className="bq-stat-compare-base" role="cell">{row.baseValue}</strong>
+          <span className="bq-stat-compare-target" role="cell">
+            <ComparisonColumn column={row.target} />
+          </span>
+          <span className="bq-stat-compare-allocation" role="cell">
+            <ComparisonColumn column={row.allocation} />
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function StatValueRow({ stat }: { stat: CraftStatValueView }) {
@@ -17,8 +81,8 @@ function StatValueRow({ stat }: { stat: CraftStatValueView }) {
     <span className="bq-detail-stat-row">
       <span className="bq-detail-stat-label">{stat.label}</span>
       <strong className="bq-detail-stat-value">
-        <span className={stat.valueImpactClass ?? ""}>{stat.projectedValue}</span>
-        {shouldShowDelta(stat.delta) ? (
+        <span>{stat.projectedValue}</span>
+        {stat.delta ? (
           <span className={`bq-detail-stat-delta ${stat.impactClass ?? ""}`}>
             ({stat.delta})
           </span>
@@ -61,22 +125,30 @@ function StatGroup({ group }: { group: CraftStatGroupView }) {
           {group.subclusters.map((subcluster) => (
             <div key={subcluster.title} className="bq-stat-subcluster">
               <div className="bq-stat-subcluster-title">{subcluster.title}</div>
-              <div className="bq-stat-group-grid">
-                {subcluster.stats.map((stat) => (
-                  <StatValueRow key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
-                ))}
-              </div>
+              {subcluster.comparisonRows ? <ComparisonTable rows={subcluster.comparisonRows} /> : null}
+              {subcluster.stats.length > 0 ? (
+                <div className="bq-stat-group-grid">
+                  {subcluster.stats.map((stat) => (
+                    <StatValueRow key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
+                  ))}
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
       ) : group.kind === "matrix" ? (
         <StatMatrix group={group} />
       ) : (
-        <div className="bq-stat-group-grid">
-          {group.stats.map((stat) => (
-            <StatValueRow key={`${group.title}:${stat.label}`} stat={stat} />
-          ))}
-        </div>
+        <>
+          {group.comparisonRows ? <ComparisonTable rows={group.comparisonRows} /> : null}
+          {group.stats.length > 0 ? (
+            <div className="bq-stat-group-grid">
+              {group.stats.map((stat) => (
+                <StatValueRow key={`${group.title}:${stat.label}`} stat={stat} />
+              ))}
+            </div>
+          ) : null}
+        </>
       )}
     </section>
   );

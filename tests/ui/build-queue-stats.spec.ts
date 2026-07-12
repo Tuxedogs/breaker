@@ -7,7 +7,7 @@ import {
   FIXTURE_ITEM_IDS,
 } from "../../src/pages/logistics/buildQueueStatsFixture";
 
-const screenshotDir = path.resolve(process.cwd(), "test-results", "build-queue-stats");
+const screenshotDir = path.resolve(process.cwd(), "artifacts/bq-craft-header/gate4");
 
 const fixtureItems = [
   { id: FIXTURE_ITEM_IDS.fr66, name: "FR-66", expectGroupedStats: true },
@@ -88,6 +88,7 @@ test.describe("Build Queue stats fixture", () => {
           await expect(page.locator('.bq-item-stats [data-bq-stats-status="ready"]')).toBeVisible({ timeout: 60_000 });
           await expect(page.locator(".bq-item-stats .bq-stat-group").first()).toBeVisible();
           await expect(page.locator(".bq-item-stats .bq-stats-meta")).toBeVisible();
+          await expect(page.locator(".bq-item-stats .bq-stat-compare").first()).toBeVisible();
         } else {
           await expect(page.locator(".bq-item-stats .bq-stats-panel")).toBeVisible();
         }
