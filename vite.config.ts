@@ -199,9 +199,8 @@ export default defineConfig(({ mode }) => {
     plugins: [
       {
         name: "scintel-recommender-api",
-        configureServer(server) {
-          installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
-        },
+        // Dev uses server.proxy → https://www.scintel.app (see server.proxy below).
+        // Preview keeps local API middleware for offline/local data.
         configurePreviewServer(server) {
           installScintelApiMiddleware(server, scintelApiRoot, fittingDataRoot);
         },
@@ -216,6 +215,17 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    server: {
+      proxy: {
+        "/api": {
+          target: "https://www.scintel.app",
+          changeOrigin: true,
+          secure: true,
+          // Strip Domain so Set-Cookie works on localhost during auth flows.
+          cookieDomainRewrite: "",
+        },
       },
     },
     build: {

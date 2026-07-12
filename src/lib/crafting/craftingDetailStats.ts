@@ -1,17 +1,18 @@
-import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
+import type { FittingComponentDetail } from "../fitting/fittingApi";
 import {
   getFittingDpsBases,
   getFittingModifierBaseValue,
   modifierDetailStatLabelKeys,
-} from "@/lib/fitting/fittingStatProjection";
-import { getModifierImpact } from "@/lib/gameplay/propertyUtils";
-import { formatProperty } from "@/components/industry/crafting/utils/qualityModifiers";
-import type { TotalModifierRow } from "@/components/industry/crafting/utils/recipeQuality";
-import type { ComponentCardMetric } from "@/components/industry/crafting/utils/componentCardSchema";
+} from "../fitting/fittingStatProjection";
+import { getModifierImpact } from "../gameplay/propertyUtils";
+import { formatProperty } from "../../components/industry/crafting/utils/qualityModifiers";
+import type { TotalModifierRow } from "../../components/industry/crafting/utils/recipeQuality";
+import type { ComponentCardMetric } from "../../components/industry/crafting/utils/componentCardSchema";
 
 export type DetailStatModifier = {
   value: string;
   impactClass: string;
+  base?: string;
 };
 
 export type DetailStatRow = ComponentCardMetric & {
@@ -270,6 +271,8 @@ export function buildModifiedDetailStatRows(
   );
 
   for (const modifier of totalModifiers) {
+    if (!Number.isFinite(modifier.totalValue) || Math.abs(modifier.totalValue) < 0.000001) continue;
+
     const binding = getModifierStatBinding(modifier.property);
     const baseValue = getCraftingModifierBaseValue(fittingDetail, modifier.property);
     const display = formatMaterialModifierDisplay(
@@ -283,6 +286,7 @@ export function buildModifiedDetailStatRows(
     const modifierDisplay: DetailStatModifier = {
       value: formatModifierDifference(display),
       impactClass,
+      base: display.base,
     };
     const existingIndex = findDetailStatRowIndex(rowIndexByLabel, binding.label);
 

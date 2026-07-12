@@ -6,10 +6,15 @@ import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
 import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
 import { buildItemSummaryDetailStatRows } from "@/lib/fitting/fittingStatProjection";
+import type { FittingComponentDetail } from "@/lib/fitting/fittingApi";
 import {
   buildModifiedDetailStatRows,
   type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
+import {
+  buildDetailStatGroups,
+  type DetailStatGroup,
+} from "@/lib/crafting/detailStatGroups";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
 import { buildAllocatedMaterialQualities } from "@/lib/logistics/buildQueueCraftStats";
 import type { BuildQueueItem } from "@/types/logistics";
@@ -24,19 +29,90 @@ interface Props {
 type CardBridge = Pick<ComponentCardIndexRecord, "id" | "entityClass" | "kind">;
 type RecipeBridge = Pick<ComponentRecipe, "blueprint_id" | "output_entityClass" | "item_kind">;
 
-function StatTile({ stat }: { stat: DetailStatRow }) {
+function titleCase(value: string): string {
+  return value
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function buildIdentityBadges(detail: FittingComponentDetail): { label: string; value: string }[] {
+  return [
+    detail.size !== null ? { label: "Size", value: `S${detail.size}` } : null,
+    detail.grade ? { label: "Grade", value: detail.grade } : null,
+    detail.class ? { label: "Class", value: titleCase(detail.class) } : null,
+    detail.manufacturer ? { label: "Maker", value: detail.manufacturer } : null,
+  ].filter((badge): badge is { label: string; value: string } => Boolean(badge));
+}
+
+function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
   return (
-    <div className="bq-stat-tile">
-      <span className="bq-stat-tile-label">{stat.label}</span>
-      <span className="bq-stat-tile-value">
+    <span className="bq-detail-stat-row">
+      <span className="bq-detail-stat-label">{stat.label}</span>
+      <strong className="bq-detail-stat-value">
         <span className={stat.valueImpactClass ?? ""}>{stat.value}</span>
         {stat.modifier ? (
-          <span className={`bq-stat-tile-delta ${stat.modifier.impactClass}`}>
+          <span className={`bq-detail-stat-delta ${stat.modifier.impactClass}`}>
             ({stat.modifier.value})
           </span>
         ) : null}
-      </span>
+      </strong>
+      {stat.modifier?.base ? (
+        <span className="bq-detail-stat-base">Base {stat.modifier.base}</span>
+      ) : null}
+    </span>
+  );
+}
+
+function StatMatrix({ group }: { group: Extract<DetailStatGroup, { kind: "matrix" }> }) {
+  return (
+    <div className="bq-stat-matrix" role="table" aria-label={group.title}>
+      <div className="bq-stat-matrix-head" role="row">
+        <span role="columnheader">Type</span>
+        {group.columns.map((column) => (
+          <span key={column} role="columnheader">{column}</span>
+        ))}
+      </div>
+      {group.rows.map((row) => (
+        <div key={row.label} className="bq-stat-matrix-row" role="row">
+          <span role="rowheader">{row.label}</span>
+          {row.values.map((value, index) => (
+            <strong key={`${row.label}:${group.columns[index] ?? index}`} role="cell">{value}</strong>
+          ))}
+        </div>
+      ))}
     </div>
+  );
+}
+
+function StatGroup({ group }: { group: DetailStatGroup }) {
+  return (
+    <section className={`bq-stat-group bq-stat-group--${group.kind}`} aria-label={group.title}>
+      <div className="bq-stat-group-title">{group.title}</div>
+      {group.kind === "nested" ? (
+        <div className="bq-stat-group-body">
+          {group.subclusters.map((subcluster) => (
+            <div key={subcluster.title} className="bq-stat-subcluster">
+              <div className="bq-stat-subcluster-title">{subcluster.title}</div>
+              <div className="bq-stat-row-grid">
+                {subcluster.stats.map((stat) => (
+                  <DetailStatRowItem key={`${group.title}:${subcluster.title}:${stat.label}`} stat={stat} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : group.kind === "matrix" ? (
+        <StatMatrix group={group} />
+      ) : (
+        <div className="bq-stat-row-grid">
+          {group.stats.map((stat) => (
+            <DetailStatRowItem key={`${group.title}:${stat.label}`} stat={stat} />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -114,11 +190,21 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     [recipe, allocatedQualities],
   );
 
-  const displayStatRows = useMemo(() => {
+  const displayStatRows = useMemo<DetailStatRow[]>(() => {
     if (!fittingDetail) return [];
     const baseStatRows = buildItemSummaryDetailStatRows(fittingDetail);
     return buildModifiedDetailStatRows(fittingDetail, baseStatRows, totalModifiers);
   }, [fittingDetail, totalModifiers]);
+
+  const statGroups = useMemo(
+    () => (fittingDetail ? buildDetailStatGroups(fittingDetail, displayStatRows) : []),
+    [displayStatRows, fittingDetail],
+  );
+
+  const identityBadges = useMemo(
+    () => (fittingDetail ? buildIdentityBadges(fittingDetail) : []),
+    [fittingDetail],
+  );
 
   const statsLoading = bridgeLoading || fittingStatsLoading;
   const hasStats = !statsLoading
@@ -126,14 +212,24 @@ export default function BuildQueueStatsBreakdown({ blueprintId, item, inputs }: 
     && Boolean(entityClass)
     && !fittingStatsMissing
     && !fittingStatsError
-    && displayStatRows.length > 0;
+    && statGroups.length > 0;
 
   if (hasStats) {
     return (
       <div className="bq-stats-panel" aria-label="Component stats">
-        <div className="bq-stats-strip">
-          {displayStatRows.map((stat) => (
-            <StatTile key={`${stat.label}:${stat.value}`} stat={stat} />
+        {identityBadges.length > 0 ? (
+          <div className="bq-stats-meta" aria-label="Component identity">
+            {identityBadges.map((badge) => (
+              <span key={`${badge.label}:${badge.value}`} className="bq-stats-meta-badge">
+                <span>{badge.label}</span>
+                <strong>{badge.value}</strong>
+              </span>
+            ))}
+          </div>
+        ) : null}
+        <div className="bq-stat-groups">
+          {statGroups.map((group) => (
+            <StatGroup key={group.title} group={group} />
           ))}
         </div>
       </div>

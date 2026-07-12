@@ -80,6 +80,10 @@ import {
   normalizeDetailStatLabel,
   type DetailStatRow,
 } from "@/lib/crafting/craftingDetailStats";
+import {
+  groupWeaponPerformanceStats,
+  normalizeWeaponPerformanceDisplayStats,
+} from "@/lib/crafting/detailStatGroups";
 
 export type { FinalProductQuality } from "../utils/recipeQuality";
 
@@ -1532,176 +1536,6 @@ function getIndexStatsObject(record: ComponentCardIndexRecord | undefined, key: 
   return isRecord(value) ? value : null;
 }
 
-const WEAPON_PERFORMANCE_EXCLUDED_LABELS = new Set(
-  ["Size", "Grade", "Class", "Craft Time", "Weapon Type", "Damage Type"].map(normalizeDetailStatLabel),
-);
-
-type WeaponStatSubclusterDefinition = {
-  title: string;
-  labels: string[];
-};
-
-type WeaponStatGroupDefinition =
-  | { title: string; kind: "flat"; labels: string[] }
-  | { title: string; kind: "nested"; subclusters: WeaponStatSubclusterDefinition[] };
-
-const WEAPON_PERFORMANCE_STAT_GROUPS: WeaponStatGroupDefinition[] = [
-  {
-    title: "Ballistics / Damage",
-    kind: "nested",
-    subclusters: [
-      {
-        title: "Damage Output",
-        labels: [
-          "Alpha Damage",
-          "Physical Damage",
-          "Energy Damage",
-          "Distortion Damage",
-          "Thermal Damage",
-          "Biochemical Damage",
-          "Stun Damage",
-          "Fire Rate",
-          "Ammo Capacity",
-          "Ammo Cost Per Shot",
-          "Charge Time",
-        ],
-      },
-      {
-        title: "Projectile",
-        labels: [
-          "Projectile Speed",
-          "Projectile Range / Max Travel",
-          "Stated Range",
-          "Hard Range",
-          "Damage Falloff Start",
-          "Damage Falloff Range",
-          "Damage Falloff Max",
-        ],
-      },
-      {
-        title: "Penetration",
-        labels: ["Penetration", "Penetration Distance"],
-      },
-    ],
-  },
-  {
-    title: "Thermal / Power",
-    kind: "flat",
-    labels: [
-      "Heat Per Shot",
-      "Heat Generation",
-      "Heat Capacity",
-      "Cooling Rate",
-      "Wear Per Shot",
-      "Power",
-      "Coolant",
-    ],
-  },
-  {
-    title: "Signature / Detection",
-    kind: "flat",
-    labels: [
-      "Online EM",
-      "Online IR",
-      "Firing EM",
-      "Firing IR",
-      "EM Signature",
-      "IR Signature",
-      "Distortion Maximum",
-    ],
-  },
-  {
-    title: "Durability / Physical",
-    kind: "flat",
-    labels: ["Component HP", "Health", "Mass"],
-  },
-];
-
-type WeaponStatSubcluster = {
-  title: string;
-  stats: DetailStatRow[];
-};
-
-type WeaponStatGroup =
-  | { title: string; kind: "flat"; stats: DetailStatRow[] }
-  | { title: string; kind: "nested"; subclusters: WeaponStatSubcluster[] };
-
-function normalizeWeaponPerformanceDisplayStats(stats: DetailStatRow[]): DetailStatRow[] {
-  const healthKey = normalizeDetailStatLabel("Health");
-  const componentHpKey = normalizeDetailStatLabel("Component HP");
-  const healthRow = stats.find((row) => normalizeDetailStatLabel(row.label) === healthKey);
-
-  if (!healthRow) return stats;
-
-  return stats
-    .filter((row) => normalizeDetailStatLabel(row.label) !== componentHpKey)
-    .map((row) =>
-      normalizeDetailStatLabel(row.label) === healthKey
-        ? { ...healthRow, label: "Component HP" }
-        : row,
-    );
-}
-
-function collectWeaponGroupStats(
-  labels: string[],
-  rowByLabel: Map<string, DetailStatRow>,
-  used: Set<string>,
-): DetailStatRow[] {
-  return labels.flatMap((label) => {
-    const key = normalizeDetailStatLabel(label);
-    if (used.has(key)) return [];
-    const row = rowByLabel.get(key);
-    if (!row) return [];
-    used.add(key);
-    return [row];
-  });
-}
-
-function groupWeaponPerformanceStats(stats: DetailStatRow[]): WeaponStatGroup[] {
-  const displayStats = stats.filter(
-    (row) => !WEAPON_PERFORMANCE_EXCLUDED_LABELS.has(normalizeDetailStatLabel(row.label)),
-  );
-  const rowByLabel = new Map(
-    displayStats.map((row) => [normalizeDetailStatLabel(row.label), row] as const),
-  );
-  const used = new Set<string>();
-  const groups: WeaponStatGroup[] = [];
-
-  for (const definition of WEAPON_PERFORMANCE_STAT_GROUPS) {
-    if (definition.kind === "nested") {
-      const subclusters = definition.subclusters
-        .map((subcluster) => ({
-          title: subcluster.title,
-          stats: collectWeaponGroupStats(subcluster.labels, rowByLabel, used),
-        }))
-        .filter((subcluster) => subcluster.stats.length > 0);
-
-      if (subclusters.length > 0) {
-        groups.push({ title: definition.title, kind: "nested", subclusters });
-      }
-      continue;
-    }
-
-    const groupStats = collectWeaponGroupStats(definition.labels, rowByLabel, used);
-    if (groupStats.length > 0) {
-      groups.push({ title: definition.title, kind: "flat", stats: groupStats });
-    }
-  }
-
-  const remaining = displayStats.filter((row) => {
-    const key = normalizeDetailStatLabel(row.label);
-    if (used.has(key)) return false;
-    used.add(key);
-    return true;
-  });
-
-  if (remaining.length > 0) {
-    groups.push({ title: "Additional", kind: "flat", stats: remaining });
-  }
-
-  return groups;
-}
-
 function DetailStatRowItem({ stat }: { stat: DetailStatRow }) {
   return (
     <span className="craft-detail-stat-row craft-stat-row stat-row">
@@ -1754,13 +1588,13 @@ function WeaponPerformanceStatGroups({ stats }: { stats: DetailStatRow[] }) {
                 </div>
               ))}
             </div>
-          ) : (
+          ) : group.kind === "flat" ? (
             <div className="stat-group-grid">
               {group.stats.map((stat) => (
                 <DetailStatRowItem key={`${group.title}:${stat.label}`} stat={stat} />
               ))}
             </div>
-          )}
+          ) : null}
         </section>
       ))}
     </div>
