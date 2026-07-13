@@ -31,60 +31,30 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
   const normalizedEntityClass = entityClass?.trim() ?? "";
   const { channel, buildId } = getFittingBuildContext();
 
-  const [detail, setDetail] = useState<FittingComponentDetail | null>(() => {
-    if (!normalizedEntityClass) return null;
-    const entry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
-    return entry?.status === "resolved" ? entry.detail : null;
-  });
   const [loading, setLoading] = useState(() => {
     if (!normalizedEntityClass) return false;
     const entry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
     return !entry;
   });
   const [error, setError] = useState<string | null>(null);
-  const [missing, setMissing] = useState(false);
 
   useEffect(() => {
     if (!normalizedEntityClass) {
       queueMicrotask(() => {
-        setDetail(null);
         setLoading(false);
         setError(null);
-        setMissing(false);
       });
       return;
     }
 
     let cancelled = false;
 
-    const applyResolved = (cached: FittingComponentDetail) => {
-      setDetail(cached);
-      setLoading(false);
-      setError(null);
-      setMissing(false);
-    };
-
-    const applyMissing = () => {
-      setDetail(null);
-      setLoading(false);
-      setError(null);
-      setMissing(true);
-    };
-
     const cachedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
-    if (cachedEntry?.status === "resolved") {
+    if (cachedEntry) {
       queueMicrotask(() => {
         if (cancelled) return;
-        applyResolved(cachedEntry.detail);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-    if (cachedEntry?.status === "missing") {
-      queueMicrotask(() => {
-        if (cancelled) return;
-        applyMissing();
+        setLoading(false);
+        setError(null);
       });
       return () => {
         cancelled = true;
@@ -95,31 +65,25 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
       if (cancelled) return;
       setLoading(true);
       setError(null);
-      setMissing(false);
-      setDetail(null);
     });
 
     loadVehicleFittingComponent(normalizedEntityClass)
-      .then((result) => {
+      .then(() => {
         if (cancelled) return;
-        applyResolved(result);
+        setLoading(false);
+        setError(null);
       })
       .catch((fetchError: unknown) => {
         if (cancelled || isAbortError(fetchError)) return;
 
         const resolvedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
-        if (resolvedEntry?.status === "resolved") {
-          applyResolved(resolvedEntry.detail);
-          return;
-        }
-        if (resolvedEntry?.status === "missing" || isNotFoundError(fetchError)) {
-          applyMissing();
+        if (resolvedEntry || isNotFoundError(fetchError)) {
+          setLoading(false);
+          setError(null);
           return;
         }
 
         setError(fetchError instanceof Error ? fetchError.message : "Fitting stats unavailable");
-        setDetail(null);
-        setMissing(false);
         setLoading(false);
       });
 
@@ -128,7 +92,23 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
     };
   }, [normalizedEntityClass, channel, buildId]);
 
-  return { detail, loading, error, missing };
+  const cacheEntry = normalizedEntityClass
+    ? getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail")
+    : null;
+  if (cacheEntry?.status === "resolved") {
+    return { detail: cacheEntry.detail, loading: false, error: null, missing: false };
+  }
+  if (cacheEntry?.status === "missing") {
+    return { detail: null, loading: false, error: null, missing: true };
+  }
+
+  // Unsettled identities must not leak a prior identity's detail into stats regions.
+  return {
+    detail: null,
+    loading: Boolean(normalizedEntityClass) && (loading || !error),
+    error,
+    missing: false,
+  };
 }
 
 export function useFpsFittingComponentFromCard(

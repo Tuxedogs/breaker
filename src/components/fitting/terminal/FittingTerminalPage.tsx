@@ -92,6 +92,7 @@ export default function FittingTerminalPage({
   const pipSyncedShipRef = useRef<string | null>(null);
   const combatAlpha = useCombatAlphaBreakdown(portRows, equippedDetails.statsById, equippedDetails.loading);
   const mitigationByComponentId = useMemo(() => {
+    if (!equippedDetails.ready) return {};
     const ids = collectMitigationComponentIds(portRows);
     const next: Record<string, FittingComponentMitigation | null> = {};
     for (const componentId of ids) {
@@ -100,7 +101,7 @@ export default function FittingTerminalPage({
       }
     }
     return next;
-  }, [equippedDetails.mitigationById, portRows]);
+  }, [equippedDetails.mitigationById, equippedDetails.ready, portRows]);
   const { syncPipsFromDraws } = terminal;
   const ship = shipDetail?.ship;
   const offensiveGroups = useMemo(() => buildOffensiveGroups(portRows), [portRows]);
@@ -286,7 +287,7 @@ export default function FittingTerminalPage({
           portRows={portRows}
           totalAlpha={totalAlpha}
           statsByComponentId={equippedDetails.statsById}
-          detailsLoading={equippedDetails.loading}
+          detailsLoading={!equippedDetails.ready}
         />
       )}
 

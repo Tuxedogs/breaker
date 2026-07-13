@@ -65,6 +65,7 @@ export type FittingMockupLoadoutState = {
   calculateResult: FittingCalculateResult | null;
   componentLookup: Map<string, FittingComponentRecord>;
   mitigationById: EquippedComponentDetailsState["mitigationById"];
+  equippedDetailsReady: boolean;
   loading: boolean;
   error: boolean;
   isModified: boolean;
@@ -327,6 +328,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     calculateResult: calculateState.data,
     componentLookup,
     mitigationById: equippedDetails.mitigationById,
+    equippedDetailsReady: equippedDetails.ready,
     loading: shipLoading || calculateState.status === "loading" || shipState.status === "loading",
     error: shipsState.status === "error" || shipState.status === "error" || calculateState.status === "error",
     isModified,

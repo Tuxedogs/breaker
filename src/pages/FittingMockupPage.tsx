@@ -233,6 +233,7 @@ export default function FittingMockupPage() {
   const combatStats = useFittingMockupCombatStats(loadout.portRows);
 
   const mitigationByComponentId = useMemo(() => {
+    if (!loadout.equippedDetailsReady) return {};
     const ids = collectMitigationComponentIds(loadout.portRows);
     const next: Record<string, FittingComponentMitigation | null> = {};
     for (const componentId of ids) {
@@ -241,7 +242,7 @@ export default function FittingMockupPage() {
       }
     }
     return next;
-  }, [loadout.mitigationById, loadout.portRows]);
+  }, [loadout.equippedDetailsReady, loadout.mitigationById, loadout.portRows]);
 
   const componentMitigations = useMemo(
     () => Object.values(mitigationByComponentId),

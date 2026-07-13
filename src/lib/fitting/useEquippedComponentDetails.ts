@@ -95,29 +95,26 @@ export function useEquippedComponentDetails(componentIds: readonly string[]): Eq
     }
 
     queueMicrotask(() => {
-      setDetailsById((current) => ({ ...hydrated, ...current }));
+      // Clear published details until the full identity set settles so regions
+      // never mix prior-loadout stats with a partial new set.
+      setDetailsById({});
       setLoading(true);
     });
 
     let cancelled = false;
     void (async () => {
-      const next = { ...hydrated };
-      for (const componentId of missing) {
-        try {
-          const detail = await loadVehicleFittingComponent(componentId);
-          if (cancelled) return;
-          next[componentId] = detail;
-          setDetailsById((current) => ({ ...current, [componentId]: detail }));
-        } catch {
-          if (cancelled) return;
-          next[componentId] = null;
-          setDetailsById((current) => ({ ...current, [componentId]: null }));
-        }
-      }
-      if (!cancelled) {
-        setDetailsById(next);
-        setLoading(false);
-      }
+      await Promise.all(
+        missing.map(async (componentId) => {
+          try {
+            await loadVehicleFittingComponent(componentId);
+          } catch {
+            // Missing/failed identities settle in the shared store; hydrate below.
+          }
+        }),
+      );
+      if (cancelled) return;
+      setDetailsById(hydrateDetailsFromStore(sortedIds));
+      setLoading(false);
     })();
 
     return () => { cancelled = true; };
