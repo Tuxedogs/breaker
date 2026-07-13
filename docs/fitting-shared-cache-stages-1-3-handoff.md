@@ -55,6 +55,14 @@ Rules:
 - build changes invalidate correct namespace
 - FPS card path uses sourceType `fps_component_card` and does not call vehicle fitting detail
 
+### Stage 2 complete
+- **SHA:** `ae2b7dd9e6641d61054f94a4ce069645dde7b25e`
+- **Store:** `src/lib/fitting/fittingComponentStore.ts` — namespaced resolved + in-flight maps keyed by `{channel}::{buildId}::{sourceType}::{identity}`; 404 → `missing` (cached), 5xx/network → retryable (not cached); `captureFittingApiMeta` purges prior build namespace.
+- **Hook:** `useFittingComponentStats` + `prefetchFittingComponents` + `getCachedFittingComponent` re-export from store; effect deps include `channel`/`buildId`.
+- **FPS entry API:** `cacheFpsComponentFromCard`, `loadFpsComponentFromCard`, `getCachedFpsComponentFromCard` (not yet wired to all consumers — Stage 3).
+- **Tests:** `fittingComponentStore.test.ts` — dedupe, remount survival, missing vs failed, no poison, build invalidation, LIVE/PTU isolation, sourceType distinction.
+- **Residual Stage 3:** migrate direct `getFittingComponent` callers (terminal, mockup, pip/alpha/combat hooks); wire BQ FPS path through `cacheFpsComponentFromCard` / `loadFpsComponentFromCard`; consumer audit.
+
 ## Stage 3 — Route all fitting-detail consumers through shared store
 
 Migrate:

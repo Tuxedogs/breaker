@@ -1,3 +1,5 @@
+import { purgeFittingComponentCacheNamespace } from "./fittingComponentStore";
+
 export type FittingChannel = "LIVE" | "PTU";
 
 export type FittingBuildContext = {
@@ -35,6 +37,15 @@ export function setFittingChannel(channel: FittingChannel): void {
 export function captureFittingApiMeta(meta: FittingMetaCapture): void {
   const buildId = meta.buildId.trim();
   if (!buildId) return;
+
+  const previousBuildId = buildIdByChannel.get(meta.channel) ?? null;
+  if (previousBuildId !== buildId) {
+    if (previousBuildId) {
+      purgeFittingComponentCacheNamespace(meta.channel, previousBuildId);
+    }
+    purgeFittingComponentCacheNamespace(meta.channel, null);
+  }
+
   buildIdByChannel.set(meta.channel, buildId);
   if (meta.channel === activeChannel) {
     resolvedBuildId = buildId;
