@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
-import { loadVehicleFittingComponent } from "./fittingComponentStore";
+import { useMemo } from "react";
 import {
   buildOffensiveGroups,
   formatNumber,
@@ -7,6 +6,7 @@ import {
   type PortBreakdownRow,
 } from "./fittingPortGrouping";
 import { resolveWeaponDps } from "./fittingWeaponStats";
+import { useEquippedComponentDetails } from "./useEquippedComponentDetails";
 
 export type MockupCombatStats = {
   pilotAlpha: number | null;
@@ -46,59 +46,26 @@ function dpsForRows(
 }
 
 export function useFittingMockupCombatStats(portRows: PortBreakdownRow[]): MockupCombatStats {
-  const [statsByComponentId, setStatsByComponentId] = useState<Record<string, Record<string, number | null>>>({});
-  const [loading, setLoading] = useState(false);
-
-  const weaponRows = useMemo(() => {
+  const loadoutSignature = portRows
+    .map((row) => `${row.portId}:${row.equippedComponentKey ?? ""}`)
+    .join("\0");
+  const componentIds = useMemo(() => {
     const groups = buildOffensiveGroups(portRows);
-    return groups
-      .filter((group) => [
-        "pilot-weapons",
-        "installed-weapons",
-        "remote-turrets",
-        "manned-turrets",
-      ].includes(group.key))
-      .flatMap((group) => group.rows)
-      .filter((row) => row.equippedComponentKey);
-  }, [portRows]);
+    return [...new Set(
+      groups
+        .filter((group) => [
+          "pilot-weapons",
+          "installed-weapons",
+          "remote-turrets",
+          "manned-turrets",
+        ].includes(group.key))
+        .flatMap((group) => group.rows)
+        .map((row) => row.equippedComponentKey)
+        .filter(Boolean),
+    )] as string[];
+  }, [loadoutSignature, portRows]);
 
-  const componentIds = useMemo(
-    () => [...new Set(weaponRows.map((row) => row.equippedComponentKey!))],
-    [weaponRows],
-  );
-
-  useEffect(() => {
-    if (componentIds.length === 0) {
-      queueMicrotask(() => {
-        setStatsByComponentId({});
-        setLoading(false);
-      });
-      return;
-    }
-
-    let cancelled = false;
-    queueMicrotask(() => setLoading(true));
-
-    void (async () => {
-      const next: Record<string, Record<string, number | null>> = {};
-      for (const componentId of componentIds) {
-        try {
-          const detail = await loadVehicleFittingComponent(componentId);
-          if (cancelled) return;
-          next[componentId] = detail.stats;
-        } catch {
-          if (cancelled) return;
-          next[componentId] = {};
-        }
-      }
-      if (!cancelled) {
-        setStatsByComponentId(next);
-        setLoading(false);
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [componentIds]);
+  const { statsById, loading } = useEquippedComponentDetails(componentIds);
 
   return useMemo(() => {
     const groups = buildOffensiveGroups(portRows);
@@ -110,16 +77,16 @@ export function useFittingMockupCombatStats(portRows: PortBreakdownRow[]): Mocku
     ];
 
     return {
-      pilotAlpha: alphaForRows(pilotRows, statsByComponentId),
-      pilotDps: dpsForRows(pilotRows, statsByComponentId),
-      turretAlpha: alphaForRows(turretRows, statsByComponentId),
-      turretDps: dpsForRows(turretRows, statsByComponentId),
-      crewAlpha: alphaForRows(crewRows, statsByComponentId),
-      crewDps: dpsForRows(crewRows, statsByComponentId),
-      statsByComponentId,
+      pilotAlpha: alphaForRows(pilotRows, statsById),
+      pilotDps: dpsForRows(pilotRows, statsById),
+      turretAlpha: alphaForRows(turretRows, statsById),
+      turretDps: dpsForRows(turretRows, statsById),
+      crewAlpha: alphaForRows(crewRows, statsById),
+      crewDps: dpsForRows(crewRows, statsById),
+      statsByComponentId: statsById,
       loading,
     };
-  }, [loading, portRows, statsByComponentId]);
+  }, [loading, portRows, statsById]);
 }
 
 export function formatCombatValue(value: number | null | undefined, loading = false): string {

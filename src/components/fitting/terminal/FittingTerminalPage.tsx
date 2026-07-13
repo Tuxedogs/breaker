@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
-import type { FittingCalculateResult } from "../../../lib/fitting/fittingApi";
+import type { FittingCalculateResult, FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
 import {
   buildDefensiveGroups,
   buildOffensiveGroups,
   categoryLabel,
   portShortLabel,
-  type FittingComponentRecord,
   type FittingShipDetail,
   type FittingShipSummary,
   type PortBreakdownRow,
@@ -15,6 +14,10 @@ import type { FittingIconMode } from "../../../lib/fitting/fittingIconMode";
 import { useFittingTerminalState } from "../../../lib/fitting/useFittingTerminalState";
 import { pipAssignmentFromDraws } from "../../../lib/fitting/fittingPipPower";
 import { usePipSystemPowerDraw } from "../../../lib/fitting/usePipSystemPowerDraw";
+import {
+  collectMitigationComponentIds,
+  useEquippedComponentDetailsForPortRows,
+} from "../../../lib/fitting/useEquippedComponentDetails";
 import CraftQualityDrawer from "./CraftQualityDrawer";
 import FittingPerformanceGrid from "./FittingPerformanceGrid";
 import FittingSystemsPanel from "./FittingSystemsPanel";
@@ -28,7 +31,6 @@ export type FittingTerminalPageProps = {
   shipDetail: FittingShipDetail | null;
   portRows: PortBreakdownRow[];
   calculateResult: FittingCalculateResult | null;
-  componentLookup: Map<string, FittingComponentRecord>;
   craftablePortIds: Set<string>;
   loading: boolean;
   iconMode: FittingIconMode;
@@ -85,9 +87,20 @@ export default function FittingTerminalPage({
   shipsLoading,
 }: FittingTerminalPageProps) {
   const terminal = useFittingTerminalState(shipId);
-  const pipPower = usePipSystemPowerDraw(portRows);
+  const equippedDetails = useEquippedComponentDetailsForPortRows(portRows);
+  const pipPower = usePipSystemPowerDraw(portRows, equippedDetails.statsById, equippedDetails.loading);
   const pipSyncedShipRef = useRef<string | null>(null);
-  const combatAlpha = useCombatAlphaBreakdown(portRows);
+  const combatAlpha = useCombatAlphaBreakdown(portRows, equippedDetails.statsById, equippedDetails.loading);
+  const mitigationByComponentId = useMemo(() => {
+    const ids = collectMitigationComponentIds(portRows);
+    const next: Record<string, FittingComponentMitigation | null> = {};
+    for (const componentId of ids) {
+      if (componentId in equippedDetails.mitigationById) {
+        next[componentId] = equippedDetails.mitigationById[componentId];
+      }
+    }
+    return next;
+  }, [equippedDetails.mitigationById, portRows]);
   const { syncPipsFromDraws } = terminal;
   const ship = shipDetail?.ship;
   const offensiveGroups = useMemo(() => buildOffensiveGroups(portRows), [portRows]);
@@ -261,6 +274,7 @@ export default function FittingTerminalPage({
             combatAlpha={combatAlpha}
             pipAssignment={terminal.pipAssignment}
             systemDraws={pipPower.draws}
+            mitigationByComponentId={mitigationByComponentId}
             onPipChange={terminal.updatePip}
             onViewWeaponStats={() => terminal.setActiveTab("weapon-stats")}
           />
@@ -268,7 +282,12 @@ export default function FittingTerminalPage({
       )}
 
       {terminal.activeTab === "weapon-stats" && !loading && (
-        <WeaponStatsTab portRows={portRows} totalAlpha={totalAlpha} />
+        <WeaponStatsTab
+          portRows={portRows}
+          totalAlpha={totalAlpha}
+          statsByComponentId={equippedDetails.statsById}
+          detailsLoading={equippedDetails.loading}
+        />
       )}
 
       {terminal.activeTab === "hardpoints" && !loading && (

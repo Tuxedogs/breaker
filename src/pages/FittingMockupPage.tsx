@@ -62,6 +62,7 @@ import {
   useFittingMockupCombatStats,
 } from "../lib/fitting/useFittingMockupCombatStats";
 import { useFittingMockupLoadout } from "../lib/fitting/useFittingMockupLoadout";
+import { collectMitigationComponentIds } from "../lib/fitting/useEquippedComponentDetails";
 import { useTurretGroupCompatibleComponents } from "../lib/fitting/useTurretGroupCompatibleComponents";
 import {
   FITTING_MOCKUP_POLARIS_SHIP_KEY,
@@ -218,8 +219,6 @@ export default function FittingMockupPage() {
   const [weaponStatsOpen, setWeaponStatsOpen] = useState(false);
   const [selectedDetail, setSelectedDetail] = useState<FittingComponentDetail | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
-  const [armorMitigations, setArmorMitigations] = useState<Array<Extract<FittingComponentMitigation, { kind: "armor" }>>>([]);
-  const [shieldMitigations, setShieldMitigations] = useState<Array<Extract<FittingComponentMitigation, { kind: "shield" }>>>([]);
   const [compatStats, setCompatStats] = useState<Record<string, FittingComponentDetail>>({});
   const [installError, setInstallError] = useState<string | null>(null);
   const [compatDebug, setCompatDebug] = useState<ReturnType<typeof buildFittingCompatDebugSnapshot> | null>(null);
@@ -232,6 +231,30 @@ export default function FittingMockupPage() {
     selectShip: loadoutSelectShip,
   } = loadout;
   const combatStats = useFittingMockupCombatStats(loadout.portRows);
+
+  const mitigationByComponentId = useMemo(() => {
+    const ids = collectMitigationComponentIds(loadout.portRows);
+    const next: Record<string, FittingComponentMitigation | null> = {};
+    for (const componentId of ids) {
+      if (componentId in loadout.mitigationById) {
+        next[componentId] = loadout.mitigationById[componentId];
+      }
+    }
+    return next;
+  }, [loadout.mitigationById, loadout.portRows]);
+
+  const componentMitigations = useMemo(
+    () => Object.values(mitigationByComponentId),
+    [mitigationByComponentId],
+  );
+  const shieldMitigations = useMemo(
+    () => componentMitigations.filter((entry): entry is Extract<FittingComponentMitigation, { kind: "shield" }> => entry?.kind === "shield"),
+    [componentMitigations],
+  );
+  const armorMitigations = useMemo(
+    () => componentMitigations.filter((entry): entry is Extract<FittingComponentMitigation, { kind: "armor" }> => entry?.kind === "armor"),
+    [componentMitigations],
+  );
 
   useEffect(() => {
     if (!loadoutShips.length || !queryShip || isFittingShipGuid(queryShip)) return;
@@ -316,62 +339,6 @@ export default function FittingMockupPage() {
       .finally(() => { if (!cancelled) setDetailLoading(false); });
     return () => { cancelled = true; };
   }, [selectedRow?.equippedComponentKey]);
-
-  useEffect(() => {
-    const armorIds = loadout.portRows
-      .filter((row) => {
-        const text = `${row.ruleCategory ?? ""} ${row.portCategory ?? ""}`.toLowerCase();
-        return row.equippedComponentKey && text.includes("armor");
-      })
-      .map((row) => row.equippedComponentKey!)
-      .filter((id, index, values) => values.indexOf(id) === index);
-
-    if (armorIds.length === 0) { setArmorMitigations([]); return; }
-
-    let cancelled = false;
-    void (async () => {
-      const next: Array<Extract<FittingComponentMitigation, { kind: "armor" }>> = [];
-      for (const componentId of armorIds) {
-        try {
-          const detail = await loadVehicleFittingComponent(componentId);
-          if (cancelled) return;
-          if (detail.mitigation?.kind === "armor") next.push(detail.mitigation);
-        } catch {
-          if (cancelled) return;
-        }
-      }
-      if (!cancelled) setArmorMitigations(next);
-    })();
-    return () => { cancelled = true; };
-  }, [loadout.portRows]);
-
-  useEffect(() => {
-    const shieldIds = loadout.portRows
-      .filter((row) => {
-        const text = `${row.ruleCategory ?? ""} ${row.portCategory ?? ""}`.toLowerCase();
-        return row.equippedComponentKey && text.includes("shield");
-      })
-      .map((row) => row.equippedComponentKey!)
-      .filter((id, index, values) => values.indexOf(id) === index);
-
-    if (shieldIds.length === 0) { setShieldMitigations([]); return; }
-
-    let cancelled = false;
-    void (async () => {
-      const next: Array<Extract<FittingComponentMitigation, { kind: "shield" }>> = [];
-      for (const componentId of shieldIds) {
-        try {
-          const detail = await loadVehicleFittingComponent(componentId);
-          if (cancelled) return;
-          if (detail.mitigation?.kind === "shield") next.push(detail.mitigation);
-        } catch {
-          if (cancelled) return;
-        }
-      }
-      if (!cancelled) setShieldMitigations(next);
-    })();
-    return () => { cancelled = true; };
-  }, [loadout.portRows]);
 
   useEffect(() => {
     const ids = drawerItems.map((component) => component.id);

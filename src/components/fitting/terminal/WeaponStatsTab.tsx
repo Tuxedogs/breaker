@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { FittingComponentStats } from "../../../lib/fitting/fittingApi";
-import { loadVehicleFittingComponent } from "../../../lib/fitting/fittingComponentStore";
 import {
   buildOffensiveGroups,
   formatNumber,
@@ -41,63 +40,51 @@ const weaponGroupKeys = [
 type WeaponStatsTabProps = {
   portRows: PortBreakdownRow[];
   totalAlpha: number | null;
+  statsByComponentId: Record<string, FittingComponentStats>;
+  detailsLoading?: boolean;
 };
 
-export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabProps) {
+export default function WeaponStatsTab({
+  portRows,
+  totalAlpha,
+  statsByComponentId,
+  detailsLoading = false,
+}: WeaponStatsTabProps) {
   const groups = useMemo(() => buildOffensiveGroups(portRows), [portRows]);
   const weaponGroups = groups.filter((group) => weaponGroupKeys.includes(group.key));
-  const [entries, setEntries] = useState<Record<string, WeaponStatEntry>>({});
 
-  useEffect(() => {
-    let cancelled = false;
+  const entries = useMemo(() => {
+    const next: Record<string, WeaponStatEntry> = {};
     const weaponRows = weaponGroups
       .flatMap((group) => group.rows)
       .filter((row) => row.equippedComponentKey);
 
-    void (async () => {
-      const componentCache = new Map<string, FittingComponentStats>();
-      for (const row of weaponRows) {
-        const componentId = row.equippedComponentKey!;
-        if (cancelled) return;
+    for (const row of weaponRows) {
+      const componentId = row.equippedComponentKey!;
+      const hasStats = componentId in statsByComponentId;
+      const stats = hasStats ? statsByComponentId[componentId] : null;
+      const alpha = stats?.alphaDamage;
+      const share = totalAlpha != null && alpha != null && totalAlpha > 0
+        ? `${formatNumber((alpha / totalAlpha) * 100)}%`
+        : "—";
+      const damageType = stats ? inferDamageType(stats) ?? "—" : "—";
 
-        if (!componentCache.has(componentId)) {
-          try {
-            const detail = await loadVehicleFittingComponent(componentId);
-            if (cancelled) return;
-            componentCache.set(componentId, detail.stats);
-          } catch {
-            if (cancelled) return;
-            componentCache.set(componentId, {});
-          }
-        }
+      next[row.portId] = {
+        portId: row.portId,
+        portLabel: portShortLabel(row),
+        name: row.equippedComponentName ?? portShortLabel(row),
+        size: row.componentSize != null ? `S${row.componentSize}` : "—",
+        type: row.componentSubtype ?? row.componentCategory ?? "—",
+        damageType,
+        alpha: statOrUnavailable(alpha),
+        alphaShare: share,
+        stats,
+        loading: detailsLoading || !hasStats,
+      };
+    }
 
-        const stats = componentCache.get(componentId) ?? {};
-        const alpha = stats.alphaDamage;
-        const share = totalAlpha != null && alpha != null && totalAlpha > 0
-          ? `${formatNumber((alpha / totalAlpha) * 100)}%`
-          : "—";
-        const damageType = inferDamageType(stats) ?? "—";
-
-        setEntries((current) => ({
-          ...current,
-          [row.portId]: {
-            portId: row.portId,
-            portLabel: portShortLabel(row),
-            name: row.equippedComponentName ?? portShortLabel(row),
-            size: row.componentSize != null ? `S${row.componentSize}` : "—",
-            type: row.componentSubtype ?? row.componentCategory ?? "—",
-            damageType,
-            alpha: statOrUnavailable(alpha),
-            alphaShare: share,
-            stats,
-            loading: false,
-          },
-        }));
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [weaponGroups, totalAlpha]);
+    return next;
+  }, [detailsLoading, statsByComponentId, totalAlpha, weaponGroups]);
 
   if (weaponGroups.every((group) => group.rows.length === 0)) {
     return <p className="fit-term-empty">No equipped weapons in the current loadout.</p>;
