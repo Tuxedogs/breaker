@@ -5,7 +5,7 @@ import { fetchSavedBlueprints } from "@/lib/userSavedBlueprints";
 import { useAuthSession } from "@/lib/auth/useAuthSession";
 import type { ComponentCardIndexRecord } from "@/lib/componentCardIndex";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
-import { prefetchFittingComponents } from "@/lib/fitting/useFittingComponentStats";
+import { cacheFpsComponentFromCard, prefetchFittingComponents } from "@/lib/fitting/useFittingComponentStats";
 import {
   getComponentCardVariantGroupKey,
   pickComponentCardGroupRepresentative,
@@ -157,6 +157,12 @@ export default function ComponentResultsBrowser({
       .map((record) => resolveEntityClassForCraftingItem({ cardBridge: record }).entityClass)
       .filter((value): value is string => Boolean(value));
     prefetchFittingComponents(entityClasses);
+
+    for (const record of pageRecords) {
+      if (record.kind === "fps" && record.entityClass?.trim()) {
+        cacheFpsComponentFromCard(record.entityClass, record);
+      }
+    }
   }, [pageRecords]);
 
   if (loading) {

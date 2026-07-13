@@ -73,5 +73,38 @@ Migrate:
 
 No consumer bypasses without documented reason.
 
+### Stage 3 complete
+- **SHA:** `0b8161389517365128a4f2c24237282b25d44e0a`
+- **New hook:** `useFpsFittingComponentFromCard` — caches FPS detail via `cacheFpsComponentFromCard` / `getCachedFpsComponentFromCard` (sourceType `fps_component_card`).
+- **Vehicle path:** all former `getFittingComponent` consumers now call `loadVehicleFittingComponent` from `fittingComponentStore`.
+
+#### Consumer migration table
+
+| Consumer | Path | Status |
+|----------|------|--------|
+| `useFittingComponentStats` | vehicle via `loadVehicleFittingComponent` | migrated (Stage 2) |
+| `useFpsFittingComponentFromCard` | FPS via `cacheFpsComponentFromCard` | migrated (new) |
+| `ComponentResultCard` | vehicle hook + FPS hook | migrated |
+| `ComponentRecipeTable` | vehicle hook + FPS hook | migrated |
+| `ComponentResultsBrowser` | `prefetchFittingComponents` + `cacheFpsComponentFromCard` | migrated |
+| `BuildQueueStatsBreakdown` | vehicle hook + FPS hook | migrated |
+| `BuildQueueStatsProvider` | same model as breakdown | migrated |
+| `usePipSystemPowerDraw` | `loadVehicleFittingComponent` | migrated |
+| `useFittingMockupCombatStats` | `loadVehicleFittingComponent` | migrated |
+| `useCombatAlphaBreakdown` | `loadVehicleFittingComponent` | migrated |
+| `WeaponStatsTab` | `loadVehicleFittingComponent` | migrated |
+| `FittingPerformanceGrid` | `loadVehicleFittingComponent` (mitigation) | migrated |
+| `CraftQualityDrawer` | `loadVehicleFittingComponent` | migrated |
+| `FittingMockupPage` | `loadVehicleFittingComponent` (detail, mitigation, compat drawer) | migrated |
+
+#### Documented bypasses
+
+| Location | Reason |
+|----------|--------|
+| `fittingComponentStore.ts` → `vehicleComponentLoader` | Internal store transport only; sole allowed direct `getFittingComponent` caller for vehicle fitting detail API |
+| `fittingApi.ts` `getFittingComponent` | Low-level API primitive; not imported by UI/hooks after Stage 3 |
+
+FPS never routes through vehicle fitting detail. LIVE/PTU isolation preserved via namespaced cache keys.
+
 ## Preserve
 API shapes, calcs, BQ Base/Target/Allocation, modifier coloring, FPS card fallback, LIVE/PTU isolation.

@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { ComponentCardIndexRecord } from "../componentCardIndex";
 import type { FittingComponentDetail } from "./fittingApi";
 import { getFittingBuildContext } from "./fittingBuildContext";
 import {
+  cacheFpsComponentFromCard,
+  getCachedFpsComponentFromCard,
   getFittingComponentCacheEntry,
   isAbortError,
   isNotFoundError,
@@ -9,7 +12,9 @@ import {
 } from "./fittingComponentStore";
 
 export {
+  cacheFpsComponentFromCard,
   getCachedFittingComponent,
+  getCachedFpsComponentFromCard,
   prefetchFittingComponents,
 } from "./fittingComponentStore";
 
@@ -124,4 +129,26 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
   }, [normalizedEntityClass, channel, buildId]);
 
   return { detail, loading, error, missing };
+}
+
+export function useFpsFittingComponentFromCard(
+  card: ComponentCardIndexRecord | null | undefined,
+  cardLoading = false,
+): FittingComponentStatsState {
+  const identity = card?.entityClass?.trim() ?? "";
+  const { channel, buildId } = getFittingBuildContext();
+
+  const detail = useMemo(() => {
+    if (!card || !identity) return null;
+    return cacheFpsComponentFromCard(identity, card) ?? getCachedFpsComponentFromCard(identity);
+  }, [card, identity, channel, buildId]);
+
+  const missing = !cardLoading && Boolean(card) && !detail;
+
+  return {
+    detail,
+    loading: cardLoading,
+    error: null,
+    missing,
+  };
 }
