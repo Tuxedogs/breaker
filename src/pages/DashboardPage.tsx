@@ -15,6 +15,7 @@ import {
   resolveInventoryUnitType,
 } from "../lib/logistics/inventory";
 import { getQueueLedgerModel, type QueueLedgerLine } from "../lib/logistics/queueLedger";
+import { getMaterialReservationCoverage, validateReservedAllocations } from "../lib/logistics/selectors";
 import { isDisplayableFittingShip, listFittingShips, type FittingShipSummary as ApiFittingShipSummary } from "../lib/fitting/fittingApi";
 import type { BuildQueueItem, InventoryEntry, InventoryLocation, MaterialTemplate } from "../types/logistics";
 
@@ -130,7 +131,7 @@ function getMiningRecReason(rec: PublicLocationEntry): string {
 function getMiningRecQuality(rec: PublicLocationEntry): string | null {
   const quality = rec.requiredMaterials?.[0]?.selectedQuality ?? rec.routeScores?.[0]?.selectedQuality;
   if (quality == null || !Number.isFinite(quality)) return null;
-  return `Q${formatDashNumber(quality)}`;
+  return `Quality ${formatDashNumber(quality)}`;
 }
 
 function formatDashNumber(value: number): string {
@@ -218,6 +219,245 @@ function toRequiredMaterials(lines: QueueLedgerLine[]): RequiredMaterial[] {
   }));
 }
 
+type NextRunBoxState = "available" | "selected" | "reserved" | "unavailable";
+type NextRunMovementState = "warehouse" | "pull" | "pending";
+
+type NextRunBox = {
+  id: string;
+  label: string;
+  quality?: number;
+  quantity: string;
+  reservedQuantity?: string;
+  availability: NextRunBoxState;
+  reservationLabel: string;
+  owner?: string;
+  movement: NextRunMovementState;
+  pullOrder?: number;
+  remainder?: string;
+};
+
+type NextRunMaterial = {
+  id: string;
+  name: string;
+  requirement: string;
+  state: "covered" | "partial" | "missing";
+  boxes: NextRunBox[];
+};
+
+type NextRunLocation = {
+  id: string;
+  name: string;
+  visitOrder?: number;
+  materials: NextRunMaterial[];
+};
+
+type NextFabricationRun = {
+  itemName: string;
+  quantity: number;
+  target?: string;
+  projected?: string;
+  readiness: string;
+  coverage: string;
+  status: string;
+  targetState: "met" | "unavailable" | "pending";
+  minimumQuality?: string;
+  minimumQuantity?: string;
+  bestAchievable?: string;
+  locations: NextRunLocation[];
+  locationsToVisit: string;
+  boxesToRetrieve: string;
+  missingMaterials: string;
+  expectedExcess?: string;
+  fixtureOnly?: boolean;
+};
+
+const DEV_NEXT_FABRICATION_RUN: NextFabricationRun | null = import.meta.env.DEV ? {
+  itemName: "P6-LR \"Archangel\" Sniper Rifle",
+  quantity: 2,
+  target: "924",
+  projected: "911",
+  readiness: "Review required",
+  coverage: "92% material coverage",
+  status: "Pull plan drafted",
+  targetState: "unavailable",
+  minimumQuality: "965",
+  minimumQuantity: "0.08 SCU",
+  bestAchievable: "911",
+  locationsToVisit: "3 locations",
+  boxesToRetrieve: "6 boxes",
+  missingMaterials: "0.08 SCU Tungsten",
+  expectedExcess: "0.14 SCU expected refund",
+  fixtureOnly: true,
+  locations: [
+    {
+      id: "fixture-orbituary",
+      name: "Everus Harbor · Cargo Center A",
+      visitOrder: 1,
+      materials: [
+        {
+          id: "fixture-taranite",
+          name: "Taranite",
+          requirement: "0.12 SCU required · Target 924",
+          state: "covered",
+          boxes: [
+            { id: "fixture-tar-01", label: "Box TAR-184", quality: 978, quantity: "0.10 SCU", reservedQuantity: "0.10 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 1, remainder: "No remainder" },
+            { id: "fixture-tar-02", label: "Box TAR-203", quality: 941, quantity: "0.16 SCU", reservedQuantity: "0.02 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 2, remainder: "0.14 SCU remains" },
+          ],
+        },
+        {
+          id: "fixture-hephaestanite",
+          name: "Hephaestanite",
+          requirement: "0.04 SCU required · Target 900",
+          state: "covered",
+          boxes: [
+            { id: "fixture-hep-01", label: "Box HEP-044", quality: 936, quantity: "0.04 SCU", reservedQuantity: "0.04 SCU reserved", availability: "reserved", reservationLabel: "Reserved", owner: "P6-LR ×2", movement: "pull", pullOrder: 3, remainder: "Consumed" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "fixture-seraphim",
+      name: "Seraphim Station · Industrial Storage Annex 04",
+      visitOrder: 2,
+      materials: [
+        {
+          id: "fixture-iron",
+          name: "Iron",
+          requirement: "0.06 SCU required · Target 640",
+          state: "covered",
+          boxes: [
+            { id: "fixture-iron-01", label: "Box IRN-771", quality: 681, quantity: "0.18 SCU", reservedQuantity: "0.06 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 4, remainder: "0.12 SCU remains" },
+            { id: "fixture-iron-02", label: "Box IRN-640", quality: 640, quantity: "0.24 SCU", availability: "reserved", reservationLabel: "Reserved", owner: "AD5B Ballistic Gatling", movement: "warehouse", remainder: "0.24 SCU remains" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "fixture-magnus",
+      name: "Magnus Gateway · Warehouse Row 12",
+      visitOrder: 3,
+      materials: [
+        {
+          id: "fixture-tungsten",
+          name: "Tungsten",
+          requirement: "0.20 SCU required · 0.08 SCU short",
+          state: "partial",
+          boxes: [
+            { id: "fixture-tung-01", label: "Box TNG-508", quality: 966, quantity: "0.12 SCU", reservedQuantity: "0.12 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "P6-LR ×2", movement: "pull", pullOrder: 5, remainder: "Consumed" },
+            { id: "fixture-tung-02", label: "Required box unavailable", quality: 965, quantity: "0.08 SCU needed", availability: "unavailable", reservationLabel: "Missing", movement: "pending" },
+          ],
+        },
+      ],
+    },
+  ],
+} : null;
+
+function formatRunQuantity(quantity: number, unitType: string | undefined) {
+  return formatInventoryQuantity(quantity, unitType === "unit" ? "unit" : "scu");
+}
+
+function buildProductionNextFabricationRun(
+  item: BuildQueueItem | undefined,
+  inventoryEntries: InventoryEntry[],
+  materialTemplates: MaterialTemplate[],
+  locations: InventoryLocation[],
+  recipesById: Map<string, { name: string }>,
+  recipeInputTemplates: Parameters<typeof getBuildQueueItemInputs>[1],
+): NextFabricationRun | null {
+  if (!item) return null;
+
+  const inputs = getBuildQueueItemInputs(item, recipeInputTemplates);
+  const allocations = item.reservedAllocations ?? [];
+  const validations = validateReservedAllocations(allocations, inventoryEntries);
+  const validationByAllocationId = new Map(validations.map((validation) => [validation.allocation.id, validation]));
+  const inventoryById = new Map(inventoryEntries.map((entry) => [entry.id, entry]));
+  const materialById = new Map(materialTemplates.map((material) => [material.id, material]));
+  const locationById = new Map(locations.map((location) => [location.id, location]));
+  const itemName = getQueueItemName(item, recipesById);
+
+  const inputStates = inputs.map((input, index) => {
+    const materialId = input.materialId ?? input.materialKey ?? `requirement-${index}`;
+    const requirementId = input.requirementId ?? `${item.id}:${materialId}:${index}`;
+    const requiredQuantity = input.quantity * item.quantity;
+    const coverage = getMaterialReservationCoverage(
+      item,
+      materialId,
+      requiredQuantity,
+      inventoryEntries,
+      { requirementId, selectedQuality: input.selectedQuality, unitType: input.unitType },
+    );
+    return { input, materialId, requirementId, requiredQuantity, coverage };
+  });
+
+  const coveredCount = inputStates.filter(({ coverage }) => coverage.coverageState === "covered" || coverage.coverageState === "overReserved").length;
+  const missingStates = inputStates.filter(({ coverage }) => coverage.coverageState !== "covered" && coverage.coverageState !== "overReserved");
+  const grouped = new Map<string, NextRunLocation>();
+
+  for (const allocation of allocations) {
+    const inventoryEntry = inventoryById.get(allocation.inventoryEntryId);
+    const validation = validationByAllocationId.get(allocation.id);
+    const locationId = inventoryEntry?.locationId ?? allocation.locationId ?? "unassigned";
+    const location = locationId === "unassigned" ? undefined : locationById.get(locationId);
+    const locationName = locationId === "unassigned"
+      ? "Unassigned Stock"
+      : location?.name ?? "Unknown Location";
+    const materialId = allocation.materialId;
+    const inputState = inputStates.find(({ requirementId, materialId: inputMaterialId }) =>
+      (allocation.requirementId ? requirementId === allocation.requirementId : inputMaterialId === materialId));
+    const materialName = allocation.materialName ?? materialById.get(materialId)?.name ?? inputState?.input.displayName ?? inputState?.input.materialName ?? materialId;
+    const locationGroup = grouped.get(locationId) ?? { id: locationId, name: locationName, materials: [] };
+    let materialGroup = locationGroup.materials.find((material) => material.id === materialId);
+    if (!materialGroup) {
+      materialGroup = {
+        id: materialId,
+        name: materialName,
+        requirement: inputState
+          ? `${formatRunQuantity(inputState.requiredQuantity, inputState.input.unitType)} required${inputState.input.selectedQuality != null ? ` · Target ${formatDashNumber(inputState.input.selectedQuality)}` : ""}`
+          : "Reserved material",
+        state: inputState?.coverage.coverageState === "covered" || inputState?.coverage.coverageState === "overReserved"
+          ? "covered"
+          : inputState?.coverage.coverageState === "missing" ? "missing" : "partial",
+        boxes: [],
+      };
+      locationGroup.materials.push(materialGroup);
+    }
+    const unitType = allocation.unitType ?? inventoryEntry?.unitType;
+    const isStale = validation?.isStale ?? !inventoryEntry;
+    materialGroup.boxes.push({
+      id: allocation.id,
+      label: inventoryEntry?.container ? `Box ${inventoryEntry.container}` : `Box ${materialGroup.boxes.length + 1}`,
+      quality: allocation.quality ?? inventoryEntry?.quality,
+      quantity: inventoryEntry ? formatRunQuantity(inventoryEntry.quantity, unitType) : "Box unavailable",
+      reservedQuantity: `${formatRunQuantity(allocation.quantityReserved, unitType)} reserved`,
+      availability: isStale ? "unavailable" : "reserved",
+      reservationLabel: isStale ? "Needs review" : "Reserved",
+      owner: itemName,
+      movement: "pending",
+    });
+    grouped.set(locationId, locationGroup);
+  }
+
+  const missingLabels = missingStates.map(({ input, requiredQuantity, coverage }) => {
+    const remaining = Math.max(0, requiredQuantity - coverage.reservedQuantity);
+    const materialName = input.displayName ?? input.materialName ?? materialById.get(input.materialId)?.name ?? input.materialId;
+    return `${formatRunQuantity(remaining, input.unitType)} ${materialName}`;
+  });
+
+  return {
+    itemName,
+    quantity: item.quantity,
+    projected: item.finalProductQualityAverage != null ? `Band ${formatDashNumber(item.finalProductQualityAverage)}` : undefined,
+    readiness: missingStates.length === 0 ? "Allocated" : "Needs allocation",
+    coverage: inputs.length > 0 ? `${coveredCount} of ${inputs.length} requirements covered` : "No material requirements",
+    status: item.status === "active" ? "Active craft" : item.status === "paused" ? "Paused" : "Queued",
+    targetState: "pending",
+    locations: [...grouped.values()],
+    locationsToVisit: grouped.size > 0 ? `${grouped.size} location${grouped.size === 1 ? "" : "s"}` : "Not planned",
+    boxesToRetrieve: allocations.length > 0 ? `${allocations.length} reserved box${allocations.length === 1 ? "" : "es"}` : "Not planned",
+    missingMaterials: missingLabels.length > 0 ? missingLabels.join(" · ") : "None identified",
+  };
+}
+
 export default function DashboardPage() {
   const { inventoryEntries: allInventoryEntries, materialTemplates, buildQueue, recipeTemplates, recipeInputTemplates, locations } = useLogisticsStore();
   const inventoryEntries = useMemo(() => getActiveInventoryEntries(allInventoryEntries), [allInventoryEntries]);
@@ -277,6 +517,21 @@ export default function DashboardPage() {
     ? { status: "idle" as const, data: [] as PublicLocationEntry[] }
     : miningState;
   const topMiningRec = displayedMiningState.data[0];
+  const nextRunFixtureMode = import.meta.env.DEV
+    ? new URLSearchParams(window.location.search).get("fixture")
+    : null;
+  const nextFabricationRun = useMemo(() => {
+    if (nextRunFixtureMode === "next-fabrication-empty") return null;
+    if (nextRunFixtureMode === "next-fabrication" && DEV_NEXT_FABRICATION_RUN) return DEV_NEXT_FABRICATION_RUN;
+    return buildProductionNextFabricationRun(
+      activeQueueItems[0],
+      inventoryEntries,
+      materialTemplates,
+      locations,
+      recipesById,
+      recipeInputTemplates,
+    );
+  }, [activeQueueItems, inventoryEntries, locations, materialTemplates, nextRunFixtureMode, recipeInputTemplates, recipesById]);
 
   useEffect(() => {
     if (miningRequiredMaterials.length === 0) return;
@@ -507,7 +762,7 @@ export default function DashboardPage() {
                           {formatInventoryQuantity(entry.quantity, resolveInventoryUnitType(entry, material))}
                         </span>
                         <span className="dash-inventory-quality-value dash-tabnum" style={{ color: entry.rarity.colorHex }}>
-                          Q{entry.quality}
+                          Quality {entry.quality}
                         </span>
                         <ArrowRight />
                       </Link>
@@ -635,6 +890,8 @@ export default function DashboardPage() {
             </div>
           </article>
         </div>
+
+        <NextFabricationRunModule run={nextFabricationRun} />
       </div>
 
       <aside className="dash-right-col" aria-label="System panels">
@@ -693,6 +950,161 @@ export default function DashboardPage() {
         </div>
       </aside>
     </div>
+  );
+}
+
+function RunStateIcon({ state }: { state: NextRunBoxState | NextRunMovementState | NextFabricationRun["targetState"] }) {
+  const path = state === "unavailable"
+    ? "M12 2L2 20h20L12 2zm0 6v5m0 3.5v.5"
+    : state === "pull"
+      ? "M5 19h14M12 5v10m0 0l-4-4m4 4l4-4"
+      : state === "warehouse"
+        ? "M3 9l9-6 9 6v11H3V9zm4 3h10m-10 4h10"
+        : state === "pending"
+          ? "M12 3a9 9 0 109 9m-9-5v5l3 2"
+          : "M20 6L9 17l-5-5";
+  return (
+    <svg aria-hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d={path} />
+    </svg>
+  );
+}
+
+function NextFabricationRunModule({ run }: { run: NextFabricationRun | null }) {
+  return (
+    <article className="dash-next-run" aria-labelledby="dash-next-run-title" data-fixture={run?.fixtureOnly ? "development" : undefined}>
+      <header className="dash-next-run-header">
+        <div>
+          <span className="dash-next-run-kicker">Operations handoff</span>
+          <h2 id="dash-next-run-title">Next Fabrication Run</h2>
+        </div>
+        {run && (
+          <span className={`dash-next-run-status dash-next-run-status--${run.targetState}`}>
+            <RunStateIcon state={run.targetState} />
+            {run.targetState === "met" ? "Target Met" : run.targetState === "unavailable" ? "Target Unavailable With Current Inventory" : "Target pending"}
+          </span>
+        )}
+      </header>
+
+      {!run ? (
+        <div className="dash-next-run-empty">
+          <div className="dash-next-run-empty-icon" aria-hidden>◇</div>
+          <div>
+            <strong>No fabrication run is queued</strong>
+            <span>Add a craft to the Build Queue to review its material pull plan here.</span>
+          </div>
+          <Link to="/logistics/build-queue" className="dash-next-run-action dash-next-run-action--secondary">
+            Open Build Queue <ArrowRight size={14} />
+          </Link>
+        </div>
+      ) : (
+        <div className="dash-next-run-layout">
+          <section className="dash-next-run-summary" aria-label="Craft summary">
+            <div className="dash-next-run-item">
+              <div className="dash-next-run-item-icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round">
+                  <path d="M12 2l9 5-9 5-9-5 9-5zm-9 5v10l9 5 9-5V7M12 12v10" />
+                </svg>
+              </div>
+              <div>
+                <span>Craft ×{run.quantity}</span>
+                <strong title={run.itemName}>{run.itemName}</strong>
+              </div>
+            </div>
+
+            <dl className="dash-next-run-metrics">
+              <div><dt>Target</dt><dd className="dash-tabnum">{run.target ?? "Not provided"}</dd></div>
+              <div><dt>Projected</dt><dd className="dash-tabnum">{run.projected ?? "Not provided"}</dd></div>
+              <div><dt>Readiness</dt><dd>{run.readiness}</dd></div>
+              <div><dt>Coverage</dt><dd>{run.coverage}</dd></div>
+            </dl>
+
+            <div className="dash-next-run-boundary" aria-label="Minimum to target status">
+              <span className="dash-next-run-boundary-label">Min to Target</span>
+              {run.minimumQuality && run.minimumQuantity ? (
+                <>
+                  <strong>Minimum Quality {run.minimumQuality}</strong>
+                  <span>{run.minimumQuantity} still required</span>
+                  {run.bestAchievable && <span>Best achievable: Projected {run.bestAchievable}</span>}
+                </>
+              ) : (
+                <span>Production inputs not available</span>
+              )}
+            </div>
+          </section>
+
+          <section className="dash-next-run-pull" aria-label="Locations, materials, and boxes">
+            <div className="dash-next-run-pull-head">
+              <span>Locations → Materials → Individual Boxes</span>
+              <span>{run.status}</span>
+            </div>
+            <div className="dash-next-run-scroll">
+              {run.locations.length > 0 ? run.locations.map((location, locationIndex) => (
+                <details key={location.id} className="dash-next-run-location" open={locationIndex < 2}>
+                  <summary>
+                    <span className="dash-next-run-location-order">{location.visitOrder ?? locationIndex + 1}</span>
+                    <span className="dash-next-run-location-name" title={location.name}>{location.name}</span>
+                    <span>{location.materials.length} material{location.materials.length === 1 ? "" : "s"}</span>
+                    <svg aria-hidden viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" /></svg>
+                  </summary>
+                  <div className="dash-next-run-location-body">
+                    {location.materials.map((material) => (
+                      <div key={material.id} className={`dash-next-run-material dash-next-run-material--${material.state}`}>
+                        <div className="dash-next-run-material-head">
+                          <span className="dash-next-run-material-name">
+                            <MaterialIcon materialName={material.name} size={16} />
+                            <strong>{material.name}</strong>
+                          </span>
+                          <span>{material.requirement}</span>
+                        </div>
+                        <div className="dash-next-run-box-head" aria-hidden>
+                          <span>Box</span><span>Quality</span><span>Quantity</span><span>Reservation</span><span>State</span><span>Expected</span>
+                        </div>
+                        {material.boxes.map((box) => (
+                          <div key={box.id} className={`dash-next-run-box dash-next-run-box--${box.availability}`}>
+                            <span className="dash-next-run-box-name" title={box.label}>{box.label}</span>
+                            <span className="dash-next-run-box-quality dash-tabnum">{box.quality != null ? `Quality ${formatDashNumber(box.quality)}` : "Not recorded"}</span>
+                            <span className="dash-next-run-box-quantity dash-tabnum">
+                              <strong>{box.quantity}</strong>
+                              {box.reservedQuantity && <small>{box.reservedQuantity}</small>}
+                            </span>
+                            <span className="dash-next-run-box-reservation">
+                              <span className={`dash-next-run-chip dash-next-run-chip--${box.availability}`}>
+                                <RunStateIcon state={box.availability} /> {box.reservationLabel}
+                              </span>
+                              {box.owner && <small title={box.owner}>{box.owner}</small>}
+                            </span>
+                            <span className={`dash-next-run-chip dash-next-run-chip--${box.movement}`}>
+                              <RunStateIcon state={box.movement} /> {box.movement === "pull" ? `${box.pullOrder ? `${box.pullOrder}. ` : ""}Pull` : box.movement === "warehouse" ? "Warehouse" : "Plan pending"}
+                            </span>
+                            <span className="dash-next-run-box-remainder">{box.remainder ?? box.owner ?? "Not provided"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )) : (
+                <div className="dash-next-run-inline-empty">No reserved boxes are attached to this craft yet.</div>
+              )}
+            </div>
+          </section>
+
+          <aside className="dash-next-run-actions" aria-label="Action summary">
+            <div className="dash-next-run-action-list">
+              <div><span>Locations to visit</span><strong>{run.locationsToVisit}</strong></div>
+              <div><span>Boxes to retrieve</span><strong>{run.boxesToRetrieve}</strong></div>
+              <div className={run.missingMaterials === "None identified" ? "is-ok" : "is-warning"}><span>Missing materials</span><strong>{run.missingMaterials}</strong></div>
+              <div><span>Expected excess / refund</span><strong>{run.expectedExcess ?? "Not provided"}</strong></div>
+            </div>
+            <Link to="/logistics/build-queue" className="dash-next-run-action">
+              Review Pull Plan <ArrowRight size={14} />
+            </Link>
+            <span className="dash-next-run-action-note">Review source allocations before warehouse retrieval.</span>
+          </aside>
+        </div>
+      )}
+    </article>
   );
 }
 
