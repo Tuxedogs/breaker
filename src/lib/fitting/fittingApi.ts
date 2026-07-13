@@ -22,9 +22,19 @@ export type FittingApiMeta = {
   generatedAt: string;
 };
 
+export type ResolvedFittingBuildContext = {
+  channel: FittingChannel;
+  buildId: string;
+};
+
 type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
+
+type FittingBuildContextBootstrapper = () => Promise<void>;
+
+let ensureFittingBuildContextInflight: Promise<ResolvedFittingBuildContext> | null = null;
+let fittingBuildContextBootstrapper: FittingBuildContextBootstrapper | null = null;
 
 function withFittingBuild(path: string): string {
   return appendFittingBuildQuery(path);
@@ -35,6 +45,54 @@ function captureResponseMeta(payload: unknown): void {
   const meta = (payload as { meta?: FittingApiMeta }).meta;
   if (!meta?.buildId) return;
   captureFittingApiMeta(meta);
+}
+
+/**
+ * Resolves channel + buildId before any patch-static component-detail GET.
+ * Bootstrap may use channel-only `/meta`; component-detail never starts until buildId is known.
+ */
+export async function ensureFittingBuildContext(
+  signal?: AbortSignal,
+): Promise<ResolvedFittingBuildContext> {
+  const current = getFittingBuildContext();
+  if (current.buildId) {
+    return { channel: current.channel, buildId: current.buildId };
+  }
+
+  if (!ensureFittingBuildContextInflight) {
+    ensureFittingBuildContextInflight = (async () => {
+      if (fittingBuildContextBootstrapper) {
+        await fittingBuildContextBootstrapper();
+      } else {
+        await readResponse<DetailResponse<unknown>>(
+          withFittingBuild("/api/v1/fitting/meta"),
+          signal,
+        );
+      }
+
+      const resolved = getFittingBuildContext();
+      if (!resolved.buildId) {
+        throw new Error("Fitting buildId unresolved after meta bootstrap");
+      }
+      return { channel: resolved.channel, buildId: resolved.buildId };
+    })().finally(() => {
+      ensureFittingBuildContextInflight = null;
+    });
+  }
+
+  return ensureFittingBuildContextInflight;
+}
+
+export function setFittingBuildContextBootstrapperForTests(
+  bootstrapper: FittingBuildContextBootstrapper | null,
+): void {
+  fittingBuildContextBootstrapper = bootstrapper;
+  ensureFittingBuildContextInflight = null;
+}
+
+export function resetFittingBuildContextBootstrapForTests(): void {
+  fittingBuildContextBootstrapper = null;
+  ensureFittingBuildContextInflight = null;
 }
 
 type DamageType = "physical" | "energy" | "distortion" | "thermal" | "biochemical" | "stun";

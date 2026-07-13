@@ -1,6 +1,10 @@
 import type { ComponentCardIndexRecord } from "../componentCardIndex";
 import { buildFittingDetailFromFpsComponentCard } from "../crafting/fpsComponentCardDetail";
-import { getFittingComponent, type FittingComponentDetail } from "./fittingApi";
+import {
+  ensureFittingBuildContext,
+  getFittingComponent,
+  type FittingComponentDetail,
+} from "./fittingApi";
 import {
   getFittingBuildContext,
   type FittingChannel,
@@ -30,7 +34,7 @@ export type FittingComponentSourceType = "vehicle_fitting_detail" | "fps_compone
 
 export type FittingComponentCacheKey = {
   channel: FittingChannel;
-  buildId: string | null;
+  buildId: string;
   sourceType: FittingComponentSourceType;
   componentIdentity: string;
 };
@@ -47,25 +51,41 @@ export function normalizeFittingComponentIdentity(identity: string): string {
 }
 
 export function serializeFittingComponentCacheKey(key: FittingComponentCacheKey): string {
+  const buildId = key.buildId.trim();
+  if (!buildId) {
+    throw new Error("Fitting cache keys require a resolved buildId");
+  }
   return [
     key.channel,
-    key.buildId ?? "",
+    buildId,
     key.sourceType,
     normalizeFittingComponentIdentity(key.componentIdentity),
   ].join("::");
 }
 
-function buildCacheKey(
+function tryBuildCacheKey(
   componentIdentity: string,
   sourceType: FittingComponentSourceType,
-): string {
+): string | null {
   const { channel, buildId } = getFittingBuildContext();
+  if (!buildId) return null;
   return serializeFittingComponentCacheKey({
     channel,
     buildId,
     sourceType,
     componentIdentity,
   });
+}
+
+function requireBuildCacheKey(
+  componentIdentity: string,
+  sourceType: FittingComponentSourceType,
+): string {
+  const key = tryBuildCacheKey(componentIdentity, sourceType);
+  if (!key) {
+    throw new Error("Fitting build context unresolved");
+  }
+  return key;
 }
 
 function shouldPersistPatchStatic(): boolean {
@@ -112,7 +132,9 @@ export function getFittingComponentCacheEntry(
 ): FittingComponentCacheEntry | null {
   const normalized = componentIdentity.trim();
   if (!normalized) return null;
-  return resolvedEntries.get(buildCacheKey(normalized, sourceType)) ?? null;
+  const key = tryBuildCacheKey(normalized, sourceType);
+  if (!key) return null;
+  return resolvedEntries.get(key) ?? null;
 }
 
 export function getCachedFittingComponent(
@@ -191,17 +213,19 @@ export function clearFittingComponentMemoryForTests(): void {
   inflightRequests.clear();
 }
 
-export function loadVehicleFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
+export async function loadVehicleFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
   const normalized = entityClass.trim();
   if (!normalized) {
-    return Promise.reject(new Error("Fitting component identity is required"));
+    throw new Error("Fitting component identity is required");
   }
 
-  const key = buildCacheKey(normalized, "vehicle_fitting_detail");
+  await ensureFittingBuildContext();
+
+  const key = requireBuildCacheKey(normalized, "vehicle_fitting_detail");
   const cached = resolvedEntries.get(key);
-  if (cached?.status === "resolved") return Promise.resolve(cached.detail);
+  if (cached?.status === "resolved") return cached.detail;
   if (cached?.status === "missing") {
-    return Promise.reject(new Error("Fitting API request failed: 404"));
+    throw new Error("Fitting API request failed: 404");
   }
 
   const inflight = inflightRequests.get(key);
@@ -240,18 +264,27 @@ export function loadVehicleFittingComponent(entityClass: string): Promise<Fittin
 }
 
 export function prefetchFittingComponents(entityClasses: readonly string[]): void {
-  for (const entityClass of entityClasses) {
-    const normalized = entityClass.trim();
-    if (!normalized) continue;
+  void (async () => {
+    try {
+      await ensureFittingBuildContext();
+    } catch {
+      return;
+    }
 
-    const key = buildCacheKey(normalized, "vehicle_fitting_detail");
-    const cached = resolvedEntries.get(key);
-    if (cached || inflightRequests.has(key)) continue;
+    for (const entityClass of entityClasses) {
+      const normalized = entityClass.trim();
+      if (!normalized) continue;
 
-    loadVehicleFittingComponent(normalized).catch((error) => {
-      if (isAbortError(error)) return;
-    });
-  }
+      const key = tryBuildCacheKey(normalized, "vehicle_fitting_detail");
+      if (!key) continue;
+      const cached = resolvedEntries.get(key);
+      if (cached || inflightRequests.has(key)) continue;
+
+      loadVehicleFittingComponent(normalized).catch((error) => {
+        if (isAbortError(error)) return;
+      });
+    }
+  })();
 }
 
 export function cacheFpsComponentFromCard(
@@ -264,25 +297,29 @@ export function cacheFpsComponentFromCard(
   const detail = buildFittingDetailFromFpsComponentCard(card);
   if (!detail) return null;
 
-  const key = buildCacheKey(normalized, "fps_component_card");
+  const key = tryBuildCacheKey(normalized, "fps_component_card");
+  if (!key) return detail;
+
   rememberEntry(key, { status: "resolved", detail });
   return detail;
 }
 
-export function loadFpsComponentFromCard(
+export async function loadFpsComponentFromCard(
   componentIdentity: string,
   cardLoader: () => Promise<ComponentCardIndexRecord | null>,
 ): Promise<FittingComponentDetail> {
   const normalized = componentIdentity.trim();
   if (!normalized) {
-    return Promise.reject(new Error("Fitting component identity is required"));
+    throw new Error("Fitting component identity is required");
   }
 
-  const key = buildCacheKey(normalized, "fps_component_card");
+  await ensureFittingBuildContext();
+
+  const key = requireBuildCacheKey(normalized, "fps_component_card");
   const cached = resolvedEntries.get(key);
-  if (cached?.status === "resolved") return Promise.resolve(cached.detail);
+  if (cached?.status === "resolved") return cached.detail;
   if (cached?.status === "missing") {
-    return Promise.reject(new Error("FPS component card not found"));
+    throw new Error("FPS component card not found");
   }
 
   const inflight = inflightRequests.get(key);

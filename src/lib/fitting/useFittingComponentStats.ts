@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ComponentCardIndexRecord } from "../componentCardIndex";
 import type { FittingComponentDetail } from "./fittingApi";
+import { ensureFittingBuildContext } from "./fittingApi";
 import { getFittingBuildContext } from "./fittingBuildContext";
 import {
   cacheFpsComponentFromCard,
@@ -33,10 +34,12 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
 
   const [loading, setLoading] = useState(() => {
     if (!normalizedEntityClass) return false;
+    if (!buildId) return true;
     const entry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
     return !entry;
   });
   const [error, setError] = useState<string | null>(null);
+  const [, setBuildEpoch] = useState(0);
 
   useEffect(() => {
     if (!normalizedEntityClass) {
@@ -49,31 +52,39 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
 
     let cancelled = false;
 
-    const cachedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
-    if (cachedEntry) {
-      queueMicrotask(() => {
-        if (cancelled) return;
-        setLoading(false);
-        setError(null);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    queueMicrotask(() => {
-      if (cancelled) return;
+    const run = async () => {
       setLoading(true);
       setError(null);
-    });
 
-    loadVehicleFittingComponent(normalizedEntityClass)
-      .then(() => {
+      try {
+        await ensureFittingBuildContext();
+      } catch (bootstrapError) {
+        if (cancelled || isAbortError(bootstrapError)) return;
+        setError(
+          bootstrapError instanceof Error
+            ? bootstrapError.message
+            : "Fitting build context unavailable",
+        );
+        setLoading(false);
+        return;
+      }
+
+      if (cancelled) return;
+      setBuildEpoch((value) => value + 1);
+
+      const cachedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
+      if (cachedEntry) {
+        setLoading(false);
+        setError(null);
+        return;
+      }
+
+      try {
+        await loadVehicleFittingComponent(normalizedEntityClass);
         if (cancelled) return;
         setLoading(false);
         setError(null);
-      })
-      .catch((fetchError: unknown) => {
+      } catch (fetchError: unknown) {
         if (cancelled || isAbortError(fetchError)) return;
 
         const resolvedEntry = getFittingComponentCacheEntry(normalizedEntityClass, "vehicle_fitting_detail");
@@ -85,7 +96,10 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
 
         setError(fetchError instanceof Error ? fetchError.message : "Fitting stats unavailable");
         setLoading(false);
-      });
+      }
+    };
+
+    void run();
 
     return () => {
       cancelled = true;
@@ -103,6 +117,7 @@ export function useFittingComponentStats(entityClass: string | null | undefined)
   }
 
   // Unsettled identities must not leak a prior identity's detail into stats regions.
+  // While buildId is unresolved, keep the fitting-dependent region in loading only.
   return {
     detail: null,
     loading: Boolean(normalizedEntityClass) && (loading || !error),
@@ -117,17 +132,40 @@ export function useFpsFittingComponentFromCard(
 ): FittingComponentStatsState {
   const identity = card?.entityClass?.trim() ?? "";
   const { channel, buildId } = getFittingBuildContext();
+  const [buildReady, setBuildReady] = useState(() => Boolean(buildId));
+
+  useEffect(() => {
+    if (buildId) {
+      queueMicrotask(() => setBuildReady(true));
+      return;
+    }
+
+    let cancelled = false;
+    setBuildReady(false);
+    void ensureFittingBuildContext()
+      .then(() => {
+        if (!cancelled) setBuildReady(true);
+      })
+      .catch(() => {
+        if (!cancelled) setBuildReady(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [channel, buildId]);
 
   const detail = useMemo(() => {
-    if (!card || !identity) return null;
+    if (!card || !identity || !buildReady || !getFittingBuildContext().buildId) return null;
     return cacheFpsComponentFromCard(identity, card) ?? getCachedFpsComponentFromCard(identity);
-  }, [card, identity, channel, buildId]);
+  }, [card, identity, channel, buildId, buildReady]);
 
-  const missing = !cardLoading && Boolean(card) && !detail;
+  const waitingOnBuild = Boolean(card) && Boolean(identity) && !buildReady;
+  const missing = !cardLoading && !waitingOnBuild && Boolean(card) && !detail;
 
   return {
     detail,
-    loading: cardLoading,
+    loading: cardLoading || waitingOnBuild,
     error: null,
     missing,
   };

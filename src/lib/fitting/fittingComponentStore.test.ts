@@ -3,7 +3,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import type { ComponentCardIndexRecord } from "../componentCardIndex.ts";
-import type { FittingComponentDetail } from "./fittingApi.ts";
+import {
+  resetFittingBuildContextBootstrapForTests,
+  setFittingBuildContextBootstrapperForTests,
+  type FittingComponentDetail,
+} from "./fittingApi.ts";
 import { createMemoryFittingComponentPersistentStorage } from "./fittingComponentPersistentStorage.ts";
 import {
   cacheFpsComponentFromCard,
@@ -23,6 +27,7 @@ import {
 import {
   captureFittingApiMeta,
   getFittingBuildContext,
+  getFittingBuildId,
   resetFittingBuildContextForTests,
   setFittingChannel,
 } from "./fittingBuildContext.ts";
@@ -56,6 +61,7 @@ function loadCard(blueprintId: string): ComponentCardIndexRecord {
 
 function resetStores(): void {
   resetFittingBuildContextForTests();
+  resetFittingBuildContextBootstrapForTests();
   resetFittingComponentStoreForTests();
 }
 
@@ -72,6 +78,15 @@ test("cache key includes channel, buildId, sourceType, and normalized identity",
   });
   assert.equal(key, "LIVE::build-1::vehicle_fitting_detail::entity_class_a");
   assert.equal(normalizeFittingComponentIdentity("Entity_Class_A"), "entity_class_a");
+  assert.throws(
+    () => serializeFittingComponentCacheKey({
+      channel: "LIVE",
+      buildId: "  ",
+      sourceType: "vehicle_fitting_detail",
+      componentIdentity: "entity-class-a",
+    }),
+    /buildId/,
+  );
 });
 
 test("concurrent vehicle loads share one in-flight promise", async () => {
@@ -329,4 +344,105 @@ test("persisted fps component-card entries stay separate from vehicle fitting de
   });
   assert.ok(fpsHydrated);
   assert.notEqual(fpsHydrated.id, "vehicle-comp");
+});
+
+test("first-session cold Crafting Browser issues one detail GET per unique component after buildId resolves", async () => {
+  assert.equal(getFittingBuildId(), null);
+
+  let bootstrapCount = 0;
+  let detailFetchCount = 0;
+  const fetchedIds: string[] = [];
+
+  setFittingBuildContextBootstrapperForTests(async () => {
+    bootstrapCount += 1;
+    await new Promise((resolve) => setTimeout(resolve, 15));
+    captureFittingApiMeta({ channel: "LIVE", buildId: "cold-build" });
+  });
+
+  setVehicleFittingComponentLoaderForTests(async (componentId) => {
+    assert.equal(getFittingBuildId(), "cold-build");
+    detailFetchCount += 1;
+    fetchedIds.push(componentId);
+    return { ...SAMPLE_DETAIL, id: componentId, class: componentId };
+  });
+
+  // Crafting Browser: prefetch visible vehicles, then cards also load the same ids.
+  prefetchFittingComponents(["entity-class-a", "entity-class-b", "entity-class-a"]);
+  const [a, b, aAgain] = await Promise.all([
+    loadVehicleFittingComponent("entity-class-a"),
+    loadVehicleFittingComponent("entity-class-b"),
+    loadVehicleFittingComponent("entity-class-a"),
+  ]);
+
+  // Allow prefetch loop to settle after shared ensure.
+  await new Promise((resolve) => setTimeout(resolve, 30));
+
+  assert.equal(bootstrapCount, 1);
+  assert.equal(detailFetchCount, 2);
+  assert.deepEqual([...fetchedIds].sort(), ["entity-class-a", "entity-class-b"]);
+  assert.equal(a.id, "entity-class-a");
+  assert.equal(b.id, "entity-class-b");
+  assert.equal(aAgain.id, "entity-class-a");
+  assert.equal(getFittingComponentCacheEntry("entity-class-a")?.status, "resolved");
+});
+
+test("first-session cold Build Queue issues one detail GET for the selected craft after buildId resolves", async () => {
+  assert.equal(getFittingBuildId(), null);
+
+  let bootstrapCount = 0;
+  let detailFetchCount = 0;
+
+  setFittingBuildContextBootstrapperForTests(async () => {
+    bootstrapCount += 1;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    captureFittingApiMeta({ channel: "LIVE", buildId: "bq-cold-build" });
+  });
+
+  setVehicleFittingComponentLoaderForTests(async (componentId) => {
+    assert.equal(getFittingBuildId(), "bq-cold-build");
+    detailFetchCount += 1;
+    return { ...SAMPLE_DETAIL, id: componentId, class: componentId };
+  });
+
+  // Build Queue selected craft: single identity, may remount/reselect after meta resolves.
+  const first = await loadVehicleFittingComponent("selected-craft");
+  const second = await loadVehicleFittingComponent("selected-craft");
+
+  assert.equal(bootstrapCount, 1);
+  assert.equal(detailFetchCount, 1);
+  assert.equal(first.id, "selected-craft");
+  assert.equal(second.id, "selected-craft");
+  assert.equal(
+    getFittingComponentCacheEntry("selected-craft")?.status,
+    "resolved",
+  );
+});
+
+test("patch-static detail loader does not start before buildId is resolved", async () => {
+  assert.equal(getFittingBuildId(), null);
+
+  let detailFetchCount = 0;
+  let releaseBootstrap: (() => void) | null = null;
+  const bootstrapGate = new Promise<void>((resolve) => {
+    releaseBootstrap = resolve;
+  });
+
+  setFittingBuildContextBootstrapperForTests(async () => {
+    await bootstrapGate;
+    captureFittingApiMeta({ channel: "LIVE", buildId: "gated-build" });
+  });
+  setVehicleFittingComponentLoaderForTests(async () => {
+    detailFetchCount += 1;
+    return SAMPLE_DETAIL;
+  });
+
+  const pending = loadVehicleFittingComponent("entity-class-a");
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  assert.equal(detailFetchCount, 0);
+  assert.equal(getFittingBuildId(), null);
+
+  releaseBootstrap?.();
+  await pending;
+  assert.equal(detailFetchCount, 1);
+  assert.equal(getFittingBuildId(), "gated-build");
 });
