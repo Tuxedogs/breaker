@@ -27,7 +27,7 @@ import {
   type FittingShipSummary,
   type PortBreakdownRow,
 } from "./fittingPortGrouping";
-import { useEquippedComponentLookup } from "./useEquippedComponentDetails";
+import { useEquippedComponentLookup, type EquippedComponentDetailsState } from "./useEquippedComponentDetails";
 import { FITTING_MOCKUP_POLARIS_SHIP_KEY } from "./mockup/fittingMockupShipResolve";
 
 type LoadState<T> = {
@@ -64,6 +64,7 @@ export type FittingMockupLoadoutState = {
   portRows: PortBreakdownRow[];
   calculateResult: FittingCalculateResult | null;
   componentLookup: Map<string, FittingComponentRecord>;
+  mitigationById: EquippedComponentDetailsState["mitigationById"];
   loading: boolean;
   error: boolean;
   isModified: boolean;
@@ -180,7 +181,8 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     () => applyLoadoutMap(basePortRows, loadoutMap),
     [basePortRows, loadoutMap],
   );
-  const { lookup: componentLookup } = useEquippedComponentLookup(appliedRows);
+  const equippedDetails = useEquippedComponentLookup(appliedRows);
+  const componentLookup = equippedDetails.lookup;
 
   const portRows = useMemo(() => {
     if (componentLookup.size === 0) return appliedRows;
@@ -324,6 +326,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     portRows,
     calculateResult: calculateState.data,
     componentLookup,
+    mitigationById: equippedDetails.mitigationById,
     loading: shipLoading || calculateState.status === "loading" || shipState.status === "loading",
     error: shipsState.status === "error" || shipState.status === "error" || calculateState.status === "error",
     isModified,
