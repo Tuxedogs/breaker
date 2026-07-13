@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { getFittingComponent, type FittingComponentStats } from "../../../lib/fitting/fittingApi";
+import type { FittingComponentStats } from "../../../lib/fitting/fittingApi";
+import { loadVehicleFittingComponent } from "../../../lib/fitting/fittingComponentStore";
 import {
   buildOffensiveGroups,
   formatNumber,
@@ -48,7 +49,7 @@ export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabP
   const [entries, setEntries] = useState<Record<string, WeaponStatEntry>>({});
 
   useEffect(() => {
-    const controller = new AbortController();
+    let cancelled = false;
     const weaponRows = weaponGroups
       .flatMap((group) => group.rows)
       .filter((row) => row.equippedComponentKey);
@@ -57,15 +58,15 @@ export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabP
       const componentCache = new Map<string, FittingComponentStats>();
       for (const row of weaponRows) {
         const componentId = row.equippedComponentKey!;
-        if (controller.signal.aborted) return;
+        if (cancelled) return;
 
         if (!componentCache.has(componentId)) {
           try {
-            const detail = await getFittingComponent(componentId, controller.signal);
-            if (controller.signal.aborted) return;
+            const detail = await loadVehicleFittingComponent(componentId);
+            if (cancelled) return;
             componentCache.set(componentId, detail.stats);
           } catch {
-            if (controller.signal.aborted) return;
+            if (cancelled) return;
             componentCache.set(componentId, {});
           }
         }
@@ -95,7 +96,7 @@ export default function WeaponStatsTab({ portRows, totalAlpha }: WeaponStatsTabP
       }
     })();
 
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [weaponGroups, totalAlpha]);
 
   if (weaponGroups.every((group) => group.rows.length === 0)) {

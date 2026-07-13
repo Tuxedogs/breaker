@@ -59,7 +59,7 @@ import {
   buildSecondaryStatsFromFitting,
   isFittingWeaponPerformanceType,
 } from "@/lib/fitting/fittingStatProjection";
-import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
+import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import {
   buildComponentCardSchema,
   buildComponentCardSchemaFromIndex,
@@ -2582,12 +2582,22 @@ function RecipeDrawer({
     }),
     [selectedRecipe, selectedComponentCard],
   );
+  const isFpsItem = selectedRecipe.item_kind === "fps" || selectedComponentCard?.kind === "fps";
   const {
-    detail: fittingDetail,
-    loading: fittingStatsLoading,
-    error: fittingStatsError,
-    missing: fittingStatsMissing,
-  } = useFittingComponentStats(entityClassResolution.entityClass);
+    detail: vehicleFittingDetail,
+    loading: vehicleFittingStatsLoading,
+    error: vehicleFittingStatsError,
+    missing: vehicleFittingStatsMissing,
+  } = useFittingComponentStats(isFpsItem ? null : entityClassResolution.entityClass);
+  const {
+    detail: fpsFittingDetail,
+    loading: fpsFittingStatsLoading,
+    missing: fpsFittingStatsMissing,
+  } = useFpsFittingComponentFromCard(isFpsItem ? selectedComponentCard : null);
+  const fittingDetail = isFpsItem ? fpsFittingDetail : vehicleFittingDetail;
+  const fittingStatsLoading = isFpsItem ? fpsFittingStatsLoading : vehicleFittingStatsLoading;
+  const fittingStatsError = isFpsItem ? null : vehicleFittingStatsError;
+  const fittingStatsMissing = isFpsItem ? fpsFittingStatsMissing : vehicleFittingStatsMissing;
 
   const displayName = useMemo(
     () => resolveCraftingCardTitle({

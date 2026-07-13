@@ -11,7 +11,7 @@
         "ui:build-queue": "playwright test --config=playwright.build-queue.config.ts",
         "content:check": "node --import tsx scripts/validate-content.mts",
         "api:check": "node --import tsx scripts/validate-public-api.mts",
-        "fitting:test": "node --import tsx --test server/fitting/fitting.routes.test.ts src/lib/crafting/resolveEntityClass.test.ts src/lib/crafting/resolveCraftingDisplayName.test.ts src/lib/fitting/fittingStatProjection.test.ts src/lib/crafting/fpsComponentCardDetail.test.ts src/lib/crafting/craftStatViewModel.test.ts src/lib/logistics/buildQueueCraftStats.test.ts src/components/logistics/buildQueueStatsGroups.test.ts",
+        "fitting:test": "node --import tsx --test server/fitting/fitting.routes.test.ts src/lib/fitting/fittingBuildContext.test.ts src/lib/fitting/fittingComponentStore.test.ts src/lib/crafting/resolveEntityClass.test.ts src/lib/crafting/resolveCraftingDisplayName.test.ts src/lib/fitting/fittingStatProjection.test.ts src/lib/crafting/fpsComponentCardDetail.test.ts src/lib/crafting/craftStatViewModel.test.ts src/lib/logistics/buildQueueCraftStats.test.ts src/components/logistics/buildQueueStatsGroups.test.ts",
         "missions:shape": "node --import tsx scripts/shape-mission-browser-data.mts",
         "crafting:shape-blueprint-sources": "node --import tsx scripts/shape-blueprint-sources-data.mts",
         "crafting:shape-component-cards": "node --import tsx scripts/shape-component-card-data.mts",

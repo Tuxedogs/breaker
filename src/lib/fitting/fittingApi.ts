@@ -1,6 +1,18 @@
 import { apiUrl } from "../apiUrl";
+import {
+  appendFittingBuildQuery,
+  captureFittingApiMeta,
+  getFittingBuildContext,
+  getFittingBuildId,
+  getFittingChannel,
+  setFittingChannel,
+  type FittingBuildContext,
+  type FittingChannel,
+} from "./fittingBuildContext";
 
 export type FittingConfidence = "high" | "medium" | "low";
+export type { FittingBuildContext, FittingChannel };
+export { getFittingBuildContext, getFittingBuildId, getFittingChannel, setFittingChannel };
 
 export type FittingApiMeta = {
   apiVersion: "1";
@@ -14,11 +26,15 @@ type Page = { limit: number; nextCursor: string | null };
 type DetailResponse<T> = { meta: FittingApiMeta; data: T };
 type ListResponse<T> = DetailResponse<T[]> & { page: Page };
 
-const FITTING_CHANNEL_QUERY = "channel=LIVE";
-
 function withFittingBuild(path: string): string {
-  const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}${FITTING_CHANNEL_QUERY}`;
+  return appendFittingBuildQuery(path);
+}
+
+function captureResponseMeta(payload: unknown): void {
+  if (!payload || typeof payload !== "object") return;
+  const meta = (payload as { meta?: FittingApiMeta }).meta;
+  if (!meta?.buildId) return;
+  captureFittingApiMeta(meta);
 }
 
 type DamageType = "physical" | "energy" | "distortion" | "thermal" | "biochemical" | "stun";
@@ -227,7 +243,9 @@ async function writeJson<T>(path: string, payload: unknown, signal?: AbortSignal
     const problem = await response.json().catch(() => null) as { detail?: string } | null;
     throw new Error(problem?.detail ?? `Fitting API request failed: ${response.status}`);
   }
-  return response.json() as Promise<T>;
+  const responseBody = await response.json() as T;
+  captureResponseMeta(responseBody);
+  return responseBody;
 }
 
 export async function validateFittingLoadout(request: FittingLoadoutRequest, signal?: AbortSignal): Promise<FittingValidationResult> {
@@ -268,7 +286,9 @@ async function readResponse<T>(
     throw new Error("Fitting API returned an empty response body");
   }
 
-  return JSON.parse(raw) as T;
+  const payload = JSON.parse(raw) as T;
+  captureResponseMeta(payload);
+  return payload;
 }
 
 async function readAllPages<T>(path: string, signal?: AbortSignal): Promise<T[]> {
@@ -465,12 +485,13 @@ export async function getFittingComponent(
     ? (): DetailResponse<FittingComponentDetail> | null => {
       const detail = resolveDetailCached();
       if (!detail) return null;
+      const { channel, buildId } = getFittingBuildContext();
       return {
         meta: {
           apiVersion: "1",
           artifactSchemaVersion: 0,
-          channel: "LIVE",
-          buildId: "",
+          channel,
+          buildId: buildId ?? "",
           generatedAt: "",
         },
         data: detail,

@@ -4,11 +4,11 @@ import FittingMockupShell from "../components/fitting/mockup/FittingMockupShell"
 import FittingSelectorDrawer from "../components/fitting/mockup/FittingSelectorDrawer";
 import PowerCardContent from "../components/fitting/mockup/PowerCardContent";
 import {
-  getFittingComponent,
   type FittingComponentDetail,
   type FittingComponentMitigation,
   type FittingComponentSummary,
 } from "../lib/fitting/fittingApi";
+import { loadVehicleFittingComponent } from "../lib/fitting/fittingComponentStore";
 import { getFittingSlotIcon } from "../lib/fitting/getFittingSlotIcon";
 import {
   buildFittingCompatDebugSnapshot,
@@ -308,13 +308,13 @@ export default function FittingMockupPage() {
   useEffect(() => {
     const componentId = selectedRow?.equippedComponentKey;
     if (!componentId) { setSelectedDetail(null); return; }
-    const controller = new AbortController();
+    let cancelled = false;
     setDetailLoading(true);
-    getFittingComponent(componentId, controller.signal)
-      .then((detail) => { if (!controller.signal.aborted) setSelectedDetail(detail); })
-      .catch(() => { if (!controller.signal.aborted) setSelectedDetail(null); })
-      .finally(() => { if (!controller.signal.aborted) setDetailLoading(false); });
-    return () => controller.abort();
+    loadVehicleFittingComponent(componentId)
+      .then((detail) => { if (!cancelled) setSelectedDetail(detail); })
+      .catch(() => { if (!cancelled) setSelectedDetail(null); })
+      .finally(() => { if (!cancelled) setDetailLoading(false); });
+    return () => { cancelled = true; };
   }, [selectedRow?.equippedComponentKey]);
 
   useEffect(() => {
@@ -328,21 +328,21 @@ export default function FittingMockupPage() {
 
     if (armorIds.length === 0) { setArmorMitigations([]); return; }
 
-    const controller = new AbortController();
+    let cancelled = false;
     void (async () => {
       const next: Array<Extract<FittingComponentMitigation, { kind: "armor" }>> = [];
       for (const componentId of armorIds) {
         try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
+          const detail = await loadVehicleFittingComponent(componentId);
+          if (cancelled) return;
           if (detail.mitigation?.kind === "armor") next.push(detail.mitigation);
         } catch {
-          if (controller.signal.aborted) return;
+          if (cancelled) return;
         }
       }
-      if (!controller.signal.aborted) setArmorMitigations(next);
+      if (!cancelled) setArmorMitigations(next);
     })();
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [loadout.portRows]);
 
   useEffect(() => {
@@ -356,41 +356,41 @@ export default function FittingMockupPage() {
 
     if (shieldIds.length === 0) { setShieldMitigations([]); return; }
 
-    const controller = new AbortController();
+    let cancelled = false;
     void (async () => {
       const next: Array<Extract<FittingComponentMitigation, { kind: "shield" }>> = [];
       for (const componentId of shieldIds) {
         try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
+          const detail = await loadVehicleFittingComponent(componentId);
+          if (cancelled) return;
           if (detail.mitigation?.kind === "shield") next.push(detail.mitigation);
         } catch {
-          if (controller.signal.aborted) return;
+          if (cancelled) return;
         }
       }
-      if (!controller.signal.aborted) setShieldMitigations(next);
+      if (!cancelled) setShieldMitigations(next);
     })();
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [loadout.portRows]);
 
   useEffect(() => {
     const ids = drawerItems.map((component) => component.id);
     if (ids.length === 0) return;
-    const controller = new AbortController();
+    let cancelled = false;
     void (async () => {
       const next: Record<string, FittingComponentDetail> = {};
       for (const componentId of ids.slice(0, 40)) {
         try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
+          const detail = await loadVehicleFittingComponent(componentId);
+          if (cancelled) return;
           next[componentId] = detail;
         } catch {
-          if (controller.signal.aborted) return;
+          if (cancelled) return;
         }
       }
-      if (!controller.signal.aborted) setCompatStats((current) => ({ ...current, ...next }));
+      if (!cancelled) setCompatStats((current) => ({ ...current, ...next }));
     })();
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [drawerItems]);
 
   useEffect(() => {
@@ -429,7 +429,7 @@ export default function FittingMockupPage() {
     setWeaponStatsOpen(true);
     setDetailLoading(true);
     try {
-      setSelectedDetail(await getFittingComponent(componentId));
+      setSelectedDetail(await loadVehicleFittingComponent(componentId));
     } catch {
       setSelectedDetail(null);
     } finally {

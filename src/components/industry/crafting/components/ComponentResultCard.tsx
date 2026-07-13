@@ -14,7 +14,7 @@ import {
   buildBrowseStatPreviewFromFitting,
   inferPrimaryShipWeaponDamageType,
 } from "@/lib/fitting/fittingStatProjection";
-import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
+import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import {
   buildShipWeaponBrowsePresentation,
   getShipWeaponBadgeClassName,
@@ -73,11 +73,22 @@ export default function ComponentResultCard({
   }, [record, recipe, isFpsItem]);
 
   const {
-    detail: fittingDetail,
+    detail: vehicleFittingDetail,
     loading: fittingStatsLoading,
     missing: fittingStatsMissing,
     error: fittingStatsError,
   } = useFittingComponentStats(isFpsItem ? null : entityClass);
+
+  const {
+    detail: fpsFittingDetail,
+    loading: fpsFittingLoading,
+    missing: fpsFittingMissing,
+  } = useFpsFittingComponentFromCard(isFpsItem ? record : null);
+
+  const fittingDetail = isFpsItem ? fpsFittingDetail : vehicleFittingDetail;
+  const fittingLoading = isFpsItem ? fpsFittingLoading : fittingStatsLoading;
+  const fittingMissing = isFpsItem ? fpsFittingMissing : fittingStatsMissing;
+  const fittingError = isFpsItem ? null : fittingStatsError;
 
   const resolvedDisplayName = useMemo(
     () => resolveCraftingDisplayName({
@@ -133,18 +144,18 @@ export default function ComponentResultCard({
   }, [isFpsItem, fittingDetail]);
 
   const showStatUnavailable = useMemo(() => {
-    if (!record || fittingStatsLoading) return false;
+    if (!record || fittingLoading) return false;
     if (isFpsItem) return true;
-    if (!entityClass || fittingStatsMissing || fittingStatsError) return true;
+    if (!entityClass || fittingMissing || fittingError) return true;
     if (fittingDetail && visibleStats.length === 0) return true;
     return false;
   }, [
     record,
-    fittingStatsLoading,
+    fittingLoading,
     isFpsItem,
     entityClass,
-    fittingStatsMissing,
-    fittingStatsError,
+    fittingMissing,
+    fittingError,
     fittingDetail,
     visibleStats.length,
   ]);

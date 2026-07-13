@@ -4,9 +4,8 @@ import { fetchComponentCardById } from "@/lib/componentCardIndexApi";
 import type { ComponentRecipe } from "@/components/industry/crafting/utils/craftingTypes";
 import { getCraftingItemByBlueprintGuid } from "@/lib/craftingData";
 import { resolveEntityClassForCraftingItem } from "@/lib/crafting/resolveEntityClass";
-import { buildFittingDetailFromFpsComponentCard } from "@/lib/crafting/fpsComponentCardDetail";
 import { buildCraftStatViewModel, type CraftStatViewModel } from "@/lib/crafting/craftStatViewModel";
-import { useFittingComponentStats } from "@/lib/fitting/useFittingComponentStats";
+import { useFittingComponentStats, useFpsFittingComponentFromCard } from "@/lib/fitting/useFittingComponentStats";
 import { computeTotalModifiersFromQualities } from "@/components/industry/crafting/utils/recipeQuality";
 import {
   buildAllocatedMaterialQualities,
@@ -101,10 +100,11 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStat
     error: fittingStatsError,
   } = useFittingComponentStats(isFpsItem ? null : entityClass);
 
-  const fpsCardDetail = useMemo(
-    () => (isFpsItem ? buildFittingDetailFromFpsComponentCard(componentCard) : null),
-    [componentCard, isFpsItem],
-  );
+  const {
+    detail: fpsCardDetail,
+    loading: fpsCardLoading,
+    missing: fpsCardMissing,
+  } = useFpsFittingComponentFromCard(isFpsItem ? componentCard : null, bridgeLoading);
 
   const fittingDetail = isFpsItem ? fpsCardDetail : fittingApiDetail;
 
@@ -145,8 +145,8 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStat
     allocationModifiers,
     targetConfigured,
     allocationConfigured,
-    loading: bridgeLoading || (!isFpsItem && fittingStatsLoading),
-    missing: isFpsItem ? !fpsCardDetail && !bridgeLoading : fittingStatsMissing,
+    loading: bridgeLoading || (isFpsItem ? fpsCardLoading : fittingStatsLoading),
+    missing: isFpsItem ? fpsCardMissing : fittingStatsMissing,
     error: isFpsItem ? null : fittingStatsError,
   }), [
     allocationConfigured,
@@ -156,7 +156,8 @@ function useBuildQueueStatModel({ blueprintId, item, inputs }: Props): CraftStat
     fittingStatsError,
     fittingStatsLoading,
     fittingStatsMissing,
-    fpsCardDetail,
+    fpsCardLoading,
+    fpsCardMissing,
     isFpsItem,
     recipe,
     targetConfigured,

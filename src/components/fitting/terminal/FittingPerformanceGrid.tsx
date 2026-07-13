@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { getFittingComponent, type FittingCalculateResult, type FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
+import type { FittingCalculateResult, FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
+import { loadVehicleFittingComponent } from "../../../lib/fitting/fittingComponentStore";
 import type { CombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
 import {
   buildOffensiveGroups,
@@ -88,23 +89,23 @@ export default function FittingPerformanceGrid({
   useEffect(() => {
     if (mitigationComponentIds.length === 0) return;
 
-    const controller = new AbortController();
+    let cancelled = false;
     void (async () => {
       const next: Record<string, FittingComponentMitigation | null> = {};
       for (const componentId of mitigationComponentIds) {
         try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
+          const detail = await loadVehicleFittingComponent(componentId);
+          if (cancelled) return;
           next[componentId] = detail.mitigation;
         } catch {
-          if (controller.signal.aborted) return;
+          if (cancelled) return;
           next[componentId] = null;
         }
       }
-      if (!controller.signal.aborted) setMitigationByComponentId(next);
+      if (!cancelled) setMitigationByComponentId(next);
     })();
 
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [mitigationComponentIds]);
 
   const activeMitigationByComponentId = useMemo(() => {

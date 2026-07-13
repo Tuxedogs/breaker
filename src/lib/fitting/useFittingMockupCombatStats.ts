@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getFittingComponent } from "./fittingApi";
+import { loadVehicleFittingComponent } from "./fittingComponentStore";
 import {
   buildOffensiveGroups,
   formatNumber,
@@ -76,28 +76,28 @@ export function useFittingMockupCombatStats(portRows: PortBreakdownRow[]): Mocku
       return;
     }
 
-    const controller = new AbortController();
+    let cancelled = false;
     queueMicrotask(() => setLoading(true));
 
     void (async () => {
       const next: Record<string, Record<string, number | null>> = {};
       for (const componentId of componentIds) {
         try {
-          const detail = await getFittingComponent(componentId, controller.signal);
-          if (controller.signal.aborted) return;
+          const detail = await loadVehicleFittingComponent(componentId);
+          if (cancelled) return;
           next[componentId] = detail.stats;
         } catch {
-          if (controller.signal.aborted) return;
+          if (cancelled) return;
           next[componentId] = {};
         }
       }
-      if (!controller.signal.aborted) {
+      if (!cancelled) {
         setStatsByComponentId(next);
         setLoading(false);
       }
     })();
 
-    return () => controller.abort();
+    return () => { cancelled = true; };
   }, [componentIds]);
 
   return useMemo(() => {
