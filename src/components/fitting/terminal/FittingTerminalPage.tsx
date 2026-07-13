@@ -5,7 +5,6 @@ import {
   buildOffensiveGroups,
   categoryLabel,
   portShortLabel,
-  type FittingComponentRecord,
   type FittingShipDetail,
   type FittingShipSummary,
   type PortBreakdownRow,
@@ -32,7 +31,6 @@ export type FittingTerminalPageProps = {
   shipDetail: FittingShipDetail | null;
   portRows: PortBreakdownRow[];
   calculateResult: FittingCalculateResult | null;
-  componentLookup: Map<string, FittingComponentRecord>;
   craftablePortIds: Set<string>;
   loading: boolean;
   iconMode: FittingIconMode;

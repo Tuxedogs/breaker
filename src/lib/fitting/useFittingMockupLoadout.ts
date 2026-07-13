@@ -5,7 +5,6 @@ import {
   getFittingLoadout,
   getFittingShip,
   isDisplayableFittingShip,
-  listFittingComponents,
   listFittingShips,
   validateFittingLoadout,
   type FittingCalculateResult,
@@ -19,7 +18,6 @@ import {
 } from "./fittingSlotCompatibility";
 import { validationFailureForPort } from "./fittingSlotValidation";
 import {
-  adaptComponent,
   adaptLoadout,
   adaptShipDetail,
   adaptShipSummary,
@@ -29,6 +27,7 @@ import {
   type FittingShipSummary,
   type PortBreakdownRow,
 } from "./fittingPortGrouping";
+import { useEquippedComponentLookup } from "./useEquippedComponentDetails";
 import { FITTING_MOCKUP_POLARIS_SHIP_KEY } from "./mockup/fittingMockupShipResolve";
 
 type LoadState<T> = {
@@ -93,7 +92,6 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
   const [stockLoadoutMap, setStockLoadoutMap] = useState<Record<string, string | null>>({});
   const [loadoutMap, setLoadoutMap] = useState<Record<string, string | null>>({});
   const [calculateState, setCalculateState] = useState<LoadState<FittingCalculateResult>>(emptyLoad);
-  const [componentsState, setComponentsState] = useState<LoadState<FittingComponentRecord[]>>(emptyLoad);
   const [selectedPortId, setSelectedPortId] = useState<string | null>(null);
   const [shipLoading, setShipLoading] = useState(false);
 
@@ -111,22 +109,6 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipsState({ status: "error", data: null });
-      });
-    return () => controller.abort();
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    queueMicrotask(() => {
-      if (!controller.signal.aborted) setComponentsState({ status: "loading", data: null });
-    });
-    listFittingComponents(controller.signal)
-      .then((records) => {
-        if (controller.signal.aborted) return;
-        setComponentsState({ status: "loaded", data: records.map(adaptComponent) });
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) setComponentsState({ status: "error", data: null });
       });
     return () => controller.abort();
   }, []);
@@ -194,17 +176,16 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
     return () => controller.abort();
   }, [selectedShipKey]);
 
-  const componentLookup = useMemo(() => {
-    const lookup = new Map<string, FittingComponentRecord>();
-    for (const component of componentsState.data ?? []) lookup.set(component.componentKey, component);
-    return lookup;
-  }, [componentsState.data]);
+  const appliedRows = useMemo(
+    () => applyLoadoutMap(basePortRows, loadoutMap),
+    [basePortRows, loadoutMap],
+  );
+  const { lookup: componentLookup } = useEquippedComponentLookup(appliedRows);
 
   const portRows = useMemo(() => {
-    const applied = applyLoadoutMap(basePortRows, loadoutMap);
-    if (componentLookup.size === 0) return applied;
-    return enrichPortRows(applied, componentLookup);
-  }, [basePortRows, componentLookup, loadoutMap]);
+    if (componentLookup.size === 0) return appliedRows;
+    return enrichPortRows(appliedRows, componentLookup);
+  }, [appliedRows, componentLookup]);
 
   const isModified = useMemo(
     () => !loadoutMapsEqual(loadoutMap, stockLoadoutMap),

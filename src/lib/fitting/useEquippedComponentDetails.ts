@@ -5,7 +5,11 @@ import {
   getFittingComponentCacheEntry,
   loadVehicleFittingComponent,
 } from "./fittingComponentStore";
-import type { PortBreakdownRow } from "./fittingPortGrouping";
+import {
+  adaptComponent,
+  type FittingComponentRecord,
+  type PortBreakdownRow,
+} from "./fittingPortGrouping";
 
 const IDS_KEY_SEPARATOR = "\0";
 
@@ -155,4 +159,25 @@ export function useEquippedComponentDetailsForPortRows(
   );
   const componentIds = useMemo(() => splitComponentIdsKey(idsKey), [idsKey]);
   return useEquippedComponentDetails(componentIds);
+}
+
+export function buildComponentLookupFromDetails(
+  detailsById: Record<string, FittingComponentDetail | null>,
+): Map<string, FittingComponentRecord> {
+  const lookup = new Map<string, FittingComponentRecord>();
+  for (const [componentId, detail] of Object.entries(detailsById)) {
+    if (detail) lookup.set(componentId, adaptComponent(detail));
+  }
+  return lookup;
+}
+
+export function useEquippedComponentLookup(portRows: readonly PortBreakdownRow[]): EquippedComponentDetailsState & {
+  lookup: Map<string, FittingComponentRecord>;
+} {
+  const equipped = useEquippedComponentDetailsForPortRows(portRows);
+  const lookup = useMemo(
+    () => buildComponentLookupFromDetails(equipped.detailsById),
+    [equipped.detailsById],
+  );
+  return { ...equipped, lookup };
 }

@@ -7,21 +7,19 @@ import {
   getFittingLoadout,
   getFittingShip,
   isDisplayableFittingShip,
-  listFittingComponents,
   listFittingShips,
   type FittingCalculateResult,
 } from "../lib/fitting/fittingApi";
 import {
-  adaptComponent,
   adaptLoadout,
   adaptShipDetail,
   adaptShipSummary,
   enrichPortRows,
-  type FittingComponentRecord,
   type FittingShipDetail,
   type FittingShipSummary,
   type PortBreakdownRow,
 } from "../lib/fitting/fittingPortGrouping";
+import { useEquippedComponentLookup } from "../lib/fitting/useEquippedComponentDetails";
 import { getCraftingItemByBlueprintGuid } from "../lib/craftingData";
 import {
   readFittingIconMode,
@@ -44,7 +42,6 @@ export default function FittingPage() {
   const [shipState, setShipState] = useState<LoadState<FittingShipDetail>>(emptyLoad);
   const [basePortRows, setBasePortRows] = useState<LoadState<PortBreakdownRow[]>>(emptyLoad);
   const [calculateState, setCalculateState] = useState<LoadState<FittingCalculateResult>>(emptyLoad);
-  const [componentsState, setComponentsState] = useState<LoadState<FittingComponentRecord[]>>(emptyLoad);
   const [craftablePortIds, setCraftablePortIds] = useState<Set<string>>(new Set());
   const [iconMode] = useState<FittingIconMode>(() => readFittingIconMode());
 
@@ -60,22 +57,6 @@ export default function FittingPage() {
       })
       .catch(() => {
         if (!controller.signal.aborted) setShipsState({ status: "error", data: null });
-      });
-    return () => controller.abort();
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    queueMicrotask(() => {
-      if (!controller.signal.aborted) setComponentsState({ status: "loading", data: null });
-    });
-    listFittingComponents(controller.signal)
-      .then((records) => {
-        if (controller.signal.aborted) return;
-        setComponentsState({ status: "loaded", data: records.map(adaptComponent) });
-      })
-      .catch(() => {
-        if (!controller.signal.aborted) setComponentsState({ status: "error", data: null });
       });
     return () => controller.abort();
   }, []);
@@ -133,17 +114,13 @@ export default function FittingPage() {
     return () => controller.abort();
   }, [selectedShipKey]);
 
-  const componentLookup = useMemo(() => {
-    const lookup = new Map<string, FittingComponentRecord>();
-    for (const component of componentsState.data ?? []) lookup.set(component.componentKey, component);
-    return lookup;
-  }, [componentsState.data]);
+  const baseRows = basePortRows.data ?? [];
+  const { lookup: componentLookup } = useEquippedComponentLookup(baseRows);
 
   const enrichedPortRows = useMemo(() => {
-    const rows = basePortRows.data ?? [];
-    if (componentLookup.size === 0) return rows;
-    return enrichPortRows(rows, componentLookup);
-  }, [basePortRows.data, componentLookup]);
+    if (componentLookup.size === 0) return baseRows;
+    return enrichPortRows(baseRows, componentLookup);
+  }, [baseRows, componentLookup]);
 
   useEffect(() => {
     const rows = basePortRows.data ?? [];
@@ -180,7 +157,6 @@ export default function FittingPage() {
       shipDetail={shipState.data}
       portRows={enrichedPortRows}
       calculateResult={calculateState.data}
-      componentLookup={componentLookup}
       craftablePortIds={craftablePortIds}
       loading={loading}
       iconMode={iconMode}
