@@ -1,10 +1,19 @@
 import type { ComponentCardIndexRecord } from "../componentCardIndex";
 import { buildFittingDetailFromFpsComponentCard } from "../crafting/fpsComponentCardDetail";
-import { getFittingComponent, type FittingComponentDetail } from "./fittingApi";
+import {
+  ensureFittingBuildContext,
+  getFittingComponent,
+  type FittingComponentDetail,
+} from "./fittingApi";
 import {
   getFittingBuildContext,
   type FittingChannel,
 } from "./fittingBuildContext";
+import {
+  createMemoryFittingComponentPersistentStorage,
+  getDefaultFittingComponentPersistentStorage,
+  type FittingComponentPersistentStorage,
+} from "./fittingComponentPersistentStorage";
 
 export type VehicleFittingComponentLoader = (
   componentId: string,
@@ -18,11 +27,14 @@ let vehicleComponentLoader: VehicleFittingComponentLoader = (
   resolveDetailCached,
 ) => getFittingComponent(componentId, signal, resolveDetailCached);
 
+let persistentStorage: FittingComponentPersistentStorage =
+  getDefaultFittingComponentPersistentStorage();
+
 export type FittingComponentSourceType = "vehicle_fitting_detail" | "fps_component_card";
 
 export type FittingComponentCacheKey = {
   channel: FittingChannel;
-  buildId: string | null;
+  buildId: string;
   sourceType: FittingComponentSourceType;
   componentIdentity: string;
 };
@@ -39,25 +51,68 @@ export function normalizeFittingComponentIdentity(identity: string): string {
 }
 
 export function serializeFittingComponentCacheKey(key: FittingComponentCacheKey): string {
+  const buildId = key.buildId.trim();
+  if (!buildId) {
+    throw new Error("Fitting cache keys require a resolved buildId");
+  }
   return [
     key.channel,
-    key.buildId ?? "",
+    buildId,
     key.sourceType,
     normalizeFittingComponentIdentity(key.componentIdentity),
   ].join("::");
 }
 
-function buildCacheKey(
+function tryBuildCacheKey(
   componentIdentity: string,
   sourceType: FittingComponentSourceType,
-): string {
+): string | null {
   const { channel, buildId } = getFittingBuildContext();
+  if (!buildId) return null;
   return serializeFittingComponentCacheKey({
     channel,
     buildId,
     sourceType,
     componentIdentity,
   });
+}
+
+function requireBuildCacheKey(
+  componentIdentity: string,
+  sourceType: FittingComponentSourceType,
+): string {
+  const key = tryBuildCacheKey(componentIdentity, sourceType);
+  if (!key) {
+    throw new Error("Fitting build context unresolved");
+  }
+  return key;
+}
+
+function shouldPersistPatchStatic(): boolean {
+  return getFittingBuildContext().buildId != null;
+}
+
+function persistEntry(key: string, entry: FittingComponentCacheEntry): void {
+  if (!shouldPersistPatchStatic()) return;
+  void persistentStorage.put(key, entry);
+}
+
+function rememberEntry(key: string, entry: FittingComponentCacheEntry): void {
+  resolvedEntries.set(key, entry);
+  persistEntry(key, entry);
+}
+
+async function readPersistentEntry(key: string): Promise<FittingComponentCacheEntry | null> {
+  if (!shouldPersistPatchStatic()) return null;
+  try {
+    const entry = await persistentStorage.get(key);
+    if (!entry) return null;
+    if (entry.status !== "resolved" && entry.status !== "missing") return null;
+    resolvedEntries.set(key, entry);
+    return entry;
+  } catch {
+    return null;
+  }
 }
 
 export function isAbortError(error: unknown): boolean {
@@ -77,7 +132,9 @@ export function getFittingComponentCacheEntry(
 ): FittingComponentCacheEntry | null {
   const normalized = componentIdentity.trim();
   if (!normalized) return null;
-  return resolvedEntries.get(buildCacheKey(normalized, sourceType)) ?? null;
+  const key = tryBuildCacheKey(normalized, sourceType);
+  if (!key) return null;
+  return resolvedEntries.get(key) ?? null;
 }
 
 export function getCachedFittingComponent(
@@ -117,6 +174,7 @@ export function purgeFittingComponentCacheNamespace(
   for (const key of inflightRequests.keys()) {
     if (key.startsWith(prefix)) inflightRequests.delete(key);
   }
+  void persistentStorage.deleteNamespace(prefix);
 }
 
 export function resetFittingComponentStoreForTests(): void {
@@ -127,6 +185,7 @@ export function resetFittingComponentStoreForTests(): void {
     signal,
     resolveDetailCached,
   ) => getFittingComponent(componentId, signal, resolveDetailCached);
+  persistentStorage = createMemoryFittingComponentPersistentStorage();
 }
 
 export function setVehicleFittingComponentLoaderForTests(
@@ -139,56 +198,93 @@ export function setVehicleFittingComponentLoaderForTests(
   ) => getFittingComponent(componentId, signal, resolveDetailCached));
 }
 
-export function loadVehicleFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
+export function setFittingComponentPersistentStorageForTests(
+  storage: FittingComponentPersistentStorage | null,
+): void {
+  persistentStorage = storage ?? createMemoryFittingComponentPersistentStorage();
+}
+
+export function getFittingComponentPersistentStorageForTests(): FittingComponentPersistentStorage {
+  return persistentStorage;
+}
+
+export function clearFittingComponentMemoryForTests(): void {
+  resolvedEntries.clear();
+  inflightRequests.clear();
+}
+
+export async function loadVehicleFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
   const normalized = entityClass.trim();
   if (!normalized) {
-    return Promise.reject(new Error("Fitting component identity is required"));
+    throw new Error("Fitting component identity is required");
   }
 
-  const key = buildCacheKey(normalized, "vehicle_fitting_detail");
+  await ensureFittingBuildContext();
+
+  const key = requireBuildCacheKey(normalized, "vehicle_fitting_detail");
   const cached = resolvedEntries.get(key);
-  if (cached?.status === "resolved") return Promise.resolve(cached.detail);
+  if (cached?.status === "resolved") return cached.detail;
   if (cached?.status === "missing") {
-    return Promise.reject(new Error("Fitting API request failed: 404"));
+    throw new Error("Fitting API request failed: 404");
   }
 
   const inflight = inflightRequests.get(key);
   if (inflight) return inflight;
 
-  const promise = vehicleComponentLoader(normalized, undefined, () => readResolvedDetail(normalized, "vehicle_fitting_detail"))
-    .then((detail) => {
-      resolvedEntries.set(key, { status: "resolved", detail });
-      inflightRequests.delete(key);
+  const promise = (async () => {
+    const persisted = await readPersistentEntry(key);
+    if (persisted?.status === "resolved") return persisted.detail;
+    if (persisted?.status === "missing") {
+      throw new Error("Fitting API request failed: 404");
+    }
+
+    try {
+      const detail = await vehicleComponentLoader(
+        normalized,
+        undefined,
+        () => readResolvedDetail(normalized, "vehicle_fitting_detail"),
+      );
+      rememberEntry(key, { status: "resolved", detail });
       return detail;
-    })
-    .catch((error) => {
-      inflightRequests.delete(key);
+    } catch (error) {
       const resolved = readResolvedDetail(normalized, "vehicle_fitting_detail");
       if (resolved) return resolved;
 
       if (isNotFoundError(error)) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
       }
       throw error;
-    });
+    } finally {
+      inflightRequests.delete(key);
+    }
+  })();
 
   inflightRequests.set(key, promise);
   return promise;
 }
 
 export function prefetchFittingComponents(entityClasses: readonly string[]): void {
-  for (const entityClass of entityClasses) {
-    const normalized = entityClass.trim();
-    if (!normalized) continue;
+  void (async () => {
+    try {
+      await ensureFittingBuildContext();
+    } catch {
+      return;
+    }
 
-    const key = buildCacheKey(normalized, "vehicle_fitting_detail");
-    const cached = resolvedEntries.get(key);
-    if (cached || inflightRequests.has(key)) continue;
+    for (const entityClass of entityClasses) {
+      const normalized = entityClass.trim();
+      if (!normalized) continue;
 
-    loadVehicleFittingComponent(normalized).catch((error) => {
-      if (isAbortError(error)) return;
-    });
-  }
+      const key = tryBuildCacheKey(normalized, "vehicle_fitting_detail");
+      if (!key) continue;
+      const cached = resolvedEntries.get(key);
+      if (cached || inflightRequests.has(key)) continue;
+
+      loadVehicleFittingComponent(normalized).catch((error) => {
+        if (isAbortError(error)) return;
+      });
+    }
+  })();
 }
 
 export function cacheFpsComponentFromCard(
@@ -201,53 +297,64 @@ export function cacheFpsComponentFromCard(
   const detail = buildFittingDetailFromFpsComponentCard(card);
   if (!detail) return null;
 
-  const key = buildCacheKey(normalized, "fps_component_card");
-  resolvedEntries.set(key, { status: "resolved", detail });
+  const key = tryBuildCacheKey(normalized, "fps_component_card");
+  if (!key) return detail;
+
+  rememberEntry(key, { status: "resolved", detail });
   return detail;
 }
 
-export function loadFpsComponentFromCard(
+export async function loadFpsComponentFromCard(
   componentIdentity: string,
   cardLoader: () => Promise<ComponentCardIndexRecord | null>,
 ): Promise<FittingComponentDetail> {
   const normalized = componentIdentity.trim();
   if (!normalized) {
-    return Promise.reject(new Error("Fitting component identity is required"));
+    throw new Error("Fitting component identity is required");
   }
 
-  const key = buildCacheKey(normalized, "fps_component_card");
+  await ensureFittingBuildContext();
+
+  const key = requireBuildCacheKey(normalized, "fps_component_card");
   const cached = resolvedEntries.get(key);
-  if (cached?.status === "resolved") return Promise.resolve(cached.detail);
+  if (cached?.status === "resolved") return cached.detail;
   if (cached?.status === "missing") {
-    return Promise.reject(new Error("FPS component card not found"));
+    throw new Error("FPS component card not found");
   }
 
   const inflight = inflightRequests.get(key);
   if (inflight) return inflight;
 
-  const promise = cardLoader()
-    .then((card) => {
+  const promise = (async () => {
+    const persisted = await readPersistentEntry(key);
+    if (persisted?.status === "resolved") return persisted.detail;
+    if (persisted?.status === "missing") {
+      throw new Error("FPS component card not found");
+    }
+
+    try {
+      const card = await cardLoader();
       if (!card) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
         throw new Error("FPS component card not found");
       }
 
       const detail = buildFittingDetailFromFpsComponentCard(card);
       if (!detail) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
         throw new Error("FPS component card not found");
       }
 
-      resolvedEntries.set(key, { status: "resolved", detail });
-      inflightRequests.delete(key);
+      rememberEntry(key, { status: "resolved", detail });
       return detail;
-    })
-    .catch((error) => {
-      inflightRequests.delete(key);
+    } catch (error) {
       const resolved = readResolvedDetail(normalized, "fps_component_card");
       if (resolved) return resolved;
       throw error;
-    });
+    } finally {
+      inflightRequests.delete(key);
+    }
+  })();
 
   inflightRequests.set(key, promise);
   return promise;

@@ -520,7 +520,7 @@ export function buildCraftStatViewModel(input: {
   } = input;
   const allocationModifiers = allocationModifiersInput ?? totalModifiers;
 
-  if (loading && !detail) {
+  if (loading) {
     return {
       category: "unknown",
       title: "Component Stats",
