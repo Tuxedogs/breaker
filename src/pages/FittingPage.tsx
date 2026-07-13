@@ -20,6 +20,7 @@ import {
   type FittingComponentRecord,
   type FittingShipDetail,
   type FittingShipSummary,
+  type PortBreakdownRow,
 } from "../lib/fitting/fittingPortGrouping";
 import { getCraftingItemByBlueprintGuid } from "../lib/craftingData";
 import {
@@ -41,7 +42,7 @@ export default function FittingPage() {
   const navigate = useNavigate();
   const [shipsState, setShipsState] = useState<LoadState<FittingShipSummary[]>>(emptyLoad);
   const [shipState, setShipState] = useState<LoadState<FittingShipDetail>>(emptyLoad);
-  const [portRows, setPortRows] = useState<LoadState<ReturnType<typeof enrichPortRows>>>(emptyLoad);
+  const [basePortRows, setBasePortRows] = useState<LoadState<PortBreakdownRow[]>>(emptyLoad);
   const [calculateState, setCalculateState] = useState<LoadState<FittingCalculateResult>>(emptyLoad);
   const [componentsState, setComponentsState] = useState<LoadState<FittingComponentRecord[]>>(emptyLoad);
   const [craftablePortIds, setCraftablePortIds] = useState<Set<string>>(new Set());
@@ -94,8 +95,9 @@ export default function FittingPage() {
     queueMicrotask(() => {
       if (controller.signal.aborted) return;
       setShipState({ status: "loading", data: null });
-      setPortRows({ status: "loading", data: null });
+      setBasePortRows({ status: "loading", data: null });
       setCalculateState({ status: "loading", data: null });
+      setCraftablePortIds(new Set());
     });
 
     getFittingShip(selectedShipKey, controller.signal)
@@ -113,37 +115,23 @@ export default function FittingPage() {
       .then(async ([ports, entries]) => {
         if (controller.signal.aborted) return;
         const { portBreakdown, loadoutMap } = adaptLoadout(selectedShipKey, ports, entries);
-        const lookup = new Map((componentsState.data ?? []).map((component) => [component.componentKey, component]));
-        const enriched = enrichPortRows(portBreakdown, lookup);
-        setPortRows({ status: "loaded", data: enriched });
+        setBasePortRows({ status: "loaded", data: portBreakdown });
 
         const calculateResult = await calculateFittingLoadout(
           { shipId: selectedShipKey, loadout: loadoutMap, options: { compareToStock: true } },
           controller.signal,
         );
         if (!controller.signal.aborted) setCalculateState({ status: "loaded", data: calculateResult });
-
-        const craftable = new Set<string>();
-        const componentIds = [...new Set(enriched.map((row) => row.equippedComponentKey).filter(Boolean))] as string[];
-        await Promise.all(componentIds.map(async (componentId) => {
-          const recipe = await getCraftingItemByBlueprintGuid(componentId);
-          if (recipe) {
-            for (const row of enriched) {
-              if (row.equippedComponentKey === componentId) craftable.add(row.portId);
-            }
-          }
-        }));
-        if (!controller.signal.aborted) setCraftablePortIds(craftable);
       })
       .catch(() => {
         if (!controller.signal.aborted) {
-          setPortRows({ status: "error", data: null });
+          setBasePortRows({ status: "error", data: null });
           setCalculateState({ status: "error", data: null });
         }
       });
 
     return () => controller.abort();
-  }, [selectedShipKey, componentsState.data]);
+  }, [selectedShipKey]);
 
   const componentLookup = useMemo(() => {
     const lookup = new Map<string, FittingComponentRecord>();
@@ -152,12 +140,34 @@ export default function FittingPage() {
   }, [componentsState.data]);
 
   const enrichedPortRows = useMemo(() => {
-    const rows = portRows.data ?? [];
+    const rows = basePortRows.data ?? [];
     if (componentLookup.size === 0) return rows;
     return enrichPortRows(rows, componentLookup);
-  }, [componentLookup, portRows.data]);
+  }, [basePortRows.data, componentLookup]);
 
-  const loading = shipState.status === "loading" || portRows.status === "loading" || calculateState.status === "loading";
+  useEffect(() => {
+    const rows = basePortRows.data ?? [];
+    if (rows.length === 0) return;
+
+    let cancelled = false;
+    const componentIds = [...new Set(rows.map((row) => row.equippedComponentKey).filter(Boolean))] as string[];
+
+    void (async () => {
+      const craftable = new Set<string>();
+      await Promise.all(componentIds.map(async (componentId) => {
+        const recipe = await getCraftingItemByBlueprintGuid(componentId);
+        if (!recipe) return;
+        for (const row of rows) {
+          if (row.equippedComponentKey === componentId) craftable.add(row.portId);
+        }
+      }));
+      if (!cancelled) setCraftablePortIds(craftable);
+    })();
+
+    return () => { cancelled = true; };
+  }, [basePortRows.data]);
+
+  const loading = shipState.status === "loading" || basePortRows.status === "loading" || calculateState.status === "loading";
 
   function selectShip(nextShipKey: string) {
     navigate(`/fitting/${nextShipKey}`);

@@ -170,9 +170,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
       .then(async ([ports, entries]) => {
         if (controller.signal.aborted) return;
         const { portBreakdown, loadoutMap: stockMap } = adaptLoadout(selectedShipKey, ports, entries);
-        const lookup = new Map((componentsState.data ?? []).map((component) => [component.componentKey, component]));
-        const enriched = enrichPortRows(portBreakdown, lookup);
-        setBasePortRows(enriched);
+        setBasePortRows(portBreakdown);
         setStockLoadoutMap(stockMap);
         setLoadoutMap(stockMap);
         setSelectedPortId(null);
@@ -194,7 +192,7 @@ export function useFittingMockupLoadout(initialShipKey?: string | null): Fitting
       });
 
     return () => controller.abort();
-  }, [selectedShipKey, componentsState.data]);
+  }, [selectedShipKey]);
 
   const componentLookup = useMemo(() => {
     const lookup = new Map<string, FittingComponentRecord>();

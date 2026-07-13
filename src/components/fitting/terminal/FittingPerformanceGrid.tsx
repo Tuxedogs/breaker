@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import type { FittingCalculateResult, FittingComponentMitigation } from "../../../lib/fitting/fittingApi";
-import { loadVehicleFittingComponent } from "../../../lib/fitting/fittingComponentStore";
 import type { CombatAlphaBreakdown } from "../../../lib/fitting/useCombatAlphaBreakdown";
 import {
   buildOffensiveGroups,
@@ -29,6 +28,7 @@ type FittingPerformanceGridProps = {
   combatAlpha: CombatAlphaBreakdown;
   pipAssignment: PipAssignment;
   systemDraws: PipSystemPowerDraw;
+  mitigationByComponentId: Record<string, FittingComponentMitigation | null>;
   onPipChange: (category: keyof PipAssignment, value: number) => void;
   onViewWeaponStats: () => void;
 };
@@ -54,6 +54,7 @@ export default function FittingPerformanceGrid({
   combatAlpha,
   pipAssignment,
   systemDraws,
+  mitigationByComponentId,
   onPipChange,
   onViewWeaponStats,
 }: FittingPerformanceGridProps) {
@@ -62,7 +63,6 @@ export default function FittingPerformanceGrid({
   const powerMargin = derivedNum(calculateResult, "power", "powerSurplus");
   const shieldHp = derivedNum(calculateResult, "shields", "totalShieldHP");
   const shieldRegen = derivedNum(calculateResult, "shields", "totalRegenRate");
-  const [mitigationByComponentId, setMitigationByComponentId] = useState<Record<string, FittingComponentMitigation | null>>({});
 
   const scmSpeed = shipPerformance?.scmSpeed ?? extractedNum(calculateResult, "performance", "scmSpeed");
   const maxSpeed = shipPerformance?.maxSpeed ?? extractedNum(calculateResult, "performance", "maxSpeed");
@@ -75,52 +75,9 @@ export default function FittingPerformanceGrid({
 
   const missilePayload = sumNullable([combatAlpha.missileAlpha, combatAlpha.torpedoAlpha]);
 
-  const mitigationComponentIds = useMemo(() => {
-    const ids = portRows
-      .filter((row) => {
-        const text = `${row.ruleCategory ?? ""} ${row.portCategory ?? ""} ${row.componentCategory ?? ""} ${row.portName ?? ""}`.toLowerCase();
-        return Boolean(row.equippedComponentKey) && (text.includes("shield") || text.includes("armor"));
-      })
-      .map((row) => row.equippedComponentKey!)
-      .filter((componentId, index, values) => values.indexOf(componentId) === index);
-    return ids;
-  }, [portRows]);
-
-  useEffect(() => {
-    if (mitigationComponentIds.length === 0) return;
-
-    let cancelled = false;
-    void (async () => {
-      const next: Record<string, FittingComponentMitigation | null> = {};
-      for (const componentId of mitigationComponentIds) {
-        try {
-          const detail = await loadVehicleFittingComponent(componentId);
-          if (cancelled) return;
-          next[componentId] = detail.mitigation;
-        } catch {
-          if (cancelled) return;
-          next[componentId] = null;
-        }
-      }
-      if (!cancelled) setMitigationByComponentId(next);
-    })();
-
-    return () => { cancelled = true; };
-  }, [mitigationComponentIds]);
-
-  const activeMitigationByComponentId = useMemo(() => {
-    if (mitigationComponentIds.length === 0) return {};
-    const next: Record<string, FittingComponentMitigation | null> = {};
-    for (const componentId of mitigationComponentIds) {
-      if (componentId in mitigationByComponentId) {
-        next[componentId] = mitigationByComponentId[componentId];
-      }
-    }
-    return next;
-  }, [mitigationComponentIds, mitigationByComponentId]);
   const componentMitigations = useMemo(
-    () => Object.values(activeMitigationByComponentId),
-    [activeMitigationByComponentId],
+    () => Object.values(mitigationByComponentId),
+    [mitigationByComponentId],
   );
   const shieldMitigations = useMemo(
     () => componentMitigations.filter((entry): entry is Extract<FittingComponentMitigation, { kind: "shield" }> => entry?.kind === "shield"),
