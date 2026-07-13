@@ -4,16 +4,20 @@ import path from "node:path";
 import test from "node:test";
 import type { ComponentCardIndexRecord } from "../componentCardIndex.ts";
 import type { FittingComponentDetail } from "./fittingApi.ts";
+import { createMemoryFittingComponentPersistentStorage } from "./fittingComponentPersistentStorage.ts";
 import {
   cacheFpsComponentFromCard,
+  clearFittingComponentMemoryForTests,
   getCachedFittingComponent,
   getCachedFpsComponentFromCard,
   getFittingComponentCacheEntry,
+  loadFpsComponentFromCard,
   loadVehicleFittingComponent,
   normalizeFittingComponentIdentity,
   prefetchFittingComponents,
   resetFittingComponentStoreForTests,
   serializeFittingComponentCacheKey,
+  setFittingComponentPersistentStorageForTests,
   setVehicleFittingComponentLoaderForTests,
 } from "./fittingComponentStore.ts";
 import {
@@ -192,4 +196,137 @@ test("prefetch skips resolved and in-flight vehicle entries", async () => {
   prefetchFittingComponents(["entity-class-a"]);
   await loadVehicleFittingComponent("entity-class-a");
   assert.equal(fetchCount, 1);
+});
+
+test("persisted resolved and missing vehicle entries hydrate after memory clear", async () => {
+  const persistence = createMemoryFittingComponentPersistentStorage();
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "live-build" });
+
+  let fetchCount = 0;
+  setVehicleFittingComponentLoaderForTests(async (id) => {
+    fetchCount += 1;
+    if (id === "missing-comp") throw new Error("Fitting API request failed: 404");
+    return SAMPLE_DETAIL;
+  });
+
+  await loadVehicleFittingComponent("entity-class-a");
+  await assert.rejects(() => loadVehicleFittingComponent("missing-comp"), /404/);
+  assert.equal(fetchCount, 2);
+
+  clearFittingComponentMemoryForTests();
+  assert.equal(getCachedFittingComponent("entity-class-a"), null);
+
+  const hydrated = await loadVehicleFittingComponent("entity-class-a");
+  assert.equal(hydrated.id, SAMPLE_DETAIL.id);
+  await assert.rejects(() => loadVehicleFittingComponent("missing-comp"), /404/);
+  assert.equal(fetchCount, 2);
+});
+
+test("failed vehicle loads are not persisted and remain retryable across memory clear", async () => {
+  const persistence = createMemoryFittingComponentPersistentStorage();
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "live-build" });
+
+  let attempts = 0;
+  setVehicleFittingComponentLoaderForTests(async () => {
+    attempts += 1;
+    if (attempts === 1) throw new Error("Fitting API request failed: 500");
+    return SAMPLE_DETAIL;
+  });
+
+  await assert.rejects(() => loadVehicleFittingComponent("retry-comp"), /500/);
+  assert.equal(await persistence.get("LIVE::live-build::vehicle_fitting_detail::retry-comp"), null);
+
+  clearFittingComponentMemoryForTests();
+  const resolved = await loadVehicleFittingComponent("retry-comp");
+  assert.equal(resolved.id, SAMPLE_DETAIL.id);
+  assert.equal(attempts, 2);
+});
+
+test("buildId change purges persisted vehicle entries for that channel", async () => {
+  const persistence = createMemoryFittingComponentPersistentStorage();
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "build-a" });
+  setVehicleFittingComponentLoaderForTests(async () => SAMPLE_DETAIL);
+
+  await loadVehicleFittingComponent("entity-class-a");
+  assert.ok(await persistence.get("LIVE::build-a::vehicle_fitting_detail::entity-class-a"));
+
+  captureFittingApiMeta({ channel: "LIVE", buildId: "build-b" });
+  await Promise.resolve();
+  assert.equal(await persistence.get("LIVE::build-a::vehicle_fitting_detail::entity-class-a"), null);
+
+  let fetchCount = 0;
+  setVehicleFittingComponentLoaderForTests(async () => {
+    fetchCount += 1;
+    return SAMPLE_DETAIL;
+  });
+  await loadVehicleFittingComponent("entity-class-a");
+  assert.equal(fetchCount, 1);
+});
+
+test("LIVE and PTU persisted vehicle entries stay isolated", async () => {
+  const persistence = createMemoryFittingComponentPersistentStorage();
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "live-build" });
+  captureFittingApiMeta({ channel: "PTU", buildId: "ptu-build" });
+
+  setVehicleFittingComponentLoaderForTests(async () => ({
+    ...SAMPLE_DETAIL,
+    id: getFittingBuildContext().channel === "PTU" ? "ptu-comp" : "live-comp",
+  }));
+
+  await loadVehicleFittingComponent("entity-class-a");
+  setFittingChannel("PTU");
+  await loadVehicleFittingComponent("entity-class-a");
+
+  assert.equal(
+    (await persistence.get("LIVE::live-build::vehicle_fitting_detail::entity-class-a"))?.status,
+    "resolved",
+  );
+  assert.equal(
+    (await persistence.get("PTU::ptu-build::vehicle_fitting_detail::entity-class-a"))?.status,
+    "resolved",
+  );
+
+  clearFittingComponentMemoryForTests();
+  setFittingChannel("LIVE");
+  assert.equal((await loadVehicleFittingComponent("entity-class-a")).id, "live-comp");
+  setFittingChannel("PTU");
+  assert.equal((await loadVehicleFittingComponent("entity-class-a")).id, "ptu-comp");
+});
+
+test("persisted fps component-card entries stay separate from vehicle fitting detail", async () => {
+  const persistence = createMemoryFittingComponentPersistentStorage();
+  setFittingComponentPersistentStorageForTests(persistence);
+  captureFittingApiMeta({ channel: "LIVE", buildId: "live-build" });
+
+  const card = loadCard("bd636d35-43fd-4782-a223-40ce0a727f39");
+  cacheFpsComponentFromCard(card.entityClass, card);
+  await Promise.resolve();
+
+  setVehicleFittingComponentLoaderForTests(async () => ({
+    ...SAMPLE_DETAIL,
+    id: "vehicle-comp",
+    class: card.entityClass,
+  }));
+  await loadVehicleFittingComponent(card.entityClass);
+
+  const identity = normalizeFittingComponentIdentity(card.entityClass);
+  assert.equal(
+    (await persistence.get(`LIVE::live-build::fps_component_card::${identity}`))?.status,
+    "resolved",
+  );
+  assert.equal(
+    (await persistence.get(`LIVE::live-build::vehicle_fitting_detail::${identity}`))?.status,
+    "resolved",
+  );
+
+  clearFittingComponentMemoryForTests();
+  const fpsHydrated = await loadFpsComponentFromCard(card.entityClass, async () => {
+    throw new Error("card loader should not run when persistence hits");
+  });
+  assert.ok(fpsHydrated);
+  assert.notEqual(fpsHydrated.id, "vehicle-comp");
 });

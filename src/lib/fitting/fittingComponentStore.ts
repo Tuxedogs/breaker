@@ -5,6 +5,11 @@ import {
   getFittingBuildContext,
   type FittingChannel,
 } from "./fittingBuildContext";
+import {
+  createMemoryFittingComponentPersistentStorage,
+  getDefaultFittingComponentPersistentStorage,
+  type FittingComponentPersistentStorage,
+} from "./fittingComponentPersistentStorage";
 
 export type VehicleFittingComponentLoader = (
   componentId: string,
@@ -17,6 +22,9 @@ let vehicleComponentLoader: VehicleFittingComponentLoader = (
   signal,
   resolveDetailCached,
 ) => getFittingComponent(componentId, signal, resolveDetailCached);
+
+let persistentStorage: FittingComponentPersistentStorage =
+  getDefaultFittingComponentPersistentStorage();
 
 export type FittingComponentSourceType = "vehicle_fitting_detail" | "fps_component_card";
 
@@ -58,6 +66,33 @@ function buildCacheKey(
     sourceType,
     componentIdentity,
   });
+}
+
+function shouldPersistPatchStatic(): boolean {
+  return getFittingBuildContext().buildId != null;
+}
+
+function persistEntry(key: string, entry: FittingComponentCacheEntry): void {
+  if (!shouldPersistPatchStatic()) return;
+  void persistentStorage.put(key, entry);
+}
+
+function rememberEntry(key: string, entry: FittingComponentCacheEntry): void {
+  resolvedEntries.set(key, entry);
+  persistEntry(key, entry);
+}
+
+async function readPersistentEntry(key: string): Promise<FittingComponentCacheEntry | null> {
+  if (!shouldPersistPatchStatic()) return null;
+  try {
+    const entry = await persistentStorage.get(key);
+    if (!entry) return null;
+    if (entry.status !== "resolved" && entry.status !== "missing") return null;
+    resolvedEntries.set(key, entry);
+    return entry;
+  } catch {
+    return null;
+  }
 }
 
 export function isAbortError(error: unknown): boolean {
@@ -117,6 +152,7 @@ export function purgeFittingComponentCacheNamespace(
   for (const key of inflightRequests.keys()) {
     if (key.startsWith(prefix)) inflightRequests.delete(key);
   }
+  void persistentStorage.deleteNamespace(prefix);
 }
 
 export function resetFittingComponentStoreForTests(): void {
@@ -127,6 +163,7 @@ export function resetFittingComponentStoreForTests(): void {
     signal,
     resolveDetailCached,
   ) => getFittingComponent(componentId, signal, resolveDetailCached);
+  persistentStorage = createMemoryFittingComponentPersistentStorage();
 }
 
 export function setVehicleFittingComponentLoaderForTests(
@@ -137,6 +174,21 @@ export function setVehicleFittingComponentLoaderForTests(
     signal,
     resolveDetailCached,
   ) => getFittingComponent(componentId, signal, resolveDetailCached));
+}
+
+export function setFittingComponentPersistentStorageForTests(
+  storage: FittingComponentPersistentStorage | null,
+): void {
+  persistentStorage = storage ?? createMemoryFittingComponentPersistentStorage();
+}
+
+export function getFittingComponentPersistentStorageForTests(): FittingComponentPersistentStorage {
+  return persistentStorage;
+}
+
+export function clearFittingComponentMemoryForTests(): void {
+  resolvedEntries.clear();
+  inflightRequests.clear();
 }
 
 export function loadVehicleFittingComponent(entityClass: string): Promise<FittingComponentDetail> {
@@ -155,22 +207,33 @@ export function loadVehicleFittingComponent(entityClass: string): Promise<Fittin
   const inflight = inflightRequests.get(key);
   if (inflight) return inflight;
 
-  const promise = vehicleComponentLoader(normalized, undefined, () => readResolvedDetail(normalized, "vehicle_fitting_detail"))
-    .then((detail) => {
-      resolvedEntries.set(key, { status: "resolved", detail });
-      inflightRequests.delete(key);
+  const promise = (async () => {
+    const persisted = await readPersistentEntry(key);
+    if (persisted?.status === "resolved") return persisted.detail;
+    if (persisted?.status === "missing") {
+      throw new Error("Fitting API request failed: 404");
+    }
+
+    try {
+      const detail = await vehicleComponentLoader(
+        normalized,
+        undefined,
+        () => readResolvedDetail(normalized, "vehicle_fitting_detail"),
+      );
+      rememberEntry(key, { status: "resolved", detail });
       return detail;
-    })
-    .catch((error) => {
-      inflightRequests.delete(key);
+    } catch (error) {
       const resolved = readResolvedDetail(normalized, "vehicle_fitting_detail");
       if (resolved) return resolved;
 
       if (isNotFoundError(error)) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
       }
       throw error;
-    });
+    } finally {
+      inflightRequests.delete(key);
+    }
+  })();
 
   inflightRequests.set(key, promise);
   return promise;
@@ -202,7 +265,7 @@ export function cacheFpsComponentFromCard(
   if (!detail) return null;
 
   const key = buildCacheKey(normalized, "fps_component_card");
-  resolvedEntries.set(key, { status: "resolved", detail });
+  rememberEntry(key, { status: "resolved", detail });
   return detail;
 }
 
@@ -225,29 +288,36 @@ export function loadFpsComponentFromCard(
   const inflight = inflightRequests.get(key);
   if (inflight) return inflight;
 
-  const promise = cardLoader()
-    .then((card) => {
+  const promise = (async () => {
+    const persisted = await readPersistentEntry(key);
+    if (persisted?.status === "resolved") return persisted.detail;
+    if (persisted?.status === "missing") {
+      throw new Error("FPS component card not found");
+    }
+
+    try {
+      const card = await cardLoader();
       if (!card) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
         throw new Error("FPS component card not found");
       }
 
       const detail = buildFittingDetailFromFpsComponentCard(card);
       if (!detail) {
-        resolvedEntries.set(key, { status: "missing" });
+        rememberEntry(key, { status: "missing" });
         throw new Error("FPS component card not found");
       }
 
-      resolvedEntries.set(key, { status: "resolved", detail });
-      inflightRequests.delete(key);
+      rememberEntry(key, { status: "resolved", detail });
       return detail;
-    })
-    .catch((error) => {
-      inflightRequests.delete(key);
+    } catch (error) {
       const resolved = readResolvedDetail(normalized, "fps_component_card");
       if (resolved) return resolved;
       throw error;
-    });
+    } finally {
+      inflightRequests.delete(key);
+    }
+  })();
 
   inflightRequests.set(key, promise);
   return promise;
