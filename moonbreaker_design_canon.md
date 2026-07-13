@@ -1,297 +1,248 @@
-Bring Crafting Detail page in line with the updated Moonbreaker visual system.
+## Crafting Detail Canon
 
-Use 5.4 Medium.
+Crafting Detail is the primary decision page between discovering an item and committing it to the Build Queue.
 
-Scope:
-Crafting/Recipe/Component Detail page visual and layout refactor only.
+It must help the user understand:
 
-Do not change:
-- Crafting data
-- Crafting calculations
-- Material modifier math
-- Quality calculation logic
-- Blueprint source logic
-- Add to Queue behavior
-- Save Blueprint behavior
-- Search/filter behavior
-- API calls
-- Fitting API
-- Inventory
-- Build Queue
-- Mining
-- Missions
+* What the item is
+* What its current and resulting performance will be
+* Which materials are required
+* How material quality affects the result
+* What target the user is pursuing
+* Whether that target is achievable
+* What blueprint sources are available
+* What will be carried into Build Queue
 
-Problem:
-The crafting detail page looks visually behind the rest of the site. It still feels like an older dense admin/debug layout, while Mining, Inventory, Build Queue, and Material Allocation now use a more polished sci-fi panel system.
+The page must preserve all crafting data, calculations, modifier logic, slider behavior, blueprint-source behavior, Save Blueprint behavior, and Add to Queue behavior.
 
-Current issues:
-- Header has excessive empty space.
-- Item identity card on the left feels disconnected and small.
-- Detail header does not use the newer hero/card language.
-- Item Summary and Crafting Overview feel like raw tables in boxes.
-- Material Requirements sliders are useful but visually dated.
-- Estimated Effects are important but too flat.
-- Blueprint Sources section needs to align with the newer card system.
-- The page lacks a strong information hierarchy.
+### Visual-System Status
 
-Goal:
-Refactor the crafting detail page so it feels visually aligned with the rest of Moonbreaker while preserving all current behavior and data.
+Crafting Detail must follow the approved Moonbreaker visual system produced by the cross-page theme audit.
 
-Use shared visual language:
-- deep blue/black panels
-- rounded cards
-- subtle borders
-- cyan/purple/amber accents
-- compact badges
-- clear hierarchy
-- readable stat tables
-- no giant empty voids
+Do not independently style it toward Dashboard, Fitting Mockup, Mining, Inventory, Build Queue, or Carrier Logistics until the global surface, card, accent, and typography system has been approved.
 
-Use these visual tokens where practical:
---panel-bg: #04131D;
---panel-bg-deep: #03121C;
---panel-row-bg: #051A28;
---panel-row-hover: #081E2C;
---panel-border: #0E2A36;
---panel-border-soft: rgba(65, 132, 160, 0.22);
---accent-cyan: #00E6D2;
---accent-blue: #4DA3FF;
---accent-purple: #B85CF6;
---warning: #FFB84D;
---danger: #FF5C5C;
---success: #22D37A;
---text-primary: #E6F2FF;
---text-secondary: #8FA3B8;
---text-muted: #5F7285;
+Page-specific identity may come from item artwork, category information, semantic effects, and crafting data. It should not use a separate base theme.
 
-Page layout target:
-Keep the page detail-oriented, but reorganize visually into:
+### Page Structure
 
-1. Compact item hero/header
-2. Main two-column detail area
-3. Blueprint/source section below
+Crafting Detail should use three primary regions:
 
-Recommended desktop layout:
+1. Compact item identity and action header
+2. Crafting and performance detail area
+3. Blueprint Sources
 
-Top detail hero:
-- Left: item icon/card
-- Center: item title, category path, quality badge, size/grade badges, description
-- Right: Save Blueprint and Add to Queue actions
+The page should remain detail-oriented without feeling like an admin or debug interface.
 
-Main content grid:
-Left column:
-- Item Summary / Performance stats
+Avoid:
 
-Right column:
-- Crafting Overview
-- Material Requirements
-- Estimated Effects
+* Giant empty hero areas
+* Detached identity cards
+* Raw tables placed inside generic boxes
+* Excessive nested cards
+* Decorative effects behind dense data
+* Stretching rows across excessive horizontal space
 
-Bottom:
-- Blueprint Sources
+### Item Identity
 
-Hero/header:
-The current top section is too empty.
+The item identity area should clearly present:
 
-Replace with a compact hero panel:
-- Height should be content-driven, not a huge blank area.
-- Item icon/card should be larger and integrated into the hero.
-- Item name should be prominent.
-- Category path should be smaller and muted.
-- Quality badge should remain visible.
-- Size and grade badges should remain.
-- Description should remain, but line length should be constrained.
-- Save Blueprint / Add to Queue should sit cleanly on the right.
+* Item visual or icon
+* Item name
+* Category path
+* Description
+* Quality
+* Size
+* Grade
+* Save Blueprint
+* Add to Queue
 
-Example hierarchy:
-vehicle / Ship Weapon / weaponGun
-ATTRITION-2 REPEATER
-[3.67 QUALITY] [S2] [GRADE A]
-Description text...
+The item visual should be integrated into the header rather than appearing as a small disconnected sidebar widget.
 
-Actions:
-[Save Blueprint] [Add to Queue]
+The header should be content-driven and compact.
 
-Item identity card:
-Do not leave the item card as a tiny isolated block.
-Integrate it into the hero.
+Save Blueprint remains a secondary action.
 
-The item visual card should:
-- use the same deep panel styling
-- have stronger border/radius
-- show category and item name
-- show quality chip
-- not feel like an old sidebar widget
+Add to Queue remains the primary action.
 
-Main content:
-Use a balanced two-column layout.
+### Item Summary and Performance
 
-Suggested:
-.detail-grid {
-  display: grid;
-  grid-template-columns: minmax(360px, 0.85fr) minmax(620px, 1.4fr);
-  gap: 16px;
-}
+Preserve all existing stats and values.
 
-Left:
-Item Summary / Weapon Performance
+Stat presentation should use:
 
-Right:
-Crafting Overview + Material Requirements + Estimated Effects
+* Clear grouping
+* Muted labels
+* Strong values
+* Right-aligned or consistently aligned numbers
+* Tabular numerals
+* Compact rows
+* Semantic delta treatment
 
-At 2K:
-- Max content width around 2200-2320px.
-- Do not stretch tables into huge gaps.
-- Keep readable line lengths.
+Do not remove important stats merely to simplify the layout.
 
-At 1440p:
-- Layout must fit without horizontal overflow.
+A numerically positive change is not automatically beneficial, and a numerically negative change is not automatically harmful. Styling must follow the semantic effect of the stat.
 
-Item Summary:
-Keep all current rows and values.
-Restyle into a cleaner stat panel.
+### Crafting Overview
 
-Requirements:
-- Section title: Item Summary
-- Subsection title if needed: Weapon Performance
-- Rows remain compact.
-- Labels muted.
-- Values right-aligned.
-- Positive deltas green/cyan.
-- Use tabular numbers.
-- Do not remove stats.
+Crafting Overview should summarize existing information such as:
 
-Crafting Overview:
-The Crafting Overview panel should feel like a modern summary card, not a flat table.
+* Craft time
+* Resulting or projected quality
+* Material requirements
+* Current target
+* Craft quantity where applicable
 
-Top summary cards:
-- Craft Time
-- Resulting Quality
-- Materials Required
+Summary values should remain compact.
 
-Use compact cards in a row.
-Each card:
-- label
-- primary value
-- optional secondary text if already available
+Do not turn every summary value into a large dashboard card.
 
-Material Requirements:
-This is the most important interactive part of the page. Keep it clear.
+### Material Requirements
 
-Each material row should show:
-- material role, e.g. Reinforced Frame / Emitter / Thermal Sink
-- material name
-- required amount
-- quality band / quality value
-- input slider
-- resulting effect
+Material Requirements is the primary interactive section of the page.
 
-Improve row layout:
-- stronger material name hierarchy
-- role label small/muted
-- quality badge compact
-- input slider aligned
-- effect chip clearly visible on the right
+Preserve:
 
-Do not change slider behavior.
-Do not change modifier math.
-Do not relabel effects unless existing labels are wrong.
+* Material roles
+* Material names
+* Required quantities
+* Selected qualities
+* Sliders and inputs
+* Existing material effects
+* Existing modifier calculations
 
-Material row visual:
-- row background subtly different from panel
-- separators quiet
-- effect chips use semantic colors:
-  - damage / performance effect: cyan or purple
-  - health / HP effect: green/cyan
-  - warning/negative: amber/red if applicable
+Each material entry should make it easy to identify:
 
-Estimated Effects:
-Make this feel like a result panel.
+* Material role
+* Material name
+* Required amount
+* Selected quality
+* Input control
+* Resulting effect
+* Relationship to the selected target where supported
 
-Each effect row should show:
-- stat label
-- final value
-- percent change
-- absolute delta
-- source materials contributing to the effect
+Do not duplicate crafting, solver, allocation, or quality calculations inside presentation components.
 
-Keep the existing data exactly.
+### Target and Min to Target
 
-Improve readability:
-- final value prominent
-- percent/delta grouped together
-- contributing material names muted but visible
-- rows should not feel like raw text strings
+Where the existing source of truth supports it, the page should communicate:
 
-Example:
-Weapon Damage
-55.48   +0.9% / +0.48
-Hadante +0.3% · Pressurized Ice +0.6%
+* Target
+* Projected quality
+* Minimum Quality for Remaining Quantity
+* Minimum Quantity at a Selected Quality
+* Target Met
+* Target Unavailable With Current Inventory
+* Best achievable projected quality
 
-Blueprint Sources:
-Bring this in line with the updated page design.
+Preferred language includes:
 
-Use card/list styling:
-- source title
-- mission/source metadata
-- any availability/confidence info
-- bookmark/save state if already present
+* Target 924
+* Projected 911
+* Min to Target
+* 0.42 SCU at Quality 965
+* Target Met
+* Target Unavailable With Current Inventory
 
-Do not change blueprint source logic.
+Never place the letter Q before or after a quality value.
 
-Buttons:
-Save Blueprint and Add to Queue should match current app button system.
+If Min to Target values do not already exist in shared crafting, allocation, Auto Reserve, or solver logic:
 
-Add to Queue:
-- Primary amber/gold button.
-- Strong but not oversized.
+* Do not recreate the calculation in the UI.
+* Document the missing data requirement.
+* Use deterministic development fixtures only for visual review.
+* Do not expose invented values in production.
 
-Save Blueprint:
-- Secondary/ghost button.
-- Clear hover/focus state.
+### Estimated Effects
 
-Spacing:
-Reduce excessive empty top/header space.
-Use consistent 12-16px gaps.
-Panels should feel connected but not cramped.
-No giant blank regions.
+Estimated Effects should clearly communicate:
 
-Responsive:
-Desktop:
-- Two-column detail grid.
+* Stat affected
+* Final value
+* Percentage change
+* Absolute delta
+* Contributing materials
 
-Tablet:
-- Keep two columns if possible around 900px+.
-- Collapse to single column only when necessary.
+Preserve all existing values and source-material relationships.
 
-Mobile:
-- Stack:
-  1. Hero
-  2. Crafting Overview
-  3. Material Requirements
-  4. Estimated Effects
-  5. Item Summary
-  6. Blueprint Sources
+Contributing materials should remain visible without becoming an undifferentiated text block.
 
-Do not make mobile worse in this pass.
+Effect styling must reflect whether the result is beneficial, detrimental, neutral, or unavailable.
 
-Important guardrails:
-- Do not touch calculation code.
-- Do not rename Deadbolt/weapon modifier labels in this pass.
-- Do not “fix” modifier effects.
-- Do not change material requirement values.
-- Do not change quality sliders/input behavior.
-- Do not change Add to Queue payloads.
-- Do not change Save Blueprint behavior.
+### Blueprint Sources
 
-Acceptance criteria:
-- Crafting detail page visually aligns with Mining/Inventory/Build Queue.
-- Header/hero no longer has excessive empty space.
-- Item identity is stronger and integrated.
-- Item Summary is readable and polished.
-- Crafting Overview feels modern.
-- Material Requirements are clearer without changing behavior.
-- Estimated Effects are easier to scan.
-- Blueprint Sources section is visually aligned.
-- No data/API/calculation behavior changes.
-- npm run build passes.
+Blueprint Sources should remain a distinct lower section.
+
+Preserve:
+
+* Source title
+* Mission or acquisition metadata
+* Availability information
+* Confidence information where present
+* Existing save or bookmark state
+* Existing blueprint-source logic
+
+Sources should use compact, readable rows or cards.
+
+Do not turn every source into a large feature card.
+
+### Crafting-Flow Continuity
+
+Terminology and visual meaning must remain consistent between:
+
+* Crafting Detail
+* Build Queue
+* Material Allocation
+* Inventory
+* Reserve selection
+* Pull instructions
+
+The user should recognize the same:
+
+* Item
+* Target
+* Projected result
+* Material
+* Quality
+* Quantity
+* Effect
+* Reservation state
+
+after moving from Crafting Detail into Build Queue.
+
+Do not expose backend terminology such as `stack` when the user is interacting with a physical inventory box.
+
+Do not expose raw location identifiers.
+
+### Responsive Order
+
+Desktop should balance performance information with interactive crafting controls without excessive horizontal spread.
+
+Mobile should prioritize the crafting decision flow:
+
+1. Item identity and actions
+2. Crafting Overview
+3. Material Requirements
+4. Estimated Effects
+5. Item Summary and performance
+6. Blueprint Sources
+
+Do not remove important information merely to simplify mobile layout.
+
+### Implementation Guardrails
+
+Visual Crafting Detail work must not change:
+
+* Crafting data
+* Crafting calculations
+* Material modifier math
+* Quality calculations
+* Blueprint-source logic
+* Add to Queue behavior or payloads
+* Save Blueprint behavior
+* API calls
+* Fitting behavior
+* Inventory behavior
+* Build Queue behavior
+* Reservation or allocation behavior
+
+Visual work requires deterministic populated data, screenshot review at 1920×1080 and 2560×1440, and a passing production build.

@@ -1,237 +1,221 @@
-# ScintelPages Agent Rules
+# Moonbreaker Agent Instructions
 
-## Prime Directive
+You are working on Moonbreaker / Scintel.
 
-Audit first. Patch second.
+## Repository Locations
 
-Do not guess, invent, or rebuild working systems. If a data path, field, function, or state flow is unclear, stop and report what is unclear before editing.
+* Main UI repository: `D:/Moonbreaker`
+* Extraction and source-data repository: `D:/scintel`
+* Clean fitting worktree, when explicitly requested: `D:/Moonbreaker-push-clean`
 
-Make the smallest scoped change that fixes the confirmed issue.
+Do not assume work should occur in the clean fitting worktree. Use the repository named in the task.
 
-## Required Workflow
+## Working Style
 
-Before editing code:
+* Prefer small, isolated changes.
+* Do not blindly follow a proposed solution when it harms usability, maintainability, or correctness.
+* Explain important tradeoffs and recommend a better direction when appropriate.
+* Do not expand a narrow task into a full-page or cross-system refactor.
+* Do not make unrelated cleanup changes.
+* Preserve existing behavior unless the task explicitly requests behavior changes.
 
-1. Trace the current state/data flow.
-2. Identify exact files, functions, and props involved.
-3. Reuse existing utilities/state where possible.
-4. Avoid duplicate logic.
-5. Patch only the confirmed issue.
-6. Run build/typecheck if available.
-7. Report:
-   - files changed
-   - logic changed
-   - risks/unknowns
-   - build result
+## Scope Safety
 
-## Scope Control
+Visual and layout tasks must not change:
 
-Do not touch Mining unless explicitly requested.
+* APIs
+* Database behavior
+* Authentication
+* Routing
+* Crafting calculations
+* Fitting calculations
+* Mining calculations
+* Material modifier calculations
+* Inventory totals
+* Reservation logic
+* Allocation logic
+* Solver behavior
+* Production data contracts
 
-Do not redesign unrelated pages.
+If a requested visual feature needs data that does not currently exist:
 
-Do not change extraction/data pipelines unless the task specifically asks for it.
+1. Verify whether the value already exists elsewhere.
+2. Reuse the existing source of truth when available.
+3. Otherwise document the missing data requirement.
+4. Use a deterministic development-only fixture for visual review when appropriate.
+5. Do not invent production calculations inside a UI component.
 
-Do not create new state stores if existing state already exists.
+## Data Truth
 
-Do not mutate source recipe data. Queue/build items may be mutable planning snapshots.
+Do not infer or relabel gameplay data from frontend assumptions.
 
-## Current Priority Areas
+Modifier, component, crafting, and fitting truth must come from the extracted or server-provided data paths.
 
-Active focus:
-- Crafting Recipe / Recipe Browser
-- Builder / Build Queue
-- shared crafting utilities only when needed
+Do not duplicate calculations in presentation components when a shared calculation or solver already exists.
 
-Not active unless requested:
-- Mining page
-- global app redesign
-- mission tracker systems
+## Quality Formatting
 
-## Design Language
+Never place the letter `Q` before or after a quality value.
 
-Use a compact Scintel industry UI:
+Forbidden:
 
-- dark graphite / muted navy surfaces
-- Rajdhani-first typography
-- compact, readable, data-dense layout
-- low nesting
-- connected drawers/details
-- restrained borders
-- no random card stacks
-- blue is allowed only when muted/tokenized
+* `Q965`
+* `965Q`
+* `Q 965`
+* `965 Q`
 
-Avoid:
-- loud default web-blue panels
-- excessive `!important`
-- Orbitron as normal UI text
-- heavy monospace except tiny metadata
-- nested card soup
-- detached floating drawers
+Required:
 
-## Accent Rules
+* `Quality 965`
+* `Target 924`
+* `Projected 911`
+* `Minimum Quality 965`
+* `0.42 SCU at Quality 965`
 
-Use accents consistently:
+This rule applies to:
 
-- green = covered / available / positive
-- amber = partial / warning
-- red = missing / destructive
-- violet = selected / active
-- rarity colors = product/material quality only
-- blue/navy = neutral/info/readout
+* Production UI
+* Development fixtures
+* Tests
+* Screenshots
+* Mockups
+* Reports
+* Documentation
+* Agent-written examples
 
-Do not let colors lie about meaning.
+## Inventory and Crafting Terminology
 
-## Recipe Page Rules
+Inventory records should be presented as physical boxes when each record represents a discrete container.
 
-Recipe page must use:
+Do not expose backend terminology such as `stack` unless the UI is intentionally showing an aggregate rather than a physical box.
 
-- selected active recipe/variant as source of truth
-- selected material quality/band state from existing flow
-- connected variant drawers
-- compact material quality cards
-- `craft-summary-panel` inside a `craft-detail`-style wrapper when relevant
+For location-based inventory, the default organizational model is:
 
-Do not invent new filters.
+`Location → Material → Individual Boxes`
 
-Sidebar filters should stay scoped to:
-- Search
-- System
-- Mining Type
-- FPS
-- Armor Weapons
-- Vehicles
-- Materials
-- Blueprint Bookmarks, if implemented
+Other workflows may use a different order when the user’s task requires it:
 
-Size, grade, and class stay in item rows, not sidebar filters.
+* Inventory: location first
+* Build Queue allocation: craft requirement first
+* Reserve selection: material requirement first
+* Pull instructions: location and retrieval order first
 
-## Final Product Quality
+Do not force one grouping model onto every workflow.
 
-Use simple ingredient average unless a task explicitly says otherwise.
+Location names must be understandable to users.
 
-Formula:
-- average selected material band numbers across all required ingredients
-- no SCU weighting
-- no unit weighting
-- no required quantity weighting
+Never expose raw location UUIDs in normal UI.
 
-Display:
-- `Band {average}`
-- max 2 decimals
-- trim trailing zeros
-- rarity color comes from final product quality
+Use:
 
-## Modifier Totals
+* Joined location name when available
+* `Unknown Location` when a location ID exists but its record cannot be resolved
+* `Unassigned Stock` when no location is assigned
 
-Modifier totals are separate from final product quality.
+## Physical Box Information
 
-Rules:
-- calculate per stat
-- only include materials that actually modify that stat
-- ignore non-contributing materials
-- do not scale by final product quality
-- only show changed stats
+Where relevant, an individual box should clearly communicate:
 
-Display:
-`Stat Name  deltaFromBase  (modifiedValue)`
+* Material
+* Quality
+* Quantity or SCU
+* Location
+* Availability
+* Reservation state
+* Owning craft when reserved
+* Pull or warehouse state
+* Consumption order
+* Expected remainder or refund
 
-Modifier value color:
-- higher-is-better: positive green, negative red
-- lower-is-better: negative green, positive red
-- unknown direction: neutral/readout
+Do not turn every individual box into a large feature card.
 
-Do not color modifier totals by rarity.
+Use compact rows or tiles optimized for scanning and comparison.
 
-## Builder / Build Queue Rules
+States such as available, selected, reserved, unavailable, missing, and completed must not rely on color alone.
 
-Builder is a mutable planning page.
+## Visual Direction
 
-Queue items may mutate:
-- selected material quality/band
-- lower-quality assignments
-- reserved amounts
-- item-specific modifier values
-- final product quality fields
+The product should feel like a dark, premium spacecraft operations interface:
 
-Builder must not mutate:
-- original recipe data
-- source extraction data
-- unrelated queue items
+* Dense but readable
+* Practical rather than ornamental
+* Strong information hierarchy
+* Controlled surface depth
+* Quiet borders
+* Restrained glow
+* Compact controls
+* No giant empty voids
+* No decorative effects that interfere with data
 
-Blueprint sources are read-only metadata.
+The global color, card, border, and highlight system is currently being audited.
 
-## Blueprint Sources
+Do not treat the current Dashboard palette or the blue, teal, and purple page family as the final global standard until that audit is approved.
 
-Blueprint sources come from `recipe.rewardPools`.
+Detailed page and design guidance belongs in the Moonbreaker design canon rather than being duplicated here.
 
-Use GUIDs:
-- `blueprint_id`
-- `blueprintGuid`
-- `poolGuid`
+## UI Implementation Rules
 
-Do not key by display name or item name.
+For visual work:
 
-Builder should display blueprint sources from the queue item snapshot.
+* State the exact page and component scope.
+* Preserve all behavior and calculations.
+* Use existing shared tokens and components where appropriate.
+* Do not create a new global primitive for a single-page experiment.
+* Do not spread page-local styling into unrelated pages.
+* Check both populated and empty states.
+* Check long names, many rows, and overflow behavior.
+* Avoid hiding important data merely to simplify layout.
 
-This is not a mission tracker.
+For responsive work, inspect at minimum:
 
-Never add:
-- mission completion state
-- progress tracking
-- checklist state
-- active mission state
-- route/run tracking
-- timers
+* `1920×1080`
+* `2560×1440`
 
-Use labels like:
-- Blueprint Source
-- Blueprint Sources
-- Unknown Blueprint Source
+Check mobile when the affected component already supports mobile or when the task explicitly requests it.
 
-Avoid:
-- Mission Tracker
+## Visual Validation
 
-## FPS Blueprint Sources
+Tests and builds are not sufficient validation for UI work.
 
-FPS blueprints should use the same reward pool model as vehicle blueprints when GUID matches exist.
+Visual changes require:
 
-Do not invent a separate FPS source model unless explicitly approved.
+* A deterministic populated state or fixture
+* Screenshot review at the requested resolutions
+* Manual inspection of hierarchy, overflow, clipping, contrast, and density
 
-If FPS `rewardPools` are empty, first check normalization/join logic before assuming data is missing.
+Do not claim a visual task is complete solely because the build passes.
 
-## Data / Naming Rules
+## Validation
 
-Do not use `q` prefixes in:
-- labels
-- ids
-- CSS classes
-- data keys
-- quality band names
+Run the checks relevant to the changed area.
 
-Use clean numeric/range naming.
+At minimum:
 
-Preserve existing data shapes unless the task explicitly requires a payload change.
+```bash
+npm run build
+```
 
-## CSS Rules
+Also run targeted tests when the changed code has an existing test suite.
 
-Before adding CSS:
+Report:
 
-1. Search existing selectors.
-2. Check for duplicates/conflicts.
-3. Reuse tokens/classes where possible.
-4. Consolidate instead of piling overrides.
-5. Avoid random `!important`.
+* Files changed
+* Behavior changed
+* Behavior intentionally preserved
+* Tests run
+* Build result
+* Screenshot or fixture route used
+* Any unresolved visual or data limitations
 
-CSS should clarify hierarchy, not fight the DOM.
+## Stop Conditions
 
-## Reporting Format
+Stop when the requested scope is complete.
 
-After work, report briefly:
+Do not continue into:
 
-- changed files
-- what changed
-- what was reused
-- what was not touched
-- build/typecheck result
-- risks or follow-up needed
+* Global theme implementation
+* Unrelated page cleanup
+* Architecture migration
+* API redesign
+* Calculation changes
+* Additional speculative features unless the task explicitly requests them.
