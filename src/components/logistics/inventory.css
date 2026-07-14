@@ -3745,3 +3745,448 @@
     font-size: 15.5px !important;
   }
 }
+
+/* Approved graphite rollout: Inventory CSV import presentation only. */
+.logi-inv-page .logi-csv-modal {
+  inset: clamp(22px, 2.5vh, 36px) clamp(24px, 2vw, 44px);
+  width: auto;
+  height: auto;
+  max-height: none;
+  gap: 10px;
+  padding: 16px 18px 14px;
+  border-color: var(--panel-border);
+  background: var(--panel-bg);
+  box-shadow:
+    0 24px 72px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.logi-inv-page .logi-csv-modal-head {
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom-color: var(--panel-border-soft);
+}
+
+.logi-inv-page .logi-csv-modal-head h2 {
+  color: var(--text-primary);
+  font-size: 24px;
+  line-height: 1.05;
+}
+
+.logi-inv-page .logi-csv-kicker {
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  letter-spacing: 0.065em;
+}
+
+.logi-inv-page .logi-csv-modal .logi-panel-close-btn {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-color: var(--panel-border);
+  background: var(--panel-bg-deep);
+  color: var(--text-secondary);
+}
+
+.logi-inv-page .logi-csv-modal .logi-panel-close-btn:hover {
+  border-color: rgba(125, 211, 252, 0.46);
+  background: rgba(125, 211, 252, 0.07);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-page .logi-csv-modal-body {
+  gap: 10px;
+}
+
+.logi-inv-page .logi-csv-controls,
+.logi-inv-page .logi-csv-actions,
+.logi-inv-page .logi-csv-confirm {
+  gap: 10px;
+}
+
+.logi-inv-page .logi-csv-controls :where(.logi-btn-ghost, .logi-select),
+.logi-inv-page .logi-csv-actions :where(.logi-btn-primary, .logi-btn-ghost) {
+  min-height: 40px;
+  font-size: 13.5px;
+  letter-spacing: 0.045em;
+}
+
+.logi-inv-page .logi-csv-controls .logi-select {
+  width: clamp(230px, 17vw, 320px);
+  border-color: var(--panel-border);
+  background-color: var(--panel-bg-deep);
+  color: var(--text-primary);
+}
+
+.logi-inv-page .logi-csv-controls .logi-select:hover {
+  border-color: rgba(125, 211, 252, 0.4);
+}
+
+.logi-inv-page .logi-csv-controls .logi-select:focus-visible {
+  border-color: rgba(125, 211, 252, 0.7);
+  outline: 2px solid rgba(125, 211, 252, 0.34);
+  outline-offset: 1px;
+}
+
+.logi-inv-page .logi-csv-file {
+  min-width: 260px;
+  max-width: 440px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-color: var(--panel-border);
+  background: var(--panel-bg-deep);
+  color: var(--text-primary);
+  font-size: 13.5px;
+  letter-spacing: 0.045em;
+  transition: border-color 140ms ease, background-color 140ms ease, color 140ms ease, box-shadow 140ms ease;
+}
+
+.logi-inv-page .logi-csv-file:hover {
+  border-color: rgba(125, 211, 252, 0.46);
+  background: rgba(125, 211, 252, 0.065);
+  color: var(--accent-cyan);
+}
+
+.logi-inv-page .logi-csv-file:focus-within {
+  border-color: rgba(125, 211, 252, 0.72);
+  background: rgba(125, 211, 252, 0.075);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.28);
+}
+
+.logi-inv-page .logi-csv-summary {
+  gap: 10px;
+}
+
+.logi-inv-page .logi-csv-summary div {
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 12px;
+  border-color: var(--panel-border-soft);
+  background: var(--panel-bg-deep);
+}
+
+.logi-inv-page .logi-csv-summary span,
+.logi-inv-page .logi-csv-success-stats span {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  letter-spacing: 0.065em;
+}
+
+.logi-inv-page .logi-csv-summary strong {
+  margin-top: 4px;
+  color: var(--text-primary);
+  font-size: 19px;
+}
+
+.logi-inv-page .logi-csv-error {
+  padding: 10px 12px;
+  border-color: rgba(251, 113, 133, 0.34);
+  background: rgba(251, 113, 133, 0.07);
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.logi-inv-page .logi-csv-scroll {
+  border-color: var(--panel-border);
+  background: #070e15;
+  scrollbar-color: rgba(125, 211, 252, 0.3) transparent;
+}
+
+.logi-inv-page .logi-csv-scroll:focus-visible {
+  border-color: rgba(125, 211, 252, 0.64);
+  outline: 2px solid rgba(125, 211, 252, 0.3);
+  outline-offset: 1px;
+}
+
+.logi-inv-page .logi-csv-table {
+  min-width: 1120px;
+}
+
+.logi-inv-page .logi-csv-table th,
+.logi-inv-page .logi-csv-table td {
+  height: 42px;
+  padding: 9px 12px;
+  border-bottom-color: var(--panel-border-soft);
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.3;
+  vertical-align: middle;
+}
+
+.logi-inv-page .logi-csv-table th {
+  height: 38px;
+  border-bottom-color: var(--panel-border);
+  background: var(--panel-bg);
+  color: var(--text-muted);
+  font-size: 11.5px;
+  letter-spacing: 0.065em;
+  white-space: nowrap;
+}
+
+.logi-inv-page .logi-csv-table tbody tr {
+  transition: background-color 120ms ease;
+}
+
+.logi-inv-page .logi-csv-table tbody tr:hover {
+  background: var(--panel-row-hover);
+}
+
+.logi-inv-page .logi-csv-row--valid td:first-child {
+  color: var(--success);
+}
+
+.logi-inv-page .logi-csv-row--warning td:first-child,
+.logi-inv-page .logi-csv-row--warning td:last-child {
+  color: var(--warning);
+}
+
+.logi-inv-page .logi-csv-row--error td:first-child,
+.logi-inv-page .logi-csv-row--error td:last-child {
+  color: var(--danger);
+}
+
+.logi-inv-page .logi-csv-table td:nth-child(2),
+.logi-inv-page .logi-csv-table td:nth-child(6) {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.logi-inv-page .logi-csv-table td:nth-child(2),
+.logi-inv-page .logi-csv-table td:nth-child(3),
+.logi-inv-page .logi-csv-table td:nth-child(5),
+.logi-inv-page .logi-csv-table td:nth-child(6),
+.logi-inv-page .logi-csv-table td:nth-child(7),
+.logi-inv-page .logi-csv-table td:nth-child(8) {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.logi-inv-page .logi-csv-table td:nth-child(4),
+.logi-inv-page .logi-csv-table td:nth-child(9),
+.logi-inv-page .logi-csv-table td:nth-child(10),
+.logi-inv-page .logi-csv-table td:nth-child(11) {
+  overflow-wrap: anywhere;
+}
+
+.logi-inv-page .logi-csv-modal .logi-quality-pill,
+.logi-inv-page .logi-csv-modal .logi-quality-pill[class*="craft-value-tier--"] {
+  --craft-value-tier-color: var(--accent-cyan);
+  --craft-value-tier-border: rgba(125, 211, 252, 0.34);
+  --craft-value-tier-bg: rgba(125, 211, 252, 0.08);
+  --craft-value-tier-glow: transparent;
+  min-height: 26px;
+  padding: 2px 8px;
+  border-color: rgba(125, 211, 252, 0.34);
+  background: rgba(125, 211, 252, 0.08);
+  color: var(--accent-cyan);
+  font-size: 14px;
+  text-shadow: none;
+}
+
+.logi-inv-page .logi-csv-confirm label {
+  color: var(--text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.045em;
+}
+
+.logi-inv-page .logi-csv-confirm input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-cyan);
+}
+
+.logi-inv-page .logi-csv-modal-foot {
+  gap: 10px;
+  padding-top: 12px;
+  border-top-color: var(--panel-border-soft);
+}
+
+.logi-inv-page .logi-csv-actions .logi-btn-primary:disabled,
+.logi-inv-page .logi-csv-actions .logi-btn-primary[aria-disabled="true"],
+.logi-inv-page .logi-csv-actions .logi-btn-primary:disabled:hover,
+.logi-inv-page .logi-csv-actions .logi-btn-primary[aria-disabled="true"]:hover {
+  border-color: var(--panel-border);
+  background: var(--panel-bg-deep);
+  color: #718197;
+  opacity: 1;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.logi-inv-page .logi-csv-btn-danger,
+.logi-inv-page .logi-csv-actions .logi-csv-btn-danger {
+  border-color: rgba(251, 113, 133, 0.3);
+  background: rgba(251, 113, 133, 0.045);
+  color: var(--danger);
+}
+
+.logi-inv-page .logi-csv-btn-danger:hover,
+.logi-inv-page .logi-csv-actions .logi-csv-btn-danger:hover {
+  border-color: rgba(251, 113, 133, 0.5);
+  background: rgba(251, 113, 133, 0.09);
+  color: #fda4af;
+}
+
+.logi-inv-page .logi-csv-success {
+  gap: 16px;
+  padding: 28px 18px;
+}
+
+.logi-inv-page .logi-csv-success-lead {
+  color: var(--success);
+  font-size: 25px;
+  letter-spacing: 0;
+}
+
+.logi-inv-page .logi-csv-success-detail {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.logi-inv-page .logi-csv-success-hint {
+  color: var(--text-muted);
+  font-size: 12.5px;
+  letter-spacing: 0.045em;
+}
+
+.logi-inv-page .logi-csv-success-stats div {
+  border-color: var(--panel-border-soft);
+  background: var(--panel-bg-deep);
+}
+
+.logi-inv-page .logi-csv-success-stats strong {
+  color: var(--text-primary);
+  font-size: 20px;
+}
+
+@media (min-width: 2200px) and (min-height: 1200px) {
+  .logi-inv-page .logi-csv-modal {
+    inset: 32px 36px;
+    gap: 14px;
+    padding: 20px 22px 18px;
+  }
+
+  .logi-inv-page .logi-csv-modal-head {
+    padding-bottom: 14px;
+  }
+
+  .logi-inv-page .logi-csv-modal-head h2 {
+    font-size: 28px;
+  }
+
+  .logi-inv-page .logi-csv-kicker {
+    font-size: 12px;
+  }
+
+  .logi-inv-page .logi-csv-modal .logi-panel-close-btn {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .logi-inv-page .logi-csv-modal-body {
+    gap: 14px;
+  }
+
+  .logi-inv-page .logi-csv-controls :where(.logi-btn-ghost, .logi-select),
+  .logi-inv-page .logi-csv-actions :where(.logi-btn-primary, .logi-btn-ghost),
+  .logi-inv-page .logi-csv-file {
+    min-height: 44px;
+    font-size: 14px;
+  }
+
+  .logi-inv-page .logi-csv-file {
+    min-width: 320px;
+    max-width: 540px;
+  }
+
+  .logi-inv-page .logi-csv-summary div {
+    min-height: 64px;
+    padding-inline: 14px;
+  }
+
+  .logi-inv-page .logi-csv-summary span,
+  .logi-inv-page .logi-csv-success-stats span {
+    font-size: 12px;
+  }
+
+  .logi-inv-page .logi-csv-summary strong {
+    font-size: 22px;
+  }
+
+  .logi-inv-page .logi-csv-error {
+    padding: 11px 14px;
+    font-size: 15px;
+  }
+
+  .logi-inv-page .logi-csv-table th,
+  .logi-inv-page .logi-csv-table td {
+    height: 46px;
+    padding: 11px 14px;
+    font-size: 15px;
+  }
+
+  .logi-inv-page .logi-csv-table th {
+    height: 42px;
+    font-size: 12px;
+  }
+
+  .logi-inv-page .logi-csv-modal .logi-quality-pill,
+  .logi-inv-page .logi-csv-modal .logi-quality-pill[class*="craft-value-tier--"] {
+    min-height: 28px;
+    font-size: 15px;
+  }
+
+  .logi-inv-page .logi-csv-confirm label {
+    font-size: 14px;
+  }
+
+  .logi-inv-page .logi-csv-success-lead {
+    font-size: 29px;
+  }
+
+  .logi-inv-page .logi-csv-success-detail {
+    font-size: 16px;
+  }
+
+  .logi-inv-page .logi-csv-success-hint {
+    font-size: 13px;
+  }
+
+  .logi-inv-page .logi-csv-success-stats strong {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .logi-inv-page .logi-csv-modal {
+    inset: 12px;
+    width: auto;
+    height: auto;
+    padding: 14px;
+  }
+
+  .logi-inv-page .logi-csv-summary,
+  .logi-inv-page .logi-csv-success-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .logi-inv-page .logi-csv-controls .logi-select,
+  .logi-inv-page .logi-csv-file {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+.logi-inv-page .logi-csv-modal:not(:has(.logi-csv-scroll)):not(:has(.logi-csv-success)) {
+  bottom: auto;
+  height: auto;
+  max-height: calc(100vh - 44px);
+}
