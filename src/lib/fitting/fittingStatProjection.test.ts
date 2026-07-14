@@ -157,6 +157,31 @@ test("buildBrowseStatPreviewFromFitting omits meta duplicate labels", () => {
   assert.ok(labels.includes("Coolant Generation"));
 });
 
+test("buildBrowseStatPreviewFromFitting keeps Alpha Damage and omits an identical damage channel", () => {
+  const preview = buildBrowseStatPreviewFromFitting({
+    ...coolerDetail(),
+    type: "ship_weapon",
+    stats: {
+      alphaDamage: 72.99,
+      damagePhysical: 72.99,
+      fireRateRpm: 750,
+      ammoCapacity: 1200,
+      projectileSpeed: 1196,
+      calculatedRange: 2702.96,
+    },
+    mitigation: null,
+  });
+
+  const labels = preview.map((row) => row.label);
+  assert.deepEqual(labels, [
+    "Alpha Damage",
+    "Fire Rate",
+    "Ammo Capacity",
+    "Projectile Speed",
+    "Projectile Range / Max Travel",
+  ]);
+});
+
 test("inferPrimaryShipWeaponDamageType picks highest non-zero channel", () => {
   const detail: FittingComponentDetail = {
     ...coolerDetail(),

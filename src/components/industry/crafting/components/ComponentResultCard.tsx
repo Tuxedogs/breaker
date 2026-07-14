@@ -20,9 +20,9 @@ import {
   getShipWeaponBadgeClassName,
 } from "../utils/shipWeaponCardDisplay";
 
-function MetricRow({ metric }: { metric: ComponentCardSchema["meta"][number] }) {
+function MetricRow({ metric, primary = false }: { metric: ComponentCardSchema["meta"][number]; primary?: boolean }) {
   return (
-    <span className="component-card-metric">
+    <span className={`component-card-metric${primary ? " component-card-metric--primary" : ""}`}>
       <span>{metric.label}</span>
       <strong>{metric.value}</strong>
     </span>
@@ -221,7 +221,11 @@ export default function ComponentResultCard({
         {visibleStats.length > 0 && (
           <div className="component-card-metrics">
             {visibleStats.map((metric) => (
-              <MetricRow key={`${metric.label}:${metric.value}`} metric={metric} />
+              <MetricRow
+                key={`${metric.label}:${metric.value}`}
+                metric={metric}
+                primary={isShipWeapon && metric.label === "Alpha Damage"}
+              />
             ))}
           </div>
         )}

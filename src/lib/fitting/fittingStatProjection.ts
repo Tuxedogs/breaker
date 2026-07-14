@@ -417,6 +417,15 @@ const BROWSE_META_DUPLICATE_LABELS = new Set([
   "crafttime",
 ]);
 
+const BROWSE_DAMAGE_CHANNEL_LABELS = new Set([
+  "physicaldamage",
+  "energydamage",
+  "distortiondamage",
+  "thermaldamage",
+  "biochemicaldamage",
+  "stundamage",
+]);
+
 function normalizeBrowseStatLabel(label: string): string {
   return label.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
@@ -425,9 +434,20 @@ export function buildBrowseStatPreviewFromFitting(
   detail: FittingComponentDetail,
   maxRows = 5,
 ): ComponentCardMetric[] {
-  return buildDetailStatRowsFromFitting(detail)
-    .filter((row) => !BROWSE_META_DUPLICATE_LABELS.has(normalizeBrowseStatLabel(row.label)))
-    .slice(0, maxRows);
+  const rows = buildDetailStatRowsFromFitting(detail)
+    .filter((row) => !BROWSE_META_DUPLICATE_LABELS.has(normalizeBrowseStatLabel(row.label)));
+
+  if (detail.type !== "ship_weapon") return rows.slice(0, maxRows);
+
+  const alphaDamage = rows.find((row) => normalizeBrowseStatLabel(row.label) === "alphadamage");
+  const browseRows = alphaDamage
+    ? rows.filter((row) => {
+      const label = normalizeBrowseStatLabel(row.label);
+      return !BROWSE_DAMAGE_CHANNEL_LABELS.has(label) || row.value !== alphaDamage.value;
+    })
+    : rows;
+
+  return browseRows.slice(0, maxRows);
 }
 
 export function inferPrimaryShipWeaponDamageType(

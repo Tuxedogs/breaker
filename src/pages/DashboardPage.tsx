@@ -252,13 +252,13 @@ type NextRunLocation = {
 };
 
 type NextFabricationRun = {
+  queueItemId: string;
   itemName: string;
   quantity: number;
   target?: string;
   projected?: string;
   readiness: string;
   coverage: string;
-  status: string;
   targetState: "met" | "unavailable" | "pending";
   minimumQuality?: string;
   minimumQuantity?: string;
@@ -268,17 +268,65 @@ type NextFabricationRun = {
   boxesToRetrieve: string;
   missingMaterials: string;
   expectedExcess?: string;
+  actionLabel: string;
+  actionNote: string;
   fixtureOnly?: boolean;
 };
 
-const DEV_NEXT_FABRICATION_RUN: NextFabricationRun | null = import.meta.env.DEV ? {
+const DEV_NEXT_FABRICATION_RUNS: NextFabricationRun[] = import.meta.env.DEV ? [
+{
+  queueItemId: "fixture-allocated",
+  itemName: "Avalanche Cooler",
+  quantity: 4,
+  target: "900",
+  projected: "918",
+  readiness: "Ready to retrieve",
+  coverage: "2 of 2 requirements covered",
+  targetState: "met",
+  locationsToVisit: "1 location",
+  boxesToRetrieve: "3 boxes",
+  missingMaterials: "None identified",
+  expectedExcess: "0.06 SCU expected remainder",
+  actionLabel: "Review Pull Plan",
+  actionNote: "All reserved boxes are ready for warehouse retrieval.",
+  fixtureOnly: true,
+  locations: [
+    {
+      id: "fixture-allocated-everus",
+      name: "Everus Harbor · Manufacturing Storage",
+      visitOrder: 1,
+      materials: [
+        {
+          id: "fixture-allocated-copper",
+          name: "Copper",
+          requirement: "0.18 SCU required · Target 900",
+          state: "covered",
+          boxes: [
+            { id: "fixture-allocated-copper-01", label: "Box CPR-118", quality: 936, quantity: "0.14 SCU", reservedQuantity: "0.14 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 1, remainder: "Consumed" },
+            { id: "fixture-allocated-copper-02", label: "Box CPR-204", quality: 902, quantity: "0.10 SCU", reservedQuantity: "0.04 SCU selected", availability: "selected", reservationLabel: "Selected", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 2, remainder: "0.06 SCU remains" },
+          ],
+        },
+        {
+          id: "fixture-allocated-quartz",
+          name: "Quartz",
+          requirement: "0.08 SCU required · Target 860",
+          state: "covered",
+          boxes: [
+            { id: "fixture-allocated-quartz-01", label: "Box QTZ-044", quality: 884, quantity: "0.08 SCU", reservedQuantity: "0.08 SCU reserved", availability: "reserved", reservationLabel: "Reserved", owner: "Avalanche Cooler ×4", movement: "pull", pullOrder: 3, remainder: "Consumed" },
+          ],
+        },
+      ],
+    },
+  ],
+},
+{
+  queueItemId: "fixture-partial",
   itemName: "P6-LR \"Archangel\" Sniper Rifle",
   quantity: 2,
   target: "924",
   projected: "911",
   readiness: "Review required",
   coverage: "92% material coverage",
-  status: "Pull plan drafted",
   targetState: "unavailable",
   minimumQuality: "965",
   minimumQuantity: "0.08 SCU",
@@ -287,6 +335,8 @@ const DEV_NEXT_FABRICATION_RUN: NextFabricationRun | null = import.meta.env.DEV 
   boxesToRetrieve: "6 boxes",
   missingMaterials: "0.08 SCU Tungsten",
   expectedExcess: "0.14 SCU expected refund",
+  actionLabel: "Review Pull Plan",
+  actionNote: "Review source allocations and the unresolved Tungsten shortfall.",
   fixtureOnly: true,
   locations: [
     {
@@ -350,7 +400,25 @@ const DEV_NEXT_FABRICATION_RUN: NextFabricationRun | null = import.meta.env.DEV 
       ],
     },
   ],
-} : null;
+},
+{
+  queueItemId: "fixture-unreserved",
+  itemName: "Long-Range Industrial Power Coupling Assembly",
+  quantity: 1,
+  target: "875",
+  projected: "Not available",
+  readiness: "Reservations required",
+  coverage: "0 of 2 requirements covered",
+  targetState: "pending",
+  locationsToVisit: "Not planned",
+  boxesToRetrieve: "No boxes selected",
+  missingMaterials: "0.24 SCU Copper · 0.10 SCU Quartz",
+  actionLabel: "Reserve Materials",
+  actionNote: "Select eligible boxes in the Build Queue before planning retrieval.",
+  fixtureOnly: true,
+  locations: [],
+},
+] : [];
 
 function formatRunQuantity(quantity: number, unitType: string | undefined) {
   return formatInventoryQuantity(quantity, unitType === "unit" ? "unit" : "scu");
@@ -444,17 +512,21 @@ function buildProductionNextFabricationRun(
   });
 
   return {
+    queueItemId: item.id,
     itemName,
     quantity: item.quantity,
     projected: item.finalProductQualityAverage != null ? `Band ${formatDashNumber(item.finalProductQualityAverage)}` : undefined,
     readiness: missingStates.length === 0 ? "Allocated" : "Needs allocation",
     coverage: inputs.length > 0 ? `${coveredCount} of ${inputs.length} requirements covered` : "No material requirements",
-    status: item.status === "active" ? "Active craft" : item.status === "paused" ? "Paused" : "Queued",
     targetState: "pending",
     locations: [...grouped.values()],
     locationsToVisit: grouped.size > 0 ? `${grouped.size} location${grouped.size === 1 ? "" : "s"}` : "Not planned",
     boxesToRetrieve: allocations.length > 0 ? `${allocations.length} reserved box${allocations.length === 1 ? "" : "es"}` : "Not planned",
     missingMaterials: missingLabels.length > 0 ? missingLabels.join(" · ") : "None identified",
+    actionLabel: allocations.length > 0 ? "Review Pull Plan" : "Reserve Materials",
+    actionNote: allocations.length > 0
+      ? "Review source allocations before warehouse retrieval."
+      : "Select eligible boxes in the Build Queue before planning retrieval.",
   };
 }
 
@@ -466,6 +538,7 @@ export default function DashboardPage() {
     status: "idle",
     data: [],
   });
+  const [selectedNextRunId, setSelectedNextRunId] = useState<string | null>(null);
 
   const queueLedger = useMemo(
     () => getQueueLedgerModel({ buildQueue, inventoryEntries, materials: materialTemplates, recipeInputsByRecipeId: recipeInputTemplates }),
@@ -520,18 +593,23 @@ export default function DashboardPage() {
   const nextRunFixtureMode = import.meta.env.DEV
     ? new URLSearchParams(window.location.search).get("fixture")
     : null;
-  const nextFabricationRun = useMemo(() => {
-    if (nextRunFixtureMode === "next-fabrication-empty") return null;
-    if (nextRunFixtureMode === "next-fabrication" && DEV_NEXT_FABRICATION_RUN) return DEV_NEXT_FABRICATION_RUN;
-    return buildProductionNextFabricationRun(
-      activeQueueItems[0],
-      inventoryEntries,
-      materialTemplates,
-      locations,
-      recipesById,
-      recipeInputTemplates,
-    );
+  const nextFabricationRuns = useMemo(() => {
+    if (nextRunFixtureMode === "next-fabrication-empty") return [];
+    if (nextRunFixtureMode === "next-fabrication") return DEV_NEXT_FABRICATION_RUNS;
+    return activeQueueItems
+      .map((item) => buildProductionNextFabricationRun(
+        item,
+        inventoryEntries,
+        materialTemplates,
+        locations,
+        recipesById,
+        recipeInputTemplates,
+      ))
+      .filter((run): run is NextFabricationRun => run !== null);
   }, [activeQueueItems, inventoryEntries, locations, materialTemplates, nextRunFixtureMode, recipeInputTemplates, recipesById]);
+  const nextFabricationRun = nextFabricationRuns.find((run) => run.queueItemId === selectedNextRunId)
+    ?? nextFabricationRuns[0]
+    ?? null;
 
   useEffect(() => {
     if (miningRequiredMaterials.length === 0) return;
@@ -891,7 +969,11 @@ export default function DashboardPage() {
           </article>
         </div>
 
-        <NextFabricationRunModule run={nextFabricationRun} />
+        <NextFabricationRunModule
+          run={nextFabricationRun}
+          runs={nextFabricationRuns}
+          onSelectRun={setSelectedNextRunId}
+        />
       </div>
 
       <aside className="dash-right-col" aria-label="System panels">
@@ -970,7 +1052,15 @@ function RunStateIcon({ state }: { state: NextRunBoxState | NextRunMovementState
   );
 }
 
-function NextFabricationRunModule({ run }: { run: NextFabricationRun | null }) {
+function NextFabricationRunModule({
+  run,
+  runs,
+  onSelectRun,
+}: {
+  run: NextFabricationRun | null;
+  runs: NextFabricationRun[];
+  onSelectRun: (queueItemId: string) => void;
+}) {
   return (
     <article className="dash-next-run" aria-labelledby="dash-next-run-title" data-fixture={run?.fixtureOnly ? "development" : undefined}>
       <header className="dash-next-run-header">
@@ -1008,7 +1098,21 @@ function NextFabricationRunModule({ run }: { run: NextFabricationRun | null }) {
               </div>
               <div>
                 <span>Craft ×{run.quantity}</span>
-                <strong title={run.itemName}>{run.itemName}</strong>
+                <label className="dash-next-run-selector">
+                  <span className="dash-sr-only">Queued craft</span>
+                  <select
+                    aria-label="Select queued craft"
+                    value={run.queueItemId}
+                    onChange={(event) => onSelectRun(event.target.value)}
+                  >
+                    {runs.map((candidate) => (
+                      <option key={candidate.queueItemId} value={candidate.queueItemId}>
+                        {candidate.itemName}
+                      </option>
+                    ))}
+                  </select>
+                  <svg aria-hidden viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" /></svg>
+                </label>
               </div>
             </div>
 
@@ -1036,7 +1140,6 @@ function NextFabricationRunModule({ run }: { run: NextFabricationRun | null }) {
           <section className="dash-next-run-pull" aria-label="Locations, materials, and boxes">
             <div className="dash-next-run-pull-head">
               <span>Locations → Materials → Individual Boxes</span>
-              <span>{run.status}</span>
             </div>
             <div className="dash-next-run-scroll">
               {run.locations.length > 0 ? run.locations.map((location, locationIndex) => (
@@ -1098,9 +1201,9 @@ function NextFabricationRunModule({ run }: { run: NextFabricationRun | null }) {
               <div><span>Expected excess / refund</span><strong>{run.expectedExcess ?? "Not provided"}</strong></div>
             </div>
             <Link to="/logistics/build-queue" className="dash-next-run-action">
-              Review Pull Plan <ArrowRight size={14} />
+              {run.actionLabel} <ArrowRight size={14} />
             </Link>
-            <span className="dash-next-run-action-note">Review source allocations before warehouse retrieval.</span>
+            <span className="dash-next-run-action-note">{run.actionNote}</span>
           </aside>
         </div>
       )}
